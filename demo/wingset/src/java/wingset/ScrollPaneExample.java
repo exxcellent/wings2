@@ -32,8 +32,6 @@ public class ScrollPaneExample
     private SScrollPane scrollPane;
 
     public SComponent createExample() {
-        controls = new ScrollPaneControls();
-
         table = new STable(new TableExample.ROTableModel(15, 15));
         table.setShowAsFormComponent(true);
         table.setDefaultRenderer(new TableExample.MyCellRenderer());
@@ -44,6 +42,9 @@ public class ScrollPaneExample
 
         ((SScrollBar) scrollPane.getHorizontalScrollBar()).setShowAsFormComponent(false);
         ((SScrollBar) scrollPane.getVerticalScrollBar()).setShowAsFormComponent(false);
+
+        controls = new ScrollPaneControls();
+        controls.addSizable(scrollPane);
 
         SForm p = new SForm(new SBorderLayout());
         p.add(controls, SBorderLayout.NORTH);
@@ -62,8 +63,17 @@ public class ScrollPaneExample
                     ((SScrollBar)scrollPane.getVerticalScrollBar()).setShowAsFormComponent(selected);
                 }
             });
-
             add(showAsFormComponent);
+
+            final SCheckBox paging = new SCheckBox("Paged Scrolling");
+            paging.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boolean selected = paging.isSelected();
+                    ((SScrollPaneLayout)scrollPane.getLayout()).setPaging(selected);
+                }
+            });
+            paging.setSelected(true);
+            add(paging);
         }
     }
 }

@@ -151,8 +151,7 @@ public class ListCG
         org.wings.plaf.Utils.optAttribute(device, "type", list.getOrderType());
         org.wings.plaf.Utils.optAttribute(device, "start", list.getStart());
 
-        if (list.getPreferredSize() != null)
-            device.print(" style=\"width:100%; height:100%; overflow:auto\"");
+        Utils.innerPreferredSize(device, list.getPreferredSize());
         device.print(">");
 
         javax.swing.ListModel model = list.getModel();

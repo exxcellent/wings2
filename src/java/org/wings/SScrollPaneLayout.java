@@ -30,7 +30,7 @@ public class SScrollPaneLayout
     private SComponent south;
 
     Map components = new HashMap(5);
-    private boolean paging;
+    private boolean paging = true;
 
     public boolean isPaging() {
         return paging;

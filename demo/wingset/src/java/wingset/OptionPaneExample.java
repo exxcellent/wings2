@@ -88,7 +88,7 @@ public class OptionPaneExample
             }
         };
 
-        SButton input = new SButton("input");
+        SButton input = new SButton("show Input");
         input.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SOptionPane.showInputDialog(null, "What's your profession?", "A Message", new STextField(), inputListener);

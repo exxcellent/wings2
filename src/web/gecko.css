@@ -353,6 +353,13 @@ div.SPageScroller table[area="pages"] button:hover, div.SPageScroller table[area
    border: 1px outset #cccccc;
 }
 
+
+div.SScrollPane > div.SList, div.SScrollPane > div.STree, div.SScrollPane > div.STable {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
 div.STabbedPane, div.STabbedPane > table {
     width: 100%;
     height: 100%;

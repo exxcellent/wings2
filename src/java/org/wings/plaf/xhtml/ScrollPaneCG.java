@@ -13,36 +13,49 @@
  */
 package org.wings.plaf.xhtml;
 
-import org.wings.SComponent;
-import org.wings.SScrollPane;
+import org.wings.*;
 import org.wings.io.Device;
 
 import java.io.IOException;
+import java.awt.*;
 
 public class ScrollPaneCG
         extends org.wings.plaf.css.AbstractComponentCG
-        implements org.wings.plaf.ScrollPaneCG {
-    public void installCG(SComponent component) {
-    }
+        implements org.wings.plaf.ScrollPaneCG
+{
+    public void write(Device device, SComponent component) throws IOException {
+        SScrollPane scrollPane = (SScrollPane) component;
+        Scrollable scrollable = scrollPane.getScrollable();
+        SScrollPaneLayout layout = (SScrollPaneLayout) scrollPane.getLayout();
 
-    public void uninstallCG(SComponent component) {
+        if (!layout.isPaging() && scrollable instanceof SComponent) {
+            SComponent center = (SComponent) scrollable;
+            Rectangle viewportSize = scrollable.getViewportSize();
+            SDimension preferredSize = center.getPreferredSize();
+            try {
+                scrollable.setViewportSize(scrollable.getScrollableViewportSize());
+                center.setPreferredSize(component.getPreferredSize());
+                component.setPreferredSize(null);
+                super.write(device, component);
+            }
+            finally {
+                component.setPreferredSize(center.getPreferredSize());
+                scrollable.setViewportSize(viewportSize);
+                center.setPreferredSize(preferredSize);
+            }
+        }
+        else
+            super.write(device, component);
     }
 
     public void writeContent(Device d, SComponent c)
-            throws IOException {
+            throws IOException
+    {
         SScrollPane scrollPane = (SScrollPane) c;
-        SComponent scrollable = (SComponent) scrollPane.getScrollable();
-
-        if (scrollPane.getPreferredSize() == null &&
-                scrollable.getPreferredSize() != null) {
-            scrollPane.setPreferredSize(scrollable.getPreferredSize());
-        }
-
         scrollPane.synchronizeAdjustables();
 
         Utils.writeContainerContents(d, scrollPane);
     }
-
 }
 
 
