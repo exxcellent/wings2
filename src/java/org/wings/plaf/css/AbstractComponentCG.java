@@ -35,7 +35,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     private final static transient Log log = LogFactory.getLog(AbstractComponentCG.class);
     
     protected AbstractComponentCG() {
-        this.prefixSuffixDelegate = SessionManager.getSession().getCGManager().getPrefixSuffixDelegate();
     }
 
     /**
