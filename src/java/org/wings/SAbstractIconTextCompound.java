@@ -46,7 +46,7 @@ public abstract class SAbstractIconTextCompound
     public static final int ROLLOVER_SELECTED_ICON = 5;
     public static final int PRESSED_ICON = 6;
 
-    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector("SELECTION");
+    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
     private SButtonModel model;
 

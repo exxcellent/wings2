@@ -61,7 +61,7 @@ import java.util.List;
 public class SList
         extends SComponent
         implements Scrollable, LowLevelEventListener, ListDataListener {
-    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector("SELECTION");
+    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
     /**
      * The preferred extent of the list.

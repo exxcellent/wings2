@@ -123,8 +123,8 @@ public class STable
 
     protected Rectangle viewport;
 
-    public static final CSSSelector SELECTOR_HEADER = new CSSSelector("HEADER");
-    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector("SELECTION");
+    public static final CSSSelector SELECTOR_HEADER = new CSSSelector.Pseudo("HEADER");
+    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
     /**
      * <p>Creates a new <code>STable</code>.</p>

@@ -41,7 +41,7 @@ public class STabbedPane
         extends SContainer
         implements LowLevelEventListener, ChangeListener {
     public static final String SELECTOR_TABS = "SELECTOR_TABS";
-    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector("SELECTION");
+    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
     /**
      * Where the tabs are placed.

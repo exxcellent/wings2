@@ -20,8 +20,6 @@ import java.io.Serializable;
  * Please refer to http://www.w3.org/TR/REC-CSS2/selector.html
  *
  * @author bschmid
- *
- * TODO introduce CSSPseudoSelector class
  */
 public class CSSSelector implements Serializable{
     public final static CSSSelector GLOBAL = new CSSSelector("");
@@ -54,5 +52,12 @@ public class CSSSelector implements Serializable{
 
     public int hashCode() {
         return (selectorString != null ? selectorString.hashCode() : 0);
+    }
+
+    /** A non-functional Pseudo-Selector. Needs to be mapped by CG. */
+    public static class Pseudo extends CSSSelector {
+        public Pseudo(String selectorString) {
+            super(selectorString);
+        }
     }
 }
