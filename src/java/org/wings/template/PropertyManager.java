@@ -32,7 +32,6 @@ public interface PropertyManager {
      * @param comp  a <code>SComponent</code> value
      * @param name  a <code>String</code> value
      * @param value a <code>String</code> value
-     * @return a <code>boolean</code> value
      */
     public void setProperty(SComponent comp, String name, String value);
 

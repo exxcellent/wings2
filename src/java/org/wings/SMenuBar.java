@@ -227,8 +227,6 @@ public class SMenuBar extends SContainer {
 
     /**
      * Implemented to be a MenuElement -- does nothing.
-     *
-     * @see #getSubElements
      */
     public void menuSelectionChanged(boolean isIncluded) {
     }

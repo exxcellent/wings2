@@ -87,7 +87,7 @@ public class SDesktopPane
      * @return an int giving the component's position, where 0 is the
      *         topmost position and the highest index value = the count
      *         count of components minus 1
-     * @see #getComponentCountInLayer
+     * @see #getIndexOf
      */
     public int getPosition(SComponent c) {
         return getIndexOf(c);

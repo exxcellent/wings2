@@ -23,7 +23,7 @@ import java.util.zip.GZIPOutputStream;
  * compressed data; don't forget to set the appropriate header, then
  * (Content-Encoding). Use this in a servlet derived from SessionServlet to
  * override the factory
- * {@link org.wings.servlet.SessionServlet#createOutputDevice(HttpServletRequest,HttpServletResponse,ExternalizedResource)}, for instance.
+ * {@link org.wings.session.SessionServlet#createOutputDevice(HttpServletRequest,HttpServletResponse,ExternalizedResource)}, for instance.
  * <p><b>Example</b><hr><pre>
  * protected Device createOutputDevice(HttpServletRequest req,
  * HttpServletResponse response,

@@ -33,7 +33,7 @@ public class RangeTagHandler extends TemplateTagHandler {
     /**
      * Parse special tag.
      *
-     * @param config   Servlet configuration
+     * @param context  The ParseContext
      * @param input    The PositionReader, located after the Name token of the Tag
      * @param startPosition The Position parsing of this token began
      * @param startTag the SGMLTag found in the file.

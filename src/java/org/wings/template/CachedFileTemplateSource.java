@@ -23,7 +23,6 @@ import java.util.Hashtable;
  *
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
  * @version $Revision$
- * @see org.wings.template.parser.DataSource
  */
 public class CachedFileTemplateSource
         extends FileTemplateSource {
