@@ -1,40 +1,67 @@
+/** $Id$ */
+// {{{ docs <-- this is a VIM (text editor) text fold
+
+/**
+ * Title: DOM Library Core
+ * Version: 0.60
+ *
+ * Summary:
+ * A set of commonly used functions that make it easier to create javascript
+ * applications that rely on the DOM.
+ *
+ * Updated: 2004/11/12
+ *
+ * Maintainer: Dan Allen <dan.allen@mojavelinux.com>
+ * Maintainer: Jason Rust <jrust@rustyparts.com>
+ *
+ * License: LGPL
+ */
+
+// }}}
 // {{{ global constants
 
 /**
  * Global constants (DO NOT EDIT)
  */
 
-// browsers
+// -- Browsers --
 var domLib_userAgent = navigator.userAgent.toLowerCase();
-var domLib_isOpera = domLib_userAgent.indexOf('opera 7') != -1 ? 1 : 0;
-var domLib_isKonq = domLib_userAgent.indexOf('konq') != -1 ? 1 : 0;
+var domLib_isMac = navigator.appVersion.indexOf('Mac') != -1 ? 1 : 0;
+var domLib_isOpera = domLib_userAgent.indexOf('opera') != -1 ? 1 : 0;
+var domLib_isOpera7 = domLib_userAgent.indexOf('opera/7') != -1 || domLib_userAgent.indexOf('opera 7') != -1 ? 1 : 0;
+// Both konqueror and safari use the khtml rendering engine
+var domLib_isKonq = (domLib_userAgent.indexOf('konq') != -1 || domLib_userAgent.indexOf('safari') != -1) ? 1 : 0;
 var domLib_isIE = !domLib_isKonq && !domLib_isOpera && (domLib_userAgent.indexOf('msie 5') != -1 || domLib_userAgent.indexOf('msie 6') != -1);
 var domLib_isIE5up = domLib_isIE;
 var domLib_isIE50 = domLib_isIE && domLib_userAgent.indexOf('msie 5.0') != -1;
 var domLib_isIE55 = domLib_isIE && domLib_userAgent.indexOf('msie 5.5') != -1;
 var domLib_isIE5 = domLib_isIE50 || domLib_isIE55;
-var domLib_isIE55up = domLib_isIE5up && !domLib_isIE50;
+// silly safari uses string "khtml, like gecko", so check for destinctive /
+var domLib_isGecko = domLib_userAgent.indexOf('gecko/') != -1 ? 1 : 0;
+var domLib_isMacIE = (domLib_isIE && domLib_isMac); 
+var domLib_isIE55up = domLib_isIE5up && !domLib_isIE50 && !domLib_isMacIE;
 var domLib_isIE6up = domLib_isIE55up && !domLib_isIE55;
-var domLib_isGecko = domLib_userAgent.indexOf('gecko') != -1 ? 1 : 0;
 
-// abilities
-var domLib_useLibrary = domLib_isOpera || domLib_isKonq || domLib_isIE5up || domLib_isGecko ? 1 : 0;
-var domLib_canTimeout = !(domLib_isKonq || domLib_isIE50);
-var domLib_canFade = domLib_isGecko || domLib_isIE55up;
+// -- Abilities --
+var domLib_standardsMode = (document.compatMode && document.compatMode == 'CSS1Compat');
+var domLib_useLibrary = (domLib_isOpera7 || domLib_isKonq || domLib_isIE55up || domLib_isGecko || domLib_isMacIE);
+var domLib_canTimeout = !(domLib_isKonq || domLib_isIE55up || domLib_isMacIE);
+var domLib_canFade = (domLib_isGecko || domLib_isIE55up);
+var domLib_canDrawOverSelect = (domLib_isOpera || domLib_isMac);
 
-// event variables
+// -- Event Variables --
 var domLib_eventTarget = domLib_isIE ? 'srcElement' : 'currentTarget';
 var domLib_eventButton = domLib_isIE ? 'button' : 'which';
 var domLib_eventTo = domLib_isIE ? 'toElement' : 'relatedTarget';
 var domLib_stylePointer = domLib_isIE ? 'hand' : 'pointer';
-// :FIX: bug in Opera that it can't set maxWidth to 'none'
+// NOTE: a bug exists in Opera that prevents maxWidth from being set to 'none', so we make it huge
 var domLib_styleNoMaxWidth = domLib_isOpera ? '10000px' : 'none';
 var domLib_hidePosition = '-1000px';
 var domLib_scrollbarWidth = 14;
 var domLib_autoId = 1;
 var domLib_zIndex = 100;
 
-// detection
+// -- Detection --
 var domLib_selectElements;
 
 var domLib_timeoutStateId = 0;
@@ -42,7 +69,7 @@ var domLib_timeoutStates = new Hash();
 
 // }}}
 // {{{ Object.prototype.clone
-
+/* potential source of name clash. inlined into setTimeout lines 415+
 Object.prototype.clone = function()
 {
 	var copy = {};
@@ -70,13 +97,14 @@ Object.prototype.clone = function()
 
 	return copy;
 }
-
+*/
 // }}}
 // {{{ class Hash()
 
 function Hash()
 {
 	this.length = 0;
+    this.numericLength = 0; 
 	this.elementData = [];
 	for (var i = 0; i < arguments.length; i += 2)
 	{
@@ -84,51 +112,100 @@ function Hash()
 		{
 			this.elementData[arguments[i]] = arguments[i + 1];
 			this.length++;
+            if (arguments[i] == parseInt(arguments[i])) 
+            {
+                this.numericLength++;
+            }
 		}
 	}
+}
 
-	this.get = function(in_key)
-	{
-		return this.elementData[in_key];
-	}
+// using prototype as opposed to inner functions saves on memory 
+Hash.prototype.get = function(in_key)
+{
+    return this.elementData[in_key];
+}
 
-	this.set = function(in_key, in_value)
-	{
-		if (typeof(in_value) != 'undefined')
-		{
-			if (typeof(this.elementData[in_key]) == 'undefined')
-			{
-				this.length++;
-			}
+Hash.prototype.set = function(in_key, in_value)
+{
+    if (typeof(in_value) != 'undefined')
+    {
+        if (typeof(this.elementData[in_key]) == 'undefined')
+        {
+            this.length++;
+            if (in_key == parseInt(in_key)) 
+            {
+                this.numericLength++;
+            }
+        }
 
-			return this.elementData[in_key] = in_value;
-		}
+        return this.elementData[in_key] = in_value;
+    }
 
-		return false;
-	}
+    return false;
+}
 
-	this.remove = function(in_key)
-	{
-		var tmp_value;
-		if (typeof(this.elementData[in_key]) != 'undefined')
-		{
-			this.length--;
-			tmp_value = this.elementData[in_key];
-			delete this.elementData[in_key];
-		}
+Hash.prototype.remove = function(in_key)
+{
+    var tmp_value;
+    if (typeof(this.elementData[in_key]) != 'undefined')
+    {
+        this.length--;
+        if (in_key == parseInt(in_key)) 
+        {
+            this.numericLength--;
+        }
 
-		return tmp_value;
-	}
+        tmp_value = this.elementData[in_key];
+        delete this.elementData[in_key];
+    }
 
-	this.size = function()
-	{
-		return this.length;
-	}
+    return tmp_value;
+}
 
-	this.has = function(in_key)
-	{
-		return typeof(this.elementData[in_key]) != 'undefined';
-	}
+Hash.prototype.size = function()
+{
+    return this.length;
+}
+
+Hash.prototype.has = function(in_key)
+{
+    return typeof(this.elementData[in_key]) != 'undefined';
+}
+
+Hash.prototype.merge = function(in_hash)
+{
+    for (var tmp_key in in_hash.elementData) 
+    {
+        if (typeof(this.elementData[tmp_key]) == 'undefined') 
+        {
+            this.length++;
+            if (tmp_key == parseInt(tmp_key)) 
+            {
+                this.numericLength++;
+            }
+        }
+
+        this.elementData[tmp_key] = in_hash.elementData[tmp_key];
+    }
+}
+
+Hash.prototype.compare = function(in_hash)
+{
+    if (this.length != in_hash.length) 
+    {
+        return false;
+    }
+
+    for (var tmp_key in this.elementData) 
+    {
+        if (this.elementData[tmp_key] != in_hash.elementData[tmp_key]) 
+        {
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 // }}}
@@ -174,8 +251,7 @@ function domLib_isDescendantOf(in_object, in_ancestor)
 // :WARNING: hideList is being used as an object property and is not a string
 function domLib_detectCollisions(in_object, in_recover)
 {
-	// no need to do anything for opera
-	if (domLib_isOpera)
+	if (domLib_canDrawOverSelect)
 	{
 		return;
 	}
@@ -296,6 +372,12 @@ function domLib_getOffsets(in_object)
 		in_object = in_object.offsetParent;
 	}
 
+    // MacIE misreports the offsets (even with margin: 0 in body{}), still not perfect
+    if (domLib_isMacIE) {
+        offsetLeft += 10;
+        offsetTop += 10;
+    }
+
 	return new Hash(
 		'left',			offsetLeft,
 		'top',			offsetTop,
@@ -317,7 +399,11 @@ function domLib_setTimeout(in_function, in_timeout, in_args)
 		in_args = [];
 	}
 
-	if (in_timeout == 0)
+    if (in_timeout < 0)
+	{
+        return -1;
+    }
+	else if (in_timeout == 0)
 	{
 		in_function(in_args);
 		return 0;
@@ -326,7 +412,33 @@ function domLib_setTimeout(in_function, in_timeout, in_args)
 	// must make a copy of the arguments so that we release the reference
 	if (typeof(in_args.clone) != 'function')
 	{
-		in_args.clone = Object.clone;
+		in_args.clone = function()
+		{
+			var copy = {};
+			for (var i in this)
+			{
+				var value = this[i];
+				try
+				{
+					if (value != null && typeof(value) == 'object' && value != window && !value.nodeType)
+					{
+						// for IE5 which doesn't inherit prototype
+						value.clone = Object.clone;
+						copy[i] = value.clone();
+					}
+					else
+					{
+						copy[i] = value;
+					}
+				}
+				catch(e)
+				{
+					copy[i] = value;
+				}
+			}
+		
+			return copy;
+		}
 	}
 
 	var args = in_args.clone();
@@ -372,33 +484,69 @@ function domLib_clearTimeout(in_id)
 
 function domLib_getEventPosition(in_eventObj)
 {
-	var eventPosition = new Hash();
-	if (domLib_isKonq)
+	var eventPosition = new Hash('x', 0, 'y', 0, 'scroll_x', 0, 'scroll_y', 0);
+
+	// IE varies depending on standard compliance mode
+	if (domLib_isIE)
 	{
-		eventPosition.set('x', in_eventObj.x);
-		eventPosition.set('y', in_eventObj.y);
-	}
-	else if (domLib_isIE)
-	{
-		if (document.documentElement.clientHeight)
+		var doc = (domLib_standardsMode ? document.documentElement : document.body);
+		// NOTE: events may fire before the body has been loaded
+		if (doc)
 		{
-			eventPosition.set('x', in_eventObj.clientX + document.documentElement.scrollLeft);
-			eventPosition.set('y', in_eventObj.clientY + document.documentElement.scrollTop);
-		}
-		// :WARNING: consider case where document.body doesn't yet exist for IE
-		else
-		{
-			eventPosition.set('x', in_eventObj.clientX + document.body.scrollLeft);
-			eventPosition.set('y', in_eventObj.clientY + document.body.scrollTop);
+			eventPosition.set('x', in_eventObj.clientX + doc.scrollLeft);
+			eventPosition.set('y', in_eventObj.clientY + doc.scrollTop);
+			eventPosition.set('scroll_x', doc.scrollLeft);
+			eventPosition.set('scroll_y', doc.scrollTop);
 		}
 	}
 	else
 	{
 		eventPosition.set('x', in_eventObj.pageX);
 		eventPosition.set('y', in_eventObj.pageY);
+		eventPosition.set('scroll_x', in_eventObj.pageX - in_eventObj.clientX);
+		eventPosition.set('scroll_y', in_eventObj.pageY - in_eventObj.clientY);
 	}
 
 	return eventPosition;
+}
+
+// }}}
+// {{{ domLib_cancelBubble()
+
+function domLib_cancelBubble(in_event)
+{
+    var eventObj = in_event ? in_event : window.event;
+    eventObj.cancelBubble = true;
+}
+
+// }}}
+// {{{ domLib_getIFrameReference()
+
+function domLib_getIFrameReference(in_frame)
+{
+	if (domLib_isGecko || domLib_isIE)
+	{
+		return in_frame.frameElement;
+	}
+	else
+	{
+		// we could either do it this way or require an id on the frame
+		// equivalent to the name
+		var name = in_frame.name;
+		if (!name || !in_frame.parent)
+		{
+			return;
+		}
+
+		var candidates = in_frame.parent.document.getElementsByTagName('iframe');
+		for (var i = 0; i < candidates.length; i++)
+		{
+			if (candidates[i].name == name)
+			{
+				return candidates[i];
+			}
+		}
+	}
 }
 
 // }}}
