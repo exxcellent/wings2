@@ -98,7 +98,7 @@ public class TabbedPaneExample extends WingSetPane {
         c.add(west, "West");
 
         textArea = new STextArea();
-        textArea.setPreferredSize(new SDimension(400, 200));
+        textArea.setPreferredSize(new SDimension("100%", "100%"));
         for (int i = 0; i < 12; ++i) {
             SPanel p = new SPanel(new SBorderLayout());
             p.add(new SLabel("Tab # " + i), "North");
@@ -155,19 +155,6 @@ public class TabbedPaneExample extends WingSetPane {
             showAsFormComponent.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     tabbedPane.setShowAsFormComponent(showAsFormComponent.isSelected());
-
-                    SDimension preferredSize = new SDimension();
-                    String width = widthTextField.getText();
-                    if (width != null && width.length() > 0)
-                        preferredSize.setWidth(width);
-                    if (preferredSize.getIntWidth() != -1)
-                        preferredSize.setWidth((preferredSize.getIntWidth() - 2) + "px");
-                    String height = heightTextField.getText();
-                    if (height != null && height.length() > 0)
-                        preferredSize.setHeight(height);
-                    if (preferredSize.getIntHeight() != -1)
-                        preferredSize.setHeight((preferredSize.getIntHeight() - 2) + "px");
-                    textArea.setPreferredSize(preferredSize);
                 }
             });
 
