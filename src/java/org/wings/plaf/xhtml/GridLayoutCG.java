@@ -36,8 +36,6 @@ public class GridLayoutCG
         SDimension dim = layout.getPreferredSize();
 
         boolean header = layout.getHeader();
-        boolean relative = layout.isRelative();
-        int width = layout.getWidth();
         int cellSpacing = layout.getCellSpacing();
         int cellPadding = layout.getCellPadding();
         int border = layout.getBorder();
@@ -46,18 +44,7 @@ public class GridLayoutCG
         int rows = layout.getRows();
 
         d.print("\n<table ");
-        if (width >= 0 || Utils.hasSpanAttributes(container)) {
-            d.print("style=\"");
-            if (width >= 0) {
-                if ((dim == null) || (dim.getWidth() == null)) {
-                    d.print("width:").print(width);
-                    if (relative) d.print("%");
-                    d.print(";");
-                }
-            }
-            Utils.writeSpanAttributes(d, (SComponent) container);
-            d.print("\" ");
-        }
+        org.wings.plaf.css.Utils.innerPreferredSize(d, container.getPreferredSize());
 
         if (cellSpacing >= 0)
             d.print(" cellspacing=\"").print(cellSpacing).print("\"");

@@ -43,10 +43,11 @@ public class TextComponentExample
         SForm f = new SForm();
 
         SGridLayout layout = new SGridLayout(2);
+        layout.setCellPadding(10);
         f.setLayout(layout);
 
         SLabel desc = new SLabel("Enter some text: ");
-        SLabel resultDesc = new SLabel("Entered text:");
+        SLabel resultDesc = new SLabel("Entered text: ");
         final SLabel result = new SLabel("");
         final SLabel buttonDesc = new SLabel("");
 
@@ -62,7 +63,7 @@ public class TextComponentExample
         button.setName("submit" + (i++));
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                buttonDesc.setText("button pressed");
+                buttonDesc.setText("Button pressed");
             }
         });
 

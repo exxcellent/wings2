@@ -41,6 +41,8 @@
         <copy todir="build/web">
             <fileset dir="src/web"/>
             <fileset dir="../../dist/web"/>
+            <fileset dir="src/java/wingset" includes="*Example.java">
+            </fileset>
         </copy>
         <copy todir="build/web/WEB-INF/classes">
             <fileset dir="build/class"/>
