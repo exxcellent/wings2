@@ -29,33 +29,33 @@ public abstract class IconTextCompound
 
         if (vertical == TOP && horizontal == LEFT ||
             vertical == BOTTOM && horizontal == RIGHT) {
-            device.print("<tr><td>");
+            device.print("<tr><td align=\"left\" valign=\"top\">");
             first(device, order);
-            device.print("</td><td></td></tr><tr><td></td><td>");
+            device.print("</td><td></td></tr><tr><td></td><td align=\"right\" valign=\"bottom\">");
             last(device, order);
             device.print("</td></tr>");
         }
         else if (vertical == TOP && horizontal == RIGHT ||
             vertical == BOTTOM && horizontal == LEFT) {
-            device.print("<tr><td></td><td>");
+            device.print("<tr><td></td><td align=\"right\" valign=\"top\">");
             first(device, order);
-            device.print("</td></tr><tr><td>");
+            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\">");
             last(device, order);
             device.print("</td><td></td></tr>");
         }
         else if (vertical == TOP && horizontal == CENTER ||
             vertical == BOTTOM && horizontal == CENTER) {
-            device.print("<tr><td>");
+            device.print("<tr><td align=\"center\" valign=\"top\">");
             first(device, order);
-            device.print("</td></tr><tr><td>");
+            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\">");
             last(device, order);
             device.print("</td></tr>");
         }
         else if (vertical == CENTER && horizontal == LEFT ||
             vertical == CENTER && horizontal == RIGHT) {
-            device.print("<tr><td>");
+            device.print("<tr><td align=\"left\">");
             first(device, order);
-            device.print("</td><td>");
+            device.print("</td><td align=\"right\">");
             last(device, order);
             device.print("</td></tr>");
         }

@@ -340,34 +340,6 @@ div.SList > * > li[selected="true"] {
    background-color: #AAAAFF;
 }
 
-/* wilken webgui */
-.atop {
-  display: table-cell;
-  vertical-align: top;
-}
-
-.abottom {
-  display: table-cell;
-  vertical-align: bottom;
-}
-
-.amiddle {
-  display: table-cell;
-  vertical-align: baseline;
-}
-
-.aright {
-  text-align: right;
-}
-
-.aleft {
-  text-align: left;
-}
-
-.acenter {
-  text-align: center;
-}
-
 div.STabbedPane, div.STabbedPane > table {
     width: 100%;
     height: 100%;

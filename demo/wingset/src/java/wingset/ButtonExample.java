@@ -18,6 +18,7 @@ import org.wings.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 /**
  * TODO: documentation
@@ -26,63 +27,27 @@ import java.awt.event.ActionListener;
  * @version $Revision$
  */
 public class ButtonExample
-    extends WingSetPane
-{
+    extends WingSetPane {
     static final ClassLoader cl = WingSet.class.getClassLoader();
-    static final SIcon icon = 
-        new SURLIcon("../icons/ButtonIcon.gif");
-    static final SIcon disabledIcon = 
-        new SURLIcon("../icons/ButtonDisabledIcon.gif");
-    static final SIcon pressedIcon = 
-        new SURLIcon("../icons/ButtonPressedIcon.gif");
-    static final SIcon rolloverIcon = 
-        new SURLIcon("../icons/ButtonRolloverIcon.gif");
-    
+    static final SIcon icon = new SURLIcon("../icons/ButtonIcon.gif");
+    static final SIcon disabledIcon = new SURLIcon("../icons/ButtonDisabledIcon.gif");
+    static final SIcon pressedIcon = new SURLIcon("../icons/ButtonPressedIcon.gif");
+    static final SIcon rolloverIcon = new SURLIcon("../icons/ButtonRolloverIcon.gif");
+    private ButtonControls controls;
+
     public SComponent createExample() {
-        SPanel p = new SPanel(new SGridLayout(2));
-        
-        p.add(new SLabel("<html><h4>Buttons outside forms</h4>"));
-        p.add(new SLabel("<html><h4>Image buttons outside forms</h4>"));
-        p.add(createButtonExample());
-        p.add(createImageButtonExample());
-        
-        SForm form = new SForm();
-        form.add(new SLabel("<html><h4>Buttons in a form</h4>"));
-        form.add(createButtonExample());
-        p.add(form);
-            
-        form = new SForm();
-        form.add(new SLabel("<html><h4>Image buttons in a form</h4>"));
-        form.add(createImageButtonExample());
-        p.add(form);
-        return p;
+        controls = new ButtonControls();
+        SContainer p = createButtonExample();
+
+        SForm form = new SForm(new SFlowDownLayout());
+        form.add(controls);
+        form.add(new SSeparator());
+        form.add(p);
+
+        return form;
     }
 
     SContainer createButtonExample() {
-        SPanel text = new SPanel();
-
-        final SLabel pressed = new SLabel("no Button pressed");
-
-        ActionListener action = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                pressed.setText("Button \"" + e.getActionCommand() + "\" pressed");
-            }
-        };
-
-        for ( int i=0; i<3; i++ ) {
-            SButton b = new SButton("text " + (i+1));
-            // b.setBorder(new SLineBorder(1));
-            b.addActionListener(action);
-            text.add(b);
-        }
-        text.add(new SLabel("<html><br />"));
-        text.add(pressed);
-
-        return text;
-    }
-
-    SContainer createImageButtonExample() {
-
         SButton[] buttons = new SButton[9];
         buttons[0] = new SButton("testTL");
         buttons[1] = new SButton("testTC");
@@ -94,18 +59,19 @@ public class ButtonExample
         buttons[7] = new SButton("testBC");
         buttons[8] = new SButton("testBR");
 
-        for ( int i=0; i<buttons.length; i++ ) {
+        for (int i = 0; i < buttons.length; i++) {
             buttons[i].setActionCommand(buttons[i].getText());
-            if ( i!=4 ) {
+            if (i != 4) {
                 buttons[i].setIcon(icon);
                 buttons[i].setDisabledIcon(disabledIcon);
                 buttons[i].setRolloverIcon(rolloverIcon);
                 buttons[i].setPressedIcon(pressedIcon);
                 buttons[i].setToolTipText("Button " + i);
                 buttons[i].setName(buttons[i].getText());
+                buttons[i].setShowAsFormComponent(false);
+                controls.addSizable(buttons[i]);
             }
         }
-
 
         buttons[0].setVerticalTextPosition(SConstants.TOP);
         buttons[0].setHorizontalTextPosition(SConstants.LEFT);
@@ -128,23 +94,19 @@ public class ButtonExample
         buttons[6].setVerticalTextPosition(SConstants.BOTTOM);
         buttons[6].setHorizontalTextPosition(SConstants.LEFT);
 
-        buttons[7].setSelected(true);
-        buttons[7].setEnabled(false);
         buttons[7].setVerticalTextPosition(SConstants.BOTTOM);
         buttons[7].setHorizontalTextPosition(SConstants.CENTER);
 
-        buttons[8].setSelected(false);
-        buttons[8].setEnabled(false);
         buttons[8].setVerticalTextPosition(SConstants.BOTTOM);
         buttons[8].setHorizontalTextPosition(SConstants.RIGHT);
 
         SPanel erg = new SPanel();
 
-        SGridLayout grid = new SGridLayout(3,3);
+        SGridLayout grid = new SGridLayout(3, 3);
         grid.setBorder(1);
         SPanel b = new SPanel(grid);
 
-        final SLabel pressed = new SLabel("no Button pressed");
+        final SLabel pressed = new SLabel("No button pressed");
 
         ActionListener action = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -152,11 +114,10 @@ public class ButtonExample
             }
         };
 
-        for ( int i=0; i<buttons.length; i++ ) {
+        for (int i = 0; i < buttons.length; i++)
             buttons[i].addActionListener(action);
-        }
 
-        for ( int i=0; i<buttons.length; i++ )
+        for (int i = 0; i < buttons.length; i++)
             b.add(buttons[i]);
 
         erg.add(b);
@@ -165,12 +126,36 @@ public class ButtonExample
 
         return erg;
     }
-}
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+    class ButtonControls extends ComponentControls {
+        public ButtonControls() {
+            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
+            showAsFormComponent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+                        SComponent component = (SComponent)iterator.next();
+                        component.setShowAsFormComponent(showAsFormComponent.isSelected());
+                    }
+                }
+            });
+            add(showAsFormComponent);
+
+            final SCheckBox useImages = new SCheckBox("Use Icons");
+            useImages.setSelected(true);
+            useImages.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boolean use = useImages.isSelected();
+
+                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+                        SButton component = (SButton)iterator.next();
+                        component.setIcon(use ? icon : null);
+                        component.setDisabledIcon(use ? disabledIcon : null);
+                        component.setRolloverIcon(use ? rolloverIcon : null);
+                        component.setPressedIcon(use ? pressedIcon : null);
+                    }
+                }
+            });
+            add(useImages);
+        }
+    }
+}

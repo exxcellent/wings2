@@ -84,6 +84,7 @@ public class ButtonCG
 
             org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
+        Utils.innerPreferredSize(device, component.getPreferredSize());
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");

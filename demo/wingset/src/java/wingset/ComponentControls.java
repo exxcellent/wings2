@@ -18,7 +18,7 @@ import java.awt.event.ActionEvent;
 public class ComponentControls
     extends SPanel
 {
-    private List sizables = new LinkedList();
+    protected List components = new LinkedList();
     protected STextField widthTextField;
     protected STextField heightTextField;
     private SButton button;
@@ -46,7 +46,7 @@ public class ComponentControls
                 if (height != null && height.length() > 0)
                     preferredSize.setHeight(height);
 
-                for (Iterator iterator = sizables.iterator(); iterator.hasNext();) {
+                for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                     SComponent component = (SComponent)iterator.next();
                     component.setPreferredSize(preferredSize);
                 }
@@ -55,7 +55,7 @@ public class ComponentControls
     }
 
     public void addSizable(SComponent component) {
-        sizables.add(component);
+        components.add(component);
     }
 
     protected void addActionListener(ActionListener actionListener) {

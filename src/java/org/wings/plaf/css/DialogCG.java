@@ -17,11 +17,6 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
     private final static byte[] __ = "/>".getBytes();
     private final static byte[] __class_framebut = " class=\"framebutton\"><a href=\"".getBytes();
     private final static byte[] __a_td = "</a></td>".getBytes();
-    private final static byte[] __table_cellpadd = "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\">".getBytes();
-    private final static byte[] __table_border_0 = "<table border=\"0\" width=\"100%\"><tr>".getBytes();
-    private final static byte[] __td_align_cente = "<td align=\"center\" valign=\"middle\">".getBytes();
-    private final static byte[] __table_cellpadd_1 = "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"".getBytes();
-    private final static byte[] __tr = "><tr>".getBytes();
     private final static byte[] __class_framebut_1 = " class=\"framebutton\">".getBytes();
 
 //--- properties of this plaf.
@@ -31,8 +26,6 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
      * Initialize properties from config
      */
     public DialogCG() {
-        System.out.println("HALLO HALLO HALLO");
-
         final CGManager manager = SessionManager.getSession().getCGManager();
         setCloseIcon((SIcon)manager.getObject("DialogCG.closeIcon", SIcon.class));
     }
