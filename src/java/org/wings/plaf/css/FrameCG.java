@@ -45,7 +45,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
      * document i.e. esp. the CSS attribute inheritance does not work correctly on <code>table</code> elements.
      * See i.e. http://www.ericmeyeroncss.com/bonus/render-mode.html
      */
-    public final static String DEFAULT_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" " +
+    public final static String DEFAULT_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" " +
             "\"http://www.w3.org/TR/REC-html40/strict.dtd\">";
 
     //--- properties of this plaf.
