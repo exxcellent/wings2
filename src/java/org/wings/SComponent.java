@@ -1320,6 +1320,8 @@ public abstract class SComponent
     }
 
     protected void processLowLevelEvent(String name, String[] values) {
+        System.out.println(name + " " + Arrays.asList(values));
+        
         if (actionMap == null)
             return;
 
@@ -1335,6 +1337,5 @@ public abstract class SComponent
         }
         if (actionPerformed)
             requestFocus();
-        System.out.println(name + " " + Arrays.asList(values));
     }
 }

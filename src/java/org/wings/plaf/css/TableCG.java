@@ -30,15 +30,12 @@ public class TableCG
         implements SConstants, org.wings.plaf.TableCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __table_1 = "</table>".getBytes();
-    private final static byte[] ___3 = "\n".getBytes();
     private final static byte[] __align_left = " align=\"left\"".getBytes();
     private final static byte[] __align_center = " align=\"center\"".getBytes();
     private final static byte[] __align_right = " align=\"right\"".getBytes();
     private final static byte[] __valign_top = " valign=\"top\"".getBytes();
     private final static byte[] __valign_center = " valign=\"center\"".getBytes();
     private final static byte[] __align_bottom = " align=\"bottom\"".getBytes();
-    private final static byte[] __th_1 = "</th>\n".getBytes();
 
     private String fixedTableBorderWidth;
 
@@ -92,7 +89,7 @@ public class TableCG
         device.print("\"");
 
         if (component == null) {
-            device.write("></td>".getBytes());
+            device.print("></td>");
             return;
         }
 
@@ -119,7 +116,7 @@ public class TableCG
                 device.write(__align_bottom);
                 break;
         }
-        device.write(">".getBytes());
+        device.print(">");
 
         String parameter = null;
         if (table.isEditable() && !isEditingCell && table.isCellEditable(row, col))
@@ -138,12 +135,12 @@ public class TableCG
                 RequestURL selectionAddr = table.getRequestURL();
                 selectionAddr.addParameter(Utils.event(table), parameter);
 
-                device.write("<a href=\"".getBytes());
+                device.print("<a href=\"");
                 org.wings.plaf.Utils.write(device, selectionAddr.toString());
                 device.print("\">");
             }
         } else
-            device.write("<span>".getBytes());
+            device.print("<span>");
 
         rendererPane.writeComponent(device, component, table);
 
@@ -165,9 +162,9 @@ public class TableCG
             throws IOException {
         SComponent comp = table.prepareHeaderRenderer(c);
 
-        device.write("<th>".getBytes());
+        device.print("<th>");
         rendererPane.writeComponent(device, comp, table);
-        device.write(__th_1);
+        device.print("</th>\n");
     }
 
 
@@ -181,7 +178,7 @@ public class TableCG
         SDimension intercellPadding = table.getIntercellPadding();
         SDimension intercellSpacing = table.getIntercellSpacing();
 
-        device.write("<table".getBytes());
+        device.print("<table");
         Utils.innerPreferredSize(device, component.getPreferredSize());
 
         // TODO: border="" should be obsolete
@@ -190,7 +187,7 @@ public class TableCG
         org.wings.plaf.Utils.optAttribute(device, "border", fixedTableBorderWidth);
         org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? intercellSpacing.width : null));
         org.wings.plaf.Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? intercellPadding.width : null));
-        device.write(">\n".getBytes());
+        device.print(">\n");
         /*
         * get viewable area
         */
@@ -216,17 +213,18 @@ public class TableCG
         boolean showAsFormComponent = table.getShowAsFormComponent();
 
         if (table.isHeaderVisible()) {
-            device.write("<tr>".getBytes());
+            device.print("<thead><tr>\n");
 
             if (numbering)
-                device.write("<th></th>".getBytes());
+                device.print("<th></th>");
 
             for (int c = startCol; c < endCol; c++)
                 writeHeaderCell(device, table, rendererPane, table.convertColumnIndexToModel(c));
 
-            device.write("</tr>\n".getBytes());
+            device.print("</tr></thead>\n");
         }
 
+        device.print("<tbody>\n");
         for (int r = startRow; r < endRow; r++) {
             device.print("<tr");
             if (selectionModel.isSelectedIndex(r))
@@ -255,7 +253,7 @@ public class TableCG
                     selectionAddr.addParameter(org.wings.plaf.css.Utils.event(table),
                             table.getToggleSelectionParameter(r, -1));
 
-                    device.write("<a href=\"".getBytes());
+                    device.print("<a href=\"");
                     org.wings.plaf.Utils.write(device, selectionAddr.toString());
                     device.print("\">");
                     device.print(r);
@@ -267,10 +265,10 @@ public class TableCG
             for (int c = startCol; c < endCol; c++)
                 writeCell(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
 
-            device.write("</tr>\n".getBytes());
+            device.print("</tr>\n");
         }
-        device.write(__table_1);
-        device.write(___3);
+        device.print("</tbody>\n");
+        device.print("</table>\n");
     }
 
     public String getFixedTableBorderWidth() {

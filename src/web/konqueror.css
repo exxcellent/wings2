@@ -117,31 +117,31 @@ div.STable > table {
     border-collapse: collapse;
 }
 
-div.STable > table > tr[odd="true"] {
+div.STable > table > tbody > tr[odd="true"] {
     background-color: #eeeeee;
 }
 
-div.STable > table > tr[selected="true"] {
+div.STable > table > tbody > tr[selected="true"] {
     background-color: #aaaaff !important;
 }
 
-div.STable > table > tr > th {
+div.STable > table > tbody > tr > th {
     border: 1px solid black;
     padding-left: 8px;
     padding-right: 8px;
 }
 
-div.STable > table > tr > td {
+div.STable > table > tbody > tr > td {
     cursor: pointer
     padding-left: 8px;
     padding-right: 8px;
     border-left: 1px solid black;
 }
-div.STable > table > tr > td[col="numbering"] {
+div.STable > table > tbody > tr > td[col="numbering"] {
     text-align: right;
 }
 
-div.STable > table > tr > td button {
+div.STable > table > tbody > tr > td button {
     border: none;
     background-color: inherit;
     padding: 0px

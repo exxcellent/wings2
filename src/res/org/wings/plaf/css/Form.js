@@ -31,8 +31,8 @@ function preventDefault(event) {
 
 function sendEvent(event, eventValue) {
     event = getEvent(event);
-    var form = getParentByTagName(getTarget(event), "FORM");
-    var div = getParentByTagName(getTarget(event), "DIV");
+    var form = getParentByTagName(event.currentTarget, "FORM");
+    var div = getParentByTagName(event.currentTarget, "DIV");
     var eventName = div.getAttribute("event");
 
     if ( form != null ) {

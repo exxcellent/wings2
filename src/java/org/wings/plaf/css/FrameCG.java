@@ -90,6 +90,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(stylesheet)));
 
         component.addScriptListener(FORM_SCRIPT_LOADER);
+        CaptureDefaultBindingsScriptListener.install(component);
     }
 
     public void uninstallCG(final SComponent comp) {

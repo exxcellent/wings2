@@ -60,10 +60,11 @@
             <param-name>wings.lookandfeel.default</param-name>
             <param-value>org.wings.plaf.css.LookAndFeel</param-value>
         </init-param>
-        <!--init-param>
-            <param-name>wings.event.usenames</param-name>
-            <param-value>true</param-value>
-        </init-param-->
+        <init-param>
+            <description>See KeyStroke.getKeyStroke(String s).</description>
+            <param-name>wings.capture.default.bindings</param-name>
+            <param-value>alt LEFT, alt RIGHT, F1</param-value>
+        </init-param>
         <!--init-param>
             <param-name>wings.servlet.lookupname</param-name>
             <param-value>Recording</param-value>

@@ -51,10 +51,11 @@ class InputMapScriptListener
             KeyStroke keyStroke = keyStrokes[i];
             Object binding = inputMap.get(keyStroke);
 
+            /*
             writeMatch(typed, keyStroke);
             writeRequest(typed, binding);
+            */
 
-            /*
             switch (keyStroke.getKeyEventType()) {
                 case KeyEvent.KEY_PRESSED:
                     writeMatch(pressed, keyStroke);
@@ -71,7 +72,6 @@ class InputMapScriptListener
                     System.out.println("released binding = " + binding);
                     break;
             }
-            */
         }
 
         if (pressed.length() > 0)
