@@ -1,0 +1,77 @@
+<project name="wingS-docbook" basedir=".">
+	
+  <!-- read properties from file -->
+  <property file="etc/build.properties"/>
+  <property file="etc/custom-build.properties"/>
+
+  <path id="saxon_cp">
+    <pathelement location="${saxon_folder}/saxon.jar"/>
+  </path>
+
+  <target name="check_env">
+    <fail message="Please copy etc/build.properties to etc/custom-build.properties and adapt custom-build.properties to reflect your system's folders.">
+      <condition>
+        <not>
+      	  <and>         
+            <isset property="docbook_folder"/>
+            <isset property="saxon_folder"/>
+            <isset property="fop_folder"/>
+          </and>
+        </not>
+      </condition>
+    </fail>
+    <fail message="One of the folders does not exist, check etc/custom-build.properties.">
+      <condition>
+        <not>
+      	  <and>
+            <available file="${docbook_folder}" type="dir"/>
+            <available file="${saxon_folder}" type="dir"/>
+            <available file="${fop_folder}" type="dir"/>
+          </and>
+        </not>
+      </condition>
+    </fail>
+  </target>
+
+  <target name="init" depends="check_env">
+    <mkdir dir="build"/>
+    <mkdir dir="dist"/>
+  </target>
+
+  <target name="html" depends="init">
+    <java classname="com.icl.saxon.StyleSheet">
+      <classpath refid="saxon_cp"/>
+      <arg line="-o build/wingS-whitepaper.html"/>
+      <arg value="src/wingS-whitepaper.xml"/>
+      <arg value="${docbook_folder}/html/docbook.xsl"/>
+    </java>
+  </target>
+
+  <target name="fo" depends="init">
+    <java classname="com.icl.saxon.StyleSheet">
+      <classpath refid="saxon_cp"/>
+      <arg line="-o build/wingS-whitepaper.fo"/>
+      <arg value="src/wingS-whitepaper.xml"/>
+      <arg value="${docbook_folder}/fo/docbook.xsl"/>
+    </java>
+  </target>
+
+  <target name="pdf" depends="fo">
+    <exec executable="${fop_folder}/fop.bat">
+      <arg value="build/wingS-whitepaper.fo"/>
+      <arg value="build/wingS-whitepaper.pdf"/>
+    </exec>
+  </target>
+
+  <target name="dist" depends="clean,html,pdf">
+    <copy todir="dist">
+      <fileset dir="build" includes="**/*.html,**/*.pdf"/>
+    </copy>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="build"/>
+    <delete dir="dist"/>
+  </target>
+
+</project>
