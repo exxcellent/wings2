@@ -1,14 +1,16 @@
 /*
- * Created on 02.03.2005
+ * $Id$
+ * Copyright 2000,2005 wingS development team.
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-package org.wings.plaf.css;
-
-import java.io.IOException;
-
-import javax.swing.InputMap;
+ * This file is part of wingS (http://www.j-wings.org).
+ *
+ * wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,26 +21,21 @@ import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
 
+import javax.swing.*;
+import java.io.IOException;
+
 /**
  * @author ole
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDelegate {
     private final static transient Log log = LogFactory.getLog(PrefixAndSuffixDelegate.class);
 
-    /**
-     * 
-     */
-    public PrefixAndSuffixDelegate() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+    public PrefixAndSuffixDelegate() {}
     
     public void writePrefix(Device device, SComponent component) throws IOException {
         SDimension prefSize = component.getPreferredSize();
-        Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" -->");
+        Utils.printDebugNewline(device, component);
+        Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         device.print("<div");
         if (component.getStyle() != null && component.getStyle().length() > 0) {
             device.print(" class=\"");

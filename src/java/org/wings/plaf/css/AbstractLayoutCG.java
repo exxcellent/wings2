@@ -95,6 +95,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             Utils.printCSSInlineStyleAttributes(d, c);
             d.print(">");
 
+            Utils.printNewline(d, c);            
             c.write(d); // Render component
 
             if (firstRow && renderFirstLineAsHeader)

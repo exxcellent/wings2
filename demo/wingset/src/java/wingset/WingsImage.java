@@ -31,6 +31,7 @@ public class WingsImage
         SPanel p = new SPanel();
         final SBorderLayout layout = new SBorderLayout();
 
+        p.setHorizontalAlignment(CENTER);
         p.setLayout(layout);
         p.setPreferredSize(new SDimension("100%", null));
 

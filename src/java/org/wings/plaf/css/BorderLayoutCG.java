@@ -39,43 +39,61 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         printLayouterTableHeader(d, "SBorderLayout",layout.getSpacing(),0,layout.getBorder(),layout);
 
         if (north != null) {
-            Utils.printNewline(d, layout.getContainer());
-            d.print("<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
+            d.print("<tr style=\"height: 0%\">");
+            Utils.printNewline(d, north);
+            d.print("<td colspan=\"").print(cols).print("\"");
+            Utils.printTableCellAlignment(d, north);
+            Utils.printCSSInlineStyleAttributes(d, north);
+            d.print(">");
             north.write(d);
             d.print("</td>");
             Utils.printNewline(d, layout.getContainer());
             d.print("</tr>");
+            Utils.printNewline(d, layout.getContainer());
         }
 
-        Utils.printNewline(d, layout.getContainer());
         d.print("<tr style=\"height: 100%\">");
 
         if (west != null) {
-            Utils.printNewline(d, layout.getContainer());
-            d.print("<td style=\"width: 0%\">");
+            Utils.printNewline(d, west);
+            d.print("<td");
+            Utils.printTableCellAlignment(d, west);
+            Utils.printCSSInlineStyleAttributes(d, west);
+            d.print(">");
             west.write(d);
             d.print("</td>");
         }
 
         if (center != null) {
-            Utils.printNewline(d, layout.getContainer());
-            d.print("<td style=\"width: 100%\">");
+            Utils.printNewline(d, center);
+            d.print("<td");
+            Utils.printTableCellAlignment(d, center);
+            Utils.printCSSInlineStyleAttributes(d, center);
+            d.print(">");
             center.write(d);
             d.print("</td>");
         }
 
         if (east != null) {
-            Utils.printNewline(d, layout.getContainer());
-            d.print("<td style=\"width: 0%\">");
+            Utils.printNewline(d, east);
+            d.print("<td");
+            Utils.printTableCellAlignment(d, east);
+            Utils.printCSSInlineStyleAttributes(d, east);
+            d.print(">");
             east.write(d);
             d.print("</td>");
         }
+
         Utils.printNewline(d, layout.getContainer());
         d.print("</tr>");
 
         if (south != null) {
             Utils.printNewline(d, layout.getContainer());
-            d.print("<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
+            d.print("<tr style=\"height: 0%\">");
+            Utils.printNewline(d, south);
+            d.print("<td colspan=\"").print(cols).print("\"");
+            Utils.printTableCellAlignment(d, south);
+            Utils.printCSSInlineStyleAttributes(d, south);
             south.write(d);
             d.print("</td>");
             Utils.printNewline(d, layout.getContainer());

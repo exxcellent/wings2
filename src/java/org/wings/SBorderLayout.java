@@ -28,7 +28,6 @@ import java.util.Map;
  */
 public class SBorderLayout
         extends SAbstractLayoutManager {
-    Map components = new HashMap(5);
 
     public static final String NORTH = "North";
     public static final String SOUTH = "South";
@@ -36,8 +35,9 @@ public class SBorderLayout
     public static final String WEST = "West";
     public static final String CENTER = "Center";
 
-    int border = 0;
-    int cellspacing = 0;
+    protected Map components = new HashMap(5);
+    protected int border = 0;
+    protected int cellspacing = 0;
 
     /**
      * creates a new border layout

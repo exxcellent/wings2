@@ -38,7 +38,10 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
         d.print("<div");
         Utils.printDivHorizontalAlignment(d, alignment);
         if (alignment == SConstants.CENTER)
+            // Cheat -- margin left/right to simulate center float. Will not wrap
             d.print(" style=\"display:table; margin-left:auto; margin-right:auto;\"");
+        else
+            d.print(" style=\"display:table; width:100%;\""); // gecko bug workaround: inherit surrounding panel bg color.
         d.print(" class=\"SFlowLayout\">");
 
         final String alignmentStyle;

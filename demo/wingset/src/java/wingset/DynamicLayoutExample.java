@@ -53,10 +53,10 @@ public class DynamicLayoutExample extends WingSetPane {
     }
 
     private static SLabel createDummyLabel(int i) {
-        final String[] texts = {"<html><span>[%] A very short component (TopLeft)</span>",
-                                "<html><span>[%] A much longer, unbreakable label for wrapping demo (Default)</span>",
-                                "<html><span>[%] And again a short one (RightBottom, red)</span>",
-                                "<html><span>[%] A 2-line <br/> label (CenterCenter, bold-italic)</span>"};
+        final String[] texts = {"<html><nobr>[%] A very short component (TopLeft)</nobr>",
+                                "<html><nobr>[%] A much longer, unbreakable label for wrapping demo (Default)</nobr>",
+                                "<html><nobr>[%] And again a short one (RightBottom, red)</nobr>",
+                                "<html><nobr>[%] A 2-line</nobr><br/><nobr>label (CenterCenter, bold-italic)</nobr>"};
         final SFont boldItalic = new SFont(null, SFont.BOLD + SFont.ITALIC, SFont.DEFAULT_SIZE);
         final SBorder greenLineBorder = new SLineBorder();
         final SLabel label = new SLabel(texts[i % 4].replace("%", Integer.toString((i + 1))));
@@ -104,22 +104,22 @@ public class DynamicLayoutExample extends WingSetPane {
 
             add(new SLabel("Spacing and Border"));
             SPanel borderDemoPanel2 = new SPanel(new SBorderLayout(10, 1));
-            borderDemoPanel2.add(wrap(createDummyLabel(0)), SBorderLayout.NORTH);
-            borderDemoPanel2.add(wrap(createDummyLabel(1)), SBorderLayout.SOUTH);
-            borderDemoPanel2.add(wrap(createDummyLabel(2)), SBorderLayout.EAST);
-            borderDemoPanel2.add(wrap(createDummyLabel(3)), SBorderLayout.WEST);
-            borderDemoPanel2.add(wrap(createDummyLabel(4)), SBorderLayout.CENTER);
+            borderDemoPanel2.add(wrap(createDummyLabel(0+3)), SBorderLayout.NORTH);
+            borderDemoPanel2.add(wrap(createDummyLabel(1+3)), SBorderLayout.SOUTH);
+            borderDemoPanel2.add(wrap(createDummyLabel(2+3)), SBorderLayout.EAST);
+            borderDemoPanel2.add(wrap(createDummyLabel(3+3)), SBorderLayout.WEST);
+            borderDemoPanel2.add(wrap(createDummyLabel(4+3)), SBorderLayout.CENTER);
             add(borderDemoPanel2);
             borderDemoPanel2.setPreferredSize(new SDimension(800,200));
             borderDemoPanel2.setBackground(new Color(210, 210, 210));
         }
 
         private SPanel wrap(SComponent c) {
-            final Color[] colors = { Color.red, Color.green, Color.pink, Color.magenta, Color.black, Color.cyan };
+            final Color[] colors = { Color.red, Color.green, Color.pink, Color.magenta, Color.gray, Color.cyan };
             SPanel p = new SPanel();
             p.add(c);
             p.setPreferredSize(new SDimension("100%","100%"));
-            p.setBackground(colors[i++ % colors.length].brighter());
+            p.setBackground(colors[i++ % colors.length]);
             return p;
         }
     }

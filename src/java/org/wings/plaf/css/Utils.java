@@ -137,8 +137,10 @@ public final class Utils implements SConstants {
         printTableHorizontalAlignment(d, align);
     }
 
-    // TODO ? may obsolete?
-    public static void printTableHorizontalAlignment(Device d, int align)
+    /**
+     * Horizontal alignment for TABLE cells. i.e. <code>align="center"</code>
+     */
+    private static void printTableHorizontalAlignment(Device d, int align)
             throws IOException {
         if (align == SConstants.NO_ALIGN || align == SConstants.LEFT) {
             d.print(" align=\"left\"");
@@ -151,8 +153,10 @@ public final class Utils implements SConstants {
         }
     }
 
-    // TODO ? may obsolete?
-    public static void printTableVerticalAlignment(Device d, int align)
+    /**
+     * Vertical alignment for TABLE cells. i.e. <code>valign="top"</code>
+     */
+    private static void printTableVerticalAlignment(Device d, int align)
             throws IOException {
         if (align == SConstants.NO_ALIGN || align == SConstants.CENTER) {
         } else if (align == SConstants.TOP) {
@@ -166,8 +170,10 @@ public final class Utils implements SConstants {
 
     public static void printTableCellAlignment(Device d, SComponent c)
             throws IOException {
-        printTableHorizontalAlignment(d, c.getHorizontalAlignment());
-        printTableVerticalAlignment(d, c.getVerticalAlignment());
+        if (c != null) {
+            printTableHorizontalAlignment(d, c.getHorizontalAlignment());
+            printTableVerticalAlignment(d, c.getVerticalAlignment());
+        }
     }
 
     public static String toColorString(int rgb) {
@@ -198,6 +204,8 @@ public final class Utils implements SConstants {
      * @throws IOException
      */
     public static void printCSSInlineStyleAttributes(Device d, SComponent component) throws IOException {
+        if (component == null)
+            return;
         StringBuffer styleString = new StringBuffer();
         java.awt.Color fgColor = component.getForeground();
         java.awt.Color bgcolor = component.getBackground();
@@ -294,7 +302,7 @@ public final class Utils implements SConstants {
      * Prints a HTML style attribute with widht/height of 100%.
      * <p>Sample: <code> style="widht:100%;"</code>
      *
-     * @param device        Device to print to
+     * @param device Device to print to
      */
     public static void printCSSInlineFullSize(Device device, SDimension preferredSize) throws IOException {
         if (preferredSize != null && (preferredSize.isWidthDefined() || preferredSize.isHeightDefined())) {
@@ -528,7 +536,7 @@ public final class Utils implements SConstants {
      * Helper method for CGs to print out debug information in output stream.
      * If {@link #PRINT_DEBUG} prints the passed string and returns the current {@link Device}.
      * In other case omits ouput and returns a {@link NullDevice}
-
+     *
      * @param d The original device
      * @return The original device or a {@link NullDevice}
      */
@@ -541,7 +549,7 @@ public final class Utils implements SConstants {
 
     /**
      * Prints a hierarchical idented newline if debug mode is enabled.
-     * {@link #printNewline(org.wings.io.Device, org.wings.SComponent)} 
+     * {@link #printNewline(org.wings.io.Device, org.wings.SComponent)}
      */
     public static Device printDebugNewline(Device d, SComponent currentComponent) throws IOException {
         if (PRINT_DEBUG)
@@ -554,7 +562,7 @@ public final class Utils implements SConstants {
      * Prints a hierarchical idented newline. For each surrounding container of the passed component one ident level.
      */
     public static Device printNewline(Device d, SComponent currentComponent) throws IOException {
-        if (PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
+        if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
             return d;
         d.print("\n");
         while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
@@ -564,7 +572,9 @@ public final class Utils implements SConstants {
         return d;
     }
 
-    /** loads a script from disk through the classloader.
+    /**
+     * loads a script from disk through the classloader.
+     *
      * @param path the path where the script can be found
      * @return the script as a String
      */
