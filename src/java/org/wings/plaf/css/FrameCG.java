@@ -178,12 +178,6 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             device.write("</title>\n".getBytes());
         }
 
-        if (frame.getBaseTarget() != null) {
-            device.write("<base target=\"".getBytes());
-            org.wings.plaf.Utils.write(device, frame.getBaseTarget());
-            device.write("\"/>\n".getBytes());
-        }
-
         device.write("<meta http-equiv=\"Content-type\" content=\"text/html; charset=".getBytes());
         org.wings.plaf.Utils.write(device, encoding);
         device.write("\"/>\n".getBytes());
