@@ -35,7 +35,7 @@ abstract public class WingSetPane extends SPanel implements SConstants {
     public WingSetPane() {
         setLayout(createResourceTemplate("/templates/ContentLayout.thtml"));
 
-        SAnchor anchor = new SAnchor("/wingset/" + getClass().getName().substring(getClass().getName().indexOf('.') + 1) + ".java");
+        SAnchor anchor = new SAnchor("../" + getClass().getName().substring(getClass().getName().indexOf('.') + 1) + ".java");
         anchor.setTarget("sourceWindow");
         anchor.add(new SLabel("view java source code", SOURCE_LABEL_ICON));
         add(anchor, "viewSource");
