@@ -45,24 +45,24 @@ public class FileChooserCG
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
-        org.wings.plaf.Utils.optAttribute(device, "size", columns);
-        org.wings.plaf.Utils.optAttribute(device, "accept", component.getFileNameFilter());
+        Utils.optAttribute(device, "size", columns);
+        Utils.optAttribute(device, "accept", component.getFileNameFilter());
 
         if (component.isEnabled()) {
             device.print(" name=\"");
-            org.wings.plaf.Utils.write(device, Utils.event(component));
+            Utils.write(device, Utils.event(component));
             device.print("\"");
             device.print(" id=\"");
-            org.wings.plaf.Utils.write(device, component.getName());
+            Utils.write(device, component.getName());
             device.print("\"");
         }
         else
             device.print(" readonly=\"true\"");
 
         if (component.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "focus", component.getName());
 
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 
         Utils.writeEvents(device, component);
         device.print("/>");

@@ -37,8 +37,8 @@ public class TextFieldCG
         final STextField component = (STextField) _c;
 
         device.print("<input type=\"text\"");
-        org.wings.plaf.Utils.optAttribute(device, "size", component.getColumns());
-        org.wings.plaf.Utils.optAttribute(device, "maxlength", component.getMaxColumns());
+        Utils.optAttribute(device, "size", component.getColumns());
+        Utils.optAttribute(device, "maxlength", component.getMaxColumns());
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
@@ -47,12 +47,12 @@ public class TextFieldCG
         }
         if (component.isEnabled()) {
             device.print(" name=\"");
-            org.wings.plaf.Utils.write(device, Utils.event(component));
+            Utils.write(device, Utils.event(component));
             device.print("\"");
         } else {
             device.print(" disabled=\"1\"");
         }
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 
         if (!(component instanceof SFormattedTextField)) {
             component.removeScriptListener(submitListener);
@@ -62,11 +62,11 @@ public class TextFieldCG
         }
         
         if (component.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "focus", component.getName());
 
         Utils.writeEvents(device, component);
 
-        org.wings.plaf.Utils.optAttribute(device, "value", component.getText());
+        Utils.optAttribute(device, "value", component.getText());
         device.print("/>");
     }
 }

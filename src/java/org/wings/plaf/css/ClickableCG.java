@@ -36,10 +36,10 @@ public class ClickableCG
             device.print("\" value=\"");
             Utils.write(device, button.getEvent());
             device.print("\"");
-            org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
+            Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         } else {
             device.print("<a href=\"");
-            org.wings.plaf.Utils.write(device, button.getURL());
+            Utils.write(device, button.getURL());
             device.print("\"");
         }
 

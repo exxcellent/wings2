@@ -17,31 +17,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is a box layout.
+ * This is a box layout - a layout manager that allows multiple components
+ * to be laid out either vertically {@link <code>SConstants#VERTICAL</code>}
+ * or horizontally {@link <code>SConstants#HORIZONTAL</code>}.
+ * <p/>
+ * Nesting multiple panels with different combinations of horizontal
+ * and vertical gives an effect similar to GridBagLayout, without the complexity.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public class SBoxLayout
         extends SAbstractLayoutManager {
-    public static final int X_AXIS = 0;
-    public static final int Y_AXIS = 1;
+
+    // Constants for swing compatibility
+    public static final int X_AXIS = SConstants.HORIZONTAL;
+    public static final int Y_AXIS = SConstants.VERTICAL;
 
     protected ArrayList components = new ArrayList(2);
 
     protected int orientation = SConstants.HORIZONTAL;
     protected int align = SConstants.LEFT_ALIGN;
 
-    protected SComponent style = null;
-
     /**
      * creates a new box layout with the given orientation
      *
-     * @param style style
      * @param orientation orientation
      */
-    public SBoxLayout(SComponent style, int orientation) {
-        this.style = style;
+    public SBoxLayout(int orientation) {
         setOrientation(orientation);
     }
 
@@ -88,23 +91,27 @@ public class SBoxLayout
      *
      * @return orientation
      */
-    public int getOrientation() { return orientation; }
+    public int getOrientation() {
+        return orientation;
+    }
 
 
-    /**
+    /* *
      * returns the alignment
      *
      * @return alignment
-     */
+     *
     public int getHorizontalAlignment() {
-        if (style != null) return style.getHorizontalAlignment();
+        if (getContainer() != null)
+            return getContainer().getHorizontalAlignment();
         return SConstants.LEFT_ALIGN;
     }
 
     public int getVerticalAlignment() {
-        if (style != null) return style.getVerticalAlignment();
+        if (getContainer()!= null)
+            return getContainer().getVerticalAlignment();
         return SConstants.TOP_ALIGN;
-    }
+    }*/
 }
 
 

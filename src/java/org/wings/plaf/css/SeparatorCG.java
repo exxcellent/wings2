@@ -33,9 +33,9 @@ public class SeparatorCG
         final SSeparator component = (SSeparator) _c;
 
         device.print("<hr");
-        org.wings.plaf.Utils.optAttribute(device, "class", component.getStyle());
-        org.wings.plaf.Utils.optAttribute(device, "width", component.getWidth());
-        org.wings.plaf.Utils.optAttribute(device, "size", component.getSize());
+        Utils.optAttribute(device, "class", component.getStyle());
+        Utils.optAttribute(device, "width", component.getWidth());
+        Utils.optAttribute(device, "size", component.getSize());
 
         switch (component.getAlignment()) {
             case SSeparator.RIGHT_ALIGN:

@@ -24,58 +24,62 @@ public class BorderLayoutCG extends AbstractLayoutCG {
 
     public void write(Device d, SLayoutManager l)
             throws IOException {
-        SBorderLayout layout = (SBorderLayout) l;
-        SComponent north = (SComponent) layout.getComponents().get(SBorderLayout.NORTH);
-        SComponent east = (SComponent) layout.getComponents().get(SBorderLayout.EAST);
-        SComponent center = (SComponent) layout.getComponents().get(SBorderLayout.CENTER);
-        SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
-        SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
+        final SBorderLayout layout = (SBorderLayout) l;
+        final SComponent north = (SComponent) layout.getComponents().get(SBorderLayout.NORTH);
+        final SComponent east = (SComponent) layout.getComponents().get(SBorderLayout.EAST);
+        final SComponent center = (SComponent) layout.getComponents().get(SBorderLayout.CENTER);
+        final SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
+        final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
         int cols = 0;
         if (west != null) cols++;
         if (center != null) cols++;
         if (east != null) cols++;
 
-        d.print("\n<table class=\"SBorderLayout\" cellpadding=\"0\" cellspacing=\"0\"><tbody>");
+        printLayouterTableHeader(d, "SBorderLayout",0,0,0,layout);
 
         if (north != null) {
-            d.print("\n<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
-            writeComponent(d, north);
+            Utils.printNewline(d, layout.getContainer());
+            d.print("<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
+            north.write(d);
             d.print("</td></tr>");
         }
-        d.print("\n<tr style=\"height: 100%\">");
+
+        Utils.printNewline(d, layout.getContainer());
+        d.print("<tr style=\"height: 100%\">");
 
         if (west != null) {
+            Utils.printNewline(d, layout.getContainer());
             d.print("<td style=\"width: 0%\">");
-            writeComponent(d, west);
+            west.write(d);
             d.print("</td>");
         }
 
         if (center != null) {
+            Utils.printNewline(d, layout.getContainer());
             d.print("<td style=\"width: 100%\">");
-            writeComponent(d, center);
+            center.write(d);
             d.print("</td>");
         }
 
         if (east != null) {
+            Utils.printNewline(d, layout.getContainer());
             d.print("<td style=\"width: 0%\">");
-            writeComponent(d, east);
+            east.write(d);
             d.print("</td>");
         }
-        d.print("</tr>\n");
+        d.print("</tr>");
 
         if (south != null) {
-            d.print("\n<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
-            writeComponent(d, south);
+            Utils.printNewline(d, layout.getContainer());
+            d.print("<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
+            south.write(d);
             d.print("</td></tr>");
         }
-        d.print("\n</tbody></table>");
+
+        printLayouterTableFooter(d, "SBorderLayout", layout);
     }
 
-    protected void writeComponent(Device d, SComponent c)
-            throws IOException {
-        c.write(d);
-    }
 }
 
 

@@ -14,8 +14,6 @@
 package org.wings.plaf.css;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
@@ -34,8 +32,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
-    private final static transient Log log = LogFactory.getLog(TabbedPaneCG.class);
-
     public void installCG(SComponent component) {
         super.installCG(component);
 
@@ -138,7 +134,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     private void writeTabs(Device device, STabbedPane tabbedPane) throws IOException {
         boolean childSelectorWorkaround = !tabbedPane.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = tabbedPane.getShowAsFormComponent();
-        boolean konquerorWorkaround = "Konqueror".equals(tabbedPane.getSession().getUserAgent().getBrowserName());
+        boolean konquerorWorkaround = tabbedPane.getSession().getUserAgent().getBrowserType().equals(BrowserType.KONQUEROR);
 
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             SIcon icon = tabbedPane.getIconAt(i);
@@ -146,6 +142,8 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             String tooltip = tabbedPane.getToolTipText();
             if (konquerorWorkaround)
                 title = nonBreakingSpaces(title);
+
+            Utils.printNewline(device, tabbedPane);
 
             if (showAsFormComponent)
                 device.print("<button name=\"")
@@ -162,7 +160,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             if (i == tabbedPane.getSelectedIndex()) {
                 device.print(" selected=\"true\"");
                 if (tabbedPane.isFocusOwner())
-                    org.wings.plaf.Utils.optAttribute(device, "focus", tabbedPane.getName());
+                    Utils.optAttribute(device, "focus", tabbedPane.getName());
             }
 
             if (!tabbedPane.isEnabledAt(i))
@@ -178,28 +176,28 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
 
             if (icon != null && tabbedPane.getTabPlacement() != STabbedPane.RIGHT) {
                 device.print("<img");
-                org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
-                org.wings.plaf.Utils.optAttribute(device, "alt", tooltip);
-                org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
-                org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
+                Utils.optAttribute(device, "src", icon.getURL());
+                Utils.optAttribute(device, "alt", tooltip);
+                Utils.optAttribute(device, "width", icon.getIconWidth());
+                Utils.optAttribute(device, "height", icon.getIconHeight());
                 device.print("/>&nbsp;");
             }
 
-            org.wings.plaf.Utils.write(device, title);
+            Utils.write(device, title);
 
             if (icon != null && tabbedPane.getTabPlacement() == STabbedPane.RIGHT) {
                 device.print("&nbsp;<img");
-                org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
-                org.wings.plaf.Utils.optAttribute(device, "alt", tooltip);
-                org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
-                org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
+                Utils.optAttribute(device, "src", icon.getURL());
+                Utils.optAttribute(device, "alt", tooltip);
+                Utils.optAttribute(device, "width", icon.getIconWidth());
+                Utils.optAttribute(device, "height", icon.getIconHeight());
                 device.print("/>");
             }
 
             if (showAsFormComponent)
-                device.print("</button>\n");
+                device.print("</button>");
             else
-                device.print("</a>\n");
+                device.print("</a>");
         }
     }
 

@@ -36,7 +36,7 @@ public class ButtonCG
                 if (renderNameAttribute) {
 
                     device.print(" name=\"");
-                    org.wings.plaf.Utils.write(device, iconName);
+                    Utils.write(device, iconName);
 
                     device.print("\"");
                 } // end of if ()
@@ -45,10 +45,10 @@ public class ButtonCG
                 if (rolloverIcon != null) {
 
                     device.print(" onMouseover=\"if(document.images){this.src='");
-                    org.wings.plaf.Utils.write(device, rolloverIcon.getURL());
+                    Utils.write(device, rolloverIcon.getURL());
 
                     device.print("';}\" onmouseout=\"if(document.images){this.src='");
-                    org.wings.plaf.Utils.write(device, origIcon.getURL());
+                    Utils.write(device, origIcon.getURL());
 
                     device.print("';}\"");
                 }
@@ -56,10 +56,10 @@ public class ButtonCG
                 if (pressedIcon != null) {
 
                     device.print(" onMousedown=\"if(document.images){this.src='");
-                    org.wings.plaf.Utils.write(device, pressedIcon.getURL());
+                    Utils.write(device, pressedIcon.getURL());
 
                     device.print("';}\" onmouseup=\"if(document.images){this.src='");
-                    org.wings.plaf.Utils.write(device, rolloverIcon != null ? rolloverIcon.getURL() : origIcon.getURL());
+                    Utils.write(device, rolloverIcon != null ? rolloverIcon.getURL() : origIcon.getURL());
 
                     device.print("';}\"");
                 }
@@ -74,10 +74,10 @@ public class ButtonCG
 
         if (button.getShowAsFormComponent()) {
             device.print("<button name=\"");
-            org.wings.plaf.Utils.write(device, Utils.event(button));
+            Utils.write(device, Utils.event(button));
             device.print("\"");
-            org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
-            org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
+            Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
+            Utils.optAttribute(device, "accesskey", button.getMnemonic());
         } else {
             device.print("<a href=\"");
             RequestURL addr = button.getRequestURL();
@@ -85,7 +85,7 @@ public class ButtonCG
             addr.write(device);
             device.print("\"");
 
-            org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
+            Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
@@ -94,7 +94,7 @@ public class ButtonCG
         if (button.isSelected())
             device.print(" checked=\"true\"");
         if (component.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "focus", component.getName());
 
         Utils.writeEvents(device, button);
         device.print(">");

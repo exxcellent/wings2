@@ -119,16 +119,16 @@ public class TableCG
         if (parameter != null && !isEditingCell) {
             if (showAsFormComponent) {
                 device.print("<button name=\"");
-                org.wings.plaf.Utils.write(device, Utils.event(table));
+                Utils.write(device, Utils.event(table));
                 device.print("\" value=\"");
-                org.wings.plaf.Utils.write(device, parameter);
+                Utils.write(device, parameter);
                 device.print("\">");
             } else {
                 RequestURL selectionAddr = table.getRequestURL();
                 selectionAddr.addParameter(Utils.event(table), parameter);
 
                 device.print("<a href=\"");
-                org.wings.plaf.Utils.write(device, selectionAddr.toString());
+                Utils.write(device, selectionAddr.toString());
                 device.print("\">");
             }
         } else
@@ -176,9 +176,9 @@ public class TableCG
         // TODO: border="" should be obsolete
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse
         /* Tweaking: CG configured to have a fixed border="xy" width */
-        org.wings.plaf.Utils.optAttribute(device, "border", fixedTableBorderWidth);
-        org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getIntWidth() : null));
-        org.wings.plaf.Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getIntHeight() : null));
+        Utils.optAttribute(device, "border", fixedTableBorderWidth);
+        Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getIntWidth() : null));
+        Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getIntHeight() : null));
         device.print(">\n");
         /*
         * get viewable area
@@ -234,9 +234,9 @@ public class TableCG
 
                 if (showAsFormComponent) {
                     device.print("<button name=\"");
-                    org.wings.plaf.Utils.write(device, Utils.event(table));
+                    Utils.write(device, Utils.event(table));
                     device.print("\" value=\"");
-                    org.wings.plaf.Utils.write(device, table.getToggleSelectionParameter(r, -1));
+                    Utils.write(device, table.getToggleSelectionParameter(r, -1));
                     device.print("\">");
                     device.print(r);
                     device.print("</button>");
@@ -246,7 +246,7 @@ public class TableCG
                             table.getToggleSelectionParameter(r, -1));
 
                     device.print("<a href=\"");
-                    org.wings.plaf.Utils.write(device, selectionAddr.toString());
+                    Utils.write(device, selectionAddr.toString());
                     device.print("\">");
                     device.print(r);
                     device.print("</a>");

@@ -76,9 +76,9 @@ public class TreeCG
     private void writeIcon(Device device, SIcon icon, int width, int height) throws IOException {
 
         device.print("<img");
-        org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
-        org.wings.plaf.Utils.optAttribute(device, "width", width);
-        org.wings.plaf.Utils.optAttribute(device, "height", height);
+        Utils.optAttribute(device, "src", icon.getURL());
+        Utils.optAttribute(device, "width", width);
+        Utils.optAttribute(device, "height", height);
         device.print("/>");
     }
 
@@ -89,9 +89,9 @@ public class TreeCG
         if (nullBorder) {
             device.print(" border=\"0\"");
         }
-        org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
-        org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
-        org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
+        Utils.optAttribute(device, "src", icon.getURL());
+        Utils.optAttribute(device, "width", icon.getIconWidth());
+        Utils.optAttribute(device, "height", icon.getIconHeight());
 
         device.print("/>");
     }
@@ -124,10 +124,10 @@ public class TreeCG
         */
         for (int i = ((component.isRootVisible()) ? 0 : 1); i < path.getPathCount() - 1; ++i) {
             device.print("<td indent=\"true\"");
-            org.wings.plaf.Utils.optAttribute(device, "width", nodeIndentDepth);
+            Utils.optAttribute(device, "width", nodeIndentDepth);
             if (hashMark != null && !isLastChild(component.getModel(), path, i)) {
                 device.print(" style=\"background-image:url(");
-                org.wings.plaf.Utils.write(device, hashMark.getURL());
+                Utils.write(device, hashMark.getURL());
                 device.print(")\"");
             }
             if (childSelectorWorkaround)
@@ -150,7 +150,7 @@ public class TreeCG
         * now, write the component.
         */
         device.print("<td");
-        org.wings.plaf.Utils.optAttribute(device, "colspan", depth - (path.getPathCount() - 1));
+        Utils.optAttribute(device, "colspan", depth - (path.getPathCount() - 1));
         if (isSelected) {
             device.print(" selected=\"true\"");
 
@@ -174,9 +174,9 @@ public class TreeCG
             } else {
                 if (component.getShowAsFormComponent()) {
                     device.print("<button name=\"");
-                    org.wings.plaf.Utils.write(device, Utils.event(component));
+                    Utils.write(device, Utils.event(component));
                     device.print("\" value=\"");
-                    org.wings.plaf.Utils.write(device, component.getExpansionParameter(row, false));
+                    Utils.write(device, component.getExpansionParameter(row, false));
                     device.print("\"");
                 } else {
                     RequestURL selectionAddr = component.getRequestURL();
@@ -184,7 +184,7 @@ public class TreeCG
                             component.getExpansionParameter(row, false));
 
                     device.print("<a href=\"");
-                    org.wings.plaf.Utils.write(device, selectionAddr.toString());
+                    Utils.write(device, selectionAddr.toString());
                     device.print("\"");
                 }
                 device.print("\">");
@@ -215,9 +215,9 @@ public class TreeCG
         if (isSelectable) {
             if (component.getShowAsFormComponent()) {
                 device.print("<button name=\"");
-                org.wings.plaf.Utils.write(device, Utils.event(component));
+                Utils.write(device, Utils.event(component));
                 device.print("\" value=\"");
-                org.wings.plaf.Utils.write(device, component.getSelectionParameter(row, false));
+                Utils.write(device, component.getSelectionParameter(row, false));
                 device.print("\"");
             } else {
                 RequestURL selectionAddr = component.getRequestURL();
@@ -225,11 +225,11 @@ public class TreeCG
                         component.getSelectionParameter(row, false));
 
                 device.print("<a href=\"");
-                org.wings.plaf.Utils.write(device, selectionAddr.toString());
+                Utils.write(device, selectionAddr.toString());
                 device.print("\"");
             }
 
-            org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+            Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             Utils.writeEvents(device, component);
             device.print(">");
 
@@ -276,7 +276,7 @@ public class TreeCG
             writeTreeNode(component, device, i, depth);
 
         device.print("<tr><td");
-        org.wings.plaf.Utils.optAttribute(device, "colspan", depth);
+        Utils.optAttribute(device, "colspan", depth);
         device.print("></td></tr></table>");
     }
 

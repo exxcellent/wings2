@@ -9,6 +9,7 @@ import org.wings.externalizer.ExternalizedResource;
 import org.wings.event.SRequestEvent;
 import org.wings.event.SRequestListener;
 import org.wings.*;
+import org.wings.plaf.css.Utils;
 import org.wings.io.StringBufferDevice;
 
 import javax.servlet.http.HttpServletResponse;
@@ -136,7 +137,7 @@ public class WingsSession
                 if (next instanceof Renderable) {
                     ((Renderable) next).write(headerdev);
                 } else {
-                    org.wings.plaf.Utils.write(headerdev, next.toString());
+                    Utils.write(headerdev, next.toString());
                 }
                 headerdev.write("\n".getBytes());
             }

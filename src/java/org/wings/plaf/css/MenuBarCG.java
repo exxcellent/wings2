@@ -37,7 +37,7 @@ public class MenuBarCG
         int mcount = mbar.getComponentCount();
 
         device.print("<table class=\"menubar\" cellspacing=\"0\" cellpadding=\"0\" vspace=\"0\" hspace=\"0\" width=\"100%\"");
-        org.wings.plaf.Utils.optAttribute(device, "class", component.getStyle());
+        Utils.optAttribute(device, "class", component.getStyle());
         device.print(">");
         device.print("<tr align=\"left\">");
         /***
@@ -53,7 +53,7 @@ public class MenuBarCG
                     rightAligned = true;
                 }
                 device.print("<td id=\"");
-                org.wings.plaf.Utils.write(device, mbar.getComponent(i).getName() + "_hook");
+                Utils.write(device, mbar.getComponent(i).getName() + "_hook");
                 device.print("\" class=\"menu\"");
                 if (mbar.getComponent(i).isEnabled() &&
                         mbar.getComponent(i) instanceof SMenuItem) {

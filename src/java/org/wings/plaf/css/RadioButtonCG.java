@@ -37,21 +37,21 @@ public class RadioButtonCG
 
     protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
         device.print("<input type=\"hidden\" name=\"");
-        org.wings.plaf.Utils.write(device, org.wings.plaf.css.Utils.event(button));
+        Utils.write(device, org.wings.plaf.css.Utils.event(button));
         device.print("\" value=\"");
-        org.wings.plaf.Utils.write(device, button.getDeselectionParameter());
+        Utils.write(device, button.getDeselectionParameter());
         device.print("\"/>");
 
         device.print("<input type=\"radio\" name=\"");
-        org.wings.plaf.Utils.write(device, Utils.event(button));
+        Utils.write(device, Utils.event(button));
         device.print("\" value=\"");
-        org.wings.plaf.Utils.write(device, button.getToggleSelectionParameter());
+        Utils.write(device, button.getToggleSelectionParameter());
         device.print("\"");
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
         if (button.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", button.getName());
+            Utils.optAttribute(device, "focus", button.getName());
 
         if (button.isSelected())
             device.print(" checked=\"true\"");

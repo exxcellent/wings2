@@ -35,11 +35,11 @@ public class AnchorCG
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
         if (component.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "focus", component.getName());
 
-        org.wings.plaf.Utils.optAttribute(device, "target", component.getTarget());
-        org.wings.plaf.Utils.optAttribute(device, "name", component.getName());
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optAttribute(device, "target", component.getTarget());
+        Utils.optAttribute(device, "name", component.getName());
+        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.writeEvents(device, component);
         device.print(">");
         Utils.renderContainer(device, component);

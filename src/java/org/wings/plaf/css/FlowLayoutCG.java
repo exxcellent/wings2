@@ -45,7 +45,7 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
                 SComponent comp = (SComponent) components.get(i);
                 if (comp.isVisible()) {
                     if (count == 0) {
-                        printLayouterTableHeader(d, 0, 0, 0, layout.getContainer());
+                        printLayouterTableHeader(d, "SFlowLayout", 0, 0, 0, layout);
                         d.print("<tr><td");
                     } else if (orientation == SConstants.VERTICAL)
                         d.print("</td></tr>\n<tr><td");
@@ -53,7 +53,7 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
                         d.print("</td><td");
 
                     org.wings.plaf.css.Utils.printTableCellAlignment(d, comp);
-                    org.wings.plaf.css.Utils.printCSSInlineStyleAttributes(d, comp);
+                    //org.wings.plaf.css.Utils.printCSSInlineStyleAttributes(d, comp);
 
                     d.print(">");
                     comp.write(d); // Render component itself
@@ -62,7 +62,7 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
             }
             if (count > 0) {
                 d.print("</td></tr>");
-                printLayouterTableFooter(d);
+                printLayouterTableFooter(d, "SFlowLayout", layout);
             }
 
             d.print("\n</div>\n"); // close hozrontal alignment

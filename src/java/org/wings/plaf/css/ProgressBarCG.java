@@ -81,33 +81,33 @@ public class ProgressBarCG
         }
         if (component.isBorderPainted()) {
             device.print("<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr><td");
-            org.wings.plaf.Utils.optAttribute(device, "bgcolor", component.getBorderColor());
+            Utils.optAttribute(device, "bgcolor", component.getBorderColor());
             device.print(">");
         }
 
         device.print("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
         device.print("<tr>");
         device.print("<td");
-        org.wings.plaf.Utils.optAttribute(device, "bgcolor", component.getFilledColor());
+        Utils.optAttribute(device, "bgcolor", component.getFilledColor());
         device.print(">");
         device.print("<img");
-        org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
+        Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"");
-        org.wings.plaf.Utils.write(device, (int) (width * component.getPercentComplete()));
+        Utils.write(device, (int) (width * component.getPercentComplete()));
         device.print("\"");
         device.print(" height=\"");
-        org.wings.plaf.Utils.write(device, height);
+        Utils.write(device, height);
         device.print("\"></td>");
         device.print("<td");
-        org.wings.plaf.Utils.optAttribute(device, "bgcolor", component.getUnfilledColor());
+        Utils.optAttribute(device, "bgcolor", component.getUnfilledColor());
         device.print(">");
         device.print("<img");
-        org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
+        Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"");
-        org.wings.plaf.Utils.write(device, (int) (width * (1 - component.getPercentComplete())));
+        Utils.write(device, (int) (width * (1 - component.getPercentComplete())));
         device.print("\"");
         device.print(" height=\"");
-        org.wings.plaf.Utils.write(device, height);
+        Utils.write(device, height);
         device.print("\">");
         device.print("</td>");
         device.print("</tr>");
@@ -120,10 +120,10 @@ public class ProgressBarCG
             device.print("</td></tr><tr><td align=\"center\">");
             if (style != null) {
                 device.print("<span class=\"");
-                org.wings.plaf.Utils.write(device, style);
+                Utils.write(device, style);
                 device.print("\">");
             }
-            org.wings.plaf.Utils.write(device, component.getString());
+            Utils.write(device, component.getString());
             if (style != null) {
                 device.print("</span>");
             }

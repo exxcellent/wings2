@@ -76,7 +76,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
 
 
         device.print("<table cellpadding=\"0\" cellspacing=\"0\" id=\"");
-        org.wings.plaf.Utils.write(device, popupId);
+        Utils.write(device, popupId);
 
         device.print("\" class=\"pdmenu\" style=\"display:none\">");
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
@@ -88,7 +88,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
 
 
                 device.print("<tr id=\"");
-                org.wings.plaf.Utils.write(device, itemHookId);
+                Utils.write(device, itemHookId);
 
                 device.print("\"");
                 if (menu.getMenuComponent(i) instanceof SMenu) {
@@ -98,13 +98,13 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
 
 
                         device.print(" onMouseDown=\"Menu.prototype.toggle('");
-                        org.wings.plaf.Utils.write(device, itemParentId);
+                        Utils.write(device, itemParentId);
 
                         device.print("','");
-                        org.wings.plaf.Utils.write(device, itemHookId);
+                        Utils.write(device, itemHookId);
 
                         device.print("','");
-                        org.wings.plaf.Utils.write(device, itemPopupId);
+                        Utils.write(device, itemPopupId);
 
                         device.print("')\"");
 
@@ -133,11 +133,11 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
 
                 if (menu.getMenuComponent(i) instanceof SMenu) {
                     device.print("<img border=\"0\" align=\"middle\" src=\"");
-                    org.wings.plaf.Utils.write(device, RIGHT_ARROW.getURL());
+                    Utils.write(device, RIGHT_ARROW.getURL());
 
                     device.print("\"");
-                    org.wings.plaf.Utils.optAttribute(device, "width", RIGHT_ARROW.getIconWidth());
-                    org.wings.plaf.Utils.optAttribute(device, "height", RIGHT_ARROW.getIconHeight());
+                    Utils.optAttribute(device, "width", RIGHT_ARROW.getIconWidth());
+                    Utils.optAttribute(device, "height", RIGHT_ARROW.getIconHeight());
                     device.print("/>");
                 }
 

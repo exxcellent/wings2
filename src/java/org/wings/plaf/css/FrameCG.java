@@ -180,27 +180,27 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
         if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
             device.print("<?xml version=\"1.0\" encoding=\"");
-            org.wings.plaf.Utils.write(device, encoding);
+            Utils.write(device, encoding);
             device.print("\"?>\n");
         }
 
-        org.wings.plaf.Utils.writeRaw(device, documentType);
+        Utils.writeRaw(device, documentType);
         device.print("\n");
         device.print("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"");
-        org.wings.plaf.Utils.write(device, language);
+        Utils.write(device, language);
         device.print("\" lang=\"");
-        org.wings.plaf.Utils.write(device, language);
+        Utils.write(device, language);
         device.print("\">\n");
 
         device.print("<head>");
         if (title != null) {
             device.print("<title>");
-            org.wings.plaf.Utils.write(device, title);
+            Utils.write(device, title);
             device.print("</title>\n");
         }
 
         device.print("<meta http-equiv=\"Content-type\" content=\"text/html; charset=");
-        org.wings.plaf.Utils.write(device, encoding);
+        Utils.write(device, encoding);
         device.print("\"/>\n");
 
         for (Iterator iterator = headers.iterator(); iterator.hasNext();) {
@@ -208,7 +208,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             if (next instanceof Renderable) {
                 ((Renderable) next).write(device);
             } else {
-                org.wings.plaf.Utils.write(device, next.toString());
+                Utils.write(device, next.toString());
             }
             device.print("\n");
         }
@@ -247,8 +247,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
         device.print("</head>\n");
         device.print("<body");
-        org.wings.plaf.Utils.optAttribute(device, "id", frame.getName());
-        org.wings.plaf.Utils.optAttribute(device, "class", frame.getStyle());
+        Utils.optAttribute(device, "id", frame.getName());
+        Utils.optAttribute(device, "class", frame.getStyle());
         Utils.writeEvents(device, frame);
         device.print(">\n");
         if (frame.isVisible()) {

@@ -39,7 +39,7 @@ public class GridLayoutCG extends AbstractLayoutCG
         int cols = layout.getColumns();
         int rows = layout.getRows();
 
-        printLayouterTableHeader(d, layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout.getContainer());
+        printLayouterTableHeader(d, "SGridLayout", layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout);
 
         if (cols <= 0)
             cols = components.size() / rows;
@@ -79,6 +79,6 @@ public class GridLayoutCG extends AbstractLayoutCG
                 d.print("</tr>\n");
         }
 
-        printLayouterTableFooter(d);
+        printLayouterTableFooter(d, "SGridLayout", layout);
     }
 }

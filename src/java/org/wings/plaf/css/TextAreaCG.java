@@ -32,9 +32,9 @@ public class TextAreaCG
         final STextArea component = (STextArea) _c;
 
         device.print("<textarea");
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-        org.wings.plaf.Utils.optAttribute(device, "cols", component.getColumns());
-        org.wings.plaf.Utils.optAttribute(device, "rows", component.getRows());
+        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optAttribute(device, "cols", component.getColumns());
+        Utils.optAttribute(device, "rows", component.getRows());
 
         switch (component.getLineWrap()) {
             case STextArea.VIRTUAL_WRAP:
@@ -52,18 +52,18 @@ public class TextAreaCG
         }
         if (component.isEnabled()) {
             device.print(" name=\"");
-            org.wings.plaf.Utils.write(device, Utils.event(component));
+            Utils.write(device, Utils.event(component));
             device.print("\"");
         } else {
             device.print(" disabled=\"1\"");
         }
 
         if (component.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "focus", component.getName());
 
         Utils.writeEvents(device, component);
         device.print(">");
-        org.wings.plaf.Utils.writeRaw(device, component.getText());
+        Utils.writeRaw(device, component.getText());
         device.print("</textarea>\n");
     }
 }

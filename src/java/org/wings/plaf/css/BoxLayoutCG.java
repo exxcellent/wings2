@@ -15,7 +15,6 @@ package org.wings.plaf.css;
 
 import org.wings.SBoxLayout;
 import org.wings.SComponent;
-import org.wings.SContainer;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
@@ -33,18 +32,11 @@ public class BoxLayoutCG extends AbstractLayoutCG implements LayoutCG {
     public void write(Device d, SLayoutManager l)
             throws IOException {
         SBoxLayout layout = (SBoxLayout) l;
-        SContainer container = layout.getContainer();
         List components = layout.getComponents();
 
-        d.print("\n<table ");
-        if (false) {
-            d.print("style=\"");
-            d.print("\" ");
-        }
-
-        org.wings.plaf.css.Utils.printTableHorizontalAlignment(d, layout.getHorizontalAlignment());
-        org.wings.plaf.css.Utils.printTableVerticalAlignment(d, layout.getVerticalAlignment());
-        d.print(" cellspacing=\"0\" cellpadding=\"0\">\n");
+        printLayouterTableHeader(d, "SBoxLayout",0,0,0,layout);
+        //org.wings.plaf.css.Utils.printTableHorizontalAlignment(d, layout.getHorizontalAlignment());
+        //org.wings.plaf.css.Utils.printTableVerticalAlignment(d, layout.getVerticalAlignment());
 
         if (layout.getOrientation() == SBoxLayout.X_AXIS) {
             d.print("<tr>");

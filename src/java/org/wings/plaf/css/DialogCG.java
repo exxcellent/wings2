@@ -40,9 +40,9 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
 
     private void writeIcon(Device device, SIcon icon) throws IOException {
         device.print("<img");
-        org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
-        org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
-        org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
+        Utils.optAttribute(device, "src", icon.getURL());
+        Utils.optAttribute(device, "width", icon.getIconWidth());
+        Utils.optAttribute(device, "height", icon.getIconHeight());
         device.print("/>");
     }
 
@@ -54,7 +54,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
         addr.addParameter(org.wings.plaf.css.Utils.event(dialog), event);
 
         device.print("<th");
-        org.wings.plaf.Utils.optAttribute(device, "width", getIconWidth(icon));
+        Utils.optAttribute(device, "width", getIconWidth(icon));
         device.print(">");
 
         if (showAsFormComponent)
@@ -114,7 +114,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
         if (dialog.getIcon() != null) {
             SIcon icon = dialog.getIcon();
             device.print("<th");
-            org.wings.plaf.Utils.optAttribute(device, "width", getIconWidth(icon));
+            Utils.optAttribute(device, "width", getIconWidth(icon));
             device.print(">");
             writeIcon(device, icon);
             device.print("</th>");
@@ -122,7 +122,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
         }
 
         device.print("<th col=\"title\">&nbsp;");
-        org.wings.plaf.Utils.write(device, text);
+        Utils.write(device, text);
         device.print("</th>");
         ++columns;
 
@@ -135,7 +135,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
 
         // write the actual content
         device.print("<tr><td colspan=\"");
-        org.wings.plaf.Utils.write(device, columns);
+        Utils.write(device, columns);
         device.print("\">");
         Utils.renderContainer(device, dialog);
         device.print("</td></tr>");

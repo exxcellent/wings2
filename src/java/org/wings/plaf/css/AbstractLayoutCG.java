@@ -13,7 +13,7 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SContainer;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
@@ -25,20 +25,25 @@ import java.io.IOException;
  * @author bschmid
  */
 public abstract class AbstractLayoutCG implements LayoutCG {
-
     /** Print HTML table element declaration of a typical invisible layouter table. */
-    protected void printLayouterTableHeader(Device d, int cellSpacing, int cellPadding, int border, SContainer container)
+    protected void printLayouterTableHeader(Device d, String styleClass, int cellSpacing, int cellPadding,
+                                            int border, SLayoutManager layout)
             throws IOException {
-        d.print("\n<table ");
+        Utils.printNewline(d, layout.getContainer());
+        d.print("<table ");
         d.print(" cellspacing=\"").print(cellSpacing < 0 ? 0: cellSpacing).print("\"");
         d.print(" cellpadding=\"").print(cellPadding < 0 ? 0 : cellPadding).print("\"");
         d.print(" border=\"").print(border < 0 ? 0 : border).print("\"");
-        Utils.printCSSInlinePreferredSize(d,container.getPreferredSize());
-        d.print(">\n");
+        d.print(" class=\"").print(styleClass).print("\"");
+        Utils.printCSSInlinePreferredSize(d,layout.getContainer().getPreferredSize());
+        d.print("><tbody>");
+        Utils.printNewline(d, layout.getContainer());
     }
     /** Counterpart to {@link #printLayouterTableHeader} */
-    protected void printLayouterTableFooter(Device d) throws IOException {
-        d.print("</table>\n");
+    protected void printLayouterTableFooter(Device d, String styleClass, SLayoutManager layout) throws IOException {
+        Utils.printNewline(d, layout.getContainer());
+        d.print("</tbody></table>");
+        Utils.printDebug(d, "<!-- END LAYOUT: ").print(styleClass).print(" -->");
     }
 
 }

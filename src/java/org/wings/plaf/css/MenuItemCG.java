@@ -33,11 +33,11 @@ public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.M
         if (icon != null) {
 
             device.print("<img border=\"0\" align=\"middle\" src=\"");
-            org.wings.plaf.Utils.write(device, icon.getURL());
+            Utils.write(device, icon.getURL());
 
             device.print("\"");
-            org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
-            org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
+            Utils.optAttribute(device, "width", icon.getIconWidth());
+            Utils.optAttribute(device, "height", icon.getIconHeight());
 
             device.print("/>");
         }
@@ -45,7 +45,7 @@ public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.M
         String text = menuItem.getText();
 
         if (text != null) {
-            org.wings.plaf.Utils.write(device, text);
+            Utils.write(device, text);
         }
 
         device.print("</nobr>");

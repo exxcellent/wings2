@@ -13,13 +13,16 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
-import org.wings.style.CSSSelector;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.LowLevelEventListener;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.wings.style.CSSSelector;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -31,10 +34,11 @@ import java.io.Serializable;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public abstract class AbstractComponentCG  implements ComponentCG, SConstants, Serializable {
+public abstract class AbstractComponentCG implements ComponentCG, SConstants, Serializable {
     private final static transient Log log = LogFactory.getLog(AbstractComponentCG.class);
 
-    protected AbstractComponentCG() {    }
+    protected AbstractComponentCG() {
+    }
 
     /**
      * Install the appropriate CG for <code>component</code>.
@@ -71,11 +75,11 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
     }
 
     protected void writePrefix(Device device, SComponent component) throws IOException {
-        device
-                .print("<div id=\"")
-                .print(component.getName())
-                .print("\" class=\"")
-                .print(component.getStyle());
+        Utils.printDebugNewline(device, component);
+        Utils.printDebug(device, "<!-- START COMPONENT: ").print(component.getName()).print(" -->");
+        Utils.printNewline(device, component);
+        device.print("<div id=\"").print(component.getName()).print("\"");
+        Utils.optAttribute(device, "class", component.getStyle());
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
@@ -115,14 +119,13 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
             String hookId = component.getName();
 
             device.print("\" onclick=\"Menu.prototype.toggle(null,'");
-            org.wings.plaf.Utils.write(device, hookId);
+            Utils.write(device, hookId);
             device.print("','");
-            org.wings.plaf.Utils.write(device, popupId);
+            Utils.write(device, popupId);
             device.print("')");
         }
 
-        device
-                .print("\">\n");
+        device.print("\">"); // div
 
         // Special handling: Render title of STitledBorder
         if (component.getBorder() instanceof STitledBorder) {
@@ -151,9 +154,10 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
 
         component.setInheritsPopupMenu(backup);
 
-        device
-                .print("</div><!--")
-                .print(component.getName())
-                .print("-->\n");
+        Utils.printNewline(device, component);
+        device.print("</div>");
+
+        Utils.printDebugNewline(device, component);
+        Utils.printDebug(device, "<!-- END COMPONENT: ").print(component.getName()).print(" -->");
     }
 }

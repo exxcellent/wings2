@@ -49,7 +49,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         if (!list.isEnabled())
             device.print(" disabled=\"true\"");
         if (list.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", list.getName());
+            Utils.optAttribute(device, "focus", list.getName());
 
         list.removeScriptListener(selectListener);
         if (list.getListSelectionListeners().length > 0) {
@@ -202,9 +202,6 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         Utils.write(device, list.getType());
         device.print(">");
     }
-
-
-//--- end code from common area in template.
 
 
     public void writeContent(final Device device,

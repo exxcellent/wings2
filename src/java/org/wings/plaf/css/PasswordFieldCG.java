@@ -33,10 +33,10 @@ public class PasswordFieldCG
 
         device.print("<input type=\"password\"");
         org.wings.plaf.css.Utils.writeEvents(device, component);
-        org.wings.plaf.Utils.optAttribute(device, "size", component.getColumns());
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-        org.wings.plaf.Utils.optAttribute(device, "maxlength", component.getMaxColumns());
-        org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+        Utils.optAttribute(device, "size", component.getColumns());
+        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optAttribute(device, "maxlength", component.getMaxColumns());
+        Utils.optAttribute(device, "focus", component.getName());
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
@@ -45,18 +45,18 @@ public class PasswordFieldCG
         }
         if (component.isEnabled()) {
             device.print(" name=\"");
-            org.wings.plaf.Utils.write(device, Utils.event(component));
+            Utils.write(device, Utils.event(component));
             device.print("\"");
         } else {
             device.print(" disabled=\"1\"");
         }
 
         if (component.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "focus", component.getName());
 
         Utils.writeEvents(device, component);
 
-        org.wings.plaf.Utils.optAttribute(device, "value", component.getText());
+        Utils.optAttribute(device, "value", component.getText());
         device.print("/>");
     }
 }

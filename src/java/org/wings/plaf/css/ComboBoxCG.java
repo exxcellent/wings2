@@ -44,15 +44,15 @@ public class ComboBoxCG
     protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
 
         device.print("<select size=\"1\"");
-        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(component));
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optAttribute(device, "name", Utils.event(component));
+        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         if (!component.isEnabled())
             device.print(" disabled=\"true\"");
         if (component.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "focus", component.getName());
 
 
         component.removeScriptListener(submitListener);
@@ -80,7 +80,7 @@ public class ComboBoxCG
 
 
             device.print("\n<option");
-            org.wings.plaf.Utils.optAttribute(device, "value", component.getSelectionParameter(i));
+            Utils.optAttribute(device, "value", component.getSelectionParameter(i));
             if (selected == i) {
 
                 device.print(" selected=\"selected\"");
@@ -90,7 +90,7 @@ public class ComboBoxCG
                 if (cellRenderer.getToolTipText() != null) {
 
                     device.print(" title=\"");
-                    org.wings.plaf.Utils.write(device, cellRenderer.getToolTipText());
+                    Utils.write(device, cellRenderer.getToolTipText());
 
                     device.print("\"");
                 }
@@ -101,7 +101,7 @@ public class ComboBoxCG
                 if (styleString != null && styleString.length() > 0) {
 
                     device.print(" style=\"");
-                    org.wings.plaf.Utils.write(device, styleString);
+                    Utils.write(device, styleString);
 
                     device.print("\"");
                 }
@@ -138,8 +138,8 @@ public class ComboBoxCG
         // util method
 
         device.print("<input type=\"hidden\"");
-        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(component));
-        org.wings.plaf.Utils.optAttribute(device, "value", -1);
+        Utils.optAttribute(device, "name", Utils.event(component));
+        Utils.optAttribute(device, "value", -1);
 
         device.print("/>");
     }

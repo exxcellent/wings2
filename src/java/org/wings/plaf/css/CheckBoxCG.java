@@ -57,9 +57,9 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
 
         if (showAsFormComponent && useIconsInForm) {
             device.print("<button");
-            org.wings.plaf.Utils.write(device, Utils.event(button));
-            org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
-            org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
+            Utils.write(device, Utils.event(button));
+            Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
+            Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
         } else if (showAsFormComponent && !useIconsInForm)
             device.print("<span");
@@ -70,7 +70,7 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
             addr.write(device);
             device.print("\"");
 
-            org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
+            Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
         }
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
@@ -80,7 +80,7 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
         if (button.isSelected())
             device.print(" checked=\"true\"");
         if (component.isFocusOwner())
-            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "focus", component.getName());
 
         device.print(">");
 
@@ -115,13 +115,13 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
 
     protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
         device.print("<input type=\"hidden\" name=\"");
-        org.wings.plaf.Utils.write(device, Utils.event(button));
+        Utils.write(device, Utils.event(button));
         device.print("\" value=\"hidden_reset\"/>");
 
         device.print("<input type=\"checkbox\" name=\"");
-        org.wings.plaf.Utils.write(device, Utils.event(button));
+        Utils.write(device, Utils.event(button));
         device.print("\"");
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
+        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");

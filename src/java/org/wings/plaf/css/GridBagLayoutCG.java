@@ -42,7 +42,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG
             return;
         }
 
-        printLayouterTableHeader(d, cellSpacing, cellPadding, border, layout.getContainer());
+        printLayouterTableHeader(d, "SGridBagLayout", cellSpacing, cellPadding, border, layout);
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
             d.print("<tr>\n");
@@ -110,7 +110,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG
             }
             d.print("</tr>\n");
         }
-        printLayouterTableFooter(d);
+        printLayouterTableFooter(d, "SGridBagLayout", layout);
     }
 
 

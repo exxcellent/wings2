@@ -25,9 +25,6 @@ import java.io.IOException;
  * @version $Revision$
  */
 public class RequestURL extends SimpleURL {
-    private static final byte[] _delimiter = "_".getBytes();
-    private static final byte[] _ampStr = "&amp;".getBytes();
-    private static final byte[] _questMark = "?".getBytes();
     private static final String DEFAULT_RESOURCE_NAME = "_";
 
     private String baseParameters;
@@ -182,7 +179,7 @@ public class RequestURL extends SimpleURL {
 
         if (resource != null && epoch != null) {
             d.print(epoch);
-            d.write(_delimiter);
+            d.print(SConstants.UID_DIVIDER);
         }
 
         if (resource != null) {
@@ -201,7 +198,7 @@ public class RequestURL extends SimpleURL {
         }
 
         if (parameters != null && parameters.length() > 0) {
-            d.write(hasQuestMark ? _ampStr : _questMark);
+            d.print(hasQuestMark ? "&amp;" : "?");
             d.print(parameters.toString());
         }
     }

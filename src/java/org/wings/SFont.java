@@ -20,7 +20,6 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public class SFont implements SConstants, Serializable {
-    protected int type = FONT;
     protected int style = PLAIN;
     protected String face = null;
     protected int size = Integer.MIN_VALUE;
@@ -36,11 +35,7 @@ public class SFont implements SConstants, Serializable {
         setStyle(style);
         setSize(size);
     }
-
-    public void setType(int t) {
-        type = t;
-    }
-
+    
     public void setFace(String f) {
         face = f;
         if (face != null && face.trim().length() == 0)

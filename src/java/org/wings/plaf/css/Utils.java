@@ -15,8 +15,11 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.io.NullDevice;
 import org.wings.script.ScriptListener;
+import org.wings.style.Style;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,15 +31,20 @@ import java.util.Map;
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  * @version $Revision$
  */
-public final class Utils
-        extends org.wings.plaf.Utils {
+public final class Utils implements SConstants {
+    /**
+     * Print debug information in generated HTML
+     */
+    public static boolean PRINT_DEBUG = true;
 
-    final static char[] hexDigits = {
+    protected final static char[] hexDigits = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'a', 'b',
         'c', 'd', 'e', 'f'};
+    // fast conversion: translates directly into bytes (good for OutputStreams)
+    private final static byte[] digits = "0123456789ABCDEF".getBytes();
 
-    private Utils() {
+    protected Utils() {
     }
 
     /**
@@ -119,7 +127,8 @@ public final class Utils
 
     /**
      * HTML allows 4 values for align property of a div element.
-     * @param d Output
+     *
+     * @param d     Output
      * @param align Please refer {@link SConstants}
      * @throws IOException
      */
@@ -182,39 +191,39 @@ public final class Utils
      * <li>Font size,style,weight,family</li>
      * <li>Preferred Dimension height and width</li>
      * </ul>. Sample: <code> style="width:100%; color:#ff0000;"</code>
-     * @param d Output device
+     *
+     * @param d         Output device
      * @param component Component having CSS attributes
      * @throws IOException
      */
     public static void printCSSInlineStyleAttributes(Device d, SComponent component) throws IOException {
-        d.print(" style=\"");
-
+        StringBuffer styleString = new StringBuffer();
         java.awt.Color fgColor = component.getForeground();
         java.awt.Color bgcolor = component.getBackground();
         SFont font = component.getFont();
         SDimension dim = component.getPreferredSize();
 
         if (bgcolor != null)
-            d.print("background-color:#").print(toColorString(bgcolor)).print(";");
+            styleString.append("background-color:#").append(toColorString(bgcolor)).append(";");
 
         if (fgColor != null) {
-            // not necessary? d.print("font-color:#").print(toColorString(fgColor)).print(";");
-            d.print("color:#").print(toColorString(fgColor)).print(";");
+            styleString.append("color:#").append(toColorString(fgColor)).append(";");
         }
+
         if (font != null) {
             int style = font.getStyle();
-            d.print("font-size:").print(font.getSize()).print("pt;");
-            d.print("font-style:").print((style & java.awt.Font.ITALIC) > 0 ? "italic;" : "normal;");
-            d.print("font-weight:").print((style & java.awt.Font.BOLD) > 0 ? "bold;" : "normal;");
-            d.print("font-family:").print(font.getFace()).print(";");
+            styleString.append("font-size:").append(font.getSize()).append("pt;");
+            styleString.append("font-style:").append((style & java.awt.Font.ITALIC) > 0 ? "italic;" : "normal;");
+            styleString.append("font-weight:").append((style & java.awt.Font.BOLD) > 0 ? "bold;" : "normal;");
+            styleString.append("font-family:").append(font.getFace()).append(";");
         }
 
         if (dim != null) {
-            if (dim.isWidthDefined()) d.print("width:").print(dim.getWidth()).print(";");
-            if (dim.isHeightDefined()) d.print("height:").print(dim.getHeight()).print(";");
+            if (dim.isWidthDefined()) styleString.append("width:").append(dim.getWidth()).append(";");
+            if (dim.isHeightDefined()) styleString.append("height:").append(dim.getHeight()).append(";");
         }
 
-        d.print("\"");
+        Utils.optAttribute(d, "style", styleString.toString());
     }
 
     public static void printIconTextCompound(Device d, String icon, String text, int horizontal, int vertical)
@@ -265,11 +274,12 @@ public final class Utils
     /**
      * Prints a HTML style attribute with widht/height of passed SDimension.
      * <p>Sample: <code> style="widht:100%;"</code>
-     * @param device Device to print to
+     *
+     * @param device        Device to print to
      * @param preferredSize Preferred sitze. May be null or contain null attributes
      */
     public static void printCSSInlinePreferredSize(Device device, SDimension preferredSize) throws IOException {
-        if (preferredSize != null) {
+        if (preferredSize != null && (preferredSize.isWidthDefined() || preferredSize.isHeightDefined())) {
             device.print(" style=\"");
             if (preferredSize.isWidthDefined())
                 device.print("width:").print(preferredSize.getWidth()).print(";");
@@ -278,4 +288,318 @@ public final class Utils
             device.print("\"");
         }
     }
+
+    /**
+     * writes an {X|HT}ML quoted string according to RFC 1866.
+     * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
+     */
+    // not optimized yet
+    private static void quote(Device d, String s, boolean quoteNewline) throws IOException {
+        if (s == null) return;
+        char[] chars = s.toCharArray();
+        char c;
+        int last = 0;
+        for (int pos = 0; pos < chars.length; ++pos) {
+            c = chars[pos];
+            // write special characters as code ..
+            if (c < 32 || c > 127) {
+                d.print(chars, last, (pos - last));
+                if (c == '\n' && quoteNewline) {
+                    d.print("<br>");
+                } else {
+                    d.print("&#");
+                    d.print((int) c);
+                    d.print(";");
+                } // end of if ()
+                last = pos + 1;
+            } else
+                switch (c) {
+                    case '&':
+                        d.print(chars, last, (pos - last));
+                        d.print("&amp;");
+                        last = pos + 1;
+                        break;
+                    case '"':
+                        d.print(chars, last, (pos - last));
+                        d.print("&quot;");
+                        last = pos + 1;
+                        break;
+                    case '<':
+                        d.print(chars, last, (pos - last));
+                        d.print("&lt;");
+                        last = pos + 1;
+                        break;
+                    case '>':
+                        d.print(chars, last, (pos - last));
+                        d.print("&gt;");
+                        last = pos + 1;
+                        break;
+                        /*
+                         * watchout: we cannot replace _space_ by &nbsp;
+                         * since non-breakable-space is a different
+                         * character: isolatin-char 160, not 32.
+                         * This will result in a confusion in forms:
+                         *   - the user enters space, presses submit
+                         *   - the form content is written to the Device by wingS,
+                         *     space is replaced by &nbsp;
+                         *   - the next time the form is submitted, we get
+                         *     isolatin-char 160, _not_ space.
+                         * (at least Konqueror behaves this correct; mozilla does not)
+                         *                                                       Henner
+                         */
+                }
+        }
+        d.print(chars, last, chars.length - last);
+    }
+
+    public static void writeRaw(Device d, String s) throws IOException {
+        if (s == null) return;
+        d.print(s);
+    }
+
+    /**
+     * writes the given String to the device. The string is quoted, i.e.
+     * for all special characters in *ML, their appropriate entity is
+     * returned.
+     * If the String starts with '<html>', the content is regarded being
+     * HTML-code and is written as is (without the <html> tag).
+     */
+    public static void write(Device d, String s) throws IOException {
+        if (s == null) return;
+        if ((s.length() > 5) && (s.startsWith("<html>"))) {
+            writeRaw(d, s.substring(6));
+        } else {
+            quote(d, s, false);
+        }
+    }
+
+    /**
+     * Prints an optional attribute. If the String value has a content
+     * (value != null && value.length > 0), the attrib is added otherwise
+     * it is left out
+     */
+    public static void optAttribute(Device d, String attr, Style value)
+            throws IOException {
+        if (value != null) {
+            d.print(" ").print(attr).print("=\"").print(value.getName()).print("\"");
+        }
+    }
+
+    /**
+     * Prints an optional attribute. If the String value has a content
+     * (value != null && value.length > 0), the attrib is added otherwise
+     * it is left out
+     */
+    public static void optAttribute(Device d, String attr, String value)
+            throws IOException {
+        if (value != null && value.trim().length() > 0) {
+            d.print(" ").print(attr).print("=\"");
+            quote(d, value, true);
+            d.print("\"");
+        }
+    }
+
+    public static void childSelectorWorkaround(Device d, String style)
+            throws IOException {
+        d.print(" class=\"");
+        d.print(style);
+        d.print("\"");
+    }
+
+    /**
+     * Prints an optional attribute. If the String value has a content
+     * (value != null && value.length > 0), the attrib is added otherwise
+     * it is left out
+     */
+    public static void optAttribute(Device d, String attr, Color value)
+            throws IOException {
+        if (value != null) {
+            d.print(" ");
+            d.print(attr);
+            d.print("=\"");
+            write(d, value);
+            d.print("\"");
+        }
+    }
+
+    /**
+     * Prints an optional, renderable attribute.
+     */
+    public static void optAttribute(Device d, String attr, Renderable r)
+            throws IOException {
+        if (r != null) {
+            d.print(" ");
+            d.print(attr);
+            d.print("=\"");
+            r.write(d);
+            d.print("\"");
+        }
+    }
+
+    /**
+     * Prints an optional attribute. If the integer value is greater than 0,
+     * the attrib is added otherwise it is left out
+     */
+    public static void optAttribute(Device d, String attr, int value)
+            throws IOException {
+        if (value > 0) {
+            d.print(" ");
+            d.print(attr);
+            d.print("=\"");
+            write(d, value);
+            d.print("\"");
+        }
+    }
+
+    /**
+     * Prints an optional attribute. If the dimension value not equals <i>null</i>
+     * the attrib is added otherwise it is left out
+     */
+    public static void optAttribute(Device d, String attr, SDimension value)
+            throws IOException {
+        if (value != null) {
+            d.print(" ");
+            d.print(attr);
+            d.print("=\"");
+            write(d, value.toString());
+            d.print("\"");
+        }
+    }
+
+    /**
+     * writes the given integer to the device. Speed optimized; character
+     * conversion avoided.
+     */
+    public static void write(Device d, int num) throws IOException {
+        int i = 10;
+        byte[] out = new byte[10];
+
+        if (num < 0) {
+            d.print("-");
+            num = -(num);
+            if (num < 0) {
+                /*
+                 * still negative ? Then we had Integer.MIN_VALUE
+                 */
+                out[--i] = digits[-(Integer.MIN_VALUE % 10)];
+                num = -(Integer.MIN_VALUE / 10);
+            }
+        }
+        do {
+            out[--i] = digits[num % 10];
+            num /= 10;
+        } while (num > 0);
+        d.write(out, i, 10 - i);
+    }
+
+    /**
+     * writes the given long integer to the device. Speed optimized; character
+     * conversion avoided.
+     */
+    public static void write(Device d, long num) throws IOException {
+        int i = 20;
+        byte[] out = new byte[20];
+
+        if (num < 0) {
+            d.print("-");
+            num = -(num);
+            if (num < 0) {
+                /*
+                 * still negative ? Then we had Long.MIN_VALUE
+                 */
+                out[--i] = digits[-(int) (Long.MIN_VALUE % 10)];
+                num = -(Long.MIN_VALUE / 10);
+            }
+        }
+        do {
+            out[--i] = digits[(int) (num % 10)];
+            num /= 10;
+        } while (num > 0);
+        d.write(out, i, 20 - i);
+    }
+
+    /**
+     * writes the given java.awt.Color to the device. Speed optimized;
+     * character conversion avoided.
+     */
+    public static void write(Device d, Color c) throws IOException {
+        d.print("#");
+        int rgb = (c == null) ? 0 : c.getRGB();
+        int mask = 0xf00000;
+        for (int bitPos = 20; bitPos >= 0; bitPos -= 4) {
+            d.print(digits[(rgb & mask) >>> bitPos]);
+            mask >>>= 4;
+        }
+    }
+
+    /**
+     * writes anything Renderable
+     */
+    public static void write(Device d, Renderable r) throws IOException {
+        if (r == null) return;
+        r.write(d);
+    }
+
+    /*
+     * testing purposes.
+     */
+    public static void main(String argv[]) throws Exception {
+        Color c = new Color(255, 254, 7);
+        Device d = new org.wings.io.StringBufferDevice();
+        write(d, c);
+        quote(d, "\nThis is a <abc> string \"; foo & sons\nmoin", true);
+        write(d, -42);
+        write(d, Integer.MIN_VALUE);
+
+        write(d, "hello test&nbsp;\n");
+        write(d, "<html>hallo test&nbsp;\n");
+        System.out.println(d.toString());
+
+        d = new org.wings.io.NullDevice();
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; ++i) {
+            quote(d, "this is a little & foo", true);
+        }
+        System.err.println("took: " + (System.currentTimeMillis() - start)
+                + "ms");
+    }
+
+    /**
+     * Helper method for CGs to print out debug information in output stream.
+     * If {@link #PRINT_DEBUG} prints the passed string and returns the current {@link Device}.
+     * In other case omits ouput and returns a {@link NullDevice}
+
+     * @param d The original device
+     * @return The original device or a {@link NullDevice}
+     */
+    public static Device printDebug(Device d, String s) throws IOException {
+        if (PRINT_DEBUG)
+            return d.print(s);
+        else
+            return NullDevice.DEFAULT;
+    }
+
+    /**
+     * Prints a hierarchical idented newline if debug mode is enabled.
+     * {@link #printNewline(org.wings.io.Device, org.wings.SComponent)} 
+     */
+    public static Device printDebugNewline(Device d, SComponent currentComponent) throws IOException {
+        if (PRINT_DEBUG)
+            return printNewline(d, currentComponent);
+        else
+            return d;
+    }
+
+    /**
+     * Prints a hierarchical idented newline. For each surrounding container of the passed component one ident level.
+     */
+    public static Device printNewline(Device d, SComponent currentComponent) throws IOException {
+        d.print("\n");
+        while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
+            d.print("\t");
+            currentComponent = currentComponent.getParent();
+        }
+        return d;
+    }
+
 }
