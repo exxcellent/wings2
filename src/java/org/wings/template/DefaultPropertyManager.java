@@ -14,12 +14,13 @@
 package org.wings.template;
 
 import bsh.Interpreter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.session.SessionManager;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 /**
  * DefaultPropertyManager.java
@@ -33,7 +34,7 @@ import java.util.logging.Logger;
  */
 public class DefaultPropertyManager implements PropertyManager {
 
-    private static final Logger logger = Logger.getLogger("org.wings.template");
+    private final transient static Log log = LogFactory.getLog(DefaultPropertyManager.class);
     static final Class[] classes = {SComponent.class};
 
     public final HashMap propertyValueConverters = new HashMap();
@@ -43,9 +44,7 @@ public class DefaultPropertyManager implements PropertyManager {
 
     private boolean scriptEnabled = false;
 
-    /**
-     *
-     */
+
     public DefaultPropertyManager() {
 
     }
@@ -59,7 +58,7 @@ public class DefaultPropertyManager implements PropertyManager {
             Interpreter interpreter = createInterpreter();
 
             try {
-                logger.finer("eval script " + value);
+                log.debug("eval script " + value);
 
                 interpreter.set("component", comp);
                 interpreter.set("session", SessionManager.getSession());

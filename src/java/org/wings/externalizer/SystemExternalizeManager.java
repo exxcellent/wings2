@@ -16,7 +16,6 @@ package org.wings.externalizer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * This singleton externalizes
@@ -40,9 +39,7 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
 
     protected final Map/*<String, ExternalizedResource>*/ externalized;
 
-    /**
-     * 
-     */
+
     private SystemExternalizeManager() {
         externalized = Collections.synchronizedMap(new HashMap());
     }
@@ -56,18 +53,16 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
         return sharedInstance;
     }
 
-    /**
-     *
-     */
+
     protected String getPrefix() {
         return MY_PREFIX_TIMESLICE_STRING;
     }
 
     protected void storeExternalizedResource(String identifier,
                                              ExternalizedResource extInfo) {
-        if (logger.isLoggable(Level.FINER)) {
-            logger.finer("store identifier " + identifier + " " + extInfo.getObject().getClass());
-            logger.finer("flags " + extInfo.getFlags());
+        if (log.isDebugEnabled()) {
+            log.debug("store identifier " + identifier + " " + extInfo.getObject().getClass());
+            log.debug("flags " + extInfo.getFlags());
         }
 
         externalized.put(identifier, extInfo);
@@ -77,14 +72,14 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
         if (identifier == null || identifier.length() < 1)
             return null;
 
-        logger.fine("system externalizer: " + identifier);
+        log.debug("system externalizer: " + identifier);
 
         int pos = identifier.indexOf(".");
         if (pos > -1) {
             identifier = identifier.substring(0, pos);
         }
 
-        logger.fine("system externalizer " + identifier);
+        log.debug("system externalizer " + identifier);
         return (ExternalizedResource) externalized.get(identifier);
     }
 

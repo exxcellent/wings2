@@ -163,8 +163,6 @@ public class STable
 
     /**
      * <p>returns the model of the table</p>
-     *
-     * @return
      */
     public TableModel getModel() {
         return model;
@@ -369,8 +367,6 @@ public class STable
      * for <I>Object</I>, <I>Number</I> and <I>Boolean</I> all which can be modified
      * or replaced.
      *
-     * @param columnClass
-     * @return
      * @see     #setDefaultEditor
      * @see     #getColumnClass
      */

@@ -13,6 +13,8 @@
  */
 package org.wings.resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.RequestURL;
 import org.wings.Resource;
 import org.wings.SFrame;
@@ -24,8 +26,6 @@ import org.wings.util.StringUtil;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Dynamic Resources are web resources representing rendered components
@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  */
 public abstract class DynamicResource
         extends Resource {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(DynamicResource.class);
 
     /**
      * The epoch of this resource. With each invalidation, this counter
@@ -63,16 +63,12 @@ public abstract class DynamicResource
         super(extension, mimeType);
     }
 
-    /**
-     *
-     */
+
     public DynamicResource(SFrame frame) {
         this(frame, "", "");
     }
 
-    /**
-     *
-     */
+
     public DynamicResource(SFrame frame, String extension, String mimeType) {
         super(extension, mimeType);
         this.frame = frame;
@@ -89,7 +85,7 @@ public abstract class DynamicResource
         if (id == null) {
             ExternalizeManager ext = SessionManager.getSession().getExternalizeManager();
             id = ext.getId(ext.externalize(this));
-            logger.fine("new " + getClass().getName() + " with id " + id);
+            log.debug("new " + getClass().getName() + " with id " + id);
         }
         return id;
     }
@@ -101,18 +97,16 @@ public abstract class DynamicResource
      */
     public final void invalidate() {
         epochCache = "W" + StringUtil.toShortestAlphaNumericString(++epoch);
-        if (logger.isLoggable(Level.FINE)) {
+        if (log.isDebugEnabled()) {
             String name = getClass().getName();
             name = name.substring(name.lastIndexOf(".") + 1);
-            logger.fine("[" + name + "] " +
+            log.debug("[" + name + "] " +
                     "invalidate - epoch: " + epochCache);
         }
 
     }
 
-    /**
-     *
-     */
+
     public final String getEpoch() {
         return epochCache;
     }

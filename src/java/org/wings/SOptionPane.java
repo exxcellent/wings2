@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.plaf.OptionPaneCG;
@@ -22,7 +24,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -31,7 +32,7 @@ import java.util.logging.Logger;
 public class SOptionPane
         extends SDialog
         implements ActionListener {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(SOptionPane.class);
 
     /**
      * Actionb Performed Value if Yes is Choosen
@@ -415,7 +416,7 @@ public class SOptionPane
     }
 
     public void actionPerformed(ActionEvent e) {
-        logger.fine("action " + e);
+        log.debug("action " + e);
         hide();
         selected = e.getSource();
 

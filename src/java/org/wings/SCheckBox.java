@@ -39,8 +39,6 @@ public class SCheckBox extends SAbstractButton {
 
     /**
      * create a checkbox with a text-label.
-     *
-     * @param text
      */
     public SCheckBox(String text) {
         this(false);

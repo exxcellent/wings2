@@ -29,9 +29,7 @@ import java.util.EventObject;
  */
 public class SRenderEvent extends EventObject {
 
-    /**
-     * 
-     */
+
     public SRenderEvent(SComponent source) {
         super(source);
     }
@@ -40,6 +38,10 @@ public class SRenderEvent extends EventObject {
 
 /*
    $Log$
+   Revision 1.3  2004/11/24 21:40:20  blueshift
+   + commons logging
+   + further empty javdoc removal
+
    Revision 1.2  2004/11/24 18:12:54  blueshift
    TOTAL CLEANUP:
    - removed document me TODOs

@@ -54,7 +54,7 @@
         </init-param>
         <init-param>
             <param-name>wings.lookandfeel.factory</param-name>
-            <param-value>org.wings.plaf.LookAndFeelFactory$Default</param-value>
+            <param-value>org.wings.plaf.LookAndFeelFactory$$Default</param-value>
         </init-param>
         <init-param>
             <param-name>wings.lookandfeel.default</param-name>

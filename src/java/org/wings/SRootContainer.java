@@ -13,7 +13,7 @@
  */
 package org.wings;
 
-import java.util.logging.Logger;
+
 
 /**
  * A root container.
@@ -32,8 +32,6 @@ import java.util.logging.Logger;
  * @author <a href="mailto:Haaf@mercatis.de">Armin Haaf</a>
  */
 public abstract class SRootContainer extends SContainer {
-    private final static Logger logger = Logger.getLogger("org.wings");
-
     /**
      * The container for the contentPane.
      */
@@ -58,7 +56,6 @@ public abstract class SRootContainer extends SContainer {
     public void pushDialog(SDialog dialog) {
         super.addComponent(dialog, null, getComponentCount());
         int count = getComponentCount();
-        logger.finest("pushDialog: " + count);
         dialog.setFrame(this);
         reload();
     }
@@ -75,7 +72,6 @@ public abstract class SRootContainer extends SContainer {
 
         SDialog dialog = (SDialog) getComponent(count - 1);
         super.remove(dialog);
-        logger.finest("popDialog: " + count);
         dialog.setFrame((SFrame) null);
         reload();
         return dialog;

@@ -13,15 +13,15 @@
  */
 package org.wings.plaf;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public abstract class LookAndFeelFactory {
-    private static Logger logger = Logger.getLogger("org.wings.plaf");
+    private final transient static Log log = LogFactory.getLog(LookAndFeelFactory.class);
 
     private static String DEFAULT_LOOKANDFEEL_FACTORY = "org.wings.plaf.LookAndFeelFactory$Default";
 
@@ -33,8 +33,6 @@ public abstract class LookAndFeelFactory {
 
     /**
      * Get the lool and feel factory.
-     *
-     * @return
      */
     public static LookAndFeelFactory getLookAndFeelFactory() {
         if (factory == null) {
@@ -57,7 +55,7 @@ public abstract class LookAndFeelFactory {
                         }
                         factory = (LookAndFeelFactory) factoryClass.newInstance();
                     } catch (Exception e) {
-                        logger.log(Level.SEVERE, "could not load wings.lookandfeel.factory: " +
+                        log.fatal("could not load wings.lookandfeel.factory: " +
                                 className, e);
                         throw new RuntimeException("could not load" +
                                 " wings.lookandfeel.factory: " +
@@ -90,8 +88,7 @@ public abstract class LookAndFeelFactory {
                             Class lafClass = Class.forName(lafName, true, Thread.currentThread().getContextClassLoader());
                             laf = (LookAndFeel) lafClass.newInstance();
                         } catch (Exception e) {
-                            logger.severe(e.getMessage());
-                            logger.throwing("LookAndFeelFactory.Default", "create", e);
+                            log.fatal("create", e);
                             throw new IOException(e.getMessage());
                         }
                     }

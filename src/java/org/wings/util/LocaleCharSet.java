@@ -13,12 +13,13 @@
  */
 package org.wings.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Map {@link java.util.Locale} to html/iso character set via <code>org/wings/util/charset.properties</code>.
@@ -31,7 +32,7 @@ public class LocaleCharSet {
      */
     public final static String DEFAULT_ENCODING = "ISO-8859-1";
     private static LocaleCharSet fInstance = null;
-    private static Logger logger = Logger.getLogger("org.wings.util");
+    private final transient static Log log = LogFactory.getLog(LocaleCharSet.class);
     private Properties fCharSet;
 
     protected LocaleCharSet() {
@@ -41,7 +42,7 @@ public class LocaleCharSet {
             fCharSet.load(in);
             in.close();
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Unexpected error on loading org/wings/util/charset.properties via CP.", e);
+            log.warn("Unexpected error on loading org/wings/util/charset.properties via CP.", e);
         }
     }
 

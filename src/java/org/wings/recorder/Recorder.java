@@ -14,6 +14,9 @@
  */
 package org.wings.recorder;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,14 +26,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * @author hengels
  */
 public class Recorder
         implements Filter {
-    private static Logger logger = Logger.getLogger(Recorder.class.getPackage().getName());
+    private final transient static Log log = LogFactory.getLog(Recorder.class);
     public static final String RECORDER_START = "recorder_start";
     public static final String RECORDER_STOP = "recorder_stop";
     public static final String RECORDER_SCRIPT = "recorder_script";
@@ -50,8 +52,8 @@ public class Recorder
             lookupName = "SessionServlet:" + filterConfig.getInitParameter("wings.mainclass");
         }
 
-        logger.config("wings.servlet.lookupname " + lookupName);
-        logger.config("wings.servlet.recorder.script " + scriptName);
+        log.info("wings.servlet.lookupname " + lookupName);
+        log.info("wings.servlet.recorder.script " + scriptName);
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -61,24 +63,24 @@ public class Recorder
                 HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
                 Map map = servletRequest.getParameterMap();
                 if (map.containsKey(RECORDER_SCRIPT)) {
-                    logger.info("recorder_script " + map.get(RECORDER_SCRIPT));
+                    log.info("recorder_script " + map.get(RECORDER_SCRIPT));
                     String[] values = (String[]) map.get(RECORDER_SCRIPT);
                     scriptName = values[0];
                 }
                 if (map.containsKey(RECORDER_START)) {
                     if (list != null)
                         return;
-                    logger.info(RECORDER_START);
+                    log.info(RECORDER_START);
                     list = new LinkedList();
                 } else if (map.containsKey(RECORDER_STOP)) {
                     if (list == null)
                         return;
-                    logger.info(RECORDER_STOP);
+                    log.info(RECORDER_STOP);
                     writeCode();
                     list = null;
                 } else if (list != null) {
                     String resource = httpServletRequest.getPathInfo();
-                    logger.finer("PATH_INFO: " + resource);
+                    log.debug("PATH_INFO: " + resource);
 
                     Request record;
                     if ("GET".equalsIgnoreCase(httpServletRequest.getMethod()))

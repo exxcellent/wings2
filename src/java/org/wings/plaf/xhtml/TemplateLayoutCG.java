@@ -42,9 +42,7 @@ public class TemplateLayoutCG
         parser.addTagHandler("LABEL", LabelTagHandler.class);
     }
 
-    /**
-     *
-     */
+
     private void write(Device device, STemplateLayout layout)
             throws IOException {
 

@@ -16,7 +16,6 @@ package org.wings;
 import org.wings.io.Device;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
@@ -24,7 +23,7 @@ import java.util.logging.Logger;
  */
 public class SCellRendererPane
         extends SContainer {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
 
     /**
      * Construct a CellRendererPane object.
@@ -62,10 +61,10 @@ public class SCellRendererPane
     public void writeComponent(Device d, SComponent c, SComponent p)
             throws IOException {
         if (getParent() == null)
-            logger.warning("SCellRendererPane: parent == null!");
+            log.warn("SCellRendererPane: parent == null!");
 
         if (getParentFrame() == null)
-            logger.warning("SCellRendererPane: parentFrame == null!");
+            log.warn("SCellRendererPane: parentFrame == null!");
 
         if (c == null) {
             return;

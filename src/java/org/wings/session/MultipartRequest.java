@@ -13,6 +13,8 @@
  */
 package org.wings.session;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.UploadFilterManager;
 import org.wings.util.LocaleCharSet;
 
@@ -22,8 +24,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A utility class to handle <tt>multipart/form-data</tt> requests,
@@ -52,7 +52,7 @@ import java.util.logging.Logger;
  */
 public class MultipartRequest
         extends HttpServletRequestWrapper {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(MultipartRequest.class);
 
     private static final int DEFAULT_MAX_POST_SIZE = 1024 * 1024;  // 1 Meg
 
@@ -65,7 +65,6 @@ public class MultipartRequest
 
     /**
      * @param request       the servlet request
-     * @param saveDirectory the directory in which to save any uploaded files
      * @throws IOException if the uploaded content is larger than 1 Megabyte
      *                     or there's a problem reading or parsing the request
      */
@@ -75,7 +74,6 @@ public class MultipartRequest
 
     /**
      * @param request     the servlet request
-     * @param filedir     the directory in which to save any uploaded files
      * @param maxPostSize the maximum size of the POST content
      * @throws IOException if the uploaded content is larger than
      *                     <tt>maxPostSize</tt> or there's a problem reading or parsing the request
@@ -354,8 +352,7 @@ public class MultipartRequest
                             uploadFile = File.createTempFile("wings_uploaded",
                                     "tmp");
                         } catch (IOException e) {
-                            logger.log(Level.SEVERE,
-                                    "couldn't create temp file in '"
+                            log.error("couldn't create temp file in '"
                                     + System.getProperty("java.io.tmpdir")
                                     + "' (CATALINA_TMPDIR set correctly?)",
                                     e);
@@ -420,7 +417,7 @@ public class MultipartRequest
             }
         } catch (IOException ex) {
             // cleanup and store the exception for notification of SFileChooser
-            logger.log(Level.WARNING, "upload", ex);
+            log.warn("upload", ex);
             if (uploadFile != null) uploadFile.delete();
             setException(currentParam, ex);
         } finally {
@@ -432,7 +429,7 @@ public class MultipartRequest
     private static class AccessibleByteArrayOutputStream extends ByteArrayOutputStream {
         public byte charAt(int index) {
             if (count + index < 0) {
-                logger.log(Level.WARNING, "count: " + count + ", index: " + index + ", buffer: " + new String(buf));
+                log.warn("count: " + count + ", index: " + index + ", buffer: " + new String(buf));
                 return -1;
             }
             if (index < 0)
@@ -642,7 +639,7 @@ public class MultipartRequest
     /**
      * Extracts and returns the content type from a line, or null if the line was empty.
      *
-     * @throws an IOException if the line is malformatted.
+     * @throws IOException if the line is malformatted.
      */
     private String extractContentType(String line) throws IOException {
         String contentType = null;
@@ -741,8 +738,6 @@ public class MultipartRequest
          * <li>'id' contains the internal name of the file in the
          * filesystem.</li>
          * </ul>
-         *
-         * @return
          */
         public String toString() {
             String encoding = getRequest().getCharacterEncoding() != null ? getRequest().getCharacterEncoding() : LocaleCharSet.DEFAULT_ENCODING;
@@ -764,7 +759,7 @@ public class MultipartRequest
 
                 return buffer.toString();
             } catch (UnsupportedEncodingException e) {
-                logger.throwing(getClass().getName(), "toString()", e);
+                log.error(getClass().getName(), e);
                 return null;
             }
         }

@@ -10,9 +10,11 @@
 # Use faster jikes perhaps? Requires jikes 1.15; 1.14 core dumps
 #build.compiler=jikes
 
-# Generate Debugging info?
-#build.debug=true
+# Do not generate Debugging info?
+#build.debug=false
 
-# Show deprecation warnings?
-#build.deprecation=true
+# Do not show deprecation warnings?
+#build.deprecation=false
 
+# The home directory of your tomcat installation for deployment
+tomcat.home=C:/Devel/jakarta-tomcat-5.5.4

@@ -13,6 +13,8 @@
  */
 package org.wings.session;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.RequestURL;
 import org.wings.externalizer.AbstractExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
@@ -31,8 +33,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Central servlet delegating all requests to the according j-wings session servlet.
@@ -43,7 +43,7 @@ import java.util.logging.Logger;
  */
 public final class WingServlet
         extends HttpServlet {
-    protected final static Logger logger = Logger.getLogger("org.wings.session");
+    private final transient static Log log = LogFactory.getLog(WingServlet.class);
 
     /**
      * used to init session servlets
@@ -66,7 +66,7 @@ public final class WingServlet
             lookupName = "SessionServlet:" + config.getInitParameter("wings.mainclass");
         }
 
-        logger.info("use session servlet lookup name " + lookupName);
+        log.info("use session servlet lookup name " + lookupName);
     }
 
     /**
@@ -88,18 +88,17 @@ public final class WingServlet
      * this servlet instance are stored in the servlet session hashtable</dd>
      * </dl>
      *
-     * @param config
      * @throws ServletException
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         servletConfig = config;
 
-        if (logger.isLoggable(Level.CONFIG)) {
-            logger.config("init-params:");
+        if (log.isInfoEnabled()) {
+            log.info("init-params:");
             for (Enumeration en = config.getInitParameterNames(); en.hasMoreElements();) {
                 String param = (String) en.nextElement();
-                logger.config(param + " = " + config.getInitParameter(param));
+                log.info(param + " = " + config.getInitParameter(param));
             }
         }
 
@@ -136,8 +135,8 @@ public final class WingServlet
             throws ServletException, IOException {
         SessionServlet sessionServlet = getSessionServlet(req, res, true);
 
-        if (logger.isLoggable(Level.FINE))
-            logger.fine((sessionServlet != null) ?
+        if (log.isDebugEnabled())
+            log.debug((sessionServlet != null) ?
                     lookupName :
                     "no session yet ..");
 
@@ -147,28 +146,28 @@ public final class WingServlet
             int maxContentLength = sessionServlet.getSession().getMaxContentLength();
             req = new MultipartRequest(req, maxContentLength * 1024);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, null, e);
+            log.fatal(null, e);
         }
 
-        if (logger.isLoggable(Level.FINER)) {
+        if (log.isDebugEnabled()) {
             if (req instanceof MultipartRequest) {
                 MultipartRequest multi = (MultipartRequest) req;
-                logger.finer("Files:");
+                log.debug("Files:");
                 Iterator files = multi.getFileNames();
                 while (files.hasNext()) {
                     String name = (String) files.next();
                     String filename = multi.getFileName(name);
                     String type = multi.getContentType(name);
                     File f = multi.getFile(name);
-                    logger.finer("name: " + name);
-                    logger.finer("filename: " + filename);
-                    logger.finer("type: " + type);
+                    log.debug("name: " + name);
+                    log.debug("filename: " + filename);
+                    log.debug("type: " + type);
                     if (f != null) {
-                        logger.finer("f.toString(): " + f.toString());
-                        logger.finer("f.getName(): " + f.getName());
-                        logger.finer("f.exists(): " + f.exists());
-                        logger.finer("f.length(): " + f.length());
-                        logger.finer("\n");
+                        log.debug("f.toString(): " + f.toString());
+                        log.debug("f.getName(): " + f.getName());
+                        log.debug("f.exists(): " + f.exists());
+                        log.debug("f.length(): " + f.length());
+                        log.debug("\n");
                     }
                 }
             }
@@ -182,7 +181,7 @@ public final class WingServlet
             throws ServletException {
         long timestamp = System.currentTimeMillis();
         try {
-            logger.fine("new session");
+            log.debug("new session");
 
             SessionServlet sessionServlet = new SessionServlet();
             sessionServlet.init(servletConfig, request, response);
@@ -201,10 +200,10 @@ public final class WingServlet
 
             sessionServlet.setParent(this);
 
-            logger.fine("time to create a new session " + (System.currentTimeMillis() - timestamp));
+            log.debug("time to create a new session " + (System.currentTimeMillis() - timestamp));
             return sessionServlet;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, null, e);
+            log.fatal(null, e);
             throw new ServletException(e);
         }
     }
@@ -229,26 +228,26 @@ public final class WingServlet
              * for lookup purposes and are satisfied, if we don't get anything.
              */
             if (sessionServlet == null && createSessionServlet) {
-                logger.info("no session servlet, create new one");
+                log.info("no session servlet, create new one");
                 sessionServlet = newSession(request, response);
                 httpSession.setAttribute(lookupName, sessionServlet);
             }
 
 
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("session id " + request.getRequestedSessionId());
-                logger.finer("session from cookie " + request.isRequestedSessionIdFromCookie());
-                logger.finer("session from url " + request.isRequestedSessionIdFromURL());
-                logger.finer("session valid " + request.isRequestedSessionIdValid());
-                logger.finer("session created at " +
+            if (log.isDebugEnabled()) {
+                log.debug("session id " + request.getRequestedSessionId());
+                log.debug("session from cookie " + request.isRequestedSessionIdFromCookie());
+                log.debug("session from url " + request.isRequestedSessionIdFromURL());
+                log.debug("session valid " + request.isRequestedSessionIdValid());
+                log.debug("session created at " +
                         new java.util.Date(httpSession.getCreationTime()));
-                logger.finer("session httpsession id " + httpSession.getId());
-                logger.finer("session httpsession new " + httpSession.isNew());
-                logger.finer("session last accessed at " +
+                log.debug("session httpsession id " + httpSession.getId());
+                log.debug("session httpsession new " + httpSession.isNew());
+                log.debug("session last accessed at " +
                         new java.util.Date(httpSession.getLastAccessedTime()));
-                logger.finer("session max inactive interval " +
+                log.debug("session max inactive interval " +
                         httpSession.getMaxInactiveInterval());
-                logger.finer("session contains wings session " +
+                log.debug("session contains wings session " +
                         (httpSession.getAttribute(lookupName) != null));
             }
 
@@ -295,10 +294,10 @@ public final class WingServlet
                 try {
                     String sessionCharacterEncoding = sessionServlet.getSession().getCharacterEncoding();                 
                     // We know better about the used character encoding than tomcat
-                    logger.finer("Advising servlet container to interpret request as " + sessionCharacterEncoding);
+                    log.debug("Advising servlet container to interpret request as " + sessionCharacterEncoding);
                     request.setCharacterEncoding(sessionCharacterEncoding);
                 } catch (UnsupportedEncodingException e) {
-                    logger.log(Level.WARNING, "Problem on applying current session character encoding", e);
+                    log.warn("Problem on applying current session character encoding", e);
                 }
             }
 
@@ -318,9 +317,7 @@ public final class WingServlet
                 && pathInfo.startsWith("/-"));
     }
 
-    /**
-     *
-     */
+
     protected AbstractExternalizeManager getExternalizeManager(HttpServletRequest req)
             throws ServletException {
         if (isSystemExternalizeRequest(req)) {
@@ -362,7 +359,7 @@ public final class WingServlet
                     pathUrl.append('?').append(req.getQueryString());
                 }
 
-                logger.fine("redirect to " + pathUrl.toString());
+                log.debug("redirect to " + pathUrl.toString());
                 response.sendRedirect(pathUrl.toString());
                 return;
             }
@@ -387,16 +384,16 @@ public final class WingServlet
                 return;
             }
 
-            logger.fine("session servlet");
+            log.debug("session servlet");
 
             SessionServlet sessionServlet = getSessionServlet(req, response, true);
 
             sessionServlet.doGet(req, response);
         } catch (ServletException e) {
-            logger.log(Level.SEVERE, "doGet", e);
+            log.fatal("doGet", e);
             throw e;
         } catch (Throwable e) {
-            logger.log(Level.SEVERE, "doGet", e);
+            log.fatal("doGet", e);
             throw new ServletException(e);
         }
     }

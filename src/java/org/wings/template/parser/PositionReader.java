@@ -50,7 +50,6 @@
  * individuals on behalf of the Java Apache Group. For more information
  * on the Java Apache Project and the Apache JServ Servlet Engine project,
  * please see <http://java.apache.org/>.
- *
  */
 
 /*

@@ -13,6 +13,8 @@
  */
 package org.wings.plaf;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.Resource;
 import org.wings.SDimension;
 import org.wings.SIcon;
@@ -27,8 +29,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A Look-and-Feel consists of a bunch of CGs and resource properties.
@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  */
 public class LookAndFeel
         implements Serializable {
-    public final static Logger logger = Logger.getLogger("org.wings.plaf");
+    private final transient static Log log = LogFactory.getLog(LookAndFeel.class);
 
     private static Map wrappers = new HashMap();
 
@@ -110,7 +110,7 @@ public class LookAndFeel
                 result = cgClass.newInstance();
                 finalResources.put(className, result);
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, null, ex);
+                log.fatal(null, ex);
             }
         }
         return result;
@@ -205,7 +205,6 @@ public class LookAndFeel
     /**
      * Utility method that creates a stylesheet object from a resource
      *
-     * @param resourceName
      * @return the styleSheet
      */
     public static StyleSheet makeStyleSheet(String resourceName) {
@@ -216,7 +215,7 @@ public class LookAndFeel
             in.close();
             return result;
         } catch (Exception e) {
-            logger.log(Level.WARNING, null, e);
+            log.warn("Exception", e);
         }
         return null;
     }
@@ -244,12 +243,11 @@ public class LookAndFeel
                 result = constructor.newInstance(new Object[]{value});
             }
         } catch (NoSuchMethodException e) {
-            logger.log(Level.SEVERE, value + " : " + clazz.getName()
+            log.fatal(value + " : " + clazz.getName()
                     + " doesn't have a single String arg constructor", e);
             result = null;
         } catch (Exception e) {
-            logger.log(Level.SEVERE,
-                    e.getClass().getName() + " : " + value, e);
+            log.error(e.getClass().getName() + " : " + value, e);
             result = null;
         }
         return result;

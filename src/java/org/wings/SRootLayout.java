@@ -34,7 +34,6 @@ public class SRootLayout
     /**
      * Read the template from a file.
      *
-     * @param tmplFileName
      * @throws java.io.IOException
      */
     public SRootLayout(String tmplFileName) throws IOException {
@@ -44,7 +43,6 @@ public class SRootLayout
     /**
      * Read the template from a file.
      *
-     * @param tmplFile
      * @throws java.io.IOException
      */
     public SRootLayout(File tmplFile) throws IOException {

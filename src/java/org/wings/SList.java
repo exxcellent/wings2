@@ -68,24 +68,16 @@ public class SList
      */
     private int visibleRowCount = 8;
 
-    /**
-     *
-     */
+
     private SListSelectionModel selectionModel;
 
-    /**
-     *
-     */
+
     private ListModel dataModel;
 
-    /**
-     *
-     */
+
     private SListCellRenderer cellRenderer;
 
-    /**
-     *
-     */
+
     private ListSelectionHandler selectionHandler;
 
     /**
@@ -827,8 +819,6 @@ public class SList
 
     /**
      * <li type="...">
-     *
-     * @param t
      */
     public void setOrderType(String t) {
         orderType = t;
@@ -836,8 +826,6 @@ public class SList
 
     /**
      * <li type="...">
-     *
-     * @return
      */
     public String getOrderType() {
         return orderType;

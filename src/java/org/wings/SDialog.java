@@ -13,10 +13,10 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.DialogCG;
 import org.wings.session.SessionManager;
-
-import java.util.logging.Logger;
 
 /**
  * As opposed to Swing, wingS dialogs are non modal. However, the dismission of
@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public class SDialog extends SForm {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(SDialog.class);
 
     /**
      * Action command if dialog window was closed
@@ -142,7 +142,7 @@ public class SDialog extends SForm {
      * Remove this dialog from its frame.
      */
     public void hide() {
-        logger.fine("hide dialog");
+        log.debug("hide dialog");
         if (owner != null) {
             owner.popDialog();
         }
@@ -171,11 +171,9 @@ public class SDialog extends SForm {
      * If the component is null, the root frame of the session is used. If there
      * is no root frame in the session, a NullPointerException is thrown (this
      * should not happen ;-).
-     *
-     * @param c
      */
     public void show(SComponent c) {
-        logger.fine("show dialog");
+        log.debug("show dialog");
         if (c == null)
             c = SessionManager.getSession().getRootFrame();
 

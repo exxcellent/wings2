@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.TreeCG;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.tree.STreeCellRenderer;
@@ -22,7 +24,6 @@ import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -31,7 +32,7 @@ import java.util.logging.Logger;
 public class STree
         extends SComponent
         implements LowLevelEventListener, Scrollable {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(STree.class);
     private int nodeIndentDepth;
 
     /**

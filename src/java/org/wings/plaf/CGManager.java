@@ -13,6 +13,8 @@
  */
 package org.wings.plaf;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLayoutManager;
@@ -22,7 +24,6 @@ import org.wings.style.Style;
 import org.wings.style.StyleSheet;
 
 import java.io.Serializable;
-import java.util.logging.Logger;
 
 /**
  * The CGManager holds a reference to the current laf.
@@ -30,7 +31,7 @@ import java.util.logging.Logger;
  * the laf's defaults.
  */
 public class CGManager implements Serializable {
-    private final static Logger logger = Logger.getLogger("org.wings.plaf");
+    private final transient static Log log = LogFactory.getLog(CGManager.class);
 
     private LookAndFeel lookAndFeel;
     private CGDefaults defaults = null;
@@ -140,7 +141,7 @@ public class CGManager implements Serializable {
      */
     public CGDefaults getDefaults() {
         if (defaults == null) {
-            logger.warning("defaults == null");
+            log.warn("defaults == null");
         }
         return defaults;
     }
@@ -168,7 +169,7 @@ public class CGManager implements Serializable {
         if (newLookAndFeel != null) {
             setDefaults(newLookAndFeel.createDefaults());
         } else {
-            logger.warning("lookandfeel == null");
+            log.warn("lookandfeel == null");
             setDefaults(null);
         }
 

@@ -52,8 +52,6 @@ public class SSeparator
 
     /**
      * sets the alignment
-     *
-     * @param al
      */
     public void setAlignment(int al) {
         alignment = al;
@@ -61,8 +59,6 @@ public class SSeparator
 
     /**
      * returns the alignment
-     *
-     * @return
      */
     public int getAlignment() {
         return alignment;
@@ -70,8 +66,6 @@ public class SSeparator
 
     /**
      * sets the size of the rule
-     *
-     * @param s
      */
     public void setSize(int s) {
         size = s;

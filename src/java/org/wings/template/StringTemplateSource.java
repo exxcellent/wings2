@@ -41,15 +41,11 @@ public class StringTemplateSource implements TemplateSource {
 
     private long lastModified;
 
-    /**
-     * 
-     */
+
     public StringTemplateSource() {
     }
 
-    /**
-     * 
-     */
+
     public StringTemplateSource(String template) {
         setTemplate(template);
     }
@@ -77,6 +73,10 @@ public class StringTemplateSource implements TemplateSource {
 
 /*
    $Log$
+   Revision 1.3  2004/11/24 21:40:25  blueshift
+   + commons logging
+   + further empty javdoc removal
+
    Revision 1.2  2004/11/24 18:13:18  blueshift
    TOTAL CLEANUP:
    - removed document me TODOs

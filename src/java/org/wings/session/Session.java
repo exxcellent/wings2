@@ -14,6 +14,8 @@
 package org.wings.session;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.event.*;
 import org.wings.externalizer.ExternalizeManager;
@@ -34,8 +36,6 @@ import javax.swing.event.EventListenerList;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 public class Session
         implements PropertyService, Serializable {
 
-    private final static Logger logger = Logger.getLogger("org.wings.session");
+    private final transient static Log log = LogFactory.getLog(Session.class);
 
     /**
      * The property name of the locale
@@ -169,7 +169,6 @@ public class Session
      * Detect user agent (userAgent). Copy init parameters. Set max content length for uploads / requests.
      * Install look and feel.
      *
-     * @param config
      * @param request a <code>HttpServletRequest</code> value
      * @throws ServletException if an error occurs
      */
@@ -185,7 +184,7 @@ public class Session
             LookAndFeel lookAndFeel = LookAndFeelFactory.getLookAndFeelFactory().create();
             CGManager.setLookAndFeel(lookAndFeel);
         } catch (Exception ex) {
-            logger.log(Level.SEVERE, "could not load look and feel: " +
+            log.fatal("could not load look and feel: " +
                     config.getInitParameter("wings.lookandfeel.factory"), ex);
             throw new ServletException(ex);
         }
@@ -198,15 +197,13 @@ public class Session
             try {
                 maxContentLength = Integer.parseInt(maxCL);
             } catch (NumberFormatException e) {
-                logger.log(Level.WARNING, "invalid content.maxlength: " + maxCL, e);
+                log.warn("invalid content.maxlength: " + maxCL, e);
             }
         }
     }
 
     /**
      * Copy the init parameters.
-     *
-     * @param config
      */
     protected void initProps(ServletConfig config) {
         Enumeration params = config.getInitParameterNames();
@@ -277,9 +274,9 @@ public class Session
     public void setUserAgentFromRequest(HttpServletRequest request) {
         try {
             userAgent = new Browser(request.getHeader("User-Agent"));
-            logger.fine("User-Agent is " + userAgent);
+            log.debug("User-Agent is " + userAgent);
         } catch (Exception ex) {
-            logger.log(Level.WARNING, "Cannot get User-Agent from request", ex);
+            log.warn("Cannot get User-Agent from request", ex);
         }
     }
 
@@ -449,7 +446,7 @@ public class Session
                 Arrays.asList(supportedLocales).contains(l)) {
             locale = l;
             propertyChangeSupport.firePropertyChange(LOCALE_PROPERTY, locale, l);
-            logger.config("Set Locale " + l);
+            log.info("Set Locale " + l);
         } else
             throw new IllegalArgumentException("Locale " + l + " not supported");
     }
@@ -750,7 +747,7 @@ public class Session
     }
 
     protected void finalize() {
-        logger.info("gc session");
+        log.info("gc session");
         if (collectStatistics) {
             WingsStatistics.getStatistics().decrementAllocatedSessionCount();
         } // end of if ()

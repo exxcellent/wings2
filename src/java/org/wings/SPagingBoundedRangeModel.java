@@ -59,9 +59,7 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      */
     protected boolean gotDelayedEvent = false;
 
-    /**
-     *
-     */
+
     public SPagingBoundedRangeModel() {
         super();
     }
@@ -394,6 +392,10 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
 
 /*
    $Log$
+   Revision 1.3  2004/11/24 21:40:28  blueshift
+   + commons logging
+   + further empty javdoc removal
+
    Revision 1.2  2004/11/24 18:13:21  blueshift
    TOTAL CLEANUP:
    - removed document me TODOs

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- -*-sgml-*- --><!-- ant build file for wingS --><!-- $Id$ -->
-<project basedir="." default="build" name="wingS">
+<!-- $Id$ -->
+<!-- ant build file for j-wingS -->
+
+<project basedir="." default="build" name="j-wingS">
     <!-- read properties from file -->
     <property file="etc/custom-build.properties"/>
     <property file="etc/build.properties"/>
@@ -28,7 +30,8 @@
     </target>
 
     <target name="compile" depends="prepare">
-        <javac debug="${build.debug}" deprecation="${build.deprecation}" destdir="build/class" srcdir="src/java" source="1.3" target="1.3">
+        <javac debug="${build.debug}" deprecation="${build.deprecation}"
+               destdir="build/class" srcdir="src/java" source="1.3" target="1.3">
             <classpath refid="build.classpath"/>
         </javac>
     </target>

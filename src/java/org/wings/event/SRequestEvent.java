@@ -23,39 +23,25 @@ import java.awt.*;
  */
 public class SRequestEvent extends AWTEvent {
 
-    /**
-     * 
-     */
+
     public static final int DELIVER_START = 50000;
 
-    /**
-     * 
-     */
+
     public static final int DELIVER_DONE = DELIVER_START + 1;
 
-    /**
-     * 
-     */
+
     public static final int DISPATCH_START = DELIVER_START + 2;
 
-    /**
-     * 
-     */
+
     public static final int DISPATCH_DONE = DELIVER_START + 3;
 
-    /**
-     * 
-     */
+
     public static final int PROCESS_REQUEST = DELIVER_START + 4;
 
-    /**
-     *
-     */
+
     public static final int REQUEST_START = DELIVER_START + 5;
 
-    /**
-     *
-     */
+
     public static final int REQUEST_END = DELIVER_START + 6;
 
     /**
@@ -77,16 +63,12 @@ public class SRequestEvent extends AWTEvent {
         this.requestedResource = requestedResource;
     }
 
-    /**
-     *
-     */
+
     public int getType() {
         return getID();
     }
 
-    /**
-     *
-     */
+
     public ExternalizedResource getRequestedResource() {
         return requestedResource;
     }

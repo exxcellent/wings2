@@ -38,9 +38,7 @@ public class PropertyAccessor {
         return false;
     }
 
-    /**
-     *
-     */
+
     public static void setProperty(Object o, String name, Object value) {
         try {
             Method[] m = o.getClass().getMethods();
@@ -57,9 +55,7 @@ public class PropertyAccessor {
         } catch (Exception e) {}
     }
 
-    /**
-     *
-     */
+
     public static void getProperty(Object o, String name, Object value) {
         // not yet implemented.
     }

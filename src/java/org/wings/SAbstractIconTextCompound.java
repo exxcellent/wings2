@@ -336,8 +336,6 @@ public abstract class SAbstractIconTextCompound
 
     /**
      * Sets the label of the button.
-     *
-     * @param t
      */
     public void setText(String t) {
         reloadIfChange(text, t);

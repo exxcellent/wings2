@@ -13,6 +13,8 @@
  */
 package org.wings.plaf.css;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
@@ -22,7 +24,6 @@ import org.wings.plaf.ComponentCG;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.logging.Logger;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.
@@ -32,7 +33,7 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractComponentCG
         implements ComponentCG, SConstants, Serializable {
-    protected final static Logger logger = Logger.getLogger("org.wings.plaf");
+    private final transient static Log log = LogFactory.getLog(AbstractComponentCG.class);
 
     protected AbstractComponentCG() {
     }

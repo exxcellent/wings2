@@ -114,8 +114,6 @@ public class STextField
 
     /**
      * Removes the supplied Listener from teh listener list
-     *
-     * @param listener
      */
     public void removeActionListener(ActionListener listener) {
         removeEventListener(ActionListener.class, listener);

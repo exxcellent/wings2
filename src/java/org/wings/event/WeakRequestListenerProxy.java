@@ -29,9 +29,7 @@ import java.lang.ref.WeakReference;
  */
 public final class WeakRequestListenerProxy extends WeakReference implements SRequestListener {
 
-    /**
-     * 
-     */
+
     public WeakRequestListenerProxy(SRequestListener requestListener) {
         super(requestListener);
     }
@@ -85,6 +83,10 @@ public final class WeakRequestListenerProxy extends WeakReference implements SRe
 
 /*
    $Log$
+   Revision 1.3  2004/11/24 21:40:20  blueshift
+   + commons logging
+   + further empty javdoc removal
+
    Revision 1.2  2004/11/24 18:12:54  blueshift
    TOTAL CLEANUP:
    - removed document me TODOs

@@ -13,21 +13,21 @@
  */
 package org.wings.externalizer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.io.Device;
 import org.wings.util.StringUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public abstract class AbstractExternalizeManager {
-    protected final static Logger logger = Logger.getLogger("org.wings.externalizer");
+    protected final transient static Log log = LogFactory.getLog(AbstractExternalizeManager.class);
 
     /**
      * The identifier generated, if the {@link ExternalizeManager} did not find
@@ -127,12 +127,10 @@ public abstract class AbstractExternalizeManager {
      */
     protected String sessionEncoding = "";
 
-    /**
-     *
-     */
+
     public AbstractExternalizeManager() {
-        logger.info("final scope expires in " + FINAL_EXPIRES + " seconds");
-        logger.info("use prefix " + PREFIX_TIMESLICE_STRING);
+        log.info("final scope expires in " + FINAL_EXPIRES + " seconds");
+        log.info("use prefix " + PREFIX_TIMESLICE_STRING);
 
         reverseExternalized = Collections.synchronizedMap(new HashMap());
     }
@@ -143,23 +141,17 @@ public abstract class AbstractExternalizeManager {
         }
     }
 
-    /**
-     *
-     */
+
     protected final synchronized long getNextIdentifier() {
         return ++counter;
     }
 
-    /**
-     *
-     */
+
     protected String getPrefix() {
         return PREFIX_TIMESLICE_STRING;
     }
 
-    /**
-     *
-     */
+
     protected final String createIdentifier() {
         return getPrefix() + StringUtil.toShortestAlphaNumericString(getNextIdentifier());
     }
@@ -379,7 +371,7 @@ public abstract class AbstractExternalizeManager {
         ExternalizedResource extInfo = getExternalizedResource(identifier);
 
         if (extInfo == null) {
-            logger.warning("identifier " + identifier + " not found");
+            log.warn("identifier " + identifier + " not found");
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
@@ -406,7 +398,7 @@ public abstract class AbstractExternalizeManager {
             int resourceLen = extInfo
                     .getExternalizer().getLength(extInfo.getObject());
             if (resourceLen > 0) {
-                logger.log(Level.FINER, extInfo.getMimeType() + ": " + resourceLen);
+                log.debug(extInfo.getMimeType() + ": " + resourceLen);
                 response.setContentLength(resourceLen);
             }
         }

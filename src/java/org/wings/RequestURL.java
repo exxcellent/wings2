@@ -40,9 +40,7 @@ public class RequestURL extends SimpleURL {
 
     private StringBuffer parameters = null;
 
-    /**
-     * 
-     */
+
     public RequestURL() {
     }
 
@@ -58,44 +56,32 @@ public class RequestURL extends SimpleURL {
         parameters = (params == null) ? params : new StringBuffer(params.toString());
     }
 
-    /**
-     * 
-     */
+
     public RequestURL(String baseURL, String encodedBaseURL) {
         setBaseURL(baseURL, encodedBaseURL);
     }
 
-    /**
-     *
-     */
+
     public void setEpoch(String e) {
         epoch = e;
     }
 
-    /**
-     *
-     */
+
     public String getEpoch() {
         return epoch;
     }
 
-    /**
-     *
-     */
+
     public void setResource(String r) {
         resource = r;
     }
 
-    /**
-     *
-     */
+
     public String getResource() {
         return resource;
     }
 
-    /**
-     *
-     */
+
     public void setBaseURL(String b, String encoded) {
         baseURL = b;
 
@@ -147,7 +133,6 @@ public class RequestURL extends SimpleURL {
      * list. The added name will be the encoded LowLevelEventId of the
      * LowLevelEventListener.
      *
-     * @param comp
      * @param value the value of the parameter
      * @return a reference to <code>this</code> to simplify 'call chaining'
      */
@@ -223,8 +208,6 @@ public class RequestURL extends SimpleURL {
     /**
      * Returns the string representation of the context URL plus
      * all paramters given.
-     *
-     * @return
      */
     public String toString() {
         StringBuffer erg = new StringBuffer();

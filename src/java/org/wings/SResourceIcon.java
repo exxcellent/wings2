@@ -13,13 +13,13 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.resource.ClasspathResource;
 import org.wings.util.ImageInfo;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * Diese Klasse ist nur ein Wrapper, um Eingabestroeme von Grafiken mit dem
@@ -41,7 +41,7 @@ import java.util.logging.Logger;
  */
 public class SResourceIcon extends ClasspathResource implements SIcon {
 
-    private final static Logger LOGGER = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(SResourceIcon.class);
 
     /**
      * Width of icon, <code>-1</code> if not set.
@@ -64,7 +64,7 @@ public class SResourceIcon extends ClasspathResource implements SIcon {
         try {
             bufferResource();
         } catch (Throwable e) {
-            LOGGER.log(Level.SEVERE, "Can not buffer resource " + resourceFileName);
+            log.fatal("Can not buffer resource " + resourceFileName);
         }
 
         if (buffer != null && buffer.isValid()) {

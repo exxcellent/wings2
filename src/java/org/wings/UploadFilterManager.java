@@ -13,19 +13,20 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.FilterOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public class UploadFilterManager {
-    private final static Logger logger = Logger.getLogger("org.wings.servlet");
+    private final transient static Log log = LogFactory.getLog(UploadFilterManager.class);
 
     private static HashMap filterMappings = new HashMap();
 
@@ -58,14 +59,14 @@ public class UploadFilterManager {
             else {
                 Class filterClass = entry.filterClass;
                 if (filterClass != null) {
-                    logger.info("using " + filterClass.getName() + " for " + name);
+                    log.info("using " + filterClass.getName() + " for " + name);
                     Constructor constructor = filterClass.getConstructor(new Class[]{OutputStream.class});
                     filter = (FilterOutputStream) constructor.newInstance(new Object[]{out});
                     entry.filterInstance = filter;
                 }
             }
         } catch (Exception e) {
-            logger.log(Level.SEVERE, null, e);
+            log.fatal("Exception", e);
         }
         return filter;
     }
@@ -76,7 +77,7 @@ public class UploadFilterManager {
             FilterOutputStream filterInstance = entry.filterInstance;
             return filterInstance;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, null, e);
+            log.fatal(null, e);
             return null;
         }
     }

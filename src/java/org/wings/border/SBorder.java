@@ -29,7 +29,6 @@ public interface SBorder extends Serializable {
      * Sets the insets of this border. Insets describe the amount
      * of space 'around' the bordered component.
      *
-     * @param insets
      * @see #getInsets()
      */
     void setInsets(Insets insets);
@@ -67,7 +66,6 @@ public interface SBorder extends Serializable {
     /**
      * Set the thickness in pixel for this border.
      *
-     * @param thickness
      * @see #getThickness()
      */
     public void setThickness(int thickness);

@@ -17,16 +17,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class ExternalizeManager extends AbstractExternalizeManager {
-    /**
-     *
-     */
+
     private static final Externalizer[] DEFAULT_EXTERNALIZERS = {
         ImageExternalizer.SHARED_PNG_INSTANCE,
         ImageExternalizer.SHARED_GIF_INSTANCE,
@@ -55,9 +52,7 @@ public class ExternalizeManager extends AbstractExternalizeManager {
         }
     }
 
-    /**
-     *
-     */
+
     public final void addDefaultExternalizers() {
         for (int i = 0; i < DEFAULT_EXTERNALIZERS.length; i++) {
             addExternalizer(DEFAULT_EXTERNALIZERS[i]);
@@ -66,9 +61,9 @@ public class ExternalizeManager extends AbstractExternalizeManager {
 
     protected final void storeExternalizedResource(String identifier,
                                                    ExternalizedResource extInfo) {
-        if (logger.isLoggable(Level.FINER)) {
-            logger.finer("store identifier " + identifier + " " + extInfo.getObject().getClass());
-            logger.finer("flags " + extInfo.getFlags());
+        if (log.isDebugEnabled()) {
+            log.debug("store identifier " + identifier + " " + extInfo.getObject().getClass());
+            log.debug("flags " + extInfo.getFlags());
         }
         externalized.put(identifier, extInfo);
     }
@@ -146,7 +141,7 @@ public class ExternalizeManager extends AbstractExternalizeManager {
 
         Externalizer externalizer = getExternalizer(obj.getClass());
         if (externalizer == null) {
-            logger.warning("could not find externalizer for " +
+            log.warn("could not find externalizer for " +
                     obj.getClass().getName());
             return NOT_FOUND_IDENTIFIER;
         }
@@ -220,8 +215,6 @@ public class ExternalizeManager extends AbstractExternalizeManager {
      * through the list of interfaces of the class and checks for object
      * externalizers for every interface. If this also doesn't return an
      * object externalizer, null is returned.
-     *
-     * @return
      */
     public Externalizer getExternalizer(Class c) {
         Externalizer externalizer = null;
@@ -233,9 +226,7 @@ public class ExternalizeManager extends AbstractExternalizeManager {
         return externalizer;
     }
 
-    /**
-     *
-     */
+
     private Externalizer getSuperclassExternalizer(Class c) {
         Externalizer externalizer = null;
         if (c != null) {
@@ -246,9 +237,7 @@ public class ExternalizeManager extends AbstractExternalizeManager {
         return externalizer;
     }
 
-    /**
-     *
-     */
+
     private Externalizer getInterfaceExternalizer(Class c) {
         Externalizer externalizer = null;
         Class[] ifList = c.getInterfaces();

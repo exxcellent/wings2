@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.io.Device;
 import org.wings.session.PropertyService;
@@ -21,8 +23,6 @@ import org.wings.session.SessionManager;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public abstract class StaticResource extends Resource {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(StaticResource.class);
     /**
      * Flags that influence the behaviour of the externalize manager
      */
@@ -148,7 +148,7 @@ public abstract class StaticResource extends Resource {
         if (id == null) {
             ExternalizeManager ext = SessionManager.getSession().getExternalizeManager();
             id = ext.getId(ext.externalize(this, externalizerFlags));
-            logger.fine("new " + getClass().getName() + " with id " + id);
+            log.debug("new " + getClass().getName() + " with id " + id);
         }
         return id;
     }
@@ -184,8 +184,7 @@ public abstract class StaticResource extends Resource {
                     size = buffer.size();
                 }
             } else {
-                logger.log(Level.SEVERE,
-                        "Resource returned empty stream: " + this);
+                log.fatal("Resource returned empty stream: " + this);
                 buffer.setValid(false);
             }
         }
@@ -233,8 +232,6 @@ public abstract class StaticResource extends Resource {
 
     /**
      * Return the size in bytes of the resource, if known
-     *
-     * @return
      */
     public final int getLength() {
         return size;

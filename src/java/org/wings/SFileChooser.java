@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.FileChooserCG;
 
 import javax.servlet.http.HttpUtils;
@@ -20,8 +22,6 @@ import java.io.File;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A filechooser shows a textfield with a browse-button to enter a file.
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 public class SFileChooser
         extends SComponent
         implements LowLevelEventListener {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(SFileChooser.class);
 
     /**
      * maximum visible amount of characters in the file chooser.
@@ -337,8 +337,6 @@ public class SFileChooser
 
     /**
      * Returns the upload filter set in {@link #setUploadFilter(Class)}
-     *
-     * @return
      */
     public Class getUploadFilter() {
         return filter;
@@ -379,7 +377,7 @@ public class SFileChooser
                     currentFile = new TempFile(fileDir, fileId);
                 }
             } catch (Exception e) {
-                logger.log(Level.SEVERE, null, e);
+                log.fatal(null, e);
             }
         }
     }
@@ -433,7 +431,7 @@ public class SFileChooser
          */
         protected void finalize() throws Throwable {
             super.finalize();
-            if (isTemp) logger.fine("garbage collect file " + getName());
+            if (isTemp) log.debug("garbage collect file " + getName());
             cleanup();
         }
     }

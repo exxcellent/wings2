@@ -53,9 +53,8 @@ public class SNumberFormatter extends SAbstractFormatter {
      * NumberFormat.maxIntegerDigits, NumberFormat.minIntegerDigits, NumberFormat.maxFractionDigits, 
      * NumberFormat.minIntegerDigits. 
      * Additional it's possible to set a maximal or a minimal valid value.
-     *
      */
-    
+
     public SNumberFormatter() {
     }
 
@@ -79,7 +78,6 @@ public class SNumberFormatter extends SAbstractFormatter {
      * sets the NumberFormat. Doesn't work after the Frame is installed, because
      * until now it's  not possible to add a JavaScriptFunction correctly after that.
      * @param NumberFormat nf the NumberFormat for the SFormattedTextField.
-     * 
      */
     public void setNumberFormat(NumberFormat nf) {
         numberFormat = nf;
@@ -110,7 +108,6 @@ public class SNumberFormatter extends SAbstractFormatter {
      * sets the maximal possible value. Doesn't work after the Frame is installed, because
      * until now it's  not possible to add a JavaScriptFunction correctly after that.
      * @param double maxVal the maximal possible value for the SFormattedTextField.
-     * 
      */
     public void setMaxVal(double maxVal) {
         this.maxVal = maxVal;
@@ -125,7 +122,6 @@ public class SNumberFormatter extends SAbstractFormatter {
     * sets the minimal possible value. Doesn't work after the Frame is installed, because
     * until now it's  not possible to add a JavaScriptFunction correctly after that.
     * @param double minVal the minimal possible value for the SFormattedTextField.
-    *
     */
     public void setMinVal(double minVal) {
         this.minVal = minVal;

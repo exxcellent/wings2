@@ -131,16 +131,12 @@ public class SLabel
         this(text, null, horizontalAlignment);
     }
 
-    /**
-     * @param t
-     */
+
     public void setImageAbsBottom(boolean t) {
         imageAbsBottom = t;
     }
 
-    /**
-     *
-     */
+
     public boolean isImageAbsBottom() {
         return imageAbsBottom;
     }
@@ -221,8 +217,6 @@ public class SLabel
 
     /**
      * Returns the text of the label
-     *
-     * @return
      */
     public String getText() {
         return text;

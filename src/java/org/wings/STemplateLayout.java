@@ -201,7 +201,6 @@ public class STemplateLayout
     /**
      * Set the template to the template given as file name.
      *
-     * @param templateFileName
      * @throws java.io.IOException
      */
     public void setTemplate(String templateFileName)
@@ -212,7 +211,6 @@ public class STemplateLayout
     /**
      * Set the template to the template stored in the given file.
      *
-     * @param templateFile
      * @throws java.io.IOException
      */
     public void setTemplate(File templateFile) throws java.io.IOException {
@@ -223,7 +221,6 @@ public class STemplateLayout
      * Set the template to the template which can be retrieved from the
      * given URL.
      *
-     * @param templateURL
      * @throws java.io.IOException
      */
     public void setTemplate(URL templateURL) throws java.io.IOException {

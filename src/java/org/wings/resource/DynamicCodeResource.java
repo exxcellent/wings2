@@ -13,6 +13,8 @@
  */
 package org.wings.resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.Resource;
 import org.wings.SFrame;
 import org.wings.io.Device;
@@ -21,8 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Traverses the component hierarchy of a frame and lets the CGs compose
@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  */
 public class DynamicCodeResource
         extends DynamicResource {
-    private static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(DynamicCodeResource.class);
 
     private static final ArrayList DEFAULT_CODE_HEADER = new ArrayList();
 
@@ -66,7 +66,7 @@ public class DynamicCodeResource
         } catch (IOException e) {
             throw e;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "resource: " + getId(), e);
+            log.fatal("resource: " + getId(), e);
             throw new IOException(e.getMessage()); // UndeclaredThrowable
         }
     }

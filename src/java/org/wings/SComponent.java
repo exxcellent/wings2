@@ -42,8 +42,6 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The basic component implementation for all components in this package.
@@ -57,7 +55,7 @@ public abstract class SComponent
 
     public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
 
     /* */
     private String name;
@@ -780,7 +778,7 @@ public abstract class SComponent
                 cg.write(s, this);
             }
         } catch (Throwable t) {
-            logger.log(Level.SEVERE, "exception during code generation for " +
+            log.fatal("exception during code generation for " +
                     getClass().getName(), t);
         }
     }
@@ -1111,9 +1109,9 @@ public abstract class SComponent
      */
     public void updateCG() {
         if (getSession() == null) {
-            logger.warning("no session yet.");
+            log.warn("no session yet.");
         } else if (getSession().getCGManager() == null) {
-            logger.warning("no CGManager");
+            log.warn("no CGManager");
         } else {
             setCG(getSession().getCGManager().getCG(this));
         }

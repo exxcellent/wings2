@@ -21,9 +21,7 @@ import java.util.EventListener;
  */
 public interface SRequestListener
         extends EventListener {
-    /**
-     * 
-     */
+
     public void processRequest(SRequestEvent e);
 
 }

@@ -19,7 +19,6 @@ import org.wings.session.SessionManager;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /*
  * Diese Klasse ist nur ein Wrapper, um Eingabestroeme von Grafiken mit dem
@@ -36,11 +35,9 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public abstract class Resource implements Serializable, URLResource, Renderable {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
 
-    /**
-     *
-     */
+
     protected String id;
 
     protected String extension;
@@ -69,8 +66,6 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
 
     /**
      * Returns the mime type of this resource.
-     *
-     * @return
      */
     public String getMimeType() {
         return mimeType;
@@ -84,9 +79,7 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
         return headers;
     }
 
-    /**
-     *
-     */
+
     public String getId() {
         return id;
     }

@@ -77,8 +77,6 @@ public class SDefaultTableCellRenderer
 
     /**
      * Sets the style the cell is drawn with when the cell is selected.
-     *
-     * @param newStyle
      */
     public void setSelectionStyle(String newStyle) {
         selectionStyle = newStyle;
@@ -86,8 +84,6 @@ public class SDefaultTableCellRenderer
 
     /**
      * Returns the style the cell is drawn with when the cell is selected.
-     *
-     * @return
      */
     public String getSelectionStyle() {
         return selectionStyle;
@@ -95,8 +91,6 @@ public class SDefaultTableCellRenderer
 
     /**
      * Sets the style the cell is drawn with when the cell isn't selected.
-     *
-     * @param newStyle
      */
     public void setNonSelectionStyle(String newStyle) {
         nonSelectionStyle = newStyle;
@@ -104,8 +98,6 @@ public class SDefaultTableCellRenderer
 
     /**
      * Returns the style the cell is drawn with when the cell isn't selected.
-     *
-     * @return
      */
     public String getNonSelectionStyle() {
         return nonSelectionStyle;

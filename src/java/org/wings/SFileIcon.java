@@ -44,8 +44,6 @@ public class SFileIcon extends FileResource implements SIcon {
      * Create a new SFileIcon from the File. This constructor extracts
      * the extension from the file to be appended to the externalized resource
      * name.
-     *
-     * @param fileName
      */
     public SFileIcon(String fileName) throws FileNotFoundException {
         this(new File(fileName));

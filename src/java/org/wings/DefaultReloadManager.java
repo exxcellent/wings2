@@ -21,7 +21,6 @@ import org.wings.style.DynamicStyleSheetResource;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * This is the default implementation of the reload manager.
@@ -31,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class DefaultReloadManager
         implements ReloadManager {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
     /**
      * a set of all resources, manged by this ReloadManager, that are marked
      * dirty.
@@ -56,7 +55,7 @@ public class DefaultReloadManager
 
     public synchronized void markDirty(DynamicResource d) {
         if (d == null) {
-            logger.warning("markDirty: null");
+            log.warn("markDirty: null");
             return;
         }
         dirtyResources.add(d);

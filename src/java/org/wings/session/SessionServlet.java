@@ -14,6 +14,8 @@
 package org.wings.session;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.event.ExitVetoException;
 import org.wings.event.SRequestEvent;
@@ -33,8 +35,6 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The servlet engine creates for each user a new HttpSession. This
@@ -56,7 +56,7 @@ import java.util.logging.Logger;
 final class SessionServlet
         extends HttpServlet
         implements HttpSessionBindingListener {
-    private static Logger logger = Logger.getLogger("org.wings.session");
+    private final transient static Log log = LogFactory.getLog(SessionServlet.class);
 
     /**
      * The parent WingsServlet
@@ -106,7 +106,7 @@ final class SessionServlet
             try {
                 getSession().setLocaleFromHeader(Boolean.valueOf(args[i]).booleanValue());
             } catch (Exception e) {
-                logger.throwing(SessionServlet.class.getName(), "setLocaleFromHeader", e);
+                log.error("setLocaleFromHeader", e);
             }
         }
     }
@@ -129,7 +129,7 @@ final class SessionServlet
                     getSession().setLocale(locale);
                     return;
                 } catch (Exception ex) {
-                    logger.warning("locale not supported " + locale);
+                    log.warn("locale not supported " + locale);
                 } // end of try-catch
             } // end of for ()
         }
@@ -197,7 +197,6 @@ final class SessionServlet
      * The error template which should be presented on any uncaught Exceptions can be set
      * via a property <code>wings.error.template</code> in the web.xml file.
      *
-     * @param config
      * @throws ServletException
      */
     protected void initErrorTemplate(ServletConfig config) throws ServletException {
@@ -242,7 +241,7 @@ final class SessionServlet
                 }
                 Object main = mainClass.newInstance();
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "could not load wings.mainclass: " +
+                log.fatal("could not load wings.mainclass: " +
                         config.getInitParameter("wings.mainclass"), ex);
                 throw new ServletException(ex);
             }
@@ -286,7 +285,6 @@ final class SessionServlet
      * </UL>
      * Ist synchronized, damit nur ein Frame gleichzeitig bearbeitet
      * werden kann.
-     * {@link org.wings.SFrameSet}
      *
      * @ deprecated -- bsc: warum? und was aendern?
      */
@@ -333,16 +331,14 @@ final class SessionServlet
                         requestURL);
             }
 
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("RequestURL: " + requestURL);
-                logger.finer("\nHEADER:");
+            if (log.isDebugEnabled()) {
+                log.debug("RequestURL: " + requestURL);
+                log.debug("\nHEADER:");
                 for (Enumeration en = req.getHeaderNames(); en.hasMoreElements();) {
                     String header = (String) en.nextElement();
-                    logger.finer("   " + header + ": " + req.getHeader(header));
+                    log.debug("   " + header + ": " + req.getHeader(header));
                 }
-                logger.finer("");
             }
-
             handleLocale(req);
 
             Enumeration en = req.getParameterNames();
@@ -356,7 +352,7 @@ final class SessionServlet
                     String paramName = (String) en.nextElement();
                     String[] value = req.getParameterValues(paramName);
 
-                    logger.fine("dispatching " + paramName + " = " + value[0]);
+                    log.debug("dispatching " + paramName + " = " + value[0]);
 
                     session.getDispatcher().dispatch(paramName, value);
                 }
@@ -419,7 +415,7 @@ final class SessionServlet
             // externalizer is able to handle static and dynamic resources
             ExternalizeManager extManager = getSession().getExternalizeManager();
             String pathInfo = req.getPathInfo().substring(1);
-            logger.fine("pathInfo: " + pathInfo);
+            log.debug("pathInfo: " + pathInfo);
 
             /*
              * if we have no path info, or the special '_' path info
@@ -431,7 +427,7 @@ final class SessionServlet
                     || pathInfo.length() == 0
                     || "_".equals(pathInfo)
                     || firstRequest) {
-                logger.fine("delivering default frame");
+                log.debug("delivering default frame");
 
                 if (session.frames().size() == 0)
                     throw new ServletException("no frame visible");
@@ -469,7 +465,7 @@ final class SessionServlet
             }
 
         } catch (Throwable e) {
-            logger.log(Level.SEVERE, "exception: ", e);
+            log.fatal("exception: ", e);
             handleException(req, response, e);
         } finally {
             if (session != null) {
@@ -607,7 +603,7 @@ final class SessionServlet
     }
 
     public void destroy() {
-        logger.info("destroy called");
+        log.info("destroy called");
 
         // Session is needed on destroying the session 
         SessionManager.setSession(session);
@@ -620,7 +616,7 @@ final class SessionServlet
             errorStackTraceLabel = null;
             errorMessageLabel = null;
         } catch (Exception ex) {
-            logger.throwing(SessionServlet.class.getName(), "destroy", ex);
+            log.error("destroy", ex);
         } finally {
             SessionManager.removeSession();
         }

@@ -24,16 +24,12 @@ package org.wings.event;
  */
 public class ExitVetoException extends Exception {
 
-    /**
-     * 
-     */
+
     public ExitVetoException(String message) {
         super(message);
     }
 
-    /**
-     * 
-     */
+
     public ExitVetoException(String message, Throwable cause) {
         super(message, cause);
     }
@@ -42,6 +38,10 @@ public class ExitVetoException extends Exception {
 
 /*
    $Log$
+   Revision 1.3  2004/11/24 21:40:20  blueshift
+   + commons logging
+   + further empty javdoc removal
+
    Revision 1.2  2004/11/24 18:12:54  blueshift
    TOTAL CLEANUP:
    - removed document me TODOs

@@ -24,9 +24,7 @@ public interface SDelayedEventModel {
      */
     void setDelayEvents(boolean b);
 
-    /**
-     *
-     */
+
     boolean getDelayEvents();
 
     /**

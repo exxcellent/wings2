@@ -93,8 +93,6 @@ public abstract class SAbstractBorder
 
     /**
      * sets the foreground color of the border
-     *
-     * @param color
      */
     public void setColor(Color color) {
         this.color = color;
@@ -104,8 +102,6 @@ public abstract class SAbstractBorder
     /**
      * set the thickness of the border
      * thickness must be > 0
-     *
-     * @param thickness
      */
     public void setThickness(int thickness) {
         this.thickness = thickness;

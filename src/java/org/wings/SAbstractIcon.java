@@ -36,15 +36,11 @@ public abstract class SAbstractIcon implements SIcon {
      */
     protected int height = -1;
 
-    /**
-     * 
-     */
+
     protected SAbstractIcon() {
     }
 
-    /**
-     * 
-     */
+
     protected SAbstractIcon(int width, int height) {
         setIconWidth(width);
         setIconHeight(height);
@@ -71,6 +67,10 @@ public abstract class SAbstractIcon implements SIcon {
 
 /*
    $Log$
+   Revision 1.3  2004/11/24 21:40:27  blueshift
+   + commons logging
+   + further empty javdoc removal
+
    Revision 1.2  2004/11/24 18:13:20  blueshift
    TOTAL CLEANUP:
    - removed document me TODOs

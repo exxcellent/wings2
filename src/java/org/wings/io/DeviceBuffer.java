@@ -134,8 +134,6 @@ public final class DeviceBuffer implements Device {
      * Writes b.length bytes from the specified byte array to this
      * output stream.
      *
-     * @param b
-     * @return
      * @throws IOException
      */
     public Device write(byte b) throws IOException {

@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.FormCG;
 
 import javax.swing.event.EventListenerList;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /*
  * Ein Form Container. In HTML ist die einzige Moeglichkeit
@@ -39,7 +40,7 @@ import java.util.logging.Logger;
 public class SForm
         extends SContainer
         implements LowLevelEventListener {
-    private final static Logger logger = Logger.getLogger("org.wings");
+    private final transient static Log log = LogFactory.getLog(SForm.class);
 
     public static final String MULTIPART_ENCODING = "multipart/form-data";
     public static final String URL_ENCODING = "application/x-www-form-urlencoded";
@@ -135,8 +136,6 @@ public class SForm
      * </ul>
      * Form events are guaranteed to be triggered <em>after</em> all
      * Selection-Changes and Button ActionListeners.
-     *
-     * @param listener
      */
     public void addActionListener(ActionListener listener) {
         listenerList.add(ActionListener.class, listener);
@@ -145,8 +144,6 @@ public class SForm
     /**
      * Remove a form action listener, that has been added in
      * {@link #addActionListener(ActionListener)}
-     *
-     * @param listener
      */
     public void removeActionListener(ActionListener listener) {
         listenerList.remove(ActionListener.class, listener);
@@ -311,8 +308,6 @@ public class SForm
      * Set, whether this form is to be transmitted via <code>POST</code> (true)
      * or <code>GET</code> (false). The default, and this is what you
      * usually want, is <code>POST</code>.
-     *
-     * @param postMethod
      */
     public void setPostMethod(boolean postMethod) {
         this.postMethod = postMethod;
@@ -321,8 +316,6 @@ public class SForm
     /**
      * Returns, whether this form is transmitted via <code>POST</code> (true)
      * or <code>GET</code> (false).
-     *
-     * @return
      */
     public boolean isPostMethod() {
         return postMethod;
@@ -422,7 +415,7 @@ public class SForm
 
     public SComponent addComponent(SComponent c, Object constraint, int index) {
         if (c instanceof SForm)
-            logger.warning("WARNING: attempt to nest forms; won't work.");
+            log.warn("WARNING: attempt to nest forms; won't work.");
         return super.addComponent(c, constraint, index);
     }
 

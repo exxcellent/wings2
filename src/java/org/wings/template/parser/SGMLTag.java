@@ -50,7 +50,6 @@
  * individuals on behalf of the Java Apache Group. For more information
  * on the Java Apache Project and the Apache JServ Servlet Engine project,
  * please see <http://java.apache.org/>.
- *
  */
 
 /*
@@ -71,10 +70,10 @@ package org.wings.template.parser;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.HashMap;
 
 /**
  * Convenient class for parsing SGML tokens from a page.

@@ -41,8 +41,6 @@ public class ClasspathResource
 
     /**
      * A static resource that is obtained from the default classpath.
-     *
-     * @param resourceFileName
      */
     public ClasspathResource(String resourceFileName) {
         this(Resource.class.getClassLoader(), resourceFileName, "unkonwn");
@@ -50,8 +48,6 @@ public class ClasspathResource
 
     /**
      * A static resource that is obtained from the default classpath.
-     *
-     * @param resourceFileName
      */
     public ClasspathResource(String resourceFileName, String mimeType) {
         this(Resource.class.getClassLoader(), resourceFileName, mimeType);

@@ -11,6 +11,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="wings" />
+    <orderEntry type="library" name="Tomcat" level="application_server_libraries" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -42,6 +43,9 @@
       <root url="file://$MODULE_DIR$/src/web" relative="/" />
       <root url="file://$MODULE_DIR$/src/java/wingset" relative="/" />
     </webroots>
+  </component>
+  <component name="WeblogicWebModuleProperties">
+    <option name="IS_RUN_APPC" value="false" />
   </component>
 </module>
 

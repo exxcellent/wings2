@@ -126,8 +126,6 @@ public abstract class SAbstractButton
      * Add this button to a button group. This influences the event-prefix
      * this button reports to the request dispatcher: it will change to
      * the button group's prefix.
-     *
-     * @param g
      */
     protected void setGroup(SButtonGroup g) {
         if (isDifferent(buttonGroup, g)) {
@@ -153,8 +151,6 @@ public abstract class SAbstractButton
 
     /**
      * Removes the supplied Listener from teh listener list
-     *
-     * @param listener
      */
     public void removeActionListener(ActionListener listener) {
         removeEventListener(ActionListener.class, listener);
@@ -209,8 +205,6 @@ public abstract class SAbstractButton
      * <LI> {@link #CHECKBOX}
      * <LI> {@link #RADIOBUTTON}
      * </UL>
-     *
-     * @param t
      */
     public void setType(String t) {
         if (isDifferent(type, t)) {
@@ -347,16 +341,12 @@ public abstract class SAbstractButton
         return true;
     }
 
-    /**
-     *
-     */
+
     public final String getEventTarget() {
         return eventTarget;
     }
 
-    /**
-     *
-     */
+
     public void setEventTarget(String target) {
         if (isDifferent(eventTarget, target)) {
             eventTarget = target;

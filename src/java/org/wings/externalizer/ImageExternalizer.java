@@ -15,12 +15,13 @@ package org.wings.externalizer;
 
 import Acme.JPM.Encoders.GifEncoder;
 import com.keypoint.PngEncoder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.io.Device;
 import org.wings.io.DeviceOutputStream;
 
 import java.awt.*;
 import java.util.Collection;
-import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class ImageExternalizer implements Externalizer {
 
-    private final static Logger logger = Logger.getLogger("org.wings.externalizer");
+    private final transient static Log log = LogFactory.getLog(ImageExternalizer.class);
 
     public static final String FORMAT_PNG = "png";
     public static final String FORMAT_GIF = "gif";
@@ -115,7 +116,7 @@ public class ImageExternalizer implements Externalizer {
                 PngEncoder.FILTER_NONE, 6);
         byte[] pngbytes = png.pngEncode();
         if (pngbytes == null) {
-            logger.severe("null image");
+            log.fatal("null image");
         } else {
             out.write(pngbytes);
         }
