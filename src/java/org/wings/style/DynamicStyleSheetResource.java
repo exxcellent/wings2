@@ -38,17 +38,6 @@ import java.util.List;
 public class DynamicStyleSheetResource
         extends DynamicResource {
 
-    private static final List marginStyles = new ArrayList();
-
-    static {
-        marginStyles.add(Style.MARGIN);
-        marginStyles.add(Style.MARGIN_BOTTOM);
-        marginStyles.add(Style.MARGIN_LEFT);
-        marginStyles.add(Style.MARGIN_RIGHT);
-        marginStyles.add(Style.MARGIN_TOP);
-        marginStyles.add(Style.BACKGROUND_COLOR);
-    }
-    
     public DynamicStyleSheetResource(SFrame frame) {
         super(frame, "css", "text/css");
     }
@@ -85,36 +74,19 @@ public class DynamicStyleSheetResource
             if (dynamicStyles != null) {
                 ComponentCG cg = component.getCG();
                 for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
-                    // TODO: check if it is really necessary to write the style filtered here...seems so
-                    
                     Style style = (Style) iterator.next();
                     // Map pseudo css selectors to real selectors
                     CSSSelector selector = cg.mapSelector(style.getSelector());
                     out.print(selectorPrefix).print(selector.getSelectorString()).print("{");
-                    if ("body".equals(selectorPrefix)) { // write all styles for body
-                        style.write(out);
-                        out.print("}\n");
-                    } else { // write two rules for all others --> double div workaround
-                        style.writeFiltered(out, marginStyles, true);
-                        out.print("}\n");
-                        out.print(selectorPrefix).print(selector.getSelectorString()).print(" > ").print(selectorPrefix).print(selector.getSelectorString()).print("{");
-                        style.writeFiltered(out, marginStyles, false);
-                        out.print("}\n");
-                    }
+                    style.write(out);
+                    out.print("}\n");
                 }
             }
 
             SBorder border = component.getBorder();
             if (border != null) {
                 out.print(selectorPrefix).print("{");
-                if ("body".equals(selectorPrefix)) { // write all styles for body
-                    border.getAttributes().write(out);
-                } else {
-                    border.getAttributes().writeFiltered(out, marginStyles, true);
-                    out.print("}\n");
-                    out.print(selectorPrefix).print(" > ").print(selectorPrefix).print("{");
-                    border.getAttributes().writeFiltered(out, marginStyles, false);
-                }
+                border.getAttributes().write(out);
                 out.print("}\n");
             }
         }
