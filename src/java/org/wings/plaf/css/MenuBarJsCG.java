@@ -1,4 +1,4 @@
-// DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/MenuBar.plaf'
+//DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/MenuBar.plaf'
 /*
  * $Id$
  * Copyright 2000,2005 wingS development team.
@@ -23,7 +23,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class MenuBarCG
+public class MenuBarJsCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.MenuBarCG {
 
@@ -37,7 +37,7 @@ public class MenuBarCG
         int mcount = mbar.getComponentCount();
 
         device.print("<div width=\"100%\"");
-        Utils.optAttribute(device, "class", component.getStyle());
+        Utils.optAttribute(device, "class", component.getStyle() + "_js");
         if ( mcount > 0 &&  mbar.getComponent(0).getHorizontalAlignment() == SConstants.RIGHT_ALIGN ) {
             // align right
             device.print(" style=\"text-align: right;\"");

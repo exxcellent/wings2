@@ -246,6 +246,15 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             }
             frame.putClientProperty("focus", focus);
         }
+        
+        // let ie understand hover css styles on elements other than anchors
+        if (BrowserType.IE.equals(browser.getBrowserType())) {
+            device.print("<style type=\"text/css\" media=\"screen\">\n");
+            device.print("body{behavior:url(../csshover.htc);}\n");
+            device.print("</style>\n");
+        }
+        
+
 
         // TODO: move this to a dynamic script resource
         SToolTipManager toolTipManager = component.getSession().getToolTipManager();
@@ -259,7 +268,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         device
                 .print(");\n")
                 .print("</script>\n");
-
+        
         device.print("</head>\n");
         device.print("<body");
         Utils.optAttribute(device, "id", frame.getName());

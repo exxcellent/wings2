@@ -14,6 +14,8 @@
 package org.wings;
 
 import org.wings.plaf.MenuBarCG;
+import org.wings.plaf.MenuCG;
+import org.wings.plaf.MenuItemCG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.List;
 public class SMenu extends SMenuItem {
     private boolean popupMenuVisible = false;
     protected final List menuItems = new ArrayList();
+    private double widthScaleFactor = 0.8f;
 
     public SMenu(String text) {
         super(text);
@@ -132,6 +135,62 @@ public class SMenu extends SMenuItem {
     public boolean isPopupMenuVisible() {
         return popupMenuVisible;
     }
+
+    /**
+     * Returns the scale factor for the width of the Menu components. 
+     * The length of the children texts is multiplied by this factor and set as
+     * width (in em) for the children. Only works with the css implementation.
+     * 
+     * @return Returns the widthScaleFactor.
+     */
+    public double getWidthScaleFactor() {
+        return widthScaleFactor;
+    }
+    /**
+     * Sets the scale factor for the width of the Menu components. 
+     * The length of the children texts is multiplied by this factor and set as
+     * width (in em) for the children. Only works with the css implementation.
+     * 
+     * Default value is 0.8.
+     * 
+     * @param widthScaleFactor The widthScaleFactor to set.
+     */
+    public void setWidthScaleFactor(double widthScaleFactor) {
+        this.widthScaleFactor = widthScaleFactor;
+    }
+
+    /** Sets the specified cg on all children that are an instance of
+     *  SMenuItem.
+     * 
+     * @param cg The CG to set.
+     */
+    public void setMenuItemCG(MenuItemCG cg) {
+        for (int i = 0; i < this.getMenuComponentCount(); i++) {
+            SComponent tempComp = this.getMenuComponent(i);
+            if (tempComp instanceof SMenu) {
+                ((SMenu)tempComp).setMenuItemCG(cg);
+            } else {
+                if (tempComp instanceof SMenuItem) {
+                    tempComp.setCG(cg);
+                }
+            }
+            
+        }
+    }
+
+    /** Sets the specified cg on itself and all children that are an instance
+     *  of SMenu.
+     * @param cg The CG to set.
+     */
+    public void setMenuCG(MenuCG cg) {
+        this.setCG(cg);
+        for (int i = 0; i < this.getMenuComponentCount(); i++) {
+            SComponent tempComp = this.getMenuComponent(i);
+            if (tempComp instanceof SMenu) {
+                ((SMenu)tempComp).setMenuCG(cg);
+            }
+        }
+     }
 }
 
 

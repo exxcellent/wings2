@@ -14,9 +14,13 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.plaf.MenuBarCG;
+import org.wings.plaf.MenuCG;
+import org.wings.plaf.MenuItemCG;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -28,6 +32,7 @@ import java.awt.event.ActionListener;
 public class MenuExample extends WingSetPane {
 
     private SLabel selectionLabel;
+    private SMenuBar menuBar;
 
     private final ActionListener menuItemListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -44,6 +49,7 @@ public class MenuExample extends WingSetPane {
 
     SMenu createMenu(TreeNode root) {
         SMenu menu = new SMenu(root.toString());
+        menu.addActionListener(menuItemListener);
 
         for (int i = 0; i < root.getChildCount(); i++) {
             TreeNode node = root.getChildAt(i);
@@ -73,14 +79,18 @@ public class MenuExample extends WingSetPane {
     }
 
     public SComponent createExample() {
+        ComponentControls controls = new ComponentControls();
         SForm panel = new SForm();
         selectionLabel = new SLabel("nothing selected");
-        panel.add(createMenuBar(HugeTreeModel.ROOT_NODE), "MenuBar");
-        panel.add(new SLabel("<html><br>Form components disappear, if needed. Selected Menu: "), "Intro");
+        menuBar = createMenuBar(HugeTreeModel.ROOT_NODE);
+        controls.addSizable(menuBar);
+        panel.add(controls);
+        panel.add(menuBar, "MenuBar");
+        panel.add(new SLabel("<html><br>Form components are overlayed in css version, disappear in js version. Selected Menu: "), "Intro");
         panel.add(selectionLabel, "SelectionLabel");
-        panel.add(new SLabel("<html><hr><br>combobox(disappear) :"));
+        panel.add(new SLabel("<html><hr><br>combobox :"));
         panel.add(new SComboBox(new DefaultComboBoxModel(ListExample.createElements())), "ComboBox");
-        panel.add(new SLabel("<html><br>list(disappear):"));
+        panel.add(new SLabel("<html><br>list:"));
         SList list = new SList(ListExample.createListModel());
         list.setVisibleRowCount(3);
         panel.add(list, "List");
@@ -89,8 +99,57 @@ public class MenuExample extends WingSetPane {
         panel.add(new SLabel("<html><br>textarea(stay visible):"));
         panel.add(new STextArea("wingS is a great framework for implementing complex web applications"), "TextArea");
 
+        SButtonGroup cgGroup = new SButtonGroup();
+
+        final SRadioButton cssMenu=new SRadioButton("css menu");
+        final SRadioButton jsMenu=new SRadioButton("javascript menu");
+        cgGroup.add(cssMenu);
+        cgGroup.add(jsMenu);
+        controls.add(cssMenu);
+        controls.add(jsMenu);
+
+        cgGroup.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if ( jsMenu.isSelected() ) {
+                        setJsCG();
+                    } else if (cssMenu.isSelected()){
+                        //tree.setCG(getSession().getCGManager().getCG("TreeCG"));
+                        setCssCG();
+                    }
+                        
+                }
+            });
+        cssMenu.setSelected(false);
+        
+        
         return panel;
     }
+
+    /**
+     * 
+     */
+    protected void setJsCG() {
+//        menuBar.setAllCGs(
+//                (MenuBarCG) getSession().getCGManager().getCG("org.wings.SMenuBarCSS"),
+//                (MenuCG) getSession().getCGManager().getCG("org.wings.SMenuCSS"),
+//                (MenuItemCG) getSession().getCGManager().getCG("org.wings.SMenuItem"));
+        menuBar.setCG((MenuBarCG) getSession().getCGManager().getCG("org.wings.SMenuBarJS"));
+        menuBar.setMenuCG((MenuCG) getSession().getCGManager().getCG("org.wings.SMenuJS"));
+        menuBar.setMenuItemCG((MenuItemCG) getSession().getCGManager().getCG("org.wings.SMenuItem"));
+    }
+
+    /**
+     * 
+     */
+    protected void setCssCG() {
+//        menuBar.setAllCGs(
+//                (MenuBarCG) getSession().getCGManager().getCG("org.wings.SMenuBarJS"),
+//                (MenuCG) getSession().getCGManager().getCG("org.wings.SMenuJS"),
+//                (MenuItemCG) getSession().getCGManager().getCG("org.wings.SMenuItem"));
+        menuBar.setCG((MenuBarCG) getSession().getCGManager().getCG("org.wings.SMenuBarCSS"));
+        menuBar.setMenuCG((MenuCG) getSession().getCGManager().getCG("org.wings.SMenuCSS"));
+        menuBar.setMenuItemCG((MenuItemCG) getSession().getCGManager().getCG("org.wings.SMenuItem"));
+   }
 
 
 }

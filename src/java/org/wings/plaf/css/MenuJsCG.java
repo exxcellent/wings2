@@ -1,4 +1,4 @@
-// DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/Menu.plaf'
+//DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/Menu.plaf'
 /*
  * $Id$
  * Copyright 2000,2005 wingS development team.
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
+public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -45,7 +45,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         BufferedReader reader = null;
 
         try {
-            in = MenuCG.class.getClassLoader().getResourceAsStream("org/wings/plaf/css/Menu.js");
+            in = MenuJsCG.class.getClassLoader().getResourceAsStream("org/wings/plaf/css/Menu.js");
             reader = new BufferedReader(new InputStreamReader(in));
             StringBuffer buffer = new StringBuffer();
             String line;

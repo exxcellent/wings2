@@ -22,14 +22,13 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.MenuBarCG {
+public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.MenuItemCG {
 
     protected void writeItemContent(final Device device, SMenuItem menuItem)
             throws IOException {
         SIcon icon = getIcon(menuItem);
 
 
-        device.print("<nobr>");
         if (icon != null) {
 
             device.print("<img border=\"0\" align=\"middle\" src=\"");
@@ -47,8 +46,6 @@ public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.M
         if (text != null) {
             Utils.write(device, text);
         }
-
-        device.print("</nobr>");
     }
 
     protected void writePrefix(Device device, SComponent component) throws IOException {
