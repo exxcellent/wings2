@@ -13,9 +13,9 @@
  */
 package org.wings.event;
 
-import java.awt.AWTEvent;
-
 import org.wings.externalizer.ExternalizedResource;
+
+import java.awt.*;
 
 /**
  * TODO: documentation
@@ -99,8 +99,6 @@ public class SRequestEvent extends AWTEvent
      * content and format of the returned string may vary between 
      * implementations. The returned string may be empty but may 
      * not be <tt>null</tt>.
-     *
-     * @return a string representation of this event.          
      */
     public String paramString() {
         if (getSource() == null)
@@ -131,11 +129,3 @@ public class SRequestEvent extends AWTEvent
         return "SRequestEvent[source=" + source + "; " + paramString() + "]";
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

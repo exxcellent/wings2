@@ -297,7 +297,7 @@ public final class WingServlet
              * to the generated pages. 
              *
              * If the user hasn't overridden the encoding in their browser, 
-             * then all form data (e.g. müller) is submitted with data encoded 
+             * then all form data (e.g. mueller) is submitted with data encoded
              * like m%C3%BCller because byte pair C3 BC is how the german 
              * u-umlaut is represented in UTF-8. If the form is 
              * iso-8859-1 encoded then you get m%FCller, because byte FC is 

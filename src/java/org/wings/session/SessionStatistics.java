@@ -4,14 +4,6 @@ import java.text.DateFormat;
 import java.util.Date;
 
 /**
- * <!--
- * Erstellt: 15.05.2003 10:29:14   Von: armin
- * Geändert: 15.05.2003 10:29:14   Von: armin
- * Copyright:     Copyright (c) 2003
- * Organisation:  Müller GmbH & Co. KG
- *  -->
- *
- *
  * @author <a href="mailto:@mueller.de">armin</a>
  * @version $Revision$
  */
@@ -123,13 +115,3 @@ public class SessionStatistics {
         return tResult.toString();
     }
 }
-
-/*
-   $Log$
-   Revision 1.1  2004/10/04 16:13:25  hengels
-   Initial revision
-
-   Revision 1.1  2003/06/04 08:20:17  arminhaaf
-   o collect statistics
-
- */

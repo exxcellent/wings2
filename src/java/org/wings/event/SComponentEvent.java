@@ -103,8 +103,6 @@ public class SComponentEvent
      * content and format of the returned string may vary between 
      * implementations. The returned string may be empty but may 
      * not be <tt>null</tt>.
-     *
-     * @return a string representation of this event.          
      */
     public String paramString() {
         if (source == null)
@@ -136,11 +134,3 @@ public class SComponentEvent
         return "ComponentEvent[source=" + source + "; " + paramString() + "]";
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
