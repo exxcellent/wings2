@@ -28,8 +28,8 @@ import java.awt.event.ItemListener;
  */
 public class DynamicLayoutExample extends WingSetPane {
     private final SForm panel = new SForm();
-    private final SPanel[] demoPanels = {new FlowLayoutDemoPanel(), new GridBagDemoPanel(), new GridLayoutDemoPanel(), new BoxLayoutDemoPanel()};
-    private final static String[] demoManagerNames = {"SFlowLayout", "SGridBagLayout", "SGridLayout", "SBoxLayout"};
+    private final SPanel[] demoPanels = {new BorderLayoutDemoPanel(), new FlowLayoutDemoPanel(), new GridBagDemoPanel(), new GridLayoutDemoPanel(), new BoxLayoutDemoPanel()};
+    private final static String[] demoManagerNames = {"SBorderLayout", "SFlowLayout", "SGridBagLayout", "SGridLayout", "SBoxLayout"};
     private final SComboBox selectLayoutManager = new SComboBox(demoManagerNames);
 
     protected SComponent createExample() {
@@ -47,45 +47,82 @@ public class DynamicLayoutExample extends WingSetPane {
     }
 
     private static void addDummyLabels(final SPanel panel, final int amount) {
+        for (int i = 0; i < amount; i++) {
+            panel.add(createDummyLabel(i));
+        }
+    }
+
+    private static SLabel createDummyLabel(int i) {
         final String[] texts = {"<html><span>[%] A very short component (TopLeft)</span>",
                                 "<html><span>[%] A much longer, unbreakable label for wrapping demo (Default)</span>",
                                 "<html><span>[%] And again a short one (RightBottom, red)</span>",
                                 "<html><span>[%] A 2-line <br/> label (CenterCenter, bold-italic)</span>"};
         final SFont boldItalic = new SFont(null, SFont.BOLD + SFont.ITALIC, SFont.DEFAULT_SIZE);
         final SBorder greenLineBorder = new SLineBorder();
+        final SLabel label = new SLabel(texts[i % 4].replace("%", Integer.toString((i + 1))));
         greenLineBorder.setColor(Color.green);
-
-        for (int i = 0; i < amount; i++) {
-            final SLabel label = new SLabel(texts[i % 4].replace("%", Integer.toString((i + 1))));
-            label.setBorder(greenLineBorder);
-            panel.add(label);
-            if (i % 3 == 0) {
-                label.setVerticalAlignment(TOP);
-                label.setHorizontalAlignment(LEFT);
-            }
-            if (i % 3 == 1) ;
-            if (i % 3 == 2) {
-                label.setForeground(Color.RED);
-                label.setHorizontalAlignment(RIGHT);
-                label.setVerticalAlignment(BOTTOM);
-            }
-            if (i % 3 == 3) {
-                label.setHorizontalAlignment(CENTER);
-                label.setVerticalAlignment(CENTER);
-                label.setFont(boldItalic);
-            }
+        label.setBorder(greenLineBorder);
+        if (i % texts.length == 0) {
+            label.setVerticalAlignment(TOP);
+            label.setHorizontalAlignment(LEFT);
         }
+        if (i % texts.length == 1) ;
+        if (i % texts.length == 2) {
+            label.setForeground(Color.RED);
+            label.setHorizontalAlignment(RIGHT);
+            label.setVerticalAlignment(BOTTOM);
+        }
+        if (i % texts.length == 3) {
+            label.setHorizontalAlignment(CENTER);
+            label.setVerticalAlignment(CENTER);
+            label.setFont(boldItalic);
+        }
+        return label;
     }
 
     private static SPanel createPanel(SLayoutManager layout, int amount) {
         final SPanel panel = new SPanel(layout);
-        //panel.setBorder(new SLineBorder());
         panel.setBackground(new Color(210, 210, 210));
         addDummyLabels(panel, amount);
-
         return panel;
     }
 
+    private static class BorderLayoutDemoPanel extends SPanel {
+        int i = 0;
+        public BorderLayoutDemoPanel() {
+            super(new SFlowDownLayout());
+            add(new SLabel("Default"));
+            SPanel borderDemoPanel1 = new SPanel(new SBorderLayout());
+            borderDemoPanel1.add(wrap(createDummyLabel(0)), SBorderLayout.NORTH);
+            borderDemoPanel1.add(wrap(createDummyLabel(1)), SBorderLayout.SOUTH);
+            borderDemoPanel1.add(wrap(createDummyLabel(2)), SBorderLayout.EAST);
+            borderDemoPanel1.add(wrap(createDummyLabel(3)), SBorderLayout.WEST);
+            borderDemoPanel1.add(wrap(createDummyLabel(4)), SBorderLayout.CENTER);
+            add(borderDemoPanel1);
+            borderDemoPanel1.setPreferredSize(new SDimension(800,200));
+            borderDemoPanel1.setBackground(new Color(210, 210, 210));
+
+            add(new SLabel("Spacing and Border"));
+            SPanel borderDemoPanel2 = new SPanel(new SBorderLayout(10, 1));
+            borderDemoPanel2.add(wrap(createDummyLabel(0)), SBorderLayout.NORTH);
+            borderDemoPanel2.add(wrap(createDummyLabel(1)), SBorderLayout.SOUTH);
+            borderDemoPanel2.add(wrap(createDummyLabel(2)), SBorderLayout.EAST);
+            borderDemoPanel2.add(wrap(createDummyLabel(3)), SBorderLayout.WEST);
+            borderDemoPanel2.add(wrap(createDummyLabel(4)), SBorderLayout.CENTER);
+            add(borderDemoPanel2);
+            borderDemoPanel2.setPreferredSize(new SDimension(800,200));
+            borderDemoPanel2.setBackground(new Color(210, 210, 210));
+        }
+
+        private SPanel wrap(SComponent c) {
+            final Color[] colors = { Color.red, Color.green, Color.pink, Color.magenta, Color.black, Color.cyan };
+            SPanel p = new SPanel();
+            p.add(c);
+            p.setPreferredSize(new SDimension("100%","100%"));
+            p.setBackground(colors[i++ % colors.length].brighter());
+            return p;
+        }
+    }
 
     private static class BoxLayoutDemoPanel extends SPanel {
         public BoxLayoutDemoPanel() {
