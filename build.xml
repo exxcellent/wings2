@@ -34,7 +34,6 @@
         <mkdir dir="dist/doc"/>
         <mkdir dir="dist/src"/>
         <mkdir dir="dist/lib"/>
-        <mkdir dir="dist/web/WEB-INF/lib"/>
         <mkdir dir="dist/web"/>
         <mkdir dir="dist/demo"/>
     </target>
@@ -58,6 +57,7 @@
     </target>
 
     <target name="build" depends="compile" description="build">
+        <mkdir dir="dist/web/WEB-INF/lib"/>
         <jar jarfile="dist/web/WEB-INF/lib/wings.jar">
             <fileset dir="build/class">
                 <exclude name="org/wings/plaf/xhtml/**"/>
@@ -101,6 +101,27 @@
     </target>
 
     <target depends="clean,compile,javadoc" name="dist">
+        <!-- lib -->
+        <mkdir dir="dist/lib"/>
+        <copy todir="dist/lib">
+            <fileset dir="lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </copy>
+
+        <!-- bin -->
+        <mkdir dir="dist/bin"/>
+        <copy todir="dist/bin">
+            <fileset dir="bin">
+                <exclude name="**/CVS"/>
+                <exclude name="**/.*"/>
+                <exclude name="**/.*/**"/>
+                <exclude name="**/*.class"/>
+                <exclude name="**/*.u"/>
+                <exclude name="**/*~"/>
+            </fileset>
+        </copy>
+
         <!-- manual -->
         <mkdir dir="dist/doc/manual"/>
         <copy todir="dist/doc/manual">
@@ -113,8 +134,8 @@
         </copy>
 
         <!-- tutorial -->
-        <mkdir dir="dist/doc/tutorial"/>
-        <copy todir="dist/doc/tutorial">
+        <mkdir dir="dist/doc/tutorial/hellowings"/>
+        <copy todir="dist/doc/tutorial/hellowings">
             <fileset dir="doc/tutorial/hellowings">
                 <exclude name="build/**"/>
                 <exclude name="**/CVS"/>
@@ -133,39 +154,30 @@
         </copy>
 
         <!-- src -->
-        <copy todir="dist/src/java">
-            <fileset dir="src/java">
+        <copy todir="dist/src">
+            <fileset dir="src">
                 <exclude name="**/CVS"/>
                 <exclude name="**/.*"/>
                 <exclude name="**/.*/**"/>
                 <exclude name="**/*.class"/>
                 <exclude name="**/*.u"/>
                 <exclude name="**/*~"/>
+                <exclude name="src/java/org/wings/Version.java"/>
             </fileset>
         </copy>
 
-        <copy todir="dist/src/res">
-            <fileset dir="src/res">
-                <exclude name="**/CVS"/>
-                <exclude name="**/.*"/>
-                <exclude name="**/.*/**"/>
-                <exclude name="**/*.class"/>
-                <exclude name="**/*.u"/>
-                <exclude name="**/*~"/>
-            </fileset>
-        </copy>
-        
         <!-- demo -->
         <mkdir dir="dist/demo"/>
         <copy todir="dist/demo">
             <fileset dir="demo">
-                <exclude name="build/**"/>
                 <exclude name="**/CVS"/>
                 <exclude name="**/.*"/>
                 <exclude name="**/.*/**"/>
                 <exclude name="**/*.class"/>
                 <exclude name="**/*.u"/>
                 <exclude name="**/*~"/>
+                <include name="**/src/**"/>
+                <include name="**/build.xml"/>
             </fileset>
         </copy>
 
@@ -173,8 +185,7 @@
         <mkdir dir="dist/etc"/>
         <copy todir="dist/etc">
             <fileset dir="etc">
-                <include name="build.properties"/>
-                <include name="custom-build.properties-example"/>
+                <exclude name="custom-build.properties"/>
             </fileset>
         </copy>
         
