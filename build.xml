@@ -16,9 +16,6 @@
     </target>
 
     <target name="prepare" depends="splash">
-        <tstamp>
-          <format property="COMPTIME" pattern="yyyy-MM-dd HH:mm"/>
-        </tstamp>
         <mkdir dir="build"/>
         <mkdir dir="build/class"/>
         <mkdir dir="build/doc"/>
@@ -32,7 +29,10 @@
         <mkdir dir="dist/demo"/>
     </target>
 
-    <target name="Version.java" depends="prepare" >
+    <target name="Version.java">
+      <tstamp>
+        <format property="COMPTIME" pattern="yyyy-MM-dd HH:mm"/>
+      </tstamp>
       <filter token="WINGS_VERSION" value="${wings.version}"/>
       <filter token="COMPILE_TIME" value="${COMPTIME}"/>
       <copy file="src/res/org/wings/Version.java.in"
@@ -40,7 +40,7 @@
             filtering="yes"/>
     </target>
 
-	<target name="compile" depends="Version.java">
+	<target name="compile" depends="prepare, Version.java">
         <javac debug="${build.debug}" deprecation="${build.deprecation}"
                destdir="build/class" srcdir="src/java" source="1.3" target="1.3">
             <classpath refid="build.classpath"/>
@@ -201,6 +201,7 @@
                 <include name="**/.#*"/>
             </fileset>
         </delete>
+        <delete file="src/java/org/wings/Version.java" />
     </target>
 
     <target depends="clean,build" description="re-build everything" name="all"/>
