@@ -32,9 +32,9 @@ public class SGridLayout
     protected int border = 0;
 
     protected boolean header = false;
-    protected boolean relative = false;
+    //protected boolean relative = false;
 
-    protected int width = -1;
+    //protected int width = -1;
     protected int cellPadding = -1;
     protected int cellSpacing = -1;
 
@@ -43,8 +43,8 @@ public class SGridLayout
      */
 
     public SGridLayout() {
-        this.setWidth(100);
-        this.setRelative(true);
+        this.setPreferredSize(new SDimension("100%", null));
+        //this.setRelative(true);
     }
 
     /**
@@ -139,18 +139,18 @@ public class SGridLayout
     public int getBorder() { return border; }
 
 
-    public void setWidth(int width) {
+    /*public void setWidth(int width) {
         this.width = width;
     }
 
-    public int getWidth() { return width; }
+    public int getWidth() { return width; }*/
 
 
-    public void setRelative(boolean relative) {
+    /*public void setRelative(boolean relative) {
         this.relative = relative;
     }
 
-    public boolean isRelative() { return relative; }
+    public boolean isRelative() { return relative; } */
 
 
     public void setHeader(boolean b) {

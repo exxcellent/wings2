@@ -38,7 +38,7 @@ public class SBoxLayout
      * creates a new box layout with the given orientation
      *
      * @param style style
-     * @param orinetation orientation
+     * @param orientation orientation
      */
     public SBoxLayout(SComponent style, int orientation) {
         this.style = style;

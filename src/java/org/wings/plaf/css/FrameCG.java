@@ -37,18 +37,30 @@ import java.util.List;
 
 public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
-//--- properties of this plaf.
-    private String documentType;
-    private Boolean renderXmlDeclaration;
+    /**
+     * The default DOCTYPE enforcing standard (non-quirks mode) in all current browsers.
+     * Please be aware, that changing the DOCTYPE may change the way how browser renders the generate
+     * document i.e. esp. the CSS attribute inheritance does not work correctly on <code>table</code> elements.
+     * See i.e. http://www.ericmeyeroncss.com/bonus/render-mode.html
+     */
+    public final static String DEFAULT_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" " +
+            "\"http://www.w3.org/TR/REC-html40/strict.dtd\">";
+
+    //--- properties of this plaf.
+    private String documentType = DEFAULT_DOCTYPE;
+    private Boolean renderXmlDeclaration = Boolean.FALSE;
 
     /**
      * Initialize properties from config
      */
     public FrameCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
-
-        setDocumentType((String) manager.getObject("FrameCG.documentType", String.class));
-        setRenderXmlDeclaration((Boolean) manager.getObject("FrameCG.renderXmlDeclaration", Boolean.class));
+        final String userDocType = (String) manager.getObject("FrameCG.userDocType", String.class);
+        final Boolean userRenderXmlDecl = (Boolean) manager.getObject("FrameCG.renderXmlDeclaration", Boolean.class);
+        if (userDocType != null)
+            setDocumentType(userDocType);
+        if (userRenderXmlDecl != null)
+            setRenderXmlDeclaration(userRenderXmlDecl);
     }
 
 
@@ -104,10 +116,6 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     }
 
 //--- code from common area in template.
-    /* The IE "browser" renders web pages differently (bigger fonts, etc.
-    * if the HTML has a valid XML declaration header vs. if none.
-    * Property enables to beautify pages.
-    */
     /*
     public static final JavaScriptListener DATE_CHOOSER_SCRIPT_LOADER =
     new JavaScriptListener("", "", loadScript("org/wings/plaf/css/DateChooser.js"));
@@ -155,13 +163,12 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         final SFrame component = (SFrame) _c;
 
         org.wings.session.Browser browser = SessionManager.getSession().getUserAgent();
-
         SFrame frame = (SFrame) component;
-
         String language = SessionManager.getSession().getLocale().getLanguage();
         String title = frame.getTitle();
         List headers = frame.headers();
         String encoding = SessionManager.getSession().getCharacterEncoding();
+
 
         if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
             device.write("<?xml version=\"1.0\" encoding=\"".getBytes());
@@ -243,7 +250,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         _c.fireRenderEvent(SComponent.DONE_RENDERING);
     }
 
-//--- setters and getters for the properties.
+    //--- setters and getters for the properties.
+
     public String getDocumentType() {
         return documentType;
     }
@@ -252,6 +260,9 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         this.documentType = documentType;
     }
 
+    /**
+     * @return The current rendered DOCTYPE of this document. {@link #DEFAULT_DOCTYPE}
+     */
     public Boolean getRenderXmlDeclaration() {
         return renderXmlDeclaration;
     }

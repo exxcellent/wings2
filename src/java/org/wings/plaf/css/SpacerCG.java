@@ -35,6 +35,6 @@ public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.Spac
         device.print(height != null ? height : "1");
         device.print("\" width=\"");
         device.print(width != null ? width : "1");
-        device.print("/>");
+        device.print("\"/>");
     }
 }
