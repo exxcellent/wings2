@@ -5,8 +5,8 @@
 <project name="wingS-Demo" default="build" basedir=".">
     <property environment="env"/>
     <!-- read custom properties from file -->
-    <property file="../etc/custom-build.properties"/>
-    <property file="../etc/build.properties"/>
+    <property file="../../etc/custom-build.properties"/>
+    <property file="../../etc/build.properties"/>
 
     <property name="deploy.wingset" value="dist/deploy/wingset.war"/>
 
