@@ -36,10 +36,14 @@ public class MenuBarCG
         SMenuBar mbar = (SMenuBar) component;
         int mcount = mbar.getComponentCount();
 
-        device.print("<table class=\"menubar\" cellspacing=\"0\" cellpadding=\"0\" vspace=\"0\" hspace=\"0\" width=\"100%\"");
+        device.print("<div width=\"100%\"");
         Utils.optAttribute(device, "class", component.getStyle());
+        if ( mcount > 0 &&  mbar.getComponent(0).getHorizontalAlignment() == SConstants.RIGHT_ALIGN ) {
+            // align right
+            device.print(" style=\"text-align: right;\"");
+        }
+        
         device.print(">");
-        device.print("<tr align=\"left\">");
         /***
          * Due to the current Opera problems we are switching to the older Menue style
          * in all other cases we do a normal job
@@ -47,12 +51,7 @@ public class MenuBarCG
         boolean rightAligned = false;
         for (int i = 0; i < mcount; i++) {
             if (mbar.getComponent(i).isVisible()) {
-                if (mbar.getComponent(i).getHorizontalAlignment() == SConstants.RIGHT_ALIGN &&
-                        !rightAligned) {
-                    device.print("<td width=\"100%\"></td>");
-                    rightAligned = true;
-                }
-                device.print("<td id=\"");
+                device.print("<span id=\"");
                 Utils.write(device, mbar.getComponent(i).getName() + "_hook");
                 device.print("\" class=\"menu\"");
                 if (mbar.getComponent(i).isEnabled() &&
@@ -62,13 +61,10 @@ public class MenuBarCG
                 }
                 device.print(">");
                 mbar.getComponent(i).write(device);
-                device.print("</nobr></td>");
+                device.print("</nobr></span>");
             }
         }
-        if (!rightAligned) {
-            device.print("<td width=\"100%\">&nbsp;</td>");
-        }
-        device.print("</tr></table>");
+        device.print("</div>");
         device.print("\n");
 
 //--- end code from write-template.

@@ -161,11 +161,11 @@ Menu.prototype.applyPosition = function() {
         }
     }
     else if (this.direction == 'horizontal') {
-        this.element.style.top = (bounds.y + 1) + "px";
-        this.element.style.left = (bounds.x + bounds.width + 1) + "px";
+        this.element.style.top = (bounds.y - 4) + "px";
+        this.element.style.left = (bounds.x + bounds.width + 4) + "px";
         if ( ie5 ) {
-	        this.element.posX = bounds.x + bounds.width + 1;
-	        this.element.posY = bounds.y + 1;
+	        this.element.posX = bounds.x + bounds.width -4;
+	        this.element.posY = bounds.y + 4;
         }
     }
 

@@ -75,7 +75,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         String popupId = componentId + "_pop";
 
 
-        device.print("<table cellpadding=\"0\" cellspacing=\"0\" id=\"");
+        device.print("<div id=\"");
         Utils.write(device, popupId);
 
         device.print("\" class=\"pdmenu\" style=\"display:none\">");
@@ -87,7 +87,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                 String itemHookId = itemComponentId + "_hook";
 
 
-                device.print("<tr id=\"");
+                device.print("<div id=\"");
                 Utils.write(device, itemHookId);
 
                 device.print("\"");
@@ -130,10 +130,10 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                     }
                 }
 
-                device.print("><td>");
+                device.print(">");
                 menu.getMenuComponent(i).write(device);
 
-                device.print("</td><td>");
+                //device.print("</td><td>");
                 if (menu.getMenuComponent(i) instanceof SMenu) {
 
                     device.print("<img border=\"0\" align=\"middle\" src=\"");
@@ -146,11 +146,11 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                     device.print("/>");
                 }
 
-                device.print("</td></tr>");
+                device.print("</div>\n");
             }
         }
 
-        device.print("</table>");
+        device.print("</div>\n");
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
             SComponent menuItem = menu.getMenuComponent(i);
 
