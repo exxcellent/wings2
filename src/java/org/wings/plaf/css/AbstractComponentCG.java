@@ -19,6 +19,7 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
+import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     private final static transient Log log = LogFactory.getLog(AbstractComponentCG.class);
     
     protected AbstractComponentCG() {
+        this.prefixSuffixDelegate = SessionManager.getSession().getCGManager().getPrefixSuffixDelegate();
     }
 
     /**
@@ -61,9 +63,10 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     public void write(Device device, SComponent component) throws IOException {
         if (!component.isVisible())
             return;
-        component.getPrefixSuffixDelegate().writePrefix(device, component);
+        org.wings.plaf.PrefixAndSuffixDelegate prefixSuffixDelegate = SessionManager.getSession().getCGManager().getPrefixSuffixDelegate();
+        prefixSuffixDelegate.writePrefix(device, component);
         writeContent(device, component);
-        component.getPrefixSuffixDelegate().writeSuffix(device, component);
+        prefixSuffixDelegate.writeSuffix(device, component);
     }
 
     public CSSSelector mapSelector(CSSSelector selector) {

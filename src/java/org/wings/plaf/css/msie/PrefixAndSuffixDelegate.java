@@ -41,7 +41,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
     
     public void writePrefix(Device device, SComponent component) throws IOException {
         SDimension prefSize = component.getPreferredSize();
-        Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" -->");
+        Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" (msie) -->");
         device.print("<div");
         if (component.getStyle() != null && component.getStyle().length() > 0) {
             device.print(" class=\"");

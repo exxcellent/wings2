@@ -76,12 +76,6 @@ public abstract class SComponent
     protected transient ComponentCG cg;
 
     /**
-     * The code generation delegate, which is responsible for
-     * the Prefix and Suffix of this component.
-     */
-    protected transient PrefixAndSuffixDelegate psDel;
-
-    /**
      * Vertical alignment
      */
     protected int verticalAlignment = NO_ALIGN;
@@ -1150,22 +1144,7 @@ public abstract class SComponent
             log.warn("no CGManager");
         } else {
             setCG(getSession().getCGManager().getCG(this));
-            setPrefixSuffixDelegate(getSession().getCGManager().getPrefixSuffixDelegate(this));
         }
-    }
-
-    /**
-     * @param prefixSuffixDelegate
-     */
-    private void setPrefixSuffixDelegate(PrefixAndSuffixDelegate prefixSuffixDelegate) {
-        this.psDel = prefixSuffixDelegate;
-    }
-
-    /**
-     * @return the prefixSuffixDelegate
-     */
-    public PrefixAndSuffixDelegate getPrefixSuffixDelegate() {
-        return this.psDel;
     }
 
     /**

@@ -186,7 +186,7 @@ public class CGManager implements Serializable {
      * @param target
      * @return the delegate responsible for the Prefix and Suffix of the target
      */
-    public PrefixAndSuffixDelegate getPrefixSuffixDelegate(SComponent target) {
+    public PrefixAndSuffixDelegate getPrefixSuffixDelegate() {
         PrefixAndSuffixDelegate del = (PrefixAndSuffixDelegate) getDefaults().get("AbstractComponentCG.PrefixAndSuffixDelegate", PrefixAndSuffixDelegate.class);
         return del;
     }
