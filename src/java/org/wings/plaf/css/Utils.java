@@ -527,7 +527,7 @@ public final class Utils implements SConstants {
         int rgb = (c == null) ? 0 : c.getRGB();
         int mask = 0xf00000;
         for (int bitPos = 20; bitPos >= 0; bitPos -= 4) {
-            d.print(digits[(rgb & mask) >>> bitPos]);
+            d.print((char)digits[(rgb & mask) >>> bitPos]);
             mask >>>= 4;
         }
     }

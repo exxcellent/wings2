@@ -83,17 +83,17 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
-            device.print("\" event=\"")
-                    .print(lowLevelEventListener.getEncodedLowLevelEventId());
+            device.print(" event=\"")
+                    .print(lowLevelEventListener.getEncodedLowLevelEventId()).print("\"");
         }
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         String toolTip = component.getToolTipText();
         if (toolTip != null)
-            device.print("\" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
+            device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
                     .print(toolTip)
-                    .print("', 'predefined', 'default'));");
+                    .print("', 'predefined', 'default'));\"");
 
         InputMap inputMap = component.getInputMap();
         if (inputMap != null && !(inputMap instanceof VersionedInputMap)) {
@@ -118,14 +118,14 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             String popupId = componentId + "_pop";
             String hookId = component.getName();
 
-            device.print("\" onclick=\"Menu.prototype.toggle(null,'");
+            device.print(" onclick=\"Menu.prototype.toggle(null,'");
             Utils.write(device, hookId);
             device.print("','");
             Utils.write(device, popupId);
-            device.print("')");
+            device.print("')\"");
         }
 
-        device.print("\">"); // div
+        device.print(">"); // div
 
         // Special handling: Render title of STitledBorder
         if (component.getBorder() instanceof STitledBorder) {
