@@ -55,7 +55,7 @@ public class DesktopPaneCG
 //--- code from write-template.
         SDesktopPane desktop = (SDesktopPane) component;
         device.write(__table_cellpadd);
-        org.wings.plaf.Utils.optAttribute(device, "class", org.wings.plaf.css.Utils.style(component));
+        org.wings.plaf.Utils.optAttribute(device, "class", component.getStyle());
         device.write(__);
         int componentCount = desktop.getComponentCount();
         for (int i = 0; i < componentCount; i++) {

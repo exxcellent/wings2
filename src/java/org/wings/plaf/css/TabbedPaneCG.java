@@ -21,6 +21,8 @@ import org.wings.STabbedPane;
 import org.wings.io.Device;
 import org.wings.session.Browser;
 import org.wings.session.SessionManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -28,9 +30,9 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Properties;
 
-public class TabbedPaneCG
-        extends AbstractComponentCG
-        implements SConstants {
+public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
+    private final static transient Log log = LogFactory.getLog(TabbedPaneCG.class);
+
     public void installCG(SComponent component) {
         super.installCG(component);
 
@@ -63,29 +65,23 @@ public class TabbedPaneCG
         boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
         int placement = tabbedPane.getTabPlacement();
 
-        device
-                .print("<table cellspacing=\"0\"");
+        device.print("<table cellspacing=\"0\"");
         if (childSelectorWorkaround)
             Utils.childSelectorWorkaround(device, style);
 
         Utils.innerPreferredSize(device, component.getPreferredSize());
 
         Utils.writeEvents(device, component);
-        device
-                .print(">");
+        device.print(">");
 
         if (placement == STabbedPane.TOP)
-            device
-                    .print("<tr><th placement=\"top\"");
+            device.print("<tr><th placement=\"top\"");
         else if (placement == STabbedPane.LEFT)
-            device
-                    .print("<tr><th placement=\"left\"");
+            device.print("<tr><th placement=\"left\"");
         else if (placement == STabbedPane.RIGHT)
-            device
-                    .print("<tr><td");
+            device.print("<tr><td");
         else if (placement == STabbedPane.BOTTOM)
-            device
-                    .print("<tr><td");
+            device.print("<tr><td");
 
         if (childSelectorWorkaround) {
             if (placement == STabbedPane.TOP)
@@ -95,27 +91,21 @@ public class TabbedPaneCG
             else
                 Utils.childSelectorWorkaround(device, "pane");
         }
-
         device.print(">");
 
-        if (placement == STabbedPane.TOP
-                || placement == STabbedPane.LEFT)
+        if (placement == STabbedPane.TOP || placement == STabbedPane.LEFT)
             writeTabs(device, tabbedPane);
         else
-            writePane(device, tabbedPane);
+            writeSelectedPaneContent(device, tabbedPane);
 
         if (placement == STabbedPane.TOP)
-            device
-                    .print("</th></tr><tr><td");
+            device.print("</th></tr><tr><td");
         else if (placement == STabbedPane.LEFT)
-            device
-                    .print("</th><td");
+            device.print("</th><td");
         else if (placement == STabbedPane.RIGHT)
-            device
-                    .print("</td><th placement=\"right\"");
+            device.print("</td><th placement=\"right\"");
         else if (placement == STabbedPane.BOTTOM)
-            device
-                    .print("</td></tr><tr><th placement=\"bottom\"");
+            device.print("</td></tr><tr><th placement=\"bottom\"");
 
         if (childSelectorWorkaround) {
             if (placement == STabbedPane.RIGHT)
@@ -125,22 +115,20 @@ public class TabbedPaneCG
             else
                 Utils.childSelectorWorkaround(device, "pane");
         }
-
         device.print(">");
 
         if (placement == STabbedPane.TOP
                 || placement == STabbedPane.LEFT) {
-            writePane(device, tabbedPane);
-            device
-                    .print("</td></tr></table>");
+            writeSelectedPaneContent(device, tabbedPane);
+            device.print("</td></tr></table>");
         } else {
             writeTabs(device, tabbedPane);
-            device
-                    .print("</th></tr></table>");
+            device.print("</th></tr></table>");
         }
     }
 
-    private void writePane(Device device, STabbedPane tabbedPane) throws IOException {
+    /** Renders the currently selected pane of the tabbed Pane. */
+    private void writeSelectedPaneContent(Device device, STabbedPane tabbedPane) throws IOException {
         tabbedPane.getSelectedComponent().write(device);
     }
 
@@ -157,15 +145,13 @@ public class TabbedPaneCG
                 title = nonBreakingSpaces(title);
 
             if (showAsFormComponent)
-                device
-                        .print("<button type=\"submit\" name=\"")
+                device.print("<button type=\"submit\" name=\"")
                         .print(Utils.event(tabbedPane))
                         .print("\" value=\"")
                         .print(i)
                         .print("\"");
             else
-                device
-                        .print("<a href=\"")
+                device.print("<a href=\"")
                         .print(tabbedPane.getRequestURL()
                         .addParameter(Utils.event(tabbedPane) + "=" + i).toString())
                         .print("\"");
@@ -184,7 +170,6 @@ public class TabbedPaneCG
                 if (!tabbedPane.isEnabledAt(i))
                     Utils.childSelectorWorkaround(device, "disabled");
             }
-
             device.print(">");
 
             if (icon != null && tabbedPane.getTabPlacement() != STabbedPane.RIGHT) {
@@ -219,8 +204,8 @@ public class TabbedPaneCG
     }
 
     public String mapSelector(String selector) {
-        System.out.println("selector = " + selector);
-        System.out.println("selector = " + geckoMappings.getProperty(selector));
+        log.debug("selector = " + selector);
+        log.debug("selector = " + geckoMappings.getProperty(selector));
         Browser browser = SessionManager.getSession().getUserAgent();
         if (browser.hasGecko())
             return geckoMappings.getProperty(selector, selector);
@@ -229,7 +214,6 @@ public class TabbedPaneCG
         else
             return defaultMappings.getProperty(selector, selector);
     }
-
 
     private static final Properties msieMappings = new Properties();
     private static final Properties geckoMappings = new Properties();

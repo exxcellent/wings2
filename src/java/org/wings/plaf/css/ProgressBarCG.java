@@ -89,7 +89,7 @@ public class ProgressBarCG
         final SProgressBar component = (SProgressBar) _c;
 
 //--- code from write-template.
-        String style = org.wings.plaf.css.Utils.style(component);
+        String style = component.getStyle();
 
         SDimension size = component.getPreferredSize();
         int width = size != null ? size.getIntWidth() : 200;

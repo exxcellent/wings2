@@ -234,7 +234,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
         device.write("</head>\n".getBytes());
         device.write("<body ".getBytes());
-        org.wings.plaf.Utils.optAttribute(device, "class", Utils.style(frame));
+        org.wings.plaf.Utils.optAttribute(device, "class", frame.getStyle());
         Utils.writeEvents(device, frame);
         device.write(">\n".getBytes());
         if (frame.isVisible()) {

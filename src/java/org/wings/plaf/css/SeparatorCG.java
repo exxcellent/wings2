@@ -50,7 +50,7 @@ public class SeparatorCG
 //--- code from write-template.
 
         device.write(__hr);
-        org.wings.plaf.Utils.optAttribute(device, "class", org.wings.plaf.css.Utils.style(component));
+        org.wings.plaf.Utils.optAttribute(device, "class", component.getStyle());
         org.wings.plaf.Utils.optAttribute(device, "width", component.getWidth());
         org.wings.plaf.Utils.optAttribute(device, "size", component.getSize());
 

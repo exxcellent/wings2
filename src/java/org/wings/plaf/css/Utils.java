@@ -40,7 +40,7 @@ public final class Utils
     }
 
     /**
-     * Renders a container
+     * Renders a container using its Layout manager or fallback just one after another.
      */
     public static void renderContainer(Device d, SContainer c)
             throws IOException {
@@ -94,16 +94,6 @@ public final class Utils
         }
     }
 
-    // TODO: inline
-    public static String style(SComponent component) {
-        return component.getStyle();
-    }
-
-    // TODO: inline
-    public static String selectionStyle(SComponent component) {
-        return component.getStyle();
-    }
-
     /*
       static String event(SComponent component, String lowLevelEventId) {
       if (component.getSession().getEventInvalidation() && component.getParentFrame() != null) {
@@ -127,28 +117,29 @@ public final class Utils
         //return event(component, component.getLowLevelEventId());
     }
 
-    final static byte[] ALIGN_CENTER = " align=\"center\"".getBytes();
-    final static byte[] ALIGN_LEFT = " align=\"left\"".getBytes();
-    final static byte[] ALIGN_RIGHT = " align=\"right\"".getBytes();
-    final static byte[] ALIGN_JUSTIFY = " align=\"justify\"".getBytes();
-    final static byte[] VALIGN_TOP = " valign=\"top\"".getBytes();
-    final static byte[] VALIGN_BOTTOM = " valign=\"bottom\"".getBytes();
-    final static byte[] VALIGN_BASELINE = " valign=\"baseline\"".getBytes();
+    private final static String ALIGN_CENTER = " align=\"center\"";
+    private final static String ALIGN_LEFT = " align=\"left\"";
+    private final static String ALIGN_RIGHT = " align=\"right\"";
+    private final static String ALIGN_JUSTIFY = " align=\"justify\"";
+    private final static String VALIGN_TOP = " valign=\"top\"";
+    private final static String VALIGN_BOTTOM = " valign=\"bottom\"";
+    private final static String VALIGN_BASELINE = " valign=\"baseline\"";
 
     public static void printTableHorizontalAlignment(Device d, int align)
             throws IOException {
         switch (align) {
             case SConstants.NO_ALIGN:
             case SConstants.LEFT:
+                d.print(ALIGN_LEFT);
                 break;
             case SConstants.CENTER:
-                d.write(ALIGN_CENTER);
+                d.print(ALIGN_CENTER);
                 break;
             case SConstants.RIGHT:
-                d.write(ALIGN_RIGHT);
+                d.print(ALIGN_RIGHT);
                 break;
             case SConstants.JUSTIFY:
-                d.write(ALIGN_JUSTIFY);
+                d.print(ALIGN_JUSTIFY);
                 break;
         }
 
@@ -161,13 +152,13 @@ public final class Utils
             case SConstants.CENTER:
                 break;
             case SConstants.TOP:
-                d.write(VALIGN_TOP);
+                d.print(VALIGN_TOP);
                 break;
             case SConstants.BOTTOM:
-                d.write(VALIGN_BOTTOM);
+                d.print(VALIGN_BOTTOM);
                 break;
             case SConstants.BASELINE:
-                d.write(VALIGN_BASELINE);
+                d.print(VALIGN_BASELINE);
                 break;
         }
     }

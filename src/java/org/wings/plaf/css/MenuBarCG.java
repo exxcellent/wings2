@@ -51,7 +51,7 @@ public class MenuBarCG
         int mcount = mbar.getComponentCount();
 
         device.write(__table_class_me);
-        org.wings.plaf.Utils.optAttribute(device, "class", org.wings.plaf.css.Utils.style(component));
+        org.wings.plaf.Utils.optAttribute(device, "class", component.getStyle());
         device.write(__);
         device.write(__tr_align_left);
         /***

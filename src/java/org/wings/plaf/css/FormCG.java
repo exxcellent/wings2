@@ -83,7 +83,7 @@ public class FormCG
         org.wings.plaf.Utils.write(device, component.getName());
         device.write(__);
         org.wings.plaf.css.Utils.writeEvents(device, component);
-        org.wings.plaf.Utils.optAttribute(device, "class", Utils.style(component));
+        org.wings.plaf.Utils.optAttribute(device, "class", component.getStyle());
         org.wings.plaf.Utils.optAttribute(device, "enctype", component.getEncodingType());
         org.wings.plaf.Utils.optAttribute(device, "action", component.getRequestURL());
 
