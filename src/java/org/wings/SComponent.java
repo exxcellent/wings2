@@ -416,6 +416,13 @@ public abstract class SComponent
     }
 
     public void setName(String name) {
+        if (name != null) {
+            if (!Character.isJavaIdentifierStart(name.charAt(0)))
+                throw new IllegalArgumentException(name + " + is not a valid java identifier");
+            for (int i=1; i < name.length(); i++)
+                if (!Character.isJavaIdentifierPart(name.charAt(i)))
+                    throw new IllegalArgumentException(name + " + is not a valid java identifier");
+        }
         reloadIfChange(this.name, name);
         this.name = name;
     }
