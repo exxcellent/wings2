@@ -39,7 +39,6 @@ public class WingsSession
 
                 wingsSession.init(request);
                 RequestURL requestURL = new RequestURL("", response.encodeURL("foo").substring(3));
-                //RequestURL requestURL = new RequestURL("TreeExample.jsp", response.encodeURL("TreeExample.jsp"));
                 wingsSession.setProperty("request.url", requestURL);
             }
 
@@ -55,17 +54,20 @@ public class WingsSession
         SessionManager.removeSession();
     }
 
-    public static SFrame getFrame(HttpServletRequest request, HttpServletResponse response, String page) throws ServletException {
+    public static SFrame getFrame(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        String path = request.getServletPath();
+        int pos = path.lastIndexOf('/');
+        path = path.substring(pos + 1);
+
         synchronized (request.getSession()) {
             WingsSession wingsSession = getSession(request, response);
             Map frames = getFrames(wingsSession);
-            SFrame frame = (SFrame)frames.get(page);
+            SFrame frame = (SFrame)frames.get(path);
             if (frame == null) {
-                frame = new SFrame(page);
-                //frame.setTargetResource("");
-                frame.setTargetResource("TreeExample.jsp");
+                frame = new SFrame(path);
+                frame.setTargetResource(path);
                 frame.show();
-                frames.put(page, frame);
+                frames.put(path, frame);
             }
             SessionManager.removeSession();
             return frame;
@@ -106,9 +108,28 @@ public class WingsSession
         }
     }
 
-    public static void writeHeaders(HttpServletRequest request, HttpServletResponse response, JspWriter out, SFrame frame) throws IOException, ServletException {
+    public void addComponent(String name, SComponent component) throws ServletException {
+        SFrame frame = getFrame(getServletRequest(), getServletResponse());
+        frame.getContentPane().add(component, name);
+        setProperty(name, component);
+    }
+
+    public SComponent getComponent(String name) {
+        return (SComponent)getProperty(name);
+    }
+
+    public SComponent removeComponent(String name) throws ServletException {
+        SFrame frame = getFrame(getServletRequest(), getServletResponse());
+        SComponent component = (SComponent) getProperty(name);
+        frame.getContentPane().remove(component);
+        return component;
+    }
+
+    public static void writeHeaders(HttpServletRequest request, HttpServletResponse response, JspWriter out) throws IOException, ServletException {
         synchronized (request.getSession()) {
+            SFrame frame = getFrame(request, response);
             WingsSession wingsSession = getSession(request, response);
+
             StringBufferDevice headerdev = new StringBufferDevice();
             for (Iterator iterator = frame.headers().iterator(); iterator.hasNext();) {
                 Object next = iterator.next();
@@ -120,6 +141,7 @@ public class WingsSession
                 headerdev.write("\n".getBytes());
             }
             out.print(headerdev);
+
             SessionManager.removeSession();
         }
     }

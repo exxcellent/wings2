@@ -9,8 +9,6 @@ import="org.wings.*,
     // call the event dispatcher
     WingsSession.dispatchEvents(request, response);
 
-    // every page needs its frame
-    SFrame frame = WingsSession.getFrame(request, response, "TreeExample.jsp");
     STree tree;
 
     synchronized (session) {
@@ -19,12 +17,12 @@ import="org.wings.*,
             // it will associate the wingS Session with the current thread
             WingsSession wingsSession = WingsSession.getSession(request, response);
 
-            tree = (STree)wingsSession.getProperty("tree");
+            // if this is the first request for this page, create the tree component
+            tree = (STree)wingsSession.getComponent("tree");
             if (tree == null) {
                 tree = new STree();
                 tree.setModel(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
-                frame.getContentPane().add(tree, "tree");
-                wingsSession.setProperty("tree", tree);
+                wingsSession.addComponent("tree", tree);
             }
         }
         finally {
@@ -39,7 +37,7 @@ import="org.wings.*,
 
 <%
     // headers are required for proper operation
-    WingsSession.writeHeaders(request, response, out, frame);
+    WingsSession.writeHeaders(request, response, out);
 %>
 
 <title>Test wingS JSP integration</title>

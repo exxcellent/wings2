@@ -24,13 +24,13 @@ public class ExternalizerServlet
         WingsSession wingsSession = WingsSession.getSession(request, response);
 
         synchronized (request.getSession()) {
-            String pathInfo = request.getServletPath();
-            if (pathInfo == null)
+            String path = request.getServletPath();
+            if (path == null)
                 return;
 
-            int pos = pathInfo.lastIndexOf('/');
-            pathInfo = pathInfo.substring(pos + 1);
-            ExternalizedResource extInfo = wingsSession.getExternalizeManager().getExternalizedResource(pathInfo);
+            int pos = path.lastIndexOf('/');
+            path = path.substring(pos + 1);
+            ExternalizedResource extInfo = wingsSession.getExternalizeManager().getExternalizedResource(path);
             Device outputDevice = DeviceFactory.createDevice(extInfo);
             wingsSession.getExternalizeManager().deliver(extInfo, response, outputDevice);
         }
