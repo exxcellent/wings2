@@ -38,6 +38,9 @@ public class SBoxLayout
 
     protected int orientation = SConstants.HORIZONTAL;
     protected int align = SConstants.LEFT_ALIGN;
+    protected int cellSpacing = 0;
+    protected int cellPadding = 0;
+    protected int borderThickness = 0;
 
     /**
      * creates a new box layout with the given orientation
@@ -95,23 +98,54 @@ public class SBoxLayout
         return orientation;
     }
 
-
-    /* *
-     * returns the alignment
-     *
-     * @return alignment
-     *
-    public int getHorizontalAlignment() {
-        if (getContainer() != null)
-            return getContainer().getHorizontalAlignment();
-        return SConstants.LEFT_ALIGN;
+    /**
+     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+     * @param cellPadding cell padding in pixel
+     */
+    public void setCellPadding(int cellPadding) {
+        this.cellPadding = cellPadding;
     }
 
-    public int getVerticalAlignment() {
-        if (getContainer()!= null)
-            return getContainer().getVerticalAlignment();
-        return SConstants.TOP_ALIGN;
-    }*/
+    /**
+     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+     * @return cell padding in pixel
+     */
+    public int getCellPadding() {
+        return cellPadding;
+    }
+
+    /**
+     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+     * @param cellSpacing The spacing between the layout cells. pixel
+     */
+    public void setCellSpacing(int cellSpacing) {
+        this.cellSpacing = cellSpacing;
+    }
+
+    /**
+     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+     * @return The spacing between the layout cells. pixel
+     */
+    public int getCellSpacing() {
+        return cellSpacing;
+    }
+
+
+    /**
+     * Typical PLAFs will render this layout as invisible table (border = 0). Use this property to make it visible
+     * @param borderThickness The rendered border with in pixel
+     */
+    public void setBorder(int borderThickness) {
+        this.borderThickness = borderThickness;
+    }
+
+    /**
+     * Typical PLAFs will render this layout as invisible table (border = 0). Use this property to make it visible
+     * @return The rendered border with in pixel
+     */
+    public int getBorder() {
+        return borderThickness;
+    }
 }
 
 

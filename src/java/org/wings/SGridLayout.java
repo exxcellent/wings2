@@ -114,38 +114,61 @@ public class SGridLayout
     }
 
 
-    public void setCellPadding(int p) {
-        cellPadding = p;
+    /**
+     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+     * @param cellPadding cell padding in pixel
+     */
+    public void setCellPadding(int cellPadding) {
+        this.cellPadding = cellPadding;
     }
 
+    /**
+     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+     * @return cell padding in pixel
+     */
     public int getCellPadding() {
         return cellPadding;
     }
 
-
-    public void setCellSpacing(int s) {
-        cellSpacing = s;
+    /**
+     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+     * @param cellSpacing The spacing between the layout cells. pixel
+     */
+    public void setCellSpacing(int cellSpacing) {
+        this.cellSpacing = cellSpacing;
     }
 
+    /**
+     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+     * @return The spacing between the layout cells. pixel
+     */
     public int getCellSpacing() {
         return cellSpacing;
     }
 
 
-    public void setBorder(int pixel) {
-        border = pixel;
+    /**
+     * Typical PLAFs will render this layout as invisible table (border = 0). Use this property to make it visible
+     * @param borderWidth The rendered border with in pixel
+     */
+    public void setBorder(int borderWidth) {
+        border = borderWidth;
     }
 
+    /**
+     * Typical PLAFs will render this layout as invisible table (border = 0). Use this property to make it visible
+     * @return The rendered border with in pixel
+     */
     public int getBorder() {
         return border;
     }
 
     /**
      * Renders the first line as HTML <code>&lt;th&gt;</code> instead regular <code>&lt;tr&gt;</code>.
-     * @param b true if first line should be rendered as header
+     * @param renderAsTH true if first line should be rendered as header
      */
-    public void setRenderFirstLineAsHeader(boolean b) {
-        renderFirstLineAsHeader = b;
+    public void setRenderFirstLineAsHeader(boolean renderAsTH) {
+        renderFirstLineAsHeader = renderAsTH;
     }
 
     /**

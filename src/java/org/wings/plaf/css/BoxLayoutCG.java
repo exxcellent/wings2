@@ -14,13 +14,11 @@
 package org.wings.plaf.css;
 
 import org.wings.SBoxLayout;
-import org.wings.SComponent;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 public class BoxLayoutCG extends AbstractLayoutCG implements LayoutCG {
@@ -31,51 +29,17 @@ public class BoxLayoutCG extends AbstractLayoutCG implements LayoutCG {
      */
     public void write(Device d, SLayoutManager l)
             throws IOException {
-        SBoxLayout layout = (SBoxLayout) l;
-        List components = layout.getComponents();
 
-        printLayouterTableHeader(d, "SBoxLayout",0,0,0,layout);
-        //Utils.printTableHorizontalAlignment(d, layout.getHorizontalAlignment());
-        //Utils.printTableVerticalAlignment(d, layout.getVerticalAlignment());
+        final SBoxLayout layout = (SBoxLayout) l;
+        final List components = layout.getComponents();
+        final int cols = layout.getOrientation() == SBoxLayout.HORIZONTAL ? components.size() : 1;
 
-        if (layout.getOrientation() == SBoxLayout.X_AXIS) {
-            d.print("<tr>");
-            for (Iterator iter = components.iterator(); iter.hasNext();) {
+        printLayouterTableHeader(d, "SBoxLayout", layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout);
 
-                SComponent c = (SComponent) iter.next();
+        printLayouterTableBody(d, cols, false, components);
 
-                d.print("<td");
-                Utils.printTableCellAlignment(d, c);
-                Utils.printCSSInlineStyleAttributes(d, c);
-                d.print(">");
+        printLayouterTableFooter(d, "SBoxLayout", layout);
 
-                c.write(d);
-
-
-                d.print("</td>");
-
-            }
-            d.print("</tr>\n");
-
-        } else {   /* This Should be the Y-Axis :) */
-            for (Iterator iter = components.iterator(); iter.hasNext();) {
-                d.print("<tr>");
-                SComponent c = (SComponent) iter.next();
-
-                d.print("<td");
-
-                Utils.printTableCellAlignment(d, c);
-                Utils.printCSSInlineStyleAttributes(d, c);
-                d.print(">");
-
-                c.write(d);
-
-                d.print("</td>");
-
-                d.print("</tr>\n");
-            }
-        }
-        d.print("</table>");
     }
 }
 

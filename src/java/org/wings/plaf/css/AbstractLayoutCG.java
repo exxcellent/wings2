@@ -14,10 +14,13 @@
 package org.wings.plaf.css;
 
 import org.wings.SLayoutManager;
+import org.wings.SComponent;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Iterator;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.
@@ -57,4 +60,54 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         Utils.printDebug(d, "<!-- END LAYOUT: ").print(styleClass).print(" -->");
     }
 
+    /**
+     * Render passed list of components to a table body.
+     * Use {@link #printLayouterTableHeader(org.wings.io.Device, String, int, int, int, org.wings.SLayoutManager)} in front
+     * and {@link #printLayouterTableFooter(org.wings.io.Device, String, org.wings.SLayoutManager)} afterwards!
+     * @param d The device to write to
+     * @param cols Wrap after this amount of columns
+     * @param renderFirstLineAsHeader Render cells in first line as TH-Element or regular TD.
+     * @param components The components to layout
+     */
+    protected void printLayouterTableBody(Device d, int cols, final boolean renderFirstLineAsHeader, final List components)
+            throws IOException {
+        boolean firstRow = true;
+        int col = 0;
+        for (Iterator iter = components.iterator(); iter.hasNext();) {
+            final SComponent c = (SComponent) iter.next();
+
+            if (col == 0)
+                d.print("<tr>");
+            else if (col % cols == 0 && iter.hasNext()) {
+                d.print("</tr>");
+                Utils.printNewline(d, c.getParent());
+                d.print("<tr>");
+                firstRow = false;
+            }
+
+
+            if (firstRow && renderFirstLineAsHeader)
+                d.print("<th");
+            else
+                d.print("<td");
+
+            Utils.printTableCellAlignment(d, c);
+            Utils.printCSSInlineStyleAttributes(d, c);
+            d.print(">");
+
+            c.write(d); // Render component
+
+            if (firstRow && renderFirstLineAsHeader)
+                d.print("</th>");
+            else
+                d.print("</td>");
+
+            col++;
+
+            if (!iter.hasNext()){
+                d.print("</tr>");
+                Utils.printNewline(d, c.getParent());
+            }
+        }
+    }
 }

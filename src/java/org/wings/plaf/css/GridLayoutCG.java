@@ -13,14 +13,12 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SComponent;
 import org.wings.SGridLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 public class GridLayoutCG extends AbstractLayoutCG
@@ -41,44 +39,9 @@ public class GridLayoutCG extends AbstractLayoutCG
 
         printLayouterTableHeader(d, "SGridLayout", layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout);
 
-        boolean firstRow = true;
-        int col = 0;
-        for (Iterator iter = components.iterator(); iter.hasNext();) {
-            if (col == 0)
-                d.print("<tr>");
-            else if (col % cols == 0 && iter.hasNext()) {
-                d.print("</tr>");
-                Utils.printNewline(d, layout.getContainer());
-                d.print("<tr>");
-                firstRow = false;
-            }
-
-            SComponent c = (SComponent) iter.next();
-
-            if (firstRow && layout.getRenderFirstLineAsHeader())
-                d.print("<th");
-            else
-                d.print("<td");
-
-            Utils.printTableCellAlignment(d, c);
-            Utils.printCSSInlineStyleAttributes(d, c);
-            d.print(">");
-
-            c.write(d); // Render component
-
-            if (firstRow && layout.getRenderFirstLineAsHeader())
-                d.print("</th>");
-            else
-                d.print("</td>");
-
-            col++;
-
-            if (!iter.hasNext()){
-                d.print("</tr>");
-                Utils.printNewline(d, layout.getContainer());
-            }
-        }
+        printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), components);
 
         printLayouterTableFooter(d, "SGridLayout", layout);
     }
+
 }
