@@ -16,6 +16,7 @@
     <!-- ==================== Preparations ==================== -->
     <target name="prepare">
         <tstamp/>
+        <splash imageurl="file:${basedir}/src/doc/j-wings-logo.png" />
         <mkdir dir="build"/>
         <mkdir dir="build/class"/>
         <mkdir dir="build/doc"/>
@@ -73,10 +74,10 @@
     <!-- ==================== Generate API Docs ==================== -->
     <target depends="prepare" name="doc">
         <mkdir dir="build/doc/api"/>
-        <javadoc bottom="wingS swings ;-)" classpathref="build.classpath" destdir="build/doc/api" doctitle="wingS ${wings.version}" link="http://java.sun.com/j2se/1.4/docs/api/" maxmemory="128m" packagenames="org.wings.*" sourcepath="src/java" use="true" version="true" windowtitle="wingS ${wings.version}"/>
+        <javadoc bottom="wingS swings ;-)" classpathref="build.classpath" destdir="build/doc/api" doctitle="wingS ${j-wings.version}" link="http://java.sun.com/j2se/1.4/docs/api/" maxmemory="128m" packagenames="org.wings.*" sourcepath="src/java" use="true" version="true" windowtitle="wingS ${wings.version}"/>
     </target>
 
-    <target depends="all,javadoc" name="dist"> 
+    <target depends="prepare,all,javadoc" name="dist">
         <!-- manual -->
         <mkdir dir="dist/doc/manual"/>
         <copy todir="dist/doc/manual">
@@ -135,8 +136,8 @@
         </copy>
 
         <!-- main -->
-        <property name="distname" value="${ant.project.name}-${wings.version}"/>
-        <filter token="VERSION" value="${wings.version}"/>
+        <property name="distname" value="${ant.project.name}-${j-wings.version}"/>
+        <filter token="VERSION" value="${j-wings.version}"/>
         <copy file="VERSION" filtering="true" todir="dist"/>
         <copy todir="dist">
             <fileset dir=".">
@@ -150,7 +151,7 @@
     </target>
 
     <target depends="dist" description="create distribution tar.gz" name="tarball">
-        <property name="distname" value="${ant.project.name}-${wings.version}"/>
+        <property name="distname" value="${ant.project.name}-${j-wings.version}"/>
         <delete dir="${distname}"/>
         <mkdir dir="${distname}"/>
         <copy todir="${distname}">
