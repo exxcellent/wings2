@@ -67,8 +67,8 @@ div.SLabel_Box {
 
 div.SLabel {
     /*font-size: 12px;
-    color: #000044;*/
-	white-space: nowrap;
+    color: #000044;
+	white-space: nowrap;*/
     box-sizing: border-box;
 }
 
@@ -514,50 +514,42 @@ div.SMenuBar {
 /* JS Menu*/
 
 div.SMenuBar_js {
-    color: #000044;
-    background-color: #eeeeff;
-    border-bottom: 1px solid #cccccc;
+    color: #004;
+    background-color: #eef;
+    border-bottom: 1px solid #ccc;
+}
+
+div.SMenuBar_js > span > span {
+	padding:1px 3px 1px 3px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #EEE #999 #999 #eee;
 }
 
 div.SMenuBar_js .SMenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
 	white-space: nowrap;
-  	color: #ffffff;
-	background-color: #7777CC;
+  	color: #004;
+	background-color: #77c;
 }
 
 div.SMenuBar_js .SMenuDisabledMenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
 	color: gray;
-	background-color: #CCCCCC;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
+	background-color: #eee;
 	white-space: nowrap;
 }
 
 div.SMenuBar_js .SMenuJSmenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-  	color: #ffffff;
-	background-color: #5555AA;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
+  	color: #fff;
+	background-color: #66b;
 	white-space: nowrap;
 }
 
 
 div.SMenuBar_js .SMenuPopup {
-	background-color: #CCCCCC;
+	background-color: #eee;
 	border-style: solid;
 	border-width: 2px;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
+	border-color: #EEE #999 #999 #eee;
 	position: absolute;
 	overflow: visible;
 	padding: 2px 2px 2px 0px;
@@ -572,37 +564,22 @@ div.SMenuBar_js div.SMenuPopup > div > img {
     right: 0px;
 }
 
-div.SMenuBar_js .menuitem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #000044;
-	background-color: #CCCCCC;
+div.SMenuBar_js .SMenuPopupItem {
+	color: #004;
+	background-color: #eee;
 	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
 }
 
 div.SMenuBar_js .SMenuDisabledMenuitem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
 	color: gray;
-	background-color: #CCCCCC;
+	background-color: #eee;
 	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
 }
 
 div.SMenuBar_js .SMenuJSmenuitem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-  	color: #ffffff;
-	background-color: #5555AA;
+	color: #fff;
+	background-color: #66b;
 	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
 }
 /* END JS Menu */
 
@@ -626,17 +603,14 @@ padding-bottom: 3.5em;
 
 div.SMenuBar_css a, div.SMenuBar_css span{
 display:block;
-/*border-width:1px;
-border-style:solid;
-border-color:#ccc #888 #555 #bbb;*/
 white-space:nowrap;
 margin:0;
-padding:1px 3px 1px 3px;
 }
 
 div.SMenuBar_css span{
 color: #004;
 background:#eef;
+padding:1px 3px 1px 3px;
 }
 
 div.SMenuBar_css a{
@@ -668,11 +642,11 @@ float:left;
 div.SMenuBar_css ul.SMenu{
 border-top: 1px solid #eee;
 border-bottom: 1px solid #999;
-border-left: 1px solid #eee;
-border-right: 1px solid #999;
 }
 
 div.SMenuBar_css ul.SMenu li{
+border-left: 1px solid #eee;
+border-right: 1px solid #999;
 }
 
 div.SMenuBar_css li{
