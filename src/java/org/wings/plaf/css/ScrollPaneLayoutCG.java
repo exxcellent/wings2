@@ -42,7 +42,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG
         SComponent west = (SComponent) components.get(SScrollPaneLayout.WEST);
         SComponent south = (SComponent) components.get(SScrollPaneLayout.SOUTH);
 
-        d.print("\n<table class=\"SScrollPaneLayout\" cellpadding=\"0\" cellspacing=\"0\"");
+        d.print("\n<table class=\"SScrollPaneLayout\"");
         Utils.printCSSInlinePreferredSize(d, container.getPreferredSize());
         d.print("><tbody>");
 

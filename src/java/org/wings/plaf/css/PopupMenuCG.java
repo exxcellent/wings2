@@ -75,7 +75,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
         String popupId = componentId + "_pop";
 
 
-        device.print("<table cellpadding=\"0\" cellspacing=\"0\" id=\"");
+        device.print("<table id=\"");
         Utils.write(device, popupId);
 
         device.print("\" class=\"pdmenu\" style=\"display:none\">");

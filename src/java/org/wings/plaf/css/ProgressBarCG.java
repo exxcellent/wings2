@@ -77,15 +77,15 @@ public class ProgressBarCG
         int height = size != null ? size.getIntHeight() : 5;
 
         if (component.isStringPainted()) {
-            device.print("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>");
+            device.print("<table><tr><td>");
         }
         if (component.isBorderPainted()) {
-            device.print("<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr><td");
+            device.print("<table cellpadding=\"1\"><tr><td");
             Utils.optAttribute(device, "bgcolor", component.getBorderColor());
             device.print(">");
         }
 
-        device.print("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
+        device.print("<table>");
         device.print("<tr>");
         device.print("<td");
         Utils.optAttribute(device, "bgcolor", component.getFilledColor());
