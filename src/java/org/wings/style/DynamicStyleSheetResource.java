@@ -20,13 +20,13 @@ import org.wings.border.SBorder;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 import org.wings.resource.DynamicResource;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
 import org.wings.util.ComponentVisitor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Traverses the component hierarchy of a frame and gathers the dynamic styles
@@ -77,7 +77,16 @@ public class DynamicStyleSheetResource
                     Style style = (Style) iterator.next();
                     // Map pseudo css selectors to real selectors
                     CSSSelector selector = cg.mapSelector(style.getSelector());
-                    out.print(selectorPrefix).print(selector.getSelectorString()).print("{");
+                    out.print(selectorPrefix).print(selector.getSelectorString());
+
+                    // IE Workaround: We need to operate IE in quirks mode. Hence we have to inherit props
+                    // over tables.
+                    BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
+                    if (BrowserType.IE.equals(currentBrowser) ) {
+                        out.print(", ").print(selectorPrefix).print(selector.getSelectorString()).print(" table ");
+                    }
+
+                    out.print("{");
                     style.write(out);
                     out.print("}\n");
                 }
