@@ -121,7 +121,7 @@ public class WingSet implements Serializable {
     public WingSet() {
         frame = new SFrame("WingSet");
         frame.setTitle("WingSet Demo");
-        frame.setAttribute("margin", "8px");
+        frame.setAttribute("margin", "8px !important");
 
         // Register our user style sheet
         final Browser browser = frame.getSession().getUserAgent();

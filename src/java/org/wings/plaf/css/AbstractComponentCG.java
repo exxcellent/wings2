@@ -86,8 +86,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
 
         // if sizes are spec'd in percentages, we need the outer box to have full size...
-        boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.contains("%");
-        boolean isWidthPercentage = prefSize != null && prefSize.width != null && prefSize.width.contains("%");
+        boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.indexOf("%") != -1;
+        boolean isWidthPercentage = prefSize != null && prefSize.width != null && prefSize.width.indexOf("%") != -1;
         if ( isHeightPercentage || isWidthPercentage ) {
             device.print(" style=\"");
             if (isHeightPercentage) {

@@ -28,10 +28,3 @@ A:link, A:visited, A:active {
     color: #000066;
     text-decoration: none;
 }
-
-/* Underline links on mouse-over */
-A:hover {
-    color: #000066;
-    text-decoration: underline;
-}
-

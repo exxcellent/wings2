@@ -39,7 +39,7 @@ public class ScrollPaneExample
         table.setDefaultRenderer(new TableExample.MyCellRenderer());
 
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
-        tree.setName("tree in scrollpane");
+        tree.setName("tree");
         tree.setShowAsFormComponent(false);
         
         scrollPane = new SScrollPane(table);
@@ -105,7 +105,6 @@ public class ScrollPaneExample
                 }
                 
             });
-            add(new SLabel(" component to scroll "));
             add(tableButton);
             add(treeButton);
         }

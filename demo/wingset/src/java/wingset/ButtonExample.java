@@ -53,11 +53,12 @@ public class ButtonExample
                 buttons[i].setDisabledIcon(disabledIcon);
                 buttons[i].setRolloverIcon(rolloverIcon);
                 buttons[i].setPressedIcon(pressedIcon);
-                buttons[i].setToolTipText("Button " + i);
-                buttons[i].setName(buttons[i].getText());
-                buttons[i].setShowAsFormComponent(false);
-                controls.addSizable(buttons[i]);
             }
+
+            buttons[i].setToolTipText("Button " + (i+1));
+            buttons[i].setName("button_" + (i+1));
+            buttons[i].setShowAsFormComponent(false);
+            controls.addSizable(buttons[i]);
         }
 
         buttons[0].setVerticalTextPosition(SConstants.TOP);

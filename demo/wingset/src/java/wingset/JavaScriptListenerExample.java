@@ -60,7 +60,10 @@ public class JavaScriptListenerExample
         firstField.setFocusTraversalIndex(1);
         secondField.setFocusTraversalIndex(2);
 
-        SForm form = new SForm(new SGridLayout(2));
+        SGridLayout gridLayout = new SGridLayout(2);
+        gridLayout.setCellPadding(4);
+
+        SForm form = new SForm(gridLayout);
         form.add(new SLabel("Value #1"));
         form.add(firstField);
         form.add(new SLabel("Value #2"));

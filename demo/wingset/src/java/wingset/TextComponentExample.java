@@ -110,7 +110,8 @@ public class TextComponentExample
 
         controls.addSizable(textField);
         controls.addSizable(textArea);
-        
+        controls.addSizable(formattedTextField);
+
         f.add(controls, SBorderLayout.NORTH);
         f.add(p, SBorderLayout.CENTER);
         return f;
