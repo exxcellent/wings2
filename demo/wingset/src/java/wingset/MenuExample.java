@@ -81,6 +81,10 @@ public class MenuExample extends WingSetPane {
     public SComponent createExample() {
         ComponentControls controls = new ComponentControls();
         SForm panel = new SForm();
+        panel.setLayout(new SBoxLayout(SConstants.VERTICAL));
+        panel.setPreferredSize(new SDimension("100%", null));
+        
+        
         selectionLabel = new SLabel("nothing selected");
         menuBar = createMenuBar(HugeTreeModel.ROOT_NODE);
         controls.addSizable(menuBar);
