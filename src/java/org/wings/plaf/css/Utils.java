@@ -64,29 +64,27 @@ public final class Utils implements SConstants {
             value = manager.getObject("SContainer.defaultLayoutBehaviour", String.class);
             if (value != null && value instanceof String) {
                 if ("classic".equals(((String)value).toLowerCase())) {
-                    System.out.println("classic");
                     layout = new SBoxLayout(SBoxLayout.VERTICAL);
                 }
                 else if ("standard".equals(((String)value).toLowerCase())) {
-                    System.out.println("standard");
                     layout = new SFlowLayout(SFlowLayout.LEFT);
+                }
+                else if ("none".equals(((String)value).toLowerCase())) {
+                    // just write out the components one after another
+                    for (int i = 0; i < c.getComponentCount(); i++) {
+                        c.getComponent(i).write(d);
+                    }
+                    return;
                 }
                 else { // fallback
                     System.out.println("fallback");
                     layout = new SFlowLayout(SFlowLayout.LEFT);
                 }
             } else {
-                System.out.println("no property");
                 // Swing default LayoutManager is FlowLayout
                 layout = new SFlowLayout(SFlowLayout.LEFT);
             }
-            System.out.println("Hi I have no layoutmanager "+c.getClass().getName());
-            for (int i = 0; i < c.getComponentCount(); i++) {
-                c.getComponent(i).write(d);
-            }
-
             c.setLayout(layout);
-            return;
         }
         layout.write(d);
     }
