@@ -48,12 +48,33 @@ public class ComponentControls
             public void actionPerformed(ActionEvent e) {
                 SDimension preferredSize = new SDimension();
                 String width = widthTextField.getText();
-                if (width != null && width.length() > 0)
-                    preferredSize.setWidth(width);
+                if (width != null && width.length() > 0) {
+                    int widthInt;
+                    try {
+                        widthInt = Integer.parseInt(width);
+                    } catch (NumberFormatException nfe) {
+                        widthInt = Integer.MIN_VALUE;
+                    }
+                    if (widthInt == Integer.MIN_VALUE) {
+                        preferredSize.setWidth(width);
+                    } else {
+                        preferredSize.setWidth(widthInt);
+                    }
+                }
                 String height = heightTextField.getText();
-                if (height != null && height.length() > 0)
-                    preferredSize.setHeight(height);
-
+                if (height != null && height.length() > 0) {
+                    int heightInt;
+                    try {
+                        heightInt = Integer.parseInt(height);
+                    } catch (NumberFormatException nfe) {
+                        heightInt = Integer.MIN_VALUE;
+                    }
+                    if (heightInt == Integer.MIN_VALUE) {
+                        preferredSize.setHeight(height);
+                    } else {
+                        preferredSize.setHeight(heightInt);
+                    }
+                }
                 for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                     SComponent component = (SComponent) iterator.next();
                     component.setPreferredSize(preferredSize);
