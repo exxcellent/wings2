@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class SFont implements SConstants, Serializable {
     protected int style = PLAIN;
     protected String face = null;
-    protected int size = Integer.MIN_VALUE;
+    protected int size = DEFAULT_SIZE;
 
     public SFont() {
     }

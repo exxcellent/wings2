@@ -214,6 +214,11 @@ public interface SConstants {
      * Bold font style for {@link SFont} constructor.
      */
     int BOLD = java.awt.Font.BOLD;
+
+    /**
+     * Default font size for {@link SFont} constructor.
+     */
+    int DEFAULT_SIZE = -1;
 }
 
 
