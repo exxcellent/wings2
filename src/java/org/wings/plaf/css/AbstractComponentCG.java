@@ -88,12 +88,12 @@ public abstract class AbstractComponentCG
                 device
                         .print("width:")
                         .print(dim.width)
-                        .print(";");
+                        .print("px;");
             if (dim.height != null)
                 device
                         .print(" height:")
                         .print(dim.height)
-                        .print(";");
+                        .print("px;");
         }
 
         String toolTip = component.getToolTipText();

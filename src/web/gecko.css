@@ -41,9 +41,6 @@ a, button {
     background-color: inherit;
 }
 
-button > * {
-    margin: -2px -3px -1px -4px
-}
 
 img {
     border: 0px;

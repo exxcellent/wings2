@@ -54,7 +54,7 @@ public class ScrollPaneExample
 
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
-            final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
+            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
             showAsFormComponent.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean selected = showAsFormComponent.isSelected();
