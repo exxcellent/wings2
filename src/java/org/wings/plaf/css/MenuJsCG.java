@@ -150,7 +150,7 @@ public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstant
             }
         }
 
-        device.print("</div>\n");
+        device.print("</div>");
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
             SComponent menuItem = menu.getMenuComponent(i);
 
@@ -214,6 +214,5 @@ public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstant
         writeItem(device, menu);
         if (menu.getParentMenu() == null)
             writePopup(device, menu);
-        device.print("\n");
     }
 }

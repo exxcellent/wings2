@@ -65,7 +65,6 @@ public class MenuBarJsCG
             }
         }
         device.print("</div>");
-        device.print("\n");
 
 //--- end code from write-template.
     }

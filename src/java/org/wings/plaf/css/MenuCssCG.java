@@ -77,7 +77,8 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
         // calculate max length of children texts for sizing of layer
         int maxLength = 0;
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-            if (((SMenuItem)menu.getMenuComponent(i)).getText().length() > maxLength) {
+            String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
+            if (text != null && text.length() > maxLength) {
                 maxLength = ((SMenuItem)menu.getMenuComponent(i)).getText().length();
                 if (menu.getMenuComponent(i) instanceof SMenu) {
                         maxLength = maxLength + 2; //graphics
@@ -241,6 +242,5 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
         writeItem(device, menu);
         if (menu.getParentMenu() == null)
             writePopup(device, menu);
-        device.print("\n");
     }
 }

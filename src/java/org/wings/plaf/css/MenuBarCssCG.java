@@ -52,21 +52,19 @@ public class MenuBarCssCG
         boolean rightAligned = false;
         for (int i = 0; i < mcount; i++) {
             if (mbar.getComponent(i).isVisible()) {
-                String stringLength = (String.valueOf((((SMenu)mbar.getComponent(i)).getText().length() * component.getWidthScaleFactor())));
+                String stringLength = "0";
+                String text = ((SMenu)mbar.getComponent(i)).getText();
+                if (text != null) {
+                    stringLength = (String.valueOf((text.length() * component.getWidthScaleFactor())));
+                }
                 stringLength = stringLength.substring(0,stringLength.lastIndexOf('.')+2);
                 device.print("<ul class=\"SMenu_Main\" style=\"width:");
                 device.print(stringLength);
                 device.print("em;\"><li class=\"SMenu\" style=\"width:");
                 device.print(stringLength);
                 device.print("em;\"");
-//                if (mbar.getComponent(i).isEnabled() &&
-//                        mbar.getComponent(i) instanceof SMenuItem) {
-//                    device.print(" onMouseOver=\"Menu.prototype.setMouseOverStyle(this)\"");
-//                    device.print(" onMouseOut=\"Menu.prototype.setMouseOutStyle(this)\"");
-//                }
                 device.print(">");
                 mbar.getComponent(i).write(device);
-                //device.print("</nobr></span>\n");
                 device.print("</li></ul>\n");
             }
         }
