@@ -132,7 +132,6 @@ public class MenuExample extends WingSetPane {
         
         switchEnable.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("actionPerformed");
                 setMenuItemsEnabled(!switchEnable.isSelected());
             }
         });

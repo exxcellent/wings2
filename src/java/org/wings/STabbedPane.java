@@ -475,14 +475,62 @@ public class STabbedPane
     public void removeTabAt(int index) {
         // If we are removing the currently selected tab AND
         // it happens to be the last tab in the bunch, then
-        // select the previous tab
-        int tabCount = getTabCount();
+        // select the previous tab, except it is the last one.
+        // TODO: how is a tabbedPane with no tabs rendered?
+        int newTabCount = getTabCount() - 1;
         int selected = getSelectedIndex();
-        if (selected >= (tabCount - 1)) {
-            setSelectedIndex(selected - 1);
-        }
-
         removePageAt(index);
+        if (newTabCount > 0) {
+            if (selected >= (newTabCount)) {
+                /* last tab was selected and maybe removed, so try to find a 
+                 * tab to select before
+                 */
+                int decrement = 1;
+                
+                while (newTabCount > decrement && !isEnabledAt(newTabCount - decrement)) {
+                    decrement++;
+                }
+                if (isEnabledAt(newTabCount - decrement)) {
+                    setSelectedIndex(newTabCount - decrement);
+                } else {
+                    // only disabled tabs left
+                    setSelectedIndex(-1);
+                }
+            } else {
+                int newTab = selected;
+                /* some tab was selected and maybe removed, so try to find a 
+                 * tab to select behind or before the removed one
+                 */
+                while ((newTabCount - 1 > newTab) && !isEnabledAt(newTab)) {
+                    newTab++;
+                }
+                if (isEnabledAt(newTab)) {
+                    setSelectedIndex(newTab);
+                    getSelectedComponent().setVisible(true);
+                } else {
+                    // see if there is an enabled tab before
+                    newTab = selected - 1;
+                    if (newTab == -1) {
+                        setSelectedIndex(-1);
+                        return;
+                    }
+                    while (newTab > 0 && !isEnabledAt(newTab)) {
+                        newTab--;
+                    }
+                    if (isEnabledAt(newTab)) {
+                        setSelectedIndex(newTab);
+                        getSelectedComponent().setVisible(true);
+                    } else {
+                        // only disabled tabs left
+                        setSelectedIndex(-1);
+                    }
+                }
+                
+            }
+        } else {
+            // no tab left
+            setSelectedIndex(-1);
+        }
     }
 
     /**
@@ -836,7 +884,7 @@ public class STabbedPane
      */
     public void stateChanged(ChangeEvent ce) {
         final int index = model.getSelectedIndex();
-        if (index >= pages.size()) return;
+        if (index >= pages.size() || index == -1) return;
         card.show(((Page) pages.get(index)).component);
 
         reload();

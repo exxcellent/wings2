@@ -177,17 +177,29 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             add(addTab);
+            final SCheckBox removeCurrent = new SCheckBox("remove current tab");
             final SButton removeTab = new SButton("remove a tab");
             removeTab.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    removeTab();
+                    removeTab(removeCurrent.isSelected());
                 }
             });
             add(removeTab);
+            add(removeCurrent);
         }
-        protected void removeTab() {
-            tabCount--;
-            tabbedPane.removeTabAt(tabCount);
+        protected void removeTab(boolean removeCurrent) {
+            if (removeCurrent) {
+                int index = tabbedPane.getSelectedIndex();
+                if (index != -1) {
+                    tabCount--;
+                    tabbedPane.removeTabAt(index);
+                }
+            } else {
+                if (tabCount > 0) {
+                    tabCount--;
+                    tabbedPane.removeTabAt(tabCount);
+                }
+            }
         }
         protected void addTab() {
             SPanel p = new SPanel(new SBorderLayout());
