@@ -36,7 +36,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         if (center != null) cols++;
         if (east != null) cols++;
 
-        printLayouterTableHeader(d, "SBorderLayout",0,0,0,layout);
+        printLayouterTableHeader(d, "SBorderLayout",layout.getSpacing(),0,layout.getBorder(),layout);
 
         if (north != null) {
             Utils.printNewline(d, layout.getContainer());
