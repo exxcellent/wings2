@@ -13,10 +13,7 @@
  */
 package org.wings.plaf.css;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.*;
-import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
@@ -33,10 +30,8 @@ import java.io.Serializable;
  */
 public abstract class AbstractComponentCG
         implements ComponentCG, SConstants, Serializable {
-    private final transient static Log log = LogFactory.getLog(AbstractComponentCG.class);
 
-    protected AbstractComponentCG() {
-    }
+    protected AbstractComponentCG() {    }
 
     /**
      * Install the appropriate CG for <code>component</code>.
@@ -140,10 +135,9 @@ public abstract class AbstractComponentCG
         device
                 .print("\">\n");
 
-        final SBorder border = component.getBorder();
-        if (border instanceof STitledBorder) {
-            STitledBorder titledBorder = (STitledBorder) border;
-
+        // Special handling: Render title of STitledBorder
+        if (component.getBorder() instanceof STitledBorder) {
+            STitledBorder titledBorder = (STitledBorder) component.getBorder();
             device.print("<div class=\"legend\" style=\"");
             titledBorder.getTitleAttributes().write(device);
             device.print("\">");

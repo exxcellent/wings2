@@ -1,220 +1,553 @@
-BODY {
-    background: #dedede;
-    position: relative;
-    margin: 0px;
-    font-family: sans-serif;
-    font-style: normal;
-    font-size: 14px;
-    width: inherit;
-    height: inherit;
+/* 
+   $Id$
+   j-wings Default Style Sheet for gecko Browser (Mozilla, FireFox).  
+*/
+
+/* Definiton of j-wings color world */
+darkfg    {	color: #902F00;	}
+heavyfg   {	color: #e64d00;	}
+defaultfg {	color: #e66e32;   }            
+heavybg   {	background-color: #E28A5F; }
+defaultbg {	background-color: #E69974; }
+lightbg   {   background-color: #EAA888; }
+lightertbg   {   background-color: #F6DECC; }
+lightestbg   {   background-color: #F9E9DD; }
+
+/* --------------------------------------------------------------------- Generic CSS definition --- */
+h1 {
+	color: #E66E32;
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+h2 {
+	color: #E66E32;
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+h3 {
+	color: #E66E32;
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+	font-size: 14px;
+	font-weight: normal;
+	text-transform: uppercase;
+}
+
+h4 {
+	color: #e66e32;
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+	font-size: 14px;
+	font-weight: normal;
+	text-transform: uppercase;
+}
+
+h5 {
+	color: #000000;
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+	font-size: 12px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+hr {
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+img {
+	border: none !important;
+	vertical-align: middle;
+}
+
+li {
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+}
+
+p {
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+}
+
+pre {
+	font-family: monospace;
 }
 
 table {
-    padding: 0px;
-    margin: 0px;
-    border-collapse: collapse;
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+	border-collapse: collapse;
+	margin: 0px;
+	padding: 0px;
 }
+
+td {
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+}
+
+textarea,input {
+	background-color: #F6DECC;
+	border: #E66E32;
+	border-style: solid;
+	border-width: 1px 1px 1px 1px;
+}
+
+th, td {
+	font-size: 14px;
+}
+
+tr {
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+}
+
+ul {
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+}
+
+
+
+a {
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+	text-decoration: none;
+}
+
+a:link, a:visited {
+	text-decoration: none;
+}
+
+a:active {
+	text-decoration: underline;
+}
+
+body {
+	font-family: Verdana,Arial,Helvetica, Sans-Serif;
+	font-size: 0.8em;
+	text-decoration: none;
+	background: White;
+	font-family: sans-serif;
+	font-style: normal;
+}
+
 div, form, td, th {
-    color: inherit;
-    background-color: inherit;
-    padding: 0px;
-    margin: 0px;
+	background-color: inherit;
+	color: inherit;
+	margin: 0px;
+	padding: 0px;
 }
 
-a, button {
-    display: table;
+/* ---------------------------------------------------------------- j-wings Component related --- */
+
+.SAnchor {
 }
 
-A:link, A:visited {
-   color: #000066;
-   text-decoration: none
+.SMenu {
+	background-color: #CCCCCC;
+	border-width: 0px;
+	color: #902F00;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-size: 14px;
+	margin: 0px;
+	padding: 0px;
+	white-space: nowrap;
 }
 
-A:active {
-   color: #0000FF;
-   text-decoration: none
+.SMenuBar {
+	background-color: #CCCCCC;
+	border: 1px solid;
+	border-color: #EEEEEE #999999 #999999 #EEEEEE;
+	color: #902F00;
+	padding: 0px;
 }
 
-HR { 
-   margin-top: 0;
-   margin-bottom: 0 
+.SScrollbar {
+	border-width: 0px;
+	font-size: 1px;
 }
 
-IMG {
-    border: none !important;
-    vertical-align: middle;
+.SSeparator {
+	border-style: inset;
+	border-width: 1px;
+	color: #CCCCCC;
+	height: 0px;
+	margin: 0px;
+	padding: 0px;
+	white-space: nowrap;
 }
 
-TH, TD {
-    font-size: 14px;
+.STextArea {
+	width: 100%;
 }
 
-div.SLabel {
-   font-size: 14px;
-   color: #000044;
+.SToolBar {
+	background-color: #CCCCCC;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+table.SBorderLayout {
+	width: 100%;
+}
+
+table.SBorderLayout > tbody > tr > td {
+	text-align: center;
+	vertical-align: middle;
 }
 
 div.SButton {
-   font-size: 14px;
-   color: #000044
+	font-size: 12px;
 }
 
-div.SButton > button {
-   border: 1px outset gray;
+div.sbutton > button {
+	background: #EAA888;
+	border: 1px outset #999999;
+	font-weight: bold;
 }
 
-div.SButton > button:hover {
-   border: 1px inset gray;
+div.sbutton > button:hover {
+	border: 1px inset #999999;
 }
 
-div.SClickable > button {
-   background-color: inherit;
-   border: 1px none;
+div.sclickable > button {
+	background-color: inherit;
+	border: 1px none;
 }
 
-div.SClickable > button:hover {
-   border: 1px solid gray;
+div.sclickable > button:hover {
+	border: 1px solid #999999;
 }
 
-div.STextField {
-   font-family: sans-serif;
-   font-weight: normal;
-   font-style: normal;
-   color: #000000;
+div.sdialog > table {
+	border: 1px outset #999999;
+	border-collapse: collapse;
 }
 
-div.STree > table {
-   border: none;
-   border-spacing: 0px;
+div.sdialog > table > tbody > tr > td {
+	border: 1px inset #E28A5F;
 }
 
-div.STree > table > tbody > tr > td {
-    padding: 0px
-    border: 1px none black;
-    cursor: pointer;
+div.sdialog > table > tbody > tr > th {
+	background-color: #AAAAFF;
+	color: #FFFFFF;
+	padding-left: 8px;
+	text-align: left;
 }
 
-div.STree > table > tbody > tr > td * {
-    white-space: nowrap;
-}
-
-div.STree > table > tbody > tr > td[selected="true"] {
-    background-color: #aaaaff;
-    border: 1px dotted black;
-}
-
-div.STree > table > tbody > tr > td button {
-    border: none;
-    background-color: inherit;
-    padding: 0px
-    text-decoration: none;
-    font-family: sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    color: #000000;
-}
-
-div.STable > table {
-    width: 100%;
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-
-div.STable > table > tbody > tr[odd="true"] {
-    background-color: #eeeeee;
-}
-
-div.STable > table > tbody > tr[selected="true"] {
-    background-color: #aaaaff !important;
-}
-
-div.STable > table > tbody > tr > th {
-    border: 1px solid black;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-div.STable > table > tbody > tr > td {
-    cursor: pointer
-    padding-left: 8px;
-    padding-right: 8px;
-    border-left: 1px solid black;
-}
-div.STable > table > tbody > tr > td[col="numbering"] {
-    text-align: right;
-}
-
-div.STable > table > tbody > tr > td button {
-    border: none;
-    background-color: inherit;
-    padding: 0px
+div.slabel {
+	font-size: 14px;
 }
 
 div.SList > * {
 }
 
 div.SList > * > li[selected="true"] {
-    background-color: #aaaaff !important;
-    border: 1px dotted black;
-    cursor: pointer
+	background-color: #E66E32 !important;
+	border: 1px dotted #000000;
+	cursor: pointer;
 }
 
-.SAnchor {
-   color: #000044;
+div.SOptionPane > table {
+	border: 1px outset #999999;
+	border-collapse: collapse;
 }
 
-.SToolbar {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	background-color: #CCCCCC;
+div.SOptionPane > table > tbody > tr > td {
+	border: 1px inset #AAAAFF;
 }
 
-.SMenuBar {
-	color: #000066;
-	background-color: #CCCCCC;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	border: 1px solid;
-    padding: 0px;
+div.SOptionPane > table > tbody > tr > th {
+	background-color: #AAAAFF;
+	color: #FFFFFF;
+	padding-left: 8px;
+	text-align: left;
 }
 
-.SMenu {
+div.SPanel, div.SContainer {
+	width: 100%;
+}
+
+div.STabbedPane > table > tbody > tr > td {
+	border: 2px ridge #000000;
+	width: 100%;
+}
+
+/* Tabbed pane tabulators. */
+div.STabbedPane > table > tbody > tr > th > * {
+   color: Black;
+	border: 1px solid #000000;
+	display: inline;
+	line-height: 1.6em;
+	padding-left: 8px;
+	padding-right: 8px;
+	white-space: nowrap;
+}
+
+/* Disabled tab label. */
+div.STabbedPane > table > tbody > tr > th > *[disabled="true"] {
+	color: #999999;
+}
+
+/* Selected tab label. */
+div.STabbedPane > table > tbody > tr > th > *[selected="true"] {
+	background-color: #E66E32;
+}
+
+div.STabbedPane > table > tbody > tr > th[placement="bottom"] {
+	text-align: left;
+}
+
+div.STabbedPane > table > tbody > tr > th[placement="bottom"] > a {
+	border-top: none !important;
+	-moz-border-radius-bottomleft: 4px;
+	-moz-border-radius-bottomright: 4px;
+}
+
+div.STabbedPane > table > tbody > tr > th[placement="left"] {
+	text-align: right;
+	vertical-align: top;
+}
+
+div.STabbedPane > table > tbody > tr > th[placement="left"] > a {
+	border-right: none !important;
+	display: block;
+	margin-bottom: 2px;
+	margin-top: 2px;
+	-moz-border-radius-bottomleft: 4px;
+	-moz-border-radius-topleft: 4px;
+}
+
+div.STabbedPane > table > tbody > tr > th[placement="right"] {
+	text-align: left;
+	vertical-align: top;
+}
+
+div.STabbedPane > table > tbody > tr > th[placement="right"] > a {
+	border-left: none !important;
+	display: block;
+	margin-bottom: 2px;
+	margin-top: 2px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-topright: 4px;
+}
+
+div.STabbedPane > table > tbody > tr > th[placement="top"] {
+	text-align: left;
+}
+
+div.STabbedPane > table > tbody > tr > th[placement="top"] > a {
+	border-bottom: none !important;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+}
+
+div.STabbedPane, div.STabbedPane > table {
+	width: 100%;
+}
+
+div.stable > table {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+div.stable > table > tbody > tr > td {
+	border-left: 1px solid #000000;
+	cursor: pointer;
+   padding-left: 8px;
+	padding-right: 8px;
+}
+
+div.stable > table > tbody > tr > td button {
+	background-color: inherit;
+	border: none;
+	padding: 0px;
+}
+
+div.stable > table > tbody > tr > td[col="numbering"] {
+	text-align: right;
+}
+
+div.stable > table > tbody > tr > th {
+	border: 1px solid #000000;
+	background-color: #E28A5F;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+div.stable > table > tbody > tr {
+	background-color: #F6DECC;
+}
+
+div.stable > table > tbody > tr[odd="true"] {
+	background-color: #F9E9DD;
+}
+
+div.stable > table > tbody > tr[selected="true"] {
+	background-color: #AAAAFF !important;
+}
+
+div.STextField {
+	color: #000000;
+	font-family: sans-serif;
+	font-style: normal;
+	font-weight: normal;
+}
+
+div.stree > table {
+	border: none;
+	border-spacing: 0px;
+}
+
+div.stree > table > tbody > tr > td {
+	cursor: pointer;
+	padding: 0px;
+	border: 1px none #000000;
+}
+
+div.stree > table > tbody > tr > td * {
+	white-space: nowrap;
+}
+
+div.stree > table > tbody > tr > td button {
+	background-color: inherit;
+	border: none;
+	color: #000000;
+	font-family: sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	padding: 0px
+}
+
+div.stree > table > tbody > tr > td[selected="true"] {
+	background-color: #E66E32;
+	border: 1px dotted #000000;
+}
+
+/* ------------------------------------------------------------------ DOM ToolTip Properties --- */
+div.domtt {
+	border: 1px solid #902F00;
+	-moz-opacity: 0.6;
+}
+
+div.domttcaption {
+	background-color: #902F00;
+	color: #FFFFFF;
+	font-family: serif;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 1px 2px;
+}
+
+div.domttcontent {
+	background-color: #EAA888;
+	font-family: sans-serif;
+	font-size: 12px;
+	padding: 3px 2px;
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+.amenu {
+	background-color: #5555AA;
+	border-width: 0px;
+	color: #FFFFFF;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
-	color: #000066;
-	background-color: #CCCCCC;
+	margin: 0px;
+	padding: 0px;
+	white-space: nowrap;
+}
+
+.amenuitem {
+	background-color: #5555AA;
 	border-width: 0px;
+	color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
 	margin: 0px;
 	padding: 0px;
 	white-space: nowrap;
 }
 
 .disabledmenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: darkgray;
 	background-color: #CCCCCC;
 	border-width: 0px;
+	color: #999999;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
 	margin: 0px;
 	padding: 0px;
 	white-space: nowrap;
 }
 
-.amenu {
+.disabledmenuitem {
+	background-color: #CCCCCC;
+	border-width: 0px;
+	color: #999999;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
-  	color: #ffffff;
+	margin: 0px;
+	padding: 0px;
+	white-space: nowrap;
+}
+
+.frameborder {
+	border-bottom-width: 2px;
+	border-color: #EEEEEE #999999 #999999 #EEEEEE;
+	border-left-width: 2px;
+	border-right-width: 2px;
+	border-style: solid;
+	border-top-width: 2px;
+	overflow: visible;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+}
+
+.framebutton {
+	border-bottom-width: 1px;
+	border-color: #EEEEEE #999999 #999999 #EEEEEE;
+	border-left-width: 1px;
+	border-right-width: 1px;
+	border-style: solid;
+	border-top-width: 1px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	overflow: visible;
+	padding: 0px;
+}
+
+.frametitle {
 	background-color: #5555AA;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
-	white-space: nowrap;
+	border-bottom-width: 1px;
+	border-color: #EEEEEE #999999 #999999 #EEEEEE;
+	border-left-width: 1px;
+	border-right-width: 0px;
+	border-style: solid;
+	border-top-width: 1px;
+	color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	overflow: visible;
+	padding-bottom: 0px;
+	padding-left: 8px;
+	padding-right: 0px;
+	padding-top: 0px;
 }
 
-.smenu {
+.legend {
+	margin-left: 1.0em;
+	margin-top: -1.7em;
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+	position: absolute;
+}
+
+.menuitem {
+	background-color: #CCCCCC;
+	border-width: 0px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
-  	color: #ffffff;
-	background-color: #7777CC;
-	border-width: 0px;
 	margin: 0px;
 	padding: 0px;
 	white-space: nowrap;
@@ -222,264 +555,22 @@ div.SList > * > li[selected="true"] {
 
 .pdmenu {
 	background-color: #CCCCCC;
+	border-color: #EEEEEE #999999 #999999 #EEEEEE;
 	border-style: solid;
 	border-width: 2px;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	position: absolute;
+	margin: 0px;
 	overflow: visible;
 	padding: 2px 2px 2px 0px;
-	margin: 0px;
-}
-
-.menuitem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: #000066;
-	background-color: #CCCCCC;
-	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
-}
-
-.disabledmenuitem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: darkgray;
-	background-color: #CCCCCC;
-	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
-}
-
-.amenuitem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-  	color: #ffffff;
-	background-color: #5555AA;
-	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
-}
-
-.SSeparator {
-	color: #CCCCCC;
-	height: 0px;
-	white-space: nowrap;
-	margin: 0px; 
-	padding: 0px;
-	border-style: inset;
-	border-width: 1px;
-}
-
-
-.framebutton {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-        background-color: #DEDEDE;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px
-}
-
-.frametitle {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-   	color: #ffffff;
-	background-color: #5555AA;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 8px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	border-left-width: 1px
-}
-
-.frameborder {
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 2px;
-	border-right-width: 2px;
-	border-bottom-width: 2px;
-	border-left-width: 2px
-}
-
-.STextArea {
-	width: 100%;
-}
-
-.titledbordertitle {
-   font-family: sans-serif;
-   font-size: 12px;
-   color: #000000;
-}
-
-.SScrollBar {
-	font-size: 1px;
-	border-width: 0px;
+	position: absolute;
 }
 
 .selection {
-   background-color: #AAAAFF;
-}
-
-div.STabbedPane, div.STabbedPane > table {
-    width: 100%;
-    height: 100%;
-}
-div.STabbedPane > table > tbody > tr > th > * {
-    display: inline;
-    border: 1px solid black;
-    padding-left: 8px;
-    padding-right: 8px;
-    white-space: nowrap;
-    line-height: 1.6em;
-}
-div.STabbedPane > table > tbody > tr > th > *[selected="true"] {
-    background-color: #aaaaff;
-}
-div.STabbedPane > table > tbody > tr > th > *[disabled="true"] {
-    color : #808080;
-}
-div.STabbedPane > table > tbody > tr > td {
-    border: 2px ridge black;
-    width: 100%;
-    height: 100%;
-}
-
-div.STabbedPane > table > tbody > tr > th[placement="top"] {
-    text-align: left;
-}
-div.STabbedPane > table > tbody > tr > th[placement="top"] > a {
-    border-bottom: none !important;
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-topleft: 4px;
-}
-
-div.STabbedPane > table > tbody > tr > th[placement="left"] {
-    vertical-align: top;
-    text-align: right;
-}
-div.STabbedPane > table > tbody > tr > th[placement="left"] > a {
-    display: block;
-    border-right: none !important;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    -moz-border-radius-topleft: 4px;
-    -moz-border-radius-bottomleft: 4px;
-}
-
-div.STabbedPane > table > tbody > tr > th[placement="right"] {
-    vertical-align: top;
-    text-align: left;
-}
-div.STabbedPane > table > tbody > tr > th[placement="right"] > a {
-    display: block;
-    border-left: none !important;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-bottomright: 4px;
-}
-
-div.STabbedPane > table > tbody > tr > th[placement="bottom"] {
-    text-align: left;
-}
-div.STabbedPane > table > tbody > tr > th[placement="bottom"] > a {
-    border-top: none !important;
-    -moz-border-radius-bottomright: 4px;
-    -moz-border-radius-bottomleft: 4px;
-}
-
-div.SPanel, div.SContainer {
-    width: 100%;
-    height: 100%;
-}
-
-table.SBorderLayout {
-    width: 100%;
-    height: 100%;
-}
-
-table.SBorderLayout > tbody > tr > td {
-    vertical-align: middle;
-    text-align: center;
-}
-
-.legend {
-   position: absolute;
-   margin-top: -1.7em;
-   margin-left: 1.0em;
-   padding-left: 0.4em;
-   padding-right: 0.4em;
-}
-
-div.SDialog > table {
-   border: 1px outset gray;
-   border-collapse: collapse;
-}
-
-div.SDialog > table > tbody > tr > th {
-   background-color: #aaaaff;
-   color: #ffffff;
-   text-align: left;
-   padding-left: 8px;
-}
-
-div.SDialog > table > tbody > tr > td {
-   border: 1px inset #aaaaff;
+	background-color: #AAAAFF;
 }
 
 
-div.SOptionPane > table {
-   border: 1px outset gray;
-   border-collapse: collapse;
-}
-
-div.SOptionPane > table > tbody > tr > th {
-   background-color: #aaaaff;
-   color: #ffffff;
-   text-align: left;
-   padding-left: 8px;
-}
-
-div.SOptionPane > table > tbody > tr > td {
-   border: 1px inset #aaaaff;
-}
-
-
-div.domTT {
-    border: 1px solid #333333;
-    opacity: 0.8;
-}
-div.domTTCaption {
-    font-family: serif;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 1px 2px;
-    color: #FFFFFF;
-    background-color: #333333;
-}
-div.domTTContent {
-    font-size: 12px;
-    font-family: sans-serif;
-    padding: 3px 2px;
-    background-color: #F1F1FF;
+.titledbordertitle {
+	color: #000000;
+	font-family: sans-serif;
+	font-size: 12px;
 }

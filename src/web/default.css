@@ -1,5 +1,12 @@
+/*
+   $Id$
+   j-wings Default Style Sheet for IE Browser.
+
+   CURRENTLY NOT IN A WORKING STATE -- WE DEVEL ON GECKO!
+*/
+
 BODY {
-    background: #dedede;
+    background: #ffffff;
     position: relative;
     margin: 0px;
     font-family: sans-serif;
@@ -473,28 +480,3 @@ div.domTTContent {
     background-color: #F1F1FF;
 }
 
-/* wilken webgui */
-
-.atop { display: table-cell; vertical-align: top; }
-.abottom { display: table-cell; vertical-align: bottom; }
-.amiddle { display: table-cell; vertical-align: baseline; }
-.aright { text-align: right; }
-.aleft { text-align: left; }
-.acenter { text-align: center; }
-
-.fill {
-    position: relative;
-    width: 100%;
-    height: auto;
-    margin: 0px;
-}
-.scrollpane {
-    position: absolute;
-    overflow: auto;
-    border: thin inset;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-}
-/* // wilken webgui */
