@@ -21,7 +21,7 @@ import org.wings.*;
  */
 public class WingsImage
         extends SPanel {
-    private static final SIcon WINGS_IMAGE = new SURLIcon("../icons/wingS.jpg");
+    private static final SIcon WINGS_IMAGE = new SURLIcon("../icons/j-wings-logo.png");
 
     public WingsImage() {
         add(createExample());
@@ -33,7 +33,6 @@ public class WingsImage
 
         p.setLayout(layout);
         p.setPreferredSize(new SDimension("100%", null));
-        p.setBackground(new java.awt.Color(150, 168, 240));
 
         SLabel label = new SLabel(WINGS_IMAGE);
         label.setHorizontalAlignment(CENTER);

@@ -1,26 +1,24 @@
 <!-- Example Application Template
      $Id$ -->
-<h1 align="center">WingS Example</h1>
-
-<!--This <a href="http://wings.mercatis.de/">wingS</a>-->
-
-<p>
-example demonstrates some wingS properties, similar to the 
-Java SwingSet example.
-</p>
-<br/>
-<table align="center" width="100%">
-<tr><td>
-<object name="content">Here is the example Application</object>
-</td></tr>
+<style>
+  .small-title { font-size: 0.8em;  }
+</style>
+<table align="center">
+<tr>
+  <td>
+    <h2>j-wingS Example</h2>
+    <div class="small-title">A example demonstrates some j-wingS <br/>
+	   properties, similar to the Java SwingSet example.</div></p>
+    <br/>
+  </td>
+  <td valign="top" align="right">
+  <a href="http://www.j-wings.org/"><img src="../icons/j-wings-logo.png" border="0"><a href="http://www.j-wings.org/">
+  </td>
+</tr>
+<tr>
+ <td colspan="2" align="center">
+   <object name="content">Here is the example Application</object>
+  </td>
+</tr>
 </table>
 
-<!--table align="center" bgcolor="white" width="50%">
-<tr>
-   <td><object name="TimeLabel"></object></td>
-</tr>
-<tr>
-   <td><object name="ParamLabel"></object></td>
-</tr>
-</table-->
-<!--Generated with <a href="http://wingS.mercatis.de/">wingS</a>-->

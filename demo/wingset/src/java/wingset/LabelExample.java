@@ -26,14 +26,9 @@ import java.util.List;
  */
 public class LabelExample extends WingSetPane {
     private static final SIcon WAIT_ICON = new SResourceIcon("org/wings/icons/Wait.gif");
-
-    static final String directions[] =
-            {"nw", "n", "ne",
-             "w", "e",
-             "sw", "s", "se"};
-
-    static final SIcon onIcons[];
-    static final SIcon offIcons[];
+    private static final String directions[] = {"nw", "n", "ne", "w", "e", "sw", "s", "se"};
+    private static final SIcon onIcons[];
+    private static final SIcon offIcons[];
     private List sizables = new LinkedList();
     private ComponentControls controls;
 
@@ -57,7 +52,7 @@ public class LabelExample extends WingSetPane {
         testLabel.setAttribute("font-weight", "bold");
         controls.addSizable(testLabel);
 
-        SPanel p = new SPanel(new SGridLayout(2));
+        SPanel p = new SPanel(new SGridLayout(1));
         p.add(new SLabel("Control the label's text position"));
         p.add(new SLabel("Result"));
         p.add(createRoundRadio(testLabel));
