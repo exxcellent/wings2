@@ -77,16 +77,16 @@ public class LabelExample extends WingSetPane {
     }
 
     SContainer createRoundRadio(final SLabel label) {
-        SPanel b = new SPanel(new SBoxLayout(null, SBoxLayout.Y_AXIS));
+        SPanel b = new SPanel(new SBoxLayout(SBoxLayout.Y_AXIS));
 
-        SPanel sp = new SPanel(new SBoxLayout(b, SBoxLayout.X_AXIS));
+        SPanel sp = new SPanel(new SBoxLayout(SBoxLayout.X_AXIS));
         SButtonGroup g = new SButtonGroup();
         final SRadioButton nw = createRadio(sp, "p=nw", g, "North West", 0);
         final SRadioButton n = createRadio(sp, "p=n", g, "North", 1);
         final SRadioButton ne = createRadio(sp, "p=ne", g, "North East", 2);
         b.add(sp);
 
-        SPanel sp1 = new SPanel(new SBoxLayout(b, SBoxLayout.X_AXIS));
+        SPanel sp1 = new SPanel(new SBoxLayout(SBoxLayout.X_AXIS));
 
         final SRadioButton w = createRadio(sp1, "p=w", g, "West", 3);
         SLabel sl = new SLabel();
@@ -95,7 +95,7 @@ public class LabelExample extends WingSetPane {
         final SRadioButton e = createRadio(sp1, "p=e", g, "East", 4);
         b.add(sp1);
 
-        SPanel sp2 = new SPanel(new SBoxLayout(b, SBoxLayout.X_AXIS));
+        SPanel sp2 = new SPanel(new SBoxLayout(SBoxLayout.X_AXIS));
         final SRadioButton sw = createRadio(sp2, "p=sw", g, "South West", 5);
         final SRadioButton s = createRadio(sp2, "p=s", g, "South", 6);
         final SRadioButton se = createRadio(sp2, "p=se", g, "South East", 7);

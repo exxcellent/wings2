@@ -20,13 +20,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 /**
+ * A quickhack example to show the capabilities of the dynamic wings layout managers.
+ *
  * @author bschmid
  */
 public class DynamicLayoutExample extends WingSetPane {
-
     private final SForm panel = new SForm();
-    private final SPanel[] demoPanels = {new GridBagDemoPanel(), new GridLayoutDemoPanel()};
-    private final static String[] demoManagerNames = {"GridBagLayout", "GridLayout"};
+    private final SPanel[] demoPanels = {new GridBagDemoPanel(), new GridLayoutDemoPanel(), new BoxLayoutDemoPanel()};
+    private final static String[] demoManagerNames = {"SGridBagLayout", "SGridLayout","SBoxLayout"};
     private final SComboBox selectLayoutManager = new SComboBox(demoManagerNames);
 
     protected SComponent createExample() {
@@ -43,6 +44,34 @@ public class DynamicLayoutExample extends WingSetPane {
         return panel;
     }
 
+    private static void addDummyLabels(final SPanel panel) {
+         for (int i = 0; i < 6; i++) {
+             final SLabel label = new SLabel("Label " + (i + 1));
+             panel.add(label);
+             if (i % 3 == 0) {
+                 label.setVerticalAlignment(TOP);
+             }
+             if (i % 3 == 1) {
+                 label.setHorizontalAlignment(CENTER);
+                 label.setVerticalAlignment(CENTER);
+             }
+             if (i % 3 == 2) {
+                 label.setForeground(Color.RED);
+                 label.setHorizontalAlignment(RIGHT);
+                 label.setVerticalAlignment(BOTTOM);
+             }
+         }
+     }
+
+
+    private static class BoxLayoutDemoPanel extends SPanel {
+        public BoxLayoutDemoPanel() {
+            SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.HORIZONTAL);
+            setLayout(boxLayout);
+            addDummyLabels(this);
+        }
+    }
+
     private static class GridLayoutDemoPanel extends SPanel {
         public GridLayoutDemoPanel() {
             add(new SLabel("Grid Layout panel with 3 colums, border, padding & spacing"));
@@ -51,36 +80,22 @@ public class DynamicLayoutExample extends WingSetPane {
             layout1.setCellPadding(10);
             layout1.setCellSpacing(20);
             final SPanel panel1 = new SPanel(layout1);
-            for (int i = 0; i < 6; i++) {
-                final SLabel label = new SLabel("Label " + (i + 1));
-                panel1.add(label);
-                if (i % 3 == 0) {
-                    label.setVerticalAlignment(TOP);
-                }
-                if (i % 3 == 1) {
-                    label.setHorizontalAlignment(CENTER);
-                    label.setVerticalAlignment(CENTER);
-                }
-                if (i % 3 == 2) {
-                    label.setForeground(Color.RED);
-                    label.setHorizontalAlignment(RIGHT);
-                    label.setVerticalAlignment(BOTTOM);
-                }
-            }
+            addDummyLabels(panel1);
             add(panel1);
         }
     }
 
     private static class GridBagDemoPanel extends SPanel {
         public GridBagDemoPanel() {
-            super(new SFlowDownLayout());
-            ((SFlowDownLayout) getLayout()).setAlignment(CENTER);
+            SFlowDownLayout flowLayout = new SFlowDownLayout();
+            setLayout(flowLayout);
+            setHorizontalAlignment(CENTER);            
 
             add(new SLabel("Horizontal adding using REMAINDER"));
             SGridBagLayout layout = new SGridBagLayout();
             layout.setBorder(1);
             SPanel p = new SPanel(layout);
-            p.setPreferredSize(new SDimension(500, 200));
+            p.setPreferredSize(new SDimension(300, 100));
             p.setBackground(Color.red);
             add(p);
 

@@ -1,13 +1,10 @@
 <!-- Example Application Template
      $Id$ -->
-<style>
-  .small-title { font-size: 0.8em;  }
-</style>
 <table align="center">
 <tr>
   <td>
     <h2>wingS Example</h2>
-    <div class="small-title">An example demonstrating some wingS <br />
+    <div>An example demonstrating some wingS <br />
 	   properties, similar to the Java SwingSet example.</div><p />
     <br />
   </td>
