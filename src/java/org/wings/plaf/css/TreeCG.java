@@ -31,7 +31,6 @@ public class TreeCG
     private final static byte[] __td_1 = "</td>".getBytes();
     private final static byte[] __table_border_0_1 = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>".getBytes();
     private final static byte[] __a_href = "<a href=\"".getBytes();
-    private final static byte[] ___3 = "\">".getBytes();
     private final static byte[] ___4 = "-".getBytes();
     private final static byte[] ___5 = "+".getBytes();
     private final static byte[] __a = "</a>".getBytes();
@@ -185,16 +184,23 @@ public class TreeCG
                 writeIcon(device, leafControlIcon, false);
             }
             else {
-                /*
-                * write expansion control (the [-] or [+] thingies)
-                */
-                // the tree generates the URL that it can handle in its RequestListener
-                RequestURL expansionAddr = component.getRequestURL();
-                expansionAddr.addParameter(component, component.getExpansionParameter(row, false));
+                if (component.getShowAsFormComponent()) {
+                    device.print("<button type=\"submit\" name=\"");
+                    org.wings.plaf.Utils.write(device, Utils.event(component));
+                    device.print("\" value=\"");
+                    org.wings.plaf.Utils.write(device, component.getExpansionParameter(row, false));
+                    device.print("\"");
+                }
+                else {
+                    RequestURL selectionAddr = component.getRequestURL();
+                    selectionAddr.addParameter(org.wings.plaf.css.Utils.event(component),
+                        component.getExpansionParameter(row, false));
 
-                device.write(__a_href);
-                org.wings.plaf.Utils.write(device, expansionAddr.toString());
-                device.write(___3);
+                    device.write("<a href=\"".getBytes());
+                    org.wings.plaf.Utils.write(device, selectionAddr.toString());
+                    device.write("\"".getBytes());
+                }
+                device.print("\">");
 
                 if (isExpanded) {
                     if (collapseControlIcon == null) {
@@ -212,8 +218,10 @@ public class TreeCG
                         writeIcon(device, expandControlIcon, true);
                     }
                 }
-
-                device.write(__a);
+                if (component.getShowAsFormComponent())
+                    device.print("</button>");
+                else
+                    device.print("</a>");
             }
 
             device.write("</td><td>".getBytes());
@@ -227,8 +235,6 @@ public class TreeCG
                 device.print("\" value=\"");
                 org.wings.plaf.Utils.write(device, component.getSelectionParameter(row, false));
                 device.print("\"");
-                org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
-                org.wings.plaf.Utils.optAttribute( device, "title", component.getToolTipText());
             }
             else {
                 RequestURL selectionAddr = component.getRequestURL();
@@ -238,9 +244,12 @@ public class TreeCG
                 device.write("<a href=\"".getBytes());
                 org.wings.plaf.Utils.write(device, selectionAddr.toString());
                 device.write("\"".getBytes());
-
-                org.wings.plaf.Utils.optAttribute( device, "title", component.getToolTipText());
             }
+
+            org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
+            org.wings.plaf.Utils.optAttribute( device, "title", component.getToolTipText());
+            Utils.writeEvents(device, component);
+            device.print(">");
 
             rendererPane.writeComponent(device, cellComp, component);
 
@@ -253,12 +262,8 @@ public class TreeCG
             rendererPane.writeComponent(device, cellComp, component);
         }
 
-        if (renderControlIcon) {
-
+        if (renderControlIcon)
             device.write(__td_tr_table_1);
-        }
-
-        // finalize row. add newline.
 
         device.write(__td_td_width_10);
     }

@@ -112,73 +112,75 @@
     <option name="HIDE_WARNINGS" value="false" />
   </component>
   <component name="FileEditorManager" split-orientation="vertical" split-proportion="0.5">
-    <first-group selected-file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ClickableCG.java">
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SRadioButton.java" pinned="false">
+    <first-group selected-file="file://$PROJECT_DIR$/blub.html">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ResetButtonCG.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="123" column="6" selection-start="3932" selection-end="3932" vertical-scroll-proportion="0.54522926">
+          <state line="30" column="0" selection-start="1116" selection-end="1116" vertical-scroll-proportion="0.4417178">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SScrollBar.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ScrollBarCG.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="23" column="27" selection-start="691" selection-end="691" vertical-scroll-proportion="0.20446096">
+          <state line="28" column="13" selection-start="796" selection-end="796" vertical-scroll-proportion="0.19879518">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SAbstractAdjustable.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/TextAreaCG.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="427" column="0" selection-start="12036" selection-end="12036" vertical-scroll-proportion="0.01858736">
+          <state line="37" column="0" selection-start="1607" selection-end="1607" vertical-scroll-proportion="0.3190184">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/session/LowLevelEventDispatcher.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/TextFieldCG.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="126" column="31" selection-start="3739" selection-end="3739" vertical-scroll-proportion="0.27509293">
+          <state line="55" column="13" selection-start="2137" selection-end="2137" vertical-scroll-proportion="0.63190186">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ClickableCG.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ToggleButtonCG.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="32" column="61" selection-start="1198" selection-end="1198" vertical-scroll-proportion="0.49194548">
+          <state line="8" column="13" selection-start="141" selection-end="141" vertical-scroll-proportion="0.10843374">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ButtonCG.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/TreeCG.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="76" column="13" selection-start="2742" selection-end="2742" vertical-scroll-proportion="0.3345725">
+          <state line="322" column="44" selection-start="12265" selection-end="12265" vertical-scroll-proportion="0.5705522">
+            <folding>
+              <element signature="imports" expanded="true" />
+            </folding>
+          </state>
+        </provider>
+      </entry>
+      <entry file="file://$PROJECT_DIR$/blub.html" pinned="false">
+        <provider selected="true" editor-type-id="text-editor">
+          <state line="86" column="32" selection-start="1545" selection-end="1545" vertical-scroll-proportion="1.2834356">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SClickable.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/web/gecko.css" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="182" column="30" selection-start="5795" selection-end="5795" vertical-scroll-proportion="0.55390334">
+          <state line="25" column="0" selection-start="0" selection-end="390" vertical-scroll-proportion="0.45180723">
+            <folding />
+          </state>
+        </provider>
+      </entry>
+      <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/JavaScriptListenerExample.java" pinned="false">
+        <provider selected="true" editor-type-id="text-editor">
+          <state line="51" column="32" selection-start="1858" selection-end="1858" vertical-scroll-proportion="0.5337423">
             <folding />
           </state>
         </provider>
       </entry>
       <entry file="file://$PROJECT_DIR$/src/java/org/wings/STree.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="882" column="0" selection-start="27324" selection-end="27324" vertical-scroll-proportion="0.68649316">
-            <folding />
-          </state>
-        </provider>
-      </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SComponent.java" pinned="false">
-        <provider selected="true" editor-type-id="text-editor">
-          <state line="191" column="22" selection-start="5358" selection-end="5358" vertical-scroll-proportion="0.34217173">
-            <folding />
-          </state>
-        </provider>
-      </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SCheckBox.java" pinned="false">
-        <provider selected="true" editor-type-id="text-editor">
-          <state line="34" column="13" selection-start="1220" selection-end="1220" vertical-scroll-proportion="0.33333334">
+          <state line="833" column="18" selection-start="25604" selection-end="25604" vertical-scroll-proportion="0.32409638">
             <folding />
           </state>
         </provider>
@@ -204,9 +206,8 @@
   <component name="ProjectPane">
     <expanded_node url="" module="wingset" type="module" />
     <expanded_node url="" module="wings" type="module" />
-    <expanded_node url="file://$PROJECT_DIR$/src/java/org/wings/plaf/xhtml/css1" module="wings" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src/java/org/wings/plaf/xhtml" module="wings" type="directory" />
     <expanded_node url="file://$PROJECT_DIR$/src/java" module="wings" type="directory" />
+    <expanded_node url="file://$PROJECT_DIR$/src/java/org/wings/plaf/css" module="wings" type="directory" />
     <expanded_node url="file://$PROJECT_DIR$/src" module="wings" type="directory" />
     <expanded_node url="file://$PROJECT_DIR$" module="wings" type="directory" />
   </component>
@@ -223,8 +224,8 @@
     </navigator>
   </component>
   <component name="PropertiesComponent">
-    <property name="vcs_file_view_treeWidth2" value="27" />
     <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="vcs_file_view_treeWidth2" value="27" />
     <property name="vcs_file_view_flatOrder1" value="1" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="vcs_file_view_treeOrder4" value="4" />
@@ -550,7 +551,7 @@
     <layout>
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.32960895" order="8" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.18912882" order="0" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.21295607" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.54525137" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.24944155" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.32960895" order="8" />
@@ -673,107 +674,109 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/WingSetPane.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/IconTextCompound.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="22" selection-start="853" selection-end="853" vertical-scroll-proportion="0.2416357">
+        <state line="20" column="23" selection-start="493" selection-end="493" vertical-scroll-proportion="0.2788104">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/BorderExample.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/LabelCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="49" selection-start="1997" selection-end="1997" vertical-scroll-proportion="0.28030303">
+        <state line="51" column="13" selection-start="1783" selection-end="1783" vertical-scroll-proportion="0.66871166">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/wingset/src/web/templates/BorderExample.thtml">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ListCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="189" selection-end="189" vertical-scroll-proportion="0.111524165">
+        <state line="66" column="0" selection-start="3082" selection-end="3082" vertical-scroll-proportion="0.4785276">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/STable.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/PasswordFieldCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="0" selection-start="3770" selection-end="3770" vertical-scroll-proportion="0.036809817">
+        <state line="49" column="0" selection-start="2103" selection-end="2103" vertical-scroll-proportion="0.81439394">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SCheckBox.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/RadioButtonCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="13" selection-start="1220" selection-end="1220" vertical-scroll-proportion="0.33333334">
+        <state line="44" column="40" selection-start="2071" selection-end="2071" vertical-scroll-proportion="0.70481926">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SRadioButton.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ResetButtonCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="6" selection-start="3932" selection-end="3932" vertical-scroll-proportion="0.54522926">
+        <state line="30" column="0" selection-start="1116" selection-end="1116" vertical-scroll-proportion="0.4417178">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file:///home/hengels/page/css-fieldsetandlabels.html">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ScrollBarCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="26" selection-start="609" selection-end="609" vertical-scroll-proportion="0.40490797">
+        <state line="28" column="13" selection-start="796" selection-end="796" vertical-scroll-proportion="0.19879518">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SScrollBar.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/TextAreaCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="27" selection-start="691" selection-end="691" vertical-scroll-proportion="0.20446096">
+        <state line="37" column="0" selection-start="1607" selection-end="1607" vertical-scroll-proportion="0.3190184">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/session/LowLevelEventDispatcher.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/TextFieldCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="126" column="31" selection-start="3739" selection-end="3739" vertical-scroll-proportion="0.27509293">
+        <state line="55" column="13" selection-start="2137" selection-end="2137" vertical-scroll-proportion="0.63190186">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ToggleButtonCG.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="13" selection-start="141" selection-end="141" vertical-scroll-proportion="0.10843374">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java/org/wings/STree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="882" column="0" selection-start="27324" selection-end="27324" vertical-scroll-proportion="0.68649316">
+        <state line="833" column="18" selection-start="25604" selection-end="25604" vertical-scroll-proportion="0.32409638">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SAbstractAdjustable.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/TreeCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="427" column="0" selection-start="12036" selection-end="12036" vertical-scroll-proportion="0.01858736">
+        <state line="322" column="44" selection-start="12265" selection-end="12265" vertical-scroll-proportion="0.5705522">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/JavaScriptListenerExample.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="51" column="32" selection-start="1858" selection-end="1858" vertical-scroll-proportion="0.5337423">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SComponent.java">
+    <entry file="file://$PROJECT_DIR$/blub.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="191" column="22" selection-start="5358" selection-end="5358" vertical-scroll-proportion="0.34217173">
+        <state line="86" column="32" selection-start="1545" selection-end="1545" vertical-scroll-proportion="1.2834356">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ButtonCG.java">
+    <entry file="file://$PROJECT_DIR$/src/web/gecko.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="13" selection-start="2742" selection-end="2742" vertical-scroll-proportion="0.3345725">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SClickable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="182" column="30" selection-start="5795" selection-end="5795" vertical-scroll-proportion="0.55390334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/ClickableCG.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="61" selection-start="1198" selection-end="1198" vertical-scroll-proportion="0.49194548">
+        <state line="25" column="0" selection-start="0" selection-end="390" vertical-scroll-proportion="0.45180723">
           <folding />
         </state>
       </provider>

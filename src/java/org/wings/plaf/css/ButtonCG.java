@@ -97,6 +97,7 @@ public class ButtonCG
         if (button.isSelected())
             device.print(" checked=\"true\"");
 
+        Utils.writeEvents(device, button);
         device.print(">");
 
         final String text = button.getText();

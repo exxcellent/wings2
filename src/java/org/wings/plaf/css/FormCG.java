@@ -70,15 +70,18 @@ public class FormCG
         device.write(__name);
         org.wings.plaf.Utils.write( device, component.getName());
         device.write(__);
-        org.wings.plaf.css.Utils.writeEvents(device, component);        org.wings.plaf.Utils.optAttribute( device, "class", Utils.style(component));        org.wings.plaf.Utils.optAttribute( device, "enctype", component.getEncodingType());        org.wings.plaf.Utils.optAttribute( device, "action", component.getRequestURL());
+        org.wings.plaf.css.Utils.writeEvents(device, component);
+        org.wings.plaf.Utils.optAttribute( device, "class", Utils.style(component));
+        org.wings.plaf.Utils.optAttribute( device, "enctype", component.getEncodingType());
+        org.wings.plaf.Utils.optAttribute( device, "action", component.getRequestURL());
         device.write(__input_type_ima);
-        org.wings.plaf.Utils.optAttribute( device, "src", BLIND_ICON.getURL()
-        );
+        org.wings.plaf.Utils.optAttribute( device, "src", BLIND_ICON.getURL());
         device.write(__width_0_height);
         device.write(__input_type_hid);
         org.wings.plaf.Utils.write( device, Utils.event(component));
         device.write(__value);
-        org.wings.plaf.Utils.write( device, component.getComponentId());        org.wings.plaf.Utils.write( device, SConstants.UID_DIVIDER);
+        org.wings.plaf.Utils.write( device, component.getComponentId());
+        org.wings.plaf.Utils.write( device, SConstants.UID_DIVIDER);
         device.write(___1);
         Utils.renderContainer(device, component);
         device.write(__input_type_ima_1);

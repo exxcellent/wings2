@@ -20,20 +20,13 @@ public class FileChooserCG
     private final static byte[] __              = "\"".getBytes();
     private final static byte[] __id            = " id=\"".getBytes();
     private final static byte[] __readonly_1    = " readonly=\"1\"".getBytes();
-    private final static byte[] ___1            = "/>".getBytes();
     private final static byte[] ___2            = "\n".getBytes();
-
-    public void installCG(final SComponent comp) {
-    }
-    public void uninstallCG(final SComponent comp) {
-    }
 
     public void writeContent(final Device device,
                       final SComponent _c)
         throws IOException {
         final SFileChooser component = (SFileChooser) _c;
 
-//--- code from write-template.
         int columns = component.getColumns();
         /*
         * for some wierd reason, the 'maxlength' column contains the
@@ -45,7 +38,10 @@ public class FileChooserCG
 
         // maxLength = maxContent removed, since it does not work.
         device.write(__input_type_fil);
-        org.wings.plaf.css.Utils.writeEvents(device, component);        org.wings.plaf.Utils.optAttribute( device, "size", columns);        org.wings.plaf.Utils.optAttribute( device, "accept", component.getFileNameFilter());        if ( component.isEnabled() ) {
+        org.wings.plaf.css.Utils.writeEvents(device, component);
+        org.wings.plaf.Utils.optAttribute( device, "size", columns);
+        org.wings.plaf.Utils.optAttribute( device, "accept", component.getFileNameFilter());
+        if ( component.isEnabled() ) {
             device.write(__name);
             org.wings.plaf.Utils.write( device, Utils.event(component));
             device.write(__);
@@ -54,10 +50,11 @@ public class FileChooserCG
             device.write(__);
         } else {
             device.write(__readonly_1);
-        }        org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());        org.wings.plaf.Utils.optAttribute( device, "class", Utils.style(component));
-        device.write(___1);
-        device.write(___2);
+        }
+        org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
+        org.wings.plaf.Utils.optAttribute( device, "class", Utils.style(component));
 
-//--- end code from write-template.
+        Utils.writeEvents(device, component);
+        device.write("/>".getBytes());
     }
 }

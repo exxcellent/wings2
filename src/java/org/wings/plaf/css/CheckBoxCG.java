@@ -54,6 +54,7 @@ public class CheckBoxCG
             org.wings.plaf.Utils.optAttribute( device, "tabindex", button.getFocusTraversalIndex());
             org.wings.plaf.Utils.optAttribute( device, "title", button.getToolTipText());
             org.wings.plaf.Utils.optAttribute( device, "accesskey", button.getMnemonic());
+            Utils.writeEvents(device, button);
         }
         else if (showAsFormComponent && !useIconsInForm)
             device.print("<span");
@@ -66,6 +67,7 @@ public class CheckBoxCG
 
             org.wings.plaf.Utils.optAttribute( device, "title", button.getToolTipText());
             org.wings.plaf.Utils.optAttribute( device, "accesskey", button.getMnemonic());
+            Utils.writeEvents(device, button);
         }
 
         if (!button.isEnabled())
@@ -119,6 +121,7 @@ public class CheckBoxCG
         if (button.isSelected())
             device.print(" checked=\"true\"");
 
+        Utils.writeEvents(device, button);
         device.write("/>".getBytes());
     }
 }

@@ -4,18 +4,17 @@
 
 <!--This <a href="http://wings.mercatis.de/">wingS</a>-->
 
+<p>
 example demonstrates some wingS properties, similar to the 
 Java SwingSet example.
-
-<hr noshade="noshade" />
-
+</p>
+<br>
 <table align="center" width="90%">
 <tr><td>
 <object name="content">Here is the example Application</object>
 </td></tr>
 </table>
 
-<hr noshade="noshade" />
 <!--table align="center" bgcolor="white" width="50%">
 <tr>
    <td><object name="TimeLabel"></object></td>

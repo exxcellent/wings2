@@ -14,15 +14,16 @@
 
 package wingset;
 
-import java.awt.Color;
-import java.awt.event.*;
 import org.wings.*;
-
-import org.wings.script.JavaScriptListener;
 import org.wings.script.JavaScriptEvent;
-import java.text.NumberFormat;
+import org.wings.script.JavaScriptListener;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 /**
@@ -42,7 +43,7 @@ public class JavaScriptListenerExample
      * SComponent argument.
      */
     private final static String JS_ADD_SCRIPT 
-        = "{2}.value = ((1.0 * {0}.value) + (1.0 * {1}.value));";
+        = "{2}.getElementsByTagName('input')[0].value = ((1.0 * {0}.getElementsByTagName('input')[0].value) + (1.0 * {1}.getElementsByTagName('input')[0].value));";
 
     private final static DecimalFormatSymbols DSYM
         = new DecimalFormatSymbols(Locale.US); // '.' as fraction separator

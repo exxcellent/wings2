@@ -28,6 +28,7 @@ public class AnchorCG
         org.wings.plaf.Utils.optAttribute(device, "name", anchor.getName());
         org.wings.plaf.Utils.optAttribute(device, "title", anchor.getToolTipText());
         org.wings.plaf.Utils.optAttribute(device, "tabindex", anchor.getFocusTraversalIndex());
+        Utils.writeEvents(device, anchor);
         device.print(">");
         Utils.renderContainer(device, anchor);
         device.print("</a>");

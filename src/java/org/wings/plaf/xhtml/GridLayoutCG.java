@@ -14,21 +14,18 @@
 
 package org.wings.plaf.xhtml;
 
-import java.io.IOException;
-import java.util.*;
+import org.wings.*;
+import org.wings.io.Device;
+import org.wings.plaf.LayoutCG;
 
-import org.wings.*; 
-import org.wings.border.*;
-import org.wings.io.*;
-import org.wings.plaf.*;
-import org.wings.util.CGUtil;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 public class GridLayoutCG
     implements LayoutCG
 {
     /**
-     * TODO: documentation
-     *
      * @param d the device to write the code to
      * @param l the layout manager
      * @throws IOException
@@ -75,17 +72,11 @@ public class GridLayoutCG
         else
             d.print(" cellpadding=\"0\"");
         
-        // CGUtil.writeSize( d, container );
-
         if (border > 0)
             d.print(" border=\"").print(border).print("\"");
         else
             d.print(" border=\"0\"");
 
-       /* if (container != null && container.getBackground() != null)
-            d.print(" bgcolor=\"#").
-                print(Utils.toColorString(container.getBackground())).print("\"");
-*/
         d.print(">\n");
 
         if (cols <= 0)
@@ -116,12 +107,6 @@ public class GridLayoutCG
                d.print(" style=\"");
                Utils.writeAttributes(d,  c);
                d.print("\"");                        
-                       
-               // Some containers (like SPanel) do not support 
-               // background colors, hence we render the background 
-               // of them using this surrounding gridlayout cell
-               // Utils.printTableCellColors(d, c);
-               
             }
             d.print(">");            
 
@@ -141,11 +126,3 @@ public class GridLayoutCG
         d.print("</table>");
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

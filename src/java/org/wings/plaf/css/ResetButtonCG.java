@@ -24,13 +24,10 @@ public class ResetButtonCG
         throws IOException {
         final SResetButton component = (SResetButton) _c;
 
-//--- code from write-template.
-
         device.write(__input_type_res);
-        Utils.writeEvents(device, component);
         org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute( device, "value", component.getText());
+        Utils.writeEvents(device, component);
         device.write(__);
-//--- end code from write-template.
     }
 }

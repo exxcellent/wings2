@@ -42,6 +42,7 @@ public class RadioButtonCG
         if (button.isSelected())
             device.print(" checked=\"true\"");
 
+        Utils.writeEvents(device, button);
         device.write("/>".getBytes());
     }
 }

@@ -16,8 +16,6 @@ public class TextAreaCG
 
 //--- byte array converted template snippets.
     private final static byte[] __textarea      = "<textarea".getBytes();
-    private final static byte[] __style_height  = " style=\"height:".getBytes();
-    private final static byte[] __width         = ";width:".getBytes();
     private final static byte[] __              = ";\" ".getBytes();
     private final static byte[] __readonly_1    = " readonly=\"1\"".getBytes();
     private final static byte[] __name          = " name=\"".getBytes();
@@ -37,7 +35,6 @@ public class TextAreaCG
         final STextArea component = (STextArea) _c;
 
         device.write(__textarea);        
-        Utils.writeEvents(device, component);
         org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute( device, "cols", component.getColumns());
         org.wings.plaf.Utils.optAttribute( device, "rows", component.getRows());
@@ -62,6 +59,7 @@ public class TextAreaCG
             device.write(__wrap_physical);
             break;
         }
+        Utils.writeEvents(device, component);
         device.write(___2);
         org.wings.plaf.Utils.writeRaw( device, component.getText());
         device.write(__textarea_1);

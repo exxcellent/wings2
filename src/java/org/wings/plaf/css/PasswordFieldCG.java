@@ -44,7 +44,9 @@ public class PasswordFieldCG
         } else 
             {
             device.write(__disabled_1);
-        }         org.wings.plaf.Utils.optAttribute( device, "value", component.getText());
+        }
+        org.wings.plaf.Utils.optAttribute( device, "value", component.getText());
+        Utils.writeEvents(device, component);
         device.write(___1);
     }
 }

@@ -36,6 +36,7 @@ public class ClickableCG
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
 
+        Utils.writeEvents(device, button);
         device.print(">");
 
         final String text = button.getText();
