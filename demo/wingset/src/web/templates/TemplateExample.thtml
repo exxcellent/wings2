@@ -9,7 +9,7 @@ layout manager are just the names of the components. Components can be
 any of 
 <code>&lt;input name=&quot;compname&quot; ../&gt;</code> 
 or simply anything which is embedded in 
-<code>&lt;object name=&quot;compname&quot;&gt&lt;/object&gt;</code>
+<code>&lt;object name=&quot;compname&quot;&gt;&lt;/object&gt;</code>
 and are replaced by the actual component given with the 
 constraint named <code>&quot;compname&quot;</code>.
 <hr size="1" noshade="noshade" />
