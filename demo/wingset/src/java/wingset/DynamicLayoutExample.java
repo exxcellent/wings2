@@ -59,7 +59,7 @@ public class DynamicLayoutExample extends WingSetPane {
                                 "<html><nobr>[%] A 2-line</nobr><br/><nobr>label (CenterCenter, bold-italic)</nobr>"};
         final SFont boldItalic = new SFont(null, SFont.BOLD + SFont.ITALIC, SFont.DEFAULT_SIZE);
         final SBorder greenLineBorder = new SLineBorder();
-        final SLabel label = new SLabel(texts[i % 4].replace("%", Integer.toString((i + 1))));
+        final SLabel label = new SLabel(texts[i % 4].replace('%', Integer.toString((i + 1)).charAt(0)));
         greenLineBorder.setColor(Color.green);
         label.setBorder(greenLineBorder);
         if (i % texts.length == 0) {
