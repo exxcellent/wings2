@@ -1,0 +1,54 @@
+<h4 align="center">Using Templates as LayoutManager</h4>
+<table>
+<tr><td>
+This is an example for the Template Layout Manager. Like any
+other layout manager it allows to place arbitrary elements, but you can
+write a simple HTML-page being the template for your components.
+The <em>constraints</em> of this
+layout manager are just the names of the components. Components can be 
+any of 
+<code>&lt;input name=&quot;compname&quot; ../&gt;</code> 
+or simply anything which is embedded in 
+<code>&lt;object name=&quot;compname&quot;&gt&lt;/object&gt;</code>
+and are replaced by the actual component given with the 
+constraint named <code>&quot;compname&quot;</code>.
+<hr size="1" noshade="noshade" />
+In this example we just place input elements and a tree in a table; Note, that
+the size parameters of the input elements are taken from the template. The "Name"
+has also an inline style definition: style="background: #eeeeee; font-weight: bold"
+<table cellpadding="2">
+<tr>
+   <td>Name:</td><td><input style="background:#eeeeee;font-weight:bold" size="30" name="NAME"></td>
+   <td rowspan="2">
+<table>
+  <tr><td><input type="radio" name="SELVAL" value="0"></td>
+      <td><input type="radio" name="SELVAL" value="1"></td>
+  </tr>
+  <tr><td><input type="radio" name="SELVAL" value="2"></td>
+      <td><input type="radio" name="SELVAL" value="3"></td>
+  </tr>
+</table>
+</td>
+</tr>
+<tr valign="top">
+   <td>Firstname:</td><td><input size="15" type="text" name="FIRSTNAME"></td>
+</tr>
+<tr><td>
+<input type="button" value="PressMe" name="TESTBUTTON">
+</td></tr>
+</table>
+<hr size="1" noshade="noshade" />
+<table>
+<tr valign="top"><td>..or just place any other component; like this tree &nbsp;</td>
+<td><object name="TREE"></object></td>
+</table>
+or consider labels: <b><object name="theLabel"></object></b>.
+<p>
+This template layout manager caches the intermediate result of the internal
+parse stage, thus it is very fast generating pages. Templates can be read
+from the filesystem or from an URL, so reading them from 
+<code>Class.getResource()</code> is possible as well; or you can implement your
+own DataSource getting it from a database for instance (if you have a 
+CMS system).
+</td></tr>
+</table>

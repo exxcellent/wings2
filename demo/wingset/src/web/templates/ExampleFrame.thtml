@@ -1,0 +1,27 @@
+<!-- Example Application Template
+     $Id$ -->
+<h1 align="center">WingS Example</h1>
+
+<!--This <a href="http://wings.mercatis.de/">wingS</a>-->
+
+example demonstrates some wingS properties, similar to the 
+Java SwingSet example.
+
+<hr noshade="noshade" />
+
+<table align="center" width="90%">
+<tr><td>
+<object name="content">Here is the example Application</object>
+</td></tr>
+</table>
+
+<hr noshade="noshade" />
+<!--table align="center" bgcolor="white" width="50%">
+<tr>
+   <td><object name="TimeLabel"></object></td>
+</tr>
+<tr>
+   <td><object name="ParamLabel"></object></td>
+</tr>
+</table-->
+<!--Generated with <a href="http://wingS.mercatis.de/">wingS</a>-->

@@ -1,0 +1,23 @@
+<h3>A simple SProgressBar</h3>
+
+<p/>
+
+<table>
+<tr>
+<td colspan="2">
+<object name="ProgressBar"></object>
+</td>
+</tr>
+<tr>
+<td align="left">
+<object name="Backward10Percent" text="-10%"></object>
+<object name="Backward1Percent" text="-1%"></object>
+</td>
+<td align="right">
+<object name="Forward1Percent" text="+1%"></object>
+<object name="Forward10Percent" text="+10%"></object>
+</td>
+</tr>
+</table>
+
+<p/><p/>
