@@ -1,10 +1,10 @@
 /*
  * $Id$
- * Copyright 2000,2005 j-wingS development team.
+ * Copyright 2000,2005 wingS development team.
  *
- * This file is part of j-wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://www.j-wings.org).
  *
- * j-wingS is free software; you can redistribute it and/or modify
+ * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -56,6 +56,12 @@ public class TemplateUtil {
 
 /*
    $Log$
+   Revision 1.4  2004/12/01 07:54:28  hengels
+   o wings is not j-wings
+   o styles are not lower case (they're derived from the class name)
+   o the gecko.css should be modified carefully, because the konqueror.css is following it
+   o the css files should be as small as possible
+
    Revision 1.3  2004/11/24 21:40:25  blueshift
    + commons logging
    + further empty javdoc removal

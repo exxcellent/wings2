@@ -1,0 +1,29 @@
+darkfg    {   color: #902F00; }
+heavyfg   {   color: #e64d00; }
+defaultfg {   color: #e66e32;   }
+heavybg   {   background-color: #E28A5F; }
+defaultbg {   background-color: #E69974; }
+lightbg   {   background-color: #EAA888; }
+lightertbg   {   background-color: #F6DECC; }
+lightestbg   {   background-color: #F9E9DD; }
+
+BODY {
+    background: #ffffff;
+}
+
+div.STabbedPane > table > tbody > tr > th > *[selected="true"] {
+    background-color: #E66E32;
+}
+
+div.STree > table > tbody > tr > td[selected="true"] {
+    background-color: #E66E32 !important;
+}
+
+div.STable > table > tbody > tr[selected="true"] {
+    background-color: #E66E32 !important;
+}
+
+textarea, input[type="text"], select {
+    background-color: #F6DECC;
+    border: 1px solid #E66E32;
+}

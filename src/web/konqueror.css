@@ -1,12 +1,5 @@
-/*
-   $Id$
-   j-wings Default Style Sheet for IE Browser.
-
-   CURRENTLY NOT IN A WORKING STATE -- WE DEVEL ON GECKO!
-*/
-
 BODY {
-    background: #ffffff;
+    background: #dedede;
     position: relative;
     margin: 0px;
     font-family: sans-serif;
@@ -479,4 +472,3 @@ div.domTTContent {
     padding: 3px 2px;
     background-color: #F1F1FF;
 }
-

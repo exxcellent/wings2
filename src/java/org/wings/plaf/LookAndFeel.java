@@ -1,10 +1,10 @@
 /*
  * $Id$
- * Copyright 2000,2005 j-wingS development team.
+ * Copyright 2000,2005 wingS development team.
  *
- * This file is part of j-wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://www.j-wings.org).
  *
- * j-wingS is free software; you can redistribute it and/or modify
+ * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -156,7 +156,6 @@ public class LookAndFeel
      *
      * @param fileName of the image file
      * @return a newly allocated Icon
-     * @see LookAndFeel.LookAndFeel(Properties p, ClassLoader cl)
      */
     public static SIcon makeIcon(String fileName) {
         SIcon result = (SIcon) finalResources.get(fileName);
@@ -290,12 +289,11 @@ public class LookAndFeel
                 return null;
             }
 
-            if (ComponentCG.class.isAssignableFrom(type)
-                    || LayoutCG.class.isAssignableFrom(type)) {
+            if (ComponentCG.class.isAssignableFrom(type) || LayoutCG.class.isAssignableFrom(type))
                 value = makeCG(property);
-            } else if (type.isAssignableFrom(SIcon.class)) {
+            else if (type.isAssignableFrom(SIcon.class))
                 value = makeIcon(property);
-            } else if (type.isAssignableFrom(Resource.class))
+            else if (type.isAssignableFrom(Resource.class))
                 value = makeResource(property);
             else if (type.isAssignableFrom(AttributeSet.class))
                 value = makeAttributeSet(property);

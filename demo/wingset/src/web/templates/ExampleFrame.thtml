@@ -6,13 +6,13 @@
 <table align="center">
 <tr>
   <td>
-    <h2>j-wingS Example</h2>
-    <div class="small-title">A example demonstrates some j-wingS <br/>
+    <h2>wingS Example</h2>
+    <div class="small-title">A example demonstrates some wingS <br/>
 	   properties, similar to the Java SwingSet example.</div></p>
     <br/>
   </td>
   <td valign="top" align="right">
-  <a href="http://www.j-wings.org/"><img src="../icons/j-wings-logo.png" border="0"><a href="http://www.j-wings.org/">
+  <a href="http://www.j-wings.org/"><img src="../icons/wings-logo.png" border="0"></a>
   </td>
 </tr>
 <tr>
@@ -21,4 +21,3 @@
   </td>
 </tr>
 </table>
-

@@ -1,11 +1,11 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/Table.plaf'
 /*
  * $Id$
- * Copyright 2000,2005 j-wingS development team.
+ * Copyright 2000,2005 wingS development team.
  *
- * This file is part of j-wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://www.j-wings.org).
  *
- * j-wingS is free software; you can redistribute it and/or modify
+ * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -20,6 +20,7 @@ import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
 import org.wings.table.STableCellRenderer;
+import org.wings.table.SDefaultTableCellRenderer;
 
 import java.awt.*;
 import java.io.IOException;
@@ -58,6 +59,10 @@ public class TableCG
         value = manager.getObject("STable.defaultRenderer", STableCellRenderer.class);
         if (value != null) {
             component.setDefaultRenderer((STableCellRenderer) value);
+            if (value instanceof SDefaultTableCellRenderer) {
+                SDefaultTableCellRenderer cellRenderer = (SDefaultTableCellRenderer) value;
+                cellRenderer.setEditIcon(manager.getIcon("TableCG.editIcon"));
+            }
         }
         value = manager.getObject("STable.headerRenderer", STableCellRenderer.class);
         if (value != null) {
@@ -179,6 +184,8 @@ public class TableCG
         device.write("<table".getBytes());
         Utils.innerPreferredSize(device, component.getPreferredSize());
 
+        // TODO: border="" should be obsolete
+        // TODO: cellspacing and cellpadding may be in conflict with border-collapse
         /* Tweaking: CG configured to have a fixed border="xy" width */
         org.wings.plaf.Utils.optAttribute(device, "border", fixedTableBorderWidth);
         org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? intercellSpacing.width : null));

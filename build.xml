@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id$ -->
-<!-- ant build file for j-wingS -->
 
-<project basedir="." default="build" name="j-wingS">
+<project basedir="." default="build" name="wingS">
     <!-- read properties from file -->
     <property file="etc/custom-build.properties"/>
     <property file="etc/build.properties"/>
@@ -13,10 +11,12 @@
         </fileset>
     </path>
 
-    <!-- ==================== Preparations ==================== -->
-    <target name="prepare">
+    <target name="splash" unless="nosplash">
+        <splash imageurl="file:${basedir}/src/doc/wings-logo.png" />
+    </target>
+
+    <target name="prepare" depends="splash">
         <tstamp/>
-        <splash imageurl="file:${basedir}/src/doc/j-wings-logo.png" />
         <mkdir dir="build"/>
         <mkdir dir="build/class"/>
         <mkdir dir="build/doc"/>
@@ -74,7 +74,7 @@
     <!-- ==================== Generate API Docs ==================== -->
     <target depends="prepare" name="doc">
         <mkdir dir="build/doc/api"/>
-        <javadoc bottom="wingS swings ;-)" classpathref="build.classpath" destdir="build/doc/api" doctitle="wingS ${j-wings.version}" link="http://java.sun.com/j2se/1.4/docs/api/" maxmemory="128m" packagenames="org.wings.*" sourcepath="src/java" use="true" version="true" windowtitle="wingS ${wings.version}">
+        <javadoc bottom="wingS swings ;-)" classpathref="build.classpath" destdir="build/doc/api" doctitle="wingS ${wings.version}" link="http://java.sun.com/j2se/1.4/docs/api/" maxmemory="128m" packagenames="org.wings.*" sourcepath="src/java" use="true" version="true" windowtitle="wingS ${wings.version}">
 	  <tag scope="all" name="beaninfo" description="Bean Info:"/>
 	</javadoc>
     </target>
@@ -138,8 +138,8 @@
         </copy>
 
         <!-- main -->
-        <property name="distname" value="${ant.project.name}-${j-wings.version}"/>
-        <filter token="VERSION" value="${j-wings.version}"/>
+        <property name="distname" value="${ant.project.name}-${wings.version}"/>
+        <filter token="VERSION" value="${wings.version}"/>
         <copy file="VERSION" filtering="true" todir="dist"/>
         <copy todir="dist">
             <fileset dir=".">
@@ -153,7 +153,7 @@
     </target>
 
     <target depends="dist" description="create distribution tar.gz" name="tarball">
-        <property name="distname" value="${ant.project.name}-${j-wings.version}"/>
+        <property name="distname" value="${ant.project.name}-${wings.version}"/>
         <delete dir="${distname}"/>
         <mkdir dir="${distname}"/>
         <copy todir="${distname}">

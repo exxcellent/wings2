@@ -1,10 +1,10 @@
 /*
  * $Id$
- * Copyright 2000,2005 j-wingS development team.
+ * Copyright 2000,2005 wingS development team.
  *
- * This file is part of j-wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://www.j-wings.org).
  *
- * j-wingS is free software; you can redistribute it and/or modify
+ * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -74,7 +74,10 @@ public class TableExample
 
 
     static class MyCellRenderer extends SDefaultTableCellRenderer {
-        SLabel colorOut = new SLabel();
+
+        public MyCellRenderer() {
+            setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));
+        }
 
         public SComponent getTableCellRendererComponent(STable table,
                                                         Object value,
@@ -82,21 +85,13 @@ public class TableExample
                                                         int row,
                                                         int col) {
             if (value instanceof Color) {
-                Color c = (Color) value;
-
-                // unfortunately this does not work, because the style sheet visitor does
-                // not visit cellrenderers
-                // colorOut.setText("[" + c.getRed() + "," 
-                //                  + c.getGreen() + "," + c.getBlue() + "]");
-                // colorOut.setForeground(c);
-                colorOut.setText("<html><span style=\"color:" + colorToHex(c) +
-                        "\">" +
-                        colorToHex(c) +
-                        "</span>");
-                return colorOut;
-            } else
-                return super.getTableCellRendererComponent(table, value,
-                        selected, row, col);
+                Color c = (Color)value;
+                setText("<html><span style=\"color:" + colorToHex(c) + "\">" + colorToHex(c) + "</span>");
+                setIcon(null);
+                return this;
+            }
+            else
+                return super.getTableCellRendererComponent(table, value, selected, row, col);
         }
     }
 
@@ -142,21 +137,31 @@ public class TableExample
         }
 
         public void setValueAt(Object value, int row, int col) {
-            if (getColumnClass(col).isAssignableFrom(String.class))
+            if (value == null)
+                data[row][col] = null;
+            else if (getColumnClass(col).isAssignableFrom(String.class))
                 data[row][col] = value.toString();
             else if (getColumnClass(col).isAssignableFrom(Boolean.class))
                 data[row][col] = new Boolean(((Boolean) value).booleanValue());
         }
 
         public Class getColumnClass(int columnIndex) {
-            return getValueAt(0, columnIndex).getClass();
+            switch (columnIndex) {
+                case 2:
+                    return Color.class;
+                case 3:
+                    return SIcon.class;
+                case 4:
+                    return Boolean.class;
+            }
+            return String.class;
         }
 
         public Color createColor(int row) {
             return colors[row % colors.length];
         }
 
-        public Object createImage(int row) {
+        public SIcon createImage(int row) {
             return image;
         }
 
