@@ -167,9 +167,7 @@ public class WingSet
         tab.add(new LabelExample(), "Label");
         tab.add(new BorderExample(), "Border");
         tab.add(new TextComponentExample(), "Text Component");
-         // a Tab with icon..
-        tab.addTab("Tree", JAVA_CUP_ICON, 
-                   new TreeExample(), "Tree Tool Tip");
+        tab.addTab("Tree", JAVA_CUP_ICON, new TreeExample(), "Tree Tool Tip");
         tab.add(new OptionPaneExample(frame), "OptionPane");
         tab.add(new TableExample(), "Table");
         tab.add(new ListExample(), "List");
@@ -183,10 +181,7 @@ public class WingSet
         tab.add(new PageScrollerExample(), "PageScroller");
         tab.add(new MenuExample(), "Menu");
         tab.add(new TabbedPaneExample(), "Tabbed Pane");
-        //tab.add(new LayoutExample(), "Simple Layout");
-        tab.addTab("Template Layout", 
-                   SMALL_COW_ICON, 
-                   new TemplateExample(), "Template Layout Manager");
+        tab.addTab("Template Layout", SMALL_COW_ICON, new TemplateExample(), "Template Layout Manager");
         tab.add(new InteractiveTemplateExample(), "Interactive Template");
         tab.add(new ProgressBarExample(), "ProgressBar");
         tab.add(new MemUsageExample(), "Memory Usage");
@@ -194,28 +189,8 @@ public class WingSet
         tab.add(new PopupExample(), "Popup Menu");
         tab.add(new KeyboardBindingsExample(), "Keyboard Bindings");
 
-        InputMap inputMap = new InputMap();
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK), "previous");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK), "next");
-        tab.setInputMap(inputMap);
-
-        Action action = new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand()))
-                    tab.setSelectedIndex(tab.getSelectedIndex() - 1);
-                else if (tab.getSelectedIndex() < tab.getTabCount() -1 && "next".equals(e.getActionCommand()))
-                    tab.setSelectedIndex(tab.getSelectedIndex() + 1);
-            }
-        };
-
-        ActionMap actionMap = new ActionMap();
-        actionMap.put("previous", action);
-        actionMap.put("next", action);
-        tab.setActionMap(actionMap);
-
         contentPane.add(tab, "WingSetApp");
         contentPane.add(timeMeasure, "TimeLabel");
-
 
         frame.show();
 

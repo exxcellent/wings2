@@ -47,10 +47,12 @@ class InputMapScriptListener
                 case KeyEvent.KEY_TYPED:
                     writeMatch(typed, keyStroke);
                     writeRequest(typed, binding);
+                    System.out.println("typed binding = " + binding);
                     break;
                 case KeyEvent.KEY_RELEASED:
                     writeMatch(released, keyStroke);
                     writeRequest(released, binding);
+                    System.out.println("released binding = " + binding);
                     break;
             }
         }
@@ -84,6 +86,6 @@ class InputMapScriptListener
     }
 
     private static void writeRequest(StringBuffer buffer, Object binding) {
-        buffer.append(" { sendEvent(event, \"").append(binding).append("\"); preventDefault(event); }\n");
+        buffer.append(" { preventDefault(event); sendEvent(event, \"").append(binding).append("\"); }\n");
     }
 }

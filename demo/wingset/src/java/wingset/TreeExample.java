@@ -7,10 +7,8 @@ package wingset;
 import org.wings.*;
 import org.wings.util.PropertyAccessor;
 
-import javax.swing.event.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +33,8 @@ public class TreeExample
 
     public SComponent createExample() {
         SForm p = new SForm();
-        // generating the tree:
-        tree = new STree(new DefaultTreeModel(ROOT_NODE)); // thats it.
+
+        tree = new STree(new DefaultTreeModel(ROOT_NODE));
         tree.setName("tree");
         tree.setShowAsFormComponent(false);
 
@@ -44,69 +42,6 @@ public class TreeExample
         p.add(new SSeparator());
         p.add(tree);
         return p;
-    }
-
-
-    private SComponent createEventView(final STree tree) {
-        SPanel panel = new SPanel();
-        final SForm form = new SForm();
-        final STextArea messages = new STextArea("");
-
-        messages.setEditable(false);
-        messages.setColumns(80);
-
-        tree.addTreeSelectionListener(new TreeSelectionListener() {
-                public void valueChanged(TreeSelectionEvent e) {
-                    messages.setText(messages.getText() + "\n"
-                                     + "TreeSelectionEvent-"
-                                     + (e.isAddedPath()?"added ":"removed ")
-                                     + e.getPath().getLastPathComponent().toString());
-                }
-            });
-
-        tree.addTreeExpansionListener(new TreeExpansionListener() {
-                public void treeExpanded(TreeExpansionEvent e) {
-                    messages.setText(messages.getText() + "\n"
-                                     + "TreeExpansionEvent-treeExpanded "
-                                     + e.getPath().getLastPathComponent().toString());
-                }
-                public void treeCollapsed(TreeExpansionEvent e) {
-                    messages.setText(messages.getText() + "\n"
-                                     + "TreeExpansionEvent-treeCollapsed "
-                                     + e.getPath().getLastPathComponent().toString());
-                }
-            });
-
-        tree.addTreeWillExpandListener(new TreeWillExpandListener() {
-                public void treeWillExpand(TreeExpansionEvent e)
-                    throws ExpandVetoException {
-                    messages.setText(messages.getText() + "\n"
-                                     + "TreeExpansionEvent-treeWillExpand "
-                                     +
-                                     e.getPath().getLastPathComponent().toString());
-                }
-
-                public void treeWillCollapse(TreeExpansionEvent e)
-                    throws ExpandVetoException {
-                    messages.setText(messages.getText() + "\n"
-                                     + "TreeExpansionEvent-treeWillCollapse "
-                                     +
-                                     e.getPath().getLastPathComponent().toString());
-                }
-            });
-
-        form.add(messages);
-
-
-        form.add(new SButton("Clear"));
-        form.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    messages.setText("");
-                }
-            });
-
-        panel.add(form);
-        return panel;
     }
 
     private SPanel createControlForm(final STree tree) {
@@ -176,31 +111,6 @@ public class TreeExample
             controlForm.add(arrowButton);
             plusButton.setSelected(true);
         }
-
-
-        final SCheckBox blockExpansion = new SCheckBox("Block Expansion");
-        // just for testing
-        //        controlForm.add(blockExpansion);
-        final SCheckBox blockCollapse = new SCheckBox("Block Collapse");
-        // just for testing
-        //        controlForm.add(blockCollapse);
-
-        tree.addTreeWillExpandListener(new TreeWillExpandListener() {
-                public void treeWillExpand(TreeExpansionEvent e) 
-                    throws ExpandVetoException {
-                    if ( blockExpansion.isSelected() ) {
-                        throw new ExpandVetoException(e);
-                    }
-                }
-
-                public void treeWillCollapse(TreeExpansionEvent e)
-                    throws ExpandVetoException {
-                    if ( blockCollapse.isSelected() ) {
-                        throw new ExpandVetoException(e);
-                    }
-                }
-                                       
-            });
 
         SButton submit = new SButton("OK");
         controlForm.add(submit);
@@ -822,11 +732,3 @@ public class TreeExample
         return top;
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

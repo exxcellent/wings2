@@ -22,8 +22,11 @@ function getParentByTagName(element, tag) {
 }
 
 function preventDefault(event) {
-  if (event.preventDefault)
-    event.preventDefault();
+    if (event.preventDefault)
+        event.preventDefault();
+    else
+        alert("!event.preventDefault");
+    event.cancelBubble = true;
 }
 
 function sendEvent(event, eventValue) {
@@ -31,6 +34,9 @@ function sendEvent(event, eventValue) {
     var form = getParentByTagName(getTarget(event), "FORM");
     var div = getParentByTagName(getTarget(event), "DIV");
     var eventName = div.getAttribute("event");
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.preventDefault();
 
     if ( form != null ) {
         var eventNode = document.createElement("input");

@@ -238,7 +238,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             // TODO: move this to a dynamic script resource
             SToolTipManager toolTipManager = component.getSession().getToolTipManager();
             device
-                .print("<script>\n")
+                .print("<script language=\"JavaScript\" type=\"text/javascript\">\n")
                 .print("domTT_addPredefined('default', 'caption', false");
             if (toolTipManager.isFollowMouse())
                 device.print(", 'trail', true");

@@ -27,8 +27,8 @@ public class TabbedPaneCG
 
         final STabbedPane tab = (STabbedPane)component;
         InputMap inputMap = new InputMap();
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK), "previous");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK), "next");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK, false), "previous");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK, false), "next");
         tab.setInputMap(inputMap);
 
         Action action = new AbstractAction() {
