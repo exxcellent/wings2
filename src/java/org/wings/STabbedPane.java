@@ -737,8 +737,8 @@ public class STabbedPane
     }
 
     private void removePageAt(int i) {
-        pages.remove(i);
         contents.remove(((Page) pages.get(i)).component);
+        pages.remove(i);
     }
 
     /**

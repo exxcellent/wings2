@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  */
 public class TabbedPaneExample extends WingSetPane {
+    private final static int INITIAL_TAB_COUNT = 12;
     private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
     private TabbedPaneControls controls;
@@ -109,7 +110,7 @@ public class TabbedPaneExample extends WingSetPane {
 
         textArea = new STextArea();
         textArea.setPreferredSize(new SDimension("100%", "100%"));
-        for (int i = 0; i < 12; ++i) {
+        for (int i = 0; i < INITIAL_TAB_COUNT; ++i) {
             SPanel p = new SPanel(new SBorderLayout());
             p.add(new SLabel("Tab # " + i), "North");
             p.add(textArea);
@@ -160,6 +161,7 @@ public class TabbedPaneExample extends WingSetPane {
     }
 
     class TabbedPaneControls extends ComponentControls {
+        private int tabCount = INITIAL_TAB_COUNT;
         public TabbedPaneControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
             showAsFormComponent.addActionListener(new ActionListener() {
@@ -167,8 +169,32 @@ public class TabbedPaneExample extends WingSetPane {
                     tabbedPane.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
             });
-
             add(showAsFormComponent);
+            final SButton addTab = new SButton("add a tab");
+            addTab.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    addTab();
+                }
+            });
+            add(addTab);
+            final SButton removeTab = new SButton("remove a tab");
+            removeTab.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    removeTab();
+                }
+            });
+            add(removeTab);
+        }
+        protected void removeTab() {
+            tabCount--;
+            tabbedPane.removeTabAt(tabCount);
+        }
+        protected void addTab() {
+            SPanel p = new SPanel(new SBorderLayout());
+            p.add(new SLabel("Tab # " + tabCount), "North");
+            p.add(textArea);
+            tabbedPane.add("Tab " + tabCount, p);
+            tabCount++;
         }
     }
 }
