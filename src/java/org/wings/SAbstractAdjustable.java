@@ -137,6 +137,7 @@ public abstract class SAbstractAdjustable
      * description: The scrollbar's BoundedRangeModel.
      */
     public void setModel(SBoundedRangeModel newModel) {
+        reloadIfChange(this.model, newModel);
         if ( model != null ) {
             model.removeChangeListener(fwdAdjustmentEvents);
         }
@@ -180,6 +181,7 @@ public abstract class SAbstractAdjustable
      * description: The scrollbar's unit increment.
      */
     public void setUnitIncrement(int unitIncrement) {
+        reloadIfChange(this.unitIncrement, unitIncrement);
         this.unitIncrement = unitIncrement;
     }
 
@@ -216,6 +218,7 @@ public abstract class SAbstractAdjustable
      * description: The scrollbar's block increment.
      */
     public void setBlockIncrement(int blockIncrement) {
+        reloadIfChange(this.blockIncrement, blockIncrement);
         this.blockIncrement = blockIncrement;
     }
 
@@ -535,6 +538,7 @@ public abstract class SAbstractAdjustable
             int type = AdjustmentEvent.TRACK;
             fireAdjustmentValueChanged(id, type, getValue());
             refreshComponents();
+            reload();
         }
     }
 }

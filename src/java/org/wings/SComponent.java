@@ -59,7 +59,7 @@ public abstract class SComponent
     private final static Logger logger = Logger.getLogger("org.wings");
 
     /* */
-    private transient String name;
+    private String name;
 
     /** the session */
     private transient Session session;
@@ -174,6 +174,7 @@ public abstract class SComponent
     }
 
     public void setInheritsPopupMenu(boolean inheritsPopupMenu) {
+        reloadIfChange(this.inheritsPopupMenu, inheritsPopupMenu);
         this.inheritsPopupMenu = inheritsPopupMenu;
     }
 
@@ -228,10 +229,7 @@ public abstract class SComponent
      * @see org.wings.SComponent#getPreferredSize
      */
     public void setPreferredSize(SDimension preferredSize) {
-        System.out.println("### preferredSize = " + preferredSize);
-        System.out.println("### preferredSize = " + preferredSize);
-        System.out.println("### preferredSize = " + preferredSize);
-        System.out.println("### preferredSize = " + preferredSize);
+        reloadIfChange(this.preferredSize, preferredSize);
         this.preferredSize = preferredSize;
     }
 
@@ -363,6 +361,7 @@ public abstract class SComponent
     }
 
     public void setName(String name) {
+        reloadIfChange(this.name, name);
         this.name = name;
     }
 
@@ -392,24 +391,6 @@ public abstract class SComponent
      */
     public final LowLevelEventDispatcher getDispatcher() {
         return getSession().getDispatcher();
-    }
-
-    /**
-     * Set the locale.
-     *
-     * @param l the new locale
-     */
-    public void setLocale(Locale l) {
-        getSession().setLocale(l);
-    }
-
-    /**
-     * Return the local.
-     *
-     * @return the locale
-     */
-    public final Locale getLocale() {
-        return getSession().getLocale();
     }
 
     /*

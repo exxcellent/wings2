@@ -113,6 +113,7 @@ public abstract class SAbstractIconTextCompound
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
         this.model = model;
+        reloadIfChange(this.model, model);
     }
 
     /**
@@ -179,6 +180,8 @@ public abstract class SAbstractIconTextCompound
 
     public void setHorizontalTextPosition(int textPosition) {
         horizontalTextPosition = textPosition;
+        reloadIfChange(this.horizontalTextPosition, textPosition);
+
     }
 
     public int getHorizontalTextPosition() {
@@ -187,6 +190,7 @@ public abstract class SAbstractIconTextCompound
 
     public void setVerticalTextPosition(int textPosition) {
         verticalTextPosition = textPosition;
+        reloadIfChange(this.verticalTextPosition, textPosition);
     }
 
     public int getVerticalTextPosition() {
@@ -195,6 +199,7 @@ public abstract class SAbstractIconTextCompound
 
     public void setIconTextGap(int gap) {
         iconTextGap = gap;
+        reloadIfChange(this.iconTextGap, gap);
     }
 
     public int getIconTextGap() {
@@ -349,14 +354,6 @@ public abstract class SAbstractIconTextCompound
         }
     }
 
-    public void setImageAbsBottom(boolean t) {
-        imageAbsBottom = t;
-    }
-
-    public boolean isImageAbsBottom() {
-        return imageAbsBottom;
-    }
-
     /**
      * Sets the proper icons for buttonstatus enabled resp. disabled.
      */
@@ -421,18 +418,3 @@ public abstract class SAbstractIconTextCompound
         delayEvents = false;
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
-
-
-
-
-
-
-

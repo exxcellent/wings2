@@ -22,7 +22,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -418,14 +417,6 @@ public class SOptionPane
         b.setName(label);
         b.addActionListener(this);
         return b;
-    }
-
-    public void setLocale(Locale l) {
-        super.setLocale(l);
-        optionOK.setText("OK");
-        optionCancel.setText("Cancel");
-        optionYes.setText("Yes");
-        optionNo.setText("No");
     }
 
     public void actionPerformed(ActionEvent e) {

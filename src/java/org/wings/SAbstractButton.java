@@ -344,20 +344,6 @@ public abstract class SAbstractButton
     }
 
     /**
-     * @deprecated use {@link #getEventTarget}
-     */
-    public final String getRealTarget() {
-        return getEventTarget();
-    }
-  
-    /**
-     * @deprecated use {@link #setEventTarget}
-     */
-    public final void setRealTarget(String t) {
-        setEventTarget(t);
-    }
-  
-    /**
      *
      */
     public final String getEventTarget() {
@@ -423,6 +409,7 @@ public abstract class SAbstractButton
                 actionPropertyChangeListener = createActionPropertyChangeListener(action);
                 action.addPropertyChangeListener(actionPropertyChangeListener);
             }
+            reload();
         }
     }
   
@@ -506,19 +493,12 @@ public abstract class SAbstractButton
         }
     }
 
-    public void setMnemonic(String pMnemonic) {
-        mnemonic = pMnemonic;
+    public void setMnemonic(String mnemonic) {
+        reloadIfChange(this.mnemonic, mnemonic);
+        this.mnemonic = mnemonic;
     }
 
     public String getMnemonic() {
         return mnemonic;
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

@@ -15,12 +15,11 @@
 package org.wings;
 
 import org.wings.plaf.FrameCG;
-import org.wings.script.JavaScriptListener;
+import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.DynamicResource;
 import org.wings.session.SessionManager;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
-import org.wings.resource.DynamicCodeResource;
-import org.wings.resource.DynamicResource;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -49,14 +48,10 @@ public class SFrame
      */
     protected String title;
 
-    protected String baseTarget = null;
-
     /**
      * A Set containing additional tags for the html header.
      */
     protected List headers;
-
-    protected boolean resizable = true;
 
     /** the style sheet used in certain look and feels. */
     protected StyleSheet styleSheet;  // IMPORTANT: initialization with null causes errors;
@@ -73,8 +68,6 @@ public class SFrame
     private HashMap dynamicResources;
 
     private SComponent focusComponent = null;                //Component which requests the focus
-
-    private JavaScriptListener focus = null;          //Listener which sets the focus onload
 
     public SFrame() {
         getSession().addPropertyChangeListener("lookAndFeel", this);
@@ -107,14 +100,6 @@ public class SFrame
             dynamicResources = new HashMap();
         }
         return (DynamicResource) dynamicResources.get(c);
-    }
-
-    public void setResizable(boolean b) {
-        resizable = b;
-    }
-
-    public boolean isResizable() {
-        return resizable;
     }
 
     /**
@@ -167,29 +152,6 @@ public class SFrame
             targetResource = getDynamicResource(DynamicCodeResource.class).getId();
         }
         return targetResource;
-    }
-
-    /**
-     * Set the base target. This is the target of any link pressed.
-     */
-    public void setBaseTarget(String baseTarget) {
-        this.baseTarget = baseTarget;
-    }
-
-    /**
-     * set the base target frame. This frame will receive all klicks
-     * in this frame. Usually you want to use this for the ReloadManager
-     * frame.
-     */
-    public void setBaseTarget(SFrame otherFrame) {
-        /*
-         * this knows, that the frames are usually named "frame" + ID
-         */
-        setBaseTarget("frame" + otherFrame.getName());
-    }
-
-    public String getBaseTarget() {
-        return baseTarget;
     }
 
     /**

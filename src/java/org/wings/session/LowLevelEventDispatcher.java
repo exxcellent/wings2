@@ -14,18 +14,17 @@
 
 package org.wings.session;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import org.wings.LowLevelEventListener;
+import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
-import org.wings.SComponent;
-import org.wings.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -72,7 +71,6 @@ public final class LowLevelEventDispatcher
     /**
      * Registers a listener. The NamePrefix of the listener is stored in the
      * HashMap as key. The value is a Set (ArrayList) of 
-     * {@link RequestListener}s.
      *
      * @param gl listener
      */
