@@ -18,6 +18,8 @@ import org.wings.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * TODO: documentation
@@ -36,7 +38,9 @@ public class LabelExample extends WingSetPane
 
     static final SIcon onIcons[];
     static final SIcon offIcons[];
-    
+    private List sizables = new LinkedList();
+    private ComponentControls controls;
+
     static {
         onIcons  = new SIcon [ directions.length ];
         offIcons = new SIcon [ directions.length ];
@@ -48,26 +52,27 @@ public class LabelExample extends WingSetPane
     }
 
     public SComponent createExample() {
-        SPanel all = new SPanel();
-        SGridLayout layout = new SGridLayout(2);
-        layout.setWidth(100);
-        layout.setRelative(true); // -> make 100 mean '%'
-        layout.setCellSpacing(10);
-        all.setLayout(layout);
-
-
+        controls = new ComponentControls();
+        
         final SLabel testLabel = new SLabel("LabelText");
         testLabel.setHorizontalAlignment(LEFT);
         testLabel.setIcon(WAIT_ICON);
         testLabel.setAttribute("color", "#AA0000");
         testLabel.setAttribute("font-weight", "bold");
+        controls.addSizable(testLabel);
 
-        all.add(new SLabel("Control the LabelText's position"));
-        all.add(new SLabel("Result"));
-        all.add(createRoundRadio(testLabel));
-        all.add(testLabel);
+        SPanel p = new SPanel(new SGridLayout(2));
+        p.add(new SLabel("Control the label's text position"));
+        p.add(new SLabel("Result"));
+        p.add(createRoundRadio(testLabel));
+        p.add(testLabel);
 
-        return all;
+        SForm form = new SForm(new SFlowDownLayout());
+        form.add(controls);
+        form.add(new SSeparator());
+        form.add(p);
+
+        return form;
     }
 
     private SRadioButton createRadio(SPanel p, String constraint,
@@ -105,6 +110,15 @@ public class LabelExample extends WingSetPane
         final SRadioButton sw = createRadio(sp2,"p=sw", g, "South West", 5);
         final SRadioButton s  = createRadio(sp2,"p=s",  g, "South", 6);
         final SRadioButton se = createRadio(sp2,"p=se", g, "South East", 7);
+
+        nw.setShowAsFormComponent(false);
+        n.setShowAsFormComponent(false);
+        ne.setShowAsFormComponent(false);
+        w.setShowAsFormComponent(false);
+        e.setShowAsFormComponent(false);
+        sw.setShowAsFormComponent(false);
+        s.setShowAsFormComponent(false);
+        se.setShowAsFormComponent(false);
 
         b.add(sp2);
         

@@ -77,7 +77,7 @@ public class MenuExample extends WingSetPane
     public SComponent createExample() {
         SForm panel = new SForm();
         selectionLabel = new SLabel("nothing selected");
-        panel.add(createMenuBar(TreeExample.ROOT_NODE), "MenuBar");
+        panel.add(createMenuBar(HugeTreeModel.ROOT_NODE), "MenuBar");
         panel.add(new SLabel("<html><br>Form components disappear, if needed. Selected Menu: "), "Intro");
         panel.add(selectionLabel, "SelectionLabel");
         panel.add(new SLabel("<html><hr><br>combobox(disappear) :"));

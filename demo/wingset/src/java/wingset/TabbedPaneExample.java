@@ -20,29 +20,24 @@ import java.awt.event.ActionListener;
 public class TabbedPaneExample extends WingSetPane {
     private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
+    private TabbedPaneControls controls;
+    private STabbedPane tabbedPane;
 
     protected SComponent createExample() {
+        controls = new TabbedPaneControls();
+
         SForm c = new SForm(new SBorderLayout());
+        c.add(controls, "North");
 
-        final STabbedPane tabs = new STabbedPane();
-        tabs.setBackground(new java.awt.Color(200, 200, 255));
-        tabs.setShowAsFormComponent(false);
-
-        SPanel north = new SPanel(new SFlowLayout());
-        final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-        showAsFormComponent.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                tabs.setShowAsFormComponent(showAsFormComponent.isSelected());
-            }
-        });
-        showAsFormComponent.setShowAsFormComponent(false);
-        north.add(showAsFormComponent);
-        c.add(north, "North");
+        tabbedPane = new STabbedPane();
+        tabbedPane.setBackground(new java.awt.Color(200, 200, 255));
+        tabbedPane.setShowAsFormComponent(false);
+        controls.addSizable(tabbedPane);
 
         SPanel west = new SPanel(new SFlowDownLayout());
         west.add(new SLabel("<html>Tab Placement:&nbsp;"));
 
-        PlacementActionListener placementActionListener = new PlacementActionListener(tabs);
+        PlacementActionListener placementActionListener = new PlacementActionListener(tabbedPane);
 
         SRadioButton top = new SRadioButton("Top");
         top.putClientProperty("placement", new Integer(SConstants.TOP));
@@ -90,7 +85,7 @@ public class TabbedPaneExample extends WingSetPane {
         for (int i = 0; i < clrs.length; i += 2) {
             SRadioButton btn = new SRadioButton(clrs[i].toString());
             btn.putClientProperty("color", clrs[i+1]);
-            btn.addActionListener(new ColorActionListener(tabs));
+            btn.addActionListener(new ColorActionListener(tabbedPane));
             btn.setShowAsFormComponent(false);
             group.add(btn);
             if (i == 0) {
@@ -107,20 +102,20 @@ public class TabbedPaneExample extends WingSetPane {
             SPanel p = new SPanel(new SBorderLayout());
             p.add(new SLabel("Tab # " + i), "North");
             p.add(text);
-            tabs.add("Tab " + i, p);
+            tabbedPane.add("Tab " + i, p);
         }
-        tabs.setIconAt(3, JAVA_CUP_ICON);
-        tabs.setIconAt(8, SMALL_COW_ICON);
-        tabs.setEnabledAt(1, false);
-        tabs.addChangeListener(new ChangeListener() {
+        tabbedPane.setIconAt(3, JAVA_CUP_ICON);
+        tabbedPane.setIconAt(8, SMALL_COW_ICON);
+        tabbedPane.setEnabledAt(1, false);
+        tabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 String t = text.getText();
                 t += "\n";
-                t += "wingS: Changed to tab " + tabs.getSelectedIndex() + "\n";
+                t += "wingS: Changed to tab " + tabbedPane.getSelectedIndex() + "\n";
                 text.setText(t);
             }
         });
-        c.add(tabs, "Center");
+        c.add(tabbedPane, "Center");
 
         return c;
     }
@@ -150,6 +145,19 @@ public class TabbedPaneExample extends WingSetPane {
             SComponent source = (SComponent)ae.getSource();
             Color color= (Color)source.getClientProperty("color");
             tabs.setBackground(color);
+        }
+    }
+
+    class TabbedPaneControls extends ComponentControls {
+        public TabbedPaneControls() {
+            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
+            showAsFormComponent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    tabbedPane.setShowAsFormComponent(showAsFormComponent.isSelected());
+                }
+            });
+
+            add(showAsFormComponent);
         }
     }
 }

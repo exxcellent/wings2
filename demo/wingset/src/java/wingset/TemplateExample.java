@@ -59,7 +59,7 @@ public class TemplateExample
             c.add(b, "SELVAL=" + i);
         }
 
-        STree tree = new STree(new DefaultTreeModel(TreeExample.ROOT_NODE));
+        STree tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
         c.add(tree, "TREE");
         return c;
     }

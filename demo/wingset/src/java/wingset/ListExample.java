@@ -28,9 +28,10 @@ public class ListExample
     extends WingSetPane
 {
     static final SResourceIcon javaCup = new SResourceIcon("org/wings/icons/JavaCup.gif");
+    private ComponentControls controls;
 
     public SComponent createExample() {
-        SForm form = new SForm(new SFlowDownLayout());
+        controls = new ComponentControls();
 
         SPanel p = new SPanel(new SGridLayout(2,2));
         p.add(createListSingleSelExample());
@@ -38,7 +39,11 @@ public class ListExample
         p.add(createComboBoxExample());
         p.add(createAnchorListExample());
 
+        SForm form = new SForm(new SFlowDownLayout());
+        form.add(controls);
+        form.add(new SSeparator());
         form.add(p);
+
         form.add(new SButton("SUBMIT"));
         return form;
     }
@@ -46,11 +51,12 @@ public class ListExample
     public SContainer createListSingleSelExample() {
         SContainer cont = new SPanel(new SFlowDownLayout());
         cont.add(new SLabel("List with single selection"));
-        SList list = new SList();
-        list.setName("single");
-        list.setSelectionMode(SINGLE_SELECTION);
-        addListElements(list);
-        cont.add(list);
+        SList sinlgeSelectionList = new SList();
+        sinlgeSelectionList.setName("single");
+        sinlgeSelectionList.setSelectionMode(SINGLE_SELECTION);
+        addListElements(sinlgeSelectionList);
+        cont.add(sinlgeSelectionList);
+        controls.addSizable(sinlgeSelectionList);
 
         return cont;
     }
@@ -58,11 +64,12 @@ public class ListExample
     public SContainer createListMultSelExample() {
         SContainer cont = new SPanel(new SFlowDownLayout());
         cont.add(new SLabel("List with multiple selection"));
-        SList list = new SList();
-        list.setName("multiple");
-        list.setSelectionMode(MULTIPLE_SELECTION);
-        addListElements(list);
-        cont.add(list);
+        SList multiSelectionList = new SList();
+        multiSelectionList.setName("multiple");
+        multiSelectionList.setSelectionMode(MULTIPLE_SELECTION);
+        addListElements(multiSelectionList);
+        cont.add(multiSelectionList);
+        controls.addSizable(multiSelectionList);
 
         return cont;
     }
@@ -74,19 +81,21 @@ public class ListExample
         comboBox.setName("combo");
         addComboBoxElements(comboBox);
         cont.add(comboBox);
-        
+        controls.addSizable(comboBox);
+
         return cont;
     }
 
     public SContainer createAnchorListExample() {
         SContainer cont = new SPanel(new SFlowDownLayout());
         cont.add(new SLabel("List with showAsFormComponent = false"));
-        SList list = new SList();
-        list.setName("noform");
-        list.setShowAsFormComponent(false);
-        list.setSelectionMode(SConstants.SINGLE_SELECTION);
-        addAnchorElements(list);
-        cont.add(list);
+        SList anchorList = new SList();
+        anchorList.setName("noform");
+        anchorList.setShowAsFormComponent(false);
+        anchorList.setSelectionMode(SConstants.SINGLE_SELECTION);
+        addAnchorElements(anchorList);
+        cont.add(anchorList);
+        controls.addSizable(anchorList);
 
         return cont;
     }
@@ -108,7 +117,9 @@ public class ListExample
             "element1",
             color,
             "element3",
-            "element4"
+            "element4",
+            "element5",
+            "element6"
         };
 
         return values;
@@ -127,7 +138,9 @@ public class ListExample
                 "element1",
                 color,
                 img,
-                "element4"
+                "element4",
+                "element5",
+                "element6"
             };
 
             public int getSize() {
@@ -148,8 +161,7 @@ public class ListExample
     private final ListModel listModel = createListModel();
 
     public void addAnchorElements(SList list) {
-        final SLabel img =
-            new SLabel(javaCup);
+        final SLabel img = new SLabel(javaCup);
 
         final SLabel color = new SLabel("");
         color.setForeground(Color.green);
@@ -157,14 +169,5 @@ public class ListExample
 
         list.setModel(listModel);
         list.setType(ORDER_TYPE_NORMAL);
-        // list.setStart(8);
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

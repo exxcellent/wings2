@@ -165,7 +165,7 @@ public class PageScrollerExample
     static Object[] listData = createData();
 
     static Object[] createData() {
-        TreeNode root = TreeExample.generateTree();
+        TreeNode root = HugeTreeModel.generateTree();
 
         ArrayList data = new ArrayList();
         

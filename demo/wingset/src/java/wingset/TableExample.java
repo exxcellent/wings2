@@ -13,10 +13,10 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -42,54 +42,25 @@ public class TableExample
         Color.white,
         Color.blue
     };
-    private static final String[] SELECTION_MODES = new String[] { "no", "single", "multiple" };
+
+    private STable table;
+    private TableControls controls;
 
     public SComponent createExample() {
-        SForm panel = new SForm(new SBorderLayout());
+        controls = new TableControls();
 
-        final STable table = new STable(new MyTableModel(7, 5));
+        table = new STable(new MyTableModel(7, 5));
         table.setName("table");
         table.setShowGrid(true);
         table.setSelectionMode(NO_SELECTION);
         table.setDefaultRenderer(cellRenderer);
         table.setShowAsFormComponent(false);
         table.setEditable(false);
+        controls.addSizable(table);
+
+        SForm panel = new SForm(new SBorderLayout());
+        panel.add(controls, SBorderLayout.NORTH);
         panel.add(table, SBorderLayout.CENTER);
-
-        final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
-        showAsFormComponent.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                table.setShowAsFormComponent(showAsFormComponent.isSelected());
-            }
-        });
-        showAsFormComponent.setShowAsFormComponent(false);
-
-        final SCheckBox editable = new SCheckBox("<html>Editable&nbsp;&nbsp;&nbsp;");
-        editable.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                table.setEditable(editable.isSelected());
-            }
-        });
-        editable.setShowAsFormComponent(false);
-
-        final SComboBox selectionMode = new SComboBox(SELECTION_MODES);
-        selectionMode.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if ("no".equals(selectionMode.getSelectedItem()))
-                    table.setSelectionMode(NO_SELECTION);
-                else if ("single".equals(selectionMode.getSelectedItem()))
-                    table.setSelectionMode(SINGLE_SELECTION);
-                else if ("multiple".equals(selectionMode.getSelectedItem()))
-                    table.setSelectionMode(MULTIPLE_SELECTION);
-            }
-        });
-
-        SPanel north = new SPanel(new SFlowLayout());
-        north.add(showAsFormComponent);
-        north.add(editable);
-        north.add(selectionMode);
-
-        panel.add(north, SBorderLayout.NORTH);
         return panel;
     }
 
@@ -264,12 +235,40 @@ public class TableExample
         }    
     }
     
-}
+    class TableControls extends ComponentControls {
+        private final String[] SELECTION_MODES = new String[] { "no", "single", "multiple" };
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+        public TableControls() {
+            final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
+            showAsFormComponent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    table.setShowAsFormComponent(showAsFormComponent.isSelected());
+                }
+            });
+
+            final SCheckBox editable = new SCheckBox("<html>Editable&nbsp;&nbsp;&nbsp;");
+            editable.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    table.setEditable(editable.isSelected());
+                }
+            });
+
+            final SComboBox selectionMode = new SComboBox(SELECTION_MODES);
+            selectionMode.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    if ("no".equals(selectionMode.getSelectedItem()))
+                        table.setSelectionMode(NO_SELECTION);
+                    else if ("single".equals(selectionMode.getSelectedItem()))
+                        table.setSelectionMode(SINGLE_SELECTION);
+                    else if ("multiple".equals(selectionMode.getSelectedItem()))
+                        table.setSelectionMode(MULTIPLE_SELECTION);
+                }
+            });
+
+            add(showAsFormComponent);
+            add(editable);
+            add(new SLabel(" selection mode "));
+            add(selectionMode);
+        }
+    }
+}
