@@ -79,9 +79,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         device.print("<div id=\"").print(component.getName()).print("\"");
         Utils.optAttribute(device, "class", component.getStyle());
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
-        device.print(">"); // div
-        device.print("<div id=\"").print(component.getName()).print("\"");
-        Utils.optAttribute(device, "class", component.getStyle());
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
@@ -154,7 +151,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         component.setInheritsPopupMenu(backup);
 
-        device.print("</div>");
         device.print("</div>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
