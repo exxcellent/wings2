@@ -5,6 +5,7 @@ package dwr;
 
 import uk.ltd.getahead.dwr.CreatorManager;
 import uk.ltd.getahead.dwr.Creator;
+import uk.ltd.getahead.dwr.ExecutionContext;
 import org.w3c.dom.Element;
 
 import javax.servlet.http.HttpSession;
@@ -17,21 +18,29 @@ import java.util.HashMap;
  * @version $Revision$
  */
 public class SessionCreatorManager
-    extends CreatorManager
+    implements CreatorManager
 {
     static ThreadLocal sessions = new ThreadLocal();
+    boolean debug;
 
     public SessionCreatorManager() {
-        super(true);
     }
 
-    protected void addCreatorType(String typename, Class clazz) {
+    public boolean isDebug() {
+        return debug;
     }
 
-    protected void addCreator(String type, String javascript, Element allower) {
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
-    protected Collection getCreatorNames() {
+    public void addCreatorType(String typename, Class clazz) {
+    }
+
+    public void addCreator(String type, String javascript, Element allower) {
+    }
+
+    public Collection getCreatorNames() {
         Map map = getCreatorMap();
         return map.keySet();
     }
@@ -52,20 +61,12 @@ public class SessionCreatorManager
     }
 
     private Map getCreatorMap() {
-        HttpSession session = (HttpSession) sessions.get();
+        HttpSession session = ExecutionContext.get().getSession();
         Map map = (Map) session.getAttribute("CreatorMap");
         if (map == null) {
             map = new HashMap();
             session.setAttribute("CreatorMap", map);
         }
         return map;
-    }
-
-    public static void setSession(HttpSession session) {
-        sessions.set(session);
-    }
-
-    public static void removeSession() {
-        sessions.set(null);
     }
 }

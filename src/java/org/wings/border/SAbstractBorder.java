@@ -71,10 +71,18 @@ public abstract class SAbstractBorder
      */
     public void setInsets(Insets insets) {
         this.insets = insets;
-        attributes.put("padding-top", insets.top + "px");
-        attributes.put("padding-left", insets.left + "px");
-        attributes.put("padding-right", insets.right + "px");
-        attributes.put("padding-bottom", insets.bottom + "px");
+        if (insets != null) {
+            attributes.put("padding-top", insets.top + "px");
+            attributes.put("padding-left", insets.left + "px");
+            attributes.put("padding-right", insets.right + "px");
+            attributes.put("padding-bottom", insets.bottom + "px");
+        }
+        else {
+            attributes.remove("padding-top");
+            attributes.remove("padding-left");
+            attributes.remove("padding-right");
+            attributes.remove("padding-bottom");
+        }
     }
 
     /**
@@ -120,5 +128,3 @@ public abstract class SAbstractBorder
     }
 
 }
-
-

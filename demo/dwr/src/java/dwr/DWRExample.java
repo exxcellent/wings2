@@ -57,7 +57,7 @@ public class DWRExample
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, SessionManager.getSession().getLocale());
 
         public Object stringToValue(String text) throws ParseException {
-            System.out.println("text = " + text);
+            System.out.println("text = '" + text + "'");
             if (text == null || text.trim().length() == 0)
                 return null;
             else
@@ -74,8 +74,7 @@ public class DWRExample
         public String validate(String text) {
             try {
                 String s = valueToString(stringToValue(text));
-                if ("".equals(s))
-                    s = "the_empty_string";
+                System.out.println("return = '" + s + "'");
                 return s;
             }
             catch (ParseException e) {
@@ -103,10 +102,7 @@ public class DWRExample
 
         public String validate(String text) {
             try {
-                String s = valueToString(stringToValue(text));
-                if ("".equals(s))
-                    s = "the_empty_string";
-                return s;
+                return valueToString(stringToValue(text));
             }
             catch (ParseException e) {
                 return null;

@@ -38,12 +38,10 @@ public abstract class DWRFormatter extends SAbstractFormatter {
                 "document.getElementById('{0}').getElementsByTagName('input')[0].style.color = 'inherit';" +
                 "formatter_{0}.validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('input')[0].value)",
                 "function callback_{0}(data) {\n" +
-                "   if (!data) {\n" +
+                "   if (!data && data != '') {\n" +
                 "       document.getElementById('{0}').getElementsByTagName('input')[0].focus();\n" +
                 "       document.getElementById('{0}').getElementsByTagName('input')[0].style.color = 'red';\n" +
                 "   }\n" +
-                "   else if (data == 'the_empty_string')\n" +
-                "       document.getElementById('{0}').getElementsByTagName('input')[0].value = '';\n" +
                 "   else\n" +
                 "       document.getElementById('{0}').getElementsByTagName('input')[0].value = data;\n" +
                 "}\n", new SComponent[] { field });

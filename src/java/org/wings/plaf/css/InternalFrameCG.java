@@ -104,7 +104,7 @@ public class InternalFrameCG
 
         device.print("<table");
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-        device.print(">\n<tr>");
+        device.print(">\n<tr height=\"0%\">");
 
         // left icon
         if (frame.getIcon() != null) {
@@ -149,7 +149,7 @@ public class InternalFrameCG
 
         // write the actual content
         if (!frame.isIconified()) {
-            device.print("<tr><td colspan=\"");
+            device.print("<tr height=\"100%\"><td colspan=\"");
             device.print(String.valueOf(columns));
             device.print("\">");
             Utils.renderContainer(device, frame);

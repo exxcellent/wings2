@@ -533,6 +533,10 @@ div.SInternalFrame > table > tbody > tr > th[col="title"] {
     width: 100%;
 }
 
+div.SInternalFrame > table > tbody > tr > td {
+    vertical-align: top;
+}
+
 div.SInternalFrame > table > tbody > tr > * {
     border: 1px solid #cccccc;
 }

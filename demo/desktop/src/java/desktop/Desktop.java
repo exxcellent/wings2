@@ -30,8 +30,6 @@ import org.wings.util.*;
 import org.wings.event.SContainerListener;
 import org.wings.event.SContainerEvent;
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */

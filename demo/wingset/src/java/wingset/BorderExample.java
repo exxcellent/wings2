@@ -30,10 +30,10 @@ public class BorderExample
         extends WingSetPane {
     private static final SIcon WAIT_ICON = new SResourceIcon("org/wings/icons/Wait.gif");
 
-    final SBorder raised = new SBevelBorder(SBevelBorder.RAISED, new Insets(10, 0, 10, 20));
-    final SBorder lowered = new SBevelBorder(SBevelBorder.LOWERED, new Insets(10, 0, 10, 20));
-    final SBorder line = new SLineBorder(2, new Insets(10, 0, 10, 20));
-    final SBorder titled = new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(10, 0, 10, 20)), "This is a title");
+    final SBorder raised = new SBevelBorder(SBevelBorder.RAISED, new Insets(5, 5, 5, 5));
+    final SBorder lowered = new SBevelBorder(SBevelBorder.LOWERED, new Insets(5, 5, 5, 5));
+    final SBorder line = new SLineBorder(2, new Insets(5, 5, 5, 5));
+    final SBorder titled = new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)), "This is a title");
 
     private SLabel borderLabel;
     private BorderControls controls;
@@ -97,7 +97,7 @@ public class BorderExample
 
         public BorderControls() {
             final STextField thicknessTextField = new STextField();
-            thicknessTextField.addActionListener(new ActionListener() {
+            addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
                     try {
                         thickness = Integer.parseInt(thicknessTextField.getText());

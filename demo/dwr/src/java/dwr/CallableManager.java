@@ -4,6 +4,9 @@
 package dwr;
 
 import org.wings.session.SessionManager;
+import org.wings.session.Session;
+
+import uk.ltd.getahead.dwr.ExecutionContext;
 
 /**
  * @author hengels
@@ -23,14 +26,16 @@ public class CallableManager
     }
 
     public void registerCallable(String scriptName, Object callable) {
-        SessionCreatorManager.setSession(SessionManager.getSession().getServletRequest().getSession());
+        Session session = SessionManager.getSession();
+        ExecutionContext.setExecutionContext(session.getServletRequest(), session.getServletResponse(), null);
         creatorManager.addCreator(scriptName, callable);
-        SessionCreatorManager.removeSession();
+        ExecutionContext.unset();
     }
 
     public void unregisterCallable(String scriptName) {
-        SessionCreatorManager.setSession(SessionManager.getSession().getServletRequest().getSession());
+        Session session = SessionManager.getSession();
+        ExecutionContext.setExecutionContext(session.getServletRequest(), session.getServletResponse(), null);
         creatorManager.removeCreator(scriptName);
-        SessionCreatorManager.removeSession();
+        ExecutionContext.unset();
     }
 }

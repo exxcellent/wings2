@@ -153,7 +153,6 @@ public class Editor
     protected SToolbar createToolbar() {
         try {
             SButton saveButton = new SButton(new SURLIcon("../icons/filesave.png"));
-            saveButton.setAttribute("border", "black thin outset");
             saveButton.setToolTipText("save");
             saveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
@@ -162,7 +161,6 @@ public class Editor
             });
 
             SButton revertButton = new SButton(new SURLIcon("../icons/filerevert.png"));
-            revertButton.setAttribute("border", "black thin outset");
             revertButton.setToolTipText("revert");
             revertButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
@@ -170,7 +168,6 @@ public class Editor
                 }
             });
             SButton closeButton = new SButton(new SURLIcon("../icons/fileclose.png"));
-            closeButton.setAttribute("border", "black thin outset");
             closeButton.setToolTipText("close");
             closeButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
@@ -179,7 +176,6 @@ public class Editor
             });
 
             SButton cutButton = new SButton(new SURLIcon("../icons/editcut.png"));
-            cutButton.setAttribute("border", "black thin outset");
             cutButton.setToolTipText("cut");
             cutButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
@@ -187,7 +183,6 @@ public class Editor
                 }
             });
             SButton copyButton = new SButton(new SURLIcon("../icons/editcopy.png"));
-            copyButton.setAttribute("border", "black thin outset");
             copyButton.setToolTipText("copy");
             copyButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
@@ -195,7 +190,6 @@ public class Editor
                 }
             });
             SButton pasteButton = new SButton(new SURLIcon("../icons/editpaste.png"));
-            pasteButton.setAttribute("border", "black thin outset");
             pasteButton.setToolTipText("paste");
             pasteButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {

@@ -26,14 +26,7 @@
         <servlet-name>dwr-invoker</servlet-name>
         <display-name>DWR Servlet</display-name>
         <description>Direct Web Remoter Servlet</description>
-        <servlet-class>dwr.AccessibleDWRServlet</servlet-class>
-        <!--
-        <init-param>
-            <param-name>config</param-name>
-            <param-value>WEB-INF/dwr.xml</param-value>
-            <description>What config file do we use?</description>
-        </init-param>
-        -->
+        <servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
         <init-param>
             <param-name>debug</param-name>
             <param-value>true</param-value>
@@ -43,6 +36,11 @@
             <param-name>logLevel</param-name>
             <param-value>DEBUG</param-value>
             <description>How verbose do we want logging to be?</description>
+        </init-param>
+        <init-param>
+            <param-name>creatorManager</param-name>
+            <param-value>dwr.SessionCreatorManager</param-value>
+            <description>Install a session local CreatorManager</description>
         </init-param>
         <load-on-startup>-1</load-on-startup>
     </servlet>
