@@ -6,7 +6,6 @@ package org.wings.jsp;
 import org.wings.externalizer.ExternalizedResource;
 import org.wings.io.DeviceFactory;
 import org.wings.io.Device;
-import org.wings.jsp.WingsSession;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,12 +23,16 @@ public class ExternalizerServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         WingsSession wingsSession = WingsSession.getSession(request, response);
 
-        String pathInfo = request.getPathInfo();
-        if (pathInfo == null)
-            return;
-        pathInfo = pathInfo.substring(1);
-        ExternalizedResource extInfo = wingsSession.getExternalizeManager().getExternalizedResource(pathInfo);
-        Device outputDevice = DeviceFactory.createDevice(extInfo);
-        wingsSession.getExternalizeManager().deliver(extInfo, response, outputDevice);
+        synchronized (request.getSession()) {
+            String pathInfo = request.getServletPath();
+            if (pathInfo == null)
+                return;
+
+            int pos = pathInfo.lastIndexOf('/');
+            pathInfo = pathInfo.substring(pos + 1);
+            ExternalizedResource extInfo = wingsSession.getExternalizeManager().getExternalizedResource(pathInfo);
+            Device outputDevice = DeviceFactory.createDevice(extInfo);
+            wingsSession.getExternalizeManager().deliver(extInfo, response, outputDevice);
+        }
     }
 }

@@ -1,55 +1,45 @@
 <%@ page language="java"
-import="jsp.*,org.wings.*,
-        org.wings.style.*,
-        org.wings.session.*,
-        org.wings.externalizer.*,
-        org.wings.io.*,
-        org.wings.session.*,
-        java.io.*,javax.swing.tree.*,
+import="org.wings.*,
+        org.wings.jsp.WingsSession,
         jsp.HugeTreeModel,
-        org.wings.event.SRequestEvent,
-        java.util.*,
-        org.wings.jsp.WingsSession"
+        javax.swing.tree.DefaultTreeModel"
 %>
 
 <%
-    WingsSession wingsSession = WingsSession.getSession(request, response);
-    SFrame frame = wingsSession.getFrame("TreeExample.jsp");
+    // call the event dispatcher
+    WingsSession.dispatchEvents(request, response);
 
-    wingsSession.fireRequestEvent(SRequestEvent.REQUEST_START);
-    wingsSession.dispatchEvents(request);
+    // every page needs its frame
+    SFrame frame = WingsSession.getFrame(request, response, "TreeExample.jsp");
+    STree tree;
 
-    STree tree = (STree) session.getAttribute("tree");
-    if (tree == null) {
-        tree = new STree();
-        tree.setModel(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
-        frame.getContentPane().add(tree, "tree");
-        session.setAttribute("tree", tree);
-    }
+    synchronized (session) {
+        try {
+            // before you can use the wingS API, you have to call the following method.
+            // it will associate the wingS Session with the current thread
+            WingsSession wingsSession = WingsSession.getSession(request, response);
 
-    if (request.getPathInfo() != null) {
-        String s = "/ExternalizerServlet/" + request.getPathInfo();
-        System.out.println("s = " + s);
-        RequestDispatcher dispatcher = request.getRequestDispatcher(s);
-        if (dispatcher != null)
-            dispatcher.forward(request, response);
-        return;
-    }
-%>
-
-<html><head>
-<%
-    StringBufferDevice headerdev = new StringBufferDevice();
-    for (Iterator iterator = frame.headers().iterator(); iterator.hasNext();) {
-        Object next = iterator.next();
-        if (next instanceof Renderable) {
-            ((Renderable) next).write(headerdev);
-        } else {
-            org.wings.plaf.Utils.write(headerdev, next.toString());
+            tree = (STree)wingsSession.getProperty("tree");
+            if (tree == null) {
+                tree = new STree();
+                tree.setModel(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
+                frame.getContentPane().add(tree, "tree");
+                wingsSession.setProperty("tree", tree);
+            }
         }
-        headerdev.write("\n".getBytes());
+        finally {
+            // release the thread association
+            WingsSession.removeSession();
+        }
     }
-    out.print(headerdev);
+%>
+
+<html>
+<head>
+
+<%
+    // headers are required for proper operation
+    WingsSession.writeHeaders(request, response, out, frame);
 %>
 
 <title>Test wingS JSP integration</title>
@@ -57,15 +47,9 @@ import="jsp.*,org.wings.*,
 <body bgcolor="#f0f0f0">
 
 <%
-    StringBufferDevice outdev = new StringBufferDevice();
-    tree.write(outdev);
-    out.print(outdev);
+    // write a component
+    WingsSession.writeComponent(request, response, out, tree);
 %>
 
 </body>
 </html>
-
-<%
-    wingsSession.fireRequestEvent(SRequestEvent.REQUEST_END);
-    SessionManager.removeSession();
-%>

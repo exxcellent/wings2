@@ -8,18 +8,18 @@ import org.wings.session.SessionManager;
 import org.wings.externalizer.ExternalizedResource;
 import org.wings.event.SRequestEvent;
 import org.wings.event.SRequestListener;
-import org.wings.RequestURL;
-import org.wings.SFrame;
-import org.wings.SForm;
+import org.wings.*;
+import org.wings.io.StringBufferDevice;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.jsp.JspWriter;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.io.IOException;
 
 /**
  * @author hengels
@@ -28,58 +28,109 @@ import java.util.Enumeration;
 public class WingsSession
         extends Session
 {
-    private final Map frames = new HashMap();
-
     public static WingsSession getSession(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        String key = "Session:" + request.getSession().getServletContext().getServletContextName();
-        WingsSession wingsSession = (WingsSession)request.getSession().getAttribute(key);
-        if (wingsSession == null) {
-            wingsSession = new WingsSession();
-            request.getSession().setAttribute(key, wingsSession);
-            SessionManager.setSession(wingsSession);
+        synchronized (request.getSession()) {
+            String key = "Session:" + request.getSession().getServletContext().getServletContextName();
+            WingsSession wingsSession = (WingsSession)request.getSession().getAttribute(key);
+            if (wingsSession == null) {
+                wingsSession = new WingsSession();
+                request.getSession().setAttribute(key, wingsSession);
+                SessionManager.setSession(wingsSession);
 
-            wingsSession.init(request);
-            //RequestURL requestURL = new RequestURL("", response.encodeURL("foo").substring(3));
-            RequestURL requestURL = new RequestURL("TreeExample.jsp", response.encodeURL("TreeExample.jsp"));
-            wingsSession.setProperty("request.url", requestURL);
-        }
-
-        SessionManager.setSession(wingsSession);
-        wingsSession.setServletRequest(request);
-        wingsSession.setServletResponse(response);
-
-        return wingsSession;
-    }
-
-    public SFrame getFrame(String page) {
-        SFrame frame = (SFrame)frames.get(page);
-        if (frame == null) {
-            frame = new SFrame(page);
-            frame.setTargetResource("");
-            //frame.setTargetResource("TreeExample.jsp");
-            frame.show();
-            frames.put(page, frame);
-        }
-        return frame;
-    }
-
-    public void dispatchEvents(HttpServletRequest request) {
-        String key = "Session:" + request.getSession().getServletContext().getServletContextName();
-        WingsSession wingsSession = (WingsSession)request.getSession().getAttribute(key);
-        SForm.clearArmedComponents();
-
-        Enumeration en = request.getParameterNames();
-        if (en.hasMoreElements()) {
-            wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_START);
-
-            while (en.hasMoreElements()) {
-                String paramName = (String) en.nextElement();
-                String[] value = request.getParameterValues(paramName);
-                wingsSession.getDispatcher().dispatch(paramName, value);
+                wingsSession.init(request);
+                RequestURL requestURL = new RequestURL("", response.encodeURL("foo").substring(3));
+                //RequestURL requestURL = new RequestURL("TreeExample.jsp", response.encodeURL("TreeExample.jsp"));
+                wingsSession.setProperty("request.url", requestURL);
             }
-            SForm.fireEvents();
 
-            wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
+            SessionManager.setSession(wingsSession);
+            wingsSession.setServletRequest(request);
+            wingsSession.setServletResponse(response);
+
+            return wingsSession;
+        }
+    }
+
+    public static void removeSession() {
+        SessionManager.removeSession();
+    }
+
+    public static SFrame getFrame(HttpServletRequest request, HttpServletResponse response, String page) throws ServletException {
+        synchronized (request.getSession()) {
+            WingsSession wingsSession = getSession(request, response);
+            Map frames = getFrames(wingsSession);
+            SFrame frame = (SFrame)frames.get(page);
+            if (frame == null) {
+                frame = new SFrame(page);
+                //frame.setTargetResource("");
+                frame.setTargetResource("TreeExample.jsp");
+                frame.show();
+                frames.put(page, frame);
+            }
+            SessionManager.removeSession();
+            return frame;
+        }
+    }
+
+    private static Map getFrames(WingsSession wingsSession) {
+        Map frames = (Map) wingsSession.getProperty("frames");
+        if (frames == null) {
+            frames = new HashMap();
+            wingsSession.setProperty("frames", frames);
+        }
+        return frames;
+    }
+
+    public static void dispatchEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        synchronized (request.getSession()) {
+            WingsSession wingsSession = getSession(request, response);
+            SForm.clearArmedComponents();
+
+            Enumeration en = request.getParameterNames();
+            if (en.hasMoreElements()) {
+                wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_START);
+
+                while (en.hasMoreElements()) {
+                    String paramName = (String) en.nextElement();
+                    String[] value = request.getParameterValues(paramName);
+                    wingsSession.getDispatcher().dispatch(paramName, value);
+                }
+                SForm.fireEvents();
+
+                wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
+            }
+
+            wingsSession.getReloadManager().invalidateResources();
+            wingsSession.getReloadManager().clear();
+            SessionManager.removeSession();
+        }
+    }
+
+    public static void writeHeaders(HttpServletRequest request, HttpServletResponse response, JspWriter out, SFrame frame) throws IOException, ServletException {
+        synchronized (request.getSession()) {
+            WingsSession wingsSession = getSession(request, response);
+            StringBufferDevice headerdev = new StringBufferDevice();
+            for (Iterator iterator = frame.headers().iterator(); iterator.hasNext();) {
+                Object next = iterator.next();
+                if (next instanceof Renderable) {
+                    ((Renderable) next).write(headerdev);
+                } else {
+                    org.wings.plaf.Utils.write(headerdev, next.toString());
+                }
+                headerdev.write("\n".getBytes());
+            }
+            out.print(headerdev);
+            SessionManager.removeSession();
+        }
+    }
+
+    public static void writeComponent(HttpServletRequest request, HttpServletResponse response, JspWriter out, SComponent component) throws IOException, ServletException {
+        synchronized (request.getSession()) {
+            WingsSession wingsSession = getSession(request, response);
+            StringBufferDevice outdev = new StringBufferDevice();
+            component.write(outdev);
+            out.print(outdev);
+            SessionManager.removeSession();
         }
     }
 
