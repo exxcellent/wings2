@@ -113,10 +113,8 @@ public class RadioButtonExample
         boxes[3].setVerticalTextPosition(SConstants.CENTER);
         boxes[3].setHorizontalTextPosition(SConstants.LEFT);
         
-        /* Huh?
-        boxes[4].setVerticalTextPosition(SConstants.CENTER);
-        boxes[4].setHorizontalTextPosition(SConstants.CENTER);
-        */
+        boxes[4].setHorizontalAlignment(SConstants.CENTER);
+        boxes[4].setVerticalAlignment(SConstants.CENTER);
 
         boxes[5].setVerticalTextPosition(SConstants.CENTER);
         boxes[5].setHorizontalTextPosition(SConstants.RIGHT);
