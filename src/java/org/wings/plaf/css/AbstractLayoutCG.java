@@ -78,7 +78,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
             if (col == 0)
                 d.print("<tr>");
-            else if (col % cols == 0 && iter.hasNext()) {
+            else if (col % cols == 0) {
                 d.print("</tr>");
                 Utils.printNewline(d, c.getParent());
                 d.print("<tr>");
