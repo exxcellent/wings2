@@ -21,6 +21,7 @@ import org.wings.session.WingsStatistics;
 import org.wings.util.TimeMeasure;
 
 import java.io.FileWriter;
+import java.io.Serializable;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Timer;
@@ -30,26 +31,17 @@ import java.util.TimerTask;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class WingSet {
+public class WingSet implements Serializable {
     static final boolean SHOW_STATISTICS = false;
-
-    static final ClassLoader cl = WingSet.class.getClassLoader();
-    private final static SIcon brushedMetal =
-            new SURLIcon("../icons/brushedMetal.gif");
-
     private final static SIcon JAVA_CUP_ICON =
             new SResourceIcon("org/wings/icons/JavaCup.gif");
 
     private final static SIcon SMALL_COW_ICON =
             new SURLIcon("../icons/cowSmall.gif");
 
-
     static final long birthday = System.currentTimeMillis();
-
     static FileWriter infoWriter;
-
     static final Timer timer = new Timer();
-
     static long oldRequestCount = 0;
     static long oldSessionCount = 0;
 
@@ -131,7 +123,7 @@ public class WingSet {
         frame.setAttribute("margin", "8px");
 
         frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../wingset-gecko.css")));
-       
+
         System.out.println("new WingSet");
         stopWatch = new TimeMeasure(new MessageFormat("<html><b>{0}</b>: {1} (<i>x {2}</i>)<br/>"));
 
