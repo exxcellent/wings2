@@ -37,7 +37,7 @@ public class MenuExample extends WingSetPane {
 
     SMenuItem createMenuItem(TreeNode node) {
         SMenuItem item = new SMenuItem(node.toString());
-        item.setName(node.toString());
+        item.setToolTipText(node.toString());
         item.addActionListener(menuItemListener);
         return item;
     }
