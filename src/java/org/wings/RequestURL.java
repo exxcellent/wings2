@@ -48,6 +48,7 @@ public class RequestURL extends SimpleURL {
      * copy constructor.
      */
     private RequestURL(RequestURL other) {
+        this.baseURL = other.baseURL;
         this.baseParameters = other.baseParameters;
         this.hasQuestMark = other.hasQuestMark;
         this.epoch = other.epoch;

@@ -84,9 +84,9 @@ public class Session
 
     private transient Browser userAgent;
 
-    private transient HttpServletResponse servletResponse;
+    protected transient HttpServletResponse servletResponse;
 
-    private transient HttpServletRequest servletRequest;
+    protected transient HttpServletRequest servletRequest;
 
     private String redirectAddress;
 
@@ -114,7 +114,7 @@ public class Session
     /**
      * Store here only weak references.
      */
-    private final EventListenerList listenerList = new EventListenerList();
+    protected final EventListenerList listenerList = new EventListenerList();
 
     public final SessionStatistics getStatistics() {
         return statistics;
@@ -172,27 +172,27 @@ public class Session
      * @param request a <code>HttpServletRequest</code> value
      * @throws ServletException if an error occurs
      */
-    public void init(ServletConfig config, HttpServletRequest request) throws ServletException {
-        servletContext = config.getServletContext();
+    public void init(HttpServletRequest request) throws ServletException {
+        servletContext = request.getSession().getServletContext();
         setServletRequest(request);
         setUserAgentFromRequest(request);
 
-        initProps(config);
-        initMaxContentLength(config);
+        initProps();
+        initMaxContentLength();
 
         try {
             LookAndFeel lookAndFeel = LookAndFeelFactory.getLookAndFeelFactory().create();
             CGManager.setLookAndFeel(lookAndFeel);
         } catch (Exception ex) {
             log.fatal("could not load look and feel: " +
-                    config.getInitParameter("wings.lookandfeel.factory"), ex);
+                    servletContext.getInitParameter("wings.lookandfeel.factory"), ex);
             throw new ServletException(ex);
         }
 
     }
 
-    protected void initMaxContentLength(ServletConfig config) {
-        String maxCL = config.getInitParameter("content.maxlength");
+    protected void initMaxContentLength() {
+        String maxCL = servletContext.getInitParameter("content.maxlength");
         if (maxCL != null) {
             try {
                 maxContentLength = Integer.parseInt(maxCL);
@@ -205,11 +205,11 @@ public class Session
     /**
      * Copy the init parameters.
      */
-    protected void initProps(ServletConfig config) {
-        Enumeration params = config.getInitParameterNames();
+    protected void initProps() {
+        Enumeration params = servletContext.getInitParameterNames();
         while (params.hasMoreElements()) {
             String name = (String) params.nextElement();
-            props.put(name, config.getInitParameter(name));
+            props.put(name, servletContext.getInitParameter(name));
         }
     }
 
@@ -724,14 +724,14 @@ public class Session
     /**
      * Fire an RequestEvent at each registered listener.
      */
-    final void fireRequestEvent(int type) {
+    void fireRequestEvent(int type) {
         fireRequestEvent(type, null);
     }
 
     /**
      * Fire an RequestEvent at each registered listener.
      */
-    final void fireRequestEvent(int type, ExternalizedResource resource) {
+    void fireRequestEvent(int type, ExternalizedResource resource) {
         SRequestEvent event = null;
 
         Object[] listeners = listenerList.getListenerList();

@@ -5,6 +5,16 @@
     "http://java.sun.com/j2ee/dtds/web-app_2.3.dtd">
 
 <web-app>
+    <servlet>
+        <servlet-name>Externalizer</servlet-name>
+        <servlet-class>org.wings.jsp.ExternalizerServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Externalizer</servlet-name>
+        <url-pattern>/ExternalizerServlet/*</url-pattern>
+    </servlet-mapping>
+
     <session-config>
         <session-timeout>10</session-timeout>
     </session-config>

@@ -42,12 +42,8 @@
     </filter-mapping-->
 
     <servlet>
-        <servlet-name>
-      WingSet
-        </servlet-name>
-        <servlet-class>
-      org.wings.session.WingServlet
-        </servlet-class>
+        <servlet-name>WingSet</servlet-name>
+        <servlet-class>org.wings.session.WingServlet</servlet-class>
         <init-param>
             <param-name>wings.mainclass</param-name>
             <param-value>wingset.WingSet</param-value>
@@ -74,12 +70,8 @@
     <!-- url mapping -->
 
     <servlet-mapping>
-        <servlet-name>
-      WingSet
-        </servlet-name>
-        <url-pattern>
-      /WingSet/*
-        </url-pattern>
+        <servlet-name>WingSet</servlet-name>
+        <url-pattern>/WingSet/*</url-pattern>
     </servlet-mapping>
 
     <session-config>
