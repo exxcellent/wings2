@@ -26,6 +26,7 @@ import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
+import org.wings.session.Session;
 import org.wings.session.SessionManager;
 import org.wings.style.DynamicStyleSheetResource;
 import org.wings.style.CSSSelector;
@@ -177,7 +178,16 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         List headers = frame.headers();
         String encoding = SessionManager.getSession().getCharacterEncoding();
 
-
+        /**
+         *  we need to put ie 6 into quirks mode
+         *  for box model compatibility. (border-box)
+         */
+        if (BrowserType.IE.equals(browser.getBrowserType())) {
+            if (browser.getMajorVersion() == 6) {
+                device.print("<!-- IE6 quirks mode switch -->\n");
+            }
+        }
+        
         if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
             device.print("<?xml version=\"1.0\" encoding=\"");
             Utils.write(device, encoding);
