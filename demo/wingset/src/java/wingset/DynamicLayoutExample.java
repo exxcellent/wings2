@@ -14,6 +14,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.border.SLineBorder;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -26,8 +27,8 @@ import java.awt.event.ItemListener;
  */
 public class DynamicLayoutExample extends WingSetPane {
     private final SForm panel = new SForm();
-    private final SPanel[] demoPanels = {new GridBagDemoPanel(), new GridLayoutDemoPanel(), new BoxLayoutDemoPanel()};
-    private final static String[] demoManagerNames = {"SGridBagLayout", "SGridLayout","SBoxLayout"};
+    private final SPanel[] demoPanels = {new FlowLayoutDemoPanel(), new GridBagDemoPanel(), new GridLayoutDemoPanel(), new BoxLayoutDemoPanel()};
+    private final static String[] demoManagerNames = {"SFlowLayout","SGridBagLayout", "SGridLayout","SBoxLayout"};
     private final SComboBox selectLayoutManager = new SComboBox(demoManagerNames);
 
     protected SComponent createExample() {
@@ -69,6 +70,25 @@ public class DynamicLayoutExample extends WingSetPane {
             SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.HORIZONTAL);
             setLayout(boxLayout);
             addDummyLabels(this);
+        }
+    }
+
+    private static class FlowLayoutDemoPanel extends SPanel {
+        public FlowLayoutDemoPanel() {
+            add(createPanel(new SFlowLayout(SFlowLayout.CENTER)));
+            add(createPanel(new SFlowLayout(SFlowLayout.LEFT)));
+            add(createPanel(new SFlowLayout(SFlowLayout.RIGHT)));
+            add(createPanel(new SFlowDownLayout()));
+        }
+
+        private SPanel createPanel(SLayoutManager layout) {
+            SPanel panel1 = new SPanel(layout);
+            panel1.setBorder(new SLineBorder());
+            panel1.setBackground(Color.LIGHT_GRAY);
+            panel1.add(new SLabel("<html><span>abcd</span>"));
+            panel1.add(new SLabel("<html><span>abcdfhsdkkfjhjksdhfjhsdjkfh jksdhfkjhsdjkhf kjdshkfjhsd k</span>"));
+            panel1.add(new SLabel("<html><span>abcdfhsdkkfjhjksdhfjhsdjkfh</span>"));
+            return panel1;
         }
     }
 
