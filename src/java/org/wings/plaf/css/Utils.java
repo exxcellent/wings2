@@ -77,7 +77,6 @@ public final class Utils implements SConstants {
                     return;
                 }
                 else { // fallback
-                    System.out.println("fallback");
                     layout = new SFlowLayout(SFlowLayout.LEFT);
                 }
             } else {
