@@ -827,7 +827,6 @@ public class STree
     /**
      * This is for plafs only!
      * With this parameter the tree selects the given node
-     * ({@link #processLowLevelEvent})
      */
     public String getSelectionParameter(int row, boolean absolute) {
         return (absolute ? "a" : "b") + row;
@@ -835,7 +834,7 @@ public class STree
 
 
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
+        processKeyEvents(values);
 
         getSelectionModel().setDelayEvents(true);
         for (int i = 0; i < values.length; i++) {

@@ -46,13 +46,14 @@ public class ComboBoxCG
         device.print("<select size=\"1\"");
         org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(component));
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-        org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
-        if (!component.isEnabled()) {
-            device.print(" disabled=\"1\"");
-        }
+        if (!component.isEnabled())
+            device.print(" disabled=\"true\"");
+        if (component.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+
 
         component.removeScriptListener(submitListener);
         if (component.getActionListeners().length > 0 || component.getItemListener().length > 0 ) {

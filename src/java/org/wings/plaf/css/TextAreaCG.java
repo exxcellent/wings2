@@ -35,7 +35,15 @@ public class TextAreaCG
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "cols", component.getColumns());
         org.wings.plaf.Utils.optAttribute(device, "rows", component.getRows());
-        org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+
+        switch (component.getLineWrap()) {
+            case STextArea.VIRTUAL_WRAP:
+                device.print(" wrap=\"virtual\"");
+                break;
+            case STextArea.PHYSICAL_WRAP:
+                device.print(" wrap=\"physical\"");
+                break;
+        }
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
@@ -50,14 +58,9 @@ public class TextAreaCG
             device.print(" disabled=\"1\"");
         }
 
-        switch (component.getLineWrap()) {
-            case STextArea.VIRTUAL_WRAP:
-                device.print(" wrap=\"virtual\"");
-                break;
-            case STextArea.PHYSICAL_WRAP:
-                device.print(" wrap=\"physical\"");
-                break;
-        }
+        if (component.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+
         Utils.writeEvents(device, component);
         device.print(">");
         org.wings.plaf.Utils.writeRaw(device, component.getText());

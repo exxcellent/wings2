@@ -79,7 +79,7 @@ public class SButton extends SAbstractButton {
 
     protected void setGroup(SButtonGroup g) {
         if (g != null) {
-            throw new IllegalArgumentException("SButton don`t support button groups, use SToggleButton");
+            throw new IllegalArgumentException("SButton doesn't support button groups, use SToggleButton");
         } // end of if ()
     }
 
@@ -104,6 +104,7 @@ public class SButton extends SAbstractButton {
     }
 
     public void fireFinalEvents() {
+        requestFocus();
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, actionCommandToFire));
         if (getGroup() != null) {
             getGroup().fireDelayedFinalEvents();
@@ -114,5 +115,3 @@ public class SButton extends SAbstractButton {
         return getActionCommand() != null ? getActionCommand() : "1";
     }
 }
-
-

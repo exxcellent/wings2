@@ -153,7 +153,7 @@ public class SInternalFrame
 
     // LowLevelEventListener interface. Handle own events.
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
+        processKeyEvents(values);
 
         switch (new Integer(values[0]).intValue()) {
             case SInternalFrameEvent.INTERNAL_FRAME_CLOSED:

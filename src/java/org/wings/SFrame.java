@@ -40,7 +40,7 @@ import java.util.List;
  */
 public class SFrame
         extends SRootContainer
-        implements PropertyChangeListener {
+        implements PropertyChangeListener, LowLevelEventListener {
 
     /**
      * The Title of the Frame.
@@ -253,7 +253,7 @@ public class SFrame
 
     /**
      * Hides this frame. This means it gets removed at the session.
-     * @see Session#getFrames()
+     * @see org.wings.session.Session#frames()
      */
     public void hide() {
         setVisible(false);
@@ -261,7 +261,7 @@ public class SFrame
 
     /**
      * Shows or hide this frame. This means it gets (un)registered at the session.
-     * @see Session#getFrames()
+     * @see org.wings.session.Session#frames()
      */
     public void setVisible(boolean b) {
         if (b) {
@@ -311,5 +311,23 @@ public class SFrame
 
     public SComponent getFocus() {
         return focusComponent;
+    }
+
+    public void processLowLevelEvent(String name, String[] values) {
+        if (values.length == 1) {
+            String eventId = values[0];
+            eventId = eventId.substring("focus_".length());
+            System.out.println("eventId = " + eventId);
+            SComponent component = (SComponent) getDispatcher().getLowLevelEventListener(eventId);
+            System.out.println("component = " + component);
+            component.requestFocus();
+        }
+    }
+
+    public void fireIntermediateEvents() {
+    }
+
+    public boolean checkEpoch() {
+        return true;
     }
 }

@@ -39,7 +39,6 @@ public class TextFieldCG
         device.print("<input type=\"text\"");
         org.wings.plaf.Utils.optAttribute(device, "size", component.getColumns());
         org.wings.plaf.Utils.optAttribute(device, "maxlength", component.getMaxColumns());
-        org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
@@ -61,6 +60,10 @@ public class TextFieldCG
                 component.addScriptListener(submitListener);
             }
         }
+        
+        if (component.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+
         Utils.writeEvents(device, component);
 
         org.wings.plaf.Utils.optAttribute(device, "value", component.getText());

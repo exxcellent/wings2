@@ -93,6 +93,8 @@ public class ButtonCG
             device.print(" disabled=\"true\"");
         if (button.isSelected())
             device.print(" checked=\"true\"");
+        if (component.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
         Utils.writeEvents(device, button);
         device.print(">");

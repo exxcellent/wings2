@@ -33,7 +33,7 @@ public final class LowLevelEventDispatcher
         implements java.io.Serializable {
     private final transient static Log log = LogFactory.getLog(LowLevelEventDispatcher.class);
 
-    private final HashMap listener = new HashMap();
+    private final HashMap listeners = new HashMap();
 
     protected boolean namedEvents = true;
 
@@ -41,23 +41,27 @@ public final class LowLevelEventDispatcher
 
     public final void addLowLevelEventListener(LowLevelEventListener gl,
                                                String eventId) {
-        List l = (List) listener.get(eventId);
+        List l = (List) listeners.get(eventId);
         if (l == null) {
             l = new ArrayList(2);
             l.add(gl);
-            listener.put(eventId, l);
+            listeners.put(eventId, l);
         } else if (!l.contains(gl))
             l.add(gl);
     }
 
     public final void removeLowLevelEventListener(LowLevelEventListener gl,
                                                   String eventId) {
-        List l = (List) listener.get(eventId);
+        List l = (List) listeners.get(eventId);
         if (l != null) {
             l.remove(gl);
             if (l.size() == 0)
-                listener.remove(eventId);
+                listeners.remove(eventId);
         }
+    }
+
+    public final LowLevelEventListener getLowLevelEventListener(String eventId) {
+        return (LowLevelEventListener) listeners.get(eventId);
     }
 
     public final void setNamedEvents(boolean b) {
@@ -65,10 +69,10 @@ public final class LowLevelEventDispatcher
     }
 
     /**
-     * Registers a listener. The NamePrefix of the listener is stored in the
+     * Registers a listeners. The NamePrefix of the listeners is stored in the
      * HashMap as key. The value is a Set (ArrayList) of {@link LowLevelEventListener}s.
      *
-     * @param gl listener
+     * @param gl listeners
      */
     public void register(LowLevelEventListener gl) {
         if (gl == null)
@@ -148,7 +152,7 @@ public final class LowLevelEventDispatcher
             values = va;
         }
 
-        List l = (List) listener.get(name);
+        List l = (List) listeners.get(name);
         if (l != null && l.size() > 0) {
             log.debug("process event '" + epoch + "_" + name + "'");
             for (int i = 0; i < l.size(); ++i) {
@@ -193,7 +197,7 @@ public final class LowLevelEventDispatcher
     }
 
     void clear() {
-        listener.clear();
+        listeners.clear();
     }
 }
 

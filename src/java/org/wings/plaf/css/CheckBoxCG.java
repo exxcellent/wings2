@@ -73,11 +73,14 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
             org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
         }
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
         if (button.isSelected())
             device.print(" checked=\"true\"");
+        if (component.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
         device.print(">");
 

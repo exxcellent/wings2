@@ -72,7 +72,7 @@ public class SCheckBox extends SAbstractButton {
     }
 
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
+        processKeyEvents(values);
 
         boolean requestSelection;
         if (Arrays.asList(values).contains("hidden_reset")) {

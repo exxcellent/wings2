@@ -1302,6 +1302,12 @@ public abstract class SComponent
         }
     }
 
+    public boolean isFocusOwner() {
+        if (getParentFrame() != null)
+            return this == getParentFrame().getFocus();
+        return false;
+    }
+
     /**
      * Set display mode (href or form-component).
      * An AbstractButton can appear as HTML-Form-Button or as
@@ -1349,12 +1355,11 @@ public abstract class SComponent
     }
 
     protected void processLowLevelEvent(String name, String[] values) {
-        processKeyEvents(values);
     }
 
-    protected void processKeyEvents(String[] values) {
+    protected boolean processKeyEvents(String[] values) {
         if (actionMap == null)
-            return;
+            return false;
 
         if (log.isDebugEnabled())
             log.debug("processKeyEvents " + Arrays.asList(values));
@@ -1370,6 +1375,8 @@ public abstract class SComponent
         }
         if (arm)
             SForm.addArmedComponent((LowLevelEventListener) this);
+
+        return arm;
     }
 
     public void fireFinalEvents() {

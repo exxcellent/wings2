@@ -872,7 +872,7 @@ public class SList
      * @param value the value
      */
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
+        processKeyEvents(values);
 
         // delay events...
         getSelectionModel().setDelayEvents(true);

@@ -353,6 +353,8 @@ public class SFileChooser
 
     // -- Implementation of LowLevelEventListener
     public void processLowLevelEvent(String action, String[] values) {
+        processKeyEvents(values);
+
         exception = null;
 
         String value = values[0];

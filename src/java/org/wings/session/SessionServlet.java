@@ -36,6 +36,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * The servlet engine creates for each user a new HttpSession. This
@@ -343,17 +345,29 @@ final class SessionServlet
             handleLocale(req);
 
             Enumeration en = req.getParameterNames();
-            
-            // are there parameters/low level events to dispatch 
+            Cookie[] cookies = req.getCookies();
+
+            // are there parameters/low level events to dispatch
             if (en.hasMoreElements()) {
                 // only fire DISPATCH_START if we have parameters to dispatch
                 session.fireRequestEvent(SRequestEvent.DISPATCH_START);
 
+                for (int i = 0; i < cookies.length; i++) {
+                    Cookie cookie = cookies[i];
+                    String paramName = (String) cookie.getName();
+                    String value = cookie.getValue();
+
+                    System.out.println("dispatching cookie " + paramName + " = " + value);
+                    log.debug("dispatching cookie " + paramName + " = " + value);
+
+                    session.getDispatcher().dispatch(paramName, new String[] { value });
+                }
                 while (en.hasMoreElements()) {
                     String paramName = (String) en.nextElement();
                     String[] value = req.getParameterValues(paramName);
 
-                    log.debug("dispatching " + paramName + " = " + value[0]);
+                    if (log.isDebugEnabled())
+                        log.debug("dispatching " + paramName + " = " + Arrays.asList(value));
 
                     session.getDispatcher().dispatch(paramName, value);
                 }

@@ -51,6 +51,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                     tab.setSelectedIndex(tab.getSelectedIndex() - 1);
                 else if (tab.getSelectedIndex() < tab.getTabCount() - 1 && "next".equals(e.getActionCommand()))
                     tab.setSelectedIndex(tab.getSelectedIndex() + 1);
+                tab.requestFocus();
             }
         };
 
@@ -160,7 +161,8 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
 
             if (i == tabbedPane.getSelectedIndex()) {
                 device.print(" selected=\"true\"");
-                org.wings.plaf.Utils.optAttribute(device, "focus", tabbedPane.getName());
+                if (tabbedPane.isFocusOwner())
+                    org.wings.plaf.Utils.optAttribute(device, "focus", tabbedPane.getName());
             }
 
             if (!tabbedPane.isEnabledAt(i))

@@ -25,79 +25,71 @@ import java.awt.event.ActionListener;
  * @version $Revision$
  */
 public class TextComponentExample
-        extends WingSetPane {
-    private int i = 1;
-
+        extends WingSetPane
+{
     private ComponentControls controls;
+    private SLabel documentEvent = new SLabel();
+    private SLabel actionEvent = new SLabel();
+
+    SDocumentListener documentListener = new SDocumentListener() {
+                public void insertUpdate(SDocumentEvent e) {
+                    documentEvent.setText(((STextComponent) e.getSource()).getName());
+                    actionEvent.setText("button not pressed");
+                }
+
+                public void removeUpdate(SDocumentEvent e) {
+                    documentEvent.setText(((STextComponent) e.getSource()).getName());
+                    actionEvent.setText("button not pressed");
+                }
+
+                public void changedUpdate(SDocumentEvent e) {
+                    documentEvent.setText(((STextComponent) e.getSource()).getName());
+                    actionEvent.setText("button not pressed");
+                }
+            };
 
     public SComponent createExample() {
         controls = new ComponentControls();
 
         SPanel p = new SPanel(new SGridLayout(2));
+
+        p.add(new SLabel("STextField: "));
         STextField textField = new STextField();
         textField.setName("textfield");
-        p.add(createTextComponentExample(textField));
+        textField.addDocumentListener(documentListener);
+        p.add(textField);
 
+        p.add(new SLabel("STextArea: "));
         STextArea textArea = new STextArea();
         textArea.setName("textarea");
-        p.add(createTextComponentExample(textArea));
+        textArea.addDocumentListener(documentListener);
+        p.add(textArea);
 
-        SPanel f = new SPanel(new SBorderLayout());
-        f.add(controls, SBorderLayout.NORTH);
-        f.add(p, SBorderLayout.CENTER);
-        return f;
-    }
-
-    SForm createTextComponentExample(STextComponent textComp) {
-        SForm f = new SForm();
-
-        SGridLayout layout = new SGridLayout(2);
-        layout.setCellPadding(10);
-        f.setLayout(layout);
-
-        SLabel desc = new SLabel("Enter some text: ");
-        SLabel resultDesc = new SLabel("Entered text: ");
-        final SLabel result = new SLabel("");
-        final SLabel buttonDesc = new SLabel("");
-
-        textComp.addDocumentListener(new SDocumentListener() {
-            public void insertUpdate(SDocumentEvent e) {
-                result.setText(((STextComponent) e.getSource()).getText());
-                buttonDesc.setText("button not pressed");
-            }
-
-            public void removeUpdate(SDocumentEvent e) {
-                result.setText(((STextComponent) e.getSource()).getText());
-                buttonDesc.setText("button not pressed");
-            }
-
-            public void changedUpdate(SDocumentEvent e) {
-                result.setText(((STextComponent) e.getSource()).getText());
-                buttonDesc.setText("button not pressed");
-            }
-        });
+        p.add(new SLabel("DocumentEvent: "));
+        p.add(documentEvent);
 
         SButton button = new SButton("Submit");
-        button.setName("submit" + (i++));
+        p.add(button);
+        p.add(actionEvent);
+
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                buttonDesc.setText("Button pressed");
+                actionEvent.setText("Button pressed");
             }
         });
 
+        SForm f = new SForm(new SBorderLayout());
         f.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                buttonDesc.setText(buttonDesc.getText() + " + form event");
+                actionEvent.setText(actionEvent.getText() + " + form event");
             }
         });
 
-        f.add(desc);
-        f.add(textComp);
-        f.add(resultDesc);
-        f.add(result);
-        f.add(button);
-        f.add(buttonDesc);
-
+        controls.addSizable(textField);
+        controls.addSizable(textArea);
+        
+        f.add(controls, SBorderLayout.NORTH);
+        f.add(p, SBorderLayout.CENTER);
         return f;
     }
 }

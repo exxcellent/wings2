@@ -50,6 +50,10 @@ public class PasswordFieldCG
         } else {
             device.print(" disabled=\"1\"");
         }
+
+        if (component.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
+
         Utils.writeEvents(device, component);
 
         org.wings.plaf.Utils.optAttribute(device, "value", component.getText());

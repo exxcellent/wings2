@@ -425,7 +425,7 @@ public abstract class SAbstractAdjustable
     }
 
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
+        processKeyEvents(values);
 
         getModel().setDelayEvents(true);
         for (int i = 0; i < values.length; i++) {

@@ -50,6 +50,9 @@ public class RadioButtonCG
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
+        if (button.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", button.getName());
+
         if (button.isSelected())
             device.print(" checked=\"true\"");
 

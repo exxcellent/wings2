@@ -45,11 +45,11 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", list.getVisibleRowCount());
         Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SConstants.MULTIPLE_SELECTION) ? "multiple" : null);
-        Utils.optAttribute(device, "focus", list.getName());
 
-        if (!list.isEnabled()) {
-            device.print(" disabled=\"1\"");
-        }
+        if (!list.isEnabled())
+            device.print(" disabled=\"true\"");
+        if (list.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", list.getName());
 
         list.removeScriptListener(selectListener);
         if (list.getListSelectionListeners().length > 0) {

@@ -59,7 +59,6 @@ public abstract class SRootContainer extends SContainer {
      */
     public void pushDialog(SDialog dialog) {
         log.debug("push dialog = " + dialog.getName());
-        new Throwable().printStackTrace();
         super.addComponent(dialog, null, getComponentCount());
         dialog.setFrame(this);
         reload();
@@ -81,7 +80,6 @@ public abstract class SRootContainer extends SContainer {
 
         reload();
         log.debug("pop dialog = " + dialog.getName());
-        new Throwable().printStackTrace();
         return dialog;
     }
 
@@ -118,7 +116,4 @@ public abstract class SRootContainer extends SContainer {
     public void remove(SComponent c) {
         throw new IllegalArgumentException("use getContentPane().removeComponent()");
     }
-
 }
-
-

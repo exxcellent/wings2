@@ -62,7 +62,7 @@ public class SRadioButton
     }
 
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
+        processKeyEvents(values);
 
         boolean origSelected = isSelected();
 

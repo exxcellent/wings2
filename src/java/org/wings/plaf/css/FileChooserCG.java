@@ -55,8 +55,12 @@ public class FileChooserCG
             device.print(" id=\"");
             org.wings.plaf.Utils.write(device, component.getName());
             device.print("\"");
-        } else
-            device.print(" readonly=\"1\"");
+        }
+        else
+            device.print(" readonly=\"true\"");
+
+        if (component.isFocusOwner())
+            org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 

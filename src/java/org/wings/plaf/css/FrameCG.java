@@ -107,7 +107,9 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
         component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(stylesheet)));
 
-        component.addScriptListener(FORM_SCRIPT_LOADER);
+        component.addScriptListener(FORM_SCRIPT);
+        component.addScriptListener(FOCUS_SCRIPT);
+        component.addScriptListener(SCROLL_POSITION_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);
     }
 
@@ -117,7 +119,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         component.removeDynamicResource(DynamicCodeResource.class);
         component.removeDynamicResource(DynamicStyleSheetResource.class);
         component.removeDynamicResource(DynamicScriptResource.class);
-        component.removeScriptListener(FORM_SCRIPT_LOADER);
+        component.removeScriptListener(FORM_SCRIPT);
         component.clearHeaders();
     }
 
@@ -126,8 +128,14 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     public static final JavaScriptListener DATE_CHOOSER_SCRIPT_LOADER =
     new JavaScriptListener("", "", loadScript("org/wings/plaf/css/DateChooser.js"));
     */
-    public static final JavaScriptListener FORM_SCRIPT_LOADER =
+    public static final JavaScriptListener FORM_SCRIPT =
             new JavaScriptListener("", "", loadScript("org/wings/plaf/css/Form.js"));
+
+    public static final JavaScriptListener FOCUS_SCRIPT =
+            new JavaScriptListener("onfocus", "storeFocus(event)");
+
+    public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
+            new JavaScriptListener("onscroll", "storeScrollPosition(event)");
 
     public static String loadScript(String resource) {
         InputStream in = null;
@@ -168,7 +176,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         _c.fireRenderEvent(SComponent.START_RENDERING);
         final SFrame component = (SFrame) _c;
 
-        org.wings.session.Browser browser = SessionManager.getSession().getUserAgent();
+        Browser browser = SessionManager.getSession().getUserAgent();
         SFrame frame = (SFrame) component;
         String language = SessionManager.getSession().getLocale().getLanguage();
         String title = frame.getTitle();
@@ -244,7 +252,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
                 .print("</script>\n");
 
         device.print("</head>\n");
-        device.print("<body ");
+        device.print("<body");
+        org.wings.plaf.Utils.optAttribute(device, "id", frame.getName());
         org.wings.plaf.Utils.optAttribute(device, "class", frame.getStyle());
         Utils.writeEvents(device, frame);
         device.print(">\n");

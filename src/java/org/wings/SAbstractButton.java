@@ -246,7 +246,7 @@ public abstract class SAbstractButton
     }
 
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
+        processKeyEvents(values);
 
         boolean requestSelection = isSelected();
 
@@ -330,6 +330,7 @@ public abstract class SAbstractButton
     }
 
     public void fireFinalEvents() {
+        requestFocus();
         super.fireFinalEvents();
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
         if (buttonGroup != null)
