@@ -135,7 +135,7 @@ public class Browser {
 
     /* regexps are not threadsafe, we have to create them. */
     protected final RE RE_START = new RE("^([a-zA-Z0-9_\\-]+)(/([0-9])\\.([0-9]+))?");
-    protected final RE RE_MSIE = new RE("RE_MSIE ([0-9])\\.([0-9]+)([a-z])?");
+    protected final RE RE_MSIE = new RE("MSIE ([0-9])\\.([0-9]+)([a-z])?");
     protected final RE RE_MSIE_WIN_LANG_OS = new RE("[wW]in(dows)? ([A-Z0-9]+) ?([0-9]\\.[0-9])?");
     protected final RE RE_MSIE_MAC_LANG_OS = new RE("Mac_PowerPC");
     protected final RE RE_NS_LANG_OS = new RE("\\[([a-z-]+)\\][ a-zA-Z0-9-]*\\(([a-zA-Z\\-]+)/?([0-9]* ?[.a-zA-Z0-9 ]*);");
@@ -155,7 +155,6 @@ public class Browser {
             throws org.apache.regexp.RESyntaxException {
         if (agent == null || agent.length() == 0)
             return;
-
         String mav, miv, lang = null;
 
         if (RE_START.match(agent)) {
