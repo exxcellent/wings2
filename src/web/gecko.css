@@ -3,12 +3,16 @@
    wings Default Style Sheet for gecko Browser (Mozilla, FireFox).
 */
 
+HTML {
+	height: 100%;
+}
 BODY {
     background: #ffffff;
     margin: 0px;
     font-family: sans-serif;
     font-style: normal;
     font-size: 12px;
+    height: 100%;
 }
 
 table {
@@ -32,7 +36,7 @@ textarea, input[type="text"], select {
 }
 
 a, button {
-    display: table;
+/*display: table;*/
     border: 0px;
     padding: 0px;
     margin: 0px;
@@ -124,28 +128,25 @@ div.STextField {
    font-style: normal;
    color: #000000;
 }
-
-div.STree > table {
-   border: none;
-   border-spacing: 0px;
+div.STree {
+	vertical-align: top;
+	text-align: left;
 }
-
-div.STree > table > tbody > tr > td {
-    padding: 0px;
-    border: 1px none black;
-    cursor: pointer;
+ul.STree{
+	list-style: none;
 }
-
-div.STree > table > tbody > tr > td * {
-    white-space: nowrap;
+ul.STree > li {
+	padding-left: -20px;
+	margin-left: -20px;
 }
-
-div.STree > table > tbody > tr > td[selected="true"] {
+ul.STree > li * {
+	white-space: nowrap;
+}
+ul.STree > li[selected="true"] {
     background-color: #f6decc;
     border: 1px dotted black;
 }
-
-div.STree > table > tbody > tr > td button {
+ul.STree > li button {
     border: none;
     background-color: inherit;
     padding: 0px;
@@ -155,7 +156,11 @@ div.STree > table > tbody > tr > td button {
     font-style: normal;
     color: #000000;
 }
-
+ul.STree > li > div.SSubTree {
+	background-image: url(icons/TreeLine.gif);
+	background-repeat:repeat-y;
+	background-position: 0px 100px;
+}
 div.STable > table {
     width: 100%;
     border: 1px solid black;

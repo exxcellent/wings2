@@ -12,6 +12,7 @@ BODY {
     font-family: sans-serif;
     font-style: normal;
     font-size: 14px;
+    height: 100%;
 }
 
 div, form {
@@ -79,7 +80,7 @@ TH, TD {
    color: #000000
 }
 
-div.STree table {
+/*div.STree table {
    border: none;
 }
 
@@ -95,7 +96,44 @@ div.STree table tbody tr td * {
 div.STree td.selected {
     background-color: #aaaaff;
     border: 1px dotted black;
+}*/
+
+div.STree {
+	vertical-align: top;
+	text-align: left;
 }
+ul.STree{
+	list-style: none;
+}
+ul.STree li {
+	padding-left: -20px;
+	margin-left: -20px;
+}
+ul.STree li * {
+	white-space: nowrap;
+}
+/* doesn't work in ie
+ul.STree li[selected="true"] {
+    background-color: #f6decc;
+    border: 1px dotted black;
+}
+*/
+ul.STree li button {
+    border: none;
+    background-color: inherit;
+    padding: 0px;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
+}
+ul.STree li div.SSubTree {
+	background-image: url(icons/TreeLine.gif);
+	background-repeat:repeat-y;
+	background-position: 0px 100px;
+}
+
 
 .STable {
    border-style: solid;
