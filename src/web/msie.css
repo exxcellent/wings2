@@ -12,13 +12,9 @@ BODY {
     font-family: sans-serif;
     font-style: normal;
     font-size: 14px;
-    width: inherit;
-    height: inherit;
 }
 
 div, form {
-    color: inherit;
-    background-color: inherit;
     font-size: 0px;
     padding: 0px;
     margin: 0px;
@@ -76,7 +72,6 @@ TH, TD {
 .SList {
    border-style: none;
    border-width: 0px;
-   border-spacing: 2px;
    text-decoration: none;
    font-family: sans-serif;
    font-weight: normal;
@@ -86,11 +81,10 @@ TH, TD {
 
 div.STree table {
    border: none;
-   border-spacing: 0px;
 }
 
 div.STree table tbody tr td {
-    padding: 0px
+    padding: 0px;
     border: 1px none black;
 }
 
@@ -107,7 +101,6 @@ div.STree td.selected {
    border-style: solid;
    border-width: 1px;
    border-color: black;
-   border-spacing: 0px;
    text-decoration: none;
    font-family: sans-serif;
    font-weight: normal;
@@ -139,18 +132,18 @@ div.STree td.selected {
 	padding-bottom: 0px;
 	border-style: solid;
 	border-width: 1px;
-    padding : 0 px;
+   padding : 0px;
 }
 
 .SMenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
-	color: #000066;
-	background-color: #CCCCCC;
 	border-width: 0px;
 	margin: 0px;
 	padding: 0px;
 	white-space: nowrap;
+  	color: #ffffff;
+	background-color: #7777CC;
 }
 
 .disabledmenu {
@@ -169,17 +162,6 @@ div.STree td.selected {
 	font-size: 14px;
   	color: #ffffff;
 	background-color: #5555AA;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
-	white-space: nowrap;
-}
-
-.smenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-  	color: #ffffff;
-	background-color: #7777CC;
 	border-width: 0px;
 	margin: 0px;
 	padding: 0px;
@@ -344,18 +326,6 @@ th.bottom {
 }
 
 
-div.STable > table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-div.STable > table > tr > * {
-    border: 1px solid black;
-}
-
-div.STable > table > tr[selected="true"] > * {
-    background-color: #aaaaff;
-}
 
 div.SPanel, div.SContainer {
     width: 100%;
@@ -365,12 +335,4 @@ div.SPanel, div.SContainer {
 table.SBorderLayout {
     width: 100%;
     height: 100%;
-}
-
-.tr_with_ths
-{
-    position:relative;
-    top:expression(this.offsetParent.scrollTop);
-    background-color:white;
-    font-family: Arial, Helvetica, sans-serif;
 }

@@ -19,7 +19,6 @@ div, form, td, th {
     padding: 0px;
     margin: 0px;
     border: none;
-    font: inherit;
 }
 
 textarea, input[type="text"], select {
@@ -41,6 +40,7 @@ img {
     border: 0px;
     padding: 0px;
     margin: 0px;
+    border: none !important;
     vertical-align: middle;
 }
 
@@ -57,11 +57,6 @@ A:active {
 HR { 
    margin-top: 0;
    margin-bottom: 0 
-}
-
-IMG {
-    border: none !important;
-    vertical-align: middle;
 }
 
 TH, TD {
@@ -128,11 +123,10 @@ div.STextField {
 
 div.STree > table {
    border: none;
-   border-spacing: 0px;
 }
 
 div.STree > table > tbody > tr > td {
-    padding: 0px
+    padding: 0px;
     border: 1px none black;
     cursor: pointer;
 }
@@ -149,7 +143,7 @@ div.STree > table > tbody > tr > td[selected="true"] {
 div.STree > table > tbody > tr > td button {
     border: none;
     background-color: inherit;
-    padding: 0px
+    padding: 0px;
     text-decoration: none;
     font-family: sans-serif;
     font-weight: normal;
@@ -178,7 +172,7 @@ div.STable > table > thead > tr > th {
 }
 
 div.STable > table > tbody > tr > td {
-    cursor: pointer
+    cursor: pointer;
     padding-left: 8px;
     padding-right: 8px;
     border-left: 1px solid black;
@@ -215,8 +209,8 @@ div.SList > * > li[selected="true"] {
 .SMenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	color: #000044;
-	background-color: #CCCCCC;
+  	color: #ffffff;
+	background-color: #7777CC;
 	border-width: 0px;
 	margin: 0px;
 	padding: 0px;
@@ -226,7 +220,7 @@ div.SList > * > li[selected="true"] {
 .disabledmenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	color: darkgray;
+	color: gray;
 	background-color: #CCCCCC;
 	border-width: 0px;
 	margin: 0px;
@@ -245,16 +239,6 @@ div.SList > * > li[selected="true"] {
 	white-space: nowrap;
 }
 
-.smenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-  	color: #ffffff;
-	background-color: #7777CC;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
-	white-space: nowrap;
-}
 
 .pdmenu {
 	background-color: #CCCCCC;
@@ -281,7 +265,7 @@ div.SList > * > li[selected="true"] {
 .disabledmenuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	color: darkgray;
+	color: gray;
 	background-color: #CCCCCC;
 	white-space: nowrap;
 	border-width: 0px;
