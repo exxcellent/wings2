@@ -78,32 +78,6 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
         }
         Utils.printNewline(d, container);
         d.print("</div>");
-
-        // TODO Move this to a special IE implementation for CENTER case
-        /*  int count = 0;
-         for (int i = 0; i < components.size(); i++) {
-             SComponent comp = (SComponent) components.get(i);
-             if (comp.isVisible()) {
-                 if (count == 0) {
-                     printLayouterTableHeader(d, "", 0, 0, 0, layout);
-                     d.print("<tr><td");
-                 } else if (orientation == SConstants.VERTICAL)
-                     d.print("</td></tr>\n<tr><td");
-                 else
-                     d.print("</td><td");
-
-                 Utils.printTableCellAlignment(d, comp);
-                 //Utils.printCSSInlineStyleAttributes(d, comp);
-
-                 d.print(">");
-                 comp.write(d); // Render component itself
-                 count++;
-             }
-         }
-         if (count > 0) {
-             d.print("</td></tr>");
-             printLayouterTableFooter(d, "SFlowLayout", layout);
-         } */
     }
 }
 
