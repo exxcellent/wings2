@@ -7,17 +7,17 @@
 <tr>
   <td>
     <h2>wingS Example</h2>
-    <div class="small-title">A example demonstrates some wingS <br/>
-	   properties, similar to the Java SwingSet example.</div></p>
-    <br/>
+    <div class="small-title">An example demonstrating some wingS <br />
+	   properties, similar to the Java SwingSet example.</div><p />
+    <br />
   </td>
   <td valign="top" align="right">
-  <a href="http://www.j-wings.org/"><img src="../icons/wings-logo.png" border="0"></a>
+  <a href="http://www.j-wings.org/"><img src="../icons/wings-logo.png" border="0" /></a>
   </td>
 </tr>
 <tr>
- <td colspan="2" align="center">
-   <object name="content">Here is the example Application</object>
+  <td colspan="2" align="center">
+    <object name="content">Here is the example Application</object>
   </td>
 </tr>
 </table>
