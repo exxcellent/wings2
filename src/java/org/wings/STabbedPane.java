@@ -782,12 +782,8 @@ public class STabbedPane
      * @see LowLevelEventListener#processLowLevelEvent(String, String[])
      */
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
-        /*
-        if ( !action.startsWith(getLowLevelEventId()) ) {
-            return;
-        }
-        */
+        processKeyEvents(values);
+
         for (int i = 0; i < values.length; ++i) {
             try {
                 int index = new Integer(values[i]).intValue();

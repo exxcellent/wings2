@@ -41,7 +41,7 @@ public class BorderLayoutCG
         if (center != null) cols++;
         if (east != null) cols++;
 
-        d.print("\n<table class=\"SBorderLayout\" cellpadding=\"0\" cellspacing=\"0\">");
+        d.print("\n<table class=\"SBorderLayout\" cellpadding=\"0\" cellspacing=\"0\"><tbody>");
 
         if (north != null) {
             d.print("\n<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
@@ -74,7 +74,7 @@ public class BorderLayoutCG
             writeComponent(d, south);
             d.print("</td></tr>");
         }
-        d.print("\n</table>");
+        d.print("\n</tbody></table>");
     }
 
     protected void writeComponent(Device d, SComponent c)

@@ -32,7 +32,7 @@ public class PageScrollerExample
 
     SList list;
     SPageScroller scrollbar;
-    SScrollPane scroller;
+    SScrollPane scrollPane;
     private PageScrollerControls controls;
 
     public SComponent createExample() {
@@ -47,18 +47,17 @@ public class PageScrollerExample
         scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
         scrollbar.setDirectPages(10);
 
-        scroller = new SScrollPane(list);
-        scroller.setHorizontalScrollBar(null);
-        scroller.setVerticalScrollBar(null);
-        // maximum of 50 visible rows...
-        scroller.setVerticalExtent(50);
+        scrollPane = new SScrollPane(list);
+        scrollPane.setHorizontalScrollBar(null);
+        scrollPane.setVerticalScrollBar(null);
+        scrollPane.setVerticalExtent(50);
 
         controls = new PageScrollerControls();
-        controls.addSizable(scroller);
+        controls.addSizable(scrollPane);
 
         SForm form = new SForm(new SBorderLayout());
         form.add(controls, SBorderLayout.NORTH);
-        form.add(scroller, SBorderLayout.CENTER);
+        form.add(scrollPane, SBorderLayout.CENTER);
         return form;
     }
 
@@ -82,7 +81,6 @@ public class PageScrollerExample
         TreeNode root = HugeTreeModel.generateTree();
 
         ArrayList data = new ArrayList();
-
         addChildNodes(root, data, 0);
 
         return data.toArray();
@@ -123,20 +121,20 @@ public class PageScrollerExample
                 public void itemStateChanged(ItemEvent e) {
                     if ("Top".equals(layout.getSelectedItem())) {
                         scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
-                        scroller.setHorizontalScrollBar(scrollbar,
-                                SBorderLayout.NORTH);
+                        scrollPane.setHorizontalScrollBar(scrollbar,
+                                SScrollPaneLayout.NORTH);
                     } else if ("Bottom".equals(layout.getSelectedItem())) {
                         scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
-                        scroller.setHorizontalScrollBar(scrollbar,
-                                SBorderLayout.SOUTH);
+                        scrollPane.setHorizontalScrollBar(scrollbar,
+                                SScrollPaneLayout.SOUTH);
                     } else if ("Left".equals(layout.getSelectedItem())) {
                         scrollbar.setLayoutMode(Adjustable.VERTICAL);
-                        scroller.setHorizontalScrollBar(scrollbar,
-                                SBorderLayout.WEST);
+                        scrollPane.setHorizontalScrollBar(scrollbar,
+                                SScrollPaneLayout.WEST);
                     } else if ("Right".equals(layout.getSelectedItem())) {
                         scrollbar.setLayoutMode(Adjustable.VERTICAL);
-                        scroller.setHorizontalScrollBar(scrollbar,
-                                SBorderLayout.EAST);
+                        scrollPane.setHorizontalScrollBar(scrollbar,
+                                SScrollPaneLayout.EAST);
                     }
                 }
             });

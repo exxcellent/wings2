@@ -101,7 +101,7 @@ public class ScrollBarCG
 
         d.print("<table orientation=\"vertical\"><tbody>\n")
                 .print("<tr height=\"1%\">\n")
-                .print("<td height=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum);
@@ -116,7 +116,7 @@ public class ScrollBarCG
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
                 .print("<tr height=\"100%\">\n")
-                .print("<td><table height=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
+                .print("<td><table area=\"slider\" height=\"100%\"><tbody>\n");
 
         int range = maximum - minimum;
         int iconWidth = DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0].getIconWidth();
@@ -127,7 +127,7 @@ public class ScrollBarCG
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
                 .print("<tr height=\"1%\">\n")
-                .print("<td height=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + 1));
@@ -165,7 +165,7 @@ public class ScrollBarCG
         boolean forwardEnabled = value < maximum - extent;
 
         d.print("<table orientation=\"horizontal\"><tbody><tr>\n")
-                .print("<td width=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
+                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum);
@@ -178,7 +178,7 @@ public class ScrollBarCG
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td width=\"100%\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
+                .print("<td width=\"100%\"><table area=\"slider\" width=\"100%\"><tbody><tr>\n");
 
         int range = maximum - minimum;
         int iconHeight = DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0].getIconHeight();
@@ -187,7 +187,7 @@ public class ScrollBarCG
         horizontalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconHeight);
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td width=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
+                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + 1));

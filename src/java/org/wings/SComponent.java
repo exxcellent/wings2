@@ -1350,12 +1350,20 @@ public abstract class SComponent
         if (actionMap == null)
             return;
 
+        if (log.isDebugEnabled())
+            log.debug("processKeyEvents " + Arrays.asList(values));
+
+        boolean arm = false;
         for (int i = 0; i < values.length; i++) {
             String value = values[i];
             Action action = actionMap.get(value);
-            if (action != null)
+            if (action != null) {
                 actionEvents.put(action, new ActionEvent(this, 0, value));
+                arm = true;
+            }
         }
+        if (arm)
+            SForm.addArmedComponent((LowLevelEventListener) this);
     }
 
     public void fireFinalEvents() {
@@ -1369,9 +1377,9 @@ public abstract class SComponent
     }
 
     /**
-     * Makes this <code>SComponent</code> unavalable
+     * Makes this <code>SComponent</code> unavailable.
      * This Method is called internal and should not be called directly
-     **/
+     */
     public void removeNotify() {
     }
 }

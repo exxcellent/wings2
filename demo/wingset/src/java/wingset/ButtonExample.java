@@ -87,8 +87,6 @@ public class ButtonExample
         buttons[8].setVerticalTextPosition(SConstants.BOTTOM);
         buttons[8].setHorizontalTextPosition(SConstants.RIGHT);
 
-        SPanel erg = new SPanel();
-
         SGridLayout grid = new SGridLayout(3, 3);
         grid.setBorder(1);
         SPanel b = new SPanel(grid);
@@ -107,6 +105,7 @@ public class ButtonExample
         for (int i = 0; i < buttons.length; i++)
             b.add(buttons[i]);
 
+        SPanel erg = new SPanel();
         erg.add(b);
         erg.add(new SLabel("<html><br />"));
         erg.add(pressed);

@@ -383,12 +383,12 @@ public class SContainer extends SComponent {
      */
     public SComponent addComponent(SComponent c, Object constraint, int index) {
         if (c != null) {
-            if (layout != null)
-                layout.addComponent(c, constraint, index);
-
             getComponentList().add(index, c);
             getConstraintList().add(index, constraint);
             c.setParent(this);
+
+            if (layout != null)
+                layout.addComponent(c, constraint, index);
 
             fireContainerEvent(SContainerEvent.COMPONENT_ADDED, c);
             reload();

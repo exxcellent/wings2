@@ -29,7 +29,7 @@ public class ScrollPaneExample
 {
     private ScrollPaneControls controls;
     private STable table;
-    private SScrollPane scroller;
+    private SScrollPane scrollPane;
 
     public SComponent createExample() {
         controls = new ScrollPaneControls();
@@ -38,16 +38,16 @@ public class ScrollPaneExample
         table.setShowAsFormComponent(true);
         table.setDefaultRenderer(new TableExample.MyCellRenderer());
 
-        scroller = new SScrollPane(table);
-        scroller.getHorizontalScrollBar().setBlockIncrement(3);
-        scroller.getVerticalScrollBar().setBlockIncrement(3);
+        scrollPane = new SScrollPane(table);
+        scrollPane.getHorizontalScrollBar().setBlockIncrement(3);
+        scrollPane.getVerticalScrollBar().setBlockIncrement(3);
 
-        ((SScrollBar) scroller.getHorizontalScrollBar()).setShowAsFormComponent(false);
-        ((SScrollBar) scroller.getVerticalScrollBar()).setShowAsFormComponent(false);
+        ((SScrollBar) scrollPane.getHorizontalScrollBar()).setShowAsFormComponent(false);
+        ((SScrollBar) scrollPane.getVerticalScrollBar()).setShowAsFormComponent(false);
 
         SForm p = new SForm(new SBorderLayout());
         p.add(controls, SBorderLayout.NORTH);
-        p.add(scroller, SBorderLayout.CENTER);
+        p.add(scrollPane, SBorderLayout.CENTER);
         return p;
     }
 
@@ -58,8 +58,8 @@ public class ScrollPaneExample
                 public void actionPerformed(ActionEvent e) {
                     boolean selected = showAsFormComponent.isSelected();
                     table.setShowAsFormComponent(selected);
-                    ((SScrollBar)scroller.getHorizontalScrollBar()).setShowAsFormComponent( selected);
-                    ((SScrollBar)scroller.getVerticalScrollBar()).setShowAsFormComponent(selected);
+                    ((SScrollBar)scrollPane.getHorizontalScrollBar()).setShowAsFormComponent( selected);
+                    ((SScrollBar)scrollPane.getVerticalScrollBar()).setShowAsFormComponent(selected);
                 }
             });
 

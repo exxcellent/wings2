@@ -89,7 +89,7 @@ public class PageScrollerCG
 
         d.print("<table orientation=\"vertical\"><tbody>\n")
                 .print("<tr height=\"1%\">\n")
-                .print("<td height=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum);
@@ -101,7 +101,7 @@ public class PageScrollerCG
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
                 .print("<tr height=\"100%\">\n")
-                .print("<td><table height=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
+                .print("<td><table area=\"pages\" height=\"100%\"><tbody>\n");
 
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
@@ -117,7 +117,7 @@ public class PageScrollerCG
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
                 .print("<tr height=\"1%\">\n")
-                .print("<td height=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + extent));
@@ -148,7 +148,7 @@ public class PageScrollerCG
         boolean forwardEnabled = value < maximum - extent;
 
         d.print("<table orientation=\"horizontal\"><tbody><tr>\n")
-                .print("<td width=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
+                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum);
@@ -158,7 +158,7 @@ public class PageScrollerCG
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td width=\"100%\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
+                .print("<td width=\"100%\"><table area=\"pages\" width=\"100%\"><tbody><tr>\n");
 
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
@@ -172,7 +172,7 @@ public class PageScrollerCG
         }
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td width=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
+                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + extent));

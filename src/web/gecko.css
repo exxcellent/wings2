@@ -312,15 +312,12 @@ div.SList > * > li[selected="true"] {
 	width: 100%;
 }
 
-.titledbordertitle {
-   font-family: sans-serif;
-   font-size: 12px;
-   color: #000000;
-}
-
 div.SScrollBar, div.SPageScroller {
     height: 100%;
     width: 100%;
+}
+
+div.SScrollBar table[area="buttons"], div.SPageScroller table[area="buttons"] {
     background-color: #eeeeff;
 }
 
@@ -332,11 +329,27 @@ div.SScrollBar > table[orientation="horizontal"], div.SPageScroller > table[orie
     width: 100%;
 }
 
-div.SScrollBar button, div.SScrollBar a, div.SPageScroller button, div.SPageScroller a {
+div.SScrollBar table[area="buttons"] button, div.SScrollBar table[area="buttons"] a {
    border: 1px solid #cccccc;
 }
 
-div.SScrollBar button:hover, div.SScrollBar a:hover, div.SPageScroller button:hover, div.SPageScroller a:hover {
+div.SScrollBar table[area="buttons"] button:hover, div.SScrollBar table[area="buttons"] a:hover {
+   border: 1px outset #cccccc;
+}
+
+div.SPageScroller table[area="buttons"] button, div.SPageScroller table[area="buttons"] a {
+   border: 1px solid #cccccc;
+}
+
+div.SPageScroller table[area="buttons"] button:hover, div.SPageScroller table[area="buttons"] a:hover {
+   border: 1px outset #cccccc;
+}
+
+div.SPageScroller table[area="pages"] button, div.SPageScroller table[area="pages"] a {
+   border: 1px none;
+}
+
+div.SPageScroller table[area="pages"] button:hover, div.SPageScroller table[area="pages"] a:hover {
    border: 1px outset #cccccc;
 }
 

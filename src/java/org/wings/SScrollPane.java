@@ -26,11 +26,13 @@ import java.awt.event.AdjustmentListener;
 public class SScrollPane
         extends SContainer
         implements javax.swing.ScrollPaneConstants {
+
     /**
-     * the viewportView component
-     * *
+     * The element which should be scrolled.
      */
-    private SComponent viewComponent;
+    protected Scrollable scrollable;
+    protected Adjustable verticalScrollBar = null;
+    protected Adjustable horizontalScrollBar = null;
 
     /**
      * store the scrollables viewport. Scrollable is reset to this value, if it
@@ -38,18 +40,9 @@ public class SScrollPane
      */
     protected Rectangle backupViewport;
 
-    /**
-     * The element which should be scrolled.
-     */
-    protected Scrollable scrollable;
-
     protected int horizontalScrollBarPolicy = HORIZONTAL_SCROLLBAR_AS_NEEDED;
 
     protected int verticalScrollBarPolicy = VERTICAL_SCROLLBAR_AS_NEEDED;
-
-    protected Adjustable verticalScrollBar = null;
-
-    protected Adjustable horizontalScrollBar = null;
 
     protected AdjustmentListener adjustmentListener;
 
@@ -58,7 +51,7 @@ public class SScrollPane
     protected int verticalExtent = 10;
 
     public SScrollPane() {
-        super(new SBorderLayout());
+        super(new SScrollPaneLayout());
 
         setHorizontalScrollBar(new SScrollBar(SConstants.HORIZONTAL));
         setVerticalScrollBar(new SScrollBar(SConstants.VERTICAL));
@@ -66,7 +59,6 @@ public class SScrollPane
 
     public SScrollPane(SComponent c) {
         this();
-
         setViewportView(c);
     }
 
@@ -129,7 +121,7 @@ public class SScrollPane
     public void synchronizeViewport() {
         Rectangle viewport = scrollable.getScrollableViewportSize();
         
-        // should never happen. If it happen we got a serious problem, because
+        // should never happen. If it happens we got a serious problem, because
         // we cannot determine what to scroll...
         if (viewport == null) viewport = new Rectangle();
 
@@ -171,7 +163,6 @@ public class SScrollPane
 
     }
 
-
     protected void setScrollable(SComponent c) {
         if (scrollable != null) {
             // reset to original value
@@ -197,14 +188,23 @@ public class SScrollPane
     }
 
     /**
+     * Sets the scrollable.
+     * If there is already one, it will be removed first.
+     *
+     * @param view the component to add to the viewport
+     */
+    public void setViewportView(SComponent view) {
+        add(view);
+    }
+
+    /**
      * only {@link Scrollable scrollables} are allowed here!
      */
     public SComponent addComponent(SComponent c, Object constraint, int index) {
         if (c instanceof Scrollable) {
-            remove((SComponent) scrollable);
-            SComponent ret = super.addComponent(c, SBorderLayout.CENTER, index);
-            setScrollable(ret);
-            return ret;
+            super.addComponent(c, SScrollPaneLayout.VIEWPORT, index);
+            setScrollable(c);
+            return c;
         } else {
             throw new IllegalArgumentException("Only Scrollables are allowed");
         }
@@ -229,7 +229,7 @@ public class SScrollPane
      * @param sb the scrollbar that controls the viewports horizontal view position
      */
     public void setHorizontalScrollBar(Adjustable sb) {
-        setHorizontalScrollBar(sb, SBorderLayout.SOUTH);
+        setHorizontalScrollBar(sb, SScrollPaneLayout.SOUTH);
     }
 
     /**
@@ -237,22 +237,20 @@ public class SScrollPane
      *
      * @param constraint the constraint for the {@link LayoutManager} of this
      *                   {@link SContainer}. The {@link LayoutManager} is per default
-     *                   {@link SBorderLayout}.
+     *                   {@link SScrollPaneLayout}.
      */
     public void setHorizontalScrollBar(Adjustable sb, String constraint) {
         if (horizontalScrollBar != null) {
             horizontalScrollBar.removeAdjustmentListener(getAdjustmentListener());
             if (horizontalScrollBar instanceof SComponent)
-                remove((SComponent) horizontalScrollBar);
+                super.remove((SComponent) horizontalScrollBar);
         }
+
         horizontalScrollBar = sb;
 
         if (horizontalScrollBar != null) {
-            if (horizontalScrollBar instanceof SComponent) {
-                super.addComponent((SComponent) horizontalScrollBar,
-                        constraint,
-                        getComponentCount());
-            }
+            if (horizontalScrollBar instanceof SComponent)
+                super.addComponent((SComponent) horizontalScrollBar, constraint, getComponentCount());
 
             synchronizeAdjustables();
             horizontalScrollBar.addAdjustmentListener(getAdjustmentListener());
@@ -286,7 +284,7 @@ public class SScrollPane
      * @param sb the scrollbar that controls the viewports vertical view position
      */
     public void setVerticalScrollBar(Adjustable sb) {
-        setVerticalScrollBar(sb, SBorderLayout.EAST);
+        setVerticalScrollBar(sb, SScrollPaneLayout.EAST);
     }
 
     /**
@@ -295,23 +293,20 @@ public class SScrollPane
      * @param sb         the scrollbar that controls the viewports vertical view position
      * @param constraint the constraint for the {@link LayoutManager} of this
      *                   {@link SContainer}. The {@link LayoutManager} is per default
-     *                   {@link SBorderLayout}.
+     *                   {@link SScrollPaneLayout}.
      */
     public void setVerticalScrollBar(Adjustable sb, String constraint) {
         if (verticalScrollBar != null) {
             verticalScrollBar.removeAdjustmentListener(getAdjustmentListener());
             if (verticalScrollBar instanceof SComponent)
-                remove((SComponent) verticalScrollBar);
+                super.remove((SComponent) verticalScrollBar);
         }
 
         verticalScrollBar = sb;
 
         if (verticalScrollBar != null) {
-            if (verticalScrollBar instanceof SComponent) {
-                super.addComponent((SComponent) verticalScrollBar,
-                        constraint,
-                        getComponentCount());
-            }
+            if (verticalScrollBar instanceof SComponent)
+                super.addComponent((SComponent) verticalScrollBar, constraint, getComponentCount());
 
             synchronizeAdjustables();
             verticalScrollBar.addAdjustmentListener(getAdjustmentListener());
@@ -407,23 +402,7 @@ public class SScrollPane
         return verticalExtent;
     }
 
-    /**
-     * Sets the viewportComponent
-     * if there already exists one, it will be removed first
-     *
-     * @param view the component to add to the viewport
-     */
-    public void setViewportView(SComponent view) {
-        if (viewComponent != null) {
-            remove(viewComponent);
-        }
-        add(view);
-        viewComponent = view;
-        ;
-    }
-
     public void scrollRectToVisible(Rectangle aRect) {
-
         Rectangle viewport = scrollable.getScrollableViewportSize();
         
         // should never happen. If it happen we got a serious problem, because
@@ -487,5 +466,3 @@ public class SScrollPane
         return pos;
     }
 }
-
-
