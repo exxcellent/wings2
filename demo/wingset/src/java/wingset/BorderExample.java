@@ -19,6 +19,8 @@ import org.wings.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -28,28 +30,23 @@ public class BorderExample
         extends WingSetPane {
     private static final SIcon WAIT_ICON = new SResourceIcon("org/wings/icons/Wait.gif");
 
-    static final SBorder raised = new SBevelBorder(SBevelBorder.RAISED, new Insets(10, 0, 10, 20));
-    static final SBorder lowered = new SBevelBorder(SBevelBorder.LOWERED, new Insets(10, 0, 10, 20));
-    static final SBorder line = new SLineBorder(2, new Insets(10, 0, 10, 20));
-    static final SBorder titled = new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(10, 0, 10, 20)), "This is a title");
+    final SBorder raised = new SBevelBorder(SBevelBorder.RAISED, new Insets(10, 0, 10, 20));
+    final SBorder lowered = new SBevelBorder(SBevelBorder.LOWERED, new Insets(10, 0, 10, 20));
+    final SBorder line = new SLineBorder(2, new Insets(10, 0, 10, 20));
+    final SBorder titled = new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(10, 0, 10, 20)), "This is a title");
+
+    private SLabel borderLabel;
+    private BorderControls controls;
+    private int thickness = 2;
 
     public SComponent createExample() {
-        SPanel p1 = new SPanel();
-        try {
-            SLayoutManager layout1 = createResourceTemplate("/templates/BorderExample.thtml");
-            p1.setLayout(layout1);
-        } catch (Exception e) {
-            p1.add(new SLabel("Sorry, can't find " + "/templates/BorderExample.thtml"
-                    + " in resources"));
-        }
-        SPanel p = p1;
+        controls = new BorderControls();
 
-        final SLabel borderLabel = new SLabel(WAIT_ICON);
+        borderLabel = new SLabel(WAIT_ICON);
         borderLabel.setBackground(new Color(222, 222, 222));
-        p.add(borderLabel, "BorderExample");
 
         SPanel buttons = new SPanel();
-        buttons.setLayout(new SGridLayout(2, 2));
+        buttons.setLayout(new SGridLayout(1));
         SButtonGroup group = new SButtonGroup();
         final SRadioButton rb = new SRadioButton("Raised");
         group.add(rb);
@@ -81,14 +78,37 @@ public class BorderExample
                     borderLabel.setText("Titled Border");
                     borderLabel.setBorder(titled);
                 }
+                borderLabel.getBorder().setThickness(thickness);
             }
         });
 
-        rb.setSelected(true); // default: raised
-        p.add(buttons, "Modifier");
+        rb.setSelected(true);
 
-        return p;
+        controls.addSizable(borderLabel);
+
+        SForm panel = new SForm(new SBorderLayout());
+        panel.add(controls, SBorderLayout.NORTH);
+        panel.add(buttons, SBorderLayout.WEST);
+        panel.add(borderLabel, SBorderLayout.CENTER);
+        return panel;
+    }
+
+    class BorderControls extends ComponentControls {
+
+        public BorderControls() {
+            final STextField thicknessTextField = new STextField();
+            thicknessTextField.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    try {
+                        thickness = Integer.parseInt(thicknessTextField.getText());
+                        borderLabel.getBorder().setThickness(thickness);
+                    }
+                    catch (NumberFormatException e) {}
+                }
+            });
+
+            add(new SLabel(" thicknessTextField "));
+            add(thicknessTextField);
+        }
     }
 }
-
-

@@ -4,6 +4,8 @@
 <dwr>
 
   <init>
+      <converter id="testbean" priority="1" class="uk.ltd.getahead.dwr.test.TestBean2Converter"/>
+
     <converter id="null" class="uk.ltd.getahead.dwr.convert.NullConverter"/>
     <converter id="primitive" class="uk.ltd.getahead.dwr.convert.PrimitiveConverter"/>
     <converter id="bignumber" class="uk.ltd.getahead.dwr.convert.BigNumberConverter"/>
@@ -16,6 +18,16 @@
   </init>
 
   <allow>
+      <create creator="new" javascript="Test" class="uk.ltd.getahead.dwr.test.Test"/>
+      <create creator="new" javascript="Date" class="java.util.Date"/>
+      <create creator="session" javascript="TestBean" class="uk.ltd.getahead.dwr.test.TestBean"/>
+      <create creator="session" javascript="Demo" class="uk.ltd.getahead.dwr.test.Demo"/>
+      <!--
+      <create creator="spring" javascript="SpringBean" beanName="SpringBean"/>
+      -->
+      <convert converter="bean" match="uk.ltd.getahead.dwr.test.*"/>
+      <convert converter="testbean" match="uk.ltd.getahead.dwr.test.TestBean2"/>
+
     <convert converter="null" match="void"/>
     <convert converter="null" match="java.lang.Void"/>
     <convert converter="primitive" match="boolean"/>

@@ -36,8 +36,8 @@ abstract class IconTextCompound implements SConstants {
         boolean order = vertical == TOP || (vertical == CENTER && horizontal == LEFT);
 
 
-        device.print("<table");
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        device.print("<table style=\"width:100%;height:100%\"");
+        //Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
         device.print(">");
 
         if (vertical == TOP && horizontal == LEFT ||
