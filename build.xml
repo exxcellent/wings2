@@ -90,11 +90,11 @@
 	</javadoc>
     </target>
 
-    <target depends="prepare,all,javadoc" name="dist">
+    <target depends="clean,compile,javadoc" name="dist">
         <!-- manual -->
         <mkdir dir="dist/doc/manual"/>
         <copy todir="dist/doc/manual">
-            <fileset dir="doc">
+            <fileset dir="build/doc">
                 <include name="FAQ.html"/>
                 <include name="FAQ.css"/>
                 <include name="Architecture.html"/>
