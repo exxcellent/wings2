@@ -67,6 +67,7 @@
                 <include name="jakarta-regexp-1.2.jar"/>
                 <include name="bsh-core.jar"/>
                 <include name="jlfgr-1_0.jar"/>
+                <include name="commons-logging.jar"/>
             </fileset>
         </copy>
     </target>
