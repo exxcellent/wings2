@@ -1,8 +1,4 @@
 /*
- * Copyright (c) 2004 Your Corporation. All Rights Reserved.
- */
-
-/*
  * $Id$
  * Copyright 2000,2005 j-wingS development team.
  *
