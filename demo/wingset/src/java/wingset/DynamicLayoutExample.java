@@ -119,6 +119,8 @@ public class DynamicLayoutExample extends WingSetPane {
             SPanel p = new SPanel();
             p.add(c);
             p.setPreferredSize(new SDimension("100%","100%"));
+            p.setVerticalAlignment(c.getVerticalAlignment());
+            p.setHorizontalAlignment(c.getHorizontalAlignment());
             p.setBackground(colors[i++ % colors.length]);
             return p;
         }
