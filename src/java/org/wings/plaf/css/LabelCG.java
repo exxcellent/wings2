@@ -54,7 +54,7 @@ public class LabelCG extends AbstractComponentCG implements SConstants, org.wing
 
     protected void writeText(Device device, String text, boolean preformatted) throws IOException {
         if (preformatted) {
-            device.print("<pre>");
+            device.print("<pre class=\"label\">");
         }
         writeText(device, text);
         if (preformatted) {

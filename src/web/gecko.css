@@ -98,7 +98,7 @@ div.SLabel {
 	white-space: nowrap;*/
 }
 
-div.SLabel pre {
+pre.label {
 	font-family: inherit;
 	margin: 0px;
 	padding: 0px;

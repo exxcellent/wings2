@@ -28,3 +28,7 @@ A:link, A:visited, A:active {
     color: #000066;
     text-decoration: none;
 }
+
+pre.label {
+    font-family: sans-serif;
+}
