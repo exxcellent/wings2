@@ -37,11 +37,27 @@ public class SBorderLayout
     public static final String CENTER = "Center";
 
     int border = 0;
+    int cellspacing = 0;
 
     /**
      * creates a new border layout
      */
     public SBorderLayout() {}
+
+    /**
+     * creates a new border layout
+     */
+    public SBorderLayout(int spacing) {
+        this.cellspacing = spacing;
+    }
+
+    /**
+     * creates a new border layout
+     */
+    public SBorderLayout(int spacing, int border) {
+        this.cellspacing = spacing;
+        this.border = border;
+    }
 
     public void addComponent(SComponent c, Object constraint, int index) {
         if (constraint == null)
@@ -85,6 +101,24 @@ public class SBorderLayout
      */
     public int getBorder() {
         return border;
+    }
+    /**
+     * Set the spacing of the parts.
+     * Default is 0, which means no spacing.
+     *
+     * @param pixel thickness of the spacing
+     */
+    public void setSpacing(int pixel) {
+        cellspacing = pixel;
+    }
+
+    /**
+     * Returns the thickness of the spacing.
+     *
+     * @return thickness of the spacing
+     */
+    public int getSpacing() {
+        return cellspacing;
     }
 }
 
