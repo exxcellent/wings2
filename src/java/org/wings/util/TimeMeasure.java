@@ -23,7 +23,7 @@ import java.text.MessageFormat;
  * gemessen wird als Parameter aufrufen. Das Ende der Zeitmessung wird durch
  * stop angezeigt. Es kann nur eine Zeitmessung gleichzeitig stattfinden. Die
  * Ausgabe ist nicht sortiert, gibt aber die relativen Unterschiede in der
- * Dauer der einzelnen Messungen an. Die Messung mit der l„ngsten Dauer ist
+ * Dauer der einzelnen Messungen an. Die Messung mit der laengsten Dauer ist
  * der Referenzwert (1.0).
  */
 /**
