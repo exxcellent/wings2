@@ -115,7 +115,7 @@ public class SDesktopPane
         // ** FIXME: move to plaf ..
         public void write(Device d)
                 throws IOException {
-            d.print("<table cellpadding=\"0\" cellspacing=\"7\" border=\"0\" width=\"100%\">\n");
+            d.print("<table cellspacing=\"7\" width=\"100%\">\n");
 
             int componentCount = getComponentCount();
             // hack ? einfach nur das erste maximized ausgeben, oder was ?
