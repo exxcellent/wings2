@@ -41,32 +41,12 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
     
     public void writePrefix(Device device, SComponent component) throws IOException {
         SDimension prefSize = component.getPreferredSize();
-        Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" (msie) -->");
-        device.print("<div");
-        if (component.getStyle() != null && component.getStyle().length() > 0) {
-            device.print(" class=\"");
-            device.print(component.getStyle());
-            device.print("_Box\"");
-        }
-
-        // if sizes are spec'd in percentages, we need the outer box to have full size...
-        boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.indexOf("%") != -1;
-        boolean isWidthPercentage = prefSize != null && prefSize.width != null && prefSize.width.indexOf("%") != -1;
-        if ( isHeightPercentage || isWidthPercentage ) {
-            device.print(" style=\"");
-            if (isHeightPercentage) {
-                device.print("height:100%;");
-            }
-            if (isWidthPercentage) {
-                device.print("width:100%;");
-            }
-            device.print("\"");
-        }
-        
-        device.print(">");
-        device.print("<div id=\"").print(component.getName()).print("\"");
+        Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" -->");
+        device.print("<table id=\"");
+        device.print(component.getName()).print("\"");
         Utils.optAttribute(device, "class", component.getStyle());
         Utils.printCSSInlinePreferredSize(device, prefSize);
+            
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
@@ -110,7 +90,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             device.print("')\"");
         }
 
-        device.print(">"); // div
+        device.print("><tr><td>"); // table
 
         // Special handling: Render title of STitledBorder
         if (component.getBorder() instanceof STitledBorder) {
@@ -136,8 +116,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
 
         component.setInheritsPopupMenu(backup);
 
-        device.print("</div>");
-        device.print("</div>");
+        device.print("</td></tr></table>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 

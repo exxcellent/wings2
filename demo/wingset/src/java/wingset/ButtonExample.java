@@ -46,7 +46,7 @@ public class ButtonExample
         SButton[] buttons = new SButton[9];
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new SButton("text " + (i + 1));
+            buttons[i] = new SButton("text_" + (i + 1));
             buttons[i].setActionCommand(buttons[i].getText());
             if (i != 4) {
                 buttons[i].setIcon(icon);

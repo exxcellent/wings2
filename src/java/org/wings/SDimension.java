@@ -134,6 +134,10 @@ public class SDimension
         return height != null;
     }
 
+    public boolean isWidthOrHeightDefined() {
+        return (width != null || height != null);
+    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SDimension)) return false;

@@ -13,6 +13,15 @@ HTML,BODY,TEXTAREA {
     overflow:auto;     /* get rid of default scrollbars */
 }
 
+/* either use this or cellpadding/cellspacing/border in table element.
+   css overwrites all attributes! */
+table, td{
+    border-collapse: collapse;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+}
+
 /* BODY {
     position: relative;
     margin: 0px;
@@ -20,7 +29,6 @@ HTML,BODY,TEXTAREA {
     font-style: normal;
     font-size: 14px;
     height: 100%;
-}
 } */
 
 /*DIV, FORM {
@@ -41,6 +49,14 @@ IMG {
      margin-top: 0;
      margin-bottom: 0
 } */
+
+.SToolBar {
+	width:100%
+}
+
+.SLabel_Box {
+	display:table;
+}
 
 .SLabel {
    font-family: sans-serif;
@@ -348,9 +364,13 @@ th.bottom {
 }
 
 
-div.SPanel, div.SContainer {
+.SPanel, .SContainer{
     width: 100%;
     height: 100%;
+}
+
+.SForm {
+    width: 100%;
 }
 
 table.SBorderLayout {
