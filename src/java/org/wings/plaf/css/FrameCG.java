@@ -158,7 +158,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             String line;
             while ((line = reader.readLine()) != null)
                 buffer.append(line).append("\n");
-            buffer.append(line).append("\n");
+            buffer.append("\n");
 
             return buffer.toString();
         } catch (Exception e) {
@@ -171,7 +171,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     }
 
 
-    public void write(final Device device,                      final SComponent _c)            throws IOException {
+    public void write(final Device device, final SComponent _c)
+            throws IOException {
         if (!_c.isVisible()) return;
         _c.fireRenderEvent(SComponent.START_RENDERING);
         final SFrame component = (SFrame) _c;
