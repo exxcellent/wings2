@@ -1,5 +1,5 @@
 /* $Id$
-   WINGSET GECKO VISUALS
+   WINGSET INTERNET EXPLORER VISUALS
 
    This is a pure OPTIONAL visual styling CSS file for the wingset demo.
 
@@ -11,16 +11,11 @@
 /** All white, no border, smaller sans-serif-font */
 BODY {
     background: #ffffff;
+    position: relative;
     margin: 0px;
     font-family: sans-serif;
     font-style: normal;
     font-size: 0.8em;
-}
-
-/* Input fields singe-dot lined, orange bg. */
-TEXTAREA, INPUT[type="text"], select {
-    background-color: #f6decc;
-    border: 1px solid #e66e32;
 }
 
 /* Links: No visited colour, no underline  */
@@ -28,10 +23,3 @@ A:link, A:visited, A:active {
     color: #000066;
     text-decoration: none;
 }
-
-/* Underline links on mouse-over */
-A:hover {
-    color: #000066;
-    text-decoration: underline;
-}
-

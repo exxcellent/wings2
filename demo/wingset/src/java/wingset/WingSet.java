@@ -15,13 +15,16 @@ package wingset;
 
 
 import org.wings.*;
-import org.wings.resource.DefaultURLResource;
 import org.wings.header.Link;
+import org.wings.resource.DefaultURLResource;
 import org.wings.session.WingsStatistics;
+import org.wings.session.Browser;
+import org.wings.session.BrowserType;
 import org.wings.util.TimeMeasure;
 
 import java.io.FileWriter;
 import java.io.Serializable;
+import java.io.File;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Timer;
@@ -79,11 +82,9 @@ public class WingSet implements Serializable {
     };
 
     static {
-
         if (SHOW_STATISTICS) {
-
             try {
-                infoWriter = new FileWriter("/tmp/wingsmemory", false);
+                infoWriter = new FileWriter(File.createTempFile("wingsmemory","log"), false);
 
                 StringBuffer result = new StringBuffer();
                 result.append("timestamp").append(' ')
@@ -122,11 +123,14 @@ public class WingSet implements Serializable {
         frame.setTitle("WingSet Demo");
         frame.setAttribute("margin", "8px");
 
-        frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../wingset-gecko.css")));
+        // Register our user style sheet
+        final Browser browser = frame.getSession().getUserAgent();
+        String cssURL = "../wingset-gecko.css"; //"../wingset-" + browser.getBrowserType().getShortName() + ".css";
+        if (browser.getBrowserType().equals(BrowserType.IE))
+            cssURL = "../wingset-msie.css";
+        frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource(cssURL)));
 
-        System.out.println("new WingSet");
         stopWatch = new TimeMeasure(new MessageFormat("<html><b>{0}</b>: {1} (<i>x {2}</i>)<br/>"));
-
         timeMeasure = new SLabel();
 
         SContainer contentPane = frame.getContentPane();

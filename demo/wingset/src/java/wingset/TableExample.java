@@ -173,7 +173,7 @@ public class TableExample
         }
 
         public void sort(int col, boolean ascending) {
-            System.out.println("sort");
+            log.debug("sort");
             if (col < asc.length)
                 asc[col] = !ascending;
         }

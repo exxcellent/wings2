@@ -50,7 +50,7 @@ public class TextComponentExample
                         documentEvent.setText(((STextComponent) e.getSource()).getName());
                     }
                     else {
-                        System.out.println("e.getSource().getClass() = " + e.getSource().getClass());
+                        log.debug("e.getSource().getClass() = " + e.getSource().getClass());
                     }
                     actionEvent.setText("button not pressed");
                 }
