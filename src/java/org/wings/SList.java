@@ -864,6 +864,7 @@ public class SList
     }
 
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         // fire selection events...
         getSelectionModel().fireDelayedFinalEvents();
     }

@@ -189,11 +189,9 @@ public class STextField
     }
 
     public void fireFinalEvents() {
-
+        super.fireFinalEvents();
         fireActionEvent();
-
     }
-
 }
 
 

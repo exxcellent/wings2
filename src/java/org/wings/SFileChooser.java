@@ -385,9 +385,6 @@ public class SFileChooser
     public void fireIntermediateEvents() {
     }
 
-    public void fireFinalEvents() {
-    }
-
     public boolean checkEpoch() {
         return true;
     }

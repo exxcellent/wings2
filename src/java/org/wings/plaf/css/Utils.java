@@ -264,7 +264,7 @@ public final class Utils
             if (preferredSize.getWidth() != null)
                 device.print("width:100%;");
             if (preferredSize.getHeight() != null)
-                device.print("height: 100%");
+                device.print("height:100%");
             device.print("\"");
         }
     }

@@ -332,9 +332,8 @@ public abstract class SAbstractButton
     public void fireFinalEvents() {
         super.fireFinalEvents();
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
-        if (buttonGroup != null) {
+        if (buttonGroup != null)
             buttonGroup.fireDelayedFinalEvents();
-        }
     }
 
     public boolean checkEpoch() {

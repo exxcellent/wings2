@@ -36,7 +36,7 @@ import java.util.HashMap;
  */
 public class STable
         extends SComponent
-        implements TableModelListener, Scrollable, CellEditorListener, LowLevelEventListener, SForm.FormComponent {
+        implements TableModelListener, Scrollable, CellEditorListener, LowLevelEventListener {
 
     /**
      * <p>the table model.</p>
@@ -775,6 +775,7 @@ public class STable
     }
 
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         // fire selection events...
         getSelectionModel().fireDelayedFinalEvents();
     }

@@ -4,7 +4,7 @@ BODY {
     margin: 0px;
     font-family: sans-serif;
     font-style: normal;
-    font-size: 14px;
+    font-size: 12px;
     width: inherit;
     height: inherit;
 }
@@ -47,25 +47,25 @@ IMG {
 }
 
 TH, TD {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 div.SLabel {
-   font-size: 14px;
+   font-size: 12px;
    color: #000044;
 }
 
 div.SButton {
-   font-size: 14px;
-   color: #000044
+   font-size: 12px;
+   color: #000044;
 }
 
 div.SButton > button {
-   border: 1px outset gray;
+   border: 1px none;
 }
 
 div.SButton > button:hover {
-   border: 1px inset gray;
+   border: 1px outset gray;
 }
 
 div.SClickable > button {
@@ -75,6 +75,21 @@ div.SClickable > button {
 
 div.SClickable > button:hover {
    border: 1px solid gray;
+}
+
+div.SToolbar > table {
+    background-color: inherit !important;
+    border: 1px none !important;
+}
+
+div.SToolbar > table > tbody > tr > td {
+    background-color: inherit !important;
+    border: 1px none !important;
+}
+
+div.SToolbar div.SButton {
+    background-color: inherit !important;
+    border: 1px none !important;
 }
 
 div.STextField {
@@ -164,11 +179,6 @@ div.SList > * > li[selected="true"] {
    color: #000044;
 }
 
-.SToolbar {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	background-color: #CCCCCC;
-}
-
 .SMenuBar {
 	color: #000066;
 	background-color: #CCCCCC;
@@ -179,7 +189,7 @@ div.SList > * > li[selected="true"] {
 
 .SMenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	color: #000066;
 	background-color: #CCCCCC;
 	border-width: 0px;
@@ -190,7 +200,7 @@ div.SList > * > li[selected="true"] {
 
 .disabledmenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	color: darkgray;
 	background-color: #CCCCCC;
 	border-width: 0px;
@@ -201,7 +211,7 @@ div.SList > * > li[selected="true"] {
 
 .amenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
   	color: #ffffff;
 	background-color: #5555AA;
 	border-width: 0px;
@@ -212,7 +222,7 @@ div.SList > * > li[selected="true"] {
 
 .smenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
   	color: #ffffff;
 	background-color: #7777CC;
 	border-width: 0px;
@@ -234,7 +244,7 @@ div.SList > * > li[selected="true"] {
 
 .menuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	color: #000066;
 	background-color: #CCCCCC;
 	white-space: nowrap;
@@ -245,7 +255,7 @@ div.SList > * > li[selected="true"] {
 
 .disabledmenuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	color: darkgray;
 	background-color: #CCCCCC;
 	white-space: nowrap;
@@ -256,7 +266,7 @@ div.SList > * > li[selected="true"] {
 
 .amenuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
   	color: #ffffff;
 	background-color: #5555AA;
 	white-space: nowrap;
@@ -273,53 +283,6 @@ div.SList > * > li[selected="true"] {
 	padding: 0px;
 	border-style: inset;
 	border-width: 1px;
-}
-
-
-.framebutton {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-        background-color: #DEDEDE;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px
-}
-
-.frametitle {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-   	color: #ffffff;
-	background-color: #5555AA;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 8px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	border-left-width: 1px
-}
-
-.frameborder {
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 2px;
-	border-right-width: 2px;
-	border-bottom-width: 2px;
-	border-left-width: 2px
 }
 
 .STextArea {
@@ -431,6 +394,30 @@ table.SBorderLayout > tbody > tr > td {
    padding-left: 0.4em;
    padding-right: 0.4em;
 }
+
+div.SDesktopPane > table > tbody > tr > td {
+    padding-top: 1em;
+}
+
+div.SInternalFrame {
+   border: 1px outset;
+}
+
+div.SInternalFrame > table > tbody > tr > th {
+   padding-left: 1px;
+   padding-right: 1px;
+}
+
+div.SInternalFrame > table > tbody > tr > th[col="title"] {
+   background-color: #aaaaff;
+   text-align: left;
+   width: 100%;
+}
+
+div.SInternalFrame > table > tbody > tr > * {
+   border: 2px inset grey;
+}
+
 
 div.SDialog > table {
    border: 1px outset gray;

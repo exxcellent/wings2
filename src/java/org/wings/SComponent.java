@@ -142,6 +142,7 @@ public abstract class SComponent
 
     private InputMap inputMap;
     private ActionMap actionMap;
+    private Map actionEvents = new HashMap();
 
     /**
      * Default constructor.cript
@@ -1325,17 +1326,21 @@ public abstract class SComponent
         if (actionMap == null)
             return;
 
-        boolean actionPerformed = false;
-
         for (int i = 0; i < values.length; i++) {
             String value = values[i];
             Action action = actionMap.get(value);
-            if (action != null) {
-                action.actionPerformed(new ActionEvent(this, 0, value));
-                actionPerformed = true;
-            }
+            if (action != null)
+                actionEvents.put(action, new ActionEvent(this, 0, value));
         }
-        if (actionPerformed)
-            requestFocus();
+    }
+
+    public void fireFinalEvents() {
+        for (Iterator iterator = actionEvents.entrySet().iterator(); iterator.hasNext();) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            Action action = (Action) entry.getKey();
+            ActionEvent event = (ActionEvent) entry.getValue();
+            action.actionPerformed(event);
+        }
+        actionEvents.clear();
     }
 }

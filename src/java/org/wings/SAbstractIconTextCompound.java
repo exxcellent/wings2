@@ -424,6 +424,7 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         delayEvents = false;
     }
 }

@@ -819,6 +819,7 @@ public class STabbedPane
      * tab selection.
      */
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         if (lleChangedIndex > -1)
             setSelectedIndex(lleChangedIndex);
         lleChangedIndex = -1;

@@ -406,6 +406,7 @@ public class SForm
     }
 
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         fireActionPerformed(getActionCommand());
     }
 
@@ -421,12 +422,6 @@ public class SForm
 
     public void setCG(FormCG cg) {
         super.setCG(cg);
-    }
-
-    public static interface FormComponent {
-        public boolean getShowAsFormComponent();
-
-        public void setShowAsFormComponent(boolean b);
     }
 }
 

@@ -301,6 +301,7 @@ public class STree
     }
 
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         fireDelayedExpansionEvents();
         getSelectionModel().fireDelayedFinalEvents();
     }

@@ -593,6 +593,7 @@ public class SComboBox
     }
 
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         if (delayedEvent) {
             if (isDifferent(selectedItemReminder, dataModel.getSelectedItem())) {
                 // in case a users implementation of ComboBoxModel

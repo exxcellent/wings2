@@ -457,6 +457,7 @@ public abstract class SAbstractAdjustable
     }
 
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         getModel().fireDelayedFinalEvents();
     }
 

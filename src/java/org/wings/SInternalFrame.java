@@ -187,6 +187,7 @@ public class SInternalFrame
     public void fireIntermediateEvents() {}
 
     public void fireFinalEvents() {
+        super.fireFinalEvents();
         // Guaranteed to return a non-null array
         Object[] listeners = getListenerList();
         // Process the listeners last to first, notifying

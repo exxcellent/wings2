@@ -146,8 +146,6 @@ public abstract class STextComponent
         fireTextValueChanged();
     }
 
-    public void fireFinalEvents() {}
-
     public boolean checkEpoch() {
         return true;
     }

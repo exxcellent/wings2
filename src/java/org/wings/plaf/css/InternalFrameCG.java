@@ -25,27 +25,8 @@ import java.io.IOException;
 
 public class InternalFrameCG
         extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.InternalFrameCG {
-
-//--- byte array converted template snippets.
-    private final static byte[] __img_border_0 = "<img border=\"0\"".getBytes();
-    private final static byte[] __ = "/>".getBytes();
-    private final static byte[] __td = "<td".getBytes();
-    private final static byte[] __class_framebut = " class=\"framebutton\"><a href=\"".getBytes();
-    private final static byte[] ___1 = "\">".getBytes();
-    private final static byte[] __a_td = "</a></td>".getBytes();
-    private final static byte[] __table_cellpadd = "<table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"border: solid 1px\"><tr>".getBytes();
-    private final static byte[] __class_framebut_1 = " class=\"framebutton\">".getBytes();
-    private final static byte[] __td_1 = "</td>".getBytes();
-    private final static byte[] __td_width_480_c = "<td width=\"480\" class=\"frametitle\">&nbsp;".getBytes();
-    private final static byte[] __tr = "</tr>".getBytes();
-    private final static byte[] __tr_td_colspan = "<tr><td colspan=\"".getBytes();
-    private final static byte[] __class_framebor = "\" class=\"frameborder\">".getBytes();
-    private final static byte[] __td_tr = "</td></tr>".getBytes();
-    private final static byte[] __table = "</table>".getBytes();
-    private final static byte[] ___2 = "\n".getBytes();
-
-//--- properties of this plaf.
+        implements SConstants, org.wings.plaf.InternalFrameCG
+{
     private SIcon closeIcon;
     private SIcon deiconifyIcon;
     private SIcon iconifyIcon;
@@ -65,102 +46,98 @@ public class InternalFrameCG
         setUnmaximizeIcon((SIcon) manager.getObject("InternalFrameCG.unmaximizeIcon", SIcon.class));
     }
 
-
-    public void installCG(final SComponent comp) {
-        final SInternalFrame component = (SInternalFrame) comp;
-        final CGManager manager = component.getSession().getCGManager();
-        Object value;
-        value = manager.getObject("SInternalFrame.style", String.class);
-        if (value != null) {
-            component.setStyle((String) value);
-        }
+    public void installCG(SComponent component) {
+        super.installCG(component);
+        component.setPreferredSize(new SDimension("100%", null));
     }
 
-//--- code from common area in template.
     private void writeIcon(Device device, SIcon icon) throws IOException {
-
-        device.write(__img_border_0);
+        device.print("<img border=\"0\"");
         org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
         org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
         org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
-
-        device.write(__);
+        device.print("/>");
     }
 
     private void writeWindowIcon(Device device, SInternalFrame frame,
                                  int event, SIcon icon) throws IOException {
+        boolean showAsFormComponent = frame.getShowAsFormComponent();
+
         RequestURL addr = frame.getRequestURL();
         addr.addParameter(org.wings.plaf.css.Utils.event(frame), event);
 
-        device.write(__td);
-        org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
+        device.print("<th");
+        org.wings.plaf.Utils.optAttribute(device, "width", getIconWidth(icon));
+        device.print(">");
 
-        device.write(__class_framebut);
-        org.wings.plaf.Utils.write(device, addr);
+        if (showAsFormComponent)
+            device.print("<button type=\"submit\" name=\"")
+                    .print(Utils.event(frame))
+                    .print("\" value=\"")
+                    .print(event)
+                    .print("\">");
+        else
+            device.print("<a href=\"")
+                    .print(frame.getRequestURL()
+                    .addParameter(Utils.event(frame) + "=" + event).toString())
+                    .print("\">");
 
-        device.write(___1);
         writeIcon(device, icon);
 
-        device.write(__a_td);
+        if (showAsFormComponent)
+            device.print("</button>");
+        else
+            device.print("</a>");
+
+        device.print("</th>");
     }
 
 
-//--- end code from common area in template.
-
-
-    public void writeContent(final Device device,
-                             final SComponent _c)
+    public void writeContent(final Device device, final SComponent _c)
             throws IOException {
         final SInternalFrame component = (SInternalFrame) _c;
 
-//--- code from write-template.
         SInternalFrame frame = component;
         String text = frame.getTitle();
         int columns = 0;
-        if (text == null) {
+        if (text == null)
             text = "wingS";
-        }
 
-        device.write(__table_cellpadd);
+        device.print("<table");
+        Utils.innerPreferredSize(device, component.getPreferredSize());
+        device.print(">\n<tr>");
+
         // left icon
         if (frame.getIcon() != null) {
             SIcon icon = frame.getIcon();
-            device.write(__td);
-            org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
-            device.write(__class_framebut_1);
+            device.print("<th");
+            org.wings.plaf.Utils.optAttribute(device, "width", getIconWidth(icon));
+            device.print(">");
             writeIcon(device, icon);
-            device.write(__td_1);
+            device.print("</th>");
             ++columns;
         }
 
-        // window main bar (width=480: hack necessary for opera, netscape 4)
-        device.write(__td_width_480_c);
+        device.print("<th col=\"title\">&nbsp;");
         org.wings.plaf.Utils.write(device, text);
-        device.write(__td_1);
+        device.print("</th>");
         ++columns;
 
-        // optional icons.
+        if (frame.isMaximizable() && !frame.isMaximized() && !frame.isIconified() && maximizeIcon != null) {
+            writeWindowIcon(device, frame,
+                    SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, maximizeIcon);
+            ++columns;
+        }
+
         if (frame.isIconifyable() && !frame.isIconified() && iconifyIcon != null) {
             writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED,
-                    iconifyIcon);
+                    SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, iconifyIcon);
             ++columns;
         }
 
         if (frame.isIconified() && deiconifyIcon != null) {
             writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED,
-                    deiconifyIcon);
-            ++columns;
-        }
-
-        if (frame.isMaximizable()
-                && !frame.isMaximized()
-                && !frame.isIconified()
-                && maximizeIcon != null) {
-            writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED,
-                    maximizeIcon);
+                    SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED, deiconifyIcon);
             ++columns;
         }
 
@@ -169,22 +146,27 @@ public class InternalFrameCG
                     SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon);
             ++columns;
         }
-        device.write(__tr);
+        device.print("</tr>");
+
         // write the actual content
         if (!frame.isIconified()) {
-            device.write(__tr_td_colspan);
+            device.print("<tr><td colspan=\"");
             org.wings.plaf.Utils.write(device, columns);
-            device.write(__class_framebor);
+            device.print("\">");
             Utils.renderContainer(device, frame);
-            device.write(__td_tr);
+            device.print("</td></tr>");
         }
-        device.write(__table);
-        device.write(___2);
-
-//--- end code from write-template.
+        device.print("</table>\n");
     }
 
-//--- setters and getters for the properties.
+    private String getIconWidth(SIcon icon) {
+        if (icon.getIconWidth() == -1)
+            return "0%";
+        else
+            return "" + icon.getIconWidth();
+    }
+
+
     public SIcon getCloseIcon() {
         return closeIcon;
     }
