@@ -15,6 +15,7 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SConstants;
+import org.wings.SDimension;
 import org.wings.io.Device;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,8 +37,11 @@ abstract class IconTextCompound implements SConstants {
         boolean order = vertical == TOP || (vertical == CENTER && horizontal == LEFT);
 
 
-        device.print("<table style=\"width:100%;height:100%\"");
-        //Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        device.print("<table");
+        SDimension prefSize = component.getPreferredSize();
+        if (prefSize != null && (prefSize.getWidth() != null || prefSize.getHeight() != null)) {
+            device.print(" style=\"width:100%;height:100%\"");
+        }
         device.print(">");
 
         if (vertical == TOP && horizontal == LEFT ||
