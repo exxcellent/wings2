@@ -287,7 +287,7 @@ public class LookAndFeel        implements Serializable {
                 return null;
             }
 
-            if (ComponentCG.class.isAssignableFrom(type) || LayoutCG.class.isAssignableFrom(type))
+            if (ComponentCG.class.isAssignableFrom(type) || LayoutCG.class.isAssignableFrom(type) || PrefixAndSuffixDelegate.class.isAssignableFrom(type))
                 value = makeCG(property);
             else if (type.isAssignableFrom(SIcon.class))
                 value = makeIcon(property);

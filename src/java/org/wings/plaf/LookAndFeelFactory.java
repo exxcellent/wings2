@@ -19,6 +19,7 @@ import org.wings.session.Session;
 import org.wings.session.SessionManager;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public abstract class LookAndFeelFactory {
     private final transient static Log log = LogFactory.getLog(LookAndFeelFactory.class);
@@ -72,18 +73,20 @@ public abstract class LookAndFeelFactory {
 
     static class Default extends LookAndFeelFactory {
         private static String DEFAULT_LOOKANDFEEL = "org.wings.plaf.css.CSSLookAndFeel";
-        private LookAndFeel laf;
+        private static HashMap lafs = new HashMap();
+        
 
         public LookAndFeel create()
                 throws IOException {
+            LookAndFeel laf = (LookAndFeel)lafs.get(SessionManager.getSession().getUserAgent().getBrowserType());
             if (laf == null) {
                 synchronized (Default.class) {
+                    laf = (LookAndFeel)lafs.get(SessionManager.getSession().getUserAgent().getBrowserType());
                     if (laf == null) {
                         Session session = SessionManager.getSession();
                         String lafName = (String) session.getProperty("wings.lookandfeel.default");
                         if (lafName == null)
                             lafName = DEFAULT_LOOKANDFEEL;
-
                         try {
                             Class lafClass = Class.forName(lafName, true, Thread.currentThread().getContextClassLoader());
                             laf = (LookAndFeel) lafClass.newInstance();
@@ -91,6 +94,7 @@ public abstract class LookAndFeelFactory {
                             log.fatal("create", e);
                             throw new IOException(e.getMessage());
                         }
+                        lafs.put(SessionManager.getSession().getUserAgent().getBrowserType(), laf);
                     }
                 }
             }

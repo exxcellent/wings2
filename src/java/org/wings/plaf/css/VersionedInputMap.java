@@ -19,7 +19,7 @@ import javax.swing.*;
  * @author hengels
  * @version $Revision$
  */
-class VersionedInputMap extends InputMap {
+public class VersionedInputMap extends InputMap {
     InputMap inputMap;
     int version = 0;
 

@@ -18,6 +18,8 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLayoutManager;
+import org.wings.plaf.PrefixAndSuffixDelegate;
+import org.wings.session.BrowserType;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 import org.wings.style.Style;
@@ -178,6 +180,15 @@ public class CGManager implements Serializable {
             ((PropertyService) SessionManager.getSession())
                     .setProperty("lookAndFeel", "" + newLookAndFeel.hashCode());
         }
+    }
+
+    /**
+     * @param target
+     * @return the delegate responsible for the Prefix and Suffix of the target
+     */
+    public PrefixAndSuffixDelegate getPrefixSuffixDelegate(SComponent target) {
+        PrefixAndSuffixDelegate del = (PrefixAndSuffixDelegate) getDefaults().get("AbstractComponentCG.PrefixAndSuffixDelegate", PrefixAndSuffixDelegate.class);
+        return del;
     }
 }
 

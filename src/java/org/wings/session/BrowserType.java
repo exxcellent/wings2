@@ -17,35 +17,43 @@ package org.wings.session;
  * Typesafe enumeration class of operating systems on browsers client side.
  */
 public class BrowserType {
+    public class BrowserID {
+        public static final int UNKNOWN = 0;
+        public static final int GECKO = 1;
+        public static final int MOZILLA = 2;
+        public static final int IE = 3;
+        public static final int OPERA = 4;
+        public static final int KONQUEROR = 5;
+    }
     /**
      * Unknown browser type
      */
-    public static final BrowserType UNKNOWN = new BrowserType(0, "default", "Unknown");
+    public static final BrowserType UNKNOWN = new BrowserType(BrowserID.UNKNOWN, "default", "Unknown");
 
     /**
      * Gecko based browser type.
      */
-    public static final BrowserType GECKO = new BrowserType(1, "gecko", "Gecko");
+    public static final BrowserType GECKO = new BrowserType(BrowserID.GECKO, "gecko", "Gecko");
 
     /**
      * Old mozilla browser type.
      */
-    public static final BrowserType MOZILLA = new BrowserType(2, "mozilla", "Mozilla (non-Gecko)");
+    public static final BrowserType MOZILLA = new BrowserType(BrowserID.MOZILLA, "mozilla", "Mozilla (non-Gecko)");
 
     /**
      * Internet Explorere variant.
      */
-    public static final BrowserType IE = new BrowserType(3, "msie", "Internet Exploder");
+    public static final BrowserType IE = new BrowserType(BrowserID.IE, "msie", "Internet Exploder");
 
     /**
      * Opera browser type on Linux/KDE.
      */
-    public static final BrowserType OPERA = new BrowserType(4, "opera", "Opera");
+    public static final BrowserType OPERA = new BrowserType(BrowserID.OPERA, "opera", "Opera");
 
     /**
      * Konqueror browser type on Linux/KDE.
      */
-    public static final BrowserType KONQUEROR = new BrowserType(5, "konqueror", "Konqueror");
+    public static final BrowserType KONQUEROR = new BrowserType(BrowserID.KONQUEROR, "konqueror", "Konqueror");
 
     private int id;
     private String description;

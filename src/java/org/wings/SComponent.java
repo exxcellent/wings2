@@ -21,6 +21,7 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
+import org.wings.plaf.PrefixAndSuffixDelegate;
 import org.wings.script.ScriptListener;
 import org.wings.session.LowLevelEventDispatcher;
 import org.wings.session.Session;
@@ -73,6 +74,12 @@ public abstract class SComponent
      * the visual representation of this component.
      */
     protected transient ComponentCG cg;
+
+    /**
+     * The code generation delegate, which is responsible for
+     * the Prefix and Suffix of this component.
+     */
+    protected transient PrefixAndSuffixDelegate psDel;
 
     /**
      * Vertical alignment
@@ -1143,7 +1150,22 @@ public abstract class SComponent
             log.warn("no CGManager");
         } else {
             setCG(getSession().getCGManager().getCG(this));
+            setPrefixSuffixDelegate(getSession().getCGManager().getPrefixSuffixDelegate(this));
         }
+    }
+
+    /**
+     * @param prefixSuffixDelegate
+     */
+    private void setPrefixSuffixDelegate(PrefixAndSuffixDelegate prefixSuffixDelegate) {
+        this.psDel = prefixSuffixDelegate;
+    }
+
+    /**
+     * @return the prefixSuffixDelegate
+     */
+    public PrefixAndSuffixDelegate getPrefixSuffixDelegate() {
+        return this.psDel;
     }
 
     /**

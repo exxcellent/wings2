@@ -27,7 +27,7 @@ import java.awt.event.KeyEvent;
  * @author hengels
  * @version $Revision$
  */
-class InputMapScriptListener
+public class InputMapScriptListener
         extends JavaScriptListener {
     private final static transient Log log = LogFactory.getLog(InputMapScriptListener.class);
 
@@ -35,7 +35,7 @@ class InputMapScriptListener
         super(event, code, script);
     }
 
-    static void install(SComponent component) {
+    public static void install(SComponent component) {
         ScriptListener[] scriptListeners = component.getScriptListeners();
 
         for (int i = 0; i < scriptListeners.length; i++) {
