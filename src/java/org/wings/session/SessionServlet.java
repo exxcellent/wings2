@@ -357,8 +357,8 @@ final class SessionServlet
                     String paramName = (String) cookie.getName();
                     String value = cookie.getValue();
 
-                    System.out.println("dispatching cookie " + paramName + " = " + value);
-                    log.debug("dispatching cookie " + paramName + " = " + value);
+                    if (log.isDebugEnabled())
+                        log.debug("dispatching cookie " + paramName + " = " + value);
 
                     session.getDispatcher().dispatch(paramName, new String[] { value });
                 }

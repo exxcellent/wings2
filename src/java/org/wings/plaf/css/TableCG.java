@@ -177,8 +177,8 @@ public class TableCG
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse
         /* Tweaking: CG configured to have a fixed border="xy" width */
         org.wings.plaf.Utils.optAttribute(device, "border", fixedTableBorderWidth);
-        org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getWidthInt() : null));
-        org.wings.plaf.Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getHeightInt() : null));
+        org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getIntWidth() : null));
+        org.wings.plaf.Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getIntHeight() : null));
         device.print(">\n");
         /*
         * get viewable area

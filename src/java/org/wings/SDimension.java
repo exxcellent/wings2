@@ -20,54 +20,16 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
 
-/**
- * This class hold preferred component sizes (dimensions).
- * <p/>
- * Web browsers support different notations for sizes. Absolute pixel values, realtive percentages (of the available
- * viewport) and special CSS like 'inherit' and 'auto' (Default).
- * This class if capable of handling all these cases.
- */
 public class SDimension
         implements Serializable {
-
-    /**
-     * Integer constant for CSS dimension 'auto'.
-     * This is the default width used by wings as well as by CSS capable browsers.
-     */
-    public final static int AUTO_VALUE = -1;
-
-    /**
-     * String constant for CSS dimension 'auto'.
-     * This is the default width used by wings as well as by CSS capable browsers.
-     */
-    public final static String AUTO = "auto";
-
-    /**
-     * Integer constant for CSS dimension 'inherit'.
-     * With this value the preferred size is inherited by the surrounding element.
-     */
-    public final static int INHERIT_VALUE = -2;
-
-    /**
-     * String for CSS dimension 'inherit'.
-     * With this value the preferred size is inherited by the surrounding element.
-     */
-    public final static String INHERIT = "inherit";
-
-    /**
-     * A convenience String constant for a full size width/height ("100%").
-     */
-    public final static String FULL_SIZE = "100%";
-
-
     private final transient static Log log = LogFactory.getLog(SDimension.class);
-    private int width = AUTO_VALUE;
-    private int height = AUTO_VALUE;
-    private boolean widthIsAbsolute = false;
-    private boolean heightIsAbsolute = false;
 
-    public SDimension() {
-    }
+    public String width = null;
+    public String height = null;
+    private int iwidth = -1;
+    private int iheight = -1;
+
+    public SDimension() {}
 
     public SDimension(String width, String height) {
         setWidth(width);
@@ -75,7 +37,7 @@ public class SDimension
     }
 
     /**
-     * Construct a new dimension with absolute values.
+     * Construct a new dimension.
      * The value is converted to "<value>px".
      *
      * @param width  the width. If value is less than <code>0</code> width
@@ -88,187 +50,89 @@ public class SDimension
         setSize(width, height);
     }
 
-    /**
-     * Set raw string value to be used inside the generated HTML code. S
-     *
-     * @param widthString Desired widthString. Should be some form of <code>123px</code> or <code>123%</code>
-     */
-    public void setWidth(String widthString) {
-        this.width = getIntValue(widthString);
-        this.widthIsAbsolute = isAbsoluteSize(widthString);
+    public void setWidth(String width) {
+        this.width = width;
+        iwidth = -1;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+        iheight = -1;
     }
 
     /**
      * Set width in pixel.
      * This appends "px" to the integer value.
      *
-     * @param width Takes also {@link SDimension.AUTO} and {@link SDimension.INHERIT}
+     * @param width if -1 set {@link SDimension#width} to <code>null</code>
      */
     public void setWidth(int width) {
-        setWidth(width, true);
+        this.iwidth = width;
+        if (width > -1)
+            this.width = width + "px";
+        else
+            this.width = null;
     }
-
-
-    /**
-     * Set width in pixel.
-     * This appends "px" to the integer value.
-     *
-     * @param width      Takes also {@link SDimension.AUTO} and {@link SDimension.INHERIT}
-     * @param isAbsolute if true the param notaes a pixel width, otherwise
-     *                   a relative percentage width.
-     */
-    public void setWidth(int width, boolean isAbsolute) {
-        this.width = width;
-        this.widthIsAbsolute = isAbsolute;
-    }
-
-    /**
-     * The width dimension.
-     *
-     * @return i.e. "100%" or "230px" or "auto" or "inherit"
-     */
-    public String getWidth() {
-        return toString(width, widthIsAbsolute);
-    }
-
-    /**
-     * Is a widht defined or just AUTO value.
-     *
-     * @return true if a width other than {@link SDimension.AUTO} is defined
-     */
-    public boolean isWidthDefined() {
-        return width != AUTO_VALUE;
-    }
-
-    /**
-     * Get just the width as number without trailing unit.
-     */
-    public int getWidthInt() {
-        return width;
-    }
-
-    /**
-     * Is width int value a absolute (px) value or relative (%).
-     *
-     * @return true if {@link #getWidthInt()} is a px width, false if it is a percentage width
-     */
-    public boolean isWidthIsAbsolute() {
-        return width >= 0 ?  widthIsAbsolute : false;
-    }
-
 
     /**
      * Set height in pixel.
      * This appends "px" to the integer value.
      *
-     * @param height Takes also {@link SDimension.AUTO} and {@link SDimension.INHERIT}
+     * @param height if -1 set {@link SDimension#height} to <code>null</code>
      */
     public void setHeight(int height) {
-        setHeight(height, true);
+        this.iheight = height;
+        if (height > -1)
+            this.height = height + "px";
+        else
+            this.height = null;
     }
-
-    /**
-     * Set raw string value to be used inside the generated HTML code. S
-     *
-     * @param heightString Desired heightString. Should be some form of <code>123px</code> or <code>123%</code>
-     */
-    public void setHeight(String heightString) {
-        this.height = getIntValue(heightString);
-        this.heightIsAbsolute = isAbsoluteSize(heightString);
-    }
-
-    /**
-     * Set height either as abolute value (pixel-value) or relative (percentage).
-     *
-     * @param height     Takes also {@link SDimension.AUTO} and {@link SDimension.INHERIT}
-     * @param isAbsolute if true the param notaes a pixel width, otherwise
-     *                   a relative percentage width.
-     */
-    public void setHeight(int height, boolean isAbsolute) {
-        this.height = height;
-        this.heightIsAbsolute = isAbsolute;
-    }
-
-    /**
-     * The heiht dimension.
-     *
-     * @return i.e. "100%" or "230px" or "auto" or "inherit"
-     */
-    public String getHeight() {
-        return toString(height, heightIsAbsolute);
-    }
-
-    /**
-     * Is a height defined or just AUTO value.
-     *
-     * @return true if a height other than {@link SDimension.AUTO} is defined
-     */
-    public boolean isHeightDefined() {
-        return height != AUTO_VALUE;
-    }
-
-
-    /**
-     * Get just the height as number without trailing unit.
-     */
-    public int getHeightInt() {
-        return height;
-    }
-
-    /**
-     * Is geight int value a absolute (px) value or relative (%).
-     *
-     * @return true if {@link #getHeightInt()} is a px width, false if it is a percentage width
-     */
-    public boolean isHeightIsAbsolute() {
-        return height >= 0 ? heightIsAbsolute : false;
-    }
-
 
     /**
      * Extract number from string.
      *
      * @return extracted integer. f.e.: "120px" becomes 120
      */
-    protected int getIntValue(String sizeString) {
-        if (sizeString == null)
-            return AUTO_VALUE;
-        if (sizeString.trim().equalsIgnoreCase(AUTO))
-            return AUTO_VALUE;
-        if (sizeString.trim().equalsIgnoreCase(INHERIT))
-            return INHERIT_VALUE;
+    protected int getInt(String size) {
         try {
-            return new DecimalFormat().parse(sizeString, new ParsePosition(0)).intValue();
+            return new DecimalFormat().parse(size, new ParsePosition(0)).intValue();
         } catch (Exception e) {
-            log.warn("Can not parse [" + sizeString + "]", e);
+            log.warn("Can not parse [" + size + "]", e);
+            return -1;
         }
-        return AUTO_VALUE;
     }
 
-    protected String toString(int size, boolean isAbsolute) {
-        if (size == AUTO_VALUE)
-            return AUTO;
-        else if (size == INHERIT_VALUE)
-            return INHERIT;
-        else if (isAbsolute)
-            return Integer.toString(size) + "px";
-        else
-            return Integer.toString(size) + "%";
-    }
+    public String getWidth() { return width; }
 
+    public String getHeight() { return height; }
 
     /**
-     * Extract intented dimension type of contained in the string
-     *
-     * @return false, if String ends with "%", true otherwise
+     * Get just the width as number without trailing
+     * unit.
      */
-    protected boolean isAbsoluteSize(String dimensionString) {
-        if (dimensionString != null)
-            return !dimensionString.trim().endsWith("%");
-        else
-            return true;
+    public int getIntWidth() {
+        if (iwidth == -1)
+            iwidth = getInt(width);
+        return iwidth;
     }
 
+    /**
+     * Get just the height as number without trailing
+     * unit.
+     */
+    public int getIntHeight() {
+        if (iheight == -1)
+            iheight = getInt(height);
+        return iheight;
+    }
+
+    public boolean isWidthDefined() {
+        return width != null;
+    }
+
+    public boolean isHeightDefined() {
+        return height != null;
+    }
 
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -276,10 +140,9 @@ public class SDimension
 
         final SDimension sDimension = (SDimension) o;
 
-        if (this.getWidthInt() != sDimension.getWidthInt() || this.isWidthIsAbsolute() != sDimension.isWidthIsAbsolute())
-            return false;
-        if (this.getHeightInt() != sDimension.getHeightInt() || this.isHeightIsAbsolute() != sDimension.isHeightIsAbsolute())
-            return false;
+        if (height != null ? !height.equals(sDimension.height) : sDimension.height != null) return false;
+        if (width != null ? !width.equals(sDimension.width) : sDimension.width != null) return false;
+
         return true;
     }
 
@@ -287,21 +150,22 @@ public class SDimension
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return width;
+        return width != null ? width.hashCode() : 0;
     }
 
     /**
-     * Set the size of this Dimension object to the specified width and height as absolute values.
+     * Set the size of this Dimension object to the specified width and height
+     * and append "px" to both values.
      *
-     * @see #setHeight(int,boolean)
-     * @see #setWidth(int,boolean)
+     * @see #setHeight(int)
+     * @see #setWidth(int)
      */
     public void setSize(int width, int height) {
-        setWidth(width, true);
-        setHeight(height, true);
+        setWidth(width);
+        setHeight(height);
     }
 
     public String toString() {
-        return "width: " + getWidth() + "; height: " + getHeight() + ";";
+        return "width: " + width + "; height: " + height;
     }
 }

@@ -118,10 +118,10 @@ public class SComponentEvent
                 typeStr = "COMPONENT_HIDDEN";
                 break;
             case COMPONENT_MOVED:
-                typeStr = "COMPONENT_MOVED (" + d.getWidthInt() + "x" + d.getHeightInt()+ ")";
+                typeStr = "COMPONENT_MOVED (" + d.getIntWidth() + "x" + d.getIntHeight()+ ")";
                 break;
             case COMPONENT_RESIZED:
-                typeStr = "COMPONENT_RESIZED (" + d.getWidthInt() + "x" + d.getHeightInt() + ")";
+                typeStr = "COMPONENT_RESIZED (" + d.getIntWidth() + "x" + d.getIntHeight() + ")";
                 break;
             default:
                 typeStr = "unknown type";

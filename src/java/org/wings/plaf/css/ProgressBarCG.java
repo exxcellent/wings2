@@ -73,8 +73,8 @@ public class ProgressBarCG
         String style = component.getStyle();
 
         SDimension size = component.getPreferredSize();
-        int width = size != null ? size.getWidthInt() : 200;
-        int height = size != null ? size.getHeightInt() : 5;
+        int width = size != null ? size.getIntWidth() : 200;
+        int height = size != null ? size.getIntHeight() : 5;
 
         if (component.isStringPainted()) {
             device.print("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>");
