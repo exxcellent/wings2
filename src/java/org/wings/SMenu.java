@@ -199,8 +199,17 @@ public class SMenu extends SMenuItem {
         return menuItems.size();
     }
     
+    /** gets the n'th child of the menu. If the index is too high, returns 
+     * null.
+     * @param index the index of the child to return
+     * @return the n'th child.
+     */
     public SComponent getChild(int index) {
-        return (SComponent)menuItems.get(index);
+        if (getChildrenCount() > index) {
+            return (SComponent)menuItems.get(index);
+        } else {
+            return null;
+        }
     }
 }
 
