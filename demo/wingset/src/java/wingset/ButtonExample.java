@@ -96,6 +96,7 @@ public class ButtonExample
 
         ActionListener action = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                log.error("Button pressed: " + e.getActionCommand());
                 pressed.setText("Button \"" + e.getActionCommand() + "\" pressed");
             }
         };

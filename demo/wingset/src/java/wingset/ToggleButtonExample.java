@@ -47,7 +47,7 @@ public class ToggleButtonExample
         SToggleButton[] buttons = new SToggleButton[9];
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new SToggleButton("text " + (i + 1));
+            buttons[i] = new SToggleButton("text_" + (i + 1));
             buttons[i].setActionCommand("" + (i + 1));
             if (i != 4) {
                 buttons[i].setIcon(icon);
