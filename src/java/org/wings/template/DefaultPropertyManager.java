@@ -112,33 +112,4 @@ public class DefaultPropertyManager implements PropertyManager {
     public Class[] getSupportedClasses() {
         return classes;
     }
-
-}// DefaultPropertyManager
-
-/*
-   $Log$
-   Revision 1.1  2004/10/04 16:13:29  hengels
-   Initial revision
-
-   Revision 1.6  2003/10/31 10:15:38  hengels
-   o java logging instead of system.out / system.err
-   o patches from doug porter
-   o fixed form action problem
-
-   Revision 1.5  2003/10/15 06:48:43  arminhaaf
-   o make methods accessible
-
-   Revision 1.4  2002/11/19 15:39:05  ahaaf
-   o use shared instance
-
-   Revision 1.3  2002/10/26 11:59:35  ahaaf
-   o deactivate scripting per default
-
-   Revision 1.2  2002/09/04 14:26:35  ahaaf
-   o SComponent now have a EventListenerList (not allocated by default)
-   o every component which manages listeners uses now the SComponent EventListener
-
-   Revision 1.1  2002/08/06 16:45:55  ahaaf
-   add DefaultPropertyManager using reflection and bean shell scripting support
-
-*/
+}

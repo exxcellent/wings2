@@ -67,6 +67,15 @@ div.SButton > button:hover {
    border: 1px inset gray;
 }
 
+div.SClickable > button {
+   background-color: inherit;
+   border: 1px none;
+}
+
+div.SClickable > button:hover {
+   border: 1px solid gray;
+}
+
 div.STextField {
    font-family: sans-serif;
    font-weight: normal;

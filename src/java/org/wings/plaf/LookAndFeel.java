@@ -26,6 +26,7 @@ import org.wings.style.StyleSheet;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,7 +43,9 @@ import java.util.logging.Logger;
  *
  * @see org.wings.plaf.ComponentCG
  */
-public class LookAndFeel {
+public class LookAndFeel
+    implements Serializable
+{
     public final static Logger logger = Logger.getLogger("org.wings.plaf");
 
     private static Map wrappers = new HashMap();

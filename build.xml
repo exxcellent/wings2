@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- -*-sgml-*- --><!-- ant build file for wingS --><!-- $Id$ -->
-<project basedir="." default="main" name="wingS">
+<project basedir="." default="build" name="wingS">
     <!-- read properties from file -->
     <property file="etc/custom-build.properties"/>
     <property file="etc/build.properties"/>
@@ -33,7 +33,7 @@
         </javac>
     </target>
 
-    <target name="build" depends="compile">
+    <target name="build" depends="compile" description="build">
         <jar jarfile="dist/web/WEB-INF/lib/wings.jar">
             <fileset dir="build/class">
                 <exclude name="org/wings/plaf/xhtml/**"/>
@@ -187,13 +187,4 @@
     </target>
 
     <target depends="clean,build" description="re-build everything" name="all"/>
-    <target depends="build" description="build changed files" name="main"/>
-
-    <!-- target name="demo" depends="build" description="build demo">
-      <ant dir="demo"/>
-    </target -->
-</project><!--
- Local variables:
- compile-command: "ant -emacs -find build.xml"
- End:
--->
+</project>

@@ -42,7 +42,7 @@ public class SEtchedBorder
     }
 
     public SEtchedBorder(int etchedType, Insets insets) {
-        super(insets);
+        super(Color.black, 2, insets);
         setEtchedType(etchedType);
     }
 

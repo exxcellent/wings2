@@ -96,7 +96,7 @@ public abstract class AbstractComponentCG
                     .print(";");
             if (dim.height != null)
                 device
-                    .print("height:")
+                    .print(" height:")
                     .print(dim.height)
                     .print(";");
         }

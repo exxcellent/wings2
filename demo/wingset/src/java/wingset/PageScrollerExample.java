@@ -14,17 +14,17 @@
 
 package wingset;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.tree.*;
-
 import org.wings.*;
 
+import javax.swing.tree.TreeNode;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -38,10 +38,6 @@ public class PageScrollerExample
 
     public SComponent createExample() {
         SPanel p = new SPanel(new SBorderLayout());
-
-        /*        SLabel label = new SLabel("<html><h4>List in a PageScroller</h4>");
-        p.add(label, SBorderLayout.NORTH);
-        */
 
         list = new SList(listData);
         list.setVisibleRowCount(8);

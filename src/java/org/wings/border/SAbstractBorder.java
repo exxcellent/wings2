@@ -57,7 +57,7 @@ public abstract class SAbstractBorder
     }
 
     public SAbstractBorder(Insets insets) {
-        this(Color.black, 2, insets);
+        this(null, 0, insets);
     }
 
     public SAbstractBorder(Color c) {

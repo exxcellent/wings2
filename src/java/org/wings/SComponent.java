@@ -251,6 +251,10 @@ public abstract class SComponent
      * @see org.wings.SComponent#getPreferredSize
      */
     public void setPreferredSize(SDimension preferredSize) {
+        System.out.println("### preferredSize = " + preferredSize);
+        System.out.println("### preferredSize = " + preferredSize);
+        System.out.println("### preferredSize = " + preferredSize);
+        System.out.println("### preferredSize = " + preferredSize);
         this.preferredSize = preferredSize;
     }
 

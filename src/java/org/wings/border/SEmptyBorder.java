@@ -24,7 +24,7 @@ public class SEmptyBorder
     extends SAbstractBorder
 {
     public SEmptyBorder(Insets insets) {
-        super(insets);
+        super(Color.black, 2, insets);
    }
 
     public SEmptyBorder(int top, int left, int bottom, int right) {

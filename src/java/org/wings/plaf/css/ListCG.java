@@ -57,8 +57,7 @@ public class ListCG
             list.addScriptListener(selectListener);
         }
 
-        final SDimension dim = list.getPreferredSize();
-        if (dim != null)
+        if (list.getPreferredSize() != null)
             device.print(" style=\"width:100%; height: 100%\"");
 
         Utils.writeEvents(device, list);

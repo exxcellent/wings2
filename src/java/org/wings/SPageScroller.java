@@ -17,25 +17,14 @@ package org.wings;
 import org.wings.border.SEmptyBorder;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SPageScroller
     extends SAbstractAdjustable
 {
-
-    /**
-     * Default maximum amount of page clickables.
-     */
     private static final int DEFAULT_DIRECT_PAGES = 10;
-
-    /**
-     *
-     */
-    private static final SEmptyBorder DEFAULT_DIRECT_CLICKABLE_BORDER =
-        new SEmptyBorder(0,5,0,5);
+    private static final SEmptyBorder DEFAULT_DIRECT_CLICKABLE_BORDER = new SEmptyBorder(0,5,0,5);
 
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
@@ -494,16 +483,4 @@ public class SPageScroller
     public void setValue(int value) {
         super.setValue(value - (value % getExtent()));
     }
-
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
-
-
-

@@ -62,7 +62,7 @@ public class SBevelBorder
      * @param padding (space between border and component) around
      */
     public SBevelBorder(int bevelType, Insets insets) {
-        super(insets);
+        super(Color.black, 2, insets);
         setBevelType(bevelType);
     }
 

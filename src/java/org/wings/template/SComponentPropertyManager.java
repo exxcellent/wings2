@@ -20,8 +20,6 @@ import org.wings.style.AttributeSet;
 import java.awt.*;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
