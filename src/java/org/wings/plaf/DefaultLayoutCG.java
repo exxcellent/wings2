@@ -16,16 +16,16 @@ package org.wings.plaf;
 
 import java.io.IOException;
 
-import org.wings.*; import org.wings.border.*;
+import org.wings.*;
+import org.wings.border.*;
 import org.wings.io.*;
 
 public class DefaultLayoutCG
-    implements LayoutCG
-{
+    implements LayoutCG {
     public void write(Device d, SLayoutManager l) throws IOException {
-	SContainer c = l.getContainer();
-	for (int i=0; i < c.getComponentCount(); i++)
-	    c.getComponent(i).write(d);
+        SContainer c = l.getContainer();
+        for (int i = 0; i < c.getComponentCount(); i++)
+            c.getComponent(i).write(d);
     }
 }
 

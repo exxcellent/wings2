@@ -24,20 +24,19 @@ import java.io.IOException;
 
 /**
  * Utils.java
- *
- *
+ * <p/>
+ * <p/>
  * Created: Thu Oct 28 16:23:53 1999
  *
  * @author Holger Engels
  * @version $Revision$
  */
 public final class Utils
-    implements SConstants
-{
+    implements SConstants {
     final static char[] hexDigits = {
-        '0' , '1' , '2' , '3' , '4' , '5' ,
-        '6' , '7' , '8' , '9' , 'a' , 'b' ,
-        'c' , 'd' , 'e' , 'f'
+        '0', '1', '2', '3', '4', '5',
+        '6', '7', '8', '9', 'a', 'b',
+        'c', 'd', 'e', 'f'
     };
 
     private Utils() {
@@ -49,7 +48,7 @@ public final class Utils
         do {
             buf[--digits] = hexDigits[rgb & 15];
             rgb >>>= 4;
-        } while (digits!=0);
+        } while (digits != 0);
 
         return new String(buf);
     }
@@ -59,24 +58,21 @@ public final class Utils
     }
 
     public static void writeStyleAttribute(Device d, String prefix, String style)
-        throws IOException
-    {
+        throws IOException {
         if (style == null)
             return;
         writeStyleAttribute(d, prefix, style, "");
     }
 
     public static void writeStyleAttribute(Device d, String prefix, String style, String postfix)
-        throws IOException
-    {
+        throws IOException {
         if (style == null)
             return;
         writeStyleAttribute(d, prefix + style + postfix);
     }
 
     public static void writeStyleAttribute(Device d, String style)
-        throws IOException
-    {
+        throws IOException {
         if (style == null)
             return;
 
@@ -85,52 +81,51 @@ public final class Utils
         d.print("\"");
     }
 
-	/**
-      * Write component class and all other style attributes including border.
-      * The <i>span</i>-tag is used.
-      * @param d the device to write to
-      * @param component the component to get style and bg-color from
-      */
-    public static void writeSpanWithStyleAttributePrefix(Device d, SComponent component )
-        throws IOException
-    {
-    	String style = component.getStyle();
-        boolean hasAttr = org.wings.plaf.xhtml.Utils.hasSpanAttributes( component );
-        if ( style == null && ! hasAttr )
+    /**
+     * Write component class and all other style attributes including border.
+     * The <i>span</i>-tag is used.
+     *
+     * @param d         the device to write to
+     * @param component the component to get style and bg-color from
+     */
+    public static void writeSpanWithStyleAttributePrefix(Device d, SComponent component)
+        throws IOException {
+        String style = component.getStyle();
+        boolean hasAttr = org.wings.plaf.xhtml.Utils.hasSpanAttributes(component);
+        if (style == null && !hasAttr)
             return;
 
         d.print("<span ");
         if (hasAttr) {
-            d.print( "style=\"");
+            d.print("style=\"");
             org.wings.plaf.xhtml.Utils.writeSpanAttributes(d, component);
-            d.print( "\" ");
+            d.print("\" ");
         }
         writeStyleAttribute(d, style);
         d.print(">");
     }
 
 
-	/**
-      * Write ending <tt>&ls;/span&gt;</tt>-attribute, if
-      * component has either style or background-color defined.
-      * @param d the device to write to
-      * @param component the component to get style and bg-color from
-      */
-    public static void writeSpanWithStyleAttributePostfix(Device d, SComponent component )
-        throws IOException
-    {
+    /**
+     * Write ending <tt>&ls;/span&gt;</tt>-attribute, if
+     * component has either style or background-color defined.
+     *
+     * @param d         the device to write to
+     * @param component the component to get style and bg-color from
+     */
+    public static void writeSpanWithStyleAttributePostfix(Device d, SComponent component)
+        throws IOException {
         if (
-        	component.getStyle() == null && 
-        	org.wings.plaf.xhtml.Utils.hasSpanAttributes( component )
-           )
+            component.getStyle() == null &&
+            org.wings.plaf.xhtml.Utils.hasSpanAttributes(component)
+        )
             return;
 
         d.print("</span>");
     }
 
     public static void writeSpanWithStyleAttributePrefix(Device d, String style)
-        throws IOException
-    {
+        throws IOException {
         if (style == null)
             return;
 
@@ -140,8 +135,7 @@ public final class Utils
     }
 
     public static void writeSpanWithStyleAttributePostfix(Device d, String style)
-        throws IOException
-    {
+        throws IOException {
         if (style == null)
             return;
 
@@ -149,30 +143,28 @@ public final class Utils
     }
 
     public static void writeDivWithStyleAttributePrefix(Device d, String style)
-        throws IOException
-    {
+        throws IOException {
         if (style == null)
             return;
- 
+
         d.print("<div");
         Utils.writeStyleAttribute(d, style);
         d.print(">");
     }
- 
+
     public static void writeDivWithStyleAttributePostfix(Device d, String style)
-        throws IOException
-    {
+        throws IOException {
         if (style == null)
             return;
- 
+
         d.print("</div>");
-    }                                                                                                             
+    }
+
     static void writeHiddenComponent(Device d, String name, String value)
-        throws IOException
-    {
+        throws IOException {
         d.print("<input type=\"hidden\" name=\"").
-	  print(name).print("\" value=\"").
-	  print(value).print("\" />\n");
+            print(name).print("\" value=\"").
+            print(value).print("\" />\n");
     }
 
     public static String toHexString(int rgb) {
@@ -181,7 +173,7 @@ public final class Utils
         do {
             buf[--digits] = hexDigits[rgb & 15];
             rgb >>>= 4;
-        } while (digits!=0);
+        } while (digits != 0);
 
         return new String(buf);
     }
@@ -191,14 +183,12 @@ public final class Utils
     }
 
     public static void writeFontPrefix(Device d, SFont font)
-        throws IOException
-    {
+        throws IOException {
         writeFontPrefix(d, font, null);
     }
 
     public static void writeFontPrefix(Device d, SFont font, Color color)
-        throws IOException
-    {
+        throws IOException {
         if (font == null && color == null)
             return;
 
@@ -234,14 +224,12 @@ public final class Utils
     }
 
     public static void writeFontPostfix(Device d, SFont font)
-        throws IOException
-    {
+        throws IOException {
         writeFontPostfix(d, font, null);
     }
 
     public static void writeFontPostfix(Device d, SFont font, Color color)
-        throws IOException
-    {
+        throws IOException {
         if (font == null && color == null)
             return;
 

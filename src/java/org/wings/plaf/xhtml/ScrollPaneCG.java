@@ -22,30 +22,28 @@ import java.io.IOException;
 
 public class ScrollPaneCG
     extends org.wings.plaf.AbstractComponentCG
-    implements org.wings.plaf.ScrollPaneCG
-{
+    implements org.wings.plaf.ScrollPaneCG {
     public void installCG(SComponent component) {
     }
 
     public void uninstallCG(SComponent component) {
     }
-    
+
     public void writeContent(Device d, SComponent c)
-        throws IOException
-    {
+        throws IOException {
         SScrollPane scrollPane = (SScrollPane)c;
         SComponent scrollable = (SComponent)scrollPane.getScrollable();
 
-        if ( scrollPane.getPreferredSize() == null &&
-            scrollable.getPreferredSize() != null ) {
+        if (scrollPane.getPreferredSize() == null &&
+            scrollable.getPreferredSize() != null) {
             scrollPane.setPreferredSize(scrollable.getPreferredSize());
         }
 
         scrollPane.synchronizeAdjustables();
-        
+
         Utils.writeContainerContents(d, scrollPane);
     }
-   
+
 }
 
 /*

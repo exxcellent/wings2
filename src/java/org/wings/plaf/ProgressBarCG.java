@@ -22,19 +22,20 @@ import org.wings.plaf.ComponentCG;
  * Created: Mon Oct 28 19:18:13 2002
  * -->
  *
- *
- *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public interface ProgressBarCG extends ComponentCG  {
-    
+public interface ProgressBarCG extends ComponentCG {
+
 }// ProgressBarCG
 
 /*
    $Log$
-   Revision 1.1  2004/10/04 16:13:17  hengels
-   Initial revision
+   Revision 1.2  2004/10/13 12:06:31  hengels
+   o using domtt for tooltips
+
+   Revision 1.1.1.1  2004/10/04 16:13:17  hengels
+   o start development of wings 2
 
    Revision 1.1  2002/10/28 20:00:34  ahaaf
    o add ProgressBar component

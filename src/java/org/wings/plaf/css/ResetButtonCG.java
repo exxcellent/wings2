@@ -15,18 +15,18 @@ public class ResetButtonCG
     implements SConstants, org.wings.plaf.ResetButtonCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __input_type_res= "<input type=\"reset\"".getBytes();
-    private final static byte[] __              = "/>".getBytes();
+    private final static byte[] __input_type_res = "<input type=\"reset\"".getBytes();
+    private final static byte[] __ = "/>".getBytes();
 
 
     public void writeContent(final Device device,
-                      final SComponent _c)
+                             final SComponent _c)
         throws IOException {
-        final SResetButton component = (SResetButton) _c;
+        final SResetButton component = (SResetButton)_c;
 
         device.write(__input_type_res);
-        org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
-        org.wings.plaf.Utils.optAttribute( device, "value", component.getText());
+        org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        org.wings.plaf.Utils.optAttribute(device, "value", component.getText());
         Utils.writeEvents(device, component);
         device.write(__);
     }

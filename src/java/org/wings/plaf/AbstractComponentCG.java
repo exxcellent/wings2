@@ -27,19 +27,20 @@ import java.util.logging.Logger;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.
+ *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public abstract class AbstractComponentCG
-    implements ComponentCG, SConstants, Serializable
-{
+    implements ComponentCG, SConstants, Serializable {
     protected final static Logger logger = Logger.getLogger("org.wings.plaf");
 
     protected AbstractComponentCG() {
     }
-    
+
     /**
      * Install the appropriate CG for <code>component</code>.
+     *
      * @param component the component
      */
     public void installCG(SComponent component) {
@@ -59,6 +60,7 @@ public abstract class AbstractComponentCG
 
     /**
      * Uninstall the CG from <code>component</code>.
+     *
      * @param component the component
      */
     public void uninstallCG(SComponent component) {
@@ -76,7 +78,6 @@ public abstract class AbstractComponentCG
         return selector;
     }
 
-    // TODO: tooltip
     protected void writePrefix(Device device, SComponent component) throws IOException {
         device
             .print("<div id=\"")
@@ -91,6 +92,13 @@ public abstract class AbstractComponentCG
                 .print(dim.width)
                 .print("; height:")
                 .print(dim.height);
+
+        String toolTip = component.getToolTipText();
+        if (toolTip != null) {
+            device.print("\" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
+                .print(toolTip)
+                .print("', 'trail', true, 'lifetime', 3000));");
+        }
 
         device
             .print("\">\n");

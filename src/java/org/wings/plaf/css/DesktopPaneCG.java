@@ -17,35 +17,36 @@ public class DesktopPaneCG
     implements SConstants, org.wings.plaf.DesktopPaneCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __table_cellpadd= "<table cellpadding=\"0\" cellspacing=\"7\" border=\"0\" width=\"100%\"".getBytes();
-    private final static byte[] __              = ">".getBytes();
-    private final static byte[] __tr_td         = "<tr><td>".getBytes();
-    private final static byte[] __td_tr_table   = "</td></tr></table>".getBytes();
-    private final static byte[] __td_tr         = "</td></tr>".getBytes();
-    private final static byte[] __table         = "</table>".getBytes();
-    private final static byte[] ___1            = "\n".getBytes();
+    private final static byte[] __table_cellpadd = "<table cellpadding=\"0\" cellspacing=\"7\" border=\"0\" width=\"100%\"".getBytes();
+    private final static byte[] __ = ">".getBytes();
+    private final static byte[] __tr_td = "<tr><td>".getBytes();
+    private final static byte[] __td_tr_table = "</td></tr></table>".getBytes();
+    private final static byte[] __td_tr = "</td></tr>".getBytes();
+    private final static byte[] __table = "</table>".getBytes();
+    private final static byte[] ___1 = "\n".getBytes();
 
     public void installCG(final SComponent comp) {
-        final SDesktopPane component = (SDesktopPane) comp;
+        final SDesktopPane component = (SDesktopPane)comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         value = manager.getObject("SDesktopPane.style", String.class);
         if (value != null) {
-            component.setStyle((String) value);
+            component.setStyle((String)value);
         }
     }
 
     public void writeContent(final Device device,
-                      final SComponent _c)
+                             final SComponent _c)
         throws IOException {
-        final SDesktopPane component = (SDesktopPane) _c;
+        final SDesktopPane component = (SDesktopPane)_c;
 
 //--- code from write-template.
         SDesktopPane desktop = (SDesktopPane)component;
-        device.write(__table_cellpadd);        org.wings.plaf.Utils.optAttribute( device, "class", org.wings.plaf.css.Utils.style(component));
+        device.write(__table_cellpadd);
+        org.wings.plaf.Utils.optAttribute(device, "class", org.wings.plaf.css.Utils.style(component));
         device.write(__);
         int componentCount = desktop.getComponentCount();
-        for (int i=0; i<componentCount; i++) {
+        for (int i = 0; i < componentCount; i++) {
             SInternalFrame frame = (SInternalFrame)desktop.getComponent(i);
             if (!frame.isClosed() && frame.isMaximized()) {
                 device.write(__tr_td);
@@ -55,7 +56,7 @@ public class DesktopPaneCG
             }
         }
 
-        for (int i=0; i<componentCount; i++) {
+        for (int i = 0; i < componentCount; i++) {
             SInternalFrame frame = (SInternalFrame)desktop.getComponent(i);
             if (!frame.isClosed()) {
                 device.write(__tr_td);

@@ -39,14 +39,14 @@ import java.util.logging.Logger;
  * A Look-and-Feel consists of a bunch of CGs and resource properties.
  * wingS provides a pluggable look-and-feel (laf or plaf) concept similar to that of Swing.
  * A certain plaf implementation normally adresses a specific browser.
- * 
+ *
  * @see org.wings.plaf.ComponentCG
  */
-public class LookAndFeel
-{
+public class LookAndFeel {
     public final static Logger logger = Logger.getLogger("org.wings.plaf");
 
     private static Map wrappers = new HashMap();
+
     static {
         wrappers.put(Boolean.TYPE, Boolean.class);
         wrappers.put(Character.TYPE, Character.class);
@@ -64,6 +64,7 @@ public class LookAndFeel
 
     /**
      * Instantiate a laf using the war's classLoader.
+     *
      * @param properties the configuration of the laf
      */
     public LookAndFeel(Properties properties) {
@@ -90,7 +91,7 @@ public class LookAndFeel
      * create a fresh CGDefaults map. One defaults map per Session is generated
      * in its CGManager. It is necessary to create a fresh defaults map, since
      * it caches values that might be modified within the sessions. A prominent
-     * example of changed values per sessions are the CG's themselves: 
+     * example of changed values per sessions are the CG's themselves:
      * CG-properties might be changed per session...
      *
      * @return the laf's defaults
@@ -101,6 +102,7 @@ public class LookAndFeel
 
     /**
      * Create a CG instance.
+     *
      * @param className the full qualified class name of the CG
      * @return a new CG instance
      */
@@ -112,7 +114,7 @@ public class LookAndFeel
                 result = cgClass.newInstance();
                 finalResources.put(className, result);
             }
-            catch ( Exception ex ) {
+            catch (Exception ex) {
                 logger.log(Level.SEVERE, null, ex);
             }
         }
@@ -121,14 +123,15 @@ public class LookAndFeel
 
     /**
      * Utility method that creates an java.awt.Color from a html color hex string
+     *
      * @return the create color
      */
     public static Color makeColor(String colorString) {
-        if (colorString!=null ) {
+        if (colorString != null) {
             try {
                 return Color.decode(colorString.trim());
             }
-            catch ( Exception ex ) {
+            catch (Exception ex) {
                 ex.printStackTrace();
                 return null;
             }
@@ -138,14 +141,15 @@ public class LookAndFeel
 
     /**
      * Utility method that creates an java.awt.Color from a html color hex string
+     *
      * @return the create color
      */
     public static SDimension makeDimension(String dimensionString) {
-        if ( dimensionString!=null ) {
+        if (dimensionString != null) {
             int commaIndex = dimensionString.indexOf(',');
-            if ( commaIndex>0 ) {
+            if (commaIndex > 0) {
                 return new SDimension(dimensionString.substring(0, commaIndex),
-                                      dimensionString.substring(commaIndex+1));
+                    dimensionString.substring(commaIndex + 1));
             }
         }
         return null;
@@ -156,13 +160,13 @@ public class LookAndFeel
      * located realtive to the given base class. Uses the ClassLoader
      * of the LookAndFeel
      *
-     * @see LookAndFeel.LookAndFeel(Properties p, ClassLoader cl)
      * @param fileName of the image file
      * @return a newly allocated Icon
+     * @see LookAndFeel.LookAndFeel(Properties p, ClassLoader cl)
      */
     public static SIcon makeIcon(String fileName) {
         SIcon result = (SIcon)finalResources.get(fileName);
-        if ( result==null ) {
+        if (result == null) {
             result = new SResourceIcon(fileName);
             finalResources.put(fileName, result);
         }
@@ -182,8 +186,8 @@ public class LookAndFeel
             String token = tokens.nextToken();
             int pos = token.indexOf(":");
             if (pos >= 0) {
-                attributes.put(token.substring(0, pos), 
-                               token.substring(pos + 1));
+                attributes.put(token.substring(0, pos),
+                    token.substring(pos + 1));
             }
         }
         return attributes;
@@ -191,12 +195,13 @@ public class LookAndFeel
 
     /**
      * Utility method that creates a styleSheet from a string
+     *
      * @param value styleSheet as a string
      * @return the styleSheet
      */
     public static Resource makeResource(String resourceName) {
         Resource result = (Resource)finalResources.get(resourceName);
-        if ( result==null ) {
+        if (result == null) {
             result = new ClasspathResource(resourceName);
             finalResources.put(resourceName, result);
         }
@@ -205,6 +210,7 @@ public class LookAndFeel
 
     /**
      * Utility method that creates a stylesheet object from a resource
+     *
      * @param resourceName
      * @return the styleSheet
      */
@@ -225,6 +231,7 @@ public class LookAndFeel
     /**
      * Utility method that creates an Object of class <code>clazz</code>
      * using the single String arg constructor.
+     *
      * @param value object as a string
      * @param clazz class of the object
      * @return the object
@@ -241,18 +248,18 @@ public class LookAndFeel
             else {
                 if (clazz.isPrimitive())
                     clazz = (Class)wrappers.get(clazz);
-                Constructor constructor = clazz.getConstructor(new Class[] { String.class });
-                result = constructor.newInstance(new Object[] { value });
+                Constructor constructor = clazz.getConstructor(new Class[]{String.class});
+                result = constructor.newInstance(new Object[]{value});
             }
         }
         catch (NoSuchMethodException e) {
             logger.log(Level.SEVERE, value + " : " + clazz.getName()
-                       + " doesn't have a single String arg constructor", e);
+                + " doesn't have a single String arg constructor", e);
             result = null;
         }
         catch (Exception e) {
             logger.log(Level.SEVERE,
-                       e.getClass().getName() + " : " + value, e);
+                e.getClass().getName() + " : " + value, e);
             result = null;
         }
         return result;
@@ -271,8 +278,10 @@ public class LookAndFeel
 
     class ResourceFactory extends CGDefaults {
 
-        public ResourceFactory() { super(null); }
-        
+        public ResourceFactory() {
+            super(null);
+        }
+
         public Object get(Object key, Class type) {
             Object value = get(key);
             if (value != null)
@@ -284,8 +293,7 @@ public class LookAndFeel
                 do {
                     property = properties.getProperty(clazz.getName());
                     clazz = clazz.getSuperclass();
-                }
-                while (property == null && clazz != null);
+                } while (property == null && clazz != null);
             }
             else
                 property = properties.getProperty(key.toString());
@@ -294,14 +302,15 @@ public class LookAndFeel
                 put(key, null);
                 return null;
             }
-            
+
             if (ComponentCG.class.isAssignableFrom(type)
                 || LayoutCG.class.isAssignableFrom(type)) {
                 value = makeCG(property);
             }
             else if (type.isAssignableFrom(SIcon.class)) {
                 value = makeIcon(property);
-            } else if (type.isAssignableFrom(Resource.class))
+            }
+            else if (type.isAssignableFrom(Resource.class))
                 value = makeResource(property);
             else if (type.isAssignableFrom(AttributeSet.class))
                 value = makeAttributeSet(property);

@@ -15,10 +15,8 @@
 package org.wings.plaf.xhtml.css1;
 
 
-
 public final class FlowLayoutCG
-    extends org.wings.plaf.xhtml.FlowLayoutCG
-{
+    extends org.wings.plaf.xhtml.FlowLayoutCG {
 }
 
 /*

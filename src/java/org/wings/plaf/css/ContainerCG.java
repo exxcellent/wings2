@@ -12,11 +12,9 @@ import org.wings.plaf.AbstractComponentCG;
 
 public class ContainerCG
     extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.PanelCG
-{
+    implements SConstants, org.wings.plaf.PanelCG {
     public void writeContent(final Device device, final SComponent component)
-        throws java.io.IOException
-    {
+        throws java.io.IOException {
         Utils.renderContainer(device, (SContainer)component);
     }
 }

@@ -19,18 +19,16 @@ public class ClickableCG
 
         if (button.getShowAsFormComponent()) {
             device.print("<button type=\"submit\" name=\"");
-            Utils.write( device, button.getEventTarget().getEncodedLowLevelEventId());
+            Utils.write(device, button.getEventTarget().getEncodedLowLevelEventId());
             device.print("\" value=\"");
-            Utils.write( device, button.getEvent());
+            Utils.write(device, button.getEvent());
             device.print("\"");
-            org.wings.plaf.Utils.optAttribute( device, "tabindex", button.getFocusTraversalIndex());
-            org.wings.plaf.Utils.optAttribute( device, "title", button.getToolTipText());
+            org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         }
         else {
             device.write("<a href=\"".getBytes());
-            org.wings.plaf.Utils.write( device, button.getURL());
+            org.wings.plaf.Utils.write(device, button.getURL());
             device.write("\"".getBytes());
-            org.wings.plaf.Utils.optAttribute( device, "title", button.getToolTipText());
         }
 
         if (!button.isEnabled())
@@ -65,14 +63,15 @@ public class ClickableCG
     }
 
     protected SIcon getIcon(SClickable abstractButton) {
-        if ( abstractButton.isSelected() ) {
+        if (abstractButton.isSelected()) {
             return abstractButton.isEnabled()
-            ? abstractButton.getSelectedIcon()
-            : abstractButton.getDisabledSelectedIcon();
-        } else {
+                ? abstractButton.getSelectedIcon()
+                : abstractButton.getDisabledSelectedIcon();
+        }
+        else {
             return abstractButton.isEnabled()
-            ? abstractButton.getIcon()
-            : abstractButton.getDisabledIcon();
+                ? abstractButton.getIcon()
+                : abstractButton.getDisabledIcon();
         }
     }
 }

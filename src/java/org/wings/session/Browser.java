@@ -193,7 +193,7 @@ public class Browser
         RE Opera_Lang_Os = new RE("\\(([a-zA-Z0-9\\-]+) ([0-9\\.]+)[^)]+\\)[ \t]*\\[([a-z_]+)\\]");
         RE Konqueror_Os = new RE("Konqueror/([0-9\\.]+); ([a-zA-Z0-9\\-]+)");
         RE Galeon_Os = new RE("\\(([a-zA-Z0-9]+); U; Galeon; ([0-9]+)\\.([0-9]+);");
-        RE Gecko_Engine = new RE("Gecko/[0-9]*( ([a-zA-Z]+)+[0-9]*/([0-9]+)\\.([0-9]+)([a-zA-Z0-9]*))?$");
+        RE Gecko_Engine = new RE("Gecko/[0-9]*( ([a-zA-Z]+)+[0-9]*/([0-9]+)\\.([0-9]+)([a-zA-Z0-9]*))?");
         
         String mav, miv, lang = null;
         
@@ -346,10 +346,12 @@ public class Browser
                 miv = Opera.getParen(8);
                 lang = Opera.getParen(10);
             }
-            
+
+            System.out.println("is gecko ??");
             /* detect gecko */
             if (Gecko_Engine.match(agent))
             {
+                System.out.println("yes !!");
                 HasGecko = true;
                 if (Gecko_Engine.getParen(2) != null)
                 	Name = Gecko_Engine.getParen(2);
@@ -417,6 +419,7 @@ public class Browser
                 }
             }
         }
+        System.out.println("agent = " + agent + " " + hasGecko());
     }
 
     public boolean supportsChildSelector() {

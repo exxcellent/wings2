@@ -24,88 +24,88 @@ import org.wings.plaf.*;
 import org.wings.util.CGUtil;
 
 public class BoxLayoutCG implements LayoutCG {
-  /**
-   * TODO: documentation
-   *
-   * @param d the device to write the code to
-   * @param l the layout manager
-   * @throws IOException
-   */
-  public void write(Device d, SLayoutManager l)
-  throws IOException {
-    SBoxLayout layout = (SBoxLayout)l;
-    SContainer container = layout.getContainer();
-    List components = layout.getComponents();
-    SDimension dim = layout.getPreferredSize();
-    
-    
-    
-    d.print("\n<table ");
-    if (Utils.hasSpanAttributes( container ) ) {
-      d.print("style=\"");
-      Utils.writeSpanAttributes( d, (SComponent) container );
-      d.print("\" ");
-    }
-   
-   org.wings.plaf.css.Utils.printTableHorizontalAlignment(d, layout.getHorizontalAlignment());
-   org.wings.plaf.css.Utils.printTableVerticalAlignment(d, layout.getVerticalAlignment());
-   d.print(" cellspacing=\"0\" cellpadding=\"0\">\n");
-    
-    
-    if (layout.getOrientation() == SBoxLayout.X_AXIS) {
-      d.print("<tr>");
-      for (Iterator iter = components.iterator(); iter.hasNext();) {
-        
-        SComponent c = (SComponent)iter.next();
-        
-        d.print("<td");
-        
-        Utils.printTableCellAlignment(d, c);
-        if (c instanceof SContainer && c.isVisible() && Utils.hasSpanAttributes(c)) {
-          // Adapt inner styles (esp. width of containers)
-          // maybe better restrict to dimension styles only?
-          d.print(" style=\"");
-          Utils.writeAttributes(d,  c);
-          d.print("\"");
-          
-        }
-        d.print(">");
-        
-        c.write(d);
-        
-        
-        d.print("</td>");
-        
-      }
-      d.print("</tr>\n");
+    /**
+     * TODO: documentation
+     *
+     * @param d the device to write the code to
+     * @param l the layout manager
+     * @throws IOException
+     */
+    public void write(Device d, SLayoutManager l)
+        throws IOException {
+        SBoxLayout layout = (SBoxLayout)l;
+        SContainer container = layout.getContainer();
+        List components = layout.getComponents();
+        SDimension dim = layout.getPreferredSize();
 
-    } else {   /* This Should be the Y-Axis :) */
-      for (Iterator iter = components.iterator(); iter.hasNext();) {
-        d.print("<tr>");
-        SComponent c = (SComponent)iter.next();
-        
-        d.print("<td");
-        
-        Utils.printTableCellAlignment(d, c);
-        if (c instanceof SContainer && c.isVisible() && Utils.hasSpanAttributes(c)) {
-          // Adapt inner styles (esp. width of containers)
-          // maybe better restrict to dimension styles only?
-          d.print(" style=\"");
-          Utils.writeAttributes(d,  c);
-          d.print("\"");
-          
+
+        d.print("\n<table ");
+        if (Utils.hasSpanAttributes(container)) {
+            d.print("style=\"");
+            Utils.writeSpanAttributes(d, (SComponent)container);
+            d.print("\" ");
         }
-        d.print(">");
-        
-        c.write(d);
-        
-        d.print("</td>");
-           
-        d.print("</tr>\n");
-      }    
+
+        org.wings.plaf.css.Utils.printTableHorizontalAlignment(d, layout.getHorizontalAlignment());
+        org.wings.plaf.css.Utils.printTableVerticalAlignment(d, layout.getVerticalAlignment());
+        d.print(" cellspacing=\"0\" cellpadding=\"0\">\n");
+
+
+        if (layout.getOrientation() == SBoxLayout.X_AXIS) {
+            d.print("<tr>");
+            for (Iterator iter = components.iterator(); iter.hasNext();) {
+
+                SComponent c = (SComponent)iter.next();
+
+                d.print("<td");
+
+                Utils.printTableCellAlignment(d, c);
+                if (c instanceof SContainer && c.isVisible() && Utils.hasSpanAttributes(c)) {
+                    // Adapt inner styles (esp. width of containers)
+                    // maybe better restrict to dimension styles only?
+                    d.print(" style=\"");
+                    Utils.writeAttributes(d, c);
+                    d.print("\"");
+
+                }
+                d.print(">");
+
+                c.write(d);
+
+
+                d.print("</td>");
+
+            }
+            d.print("</tr>\n");
+
+        }
+        else {   /* This Should be the Y-Axis :) */
+            for (Iterator iter = components.iterator(); iter.hasNext();) {
+                d.print("<tr>");
+                SComponent c = (SComponent)iter.next();
+
+                d.print("<td");
+
+                Utils.printTableCellAlignment(d, c);
+                if (c instanceof SContainer && c.isVisible() && Utils.hasSpanAttributes(c)) {
+                    // Adapt inner styles (esp. width of containers)
+                    // maybe better restrict to dimension styles only?
+                    d.print(" style=\"");
+                    Utils.writeAttributes(d, c);
+                    d.print("\"");
+
+                }
+                d.print(">");
+
+                c.write(d);
+
+                d.print("</td>");
+
+                d.print("</tr>\n");
+            }
+        }
+        d.print("</table>");
     }
-    d.print("</table>");
-  }
 }
 
 /*

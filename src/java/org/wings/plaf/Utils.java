@@ -34,11 +34,11 @@ public class Utils implements SConstants {
     private final static byte[] digits = "0123456789ABCDEF".getBytes();
 
     // byte representation of special characters
-    private final static byte HASH_CHAR = (byte) '#';
-    private final static byte MINUS_CHAR = (byte) '-';
-    private final static byte SPACE = (byte) ' ';
+    private final static byte HASH_CHAR = (byte)'#';
+    private final static byte MINUS_CHAR = (byte)'-';
+    private final static byte SPACE = (byte)' ';
     private final static byte[] EQUALS_QUOT = "=\"".getBytes();
-    private final static byte QUOT = (byte) '"';
+    private final static byte QUOT = (byte)'"';
     private final static byte[] CLASS_EQUALS = " class=\"".getBytes();
 
     /**
@@ -68,13 +68,15 @@ public class Utils implements SConstants {
                 d.print(chars, last, (pos - last));
                 if (c == '\n' && quoteNewline) {
                     d.print("<br>");
-                } else {
+                }
+                else {
                     d.print("&#");
-                    d.print((int) c);
+                    d.print((int)c);
                     d.print(";");
                 } // end of if ()
                 last = pos + 1;
-            } else
+            }
+            else
                 switch (c) {
                     case '&':
                         d.print(chars, last, (pos - last));
@@ -130,7 +132,8 @@ public class Utils implements SConstants {
         if (s == null) return;
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
-        } else {
+        }
+        else {
             quote(d, s, false);
         }
     }
@@ -141,7 +144,7 @@ public class Utils implements SConstants {
      * it is left out
      */
     public static void optAttribute(Device d, String attr, Style value)
-            throws IOException {
+        throws IOException {
         if (value != null) {
             d.write(SPACE);
             d.print(attr);
@@ -157,7 +160,7 @@ public class Utils implements SConstants {
      * it is left out
      */
     public static void optAttribute(Device d, String attr, String value)
-            throws IOException {
+        throws IOException {
         if (value != null && value.length() > 0) {
             d.write(SPACE);
             d.print(attr);
@@ -168,7 +171,7 @@ public class Utils implements SConstants {
     }
 
     public static void childSelectorWorkaround(Device d, String style)
-            throws IOException {
+        throws IOException {
         d.write(CLASS_EQUALS);
         d.print(style);
         d.write(QUOT);
@@ -180,7 +183,7 @@ public class Utils implements SConstants {
      * it is left out
      */
     public static void optAttribute(Device d, String attr, Color value)
-            throws IOException {
+        throws IOException {
         if (value != null) {
             d.write(SPACE);
             d.print(attr);
@@ -194,7 +197,7 @@ public class Utils implements SConstants {
      * Prints an optional, renderable attribute.
      */
     public static void optAttribute(Device d, String attr, Renderable r)
-            throws IOException {
+        throws IOException {
         if (r != null) {
             d.write(SPACE);
             d.print(attr);
@@ -209,7 +212,7 @@ public class Utils implements SConstants {
      * the attrib is added otherwise it is left out
      */
     public static void optAttribute(Device d, String attr, int value)
-            throws IOException {
+        throws IOException {
         if (value > 0) {
             d.write(SPACE);
             d.print(attr);
@@ -224,7 +227,7 @@ public class Utils implements SConstants {
      * the attrib is added otherwise it is left out
      */
     public static void optAttribute(Device d, String attr, SDimension value)
-            throws IOException {
+        throws IOException {
         if (value != null) {
             d.write(SPACE);
             d.print(attr);
@@ -275,12 +278,12 @@ public class Utils implements SConstants {
                 /*
                  * still negative ? Then we had Long.MIN_VALUE
                  */
-                out[--i] = digits[-(int) (Long.MIN_VALUE % 10)];
+                out[--i] = digits[-(int)(Long.MIN_VALUE % 10)];
                 num = -(Long.MIN_VALUE / 10);
             }
         }
         do {
-            out[--i] = digits[(int) (num % 10)];
+            out[--i] = digits[(int)(num % 10)];
             num /= 10;
         } while (num > 0);
         d.write(out, i, 20 - i);
@@ -329,7 +332,7 @@ public class Utils implements SConstants {
             quote(d, "this is a little & foo");
         }
         System.err.println("took: " + (System.currentTimeMillis() - start)
-                           + "ms");
+            + "ms");
     }
 }
 

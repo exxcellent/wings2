@@ -11,8 +11,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class LookAndFeel
-    extends org.wings.plaf.LookAndFeel
-{
+    extends org.wings.plaf.LookAndFeel {
     private static final String PROPERTIES_LOCATION = "WEB-INF/" + LookAndFeel.class.getPackage().getName() + ".properties";
 
     public LookAndFeel() throws IOException {

@@ -83,16 +83,13 @@ public class ListCG
                 device.write(__selected_selec);
             }
 
-            if (renderer != null)
-                org.wings.plaf.Utils.optAttribute(device, "title", renderer.getToolTipText());
-
             org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
             org.wings.plaf.xhtml.Utils.writeAttributes(stringBufferDevice, renderer);
             String styleString = stringBufferDevice.toString();
-            if ( styleString!=null && styleString.length()>0) {
+            if (styleString != null && styleString.length() > 0) {
 
                 device.write(__style);
-                org.wings.plaf.Utils.write( device, styleString);
+                org.wings.plaf.Utils.write(device, styleString);
 
                 device.write(___1);
             }

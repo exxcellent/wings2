@@ -21,11 +21,10 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public interface ComponentCG
-    extends Serializable
-{
+    extends Serializable {
     /**
      * Installs the CG.
-     *
+     * <p/>
      * <p><b>Note</b>: Be very careful here since this method is called from
      * the SComponent constructor! Don't call any methods which rely on
      * something that will be constructed in a subconstructor later!
@@ -39,11 +38,11 @@ public interface ComponentCG
 
     /**
      * Writes the given component to the Device.
-     *
-     * <p>This renders the component according to this pluggable look and 
-     * feel; it reads the properties of the component and genereates the 
+     * <p/>
+     * <p>This renders the component according to this pluggable look and
+     * feel; it reads the properties of the component and genereates the
      * HTML, XML or whatever representation that is written to the Device.
-     *
+     * <p/>
      * <p>This method should be called from the write method in SComponent or
      * a subclass. It delegates
      *

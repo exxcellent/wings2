@@ -13,8 +13,7 @@ import java.io.IOException;
  * @version $Revision$
  */
 public abstract class IconTextCompound
-    implements SConstants
-{
+    implements SConstants {
     public void writeCompound(Device d, int horizontal, int vertical) throws IOException {
         if (horizontal == NO_ALIGN)
             horizontal = RIGHT;
@@ -78,5 +77,6 @@ public abstract class IconTextCompound
     }
 
     protected abstract void text(Device d) throws IOException;
+
     protected abstract void icon(Device d) throws IOException;
 }

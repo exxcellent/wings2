@@ -29,8 +29,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public final class Utils
-    extends org.wings.plaf.Utils
-{
+    extends org.wings.plaf.Utils {
 
     final static char[] hexDigits = {
         '0', '1', '2', '3', '4', '5',
@@ -49,7 +48,8 @@ public final class Utils
 
         if (layout != null) {
             layout.write(d);
-        } else {
+        }
+        else {
             for (int i = 0; i < c.getComponentCount(); i++) {
                 c.getComponent(i).write(d);
             }
@@ -66,7 +66,7 @@ public final class Utils
                 final String event = script.getEvent();
                 String eventScriptCode = script.getCode();
 
-                if (event == null 
+                if (event == null
                     || event.length() == 0
                     || eventScriptCode == null
                     || eventScriptCode.length() == 0) {
@@ -74,7 +74,7 @@ public final class Utils
                 }
 
                 if (eventScripts.containsKey(event)) {
-                    String savedEventScriptCode = (String) eventScripts.get(event);
+                    String savedEventScriptCode = (String)eventScripts.get(event);
                     eventScriptCode = savedEventScriptCode
                         + (savedEventScriptCode.trim().endsWith(";") ? "" : ";")
                         + eventScriptCode;
@@ -84,8 +84,8 @@ public final class Utils
 
             Iterator it = eventScripts.keySet().iterator();
             while (it.hasNext()) {
-                String event = (String) it.next();
-                String code = (String) eventScripts.get(event);
+                String event = (String)it.next();
+                String code = (String)eventScripts.get(event);
                 d.print(" ");
                 d.print(event);
                 d.print("=\"");
@@ -136,47 +136,47 @@ public final class Utils
     final static byte[] VALIGN_BOTTOM = " valign=\"bottom\"".getBytes();
     final static byte[] VALIGN_BASELINE = " valign=\"baseline\"".getBytes();
 
-    public static void printTableHorizontalAlignment(Device d, int align) 
-       throws IOException {
+    public static void printTableHorizontalAlignment(Device d, int align)
+        throws IOException {
         switch (align) {
-        case SConstants.NO_ALIGN:
-        case SConstants.LEFT:
-            break;
-        case SConstants.CENTER:
-            d.write(ALIGN_CENTER);
-            break;
-        case SConstants.RIGHT:
-            d.write(ALIGN_RIGHT);
-            break;
-        case SConstants.JUSTIFY:
-            d.write(ALIGN_JUSTIFY);
-            break;
+            case SConstants.NO_ALIGN:
+            case SConstants.LEFT:
+                break;
+            case SConstants.CENTER:
+                d.write(ALIGN_CENTER);
+                break;
+            case SConstants.RIGHT:
+                d.write(ALIGN_RIGHT);
+                break;
+            case SConstants.JUSTIFY:
+                d.write(ALIGN_JUSTIFY);
+                break;
         }
-      
+
     }
-    
-    public static void printTableVerticalAlignment(Device d, int align) 
-     throws IOException {
+
+    public static void printTableVerticalAlignment(Device d, int align)
+        throws IOException {
         switch (align) {
-        case SConstants.NO_ALIGN:
-        case SConstants.CENTER:
-            break;
-        case SConstants.TOP:
-            d.write(VALIGN_TOP);
-            break;
-        case SConstants.BOTTOM:
-            d.write(VALIGN_BOTTOM);
-            break;
-        case SConstants.BASELINE:
-            d.write(VALIGN_BASELINE);
-            break;
+            case SConstants.NO_ALIGN:
+            case SConstants.CENTER:
+                break;
+            case SConstants.TOP:
+                d.write(VALIGN_TOP);
+                break;
+            case SConstants.BOTTOM:
+                d.write(VALIGN_BOTTOM);
+                break;
+            case SConstants.BASELINE:
+                d.write(VALIGN_BASELINE);
+                break;
         }
     }
-    
+
     public static void printTableCellAlignment(Device d, SComponent c)
         throws IOException {
-          printTableHorizontalAlignment(d, c.getHorizontalAlignment());
-          printTableVerticalAlignment(d, c.getVerticalAlignment());
+        printTableHorizontalAlignment(d, c.getHorizontalAlignment());
+        printTableVerticalAlignment(d, c.getVerticalAlignment());
     }
 
     public static String toColorString(int rgb) {
@@ -202,7 +202,7 @@ public final class Utils
         SFont font = component.getFont();
         SDimension dim = component.getPreferredSize();
 
-        if (bgcolor != null) 
+        if (bgcolor != null)
             d.print("background-color:#").print(toColorString(bgcolor)).print(";");
 
         if (fgColor != null) {

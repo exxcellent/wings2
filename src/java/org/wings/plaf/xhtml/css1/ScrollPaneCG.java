@@ -20,8 +20,7 @@ import org.wings.plaf.*;
 import org.wings.io.*;
 
 public final class ScrollPaneCG
-    extends org.wings.plaf.xhtml.ScrollPaneCG
-{
+    extends org.wings.plaf.xhtml.ScrollPaneCG {
 }
 
 /*

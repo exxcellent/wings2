@@ -15,10 +15,8 @@
 package org.wings.plaf.xhtml.css1;
 
 
-
 public final class ScrollBarCG
-    extends org.wings.plaf.css.ScrollBarCG
-{
+    extends org.wings.plaf.css.ScrollBarCG {
 }
 
 /*

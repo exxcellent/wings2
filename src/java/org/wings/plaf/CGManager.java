@@ -27,11 +27,10 @@ import java.util.logging.Logger;
 
 /**
  * The CGManager holds a reference to the current laf.
- * It delegates to a session related CGDefaults table, that is backed by 
+ * It delegates to a session related CGDefaults table, that is backed by
  * the laf's defaults.
  */
-public class CGManager implements Serializable
-{
+public class CGManager implements Serializable {
     private final static Logger logger = Logger.getLogger("org.wings.plaf");
 
     private LookAndFeel lookAndFeel;
@@ -41,6 +40,7 @@ public class CGManager implements Serializable
      * Get an Object from the defaults table.
      * If the there's no value associated to the <code>key</code>, the request
      * is delegated to the laf's defaults table.
+     *
      * @param key the lookup key
      */
     public Object get(String key) {
@@ -51,6 +51,7 @@ public class CGManager implements Serializable
      * Get an Object from the defaults table.
      * If the there's no value associated to the <code>key</code>, the request
      * is delegated to the laf's defaults table.
+     *
      * @param key the lookup key
      * @param key the class of the object in question
      */
@@ -62,6 +63,7 @@ public class CGManager implements Serializable
      * Get a ComponentCG from the defaults table.
      * If the there's no value associated to the <code>target</code>'s cgClassID, the request
      * is delegated to the laf's defaults table.
+     *
      * @param target the SComponent
      */
     public ComponentCG getCG(SComponent target) {
@@ -72,6 +74,7 @@ public class CGManager implements Serializable
      * Get a ComponentCG from the defaults table.
      * If the there's no value associated to the <code>target</code>'s cgClassID, the request
      * is delegated to the laf's defaults table.
+     *
      * @param cgClassID the cg class id
      */
     public ComponentCG getCG(String cgClassID) {
@@ -82,6 +85,7 @@ public class CGManager implements Serializable
      * Get a LayoutManagerCG from the defaults table.
      * If the there's no value associated to the <code>target</code>'s cgClassID, the request
      * is delegated to the laf's defaults table.
+     *
      * @param target the SLayoutManager
      */
     public LayoutCG getCG(SLayoutManager target) {
@@ -92,6 +96,7 @@ public class CGManager implements Serializable
      * Get a StyleSheet from the defaults table.
      * If the there's no value associated to the <code>key</code>, the request
      * is delegated to the laf's defaults table.
+     *
      * @param key the lookup key
      */
     public StyleSheet getStyleSheet(String key) {
@@ -102,6 +107,7 @@ public class CGManager implements Serializable
      * Get a Style from the defaults table.
      * If the there's no value associated to the <code>key</code>, the request
      * is delegated to the laf's defaults table.
+     *
      * @param key the lookup key
      */
     public Style getStyle(String key) {
@@ -112,6 +118,7 @@ public class CGManager implements Serializable
      * Get a Icon from the defaults table.
      * If the there's no value associated to the <code>key</code>, the request
      * is delegated to the laf's defaults table.
+     *
      * @param key the lookup key
      */
     public SIcon getIcon(String key) {
@@ -120,6 +127,7 @@ public class CGManager implements Serializable
 
     /**
      * Set the defaults table.
+     *
      * @param defaults the defaults table
      */
     public void setDefaults(CGDefaults defaults) {
@@ -128,6 +136,7 @@ public class CGManager implements Serializable
 
     /**
      * Return the defaults table.
+     *
      * @return the defaults table
      */
     public CGDefaults getDefaults() {
@@ -156,7 +165,7 @@ public class CGManager implements Serializable
      */
     public void setLookAndFeel(LookAndFeel newLookAndFeel) {
         lookAndFeel = newLookAndFeel;
-        
+
         if (newLookAndFeel != null) {
             setDefaults(newLookAndFeel.createDefaults());
         }

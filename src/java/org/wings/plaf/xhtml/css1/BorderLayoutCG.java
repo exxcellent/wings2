@@ -15,10 +15,8 @@
 package org.wings.plaf.xhtml.css1;
 
 
-
 public final class BorderLayoutCG
-    extends org.wings.plaf.xhtml.BorderLayoutCG
-{
+    extends org.wings.plaf.xhtml.BorderLayoutCG {
 }
 
 /*

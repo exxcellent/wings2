@@ -17,32 +17,32 @@ public class ComboBoxCG
 
 //--- byte array converted template snippets.
     private final static byte[] __select_size_1 = "<select size=\"1\"".getBytes();
-    private final static byte[] __disabled_1    = " disabled=\"1\"".getBytes();
-    private final static byte[] __              = ">".getBytes();
+    private final static byte[] __disabled_1 = " disabled=\"1\"".getBytes();
+    private final static byte[] __ = ">".getBytes();
     private final static byte[] __renderer_null = "<!--renderer==null-->".getBytes();
-    private final static byte[] __option        = "\n<option".getBytes();
-    private final static byte[] __selected_selec= " selected=\"selected\"".getBytes();
-    private final static byte[] __title         = " title=\"".getBytes();
-    private final static byte[] ___1            = "\"".getBytes();
-    private final static byte[] __style         = " style=\"".getBytes();
-    private final static byte[] __cellrenderer_n= "<!--cellrenderer==null, use toString-->".getBytes();
-    private final static byte[] __option_1      = "</option>".getBytes();
-    private final static byte[] __select        = "\n</select>".getBytes();
-    private final static byte[] __input_type_hid= "<input type=\"hidden\"".getBytes();
-    private final static byte[] ___2            = "/>".getBytes();
-    private final static byte[] ___3            = "\n".getBytes();
+    private final static byte[] __option = "\n<option".getBytes();
+    private final static byte[] __selected_selec = " selected=\"selected\"".getBytes();
+    private final static byte[] __title = " title=\"".getBytes();
+    private final static byte[] ___1 = "\"".getBytes();
+    private final static byte[] __style = " style=\"".getBytes();
+    private final static byte[] __cellrenderer_n = "<!--cellrenderer==null, use toString-->".getBytes();
+    private final static byte[] __option_1 = "</option>".getBytes();
+    private final static byte[] __select = "\n</select>".getBytes();
+    private final static byte[] __input_type_hid = "<input type=\"hidden\"".getBytes();
+    private final static byte[] ___2 = "/>".getBytes();
+    private final static byte[] ___3 = "\n".getBytes();
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        final SComboBox component = (SComboBox) comp;
+        final SComboBox component = (SComboBox)comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         value = manager.getObject("SComboBox.renderer", SDefaultListCellRenderer.class);
         if (value != null) {
-            component.setRenderer((SDefaultListCellRenderer) value);
+            component.setRenderer((SDefaultListCellRenderer)value);
         }
 
-  
+
     }
 
 //--- code from common area in template.
@@ -51,14 +51,14 @@ public class ComboBoxCG
     protected void writeFormComboBox(Device device, SComboBox comboBox) throws IOException {
 
         device.write(__select_size_1);
-        org.wings.plaf.Utils.optAttribute( device, "name", Utils.event(comboBox));
-        org.wings.plaf.Utils.optAttribute( device, "tabindex", comboBox.getFocusTraversalIndex());
-        if ( !comboBox.isEnabled() ) {
+        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(comboBox));
+        org.wings.plaf.Utils.optAttribute(device, "tabindex", comboBox.getFocusTraversalIndex());
+        if (!comboBox.isEnabled()) {
             device.write(__disabled_1);
         }
 
         comboBox.removeScriptListener(submitListener);
-        if (comboBox.getActionListeners().length>0) {
+        if (comboBox.getActionListeners().length > 0) {
             comboBox.addScriptListener(submitListener);
         }
 
@@ -71,28 +71,29 @@ public class ComboBoxCG
 
         SListCellRenderer renderer = comboBox.getRenderer();
 
-        for (int i=0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             SComponent cellRenderer = null;
             if (renderer != null) {
                 cellRenderer = renderer.getListCellRendererComponent(comboBox, model.getElementAt(i), false, i);
-            } else {
+            }
+            else {
 
                 device.write(__renderer_null);
             }
 
 
             device.write(__option);
-            org.wings.plaf.Utils.optAttribute( device, "value", comboBox.getSelectionParameter(i));
+            org.wings.plaf.Utils.optAttribute(device, "value", comboBox.getSelectionParameter(i));
             if (selected == i) {
 
                 device.write(__selected_selec);
             }
 
-            if (cellRenderer!=null) {
+            if (cellRenderer != null) {
                 if (cellRenderer.getToolTipText() != null) {
 
                     device.write(__title);
-                    org.wings.plaf.Utils.write( device, cellRenderer.getToolTipText());
+                    org.wings.plaf.Utils.write(device, cellRenderer.getToolTipText());
 
                     device.write(___1);
                 }
@@ -100,10 +101,10 @@ public class ComboBoxCG
                 org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
                 org.wings.plaf.xhtml.Utils.writeAttributes(stringBufferDevice, cellRenderer);
                 String styleString = stringBufferDevice.toString();
-                if ( styleString!=null && styleString.length()>0) {
+                if (styleString != null && styleString.length() > 0) {
 
                     device.write(__style);
-                    org.wings.plaf.Utils.write( device, styleString);
+                    org.wings.plaf.Utils.write(device, styleString);
 
                     device.write(___1);
                 }
@@ -116,17 +117,18 @@ public class ComboBoxCG
                 cellRenderer.write(string);
                 char[] chars = string.toString().toCharArray();
                 int pos = 0;
-                for (int c=0; c < chars.length; c++) {
+                for (int c = 0; c < chars.length; c++) {
                     switch (chars[c]) {
                         case '<':
-                        device.print(chars, pos, c - pos);
-                        break;
+                            device.print(chars, pos, c - pos);
+                            break;
                         case '>':
-                        pos = c+1;
+                            pos = c + 1;
                     }
                 }
                 device.print(chars, pos, chars.length - pos);
-            } else {
+            }
+            else {
 
                 device.write(__cellrenderer_n);
                 device.print(model.getElementAt(i).toString());
@@ -140,8 +142,8 @@ public class ComboBoxCG
         // util method
 
         device.write(__input_type_hid);
-        org.wings.plaf.Utils.optAttribute( device, "name", Utils.event(comboBox));
-        org.wings.plaf.Utils.optAttribute( device, "value", -1);
+        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(comboBox));
+        org.wings.plaf.Utils.optAttribute(device, "value", -1);
 
         device.write(___2);
     }
@@ -161,18 +163,18 @@ public class ComboBoxCG
 
 
     public void writeContent(final Device device,
-                      final SComponent _c)
+                             final SComponent _c)
         throws IOException {
-        final SComboBox component = (SComboBox) _c;
+        final SComboBox component = (SComboBox)_c;
 
 //--- code from write-template.
         SComboBox comboBox = (SComboBox)component;
         // TODO: implement anchor combobox
         //if (comboBox.getShowAsFormComponent()) {
-            writeFormComboBox(device, comboBox);
-            //} else {
-            //    writeAnchorComboBox(device, comboBox);
-            // }
+        writeFormComboBox(device, comboBox);
+        //} else {
+        //    writeAnchorComboBox(device, comboBox);
+        // }
         device.write(___3);
 
 //--- end code from write-template.

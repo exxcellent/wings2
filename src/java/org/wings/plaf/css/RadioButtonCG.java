@@ -11,8 +11,7 @@ import java.io.IOException;
 
 public class RadioButtonCG
     extends CheckBoxCG
-    implements SConstants, org.wings.plaf.RadioButtonCG
-{
+    implements SConstants, org.wings.plaf.RadioButtonCG {
     protected void installIcons(final SAbstractButton button) {
         org.wings.plaf.CGManager manager = button.getSession().getCGManager();
         button.setIcon((SIcon)manager.getObject("SRadioButton.icon", SIcon.class));
@@ -26,15 +25,15 @@ public class RadioButtonCG
 
     protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
         device.write("<input type=\"hidden\" name=\"".getBytes());
-        org.wings.plaf.Utils.write( device, org.wings.plaf.css.Utils.event(button));
+        org.wings.plaf.Utils.write(device, org.wings.plaf.css.Utils.event(button));
         device.write("\" value=\"".getBytes());
-        org.wings.plaf.Utils.write( device, button.getDeselectionParameter());
+        org.wings.plaf.Utils.write(device, button.getDeselectionParameter());
         device.write("\"/>".getBytes());
 
         device.write("<input type=\"radio\" name=\"".getBytes());
-        org.wings.plaf.Utils.write( device, Utils.event(button));
+        org.wings.plaf.Utils.write(device, Utils.event(button));
         device.write("\" value=\"".getBytes());
-        org.wings.plaf.Utils.write( device, button.getToggleSelectionParameter());
+        org.wings.plaf.Utils.write(device, button.getToggleSelectionParameter());
         device.write("\"".getBytes());
 
         if (!button.isEnabled())

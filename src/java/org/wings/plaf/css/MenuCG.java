@@ -14,36 +14,37 @@ import java.io.InputStreamReader;
 public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuBarCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __table_cellpadd= "<table cellpadding=\"0\" cellspacing=\"0\" id=\"".getBytes();
-    private final static byte[] __class_pdmenu_s= "\" class=\"pdmenu\" style=\"display:none\">".getBytes();
-    private final static byte[] __tr_id         = "<tr id=\"".getBytes();
-    private final static byte[] __              = "\"".getBytes();
-    private final static byte[] __onMouseDown_Me= " onMouseDown=\"Menu.prototype.toggle('".getBytes();
-    private final static byte[] ___1            = "','".getBytes();
-    private final static byte[] ___2            = "')\"".getBytes();
-    private final static byte[] __class_menu    = " class=\"menu\"".getBytes();
-    private final static byte[] __class_disabled= " class=\"disabledmenu\"".getBytes();
-    private final static byte[] __onClick_window= " onClick=\"window.location.href='".getBytes();
-    private final static byte[] ___3            = "'\"".getBytes();
-    private final static byte[] __class_menuitem= " class=\"menuitem\"".getBytes();
-    private final static byte[] __class_disabled_1= " class=\"disabledmenuitem\"".getBytes();
-    private final static byte[] __td            = "><td>".getBytes();
-    private final static byte[] __td_td         = "</td><td>".getBytes();
-    private final static byte[] __img_border_0_a= "<img border=\"0\" align=\"middle\" src=\"".getBytes();
-    private final static byte[] ___4            = "/>".getBytes();
-    private final static byte[] __td_tr         = "</td></tr>".getBytes();
-    private final static byte[] __table         = "</table>".getBytes();
-    private final static byte[] __span_onClick_M= "<span onClick=\"Menu.prototype.toggle(".getBytes();
-    private final static byte[] ___5            = ",'".getBytes();
-    private final static byte[] __id            = "')\" id=\"".getBytes();
-    private final static byte[] ___6            = "\">".getBytes();
-    private final static byte[] __span          = "</span>".getBytes();
-    private final static byte[] ___7            = "\n".getBytes();
+    private final static byte[] __table_cellpadd = "<table cellpadding=\"0\" cellspacing=\"0\" id=\"".getBytes();
+    private final static byte[] __class_pdmenu_s = "\" class=\"pdmenu\" style=\"display:none\">".getBytes();
+    private final static byte[] __tr_id = "<tr id=\"".getBytes();
+    private final static byte[] __ = "\"".getBytes();
+    private final static byte[] __onMouseDown_Me = " onMouseDown=\"Menu.prototype.toggle('".getBytes();
+    private final static byte[] ___1 = "','".getBytes();
+    private final static byte[] ___2 = "')\"".getBytes();
+    private final static byte[] __class_menu = " class=\"menu\"".getBytes();
+    private final static byte[] __class_disabled = " class=\"disabledmenu\"".getBytes();
+    private final static byte[] __onClick_window = " onClick=\"window.location.href='".getBytes();
+    private final static byte[] ___3 = "'\"".getBytes();
+    private final static byte[] __class_menuitem = " class=\"menuitem\"".getBytes();
+    private final static byte[] __class_disabled_1 = " class=\"disabledmenuitem\"".getBytes();
+    private final static byte[] __td = "><td>".getBytes();
+    private final static byte[] __td_td = "</td><td>".getBytes();
+    private final static byte[] __img_border_0_a = "<img border=\"0\" align=\"middle\" src=\"".getBytes();
+    private final static byte[] ___4 = "/>".getBytes();
+    private final static byte[] __td_tr = "</td></tr>".getBytes();
+    private final static byte[] __table = "</table>".getBytes();
+    private final static byte[] __span_onClick_M = "<span onClick=\"Menu.prototype.toggle(".getBytes();
+    private final static byte[] ___5 = ",'".getBytes();
+    private final static byte[] __id = "')\" id=\"".getBytes();
+    private final static byte[] ___6 = "\">".getBytes();
+    private final static byte[] __span = "</span>".getBytes();
+    private final static byte[] ___7 = "\n".getBytes();
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         comp.addScriptListener(SCRIPT_LOADER);
     }
+
     public void uninstallCG(final SComponent comp) {
     }
 
@@ -51,7 +52,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
     public static final SIcon RIGHT_ARROW = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
 
     public static final JavaScriptListener SCRIPT_LOADER =
-    new JavaScriptListener("", "", loadScript());
+        new JavaScriptListener("", "", loadScript());
 
     public static String loadScript() {
         InputStream in = null;
@@ -63,7 +64,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
             StringBuffer buffer = new StringBuffer();
             String line;
             while ((line = reader.readLine()) != null)
-            buffer.append(line).append("\n");
+                buffer.append(line).append("\n");
             buffer.append(line).append("\n");
 
             return buffer.toString();
@@ -71,62 +72,72 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         catch (Exception e) {
             e.printStackTrace();
             return "";
-        } finally {
-            try { in.close(); } catch (Exception ign) {} 
-            try { reader.close(); } catch (Exception ign1) {}
+        }
+        finally {
+            try {
+                in.close();
+            }
+            catch (Exception ign) {
+            }
+            try {
+                reader.close();
+            }
+            catch (Exception ign1) {
+            }
         }
     }
 
     protected void writePopup(final Device device, SMenu menu)
-    throws IOException
-        {
+        throws IOException {
         String parentId = menu.getParentMenu() != null ? "'" + menu.getParentMenu().getComponentId() + "_pop'" : "null";
         String componentId = menu.getComponentId();
         String popupId = componentId + "_pop";
 
 
         device.write(__table_cellpadd);
-        org.wings.plaf.Utils.write( device, popupId);
+        org.wings.plaf.Utils.write(device, popupId);
 
         device.write(__class_pdmenu_s);
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
             SComponent menuItem = menu.getMenuComponent(i);
 
-            if ( menuItem.isVisible() ) {
+            if (menuItem.isVisible()) {
                 String itemComponentId = menu.getMenuComponent(i).getComponentId();
                 String itemHookId = itemComponentId + "_hook";
 
 
                 device.write(__tr_id);
-                org.wings.plaf.Utils.write( device, itemHookId);
+                org.wings.plaf.Utils.write(device, itemHookId);
 
                 device.write(__);
-                if ( menu.getMenuComponent(i) instanceof SMenu ) {
+                if (menu.getMenuComponent(i) instanceof SMenu) {
                     if (menuItem.isEnabled()) {
                         String itemParentId = popupId;
                         String itemPopupId = itemComponentId + "_pop";
 
 
                         device.write(__onMouseDown_Me);
-                        org.wings.plaf.Utils.write( device, itemParentId);
+                        org.wings.plaf.Utils.write(device, itemParentId);
 
                         device.write(___1);
-                        org.wings.plaf.Utils.write( device, itemHookId);
+                        org.wings.plaf.Utils.write(device, itemHookId);
 
                         device.write(___1);
-                        org.wings.plaf.Utils.write( device, itemPopupId);
+                        org.wings.plaf.Utils.write(device, itemPopupId);
 
                         device.write(___2);
 
                         device.write(__class_menu);
-                    } else {
+                    }
+                    else {
 
                         device.write(__class_disabled);
                     }
 
-                } else {
+                }
+                else {
                     if (menuItem.isEnabled()) {
-                        if ( menuItem instanceof SMenuItem ) {
+                        if (menuItem instanceof SMenuItem) {
 
                             device.write(__onClick_window);
                             writeAnchorAddress(device, (SMenuItem)menuItem);
@@ -134,7 +145,8 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                         }
 
                         device.write(__class_menuitem);
-                    } else {
+                    }
+                    else {
 
                         device.write(__class_disabled_1);
                     }
@@ -147,11 +159,11 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                 if (menu.getMenuComponent(i) instanceof SMenu) {
 
                     device.write(__img_border_0_a);
-                    org.wings.plaf.Utils.write( device, RIGHT_ARROW.getURL());
+                    org.wings.plaf.Utils.write(device, RIGHT_ARROW.getURL());
 
                     device.write(__);
-                    org.wings.plaf.Utils.optAttribute( device, "width", RIGHT_ARROW.getIconWidth());
-                    org.wings.plaf.Utils.optAttribute( device, "height", RIGHT_ARROW.getIconHeight());
+                    org.wings.plaf.Utils.optAttribute(device, "width", RIGHT_ARROW.getIconWidth());
+                    org.wings.plaf.Utils.optAttribute(device, "height", RIGHT_ARROW.getIconHeight());
 
                     device.write(___4);
                 }
@@ -164,16 +176,15 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
             SComponent menuItem = menu.getMenuComponent(i);
 
-            if ( menuItem.isVisible() && menuItem.isEnabled() && menuItem instanceof SMenu ) {
+            if (menuItem.isVisible() && menuItem.isEnabled() && menuItem instanceof SMenu) {
                 writePopup(device, (SMenu)menu.getMenuComponent(i));
             }
         }
     }
 
     protected void writeItem(final Device device, SMenuItem menu)
-    throws IOException
-        {
-        boolean hasParent = menu.getParentMenu()!=null;
+        throws IOException {
+        boolean hasParent = menu.getParentMenu() != null;
 
         String parentId = hasParent ? "'" + menu.getParentMenu().getComponentId() + "_pop'" : "null";
         String componentId = menu.getComponentId();
@@ -183,37 +194,36 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
 
 
         // parent, hook, menu
-        if ( menu.isEnabled() && !hasParent) {
+        if (menu.isEnabled() && !hasParent) {
 
             device.write(__span_onClick_M);
-            org.wings.plaf.Utils.write( device, parentId);
+            org.wings.plaf.Utils.write(device, parentId);
 
             device.write(___5);
-            org.wings.plaf.Utils.write( device, hookId);
+            org.wings.plaf.Utils.write(device, hookId);
 
             device.write(___1);
-            org.wings.plaf.Utils.write( device, popupId);
+            org.wings.plaf.Utils.write(device, popupId);
 
             device.write(__id);
-            org.wings.plaf.Utils.write( device, componentId);
+            org.wings.plaf.Utils.write(device, componentId);
 
             device.write(___6);
         }
 
         if (menu.getParentMenu() == null)
-        writeItemContent(device, menu);
+            writeItemContent(device, menu);
         else
-        writeItemContent(device, menu);
+            writeItemContent(device, menu);
 
-        if ( menu.isEnabled() && !hasParent) {
+        if (menu.isEnabled() && !hasParent) {
 
             device.write(__span);
         }
     }
 
     protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
-    throws IOException
-        {
+        throws IOException {
         RequestURL addr = abstractButton.getRequestURL();
         addr.addParameter(abstractButton,
             abstractButton.getToggleSelectionParameter());
@@ -221,9 +231,9 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
     }
 
     public void writeContent(final Device device,
-                      final SComponent _c)
+                             final SComponent _c)
         throws IOException {
-        final SMenu component = (SMenu) _c;
+        final SMenu component = (SMenu)_c;
 
         SMenu menu = component;
         writeItem(device, menu);

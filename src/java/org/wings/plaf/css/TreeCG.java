@@ -142,7 +142,7 @@ public class TreeCG
             }
             if (childSelectorWorkaround)
                 Utils.childSelectorWorkaround(device, "indent");
-            
+
             device.write(">".getBytes());
 
             if (emptyFillIcon != null) {
@@ -246,8 +246,7 @@ public class TreeCG
                 device.write("\"".getBytes());
             }
 
-            org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
-            org.wings.plaf.Utils.optAttribute( device, "title", component.getToolTipText());
+            org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             Utils.writeEvents(device, component);
             device.print(">");
 

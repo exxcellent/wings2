@@ -15,6 +15,7 @@
 package org.wings.plaf.xhtml;
 
 import java.io.IOException;
+
 import org.wings.SLayoutManager;
 import org.wings.STemplateLayout;
 import org.wings.SComponent;
@@ -32,8 +33,7 @@ import org.wings.template.parser.PageParser;
  * @version $Revision$
  */
 public class TemplateLayoutCG
-    implements LayoutCG
-{
+    implements LayoutCG {
     /**
      * The parser looks for the '<OBJECT></OBJECT>' - tags.
      */
@@ -42,9 +42,9 @@ public class TemplateLayoutCG
         parser.addTagHandler("OBJECT", RangeTagHandler.class);
         parser.addTagHandler("WINGSOBJECT", RangeTagHandler.class);
         parser.addTagHandler("TEXTAREA", RangeTagHandler.class);
-        parser.addTagHandler("SELECT",   RangeTagHandler.class);
-        parser.addTagHandler("INPUT",    SimpleTagHandler.class);
-        parser.addTagHandler("LABEL",    LabelTagHandler.class);
+        parser.addTagHandler("SELECT", RangeTagHandler.class);
+        parser.addTagHandler("INPUT", SimpleTagHandler.class);
+        parser.addTagHandler("LABEL", LabelTagHandler.class);
     }
 
     /**
@@ -54,23 +54,23 @@ public class TemplateLayoutCG
         throws IOException {
 
         final TemplateSource source = layout.getTemplateSource();
-        SComponent container = ( SComponent ) layout.getContainer();
+        SComponent container = (SComponent)layout.getContainer();
 
-        if(source == null) {
+        if (source == null) {
             device.print("Unable to open template-file <b>'");
             device.print(source);
             device.print("'</b>");
         }
-	else {
+        else {
             if (Utils.hasSpanAttributes(container)) {
                 device.print(" <span style=\"");
-                Utils.writeSpanAttributes( device, container );
-            	device.print("\">");
+                Utils.writeSpanAttributes(device, container);
+                device.print("\">");
             }
 
             layout.getPageParser().process(source, new TemplateParseContext(device, layout));
 
-            if ( Utils.hasSpanAttributes( container ) ) {
+            if (Utils.hasSpanAttributes(container)) {
                 device.print("</span>");
             }
         }
@@ -79,14 +79,14 @@ public class TemplateLayoutCG
     /**
      * TODO: documentation
      *
-     * @param device the device to write the code to
+     * @param device  the device to write the code to
      * @param manager the layout manager
      * @throws IOException
      */
     public void write(Device device, SLayoutManager manager)
         throws IOException {
 
-        write(device, (STemplateLayout) manager);
+        write(device, (STemplateLayout)manager);
     }
 }
 

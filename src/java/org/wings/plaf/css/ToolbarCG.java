@@ -10,12 +10,10 @@ import java.io.IOException;
 
 public class ToolbarCG
     extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.ToolbarCG
-{
+    implements SConstants, org.wings.plaf.ToolbarCG {
     public void writeContent(final Device device, final SComponent _c)
-        throws IOException
-    {
-        final SToolbar toolbar = (SToolbar) _c;
+        throws IOException {
+        final SToolbar toolbar = (SToolbar)_c;
 
         device.print("<table><tr>");
         SComponent[] components = toolbar.getComponents();

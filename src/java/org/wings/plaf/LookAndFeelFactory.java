@@ -34,6 +34,7 @@ public abstract class LookAndFeelFactory {
 
     /**
      * Get the lool and feel factory.
+     *
      * @return
      */
     public static LookAndFeelFactory getLookAndFeelFactory() {

@@ -17,17 +17,17 @@ public class TableCG
     implements SConstants, org.wings.plaf.TableCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __table         = "<table".getBytes();
-    private final static byte[] __              = ">\n".getBytes();
-    private final static byte[] __table_1       = "</table>".getBytes();
-    private final static byte[] ___3            = "\n".getBytes();
-    private final static byte[] __align_left    = " align=\"left\"".getBytes();
-    private final static byte[] __align_center  = " align=\"center\"".getBytes();
-    private final static byte[] __align_right   = " align=\"right\"".getBytes();
-    private final static byte[] __valign_top    = " valign=\"top\"".getBytes();
+    private final static byte[] __table = "<table".getBytes();
+    private final static byte[] __ = ">\n".getBytes();
+    private final static byte[] __table_1 = "</table>".getBytes();
+    private final static byte[] ___3 = "\n".getBytes();
+    private final static byte[] __align_left = " align=\"left\"".getBytes();
+    private final static byte[] __align_center = " align=\"center\"".getBytes();
+    private final static byte[] __align_right = " align=\"right\"".getBytes();
+    private final static byte[] __valign_top = " valign=\"top\"".getBytes();
     private final static byte[] __valign_center = " valign=\"center\"".getBytes();
-    private final static byte[] __align_bottom  = " align=\"bottom\"".getBytes();
-    private final static byte[] __th_1          = "</th>\n".getBytes();
+    private final static byte[] __align_bottom = " align=\"bottom\"".getBytes();
+    private final static byte[] __th_1 = "</th>\n".getBytes();
 
     private String fixedTableBorderWidth;
 
@@ -36,31 +36,30 @@ public class TableCG
      */
     public TableCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
-        setFixedTableBorderWidth((String) manager.getObject("TableCG.fixedTableBorderWidth", String.class));
+        setFixedTableBorderWidth((String)manager.getObject("TableCG.fixedTableBorderWidth", String.class));
     }
 
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        final STable component = (STable) comp;
+        final STable component = (STable)comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         value = manager.getObject("STable.defaultRenderer", STableCellRenderer.class);
         if (value != null) {
-            component.setDefaultRenderer((STableCellRenderer) value);
+            component.setDefaultRenderer((STableCellRenderer)value);
         }
         value = manager.getObject("STable.headerRenderer", STableCellRenderer.class);
         if (value != null) {
-            component.setHeaderRenderer((STableCellRenderer) value);
+            component.setHeaderRenderer((STableCellRenderer)value);
         }
     }
 
     /**
-    * write a specific cell to the device
-    */
+     * write a specific cell to the device
+     */
     protected void writeCell(Device device, STable table, SCellRendererPane rendererPane, int row, int col)
-        throws IOException
-    {
+        throws IOException {
         SComponent component = null;
         boolean isEditingCell = table.isEditing()
             && row == table.getEditingRow()
@@ -151,8 +150,7 @@ public class TableCG
     protected void writeHeaderCell(Device device, STable table,
                                    SCellRendererPane rendererPane,
                                    int c)
-        throws IOException
-    {
+        throws IOException {
         SComponent comp = table.prepareHeaderRenderer(c);
 
         device.write("<th>".getBytes());
@@ -163,7 +161,7 @@ public class TableCG
 
     public void writeContent(final Device device, final SComponent _c)
         throws IOException {
-        final STable component = (STable) _c;
+        final STable component = (STable)_c;
 
         STable table = (STable)component;
         boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
@@ -174,13 +172,13 @@ public class TableCG
 
         device.write(__table);
         if (dim != null) {
-            org.wings.plaf.Utils.optAttribute( device, "width", dim.width);
-            org.wings.plaf.Utils.optAttribute( device, "height", dim.height);
+            org.wings.plaf.Utils.optAttribute(device, "width", dim.width);
+            org.wings.plaf.Utils.optAttribute(device, "height", dim.height);
         }
         /* Tweaking: CG configured to have a fixed border="xy" width */
-        org.wings.plaf.Utils.optAttribute( device, "border", fixedTableBorderWidth);
-        org.wings.plaf.Utils.optAttribute( device, "cellspacing", ((intercellSpacing != null) ? intercellSpacing.width : null));
-        org.wings.plaf.Utils.optAttribute( device, "cellpadding", ((intercellPadding != null) ? intercellPadding.width : null));
+        org.wings.plaf.Utils.optAttribute(device, "border", fixedTableBorderWidth);
+        org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? intercellSpacing.width : null));
+        org.wings.plaf.Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? intercellPadding.width : null));
         device.write(__);
         /*
         * get viewable area
@@ -193,8 +191,8 @@ public class TableCG
         if (viewport != null) {
             startRow = viewport.y;
             startCol = viewport.x;
-            endRow = Math.min(startRow+viewport.height, endRow);
-            endCol = Math.min(startCol+viewport.width, endCol);
+            endRow = Math.min(startRow + viewport.height, endRow);
+            endCol = Math.min(startCol + viewport.width, endCol);
         }
 
         SCellRendererPane rendererPane = table.getCellRendererPane();
@@ -230,7 +228,7 @@ public class TableCG
             if (numbering) {
                 device.print("<td col=\"numbering\"");
                 if (childSelectorWorkaround)
-                Utils.childSelectorWorkaround(device, "numbering");
+                    Utils.childSelectorWorkaround(device, "numbering");
                 device.print(">");
 
                 if (showAsFormComponent) {
@@ -265,6 +263,11 @@ public class TableCG
         device.write(___3);
     }
 
-    public String getFixedTableBorderWidth() { return fixedTableBorderWidth; }
-    public void setFixedTableBorderWidth(String fixedTableBorderWidth) { this.fixedTableBorderWidth = fixedTableBorderWidth; }
+    public String getFixedTableBorderWidth() {
+        return fixedTableBorderWidth;
+    }
+
+    public void setFixedTableBorderWidth(String fixedTableBorderWidth) {
+        this.fixedTableBorderWidth = fixedTableBorderWidth;
+    }
 }

@@ -23,8 +23,7 @@ import java.util.HashMap;
  * mappings of its <code>parent</code> table.
  */
 public class CGDefaults
-    extends HashMap
-{
+    extends HashMap {
     private PropertyChangeSupport changeSupport;
     private CGDefaults parent;
 
@@ -41,9 +40,9 @@ public class CGDefaults
      * equal to the old one, fire a PropertyChangeEvent.  If value
      * is null, the key is removed from the table.
      *
-     * @param key    the unique Object who's value will be used to
-     *               retreive the data value associated with it
-     * @param value  the new Object to store as data under that key
+     * @param key   the unique Object who's value will be used to
+     *              retreive the data value associated with it
+     * @param value the new Object to store as data under that key
      * @return the previous Object value, or null
      * @see java.util.Map#put
      */
@@ -59,7 +58,8 @@ public class CGDefaults
      * Get a value from the defaults table.
      * If the <code>key</code> is not associated with a value,
      * the request is delegated to the parent defaults table
-     * @param key the key
+     *
+     * @param key  the key
      * @param type the class of the value in question
      * @return the associated value or <code>null</code>
      */
@@ -78,11 +78,11 @@ public class CGDefaults
     /**
      * Add a PropertyChangeListener to the listener list.
      * The listener is registered for all properties.
-     * <p>
+     * <p/>
      * A PropertyChangeEvent will get fired whenever a default
      * is changed.
      *
-     * @param listener  The PropertyChangeListener to be added
+     * @param listener The PropertyChangeListener to be added
      * @see java.beans.PropertyChangeSupport
      */
     public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -98,7 +98,7 @@ public class CGDefaults
      * This removes a PropertyChangeListener that was registered
      * for all properties.
      *
-     * @param listener  The PropertyChangeListener to be removed
+     * @param listener The PropertyChangeListener to be removed
      * @see java.beans.PropertyChangeSupport
      */
     public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
@@ -113,9 +113,9 @@ public class CGDefaults
      * newValue are not equal and the PropertyChangeEvent listener list
      * isn't empty, then fire a PropertyChange event to each listener.
      *
-     * @param propertyName  The programmatic name of the property that was changed.
-     * @param oldValue  The old value of the property.
-     * @param newValue  The new value of the property.
+     * @param propertyName The programmatic name of the property that was changed.
+     * @param oldValue     The old value of the property.
+     * @param newValue     The new value of the property.
      * @see java.beans.PropertyChangeSupport
      */
     protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {

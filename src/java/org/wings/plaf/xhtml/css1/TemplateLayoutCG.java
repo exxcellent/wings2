@@ -19,8 +19,7 @@ package org.wings.plaf.xhtml.css1;
  * @version $Revision$
  */
 public final class TemplateLayoutCG
-    extends org.wings.plaf.xhtml.TemplateLayoutCG
-{
+    extends org.wings.plaf.xhtml.TemplateLayoutCG {
 }
 
 /*

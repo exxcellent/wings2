@@ -16,49 +16,49 @@ public class MenuBarCG
     implements SConstants, org.wings.plaf.MenuBarCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __table_class_me= "<table class=\"menubar\" cellspacing=\"0\" cellpadding=\"0\" vspace=\"0\" hspace=\"0\" width=\"100%\"".getBytes();
-    private final static byte[] __              = ">".getBytes();
+    private final static byte[] __table_class_me = "<table class=\"menubar\" cellspacing=\"0\" cellpadding=\"0\" vspace=\"0\" hspace=\"0\" width=\"100%\"".getBytes();
+    private final static byte[] __ = ">".getBytes();
     private final static byte[] __tr_align_left = "<tr align=\"left\">".getBytes();
-    private final static byte[] __td_width_100_t= "<td width=\"100%\"></td>".getBytes();
-    private final static byte[] __td_id         = "<td id=\"".getBytes();
-    private final static byte[] __class_menu    = "\" class=\"menu\"".getBytes();
-    private final static byte[] __onMouseOver_Me= " onMouseOver=\"Menu.prototype.setMouseOverStyle(this)\"".getBytes();
-    private final static byte[] __onMouseOut_Men= " onMouseOut=\"Menu.prototype.setMouseOutStyle(this)\"".getBytes();
-    private final static byte[] __nobr_td       = "</nobr></td>".getBytes();
-    private final static byte[] __td_width_100_n= "<td width=\"100%\">&nbsp;</td>".getBytes();
-    private final static byte[] __tr_table      = "</tr></table>".getBytes();
-    private final static byte[] ___1            = "\n".getBytes();
+    private final static byte[] __td_width_100_t = "<td width=\"100%\"></td>".getBytes();
+    private final static byte[] __td_id = "<td id=\"".getBytes();
+    private final static byte[] __class_menu = "\" class=\"menu\"".getBytes();
+    private final static byte[] __onMouseOver_Me = " onMouseOver=\"Menu.prototype.setMouseOverStyle(this)\"".getBytes();
+    private final static byte[] __onMouseOut_Men = " onMouseOut=\"Menu.prototype.setMouseOutStyle(this)\"".getBytes();
+    private final static byte[] __nobr_td = "</nobr></td>".getBytes();
+    private final static byte[] __td_width_100_n = "<td width=\"100%\">&nbsp;</td>".getBytes();
+    private final static byte[] __tr_table = "</tr></table>".getBytes();
+    private final static byte[] ___1 = "\n".getBytes();
 
     public void writeContent(final Device device,
-                      final SComponent _c)
+                             final SComponent _c)
         throws IOException {
-        final SMenuBar component = (SMenuBar) _c;
+        final SMenuBar component = (SMenuBar)_c;
 
 //--- code from write-template.
         SMenuBar mbar = (SMenuBar)component;
         int mcount = mbar.getComponentCount();
 
         device.write(__table_class_me);
-        org.wings.plaf.Utils.optAttribute( device, "class", org.wings.plaf.css.Utils.style(component));
+        org.wings.plaf.Utils.optAttribute(device, "class", org.wings.plaf.css.Utils.style(component));
         device.write(__);
         device.write(__tr_align_left);
         /***
-        * Due to the current Opera problems we are switching to the older Menue style
-        * in all other cases we do a normal job
-        ***/
+         * Due to the current Opera problems we are switching to the older Menue style
+         * in all other cases we do a normal job
+         ***/
         boolean rightAligned = false;
         for (int i = 0; i < mcount; i++) {
-            if ( mbar.getComponent(i).isVisible() ) {
-                if ( mbar.getComponent(i).getHorizontalAlignment()==SConstants.RIGHT_ALIGN &&
-                    !rightAligned ) {
+            if (mbar.getComponent(i).isVisible()) {
+                if (mbar.getComponent(i).getHorizontalAlignment() == SConstants.RIGHT_ALIGN &&
+                    !rightAligned) {
                     device.write(__td_width_100_t);
                     rightAligned = true;
                 }
                 device.write(__td_id);
-                org.wings.plaf.Utils.write( device, mbar.getComponent(i).getComponentId() + "_hook");
+                org.wings.plaf.Utils.write(device, mbar.getComponent(i).getComponentId() + "_hook");
                 device.write(__class_menu);
-                if ( mbar.getComponent(i).isEnabled() &&
-                    mbar.getComponent(i) instanceof SMenuItem ) {
+                if (mbar.getComponent(i).isEnabled() &&
+                    mbar.getComponent(i) instanceof SMenuItem) {
                     device.write(__onMouseOver_Me);
                     device.write(__onMouseOut_Men);
                 }
@@ -67,7 +67,7 @@ public class MenuBarCG
                 device.write(__nobr_td);
             }
         }
-        if ( !rightAligned ) {
+        if (!rightAligned) {
             device.write(__td_width_100_n);
         }
         device.write(__tr_table);

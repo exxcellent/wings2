@@ -21,12 +21,14 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public interface BorderCG
-    extends Serializable
-{
+    extends Serializable {
     void writePrefix(Device d, SBorder c) throws IOException;
+
     void writePostfix(Device d, SBorder c) throws IOException;
+
     String getSpanAttributes(SBorder border);
-    void writeSpanAttributes( Device d, SBorder border ) throws IOException;
+
+    void writeSpanAttributes(Device d, SBorder border) throws IOException;
 }
 
 /*

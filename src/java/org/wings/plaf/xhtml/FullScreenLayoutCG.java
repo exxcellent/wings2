@@ -17,18 +17,19 @@ package org.wings.plaf.xhtml;
 import java.io.IOException;
 import java.util.*;
 
-import org.wings.*; import org.wings.border.*;
+import org.wings.*;
+import org.wings.border.*;
 import org.wings.io.*;
 import org.wings.plaf.*;
 
 /**
  * CG for <a href="../../SFullScreenLayout.html">SFullScreenLayout</a>.
+ *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @version $Revision$
  */
 public class FullScreenLayoutCG
-    extends BorderLayoutCG
-{
+    extends BorderLayoutCG {
     /**
      * TODO: documentation
      *
@@ -37,10 +38,9 @@ public class FullScreenLayoutCG
      * @throws IOException
      */
     public void write(Device d, SLayoutManager l)
-        throws IOException
-    {
+        throws IOException {
         d.print("\n<div style=\"position:absolute; z-index:1; left: 0; top: 0; width: 100%; height: 100%\">");
-        super.write( d, l );
+        super.write(d, l);
         System.out.println("Div Fullscreenlayout");
         d.print("</div>");
     }

@@ -460,3 +460,22 @@ table.SBorderLayout > tbody > tr > td {
    padding-left: 0.4em;
    padding-right: 0.4em;
 }
+
+div.domTT {
+    border: 1px solid #333333;
+    opacity: 0.8;
+}
+div.domTTCaption {
+    font-family: serif;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 1px 2px;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+div.domTTContent {
+    font-size: 12px;
+    font-family: sans-serif;
+    padding: 3px 2px;
+    background-color: #F1F1FF;
+}

@@ -11,8 +11,7 @@ import java.io.IOException;
 
 public class CheckBoxCG
     extends ButtonCG
-    implements SConstants, org.wings.plaf.CheckBoxCG
-{
+    implements SConstants, org.wings.plaf.CheckBoxCG {
     private boolean useIconsInForm = false;
 
     public boolean isUseIconsInForm() {
@@ -42,7 +41,7 @@ public class CheckBoxCG
 
     public void writeContent(final Device device, final SComponent component)
         throws IOException {
-        final SAbstractButton button = (SAbstractButton) component;
+        final SAbstractButton button = (SAbstractButton)component;
 
         final boolean showAsFormComponent = button.getShowAsFormComponent();
         final String text = button.getText();
@@ -50,10 +49,9 @@ public class CheckBoxCG
 
         if (showAsFormComponent && useIconsInForm) {
             device.print("<button type=\"submit\"");
-            org.wings.plaf.Utils.write( device, Utils.event(button));
-            org.wings.plaf.Utils.optAttribute( device, "tabindex", button.getFocusTraversalIndex());
-            org.wings.plaf.Utils.optAttribute( device, "title", button.getToolTipText());
-            org.wings.plaf.Utils.optAttribute( device, "accesskey", button.getMnemonic());
+            org.wings.plaf.Utils.write(device, Utils.event(button));
+            org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
+            org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
         }
         else if (showAsFormComponent && !useIconsInForm)
@@ -65,8 +63,7 @@ public class CheckBoxCG
             addr.write(device);
             device.write("\"".getBytes());
 
-            org.wings.plaf.Utils.optAttribute( device, "title", button.getToolTipText());
-            org.wings.plaf.Utils.optAttribute( device, "accesskey", button.getMnemonic());
+            org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
         }
 
@@ -108,13 +105,13 @@ public class CheckBoxCG
 
     protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
         device.write("<input type=\"hidden\" name=\"".getBytes());
-        org.wings.plaf.Utils.write( device, Utils.event(button));
+        org.wings.plaf.Utils.write(device, Utils.event(button));
         device.write("\" value=\"hidden_reset\"/>".getBytes());
 
         device.write("<input type=\"checkbox\" name=\"".getBytes());
-        org.wings.plaf.Utils.write( device, Utils.event(button));
+        org.wings.plaf.Utils.write(device, Utils.event(button));
         device.write("\"".getBytes());
-        org.wings.plaf.Utils.optAttribute( device, "tabindex", button.getFocusTraversalIndex());
+        org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");

@@ -13,19 +13,19 @@ public class FormCG
     implements SConstants, org.wings.plaf.FormCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __form_method   = "<form method=\"".getBytes();
-    private final static byte[] __post          = "post".getBytes();
-    private final static byte[] __get           = "get".getBytes();
-    private final static byte[] __              = "\"".getBytes();
-    private final static byte[] __name          = " name=\"".getBytes();
-    private final static byte[] __input_type_ima= "><input type=\"image\" name=\"_capture_enter1\" border=\"0\" ".getBytes();
-    private final static byte[] __width_0_height= " width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;;margin:0pxposition:absolute\"/>".getBytes();
-    private final static byte[] __input_type_hid= "<input type=\"hidden\" name=\"".getBytes();
-    private final static byte[] __value         = "\" value=\"".getBytes();
-    private final static byte[] ___1            = "\" />".getBytes();
-    private final static byte[] __input_type_ima_1= "<input type=\"image\" name=\"_capture_enter2\" border=\"0\" ".getBytes();
-    private final static byte[] __form          = "</form>".getBytes();
-    private final static byte[] ___2            = "\n".getBytes();
+    private final static byte[] __form_method = "<form method=\"".getBytes();
+    private final static byte[] __post = "post".getBytes();
+    private final static byte[] __get = "get".getBytes();
+    private final static byte[] __ = "\"".getBytes();
+    private final static byte[] __name = " name=\"".getBytes();
+    private final static byte[] __input_type_ima = "><input type=\"image\" name=\"_capture_enter1\" border=\"0\" ".getBytes();
+    private final static byte[] __width_0_height = " width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;;margin:0pxposition:absolute\"/>".getBytes();
+    private final static byte[] __input_type_hid = "<input type=\"hidden\" name=\"".getBytes();
+    private final static byte[] __value = "\" value=\"".getBytes();
+    private final static byte[] ___1 = "\" />".getBytes();
+    private final static byte[] __input_type_ima_1 = "<input type=\"image\" name=\"_capture_enter2\" border=\"0\" ".getBytes();
+    private final static byte[] __form = "</form>".getBytes();
+    private final static byte[] ___2 = "\n".getBytes();
 
 //--- code from common area in template.
     private static final SIcon BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
@@ -54,39 +54,39 @@ public class FormCG
 
 
     public void writeContent(final Device device,
-                      final SComponent _c)
+                             final SComponent _c)
         throws IOException {
-        final SForm component = (SForm) _c;
+        final SForm component = (SForm)_c;
 
 //--- code from write-template.
 
         device.write(__form_method);
         if (component.isPostMethod()) {
             device.write(__post);
-        } else {
+        }
+        else {
             device.write(__get);
         }
         device.write(__);
         device.write(__name);
-        org.wings.plaf.Utils.write( device, component.getName());
+        org.wings.plaf.Utils.write(device, component.getName());
         device.write(__);
         org.wings.plaf.css.Utils.writeEvents(device, component);
-        org.wings.plaf.Utils.optAttribute( device, "class", Utils.style(component));
-        org.wings.plaf.Utils.optAttribute( device, "enctype", component.getEncodingType());
-        org.wings.plaf.Utils.optAttribute( device, "action", component.getRequestURL());
+        org.wings.plaf.Utils.optAttribute(device, "class", Utils.style(component));
+        org.wings.plaf.Utils.optAttribute(device, "enctype", component.getEncodingType());
+        org.wings.plaf.Utils.optAttribute(device, "action", component.getRequestURL());
         device.write(__input_type_ima);
-        org.wings.plaf.Utils.optAttribute( device, "src", BLIND_ICON.getURL());
+        org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.write(__width_0_height);
         device.write(__input_type_hid);
-        org.wings.plaf.Utils.write( device, Utils.event(component));
+        org.wings.plaf.Utils.write(device, Utils.event(component));
         device.write(__value);
-        org.wings.plaf.Utils.write( device, component.getComponentId());
-        org.wings.plaf.Utils.write( device, SConstants.UID_DIVIDER);
+        org.wings.plaf.Utils.write(device, component.getComponentId());
+        org.wings.plaf.Utils.write(device, SConstants.UID_DIVIDER);
         device.write(___1);
         Utils.renderContainer(device, component);
         device.write(__input_type_ima_1);
-        org.wings.plaf.Utils.optAttribute( device, "src", BLIND_ICON.getURL()
-        );
+        org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.write(__width_0_height);
         device.write(__form);
         device.write(___2);

@@ -17,12 +17,12 @@ package org.wings.plaf.xhtml;
 import java.io.IOException;
 import java.util.*;
 
-import org.wings.*; import org.wings.border.*;
+import org.wings.*;
+import org.wings.border.*;
 import org.wings.io.*;
 import org.wings.plaf.*;
 
-public class CardLayoutCG implements LayoutCG
-{
+public class CardLayoutCG implements LayoutCG {
     /**
      * TODO: documentation
      *
@@ -31,20 +31,19 @@ public class CardLayoutCG implements LayoutCG
      * @throws IOException
      */
     public void write(Device d, SLayoutManager l)
-        throws IOException
-    {
+        throws IOException {
         SCardLayout layout = (SCardLayout)l;
         SComponent c = layout.getVisibleComponent();
 
         if (c == null) return;
-	/*	
-        if ( Utils.hasSpanAttributes( component ) )
-         {
-         	d.print("<span style=\"");
-        	Utils.writeSpanAttributes( d, component );
-            d.print("\">");
-		 }
-        */
+        /*
+if ( Utils.hasSpanAttributes( component ) )
+{
+                 d.print("<span style=\"");
+                Utils.writeSpanAttributes( d, component );
+d.print("\">");
+             }
+*/
         c.write(d);
         /*
         if ( Utils.hasSpanAttributes( component ) )

@@ -18,11 +18,9 @@ import java.util.Properties;
 
 public class TabbedPaneCG
     extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.PanelCG
-{
+    implements SConstants, org.wings.plaf.PanelCG {
     public void writeContent(final Device device, final SComponent component)
-        throws java.io.IOException
-    {
+        throws java.io.IOException {
         STabbedPane tabbedPane = (STabbedPane)component;
         String style = component.getStyle();
         boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();

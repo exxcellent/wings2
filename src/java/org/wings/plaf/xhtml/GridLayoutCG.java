@@ -23,21 +23,19 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GridLayoutCG
-    implements LayoutCG
-{
+    implements LayoutCG {
     /**
      * @param d the device to write the code to
      * @param l the layout manager
      * @throws IOException
      */
     public void write(Device d, SLayoutManager l)
-        throws IOException
-    {
+        throws IOException {
         SGridLayout layout = (SGridLayout)l;
         SContainer container = layout.getContainer();
         List components = layout.getComponents();
         SDimension dim = layout.getPreferredSize();
-      
+
         boolean header = layout.getHeader();
         boolean relative = layout.isRelative();
         int width = layout.getWidth();
@@ -47,18 +45,18 @@ public class GridLayoutCG
 
         int cols = layout.getColumns();
         int rows = layout.getRows();
-        
+
         d.print("\n<table ");
-        if (width >= 0 || Utils.hasSpanAttributes( container ) ) {
+        if (width >= 0 || Utils.hasSpanAttributes(container)) {
             d.print("style=\"");
             if (width >= 0) {
-              if ((dim == null) || (dim.getWidth() == null)) {
-                d.print("width:").print(width);
-                if (relative) d.print("%");
-                d.print(";");
-              }
-            } 
-            Utils.writeSpanAttributes( d, (SComponent) container );
+                if ((dim == null) || (dim.getWidth() == null)) {
+                    d.print("width:").print(width);
+                    if (relative) d.print("%");
+                    d.print(";");
+                }
+            }
+            Utils.writeSpanAttributes(d, (SComponent)container);
             d.print("\" ");
         }
 
@@ -71,7 +69,7 @@ public class GridLayoutCG
             d.print(" cellpadding=\"").print(cellPadding).print("\"");
         else
             d.print(" cellpadding=\"0\"");
-        
+
         if (border > 0)
             d.print(" border=\"").print(border).print("\"");
         else
@@ -88,27 +86,27 @@ public class GridLayoutCG
         for (Iterator iter = components.iterator(); iter.hasNext();) {
             if (col == 0)
                 d.print("<tr>");
-            else if (col%cols == 0 && iter.hasNext()) {
+            else if (col % cols == 0 && iter.hasNext()) {
                 d.print("</tr>\n<tr>");
                 firstRow = false;
             }
 
             SComponent c = (SComponent)iter.next();
 
-            if (firstRow && header) 
-                d.print("<th");          
-            else 
+            if (firstRow && header)
+                d.print("<th");
+            else
                 d.print("<td");
 
             Utils.printTableCellAlignment(d, c);
             if (c instanceof SContainer && c.isVisible() && Utils.hasSpanAttributes(c)) {
-               // Adapt inner styles (esp. width of containers)
-               // maybe better restrict to dimension styles only?
-               d.print(" style=\"");
-               Utils.writeAttributes(d,  c);
-               d.print("\"");                        
+                // Adapt inner styles (esp. width of containers)
+                // maybe better restrict to dimension styles only?
+                d.print(" style=\"");
+                Utils.writeAttributes(d, c);
+                d.print("\"");
             }
-            d.print(">");            
+            d.print(">");
 
             c.write(d);
 

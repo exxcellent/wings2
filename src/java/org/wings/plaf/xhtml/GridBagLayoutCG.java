@@ -18,14 +18,14 @@ import java.awt.GridBagConstraints;
 import java.io.IOException;
 import java.util.*;
 
-import org.wings.*; import org.wings.border.*;
+import org.wings.*;
+import org.wings.border.*;
 import org.wings.io.*;
 import org.wings.plaf.*;
 import org.wings.util.CGUtil;
 
 public class GridBagLayoutCG
-    implements LayoutCG
-{
+    implements LayoutCG {
     /**
      * TODO: documentation
      *
@@ -34,8 +34,7 @@ public class GridBagLayoutCG
      * @throws IOException
      */
     public void write(Device d, SLayoutManager l)
-        throws IOException
-    {
+        throws IOException {
         SGridBagLayout layout = (SGridBagLayout)l;
         SContainer container = layout.getContainer();
 
@@ -50,10 +49,9 @@ public class GridBagLayoutCG
         }
 
         d.print("\n<table ");
-        if ( Utils.hasSpanAttributes( container ) )
-        {
+        if (Utils.hasSpanAttributes(container)) {
             d.print(" style=\"");
-            Utils.writeSpanAttributes( d, container );
+            Utils.writeSpanAttributes(d, container);
             d.print("\" ");
         }
 
@@ -82,23 +80,26 @@ public class GridBagLayoutCG
         d.print(">\n");
 
 
-        for (int row=grid.firstRow; row<grid.rows; row++) {
+        for (int row = grid.firstRow; row < grid.rows; row++) {
             d.print("<tr>\n");
-            for (int col=grid.firstCol; col<grid.cols; col++) {
+            for (int col = grid.firstCol; col < grid.cols; col++) {
                 SComponent comp = grid.grid[col][row];
                 if (comp == null) {
                     if (row == grid.firstRow && header) {
                         d.print("<th></th>\n");
-                    } else {
+                    }
+                    else {
                         d.print("<td></td>\n");
                     }
-                } else {
+                }
+                else {
                     GridBagConstraints c = layout.getConstraints(comp);
                     if ((c.gridx == SGridBagLayout.LAST_CELL || c.gridx == col) &&
                         (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
                         if (row == grid.firstRow && header) {
                             d.print("<th");
-                        } else {
+                        }
+                        else {
                             d.print("<td");
                         }
 
@@ -107,31 +108,33 @@ public class GridBagLayoutCG
                         int gridwidth = c.gridwidth;
                         if (gridwidth == GridBagConstraints.RELATIVE) {
                             gridwidth = grid.cols - col - 1;
-                        } else if (gridwidth == GridBagConstraints.REMAINDER) {
+                        }
+                        else if (gridwidth == GridBagConstraints.REMAINDER) {
                             gridwidth = grid.cols - col;
                         }
                         if (gridwidth > 1) {
-                            d.print(" colspan="+gridwidth);
+                            d.print(" colspan=" + gridwidth);
                         }
 
                         int gridheight = c.gridheight;
                         if (gridheight == GridBagConstraints.RELATIVE) {
                             gridheight = grid.rows - row - 1;
-                        } else if (gridheight == GridBagConstraints.REMAINDER) {
+                        }
+                        else if (gridheight == GridBagConstraints.REMAINDER) {
                             gridheight = grid.rows - row;
                         }
                         if (gridheight > 1) {
-                            d.print(" rowspan="+gridheight);
+                            d.print(" rowspan=" + gridheight);
                         }
                         if (c.weightx > 0 && grid.colweight[row] > 0) {
-                            d.print(" width=\""+
-                                    (int) (100*c.weightx/grid.colweight[row])+
-                                    "%\"");
+                            d.print(" width=\"" +
+                                (int)(100 * c.weightx / grid.colweight[row]) +
+                                "%\"");
                         }
                         if (c.weighty > 0 && grid.rowweight[col] > 0) {
-                            d.print(" height=\""+
-                                    (int) (100*c.weighty/grid.rowweight[col])+
-                                    "%\"");
+                            d.print(" height=\"" +
+                                (int)(100 * c.weighty / grid.rowweight[col]) +
+                                "%\"");
                         }
 
                         d.print(">");
@@ -139,7 +142,8 @@ public class GridBagLayoutCG
 
                         if (row == grid.firstRow && header) {
                             d.print("</th>\n");
-                        } else {
+                        }
+                        else {
                             d.print("</td>\n");
                         }
                     }
