@@ -39,10 +39,13 @@ public class SByteArrayIcon extends Resource implements SIcon {
 
     public SByteArrayIcon(byte[] pIconData, String pExtension, String pMimeType) {
         setIconData(pIconData, pExtension, pMimeType);
-
     }
 
     public SByteArrayIcon() {
+    }
+
+    public SByteArrayIcon(byte[] pIconData) {
+        setIconData(pIconData, null, null);
     }
 
     protected void externalize() {
