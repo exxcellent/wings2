@@ -33,7 +33,7 @@ public class TreeCG
     private SIcon expandControlIcon;
     private SIcon hashMark;
     private SIcon leafControlIcon;
-
+    
     /**
      * Initialize properties from config
      */
@@ -65,11 +65,10 @@ public class TreeCG
 
 //--- code from common area in template.
     private final boolean isLastChild(TreeModel model, TreePath path, int i) {
-        Object node = path.getPathComponent(i);
         if (i == 0)
             return true;
+        Object node = path.getPathComponent(i);
         Object parent = path.getPathComponent(i - 1);
-
         return node.equals(model.getChild(parent, model.getChildCount(parent) - 1));
     }
 
@@ -100,7 +99,6 @@ public class TreeCG
             throws IOException {
         boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
         final TreePath path = component.getPathForRow(row);
-        final int nodeIndentDepth = component.getNodeIndentDepth();
 
         final Object node = path.getLastPathComponent();
         final STreeCellRenderer cellRenderer = component.getCellRenderer();
@@ -117,40 +115,11 @@ public class TreeCG
                 isLeaf, row,
                 false);
 
-        device.print("<tr height=\"1\">");
-
         /*
-        * fill the indented area.
-        */
-        for (int i = ((component.isRootVisible()) ? 0 : 1); i < path.getPathCount() - 1; ++i) {
-            device.print("<td indent=\"true\"");
-            Utils.optAttribute(device, "width", nodeIndentDepth);
-            if (hashMark != null && !isLastChild(component.getModel(), path, i)) {
-                device.print(" style=\"background-image:url(");
-                Utils.write(device, hashMark.getURL());
-                device.print(")\"");
-            }
-            if (childSelectorWorkaround)
-                Utils.childSelectorWorkaround(device, "indent");
+         * now, write the component.
+         */
+        device.print("<li");
 
-            device.print(">");
-
-            if (emptyFillIcon != null) {
-                writeIcon(device, emptyFillIcon, nodeIndentDepth, 1);
-            } else {
-                for (int n = nodeIndentDepth; n > 0; --n) {
-                    device.print("&nbsp;");
-                }
-            }
-
-            device.print("</td>");
-        }
-
-        /*
-        * now, write the component.
-        */
-        device.print("<td");
-        Utils.optAttribute(device, "colspan", depth - (path.getPathCount() - 1));
         if (isSelected) {
             device.print(" selected=\"true\"");
 
@@ -167,8 +136,12 @@ public class TreeCG
         final boolean renderControlIcon = !(isLeaf && leafControlIcon == null);
 
         if (renderControlIcon) {
+            /*
+             * This table has to be here so that block level elements can be
+             * nodes. I just can't think around it. So it won...
+             */
+            device.print("<table border=\"0\"><tr><td>");
 
-            device.print("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>");
             if (isLeaf) {
                 writeIcon(device, leafControlIcon, false);
             } else {
@@ -187,7 +160,7 @@ public class TreeCG
                     Utils.write(device, selectionAddr.toString());
                     device.print("\"");
                 }
-                device.print("\">");
+                device.print(">");
 
                 if (isExpanded) {
                     if (collapseControlIcon == null) {
@@ -207,8 +180,11 @@ public class TreeCG
                 else
                     device.print("</a>");
             }
-
+            /*
+             * closing layout td
+             */
             device.print("</td><td>");
+
         }
 
         SCellRendererPane rendererPane = component.getCellRendererPane();
@@ -242,11 +218,37 @@ public class TreeCG
         } else {
             rendererPane.writeComponent(device, cellComp, component);
         }
+        
+        if (renderControlIcon) {
+            /*
+             * we have to close the table
+             */
+            device.print("</td></tr></table>\n");
+        }
+        
 
-        if (renderControlIcon)
-            device.print("</td></tr></table>");
-
-        device.print("</td><td width=\"100%\"></td></tr>\n");
+        //handle the depth level of the tree
+        int nextPathCount = 1;
+        int pathCount = path.getPathCount();
+        TreePath nextPath = component.getPathForRow(row + 1);
+        // is there a next element? else use initialized level.
+        if (nextPath != null) {
+            nextPathCount = nextPath.getPathCount();
+        }
+        if ( pathCount < nextPathCount ) {
+            device.print("<div");
+            if (!isLastChild(component.getModel(), path, pathCount-1)) {
+                device.print(" class=\"SSubTree\"");
+            }
+            device.print("><ul class=\"STree\">\n");
+        } else if ( pathCount > nextPathCount ) {
+            device.print("</li>\n");
+            for (int i = nextPathCount; i < pathCount; i++) {
+                device.print("</ul></div></li>\n");
+            }
+        } else if ( path.getPathCount() == nextPathCount ) {
+            device.print("</li>");
+        }
     }
 
 
@@ -268,16 +270,14 @@ public class TreeCG
 
         final int depth = component.getMaximumExpandedDepth();
 
-        device.print("<table");
+        device.print("<ul class=\"STree\"");
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
         device.print(">");
 
         for (int i = start; i < count; ++i)
             writeTreeNode(component, device, i, depth);
-
-        device.print("<tr><td");
-        Utils.optAttribute(device, "colspan", depth);
-        device.print("></td></tr></table>");
+        
+        device.print("</ul>");
     }
 
 //--- setters and getters for the properties.
