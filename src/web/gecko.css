@@ -665,8 +665,7 @@ background:#eef;
 padding:1px 3px 1px 3px;
 }
 
-div.SMenuBar_css a{
-background: #eee;
+div.SMenuBar_css a {
 width:100%;
 }
 
@@ -684,6 +683,11 @@ color:#aaa;
 background:#66b;
 }
 
+div.SMenuBar_css .SMenu_Disabled a:hover,
+div.SMenuBar_css .SMenuItem_Disabled a:hover{
+background:#eee;
+}
+
 div.SMenuBar_css ul{
 list-style:none;
 margin:0;
@@ -697,8 +701,15 @@ border-bottom: 1px solid #999;
 }
 
 div.SMenuBar_css ul.SMenu li{
+background: #eee;
 border-left: 1px solid #eee;
 border-right: 1px solid #999;
+}
+
+div.SMenuBar_css li.SMenu_Disabled a,
+div.SMenuBar_css li.SMenuItem_Disabled a,
+div.SMenuBar_css span.TopMenu_Disabled {
+color: #666;
 }
 
 div.SMenuBar_css li{
@@ -731,7 +742,7 @@ older version of csshover.htc - V1.21.041022. It
 improves IE's performance speed to use the older
 file and this method */
 
-div.SMenuBar_css span:hover{
+div.SMenuBar_css span.TopMenu:hover{
 background:#dde;
 }
 

@@ -190,7 +190,18 @@ public class SMenu extends SMenuItem {
                 ((SMenu)tempComp).setMenuCG(cg);
             }
         }
-     }
+    }
+    
+    /** 
+     * @return Returns the amount of children elements.
+     */
+    public int getChildrenCount() {
+        return menuItems.size();
+    }
+    
+    public SComponent getChild(int index) {
+        return (SComponent)menuItems.get(index);
+    }
 }
 
 

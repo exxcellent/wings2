@@ -35,8 +35,6 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
     protected void writePopup(final Device device, SMenu menu)
             throws IOException {
         String componentId = menu.getName();
-        //String popupId = componentId + "_pop";
-
         // calculate max length of children texts for sizing of layer
         int maxLength = 0;
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
@@ -48,142 +46,76 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
                 }
             }
         }
-        device.print("<ul");
-        device.print(" style=\"width:");
-        String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
-        device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
-        device.print("em;\" class=\"SMenu\">");
-//        device.print(" class=\"SMenu\">");
-        for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-            SComponent menuItem = menu.getMenuComponent(i);
-
-            if (menuItem.isVisible()) {
-//                String itemComponentId = menu.getMenuComponent(i).getName();
-//                String itemHookId = itemComponentId + "_hook";
-
-
-                device.print("<li");
-//                Utils.write(device, itemHookId);
-
-//                device.print("\"");
-                if (menu.getMenuComponent(i) instanceof SMenu) {
-                    if (menuItem.isEnabled()) {
-//                        String itemParentId = popupId;
-//                        String itemPopupId = itemComponentId + "_pop";
-//
-//
-//                        device.print(" onMouseDown=\"Menu.prototype.toggle('");
-//                        Utils.write(device, itemParentId);
-//
-//                        device.print("','");
-//                        Utils.write(device, itemHookId);
-//
-//                        device.print("','");
-//                        Utils.write(device, itemPopupId);
-//
-//                        device.print("')\"");
-
-                        device.print(" class=\"SMenu\"");
-                    } else {
-
-                        device.print(" class=\"SMenu_Disabled\"");
-                    }
-
-                } else {
-                    if (menuItem.isEnabled()) {
-//                        if (menuItem instanceof SMenuItem) {
-//
-//                            device.print(" onClick=\"window.location.href='");
-//                            writeAnchorAddress(device, (SMenuItem) menuItem);
-//                            device.print("'\"");
-//                        }
-//
-                        device.print(" class=\"SMenuItem\"");
-                    } else {
-
-                        device.print(" class=\"SMenuItem_Disabled\"");
-                    }
-                }
-
-                device.print(">");
-                if (menuItem instanceof SMenuItem) {
-                    device.print("<a href=\"");
-                    writeAnchorAddress(device, (SMenuItem) menuItem);
+        if (menu.isEnabled()) {
+            device.print("<ul");
+            device.print(" style=\"width:");
+            String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
+            device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
+            device.print("em;\" class=\"SMenu\">");
+            for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+                SComponent menuItem = menu.getMenuComponent(i);
+    
+                if (menuItem.isVisible()) {
+                    device.print("<li");
                     if (menuItem instanceof SMenu) {
-                        device.print("\" class=\"x\"");
+                        if (menuItem.isEnabled()) {
+                            device.print(" class=\"SMenu\"");
+                        } else {
+                            device.print(" class=\"SMenu_Disabled\"");
+                        }
+    
+                    } else {
+                        if (menuItem.isEnabled()) {
+                            device.print(" class=\"SMenuItem\"");
+                        } else {
+    
+                            device.print(" class=\"SMenuItem_Disabled\"");
+                        }
                     }
-                    device.print("\">");
+    
+                    device.print(">");
+                    if (menuItem instanceof SMenuItem) {
+                            device.print("<a");
+                            if (menuItem.isEnabled()) {
+                                device.print(" href=\"");
+                                writeAnchorAddress(device, (SMenuItem) menuItem);
+                                device.print("\"");
+                            }
+                            if (menuItem instanceof SMenu && menuItem.isEnabled()) {
+                                device.print(" class=\"x\"");
+                            }
+                            device.print(">");
+                    }
+                    menuItem.write(device);
+                    if (menuItem instanceof SMenuItem) {
+                        device.print("</a>");
+                    }
+                    if (menuItem.isEnabled() && menuItem instanceof SMenu) {
+                        writePopup(device, (SMenu) menuItem);
+                    }
+                    device.print("</li>\n");
                 }
-                menu.getMenuComponent(i).write(device);
-                
-//                if (menu.getMenuComponent(i) instanceof SMenu) {
-//
-//                    device.print("<img border=\"0\" align=\"middle\" src=\"");
-//                    Utils.write(device, RIGHT_ARROW.getURL());
-//
-//                    device.print("\"");
-//                    Utils.optAttribute(device, "width", RIGHT_ARROW.getIconWidth());
-//                    Utils.optAttribute(device, "height", RIGHT_ARROW.getIconHeight());
-//
-//                    device.print("/>");
-//                }
-
-                if (menuItem instanceof SMenuItem) {
-                    device.print("</a>");
-                }
-                if (menuItem.isEnabled() && menuItem instanceof SMenu) {
-                    writePopup(device, (SMenu) menu.getMenuComponent(i));
-                }
-
-                device.print("</li>\n");
-
             }
+            device.print("</ul>");
         }
-
-        device.print("</ul>\n");
-//        for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-//            SComponent menuItem = menu.getMenuComponent(i);
-//
-//            if (menuItem.isVisible() && menuItem.isEnabled() && menuItem instanceof SMenu) {
-//                writePopup(device, (SMenu) menu.getMenuComponent(i));
-//            }
-//        }
+        device.print("\n");
     }
 
     protected void writeItem(final Device device, SMenuItem menu)
             throws IOException {
         boolean hasParent = menu.getParentMenu() != null;
 
-//        String parentId = hasParent ? "'" + menu.getParentMenu().getName() + "_pop'" : "null";
-//        String componentId = menu.getName();
-//        String popupId = componentId + "_pop";
-//        String hookId = componentId + "_hook";
-
-
-
         // parent, hook, menu
-        if (menu.isEnabled() && !hasParent) {
-
-            device.print("<span>");
-//            device.print("<span onClick=\"Menu.prototype.toggle(");
-//            Utils.write(device, parentId);
-//
-//            device.print(",'");
-//            Utils.write(device, hookId);
-//
-//            device.print("','");
-//            Utils.write(device, popupId);
-//
-//            device.print("')\" id=\"");
-//            Utils.write(device, componentId);
-//
-//            device.print("\">");
+        if (!hasParent) {
+            if (menu.isEnabled()) {
+                device.print("<span class=\"TopMenu\">");
+            } else {
+                device.print("<span class=\"TopMenu_Disabled\">");
+            }
+            
         }
-
         writeItemContent(device, menu);
-
-        if (menu.isEnabled() && !hasParent) {
-
+        if (!hasParent) {
             device.print("</span>");
         }
     }

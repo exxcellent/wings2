@@ -105,13 +105,14 @@ public class MenuExample extends WingSetPane {
 
         SButtonGroup cgGroup = new SButtonGroup();
 
+        // switch between css and js menu
         final SRadioButton cssMenu=new SRadioButton("css menu");
         final SRadioButton jsMenu=new SRadioButton("javascript menu");
         cgGroup.add(cssMenu);
         cgGroup.add(jsMenu);
         controls.add(cssMenu);
         controls.add(jsMenu);
-
+        
         cgGroup.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if ( jsMenu.isSelected() ) {
@@ -123,10 +124,44 @@ public class MenuExample extends WingSetPane {
                         
                 }
             });
-        cssMenu.setSelected(false);
+        cssMenu.setSelected(true);
+
+        // enable / disable some menuitems
+        final SCheckBox switchEnable = new SCheckBox("disable some menuitems");
+        controls.add(switchEnable);
         
-        
+        switchEnable.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("actionPerformed");
+                setMenuItemsEnabled(!switchEnable.isSelected());
+            }
+        });
+
         return panel;
+    }
+
+    protected void setMenuItemsEnabled(boolean enabled) {
+        if (menuBar.getComponentCount() > 1) {
+            SMenuItem first = (SMenuItem)menuBar.getComponent(0);
+            SMenuItem last = (SMenuItem)menuBar.getComponent(menuBar.getComponentCount() - 1);
+            recursiveMenuItemSwitch(first, last, enabled);
+        } else if (menuBar.getComponentCount() == 1) {
+            ((SMenuItem)menuBar.getComponent(0)).setEnabled(enabled);
+        }
+    }
+
+    private void recursiveMenuItemSwitch(SMenuItem first, SMenuItem last, boolean enabled) {
+        last.setEnabled(enabled);
+        if (first instanceof SMenu) {
+            if (((SMenu)first).getChildrenCount() > 1) {
+                SMenu parent = (SMenu) first;
+                SMenuItem firstChild = (SMenuItem)parent.getChild(0);
+                SMenuItem lastChild = (SMenuItem)parent.getChild(parent.getChildrenCount() - 1);
+                recursiveMenuItemSwitch(firstChild, lastChild, enabled);
+            } else if (((SMenu)first).getChildrenCount() == 1) {
+                ((SMenuItem)((SMenu)first).getChild(0)).setEnabled(enabled);
+            }
+        }
     }
 
     /**

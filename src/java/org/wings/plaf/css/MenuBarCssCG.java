@@ -50,7 +50,8 @@ public class MenuBarCssCG
          ***/
         boolean rightAligned = false;
         for (int i = 0; i < mcount; i++) {
-            if (mbar.getComponent(i).isVisible()) {
+            SComponent menu = mbar.getComponent(i);
+            if (menu.isVisible()) {
                 String stringLength = "0";
                 String text = ((SMenu)mbar.getComponent(i)).getText();
                 if (text != null) {
@@ -61,9 +62,8 @@ public class MenuBarCssCG
                 device.print(stringLength);
                 device.print("em;\"><li class=\"SMenu\" style=\"width:");
                 device.print(stringLength);
-                device.print("em;\"");
-                device.print(">");
-                mbar.getComponent(i).write(device);
+                device.print("em;\">");
+                menu.write(device);
                 device.print("</li></ul>\n");
             }
         }

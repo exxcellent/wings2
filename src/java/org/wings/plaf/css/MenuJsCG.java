@@ -51,7 +51,7 @@ public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstant
             SComponent menuItem = menu.getMenuComponent(i);
 
             if (menuItem.isVisible()) {
-                String itemComponentId = menu.getMenuComponent(i).getName();
+                String itemComponentId = menuItem.getName();
                 String itemHookId = itemComponentId + "_hook";
 
 
@@ -59,7 +59,7 @@ public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstant
                 Utils.write(device, itemHookId);
 
                 device.print("\"");
-                if (menu.getMenuComponent(i) instanceof SMenu) {
+                if (menuItem instanceof SMenu) {
                     if (menuItem.isEnabled()) {
                         String itemParentId = popupId;
                         String itemPopupId = itemComponentId + "_pop";
@@ -99,10 +99,10 @@ public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstant
                 }
 
                 device.print(">");
-                menu.getMenuComponent(i).write(device);
+                menuItem.write(device);
 
                 //device.print("</td><td>");
-                if (menu.getMenuComponent(i) instanceof SMenu) {
+                if (menuItem instanceof SMenu) {
 
                     device.print("<img border=\"0\" align=\"middle\" src=\"");
                     Utils.write(device, RIGHT_ARROW.getURL());
@@ -123,7 +123,7 @@ public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstant
             SComponent menuItem = menu.getMenuComponent(i);
 
             if (menuItem.isVisible() && menuItem.isEnabled() && menuItem instanceof SMenu) {
-                writePopup(device, (SMenu) menu.getMenuComponent(i));
+                writePopup(device, (SMenu) menuItem);
             }
         }
     }
@@ -140,27 +140,31 @@ public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstant
 
 
         // parent, hook, menu
-        if (menu.isEnabled() && !hasParent) {
-
-            device.print("<span onClick=\"Menu.prototype.toggle(");
-            Utils.write(device, parentId);
-
-            device.print(",'");
-            Utils.write(device, hookId);
-
-            device.print("','");
-            Utils.write(device, popupId);
-
-            device.print("')\" id=\"");
-            Utils.write(device, componentId);
-
-            device.print("\">");
+        if (!hasParent) {
+            device.print("<span");
+            if (menu.isEnabled()) {
+                device.print(" onClick=\"Menu.prototype.toggle(");
+                Utils.write(device, parentId);
+    
+                device.print(",'");
+                Utils.write(device, hookId);
+    
+                device.print("','");
+                Utils.write(device, popupId);
+    
+                device.print("')\" id=\"");
+                Utils.write(device, componentId);
+    
+                device.print("\"");
+            } else {
+                device.print(" style=\"color:#666\"");
+            }
+            device.print(">");
         }
 
         writeItemContent(device, menu);
 
-        if (menu.isEnabled() && !hasParent) {
-
+        if (!hasParent) {
             device.print("</span>");
         }
     }
