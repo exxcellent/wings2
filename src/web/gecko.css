@@ -24,6 +24,20 @@ table {
     border: none;
 }
 
+/* tables inherit certain properties from their parents. These need to be
+   defined here. This works with konq, moz, opera. */
+table tr {
+	text-align:inherit;
+	vertical-align:inherit;
+/*	these already work without specifying them
+	background-color:inherit;
+	font-family:inherit;
+	font-size:inherit;
+	font-style:inherit;
+	font-weight:inherit;
+	color:inherit;*/
+}
+
 /* this stays in here! 
    it switches the gecko-compatible browsers into border-box mode */
 div {
@@ -184,7 +198,7 @@ ul.STree > li * {
 	white-space: nowrap;
 }
 
-ul.STree > li[selected="true"] > table {
+ul.STree > li[selected="true"] > table > tbody > tr > td > a > div {
     background-color: #f6decc;
     border: 1px dotted black;
 }
@@ -231,6 +245,12 @@ div.STable > table > tbody > tr > td {
     padding-left: 8px;
     padding-right: 8px;
     border-left: 1px solid black;
+}
+
+/* let the link span the whole table */
+div.STable > table > tbody > tr > td > a {
+	display: block;
+	width: 100%;
 }
 
 div.STable > table > tbody > tr > td[col="numbering"] {
