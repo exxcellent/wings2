@@ -207,6 +207,16 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         Utils.write(device, language);
         device.print("\">\n");
 
+        /* Insert version and compile time.
+         * Since the Version Class is generated on compile time, build errors
+         * in SDK's are quite normal. Just run the Version.java ant task.
+         */
+        device.print("<!-- This is wingS (http://www.j-wings.org) version ");
+        device.print(Version.getVersion());
+        device.print(" (Build date: ");
+        device.print(Version.getCompileTime());
+        device.print(") -->\n");
+        
         device.print("<head>");
         if (title != null) {
             device.print("<title>");
