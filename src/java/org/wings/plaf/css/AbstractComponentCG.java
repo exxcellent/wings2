@@ -76,6 +76,13 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
     protected void writePrefix(Device device, SComponent component) throws IOException {
         Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" -->");
+        device.print("<div");
+        if (component.getStyle() != null && component.getStyle().length() > 0) {
+            device.print(" class=\"");
+            device.print(component.getStyle());
+            device.print("_Box\"");
+        }
+        device.print(">");
         device.print("<div id=\"").print(component.getName()).print("\"");
         Utils.optAttribute(device, "class", component.getStyle());
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
@@ -151,6 +158,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         component.setInheritsPopupMenu(backup);
 
+        device.print("</div>");
         device.print("</div>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }

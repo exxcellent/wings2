@@ -3,10 +3,11 @@
    wings Default Style Sheet for gecko Browser (Mozilla, FireFox).
 */
 
-HTML {
+html {
 	height: 100%;
 }
-BODY {
+
+body {
     background: #ffffff;
     margin: 0px;
     font-family: sans-serif;
@@ -16,11 +17,10 @@ BODY {
 }
 
 div {
-    box-sizing: border-box;
+    box-sizing: border-box; /* for opera */
     -moz-box-sizing: border-box;
 }
         
-
 table {
     border-collapse: collapse;
     padding: 0px;
@@ -49,7 +49,6 @@ a, button {
     background-color: inherit;
 }
 
-
 img {
     padding: 0px;
     margin: 0px;
@@ -57,37 +56,44 @@ img {
     border: none !important;
 }
 
-A:link, A:visited {
+a:link, a:visited {
     color: #000066;
     text-decoration: none;
 }
 
-A:active {
+a:active {
     color: #0000FF;
     text-decoration: none;
 }
 
-HR { 
+hr { 
      margin-top: 0;
      margin-bottom: 0;
 }
 
-TH, TD {
+th, td {
     font-size: 12px;
+}
+
+div.SLabel_Box {
+	display: table;
 }
 
 div.SLabel {
     font-size: 12px;
     color: #000044;
 	white-space: nowrap;
-	display: table-cell;
+    box-sizing: border-box;
+}
+
+div.SButton_Box {
+    display: table;
 }
 
 div.SButton {
     font-size: 12px;
     color: #000044;
 	white-space: nowrap;
-	display: table-cell;
 }
 
 div.SButton > button {
@@ -106,10 +112,6 @@ div.SButton > button[disabled="true"] * {
 div.SButton > button:hover[disabled="true"] {
     border: 1px solid #cccccc;
 }
-
-/*div.SClickable {
-	display: table-cell;
-}*/
 
 div.SClickable > button {
     background-color: inherit;
@@ -144,6 +146,7 @@ div.STextField {
     font-style: normal;
     color: #000000;
 }
+
 div.STextField > input[disabled="true"] {
     opacity: 0.7;
 }
@@ -158,6 +161,7 @@ div.SFormattedTextField {
     font-style: normal;
     color: #000000;
 }
+
 div.SFormattedTextField > input[disabled="true"] {
     opacity: 0.7;
 }
@@ -170,20 +174,25 @@ div.STree {
 	vertical-align: top;
 	text-align: left;
 }
+
 ul.STree{
 	list-style: none;
 }
+
 ul.STree > li {
 	padding-left: -20px;
 	margin-left: -20px;
 }
+
 ul.STree > li * {
 	white-space: nowrap;
 }
+
 ul.STree > li[selected="true"] > table {
     background-color: #f6decc;
     border: 1px dotted black;
 }
+
 ul.STree > li button {
     border: none;
     background-color: inherit;
@@ -194,6 +203,7 @@ ul.STree > li button {
     font-style: normal;
     color: #000000;
 }
+
 ul.STree > li > div.SSubTree {
 	background-image: url(icons/TreeLine.gif);
 	background-repeat:repeat-y;
@@ -226,6 +236,7 @@ div.STable > table > tbody > tr > td {
     padding-right: 8px;
     border-left: 1px solid black;
 }
+
 div.STable > table > tbody > tr > td[col="numbering"] {
     text-align: right;
 }
@@ -247,7 +258,7 @@ div.SMenuBar {
 }
 
 .SAnchor {
-   color: #000044;
+    color: #000044;
 }
 
 .SMenuBar {
@@ -356,6 +367,11 @@ div.pdmenu > div > img {
 	width: 100%;
 }
 
+div.SScrollBar_Box {
+    height: 100%;
+    width: 100%;
+}
+
 div.SScrollBar, div.SPageScroller {
     height: 100%;
     width: 100%;
@@ -374,27 +390,27 @@ div.SScrollBar > table[orientation="horizontal"], div.SPageScroller > table[orie
 }
 
 div.SScrollBar table[area="buttons"] button, div.SScrollBar table[area="buttons"] a {
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
 }
 
 div.SScrollBar table[area="buttons"] button:hover, div.SScrollBar table[area="buttons"] a:hover {
-   border: 1px outset #cccccc;
+    border: 1px outset #cccccc;
 }
 
 div.SPageScroller table[area="buttons"] button, div.SPageScroller table[area="buttons"] a {
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
 }
 
 div.SPageScroller table[area="buttons"] button:hover, div.SPageScroller table[area="buttons"] a:hover {
-   border: 1px outset #cccccc;
+    border: 1px outset #cccccc;
 }
 
 div.SPageScroller table[area="pages"] button, div.SPageScroller table[area="pages"] a {
-   border: 1px none;
+    border: 1px none;
 }
 
 div.SPageScroller table[area="pages"] button:hover, div.SPageScroller table[area="pages"] a:hover {
-   border: 1px outset #cccccc;
+    border: 1px outset #cccccc;
 }
 
 
@@ -408,6 +424,7 @@ div.STabbedPane, div.STabbedPane > table {
     width: 100%;
     height: 100%;
 }
+
 div.STabbedPane > table > tbody > tr > th > * {
     display: inline;
     border: 1px solid black;
@@ -416,12 +433,15 @@ div.STabbedPane > table > tbody > tr > th > * {
     white-space: nowrap;
     line-height: 1.6em;
 }
+
 div.STabbedPane > table > tbody > tr > th > *[selected="true"] {
     background-color: #f6decc;
 }
+
 div.STabbedPane > table > tbody > tr > th > *[disabled="true"] {
     color : #808080;
 }
+
 div.STabbedPane > table > tbody > tr > td {
     border: 2px ridge black;
     width: 100%;
@@ -431,6 +451,7 @@ div.STabbedPane > table > tbody > tr > td {
 div.STabbedPane > table > tbody > tr > th[placement="top"] {
     text-align: left;
 }
+
 div.STabbedPane > table > tbody > tr > th[placement="top"] > a {
     border-bottom: none !important;
     -moz-border-radius-topright: 4px;
@@ -441,6 +462,7 @@ div.STabbedPane > table > tbody > tr > th[placement="left"] {
     vertical-align: top;
     text-align: right;
 }
+
 div.STabbedPane > table > tbody > tr > th[placement="left"] > a {
     display: block;
     border-right: none !important;
@@ -454,6 +476,7 @@ div.STabbedPane > table > tbody > tr > th[placement="right"] {
     vertical-align: top;
     text-align: left;
 }
+
 div.STabbedPane > table > tbody > tr > th[placement="right"] > a {
     display: block;
     border-left: none !important;
@@ -466,6 +489,7 @@ div.STabbedPane > table > tbody > tr > th[placement="right"] > a {
 div.STabbedPane > table > tbody > tr > th[placement="bottom"] {
     text-align: left;
 }
+
 div.STabbedPane > table > tbody > tr > th[placement="bottom"] > a {
     border-top: none !important;
     -moz-border-radius-bottomright: 4px;
@@ -482,17 +506,12 @@ table.SBorderLayout {
     height: 100%;
 }
 
-/*table.SBorderLayout > tbody > tr > td {
-    vertical-align: middle;
-    text-align: center;
-}*/
-
 .legend {
-   position: absolute;
-   margin-top: -1.7em;
-   margin-left: 1.0em;
-   padding-left: 0.4em;
-   padding-right: 0.4em;
+    position: absolute;
+    margin-top: -1.7em;
+    margin-left: 1.0em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
 }
 
 div.SDesktopPane > table > tbody > tr > td {
@@ -500,68 +519,76 @@ div.SDesktopPane > table > tbody > tr > td {
 }
 
 div.SInternalFrame {
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
 }
 
 div.SInternalFrame > table > tbody > tr > th {
-   padding-left: 1px;
-   padding-right: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
 }
 
 div.SInternalFrame > table > tbody > tr > th[col="title"] {
-   background-color: #aaaaff;
-   text-align: left;
-   width: 100%;
+    background-color: #aaaaff;
+    text-align: left;
+    width: 100%;
 }
 
 div.SInternalFrame > table > tbody > tr > * {
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
+}
+
+div.SDialog_Box {
+    display: table;
 }
 
 div.SDialog {
-   display: table-cell;
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
 }
 
 div.SDialog > table > tbody > tr > th {
-   padding-left: 1px;
-   padding-right: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
 }
 
 div.SDialog > table > tbody > tr > th[col="title"] {
-   background-color: #aaaaff;
-   text-align: left;
-   width: 100%;
+    background-color: #aaaaff;
+    text-align: left;
+    width: 100%;
 }
 
 div.SDialog > table > tbody > tr > * {
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
+}
+
+div.SOptionPane_Box {
+    display: table;
 }
 
 div.SOptionPane {
 	display: table-cell;
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
 }
 
 div.SOptionPane > table > tbody > tr > th {
-   padding-left: 1px;
-   padding-right: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
 }
 
 div.SOptionPane > table > tbody > tr > th[col="title"] {
-   background-color: #aaaaff;
-   text-align: left;
-   width: 100%;
+    background-color: #aaaaff;
+    text-align: left;
+    width: 100%;
 }
 
 div.SOptionPane > table > tbody > tr > * {
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
 }
 
 div.domTT {
     border: 1px solid #333333;
     -moz-opacity: 0.8;
 }
+
 div.domTTCaption {
     font-family: serif;
     font-size: 12px;
@@ -570,6 +597,7 @@ div.domTTCaption {
     color: #FFFFFF;
     background-color: #333333;
 }
+
 div.domTTContent {
     font-size: 12px;
     font-family: sans-serif;
