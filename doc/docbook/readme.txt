@@ -12,7 +12,8 @@ What you need to use DocBook
 
 3. Run "ant dist", all project documentation should be generated now.
 
-4. To edit DocBook XML documents I strongly recommend getting a XML and DTD aware Editor such as XMLMind XML Editor (<URL>). It takes time to get used to it, but you don't want to live without the assistance. 
+4. To edit DocBook XML documents I strongly recommend getting a XML and DTD aware Editor such as XMLMind XML Editor (<URL>).
+   It takes time to get used to it, but you don't want to live without the assistance. 
 
 
 Generation Schema

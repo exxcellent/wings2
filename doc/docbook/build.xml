@@ -8,6 +8,14 @@
     <pathelement location="${saxon_folder}/saxon.jar"/>
   </path>
 
+  <path id="fop_cp">
+    <pathelement location="${fop_folder}/build/fop.jar"/>
+     <fileset dir="${fop_folder}/lib">
+            <include name="*.jar"/>
+     </fileset>
+  </path>
+
+
   <target name="check_env">
     <fail message="Please copy etc/build.properties to etc/custom-build.properties and adapt custom-build.properties to reflect your system's folders.">
       <condition>
@@ -44,6 +52,8 @@
       <arg line="-o build/wingS-whitepaper.html"/>
       <arg value="src/wingS-whitepaper.xml"/>
       <arg value="${docbook_folder}/html/docbook.xsl"/>
+      <sysproperty key="http.proxyHost" value="${http.proxyHost}"/>
+      <sysproperty key="http.proxyPort" value="${http.proxyPort}"/>
     </java>
   </target>
 
@@ -53,14 +63,19 @@
       <arg line="-o build/wingS-whitepaper.fo"/>
       <arg value="src/wingS-whitepaper.xml"/>
       <arg value="${docbook_folder}/fo/docbook.xsl"/>
+      <sysproperty key="http.proxyHost" value="${http.proxyHost}"/>
+      <sysproperty key="http.proxyPort" value="${http.proxyPort}"/>
     </java>
   </target>
 
   <target name="pdf" depends="fo">
-    <exec executable="${fop_folder}/fop.bat">
-      <arg value="build/wingS-whitepaper.fo"/>
-      <arg value="build/wingS-whitepaper.pdf"/>
-    </exec>
+      <java classname="org.apache.fop.apps.Fop">
+        <classpath refid="fop_cp"/>
+        <arg value="build/wingS-whitepaper.fo"/>
+        <arg value="build/wingS-whitepaper.pdf"/>
+        <sysproperty key="http.proxyHost" value="${http.proxyHost}"/>
+        <sysproperty key="http.proxyPort" value="${http.proxyPort}"/>
+      </java>
   </target>
 
   <target name="dist" depends="clean,html,pdf">
