@@ -42,6 +42,7 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.net.SocketException;
 
 /**
  * The basic component implementation for all components in this package.
@@ -131,16 +132,26 @@ public abstract class SComponent
      */
     protected SDimension preferredSize;
 
+    /**
+     * This is for performance optimizations. With this flag is set, property change
+     * events are generated and so every property setter method has to test if a property
+     * has changed and temporarily store the old value to generate the property
+     * change event
+     */
     private boolean fireComponentChangeEvents = false;
 
     private EventListenerList listeners;
+
     private Boolean useNamedEvents;
 
     private boolean showAsFormComponent = true;
+
     private SPopupMenu popupMenu;
+
     private boolean inheritsPopupMenu;
 
     private InputMap inputMap;
+
     private ActionMap actionMap;
     private Map actionEvents = new HashMap();
 
@@ -205,7 +216,7 @@ public abstract class SComponent
         this.inheritsPopupMenu = inheritsPopupMenu;
     }
 
-    public boolean getInheritsPopupMenu() {
+    public boolean isInheritsPopupMenu() {
         return inheritsPopupMenu;
     }
 
@@ -219,7 +230,7 @@ public abstract class SComponent
     }
 
     public SPopupMenu getComponentPopupMenu() {
-        if (!getInheritsPopupMenu())
+        if (!isInheritsPopupMenu())
             return popupMenu;
 
         if (popupMenu == null) {
@@ -778,8 +789,14 @@ public abstract class SComponent
             if (visible) {
                 cg.write(s, this);
             }
+        }
+        catch (SocketException se) {
+            // Typical double-clicks. Not severe
+            log.info( "Exception during code generation for " +
+                    getClass().getName(), se);
+
         } catch (Throwable t) {
-            log.fatal("exception during code generation for " +
+            log.fatal( "Exception during code generation for " +
                     getClass().getName(), t);
         }
     }
@@ -1071,8 +1088,6 @@ public abstract class SComponent
      * }
      * </pre>
      *
-     * @beaninfo bound: true
-     * description: The component's look and feel delegate
      * @see #updateCG
      * @see org.wings.plaf.CGManager#getLookAndFeel
      * @see org.wings.plaf.CGManager#getCG
@@ -1295,7 +1310,7 @@ public abstract class SComponent
     /**
      * Test, what display method is set.
      *
-     * @return treu, if displayed as link, false when displayed as html form component.
+     * @return true, if displayed as link, false when displayed as html form component.
      * @see #setShowAsFormComponent(boolean)
      */
     public boolean getShowAsFormComponent() {

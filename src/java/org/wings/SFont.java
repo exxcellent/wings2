@@ -19,19 +19,14 @@ import java.io.Serializable;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SFont
-        implements SConstants, Serializable {
-    private static final boolean DEBUG = true;
-
+public class SFont implements SConstants, Serializable {
     protected int type = FONT;
-
     protected int style = PLAIN;
-
     protected String face = null;
-
     protected int size = Integer.MIN_VALUE;
 
-    public SFont() {}
+    public SFont() {
+    }
 
     /*
      * @parameter size if Integer.MIN_VALUE the size is ignored

@@ -70,16 +70,28 @@ public class SFrame
 
     private SComponent focusComponent = null;                //Component which requests the focus
 
+    /**
+     * Creates a new SFrame
+     */
     public SFrame() {
         getSession().addPropertyChangeListener("lookAndFeel", this);
         getSession().addPropertyChangeListener("request.url", this);
     }
 
+    /**
+     * Creates a new SFrame
+     *
+     * @param title Title of this frame, rendered in browser window title
+     */
     public SFrame(String title) {
         this();
         setTitle(title);
     }
 
+    /**
+     * Adds a dynamic ressoure.
+     * @see #getDynamicResource(Class)
+     */
     public void addDynamicResource(DynamicResource d) {
         if (dynamicResources == null) {
             dynamicResources = new HashMap();
@@ -89,6 +101,8 @@ public class SFrame
 
     /**
      * Removes the instance of the dynamic ressource of the given class.
+     * @see #getDynamicResource(Class)
+     * @param dynamicResourceClass Class of dynamic ressource to remove
      */
     public void removeDynamicResource(Class dynamicResourceClass) {
         if (dynamicResources != null) {
@@ -96,6 +110,17 @@ public class SFrame
         }
     }
 
+    /**
+     * Severeral Dynamic code Ressources are attached to a <code>SFrame</code>.
+     * <br>See <code>Frame.plaf</code> for details, but in general you wil find attached
+     * to every <code>SFrame</code> a
+     * <ul><li>A {@link DynamicCodeResource} rendering the HTML-Code of all SComponents inside this frame.
+     * <li>A {@link org.wings.script.DynamicScriptResource} rendering the attached (Java-)Scripts of all SComponents
+     * into an external file and including them by a link tag into the rendered frame.
+     * <li>A {@link org.wings.style.DynamicStyleSheetResource} rendering the CSS attributes
+     * of all SComponents inside this frame into an external file with CSS classes.
+     * </ul>
+     */
     public DynamicResource getDynamicResource(Class c) {
         if (dynamicResources == null) {
             dynamicResources = new HashMap();
@@ -112,6 +137,12 @@ public class SFrame
         return this;
     }
 
+    /**
+     * A String with the current epoch of this SFrame. Provided by the
+     * {@link DynamicCodeResource} rendering this frame.
+     *
+     * @return A String with current epoch. Increased on every invalidation.
+     */
     public String getEventEpoch() {
         return getDynamicResource(DynamicCodeResource.class).getEpoch();
     }
@@ -148,6 +179,11 @@ public class SFrame
         this.targetResource = targetResource;
     }
 
+    /**
+     * Every externalized ressource has an id. A frame is a <code>DynamicCodeResource</code>.
+     *
+     * @return The id of this <code>DynamicCodeResource</code>
+     */
     public String getTargetResource() {
         if (targetResource == null) {
             targetResource = getDynamicResource(DynamicCodeResource.class).getId();
@@ -156,31 +192,53 @@ public class SFrame
     }
 
     /**
-     * @param m is typically a {@link Renderable}.
+     * Add an {@link Renderable}  into the header of the HTML page
+     * @param m is typically a {@link org.wings.header.Link} or {@link DynamicResource}.
+     * @see org.wings.header.Link
+     * @see org.wings.script.DynamicScriptResource
+     * @see DynamicCodeResource
      */
     public void addHeader(Object m) {
         if (!headers().contains(m))
             headers.add(m);
     }
 
+    /** @see #addHeader(Object) */
     public void removeHeader(Object m) {
         headers.remove(m);
     }
 
+    /**
+     * Removes all headers. Be carful about what you do!
+     * @see #addHeader(Object)
+     */
     public void clearHeaders() {
         headers().clear();
     }
 
+    /**
+     * @see #addHeader(Object)
+     */
     public List headers() {
         if (headers == null)
             headers = new ArrayList(2);
         return headers;
     }
 
+    /**
+     * Sets the title of this HTML page. Typically shown in the browsers window title.
+     *
+     * @param title The window title.
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Title of this HTML page. Typically shown in the browsers window title.
+     *
+     * @return Current page title
+     */
     public String getTitle() {
         return title;
     }
@@ -193,10 +251,18 @@ public class SFrame
         setVisible(true);
     }
 
+    /**
+     * Hides this frame. This means it gets removed at the session.
+     * @see Session#getFrames()
+     */
     public void hide() {
         setVisible(false);
     }
 
+    /**
+     * Shows or hide this frame. This means it gets (un)registered at the session.
+     * @see Session#getFrames()
+     */
     public void setVisible(boolean b) {
         if (b) {
             getSession().addFrame(this);

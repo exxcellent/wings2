@@ -27,8 +27,6 @@ import java.io.IOException;
  */
 public abstract class SAbstractLayoutManager
         implements SLayoutManager {
-    private static final boolean DEBUG = true;
-
     /**
      * The code generation delegate, which is responsible for
      * the visual representation of a layout.

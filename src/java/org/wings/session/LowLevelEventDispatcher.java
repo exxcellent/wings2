@@ -66,7 +66,7 @@ public final class LowLevelEventDispatcher
 
     /**
      * Registers a listener. The NamePrefix of the listener is stored in the
-     * HashMap as key. The value is a Set (ArrayList) of
+     * HashMap as key. The value is a Set (ArrayList) of {@link LowLevelEventListener}s.
      *
      * @param gl listener
      */
