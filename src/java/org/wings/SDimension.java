@@ -18,9 +18,6 @@ import java.io.*;
 import java.text.*;
 import java.util.logging.*;
 
-/**
- * TODO: parse units
- */
 public class SDimension
     implements Serializable
 {
@@ -158,11 +155,3 @@ public class SDimension
         return "width: " + width + "; height: " + height;
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

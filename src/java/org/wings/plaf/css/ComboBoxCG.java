@@ -45,38 +45,37 @@ public class ComboBoxCG
 //--- code from common area in template.
     private static final JavaScriptListener submitListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submit()");
 
-    protected void writeFormComboBox(Device device, SComboBox comboBox) throws IOException {
+    protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
 
         device.write(__select_size_1);
-        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(comboBox));
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", comboBox.getFocusTraversalIndex());
-        org.wings.plaf.Utils.optAttribute(device, "focus", comboBox.getComponentId());
+        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(component));
+        org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        org.wings.plaf.Utils.optAttribute(device, "focus", component.getComponentId());
 
-        if (comboBox.getPreferredSize() != null)
-            device.print(" style=\"width:100%\"");
+        Utils.innerPreferredSize(device, component.getPreferredSize());
 
-        if (!comboBox.isEnabled()) {
+        if (!component.isEnabled()) {
             device.write(__disabled_1);
         }
 
-        comboBox.removeScriptListener(submitListener);
-        if (comboBox.getActionListeners().length > 0) {
-            comboBox.addScriptListener(submitListener);
+        component.removeScriptListener(submitListener);
+        if (component.getActionListeners().length > 0) {
+            component.addScriptListener(submitListener);
         }
 
-        Utils.writeEvents(device, comboBox);
+        Utils.writeEvents(device, component);
 
         device.write(__);
-        javax.swing.ComboBoxModel model = comboBox.getModel();
+        javax.swing.ComboBoxModel model = component.getModel();
         int size = model.getSize();
-        int selected = comboBox.getSelectedIndex();
+        int selected = component.getSelectedIndex();
 
-        SListCellRenderer renderer = comboBox.getRenderer();
+        SListCellRenderer renderer = component.getRenderer();
 
         for (int i = 0; i < size; i++) {
             SComponent cellRenderer = null;
             if (renderer != null) {
-                cellRenderer = renderer.getListCellRendererComponent(comboBox, model.getElementAt(i), false, i);
+                cellRenderer = renderer.getListCellRendererComponent(component, model.getElementAt(i), false, i);
             }
             else {
 
@@ -85,7 +84,7 @@ public class ComboBoxCG
 
 
             device.write(__option);
-            org.wings.plaf.Utils.optAttribute(device, "value", comboBox.getSelectionParameter(i));
+            org.wings.plaf.Utils.optAttribute(device, "value", component.getSelectionParameter(i));
             if (selected == i) {
 
                 device.write(__selected_selec);
@@ -144,7 +143,7 @@ public class ComboBoxCG
         // util method
 
         device.write(__input_type_hid);
-        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(comboBox));
+        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(component));
         org.wings.plaf.Utils.optAttribute(device, "value", -1);
 
         device.write(___2);

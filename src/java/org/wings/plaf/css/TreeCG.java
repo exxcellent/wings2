@@ -17,26 +17,8 @@ import java.io.IOException;
 
 public class TreeCG
     extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.TreeCG {
-
-//--- byte array converted template snippets.
-    private final static byte[] __tr_td = "<tr><td".getBytes();
-    private final static byte[] __td_tr_table = "></td></tr></table>".getBytes();
-    private final static byte[] __img = "<img".getBytes();
-    private final static byte[] ___1 = "/>".getBytes();
-    private final static byte[] __border_0 = " border=\"0\"".getBytes();
-    private final static byte[] __tr_height_1 = "<tr height=\"1\">".getBytes();
-    private final static byte[] __nbsp = "&nbsp;".getBytes();
-    private final static byte[] __td_1 = "</td>".getBytes();
-    private final static byte[] __table_border_0_1 = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>".getBytes();
-    private final static byte[] __a_href = "<a href=\"".getBytes();
-    private final static byte[] ___4 = "-".getBytes();
-    private final static byte[] ___5 = "+".getBytes();
-    private final static byte[] __a = "</a>".getBytes();
-    private final static byte[] __td_tr_table_1 = "</td></tr></table>".getBytes();
-    private final static byte[] __td_td_width_10 = "</td><td width=\"100%\"></td></tr>\n".getBytes();
-
-//--- properties of this plaf.
+    implements SConstants, org.wings.plaf.TreeCG
+{
     private SIcon collapseControlIcon;
     private SIcon emptyFillIcon;
     private SIcon expandControlIcon;
@@ -84,25 +66,25 @@ public class TreeCG
 
     private void writeIcon(Device device, SIcon icon, int width, int height) throws IOException {
 
-        device.write(__img);
+        device.write("<img".getBytes());
         org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
         org.wings.plaf.Utils.optAttribute(device, "width", width);
         org.wings.plaf.Utils.optAttribute(device, "height", height);
-        device.write(___1);
+        device.write("/>".getBytes());
     }
 
     private void writeIcon(Device device, SIcon icon, boolean nullBorder) throws IOException {
         if (icon == null) return;
 
-        device.write(__img);
+        device.write("<img".getBytes());
         if (nullBorder) {
-            device.write(__border_0);
+            device.write(" border=\"0\"".getBytes());
         }
         org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
         org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
         org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
 
-        device.write(___1);
+        device.write("/>".getBytes());
     }
 
     private void writeTreeNode(STree component, Device device, int row, int depth)
@@ -126,7 +108,7 @@ public class TreeCG
             isLeaf, row,
             false);
 
-        device.write(__tr_height_1);
+        device.write("<tr height=\"1\">".getBytes());
 
         /*
         * fill the indented area.
@@ -149,11 +131,11 @@ public class TreeCG
             }
             else {
                 for (int n = nodeIndentDepth; n > 0; --n) {
-                    device.write(__nbsp);
+                    device.write("&nbsp;".getBytes());
                 }
             }
 
-            device.write(__td_1);
+            device.write("</td>".getBytes());
         }
 
         /*
@@ -178,7 +160,7 @@ public class TreeCG
 
         if (renderControlIcon) {
 
-            device.write(__table_border_0_1);
+            device.write("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>".getBytes());
             if (isLeaf) {
                 writeIcon(device, leafControlIcon, false);
             }
@@ -203,7 +185,7 @@ public class TreeCG
 
                 if (isExpanded) {
                     if (collapseControlIcon == null) {
-                        device.write(___4);
+                        device.write("-".getBytes());
                     }
                     else {
                         writeIcon(device, collapseControlIcon, true);
@@ -211,7 +193,7 @@ public class TreeCG
                 }
                 else {
                     if (expandControlIcon == null) {
-                        device.write(___5);
+                        device.write("+".getBytes());
                     }
                     else {
                         writeIcon(device, expandControlIcon, true);
@@ -261,9 +243,9 @@ public class TreeCG
         }
 
         if (renderControlIcon)
-            device.write(__td_tr_table_1);
+            device.write("</td></tr></table>".getBytes());
 
-        device.write(__td_td_width_10);
+        device.write("</td><td width=\"100%\"></td></tr>\n".getBytes());
     }
 
 
@@ -285,19 +267,16 @@ public class TreeCG
 
         final int depth = component.getMaximumExpandedDepth();
 
-        if (component.getPreferredSize() != null)
-            device.print("<table style=\"width:100%; height:100%; overflow:auto\">");
-        else
-            device.print("<table>");
-        
-        for (int i = start; i < count; ++i) {
-            writeTreeNode(component, device, i, depth);
-        }
+        device.print("<table");
+        Utils.innerPreferredSize(device, component.getPreferredSize());
+        device.print(">");
 
-        // expandable last row to fit preferred table size on IE
-        device.write(__tr_td);
+        for (int i = start; i < count; ++i)
+            writeTreeNode(component, device, i, depth);
+
+        device.write("<tr><td".getBytes());
         org.wings.plaf.Utils.optAttribute(device, "colspan", depth);
-        device.write(__td_tr_table);
+        device.write("></td></tr></table>".getBytes());
     }
 
 //--- setters and getters for the properties.

@@ -22,11 +22,11 @@ public abstract class IconTextCompound
             vertical = CENTER;
         boolean order = vertical == TOP || (vertical == CENTER && horizontal == LEFT);
 
-        if (component.getPreferredSize() != null)
-            device.print("<table style=\"width:100%; height: 100%\">");
-        else
-            device.print("<table>");
-        
+
+        device.print("<table");
+        Utils.innerPreferredSize(device, component.getPreferredSize());
+        device.print(">");
+
         if (vertical == TOP && horizontal == LEFT ||
             vertical == BOTTOM && horizontal == RIGHT) {
             device.print("<tr><td>");

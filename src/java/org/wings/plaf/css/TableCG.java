@@ -16,8 +16,6 @@ public class TableCG
     implements SConstants, org.wings.plaf.TableCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __table = "<table".getBytes();
-    private final static byte[] __ = ">\n".getBytes();
     private final static byte[] __table_1 = "</table>".getBytes();
     private final static byte[] ___3 = "\n".getBytes();
     private final static byte[] __align_left = " align=\"left\"".getBytes();
@@ -165,19 +163,17 @@ public class TableCG
         STable table = (STable)component;
         boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
 
-        SDimension dim = component.getPreferredSize();
         SDimension intercellPadding = table.getIntercellPadding();
         SDimension intercellSpacing = table.getIntercellSpacing();
 
-        device.write(__table);
-        if (component.getPreferredSize() != null)
-            device.print(" style=\"width:100%; height: 100%\"");
+        device.write("<table".getBytes());
+        Utils.innerPreferredSize(device, component.getPreferredSize());
 
         /* Tweaking: CG configured to have a fixed border="xy" width */
         org.wings.plaf.Utils.optAttribute(device, "border", fixedTableBorderWidth);
         org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? intercellSpacing.width : null));
         org.wings.plaf.Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? intercellPadding.width : null));
-        device.write(__);
+        device.write(">\n".getBytes());
         /*
         * get viewable area
         */

@@ -51,7 +51,7 @@ TH, TD {
 
 div.SLabel {
    font-size: 14px;
-   color: #000044
+   color: #000044;
 }
 
 div.SButton {
@@ -80,11 +80,7 @@ div.STextField {
    font-family: sans-serif;
    font-weight: normal;
    font-style: normal;
-   color: #000000 
-}
-
-.selection {
-  background-color: #99cccc
+   color: #000000;
 }
 
 div.STree > table {
@@ -95,7 +91,7 @@ div.STree > table {
 div.STree > table > tbody > tr > td {
     padding: 0px
     border: 1px none black;
-    cursor: pointer
+    cursor: pointer;
 }
 
 div.STree > table > tbody > tr > td * {
@@ -111,6 +107,11 @@ div.STree > table > tbody > tr > td button {
     border: none;
     background-color: inherit;
     padding: 0px
+    text-decoration: none;
+    font-family: sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
 }
 
 div.STable > table {
@@ -172,7 +173,7 @@ div.SList > * > li[selected="true"] {
 	background-color: #CCCCCC;
 	border-color: #EEEEEE #999999 #999999 #eeeeee;
 	border: 1px solid;
-    padding : 0 px;
+    padding: 0px;
 }
 
 .SMenu {
@@ -366,24 +367,6 @@ div.SList > * > li[selected="true"] {
 .acenter {
   text-align: center;
 }
-.fill {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-}
-.scrollpane {
-  overflow: auto;
-  border: thin inset;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-
-/* // wilken webgui */
-
 
 div.STabbedPane, div.STabbedPane > table {
     width: 100%;

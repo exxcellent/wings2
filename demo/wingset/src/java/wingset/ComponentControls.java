@@ -19,8 +19,8 @@ public class ComponentControls
     extends SPanel
 {
     private List sizables = new LinkedList();
-    private STextField widthTextField;
-    private STextField heightTextField;
+    protected STextField widthTextField;
+    protected STextField heightTextField;
     private SButton button;
 
     public ComponentControls() {

@@ -81,7 +81,6 @@ public class ListExample
         comboBox.setName("combo");
         addComboBoxElements(comboBox);
         cont.add(comboBox);
-        controls.addSizable(comboBox);
 
         return cont;
     }

@@ -9,7 +9,13 @@ BODY {
     height: inherit;
 }
 
-div, form {
+table {
+    padding: 0px;
+    margin: 0px;
+    border-collapse: collapse;
+}
+
+div, form, td, th {
     color: inherit;
     background-color: inherit;
     padding: 0px;
@@ -40,49 +46,49 @@ TH, TD {
     font-size: 14px;
 }
 
-.SLabel {
-   font-family: sans-serif;
-   font-weight: bold;
-   font-style: normal;
+div.SLabel {
    font-size: 14px;
-   color: #000044 
+   color: #000044;
 }
 
-.STextField {
+div.SButton {
+   font-size: 14px;
+   color: #000044
+}
+
+div.SButton > button {
+   border: 1px outset gray;
+}
+
+div.SButton > button:hover {
+   border: 1px inset gray;
+}
+
+div.SClickable > button {
+   background-color: inherit;
+   border: 1px none;
+}
+
+div.SClickable > button:hover {
+   border: 1px solid gray;
+}
+
+div.STextField {
    font-family: sans-serif;
    font-weight: normal;
    font-style: normal;
-   color: #000000 
-}
-
-.href { 
-   color: #990000;
-   text-decoration: none;
-   font-weight: bold 
-}
-
-.selection {
-  background-color: #99cccc
-}
-
-.SList {
-   border-style: none;
-   border-width: 0px;
-   border-spacing: 2px;
-   text-decoration: none;
-   font-family: sans-serif;
-   font-weight: normal;
-   font-style: normal;
-   color: #000000
+   color: #000000;
 }
 
 div.STree > table {
+   border: none;
    border-spacing: 0px;
 }
 
 div.STree > table > tr > td {
     padding: 0px
     border: 1px none black;
+    cursor: pointer;
 }
 
 div.STree > table > tr > td * {
@@ -94,21 +100,60 @@ div.STree > table > tr > td[selected="true"] {
     border: 1px dotted black;
 }
 
-.STable {
-   border-style: solid;
-   border-width: 1px;
-   border-color: black;
-   border-spacing: 0px;
-   text-decoration: none;
-   font-family: sans-serif;
-   font-weight: normal;
-   font-style: normal;
-   color: #000000
+div.STree > table > tr > td button {
+    border: none;
+    background-color: inherit;
+    padding: 0px
+    text-decoration: none;
+    font-family: sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
 }
 
-.tableheader {
-   font-weight: bold;
-   background-color: #dedede
+div.STable > table {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+div.STable > table > tr[odd="true"] {
+    background-color: #eeeeee;
+}
+
+div.STable > table > tr[selected="true"] {
+    background-color: #aaaaff !important;
+}
+
+div.STable > table > tr > th {
+    border: 1px solid black;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+div.STable > table > tr > td {
+    cursor: pointer
+    padding-left: 8px;
+    padding-right: 8px;
+    border-left: 1px solid black;
+}
+div.STable > table > tr > td[col="numbering"] {
+    text-align: right;
+}
+
+div.STable > table > tr > td button {
+    border: none;
+    background-color: inherit;
+    padding: 0px
+}
+
+div.SList > * {
+}
+
+div.SList > * > li[selected="true"] {
+    background-color: #aaaaff !important;
+    border: 1px dotted black;
+    cursor: pointer
 }
 
 .SAnchor {
@@ -124,13 +169,8 @@ div.STree > table > tr > td[selected="true"] {
 	color: #000066;
 	background-color: #CCCCCC;
 	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	padding-right: 0px;
-	padding-left: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-width: 1px;
-    padding : 0 px;
+	border: 1px solid;
+    padding: 0px;
 }
 
 .SMenu {
@@ -188,7 +228,7 @@ div.STree > table > tr > td[selected="true"] {
 	margin: 0px;
 }
 
-.SMenuItem {
+.menuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: #000066;
@@ -293,38 +333,6 @@ div.STree > table > tr > td[selected="true"] {
 	border-width: 0px;
 }
 
-.selection {
-   background-color: #AAAAFF;
-}
-
-/* wilken webgui */
-.atop {
-  display: table-cell;
-  vertical-align: top;
-}
-
-.abottom {
-  display: table-cell;
-  vertical-align: bottom;
-}
-
-.amiddle {
-  display: table-cell;
-  vertical-align: baseline;
-}
-
-.aright {
-  text-align: right;
-}
-
-.aleft {
-  text-align: left;
-}
-
-.acenter {
-  text-align: center;
-}
-
 div.STabbedPane > table {
     width: 100%;
     height: auto;
@@ -385,20 +393,6 @@ div.STabbedPane > table > tr > th[placement="bottom"] > a {
     border-top: none !important;
 }
 
-
-div.STable > table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-div.STable > table > tr > * {
-    border: 1px solid black;
-}
-
-div.STable > table > tr[selected="true"] > * {
-    background-color: #aaaaff;
-}
-
 div.SPanel, div.SContainer {
     width: 100%;
     height: auto;
@@ -412,6 +406,67 @@ table.SBorderLayout {
 table.SBorderLayout > tr > td {
     vertical-align: middle;
     text-align: center;
+}
+
+.legend {
+   position: absolute;
+   margin-top: -1.7em;
+   margin-left: 1.0em;
+   padding-left: 0.4em;
+   padding-right: 0.4em;
+}
+
+div.SDialog > table {
+   border: 1px outset gray;
+   border-collapse: collapse;
+}
+
+div.SDialog > table > tr > th {
+   background-color: #aaaaff;
+   color: #ffffff;
+   text-align: left;
+   padding-left: 8px;
+}
+
+div.SDialog > table > tr > td {
+   border: 1px inset #aaaaff;
+}
+
+
+div.SOptionPane > table {
+   border: 1px outset gray;
+   border-collapse: collapse;
+}
+
+div.SOptionPane > table > tr > th {
+   background-color: #aaaaff;
+   color: #ffffff;
+   text-align: left;
+   padding-left: 8px;
+}
+
+div.SOptionPane > table > tr > td {
+   border: 1px inset #aaaaff;
+}
+
+
+div.domTT {
+    border: 1px solid #333333;
+    opacity: 0.8;
+}
+div.domTTCaption {
+    font-family: serif;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 1px 2px;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+div.domTTContent {
+    font-size: 12px;
+    font-family: sans-serif;
+    padding: 3px 2px;
+    background-color: #F1F1FF;
 }
 
 /* wilken webgui */

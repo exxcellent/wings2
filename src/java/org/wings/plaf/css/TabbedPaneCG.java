@@ -59,8 +59,7 @@ public class TabbedPaneCG
         if (childSelectorWorkaround)
             Utils.childSelectorWorkaround(device, style);
 
-        if (component.getPreferredSize() != null)
-            device.print(" style=\"width:100%; height: 100%\"");
+        Utils.innerPreferredSize(device, component.getPreferredSize());
 
         Utils.writeEvents(device, component);
         device

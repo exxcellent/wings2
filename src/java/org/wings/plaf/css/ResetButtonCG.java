@@ -14,8 +14,6 @@ public class ResetButtonCG
     implements SConstants, org.wings.plaf.ResetButtonCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __input_type_res = "<input type=\"reset\"".getBytes();
-    private final static byte[] __ = "/>".getBytes();
 
 
     public void writeContent(final Device device,
@@ -23,12 +21,11 @@ public class ResetButtonCG
         throws IOException {
         final SResetButton component = (SResetButton)_c;
 
-        device.write(__input_type_res);
-        if (component.getPreferredSize() != null)
-            device.print(" style=\"width:100%; height: 100%\"");
+        device.write("<input type=\"reset\"".getBytes());
+        Utils.innerPreferredSize(device, component.getPreferredSize());
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "value", component.getText());
         Utils.writeEvents(device, component);
-        device.write(__);
+        device.write("/>".getBytes());
     }
 }

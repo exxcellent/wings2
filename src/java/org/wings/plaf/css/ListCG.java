@@ -57,9 +57,7 @@ public class ListCG
             list.addScriptListener(selectListener);
         }
 
-        if (list.getPreferredSize() != null)
-            device.print(" style=\"width:100%; height: 100%\"");
-
+        Utils.innerPreferredSize(device, list.getPreferredSize());
         Utils.writeEvents(device, list);
 
         device.write(">".getBytes());

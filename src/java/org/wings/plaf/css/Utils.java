@@ -269,4 +269,15 @@ public final class Utils
             d.print("</table>");
         }
     }
+
+    public static void innerPreferredSize(Device device, SDimension preferredSize) throws IOException {
+        if (preferredSize != null) {
+            device.print(" style=\"");
+            if (preferredSize.getWidth() != null)
+                device.print("width:100%;");
+            if (preferredSize.getHeight() != null)
+                device.print("height: 100%");
+            device.print("\"");
+        }
+    }
 }
