@@ -33,7 +33,7 @@ public class AnchorCG
         device.print(component.getURL());
         device.print("\"");
 
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         org.wings.plaf.Utils.optAttribute(device, "target", component.getTarget());
         org.wings.plaf.Utils.optAttribute(device, "name", component.getName());

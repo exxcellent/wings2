@@ -26,27 +26,26 @@ public class CGUtil {
      */
     public static void writeSize(Device d, SComponent c)
             throws IOException {
-        SDimension dim = c.getPreferredSize();
-
-        if (dim != null) {
-            if (dim.width != null)
-                d.print(" width=\"").print(dim.width).print("\"");
-            if (dim.height != null)
-                d.print(" height=\"").print(dim.height).print("\"");
-        }
+        writeDimension(d, c.getPreferredSize());
     }
 
+    /**
+     * Write <i>width</i> and <i>height</i> argument to LayoutManager tag.
+     */
     public static void writeSize(Device d, SAbstractLayoutManager lm)
             throws IOException {
-        SDimension dim = lm.getPreferredSize();
+        writeDimension(d, lm.getPreferredSize());
+    }
 
+    private static void writeDimension(Device d, SDimension dim) throws IOException {
         if (dim != null) {
-            if (dim.width != null)
-                d.print(" width=\"").print(dim.width).print("\"");
-            if (dim.height != null)
-                d.print(" height=\"").print(dim.height).print("\"");
+            if (dim.isWidthDefined())
+                d.print(" width=\"").print(dim.getWidth()).print("\"");
+            if (dim.isHeigthDefined())
+                d.print(" height=\"").print(dim.getHeight()).print("\"");
         }
     }
+
 }
 
 

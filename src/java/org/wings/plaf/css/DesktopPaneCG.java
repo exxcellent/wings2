@@ -37,7 +37,7 @@ public class DesktopPaneCG
         SDesktopPane desktop = (SDesktopPane) component;
 
         device.print("<table");
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
         device.print(">\n");
 
         int componentCount = desktop.getComponentCount();

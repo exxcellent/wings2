@@ -66,7 +66,7 @@ public class FormCG
         Utils.optAttribute(device, "enctype", component.getEncodingType());
         Utils.optAttribute(device, "action", component.getRequestURL());
 
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         device.print("><input type=\"image\" name=\"_capture_enter1\" border=\"0\" ");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());

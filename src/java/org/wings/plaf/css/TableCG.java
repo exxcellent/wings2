@@ -179,14 +179,14 @@ public class TableCG
         SDimension intercellSpacing = table.getIntercellSpacing();
 
         device.print("<table");
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         // TODO: border="" should be obsolete
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse
         /* Tweaking: CG configured to have a fixed border="xy" width */
         org.wings.plaf.Utils.optAttribute(device, "border", fixedTableBorderWidth);
-        org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? intercellSpacing.width : null));
-        org.wings.plaf.Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? intercellPadding.width : null));
+        org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getWidthInt() : null));
+        org.wings.plaf.Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getHeightInt() : null));
         device.print(">\n");
         /*
         * get viewable area

@@ -34,7 +34,7 @@ public abstract class IconTextCompound
 
 
         device.print("<table");
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
         device.print(">");
 
         if (vertical == TOP && horizontal == LEFT ||

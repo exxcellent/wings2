@@ -269,7 +269,7 @@ public class TreeCG
         final int depth = component.getMaximumExpandedDepth();
 
         device.print("<table");
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
         device.print(">");
 
         for (int i = start; i < count; ++i)

@@ -48,7 +48,7 @@ public class ComboBoxCG
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         if (!component.isEnabled()) {
             device.print(" disabled=\"1\"");

@@ -210,8 +210,8 @@ public final class Utils
         }
 
         if (dim != null) {
-            if (dim.width != null) d.print("width:").print(dim.width).print(";");
-            if (dim.height != null) d.print("height:").print(dim.height).print(";");
+            if (dim.isWidthDefined()) d.print("width:").print(dim.getWidth()).print(";");
+            if (dim.isHeigthDefined()) d.print("height:").print(dim.getHeight()).print(";");
         }
 
         d.print("\"");
@@ -262,7 +262,13 @@ public final class Utils
         }
     }
 
-    public static void printInnerPreferredSize(Device device, SDimension preferredSize) throws IOException {
+    /**
+     * Prints a HTML style attribute with widht/height of passed SDimension.
+     * <p>Sample: <code> style="widht:100%;"</code>
+     * @param device Device to print to
+     * @param preferredSize Preferred sitze. May be null or contain null attributes
+     */
+    public static void printCSSInlinePreferredSize(Device device, SDimension preferredSize) throws IOException {
         if (preferredSize != null) {
             device.print(" style=\"");
             if (preferredSize.getWidth() != null)

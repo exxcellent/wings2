@@ -51,7 +51,7 @@ public class FileChooserCG
         // maxLength = maxContent removed, since it does not work.
         device.write(__input_type_fil);
 
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         org.wings.plaf.Utils.optAttribute(device, "size", columns);
         org.wings.plaf.Utils.optAttribute(device, "accept", component.getFileNameFilter());

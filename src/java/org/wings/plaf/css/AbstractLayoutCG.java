@@ -20,6 +20,8 @@ import org.wings.plaf.LayoutCG;
 import java.io.IOException;
 
 /**
+ * Abstract super class for layout CGs using invisible tables to arrange their contained components.
+ *
  * @author bschmid
  */
 public abstract class AbstractLayoutCG implements LayoutCG {
@@ -31,7 +33,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         d.print(" cellspacing=\"").print(cellSpacing < 0 ? 0: cellSpacing).print("\"");
         d.print(" cellpadding=\"").print(cellPadding < 0 ? 0 : cellPadding).print("\"");
         d.print(" border=\"").print(border < 0 ? 0 : border).print("\"");
-        Utils.printInnerPreferredSize(d,container.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(d,container.getPreferredSize());
         d.print(">\n");
     }
     /** Counterpart to {@link #printLayouterTableHeader} */

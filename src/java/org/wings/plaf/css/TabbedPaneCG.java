@@ -68,7 +68,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
         if (childSelectorWorkaround)
             Utils.childSelectorWorkaround(device, style);
 
-        Utils.printInnerPreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         Utils.writeEvents(device, component);
         device.print(">");

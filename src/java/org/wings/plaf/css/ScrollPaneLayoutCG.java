@@ -42,7 +42,7 @@ public class ScrollPaneLayoutCG
         SComponent south = (SComponent) components.get(SScrollPaneLayout.SOUTH);
 
         d.print("\n<table class=\"SScrollPaneLayout\" cellpadding=\"0\" cellspacing=\"0\"");
-        Utils.printInnerPreferredSize(d, container.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(d, container.getPreferredSize());
         d.print("><tbody>");
 
         if (north != null) {
