@@ -47,8 +47,8 @@ public class ToggleButtonExample
         SToggleButton[] buttons = new SToggleButton[9];
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new SToggleButton("text_" + (i + 1));
-            buttons[i].setActionCommand("" + (i + 1));
+            buttons[i] = new SToggleButton("Text " + (i + 1));
+            buttons[i].setActionCommand(buttons[i].getText());
             if (i != 4) {
                 buttons[i].setIcon(icon);
                 buttons[i].setDisabledIcon(disabledIcon);
@@ -56,8 +56,8 @@ public class ToggleButtonExample
                 buttons[i].setPressedIcon(pressedIcon);
                 buttons[i].setSelectedIcon(pressedIcon);
             }
-            buttons[i].setToolTipText("Button " + i);
-            buttons[i].setName(buttons[i].getText());
+            buttons[i].setToolTipText("Button " + (i+1));
+            buttons[i].setName("button" + (i+1));
             buttons[i].setShowAsFormComponent(false);
             group.add(buttons[i]);
             controls.addSizable(buttons[i]);

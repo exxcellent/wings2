@@ -46,7 +46,7 @@ public class ButtonExample
         SButton[] buttons = new SButton[9];
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new SButton("text_" + (i + 1));
+            buttons[i] = new SButton("Text " + (i + 1));
             buttons[i].setActionCommand(buttons[i].getText());
             if (i != 4) {
                 buttons[i].setIcon(icon);
@@ -56,7 +56,7 @@ public class ButtonExample
             }
 
             buttons[i].setToolTipText("Button " + (i+1));
-            buttons[i].setName("button_" + (i+1));
+            buttons[i].setName("button" + (i+1));
             buttons[i].setShowAsFormComponent(false);
             controls.addSizable(buttons[i]);
         }
@@ -96,7 +96,7 @@ public class ButtonExample
 
         ActionListener action = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                log.error("Button pressed: " + e.getActionCommand());
+                System.out.println("Button pressed: " + e.getActionCommand());
                 pressed.setText("Button \"" + e.getActionCommand() + "\" pressed");
             }
         };

@@ -22,10 +22,13 @@ import org.wings.*;
 public class PopupExample extends WingSetPane {
 
     public SComponent createExample() {
-        SLabel testLabel = new SLabel("This label has a context menu.");
 
         SPopupMenu menu = new SPopupMenu();
-        menu.add(new SMenuItem("blub"));
+        menu.add(new SMenuItem("Cut"));
+        menu.add(new SMenuItem("Copy"));
+        menu.add(new SMenuItem("Paste"));
+
+        SLabel testLabel = new SLabel("This label has a context menu.");
         testLabel.setComponentPopupMenu(menu);
 
         SPanel all = new SPanel();
