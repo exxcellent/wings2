@@ -1367,6 +1367,10 @@ public abstract class SComponent
     }
 
     public void fireFinalEvents() {
+        fireKeyEvents();
+    }
+
+    protected void fireKeyEvents() {
         for (Iterator iterator = actionEvents.entrySet().iterator(); iterator.hasNext();) {
             Map.Entry entry = (Map.Entry) iterator.next();
             Action action = (Action) entry.getKey();

@@ -145,9 +145,9 @@ public class SDialog extends SForm {
      */
     public void hide() {
         log.debug("hide dialog");
-        if (owner != null) {
+        if (owner != null)
             owner.popDialog();
-        }
+        visible = false;
     }
 
     public void setVisible(boolean visible) {
@@ -203,7 +203,7 @@ public class SDialog extends SForm {
 
     // LowLevelEventListener interface. Handle own events.
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
+        processKeyEvents(values);
 
         // is this a window event?
         try {
@@ -224,7 +224,6 @@ public class SDialog extends SForm {
     }
 
     public void fireFinalEvents() {
-        super.fireFinalEvents();
     }
 
     public void setCG(DialogCG cg) {

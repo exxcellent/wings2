@@ -54,8 +54,9 @@ public abstract class SRootContainer extends SContainer {
      * @param dialog the SDialog that is to be shown on top.
      */
     public void pushDialog(SDialog dialog) {
+        System.out.println("push dialog = " + dialog.getName());
+        new Throwable().printStackTrace();
         super.addComponent(dialog, null, getComponentCount());
-        int count = getComponentCount();
         dialog.setFrame(this);
         reload();
     }
@@ -72,8 +73,11 @@ public abstract class SRootContainer extends SContainer {
 
         SDialog dialog = (SDialog) getComponent(count - 1);
         super.remove(dialog);
-        dialog.setFrame((SFrame) null);
+        dialog.setFrame(null);
+
         reload();
+        System.out.println("pop dialog = " + dialog.getName());
+        new Throwable().printStackTrace();
         return dialog;
     }
 

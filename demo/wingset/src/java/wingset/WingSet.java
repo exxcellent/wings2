@@ -160,7 +160,7 @@ public class WingSet {
         tab.add(new BorderExample(), "Border");
         tab.add(new TextComponentExample(), "Text Component");
         tab.addTab("Tree", JAVA_CUP_ICON, new TreeExample(), "Tree Tool Tip");
-        tab.add(new OptionPaneExample(frame), "OptionPane");
+        tab.add(new OptionPaneExample(), "OptionPane");
         tab.add(new TableExample(), "Table");
         tab.add(new ListExample(), "List");
         tab.add(new ButtonExample(), "Button");

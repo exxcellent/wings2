@@ -23,63 +23,82 @@ import java.awt.event.ActionListener;
  * @version $Revision$
  */
 public class OptionPaneExample
-        extends SForm
-        implements SConstants {
-    public OptionPaneExample(SFrame f) {
+        extends WingSetPane
+{
+    protected SComponent createExample() {
+        SToolbar toolbar = new SToolbar();
 
-        SToolbar panel = new SToolbar();
-
-        final SFrame frame = f;
         SButton msg = new SButton("show Message");
         msg.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SOptionPane.showMessageDialog(frame, "This is a simple message", "A Message");
+                SOptionPane.showMessageDialog(null, "This is a simple message", "A Message");
             }
         });
-        panel.add(msg);
+        toolbar.add(msg);
 
         SButton question = new SButton("show Question");
         final ActionListener comment = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand() == SOptionPane.OK_ACTION)
-                    SOptionPane.showMessageDialog(frame, "Fine !");
+                    SOptionPane.showMessageDialog(null, "Fine !");
                 else
-                    SOptionPane.showMessageDialog(frame, "No Problem, just look at another site");
+                    SOptionPane.showMessageDialog(null, "No Problem, just look at another site");
             }
         };
 
         question.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SOptionPane.showQuestionDialog(frame, "Continue this example?",
+                SOptionPane.showQuestionDialog(null, "Continue this example?",
                         "A Question", comment);
             }
         });
-        panel.add(question);
+        toolbar.add(question);
 
         SButton yesno = new SButton("show Yes No");
         final ActionListener feedback = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand() == SOptionPane.NO_ACTION) {
                     SPanel p = new SPanel(new SFlowDownLayout());
-                    p.add(new SLabel("That's sad !"));
-                    SAnchor sendMail = new SAnchor("mailto:ahaaf@mercatis.de");
+                    p.add(new SLabel("That's sad!"));
+                    SAnchor sendMail = new SAnchor("mailto:haaf@mercatis.de");
                     sendMail.add(new SLabel("Please send my why!"));
                     p.add(sendMail);
-                    SOptionPane.showMessageDialog(frame, p);
+                    SOptionPane.showMessageDialog(null, p);
                 } else
-                    SOptionPane.showMessageDialog(frame, "Fine, so do we!");
+                    SOptionPane.showMessageDialog(null, "Fine, so do we!");
             }
         };
 
         yesno.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SOptionPane.showYesNoDialog(frame,
-                        "Do you like the HTML package",
+                SOptionPane.showYesNoDialog(null,
+                        "Do you like wingS",
                         "A Yes No Question", feedback);
             }
         });
 
-        panel.add(yesno);
-        add(panel);
+        toolbar.add(yesno);
+
+        final SLabel label = new SLabel();
+        final ActionListener inputListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SOptionPane optionPane = (SOptionPane) e.getSource();
+                STextField inputValue = (STextField) optionPane.getInputValue();
+                label.setText("" + inputValue.getText());
+            }
+        };
+
+        SButton input = new SButton("input");
+        input.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SOptionPane.showInputDialog(null, "What's your profession?", "A Message", new STextField(), inputListener);
+            }
+        });
+        toolbar.add(input);
+        toolbar.add(label);
+
+        SForm c = new SForm(new SBorderLayout());
+        c.add(toolbar, SBorderLayout.NORTH);
+        return c;
     }
 }

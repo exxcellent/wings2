@@ -395,8 +395,8 @@ public class SForm
     }
 
     public void processLowLevelEvent(String action, String[] values) {
-        super.processLowLevelEvent(action, values);
-        
+        processKeyEvents(values);
+
         // we have to wait, until all changed states of our form have
         // changed, before we anything can happen.
         SForm.addArmedComponent(this);
@@ -406,7 +406,7 @@ public class SForm
     }
 
     public void fireFinalEvents() {
-        super.fireFinalEvents();
+        fireKeyEvents();
         fireActionPerformed(getActionCommand());
     }
 
@@ -424,5 +424,3 @@ public class SForm
         super.setCG(cg);
     }
 }
-
-

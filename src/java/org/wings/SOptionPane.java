@@ -243,6 +243,7 @@ public class SOptionPane
      * Message type. 
      */
     protected int messageType;
+    private Object inputValue;
 
     /**
      * Default Constructor for <code>SOptionPane</code>
@@ -379,6 +380,10 @@ public class SOptionPane
         return selected;
     }
 
+    public Object getInputValue() {
+        return inputValue;
+    }
+
     private final void initPanel() {
         optionButtons.add(optionOK, "OK");
         optionButtons.add(optionYes, "YES");
@@ -410,7 +415,7 @@ public class SOptionPane
      */
     protected final SButton createButton(String label) {
         SButton b = new SButton(label);
-        b.setName(label);
+        b.setName(getName() + label);
         b.addActionListener(this);
         return b;
     }
@@ -645,6 +650,7 @@ public class SOptionPane
                           SComponent inputElement, String title) {
         showOption(parent, title, message);
         optionData.add(inputElement);
+        inputValue = inputElement;
 
         setOptionType(OK_CANCEL_OPTION);
         setMessageType(QUESTION_MESSAGE);
