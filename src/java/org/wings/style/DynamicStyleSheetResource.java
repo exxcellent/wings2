@@ -62,41 +62,32 @@ public class DynamicStyleSheetResource
 
         private void writeAttributesFrom(SComponent component)
                 throws IOException {
+            // default: components id
             String selectorPrefix = "#" + component.getName();
             if (component instanceof SFrame)
-                selectorPrefix = "body";
+                selectorPrefix = "body"; //special case: everything
 
             Collection dynamicStyles = component.getDynamicStyles();
             if (dynamicStyles != null) {
                 ComponentCG cg = component.getCG();
                 for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
                     Style style = (Style) iterator.next();
-                    CSSSelector selector = style.getSelector();
-                    selector = cg.mapSelector(selector);
-                    writeAttributes(selectorPrefix + selector, style);
+                    // Map pseudo css selectors to real selectors
+                    CSSSelector selector = cg.mapSelector(style.getSelector());
+                    out.print(selectorPrefix).print(selector.getSelectorString()).print("{");
+                    style.write(out);
+                    out.print("}\n");
                 }
             }
 
             SBorder border = component.getBorder();
             if (border != null) {
-                writeAttributes(selectorPrefix, border.getAttributes());
+                out.print(selectorPrefix).print("{");
+                border.getAttributes().write(out);
+                out.print("}\n");
             }
         }
 
-        /*private void writeAttributes(CSSSelector selector, Style style)
-                throws IOException {
-            CSSSelector backup = style.getSelector();
-            style.setSelector(selector);
-            style.write(out);
-            style.setSelector(backup);
-        }*/
-
-        private void writeAttributes(String selector, AttributeSet attributes)
-                throws IOException {
-            out.print(selector).print("{");
-            attributes.write(out);
-            out.print("}\n");
-        }
 
         public void visit(SComponent component) throws Exception {
             writeAttributesFrom(component);

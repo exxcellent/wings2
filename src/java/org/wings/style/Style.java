@@ -13,9 +13,7 @@
  */
 package org.wings.style;
 
-import org.wings.io.Device;
 
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
@@ -56,15 +54,8 @@ public final class Style
 
     public StyleSheet getSheet() { return sheet; }
 
-    public void write(Device d)
-            throws IOException {
-        d.print(selector).print("{");
-        super.write(d);
-        d.print("}\n");
-    }
-
     public String toString() {
-        return selector + " { " + super.toString() + "}";
+        return selector.getSelectorString() + " { " + super.toString() + "}";
     }
 }
 

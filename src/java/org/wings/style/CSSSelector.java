@@ -39,6 +39,10 @@ public class CSSSelector implements Serializable{
         return selectorString.substring(selectorString.indexOf(".") + 1);
     }
 
+    public String toString() {
+        return super.toString();
+    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CSSSelector)) return false;
