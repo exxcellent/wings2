@@ -17,44 +17,53 @@ import org.wings.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class ScrollPaneExample
-        extends WingSetPane {
+        extends WingSetPane
+{
+    private ScrollPaneControls controls;
+    private STable table;
+    private SScrollPane scroller;
 
     public SComponent createExample() {
-        SForm p = new SForm();
+        controls = new ScrollPaneControls();
 
-        SLabel label = new SLabel("<html><h4>Table in a ScrollPane</h4>");
-        p.add(label);
-
-        STable table = new STable(new TableExample.ROTableModel(15, 15));
+        table = new STable(new TableExample.ROTableModel(15, 15));
         table.setShowAsFormComponent(true);
         table.setDefaultRenderer(new TableExample.MyCellRenderer());
 
-        final SScrollPane scroller = new SScrollPane(table);
+        scroller = new SScrollPane(table);
         scroller.getHorizontalScrollBar().setBlockIncrement(3);
         scroller.getVerticalScrollBar().setBlockIncrement(3);
 
-        final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-        showAsFormComponent.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ((SScrollBar) scroller.getHorizontalScrollBar()).setShowAsFormComponent(showAsFormComponent.isSelected());
-                ((SScrollBar) scroller.getVerticalScrollBar()).setShowAsFormComponent(showAsFormComponent.isSelected());
-            }
-        });
-        showAsFormComponent.setShowAsFormComponent(false);
         ((SScrollBar) scroller.getHorizontalScrollBar()).setShowAsFormComponent(false);
         ((SScrollBar) scroller.getVerticalScrollBar()).setShowAsFormComponent(false);
 
-        p.add(showAsFormComponent);
-        p.add(scroller);
+        SForm p = new SForm(new SBorderLayout());
+        p.add(controls, SBorderLayout.NORTH);
+        p.add(scroller, SBorderLayout.CENTER);
         return p;
     }
 
+    class ScrollPaneControls extends ComponentControls {
+        public ScrollPaneControls () {
+            final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
+            showAsFormComponent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boolean selected = showAsFormComponent.isSelected();
+                    table.setShowAsFormComponent(selected);
+                    ((SScrollBar)scroller.getHorizontalScrollBar()).setShowAsFormComponent( selected);
+                    ((SScrollBar)scroller.getVerticalScrollBar()).setShowAsFormComponent(selected);
+                }
+            });
+
+            add(showAsFormComponent);
+        }
+    }
 }
-
-

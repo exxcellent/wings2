@@ -26,7 +26,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public abstract class SAbstractAdjustable
-        extends SContainer
+        extends SComponent
         implements Adjustable, LowLevelEventListener {
     public static final int UNIT = 0;
 
@@ -106,12 +106,6 @@ public abstract class SAbstractAdjustable
     public SAbstractAdjustable() {
         this(0, 10, 0, 100);
     }
-
-    /**
-     * This method is called if the status of the model has changed. Adapt the
-     * visible Components here.
-     */
-    protected abstract void refreshComponents();
 
     /**
      * Returns data model that handles the scrollbar's four
@@ -430,12 +424,6 @@ public abstract class SAbstractAdjustable
         m.setRangeProperties(newValue, newExtent, newMin, newMax, m.getValueIsAdjusting());
     }
 
-
-    // LowLevelEventListener
-    protected String getEventParameter(int value) {
-        return Integer.toString(value);
-    }
-
     public void processLowLevelEvent(String action, String[] values) {
         super.processLowLevelEvent(action, values);
 
@@ -531,7 +519,6 @@ public abstract class SAbstractAdjustable
             int id = AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED;
             int type = AdjustmentEvent.TRACK;
             fireAdjustmentValueChanged(id, type, getValue());
-            refreshComponents();
             reload();
         }
     }

@@ -1,15 +1,5 @@
 /*
- * $Id$
- * Copyright 2000,2005 wingS development team.
- *
- * This file is part of wingS (http://www.j-wings.org).
- *
- * wingS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- *
- * Please see COPYING for the complete licence.
+ * Copyright (c) 2005 Your Corporation. All Rights Reserved.
  */
 package org.wings.plaf.css;
 
@@ -21,13 +11,13 @@ import java.awt.*;
 import java.io.IOException;
 
 /**
- * CG for a scrollbar.
+ * CG for a pagescroller.
  *
  * @author holger
  */
-public class ScrollBarCG
-        extends org.wings.plaf.css.AbstractComponentCG
-        implements org.wings.plaf.ScrollBarCG
+public class PageScrollerCG
+        extends AbstractComponentCG
+        implements org.wings.plaf.PageScrollerCG
 {
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
@@ -81,21 +71,19 @@ public class ScrollBarCG
     public void writeContent(Device d, SComponent c)
             throws IOException {
         System.out.println("write = " + c);
-        SScrollBar sb = (SScrollBar) c;
+        SPageScroller sb = (SPageScroller) c;
 
-        if (sb.getOrientation() == SConstants.VERTICAL)
-            writeVerticalScrollbar(d, sb);
+        if (sb.getLayoutMode() == SConstants.VERTICAL)
+            writeVerticalPageScroller(d, sb);
         else
-            writeHorizontalScrollbar(d, sb);
+            writeHorizontalPageScroller(d, sb);
     }
 
-    private void writeVerticalScrollbar(Device d, SScrollBar sb) throws IOException {
+    private void writeVerticalPageScroller(Device d, SPageScroller sb) throws IOException {
         int value = sb.getValue();
-        int blockIncrement = sb.getBlockIncrement();
         int extent = sb.getExtent();
         int minimum = sb.getMinimum();
         int maximum = sb.getMaximum();
-        int last = maximum - extent;
         boolean backEnabled = value > minimum;
         boolean forwardEnabled = value < maximum - extent;
 
@@ -107,10 +95,7 @@ public class ScrollBarCG
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum);
         d.print("</td></tr>\n");
         d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD_BLOCK][0], "" + (Math.max(minimum, value - blockIncrement)));
-        d.print("</td></tr>\n");
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - 1));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - extent));
         d.print("</td></tr>\n");
 
         d.print("</tbody></table></td>\n")
@@ -118,10 +103,16 @@ public class ScrollBarCG
                 .print("<tr height=\"100%\">\n")
                 .print("<td><table height=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
 
-        int range = maximum - minimum;
-        verticalArea(d, "#eeeeff", value * 100 / range);
-        verticalArea(d, "#cccccc", extent * 100 / range);
-        verticalArea(d, "#eeeeff", (range - value - extent) * 100 / range);
+        int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
+        firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
+        firstDirectPage = Math.max(firstDirectPage, 0);
+
+        for (int i = 0; i < Math.min(sb.getDirectPages(), sb.getPageCount() - firstDirectPage); i++) {
+            int page = firstDirectPage + i;
+            d.print("<tr><td>");
+            writePage(d, sb, page);
+            d.print("</td></tr>\n");
+        }
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
@@ -129,13 +120,10 @@ public class ScrollBarCG
                 .print("<td height=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
 
         d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + 1));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + extent));
         d.print("</td></tr>\n");
         d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD_BLOCK][0], "" + (Math.min(last, value + blockIncrement)));
-        d.print("</td></tr>\n");
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + last);
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + (maximum + 1 - extent));
         d.print("</td></tr>\n");
 
         d.print("</tbody></table></td>\n")
@@ -151,13 +139,11 @@ public class ScrollBarCG
         d.print("\"></td></tr>\n");
     }
 
-    private void writeHorizontalScrollbar(Device d, SScrollBar sb) throws IOException {
+    private void writeHorizontalPageScroller(Device d, SPageScroller sb) throws IOException {
         int value = sb.getValue();
-        int blockIncrement = sb.getBlockIncrement();
         int extent = sb.getExtent();
         int minimum = sb.getMinimum();
         int maximum = sb.getMaximum();
-        int last = maximum - extent;
         boolean backEnabled = value > minimum;
         boolean forwardEnabled = value < maximum - extent;
 
@@ -168,59 +154,76 @@ public class ScrollBarCG
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum);
         d.print("</td>\n");
         d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD_BLOCK][0], "" + (Math.max(minimum, value - blockIncrement)));
-        d.print("</td>\n");
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - 1));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - extent));
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
                 .print("<td width=\"100%\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
 
-        int range = maximum - minimum;
-        horizontalArea(d, "#eeeeff", value * 100 / range);
-        horizontalArea(d, "#cccccc", extent * 100 / range);
-        horizontalArea(d, "#eeeeff", (range - value - extent) * 100 / range);
+        int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
+        firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
+        firstDirectPage = Math.max(firstDirectPage, 0);
+
+        for (int i = 0; i < Math.min(sb.getDirectPages(), sb.getPageCount() - firstDirectPage); i++) {
+            int page = firstDirectPage + i;
+            d.print("<td>");
+            writePage(d, sb, page);
+            d.print("</td>\n");
+        }
 
         d.print("</tr></tbody></table></td>\n")
                 .print("<td width=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
 
         d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + 1));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + extent));
         d.print("</td>\n");
         d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD_BLOCK][0], "" + (Math.min(last, value + blockIncrement)));
-        d.print("</td>\n");
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + last);
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + (maximum + 1 - extent));
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
                 .print("</tr></tbody></table>");
     }
 
-    private void horizontalArea(Device d, String s, int v) throws IOException {
-        d.print("<td style=\"background-color: ");
-        d.print(s);
-        d.print("\" width=\"");
-        d.print(v + "%");
-        d.print("\"></td>\n");
-    }
-
-    private void writeButton(Device device, SScrollBar scrollBar, SIcon icon, String event) throws IOException {
-        boolean childSelectorWorkaround = !scrollBar.getSession().getUserAgent().supportsChildSelector();
-        boolean showAsFormComponent = scrollBar.getShowAsFormComponent();
+    private void writePage(Device device, SPageScroller pageScroller, int page) throws IOException {
+        boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsChildSelector();
+        boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
         if (showAsFormComponent)
             device.print("<button type=\"submit\" name=\"")
-                    .print(Utils.event(scrollBar))
+                    .print(Utils.event(pageScroller))
+                    .print("\" value=\"")
+                    .print("" + (page * pageScroller.getExtent()))
+                    .print("\"");
+        else
+            device.print("<a href=\"")
+                    .print(pageScroller.getRequestURL()
+                    .addParameter(Utils.event(pageScroller) + "=" + page * pageScroller.getExtent()).toString())
+                    .print("\"");
+        device.print(">");
+
+        device.print(Integer.toString(page + 1));
+
+        if (showAsFormComponent)
+            device.print("</button>\n");
+        else
+            device.print("</a>\n");
+    }
+
+    private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event) throws IOException {
+        boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsChildSelector();
+        boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
+
+        if (showAsFormComponent)
+            device.print("<button type=\"submit\" name=\"")
+                    .print(Utils.event(pageScroller))
                     .print("\" value=\"")
                     .print(event)
                     .print("\"");
         else
             device.print("<a href=\"")
-                    .print(scrollBar.getRequestURL()
-                    .addParameter(Utils.event(scrollBar) + "=" + event).toString())
+                    .print(pageScroller.getRequestURL()
+                    .addParameter(Utils.event(pageScroller) + "=" + event).toString())
                     .print("\"");
         device.print(">");
 

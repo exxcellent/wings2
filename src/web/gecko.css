@@ -7,9 +7,10 @@ BODY {
 }
 
 table {
+    border-collapse: collapse;
     padding: 0px;
     margin: 0px;
-    border-collapse: collapse;
+    border: none;
 }
 
 div, form, td, th {
@@ -17,11 +18,24 @@ div, form, td, th {
     background-color: inherit;
     padding: 0px;
     margin: 0px;
+    border: none;
+    font: inherit;
 }
 
 a, button {
     display: table;
-    border: none;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    color: inherit;
+    background-color: inherit;
+}
+
+img {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    vertical-align: middle;
 }
 
 A:link, A:visited {
@@ -37,11 +51,6 @@ A:active {
 HR { 
    margin-top: 0;
    margin-bottom: 0 
-}
-
-IMG {
-    border: none !important;
-    vertical-align: middle;
 }
 
 TH, TD {
@@ -300,9 +309,34 @@ div.SList > * > li[selected="true"] {
    color: #000000;
 }
 
-.SScrollBar {
-	font-size: 1px;
-	border-width: 0px;
+div.SScrollBar {
+    height: 100%;
+    width: 100%;
+    background-color: #eeeeff;
+}
+
+div.SScrollBar > table[orientation="vertical"] {
+    height: 100%;
+}
+
+div.SScrollBar > table[orientation="horizontal"] {
+    width: 100%;
+}
+
+div.SScrollBar > table[orientation="vertical"] > tbody > tr > td > table > tbody > tr > td {
+    width: 14px;
+}
+
+div.SScrollBar > table[orientation="horizontal"] > tbody > tr > td > table > tbody > tr > td {
+    height: 14px;
+}
+
+div.SScrollBar button, div.SScrollBar a {
+   border: 1px solid #cccccc;
+}
+
+div.SScrollBar button:hover, div.SScrollBar a:hover {
+   border: 1px outset #cccccc;
 }
 
 .selection {

@@ -200,15 +200,22 @@ public abstract class SComponent
      *
      * @param f the frame
      */
-    protected void setParentFrame(SFrame f) {
-        if (f != parentFrame) {
+    protected void setParentFrame(SFrame parentFrame) {
+        if (this.parentFrame == parentFrame)
+            return;
+
+        if (this.parentFrame != null)
             unregister();
-            parentFrame = f;
+
+        this.parentFrame = parentFrame;
+
+        if (this.parentFrame != null)
             register();
-            if (this.popupMenu != null)
-                popupMenu.setParentFrame(parentFrame);
-            reload();
-        }
+
+        if (this.popupMenu != null)
+            popupMenu.setParentFrame(parentFrame);
+
+        reload();
     }
 
     public void setInheritsPopupMenu(boolean inheritsPopupMenu) {
@@ -216,7 +223,7 @@ public abstract class SComponent
         this.inheritsPopupMenu = inheritsPopupMenu;
     }
 
-    public boolean isInheritsPopupMenu() {
+    public boolean getInheritsPopupMenu() {
         return inheritsPopupMenu;
     }
 
@@ -230,7 +237,7 @@ public abstract class SComponent
     }
 
     public SPopupMenu getComponentPopupMenu() {
-        if (!isInheritsPopupMenu())
+        if (!getInheritsPopupMenu())
             return popupMenu;
 
         if (popupMenu == null) {

@@ -20,78 +20,11 @@ import org.wings.plaf.ScrollBarCG;
  * @version $Revision$
  */
 public class SScrollBar
-        extends SAbstractAdjustable {
-    /**
-     * Access to the default Icons for buttons
-     */
-    public static final int FORWARD = 0;
-    public static final int BACKWARD = 1;
-    public static final int FORWARD_BLOCK = 2;
-    public static final int BACKWARD_BLOCK = 3;
-    public static final int FIRST = 4;
-    public static final int LAST = 5;
-
-    /**
-     * contains the clickables forward, backward, blockforward, blockbackward,
-     * first, last
-     */
-    protected SClickable[] clickables = new SClickable[6];
-
-    // 2 orientations, 6 directions (FORWARD, BACKWARD,...) 
-    // and the Icons
-    private final static SIcon[][][] DEFAULT_ICONS = new SIcon[2][6][SClickable.ICON_COUNT];
-
-    // Initialisiert (laedt) die Default Images
-    static {
-        String[] postfixes = new String[6];
-        String[] prefixes = new String[6];
-        for (int orientation = 0; orientation < 2; orientation++) {
-            prefixes[BACKWARD] = "";
-            prefixes[FORWARD] = "";
-            prefixes[FIRST] = "Margin";
-            prefixes[LAST] = "Margin";
-            prefixes[FORWARD_BLOCK] = "Block";
-            prefixes[BACKWARD_BLOCK] = "Block";
-            if (orientation == SConstants.VERTICAL) {
-                postfixes[BACKWARD] = "Up";
-                postfixes[FORWARD] = "Down";
-                postfixes[FIRST] = "Up";
-                postfixes[LAST] = "Down";
-                postfixes[BACKWARD_BLOCK] = "Up";
-                postfixes[FORWARD_BLOCK] = "Down";
-            } else {
-                postfixes[BACKWARD] = "Left";
-                postfixes[FORWARD] = "Right";
-                postfixes[FIRST] = "Left";
-                postfixes[LAST] = "Right";
-                postfixes[BACKWARD_BLOCK] = "Left";
-                postfixes[FORWARD_BLOCK] = "Right";
-            }
-
-            for (int direction = 0; direction < postfixes.length; direction++) {
-                DEFAULT_ICONS[orientation][direction][SClickable.ENABLED_ICON] =
-                        new SResourceIcon("org/wings/icons/"
-                        + prefixes[direction]
-                        + "Scroll"
-                        + postfixes[direction] + ".gif");
-                DEFAULT_ICONS[orientation][direction][SClickable.DISABLED_ICON] =
-                        new SResourceIcon("org/wings/icons/Disabled"
-                        + prefixes[direction]
-                        + "Scroll"
-                        + postfixes[direction] + ".gif");
-                DEFAULT_ICONS[orientation][direction][SClickable.PRESSED_ICON] =
-                        new SResourceIcon("org/wings/icons/Pressed"
-                        + prefixes[direction]
-                        + "Scroll"
-                        + postfixes[direction] + ".gif");
-                DEFAULT_ICONS[orientation][direction][SClickable.ROLLOVER_ICON] =
-                        new SResourceIcon("org/wings/icons/Rollover"
-                        + prefixes[direction]
-                        + "Scroll"
-                        + postfixes[direction] + ".gif");
-            }
-        }
-    }
+        extends SAbstractAdjustable
+{
+    boolean marginVisisble;
+    boolean stepVisisble;
+    boolean blockVisisble;
 
     /**
      * Creates a scrollbar with the specified orientation,
@@ -113,12 +46,6 @@ public class SScrollBar
      */
     public SScrollBar(int orientation, int value, int extent, int min, int max) {
         super(value, extent, min, max);
-
-        for (int i = 0; i < clickables.length; i++) {
-            clickables[i] = new SClickable();
-            clickables[i].setEventTarget(this);
-        }
-
         setOrientation(orientation);
     }
 
@@ -150,179 +77,32 @@ public class SScrollBar
         this(SConstants.VERTICAL);
     }
 
-    public void resetIcons() {
-        for (int i = 0; i < clickables.length; i++)
-            clickables[i].setIcons(DEFAULT_ICONS[orientation][i]);
+    public boolean isMarginVisisble() {
+        return marginVisisble;
     }
 
-    /**
-     * to set your favorite icons and text of the clickable. Icons will be
-     * reset to default, if you change the orientation {@link #setOrientation}
-     *
-     * @see #FORWARD
-     * @see #BACKWARD
-     * @see #FORWARD_BLOCK
-     * @see #BACKWARD_BLOCK
-     * @see #FIRST
-     * @see #LAST
-     */
-    public SClickable getClickable(int clickable) {
-        return clickables[clickable];
+    public void setMarginVisisble(boolean marginVisisble) {
+        this.marginVisisble = marginVisisble;
     }
 
-    /**
-     * Are margin buttons visible
-     *
-     * @see #FIRST
-     * @see #LAST
-     */
-    public final boolean isMarginVisible() {
-        return clickables[FIRST].isVisible() ||
-                clickables[LAST].isVisible();
+    public boolean isStepVisisble() {
+        return stepVisisble;
     }
 
-    /**
-     * Are margin buttons visible
-     *
-     * @see #FIRST
-     * @see #LAST
-     */
-    public final void setMarginVisible(boolean b) {
-        clickables[FIRST].setVisible(b);
-        clickables[LAST].setVisible(b);
+    public void setStepVisisble(boolean stepVisisble) {
+        this.stepVisisble = stepVisisble;
     }
 
-
-    /**
-     * Are step buttons visible
-     *
-     * @see #FORWARD
-     * @see #BACKWARD
-     */
-    public final boolean isStepVisible() {
-        return clickables[BACKWARD].isVisible() ||
-                clickables[FORWARD].isVisible();
+    public boolean isBlockVisisble() {
+        return blockVisisble;
     }
 
-
-    /**
-     * Are step buttons visible
-     *
-     * @see #FORWARD
-     * @see #BACKWARD
-     */
-    public final void setStepVisible(boolean b) {
-        clickables[FORWARD].setVisible(b);
-        clickables[BACKWARD].setVisible(b);
-    }
-
-    /**
-     * Are block buttons visible
-     *
-     * @see #FORWARD_BLOCK
-     * @see #BACKWARD_BLOCK
-     */
-    public final void setBlockVisible(boolean b) {
-        clickables[FORWARD_BLOCK].setVisible(b);
-        clickables[BACKWARD_BLOCK].setVisible(b);
-    }
-
-    /**
-     * Are block buttons visible
-     *
-     * @see #FORWARD_BLOCK
-     * @see #BACKWARD_BLOCK
-     */
-    public final boolean isBlockVisible() {
-        return clickables[BACKWARD_BLOCK].isVisible() ||
-                clickables[FORWARD_BLOCK].isVisible();
-    }
-
-    public void setOrientation(int orientation) {
-        super.setOrientation(orientation);
-        resetIcons();
-        initLayout();
-    }
-
-    protected void initLayout() {
-        removeAll();
-
-        SPanel backward = null;
-        SPanel forward = null;
-        if (orientation == SConstants.VERTICAL) {
-            backward = new SPanel(new SFlowDownLayout());
-            add(backward);
-
-            forward = new SPanel(new SFlowDownLayout());
-            add(forward);
-        } else {
-            backward = new SPanel(new SFlowLayout());
-            add(backward);
-
-            forward = new SPanel(new SFlowLayout());
-            add(forward);
-        }
-
-        backward.add(clickables[FIRST]);
-        backward.add(clickables[BACKWARD_BLOCK]);
-        backward.add(clickables[BACKWARD]);
-
-        forward.add(clickables[FORWARD]);
-        forward.add(clickables[FORWARD_BLOCK]);
-        forward.add(clickables[LAST]);
-    }
-
-    protected void refreshComponents() {
-        // lower bound
-        clickables[BACKWARD].setEnabled(getValue() > getMinimum());
-        clickables[FIRST].setEnabled(clickables[BACKWARD].isEnabled());
-        clickables[BACKWARD_BLOCK].setEnabled(clickables[BACKWARD].isEnabled());
-
-        if (clickables[BACKWARD].isEnabled()) {
-            clickables[BACKWARD].setEvent(getEventParameter(getValue() - 1));
-            int first = getMinimum();
-            clickables[FIRST].setEvent(getEventParameter(first));
-            int blockValue = Math.max(first,
-                    getValue() - getBlockIncrement());
-            clickables[BACKWARD_BLOCK].setEvent(getEventParameter(blockValue));
-        }
-
-        // upper bound: maximum - extent
-        clickables[FORWARD].setEnabled(getValue() < getMaximum() - getExtent());
-        clickables[LAST].setEnabled(clickables[FORWARD].isEnabled());
-        clickables[FORWARD_BLOCK].setEnabled(clickables[FORWARD].isEnabled());
-
-        if (clickables[FORWARD].isEnabled()) {
-            clickables[FORWARD].setEvent(getEventParameter(getValue() + 1));
-            int last = getMaximum() - getExtent();
-            clickables[LAST].setEvent(getEventParameter(last));
-            int blockValue = Math.min(last,
-                    getValue() + getBlockIncrement());
-            clickables[FORWARD_BLOCK].setEvent(getEventParameter(blockValue));
-        }
-    }
-
-    /**
-     * Enables the component so that the knob position can be changed.
-     * When the disabled, the knob position cannot be changed.
-     *
-     * @param x a boolean value, where true enables the component and
-     *          false disables it
-     */
-    public void setEnabled(boolean x) {
-        super.setEnabled(x);
-        for (int i = 0; i < clickables.length; i++)
-            clickables[i].setEnabled(x);
+    public void setBlockVisisble(boolean blockVisisble) {
+        this.blockVisisble = blockVisisble;
     }
 
     public void setCG(ScrollBarCG cg) {
         super.setCG(cg);
-    }
-
-    public void setShowAsFormComponent(boolean showAsFormComponent) {
-        super.setShowAsFormComponent(showAsFormComponent);
-        for (int i = 0; i < clickables.length; i++)
-            clickables[i].setShowAsFormComponent(showAsFormComponent);
     }
 
     public String toString() {

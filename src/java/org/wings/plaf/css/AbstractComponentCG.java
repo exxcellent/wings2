@@ -154,7 +154,7 @@ public abstract class AbstractComponentCG
     protected void writePostfix(Device device, SComponent component) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
 
-        boolean backup = component.isInheritsPopupMenu();
+        boolean backup = component.getInheritsPopupMenu();
         component.setInheritsPopupMenu(false);
 
         if (component.getComponentPopupMenu() != null)
