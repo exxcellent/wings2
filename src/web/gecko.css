@@ -15,6 +15,12 @@ BODY {
     height: 100%;
 }
 
+div {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+        
+
 table {
     border-collapse: collapse;
     padding: 0px;
@@ -36,7 +42,6 @@ textarea, input[type="text"], select {
 }
 
 a, button {
-/*display: table;*/
     border: 0px;
     padding: 0px;
     margin: 0px;
@@ -59,12 +64,12 @@ A:link, A:visited {
 
 A:active {
     color: #0000FF;
-    text-decoration: none
+    text-decoration: none;
 }
 
 HR { 
      margin-top: 0;
-     margin-bottom: 0
+     margin-bottom: 0;
 }
 
 TH, TD {
@@ -75,38 +80,47 @@ div.SLabel {
     font-size: 12px;
     color: #000044;
 	white-space: nowrap;
+	display: table-cell;
 }
 
 div.SButton {
     font-size: 12px;
     color: #000044;
 	white-space: nowrap;
+	display: table-cell;
 }
 
 div.SButton > button {
-   border: 1px solid #cccccc;
-   background-color: #eeeeff;
+    border: 1px solid #cccccc;
+    background-color: #eeeeff;
 }
 
 div.SButton > button:hover {
-   border: 1px outset #cccccc;
+    border: 1px outset #cccccc;
 }
 
 div.SButton > button[disabled="true"] * {
-   opacity: 0.7;
+    opacity: 0.7;
 }
 
 div.SButton > button:hover[disabled="true"] {
-   border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
 }
 
+/*div.SClickable {
+	display: table-cell;
+}*/
+
 div.SClickable > button {
-   background-color: inherit;
-   border: 1px none;
+    background-color: inherit;
+    border: 1px none;
 }
 
 div.SClickable > button:hover {
-   border: 1px solid gray;
+    border: 1px solid gray;
+}
+
+div.SToolbar {
 }
 
 div.SToolbar > table {
@@ -185,6 +199,7 @@ ul.STree > li > div.SSubTree {
 	background-repeat:repeat-y;
 	background-position: 0px 100px;
 }
+
 div.STable > table {
     width: 100%;
     border: 1px solid black;
@@ -221,13 +236,14 @@ div.STable > table > tbody > tr > td button {
     padding: 0px
 }
 
-div.SList > * {
-}
-
 div.SList > * > li[selected="true"] {
     background-color: #f6decc !important;
     border: 1px dotted black;
     cursor: pointer
+}
+
+div.SMenuBar {
+    text-align:left;
 }
 
 .SAnchor {
@@ -281,7 +297,16 @@ div.SList > * > li[selected="true"] {
 	position: absolute;
 	overflow: visible;
 	padding: 2px 2px 2px 0px;
-	margin: 0px;
+}
+
+div.pdmenu > div {
+	padding: 0px 10px 0px 0px;
+    width: 100%;
+}
+
+div.pdmenu > div > img {
+    position: absolute;
+    right: 0px;
 }
 
 .menuitem {
@@ -457,10 +482,10 @@ table.SBorderLayout {
     height: 100%;
 }
 
-table.SBorderLayout > tbody > tr > td {
+/*table.SBorderLayout > tbody > tr > td {
     vertical-align: middle;
     text-align: center;
-}
+}*/
 
 .legend {
    position: absolute;
@@ -494,6 +519,7 @@ div.SInternalFrame > table > tbody > tr > * {
 }
 
 div.SDialog {
+   display: table-cell;
    border: 1px solid #cccccc;
 }
 
@@ -513,6 +539,7 @@ div.SDialog > table > tbody > tr > * {
 }
 
 div.SOptionPane {
+	display: table-cell;
    border: 1px solid #cccccc;
 }
 
