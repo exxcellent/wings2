@@ -25,7 +25,6 @@ import org.wings.io.Device;
 import org.wings.io.DeviceFactory;
 import org.wings.io.ServletDevice;
 import org.wings.resource.DynamicCodeResource;
-import org.wings.util.DebugUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -33,6 +32,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Locale;
 
@@ -555,7 +556,7 @@ final class SessionServlet
 
             res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
-            errorStackTraceLabel.setText(DebugUtil.getStackTraceString(e));
+            errorStackTraceLabel.setText(getStackTraceString(e));
             errorMessageLabel.setText(e.getMessage());
             errorFrame.write(new ServletDevice(out));
         } catch (Exception ex) {
@@ -622,6 +623,13 @@ final class SessionServlet
         }
     }
 
+    private String getStackTraceString(Throwable e) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        stringWriter.getBuffer().setLength(0);
+        e.printStackTrace(printWriter);
+        return stringWriter.toString();
+    }
 }
 
 
