@@ -84,17 +84,16 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
 
         device.print(">");
 
-        final boolean preformatted = (component instanceof SLabel) && ((SLabel)component).isPreformattedText();
         if (showAsFormComponent && !useIconsInForm && text == null)
             inputTypeCheckbox(device, button);
         else if (icon != null && text == null)
             writeIcon(device, icon);
         else if (text != null && icon == null)
-            writeText(device, text, preformatted);
+            writeText(device, text);
         else if (text != null) {
             new IconTextCompound() {
                 protected void text(Device device) throws IOException {
-                    writeText(device, text, preformatted);
+                    writeText(device, text);
                 }
 
                 protected void icon(Device device) throws IOException {

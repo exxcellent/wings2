@@ -101,16 +101,15 @@ public class ButtonCG
 
         final String text = button.getText();
         final SIcon icon = getIcon(button);
-        final boolean preformatted = (component instanceof SLabel) && ((SLabel)component).isPreformattedText();
 
         if (icon == null && text != null)
-            writeText(device, text, preformatted);
+            writeText(device, text);
         else if (icon != null && text == null)
             writeIcon(device, icon);
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
-                    writeText(d, text, preformatted);
+                    writeText(d, text);
                 }
 
                 protected void icon(Device d) throws IOException {
