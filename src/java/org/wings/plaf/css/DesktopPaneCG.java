@@ -7,7 +7,6 @@ import org.wings.SConstants;
 import org.wings.SDesktopPane;
 import org.wings.SInternalFrame;
 import org.wings.io.Device;
-import org.wings.plaf.AbstractComponentCG;
 import org.wings.plaf.CGManager;
 
 import java.io.IOException;

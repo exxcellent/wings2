@@ -7,7 +7,6 @@ import org.wings.SConstants;
 import org.wings.SMenuBar;
 import org.wings.SMenuItem;
 import org.wings.io.Device;
-import org.wings.plaf.AbstractComponentCG;
 
 import java.io.IOException;
 

@@ -112,38 +112,31 @@
     <option name="HIDE_WARNINGS" value="false" />
   </component>
   <component name="FileEditorManager" split-orientation="vertical" split-proportion="0.5">
-    <first-group selected-file="file://$PROJECT_DIR$/src/java/org/wings/plaf/AbstractComponentCG.java">
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/PopupMenuCG.java" pinned="false">
-        <provider selected="true" editor-type-id="text-editor">
-          <state line="34" column="49" selection-start="1799" selection-end="1799" vertical-scroll-proportion="0.2651515">
-            <folding />
-          </state>
-        </provider>
-      </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/AbstractComponentCG.java" pinned="false">
-        <provider selected="true" editor-type-id="text-editor">
-          <state line="142" column="0" selection-start="4647" selection-end="4647" vertical-scroll-proportion="0.68401486">
-            <folding />
-          </state>
-        </provider>
-      </entry>
+    <first-group selected-file="file://$PROJECT_DIR$/src/java/org/wings/SComponent.java">
       <entry file="file://$PROJECT_DIR$/src/java/org/wings/SComponent.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="198" column="0" selection-start="5628" selection-end="5628" vertical-scroll-proportion="0.5037879">
+          <state line="49" column="22" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.22727273">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/MenuCG.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/AbstractComponentCG.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="45" column="0" selection-start="2535" selection-end="2535" vertical-scroll-proportion="0.5681818">
+          <state line="65" column="51" selection-start="1954" selection-end="1954" vertical-scroll-proportion="0.78066915">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/Menu.js" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/web/WEB-INF/org.wings.plaf.css.properties" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="80" column="47" selection-start="2106" selection-end="2106" vertical-scroll-proportion="0.49242425">
+          <state line="83" column="3" selection-start="3603" selection-end="3603" vertical-scroll-proportion="0.8921933">
+            <folding />
+          </state>
+        </provider>
+      </entry>
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/STabbedPane.java" pinned="false">
+        <provider selected="true" editor-type-id="text-editor">
+          <state line="105" column="17" selection-start="2901" selection-end="2901" vertical-scroll-proportion="0.34217173">
             <folding />
           </state>
         </provider>
@@ -155,32 +148,37 @@
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SPopupMenu.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SFrameSet.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="58" column="0" selection-start="1295" selection-end="1295" vertical-scroll-proportion="0.94423795">
-            <folding>
-              <element signature="imports" expanded="true" />
-            </folding>
-          </state>
-        </provider>
-      </entry>
-      <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/PopupExample.java" pinned="false">
-        <provider selected="true" editor-type-id="text-editor">
-          <state line="20" column="38" selection-start="501" selection-end="501" vertical-scroll-proportion="0.3345725">
+          <state line="33" column="40" selection-start="897" selection-end="897" vertical-scroll-proportion="0.3345725">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/WingSet.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/session/Session.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="190" column="47" selection-start="7032" selection-end="7032" vertical-scroll-proportion="0.70075756">
+          <state line="616" column="56" selection-start="19388" selection-end="19388" vertical-scroll-proportion="0.12887236">
             <folding />
           </state>
         </provider>
       </entry>
-      <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/MenuExample.java" pinned="false">
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SFrame.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="57" column="0" selection-start="1675" selection-end="1675" vertical-scroll-proportion="0.3219697">
+          <state line="247" column="34" selection-start="6956" selection-end="6956" vertical-scroll-proportion="0.12887236">
+            <folding />
+          </state>
+        </provider>
+      </entry>
+      <entry file="file://$PROJECT_DIR$/src/java/org/wings/SRootContainer.java" pinned="false">
+        <provider selected="true" editor-type-id="text-editor">
+          <state line="49" column="5" selection-start="1834" selection-end="1834" vertical-scroll-proportion="0.14745973">
+            <folding />
+          </state>
+        </provider>
+      </entry>
+      <entry file="file://$PROJECT_DIR$/src/web/gecko.css" pinned="false">
+        <provider selected="true" editor-type-id="text-editor">
+          <state line="61" column="18" selection-start="867" selection-end="867" vertical-scroll-proportion="0.65799254">
             <folding />
           </state>
         </provider>
@@ -204,13 +202,12 @@
     <expanded_node url="" module="wings" type="module" />
   </component>
   <component name="ProjectPane">
-    <expanded_node url="file://$PROJECT_DIR$/src/java/org/wings" module="wings" type="directory" />
+    <expanded_node url="" module="wingset" type="module" />
     <expanded_node url="file://$PROJECT_DIR$/src/java" module="wings" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src" module="wings" type="directory" />
+    <expanded_node url="" module="wings" type="module" />
     <expanded_node url="file://$PROJECT_DIR$/src/java/org/wings/plaf/css" module="wings" type="directory" />
     <expanded_node url="file://$PROJECT_DIR$" module="wings" type="directory" />
-    <expanded_node url="" module="wings" type="module" />
-    <expanded_node url="" module="wingset" type="module" />
+    <expanded_node url="file://$PROJECT_DIR$/src" module="wings" type="directory" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" splitterProportion="0.5">
@@ -441,7 +438,7 @@
       <option name="OPEN_IN_BROWSER_URL" value="/" />
       <option name="COMMON_VM_ARGUMENTS" value="" />
     </configuration>
-    <configuration name="wingset" default="false" selected="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat" RunnerId="Run">
+    <configuration name="wingset" default="false" selected="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat">
       <option name="CATALINA_BASE" value="" />
       <option name="WORKING_DIRECTORY" />
       <option name="HOST" value="localhost" />
@@ -493,10 +490,6 @@
       <option name="OPEN_IN_BROWSER" value="false" />
       <option name="OPEN_IN_BROWSER_URL" value="http://localhost:9090//" />
       <option name="COMMON_VM_ARGUMENTS" value="" />
-      <RunnerSettings>
-        <option name="DEBUG_PORT" value="" />
-      </RunnerSettings>
-      <RunnerSettings />
     </configuration>
   </component>
   <component name="SelectInManager">
@@ -552,11 +545,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1400" height="1016" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.32960895" order="8" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.2829486" order="0" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.2323157" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.54525137" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.24944155" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.32960895" order="8" />
@@ -679,68 +672,47 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SMenuItem.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/LookAndFeel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="548" selection-end="548" vertical-scroll-proportion="0.11771995">
+        <state line="114" column="26" selection-start="3700" selection-end="3700" vertical-scroll-proportion="0.3808438">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/PopupMenuCG.java">
+    <entry file="file://$PROJECT_DIR$/etc/custom-build.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="278" selection-end="278" vertical-scroll-proportion="0.26022306">
+        <state line="14" column="0" selection-start="388" selection-end="388" vertical-scroll-proportion="0.24590164">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SMenu.java">
+    <entry file="jar:///usr/java/jdk1.5.0/src.zip!/java/lang/Class.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="5" selection-start="1063" selection-end="1063" vertical-scroll-proportion="0.38537794">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/LabelExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="39" selection-start="920" selection-end="920" vertical-scroll-proportion="0.29739776">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/web/WEB-INF/org.wings.plaf.css.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="49" selection-start="2602" selection-end="2602" vertical-scroll-proportion="0.72490704">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/MenuExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="0" selection-start="1675" selection-end="1675" vertical-scroll-proportion="0.3219697">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/WingSet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="190" column="47" selection-start="7032" selection-end="7032" vertical-scroll-proportion="0.70075756">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/PopupExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="38" selection-start="501" selection-end="501" vertical-scroll-proportion="0.3345725">
+        <state line="210" column="27" selection-start="8318" selection-end="8318" vertical-scroll-proportion="1.011043">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java/org/wings/SPopupMenu.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="0" selection-start="1295" selection-end="1295" vertical-scroll-proportion="0.94423795">
+        <state line="58" column="0" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.9927711">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/wingset/src/java/wingset/PopupExample.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="38" selection-start="497" selection-end="497" vertical-scroll-proportion="0.3253012">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/STabbedPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="105" column="17" selection-start="2901" selection-end="2901" vertical-scroll-proportion="0.34217173">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -751,37 +723,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SFrameSet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="40" selection-start="897" selection-end="897" vertical-scroll-proportion="0.3345725">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/session/Session.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="616" column="56" selection-start="19388" selection-end="19388" vertical-scroll-proportion="0.12887236">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="247" column="34" selection-start="6956" selection-end="6956" vertical-scroll-proportion="0.12887236">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/web/gecko.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="18" selection-start="867" selection-end="867" vertical-scroll-proportion="0.65799254">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/SRootContainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="49" column="5" selection-start="1834" selection-end="1834" vertical-scroll-proportion="0.14745973">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/java/org/wings/SComponent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="198" column="0" selection-start="5628" selection-end="5628" vertical-scroll-proportion="0.5037879">
+        <state line="49" column="22" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.22727273">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/Menu.js">
+    <entry file="file://$PROJECT_DIR$/src/web/WEB-INF/org.wings.plaf.css.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="47" selection-start="2106" selection-end="2106" vertical-scroll-proportion="0.49242425">
+        <state line="83" column="3" selection-start="3603" selection-end="3603" vertical-scroll-proportion="0.8921933">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/AbstractComponentCG.java">
+    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/AbstractComponentCG.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="0" selection-start="4647" selection-end="4647" vertical-scroll-proportion="0.68401486">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/MenuCG.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="0" selection-start="2535" selection-end="2535" vertical-scroll-proportion="0.5681818">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/org/wings/plaf/css/PopupMenuCG.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="49" selection-start="1799" selection-end="1799" vertical-scroll-proportion="0.2651515">
+        <state line="65" column="51" selection-start="1954" selection-end="1954" vertical-scroll-proportion="0.78066915">
           <folding />
         </state>
       </provider>

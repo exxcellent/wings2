@@ -7,7 +7,6 @@ import org.wings.SConstants;
 import org.wings.SFormattedTextField;
 import org.wings.STextField;
 import org.wings.io.Device;
-import org.wings.plaf.AbstractComponentCG;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 

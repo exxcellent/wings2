@@ -7,7 +7,6 @@ import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.io.Device;
-import org.wings.plaf.AbstractComponentCG;
 
 import java.io.IOException;
 

@@ -21,7 +21,7 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 public class ScrollPaneCG
-    extends org.wings.plaf.AbstractComponentCG
+    extends org.wings.plaf.css.AbstractComponentCG
     implements org.wings.plaf.ScrollPaneCG {
     public void installCG(SComponent component) {
     }

@@ -449,15 +449,6 @@ public abstract class SComponent
     }
 
     /**
-     * Watch components beeing garbage collected.
-     */
-    /* comment out, unless explicitly debugged ..
-       protected void finalize() {
-       System.out.println("finalize " + getClass().getName());
-       }
-    */
-
-    /**
      * Set the class of the laf-provided style.
      * @param value the new value for style
      */

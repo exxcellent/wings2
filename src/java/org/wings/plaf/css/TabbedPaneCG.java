@@ -9,7 +9,6 @@ import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.STabbedPane;
 import org.wings.io.Device;
-import org.wings.plaf.AbstractComponentCG;
 import org.wings.session.Browser;
 import org.wings.session.SessionManager;
 

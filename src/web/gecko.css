@@ -10,6 +10,8 @@ BODY {
 }
 
 table {
+    padding: 0px;
+    margin: 0px;
     border-collapse: collapse;
 }
 div, form, td, th {
@@ -20,8 +22,7 @@ div, form, td, th {
 }
 
 a, button {
-    padding: 0px;
-    margin: 0px;
+    display: table;
 }
 
 A:link, A:visited {
@@ -376,6 +377,7 @@ div.STabbedPane, div.STabbedPane > table {
     height: 100%;
 }
 div.STabbedPane > table > tbody > tr > th > * {
+    display: inline;
     border: 1px solid black;
     padding-left: 8px;
     padding-right: 8px;

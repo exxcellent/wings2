@@ -8,7 +8,6 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.io.Device;
-import org.wings.plaf.AbstractComponentCG;
 
 public class ContainerCG
     extends AbstractComponentCG

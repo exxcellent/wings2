@@ -8,7 +8,6 @@ import org.wings.SAnchor;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.io.Device;
-import org.wings.plaf.AbstractComponentCG;
 
 import java.io.IOException;
 

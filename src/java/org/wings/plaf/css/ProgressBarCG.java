@@ -4,7 +4,6 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
-import org.wings.plaf.AbstractComponentCG;
 import org.wings.plaf.CGManager;
 
 import java.io.IOException;

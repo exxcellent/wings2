@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
  */
 public class ScrollBarCG
-    extends org.wings.plaf.AbstractComponentCG
+    extends org.wings.plaf.css.AbstractComponentCG
     implements org.wings.plaf.ScrollBarCG {
     public static final int SCROLLBAR_STEPS = 15;
     /*

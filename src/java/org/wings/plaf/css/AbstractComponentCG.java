@@ -12,12 +12,13 @@
  * Please see COPYING for the complete licence.
  */
 
-package org.wings.plaf;
+package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SPopupMenu;
+import org.wings.plaf.ComponentCG;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
@@ -45,18 +46,13 @@ public abstract class AbstractComponentCG
      * @param component the component
      */
     public void installCG(SComponent component) {
-        String className = component.getClass().getName();
-        className = className.substring(className.lastIndexOf(".") + 1);
+        Class clazz = component.getClass();
+        while (!"org.wings".equals(clazz.getPackage().getName()))
+            clazz = clazz.getSuperclass();
 
-        // default style class name
-        String style = component.getClass().getName();
+        String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);
-
-        CGManager manager = component.getSession().getCGManager();
-        String value = (String)manager.getObject("style" + ".style", String.class);
-        if (value == null)
-            value = style;
-        component.setStyle(value);
+        component.setStyle(style);
     }
 
     /**
@@ -87,12 +83,19 @@ public abstract class AbstractComponentCG
             .print(component.getStyle());
 
         final SDimension dim = component.getPreferredSize();
-        if (dim != null)
-            device
-                .print("\" style=\"width:")
-                .print(dim.width)
-                .print("; height:")
-                .print(dim.height);
+        if (dim != null) {
+            device.print("\" style=\"");
+            if (dim.width != null)
+                device
+                    .print("width:")
+                    .print(dim.width)
+                    .print(";");
+            if (dim.height != null)
+                device
+                    .print("height:")
+                    .print(dim.height)
+                    .print(";");
+        }
 
         String toolTip = component.getToolTipText();
         if (toolTip != null)
