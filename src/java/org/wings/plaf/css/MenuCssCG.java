@@ -17,12 +17,8 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
-import org.wings.script.JavaScriptListener;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
 

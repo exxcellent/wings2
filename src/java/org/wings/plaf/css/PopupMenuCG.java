@@ -14,14 +14,11 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.script.JavaScriptListener;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.wings.plaf.MenuBarCG {
 

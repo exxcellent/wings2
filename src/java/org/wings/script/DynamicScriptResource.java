@@ -16,7 +16,6 @@ package org.wings.script;
 import org.wings.SComponent;
 import org.wings.SContainer;
 import org.wings.SFrame;
-import org.wings.SPopupMenu;
 import org.wings.io.Device;
 import org.wings.resource.DynamicResource;
 import org.wings.util.ComponentVisitor;

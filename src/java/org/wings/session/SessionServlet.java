@@ -37,7 +37,6 @@ import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * The servlet engine creates for each user a new HttpSession. This

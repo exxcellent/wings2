@@ -21,7 +21,6 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
-import org.wings.plaf.PrefixAndSuffixDelegate;
 import org.wings.script.ScriptListener;
 import org.wings.session.LowLevelEventDispatcher;
 import org.wings.session.Session;

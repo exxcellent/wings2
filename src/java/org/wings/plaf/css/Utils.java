@@ -18,7 +18,6 @@ import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.plaf.CGManager;
 import org.wings.script.ScriptListener;
-import org.wings.session.SessionManager;
 import org.wings.style.Style;
 
 import java.awt.*;

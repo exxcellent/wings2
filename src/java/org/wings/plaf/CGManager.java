@@ -19,7 +19,6 @@ import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLayoutManager;
 import org.wings.plaf.PrefixAndSuffixDelegate;
-import org.wings.session.BrowserType;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 import org.wings.style.Style;

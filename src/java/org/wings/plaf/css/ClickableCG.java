@@ -18,7 +18,6 @@ import org.wings.SClickable;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
-import org.wings.SLabel;
 import org.wings.io.Device;
 
 import java.io.IOException;

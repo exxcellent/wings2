@@ -16,9 +16,6 @@ package org.wings;
 //import javax.swing.*;
 
 import org.wings.plaf.LabelCG;
-import org.wings.style.AttributeSet;
-import org.wings.style.CSSSelector;
-import org.wings.style.Style;
 
 /**
  * A display area for a short text string or an image, or both.

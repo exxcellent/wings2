@@ -19,7 +19,6 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SMenu;
 import org.wings.SMenuBar;
-import org.wings.SMenuItem;
 import org.wings.io.Device;
 
 import java.io.IOException;
