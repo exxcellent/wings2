@@ -596,9 +596,9 @@ float:left;
 clear:right;
 }
 
-/* gives the menu enough space below for 2 columns */
-div.SMenuBar .spacer {
-padding-bottom: 3.5em;
+/* clears the menu */
+div.SMenuBar div.spacer {
+clear: both;
 }
 
 div.SMenuBar_css a, div.SMenuBar_css span{

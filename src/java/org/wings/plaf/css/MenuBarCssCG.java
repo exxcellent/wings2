@@ -37,6 +37,7 @@ public class MenuBarCssCG
         SMenuBar mbar = (SMenuBar) component;
         int mcount = mbar.getComponentCount();
 
+        device.print("<div class=\"spacer\"></div>");
         device.print("<div width=\"100%\"");
         Utils.optAttribute(device, "class", component.getStyle() + "_css");
         if ( mcount > 0 &&  mbar.getComponent(0).getHorizontalAlignment() == SConstants.RIGHT_ALIGN ) {
