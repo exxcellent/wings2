@@ -142,7 +142,13 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             String tooltip = tabbedPane.getToolTipText();
             if (konquerorWorkaround)
                 title = nonBreakingSpaces(title);
-
+            
+            /*
+             * needed here so that the tabs can be wrapped. else they are in
+             * one long line. noticed in firefox and konqueror.
+             */
+            device.print("\n");
+            
             if (showAsFormComponent)
                 device.print("<button name=\"")
                         .print(Utils.event(tabbedPane))

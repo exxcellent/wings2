@@ -13,27 +13,13 @@
  */
 package wingset;
 
-import java.awt.Color;
+import org.wings.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.tree.DefaultTreeModel;
 
-import org.wings.SBorderLayout;
-import org.wings.SButtonGroup;
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SForm;
-import org.wings.SLabel;
-import org.wings.SList;
-import org.wings.SRadioButton;
-import org.wings.SResourceIcon;
-import org.wings.SScrollBar;
-import org.wings.SScrollPane;
-import org.wings.SScrollPaneLayout;
-import org.wings.STable;
-import org.wings.STree;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -46,7 +32,6 @@ public class ScrollPaneExample
     private STable table;
     private STree tree;
     private SScrollPane scrollPane;
-    static final SResourceIcon javaCup = new SResourceIcon("org/wings/icons/JavaCup.gif");
 
     public SComponent createExample() {
         table = new STable(new TableExample.ROTableModel(15, 15));
@@ -54,7 +39,7 @@ public class ScrollPaneExample
         table.setDefaultRenderer(new TableExample.MyCellRenderer());
 
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
-        tree.setName("scrolltree");
+        tree.setName("tree in scrollpane");
         tree.setShowAsFormComponent(false);
         
         scrollPane = new SScrollPane(table);
@@ -77,8 +62,6 @@ public class ScrollPaneExample
      * @param table
      */
     protected void showInPane(SComponent comp) {
-        //scrollPane.removeAll();
-        //scrollPane.add(comp);
         scrollPane.setViewportView(comp);
     }
     
