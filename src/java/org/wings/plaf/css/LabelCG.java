@@ -38,7 +38,7 @@ public class LabelCG
                 protected void icon(Device d) throws IOException {
                     writeIcon(d, icon);
                 }
-            }.writeCompound(device, horizontalTextPosition, verticalTextPosition);
+            }.writeCompound(device, component, horizontalTextPosition, verticalTextPosition);
         }
     }
 

@@ -285,7 +285,11 @@ public class TreeCG
 
         final int depth = component.getMaximumExpandedDepth();
 
-        device.print("<table>");
+        if (component.getPreferredSize() != null)
+            device.print("<table style=\"width:100%; height:100%; overflow:auto\">");
+        else
+            device.print("<table>");
+        
         for (int i = start; i < count; ++i) {
             writeTreeNode(component, device, i, depth);
         }

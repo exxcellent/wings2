@@ -43,8 +43,8 @@ public class ListCG
 
         device.write(__select);
         org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(list));
-        org.wings.plaf.Utils.optAttribute(device, "size", list.getVisibleRowCount());
         org.wings.plaf.Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
+        org.wings.plaf.Utils.optAttribute(device, "size", list.getVisibleRowCount());
         org.wings.plaf.Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SConstants.MULTIPLE_SELECTION) ? "multiple" : null);
         org.wings.plaf.Utils.optAttribute(device, "focus", list.getComponentId());
 
@@ -56,6 +56,10 @@ public class ListCG
         if (list.getListSelectionListeners().length > 0) {
             list.addScriptListener(selectListener);
         }
+
+        final SDimension dim = list.getPreferredSize();
+        if (dim != null)
+            device.print(" style=\"width:100%; height: 100%\"");
 
         Utils.writeEvents(device, list);
 
@@ -81,13 +85,10 @@ public class ListCG
             org.wings.plaf.xhtml.Utils.writeAttributes(stringBufferDevice, renderer);
             String styleString = stringBufferDevice.toString();
             if (styleString != null && styleString.length() > 0) {
-
                 device.write(__style);
                 org.wings.plaf.Utils.write(device, styleString);
-
                 device.write(___1);
             }
-
             device.write(">".getBytes());
 
             if (renderer != null) {
@@ -115,11 +116,9 @@ public class ListCG
         }
 
         device.write(__select_1);
-
         device.write(__input_type_hid);
         org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(list));
         org.wings.plaf.Utils.optAttribute(device, "value", -1);
-
         device.write(___2);
     }
 
@@ -142,6 +141,9 @@ public class ListCG
         org.wings.plaf.Utils.write(device, list.getType());
         org.wings.plaf.Utils.optAttribute(device, "type", list.getOrderType());
         org.wings.plaf.Utils.optAttribute(device, "start", list.getStart());
+
+        if (list.getPreferredSize() != null)
+            device.print(" style=\"width:100%; height:100%; overflow:auto\"");
         device.print(">");
 
         javax.swing.ListModel model = list.getModel();

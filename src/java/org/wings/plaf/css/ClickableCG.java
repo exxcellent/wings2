@@ -53,7 +53,7 @@ public class ClickableCG
                 protected void icon(Device d) throws IOException {
                     writeIcon(d, icon);
                 }
-            }.writeCompound(device, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+            }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
         if (button.getShowAsFormComponent())

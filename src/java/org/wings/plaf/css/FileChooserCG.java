@@ -37,9 +37,13 @@ public class FileChooserCG
 
         // maxLength = maxContent removed, since it does not work.
         device.write(__input_type_fil);
-        org.wings.plaf.css.Utils.writeEvents(device, component);
+
+        if (component.getPreferredSize() != null)
+            device.print(" style=\"width:100%\"");
+
         org.wings.plaf.Utils.optAttribute(device, "size", columns);
         org.wings.plaf.Utils.optAttribute(device, "accept", component.getFileNameFilter());
+
         if (component.isEnabled()) {
             device.write(__name);
             org.wings.plaf.Utils.write(device, Utils.event(component));
@@ -48,11 +52,10 @@ public class FileChooserCG
             org.wings.plaf.Utils.write(device, component.getComponentId());
             device.write(__);
         }
-        else {
+        else
             device.write(__readonly_1);
-        }
+
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-        org.wings.plaf.Utils.optAttribute(device, "class", Utils.style(component));
 
         Utils.writeEvents(device, component);
         device.write("/>".getBytes());

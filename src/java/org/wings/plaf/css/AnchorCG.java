@@ -22,6 +22,10 @@ public class AnchorCG
         device.write("<a href=\"".getBytes());
         device.print(anchor.getURL());
         device.print("\"");
+
+        if (anchor.getPreferredSize() != null)
+            device.print(" style=\"width:100%; height: 100%\"");
+
         org.wings.plaf.Utils.optAttribute(device, "target", anchor.getTarget());
         org.wings.plaf.Utils.optAttribute(device, "name", anchor.getName());
         org.wings.plaf.Utils.optAttribute(device, "tabindex", anchor.getFocusTraversalIndex());

@@ -92,7 +92,7 @@ public class CheckBoxCG
                     else
                         writeIcon(device, icon);
                 }
-            }.writeCompound(device, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+            }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
         if (showAsFormComponent && useIconsInForm)

@@ -170,10 +170,9 @@ public class TableCG
         SDimension intercellSpacing = table.getIntercellSpacing();
 
         device.write(__table);
-        if (dim != null) {
-            org.wings.plaf.Utils.optAttribute(device, "width", dim.width);
-            org.wings.plaf.Utils.optAttribute(device, "height", dim.height);
-        }
+        if (component.getPreferredSize() != null)
+            device.print(" style=\"width:100%; height: 100%\"");
+
         /* Tweaking: CG configured to have a fixed border="xy" width */
         org.wings.plaf.Utils.optAttribute(device, "border", fixedTableBorderWidth);
         org.wings.plaf.Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? intercellSpacing.width : null));

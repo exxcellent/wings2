@@ -74,6 +74,10 @@ public class FormCG
         org.wings.plaf.Utils.optAttribute(device, "class", Utils.style(component));
         org.wings.plaf.Utils.optAttribute(device, "enctype", component.getEncodingType());
         org.wings.plaf.Utils.optAttribute(device, "action", component.getRequestURL());
+
+        if (component.getPreferredSize() != null)
+            device.print(" style=\"width:100%; height: 100%\"");
+
         device.write(__input_type_ima);
         org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.write(__width_0_height);

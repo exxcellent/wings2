@@ -52,6 +52,9 @@ public class ComboBoxCG
         org.wings.plaf.Utils.optAttribute(device, "tabindex", comboBox.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "focus", comboBox.getComponentId());
 
+        if (comboBox.getPreferredSize() != null)
+            device.print(" style=\"width:100%\"");
+
         if (!comboBox.isEnabled()) {
             device.write(__disabled_1);
         }

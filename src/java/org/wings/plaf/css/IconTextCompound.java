@@ -3,6 +3,7 @@
  */
 package org.wings.plaf.css;
 
+import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.io.Device;
 
@@ -14,52 +15,56 @@ import java.io.IOException;
  */
 public abstract class IconTextCompound
     implements SConstants {
-    public void writeCompound(Device d, int horizontal, int vertical) throws IOException {
+    public void writeCompound(Device device, SComponent component, int horizontal, int vertical) throws IOException {
         if (horizontal == NO_ALIGN)
             horizontal = RIGHT;
         if (vertical == NO_ALIGN)
             vertical = CENTER;
         boolean order = vertical == TOP || (vertical == CENTER && horizontal == LEFT);
 
-        d.print("<table>");
+        if (component.getPreferredSize() != null)
+            device.print("<table style=\"width:100%; height: 100%\">");
+        else
+            device.print("<table>");
+        
         if (vertical == TOP && horizontal == LEFT ||
             vertical == BOTTOM && horizontal == RIGHT) {
-            d.print("<tr><td>");
-            first(d, order);
-            d.print("</td><td></td></tr><tr><td></td><td>");
-            last(d, order);
-            d.print("</td></tr>");
+            device.print("<tr><td>");
+            first(device, order);
+            device.print("</td><td></td></tr><tr><td></td><td>");
+            last(device, order);
+            device.print("</td></tr>");
         }
         else if (vertical == TOP && horizontal == RIGHT ||
             vertical == BOTTOM && horizontal == LEFT) {
-            d.print("<tr><td></td><td>");
-            first(d, order);
-            d.print("</td></tr><tr><td>");
-            last(d, order);
-            d.print("</td><td></td></tr>");
+            device.print("<tr><td></td><td>");
+            first(device, order);
+            device.print("</td></tr><tr><td>");
+            last(device, order);
+            device.print("</td><td></td></tr>");
         }
         else if (vertical == TOP && horizontal == CENTER ||
             vertical == BOTTOM && horizontal == CENTER) {
-            d.print("<tr><td>");
-            first(d, order);
-            d.print("</td></tr><tr><td>");
-            last(d, order);
-            d.print("</td></tr>");
+            device.print("<tr><td>");
+            first(device, order);
+            device.print("</td></tr><tr><td>");
+            last(device, order);
+            device.print("</td></tr>");
         }
         else if (vertical == CENTER && horizontal == LEFT ||
             vertical == CENTER && horizontal == RIGHT) {
-            d.print("<tr><td>");
-            first(d, order);
-            d.print("</td><td>");
-            last(d, order);
-            d.print("</td></tr>");
+            device.print("<tr><td>");
+            first(device, order);
+            device.print("</td><td>");
+            last(device, order);
+            device.print("</td></tr>");
         }
         else {
             System.out.println("WARNING");
             System.out.println("horizontal = " + horizontal);
             System.out.println("vertical = " + vertical);
         }
-        d.print("</table>");
+        device.print("</table>");
     }
 
     private void first(Device d, boolean order) throws IOException {

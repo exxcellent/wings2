@@ -24,6 +24,8 @@ public class ResetButtonCG
         final SResetButton component = (SResetButton)_c;
 
         device.write(__input_type_res);
+        if (component.getPreferredSize() != null)
+            device.print(" style=\"width:100%; height: 100%\"");
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "value", component.getText());
         Utils.writeEvents(device, component);

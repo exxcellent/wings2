@@ -514,7 +514,6 @@ public abstract class SAbstractButton
     public String getMnemonic() {
         return mnemonic;
     }
-
 }
 
 /*
