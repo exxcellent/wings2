@@ -151,7 +151,6 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             List headers = frame.headers();
             String encoding = SessionManager.getSession().getCharacterEncoding();
 
-
             if ("MSIE".equals(browser.getBrowserName()) &&
                 browser.getMajorVersion() < 4) {
                 device.write("<html>\n".getBytes());
@@ -215,6 +214,19 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
                 }
                 device.write("\n".getBytes());
             }
+
+            // TODO: move this to a dynamic script resource
+            SToolTipManager toolTipManager = component.getSession().getToolTipManager();
+            device
+                .print("<script>\n")
+                .print("domTT_addPredefined('default', 'caption', false");
+            if (toolTipManager.isFollowMouse())
+                device.print(", 'trail', true");
+            device.print(", 'delay', ").print(toolTipManager.getInitialDelay());
+            device.print(", 'lifetime', ").print(toolTipManager.getDismissDelay());
+            device
+                .print(");\n")
+                .print("</script>\n");
 
             device.write("</head>\n".getBytes());
             device.write("<body ".getBytes());

@@ -94,11 +94,10 @@ public abstract class AbstractComponentCG
                 .print(dim.height);
 
         String toolTip = component.getToolTipText();
-        if (toolTip != null) {
+        if (toolTip != null)
             device.print("\" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
                 .print(toolTip)
-                .print("', 'trail', true, 'lifetime', 3000));");
-        }
+                .print("', 'predefined', 'default'));");
 
         device
             .print("\">\n");

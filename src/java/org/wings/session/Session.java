@@ -15,10 +15,7 @@
 package org.wings.session;
 
 
-import org.wings.DefaultReloadManager;
-import org.wings.ReloadManager;
-import org.wings.SContainer;
-import org.wings.SFrame;
+import org.wings.*;
 import org.wings.event.*;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
@@ -67,6 +64,8 @@ public class Session
     private final SessionStatistics statistics = new SessionStatistics();
 
     private CGManager CGManager = new CGManager();
+
+    private SToolTipManager toolTipManager = new SToolTipManager();
 
     private ReloadManager reloadManager = null;
 
@@ -285,6 +284,10 @@ public class Session
 
     public CGManager getCGManager() {
         return CGManager;
+    }
+
+    public SToolTipManager getToolTipManager() {
+        return toolTipManager;
     }
 
     /**
@@ -805,7 +808,6 @@ public class Session
             WingsStatistics.getStatistics().decrementAllocatedSessionCount();
         } // end of if ()
     }
-
 }
 
 /*
