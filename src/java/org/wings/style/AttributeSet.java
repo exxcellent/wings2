@@ -227,6 +227,44 @@ public class AttributeSet
     }
 
     /**
+     * Write style definition to the device. If include is true, write those
+     * contained in the {@link List}. If include is false, write those not contained
+     * in the {@link List}.
+     * Basically this is a filter on the styles, so we can separate styles for
+     * one logical component onto multiple real html elements.  
+     */
+    public void writeFiltered(Device d, List l, boolean include) throws IOException {
+        if (l == null) l = Collections.EMPTY_LIST;
+        if (map != null) {
+            Iterator names = map.entrySet().iterator();
+            while (names.hasNext()) {
+                Map.Entry next = (Map.Entry) names.next();
+                if ( !(l.contains(next.getKey()) ^ include) ) {
+                    d.print(next.getKey()).print(":")
+                            .print(next.getValue())
+                            .print("; ");
+                }
+            }
+        }
+    }
+    
+    /**
+     * Write style definition to the device. Write only those not contained
+     * in the set.
+     */
+    public void writeExcluding(Device d, List l) throws IOException {
+        writeFiltered(d, l, false);
+    }
+
+    /**
+     * Write style definition to the device. Write only those  contained
+     * in the set.
+     */
+    public void writeIncluding(Device d, List l) throws IOException {
+        writeFiltered(d, l, true);
+    }
+
+    /**
      * Write style definition to the device
      */
     public void write(Device d)

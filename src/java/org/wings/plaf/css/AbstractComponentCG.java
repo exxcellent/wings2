@@ -36,7 +36,7 @@ import java.io.Serializable;
  */
 public abstract class AbstractComponentCG implements ComponentCG, SConstants, Serializable {
     private final static transient Log log = LogFactory.getLog(AbstractComponentCG.class);
-
+    
     protected AbstractComponentCG() {
     }
 
@@ -78,14 +78,16 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" -->");
         device.print("<div id=\"").print(component.getName()).print("\"");
         Utils.optAttribute(device, "class", component.getStyle());
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        device.print(">"); // div
+        device.print("<div id=\"").print(component.getName()).print("\"");
+        Utils.optAttribute(device, "class", component.getStyle());
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
             device.print(" event=\"")
                     .print(lowLevelEventListener.getEncodedLowLevelEventId()).print("\"");
         }
-
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         String toolTip = component.getToolTipText();
         if (toolTip != null)
@@ -152,6 +154,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         component.setInheritsPopupMenu(backup);
 
+        device.print("</div>");
         device.print("</div>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
