@@ -17,6 +17,7 @@ package org.wings.session;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -94,8 +95,6 @@ public final class LowLevelEventDispatcher
     }
 
     /**
-     * TODO: documentation
-     *
      * TODO:
      * This should remove the GetListener from the HashMap, not the Names of
      * the GetListener (Names may change)
@@ -124,12 +123,9 @@ public final class LowLevelEventDispatcher
      * in the HTTP request.
      */
     public boolean dispatch(String name, String[] values) {
-        /*
-          System.out.println("Dispatcher LLE: " + name);
-          for (int i = 0; i < values.length; ++i) {
-          System.out.println("\t"+i+"="+values[i]);
-          }
-        */
+        if (logger.isLoggable(Level.FINER))
+            logger.finer("dispatch " + name + " = " + Arrays.asList(values));
+
         boolean result = false;
         int dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
         String epoch = null;
@@ -138,16 +134,6 @@ public final class LowLevelEventDispatcher
         if (dividerIndex > 0) {
             epoch = name.substring(0, dividerIndex);
             name = name.substring(dividerIndex + 1);
-
-            if (logger.isLoggable(Level.FINER)) {
-                StringBuffer buffer = new StringBuffer("dispatch ");
-                buffer.append(epoch);
-                buffer.append(SConstants.UID_DIVIDER);
-                buffer.append(name);
-                buffer.append(": ");
-                buffer.append(StringUtil.delimitedString(values));
-                logger.finer(buffer.toString());
-            }
         }
 
         // make ImageButtons work in Forms .. browsers return

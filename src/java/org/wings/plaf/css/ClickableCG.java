@@ -19,7 +19,9 @@ public class ClickableCG
 
         if (button.getShowAsFormComponent()) {
             device.print("<button type=\"submit\" name=\"");
-            org.wings.plaf.Utils.write( device, button.getURL());
+            Utils.write( device, button.getEventTarget().getEncodedLowLevelEventId());
+            device.print("\" value=\"");
+            Utils.write( device, button.getEvent());
             device.print("\"");
             org.wings.plaf.Utils.optAttribute( device, "tabindex", button.getFocusTraversalIndex());
             org.wings.plaf.Utils.optAttribute( device, "title", button.getToolTipText());

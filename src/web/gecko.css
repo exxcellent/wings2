@@ -452,3 +452,11 @@ table.SBorderLayout > tbody > tr > td {
     vertical-align: middle;
     text-align: center;
 }
+
+.legend {
+   position: absolute;
+   margin-top: -1.7em;
+   margin-left: 1.0em;
+   padding-left: 0.4em;
+   padding-right: 0.4em;
+}

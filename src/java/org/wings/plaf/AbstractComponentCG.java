@@ -18,6 +18,7 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.border.SBorder;
+import org.wings.border.STitledBorder;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -75,16 +76,13 @@ public abstract class AbstractComponentCG
         return selector;
     }
 
-    // TODO: javascript listener
+    // TODO: tooltip
     protected void writePrefix(Device device, SComponent component) throws IOException {
         device
             .print("<div id=\"")
             .print(component.getComponentId())
             .print("\" class=\"")
             .print(component.getStyle());
-
-        final SBorder border = component.getBorder();
-        //borderStyle(border);
 
         final SDimension dim = component.getPreferredSize();
         if (dim != null)
@@ -96,6 +94,17 @@ public abstract class AbstractComponentCG
 
         device
             .print("\">\n");
+
+        final SBorder border = component.getBorder();
+        if (border instanceof STitledBorder) {
+            STitledBorder titledBorder = (STitledBorder)border;
+
+            device.print("<div class=\"legend\" style=\"");
+            titledBorder.getTitleAttributes().write(device);
+            device.print("\">");
+            device.print(titledBorder.getTitle());
+            device.print("</div>");
+        }
 
         component.fireRenderEvent(SComponent.START_RENDERING);
     }

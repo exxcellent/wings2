@@ -14,27 +14,9 @@
 
 package org.wings;
 
-import java.awt.Adjustable;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.AdjustmentListener;
-import java.awt.event.AdjustmentEvent;
-import java.io.Serializable;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.swing.BoundedRangeModel;
-import javax.swing.DefaultBoundedRangeModel;
-import javax.swing.Icon;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-
-import org.wings.plaf.*;
-import org.wings.io.Device;
+import org.wings.plaf.ScrollBarCG;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -57,8 +39,7 @@ public class SScrollBar
 
     // 2 orientations, 6 directions (FORWARD, BACKWARD,...) 
     // and the Icons
-    private final static SIcon[][][] DEFAULT_ICONS =
-        new SIcon[2][6][SClickable.ICON_COUNT];
+    private final static SIcon[][][] DEFAULT_ICONS = new SIcon[2][6][SClickable.ICON_COUNT];
 
     // Initialisiert (laedt) die Default Images
     static {
@@ -170,14 +151,9 @@ public class SScrollBar
         this(SConstants.VERTICAL);
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
     public void resetIcons() {
-        for ( int i=0; i<clickables.length; i++ ) {
+        for ( int i=0; i<clickables.length; i++ )
             clickables[i].setIcons(DEFAULT_ICONS[orientation][i]);
-        } 
     }
 
     /**
@@ -262,10 +238,8 @@ public class SScrollBar
         initLayout();
     }
 
-    protected void initLayout()
-    {
+    protected void initLayout() {
         removeAll();
-
 
         SPanel backward = null;
         SPanel forward = null;
@@ -326,15 +300,13 @@ public class SScrollBar
      * Enables the component so that the knob position can be changed.
      * When the disabled, the knob position cannot be changed.
      *
-     * @param b a boolean value, where true enables the component and
+     * @param x a boolean value, where true enables the component and
      *          false disables it
      */
     public void setEnabled(boolean x)  {
         super.setEnabled(x);
-        SComponent[] children = getComponents();
-        for(int i = 0; i < children.length; i++) {
-            children[i].setEnabled(x);
-        }
+        for(int i = 0; i < clickables.length; i++)
+            clickables[i].setEnabled(x);
     }
 
     public void setCG(ScrollBarCG cg) {
@@ -343,22 +315,12 @@ public class SScrollBar
 
     public void setShowAsFormComponent(boolean showAsFormComponent) {
         super.setShowAsFormComponent(showAsFormComponent);
-        for(int i = 0; i < clickables.length; i++) {
+        for(int i = 0; i < clickables.length; i++)
             clickables[i].setShowAsFormComponent(showAsFormComponent);
-        }
     }
 
     public String toString()
     {
-        return "SScrollBar[orientation=" +
-            ((orientation == SComponent.HORIZONTAL)?"horizontal":"vertical") + "]";
+        return "SScrollBar[orientation=" + ((orientation == SComponent.HORIZONTAL)?"horizontal":"vertical") + "]";
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

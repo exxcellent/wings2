@@ -15,13 +15,11 @@
 package wingset;
 
 import org.wings.*;
-import org.wings.border.SBevelBorder;
-import org.wings.border.SBorder;
-import org.wings.border.SLineBorder;
-import org.wings.border.STitledBorder;
+import org.wings.border.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -32,10 +30,10 @@ public class BorderExample
 {
     private static final SIcon WAIT_ICON = new SResourceIcon("org/wings/icons/Wait.gif");
 
-    static final SBorder raised  = new SBevelBorder(SBevelBorder.RAISED);
-    static final SBorder lowered = new SBevelBorder(SBevelBorder.LOWERED);
-    static final SBorder line    = new SLineBorder(3);
-    static final SBorder titled  = new STitledBorder("This is a title ...");
+    static final SBorder raised  = new SBevelBorder(SBevelBorder.RAISED, new Insets(10, 0, 10, 20));
+    static final SBorder lowered = new SBevelBorder(SBevelBorder.LOWERED, new Insets(10, 0, 10, 20));
+    static final SBorder line    = new SLineBorder(2, new Insets(10, 0, 10, 20));
+    static final SBorder titled  = new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(10, 0, 10, 20)), "This is a title");
 
     public SComponent createExample() {
         SPanel p1 = new SPanel();
@@ -50,7 +48,7 @@ public class BorderExample
         SPanel p = p1;
 
         final SLabel borderLabel = new SLabel(WAIT_ICON);
-        borderLabel.setBackground(new java.awt.Color(180, 180, 255));
+        borderLabel.setBackground(new Color(222, 222, 222));
         p.add(borderLabel, "BorderExample");
 
         SPanel buttons = new SPanel();

@@ -29,52 +29,33 @@ import org.wings.plaf.*;
  * @version $Revision$
  */
 public class SRadioButton
-    extends SAbstractButton
-{
-    /**
-     * TODO: documentation
-     *
-     */
+    extends SAbstractButton {
     public SRadioButton() {
         setType(RADIOBUTTON);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param label
-     */
     public SRadioButton(String label) {
         super(label, RADIOBUTTON);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param selected
-     */
     public SRadioButton(boolean selected) {
         this();
         setSelected(selected);
     }
 
     public String getLowLevelEventId() {
-        if ( getGroup()!=null && isRenderedAsFormInput() ) {
+        if (getGroup() != null && getShowAsFormComponent()) {
             return getGroup().getComponentId();
-        } else {
+        }
+        else {
             return super.getLowLevelEventId();
         } // end of if ()
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param t
-     */
     public void setType(String t) {
-        if ( !RADIOBUTTON.equals(t) )
+        if (!RADIOBUTTON.equals(t))
             throw new IllegalArgumentException("type change not supported, type is fix: radiobutton");
-        
+
         super.setType(t);
     }
 
@@ -82,44 +63,42 @@ public class SRadioButton
         super.setCG(cg);
     }
 
-    protected boolean isRenderedAsFormInput() {
-        return getShowAsFormComponent() &&
-            getIcon()==null;
-    }
-
     public void processLowLevelEvent(String action, String[] values) {
         boolean origSelected = isSelected();
 
-        if ( isRenderedAsFormInput() ) {
-            if ( getGroup()==null ) {
+        if (getShowAsFormComponent()) {
+            if (getGroup() == null) {
                 // one hidden and one checked event from the form says select
                 // it, else deselect it (typically only the hidden event)
-                setSelected(values.length==2);
-            } else {
+                setSelected(values.length == 2);
+            }
+            else {
                 int eventCount = 0;
-                for ( int i=0; i<values.length; i++) {
+                for (int i = 0; i < values.length; i++) {
                     // check the count of events, which are for me - with a
                     // button group, the value is my component id, if a event is
                     // for me   
-                    if ( getComponentId().equals(values[i]) ) {
+                    if (getComponentId().equals(values[i])) {
                         eventCount++;
                     } // end of if ()
                 } // end of for (int i=0; i<; i++)
                 // one hidden and one checked event from the form says select
                 // it, else deselect it (typically only the hidden event)
-                setSelected(eventCount==2);
+                setSelected(eventCount == 2);
             } // end of if ()
-        } else {
-            if ( getGroup()!=null ) {
+        }
+        else {
+            if (getGroup() != null) {
                 getGroup().setDelayEvents(true);
                 setSelected(parseSelectionToggle(values[0]));
                 getGroup().setDelayEvents(false);
-            } else {
+            }
+            else {
                 setSelected(parseSelectionToggle(values[0]));
             } // end of else
-        }        
- 
-        if ( isSelected()!=origSelected ) {
+        }
+
+        if (isSelected() != origSelected) {
             // got an event, that is a select...
             SForm.addArmedComponent(this);
         } // end of if ()
@@ -131,44 +110,36 @@ public class SRadioButton
      * for me.
      */
     protected boolean parseSelectionToggle(String toggleParameter) {
-	// a button/image in a form has no value, so just toggle selection...
-	if ( getShowAsFormComponent() ) {
-	    return !isSelected();
-	} // end of if ()
+        // a button/image in a form has no value, so just toggle selection...
+        if (getShowAsFormComponent()) {
+            return !isSelected();
+        } // end of if ()
 
-	if ( "1".equals(toggleParameter) )
-	    return true;
-	else if ( "0".equals(toggleParameter) )
-	    return false;
-	
-	
-	// don't change...
-	return isSelected();
+        if ("1".equals(toggleParameter))
+            return true;
+        else if ("0".equals(toggleParameter))
+            return false;
+
+
+        // don't change...
+        return isSelected();
     }
 
     public String getSelectionParameter() {
-        if ( getGroup()!=null && isRenderedAsFormInput() ) {
+        if (getGroup() != null && getShowAsFormComponent()) {
             return getComponentId();
-        } else {
+        }
+        else {
             return "1";
-        } 
+        }
     }
-  
+
     public String getDeselectionParameter() {
-        if ( getGroup()!=null && isRenderedAsFormInput() ) {
+        if (getGroup() != null && getShowAsFormComponent()) {
             return getComponentId();
-        } else {
+        }
+        else {
             return "0";
-        } 
+        }
     }
-
-
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

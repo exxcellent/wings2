@@ -23,8 +23,6 @@ import java.awt.event.AdjustmentListener;
 import java.io.Serializable;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -32,19 +30,10 @@ public abstract class SAbstractAdjustable
     extends SContainer
     implements Adjustable, LowLevelEventListener
 {
-    /**
-     * TODO: documentation
-     */
     public static final int UNIT = 0;
 
-    /**
-     * TODO: documentation
-     */
     public static final int BLOCK = 1;
 
-    /**
-     * TODO: documentation
-     */
     public static final int MARGIN = 2;
 
     /**
@@ -455,12 +444,6 @@ public abstract class SAbstractAdjustable
         System.out.println("name = " + name);
         System.out.println("name = " + name);
         System.out.println("name = " + name);
-        // is it for me ?
-        /*
-        if ( !name.startsWith(getComponentId()) ) {
-            return;
-        }
-        */
 
         getModel().setDelayEvents(true);
         for ( int i=0; i<values.length; i++ ) {
@@ -470,9 +453,9 @@ public abstract class SAbstractAdjustable
                 // ignore
             }
         }
-        getModel().setDelayEvents(false);
 
         SForm.addArmedComponent(this);
+        getModel().setDelayEvents(false);
     }
 
     public void fireIntermediateEvents() {
@@ -549,11 +532,6 @@ public abstract class SAbstractAdjustable
      * value are considered equivalent.
      */
     private class ModelListener implements ChangeListener, Serializable {
-        /**
-         * TODO: documentation
-         *
-         * @param e
-         */
         public void stateChanged(ChangeEvent e)   {
             int id = AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED;
             int type = AdjustmentEvent.TRACK;
