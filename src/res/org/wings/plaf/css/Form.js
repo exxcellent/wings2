@@ -79,13 +79,16 @@ function requestFocus(id) {
             return;
         }
     }
-    var elements = div.getElementsByTagName("BUTTON");
-    for (var i = 0; i < elements.length; i++) {
-        if (elements[i].getAttribute("focus") == id) {
-            elements[i].focus();
-            return;
-        }
-    }
+    /* this produces javascript errors on konqueror, so hide (2005-03-11) */
+    if (!(navigator.userAgent.toLowerCase().indexOf('konqueror') + 1)) {
+	    var elements = div.getElementsByTagName("BUTTON");
+	    for (var i = 0; i < elements.length; i++) {
+	        if (elements[i].getAttribute("focus") == id) {
+	            elements[i].focus();
+	            return;
+	        }
+	    }
+	}
 }
 
 function getCookie(name)
