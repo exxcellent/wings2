@@ -25,11 +25,15 @@ import org.wings.plaf.PanelCG;
  */
 public class SPanel
         extends SContainer {
+
     public SPanel() {
+        //setPreferredSize(new SDimension(SDimension.FULL_SIZE, SDimension.AUTO));
+        // Nope -- Panels should expand to 100% where possible, but block only the minimum dimension!
     }
 
     public SPanel(SLayoutManager l) {
         super(l);
+        //setPreferredSize(new SDimension(SDimension.FULL_SIZE, SDimension.AUTO));
     }
 
     public void setCG(PanelCG cg) {

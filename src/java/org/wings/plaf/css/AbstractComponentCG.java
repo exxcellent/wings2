@@ -84,7 +84,7 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
             device.print("\" style=\"");
             if (dim.isWidthDefined())
                 device.print("width:").print(dim.getWidth());
-            if (dim.isHeigthDefined())
+            if (dim.isHeightDefined())
                 device.print(" height:").print(dim.getHeight());
         }
 

@@ -31,21 +31,40 @@ public class SDimension
         implements Serializable {
 
     /**
-     * Constant for CSS dimension 'auto'.
+     * Integer constant for CSS dimension 'auto'.
      * This is the default width used by wings as well as by CSS capable browsers.
      */
-    public final static int AUTO = -1;
+    public final static int AUTO_VALUE = -1;
+
     /**
-     * Constant for CSS dimension 'inherit'.
+     * String constant for CSS dimension 'auto'.
+     * This is the default width used by wings as well as by CSS capable browsers.
+     */
+    public final static String AUTO = "auto";
+
+    /**
+     * Integer constant for CSS dimension 'inherit'.
      * With this value the preferred size is inherited by the surrounding element.
      */
-    public final static int INHERIT = -2;
+    public final static int INHERIT_VALUE = -2;
+
+    /**
+     * String for CSS dimension 'inherit'.
+     * With this value the preferred size is inherited by the surrounding element.
+     */
+    public final static String INHERIT = "inherit";
+
+    /**
+     * A convenience String constant for a full size width/height ("100%").
+     */
+    public final static String FULL_SIZE = "100%";
+
 
     private final transient static Log log = LogFactory.getLog(SDimension.class);
-    private int width = AUTO;
-    private int height = AUTO;
-    private boolean widthIsAbsolute = true;
-    private boolean heightIsAbsolute = true;
+    private int width = AUTO_VALUE;
+    private int height = AUTO_VALUE;
+    private boolean widthIsAbsolute = false;
+    private boolean heightIsAbsolute = false;
 
     public SDimension() {
     }
@@ -76,7 +95,7 @@ public class SDimension
      */
     public void setWidth(String widthString) {
         this.width = getIntValue(widthString);
-        this.widthIsAbsolute = getAbsoluteValue(widthString);
+        this.widthIsAbsolute = isAbsoluteSize(widthString);
     }
 
     /**
@@ -118,7 +137,7 @@ public class SDimension
      * @return true if a width other than {@link SDimension.AUTO} is defined
      */
     public boolean isWidthDefined() {
-        return width != AUTO;
+        return width != AUTO_VALUE;
     }
 
     /**
@@ -134,7 +153,7 @@ public class SDimension
      * @return true if {@link #getWidthInt()} is a px width, false if it is a percentage width
      */
     public boolean isWidthIsAbsolute() {
-        return widthIsAbsolute;
+        return width >= 0 ?  widthIsAbsolute : false;
     }
 
 
@@ -155,7 +174,7 @@ public class SDimension
      */
     public void setHeight(String heightString) {
         this.height = getIntValue(heightString);
-        this.heightIsAbsolute = getAbsoluteValue(heightString);
+        this.heightIsAbsolute = isAbsoluteSize(heightString);
     }
 
     /**
@@ -184,8 +203,8 @@ public class SDimension
      *
      * @return true if a height other than {@link SDimension.AUTO} is defined
      */
-    public boolean isHeigthDefined() {
-        return height != AUTO;
+    public boolean isHeightDefined() {
+        return height != AUTO_VALUE;
     }
 
 
@@ -202,7 +221,7 @@ public class SDimension
      * @return true if {@link #getHeightInt()} is a px width, false if it is a percentage width
      */
     public boolean isHeightIsAbsolute() {
-        return heightIsAbsolute;
+        return height >= 0 ? heightIsAbsolute : false;
     }
 
 
@@ -213,24 +232,24 @@ public class SDimension
      */
     protected int getIntValue(String sizeString) {
         if (sizeString == null)
-            return AUTO;
-        if (sizeString.trim().equalsIgnoreCase("auto"))
-            return AUTO;
-        if (sizeString.trim().equalsIgnoreCase("inherit"))
-            return INHERIT;
+            return AUTO_VALUE;
+        if (sizeString.trim().equalsIgnoreCase(AUTO))
+            return AUTO_VALUE;
+        if (sizeString.trim().equalsIgnoreCase(INHERIT))
+            return INHERIT_VALUE;
         try {
             return new DecimalFormat().parse(sizeString, new ParsePosition(0)).intValue();
         } catch (Exception e) {
             log.warn("Can not parse [" + sizeString + "]", e);
         }
-        return AUTO;
+        return AUTO_VALUE;
     }
 
     protected String toString(int size, boolean isAbsolute) {
-        if (size == AUTO)
-            return "auto";
-        else if (size == INHERIT)
-            return "inherit";
+        if (size == AUTO_VALUE)
+            return AUTO;
+        else if (size == INHERIT_VALUE)
+            return INHERIT;
         else if (isAbsolute)
             return Integer.toString(size) + "px";
         else
@@ -243,8 +262,11 @@ public class SDimension
      *
      * @return false, if String ends with "%", true otherwise
      */
-    protected boolean getAbsoluteValue(String dimensionString) {
-        return dimensionString.trim().endsWith("%");
+    protected boolean isAbsoluteSize(String dimensionString) {
+        if (dimensionString != null)
+            return !dimensionString.trim().endsWith("%");
+        else
+            return true;
     }
 
 

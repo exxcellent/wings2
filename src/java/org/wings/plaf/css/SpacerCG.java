@@ -14,7 +14,10 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SIcon;
+import org.wings.SResourceIcon;
+import org.wings.SSpacer;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -27,14 +30,14 @@ public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.Spac
 
     public void writeContent(final Device device, final SComponent c) throws IOException {
         final SSpacer component = (SSpacer) c;
-        String height = component.getPreferredSize().getHeight();
-        String width = component.getPreferredSize().getWidth();
+        int height = component.getPreferredSize().getHeightInt();
+        int width = component.getPreferredSize().getWidthInt();
         device.print("<img src=\"");
         device.print(INVISIBLE_ICON.getURL());
-        device.print("\" heigth=\"");
-        device.print(height != null ? height : "1");
+        device.print("\" height=\"");
+        device.print(height >= 0 ? height : 0);
         device.print("\" width=\"");
-        device.print(width != null ? width : "1");
+        device.print(width >= 0 ? width : 0);
         device.print("\"/>");
     }
 }

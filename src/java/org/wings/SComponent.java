@@ -29,6 +29,8 @@ import org.wings.style.AttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
 import org.wings.util.ComponentVisitor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -54,11 +56,10 @@ public abstract class SComponent
         implements SConstants, Cloneable, Serializable, Renderable {
     public static final String SELECTOR_GLOBAL = "";
 
-    public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+    private static final Log log = LogFactory.getLog("org.wings");
 
-    private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
-
-    /* */
+    /* Components unique name. */
     private String name;
 
     /**
@@ -153,6 +154,7 @@ public abstract class SComponent
     private InputMap inputMap;
 
     private ActionMap actionMap;
+
     private Map actionEvents = new HashMap();
 
     /**

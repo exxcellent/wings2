@@ -41,7 +41,7 @@ public class CGUtil {
         if (dim != null) {
             if (dim.isWidthDefined())
                 d.print(" width=\"").print(dim.getWidth()).print("\"");
-            if (dim.isHeigthDefined())
+            if (dim.isHeightDefined())
                 d.print(" height=\"").print(dim.getHeight()).print("\"");
         }
     }
