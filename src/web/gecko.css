@@ -53,18 +53,18 @@ img {
 }
 
 A:link, A:visited {
-   color: #000066;
-   text-decoration: none;
+    color: #000066;
+    text-decoration: none;
 }
 
 A:active {
-   color: #0000FF;
-   text-decoration: none
+    color: #0000FF;
+    text-decoration: none
 }
 
 HR { 
-   margin-top: 0;
-   margin-bottom: 0 
+     margin-top: 0;
+     margin-bottom: 0
 }
 
 TH, TD {
@@ -72,13 +72,15 @@ TH, TD {
 }
 
 div.SLabel {
-   font-size: 12px;
-   color: #000044;
+    font-size: 12px;
+    color: #000044;
+	white-space: nowrap;
 }
 
 div.SButton {
-   font-size: 12px;
-   color: #000044;
+    font-size: 12px;
+    color: #000044;
+	white-space: nowrap;
 }
 
 div.SButton > button {
@@ -123,11 +125,33 @@ div.SToolbar div.SButton {
 }
 
 div.STextField {
-   font-family: sans-serif;
-   font-weight: normal;
-   font-style: normal;
-   color: #000000;
+    font-family: sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
 }
+div.STextField > input[disabled="true"] {
+    opacity: 0.7;
+}
+
+div.STextField > input[readonly="true"] {
+    background-color: #eeeeff;
+}
+
+div.SFormattedTextField {
+    font-family: sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
+}
+div.SFormattedTextField > input[disabled="true"] {
+    opacity: 0.7;
+}
+
+div.SFormattedTextField > input[readonly="true"] {
+    background-color: #eeeeff;
+}
+
 div.STree {
 	vertical-align: top;
 	text-align: left;

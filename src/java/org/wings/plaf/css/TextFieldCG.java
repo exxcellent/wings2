@@ -43,14 +43,14 @@ public class TextFieldCG
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
         if (!component.isEditable() || !component.isEnabled()) {
-            device.print(" readonly=\"1\"");
+            device.print(" readonly=\"true\"");
         }
         if (component.isEnabled()) {
             device.print(" name=\"");
             Utils.write(device, Utils.event(component));
             device.print("\"");
         } else {
-            device.print(" disabled=\"1\"");
+            device.print(" disabled=\"true\"");
         }
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 

@@ -21,6 +21,7 @@ package org.wings;
 
 import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDefaultFormatter;
+import org.wings.script.JavaScriptListener;
 
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -33,8 +34,22 @@ public class SFormattedTextField
     extends STextField
 {
     private SAbstractFormatter formatter = null;
+    private static final SAbstractFormatter NO_FORMATTER = new SAbstractFormatter() {
+        public JavaScriptListener generateJavaScript(SFormattedTextField field, boolean actionListener) {
+            return null;
+        }
+
+        public Object stringToValue(String text) throws ParseException {
+            return null;
+        }
+
+        public String valueToString(Object value) throws ParseException {
+            return null;
+        }
+    };
 
     public SFormattedTextField() {
+        this(NO_FORMATTER);
     }
 
     public SFormattedTextField(SAbstractFormatter formatter) {

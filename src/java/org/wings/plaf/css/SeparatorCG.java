@@ -50,7 +50,7 @@ public class SeparatorCG
         }
         ;
         if (!component.getShade()) {
-            device.print(" noshade=\"1\"");
+            device.print(" noshade=\"true\"");
         }
         device.print("/>\n");
     }
