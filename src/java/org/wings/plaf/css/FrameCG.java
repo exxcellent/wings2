@@ -177,29 +177,29 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
 
         if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
-            device.write("<?xml version=\"1.0\" encoding=\"".getBytes());
+            device.print("<?xml version=\"1.0\" encoding=\"");
             org.wings.plaf.Utils.write(device, encoding);
-            device.write("\"?>\n".getBytes());
+            device.print("\"?>\n");
         }
 
         org.wings.plaf.Utils.writeRaw(device, documentType);
-        device.write("\n".getBytes());
-        device.write("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".getBytes());
+        device.print("\n");
+        device.print("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"");
         org.wings.plaf.Utils.write(device, language);
-        device.write("\" lang=\"".getBytes());
+        device.print("\" lang=\"");
         org.wings.plaf.Utils.write(device, language);
-        device.write("\">\n".getBytes());
+        device.print("\">\n");
 
-        device.write("<head>".getBytes());
+        device.print("<head>");
         if (title != null) {
-            device.write("<title>".getBytes());
+            device.print("<title>");
             org.wings.plaf.Utils.write(device, title);
-            device.write("</title>\n".getBytes());
+            device.print("</title>\n");
         }
 
-        device.write("<meta http-equiv=\"Content-type\" content=\"text/html; charset=".getBytes());
+        device.print("<meta http-equiv=\"Content-type\" content=\"text/html; charset=");
         org.wings.plaf.Utils.write(device, encoding);
-        device.write("\"/>\n".getBytes());
+        device.print("\"/>\n");
 
         for (Iterator iterator = headers.iterator(); iterator.hasNext();) {
             Object next = iterator.next();
@@ -208,7 +208,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             } else {
                 org.wings.plaf.Utils.write(device, next.toString());
             }
-            device.write("\n".getBytes());
+            device.print("\n");
         }
 
         SComponent focus = frame.getFocus();
@@ -243,16 +243,16 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
                 .print(");\n")
                 .print("</script>\n");
 
-        device.write("</head>\n".getBytes());
-        device.write("<body ".getBytes());
+        device.print("</head>\n");
+        device.print("<body ");
         org.wings.plaf.Utils.optAttribute(device, "class", frame.getStyle());
         Utils.writeEvents(device, frame);
-        device.write(">\n".getBytes());
+        device.print(">\n");
         if (frame.isVisible()) {
             frame.getLayout().write(device);
         }
 
-        device.write("</body></html>\n".getBytes());
+        device.print("</body></html>\n");
         _c.fireRenderEvent(SComponent.DONE_RENDERING);
     }
 

@@ -159,7 +159,7 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
         component.setInheritsPopupMenu(backup);
 
         device
-                .print("</div><!-- ")
+                .print("</div><!--")
                 .print(component.getName())
                 .print("-->\n");
     }

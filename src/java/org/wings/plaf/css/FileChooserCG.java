@@ -26,14 +26,6 @@ public class FileChooserCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.FileChooserCG {
 
-//--- byte array converted template snippets.
-    private final static byte[] __input_type_fil = "<input type=\"file\"".getBytes();
-    private final static byte[] __name = " name=\"".getBytes();
-    private final static byte[] __ = "\"".getBytes();
-    private final static byte[] __id = " id=\"".getBytes();
-    private final static byte[] __readonly_1 = " readonly=\"1\"".getBytes();
-    private final static byte[] ___2 = "\n".getBytes();
-
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {
@@ -49,7 +41,7 @@ public class FileChooserCG
         //int maxContent = component.getSession().getMaxContentLength()*1024;
 
         // maxLength = maxContent removed, since it does not work.
-        device.write(__input_type_fil);
+        device.print("<input type=\"file\"");
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
@@ -57,18 +49,18 @@ public class FileChooserCG
         org.wings.plaf.Utils.optAttribute(device, "accept", component.getFileNameFilter());
 
         if (component.isEnabled()) {
-            device.write(__name);
+            device.print(" name=\"");
             org.wings.plaf.Utils.write(device, Utils.event(component));
-            device.write(__);
-            device.write(__id);
+            device.print("\"");
+            device.print(" id=\"");
             org.wings.plaf.Utils.write(device, component.getName());
-            device.write(__);
+            device.print("\"");
         } else
-            device.write(__readonly_1);
+            device.print(" readonly=\"1\"");
 
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 
         Utils.writeEvents(device, component);
-        device.write("/>".getBytes());
+        device.print("/>");
     }
 }

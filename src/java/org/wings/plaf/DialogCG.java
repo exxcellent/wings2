@@ -17,5 +17,3 @@ package org.wings.plaf;
 
 public interface DialogCG extends ComponentCG {
 }
-
-

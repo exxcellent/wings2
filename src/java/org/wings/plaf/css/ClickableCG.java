@@ -31,16 +31,16 @@ public class ClickableCG
         final SClickable button = (SClickable) component;
 
         if (button.getShowAsFormComponent()) {
-            device.print("<button type=\"submit\" name=\"");
+            device.print("<button name=\"");
             Utils.write(device, button.getEventTarget().getEncodedLowLevelEventId());
             device.print("\" value=\"");
             Utils.write(device, button.getEvent());
             device.print("\"");
             org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         } else {
-            device.write("<a href=\"".getBytes());
+            device.print("<a href=\"");
             org.wings.plaf.Utils.write(device, button.getURL());
-            device.write("\"".getBytes());
+            device.print("\"");
         }
 
         if (!button.isEnabled())

@@ -24,30 +24,22 @@ import java.io.IOException;
 
 public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.MenuBarCG {
 
-//--- byte array converted template snippets.
-    private final static byte[] __nobr = "<nobr>".getBytes();
-    private final static byte[] __img_border_0_a = "<img border=\"0\" align=\"middle\" src=\"".getBytes();
-    private final static byte[] __ = "\"".getBytes();
-    private final static byte[] ___1 = "/>".getBytes();
-    private final static byte[] __nobr_1 = "</nobr>".getBytes();
-    private final static byte[] ___2 = "\n".getBytes();
-
     protected void writeItemContent(final Device device, SMenuItem menuItem)
             throws IOException {
         SIcon icon = getIcon(menuItem);
 
 
-        device.write(__nobr);
+        device.print("<nobr>");
         if (icon != null) {
 
-            device.write(__img_border_0_a);
+            device.print("<img border=\"0\" align=\"middle\" src=\"");
             org.wings.plaf.Utils.write(device, icon.getURL());
 
-            device.write(__);
+            device.print("\"");
             org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
             org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
 
-            device.write(___1);
+            device.print("/>");
         }
 
         String text = menuItem.getText();
@@ -56,7 +48,7 @@ public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.M
             org.wings.plaf.Utils.write(device, text);
         }
 
-        device.write(__nobr_1);
+        device.print("</nobr>");
     }
 
     protected void writePrefix(Device device, SComponent component) throws IOException {

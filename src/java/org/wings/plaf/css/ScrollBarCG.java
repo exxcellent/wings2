@@ -219,7 +219,7 @@ public class ScrollBarCG
         boolean showAsFormComponent = scrollBar.getShowAsFormComponent();
 
         if (showAsFormComponent)
-            device.print("<button type=\"submit\" name=\"")
+            device.print("<button name=\"")
                     .print(Utils.event(scrollBar))
                     .print("\" value=\"")
                     .print(event)

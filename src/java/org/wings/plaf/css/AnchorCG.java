@@ -29,7 +29,7 @@ public class AnchorCG
             throws IOException {
         final SAnchor component = (SAnchor) _c;
 
-        device.write("<a href=\"".getBytes());
+        device.print("<a href=\"");
         device.print(component.getURL());
         device.print("\"");
 

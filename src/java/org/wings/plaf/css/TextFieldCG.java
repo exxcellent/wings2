@@ -29,41 +29,29 @@ public class TextFieldCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.TextFieldCG {
 
-//--- byte array converted template snippets.
-    private final static byte[] __input_type_tex = "<input type=\"text\"".getBytes();
-    private final static byte[] __readonly_1 = " readonly=\"1\"".getBytes();
-    private final static byte[] __name = " name=\"".getBytes();
-    private final static byte[] __ = "\"".getBytes();
-    private final static byte[] __id = " id=\"".getBytes();
-    private final static byte[] __disabled_1 = " disabled=\"1\"".getBytes();
-    private final static byte[] ___1 = "/>".getBytes();
-
-//--- code from common area in template.
     private static final JavaScriptListener submitListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submit()");
-
-
-//--- end code from common area in template.
-
 
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {
         final STextField component = (STextField) _c;
 
-        device.write(__input_type_tex);
+        device.print("<input type=\"text\"");
         org.wings.plaf.Utils.optAttribute(device, "size", component.getColumns());
         org.wings.plaf.Utils.optAttribute(device, "maxlength", component.getMaxColumns());
         org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+
         if (!component.isEditable() || !component.isEnabled()) {
-            device.write(__readonly_1);
+            device.print(" readonly=\"1\"");
         }
         if (component.isEnabled()) {
-            device.write(__name);
+            device.print(" name=\"");
             org.wings.plaf.Utils.write(device, Utils.event(component));
-            device.write(__);
+            device.print("\"");
         } else {
-            device.write(__disabled_1);
+            device.print(" disabled=\"1\"");
         }
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 
@@ -73,10 +61,9 @@ public class TextFieldCG
                 component.addScriptListener(submitListener);
             }
         }
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
         Utils.writeEvents(device, component);
 
         org.wings.plaf.Utils.optAttribute(device, "value", component.getText());
-        device.write(___1);
+        device.print("/>");
     }
 }

@@ -40,8 +40,10 @@ public class JavaScriptListenerExample
      * The curly braces with a number in it are replaced by the numbered
      * SComponent argument.
      */
-    private final static String JS_ADD_SCRIPT
-            = "{2}.getElementsByTagName('input')[0].value = ((1.0 * {0}.getElementsByTagName('input')[0].value) + (1.0 * {1}.getElementsByTagName('input')[0].value));";
+    private final static String JS_ADD_SCRIPT =
+            "document.getElementById('{2}').getElementsByTagName('input')[0].value" +
+            " = ((1.0 * document.getElementById('{0}').getElementsByTagName('input')[0].value)" +
+            " + (1.0 * document.getElementById('{1}').getElementsByTagName('input')[0].value));";
 
     private final static DecimalFormatSymbols DSYM
             = new DecimalFormatSymbols(Locale.US); // '.' as fraction separator

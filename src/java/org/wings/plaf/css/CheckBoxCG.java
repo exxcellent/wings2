@@ -56,7 +56,7 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
         final SIcon icon = getIcon(button);
 
         if (showAsFormComponent && useIconsInForm) {
-            device.print("<button type=\"submit\"");
+            device.print("<button");
             org.wings.plaf.Utils.write(device, Utils.event(button));
             org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
@@ -64,11 +64,11 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
         } else if (showAsFormComponent && !useIconsInForm)
             device.print("<span");
         else {
-            device.write("<a href=\"".getBytes());
+            device.print("<a href=\"");
             RequestURL addr = button.getRequestURL();
             addr.addParameter(button, button.getToggleSelectionParameter());
             addr.write(device);
-            device.write("\"".getBytes());
+            device.print("\"");
 
             org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
@@ -111,13 +111,13 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
     }
 
     protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
-        device.write("<input type=\"hidden\" name=\"".getBytes());
+        device.print("<input type=\"hidden\" name=\"");
         org.wings.plaf.Utils.write(device, Utils.event(button));
-        device.write("\" value=\"hidden_reset\"/>".getBytes());
+        device.print("\" value=\"hidden_reset\"/>");
 
-        device.write("<input type=\"checkbox\" name=\"".getBytes());
+        device.print("<input type=\"checkbox\" name=\"");
         org.wings.plaf.Utils.write(device, Utils.event(button));
-        device.write("\"".getBytes());
+        device.print("\"");
         org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
 
         if (!button.isEnabled())
@@ -126,6 +126,6 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
             device.print(" checked=\"true\"");
 
         Utils.writeEvents(device, button);
-        device.write("/>".getBytes());
+        device.print("/>");
     }
 }

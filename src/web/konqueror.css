@@ -1,18 +1,16 @@
 BODY {
-    background: #dedede;
-    position: relative;
+    background: #ffffff;
     margin: 0px;
     font-family: sans-serif;
     font-style: normal;
-    font-size: 14px;
-    width: inherit;
-    height: inherit;
+    font-size: 12px;
 }
 
 table {
+    border-collapse: collapse;
     padding: 0px;
     margin: 0px;
-    border-collapse: collapse;
+    border: none;
 }
 
 div, form, td, th {
@@ -20,11 +18,35 @@ div, form, td, th {
     background-color: inherit;
     padding: 0px;
     margin: 0px;
+    border: none;
+    font: inherit;
+}
+
+textarea, input[type="text"], select {
+    background-color: #f6decc;
+    border: 1px solid #e66e32;
+}
+
+a, button {
+    display: table;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    color: inherit;
+    background-color: inherit;
+}
+
+
+img {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    vertical-align: middle;
 }
 
 A:link, A:visited {
    color: #000066;
-   text-decoration: none
+   text-decoration: none;
 }
 
 A:active {
@@ -43,25 +65,34 @@ IMG {
 }
 
 TH, TD {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 div.SLabel {
-   font-size: 14px;
+   font-size: 12px;
    color: #000044;
 }
 
 div.SButton {
-   font-size: 14px;
-   color: #000044
+   font-size: 12px;
+   color: #000044;
 }
 
 div.SButton > button {
-   border: 1px outset gray;
+   border: 1px solid #cccccc;
+   background-color: #eeeeff;
 }
 
 div.SButton > button:hover {
-   border: 1px inset gray;
+   border: 1px outset #cccccc;
+}
+
+div.SButton > button[disabled="true"] * {
+   opacity: 0.7;
+}
+
+div.SButton > button:hover[disabled="true"] {
+   border: 1px solid #cccccc;
 }
 
 div.SClickable > button {
@@ -71,6 +102,21 @@ div.SClickable > button {
 
 div.SClickable > button:hover {
    border: 1px solid gray;
+}
+
+div.SToolbar > table {
+    background-color: inherit !important;
+    border: 1px none !important;
+}
+
+div.SToolbar > table > tbody > tr > td {
+    background-color: inherit !important;
+    padding: 2px;
+}
+
+div.SToolbar div.SButton {
+    background-color: inherit !important;
+    border: 1px none !important;
 }
 
 div.STextField {
@@ -85,22 +131,22 @@ div.STree > table {
    border-spacing: 0px;
 }
 
-div.STree > table > tr > td {
+div.STree > table > tbody > tr > td {
     padding: 0px
     border: 1px none black;
     cursor: pointer;
 }
 
-div.STree > table > tr > td * {
+div.STree > table > tbody > tr > td * {
     white-space: nowrap;
 }
 
-div.STree > table > tr > td[selected="true"] {
-    background-color: #aaaaff;
+div.STree > table > tbody > tr > td[selected="true"] {
+    background-color: #f6decc;
     border: 1px dotted black;
 }
 
-div.STree > table > tr > td button {
+div.STree > table > tbody > tr > td button {
     border: none;
     background-color: inherit;
     padding: 0px
@@ -122,10 +168,10 @@ div.STable > table > tbody > tr[odd="true"] {
 }
 
 div.STable > table > tbody > tr[selected="true"] {
-    background-color: #aaaaff !important;
+    background-color: #f6decc !important;
 }
 
-div.STable > table > tbody > tr > th {
+div.STable > table > thead > tr > th {
     border: 1px solid black;
     padding-left: 8px;
     padding-right: 8px;
@@ -151,7 +197,7 @@ div.SList > * {
 }
 
 div.SList > * > li[selected="true"] {
-    background-color: #aaaaff !important;
+    background-color: #f6decc !important;
     border: 1px dotted black;
     cursor: pointer
 }
@@ -160,23 +206,16 @@ div.SList > * > li[selected="true"] {
    color: #000044;
 }
 
-.SToolbar {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	background-color: #CCCCCC;
-}
-
 .SMenuBar {
-	color: #000066;
-	background-color: #CCCCCC;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	border: 1px solid;
-    padding: 0px;
+    color: #000044;
+    background-color: #eeeeff;
+    border-bottom: 1px solid #cccccc;
 }
 
 .SMenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: #000066;
+	font-size: 12px;
+	color: #000044;
 	background-color: #CCCCCC;
 	border-width: 0px;
 	margin: 0px;
@@ -186,7 +225,7 @@ div.SList > * > li[selected="true"] {
 
 .disabledmenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	color: darkgray;
 	background-color: #CCCCCC;
 	border-width: 0px;
@@ -197,7 +236,7 @@ div.SList > * > li[selected="true"] {
 
 .amenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
   	color: #ffffff;
 	background-color: #5555AA;
 	border-width: 0px;
@@ -208,7 +247,7 @@ div.SList > * > li[selected="true"] {
 
 .smenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
   	color: #ffffff;
 	background-color: #7777CC;
 	border-width: 0px;
@@ -230,8 +269,8 @@ div.SList > * > li[selected="true"] {
 
 .menuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: #000066;
+	font-size: 12px;
+	color: #000044;
 	background-color: #CCCCCC;
 	white-space: nowrap;
 	border-width: 0px;
@@ -241,7 +280,7 @@ div.SList > * > li[selected="true"] {
 
 .disabledmenuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	color: darkgray;
 	background-color: #CCCCCC;
 	white-space: nowrap;
@@ -252,7 +291,7 @@ div.SList > * > li[selected="true"] {
 
 .amenuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
   	color: #ffffff;
 	background-color: #5555AA;
 	white-space: nowrap;
@@ -271,129 +310,118 @@ div.SList > * > li[selected="true"] {
 	border-width: 1px;
 }
 
-
-.framebutton {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-        background-color: #DEDEDE;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px
-}
-
-.frametitle {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-   	color: #ffffff;
-	background-color: #5555AA;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 8px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	border-left-width: 1px
-}
-
-.frameborder {
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 2px;
-	border-right-width: 2px;
-	border-bottom-width: 2px;
-	border-left-width: 2px
-}
-
 .STextArea {
 	width: 100%;
 }
 
-.titledbordertitle {
-   font-family: sans-serif;
-   font-size: 12px;
-   color: #000000;
+div.SScrollBar, div.SPageScroller {
+    height: 100%;
+    width: 100%;
 }
 
-.SScrollBar {
-	font-size: 1px;
-	border-width: 0px;
+div.SScrollBar table[area="buttons"], div.SPageScroller table[area="buttons"] {
+    background-color: #eeeeff;
 }
 
-.selection {
-   background-color: #AAAAFF;
+div.SScrollBar > table[orientation="vertical"], div.SPageScroller > table[orientation="vertical"] {
+    height: 100%;
 }
 
-div.STabbedPane > table {
+div.SScrollBar > table[orientation="horizontal"], div.SPageScroller > table[orientation="horizontal"] {
     width: 100%;
     height: auto;
 }
-div.STabbedPane > table > tr > th > * {
+
+div.SScrollBar table[area="buttons"] button, div.SScrollBar table[area="buttons"] a {
+   border: 1px solid #cccccc;
+}
+
+div.SScrollBar table[area="buttons"] button:hover, div.SScrollBar table[area="buttons"] a:hover {
+   border: 1px outset #cccccc;
+}
+
+div.SPageScroller table[area="buttons"] button, div.SPageScroller table[area="buttons"] a {
+   border: 1px solid #cccccc;
+}
+
+div.SPageScroller table[area="buttons"] button:hover, div.SPageScroller table[area="buttons"] a:hover {
+   border: 1px outset #cccccc;
+}
+
+div.SPageScroller table[area="pages"] button, div.SPageScroller table[area="pages"] a {
+   border: 1px none;
+}
+
+div.SPageScroller table[area="pages"] button:hover, div.SPageScroller table[area="pages"] a:hover {
+   border: 1px outset #cccccc;
+}
+
+
+div.SScrollPane > div.SList, div.SScrollPane > div.STree, div.SScrollPane > div.STable {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+div.STabbedPane, div.STabbedPane > table {
+    width: 100%;
+    height: 100%;
+}
+div.STabbedPane > table > tbody > tr > th > * {
+    display: inline;
     border: 1px solid black;
     padding-left: 8px;
     padding-right: 8px;
+    white-space: nowrap;
     line-height: 1.6em;
 }
-div.STabbedPane > table > tr > th > *[selected="true"] {
-    background-color: #aaaaff;
+div.STabbedPane > table > tbody > tr > th > *[selected="true"] {
+    background-color: #f6decc;
 }
-div.STabbedPane > table > tr > th > *[disabled="true"] {
+div.STabbedPane > table > tbody > tr > th > *[disabled="true"] {
     color : #808080;
 }
-div.STabbedPane > table > tr > td {
+div.STabbedPane > table > tbody > tr > td {
     border: 2px ridge black;
     width: 100%;
     height: auto;
 }
 
-div.STabbedPane > table > tr > th[placement="top"] {
+div.STabbedPane > table > tbody > tr > th[placement="top"] {
     text-align: left;
 }
-div.STabbedPane > table > tr > th[placement="top"] > a {
+div.STabbedPane > table > tbody > tr > th[placement="top"] > a {
     border-bottom: none !important;
 }
 
-div.STabbedPane > table > tr > th[placement="left"] {
+div.STabbedPane > table > tbody > tr > th[placement="left"] {
     width: 0%;
     vertical-align: top;
     text-align: right;
 }
-div.STabbedPane > table > tr > th[placement="left"] > a {
+div.STabbedPane > table > tbody > tr > th[placement="left"] > a {
     display: block;
     border-right: none !important;
     margin-top: 2px;
     margin-bottom: 2px;
 }
 
-div.STabbedPane > table > tr > th[placement="right"] {
+div.STabbedPane > table > tbody > tr > th[placement="right"] {
     width: 0%;
     vertical-align: top;
     text-align: left;
 }
-div.STabbedPane > table > tr > th[placement="right"] > a {
+div.STabbedPane > table > tbody > tr > th[placement="right"] > a {
     display: block;
     border-left: none !important;
     margin-top: 2px;
     margin-bottom: 2px;
 }
 
-div.STabbedPane > table > tr > th[placement="bottom"] {
+div.STabbedPane > table > tbody > tr > th[placement="bottom"] {
     text-align: left;
 }
-div.STabbedPane > table > tr > th[placement="bottom"] > a {
+div.STabbedPane > table > tbody > tr > th[placement="bottom"] > a {
     border-top: none !important;
 }
 
@@ -420,39 +448,66 @@ table.SBorderLayout > tr > td {
    padding-right: 0.4em;
 }
 
-div.SDialog > table {
-   border: 1px outset gray;
-   border-collapse: collapse;
+div.SDesktopPane > table > tbody > tr > td {
+    padding-top: 1em;
 }
 
-div.SDialog > table > tr > th {
+div.SInternalFrame {
+   border: 1px solid #cccccc;
+}
+
+div.SInternalFrame > table > tbody > tr > th {
+   padding-left: 1px;
+   padding-right: 1px;
+}
+
+div.SInternalFrame > table > tbody > tr > th[col="title"] {
    background-color: #aaaaff;
-   color: #ffffff;
    text-align: left;
-   padding-left: 8px;
+   width: 100%;
 }
 
-div.SDialog > table > tr > td {
-   border: 1px inset #aaaaff;
+div.SInternalFrame > table > tbody > tr > * {
+   border: 1px solid #cccccc;
 }
 
-
-div.SOptionPane > table {
-   border: 1px outset gray;
-   border-collapse: collapse;
+div.SDialog {
+   border: 1px solid #cccccc;
 }
 
-div.SOptionPane > table > tr > th {
+div.SDialog > table > tbody > tr > th {
+   padding-left: 1px;
+   padding-right: 1px;
+}
+
+div.SDialog > table > tbody > tr > th[col="title"] {
    background-color: #aaaaff;
-   color: #ffffff;
    text-align: left;
-   padding-left: 8px;
+   width: 100%;
 }
 
-div.SOptionPane > table > tr > td {
-   border: 1px inset #aaaaff;
+div.SDialog > table > tbody > tr > * {
+   border: 1px solid #cccccc;
 }
 
+div.SOptionPane {
+   border: 1px solid #cccccc;
+}
+
+div.SOptionPane > table > tbody > tr > th {
+   padding-left: 1px;
+   padding-right: 1px;
+}
+
+div.SOptionPane > table > tbody > tr > th[col="title"] {
+   background-color: #aaaaff;
+   text-align: left;
+   width: 100%;
+}
+
+div.SOptionPane > table > tbody > tr > * {
+   border: 1px solid #cccccc;
+}
 
 div.domTT {
     border: 1px solid #333333;

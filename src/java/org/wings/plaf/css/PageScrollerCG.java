@@ -189,7 +189,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
         if (showAsFormComponent)
-            device.print("<button type=\"submit\" name=\"")
+            device.print("<button name=\"")
                     .print(Utils.event(pageScroller))
                     .print("\" value=\"")
                     .print("" + (page * pageScroller.getExtent()))
@@ -214,7 +214,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
         if (showAsFormComponent)
-            device.print("<button type=\"submit\" name=\"")
+            device.print("<button name=\"")
                     .print(Utils.event(pageScroller))
                     .print("\" value=\"")
                     .print(event)

@@ -796,7 +796,7 @@ public abstract class SComponent
      */
     public void write(Device s) throws IOException {
         try {
-            boolean debugComments = this instanceof SContainer;
+            boolean debugComments = false;
             if (debugComments)
                 s.print("<!--"+this.getClass().getName()+".START-->");
             if (visible) {

@@ -24,7 +24,7 @@ public class FormCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.FormCG {
 
-    private static final SIcon BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
+    static final SIcon BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
 
     /*
     * we render two icons into the page that captures pressing simple 'return'
@@ -77,11 +77,17 @@ public class FormCG
         Utils.write(device, component.getName());
         Utils.write(device, SConstants.UID_DIVIDER);
         device.print("\" />");
-        Utils.renderContainer(device, component);
+
+        renderContainer(device, component);
+
         device.print("<input type=\"image\" name=\"_capture_enter2\" border=\"0\" ");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
         device.print("</form>");
         device.print("\n");
+    }
+
+    protected void renderContainer(final Device device, final SForm component) throws IOException {
+        Utils.renderContainer(device, component);
     }
 }

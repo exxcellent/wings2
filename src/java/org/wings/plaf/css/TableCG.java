@@ -29,14 +29,6 @@ public class TableCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.TableCG {
 
-//--- byte array converted template snippets.
-    private final static byte[] __align_left = " align=\"left\"".getBytes();
-    private final static byte[] __align_center = " align=\"center\"".getBytes();
-    private final static byte[] __align_right = " align=\"right\"".getBytes();
-    private final static byte[] __valign_top = " valign=\"top\"".getBytes();
-    private final static byte[] __valign_center = " valign=\"center\"".getBytes();
-    private final static byte[] __align_bottom = " align=\"bottom\"".getBytes();
-
     private String fixedTableBorderWidth;
 
     /**
@@ -95,25 +87,25 @@ public class TableCG
 
         switch (component.getHorizontalAlignment()) {
             case LEFT_ALIGN:
-                device.write(__align_left);
+                device.print(" align=\"left\"");
                 break;
             case CENTER_ALIGN:
-                device.write(__align_center);
+                device.print(" align=\"center\"");
                 break;
             case RIGHT_ALIGN:
-                device.write(__align_right);
+                device.print(" align=\"right\"");
                 break;
         }
 
         switch (component.getVerticalAlignment()) {
             case TOP_ALIGN:
-                device.write(__valign_top);
+                device.print(" valign=\"top\"");
                 break;
             case CENTER_ALIGN:
-                device.write(__valign_center);
+                device.print(" valign=\"center\"");
                 break;
             case BOTTOM_ALIGN:
-                device.write(__align_bottom);
+                device.print(" align=\"bottom\"");
                 break;
         }
         device.print(">");
@@ -126,7 +118,7 @@ public class TableCG
 
         if (parameter != null && !isEditingCell) {
             if (showAsFormComponent) {
-                device.print("<button type=\"submit\" name=\"");
+                device.print("<button name=\"");
                 org.wings.plaf.Utils.write(device, Utils.event(table));
                 device.print("\" value=\"");
                 org.wings.plaf.Utils.write(device, parameter);
@@ -241,7 +233,7 @@ public class TableCG
                 device.print(">");
 
                 if (showAsFormComponent) {
-                    device.print("<button type=\"submit\" name=\"");
+                    device.print("<button name=\"");
                     org.wings.plaf.Utils.write(device, Utils.event(table));
                     device.print("\" value=\"");
                     org.wings.plaf.Utils.write(device, table.getToggleSelectionParameter(r, -1));

@@ -26,11 +26,6 @@ import java.io.IOException;
 public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, org.wings.plaf.DialogCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __img_border_0 = "<img border=\"0\"".getBytes();
-    private final static byte[] __ = "/>".getBytes();
-    private final static byte[] __class_framebut = " class=\"framebutton\"><a href=\"".getBytes();
-    private final static byte[] __a_td = "</a></td>".getBytes();
-    private final static byte[] __class_framebut_1 = " class=\"framebutton\">".getBytes();
 
 //--- properties of this plaf.
     private SIcon closeIcon;
@@ -44,73 +39,107 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
     }
 
     private void writeIcon(Device device, SIcon icon) throws IOException {
-        device.write(__img_border_0);
+        device.print("<img");
         org.wings.plaf.Utils.optAttribute(device, "src", icon.getURL());
         org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
         org.wings.plaf.Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.write(__);
+        device.print("/>");
     }
 
     private void writeWindowIcon(Device device, SDialog dialog,
                                  int event, SIcon icon) throws IOException {
+        boolean showAsFormComponent = dialog.getShowAsFormComponent();
+
         RequestURL addr = dialog.getRequestURL();
         addr.addParameter(org.wings.plaf.css.Utils.event(dialog), event);
 
-        device.write("<td".getBytes());
-        org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
+        device.print("<th");
+        org.wings.plaf.Utils.optAttribute(device, "width", getIconWidth(icon));
+        device.print(">");
 
-        device.write(__class_framebut);
-        org.wings.plaf.Utils.write(device, addr);
+        if (showAsFormComponent)
+            device.print("<button name=\"")
+                    .print(Utils.event(dialog))
+                    .print("\" value=\"")
+                    .print(event)
+                    .print("\">");
+        else
+            device.print("<a href=\"")
+                    .print(dialog.getRequestURL()
+                    .addParameter(Utils.event(dialog) + "=" + event).toString())
+                    .print("\">");
 
-        device.write("\">".getBytes());
         writeIcon(device, icon);
 
-        device.write(__a_td);
+        if (showAsFormComponent)
+            device.print("</button>");
+        else
+            device.print("</a>");
+
+        device.print("</th>");
     }
 
+    private String getIconWidth(SIcon icon) {
+        if (icon.getIconWidth() == -1)
+            return "0%";
+        else
+            return "" + icon.getIconWidth();
+    }
 
     public void write(final Device device, final SComponent component)
             throws IOException {
-        device.print("<table border=\"0\" width=\"100%\" height=\"100%\"><tr><td align=\"center\" valign=\"middle\">\n");
-        super.write(device, component);
+        SDialog dialog = (SDialog) component;
+        device.print("<table border=\"0\" width=\"100%\" height=\"100%\"><tr><td align=\"center\" valign=\"middle\">");
+        super.writeContent(device, dialog);
         device.print("</td></tr></table>\n");
+    }
+
+    protected void renderContainer(Device device, SForm component) throws IOException {
+        super.write(device, component);
     }
 
     protected void writeContent(final Device device, final SComponent component) throws IOException {
         final SDialog dialog = (SDialog) component;
-        device.print("<table><tr>");
-        int cols = 0;
+
         String text = dialog.getTitle();
+        int columns = 0;
         if (text == null)
             text = "Dialog";
+
+        device.print("<table");
+        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        device.print(">\n<tr>");
 
         // left icon
         if (dialog.getIcon() != null) {
             SIcon icon = dialog.getIcon();
             device.print("<th");
-            org.wings.plaf.Utils.optAttribute(device, "width", icon.getIconWidth());
-            device.write(__class_framebut_1);
+            org.wings.plaf.Utils.optAttribute(device, "width", getIconWidth(icon));
+            device.print(">");
             writeIcon(device, icon);
             device.print("</th>");
-            cols++;
+            ++columns;
         }
 
-        device.print("<th>");
+        device.print("<th col=\"title\">&nbsp;");
         org.wings.plaf.Utils.write(device, text);
         device.print("</th>");
-        cols++;
+        ++columns;
 
         if (dialog.isClosable() && closeIcon != null) {
-            writeWindowIcon(device, dialog, SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon);
-            cols++;
+            writeWindowIcon(device, dialog,
+                    SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon);
+            ++columns;
         }
-
         device.print("</tr>");
-        device.write("<tr><td colspan=\"".getBytes());
-        org.wings.plaf.Utils.write(device, cols);
-        device.write("\">".getBytes());
-        super.writeContent(device, component);
-        device.write("</td></tr></table>\n".getBytes());
+
+        // write the actual content
+        device.print("<tr><td colspan=\"");
+        org.wings.plaf.Utils.write(device, columns);
+        device.print("\">");
+        Utils.renderContainer(device, dialog);
+        device.print("</td></tr>");
+        device.print("</table>\n");
     }
 
     public SIcon getCloseIcon() {

@@ -167,7 +167,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
 
             if (renderSelection) {
                 if (showAsFormComponent) {
-                    device.print("<button type=\"submit\" name=\"");
+                    device.print("<button name=\"");
                     Utils.write(device, Utils.event(list));
                     device.print("\" value=\"");
                     Utils.write(device, list.getToggleSelectionParameter(i));

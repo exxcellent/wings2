@@ -64,6 +64,11 @@ HR {
    margin-bottom: 0 
 }
 
+IMG {
+    border: none !important;
+    vertical-align: middle;
+}
+
 TH, TD {
     font-size: 12px;
 }
@@ -476,40 +481,43 @@ div.SInternalFrame > table > tbody > tr > * {
    border: 1px solid #cccccc;
 }
 
-
-div.SDialog > table {
-   border: 1px outset gray;
-   border-collapse: collapse;
+div.SDialog {
+   border: 1px solid #cccccc;
 }
 
 div.SDialog > table > tbody > tr > th {
+   padding-left: 1px;
+   padding-right: 1px;
+}
+
+div.SDialog > table > tbody > tr > th[col="title"] {
    background-color: #aaaaff;
-   color: #ffffff;
    text-align: left;
-   padding-left: 8px;
+   width: 100%;
 }
 
-div.SDialog > table > tbody > tr > td {
-   border: 1px inset #aaaaff;
+div.SDialog > table > tbody > tr > * {
+   border: 1px solid #cccccc;
 }
 
-
-div.SOptionPane > table {
-   border: 1px outset gray;
-   border-collapse: collapse;
+div.SOptionPane {
+   border: 1px solid #cccccc;
 }
 
 div.SOptionPane > table > tbody > tr > th {
+   padding-left: 1px;
+   padding-right: 1px;
+}
+
+div.SOptionPane > table > tbody > tr > th[col="title"] {
    background-color: #aaaaff;
-   color: #ffffff;
    text-align: left;
-   padding-left: 8px;
+   width: 100%;
 }
 
-div.SOptionPane > table > tbody > tr > td {
-   border: 1px inset #aaaaff;
+div.SOptionPane > table > tbody > tr > * {
+   border: 1px solid #cccccc;
 }
-
 
 div.domTT {
     border: 1px solid #333333;

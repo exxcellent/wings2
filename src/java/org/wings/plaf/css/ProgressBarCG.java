@@ -26,25 +26,6 @@ public class ProgressBarCG
         implements SConstants, org.wings.plaf.ProgressBarCG {
 
 //--- byte array converted template snippets.
-    private final static byte[] __table_border_0 = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>".getBytes();
-    private final static byte[] __table_border_0_1 = "<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr><td".getBytes();
-    private final static byte[] __ = ">".getBytes();
-    private final static byte[] __table_border_0_2 = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">".getBytes();
-    private final static byte[] __tr = "<tr>".getBytes();
-    private final static byte[] __td = "<td".getBytes();
-    private final static byte[] __img = "<img".getBytes();
-    private final static byte[] __width = " width=\"".getBytes();
-    private final static byte[] ___1 = "\"".getBytes();
-    private final static byte[] __height = " height=\"".getBytes();
-    private final static byte[] __td_1 = "\"></td>".getBytes();
-    private final static byte[] ___2 = "\">".getBytes();
-    private final static byte[] __td_2 = "</td>".getBytes();
-    private final static byte[] __tr_1 = "</tr>".getBytes();
-    private final static byte[] __table = "</table>".getBytes();
-    private final static byte[] __td_tr_table = "</td></tr></table>".getBytes();
-    private final static byte[] __td_tr_tr_td_al = "</td></tr><tr><td align=\"center\">".getBytes();
-    private final static byte[] __span_class = "<span class=\"".getBytes();
-    private final static byte[] __span = "</span>".getBytes();
 
     public void installCG(final SComponent comp) {
         final SProgressBar component = (SProgressBar) comp;
@@ -96,57 +77,57 @@ public class ProgressBarCG
         int height = size != null ? size.getHeightInt() : 5;
 
         if (component.isStringPainted()) {
-            device.write(__table_border_0);
+            device.print("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>");
         }
         if (component.isBorderPainted()) {
-            device.write(__table_border_0_1);
+            device.print("<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr><td");
             org.wings.plaf.Utils.optAttribute(device, "bgcolor", component.getBorderColor());
-            device.write(__);
+            device.print(">");
         }
 
-        device.write(__table_border_0_2);
-        device.write(__tr);
-        device.write(__td);
+        device.print("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
+        device.print("<tr>");
+        device.print("<td");
         org.wings.plaf.Utils.optAttribute(device, "bgcolor", component.getFilledColor());
-        device.write(__);
-        device.write(__img);
+        device.print(">");
+        device.print("<img");
         org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
-        device.write(__width);
+        device.print(" width=\"");
         org.wings.plaf.Utils.write(device, (int) (width * component.getPercentComplete()));
-        device.write(___1);
-        device.write(__height);
+        device.print("\"");
+        device.print(" height=\"");
         org.wings.plaf.Utils.write(device, height);
-        device.write(__td_1);
-        device.write(__td);
+        device.print("\"></td>");
+        device.print("<td");
         org.wings.plaf.Utils.optAttribute(device, "bgcolor", component.getUnfilledColor());
-        device.write(__);
-        device.write(__img);
+        device.print(">");
+        device.print("<img");
         org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
-        device.write(__width);
+        device.print(" width=\"");
         org.wings.plaf.Utils.write(device, (int) (width * (1 - component.getPercentComplete())));
-        device.write(___1);
-        device.write(__height);
+        device.print("\"");
+        device.print(" height=\"");
         org.wings.plaf.Utils.write(device, height);
-        device.write(___2);
-        device.write(__td_2);
-        device.write(__tr_1);
-        device.write(__table);
+        device.print("\">");
+        device.print("</td>");
+        device.print("</tr>");
+        device.print("</table>");
         if (component.isBorderPainted()) {
-            device.write(__td_tr_table);
+            device.print("</td></tr></table>");
         }
 
         if (component.isStringPainted()) {
-            device.write(__td_tr_tr_td_al);
+            device.print("</td></tr><tr><td align=\"center\">");
             if (style != null) {
-                device.write(__span_class);
+                device.print("<span class=\"");
                 org.wings.plaf.Utils.write(device, style);
-                device.write(___2);
+                device.print("\">");
             }
             org.wings.plaf.Utils.write(device, component.getString());
             if (style != null) {
-                device.write(__span);
+                device.print("</span>");
             }
-            device.write(__td_tr_table);
+            device.print("</td></tr></table>");
         }
 //--- end code from write-template.
     }

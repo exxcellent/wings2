@@ -147,7 +147,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                 title = nonBreakingSpaces(title);
 
             if (showAsFormComponent)
-                device.print("<button type=\"submit\" name=\"")
+                device.print("<button name=\"")
                         .print(Utils.event(tabbedPane))
                         .print("\" value=\"")
                         .print(i)

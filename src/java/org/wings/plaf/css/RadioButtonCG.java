@@ -36,17 +36,17 @@ public class RadioButtonCG
     }
 
     protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
-        device.write("<input type=\"hidden\" name=\"".getBytes());
+        device.print("<input type=\"hidden\" name=\"");
         org.wings.plaf.Utils.write(device, org.wings.plaf.css.Utils.event(button));
-        device.write("\" value=\"".getBytes());
+        device.print("\" value=\"");
         org.wings.plaf.Utils.write(device, button.getDeselectionParameter());
-        device.write("\"/>".getBytes());
+        device.print("\"/>");
 
-        device.write("<input type=\"radio\" name=\"".getBytes());
+        device.print("<input type=\"radio\" name=\"");
         org.wings.plaf.Utils.write(device, Utils.event(button));
-        device.write("\" value=\"".getBytes());
+        device.print("\" value=\"");
         org.wings.plaf.Utils.write(device, button.getToggleSelectionParameter());
-        device.write("\"".getBytes());
+        device.print("\"");
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
@@ -54,6 +54,6 @@ public class RadioButtonCG
             device.print(" checked=\"true\"");
 
         Utils.writeEvents(device, button);
-        device.write("/>".getBytes());
+        device.print("/>");
     }
 }

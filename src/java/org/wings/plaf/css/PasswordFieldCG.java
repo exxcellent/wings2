@@ -26,21 +26,12 @@ public class PasswordFieldCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.PasswordFieldCG {
 
-//--- byte array converted template snippets.
-    private final static byte[] __input_type_pas = "<input type=\"password\"".getBytes();
-    private final static byte[] __readonly_1 = " readonly=\"1\"".getBytes();
-    private final static byte[] __name = " name=\"".getBytes();
-    private final static byte[] __ = "\"".getBytes();
-    private final static byte[] __disabled_1 = " disabled=\"1\"".getBytes();
-    private final static byte[] ___1 = "/>".getBytes();
-
-
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {
         final SPasswordField component = (SPasswordField) _c;
 
-        device.write(__input_type_pas);
+        device.print("<input type=\"password\"");
         org.wings.plaf.css.Utils.writeEvents(device, component);
         org.wings.plaf.Utils.optAttribute(device, "size", component.getColumns());
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
@@ -49,18 +40,19 @@ public class PasswordFieldCG
 
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
 
-        if (!component.isEditable()) {
-            device.write(__readonly_1);
+        if (!component.isEditable() || !component.isEnabled()) {
+            device.print(" readonly=\"1\"");
         }
         if (component.isEnabled()) {
-            device.write(__name);
+            device.print(" name=\"");
             org.wings.plaf.Utils.write(device, Utils.event(component));
-            device.write(__);
+            device.print("\"");
         } else {
-            device.write(__disabled_1);
+            device.print(" disabled=\"1\"");
         }
-        org.wings.plaf.Utils.optAttribute(device, "value", component.getText());
         Utils.writeEvents(device, component);
-        device.write(___1);
+
+        org.wings.plaf.Utils.optAttribute(device, "value", component.getText());
+        device.print("/>");
     }
 }

@@ -23,12 +23,6 @@ public class ButtonCG
         extends LabelCG
         implements SConstants, org.wings.plaf.ButtonCG {
 
-    private final static byte[] __onMouseover_if = " onMouseover=\"if(document.images){this.src='".getBytes();
-    private final static byte[] __onmouseout_if = "';}\" onmouseout=\"if(document.images){this.src='".getBytes();
-    private final static byte[] ___4 = "';}\"".getBytes();
-    private final static byte[] __onMousedown_if = " onMousedown=\"if(document.images){this.src='".getBytes();
-    private final static byte[] __onmouseup_if_d = "';}\" onmouseup=\"if(document.images){this.src='".getBytes();
-
     private void writeDynamicIcons(final Device device, SAbstractButton abstractButton, SIcon origIcon,
                                    String iconName, boolean renderNameAttribute)
             throws IOException {
@@ -41,33 +35,33 @@ public class ButtonCG
             if (rolloverIcon != null || pressedIcon != null) {
                 if (renderNameAttribute) {
 
-                    device.write(" name=\"".getBytes());
+                    device.print(" name=\"");
                     org.wings.plaf.Utils.write(device, iconName);
 
-                    device.write("\"".getBytes());
+                    device.print("\"");
                 } // end of if ()
 
 
                 if (rolloverIcon != null) {
 
-                    device.write(__onMouseover_if);
+                    device.print(" onMouseover=\"if(document.images){this.src='");
                     org.wings.plaf.Utils.write(device, rolloverIcon.getURL());
 
-                    device.write(__onmouseout_if);
+                    device.print("';}\" onmouseout=\"if(document.images){this.src='");
                     org.wings.plaf.Utils.write(device, origIcon.getURL());
 
-                    device.write(___4);
+                    device.print("';}\"");
                 }
 
                 if (pressedIcon != null) {
 
-                    device.write(__onMousedown_if);
+                    device.print(" onMousedown=\"if(document.images){this.src='");
                     org.wings.plaf.Utils.write(device, pressedIcon.getURL());
 
-                    device.write(__onmouseup_if_d);
+                    device.print("';}\" onmouseup=\"if(document.images){this.src='");
                     org.wings.plaf.Utils.write(device, rolloverIcon != null ? rolloverIcon.getURL() : origIcon.getURL());
 
-                    device.write(___4);
+                    device.print("';}\"");
                 }
             }
         }
@@ -79,17 +73,17 @@ public class ButtonCG
         final SAbstractButton button = (SAbstractButton) component;
 
         if (button.getShowAsFormComponent()) {
-            device.print("<button type=\"submit\" name=\"");
+            device.print("<button name=\"");
             org.wings.plaf.Utils.write(device, Utils.event(button));
             device.print("\"");
             org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
         } else {
-            device.write("<a href=\"".getBytes());
+            device.print("<a href=\"");
             RequestURL addr = button.getRequestURL();
             addr.addParameter(button, button.getToggleSelectionParameter());
             addr.write(device);
-            device.write("\"".getBytes());
+            device.print("\"");
 
             org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }

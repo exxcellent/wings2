@@ -26,33 +26,6 @@ import java.io.InputStreamReader;
 
 public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
 
-//--- byte array converted template snippets.
-    private final static byte[] __table_cellpadd = "<table cellpadding=\"0\" cellspacing=\"0\" id=\"".getBytes();
-    private final static byte[] __class_pdmenu_s = "\" class=\"pdmenu\" style=\"display:none\">".getBytes();
-    private final static byte[] __tr_id = "<tr id=\"".getBytes();
-    private final static byte[] __ = "\"".getBytes();
-    private final static byte[] __onMouseDown_Me = " onMouseDown=\"Menu.prototype.toggle('".getBytes();
-    private final static byte[] ___1 = "','".getBytes();
-    private final static byte[] ___2 = "')\"".getBytes();
-    private final static byte[] __class_menu = " class=\"menu\"".getBytes();
-    private final static byte[] __class_disabled = " class=\"disabledmenu\"".getBytes();
-    private final static byte[] __onClick_window = " onClick=\"window.location.href='".getBytes();
-    private final static byte[] ___3 = "'\"".getBytes();
-    private final static byte[] __class_menuitem = " class=\"menuitem\"".getBytes();
-    private final static byte[] __class_disabled_1 = " class=\"disabledmenuitem\"".getBytes();
-    private final static byte[] __td = "><td>".getBytes();
-    private final static byte[] __td_td = "</td><td>".getBytes();
-    private final static byte[] __img_border_0_a = "<img border=\"0\" align=\"middle\" src=\"".getBytes();
-    private final static byte[] ___4 = "/>".getBytes();
-    private final static byte[] __td_tr = "</td></tr>".getBytes();
-    private final static byte[] __table = "</table>".getBytes();
-    private final static byte[] __span_onClick_M = "<span onClick=\"Menu.prototype.toggle(".getBytes();
-    private final static byte[] ___5 = ",'".getBytes();
-    private final static byte[] __id = "')\" id=\"".getBytes();
-    private final static byte[] ___6 = "\">".getBytes();
-    private final static byte[] __span = "</span>".getBytes();
-    private final static byte[] ___7 = "\n".getBytes();
-
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         comp.addScriptListener(SCRIPT_LOADER);
@@ -102,10 +75,10 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         String popupId = componentId + "_pop";
 
 
-        device.write(__table_cellpadd);
+        device.print("<table cellpadding=\"0\" cellspacing=\"0\" id=\"");
         org.wings.plaf.Utils.write(device, popupId);
 
-        device.write(__class_pdmenu_s);
+        device.print("\" class=\"pdmenu\" style=\"display:none\">");
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
             SComponent menuItem = menu.getMenuComponent(i);
 
@@ -114,70 +87,70 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                 String itemHookId = itemComponentId + "_hook";
 
 
-                device.write(__tr_id);
+                device.print("<tr id=\"");
                 org.wings.plaf.Utils.write(device, itemHookId);
 
-                device.write(__);
+                device.print("\"");
                 if (menu.getMenuComponent(i) instanceof SMenu) {
                     if (menuItem.isEnabled()) {
                         String itemParentId = popupId;
                         String itemPopupId = itemComponentId + "_pop";
 
 
-                        device.write(__onMouseDown_Me);
+                        device.print(" onMouseDown=\"Menu.prototype.toggle('");
                         org.wings.plaf.Utils.write(device, itemParentId);
 
-                        device.write(___1);
+                        device.print("','");
                         org.wings.plaf.Utils.write(device, itemHookId);
 
-                        device.write(___1);
+                        device.print("','");
                         org.wings.plaf.Utils.write(device, itemPopupId);
 
-                        device.write(___2);
+                        device.print("')\"");
 
-                        device.write(__class_menu);
+                        device.print(" class=\"menu\"");
                     } else {
 
-                        device.write(__class_disabled);
+                        device.print(" class=\"disabledmenu\"");
                     }
 
                 } else {
                     if (menuItem.isEnabled()) {
                         if (menuItem instanceof SMenuItem) {
 
-                            device.write(__onClick_window);
+                            device.print(" onClick=\"window.location.href='");
                             writeAnchorAddress(device, (SMenuItem) menuItem);
-                            device.write(___3);
+                            device.print("'\"");
                         }
 
-                        device.write(__class_menuitem);
+                        device.print(" class=\"menuitem\"");
                     } else {
 
-                        device.write(__class_disabled_1);
+                        device.print(" class=\"disabledmenuitem\"");
                     }
                 }
 
-                device.write(__td);
+                device.print("><td>");
                 menu.getMenuComponent(i).write(device);
 
-                device.write(__td_td);
+                device.print("</td><td>");
                 if (menu.getMenuComponent(i) instanceof SMenu) {
 
-                    device.write(__img_border_0_a);
+                    device.print("<img border=\"0\" align=\"middle\" src=\"");
                     org.wings.plaf.Utils.write(device, RIGHT_ARROW.getURL());
 
-                    device.write(__);
+                    device.print("\"");
                     org.wings.plaf.Utils.optAttribute(device, "width", RIGHT_ARROW.getIconWidth());
                     org.wings.plaf.Utils.optAttribute(device, "height", RIGHT_ARROW.getIconHeight());
 
-                    device.write(___4);
+                    device.print("/>");
                 }
 
-                device.write(__td_tr);
+                device.print("</td></tr>");
             }
         }
 
-        device.write(__table);
+        device.print("</table>");
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
             SComponent menuItem = menu.getMenuComponent(i);
 
@@ -201,26 +174,26 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         // parent, hook, menu
         if (menu.isEnabled() && !hasParent) {
 
-            device.write(__span_onClick_M);
+            device.print("<span onClick=\"Menu.prototype.toggle(");
             org.wings.plaf.Utils.write(device, parentId);
 
-            device.write(___5);
+            device.print(",'");
             org.wings.plaf.Utils.write(device, hookId);
 
-            device.write(___1);
+            device.print("','");
             org.wings.plaf.Utils.write(device, popupId);
 
-            device.write(__id);
+            device.print("')\" id=\"");
             org.wings.plaf.Utils.write(device, componentId);
 
-            device.write(___6);
+            device.print("\">");
         }
 
         writeItemContent(device, menu);
 
         if (menu.isEnabled() && !hasParent) {
 
-            device.write(__span);
+            device.print("</span>");
         }
     }
 
@@ -241,6 +214,6 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         writeItem(device, menu);
         if (menu.getParentMenu() == null)
             writePopup(device, menu);
-        device.write(___7);
+        device.print("\n");
     }
 }

@@ -55,6 +55,7 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
                     org.wings.plaf.css.Utils.printTableCellAlignment(d, comp);
                     org.wings.plaf.css.Utils.printCSSInlineStyleAttributes(d, comp);
 
+                    d.print(">");
                     comp.write(d); // Render component itself
                     count++;
                 }
