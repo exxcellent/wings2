@@ -23,13 +23,14 @@ import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDefaultFormatter;
 
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 
 /*
  * @author  theresia
  */
 public class SFormattedTextField
-        extends STextField
+    extends STextField
 {
     private SAbstractFormatter formatter = null;
 
@@ -38,17 +39,28 @@ public class SFormattedTextField
 
     public SFormattedTextField(SAbstractFormatter formatter) {
         this.formatter = formatter;
-        formatter.install(this);
     }
 
     public void setValue(Object object) {
         String string = null;
-        if (formatter != null) string = this.formatter.valueToString(object);
+        if (formatter != null)
+            try {
+                string = this.formatter.valueToString(object);
+            }
+            catch (ParseException e) {
+                e.printStackTrace();
+            }
         super.setText(string);
     }
 
     public Object getValue() {
-        Object returnValue = this.formatter.stringToValue(this.getText());
+        Object returnValue = null;
+        try {
+            returnValue = this.formatter.stringToValue(this.getText());
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
         return returnValue;
     }
 
@@ -82,4 +94,11 @@ public class SFormattedTextField
         }
     }
 
+    protected void setParentFrame(SFrame parentFrame) {
+        if (this.parentFrame != null)
+            formatter.uninstall(this);
+        super.setParentFrame(parentFrame);
+        if (this.parentFrame != null)
+            formatter.install(this);
+    }
 }

@@ -24,6 +24,7 @@ import org.wings.script.JavaScriptListener;
 
 import java.util.Iterator;
 import java.util.Vector;
+import java.text.ParseException;
 
 /**
  * @author theresia
@@ -119,11 +120,11 @@ public abstract class SAbstractFormatter {
      * @param text String to convert
      * @return Object representation of text
      */
-    public abstract Object stringToValue(String text);
+    public abstract Object stringToValue(String text) throws ParseException;
 
     /**
      * @param value Value to convert
      * @return String representation of value
      */
-    public abstract String valueToString(Object value);
+    public abstract String valueToString(Object value) throws ParseException;
 }

@@ -72,7 +72,7 @@ public class JavaScriptListener
     public JavaScriptListener(String event, String code, String script, SComponent[] components) {
         this.event = event;
         this.code = substituteIds(code, components);
-        this.script = script;
+        this.script = substituteIds(script, components);
         this.components = components;
     }
 

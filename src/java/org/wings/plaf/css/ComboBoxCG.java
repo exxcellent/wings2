@@ -42,7 +42,6 @@ public class ComboBoxCG
 
 
     protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
-        Utils.printNewline(device, component);
         device.print("<select size=\"1\"");
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
@@ -62,7 +61,7 @@ public class ComboBoxCG
 
         Utils.writeEvents(device, component);
 
-        device.print(">");
+        device.print(">\n");
         javax.swing.ComboBoxModel model = component.getModel();
         int size = model.getSize();
         int selected = component.getSelectedIndex();
@@ -74,12 +73,10 @@ public class ComboBoxCG
             if (renderer != null) {
                 cellRenderer = renderer.getListCellRendererComponent(component, model.getElementAt(i), false, i);
             } else {
-
                 device.print("<!--renderer==null-->");
             }
 
 
-            Utils.printNewline(device, component);
             device.print("<option");
             Utils.optAttribute(device, "value", component.getSelectionParameter(i));
             if (selected == i) {
@@ -93,7 +90,7 @@ public class ComboBoxCG
                 Utils.optAttribute(device, "style", stringBufferDevice.toString());
             }
 
-            device.print(">"); //option
+            device.print(">\n"); //option
 
             if (cellRenderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
@@ -120,7 +117,6 @@ public class ComboBoxCG
         }
 
 
-        Utils.printNewline(device, component);
         device.print("</select>");
         // util method
 

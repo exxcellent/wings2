@@ -51,7 +51,6 @@ public class FormCG
             throws IOException {
         final SForm component = (SForm) c;
 
-        Utils.printNewline(device, component);
         device.print("<form method=\"");
         if (component.isPostMethod()) {
             device.print("post");
@@ -84,7 +83,6 @@ public class FormCG
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
 
-        Utils.printNewline(device, component);
         device.print("</form>");
     }
 

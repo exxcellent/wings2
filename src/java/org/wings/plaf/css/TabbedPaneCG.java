@@ -143,8 +143,6 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             if (konquerorWorkaround)
                 title = nonBreakingSpaces(title);
 
-            Utils.printNewline(device, tabbedPane);
-
             if (showAsFormComponent)
                 device.print("<button name=\"")
                         .print(Utils.event(tabbedPane))

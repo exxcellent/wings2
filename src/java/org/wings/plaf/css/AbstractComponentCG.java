@@ -75,9 +75,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     protected void writePrefix(Device device, SComponent component) throws IOException {
-        Utils.printDebugNewline(device, component);
-        Utils.printDebug(device, "<!-- START COMPONENT: ").print(component.getName()).print(" -->");
-        Utils.printNewline(device, component);
+        Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" -->");
         device.print("<div id=\"").print(component.getName()).print("\"");
         Utils.optAttribute(device, "class", component.getStyle());
 
@@ -154,10 +152,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         component.setInheritsPopupMenu(backup);
 
-        Utils.printNewline(device, component);
         device.print("</div>");
-
-        Utils.printDebugNewline(device, component);
-        Utils.printDebug(device, "<!-- END COMPONENT: ").print(component.getName()).print(" -->");
+        Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 }
