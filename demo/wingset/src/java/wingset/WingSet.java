@@ -128,7 +128,8 @@ public class WingSet {
     public WingSet() {
         frame = new SFrame("WingSet");
         frame.setTitle("WingSet Demo");
-        
+        frame.setAttribute("margin", "8px");
+
         frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../wingset-gecko.css")));
        
         System.out.println("new WingSet");

@@ -21,6 +21,7 @@ div, form, td, th {
 
 a, button {
     display: table;
+    border: none;
 }
 
 A:link, A:visited {
@@ -67,7 +68,11 @@ div.SButton > button:hover {
 }
 
 div.SButton > button[disabled="true"] * {
-   opacity: 0.5;
+   opacity: 0.7;
+}
+
+div.SButton > button:hover[disabled="true"] {
+   border: 1px solid #cccccc;
 }
 
 div.SClickable > button {
