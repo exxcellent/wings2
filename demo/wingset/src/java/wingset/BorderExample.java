@@ -19,8 +19,6 @@ import org.wings.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
