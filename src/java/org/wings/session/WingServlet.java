@@ -35,7 +35,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
- * Central servlet delegating all requests to the according j-wings session servlet.
+ * Central servlet delegating all requests to the according wingS session servlet.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
