@@ -120,19 +120,20 @@ public class SDimension
             iheight=getInt(height);
         return iheight;
     }
-    
-    /**
-     * Checks whether two dimension objects have equal values.
-     * @param obj - the reference object with which to compare.
-     * @return true if this object is the same as the obj argument; 
-     *         false otherwise.
-     */
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        return width.equals(((SDimension) obj).width) && height.equals(((SDimension) obj).height);
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SDimension)) return false;
+
+        final SDimension sDimension = (SDimension)o;
+
+        if (height != null ? !height.equals(sDimension.height) : sDimension.height != null) return false;
+        if (width != null ? !width.equals(sDimension.width) : sDimension.width != null) return false;
+
+        return true;
     }
-    
-    /** 
+
+    /**
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
