@@ -14,7 +14,6 @@
 package org.wings.plaf.css;
 
 import org.wings.*;
-import org.wings.border.SBorder;
 import org.wings.io.Device;
 import org.wings.script.ScriptListener;
 
@@ -201,7 +200,6 @@ public final class Utils
         java.awt.Color fgColor = component.getForeground();
         java.awt.Color bgcolor = component.getBackground();
         SFont font = component.getFont();
-        SBorder border = component.getBorder();
         SDimension dim = component.getPreferredSize();
 
         if (bgcolor != null) 
@@ -217,9 +215,6 @@ public final class Utils
             d.print("font-style:").print((style & java.awt.Font.ITALIC) > 0 ? "italic;" : "normal;");
             d.print("font-weight:").print((style & java.awt.Font.BOLD) > 0 ? "bold;" : "normal;");
             d.print("font-family:").print(font.getFace()).print(";");
-        }
-       if (border != null) {
-          border.writeSpanAttributes(d);
         }
 
         if (dim != null) {

@@ -14,10 +14,9 @@
 
 package org.wings.border;
 
-import org.wings.io.Device;
+import org.wings.style.AttributeSet;
 
 import java.awt.*;
-import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -28,7 +27,6 @@ import java.io.Serializable;
  */
 public interface SBorder extends Serializable
 {
-
     /**
      * Sets the insets of this border. Insets describe the amount
      * of space 'around' the bordered component.
@@ -61,43 +59,6 @@ public interface SBorder extends Serializable
     void setColor(Color color);
 
     /**
-     * writes the border prefix
-     *
-     * @exception IOException
-     * @param d output device
-     */
-    void writePrefix(Device d) throws IOException;
-
-    /**
-     * writes the border postfix to the given device
-     *
-     * @exception IOException
-     * @param d output device
-     */
-    void writePostfix(Device d) throws IOException;
-
-    /**
-     * writes the border attributes for span element.
-     *
-     * @exception IOException
-     * @param d output device
-     */
-    void writeSpanAttributes(Device d) throws IOException;
-
-/**
-     * delivers the border attributes for span element.
-     *
-     */
-    String getSpanAttributes();
-
-    /**
-     * Notification from the CGFactory that the L&F has changed.
-     *
-     * @see org.wings.SComponent#updateCG
-     */
-    void updateCG();
-
-    /**
      * Get the thickness in pixel for this border.
      *
      * @return thickness
@@ -112,12 +73,6 @@ public interface SBorder extends Serializable
      * @see #getThickness()
      */
     public void setThickness(int thickness);
-}
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+    AttributeSet getAttributes();
+}

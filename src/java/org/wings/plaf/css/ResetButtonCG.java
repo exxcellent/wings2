@@ -28,7 +28,6 @@ public class ResetButtonCG
 
         device.write(__input_type_res);
         Utils.writeEvents(device, component);
-        org.wings.plaf.Utils.optAttribute( device, "class", org.wings.plaf.css.Utils.style(component));
         org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute( device, "value", component.getText());
         device.write(__);

@@ -17,8 +17,6 @@ package org.wings.border;
 import java.awt.*;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

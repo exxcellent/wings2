@@ -14,13 +14,10 @@
 
 package org.wings.border;
 
-import java.awt.Insets;
-import java.awt.Color;
-import java.io.IOException;
+import org.wings.style.AttributeSet;
+import org.wings.style.CSSStyleSheet;
 
-import org.wings.io.Device;
-import org.wings.plaf.*;
-import org.wings.session.*;
+import java.awt.*;
 
 /**
  * This is a an abstract implementation of the <code>SBorder</code>
@@ -32,12 +29,6 @@ import org.wings.session.*;
 public abstract class SAbstractBorder
     implements SBorder
 {
-    /**
-     * The code generation delegate, which is responsible for
-     * the visual representation of a border.
-     */
-    protected transient BorderCG cg;
-
     /**
      * the insets
      */
@@ -53,64 +44,28 @@ public abstract class SAbstractBorder
      */
     private int thickness;
 
-    /**
-     * constructor
-     */
+    protected AttributeSet attributes = new AttributeSet();
+
     public SAbstractBorder() {
-        this(Color.black, 1, new Insets(0, 0, 0, 0));
+        this(Color.black, 2, new Insets(0, 0, 0, 0));
     }
 
-    /**
-     * constructor
-     */
     public SAbstractBorder(Color c, int thickness, Insets insets) {
         setInsets(insets);
         setColor(c);
         setThickness(thickness);
-	updateCG();
     }
 
-    /**
-     * constructor
-     */
     public SAbstractBorder(Insets insets) {
-	this(Color.black, 1, insets);
+        this(Color.black, 2, insets);
     }
 
-    /**
-     * constructor
-     */
     public SAbstractBorder(Color c) {
-	this(c, 1, new Insets(0, 0, 0, 0));
+        this(c, 2, new Insets(0, 0, 0, 0));
     }
 
-    /**
-     * constructor
-     */
     public SAbstractBorder(int thickness) {
-	this(Color.black, thickness, new Insets(0, 0, 0, 0));
-    }
-
-    /**
-     * Sets the look and feel delegate.
-     *
-     * @param newGC the new componet's cg
-     */
-    protected void setCG(BorderCG newCG) {
-        cg = newCG;
-    }
-
-    /**
-     * Return the look and feel delegate.
-     *
-     * @return the componet's cg
-     */
-    public BorderCG getCG() {
-        return cg;
-    }
-
-    public void updateCG() {
-        setCG((BorderCG)SessionManager.getSession().getCGManager().getCG(this));
+        this(Color.black, thickness, new Insets(0, 0, 0, 0));
     }
 
     /**
@@ -118,32 +73,21 @@ public abstract class SAbstractBorder
      */
     public void setInsets(Insets insets) {
         this.insets = insets;
+        attributes.put("padding-top", insets.top + "px");
+        attributes.put("padding-left", insets.left + "px");
+        attributes.put("padding-right", insets.right + "px");
+        attributes.put("padding-bottom", insets.bottom + "px");
     }
 
     /**
      * @return the insets of the border
      */
-    public final Insets getInsets() { return insets; }
-
-    public void writePrefix(Device d) throws IOException {
-	cg.writePrefix(d, this);
+    public final Insets getInsets() {
+        return insets;
     }
 
-    public void writePostfix(Device d) throws IOException {
-	cg.writePostfix(d, this);
-    }
-
-    public void writeSpanAttributes(Device d) throws IOException {
-        cg.writeSpanAttributes( d, this );
-    }
-
-    public String getSpanAttributes() {
-      return cg.getSpanAttributes(this);
-    }
-    
     /**
      * sets the foreground color of the border
-     * @param color
      */
     public Color getColor() {
         return color;
@@ -151,26 +95,35 @@ public abstract class SAbstractBorder
 
     /**
      * sets the foreground color of the border
+     *
      * @param color
      */
     public void setColor(Color color) {
         this.color = color;
+        attributes.put("border-color", CSSStyleSheet.getAttribute(color));
     }
 
     /**
-     * set the thickness of the border 
+     * set the thickness of the border
      * thickness must be > 0
      *
      * @param thickness
      */
     public void setThickness(int thickness) {
         this.thickness = thickness;
+        attributes.put("border-width", thickness + "px");
+    }
+
+    public AttributeSet getAttributes() {
+        return attributes;
     }
 
     /**
      * @return thickness in pixels
      */
-    public final int getThickness() { return thickness; }
+    public final int getThickness() {
+        return thickness;
+    }
 
 }
 

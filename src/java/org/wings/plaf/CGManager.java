@@ -17,7 +17,6 @@ package org.wings.plaf;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLayoutManager;
-import org.wings.border.SBorder;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 import org.wings.style.Style;
@@ -87,16 +86,6 @@ public class CGManager implements Serializable
      */
     public LayoutCG getCG(SLayoutManager target) {
         return (LayoutCG)getDefaults().get(target.getClass(), LayoutCG.class);
-    }
-
-    /**
-     * Get a BorderCG from the defaults table.
-     * If the there's no value associated to the <code>target</code>'s cgClassID, the request
-     * is delegated to the laf's defaults table.
-     * @param target the SBorder
-     */
-    public BorderCG getCG(SBorder target) {
-        return (BorderCG)getDefaults().get(target.getClass(), BorderCG.class);
     }
 
     /**

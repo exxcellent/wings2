@@ -19,6 +19,11 @@ div, form, td, th {
     margin: 0px;
 }
 
+a, button {
+    padding: 0px;
+    margin: 0px;
+}
+
 A:link, A:visited {
    color: #000066;
    text-decoration: none

@@ -74,11 +74,6 @@ public class STextField
             reload(ReloadManager.RELOAD_CODE);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
     public int getMaxColumns() {
         return maxColumns;
     }

@@ -39,20 +39,6 @@ public final class Utils implements SConstants
     private Utils() {
     }
 
-    public static void writeBorderPrefix(Device d, SBorder border)
-        throws IOException
-    {
-        if (border != null)
-            border.writePrefix(d);
-    }
-
-    public static void writeBorderPostfix(Device d, SBorder border)
-        throws IOException
-    {
-        if (border != null)
-            border.writePostfix(d);
-    }
-
     public static void writeContainerContents(Device d, SContainer c)
         throws IOException
     {
@@ -320,10 +306,6 @@ public final class Utils implements SConstants
             d.print("font-family:").print(font.getFace()).print(";");
         }
         
-        if (border != null) {
-              border.writeSpanAttributes(d);
-        }
-
         if (dim != null) {
             if (dim.width != null) d.print("width:").print(dim.width).print(";");
             if (dim.height != null) d.print("height:").print(dim.height).print(";");

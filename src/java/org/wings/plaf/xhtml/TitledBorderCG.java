@@ -40,9 +40,7 @@ public class TitledBorderCG implements BorderCG
     public void writePrefix(Device d, SBorder c) throws IOException
     {
         STitledBorder b = (STitledBorder) c;
-        d.print("<fieldset style=\"");
-        b.getBorder().writeSpanAttributes(d);
-        d.print("\">");
+        d.print("<fieldset>");
 		if (b.getTitle() != null) {
 		    d.print("<legend  class=\"titledbordertitle\" align=\"");
 		    switch (b.getTitlePosition()) {

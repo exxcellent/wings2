@@ -1179,8 +1179,6 @@ public abstract class SComponent
         } else {
             setCG(getSession().getCGManager().getCG(this));
         }
-        if (border != null)
-            border.updateCG();
     }
 
     /**

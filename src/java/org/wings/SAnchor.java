@@ -117,16 +117,6 @@ public class SAnchor extends SContainer
     }
 
     /**
-     * set the url this anchor points to.
-     *
-     * @deprecated use setURL() instead.
-     * @param r
-     */
-    public void setReference(String r) {
-        setURL(r);
-    }
-
-    /**
      * set the name of the target frame/window.
      */
     public void setTarget(String t) {
@@ -138,15 +128,6 @@ public class SAnchor extends SContainer
      */
     public String getTarget() {
         return target;
-    }
-
-    /**
-     * TODO: documentation
-     * @deprecated use getURL() instead.
-     * @return
-     */
-    public String getReference() {
-        return url.toString();
     }
 
     public SimpleURL getURL() {

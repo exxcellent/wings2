@@ -5,10 +5,8 @@ This example allows you to set the Border of this area
 <p>
 <table align="center">
 <tr><th align="center">Example</th><th>Border Control Panel</th></tr>
-<tr><td><object name="BorderExample"></object></td>
-    <td bgcolor="white"><object name="Modifier"></object></td>
+<tr><td style="padding: 10px"><object name="BorderExample"></object></td>
+    <td style="padding: 10px" bgcolor="white"><object name="Modifier"></object></td>
 </tr>
 </table>
 <p>
-(Note: This doesn't seem to work with Netscape 4.*)
-

@@ -94,7 +94,7 @@ public class ButtonCG
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
-        if (!button.isSelected())
+        if (button.isSelected())
             device.print(" checked=\"true\"");
 
         device.print(">");

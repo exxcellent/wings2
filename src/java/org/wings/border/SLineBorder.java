@@ -34,62 +34,36 @@ public class SLineBorder
 
     private String borderStyle = SOLID;
 
-    /**
-     * TODO: documentation
-     *
-     */
-    public SLineBorder() {}
+    public SLineBorder() {
+        setBorderStyle(SOLID);
+    }
 
-    /**
-     * TODO: documentation
-     *
-     */
     public SLineBorder(int thickness) {
         super(thickness);
+        setBorderStyle(SOLID);
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
     public SLineBorder(Color c) {
         super(c);
+        setBorderStyle(SOLID);
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
     public SLineBorder(Color c, String borderStyle) {
         super(c);
-
         setBorderStyle(borderStyle);
+        setBorderStyle(SOLID);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param thickness
-     * @param insets
-     */
     public SLineBorder(int thickness, Insets insets) {
         super(Color.black, thickness, insets);
+        setBorderStyle(SOLID);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param style
-     */
     public void setBorderStyle(String style) {
         this.borderStyle = style;
+        attributes.put("border-style", style);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return thickness in pixels
-     */
     public final String getBorderStyle() { return borderStyle; }
 }
 

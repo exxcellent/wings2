@@ -75,13 +75,16 @@ public abstract class AbstractComponentCG
         return selector;
     }
 
-    // TODO: border / javascript listener
+    // TODO: javascript listener
     protected void writePrefix(Device device, SComponent component) throws IOException {
         device
             .print("<div id=\"")
             .print(component.getComponentId())
             .print("\" class=\"")
             .print(component.getStyle());
+
+        final SBorder border = component.getBorder();
+        //borderStyle(border);
 
         final SDimension dim = component.getPreferredSize();
         if (dim != null)
@@ -95,20 +98,12 @@ public abstract class AbstractComponentCG
             .print("\">\n");
 
         component.fireRenderEvent(SComponent.START_RENDERING);
-
-        final SBorder border = component.getBorder();
-        if (border != null)
-            border.writePrefix(device);
     }
 
     protected void writeContent(Device device, SComponent component) throws IOException {
     }
 
     protected void writePostfix(Device device, SComponent component) throws IOException {
-        final SBorder border = component.getBorder();
-        if (border != null)
-            border.writePostfix(device);
-
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         device
             .print("</div><!-- ")
@@ -116,11 +111,3 @@ public abstract class AbstractComponentCG
             .print("-->\n");
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

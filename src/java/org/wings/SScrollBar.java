@@ -262,10 +262,6 @@ public class SScrollBar
         initLayout();
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
     protected void initLayout()
     {
         removeAll();
@@ -296,10 +292,6 @@ public class SScrollBar
         forward.add(clickables[LAST]);
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
     protected void refreshComponents() {
         // lower bound
         clickables[BACKWARD].setEnabled(getValue() > getMinimum());
@@ -347,6 +339,13 @@ public class SScrollBar
 
     public void setCG(ScrollBarCG cg) {
         super.setCG(cg);
+    }
+
+    public void setShowAsFormComponent(boolean showAsFormComponent) {
+        super.setShowAsFormComponent(showAsFormComponent);
+        for(int i = 0; i < clickables.length; i++) {
+            clickables[i].setShowAsFormComponent(showAsFormComponent);
+        }
     }
 
     public String toString()

@@ -33,6 +33,7 @@ public class ComboBoxCG
     private final static byte[] ___3            = "\n".getBytes();
 
     public void installCG(final SComponent comp) {
+        super.installCG(comp);
         final SComboBox component = (SComboBox) comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
@@ -50,14 +51,10 @@ public class ComboBoxCG
     protected void writeFormComboBox(Device device, SComboBox comboBox) throws IOException {
 
         device.write(__select_size_1);
-        org.wings.plaf.Utils.optAttribute( device, "class", org.wings.plaf.css.Utils.style(comboBox));
         org.wings.plaf.Utils.optAttribute( device, "name", Utils.event(comboBox));
-        org.wings.plaf.Utils.optAttribute( device, "style", comboBox.getPreferredSize());
         org.wings.plaf.Utils.optAttribute( device, "tabindex", comboBox.getFocusTraversalIndex());
         if ( !comboBox.isEnabled() ) {
-
             device.write(__disabled_1);
-            // ="1" needed for XHTML
         }
 
         comboBox.removeScriptListener(submitListener);

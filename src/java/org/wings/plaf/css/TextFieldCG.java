@@ -26,11 +26,6 @@ public class TextFieldCG
     private final static byte[] __disabled_1    = " disabled=\"1\"".getBytes();
     private final static byte[] ___1            = "/>".getBytes();
 
-    public void installCG(final SComponent comp) {
-    }
-    public void uninstallCG(final SComponent comp) {
-    }
-
 //--- code from common area in template.
     private static final JavaScriptListener submitListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submit()");
 
@@ -43,23 +38,26 @@ public class TextFieldCG
         throws IOException {
         final STextField component = (STextField) _c;
 
-//--- code from write-template.
-        // writeEvents();
-        device.write(__input_type_tex);        org.wings.plaf.Utils.optAttribute( device, "size", component.getColumns());        if (component.getMaxColumns() >= 0) {            org.wings.plaf.Utils.optAttribute( device, "maxlength", component.getMaxColumns());        }        org.wings.plaf.Utils.optAttribute( device, "class", org.wings.plaf.css.Utils.style(component));        org.wings.plaf.Utils.optAttribute( device, "style", component.getPreferredSize());        if (!component.isEditable() || !component.isEnabled() ) {
+        device.write(__input_type_tex);
+        org.wings.plaf.Utils.optAttribute( device, "size", component.getColumns());
+        org.wings.plaf.Utils.optAttribute( device, "maxlength", component.getMaxColumns());
+
+        if (!component.isEditable() || !component.isEnabled() ) {
             device.write(__readonly_1);
         }
         if (component.isEnabled()) {
             device.write(__name);
             org.wings.plaf.Utils.write( device, Utils.event(component));
             device.write(__);
-            device.write(__id);
-            org.wings.plaf.Utils.write( device, component.getComponentId());
-            device.write(__);
-        } else {
+        }
+        else {
             device.write(__disabled_1);
-        }         org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());        if(!(component instanceof SFormattedTextField)){
+        }
+        org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
+
+        if(!(component instanceof SFormattedTextField)){
             component.removeScriptListener(submitListener);
-            if (component.getActionListeners().length>0) {
+            if (component.getActionListeners().length > 0) {
                 component.addScriptListener(submitListener);
             }
         }
@@ -67,7 +65,5 @@ public class TextFieldCG
 
         org.wings.plaf.Utils.optAttribute( device, "value", component.getText());
         device.write(___1);
-
-//--- end code from write-template.
     }
 }

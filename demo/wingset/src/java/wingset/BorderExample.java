@@ -24,8 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -51,15 +49,9 @@ public class BorderExample
         }
         SPanel p = p1;
 
-        /*
-         * border layout allows to set the color
-         */
-        final SPanel c = new SPanel(new SBorderLayout());
-        c.setBackground(new java.awt.Color(180, 180, 255));
-        final SLabel borderLabel;
-        borderLabel = new SLabel(WAIT_ICON);
-        c.add(borderLabel);
-        p.add(c, "BorderExample");
+        final SLabel borderLabel = new SLabel(WAIT_ICON);
+        borderLabel.setBackground(new java.awt.Color(180, 180, 255));
+        p.add(borderLabel, "BorderExample");
 
         SPanel buttons = new SPanel();
         buttons.setLayout(new SGridLayout(2, 2));
@@ -79,19 +71,19 @@ public class BorderExample
                     Object button = g.getSelection();
                     if (button == rb) {
                         borderLabel.setText("Raised Border");
-                        c.setBorder(raised);
+                        borderLabel.setBorder(raised);
                     }
                     else if (button == lb) {
                         borderLabel.setText("Lowered Border");
-                        c.setBorder(lowered);
+                        borderLabel.setBorder(lowered);
                     }
                     else if (button == lineb) {
                         borderLabel.setText("Line Border");
-                        c.setBorder(line);
+                        borderLabel.setBorder(line);
                     }
                     else if (button == eb) {
                         borderLabel.setText("Titled Border");
-                        c.setBorder(titled);
+                        borderLabel.setBorder(titled);
                     }
                 }
             });

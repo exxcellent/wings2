@@ -22,21 +22,19 @@ public class PasswordFieldCG
     private final static byte[] __disabled_1    = " disabled=\"1\"".getBytes();
     private final static byte[] ___1            = "/>".getBytes();
 
-    public void installCG(final SComponent comp) {
-    }
-    public void uninstallCG(final SComponent comp) {
-    }
-
 
     public void writeContent(final Device device,
                       final SComponent _c)
         throws IOException {
         final SPasswordField component = (SPasswordField) _c;
 
-//--- code from write-template.
-
         device.write(__input_type_pas);
-        org.wings.plaf.css.Utils.writeEvents(device, component);        org.wings.plaf.Utils.optAttribute( device, "size", component.getColumns());        org.wings.plaf.Utils.optAttribute( device, "style", component.getPreferredSize());        org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());        org.wings.plaf.Utils.optAttribute( device, "maxlength", component.getMaxColumns());        org.wings.plaf.Utils.optAttribute( device, "class", Utils.style(component));        org.wings.plaf.Utils.optAttribute( device, "id", component.getComponentId());        if (!component.isEditable()) {
+        org.wings.plaf.css.Utils.writeEvents(device, component);
+        org.wings.plaf.Utils.optAttribute( device, "size", component.getColumns());
+        org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
+        org.wings.plaf.Utils.optAttribute( device, "maxlength", component.getMaxColumns());
+        org.wings.plaf.Utils.optAttribute( device, "id", component.getComponentId());
+        if (!component.isEditable()) {
             device.write(__readonly_1);
         }
         if (component.isEnabled())   {
@@ -48,7 +46,5 @@ public class PasswordFieldCG
             device.write(__disabled_1);
         }         org.wings.plaf.Utils.optAttribute( device, "value", component.getText());
         device.write(___1);
-
-//--- end code from write-template.
     }
 }

@@ -4,7 +4,6 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.SDimension;
 import org.wings.STextArea;
 import org.wings.io.Device;
 import org.wings.plaf.AbstractComponentCG;
@@ -31,26 +30,18 @@ public class TextAreaCG
     private final static byte[] __textarea_1    = "</textarea>".getBytes();
     private final static byte[] ___3            = "\n".getBytes();
 
-    public void installCG(final SComponent comp) {
-    }
-    public void uninstallCG(final SComponent comp) {
-    }
-
 
     public void writeContent(final Device device,
                       final SComponent _c)
         throws IOException {
         final STextArea component = (STextArea) _c;
 
-//--- code from write-template.
-        SDimension dim = component.getPreferredSize();
-        device.write(__textarea);        org.wings.plaf.Utils.optAttribute( device, "class", org.wings.plaf.css.Utils.style(component));        Utils.writeEvents(device, component);        org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());        org.wings.plaf.Utils.optAttribute( device, "cols", component.getColumns());        org.wings.plaf.Utils.optAttribute( device, "rows", component.getRows());        if (dim != null) {
-            device.write(__style_height);
-            device.print(dim.getHeight());
-            device.write(__width);
-            device.print(dim.getWidth());
-            device.write(__);
-        }
+        device.write(__textarea);        
+        Utils.writeEvents(device, component);
+        org.wings.plaf.Utils.optAttribute( device, "tabindex", component.getFocusTraversalIndex());
+        org.wings.plaf.Utils.optAttribute( device, "cols", component.getColumns());
+        org.wings.plaf.Utils.optAttribute( device, "rows", component.getRows());
+
         if (!component.isEditable()) {
             device.write(__readonly_1);
         }
@@ -58,10 +49,8 @@ public class TextAreaCG
             device.write(__name);
             org.wings.plaf.Utils.write( device, Utils.event(component));
             device.write(___1);
-            device.write(__id);
-            org.wings.plaf.Utils.write( device, component.getComponentId());
-            device.write(___1);
-        }  else { 
+        }
+        else {
             device.write(__disabled_1);
         } 
 
@@ -77,7 +66,5 @@ public class TextAreaCG
         org.wings.plaf.Utils.writeRaw( device, component.getText());
         device.write(__textarea_1);
         device.write(___3);
-
-//--- end code from write-template.
     }
 }

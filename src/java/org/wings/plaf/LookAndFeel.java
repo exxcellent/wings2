@@ -296,8 +296,7 @@ public class LookAndFeel
             }
             
             if (ComponentCG.class.isAssignableFrom(type)
-                || LayoutCG.class.isAssignableFrom(type)
-                || BorderCG.class.isAssignableFrom(type)) {
+                || LayoutCG.class.isAssignableFrom(type)) {
                 value = makeCG(property);
             }
             else if (type.isAssignableFrom(SIcon.class)) {

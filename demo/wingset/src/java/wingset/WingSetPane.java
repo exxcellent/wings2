@@ -61,7 +61,7 @@ abstract public class WingSetPane
     
     protected static SLayoutManager createResourceTemplate(String name) {
         try {
-            return new STemplateLayout(SessionManager.getSession().getServletContext().getResource(name));
+            return new STemplateLayout(SessionManager.getSession().getServletContext().getRealPath(name));
         }
         catch ( Exception except ) {
             except.printStackTrace();

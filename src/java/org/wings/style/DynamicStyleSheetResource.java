@@ -15,6 +15,7 @@
 package org.wings.style;
 
 import org.wings.*;
+import org.wings.border.SBorder;
 import org.wings.plaf.ComponentCG;
 import org.wings.io.Device;
 import org.wings.util.ComponentVisitor;
@@ -78,14 +79,19 @@ public class DynamicStyleSheetResource
                 selectorPrefix = "";
 
             Collection dynamicStyles = component.getDynamicStyles();
-            ComponentCG cg = component.getCG();
             if (dynamicStyles != null) {
+                ComponentCG cg = component.getCG();
                 for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
                     Style style = (Style)iterator.next();
                     String selector = style.getSelector();
                     selector = cg.mapSelector(selector);
                     writeAttributes(selectorPrefix + selector, style);
                 }
+            }
+
+            SBorder border = component.getBorder();
+            if (border != null) {
+                writeAttributes(selectorPrefix, border.getAttributes());
             }
         }
         
@@ -96,6 +102,14 @@ public class DynamicStyleSheetResource
             style.setSelector(selector);
             style.write(out);
             style.setSelector(backup);
+        }
+
+        private void writeAttributes(String selector, AttributeSet attributes)
+            throws IOException
+        {
+            out.print(selector).print("{");
+            attributes.write(out);
+            out.print("}\n");
         }
 
         public void visit(SComponent component) throws Exception {

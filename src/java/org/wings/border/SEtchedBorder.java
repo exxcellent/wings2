@@ -33,39 +33,22 @@ public class SEtchedBorder
 
     int etchedType = RAISED;
 
-    /**
-     * TODO: documentation
-     *
-     */
-    public SEtchedBorder() {}
+    public SEtchedBorder() {
+        setEtchedType(RAISED);
+    }
 
-    /**
-     * TODO: documentation
-     *
-     * @param etchedType
-     */
     public SEtchedBorder(int etchedType) {
         setEtchedType(etchedType);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param etchedType
-     * @param insets
-     */
     public SEtchedBorder(int etchedType, Insets insets) {
         super(insets);
         setEtchedType(etchedType);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param etchedType
-     */
     public void setEtchedType(int etchedType) {
         this.etchedType = etchedType;
+        attributes.put("border-style", etchedType == RAISED ? "ridge" : "groove");
     }
 
     public int getEtchedType() { return etchedType; }

@@ -40,7 +40,9 @@ public class SBevelBorder
     /**
      * Creates a new beveled raised border.
      */
-    public SBevelBorder() {}
+    public SBevelBorder() {
+        setBevelType(RAISED);
+    }
 
     /**
      * Creates a new beveled border with the given type.
@@ -86,6 +88,7 @@ public class SBevelBorder
      */
     public void setBevelType(int bevelType) {
         this.bevelType = bevelType;
+        attributes.put("border-style", bevelType == RAISED ? "outset" : "inset");
     }
 
     /**

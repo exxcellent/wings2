@@ -13,13 +13,10 @@
  */
 package org.wings.border;
 
-import java.awt.Color;
-import java.awt.Insets;
-
-import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFont;
-import org.wings.SLabel;
+
+import java.awt.*;
 
 /**
  * Display a titled border. This depends on the implementation
@@ -53,8 +50,6 @@ import org.wings.SLabel;
  */
 public class STitledBorder extends SAbstractBorder
 {
-    private static final String cgClassID = "TitledBorderCG";
-
     /**
      * The border to use.
      */

@@ -16,9 +16,10 @@ package wingset;
 
 import org.wings.*;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -32,13 +33,26 @@ public class ScrollPaneExample
         SLabel label = new SLabel("<html><h4>Table in a ScrollPane</h4>");
         p.add(label);
 
-        // table.setShowGrid(true);
         STable table = new STable(new TableExample.ROTableModel(15, 15));
         table.setShowAsFormComponent(true);
         table.setDefaultRenderer(new TableExample.MyCellRenderer());
-        SScrollPane scroller = new SScrollPane(table);
+
+        final SScrollPane scroller = new SScrollPane(table);
         scroller.getHorizontalScrollBar().setBlockIncrement(3);
         scroller.getVerticalScrollBar().setBlockIncrement(3);
+
+        final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
+        showAsFormComponent.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ((SScrollBar)scroller.getHorizontalScrollBar()).setShowAsFormComponent(showAsFormComponent.isSelected());
+                ((SScrollBar)scroller.getVerticalScrollBar()).setShowAsFormComponent(showAsFormComponent.isSelected());
+            }
+        });
+        showAsFormComponent.setShowAsFormComponent(false);
+        ((SScrollBar)scroller.getHorizontalScrollBar()).setShowAsFormComponent(false);
+        ((SScrollBar)scroller.getVerticalScrollBar()).setShowAsFormComponent(false);
+
+        p.add(showAsFormComponent);
         p.add(scroller);
         return p;
     }

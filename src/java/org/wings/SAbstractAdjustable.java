@@ -452,6 +452,9 @@ public abstract class SAbstractAdjustable
     }
 
     public void processLowLevelEvent(String name, String[] values) {
+        System.out.println("name = " + name);
+        System.out.println("name = " + name);
+        System.out.println("name = " + name);
         // is it for me ?
         /*
         if ( !name.startsWith(getComponentId()) ) {

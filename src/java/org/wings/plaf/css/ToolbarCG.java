@@ -25,24 +25,15 @@ public class ToolbarCG
     private final static byte[] __tr_table      = "</tr></table>".getBytes();
     private final static byte[] __div           = "</div>".getBytes();
 
-    public void installCG(final SComponent comp) {
-    }
-    public void uninstallCG(final SComponent comp) {
-    }
-
-
     public void writeContent(final Device device,
                       final SComponent _c)
         throws IOException {
         final SToolbar component = (SToolbar) _c;
 
-//--- code from write-template.
         SToolbar toolbar = (SToolbar)component;
         int mcount = toolbar.getComponentCount();
 
-        device.write(__div_class_tool);
-        device.write(__table_cellspac);        org.wings.plaf.Utils.optAttribute( device, "class", org.wings.plaf.css.Utils.style(component));
-        device.write(__);
+        device.print("<table>");
         device.write(__tr_align_left);
         for (int i = 0; i < mcount; i++) {
             if ( toolbar.getComponent(i).isVisible() ) {
@@ -55,7 +46,6 @@ public class ToolbarCG
             }
         }
         device.write(__tr_table);
-        device.write(__div);
 //--- end code from write-template.
     }
 }
