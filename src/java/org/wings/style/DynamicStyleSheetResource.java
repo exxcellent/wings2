@@ -15,6 +15,7 @@
 package org.wings.style;
 
 import org.wings.*;
+import org.wings.resource.DynamicResource;
 import org.wings.border.SBorder;
 import org.wings.plaf.ComponentCG;
 import org.wings.io.Device;

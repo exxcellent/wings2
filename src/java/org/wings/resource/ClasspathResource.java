@@ -12,9 +12,11 @@
  * Please see COPYING for the complete licence.
  */
 
-package org.wings;
+package org.wings.resource;
 
 import org.wings.externalizer.ExternalizeManager;
+import org.wings.StaticResource;
+import org.wings.Resource;
 
 import java.io.InputStream;
 

@@ -29,6 +29,7 @@ import org.wings.session.Session;
 import org.wings.session.SessionManager;
 import org.wings.style.Style;
 import org.wings.externalizer.ExternalizeManager;
+import org.wings.resource.DynamicResource;
 
 /**
  * The reload manager interface.

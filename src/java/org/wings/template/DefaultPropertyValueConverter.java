@@ -14,6 +14,7 @@
 package org.wings.template;
 
 import org.wings.*;
+import org.wings.resource.ClasspathResource;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.LookAndFeel;
 import org.wings.style.CSSStyleSheet;
@@ -159,8 +160,11 @@ public class DefaultPropertyValueConverter  implements PropertyValueConverter  {
 
 /*
    $Log$
-   Revision 1.1  2004/10/04 16:13:29  hengels
-   Initial revision
+   Revision 1.2  2004/11/20 16:33:51  hengels
+   o moved resource implementations to a separate package
+
+   Revision 1.1.1.1  2004/10/04 16:13:29  hengels
+   o start development of wings 2
 
    Revision 1.3  2002/11/19 15:36:40  ahaaf
    o use LookAndFeel methods

@@ -12,9 +12,11 @@
  * Please see COPYING for the complete licence.
  */
 
-package org.wings;
+package org.wings.resource;
 
 import org.wings.io.Device;
+import org.wings.Resource;
+import org.wings.SFrame;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,10 +40,10 @@ public class DynamicCodeResource
     private static final ArrayList DEFAULT_CODE_HEADER = new ArrayList();
 
     static {
-        DEFAULT_CODE_HEADER.add(new HeaderEntry("Expires", new Date(1000)));
-        DEFAULT_CODE_HEADER.add(new HeaderEntry("Cache-Control", "no-store, no-cache, must-revalidate"));
-        DEFAULT_CODE_HEADER.add(new HeaderEntry("Cache-Control", "post-check=0, pre-check=0"));
-        DEFAULT_CODE_HEADER.add(new HeaderEntry("Pragma", "no-cache"));
+        DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Expires", new Date(1000)));
+        DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Cache-Control", "no-store, no-cache, must-revalidate"));
+        DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Cache-Control", "post-check=0, pre-check=0"));
+        DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Pragma", "no-cache"));
     }
             
 

@@ -12,7 +12,9 @@
  * Please see COPYING for the complete licence.
  */
 
-package org.wings;
+package org.wings.resource;
+
+import org.wings.StaticResource;
 
 import java.io.File;
 import java.io.FileInputStream;

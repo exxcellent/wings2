@@ -15,6 +15,7 @@
 package org.wings;
 
 import org.wings.util.ImageInfo;
+import org.wings.resource.ClasspathResource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -1,4 +1,6 @@
-package org.wings;
+package org.wings.resource;
+
+import org.wings.SFileIcon;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,7 +9,7 @@ import java.io.FileNotFoundException;
  * 
  * @author armin
  * created at 06.01.2004 13:32:57
- * @deprecated use {@link SFileIcon} instead
+ * @deprecated use {@link org.wings.SFileIcon} instead
  */
 public class FileImageIcon extends SFileIcon {
     public FileImageIcon(String name) throws FileNotFoundException {

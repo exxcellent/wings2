@@ -19,6 +19,8 @@ import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
+import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.DynamicResource;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

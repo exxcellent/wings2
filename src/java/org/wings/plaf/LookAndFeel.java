@@ -14,11 +14,12 @@
 
 package org.wings.plaf;
 
-import org.wings.ClasspathResource;
+import org.wings.resource.ClasspathResource;
 import org.wings.Resource;
 import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
+import org.wings.resource.ClasspathResource;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.AttributeSet;
 import org.wings.style.StyleSheet;

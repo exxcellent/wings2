@@ -16,6 +16,7 @@ package org.wings.session;
 
 
 import org.wings.*;
+import org.wings.resource.DynamicCodeResource;
 import org.wings.event.ExitVetoException;
 import org.wings.event.SRequestEvent;
 import org.wings.externalizer.ExternalizeManager;

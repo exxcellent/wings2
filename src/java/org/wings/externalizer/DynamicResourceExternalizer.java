@@ -14,8 +14,9 @@
 
 package org.wings.externalizer;
 
-import org.wings.DynamicResource;
+import org.wings.resource.DynamicResource;
 import org.wings.Renderable;
+import org.wings.resource.DynamicResource;
 import org.wings.io.Device;
 
 import java.io.IOException;

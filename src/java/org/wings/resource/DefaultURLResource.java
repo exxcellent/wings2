@@ -1,4 +1,7 @@
-package org.wings;
+package org.wings.resource;
+
+import org.wings.URLResource;
+import org.wings.SimpleURL;
 
 /**
  * Default implementation of an URLResource

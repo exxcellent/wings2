@@ -15,6 +15,7 @@
 package org.wings;
 
 import org.wings.util.ImageInfo;
+import org.wings.resource.FileResource;
 
 import java.io.File;
 import java.io.FileInputStream;

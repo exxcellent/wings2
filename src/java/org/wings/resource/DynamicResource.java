@@ -12,12 +12,16 @@
  * Please see COPYING for the complete licence.
  */
 
-package org.wings;
+package org.wings.resource;
 
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 import org.wings.util.StringUtil;
+import org.wings.Resource;
+import org.wings.SFrame;
+import org.wings.SimpleURL;
+import org.wings.RequestURL;
 
 import java.util.Collection;
 import java.util.Set;

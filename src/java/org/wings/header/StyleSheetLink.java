@@ -1,7 +1,8 @@
 package org.wings.header;
 
-import org.wings.DefaultURLResource;
+import org.wings.resource.DefaultURLResource;
 import org.wings.URLResource;
+import org.wings.resource.DefaultURLResource;
 
 /**
  * Use this to add style sheets to a frame

@@ -12,12 +12,15 @@
  * Please see COPYING for the complete licence.
  */
 
-package org.wings;
+package org.wings.resource;
 
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.session.SessionManager;
 import org.wings.session.PropertyService;
 import org.wings.io.Device;
+import org.wings.Resource;
+import org.wings.SimpleURL;
+import org.wings.RequestURL;
 
 import java.io.IOException;
 

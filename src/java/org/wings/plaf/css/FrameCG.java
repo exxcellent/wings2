@@ -2,6 +2,8 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
+import org.wings.resource.DefaultURLResource;
+import org.wings.resource.DynamicCodeResource;
 import org.wings.header.Link;
 import org.wings.header.Script;
 import org.wings.io.Device;

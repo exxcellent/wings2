@@ -19,6 +19,8 @@ import java.util.logging.*;
 
 import org.wings.style.DynamicStyleSheetResource;
 import org.wings.script.DynamicScriptResource;
+import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.DynamicResource;
 
 /**
  * This is the default implementation of the reload manager.

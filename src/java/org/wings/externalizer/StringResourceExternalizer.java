@@ -15,7 +15,8 @@
 package org.wings.externalizer;
 
 import org.wings.Renderable;
-import org.wings.StringResource;
+import org.wings.resource.StringResource;
+import org.wings.resource.StringResource;
 import org.wings.io.Device;
 
 import java.io.IOException;
