@@ -14,10 +14,10 @@
 package org.wings;
 
 import org.wings.plaf.ListCG;
-import org.wings.plaf.ListCG;
 import org.wings.style.AttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
+import org.wings.style.CSSSelector;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -53,7 +53,6 @@ import java.util.List;
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
- * @beaninfo attribute: isContainer false
  * @see javax.swing.ListModel
  * @see SDefaultListModel
  * @see javax.swing.ListSelectionModel
@@ -62,7 +61,7 @@ import java.util.List;
 public class SList
         extends SComponent
         implements Scrollable, LowLevelEventListener, ListDataListener {
-    public static final String SELECTOR_SELECTION = "SELECTION";
+    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector("SELECTION");
 
     /**
      * The preferred extent of the list.
@@ -179,7 +178,6 @@ public class SList
      * Sets the renderer that's used to write out each cell in the list.
      *
      * @param cellRenderer the SListCellRenderer that paints list cells
-     * @beaninfo bound: true
      * description: The component used to draw the cells.
      * @see #getCellRenderer
      */
@@ -262,7 +260,6 @@ public class SList
      * The default value of this property is 8.
      *
      * @param visibleRowCount the preferred number of visible rows
-     * @beaninfo bound: true
      * description: The preferred number of cells that can be displayed without a scrollbar.
      * @see #getVisibleRowCount
      */
@@ -294,7 +291,6 @@ public class SList
      * Sets the model
      *
      * @param model the ListModel that provides the list of items
-     * @beaninfo bound: true
      * description: The object that contains the data to be shownin the list.
      * @see #getModel
      */
@@ -463,7 +459,6 @@ public class SList
      * Set the selectionModel for the list.
      * The selection model keeps track of which items are selected.
      *
-     * @beaninfo bound: true
      * description: The selection model, recording which cells are selected.
      * @see #getSelectionModel
      */
@@ -477,7 +472,7 @@ public class SList
             selectionModel.addListSelectionListener(selectionHandler);
         }
 
-        SListSelectionModel oldValue = this.selectionModel;
+        //SListSelectionModel oldValue = this.selectionModel;
         this.selectionModel = selectionModel;
     }
 
@@ -492,7 +487,6 @@ public class SList
      * </ul>
      *
      * @param selectionMode single or multiple selections
-     * @beaninfo description: The selection mode
      * enum: SINGLE_SELECTION            ListSelectionModel.SINGLE_SELECTION
      * MULTIPLE_INTERVAL_SELECTION ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
      * @see #getSelectionMode
@@ -526,7 +520,6 @@ public class SList
 
     /**
      * @return The index that most recently ended a interval selection.
-     * @beaninfo description: The lead selection index.
      * @see ListSelectionModel#getLeadSelectionIndex
      * @see #addSelectionInterval
      * @see #setSelectionInterval
@@ -681,7 +674,6 @@ public class SList
      * Select a single cell.
      *
      * @param index The index of the one cell to select
-     * @beaninfo description: The index of the selected cell.
      * @see ListSelectionModel#setSelectionInterval
      * @see #isSelectedIndex
      * @see #addListSelectionListener

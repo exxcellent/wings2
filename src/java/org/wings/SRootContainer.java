@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -32,6 +34,8 @@ package org.wings;
  * @author <a href="mailto:Haaf@mercatis.de">Armin Haaf</a>
  */
 public abstract class SRootContainer extends SContainer {
+    private final static transient Log log = LogFactory.getLog(SRootContainer.class);
+
     /**
      * The container for the contentPane.
      */
@@ -54,7 +58,7 @@ public abstract class SRootContainer extends SContainer {
      * @param dialog the SDialog that is to be shown on top.
      */
     public void pushDialog(SDialog dialog) {
-        System.out.println("push dialog = " + dialog.getName());
+        log.debug("push dialog = " + dialog.getName());
         new Throwable().printStackTrace();
         super.addComponent(dialog, null, getComponentCount());
         dialog.setFrame(this);
@@ -76,7 +80,7 @@ public abstract class SRootContainer extends SContainer {
         dialog.setFrame(null);
 
         reload();
-        System.out.println("pop dialog = " + dialog.getName());
+        log.debug("pop dialog = " + dialog.getName());
         new Throwable().printStackTrace();
         return dialog;
     }

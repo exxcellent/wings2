@@ -411,9 +411,9 @@ public class MultipartRequest
 
                 currentByte = mimeStream.read();
                 if (currentByte == '\r' && mimeStream.read() != '\n')
-                    System.err.println("na so was: " + currentByte);
+                    log.error("No line return char? " + currentByte);
                 if (currentByte == '-' && mimeStream.read() != '-')
-                    System.err.println("na so was: " + currentByte);
+                    log.error("?? No clue " + currentByte);
             }
         } catch (IOException ex) {
             // cleanup and store the exception for notification of SFileChooser

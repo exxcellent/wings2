@@ -13,12 +13,16 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class SRootLayout
-        extends STemplateLayout {
+public class SRootLayout extends STemplateLayout {
+    private final static transient Log log = LogFactory.getLog(SRootLayout.class);
+
     /**
      * Use the default template.
      */
@@ -26,8 +30,7 @@ public class SRootLayout
         try {
             setTemplate(getClass().getResource("template/default.thtml"));
         } catch (IOException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace(System.err);
+            log.error("Unable to get template/default.thtml",e);
         }
     }
 

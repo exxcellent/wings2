@@ -16,6 +16,8 @@ package org.wings.plaf.css;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.io.Device;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 
@@ -23,8 +25,9 @@ import java.io.IOException;
  * @author hengels
  * @version $Revision$
  */
-public abstract class IconTextCompound
-        implements SConstants {
+public abstract class IconTextCompound implements SConstants {
+    private final static transient Log log = LogFactory.getLog(IconTextCompound.class);
+    
     public void writeCompound(Device device, SComponent component, int horizontal, int vertical) throws IOException {
         if (horizontal == NO_ALIGN)
             horizontal = RIGHT;
@@ -66,9 +69,8 @@ public abstract class IconTextCompound
             last(device, order);
             device.print("</td></tr>");
         } else {
-            System.out.println("WARNING");
-            System.out.println("horizontal = " + horizontal);
-            System.out.println("vertical = " + vertical);
+            log.warn("horizontal = " + horizontal);
+            log.warn("vertical = " + vertical);
         }
         device.print("</table>");
     }

@@ -15,10 +15,8 @@ package org.wings;
 
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.TabbedPaneCG;
-import org.wings.plaf.ComponentCG;
-import org.wings.plaf.TabbedPaneCG;
-import org.wings.plaf.ComponentCG;
 import org.wings.style.AttributeSet;
+import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
 
@@ -43,7 +41,7 @@ public class STabbedPane
         extends SContainer
         implements LowLevelEventListener, ChangeListener {
     public static final String SELECTOR_TABS = "SELECTOR_TABS";
-    public static final String SELECTOR_SELECTION = "SELECTION";
+    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector("SELECTION");
 
     /**
      * Where the tabs are placed.
@@ -690,9 +688,9 @@ public class STabbedPane
      *
      * @param index     the tab index where this component is being placed
      * @param component the component for the tab
-     * @see #getComponentAt
+     * @see #getComponent(int)
      */
-    public void setComponentAt(int index, SComponent component) {
+    public void setComponent(int index, SComponent component) {
         Page page = (Page) pages.get(index);
         if (component != page.component) {
             if (page.component != null) {
@@ -772,7 +770,6 @@ public class STabbedPane
     public void setParentFrame(SFrame f) {
         super.setParentFrame(f);
         contents.setParentFrame(f);
-        ComponentCG cg = this.getCG();
     }
 
     public void setCG(TabbedPaneCG cg) {

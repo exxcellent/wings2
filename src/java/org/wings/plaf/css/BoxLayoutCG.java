@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class BoxLayoutCG implements LayoutCG {
+public class BoxLayoutCG extends AbstractLayoutCG implements LayoutCG {
     /**
      * @param d the device to write the code to
      * @param l the layout manager

@@ -19,7 +19,6 @@ import org.wings.SFrame;
 import org.wings.border.SBorder;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
-import org.wings.plaf.ComponentCG;
 import org.wings.resource.DynamicResource;
 import org.wings.util.ComponentVisitor;
 
@@ -72,7 +71,7 @@ public class DynamicStyleSheetResource
                 ComponentCG cg = component.getCG();
                 for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
                     Style style = (Style) iterator.next();
-                    String selector = style.getSelector();
+                    CSSSelector selector = style.getSelector();
                     selector = cg.mapSelector(selector);
                     writeAttributes(selectorPrefix + selector, style);
                 }
@@ -84,13 +83,13 @@ public class DynamicStyleSheetResource
             }
         }
 
-        private void writeAttributes(String selector, Style style)
+        /*private void writeAttributes(CSSSelector selector, Style style)
                 throws IOException {
-            String backup = style.getSelector();
+            CSSSelector backup = style.getSelector();
             style.setSelector(selector);
             style.write(out);
             style.setSelector(backup);
-        }
+        }*/
 
         private void writeAttributes(String selector, AttributeSet attributes)
                 throws IOException {

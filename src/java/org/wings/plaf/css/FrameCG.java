@@ -28,6 +28,7 @@ import org.wings.session.Browser;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 import org.wings.style.DynamicStyleSheetResource;
+import org.wings.style.CSSSelector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -276,7 +277,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         this.renderXmlDeclaration = renderXmlDeclaration;
     }
 
-    public String mapSelector(String selector) {
+    public CSSSelector mapSelector(CSSSelector selector) {
         return selector;
     }
 }

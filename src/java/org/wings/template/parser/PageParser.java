@@ -16,6 +16,8 @@ package org.wings.template.parser;
 import org.wings.template.FileTemplateSource;
 import org.wings.template.LabelTagHandler;
 import org.wings.template.TemplateSource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
 import java.util.*;
@@ -40,6 +42,8 @@ import java.util.*;
  */
 
 public class PageParser {
+    private final static Log log = LogFactory.getLog(PageParser.class);
+
     private static PageParser sharedInstance = null;
 
     /**
@@ -352,7 +356,7 @@ public class PageParser {
 
                             endTag = handler.parseTag(context, fin, startPos, tag);
                         } catch (Exception e) {
-                            System.err.println(e.getMessage());
+                            log.warn("Exception",e);
                         }
                         if (endTag != null) {
                             if ("LABEL".equals(upName)) {

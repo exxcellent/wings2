@@ -24,29 +24,29 @@ import java.io.IOException;
 public final class Style
         extends AttributeSet implements StyleConstants {
     private StyleSheet sheet;
-    private String selector;
+    private CSSSelector selector;
     private String name;
 
-    public Style(String selector, AttributeSet attributes) {
+    public Style(CSSSelector selector, AttributeSet attributes) {
         super(attributes);
         this.selector = selector;
     }
 
-    public Style(String selector, String name, String value) {
+    public Style(CSSSelector selector, String name, String value) {
         super(name, value);
         this.selector = selector;
     }
 
-    public void setSelector(String selector) {
+    public void setSelector(CSSSelector selector) {
         this.selector = selector;
         name = null;
     }
 
-    public String getSelector() { return selector; }
+    public CSSSelector getSelector() { return selector; }
 
     public String getName() {
         if (name == null && selector != null)
-            name = selector.substring(selector.indexOf(".") + 1);
+            name = selector.getName();
         return name;
     }
 

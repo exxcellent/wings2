@@ -14,21 +14,24 @@
 package org.wings.plaf.css;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.STabbedPane;
 import org.wings.io.Device;
 import org.wings.session.Browser;
+import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.wings.style.CSSSelector;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     private final static transient Log log = LogFactory.getLog(TabbedPaneCG.class);
@@ -202,23 +205,24 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
         return title.replace(' ', '\u00A0');
     }
 
-    public String mapSelector(String selector) {
+    public CSSSelector  mapSelector(CSSSelector selector) {
         Browser browser = SessionManager.getSession().getUserAgent();
-        if ("MSIE".equals(browser.getBrowserName()))
-            return msieMappings.getProperty(selector, selector);
+        CSSSelector mappedSelector = null;
+        if (browser.getBrowserType().equals(BrowserType.IE))
+            mappedSelector = (CSSSelector) msieMappings.get(selector);
         else
-            return geckoMappings.getProperty(selector, selector);
+            mappedSelector = (CSSSelector) geckoMappings.get(selector);
+        return mappedSelector != null ? mappedSelector : selector;
     }
 
-    private static final Properties msieMappings = new Properties();
-    private static final Properties geckoMappings = new Properties();
-
+    private static final Map msieMappings = new HashMap();
+    private static final Map geckoMappings = new HashMap();
     static {
-        msieMappings.setProperty(STabbedPane.SELECTOR_SELECTION, " *.selected");
-        msieMappings.setProperty(STabbedPane.SELECTOR_CONTENT, " td.content");
-        msieMappings.setProperty(STabbedPane.SELECTOR_TABS, " th");
-        geckoMappings.setProperty(STabbedPane.SELECTOR_SELECTION, " > table > tbody > tr > th > *[selected=\"true\"]");
-        geckoMappings.setProperty(STabbedPane.SELECTOR_CONTENT, " > table > tbody > tr > td");
-        geckoMappings.setProperty(STabbedPane.SELECTOR_TABS, " > table > tbody > tr > th");
+        msieMappings.put(STabbedPane.SELECTOR_SELECTION, new CSSSelector (" *.selected"));
+        msieMappings.put(STabbedPane.SELECTOR_CONTENT, new CSSSelector (" td.content"));
+        msieMappings.put(STabbedPane.SELECTOR_TABS, new CSSSelector (" th"));
+        geckoMappings.put(STabbedPane.SELECTOR_SELECTION, new CSSSelector (" > table > tbody > tr > th > *[selected=\"true\"]"));
+        geckoMappings.put(STabbedPane.SELECTOR_CONTENT, new CSSSelector (" > table > tbody > tr > td"));
+        geckoMappings.put(STabbedPane.SELECTOR_TABS, new CSSSelector (" > table > tbody > tr > th"));
     }
 }

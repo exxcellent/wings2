@@ -3,11 +3,11 @@
  */
 package org.wings.plaf.css;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.Device;
-import org.wings.plaf.LookAndFeel;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -15,10 +15,9 @@ import java.io.IOException;
  *
  * @author holger
  */
-public class PageScrollerCG
-        extends AbstractComponentCG
-        implements org.wings.plaf.PageScrollerCG
-{
+public class PageScrollerCG extends AbstractComponentCG implements org.wings.plaf.PageScrollerCG {
+    private final static transient Log log = LogFactory.getLog(PageScrollerCG.class);
+
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
     public static final int FORWARD_BLOCK = 2;
@@ -70,7 +69,7 @@ public class PageScrollerCG
 
     public void writeContent(Device d, SComponent c)
             throws IOException {
-        System.out.println("write = " + c);
+        log.debug("write = " + c);
         SPageScroller sb = (SPageScroller) c;
 
         if (sb.getLayoutMode() == SConstants.VERTICAL)

@@ -271,9 +271,9 @@ public final class Utils
     public static void printCSSInlinePreferredSize(Device device, SDimension preferredSize) throws IOException {
         if (preferredSize != null) {
             device.print(" style=\"");
-            if (preferredSize.getWidth() != null)
+            if (preferredSize.isWidthDefined())
                 device.print("width:").print(preferredSize.getWidth()).print(";");
-            if (preferredSize.getHeight() != null)
+            if (preferredSize.isHeightDefined())
                 device.print("height:").print(preferredSize.getHeight()).print(";");
             device.print("\"");
         }

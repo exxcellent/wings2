@@ -28,6 +28,7 @@ import org.wings.session.SessionManager;
 import org.wings.style.AttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
+import org.wings.style.CSSSelector;
 import org.wings.util.ComponentVisitor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,7 +55,7 @@ import java.util.*;
  */
 public abstract class SComponent
         implements SConstants, Cloneable, Serializable, Renderable {
-    public static final String SELECTOR_GLOBAL = "";
+    public static final CSSSelector SELECTOR_GLOBAL = CSSSelector.GLOBAL;
 
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
     private static final Log log = LogFactory.getLog("org.wings");
@@ -498,7 +499,7 @@ public abstract class SComponent
         reload();
     }
 
-    public Style getDynamicStyle(String selector) {
+    public Style getDynamicStyle(CSSSelector selector) {
         if (dynamicStyles == null)
             return null;
         return (Style) dynamicStyles.get(selector);
@@ -526,7 +527,7 @@ public abstract class SComponent
         setAttribute(SELECTOR_GLOBAL, name, value);
     }
 
-    public void setAttribute(String selector, String name, String value) {
+    public void setAttribute(CSSSelector selector, String name, String value) {
         Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new Style(selector, name, value));
@@ -538,11 +539,11 @@ public abstract class SComponent
     }
 
     public void setAttributes(AttributeSet attributes) {
-        System.out.println("attributes = " + attributes);
+        log.debug("attributes = " + attributes);
         setAttributes(SELECTOR_GLOBAL, attributes);
     }
 
-    public void setAttributes(String selector, AttributeSet attributes) {
+    public void setAttributes(CSSSelector selector, AttributeSet attributes) {
         Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new Style(selector, attributes));

@@ -16,8 +16,8 @@ package org.wings;
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.plaf.ContainerCG;
-import org.wings.plaf.ContainerCG;
 import org.wings.style.StyleConstants;
+import org.wings.style.CSSSelector;
 import org.wings.util.ComponentVisitor;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class SContainer extends SComponent {
      * The constraints for the components.
      */
     private ArrayList constraintList;
-    public static final String SELECTOR_CONTENT = "";
+    public static final CSSSelector SELECTOR_CONTENT = CSSSelector.GLOBAL;
 
 
     /**

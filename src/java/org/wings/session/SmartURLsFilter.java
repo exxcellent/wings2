@@ -142,7 +142,6 @@ public class SmartURLsFilter
         }
 
         public String getRequestURI() {
-            System.out.println("*************** getRequestURI called");
             return super.getRequestURI();
         }
 

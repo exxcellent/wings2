@@ -16,6 +16,8 @@ package org.wings.plaf.css;
 import org.wings.SComponent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
 import java.awt.event.InputEvent;
@@ -27,6 +29,8 @@ import java.awt.event.KeyEvent;
  */
 class InputMapScriptListener
         extends JavaScriptListener {
+    private final static transient Log log = LogFactory.getLog(InputMapScriptListener.class);
+
     public InputMapScriptListener(String event, String code, String script) {
         super(event, code, script);
     }
@@ -64,12 +68,12 @@ class InputMapScriptListener
                 case KeyEvent.KEY_TYPED:
                     writeMatch(typed, keyStroke);
                     writeRequest(typed, binding);
-                    System.out.println("typed binding = " + binding);
+                    log.debug("typed binding = " + binding);
                     break;
                 case KeyEvent.KEY_RELEASED:
                     writeMatch(released, keyStroke);
                     writeRequest(released, binding);
-                    System.out.println("released binding = " + binding);
+                    log.debug("released binding = " + binding);
                     break;
             }
         }

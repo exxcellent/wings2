@@ -3,16 +3,17 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SLayoutManager;
+import org.wings.SScrollPaneLayout;
 import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
 import java.util.Map;
-import java.awt.*;
 
-public class ScrollPaneLayoutCG
+public class ScrollPaneLayoutCG extends AbstractLayoutCG
         implements LayoutCG {
 
     public void write(Device d, SLayoutManager l)

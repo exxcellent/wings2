@@ -14,9 +14,12 @@
 package org.wings.plaf.css;
 
 import org.wings.*;
+import org.wings.style.CSSSelector;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -29,6 +32,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public abstract class AbstractComponentCG  implements ComponentCG, SConstants, Serializable {
+    private final static transient Log log = LogFactory.getLog(AbstractComponentCG.class);
 
     protected AbstractComponentCG() {    }
 
@@ -62,7 +66,7 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
         writePostfix(device, component);
     }
 
-    public String mapSelector(String selector) {
+    public CSSSelector mapSelector(CSSSelector selector) {
         return selector;
     }
 
@@ -96,7 +100,7 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
 
         InputMap inputMap = component.getInputMap();
         if (inputMap != null && !(inputMap instanceof VersionedInputMap)) {
-            System.out.println("inputMap = " + inputMap);
+            log.debug("inputMap = " + inputMap);
             inputMap = new VersionedInputMap(inputMap);
             component.setInputMap(inputMap);
         }
@@ -105,7 +109,7 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
             VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
             Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
             if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
-                System.out.println("inputMapVersion = " + inputMapVersion);
+                log.debug("inputMapVersion = " + inputMapVersion);
                 InputMapScriptListener.install(component);
                 component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
             }

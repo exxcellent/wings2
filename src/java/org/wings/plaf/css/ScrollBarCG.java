@@ -13,11 +13,11 @@
  */
 package org.wings.plaf.css;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.Device;
-import org.wings.plaf.LookAndFeel;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -29,6 +29,7 @@ public class ScrollBarCG
         extends org.wings.plaf.css.AbstractComponentCG
         implements org.wings.plaf.ScrollBarCG
 {
+    private final static transient Log log = LogFactory.getLog(ScrollBarCG.class);
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
     public static final int FORWARD_BLOCK = 2;
@@ -80,7 +81,7 @@ public class ScrollBarCG
 
     public void writeContent(Device d, SComponent c)
             throws IOException {
-        System.out.println("write = " + c);
+        log.debug("write = " + c);
         SScrollBar sb = (SScrollBar) c;
 
         if (sb.getOrientation() == SConstants.VERTICAL)

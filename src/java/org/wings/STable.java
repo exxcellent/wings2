@@ -14,8 +14,8 @@
 package org.wings;
 
 import org.wings.plaf.TableCG;
-import org.wings.plaf.TableCG;
 import org.wings.style.AttributeSet;
+import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
 import org.wings.table.STableCellEditor;
@@ -123,8 +123,8 @@ public class STable
 
     protected Rectangle viewport;
 
-    public static final String SELECTOR_HEADER = "HEADER";
-    public static final String SELECTOR_SELECTION = "SELECTION";
+    public static final CSSSelector SELECTOR_HEADER = new CSSSelector("HEADER");
+    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector("SELECTION");
 
     /**
      * <p>Creates a new <code>STable</code>.</p>

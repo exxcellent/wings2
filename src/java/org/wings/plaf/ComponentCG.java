@@ -14,6 +14,7 @@
 package org.wings.plaf;
 
 import org.wings.SComponent;
+import org.wings.style.CSSSelector;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -57,8 +58,8 @@ public interface ComponentCG
      * responsibility of the CG to apply the styling to the respective areas. In case of HTML, one can use
      * arbitrary CSS selectors in order to style what ever is addressable by means of CSS selector.
      *
-     * @param selector
-     * @return
+     * @param pseudoSelector The pseudo selector
+     * @return The real-life css selector for the current browser.
      */
-    String mapSelector(String selector);
+    CSSSelector mapSelector(CSSSelector pseudoSelector);
 }

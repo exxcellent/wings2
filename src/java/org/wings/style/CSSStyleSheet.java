@@ -300,7 +300,6 @@ public class CSSStyleSheet
      */
     static final Color hexToColor(String value) {
         String digits;
-        int n = value.length();
         if (value.startsWith("#")) {
             digits = value.substring(1, Math.min(value.length(), 7));
         } else {
@@ -468,7 +467,6 @@ public class CSSStyleSheet
             return attributes;
         attributes.put(Style.FONT_FAMILY, font.getFace());
 
-        int style = Font.PLAIN;
         if ((font.getStyle() & Font.ITALIC) > 0)
             attributes.put(Style.FONT_STYLE, "italic");
 
@@ -599,7 +597,7 @@ public class CSSStyleSheet
             for (int i = 0; i < n; i++) {
                 String[] selector = (String[]) selectors.get(i);
                 for (int j = selector.length - 1; j >= 0; --j) {
-                    CSSStyleSheet.this.putStyle(new Style(selector[j], declaration));
+                    CSSStyleSheet.this.putStyle(new Style(new CSSSelector(selector[j]), declaration));
                 }
             }
             declaration.clear();

@@ -15,6 +15,8 @@ package org.wings;
 
 import org.wings.externalizer.ImageExternalizer;
 import org.wings.session.SessionManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +24,7 @@ import java.awt.image.IndexColorModel;
 import java.awt.image.PixelGrabber;
 
 public class SImageIcon extends SAbstractIcon {
+    private final static transient Log log = LogFactory.getLog(SImageIcon.class);
 
     private final ImageIcon img;
     private final SimpleURL url;
@@ -62,7 +65,7 @@ public class SImageIcon extends SAbstractIcon {
         try {
             pg.grabPixels();
         } catch (InterruptedException e) {
-            System.err.println("interrupted waiting for pixels!");
+            log.warn("interrupted waiting for pixels!");
         }
 
         String mimeType = "image/";

@@ -17,6 +17,7 @@ package org.wings;
 import org.wings.style.AttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
+import org.wings.style.CSSSelector;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -45,7 +46,7 @@ public abstract class SAbstractIconTextCompound
     public static final int ROLLOVER_SELECTED_ICON = 5;
     public static final int PRESSED_ICON = 6;
 
-    public static final String SELECTOR_SELECTION = "SELECTION";
+    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector("SELECTION");
 
     private SButtonModel model;
 
@@ -83,8 +84,6 @@ public abstract class SAbstractIconTextCompound
     private int horizontalTextPosition = RIGHT;
 
     private int iconTextGap = 0;
-
-    private boolean imageAbsBottom = false;
 
     private boolean delayEvents = false;
 
