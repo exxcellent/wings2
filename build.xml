@@ -100,7 +100,7 @@
 	</javadoc>
     </target>
 
-    <target depends="compile,javadoc" name="dist">
+    <target depends="clean,compile,javadoc" name="dist">
         <!-- manual -->
         <mkdir dir="dist/doc/manual"/>
         <copy todir="dist/doc/manual">
@@ -229,6 +229,11 @@
                 <include name="**/*.bak"/>
                 <include name="**/*~"/>
                 <include name="**/.#*"/>
+            </fileset>
+        </delete>
+        <delete>
+            <fileset dir=".">
+                <include name="wingS*.tar.gz"/>
             </fileset>
         </delete>
         <delete file="src/java/org/wings/Version.java" />
