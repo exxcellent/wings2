@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.logging.*;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.wings.UploadFilterManager;
 import org.wings.util.LocaleCharSet;
@@ -50,8 +51,7 @@ import org.wings.util.LocaleCharSet;
  * @version $Revision$
  */
 public class MultipartRequest
-    extends DelegatingHttpServletRequest
-    implements HttpServletRequest
+    extends HttpServletRequestWrapper
 {
     private final static Logger logger = Logger.getLogger("org.wings");
 

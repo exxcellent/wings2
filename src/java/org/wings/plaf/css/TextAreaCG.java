@@ -37,6 +37,7 @@ public class TextAreaCG
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "cols", component.getColumns());
         org.wings.plaf.Utils.optAttribute(device, "rows", component.getRows());
+        org.wings.plaf.Utils.optAttribute(device, "focus", component.getComponentId());
 
         if (!component.isEditable()) {
             device.write(__readonly_1);

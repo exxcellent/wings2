@@ -12,12 +12,41 @@ import org.wings.io.Device;
 import org.wings.session.Browser;
 import org.wings.session.SessionManager;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Properties;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 
 public class TabbedPaneCG
     extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.PanelCG {
+    implements SConstants
+{
+    public void installCG(SComponent component) {
+        super.installCG(component);
+
+        final STabbedPane tab = (STabbedPane)component;
+        InputMap inputMap = new InputMap();
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK), "previous");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK), "next");
+        tab.setInputMap(inputMap);
+
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand()))
+                    tab.setSelectedIndex(tab.getSelectedIndex() - 1);
+                else if (tab.getSelectedIndex() < tab.getTabCount() -1 && "next".equals(e.getActionCommand()))
+                    tab.setSelectedIndex(tab.getSelectedIndex() + 1);
+                tab.requestFocus();
+            }
+        };
+
+        ActionMap actionMap = new ActionMap();
+        actionMap.put("previous", action);
+        actionMap.put("next", action);
+        tab.setActionMap(actionMap);
+    }
+
     public void writeContent(final Device device, final SComponent component)
         throws java.io.IOException {
         STabbedPane tabbedPane = (STabbedPane)component;
@@ -131,8 +160,10 @@ public class TabbedPaneCG
                     .addParameter(Utils.event(tabbedPane) + "=" + i).toString())
                     .print("\"");
 
-            if (i == tabbedPane.getSelectedIndex())
+            if (i == tabbedPane.getSelectedIndex()) {
                 device.print(" selected=\"true\"");
+                org.wings.plaf.Utils.optAttribute(device, "focus", tabbedPane.getComponentId());
+            }
 
             if (!tabbedPane.isEnabledAt(i))
                 device.print(" disabled=\"true\"");

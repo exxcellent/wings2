@@ -1590,7 +1590,7 @@ public abstract class SComponent
      */
     public void requestFocus(){  
         if(getParentFrame() != null){
-            getParentFrame().focusRequest(this); 
+            getParentFrame().setFocus(this);
         }
     }
 

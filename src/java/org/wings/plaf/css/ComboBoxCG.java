@@ -40,8 +40,6 @@ public class ComboBoxCG
         if (value != null) {
             component.setRenderer((SDefaultListCellRenderer)value);
         }
-
-
     }
 
 //--- code from common area in template.
@@ -52,6 +50,8 @@ public class ComboBoxCG
         device.write(__select_size_1);
         org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(comboBox));
         org.wings.plaf.Utils.optAttribute(device, "tabindex", comboBox.getFocusTraversalIndex());
+        org.wings.plaf.Utils.optAttribute(device, "focus", comboBox.getComponentId());
+
         if (!comboBox.isEnabled()) {
             device.write(__disabled_1);
         }

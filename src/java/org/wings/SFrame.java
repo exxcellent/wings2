@@ -16,7 +16,6 @@ package org.wings;
 
 import org.wings.plaf.FrameCG;
 import org.wings.script.JavaScriptListener;
-import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
@@ -273,57 +272,14 @@ public class SFrame
     }
 
     /*
-     * Adds a scriptListener to the body-tag, which sets the focus to the Component
-     * of the frame which requests the focus at last.
-     **/
-    public void setFocus() {
-        StringBuffer compId;
-        String formName;
-        
-        if (focusComponent != null) {
-            try {
-                this.removeScriptListener(focus);
-            } catch (Exception e) {}
-
-            SForm form = (SForm) focusComponent.getParent();
-            formName = form.getName();
-
-            compId = new StringBuffer(focusComponent.getEncodedLowLevelEventId());
-
-            focus = new JavaScriptListener("onload", "document." + formName + "." + compId + ".focus()");
-            addScriptListener(focus);
-
-            focusComponent = null;
-        }
-
-    }
-
-    /*
      * This function is called by SComponent.requestFocus().
      * @param c the component which requests the focus.
-     *
-     **/
-    public void focusRequest(SComponent c) {
+     */
+    public void setFocus(SComponent c) {
         focusComponent = c;
     }
 
-    /*
-     * Everytime a frame ist reloaded, this Method is called
-     * by org.wings.plaf.css1.Util. Then setFocus must be called,
-     * bacause the ids of the Components change at that time.
-     */
-    public ScriptListener[] getScriptListeners() {
-        setFocus();
-        return (ScriptListener[]) super.getListeners(ScriptListener.class);
+    public SComponent getFocus() {
+        return focusComponent;
     }
-
-
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

@@ -14,12 +14,9 @@
 
 package org.wings.session;
 
-import java.util.Properties;
 import java.util.Map;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */

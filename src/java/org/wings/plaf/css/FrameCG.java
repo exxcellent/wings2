@@ -8,6 +8,7 @@ import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.script.DynamicScriptResource;
 import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
 import org.wings.session.Browser;
 import org.wings.session.SessionManager;
 import org.wings.style.DynamicStyleSheetResource;
@@ -213,6 +214,25 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
                     org.wings.plaf.Utils.write(device, next.toString());
                 }
                 device.write("\n".getBytes());
+            }
+
+            SComponent focus = frame.getFocus();
+            Object lastFocus = frame.getClientProperty("focus");
+            if (focus != lastFocus) {
+                if (lastFocus != null) {
+                    ScriptListener[] scriptListeners = frame.getScriptListeners();
+
+                    for (int i = 0; i < scriptListeners.length; i++) {
+                        ScriptListener scriptListener = scriptListeners[i];
+                        if (scriptListener instanceof FocusScriptListener)
+                            component.removeScriptListener(scriptListener);
+                    }
+                }
+                if (focus != null) {
+                    FocusScriptListener listener = new FocusScriptListener("onload", "requestFocus('" + focus.getComponentId() + "')");
+                    frame.addScriptListener(listener);
+                }
+                frame.putClientProperty("focus", focus);
             }
 
             // TODO: move this to a dynamic script resource

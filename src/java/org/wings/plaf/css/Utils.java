@@ -80,7 +80,7 @@ public final class Utils
                         + eventScriptCode;
                 }
                 eventScripts.put(event, eventScriptCode);
-            } // end of for ()
+            }
 
             Iterator it = eventScripts.keySet().iterator();
             while (it.hasNext()) {
@@ -92,7 +92,7 @@ public final class Utils
                 d.print(code);
                 d.print("\"");
             }
-        } // end of if ()
+        }
     }
 
     // TODO: inline

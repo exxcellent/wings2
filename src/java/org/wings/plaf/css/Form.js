@@ -12,6 +12,15 @@ function getTarget(event) {
     return event.target;
 }
 
+function getParentByTagName(element, tag) {
+  while (element != null) {
+    if (tag == element.tagName)
+      return element;
+    element = element.parentNode;
+  }
+  return null;
+}
+
 function preventDefault(event) {
   if (event.preventDefault)
     event.preventDefault();
@@ -38,11 +47,42 @@ function sendEvent(event, eventValue) {
     return false;
 }
 
-function getParentByTagName(element, tag) {
-  while (element != null) {
-    if (tag == element.tagName)
-      return element;
-    element = element.parentNode;
-  }
-  return null;
+function requestFocus(id) {
+    var div = document.getElementById(id);
+
+    var elements = div.getElementsByTagName("INPUT");
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].getAttribute("focus") == id) {
+            elements[i].focus();
+            return;
+        }
+    }
+    var elements = div.getElementsByTagName("SELECT");
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].getAttribute("focus") == id) {
+            elements[i].focus();
+            return;
+        }
+    }
+    var elements = div.getElementsByTagName("TEXTAREA");
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].getAttribute("focus") == id) {
+            elements[i].focus();
+            return;
+        }
+    }
+    var elements = div.getElementsByTagName("A");
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].getAttribute("focus") == id) {
+            elements[i].focus();
+            return;
+        }
+    }
+    var elements = div.getElementsByTagName("BUTTON");
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].getAttribute("focus") == id) {
+            elements[i].focus();
+            return;
+        }
+    }
 }

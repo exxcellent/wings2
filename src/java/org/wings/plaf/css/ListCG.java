@@ -46,6 +46,8 @@ public class ListCG
         org.wings.plaf.Utils.optAttribute(device, "size", list.getVisibleRowCount());
         org.wings.plaf.Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SConstants.MULTIPLE_SELECTION) ? "multiple" : null);
+        org.wings.plaf.Utils.optAttribute(device, "focus", list.getComponentId());
+
         if (!list.isEnabled()) {
             device.write(__disabled_1);
         }
@@ -171,7 +173,7 @@ public class ListCG
                     org.wings.plaf.Utils.write(device, Utils.event(list));
                     device.print("\" value=\"");
                     org.wings.plaf.Utils.write(device, list.getToggleSelectionParameter(i));
-                    device.print("\">");
+                    device.print("\"");
                 }
                 else {
                     RequestURL selectionAddr = list.getRequestURL();
@@ -179,8 +181,10 @@ public class ListCG
 
                     device.write("<a href=\"".getBytes());
                     org.wings.plaf.Utils.write(device, selectionAddr.toString());
-                    device.print("\">");
+                    device.print("\"");
                 }
+                org.wings.plaf.Utils.optAttribute(device, "focus", renderer.getComponentId());
+                device.print(">");
             }
             else
                 device.print("<span>");
