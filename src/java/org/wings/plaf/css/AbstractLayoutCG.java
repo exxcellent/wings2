@@ -44,6 +44,8 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         d.print(" cellpadding=\"").print(cellPadding < 0 ? 0 : cellPadding).print("\"");
         d.print(" border=\"").print(border < 0 ? 0 : border).print("\"");
         Utils.optAttribute(d, "class", styleClass);
+        // we don't need to do that here once we have set all layoutmanagers
+        // to 100% width/height 
         Utils.printCSSInlinePreferredSize(d, layout.getContainer().getPreferredSize());
         d.print("><tbody>");
         Utils.printNewline(d, layout.getContainer());
