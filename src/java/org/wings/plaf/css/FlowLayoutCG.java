@@ -37,7 +37,7 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
         if (components.size() > 0) {
             // Horizontal alignment
             d.print("\n<div");
-            org.wings.plaf.css.Utils.printDivHorizontalAlignment(d, layout.getAlignment());
+            Utils.printDivHorizontalAlignment(d, layout.getAlignment());
             d.print(">\n");
 
             int count = 0;
@@ -52,8 +52,8 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
                     else
                         d.print("</td><td");
 
-                    org.wings.plaf.css.Utils.printTableCellAlignment(d, comp);
-                    //org.wings.plaf.css.Utils.printCSSInlineStyleAttributes(d, comp);
+                    Utils.printTableCellAlignment(d, comp);
+                    //Utils.printCSSInlineStyleAttributes(d, comp);
 
                     d.print(">");
                     comp.write(d); // Render component itself

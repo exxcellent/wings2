@@ -23,16 +23,13 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class LabelCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.LabelCG {
+public class LabelCG extends AbstractComponentCG implements SConstants, org.wings.plaf.LabelCG {
     public LabelCG() {
     }
 
     public void writeContent(final Device device, final SComponent component)
             throws IOException {
         final SLabel label = (SLabel) component;
-
         final String text = label.getText();
         final SIcon icon = label.isEnabled() ? label.getIcon() : label.getDisabledIcon();
         final int horizontalTextPosition = label.getHorizontalTextPosition();

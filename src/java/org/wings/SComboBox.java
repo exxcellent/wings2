@@ -29,7 +29,6 @@ import java.util.Vector;
 /**
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
- * @beaninfo attribute: isContainer false
  * @see javax.swing.ComboBoxModel
  * @see SListCellRenderer
  */
@@ -115,8 +114,6 @@ public class SComboBox
      * Sets the data model that the SComboBox uses to obtain the list of items.
      *
      * @param model the ComboBoxModel that provides the displayed list of items
-     * @beaninfo bound: true
-     * description: Model that the combo box uses to get data to display.
      */
     public void setModel(ComboBoxModel model) {
         if (isDifferent(dataModel, model)) {
@@ -148,7 +145,6 @@ public class SComboBox
      * If shown as a formComponent, this value is used for the <em>size</em>-attribute.
      *
      * @param count <em>size</em>-attribute
-     * @beaninfo preferred: true
      */
     public void setMaximumRowCount(int count) {
         if (maximumRowCount != count) {
@@ -188,8 +184,6 @@ public class SComboBox
      * Sets the selected item in the SComboBox.
      *
      * @param object the list object to select
-     * @beaninfo preferred:   true
-     * description: Sets the selected item in the SComboBox.
      */
     public void setSelectedItem(Object object) {
         if (isDifferent(object, dataModel.getSelectedItem())) {
@@ -234,8 +228,6 @@ public class SComboBox
      * Selects the item at index <code>index</code>.
      *
      * @param index the item to be selected
-     * @beaninfo preferred: true
-     * description: The item at index is selected.
      */
     public void setSelectedIndex(int index) {
         int size = dataModel.getSize();

@@ -594,6 +594,8 @@ public final class Utils implements SConstants {
      * Prints a hierarchical idented newline. For each surrounding container of the passed component one ident level.
      */
     public static Device printNewline(Device d, SComponent currentComponent) throws IOException {
+        if (PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
+            return d;
         d.print("\n");
         while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
             d.print("\t");

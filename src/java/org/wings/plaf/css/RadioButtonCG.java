@@ -37,7 +37,7 @@ public class RadioButtonCG
 
     protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
         device.print("<input type=\"hidden\" name=\"");
-        Utils.write(device, org.wings.plaf.css.Utils.event(button));
+        Utils.write(device, Utils.event(button));
         device.print("\" value=\"");
         Utils.write(device, button.getDeselectionParameter());
         device.print("\"/>");

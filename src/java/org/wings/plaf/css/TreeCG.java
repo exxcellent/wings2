@@ -180,7 +180,7 @@ public class TreeCG
                     device.print("\"");
                 } else {
                     RequestURL selectionAddr = component.getRequestURL();
-                    selectionAddr.addParameter(org.wings.plaf.css.Utils.event(component),
+                    selectionAddr.addParameter(Utils.event(component),
                             component.getExpansionParameter(row, false));
 
                     device.print("<a href=\"");
@@ -221,7 +221,7 @@ public class TreeCG
                 device.print("\"");
             } else {
                 RequestURL selectionAddr = component.getRequestURL();
-                selectionAddr.addParameter(org.wings.plaf.css.Utils.event(component),
+                selectionAddr.addParameter(Utils.event(component),
                         component.getSelectionParameter(row, false));
 
                 device.print("<a href=\"");

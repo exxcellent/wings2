@@ -17,9 +17,7 @@ package org.wings;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SDefaultListCellRenderer
-        extends SLabel
-        implements SListCellRenderer {
+public class SDefaultListCellRenderer extends SLabel implements SListCellRenderer {
 
     /**
      * Style class to use for the foreground for selected nodes.
@@ -34,7 +32,8 @@ public class SDefaultListCellRenderer
     /**
      * Create a SDefaultListCellRenderer with default properties.
      */
-    public SDefaultListCellRenderer() {}
+    public SDefaultListCellRenderer() {
+    }
 
 
     /**
@@ -66,10 +65,7 @@ public class SDefaultListCellRenderer
     }
 
 
-    public SComponent getListCellRendererComponent(SComponent list,
-                                                   Object value,
-                                                   boolean selected,
-                                                   int index) {
+    public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int index) {
         setText(null);
         setIcon(null);
 

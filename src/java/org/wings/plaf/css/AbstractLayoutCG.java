@@ -29,6 +29,9 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     protected void printLayouterTableHeader(Device d, String styleClass, int cellSpacing, int cellPadding,
                                             int border, SLayoutManager layout)
             throws IOException {
+        Utils.printDebugNewline(d, layout.getContainer());
+        Utils.printDebug(d, "<!-- START LAYOUT: ").print(styleClass).print(" -->");
+
         Utils.printNewline(d, layout.getContainer());
         d.print("<table ");
         d.print(" cellspacing=\"").print(cellSpacing < 0 ? 0: cellSpacing).print("\"");
@@ -43,6 +46,8 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     protected void printLayouterTableFooter(Device d, String styleClass, SLayoutManager layout) throws IOException {
         Utils.printNewline(d, layout.getContainer());
         d.print("</tbody></table>");
+        
+        Utils.printDebugNewline(d, layout.getContainer());
         Utils.printDebug(d, "<!-- END LAYOUT: ").print(styleClass).print(" -->");
     }
 

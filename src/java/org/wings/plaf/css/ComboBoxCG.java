@@ -27,6 +27,8 @@ public class ComboBoxCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.ComboBoxCG {
 
+    private static final JavaScriptListener submitListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submit()");
+
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         final SComboBox component = (SComboBox) comp;
@@ -38,11 +40,9 @@ public class ComboBoxCG
         }
     }
 
-//--- code from common area in template.
-    private static final JavaScriptListener submitListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submit()");
 
     protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
-
+        Utils.printNewline(device, component);
         device.print("<select size=\"1\"");
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
@@ -79,35 +79,22 @@ public class ComboBoxCG
             }
 
 
-            device.print("\n<option");
+            Utils.printNewline(device, component);
+            device.print("<option");
             Utils.optAttribute(device, "value", component.getSelectionParameter(i));
             if (selected == i) {
-
                 device.print(" selected=\"selected\"");
             }
 
             if (cellRenderer != null) {
-                if (cellRenderer.getToolTipText() != null) {
-
-                    device.print(" title=\"");
-                    Utils.write(device, cellRenderer.getToolTipText());
-
-                    device.print("\"");
-                }
-
+                Utils.optAttribute(device, "title", cellRenderer.getToolTipText());
                 org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
                 Utils.printCSSInlineStyleAttributes(stringBufferDevice, cellRenderer);
-                String styleString = stringBufferDevice.toString();
-                if (styleString != null && styleString.length() > 0) {
-
-                    device.print(" style=\"");
-                    Utils.write(device, styleString);
-
-                    device.print("\"");
-                }
+                Utils.optAttribute(device, "style", stringBufferDevice.toString());
             }
 
-            device.print(">");
+            device.print(">"); //option
+
             if (cellRenderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
                 org.wings.io.StringBufferDevice string = getStringBufferDevice();
@@ -125,7 +112,6 @@ public class ComboBoxCG
                 }
                 device.print(chars, pos, chars.length - pos);
             } else {
-
                 device.print("<!--cellrenderer==null, use toString-->");
                 device.print(model.getElementAt(i).toString());
             }
@@ -134,7 +120,8 @@ public class ComboBoxCG
         }
 
 
-        device.print("\n</select>");
+        Utils.printNewline(device, component);
+        device.print("</select>");
         // util method
 
         device.print("<input type=\"hidden\"");

@@ -51,7 +51,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
         boolean showAsFormComponent = dialog.getShowAsFormComponent();
 
         RequestURL addr = dialog.getRequestURL();
-        addr.addParameter(org.wings.plaf.css.Utils.event(dialog), event);
+        addr.addParameter(Utils.event(dialog), event);
 
         device.print("<th");
         Utils.optAttribute(device, "width", getIconWidth(icon));

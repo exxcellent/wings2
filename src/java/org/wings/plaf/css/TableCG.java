@@ -242,7 +242,7 @@ public class TableCG
                     device.print("</button>");
                 } else {
                     RequestURL selectionAddr = table.getRequestURL();
-                    selectionAddr.addParameter(org.wings.plaf.css.Utils.event(table),
+                    selectionAddr.addParameter(Utils.event(table),
                             table.getToggleSelectionParameter(r, -1));
 
                     device.print("<a href=\"");

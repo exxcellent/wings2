@@ -45,14 +45,16 @@ public class GridBagLayoutCG extends AbstractLayoutCG
         printLayouterTableHeader(d, "SGridBagLayout", cellSpacing, cellPadding, border, layout);
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
-            d.print("<tr>\n");
+            Utils.printNewline(d, layout.getContainer());
+            d.print("<tr>");
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 SComponent comp = grid.grid[col][row];
+                Utils.printNewline(d, layout.getContainer());
                 if (comp == null) {
                     if (row == grid.firstRow && header) {
-                        d.print("<th></th>\n");
+                        d.print("<th></th>");
                     } else {
-                        d.print("<td></td>\n");
+                        d.print("<td></td>");
                     }
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
@@ -101,14 +103,15 @@ public class GridBagLayoutCG extends AbstractLayoutCG
                         comp.write(d);
 
                         if (row == grid.firstRow && header) {
-                            d.print("</th>\n");
+                            d.print("</th>");
                         } else {
-                            d.print("</td>\n");
+                            d.print("</td>");
                         }
                     }
                 }
             }
-            d.print("</tr>\n");
+            Utils.printNewline(d, layout.getContainer());
+            d.print("</tr>");
         }
         printLayouterTableFooter(d, "SGridBagLayout", layout);
     }

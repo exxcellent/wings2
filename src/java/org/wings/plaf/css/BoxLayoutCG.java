@@ -35,8 +35,8 @@ public class BoxLayoutCG extends AbstractLayoutCG implements LayoutCG {
         List components = layout.getComponents();
 
         printLayouterTableHeader(d, "SBoxLayout",0,0,0,layout);
-        //org.wings.plaf.css.Utils.printTableHorizontalAlignment(d, layout.getHorizontalAlignment());
-        //org.wings.plaf.css.Utils.printTableVerticalAlignment(d, layout.getVerticalAlignment());
+        //Utils.printTableHorizontalAlignment(d, layout.getHorizontalAlignment());
+        //Utils.printTableVerticalAlignment(d, layout.getVerticalAlignment());
 
         if (layout.getOrientation() == SBoxLayout.X_AXIS) {
             d.print("<tr>");

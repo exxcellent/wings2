@@ -32,7 +32,7 @@ public class PasswordFieldCG
         final SPasswordField component = (SPasswordField) _c;
 
         device.print("<input type=\"password\"");
-        org.wings.plaf.css.Utils.writeEvents(device, component);
+        Utils.writeEvents(device, component);
         Utils.optAttribute(device, "size", component.getColumns());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());

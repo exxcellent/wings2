@@ -42,7 +42,9 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, layout.getContainer());
             d.print("<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
             north.write(d);
-            d.print("</td></tr>");
+            d.print("</td>");
+            Utils.printNewline(d, layout.getContainer());
+            d.print("</tr>");
         }
 
         Utils.printNewline(d, layout.getContainer());
@@ -68,13 +70,16 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             east.write(d);
             d.print("</td>");
         }
+        Utils.printNewline(d, layout.getContainer());
         d.print("</tr>");
 
         if (south != null) {
             Utils.printNewline(d, layout.getContainer());
             d.print("<tr style=\"height: 0%\"><td colspan=\"").print(cols).print("\">");
             south.write(d);
-            d.print("</td></tr>");
+            d.print("</td>");
+            Utils.printNewline(d, layout.getContainer());
+            d.print("</tr>");
         }
 
         printLayouterTableFooter(d, "SBorderLayout", layout);

@@ -47,10 +47,11 @@ public class FormCG
     */
 
     protected void writeContent(final Device device,
-                                final SComponent _c)
+                                final SComponent c)
             throws IOException {
-        final SForm component = (SForm) _c;
+        final SForm component = (SForm) c;
 
+        Utils.printNewline(device, component);
         device.print("<form method=\"");
         if (component.isPostMethod()) {
             device.print("post");
@@ -58,10 +59,9 @@ public class FormCG
             device.print("get");
         }
         device.print("\"");
-        device.print(" name=\"");
-        Utils.write(device, component.getName());
-        device.print("\"");
-        org.wings.plaf.css.Utils.writeEvents(device, component);
+
+        Utils.optAttribute(device, "name", component.getName());
+        Utils.writeEvents(device, component);
         Utils.optAttribute(device, "class", component.getStyle());
         Utils.optAttribute(device, "enctype", component.getEncodingType());
         Utils.optAttribute(device, "action", component.getRequestURL());
@@ -83,8 +83,9 @@ public class FormCG
         device.print("<input type=\"image\" name=\"_capture_enter2\" border=\"0\" ");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
+
+        Utils.printNewline(device, component);
         device.print("</form>");
-        device.print("\n");
     }
 
     protected void renderContainer(final Device device, final SForm component) throws IOException {

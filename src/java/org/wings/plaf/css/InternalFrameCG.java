@@ -63,7 +63,7 @@ public class InternalFrameCG
         boolean showAsFormComponent = frame.getShowAsFormComponent();
 
         RequestURL addr = frame.getRequestURL();
-        addr.addParameter(org.wings.plaf.css.Utils.event(frame), event);
+        addr.addParameter(Utils.event(frame), event);
 
         device.print("<th");
         Utils.optAttribute(device, "width", getIconWidth(icon));

@@ -796,21 +796,14 @@ public abstract class SComponent
      */
     public void write(Device s) throws IOException {
         try {
-            boolean debugComments = false;
-            if (debugComments)
-                s.print("<!--"+this.getClass().getName()+".START-->");
-            if (visible) {
+            if (visible)
                 cg.write(s, this);
-            }
-            if (debugComments)
-                s.print("<!--"+this.getClass().getName()+".END-->");
         }
         catch (SocketException se) {
             // Typical double-clicks. Not severe
-            log.info( "Exception during code generation for " + getClass().getName(), se);
-
+            log.debug( "Exception during code generation for " + getClass().getName(), se);
         } catch (Throwable t) {
-            log.fatal( "Exception during code generation for " + getClass().getName(), t);
+            log.warn( "Exception during code generation for " + getClass().getName(), t);
         }
     }
 
