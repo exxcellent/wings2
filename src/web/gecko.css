@@ -24,6 +24,13 @@ table {
     border: none;
 }
 
+/* this stays in here! 
+   it switches the gecko-compatible browsers into border-box mode */
+div {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
 /* DIV, FORM, TD, TH {
     color: inherit;
     background-color: inherit;
@@ -69,7 +76,6 @@ div.SLabel {
     /*font-size: 12px;
     color: #000044;
 	white-space: nowrap;*/
-    box-sizing: border-box;
 }
 
 div.SButton_Box {
