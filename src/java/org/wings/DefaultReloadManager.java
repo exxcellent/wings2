@@ -14,13 +14,15 @@
 
 package org.wings;
 
-import java.util.*;
-import java.util.logging.*;
-
-import org.wings.style.DynamicStyleSheetResource;
-import org.wings.script.DynamicScriptResource;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.DynamicResource;
+import org.wings.script.DynamicScriptResource;
+import org.wings.style.DynamicStyleSheetResource;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * This is the default implementation of the reload manager.
@@ -42,22 +44,16 @@ public class DefaultReloadManager
         dirtyResources = new HashSet();
     }
     
-    public void reload(SComponent component, int aspect) {
+    public void reload(SComponent component) {
         SFrame parent = component.getParentFrame();
 
         if (parent == null) {
             return;
         }
 
-        if ( (aspect & RELOAD_CODE) != 0 ) {
-            markDirty(parent.getDynamicResource(DynamicCodeResource.class));
-        }  
-        if ( (aspect & RELOAD_STYLE) != 0 ) {
-            markDirty(parent.getDynamicResource(DynamicStyleSheetResource.class));
-        }
-        if ( (aspect & RELOAD_SCRIPT) != 0 ) {
-            markDirty(parent.getDynamicResource(DynamicScriptResource.class));
-        }
+        markDirty(parent.getDynamicResource(DynamicCodeResource.class));
+        markDirty(parent.getDynamicResource(DynamicStyleSheetResource.class));
+        markDirty(parent.getDynamicResource(DynamicScriptResource.class));
     }
 
     public synchronized void markDirty(DynamicResource d) {

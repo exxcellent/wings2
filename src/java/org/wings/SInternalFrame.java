@@ -43,19 +43,19 @@ public class SInternalFrame
     }
 
     public void setIconifyable(boolean v) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, iconifyable, v);
+        reloadIfChange(iconifyable, v);
     }
     public boolean isIconifyable() { return iconifyable; }
 
     public void setMaximizable(boolean v) {
         maximizable = v;
-        reloadIfChange(ReloadManager.RELOAD_CODE, maximizable, v);
+        reloadIfChange(maximizable, v);
     }
     public boolean isMaximizable() { return maximizable; }
 
     public void setClosable(boolean v) {
         closable = v;
-        reloadIfChange(ReloadManager.RELOAD_CODE, closable, v);
+        reloadIfChange(closable, v);
     }
     public boolean isClosable() { return closable; }
 
@@ -64,7 +64,7 @@ public class SInternalFrame
         boolean old = iconified;
         iconified = v;
         if (old != iconified) {
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
             if (iconified)
                 setMaximized(false);
         }
@@ -76,7 +76,7 @@ public class SInternalFrame
         boolean old = maximized;
         maximized = v;
         if (old != maximized) {
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
             if (maximized)
                 setIconified(false);
         }
@@ -88,14 +88,14 @@ public class SInternalFrame
         boolean old = closed;
         closed = v;
         if (old != closed)
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
     public boolean isClosed() { return closed; }
 
     public void setIcon(SIcon i) {
         if ( i!=icon || i!=null && !i.equals(icon) ) {
             icon = i;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -108,7 +108,7 @@ public class SInternalFrame
         title = t;
         if ((title == null && oldTitle != null) ||
             (title != null && !title.equals(oldTitle)))
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     public String getTitle() {

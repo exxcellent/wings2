@@ -89,7 +89,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
 
     protected void writePopup(final Device device, SMenu menu)
         throws IOException {
-        String componentId = menu.getComponentId();
+        String componentId = menu.getName();
         String popupId = componentId + "_pop";
 
 
@@ -101,7 +101,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
             SComponent menuItem = menu.getMenuComponent(i);
 
             if (menuItem.isVisible()) {
-                String itemComponentId = menu.getMenuComponent(i).getComponentId();
+                String itemComponentId = menu.getMenuComponent(i).getName();
                 String itemHookId = itemComponentId + "_hook";
 
 
@@ -185,8 +185,8 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         throws IOException {
         boolean hasParent = menu.getParentMenu() != null;
 
-        String parentId = hasParent ? "'" + menu.getParentMenu().getComponentId() + "_pop'" : "null";
-        String componentId = menu.getComponentId();
+        String parentId = hasParent ? "'" + menu.getParentMenu().getName() + "_pop'" : "null";
+        String componentId = menu.getName();
         String popupId = componentId + "_pop";
         String hookId = componentId + "_hook";
 

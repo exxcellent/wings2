@@ -164,7 +164,7 @@ public class TabbedPaneCG
 
             if (i == tabbedPane.getSelectedIndex()) {
                 device.print(" selected=\"true\"");
-                org.wings.plaf.Utils.optAttribute(device, "focus", tabbedPane.getComponentId());
+                org.wings.plaf.Utils.optAttribute(device, "focus", tabbedPane.getName());
             }
 
             if (!tabbedPane.isEnabledAt(i))

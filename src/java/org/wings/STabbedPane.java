@@ -346,7 +346,7 @@ public class STabbedPane
         Page p = new Page(title, icon, disabledIcon, component, tip);
         pages.add(index, p);
 
-        contents.addComponent(p.component, p.component.getComponentId());
+        contents.addComponent(p.component, p.component.getName());
 
         if ( pages.size() == 1 ) {
             setSelectedIndex(0);
@@ -705,7 +705,7 @@ public class STabbedPane
                 contents.remove(page.component);
             }
             page.component = component;
-            contents.addComponent(page.component, page.component.getComponentId());
+            contents.addComponent(page.component, page.component.getName());
             if (getSelectedIndex() == index)
             	card.show(component);
         }
@@ -846,7 +846,7 @@ public class STabbedPane
         if (index >= pages.size()) return;
         card.show(((Page) pages.get(index)).component);
 
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
         fireStateChanged();
     }
 

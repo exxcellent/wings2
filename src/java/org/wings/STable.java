@@ -153,7 +153,7 @@ public class STable
         if (model != null)
             model.removeTableModelListener(this);
 
-        reloadIfChange(ReloadManager.RELOAD_CODE, model, tm);
+        reloadIfChange(model, tm);
 
         model = tm;
         if (model == null)
@@ -544,7 +544,7 @@ public class STable
         int oldEditingColumn = editingColumn;
         editingColumn = aColumn;
         if (editingColumn != oldEditingColumn)
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     /**
@@ -556,7 +556,7 @@ public class STable
         int oldEditingRow = editingRow;
         editingRow = aRow;
         if (editingRow != oldEditingRow)
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     /**
@@ -629,7 +629,7 @@ public class STable
             Object value = editor.getCellEditorValue();
             setValueAt(value, editingRow, editingColumn);
             removeEditor();
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -641,7 +641,7 @@ public class STable
      */
     public void editingCanceled(ChangeEvent e) {
         removeEditor();
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     /**
@@ -844,7 +844,7 @@ public class STable
                     break;
             }
         }
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     /**
@@ -947,7 +947,7 @@ public class STable
         boolean oldHeaderVisible = headerVisible;
         headerVisible = hv;
         if (oldHeaderVisible != headerVisible)
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     public boolean isHeaderVisible() {
@@ -963,7 +963,7 @@ public class STable
         boolean oldShowHorizontalLines = showHorizontalLines;
         showHorizontalLines = b;
         if (showHorizontalLines != oldShowHorizontalLines)
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     public boolean getShowHorizontalLines() {
@@ -974,7 +974,7 @@ public class STable
         boolean oldShowVerticalLines = showVerticalLines;
         showVerticalLines = b;
         if (showVerticalLines != oldShowVerticalLines)
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     public boolean getShowVerticalLines() {
@@ -991,7 +991,7 @@ public class STable
         intercellSpacing = d;
         if ((intercellSpacing == null && oldIntercellSpacing != null) ||
             intercellSpacing != null && !intercellSpacing.equals(oldIntercellSpacing))
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     public SDimension getIntercellSpacing() {
@@ -1009,7 +1009,7 @@ public class STable
         intercellPadding = d;
         if ((intercellPadding == null && oldIntercellPadding != null) ||
             intercellPadding != null && !intercellPadding.equals(oldIntercellPadding))
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     public SDimension getIntercellPadding() {
@@ -1051,7 +1051,7 @@ public class STable
     public void setViewportSize(Rectangle d) {
         if (isDifferent(viewport, d)) {
             viewport = d;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -1069,7 +1069,7 @@ public class STable
     protected final ListSelectionListener reloadOnSelectionChangeListener =
         new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                reload(ReloadManager.RELOAD_CODE);
+                reload();
             }
         };
 }

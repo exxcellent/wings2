@@ -185,7 +185,7 @@ public class SFrame
         /*
          * this knows, that the frames are usually named "frame" + ID
          */
-        setBaseTarget("frame" + otherFrame.getComponentId());
+        setBaseTarget("frame" + otherFrame.getName());
     }
 
     public String getBaseTarget() {

@@ -136,7 +136,7 @@ public abstract class SAbstractButton
             if ( buttonGroup!=null && getDispatcher()!=null ) {
                 getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
   
@@ -211,7 +211,7 @@ public abstract class SAbstractButton
     public void setType(String t) {
         if ( isDifferent(type, t) ) {
             type = t;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
   
@@ -370,7 +370,7 @@ public abstract class SAbstractButton
     public void setEventTarget(String target) {
         if ( isDifferent(eventTarget, target) ) {
             eventTarget = target;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
   
@@ -423,7 +423,6 @@ public abstract class SAbstractButton
                 actionPropertyChangeListener = createActionPropertyChangeListener(action);
                 action.addPropertyChangeListener(actionPropertyChangeListener);
             }
-            firePropertyChange("action", oldValue, action);
         }
     }
   

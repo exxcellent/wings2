@@ -195,7 +195,7 @@ public class SScrollPane
             scrollable = null;
         }
 
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     public final Scrollable getScrollable() { 
@@ -261,7 +261,7 @@ public class SScrollPane
             horizontalScrollBar.addAdjustmentListener(getAdjustmentListener());
         }
 
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     /**
@@ -316,7 +316,7 @@ public class SScrollPane
             verticalScrollBar.addAdjustmentListener(getAdjustmentListener());
         }
 
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     /**
@@ -338,7 +338,7 @@ public class SScrollPane
     public void setHorizontalScrollBarPolicy(int policy) {
         if ( policy!=horizontalScrollBarPolicy ) {
             horizontalScrollBarPolicy = policy;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -352,7 +352,7 @@ public class SScrollPane
     public void setVerticalScrollBarPolicy(int policy) {
         if ( policy!=verticalScrollBarPolicy) {
             verticalScrollBarPolicy = policy;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 

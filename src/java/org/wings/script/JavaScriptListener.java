@@ -116,7 +116,7 @@ public class JavaScriptListener
                 if (c == '}') {
                     buffer.append(code.substring(startPos, endPos-1));
                     startPos = i+1;
-                    buffer.append(components[varIndex].getComponentId());
+                    buffer.append(components[varIndex].getName());
                 }
                 else {
                     throw new IllegalArgumentException("Expected closing '}' after '{" + varIndex + "'");

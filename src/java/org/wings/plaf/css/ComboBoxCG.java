@@ -50,7 +50,7 @@ public class ComboBoxCG
         device.write(__select_size_1);
         org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(component));
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-        org.wings.plaf.Utils.optAttribute(device, "focus", component.getComponentId());
+        org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
         Utils.innerPreferredSize(device, component.getPreferredSize());
 

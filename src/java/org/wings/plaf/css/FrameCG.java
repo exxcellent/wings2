@@ -212,7 +212,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
                 }
             }
             if (focus != null) {
-                FocusScriptListener listener = new FocusScriptListener("onload", "requestFocus('" + focus.getComponentId() + "')");
+                FocusScriptListener listener = new FocusScriptListener("onload", "requestFocus('" + focus.getName() + "')");
                 frame.addScriptListener(listener);
             }
             frame.putClientProperty("focus", focus);

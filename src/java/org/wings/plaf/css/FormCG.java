@@ -84,7 +84,7 @@ public class FormCG
         device.write(__input_type_hid);
         org.wings.plaf.Utils.write(device, Utils.event(component));
         device.write(__value);
-        org.wings.plaf.Utils.write(device, component.getComponentId());
+        org.wings.plaf.Utils.write(device, component.getName());
         org.wings.plaf.Utils.write(device, SConstants.UID_DIVIDER);
         device.write(___1);
         Utils.renderContainer(device, component);

@@ -73,7 +73,7 @@ public class DynamicScriptResource extends DynamicResource {
                     set.add(listener.getScript());
                     out.print("\n");
                     out.print("// ");
-                    out.print(component.getComponentId());
+                    out.print(component.getName());
                     out.print(".");
                     out.print(listener.getEvent());
                     out.print("\n");

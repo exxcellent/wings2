@@ -304,7 +304,7 @@ public class SContainer extends SComponent
             fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -436,7 +436,7 @@ public class SContainer extends SComponent
             c.setParent(this);
 
             fireContainerEvent(SContainerEvent.COMPONENT_ADDED, c);
-            reload(ReloadManager.RELOAD_ALL);
+            reload();
         }
 
         return c;

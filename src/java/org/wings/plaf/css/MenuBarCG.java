@@ -54,7 +54,7 @@ public class MenuBarCG
                     rightAligned = true;
                 }
                 device.write(__td_id);
-                org.wings.plaf.Utils.write(device, mbar.getComponent(i).getComponentId() + "_hook");
+                org.wings.plaf.Utils.write(device, mbar.getComponent(i).getName() + "_hook");
                 device.write(__class_menu);
                 if (mbar.getComponent(i).isEnabled() &&
                     mbar.getComponent(i) instanceof SMenuItem) {

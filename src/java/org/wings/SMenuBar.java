@@ -83,7 +83,6 @@ public class SMenuBar extends SContainer
     public void setSelectionModel(SingleSelectionModel model) {
 	SingleSelectionModel oldValue = selectionModel;
         this.selectionModel = model;
-        firePropertyChange("selectionModel", oldValue, selectionModel);
     }
 
 
@@ -191,14 +190,6 @@ public class SMenuBar extends SContainer
     public void setBorderPainted(boolean b) {
         boolean oldValue = paintBorder;
         paintBorder = b;
-        firePropertyChange("borderPainted", oldValue ? Boolean.TRUE : Boolean.FALSE, 
-                           paintBorder ? Boolean.TRUE : Boolean.FALSE );
-       /*
-        if (b != oldValue) {
-              revalidate();
-              repaint();
-        }
-       */
     }
 
     /**
@@ -221,7 +212,7 @@ public class SMenuBar extends SContainer
      * its menus. Setting to null will cause the menubar to
      * use the default margins.
      *
-     * @param margin an Insets object containing the margin values
+     * @param m an Insets object containing the margin values
      * @see Insets
      * @beaninfo
      *        bound: true
@@ -231,7 +222,6 @@ public class SMenuBar extends SContainer
     public void setMargin(Insets m) {
         Insets old = margin;
         this.margin = m;
-        firePropertyChange("margin", old, m);
       /*
         if (old == null || !m.equals(old)) {
               revalidate();

@@ -192,7 +192,7 @@ public final class LowLevelEventDispatcher
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("### got outdated event '" + epoch + "_" + name
                                 + "' from frame '"
-                                + frame.getComponentId() 
+                                + frame.getName()
                                 + "'; expected epoch: " 
                                 + frame.getEventEpoch());
                 }

@@ -202,7 +202,7 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, icon, i);
+        reloadIfChange(icon, i);
         icon = i;
     }
 
@@ -211,7 +211,7 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setPressedIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, pressedIcon, i);
+        reloadIfChange(pressedIcon, i);
         pressedIcon = i;
     }
 
@@ -220,7 +220,7 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setRolloverIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, rolloverIcon, i);
+        reloadIfChange(rolloverIcon, i);
         rolloverIcon = i;
     }
 
@@ -229,7 +229,7 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setRolloverSelectedIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, rolloverSelectedIcon, i);
+        reloadIfChange(rolloverSelectedIcon, i);
         rolloverSelectedIcon = i;
     }
 
@@ -238,7 +238,7 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setSelectedIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, selectedIcon, i);
+        reloadIfChange(selectedIcon, i);
         selectedIcon = i;
     }
 
@@ -247,7 +247,7 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setDisabledSelectedIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, disabledSelectedIcon, i);
+        reloadIfChange(disabledSelectedIcon, i);
         disabledSelectedIcon = i;
     }
 
@@ -256,7 +256,7 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setDisabledIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, disabledIcon, i);
+        reloadIfChange(disabledIcon, i);
         disabledIcon = i;
     }
 
@@ -324,7 +324,7 @@ public abstract class SAbstractIconTextCompound
      * @param t
      */
     public void setText(String t) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, text, t);
+        reloadIfChange(text, t);
         text = t;
     }
 
@@ -345,7 +345,7 @@ public abstract class SAbstractIconTextCompound
         if (model.isSelected() != selected) {
             model.setSelected(selected);
             fireStateChanged();
-            reload(ReloadManager.RELOAD_CODE | ReloadManager.RELOAD_STYLE);
+            reload();
         }
     }
 

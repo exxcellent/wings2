@@ -48,7 +48,7 @@ public class FileChooserCG
             org.wings.plaf.Utils.write(device, Utils.event(component));
             device.write(__);
             device.write(__id);
-            org.wings.plaf.Utils.write(device, component.getComponentId());
+            org.wings.plaf.Utils.write(device, component.getName());
             device.write(__);
         }
         else

@@ -67,7 +67,7 @@ public class DynamicStyleSheetResource
         private void writeAttributesFrom(SComponent component)
             throws IOException
         {
-            String selectorPrefix = "#" + component.getComponentId();
+            String selectorPrefix = "#" + component.getName();
             if (component instanceof SFrame)
                 selectorPrefix = "body";
 

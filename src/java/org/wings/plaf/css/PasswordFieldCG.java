@@ -32,7 +32,7 @@ public class PasswordFieldCG
         org.wings.plaf.Utils.optAttribute(device, "size", component.getColumns());
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "maxlength", component.getMaxColumns());
-        org.wings.plaf.Utils.optAttribute(device, "focus", component.getComponentId());
+        org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
         Utils.innerPreferredSize(device, component.getPreferredSize());
 

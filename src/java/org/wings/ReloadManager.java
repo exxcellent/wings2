@@ -14,22 +14,9 @@
 
 package org.wings;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.beans.*;
-import java.io.IOException;
-import java.lang.reflect.*;
-import java.util.*;
-
-import org.wings.io.Device;
-import org.wings.io.StringBufferDevice;
-import org.wings.plaf.*;
-import org.wings.plaf.ComponentCG;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
-import org.wings.style.Style;
-import org.wings.externalizer.ExternalizeManager;
 import org.wings.resource.DynamicResource;
+
+import java.util.Set;
 
 /**
  * The reload manager interface.
@@ -39,19 +26,14 @@ import org.wings.resource.DynamicResource;
  */
 public interface ReloadManager
 {
-    final int RELOAD_CODE   = 0x01;
-    final int RELOAD_STYLE  = 0x02;
-    final int RELOAD_SCRIPT = 0x04;
-    final int RELOAD_ALL    = RELOAD_CODE | RELOAD_STYLE | RELOAD_SCRIPT;
-
-    void reload(SComponent component, int aspect);
+    void reload(SComponent component);
 
     /**
      * Mark a <code>component</code> dirty.
      * Frames that contain dirty components have to be reloaded.
      * @param component the dirty component
      */
-    void markDirty(DynamicResource d);
+    void markDirty(DynamicResource component);
 
     /**
      * Return a set of all dynamic resources that are marked dirty.
@@ -66,11 +48,3 @@ public interface ReloadManager
 
     void invalidateResources();
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

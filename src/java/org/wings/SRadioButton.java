@@ -80,7 +80,7 @@ public class SRadioButton
                     // check the count of events, which are for me - with a
                     // button group, the value is my component id, if a event is
                     // for me   
-                    if (getComponentId().equals(values[i])) {
+                    if (getName().equals(values[i])) {
                         eventCount++;
                     } // end of if ()
                 } // end of for (int i=0; i<; i++)
@@ -129,7 +129,7 @@ public class SRadioButton
 
     public String getSelectionParameter() {
         if (getGroup() != null && getShowAsFormComponent()) {
-            return getComponentId();
+            return getName();
         }
         else {
             return "1";
@@ -138,7 +138,7 @@ public class SRadioButton
 
     public String getDeselectionParameter() {
         if (getGroup() != null && getShowAsFormComponent()) {
-            return getComponentId();
+            return getName();
         }
         else {
             return "0";

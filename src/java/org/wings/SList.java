@@ -197,7 +197,7 @@ public class SList
     public void setCellRenderer(SListCellRenderer cellRenderer) {
         SListCellRenderer oldValue = this.cellRenderer;
         this.cellRenderer = cellRenderer;
-        reloadIfChange(ReloadManager.RELOAD_CODE, oldValue, cellRenderer);
+        reloadIfChange(oldValue, cellRenderer);
     }
 
 
@@ -275,7 +275,7 @@ public class SList
     public void setVisibleRowCount(int visibleRowCount) {
         if ( this.visibleRowCount!=visibleRowCount ) {
             this.visibleRowCount = Math.max(0, visibleRowCount);
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
             //firePropertyChange("visibleRowCount", oldValue, visibleRowCount);
         }
     }
@@ -313,7 +313,7 @@ public class SList
             clearSelection();
             dataModel = model;
             dataModel.addListDataListener(this);
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -418,7 +418,7 @@ public class SList
             fireSelectionValueChanged(e.getFirstIndex(),
                                       e.getLastIndex(),
                                       e.getValueIsAdjusting());
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -487,7 +487,6 @@ public class SList
 
         SListSelectionModel oldValue = this.selectionModel;
         this.selectionModel = selectionModel;
-        firePropertyChange("selectionModel", oldValue, selectionModel);
     }
 
 
@@ -598,7 +597,7 @@ public class SList
     public void clearSelection() {
         if (!getSelectionModel().isSelectionEmpty()) {
             getSelectionModel().clearSelection();
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -984,7 +983,7 @@ public class SList
     public void setViewportSize(Rectangle d) {
         if ( isDifferent(viewport, d) ) {
             viewport = d;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -1056,15 +1055,15 @@ public class SList
      **/
     
     public void contentsChanged(javax.swing.event.ListDataEvent e) {
-      reload(ReloadManager.RELOAD_CODE);
+      reload();
     }
     
     public void intervalAdded(javax.swing.event.ListDataEvent e) {
-      reload(ReloadManager.RELOAD_CODE);
+      reload();
     }
     
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
-      reload(ReloadManager.RELOAD_CODE);
+      reload();
     }
     
 }

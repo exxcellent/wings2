@@ -56,16 +56,10 @@ public abstract class SComponent
 
     public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
-    public static final String ENABLED_PROPERTY = "_Enabled_Property";
-    public static final String VISIBLE_PROPERTY = "_Visible_Property";
-    public static final String OPAQUE_PROPERTY = "_Opaque_Property";
-    public static final String BORDER_PROPERTY = "_Border_Property";
-    public static final String NAME_PROPERTY = "_Name_Property";
-
     private final static Logger logger = Logger.getLogger("org.wings");
 
     /* */
-    private transient String componentId;
+    private transient String name;
 
     /** the session */
     private transient Session session;
@@ -100,9 +94,6 @@ public abstract class SComponent
     /** The frame, this component resides in. */
     protected SFrame parentFrame;
 
-    /** The name of the component. */
-    protected String name;
-
     /** The border for the component. */
     protected SBorder border;
 
@@ -114,14 +105,6 @@ public abstract class SComponent
 
     /** Preferred size of component in pixel. */
     protected SDimension preferredSize;
-
-    /**
-     * This is for performance optimizations. With this flag is set, property change
-     * events are generated and so every property setter method has to test if a property
-     * has changed and temporarily store the old value to generate the property
-     * change event
-     */
-    private boolean firePropertyChangeEvents = false;
 
     private boolean fireComponentChangeEvents = false;
 
@@ -148,17 +131,8 @@ public abstract class SComponent
     }
 
     public void setBorder(SBorder border) {
-        if (firePropertyChangeEvents) {
-            if (this.border != border) {
-                SBorder oldBorder = this.border;
-
-                this.border = border;
-
-                firePropertyChange(BORDER_PROPERTY, oldBorder, border);
-            }
-        } else {
-            this.border = border;
-        }
+        reloadIfChange(this.border, border);
+        this.border = border;
     }
 
     /**
@@ -172,12 +146,13 @@ public abstract class SComponent
     /**
      * Sets the parent container. Also gets the parent frame from the parent.
      *
-     * @param p the container
+     * @param parent the container
      */
-    public void setParent(SContainer p) {
-        parent = p;
-        if (p != null)
-            setParentFrame(p.getParentFrame());
+    public void setParent(SContainer parent) {
+        reloadIfChange(this.parent, parent);
+        this.parent = parent;
+        if (parent != null)
+            setParentFrame(parent.getParentFrame());
         else
             setParentFrame(null);
     }
@@ -194,6 +169,7 @@ public abstract class SComponent
             register();
             if (this.popupMenu != null)
                 popupMenu.setParentFrame(parentFrame);
+            reload();
         }
     }
 
@@ -206,6 +182,7 @@ public abstract class SComponent
     }
 
     public void setComponentPopupMenu(SPopupMenu popupMenu) {
+        reloadIfChange(this.popupMenu, popupMenu);
         if (this.popupMenu != null)
             popupMenu.setParentFrame(null);
         this.popupMenu = popupMenu;
@@ -385,15 +362,14 @@ public abstract class SComponent
         return (ScriptListener[])getListeners(ScriptListener.class);
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    /**
-     * Return a jvm wide unique id.
-     * @return an id
-     */
-    public final String getComponentId() {
-        if (componentId == null)
-            componentId = getSession().createUniqueId();
-        return componentId;
+    public final String getName() {
+        if (name == null)
+            name = getSession().createUniqueId();
+        return name;
     }
 
     /**
@@ -461,7 +437,7 @@ public abstract class SComponent
      * @param value the new value for style
      */
     public void setStyle(String value) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, style, value);
+        reloadIfChange(style, value);
         this.style = value;
     }
 
@@ -476,14 +452,14 @@ public abstract class SComponent
         if (dynamicStyles == null)
             dynamicStyles = new HashMap(4);
         dynamicStyles.put(style.getSelector(), style);
-        reload(ReloadManager.RELOAD_STYLE);
+        reload();
     }
 
     public void removeDynamicStyle(String selector) {
         if (dynamicStyles == null)
             return;
         dynamicStyles.remove(selector);
-        reload(ReloadManager.RELOAD_STYLE);
+        reload();
     }
 
     public Style getDynamicStyle(String selector) {
@@ -501,7 +477,7 @@ public abstract class SComponent
             Style style = (Style)iterator.next();
             this.dynamicStyles.put(style.getSelector(), style);
         }
-        reload(ReloadManager.RELOAD_STYLE);
+        reload();
     }
 
     public Collection getDynamicStyles() {
@@ -518,11 +494,11 @@ public abstract class SComponent
         Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new Style(selector, name, value));
-            reload(ReloadManager.RELOAD_STYLE);
+            reload();
         }
         else {
             String old = style.put(name, value);
-            reloadIfChange(ReloadManager.RELOAD_STYLE, old, value);
+            reloadIfChange(old, value);
         }
     }
 
@@ -535,12 +511,12 @@ public abstract class SComponent
         Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new Style(selector, attributes));
-            reload(ReloadManager.RELOAD_STYLE);
+            reload();
         }
         else {
             boolean changed = style.putAll(attributes);
             if (changed)
-                reload(ReloadManager.RELOAD_STYLE);
+                reload();
         }
     }
 
@@ -597,17 +573,8 @@ public abstract class SComponent
      * @param visible wether this component will show or not
      */
     public void setVisible(boolean visible) {
-        final boolean old = SComponent.this.visible;
-        if (firePropertyChangeEvents) {
-            if (this.visible != visible) {
-                this.visible = visible;
-                firePropertyChange(VISIBLE_PROPERTY,
-                                   Boolean.valueOf(!visible),
-                                   Boolean.valueOf(visible));
-            }
-        } else {
-            this.visible = visible;
-        }
+        boolean old = this.visible;
+        this.visible = visible;
         if (fireComponentChangeEvents && (visible != old)) {
             fireComponentChangeEvent(
                 new SComponentEvent(this, visible
@@ -631,16 +598,7 @@ public abstract class SComponent
      * @param enabled true if the component is enabled, false otherwise
      */
     public void setEnabled(boolean enabled) {
-        if (firePropertyChangeEvents) {
-            if (this.enabled != enabled) {
-                this.enabled = enabled;
-                firePropertyChange(ENABLED_PROPERTY,
-                                   Boolean.valueOf(!enabled),
-                                   Boolean.valueOf(enabled));
-            }
-        } else {
-            this.enabled = enabled;
-        }
+        this.enabled = enabled;
     }
 
     /**
@@ -653,206 +611,137 @@ public abstract class SComponent
     }
 
     /**
-     * Return the name of this component.
-     *
-     * @return the name of this component
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name of this component.
-     *
-     * @param name the new name for this component
-     */
-    public void setName(String name) {
-        if (firePropertyChangeEvents) {
-            if (isDifferent(this.name, name)) {
-                this.name = name;
-
-                firePropertyChange(NAME_PROPERTY,
-                                   this.name,
-                                   name);
-            }
-        } else {
-            this.name = name;
-        }
-    }
-
-
-    /**
      * Mark the component as subject to reload.
      * The component will be registered with the ReloadManager.
-     *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      */
-    public final void reload(int aspect) {
-        getSession().getReloadManager().reload(this, aspect);
+    public final void reload() {
+        getSession().getReloadManager().reload(this);
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        Object oldVal, Object newVal) {
+    protected final void reloadIfChange(Object oldVal, Object newVal) {
         if (!((oldVal == newVal) || (oldVal != null && oldVal.equals(newVal)))) {
             //System.err.println(getClass().getName() + ": reload. old:" + oldVal + "; new: "+ newVal);
-            reload(aspect);
+            reload();
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        int oldVal, int newVal) {
+    protected final void reloadIfChange(int oldVal, int newVal) {
         if (oldVal != newVal) {
-            reload(aspect);
+            reload();
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        boolean oldVal, boolean newVal) {
+    protected final void reloadIfChange(boolean oldVal, boolean newVal) {
         if (oldVal != newVal) {
-            reload(aspect);
+            reload();
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        byte oldVal, byte newVal) {
+    protected final void reloadIfChange(byte oldVal, byte newVal) {
         if (oldVal != newVal) {
-            reload(aspect);
+            reload();
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        short oldVal, short newVal) {
+    protected final void reloadIfChange(short oldVal, short newVal) {
         if (oldVal != newVal) {
-            reload(aspect);
+            reload();
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        long oldVal, long newVal) {
+    protected final void reloadIfChange(long oldVal, long newVal) {
         if (oldVal != newVal) {
-            reload(aspect);
+            reload();
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        float oldVal, float newVal) {
+    protected final void reloadIfChange(float oldVal, float newVal) {
         if (oldVal != newVal) {
-            reload(aspect);
+            reload();
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        double oldVal, double newVal) {
+    protected final void reloadIfChange(double oldVal, double newVal) {
         if (oldVal != newVal) {
-            reload(aspect);
+            reload();
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * fashion, changed. Convenience method for {@link #reload()}
      *
-     * @param aspect the aspect to reload; this is one of the constants
-     *               defined in ReloadManager:
-     *               <code>ReloadManager.RELOAD_*</code>
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
-    protected final void reloadIfChange(int aspect,
-                                        char oldVal, char newVal) {
+    protected final void reloadIfChange(char oldVal, char newVal) {
         if (oldVal != newVal) {
-            reload(aspect);
+            reload();
         }
     }
 
@@ -964,7 +853,7 @@ public abstract class SComponent
      * {@link LowLevelEventListener}.
      */
     public String getLowLevelEventId() {
-        return getComponentId();
+        return getName();
     }
 
     /**
@@ -974,7 +863,7 @@ public abstract class SComponent
         if (this instanceof LowLevelEventListener) {
             return encodeLowLevelEventId(this.getLowLevelEventId());
         }
-        return getComponentId();
+        return getName();
     }
 
 
@@ -1148,18 +1037,13 @@ public abstract class SComponent
      * alternative to subclassing when designing a new component.
      *
      * @see #getClientProperty
-     * @see #addPropertyChangeListener
      */
     public final void putClientProperty(Object key, Object value) {
-        Object oldValue = getClientProperties().get(key);
-
         if (value != null) {
             getClientProperties().put(key, value);
         } else {
             getClientProperties().remove(key);
         }
-
-        firePropertyChange(key.toString(), oldValue, value);
     }
 
 
@@ -1194,8 +1078,7 @@ public abstract class SComponent
         if (cg != null) {
             cg.installCG(this);
         }
-        firePropertyChange("CG", oldCG, newCG);
-        reloadIfChange(ReloadManager.RELOAD_ALL, cg, oldCG);
+        reloadIfChange(cg, oldCG);
     }
 
     /**
@@ -1305,231 +1188,6 @@ public abstract class SComponent
         }
     }
 
-    /**
-     * Adds a new {@link PropertyChangeListener} to this component.
-     * This forces the
-     * {@link #setFirePropertyChangeEvents firePropertyChangeEvents}
-     * flag to be set to true.
-     * @param listener
-     */
-    public final void addPropertyChangeListener(PropertyChangeListener listener) {
-        if (listener == null)
-            throw new IllegalArgumentException("null parameter not allowed");
-
-        addEventListener(PropertyChangeListener.class, listener);
-
-        // somebody is interested, so fire the events.
-        setFirePropertyChangeEvents(true);
-    }
-
-    /**
-     * Removes a {@link PropertyChangeListener} from this component. If it was the last
-     * {@link PropertyChangeListener} it forces the
-     * {@link #setFirePropertyChangeEvents firePropertyChangeEvents}
-     * flags to be set to false
-     * @param listener
-     */
-    public final void removePropertyChangeListener(PropertyChangeListener listener) {
-        if (listener == null)
-            throw new IllegalArgumentException("null parameter not allowed");
-
-        removeEventListener(PropertyChangeListener.class, listener);
-
-        if (getListenerCount(PropertyChangeListener.class) == 0) {
-            setFirePropertyChangeEvents(false);
-        }
-    }
-
-    /**
-     * This is for performance optimizations. With the firePropertyChangeEvents flag set,
-     * property change
-     * events are generated and so every property setter method has to test if a property
-     * has changed and temporarily store the old value to generate the property
-     * change event. If it is not set, a setter just have to set the property.
-     */
-    public final void setFirePropertyChangeEvents(boolean b) {
-        firePropertyChangeEvents = b;
-    }
-
-    /**
-     * Indicates, if PropertyChangeEvents are fired.
-     * @see #setFirePropertyChangeEvents
-     * @return true, if PropertyChangeEvents are fired, false otherwise
-     */
-    public final boolean getFirePropertyChangeEvents() {
-        return firePropertyChangeEvents;
-    }
-
-    /**
-     * Reports a bound property change.
-     *
-     * @param propertyName the programmatic name of the property
-     *		that was changed
-     * @param oldValue the old value of the property (as a byte)
-     * @param newValue the new value of the property (as a byte)
-     * @see #firePropertyChange(java.lang.String, java.lang.Object,
-        *		java.lang.Object)
-     */
-    public void firePropertyChange(String propertyName, byte oldValue, byte newValue) {
-        if (firePropertyChangeEvents && (oldValue != newValue)) {
-            firePropertyChange(propertyName, new Byte(oldValue), new Byte(newValue));
-        }
-    }
-
-    /**
-     * Reports a bound property change.
-     *
-     * @param propertyName the programmatic name of the property
-     *		that was changed
-     * @param oldValue the old value of the property (as a char)
-     * @param newValue the new value of the property (as a char)
-     * @see #firePropertyChange(java.lang.String, java.lang.Object,
-        *		java.lang.Object)
-     */
-    public void firePropertyChange(String propertyName, char oldValue, char newValue) {
-        if (firePropertyChangeEvents && (oldValue != newValue)) {
-            firePropertyChange(propertyName, new Character(oldValue), new Character(newValue));
-        }
-    }
-
-    /**
-     * Reports a bound property change.
-     *
-     * @param propertyName the programmatic name of the property
-     *		that was changed
-     * @param oldValue the old value of the property (as a short)
-     * @param newValue the old value of the property (as a short)
-     * @see #firePropertyChange(java.lang.String, java.lang.Object,
-        *		java.lang.Object)
-     */
-    public void firePropertyChange(String propertyName, short oldValue, short newValue) {
-        if (firePropertyChangeEvents && (oldValue != newValue)) {
-            firePropertyChange(propertyName, new Short(oldValue), new Short(newValue));
-        }
-    }
-
-    /**
-     * Reports a bound property change.
-     *
-     * @param propertyName the programmatic name of the property
-     *		that was changed
-     * @param oldValue the old value of the property (as an int)
-     * @param newValue the new value of the property (as an int)
-     * @see #firePropertyChange(java.lang.String, java.lang.Object,
-        *		java.lang.Object)
-     */
-    public void firePropertyChange(String propertyName, int oldValue, int newValue) {
-        if (firePropertyChangeEvents && (oldValue != newValue)) {
-            firePropertyChange(propertyName, new Integer(oldValue), new Integer(newValue));
-        }
-    }
-
-    /**
-     * Reports a bound property change.
-     *
-     * @param propertyName the programmatic name of the property
-     *		that was changed
-     * @param oldValue the old value of the property (as a long)
-     * @param newValue the new value of the property (as a long)
-     * @see #firePropertyChange(java.lang.String, java.lang.Object,
-        *		java.lang.Object)
-     */
-    public void firePropertyChange(String propertyName, long oldValue, long newValue) {
-        if (firePropertyChangeEvents && (oldValue != newValue)) {
-            firePropertyChange(propertyName, new Long(oldValue), new Long(newValue));
-        }
-    }
-
-    /**
-     * Reports a bound property change.
-     *
-     * @param propertyName the programmatic name of the property
-     *		that was changed
-     * @param oldValue the old value of the property (as a float)
-     * @param newValue the new value of the property (as a float)
-     * @see #firePropertyChange(java.lang.String, java.lang.Object,
-        *		java.lang.Object)
-     */
-    public void firePropertyChange(String propertyName, float oldValue, float newValue) {
-        if (firePropertyChangeEvents && (oldValue != newValue)) {
-            firePropertyChange(propertyName, new Float(oldValue), new Float(newValue));
-        }
-    }
-
-    /**
-     * Reports a bound property change.
-     *
-     * @param propertyName the programmatic name of the property
-     *		that was changed
-     * @param oldValue the old value of the property (as a double)
-     * @param newValue the new value of the property (as a double)
-     * @see #firePropertyChange(java.lang.String, java.lang.Object,
-        *		java.lang.Object)
-     */
-    public void firePropertyChange(String propertyName, double oldValue, double newValue) {
-        if (firePropertyChangeEvents && (oldValue != newValue)) {
-            firePropertyChange(propertyName, new Double(oldValue), new Double(newValue));
-        }
-    }
-
-    /**
-     * Reports a bound property change.
-     *
-     * @param propertyName the programmatic name of the property
-     *		that was changed
-     * @param oldValue the old value of the property (as a boolean)
-     * @param oldValue the old value of the property (as a boolean)
-     * @see #firePropertyChange(java.lang.String, java.lang.Object,
-        *		java.lang.Object)
-     */
-    public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {
-        if (firePropertyChangeEvents && (oldValue != newValue)) {
-            firePropertyChange(propertyName, oldValue ? Boolean.TRUE : Boolean.FALSE,
-                               newValue ? Boolean.TRUE : Boolean.FALSE);
-        }
-    }
-
-    /**
-     * Fires a PropertyChangedEvent to all listeners if the
-     * {@link #getFirePropertyChangeEvents firePropertyChangeEvents} is set.
-     * @param property The property which has changed
-     * @param oldValue The old value of the property before the change
-     * @param newValue The new value of the property
-     */
-    protected final void firePropertyChange(String property,
-                                            Object oldValue, Object newValue) {
-        if (firePropertyChangeEvents) {
-
-            PropertyChangeEvent event = null;
-
-            // maybe the better way to do this is to user the getListenerList
-            // and iterate through all listeners, this saves the creation of
-            // an array but it must cast to the apropriate listener
-            Object[] listeners = getListenerList();
-            for (int i = listeners.length - 2; i >= 0; i -= 2) {
-                if (listeners[i] == PropertyChangeListener.class) {
-                    // Lazily create the event:
-                    if (event == null)
-                        event = new PropertyChangeEvent(this, property, oldValue, newValue);
-                    ((PropertyChangeListener)listeners[i + 1]).propertyChange(event);
-                }
-            }
-
-            // this is an array with length > 0 , so it is not the
-            // EMPTY_EVENTLISTENER_ARRAY and so of the
-            // correct (PropertyChangeListener[]) type
-            /* this is the alternative aproach
-               PropertyChangeListener[] pcListener =
-               (PropertyChangeListener[]) getListeners(PropertyChangeListener.class);
-
-               for (int i = 0; i < pcListener.length; i++) {
-               pcListener[i].propertyChange(event);
-               }
-            */
-        }
-
-    }
-
 
     private transient SRenderEvent renderEvent;
 
@@ -1612,7 +1270,7 @@ public abstract class SComponent
     public void setShowAsFormComponent(boolean showAsFormComponent) {
         if (this.showAsFormComponent!=showAsFormComponent ) {
             this.showAsFormComponent = showAsFormComponent;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 

@@ -137,7 +137,7 @@ public class SComboBox
             // set the current selected item.
             selectedItemReminder = dataModel.getSelectedItem();
 
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -162,7 +162,7 @@ public class SComboBox
         if ( maximumRowCount!=count ) {
             maximumRowCount = count;
 
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -186,7 +186,7 @@ public class SComboBox
     public void setRenderer(SListCellRenderer newRenderer) {
         if ( isDifferent(renderer, newRenderer) ) {
             renderer = newRenderer;
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
         }
     }
 
@@ -232,7 +232,7 @@ public class SComboBox
                 selectedItemReminder = object;
             }
 
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
 	}
     }
 
@@ -383,7 +383,7 @@ public class SComboBox
      */
     public void addActionListener(ActionListener listener) {
         addEventListener(ActionListener.class, listener);
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     /** Removes an ActionListener 
@@ -392,7 +392,7 @@ public class SComboBox
      */
     public void removeActionListener(ActionListener listener) {
         removeEventListener(ActionListener.class, listener);
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
      /**
@@ -501,7 +501,7 @@ public class SComboBox
 	    if (!selectingItem) {
 		fireActionEvent();
 	    }
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
 	}
     }
  
@@ -512,7 +512,7 @@ public class SComboBox
      * @see javax.swing.event.ListDataListener
      */
     public void intervalAdded(ListDataEvent e) {
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     /**
@@ -522,7 +522,7 @@ public class SComboBox
      * @see javax.swing.event.ListDataListener
      */
     public void intervalRemoved(ListDataEvent e) {
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
 

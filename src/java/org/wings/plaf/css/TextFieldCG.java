@@ -40,7 +40,7 @@ public class TextFieldCG
         device.write(__input_type_tex);
         org.wings.plaf.Utils.optAttribute(device, "size", component.getColumns());
         org.wings.plaf.Utils.optAttribute(device, "maxlength", component.getMaxColumns());
-        org.wings.plaf.Utils.optAttribute(device, "focus", component.getComponentId());
+        org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
         if (!component.isEditable() || !component.isEnabled()) {
             device.write(__readonly_1);

@@ -46,7 +46,7 @@ public class ListCG
         org.wings.plaf.Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "size", list.getVisibleRowCount());
         org.wings.plaf.Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SConstants.MULTIPLE_SELECTION) ? "multiple" : null);
-        org.wings.plaf.Utils.optAttribute(device, "focus", list.getComponentId());
+        org.wings.plaf.Utils.optAttribute(device, "focus", list.getName());
 
         if (!list.isEnabled()) {
             device.write(__disabled_1);
@@ -182,7 +182,7 @@ public class ListCG
                     org.wings.plaf.Utils.write(device, selectionAddr.toString());
                     device.print("\"");
                 }
-                org.wings.plaf.Utils.optAttribute(device, "focus", renderer.getComponentId());
+                org.wings.plaf.Utils.optAttribute(device, "focus", renderer.getName());
                 device.print(">");
             }
             else

@@ -58,18 +58,18 @@ class InputMapScriptListener
         }
 
         if (pressed.length() > 0)
-            component.addScriptListener(new InputMapScriptListener("onkeydown", "pressed_" + component.getComponentId() + "(event)",
-                "function pressed_" + component.getComponentId() + "(event) {\n  " +
+            component.addScriptListener(new InputMapScriptListener("onkeydown", "pressed_" + component.getName() + "(event)",
+                "function pressed_" + component.getName() + "(event) {\n  " +
                 "event = getEvent(event); target = getTarget(event);\n  " +
                 pressed.toString() + "  return false;\n}\n"));
         if (typed.length() > 0)
-            component.addScriptListener(new InputMapScriptListener("onkeypress", "typed_" + component.getComponentId() + "(event)",
-                "function typed_" + component.getComponentId() + "(event) {\n  " +
+            component.addScriptListener(new InputMapScriptListener("onkeypress", "typed_" + component.getName() + "(event)",
+                "function typed_" + component.getName() + "(event) {\n  " +
                 "event = getEvent(event); target = getTarget(event);\n  " +
                 typed.toString() + "  return false;\n}\n"));
         if (released.length() > 0)
-            component.addScriptListener(new InputMapScriptListener("onkeyup", "released_" + component.getComponentId() + "(event)",
-                "function released_" + component.getComponentId() + "(event) {\n" +
+            component.addScriptListener(new InputMapScriptListener("onkeyup", "released_" + component.getName() + "(event)",
+                "function released_" + component.getName() + "(event) {\n" +
                 "event = getEvent(event); target = getTarget(event);\n  " +
                 released.toString() + "  return false;\n}\n"));
     }

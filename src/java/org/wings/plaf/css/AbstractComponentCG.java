@@ -76,7 +76,7 @@ public abstract class AbstractComponentCG
     protected void writePrefix(Device device, SComponent component) throws IOException {
         device
             .print("<div id=\"")
-            .print(component.getComponentId())
+            .print(component.getName())
             .print("\" class=\"")
             .print(component.getStyle());
 
@@ -126,9 +126,9 @@ public abstract class AbstractComponentCG
 
         SPopupMenu menu = component.getComponentPopupMenu();
         if (menu != null) {
-            String componentId = menu.getComponentId();
+            String componentId = menu.getName();
             String popupId = componentId + "_pop";
-            String hookId = component.getComponentId();
+            String hookId = component.getName();
 
             device.print("\" onclick=\"Menu.prototype.toggle(null,'");
             org.wings.plaf.Utils.write(device, hookId);
@@ -170,7 +170,7 @@ public abstract class AbstractComponentCG
 
         device
             .print("</div><!-- ")
-            .print(component.getComponentId())
+            .print(component.getName())
             .print("-->\n");
     }
 }

@@ -318,8 +318,7 @@ public class SProgressBar extends SComponent {
             case HORIZONTAL:
                 int oldOrientation = orientation;
                 orientation = newOrientation;
-                reloadIfChange(ReloadManager.RELOAD_CODE, oldOrientation, newOrientation);
-                firePropertyChange(ORIENTATION_PROPERTY, oldOrientation, newOrientation);
+                reloadIfChange(oldOrientation, newOrientation);
                 break;
             default:
                 throw new IllegalArgumentException(newOrientation +
@@ -363,8 +362,7 @@ public class SProgressBar extends SComponent {
         //         or just leave that to the L&F?
         boolean oldValue = paintString;
         paintString = b;
-        reloadIfChange(ReloadManager.RELOAD_CODE, oldValue, paintString);
-        firePropertyChange(STRING_PAINTED_PROPERTY, oldValue, paintString);
+        reloadIfChange(oldValue, paintString);
     }
 
 
@@ -413,8 +411,7 @@ public class SProgressBar extends SComponent {
     public void setString(String s){
         String oldValue = progressString;
         progressString = s;
-        reloadIfChange(ReloadManager.RELOAD_CODE, oldValue, progressString);
-        firePropertyChange(STRING_PROPERTY, oldValue, progressString);
+        reloadIfChange(oldValue, progressString);
     }
 
     /**
@@ -461,8 +458,7 @@ public class SProgressBar extends SComponent {
     public void setBorderPainted(boolean b) {
         boolean oldValue = paintBorder;
         paintBorder = b;
-        reloadIfChange(ReloadManager.RELOAD_CODE, oldValue, paintBorder);
-        firePropertyChange(BORDER_PAINTED_PROPERTY, oldValue, paintBorder);
+        reloadIfChange(oldValue, paintBorder);
     }
 
     /**
@@ -542,7 +538,7 @@ public class SProgressBar extends SComponent {
      */
     private class ModelListener implements ChangeListener, Serializable {
         public void stateChanged(ChangeEvent e) {
-	    reload(ReloadManager.RELOAD_CODE);
+	    reload();
             fireStateChanged();
         }
     }
@@ -653,7 +649,7 @@ public class SProgressBar extends SComponent {
             if (model != null) {
                 model.setExtent(0);
             }
-	    reload(ReloadManager.RELOAD_CODE);
+	    reload();
         }
     }
 
@@ -793,7 +789,6 @@ public class SProgressBar extends SComponent {
     public void setIndeterminate(boolean newValue) {
         boolean oldValue = indeterminate;
         indeterminate = newValue;
-        firePropertyChange("indeterminate", oldValue, indeterminate);
     }
 
     /**
@@ -817,8 +812,11 @@ public class SProgressBar extends SComponent {
 
 /*
    $Log$
-   Revision 1.1  2004/10/04 16:13:09  hengels
-   Initial revision
+   Revision 1.2  2004/11/20 17:04:48  hengels
+   o remove property change support
+
+   Revision 1.1.1.1  2004/10/04 16:13:09  hengels
+   o start development of wings 2
 
    Revision 1.3  2002/11/18 14:50:48  ahaaf
    o reload code on model change

@@ -85,7 +85,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
 
     protected void writePopup(final Device device, SPopupMenu menu)
         throws IOException {
-        String componentId = menu.getComponentId();
+        String componentId = menu.getName();
         String popupId = componentId + "_pop";
 
 
@@ -97,7 +97,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
             SComponent menuItem = menu.getMenuComponent(i);
 
             if (menuItem.isVisible()) {
-                String itemComponentId = menu.getMenuComponent(i).getComponentId();
+                String itemComponentId = menu.getMenuComponent(i).getName();
                 String itemHookId = itemComponentId + "_hook";
 
 

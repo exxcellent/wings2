@@ -67,7 +67,7 @@ public abstract class STextComponent
         if (oldDocument != null)
             oldDocument.removeDocumentListener(this);
         document.addDocumentListener(this);
-        reloadIfChange(ReloadManager.RELOAD_CODE, oldDocument, document);
+        reloadIfChange(oldDocument, document);
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class STextComponent
         boolean oldEditable = editable;
         editable = ed;
         if (editable != oldEditable)
-            reload(ReloadManager.RELOAD_CODE);
+            reload();
     }
 
     /**
@@ -191,17 +191,17 @@ public abstract class STextComponent
     //-- implement SDocumentListener to notify TextListeners
     public void insertUpdate(SDocumentEvent e) {
         fireTextValueChanged();
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     public void removeUpdate(SDocumentEvent e) {
         fireTextValueChanged();
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 
     public void changedUpdate(SDocumentEvent e) {
         fireTextValueChanged();
-        reload(ReloadManager.RELOAD_CODE);
+        reload();
     }
 }
 

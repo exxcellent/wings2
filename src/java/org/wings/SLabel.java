@@ -205,7 +205,7 @@ public class SLabel
     }
 
     public void setIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, icon, i);
+        reloadIfChange(icon, i);
         icon = i;
     }
 
@@ -214,7 +214,7 @@ public class SLabel
     }
 
     public void setDisabledIcon(SIcon i) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, disabledIcon, i);
+        reloadIfChange(disabledIcon, i);
         disabledIcon = i;
     }
 
@@ -238,7 +238,7 @@ public class SLabel
      * @param t The new text
      */
     public void setText(String t) {
-        reloadIfChange(ReloadManager.RELOAD_CODE, text, t);
+        reloadIfChange(text, t);
         text = t;
     }
 
