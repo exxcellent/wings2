@@ -1,0 +1,18 @@
+# $Id$
+#
+# Example file for custom build propert
+#
+# COPY THIS FILE TO custom-build.properties AND ADAPT SETTINGS TO YOUR LOCAL
+# REQUREMENTS!
+#
+# Provide here a template file that user can copy and modify to adapt your settings
+
+# Use faster jikes perhaps? Requires jikes 1.15; 1.14 core dumps
+#build.compiler=jikes
+
+# Generate Debugging info?
+#build.debug=true
+
+# Show deprecation warnings?
+#build.deprecation=true
+

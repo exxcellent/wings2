@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.session;
 
 import org.wings.RequestURL;
@@ -44,29 +43,6 @@ import java.util.logging.Logger;
  */
 public final class WingServlet
         extends HttpServlet {
-    /**
-     * @deprecated use {@link WingsStatistics#getStatistics()} instead
-     */
-    public static final int getRequestCount() {
-        return WingsStatistics.getStatistics().getRequestCount();
-    }
-
-    /**
-     * @deprecated use {@link WingsStatistics#getStatistics()} instead
-     */
-    public static final long getUptime() {
-        return WingsStatistics.getStatistics().getUptime();
-    }
-
-    static {
-        /*
-        try {
-            LogManager.getLogManager().readConfiguration();
-        }
-        catch (Throwable t) {}
-        */
-    }
-
     protected final static Logger logger = Logger.getLogger("org.wings.session");
 
     /**
@@ -74,12 +50,8 @@ public final class WingServlet
      */
     protected ServletConfig servletConfig = null;
 
-    /** */
     private String lookupName = "SessionServlet";
 
-    /**
-     * TODO: documentation
-     */
     public WingServlet() {
     }
 
@@ -146,7 +118,6 @@ public final class WingServlet
             return System.currentTimeMillis();
         }
         String pathInfo = request.getPathInfo();
-        //System.err.println("LAST MODIFIED: " + pathInfo);
         if (extMgr != null && pathInfo != null && pathInfo.length() > 1) {
             String identifier = pathInfo.substring(1);
             ExternalizedResource info = extMgr.getExternalizedResource(identifier);
@@ -167,8 +138,8 @@ public final class WingServlet
 
         if (logger.isLoggable(Level.FINE))
             logger.fine((sessionServlet != null) ?
-                        lookupName :
-                        "no session yet ..");
+                    lookupName :
+                    "no session yet ..");
 
         // Wrap with MultipartRequest which can handle multipart/form-data
         // (file - upload), otherwise behaves like normal HttpServletRequest
@@ -270,15 +241,15 @@ public final class WingServlet
                 logger.finer("session from url " + request.isRequestedSessionIdFromURL());
                 logger.finer("session valid " + request.isRequestedSessionIdValid());
                 logger.finer("session created at " +
-                             new java.util.Date(httpSession.getCreationTime()));
+                        new java.util.Date(httpSession.getCreationTime()));
                 logger.finer("session httpsession id " + httpSession.getId());
                 logger.finer("session httpsession new " + httpSession.isNew());
                 logger.finer("session last accessed at " +
-                             new java.util.Date(httpSession.getLastAccessedTime()));
+                        new java.util.Date(httpSession.getLastAccessedTime()));
                 logger.finer("session max inactive interval " +
-                             httpSession.getMaxInactiveInterval());
+                        httpSession.getMaxInactiveInterval());
                 logger.finer("session contains wings session " +
-                             (httpSession.getAttribute(lookupName) != null));
+                        (httpSession.getAttribute(lookupName) != null));
             }
 
             sessionServlet.getSession().getExternalizeManager().setResponse(response);
@@ -362,9 +333,6 @@ public final class WingServlet
         }
     }
 
-    /**
-     * TODO: documentation
-     */
     public final void doGet(HttpServletRequest req,
                             HttpServletResponse response)
             throws ServletException, IOException {
@@ -413,8 +381,8 @@ public final class WingServlet
                         .getExternalizedResource(identifier);
                 if (extInfo != null) {
                     extManager.deliver(extInfo, response,
-                                       createOutputDevice(req, response,
-                                                          extInfo));
+                            createOutputDevice(req, response,
+                                    extInfo));
                 }
                 return;
             }
@@ -460,10 +428,4 @@ public final class WingServlet
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

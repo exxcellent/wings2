@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
 
 import org.wings.*;
@@ -25,7 +24,7 @@ import java.util.Iterator;
  * @version $Revision$
  */
 public class ToggleButtonExample
-    extends WingSetPane {
+        extends WingSetPane {
     static final ClassLoader cl = WingSet.class.getClassLoader();
     static final SIcon icon = new SURLIcon("../icons/ButtonIcon.gif");
     static final SIcon disabledIcon = new SURLIcon("../icons/ButtonDisabledIcon.gif");
@@ -126,7 +125,7 @@ public class ToggleButtonExample
             showAsFormComponent.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
-                        SComponent component = (SComponent)iterator.next();
+                        SComponent component = (SComponent) iterator.next();
                         component.setShowAsFormComponent(showAsFormComponent.isSelected());
                     }
                 }
@@ -140,7 +139,7 @@ public class ToggleButtonExample
                     boolean use = useImages.isSelected();
 
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
-                        SAbstractButton component = (SAbstractButton)iterator.next();
+                        SAbstractButton component = (SAbstractButton) iterator.next();
                         component.setIcon(use ? icon : null);
                         component.setDisabledIcon(use ? disabledIcon : null);
                         component.setRolloverIcon(use ? rolloverIcon : null);

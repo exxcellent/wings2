@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/ComboBox.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -11,8 +24,8 @@ import org.wings.script.JavaScriptListener;
 import java.io.IOException;
 
 public class ComboBoxCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.ComboBoxCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.ComboBoxCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __select_size_1 = "<select size=\"1\"".getBytes();
@@ -33,12 +46,12 @@ public class ComboBoxCG
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        final SComboBox component = (SComboBox)comp;
+        final SComboBox component = (SComboBox) comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         value = manager.getObject("SComboBox.renderer", SDefaultListCellRenderer.class);
         if (value != null) {
-            component.setRenderer((SDefaultListCellRenderer)value);
+            component.setRenderer((SDefaultListCellRenderer) value);
         }
     }
 
@@ -76,8 +89,7 @@ public class ComboBoxCG
             SComponent cellRenderer = null;
             if (renderer != null) {
                 cellRenderer = renderer.getListCellRendererComponent(component, model.getElementAt(i), false, i);
-            }
-            else {
+            } else {
 
                 device.write(__renderer_null);
             }
@@ -128,8 +140,7 @@ public class ComboBoxCG
                     }
                 }
                 device.print(chars, pos, chars.length - pos);
-            }
-            else {
+            } else {
 
                 device.write(__cellrenderer_n);
                 device.print(model.getElementAt(i).toString());
@@ -165,11 +176,11 @@ public class ComboBoxCG
 
     public void writeContent(final Device device,
                              final SComponent _c)
-        throws IOException {
-        final SComboBox component = (SComboBox)_c;
+            throws IOException {
+        final SComboBox component = (SComboBox) _c;
 
 //--- code from write-template.
-        SComboBox comboBox = (SComboBox)component;
+        SComboBox comboBox = (SComboBox) component;
         // TODO: implement anchor combobox
         //if (comboBox.getShowAsFormComponent()) {
         writeFormComboBox(device, comboBox);

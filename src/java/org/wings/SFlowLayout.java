@@ -1,24 +1,20 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
-import java.io.IOException;
-import java.util.*;
-
-import org.wings.plaf.*;
-import org.wings.io.Device;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The flow layout arranges components in a left-to-right or top-to-bottom order.
@@ -27,15 +23,14 @@ import org.wings.io.Device;
  * @version $Revision$
  */
 public class SFlowLayout
-    extends SAbstractLayoutManager
-{
+        extends SAbstractLayoutManager {
     /**
      * List of layouted components.
      */
     protected final List components;
 
     /**
-     * Orientation (horizontally or vertically) of components. 
+     * Orientation (horizontally or vertically) of components.
      */
     protected int orientation;
 
@@ -65,11 +60,11 @@ public class SFlowLayout
     }
 
     /**
-     * Adds the given component at given index. 
+     * Adds the given component at given index.
      *
-     * @param c component to add
+     * @param c          component to add
      * @param constraint is ignored in this layout manager!
-     * @param index position to add component to
+     * @param index      position to add component to
      */
     public void addComponent(SComponent c, Object constraint, int index) {
         components.add(index, c);
@@ -81,6 +76,7 @@ public class SFlowLayout
 
     /**
      * returns a list of all components
+     *
      * @return all components
      */
     public List getComponents() {
@@ -94,14 +90,14 @@ public class SFlowLayout
      * @return component
      */
     public SComponent getComponentAt(int i) {
-        return (SComponent)components.get(i);
+        return (SComponent) components.get(i);
     }
 
     /**
      * Sets the orientation for this layout. Possible values are
      * <ul>
-     *   <li>{@link org.wings.SConstants#HORIZONTAL}
-     *   <li>{@link org.wings.SConstants#VERTICAL}
+     * <li>{@link org.wings.SConstants#HORIZONTAL}
+     * <li>{@link org.wings.SConstants#VERTICAL}
      * </ul>
      *
      * @param o one of the orientation values shown above
@@ -112,6 +108,7 @@ public class SFlowLayout
 
     /**
      * returns the orientation
+     *
      * @return orientation
      */
     public int getOrientation() { return orientation; }
@@ -119,9 +116,9 @@ public class SFlowLayout
     /**
      * Sets the alignment for this layout. Possible values are
      * <ul>
-     *   <li>{@link org.wings.SConstants#LEFT_ALIGN}
-     *   <li>{@link org.wings.SConstants#CENTER_ALIGN}
-     *   <li>{@link org.wings.SConstants#RIGHT_ALIGN}
+     * <li>{@link org.wings.SConstants#LEFT_ALIGN}
+     * <li>{@link org.wings.SConstants#CENTER_ALIGN}
+     * <li>{@link org.wings.SConstants#RIGHT_ALIGN}
      * </ul>
      *
      * @param a one of the allignment values shown above
@@ -132,15 +129,10 @@ public class SFlowLayout
 
     /**
      * returns the alignment
+     *
      * @return alignment
      */
     public int getAlignment() { return align; }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

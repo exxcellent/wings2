@@ -1,22 +1,21 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.resource;
 
-import org.wings.io.Device;
 import org.wings.Resource;
 import org.wings.SFrame;
+import org.wings.io.Device;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,8 +32,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public class DynamicCodeResource
-    extends DynamicResource
-{
+        extends DynamicResource {
     private static Logger logger = Logger.getLogger("org.wings");
 
     private static final ArrayList DEFAULT_CODE_HEADER = new ArrayList();
@@ -45,7 +43,7 @@ public class DynamicCodeResource
         DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Cache-Control", "post-check=0, pre-check=0"));
         DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Pragma", "no-cache"));
     }
-            
+
 
     /**
      * Create a code resource for the specified frame.
@@ -62,15 +60,12 @@ public class DynamicCodeResource
      * Write the code of the whole frame to the Device.
      */
     public void write(Device out)
-        throws IOException
-    {
+            throws IOException {
         try {
             getFrame().write(out);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw e;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.log(Level.SEVERE, "resource: " + getId(), e);
             throw new IOException(e.getMessage()); // UndeclaredThrowable
         }
@@ -81,10 +76,4 @@ public class DynamicCodeResource
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,6 +1,19 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -16,9 +29,8 @@ import javax.swing.tree.TreePath;
 import java.io.IOException;
 
 public class TreeCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.TreeCG
-{
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.TreeCG {
     private SIcon collapseControlIcon;
     private SIcon emptyFillIcon;
     private SIcon expandControlIcon;
@@ -31,26 +43,26 @@ public class TreeCG
     public TreeCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
 
-        setCollapseControlIcon((SIcon)manager.getObject("TreeCG.collapseControlIcon", SIcon.class));
-        setEmptyFillIcon((SIcon)manager.getObject("TreeCG.emptyFillIcon", SIcon.class));
-        setExpandControlIcon((SIcon)manager.getObject("TreeCG.expandControlIcon", SIcon.class));
-        setHashMark((SIcon)manager.getObject("TreeCG.hashMark", SIcon.class));
-        setLeafControlIcon((SIcon)manager.getObject("TreeCG.leafControlIcon", SIcon.class));
+        setCollapseControlIcon((SIcon) manager.getObject("TreeCG.collapseControlIcon", SIcon.class));
+        setEmptyFillIcon((SIcon) manager.getObject("TreeCG.emptyFillIcon", SIcon.class));
+        setExpandControlIcon((SIcon) manager.getObject("TreeCG.expandControlIcon", SIcon.class));
+        setHashMark((SIcon) manager.getObject("TreeCG.hashMark", SIcon.class));
+        setLeafControlIcon((SIcon) manager.getObject("TreeCG.leafControlIcon", SIcon.class));
     }
 
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        final STree component = (STree)comp;
+        final STree component = (STree) comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         value = manager.getObject("STree.cellRenderer", STreeCellRenderer.class);
         if (value != null) {
-            component.setCellRenderer((STreeCellRenderer)value);
+            component.setCellRenderer((STreeCellRenderer) value);
         }
         value = manager.getObject("STree.nodeIndentDepth", Integer.class);
         if (value != null) {
-            component.setNodeIndentDepth(((Integer)value).intValue());
+            component.setNodeIndentDepth(((Integer) value).intValue());
         }
     }
 
@@ -88,7 +100,7 @@ public class TreeCG
     }
 
     private void writeTreeNode(STree component, Device device, int row, int depth)
-        throws IOException {
+            throws IOException {
         boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
         final TreePath path = component.getPathForRow(row);
         final int nodeIndentDepth = component.getNodeIndentDepth();
@@ -103,10 +115,10 @@ public class TreeCG
         final boolean isSelectable = (component.getSelectionModel() != SDefaultTreeSelectionModel.NO_SELECTION_MODEL);
 
         SComponent cellComp = cellRenderer.getTreeCellRendererComponent(component, node,
-            isSelected,
-            isExpanded,
-            isLeaf, row,
-            false);
+                isSelected,
+                isExpanded,
+                isLeaf, row,
+                false);
 
         device.write("<tr height=\"1\">".getBytes());
 
@@ -128,8 +140,7 @@ public class TreeCG
 
             if (emptyFillIcon != null) {
                 writeIcon(device, emptyFillIcon, nodeIndentDepth, 1);
-            }
-            else {
+            } else {
                 for (int n = nodeIndentDepth; n > 0; --n) {
                     device.write("&nbsp;".getBytes());
                 }
@@ -163,19 +174,17 @@ public class TreeCG
             device.write("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>".getBytes());
             if (isLeaf) {
                 writeIcon(device, leafControlIcon, false);
-            }
-            else {
+            } else {
                 if (component.getShowAsFormComponent()) {
                     device.print("<button type=\"submit\" name=\"");
                     org.wings.plaf.Utils.write(device, Utils.event(component));
                     device.print("\" value=\"");
                     org.wings.plaf.Utils.write(device, component.getExpansionParameter(row, false));
                     device.print("\"");
-                }
-                else {
+                } else {
                     RequestURL selectionAddr = component.getRequestURL();
                     selectionAddr.addParameter(org.wings.plaf.css.Utils.event(component),
-                        component.getExpansionParameter(row, false));
+                            component.getExpansionParameter(row, false));
 
                     device.write("<a href=\"".getBytes());
                     org.wings.plaf.Utils.write(device, selectionAddr.toString());
@@ -186,16 +195,13 @@ public class TreeCG
                 if (isExpanded) {
                     if (collapseControlIcon == null) {
                         device.write("-".getBytes());
-                    }
-                    else {
+                    } else {
                         writeIcon(device, collapseControlIcon, true);
                     }
-                }
-                else {
+                } else {
                     if (expandControlIcon == null) {
                         device.write("+".getBytes());
-                    }
-                    else {
+                    } else {
                         writeIcon(device, expandControlIcon, true);
                     }
                 }
@@ -216,11 +222,10 @@ public class TreeCG
                 device.print("\" value=\"");
                 org.wings.plaf.Utils.write(device, component.getSelectionParameter(row, false));
                 device.print("\"");
-            }
-            else {
+            } else {
                 RequestURL selectionAddr = component.getRequestURL();
                 selectionAddr.addParameter(org.wings.plaf.css.Utils.event(component),
-                    component.getSelectionParameter(row, false));
+                        component.getSelectionParameter(row, false));
 
                 device.write("<a href=\"".getBytes());
                 org.wings.plaf.Utils.write(device, selectionAddr.toString());
@@ -237,8 +242,7 @@ public class TreeCG
                 device.print("</button>");
             else
                 device.print("</a>");
-        }
-        else {
+        } else {
             rendererPane.writeComponent(device, cellComp, component);
         }
 
@@ -253,8 +257,8 @@ public class TreeCG
 
 
     public void writeContent(final Device device, final SComponent _c)
-        throws IOException {
-        final STree component = (STree)_c;
+            throws IOException {
+        final STree component = (STree) _c;
 
         int start = 0;
         int count = component.getRowCount();

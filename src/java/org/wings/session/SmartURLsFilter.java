@@ -1,4 +1,17 @@
 /* $Id$ */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.session;
 
 import javax.servlet.*;
@@ -21,8 +34,7 @@ import java.util.regex.Pattern;
  * @author hengels
  */
 public class SmartURLsFilter
-    implements Filter
-{
+        implements Filter {
     private static Logger logger = Logger.getLogger(SmartURLsFilter.class.getPackage().getName());
     private String parameterSeparator = ";";
     private String nameValueSeparator = ",";
@@ -40,18 +52,18 @@ public class SmartURLsFilter
         logger.config("wings.servlet.smarturls.nameValueSeparator " + nameValueSeparator);
 
         encodePattern = Pattern.compile("(" + "\\?|&" + ")([a-zA-Z0-9%+.-[*]_]*)" +
-                        "(" + "=" + ")([a-zA-Z0-9%+.-[*]_=/:]*)");
+                "(" + "=" + ")([a-zA-Z0-9%+.-[*]_=/:]*)");
         decodePattern = Pattern.compile("(" + parameterSeparator + ")([a-zA-Z0-9%+.-[*]_]*)" +
-                        "(" + nameValueSeparator + ")([a-zA-Z0-9%+.-[*]_=/:]*)");
+                "(" + nameValueSeparator + ")([a-zA-Z0-9%+.-[*]_=/:]*)");
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
         ServletRequest request = servletRequest;
         ServletResponse response = servletResponse;
 
         if (servletRequest instanceof HttpServletRequest) {
-            HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
+            HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
 
             MyHttpServletRequestWrapper requestWrapper = new MyHttpServletRequestWrapper(httpServletRequest);
             if (requestWrapper.getPathInfo() == null || requestWrapper.getPathInfo().indexOf('.') == -1) {
@@ -61,8 +73,7 @@ public class SmartURLsFilter
                     request = requestWrapper;
 
                 logger.finer("wrap " + requestWrapper.getPathInfo());
-            }
-            else
+            } else
                 logger.finer("don't wrap " + requestWrapper.getPathInfo());
         }
         filterChain.doFilter(request, response);
@@ -77,21 +88,19 @@ public class SmartURLsFilter
 
         int lastindex = 0;
         int indexOf = s.indexOf(toFind);
-        if ( indexOf == -1 ) return s;
-        while ( indexOf != -1 )
-            {
-                erg.append(s.substring(lastindex, indexOf)).append(replace);
-                lastindex = indexOf + toFind.length();
-                indexOf = s.indexOf(toFind, lastindex);
-            }
+        if (indexOf == -1) return s;
+        while (indexOf != -1) {
+            erg.append(s.substring(lastindex, indexOf)).append(replace);
+            lastindex = indexOf + toFind.length();
+            indexOf = s.indexOf(toFind, lastindex);
+        }
 
         erg.append(s.substring(lastindex));
 
         return erg.toString();
     }
 
-    private class MyHttpServletRequestWrapper extends HttpServletRequestWrapper
-    {
+    private class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
         private Map parameterMap;
         private String pathInfo;
         private String queryString;
@@ -150,9 +159,9 @@ public class SmartURLsFilter
         public String getParameter(String string) {
             Object value = getParameterMap().get(string);
             if (value instanceof String)
-                return (String)value;
+                return (String) value;
             else
-                return ((String[])value)[0];
+                return ((String[]) value)[0];
         }
 
         public Enumeration getParameterNames() {
@@ -162,22 +171,22 @@ public class SmartURLsFilter
         public String[] getParameterValues(String string) {
             Object value = getParameterMap().get(string);
             if (value instanceof String)
-                return new String[] { (String)value };
+                return new String[]{(String) value};
             else
-                return (String[])value;
+                return (String[]) value;
         }
     }
 
-    private static class MyHttpServletResponseWrapper extends HttpServletResponseWrapper
-    {
+    private static class MyHttpServletResponseWrapper extends HttpServletResponseWrapper {
         public MyHttpServletResponseWrapper(ServletResponse servletResponse) {
-            super((HttpServletResponse)servletResponse);
+            super((HttpServletResponse) servletResponse);
         }
 
         public ServletOutputStream getOutputStream() throws IOException {
             final ServletOutputStream superOut = super.getOutputStream();
             return new ServletOutputStream() {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream(1000);
+
                 public void write(int b) throws IOException {
                     bytes.write(b);
                 }
@@ -196,12 +205,11 @@ public class SmartURLsFilter
 
         SmartURLsFilter smartURLsFilter = new SmartURLsFilter();
         String replacement =
-            smartURLsFilter.parameterSeparator + "$2" +
-            smartURLsFilter.nameValueSeparator + "$4";
+                smartURLsFilter.parameterSeparator + "$2" +
+                smartURLsFilter.nameValueSeparator + "$4";
 
-        smartURLsFilter.encodePattern = Pattern.compile(
-            "(" + "\\?|&" + ")([a-zA-Z0-9%+.-[*]_]*)" +
-            "(" + "=" + ")([a-zA-Z0-9%+.-[*]_=/]*)");
+        smartURLsFilter.encodePattern = Pattern.compile("(" + "\\?|&" + ")([a-zA-Z0-9%+.-[*]_]*)" +
+                "(" + "=" + ")([a-zA-Z0-9%+.-[*]_=/]*)");
 
         CharBuffer chars = CharBuffer.wrap(bytes.toString());
         Pattern pattern = Pattern.compile(regex);

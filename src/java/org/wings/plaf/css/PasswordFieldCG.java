@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/PasswordField.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -10,8 +23,8 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 public class PasswordFieldCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.PasswordFieldCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.PasswordFieldCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __input_type_pas = "<input type=\"password\"".getBytes();
@@ -24,8 +37,8 @@ public class PasswordFieldCG
 
     public void writeContent(final Device device,
                              final SComponent _c)
-        throws IOException {
-        final SPasswordField component = (SPasswordField)_c;
+            throws IOException {
+        final SPasswordField component = (SPasswordField) _c;
 
         device.write(__input_type_pas);
         org.wings.plaf.css.Utils.writeEvents(device, component);
@@ -43,8 +56,7 @@ public class PasswordFieldCG
             device.write(__name);
             org.wings.plaf.Utils.write(device, Utils.event(component));
             device.write(__);
-        }
-        else {
+        } else {
             device.write(__disabled_1);
         }
         org.wings.plaf.Utils.optAttribute(device, "value", component.getText());

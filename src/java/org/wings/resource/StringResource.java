@@ -1,38 +1,34 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.resource;
 
-import org.wings.externalizer.ExternalizeManager;
-import org.wings.session.SessionManager;
-import org.wings.session.PropertyService;
-import org.wings.io.Device;
+import org.wings.RequestURL;
 import org.wings.Resource;
 import org.wings.SimpleURL;
-import org.wings.RequestURL;
+import org.wings.externalizer.ExternalizeManager;
+import org.wings.io.Device;
+import org.wings.session.PropertyService;
+import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public class StringResource
-    extends Resource
-{
+        extends Resource {
     private final String string;
 
     private String id;
@@ -43,33 +39,30 @@ public class StringResource
     protected int externalizerFlags;
 
     public StringResource(String string) {
-	this(string, "txt", "text/plain");
+        this(string, "txt", "text/plain");
     }
 
     public StringResource(String string, String extension, String mimeType) {
-	this(string, extension, mimeType, ExternalizeManager.FINAL);
+        this(string, extension, mimeType, ExternalizeManager.FINAL);
     }
 
-    public StringResource(String string, String extension, String mimeType, 
-			  int externalizerFlags) {
-	super(extension, mimeType);
+    public StringResource(String string, String extension, String mimeType,
+                          int externalizerFlags) {
+        super(extension, mimeType);
 
-	this.string = string;
-	this.externalizerFlags = externalizerFlags;
+        this.string = string;
+        this.externalizerFlags = externalizerFlags;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public int getLength() {
-	return string.length();
+        return string.length();
     }
 
     /**
      * Get the id that identifies this resource as an externalized object.
      * If the object has not been externalized yet, it will be externalized.
+     *
      * @return the externalization id
      */
     public String getId() {
@@ -86,17 +79,16 @@ public class StringResource
         // append the sessionid, if not global
         if ((externalizerFlags & ExternalizeManager.GLOBAL) > 0) {
             return new SimpleURL(name);
+        } else {
+            RequestURL requestURL = (RequestURL) getPropertyService().getProperty("request.url");
+            requestURL = (RequestURL) requestURL.clone();
+            requestURL.setResource(name);
+            return requestURL;
         }
-        else {
-	    RequestURL requestURL = (RequestURL)getPropertyService().getProperty("request.url");
-	    requestURL = (RequestURL) requestURL.clone();
-	    requestURL.setResource(name);
-	    return requestURL;
-	}
     }
 
     public final void write(Device out) throws IOException {
-	out.print(string);
+        out.print(string);
     }
 
     public int getExternalizerFlags() {
@@ -104,9 +96,10 @@ public class StringResource
     }
 
     private PropertyService propertyService;
+
     protected PropertyService getPropertyService() {
         if (propertyService == null)
-            propertyService = (PropertyService)SessionManager.getSession();
+            propertyService = (PropertyService) SessionManager.getSession();
         return propertyService;
     }
 

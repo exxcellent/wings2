@@ -1,18 +1,18 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.template;
+
 import org.wings.SComponent;
 
 /**
@@ -24,14 +24,13 @@ import org.wings.SComponent;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public interface PropertyManager
-{
+public interface PropertyManager {
 
     /**
      * Describe <code>setProperty</code> method here.
      *
-     * @param comp a <code>SComponent</code> value
-     * @param name a <code>String</code> value
+     * @param comp  a <code>SComponent</code> value
+     * @param name  a <code>String</code> value
      * @param value a <code>String</code> value
      * @return a <code>boolean</code> value
      */
@@ -45,10 +44,4 @@ public interface PropertyManager
     public Class[] getSupportedClasses();
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

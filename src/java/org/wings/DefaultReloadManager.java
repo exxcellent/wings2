@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.resource.DynamicCodeResource;
@@ -31,8 +30,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public class DefaultReloadManager
-    implements ReloadManager
-{
+        implements ReloadManager {
     private final static Logger logger = Logger.getLogger("org.wings");
     /**
      * a set of all resources, manged by this ReloadManager, that are marked
@@ -43,7 +41,7 @@ public class DefaultReloadManager
     public DefaultReloadManager() {
         dirtyResources = new HashSet();
     }
-    
+
     public void reload(SComponent component) {
         SFrame parent = component.getParentFrame();
 
@@ -76,17 +74,11 @@ public class DefaultReloadManager
         //Set frames = new HashSet();
         Iterator it = dirtyResources.iterator();
         while (it.hasNext()) {
-            DynamicResource resource = (DynamicResource)it.next();
+            DynamicResource resource = (DynamicResource) it.next();
             resource.invalidate();
             it.remove();
         }
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,3 +1,16 @@
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.session;
 
 import java.text.DateFormat;
@@ -113,10 +126,10 @@ public class WingsStatistics {
         StringBuffer tResult = new StringBuffer();
 
         tResult.append("birthday: ").append(DateFormat.getDateTimeInstance().format(new Date(birthDay))).append("\n")
-            .append("sessions: ").append(sessionCounter).append(" / ").append(activeSessionCounter).append(" / ").append(allocatedSessionCounter).append("\n")
-            .append("requests: ").append(requestCounter).append(" / ").append(requestCounter == 0 ? 0 : requestDuration / requestCounter).append(" ms\n")
-            .append("dispatch: ").append(dispatchCounter).append(" / ").append(dispatchCounter == 0 ? 0 : dispatchDuration / dispatchCounter).append(" ms\n")
-            .append("deliver: ").append(deliverCounter).append(" / ").append(deliverCounter == 0 ? 0 : deliverDuration / deliverCounter).append(" ms\n");
+                .append("sessions: ").append(sessionCounter).append(" / ").append(activeSessionCounter).append(" / ").append(allocatedSessionCounter).append("\n")
+                .append("requests: ").append(requestCounter).append(" / ").append(requestCounter == 0 ? 0 : requestDuration / requestCounter).append(" ms\n")
+                .append("dispatch: ").append(dispatchCounter).append(" / ").append(dispatchCounter == 0 ? 0 : dispatchDuration / dispatchCounter).append(" ms\n")
+                .append("deliver: ").append(deliverCounter).append(" / ").append(deliverCounter == 0 ? 0 : deliverDuration / deliverCounter).append(" ms\n");
 
         return tResult.toString();
 

@@ -2,6 +2,19 @@
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
 
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package wingset;
 
 import org.wings.*;
@@ -11,18 +24,17 @@ import org.wings.table.SDefaultTableCellRenderer;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class TableExample
-    extends WingSetPane
-{
+        extends WingSetPane {
     static final SIcon image = new SResourceIcon("org/wings/icons/JavaCup.gif");
 
     public final MyCellRenderer cellRenderer = new MyCellRenderer();
@@ -82,19 +94,17 @@ public class TableExample
                 //                  + c.getGreen() + "," + c.getBlue() + "]");
                 // colorOut.setForeground(c);
                 colorOut.setText("<html><span style=\"color:" + colorToHex(c) +
-                                 "\">" +
-                                 colorToHex(c) +
-                                 "</span>");
+                        "\">" +
+                        colorToHex(c) +
+                        "</span>");
                 return colorOut;
-            }
-            else
-                return super.getTableCellRendererComponent(table,value,
-                                                           selected,row,col);
+            } else
+                return super.getTableCellRendererComponent(table, value,
+                        selected, row, col);
         }
     }
 
-    static class MyTableModel extends AbstractTableModel
-    {
+    static class MyTableModel extends AbstractTableModel {
         int cols, rows;
 
         Object[][] data;
@@ -107,15 +117,15 @@ public class TableExample
             data = new Object[rows][cols];
             asc = new boolean[cols];
 
-            for (int c=0; c < cols; c++) {
-                for (int r=0; r < rows; r++)
+            for (int c = 0; c < cols; c++) {
+                for (int r = 0; r < rows; r++)
                     data[r][c] = "cell " + r + ":" + c;
             }
-            for (int r=0; r < rows; r++)
+            for (int r = 0; r < rows; r++)
                 data[r][2] = createColor(r);
-            for (int r=0; r < rows; r++)
+            for (int r = 0; r < rows; r++)
                 data[r][3] = createImage(r);
-            for (int r=0; r < rows; r++)
+            for (int r = 0; r < rows; r++)
                 data[r][4] = createBoolean(r);
         }
 
@@ -139,7 +149,7 @@ public class TableExample
             if (getColumnClass(col).isAssignableFrom(String.class))
                 data[row][col] = value.toString();
             else if (getColumnClass(col).isAssignableFrom(Boolean.class))
-                data[row][col] = new Boolean(((Boolean)value).booleanValue());
+                data[row][col] = new Boolean(((Boolean) value).booleanValue());
         }
 
         public Class getColumnClass(int columnIndex) {
@@ -163,21 +173,20 @@ public class TableExample
 
         public void sort(int col, boolean ascending) {
             System.out.println("sort");
-            if ( col<asc.length )
+            if (col < asc.length)
                 asc[col] = !ascending;
         }
 
         public boolean isCellEditable(int row, int col) {
             if (getColumnClass(col).isAssignableFrom(String.class) ||
-                getColumnClass(col).isAssignableFrom(Boolean.class))
+                    getColumnClass(col).isAssignableFrom(Boolean.class))
                 return true;
             else
                 return false;
         }
     }
 
-    static class ROTableModel extends MyTableModel
-    {
+    static class ROTableModel extends MyTableModel {
         public ROTableModel(int cols, int rows) {
             super(cols, rows);
         }
@@ -186,57 +195,61 @@ public class TableExample
     }
 
     static String colorToHex(Color color) {
-	String colorstr = new String("#");
+        String colorstr = new String("#");
 
-	// Red
-	String str = Integer.toHexString(color.getRed());
-	if (str.length() > 2)
-	    str = str.substring(0, 2);
-	else if (str.length() < 2)
-	    colorstr += "0" + str;
-	else
-	    colorstr += str;
+        // Red
+        String str = Integer.toHexString(color.getRed());
+        if (str.length() > 2)
+            str = str.substring(0, 2);
+        else if (str.length() < 2)
+            colorstr += "0" + str;
+        else
+            colorstr += str;
 
-	// Green
-	str = Integer.toHexString(color.getGreen());
-	if (str.length() > 2)
-	    str = str.substring(0, 2);
-	else if (str.length() < 2)
-	    colorstr += "0" + str;
-	else
-	    colorstr += str;
+        // Green
+        str = Integer.toHexString(color.getGreen());
+        if (str.length() > 2)
+            str = str.substring(0, 2);
+        else if (str.length() < 2)
+            colorstr += "0" + str;
+        else
+            colorstr += str;
 
-	// Blue
-	str = Integer.toHexString(color.getBlue());
-	if (str.length() > 2)
-	    str = str.substring(0, 2);
-	else if (str.length() < 2)
-	    colorstr += "0" + str;
-	else
-	    colorstr += str;
+        // Blue
+        str = Integer.toHexString(color.getBlue());
+        if (str.length() > 2)
+            str = str.substring(0, 2);
+        else if (str.length() < 2)
+            colorstr += "0" + str;
+        else
+            colorstr += str;
 
-	return colorstr;
+        return colorstr;
     }
-    
-    
-    /** Proof that we can do some really nice tables with j-wings.  */
+
+
+    /**
+     * Proof that we can do some really nice tables with j-wings.
+     */
     public class MyTable extends STable {
         private final /*static*/ TableCG myTableCG = new TableCG();
 
         public MyTable(TableModel tm) {
             super(tm);
-            myTableCG.setFixedTableBorderWidth("0"); 
+            myTableCG.setFixedTableBorderWidth("0");
             setCG(myTableCG);
         }
-    
-        /** Returns the CSS style for a row (<td style="xxx") */
+
+        /**
+         * Returns the CSS style for a row (<td style="xxx")
+         */
         public String getRowStyle(int row) {
-            return isRowSelected(row) ? "table_selected_row":(row % 2 == 0 ? "table_row1" : "table_row2");
-        }    
+            return isRowSelected(row) ? "table_selected_row" : (row % 2 == 0 ? "table_row1" : "table_row2");
+        }
     }
-    
+
     class TableControls extends ComponentControls {
-        private final String[] SELECTION_MODES = new String[] { "no", "single", "multiple" };
+        private final String[] SELECTION_MODES = new String[]{"no", "single", "multiple"};
 
         public TableControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");

@@ -1,22 +1,21 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
 
 /**
  * A Device encapsulating a StringBuffer
@@ -24,12 +23,11 @@ import java.io.ByteArrayOutputStream;
  * @author <a href="mailto:hzeller@to.com">Henner Zeller</a>
  * @version $Revision$
  */
-public final class StringBufferDevice implements Device
-{
+public final class StringBufferDevice implements Device {
     private StringBuffer buffer;
     private ByteArrayOutputStream byteStream = null;
 
-    public StringBufferDevice () {
+    public StringBufferDevice() {
         buffer = new StringBuffer();
     }
 
@@ -45,12 +43,12 @@ public final class StringBufferDevice implements Device
      */
     public void flush() {
         if (byteStream != null) {
-            buffer.append (byteStream.toString());
+            buffer.append(byteStream.toString());
             byteStream = null;
         }
     }
 
-    public void close() { 
+    public void close() {
         flush();
     }
 
@@ -69,34 +67,34 @@ public final class StringBufferDevice implements Device
     /**
      * Print a String.
      */
-    public Device print (String s) {
+    public Device print(String s) {
         if (byteStream != null) flush();
-        buffer.append (s);
+        buffer.append(s);
         return this;
     }
 
     /**
      * Print a character.
      */
-    public Device print (char c) {
+    public Device print(char c) {
         if (byteStream != null) flush();
-        buffer.append (c);
+        buffer.append(c);
         return this;
     }
 
     /**
      * Print a character array.
      */
-    public Device print (char[] c) throws IOException {
+    public Device print(char[] c) throws IOException {
         if (byteStream != null) flush();
-        buffer.append (c);
+        buffer.append(c);
         return this;
     }
 
     /**
      * Print a character array.
      */
-    public Device print (char[] c, int start, int len) throws IOException {
+    public Device print(char[] c, int start, int len) throws IOException {
         if (byteStream != null) flush();
         buffer.append(c, start, len);
         return this;
@@ -105,26 +103,26 @@ public final class StringBufferDevice implements Device
     /**
      * Print an integer.
      */
-    public Device print (int i) {
+    public Device print(int i) {
         if (byteStream != null) flush();
-        buffer.append (i);
+        buffer.append(i);
         return this;
     }
 
     /**
      * Print any Object
      */
-    public Device print (Object o) {
+    public Device print(Object o) {
         if (byteStream != null) flush();
-        buffer.append (o);
+        buffer.append(o);
         return this;
     }
 
     /**
      * Writes the specified byte to this data output stream.
      */
-    public Device write (int c) throws IOException {
-        getStream().write (c);
+    public Device write(int c) throws IOException {
+        getStream().write(c);
         return this;
     }
 
@@ -133,7 +131,7 @@ public final class StringBufferDevice implements Device
      * output stream.
      */
     public Device write(byte b[]) throws IOException {
-        getStream().write (b);
+        getStream().write(b);
         return this;
     }
 
@@ -142,15 +140,9 @@ public final class StringBufferDevice implements Device
      * off to this output stream.
      */
     public Device write(byte b[], int off, int len) throws IOException {
-        getStream().write (b, off, len);
+        getStream().write(b, off, len);
         return this;
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

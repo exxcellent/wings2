@@ -1,22 +1,21 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.plaf.ButtonCG;
 
-import javax.swing.Action;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -30,15 +29,14 @@ import java.beans.PropertyChangeListener;
  * @version $Revision$
  */
 public abstract class SAbstractButton
-    extends SAbstractIconTextCompound
-    implements LowLevelEventListener 
-{
-    public static final String SUBMIT_BUTTON  = "submit";
-    public static final String RESET_BUTTON   = "reset";
-    public static final String IMAGE_BUTTON   = "image";
-    public static final String CHECKBOX       = "checkbox";
-    public static final String RADIOBUTTON    = "radio";
-  
+        extends SAbstractIconTextCompound
+        implements LowLevelEventListener {
+    public static final String SUBMIT_BUTTON = "submit";
+    public static final String RESET_BUTTON = "reset";
+    public static final String IMAGE_BUTTON = "image";
+    public static final String CHECKBOX = "checkbox";
+    public static final String RADIOBUTTON = "radio";
+
     private String type = SUBMIT_BUTTON;
 
     private SButtonGroup buttonGroup;
@@ -46,25 +44,26 @@ public abstract class SAbstractButton
     protected String actionCommand;
 
     private String eventTarget;
-  
+
     private Action action;
-  
+
     private PropertyChangeListener actionPropertyChangeListener;
-  
+
     private String mnemonic;
-  
+
     /**
      * Create a button with given text.
+     *
      * @param text the button text
      */
     public SAbstractButton(String text) {
         super(text);
     }
-  
+
     public SAbstractButton(Action action) {
         setAction(action);
     }
-  
+
     /**
      * Creates a new Button with the given Text and the given Type.
      *
@@ -76,7 +75,7 @@ public abstract class SAbstractButton
         this(text);
         setType(type);
     }
-  
+
     /**
      * Creates a new submit button
      */
@@ -85,21 +84,23 @@ public abstract class SAbstractButton
 
     /**
      * Sets the action command for this button.
+     *
      * @param ac the action command for this button
      */
     public void setActionCommand(String ac) {
         actionCommand = ac;
     }
-  
+
     /**
      * Returns the action command for this button.
+     *
      * @return the action command for this button
      */
     public final String getActionCommand() {
         return actionCommand;
     }
-  
-  
+
+
     /**
      * TODO: Return the Button group where this button lies in
      *
@@ -108,15 +109,15 @@ public abstract class SAbstractButton
     public final SButtonGroup getGroup() {
         return buttonGroup;
     }
-  
+
     protected void setParentFrame(SFrame f) {
-        if ( buttonGroup!=null && getDispatcher()!=null ) {
+        if (buttonGroup != null && getDispatcher() != null) {
             getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
         } // end of if ()
 
         super.setParentFrame(f);
 
-        if ( buttonGroup!=null && getDispatcher()!=null ) {
+        if (buttonGroup != null && getDispatcher() != null) {
             getDispatcher().addLowLevelEventListener(this, buttonGroup.getComponentId());
         } // end of if ()
     }
@@ -125,29 +126,31 @@ public abstract class SAbstractButton
      * Add this button to a button group. This influences the event-prefix
      * this button reports to the request dispatcher: it will change to
      * the button group's prefix.
+     *
      * @param g
      */
     protected void setGroup(SButtonGroup g) {
-        if ( isDifferent(buttonGroup, g) ) {
-            if ( buttonGroup!=null && getDispatcher()!=null ) {
+        if (isDifferent(buttonGroup, g)) {
+            if (buttonGroup != null && getDispatcher() != null) {
                 getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
             buttonGroup = g;
-            if ( buttonGroup!=null && getDispatcher()!=null ) {
+            if (buttonGroup != null && getDispatcher() != null) {
                 getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
             reload();
         }
     }
-  
+
     /**
      * Adds an ActionListener to the button.
+     *
      * @param listener the ActionListener to be added
      */
     public void addActionListener(ActionListener listener) {
         addEventListener(ActionListener.class, listener);
     }
-  
+
     /**
      * Removes the supplied Listener from teh listener list
      *
@@ -165,11 +168,12 @@ public abstract class SAbstractButton
      *         array if no listeners have been added
      */
     public ActionListener[] getActionListeners() {
-        return (ActionListener[])(getListeners(ActionListener.class));
+        return (ActionListener[]) (getListeners(ActionListener.class));
     }
-  
+
     /**
      * Fire an ActionEvent at each registered listener.
+     *
      * @param event supplied ActionEvent
      */
     protected void fireActionPerformed(ActionEvent event) {
@@ -178,25 +182,25 @@ public abstract class SAbstractButton
         ActionEvent e = null;
         // Process the listeners last to first, notifying
         // those that are interested in this event
-        for (int i = listeners.length-2; i>=0; i-=2) {
-            if (listeners[i]==ActionListener.class) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == ActionListener.class) {
                 if (e == null) {
                     String actionCommand = event.getActionCommand();
-                    if(actionCommand == null) {
+                    if (actionCommand == null) {
                         actionCommand = getActionCommand();
                     }
                     e = new ActionEvent(SAbstractButton.this,
-                                        ActionEvent.ACTION_PERFORMED,
-                                        actionCommand,
-                                        event.getWhen(),
-                                        event.getModifiers());
+                            ActionEvent.ACTION_PERFORMED,
+                            actionCommand,
+                            event.getWhen(),
+                            event.getModifiers());
                 }
-                ((ActionListener)listeners[i+1]).actionPerformed(e);
+                ((ActionListener) listeners[i + 1]).actionPerformed(e);
             }
         }
     }
-  
-  
+
+
     /**
      * Sets the button type. Use one of the following types:
      * <UL>
@@ -209,12 +213,12 @@ public abstract class SAbstractButton
      * @param t
      */
     public void setType(String t) {
-        if ( isDifferent(type, t) ) {
+        if (isDifferent(type, t)) {
             type = t;
             reload();
         }
     }
-  
+
     /**
      * Delifers the Button Type
      *
@@ -223,71 +227,71 @@ public abstract class SAbstractButton
     public final String getType() {
         return type;
     }
-  
+
     /**
      * Simulates an click on the Button
      */
     public void doClick() {
         setSelected(!isSelected());
-    
+
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
     }
-  
+
     /**
      * Sets the state of the button.      *
-     * @param b  true if the button is selected, otherwise false
+     *
+     * @param b true if the button is selected, otherwise false
      */
     public void setSelected(boolean b) {
-        if ( isSelected()!=b ) {
-            if ( buttonGroup!=null )
+        if (isSelected() != b) {
+            if (buttonGroup != null)
                 buttonGroup.setSelected(this, b);
-      
+
             super.setSelected(b);
         }
     }
-  
+
     public void processLowLevelEvent(String action, String[] values) {
         super.processLowLevelEvent(action, values);
 
         boolean requestSelection = isSelected();
-    
+
         int eventCount = 0;
-    
-        if ( buttonGroup!=null ) {
+
+        if (buttonGroup != null) {
             // button group prefix is shared, so maybe more than one value is
             // delivered in a form
-            for ( int i=0; i<values.length; i++ ) {
-        
+            for (int i = 0; i < values.length; i++) {
+
                 // with button group the value has a special encoding...
                 // this is because in a form the name of a parameter for
                 // buttons in a buttongroup must be the same...
                 String value = values[i];
         
                 // illegal format
-                if ( value.length() < 3 ) { continue;  }
+                if (value.length() < 3) { continue;  }
         
                 // no uid DIVIDER
                 // value.charAt(value.length()-2)!=UID_DIVIDER ) { break; }
         
                 // not for me
-                if ( !value.startsWith(super.getLowLevelEventId()) ) { continue; }
+                if (!value.startsWith(super.getLowLevelEventId())) { continue; }
         
                 // last character is indicator, if button should be
                 // selected or not
-                switch ( value.charAt(value.length()-1) ) {
-                case '1':
-                    requestSelection = true;
-                    ++eventCount;
-                    break;
-                case '0':
-                    requestSelection = false;
-                    ++eventCount;
-                    break;
+                switch (value.charAt(value.length() - 1)) {
+                    case '1':
+                        requestSelection = true;
+                        ++eventCount;
+                        break;
+                    case '0':
+                        requestSelection = false;
+                        ++eventCount;
+                        break;
                 }
             }
-        }
-        else {
-            for ( int i=0; i<values.length; i++ ) {
+        } else {
+            for (int i = 0; i < values.length; i++) {
                 requestSelection = parseSelectionToggle(values[0]);
                 ++eventCount;
             }
@@ -306,35 +310,35 @@ public abstract class SAbstractButton
          * This is just in case, the browser sends the both events
          * in the wrong order (select and then deselect).
          */
-        if ( eventCount==2 ) {
+        if (eventCount == 2) {
             requestSelection = true;
         }
-    
-        if ( isSelected()!=requestSelection ) {
+
+        if (isSelected() != requestSelection) {
             delayEvents(true);
-            if ( buttonGroup!=null ) {
+            if (buttonGroup != null) {
                 buttonGroup.setDelayEvents(true);
                 setSelected(requestSelection);
                 buttonGroup.setDelayEvents(false);
             } else {
                 setSelected(requestSelection);
             }
-      
+
             SForm.addArmedComponent(this);
         }
     }
-  
+
     public void fireIntermediateEvents() {
         super.fireIntermediateEvents();
-        if ( buttonGroup!=null ) {
+        if (buttonGroup != null) {
             buttonGroup.fireDelayedIntermediateEvents();
         }
     }
-  
+
     public void fireFinalEvents() {
         super.fireFinalEvents();
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
-        if ( buttonGroup!=null ) {
+        if (buttonGroup != null) {
             buttonGroup.fireDelayedFinalEvents();
         }
     }
@@ -349,47 +353,47 @@ public abstract class SAbstractButton
     public final String getEventTarget() {
         return eventTarget;
     }
-  
+
     /**
      *
      */
     public void setEventTarget(String target) {
-        if ( isDifferent(eventTarget, target) ) {
+        if (isDifferent(eventTarget, target)) {
             eventTarget = target;
             reload();
         }
     }
-  
+
     protected boolean parseSelectionToggle(String toggleParameter) {
-        if ( "1".equals(toggleParameter) )
+        if ("1".equals(toggleParameter))
             return true;
-        else if ( "0".equals(toggleParameter) )
+        else if ("0".equals(toggleParameter))
             return false;
     
         // don't change...
         return isSelected();
     }
-  
+
     public String getToggleSelectionParameter() {
         return isSelected() ? getDeselectionParameter() : getSelectionParameter();
     }
-  
+
     public String getSelectionParameter() {
         return "1";
     }
-  
+
     public String getDeselectionParameter() {
         return "0";
     }
-  
-  
+
+
     /**
      * Sets the action for the ActionEvent source.
      * the new action code will replace the old one but not the one bound to the actionListener
      *
      * @param a the Action for the AbstractButton,
      */
-  
+
     public void setAction(Action a) {
         Action oldValue = getAction();
         if (action == null || !action.equals(a)) {
@@ -412,75 +416,71 @@ public abstract class SAbstractButton
             reload();
         }
     }
-  
+
     private boolean isListener(Class c, ActionListener a) {
         boolean isListener = false;
         Object[] listeners = getListenerList();
-        for (int i = listeners.length-2; i>=0; i-=2) {
-            if (listeners[i] == c && listeners[i+1] == a) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == c && listeners[i + 1] == a) {
                 isListener = true;
             }
         }
         return isListener;
     }
-  
+
     /**
      * Returns the action for this ActionEvent source, or <code>null</code>
      * if no <code>Action</code> is set.
      *
      * @return the <code>Action</code> for this <code>ActionEvent</code>
-     *		source, or <code>null</code>
+     *         source, or <code>null</code>
      */
     public Action getAction() {
         return action;
     }
-  
+
     public void setCG(ButtonCG cg) {
         super.setCG(cg);
     }
-  
+
     protected void configurePropertiesFromAction(Action a) {
         // uncomment if compiled against < jdk 1.3
         //	setActionCommand((a != null
         //                  ? (String)a.getValue(Action.ACTION_COMMAND_KEY)
         //                  : null));
-        setText((a != null ? (String)a.getValue(Action.NAME) : null));
-        setIcon((a != null ? (SIcon)a.getValue(Action.SMALL_ICON) : null));
+        setText((a != null ? (String) a.getValue(Action.NAME) : null));
+        setIcon((a != null ? (SIcon) a.getValue(Action.SMALL_ICON) : null));
         setEnabled((a != null ? a.isEnabled() : true));
-        setToolTipText((a != null ? (String)a.getValue(Action.SHORT_DESCRIPTION) : null));
+        setToolTipText((a != null ? (String) a.getValue(Action.SHORT_DESCRIPTION) : null));
     }
-  
+
     protected PropertyChangeListener createActionPropertyChangeListener(Action a) {
         return new ButtonActionPropertyChangeListener(this, a);
     }
-  
+
     private static class ButtonActionPropertyChangeListener
-        extends AbstractActionPropertyChangeListener {
+            extends AbstractActionPropertyChangeListener {
         ButtonActionPropertyChangeListener(SAbstractButton b, Action a) {
             super(b, a);
         }
-    
+
         public void propertyChange(PropertyChangeEvent e) {
             String propertyName = e.getPropertyName();
-            SButton button = (SButton)getTarget();
+            SButton button = (SButton) getTarget();
             if (button == null) {
-                Action action = (Action)e.getSource();
+                Action action = (Action) e.getSource();
                 action.removePropertyChangeListener(this);
-            }
-            else {
+            } else {
                 if (e.getPropertyName().equals(Action.NAME)) {
-                    String text = (String)e.getNewValue();
+                    String text = (String) e.getNewValue();
                     button.setText(text);
-                }
-                else if (e.getPropertyName().equals(Action.SHORT_DESCRIPTION)) {
-                    String text = (String)e.getNewValue();
+                } else if (e.getPropertyName().equals(Action.SHORT_DESCRIPTION)) {
+                    String text = (String) e.getNewValue();
                     button.setToolTipText(text);
-                }
-                else if (propertyName.equals("enabled")) {
-                    Boolean enabled = (Boolean)e.getNewValue();
+                } else if (propertyName.equals("enabled")) {
+                    Boolean enabled = (Boolean) e.getNewValue();
                     button.setEnabled(enabled.booleanValue());
-                }
-                else if (e.getPropertyName().equals(Action.SMALL_ICON)) {
+                } else if (e.getPropertyName().equals(Action.SMALL_ICON)) {
                     SIcon icon = (SIcon) e.getNewValue();
                     button.setIcon(icon);
                 }

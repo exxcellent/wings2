@@ -1,53 +1,50 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.externalizer;
 
-import java.util.*;
-import java.util.logging.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 
 /**
- * This singleton externalizes 
+ * This singleton externalizes
  * {#link AbstractExternalizeManager#GLOBAL global} scope. Every object
- * externalized by the SystemExternalizeManager (global scope) is available 
+ * externalized by the SystemExternalizeManager (global scope) is available
  * over the life time of the servlet container and is not garbage collected.
- *
+ * <p/>
  * Created: Sat Nov 10 15:49:15 2001
  *
  * @author <a href="mailto:armin@hyperion.intranet.mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 
-public class SystemExternalizeManager extends AbstractExternalizeManager
-{
+public class SystemExternalizeManager extends AbstractExternalizeManager {
     /**
      * singleton implementation
      */
     private static final SystemExternalizeManager sharedInstance = new SystemExternalizeManager();
-  
+
     private final String MY_PREFIX_TIMESLICE_STRING = "-" + PREFIX_TIMESLICE_STRING;
 
-    /**
-     * TODO: documentation
-     */
     protected final Map/*<String, ExternalizedResource>*/ externalized;
 
     /**
      * 
      */
-    private SystemExternalizeManager () {
-        externalized = Collections.synchronizedMap( new HashMap() );
+    private SystemExternalizeManager() {
+        externalized = Collections.synchronizedMap(new HashMap());
     }
 
     /**
@@ -66,7 +63,7 @@ public class SystemExternalizeManager extends AbstractExternalizeManager
         return MY_PREFIX_TIMESLICE_STRING;
     }
 
-    protected void storeExternalizedResource(String identifier, 
+    protected void storeExternalizedResource(String identifier,
                                              ExternalizedResource extInfo) {
         if (logger.isLoggable(Level.FINER)) {
             logger.finer("store identifier " + identifier + " " + extInfo.getObject().getClass());
@@ -77,18 +74,18 @@ public class SystemExternalizeManager extends AbstractExternalizeManager
     }
 
     public ExternalizedResource getExternalizedResource(String identifier) {
-        if ( identifier == null || identifier.length() < 1 )
+        if (identifier == null || identifier.length() < 1)
             return null;
-        
+
         logger.fine("system externalizer: " + identifier);
-        
+
         int pos = identifier.indexOf(".");
         if (pos > -1) {
             identifier = identifier.substring(0, pos);
         }
 
         logger.fine("system externalizer " + identifier);
-        return (ExternalizedResource)externalized.get(identifier);
+        return (ExternalizedResource) externalized.get(identifier);
     }
 
     public final void removeExternalizedResource(String identifier) {
@@ -96,11 +93,5 @@ public class SystemExternalizeManager extends AbstractExternalizeManager
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+
 

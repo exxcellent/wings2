@@ -1,22 +1,20 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.session;
 
 
 import org.wings.*;
-import org.wings.resource.DynamicCodeResource;
 import org.wings.event.ExitVetoException;
 import org.wings.event.SRequestEvent;
 import org.wings.externalizer.ExternalizeManager;
@@ -24,6 +22,7 @@ import org.wings.externalizer.ExternalizedResource;
 import org.wings.io.Device;
 import org.wings.io.DeviceFactory;
 import org.wings.io.ServletDevice;
+import org.wings.resource.DynamicCodeResource;
 import org.wings.util.DebugUtil;
 
 import javax.servlet.ServletConfig;
@@ -139,11 +138,7 @@ final class SessionServlet
     // jetzt kommen alle Servlet Methoden, die an den parent deligiert
     // werden
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public ServletContext getServletContext() {
         if (parent != this)
             return parent.getServletContext();
@@ -151,12 +146,7 @@ final class SessionServlet
             return super.getServletContext();
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param name
-     * @return
-     */
+
     public String getInitParameter(String name) {
         if (parent != this)
             return parent.getInitParameter(name);
@@ -164,11 +154,7 @@ final class SessionServlet
             return super.getInitParameter(name);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public Enumeration getInitParameterNames() {
         if (parent != this)
             return parent.getInitParameterNames();
@@ -189,11 +175,7 @@ final class SessionServlet
             super.log(msg);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String getServletInfo() {
         if (parent != this)
             return parent.getServletInfo();
@@ -201,11 +183,7 @@ final class SessionServlet
             return super.getServletInfo();
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public ServletConfig getServletConfig() {
         if (parent != this)
             return parent.getServletConfig();
@@ -244,7 +222,7 @@ final class SessionServlet
             if (request.isRequestedSessionIdValid()) {
                 // this will fire an event, if the encoding has changed ..
                 ((PropertyService) session).setProperty("request.url",
-                                                        new RequestURL("", getSessionEncoding(response)));
+                        new RequestURL("", getSessionEncoding(response)));
             }
 
             session.init(config, request);
@@ -255,8 +233,8 @@ final class SessionServlet
                 Class mainClass = null;
                 try {
                     mainClass = Class.forName(mainClassName, true,
-                                              Thread.currentThread()
-                                              .getContextClassLoader());
+                            Thread.currentThread()
+                            .getContextClassLoader());
                 } catch (ClassNotFoundException e) {
                     // fallback, in case the servlet container fails to set the
                     // context class loader.
@@ -265,7 +243,7 @@ final class SessionServlet
                 Object main = mainClass.newInstance();
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "could not load wings.mainclass: " +
-                                         config.getInitParameter("wings.mainclass"), ex);
+                        config.getInitParameter("wings.mainclass"), ex);
                 throw new ServletException(ex);
             }
         } finally {
@@ -288,7 +266,7 @@ final class SessionServlet
             ServletOutputStream out = res.getOutputStream();
             out.println("<html><head><title>Too big</title></head>");
             out.println("<body><h1>Error - content length &gt; " +
-                        getSession().getMaxContentLength() + "k");
+                    getSession().getMaxContentLength() + "k");
             out.println("</h1></body></html>");
         } else {
             doGet(req, res);
@@ -352,7 +330,7 @@ final class SessionServlet
                 requestURL = new RequestURL("", getSessionEncoding(response));
                 // this will fire an event, if the encoding has changed ..
                 ((PropertyService) session).setProperty("request.url",
-                                                        requestURL);
+                        requestURL);
             }
 
             if (logger.isLoggable(Level.FINER)) {
@@ -450,9 +428,9 @@ final class SessionServlet
              */
             String externalizeIdentifier = null;
             if (pathInfo == null
-                || pathInfo.length() == 0
-                || "_".equals(pathInfo)
-                || firstRequest) {
+                    || pathInfo.length() == 0
+                    || "_".equals(pathInfo)
+                    || firstRequest) {
                 logger.fine("delivering default frame");
 
                 if (session.frames().size() == 0)
@@ -572,11 +550,11 @@ final class SessionServlet
 
                 errorStackTraceLabel = new SLabel();
                 errorFrame.getContentPane().add(errorStackTraceLabel,
-                                                "EXCEPTION_STACK_TRACE");
+                        "EXCEPTION_STACK_TRACE");
 
                 errorMessageLabel = new SLabel();
                 errorFrame.getContentPane().add(errorMessageLabel,
-                                                "EXCEPTION_MESSAGE");
+                        "EXCEPTION_MESSAGE");
             }
 
             res.setContentType("text/html");
@@ -603,21 +581,15 @@ final class SessionServlet
         res.getOutputStream().println("<h1>404 Not Found</h1>Unknown Resource Requested");
     }
 
-    /** --- HttpSessionBindingListener --- **/
-
     /**
-     * TODO: documentation
-     *
-     * @param event
+     * --- HttpSessionBindingListener --- *
      */
+
+
     public void valueBound(HttpSessionBindingEvent event) {
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param event
-     */
+
     public void valueUnbound(HttpSessionBindingEvent event) {
         destroy();
     }
@@ -634,9 +606,6 @@ final class SessionServlet
         return enc;
     }
 
-    /**
-     * TODO: documentation
-     */
     public void destroy() {
         logger.info("destroy called");
 
@@ -659,10 +628,4 @@ final class SessionServlet
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

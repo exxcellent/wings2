@@ -1,30 +1,29 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.event;
 
 /**
  * An abstract adapter class for receiving component events.
  * The methods in this class are empty. This class exists as
  * convenience for creating listener objects.
- *
- * Extend this class to create a ComponentEvent listener 
- * and override the methods for the events of interest. (If you implement the 
+ * <p/>
+ * Extend this class to create a ComponentEvent listener
+ * and override the methods for the events of interest. (If you implement the
  * ComponentListener interface, you have to define all of
  * the methods in it. This abstract class defines null methods for them
  * all, so you can only have to define methods for events you care about.)
-
+ * <p/>
  * Create a listener object using your class and then register it with a
  * component using the component's addComponentListener method. When the component's size, location, or visibility
  * changes, the relevant method in the listener object is invoked,
@@ -36,8 +35,7 @@ package org.wings.event;
  * @see org.wings.event.SComponentListener
  */
 public abstract class SComponentAdapter
-	implements SComponentListener
-{
+        implements SComponentListener {
     /**
      * Invoked when the component has been made invisible.
      */
@@ -59,10 +57,4 @@ public abstract class SComponentAdapter
     public void componentShown(SComponentEvent e) {};
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,6 +1,19 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -10,8 +23,8 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 public class ButtonCG
-    extends LabelCG
-    implements SConstants, org.wings.plaf.ButtonCG {
+        extends LabelCG
+        implements SConstants, org.wings.plaf.ButtonCG {
 
     private final static byte[] __onMouseover_if = " onMouseover=\"if(document.images){this.src='".getBytes();
     private final static byte[] __onmouseout_if = "';}\" onmouseout=\"if(document.images){this.src='".getBytes();
@@ -21,9 +34,9 @@ public class ButtonCG
 
     private void writeDynamicIcons(final Device device, SAbstractButton abstractButton, SIcon origIcon,
                                    String iconName, boolean renderNameAttribute)
-        throws IOException {
+            throws IOException {
         if (abstractButton.isEnabled() &&
-            (abstractButton.getGroup() == null || !abstractButton.isSelected())) {
+                (abstractButton.getGroup() == null || !abstractButton.isSelected())) {
             // render rollover
             SIcon rolloverIcon = abstractButton.getRolloverIcon();
             SIcon pressedIcon = abstractButton.getPressedIcon();
@@ -65,8 +78,8 @@ public class ButtonCG
     }
 
     public void writeContent(final Device device, final SComponent component)
-        throws IOException {
-        final SAbstractButton button = (SAbstractButton)component;
+            throws IOException {
+        final SAbstractButton button = (SAbstractButton) component;
 
         if (button.getShowAsFormComponent()) {
             device.print("<button type=\"submit\" name=\"");
@@ -74,8 +87,7 @@ public class ButtonCG
             device.print("\"");
             org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
-        }
-        else {
+        } else {
             device.write("<a href=\"".getBytes());
             RequestURL addr = button.getRequestURL();
             addr.addParameter(button, button.getToggleSelectionParameter());
@@ -122,13 +134,12 @@ public class ButtonCG
     protected SIcon getIcon(SAbstractButton abstractButton) {
         if (abstractButton.isSelected()) {
             return abstractButton.isEnabled()
-                ? abstractButton.getSelectedIcon()
-                : abstractButton.getDisabledSelectedIcon();
-        }
-        else {
+                    ? abstractButton.getSelectedIcon()
+                    : abstractButton.getDisabledSelectedIcon();
+        } else {
             return abstractButton.isEnabled()
-                ? abstractButton.getIcon()
-                : abstractButton.getDisabledIcon();
+                    ? abstractButton.getIcon()
+                    : abstractButton.getDisabledIcon();
         }
     }
 }

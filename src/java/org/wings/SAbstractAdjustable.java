@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import javax.swing.*;
@@ -27,9 +26,8 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public abstract class SAbstractAdjustable
-    extends SContainer
-    implements Adjustable, LowLevelEventListener
-{
+        extends SContainer
+        implements Adjustable, LowLevelEventListener {
     public static final int UNIT = 0;
 
     public static final int BLOCK = 1;
@@ -45,6 +43,7 @@ public abstract class SAbstractAdjustable
     /**
      * The model that represents the scrollbar's minimum, maximum, extent
      * (aka "visibleAmount") and current value.
+     *
      * @see #setModel
      */
     protected SBoundedRangeModel model;
@@ -69,14 +68,13 @@ public abstract class SAbstractAdjustable
      * value, extent, mimimum, and maximum.
      * The "extent" is the size of the viewable area. It is also known
      * as the "visible amount".
-     * <p>
+     * <p/>
      * Note: Use <code>setBlockIncrement</code> to set the block
      * increment to a size slightly smaller than the view's extent.
      * That way, when the user jumps the knob to an adjacent position,
      * one or two lines of the original contents remain in view.
      *
-     * @exception IllegalArgumentException if orientation is not one of VERTICAL, HORIZONTAL
-     *
+     * @throws IllegalArgumentException if orientation is not one of VERTICAL, HORIZONTAL
      * @see #setOrientation
      * @see #setValue
      * @see #setVisibleAmount
@@ -130,19 +128,18 @@ public abstract class SAbstractAdjustable
      * Sets the model that handles the scrollbar's four
      * fundamental properties: minimum, maximum, value, extent.
      *
-     * @see #getModel
-     * @beaninfo
-     *       bound: true
-     *       expert: true
+     * @beaninfo bound: true
+     * expert: true
      * description: The scrollbar's BoundedRangeModel.
+     * @see #getModel
      */
     public void setModel(SBoundedRangeModel newModel) {
         reloadIfChange(this.model, newModel);
-        if ( model != null ) {
+        if (model != null) {
             model.removeChangeListener(fwdAdjustmentEvents);
         }
         model = newModel;
-        if ( model != null ) {
+        if (model != null) {
             model.addChangeListener(fwdAdjustmentEvents);
         }
     }
@@ -156,7 +153,7 @@ public abstract class SAbstractAdjustable
      * value.   Subclasses my override this method to compute
      * a value, e.g. the change required to scroll up or down one
      * (variable height) line text or one row in a table.
-     * <p>
+     * <p/>
      * The JScrollPane component creates scrollbars (by default)
      * that override this method and delegate to the viewports
      * Scrollable view, if it has one.  The Scrollable interface
@@ -174,11 +171,11 @@ public abstract class SAbstractAdjustable
 
     /**
      * Sets the unitIncrement property.
-     * @see #getUnitIncrement
-     * @beaninfo
-     *   preferred: true
-     *       bound: true
+     *
+     * @beaninfo preferred: true
+     * bound: true
      * description: The scrollbar's unit increment.
+     * @see #getUnitIncrement
      */
     public void setUnitIncrement(int unitIncrement) {
         reloadIfChange(this.unitIncrement, unitIncrement);
@@ -193,7 +190,7 @@ public abstract class SAbstractAdjustable
      * up or down by large amount.  Subclasses my override this
      * method to compute a value, e.g. the change required to scroll
      * up or down one paragraph in a text document.
-     * <p>
+     * <p/>
      * The JScrollPane component creates scrollbars (by default)
      * that override this method and delegate to the viewports
      * Scrollable view, if it has one.  The Scrollable interface
@@ -211,11 +208,11 @@ public abstract class SAbstractAdjustable
 
     /**
      * Sets the blockIncrement property.
-     * @see #getBlockIncrement()
-     * @beaninfo
-     *   preferred: true
-     *       bound: true
+     *
+     * @beaninfo preferred: true
+     * bound: true
      * description: The scrollbar's block increment.
+     * @see #getBlockIncrement()
      */
     public void setBlockIncrement(int blockIncrement) {
         reloadIfChange(this.blockIncrement, blockIncrement);
@@ -225,6 +222,7 @@ public abstract class SAbstractAdjustable
 
     /**
      * For backwards compatibility with java.awt.Scrollbar.
+     *
      * @see Adjustable#getUnitIncrement
      * @see #getUnitIncrement(int)
      */
@@ -235,6 +233,7 @@ public abstract class SAbstractAdjustable
 
     /**
      * For backwards compatibility with java.awt.Scrollbar.
+     *
      * @see Adjustable#getBlockIncrement
      * @see #getBlockIncrement(int)
      */
@@ -245,6 +244,7 @@ public abstract class SAbstractAdjustable
 
     /**
      * Returns the scrollbar's value.
+     *
      * @return the model's value property
      * @see #setValue
      */
@@ -257,12 +257,11 @@ public abstract class SAbstractAdjustable
      * Sets the scrollbar's value.  This method just forwards the value
      * to the model.
      *
+     * @beaninfo preferred: true
+     * bound: true
+     * description: The scrollbar's current value.
      * @see #getValue
      * @see BoundedRangeModel#setValue
-     * @beaninfo
-     *   preferred: true
-     *       bound: true
-     * description: The scrollbar's current value.
      */
     public void setValue(int value) {
         getModel().setValue(value);
@@ -294,11 +293,10 @@ public abstract class SAbstractAdjustable
     /**
      * Set the model's extent property.
      *
+     * @beaninfo preferred: true
+     * description: The amount of the view that is currently visible.
      * @see #getVisibleAmount
      * @see BoundedRangeModel#setExtent
-     * @beaninfo
-     *   preferred: true
-     * description: The amount of the view that is currently visible.
      */
     public void setVisibleAmount(int extent) {
         getModel().setExtent(extent);
@@ -320,11 +318,10 @@ public abstract class SAbstractAdjustable
     /**
      * Sets the model's minimum property.
      *
+     * @beaninfo preferred: true
+     * description: The scrollbar's minimum value.
      * @see #getMinimum
      * @see BoundedRangeModel#setMinimum
-     * @beaninfo
-     *   preferred: true
-     * description: The scrollbar's minimum value.
      */
     public void setMinimum(int minimum) {
         getModel().setMinimum(minimum);
@@ -346,11 +343,10 @@ public abstract class SAbstractAdjustable
      * Sets the model's maximum property.  Note that the scrollbar's value
      * can only be set to maximum - extent.
      *
+     * @beaninfo preferred: true
+     * description: The scrollbar's maximum value.
      * @see #getMaximum
      * @see BoundedRangeModel#setMaximum
-     * @beaninfo
-     *   preferred: true
-     * description: The scrollbar's maximum value.
      */
     public void setMaximum(int maximum) {
         getModel().setMaximum(maximum);
@@ -371,20 +367,19 @@ public abstract class SAbstractAdjustable
      * Set the scrollbar's orientation to either VERTICAL or
      * HORIZONTAL.
      *
-     * @exception IllegalArgumentException if orientation is not one of VERTICAL, HORIZONTAL
+     * @throws IllegalArgumentException if orientation is not one of VERTICAL, HORIZONTAL
      * @see #getOrientation
      */
     public void setOrientation(int orientation) {
         switch (orientation) {
-        case SConstants.VERTICAL:
-        case SConstants.HORIZONTAL:
-            this.orientation = orientation;
-            break;
-        default:
-            throw new IllegalArgumentException("orientation must be one of: VERTICAL, HORIZONTAL");
+            case SConstants.VERTICAL:
+            case SConstants.HORIZONTAL:
+                this.orientation = orientation;
+                break;
+            default:
+                throw new IllegalArgumentException("orientation must be one of: VERTICAL, HORIZONTAL");
         }
     }
-
 
 
     /**
@@ -405,12 +400,11 @@ public abstract class SAbstractAdjustable
      * scrollbar model will not generate ChangeEvents while
      * valueIsAdjusting is true.
      *
+     * @beaninfo expert: true
+     * bound: true
+     * description: True if the scrollbar thumb is being dragged.
      * @see #getValueIsAdjusting
      * @see BoundedRangeModel#setValueIsAdjusting
-     * @beaninfo
-     *      expert: true
-     *       bound: true
-     * description: True if the scrollbar thumb is being dragged.
      */
     public void setValueIsAdjusting(boolean b) {
         getModel().setValueIsAdjusting(b);
@@ -423,7 +417,7 @@ public abstract class SAbstractAdjustable
      * <pre>
      * minimum <= value <= value+extent <= maximum
      * </pre>
-     * <p>
+     * <p/>
      *
      * @see BoundedRangeModel#setRangeProperties
      * @see #setValue
@@ -431,8 +425,7 @@ public abstract class SAbstractAdjustable
      * @see #setMinimum
      * @see #setMaximum
      */
-    public void setValues(int newValue, int newExtent, int newMin, int newMax)
-    {
+    public void setValues(int newValue, int newExtent, int newMin, int newMax) {
         BoundedRangeModel m = getModel();
         m.setRangeProperties(newValue, newExtent, newMin, newMax, m.getValueIsAdjusting());
     }
@@ -447,10 +440,10 @@ public abstract class SAbstractAdjustable
         super.processLowLevelEvent(action, values);
 
         getModel().setDelayEvents(true);
-        for ( int i=0; i<values.length; i++ ) {
+        for (int i = 0; i < values.length; i++) {
             try {
                 setValue(Integer.parseInt(values[i]));
-            } catch ( NumberFormatException ex ) {
+            } catch (NumberFormatException ex) {
                 // ignore
             }
         }
@@ -476,7 +469,7 @@ public abstract class SAbstractAdjustable
      * Adds an AdjustmentListener.  Adjustment listeners are notified
      * each time the scrollbar's model changes.  Adjustment events are
      * provided for backwards compatability with java.awt.Scrollbar.
-     * <p>
+     * <p/>
      * Note that the AdjustmentEvents type property will always have a
      * placeholder value of AdjustmentEvent.TRACK because all changes
      * to a BoundedRangeModels value are considered equivalent.  To change
@@ -515,12 +508,12 @@ public abstract class SAbstractAdjustable
         AdjustmentEvent e = null;
 
         Object[] listeners = getListenerList();
-        for ( int i = listeners.length - 2; i >= 0; i -= 2 ) {
-            if (listeners[i]==AdjustmentListener.class) {
-                if ( e == null ) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == AdjustmentListener.class) {
+                if (e == null) {
                     e = new AdjustmentEvent(this, id, type, value);
                 }
-                ((AdjustmentListener)listeners[i+1]).adjustmentValueChanged(e);
+                ((AdjustmentListener) listeners[i + 1]).adjustmentValueChanged(e);
             }
         }
     }
@@ -533,7 +526,7 @@ public abstract class SAbstractAdjustable
      * value are considered equivalent.
      */
     private class ModelListener implements ChangeListener, Serializable {
-        public void stateChanged(ChangeEvent e)   {
+        public void stateChanged(ChangeEvent e) {
             int id = AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED;
             int type = AdjustmentEvent.TRACK;
             fireAdjustmentValueChanged(id, type, getValue());

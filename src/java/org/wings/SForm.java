@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.plaf.FormCG;
@@ -34,8 +33,6 @@ import java.util.logging.Logger;
  */
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -63,16 +60,10 @@ public class SForm
      */
     private URL action;
 
-    /**
-     * TODO: documentation
-     */
     protected final EventListenerList listenerList = new EventListenerList();
 
-    /**
-     * TODO: documentation
-     */
     protected String actionCommand;
-    
+
     /**
      * the button, that is activated, if no other button is pressed in this
      * form.
@@ -91,44 +82,25 @@ public class SForm
         }
     };
 
-    /**
-     * TODO: documentation
-     *
-     * @param action
-     */
+
     public SForm(URL action) {
         setAction(action);
     }
 
-    /**
-     * TODO: documentation
-     */
     public SForm() {
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param layout
-     */
+
     public SForm(SLayoutManager layout) {
         super(layout);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param ac
-     */
+
     public void setActionCommand(String ac) {
         actionCommand = ac;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String getActionCommand() {
         return actionCommand;
     }
@@ -194,7 +166,7 @@ public class SForm
                 // lazy create ActionEvent
                 if (e == null) {
                     e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
-                                        pActionCommand);
+                            pActionCommand);
                 }
                 ((ActionListener) listeners[i + 1]).actionPerformed(e);
             }
@@ -264,14 +236,12 @@ public class SForm
                         formEvents = new LinkedList();
                     } // end of if ()
                     formEvents.add(component);
-                } 
-                else if (component instanceof SAbstractIconTextCompound) {
+                } else if (component instanceof SAbstractIconTextCompound) {
                     if (buttonEvents == null) {
                         buttonEvents = new LinkedList();
                     }
                     buttonEvents.add(component);
-                } 
-                else {
+                } else {
                     component.fireIntermediateEvents();
                 }
             }
@@ -412,29 +382,17 @@ public class SForm
         return null;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param action
-     */
+
     public void setAction(URL action) {
         this.action = action;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public URL getAction() {
         return action;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public RequestURL getRequestURL() {
         RequestURL addr = super.getRequestURL();
         if (getAction() != null) {
@@ -479,10 +437,4 @@ public class SForm
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.io.Device;
@@ -27,8 +26,7 @@ import java.io.IOException;
  * @version $Revision$
  */
 public abstract class SAbstractLayoutManager
-    implements SLayoutManager
-{
+        implements SLayoutManager {
     private static final boolean DEBUG = true;
 
     /**
@@ -37,7 +35,9 @@ public abstract class SAbstractLayoutManager
      */
     protected transient LayoutCG cg;
 
-    /** The container using this layout */
+    /**
+     * The container using this layout
+     */
     protected SContainer container;
 
     /**
@@ -47,7 +47,7 @@ public abstract class SAbstractLayoutManager
 
 
     protected SAbstractLayoutManager() {
-	updateCG();
+        updateCG();
     }
 
     protected void setCG(LayoutCG newCG) {
@@ -70,17 +70,16 @@ public abstract class SAbstractLayoutManager
      * @see SComponent#updateCG
      */
     public void updateCG() {
-        setCG((LayoutCG)SessionManager.getSession().getCGManager().getCG(this));
+        setCG((LayoutCG) SessionManager.getSession().getCGManager().getCG(this));
     }
 
     public void write(Device d)
-	throws IOException
-    {
-	cg.write(d, this);
+            throws IOException {
+        cg.write(d, this);
     }
 
     public void setContainer(SContainer c) {
-	container = c;
+        container = c;
     }
 
     public SContainer getContainer() {
@@ -93,14 +92,16 @@ public abstract class SAbstractLayoutManager
      * missing implementations in the {@link SLayoutManager } cg or html properties.
      * If <i>width</i> or <i>height</i> is zero, it is ignored and the browser
      * defines the size.
+     *
      * @see #getPreferredSize
      */
     public final void setPreferredSize(SDimension preferredSize) {
-     	this.preferredSize = preferredSize;
+        this.preferredSize = preferredSize;
     }
-    
+
     /**
      * Get the preferred size of this {@link SLayoutManager }.
+     *
      * @see #setPreferredSize
      */
     public final SDimension getPreferredSize() {
@@ -108,10 +109,4 @@ public abstract class SAbstractLayoutManager
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,31 +1,27 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.util;
 
-import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.StringTokenizer;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class DebugUtil
-{
+public class DebugUtil {
     private static final boolean DEBUG = true;
 
     /**
@@ -44,13 +40,13 @@ public class DebugUtil
      * Um ein Exception Stacktrace in einen String zu schreiben
      */
     private static final StringWriter STACK_TRACE_STRING_WRITER =
-        new StringWriter();
+            new StringWriter();
 
     /*
      * Um ein Exception Stacktrace in einen String zu schreiben
      */
     private static final PrintWriter STACK_TRACE_PRINT_WRITER =
-        new PrintWriter(STACK_TRACE_STRING_WRITER);
+            new PrintWriter(STACK_TRACE_STRING_WRITER);
 
     private static final Throwable STACK_TRACE_EXCEPTION = new Throwable();
 
@@ -69,14 +65,14 @@ public class DebugUtil
 
     public static final String getCodeLineStack(int callLevel) {
         StringTokenizer t =
-            new StringTokenizer(getStackTraceString(),
-                                System.getProperty("line.separator"));
+                new StringTokenizer(getStackTraceString(),
+                        System.getProperty("line.separator"));
 
-        for ( int i=0; i<callLevel+INTERNAL_CODE_LINE_CALL_LEVEL &&
-              t.hasMoreTokens(); i++ )
+        for (int i = 0; i < callLevel + INTERNAL_CODE_LINE_CALL_LEVEL &&
+                t.hasMoreTokens(); i++)
             t.nextToken();
 
-        if ( t.hasMoreTokens() )
+        if (t.hasMoreTokens())
             return t.nextToken().trim();
         else
             return "";
@@ -91,13 +87,13 @@ public class DebugUtil
     }
 
     public static final String getCodeLine(int callLevel) {
-        String erg = getCodeLineStack(callLevel+1);
+        String erg = getCodeLineStack(callLevel + 1);
         int pindex = erg.lastIndexOf("(");
-        if ( pindex>=0 ) {
-            erg = erg.substring(pindex+1, erg.length()-1);
+        if (pindex >= 0) {
+            erg = erg.substring(pindex + 1, erg.length() - 1);
             int cindex = erg.indexOf(":");
-            if ( cindex>=0 )
-                return erg.substring(cindex+1);
+            if (cindex >= 0)
+                return erg.substring(cindex + 1);
         }
         return "?";
     }
@@ -111,8 +107,8 @@ public class DebugUtil
      * This method should be used in a Class lokal static method like
      * <CODE>
      * private static final void debug(String mesg) {
-     *   if ( DEBUG && de.mercatis.Global.DEBUG )
-     *     de.mercatis.util.DebugUtil.printDebugMessage(this.class, mesg));
+     * if ( DEBUG && de.mercatis.Global.DEBUG )
+     * de.mercatis.util.DebugUtil.printDebugMessage(this.class, mesg));
      * }
      * </CODE>
      */
@@ -124,10 +120,4 @@ public class DebugUtil
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

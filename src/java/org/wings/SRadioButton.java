@@ -1,21 +1,20 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 
-import org.wings.plaf.*;
+import org.wings.plaf.RadioButtonCG;
 
 /**
  * <form>
@@ -29,7 +28,7 @@ import org.wings.plaf.*;
  * @version $Revision$
  */
 public class SRadioButton
-    extends SAbstractButton {
+        extends SAbstractButton {
     public SRadioButton() {
         setType(RADIOBUTTON);
     }
@@ -46,8 +45,7 @@ public class SRadioButton
     public String getLowLevelEventId() {
         if (getGroup() != null && getShowAsFormComponent()) {
             return getGroup().getComponentId();
-        }
-        else {
+        } else {
             return super.getLowLevelEventId();
         } // end of if ()
     }
@@ -73,8 +71,7 @@ public class SRadioButton
                 // one hidden and one checked event from the form says select
                 // it, else deselect it (typically only the hidden event)
                 setSelected(values.length == 2);
-            }
-            else {
+            } else {
                 int eventCount = 0;
                 for (int i = 0; i < values.length; i++) {
                     // check the count of events, which are for me - with a
@@ -88,14 +85,12 @@ public class SRadioButton
                 // it, else deselect it (typically only the hidden event)
                 setSelected(eventCount == 2);
             } // end of if ()
-        }
-        else {
+        } else {
             if (getGroup() != null) {
                 getGroup().setDelayEvents(true);
                 setSelected(parseSelectionToggle(values[0]));
                 getGroup().setDelayEvents(false);
-            }
-            else {
+            } else {
                 setSelected(parseSelectionToggle(values[0]));
             } // end of else
         }
@@ -130,8 +125,7 @@ public class SRadioButton
     public String getSelectionParameter() {
         if (getGroup() != null && getShowAsFormComponent()) {
             return getName();
-        }
-        else {
+        } else {
             return "1";
         }
     }
@@ -139,8 +133,7 @@ public class SRadioButton
     public String getDeselectionParameter() {
         if (getGroup() != null && getShowAsFormComponent()) {
             return getName();
-        }
-        else {
+        } else {
             return "0";
         }
     }

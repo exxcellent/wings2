@@ -1,37 +1,34 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.io.IOException;
-import java.util.*;
+import org.wings.event.SComponentEvent;
+import org.wings.event.SComponentListener;
 
-import org.wings.event.*;
-import org.wings.plaf.*;
-import org.wings.io.Device;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * This is a gridbag layout.
- *
+ * <p/>
  * This layout is similar to Swing's GridBagLayout, though it can't
  * implement all functionalities because of the limitations of
  * HTML-table. It probably doesn't work exactly like its
  * Swing-counterpart - as a general hint: don't be too clever...
  * <P>
- *
+ * <p/>
  * SComponents are usually added using an instance of
  * java.awt.GridBagConstraints which is copied while adding it (so you
  * might reuse it to add other SComponents). There are basically two
@@ -47,14 +44,14 @@ import org.wings.io.Device;
  * last cell of the row/column which will always be placed at the end
  * (while the 'RELATIVE'-SComponent will be expanded to fill the gap).
  * <P>
- *
+ * <p/>
  * <em>Important:</em> When choosing a new row/column, the next
  * gridx/gridy-value that SGridLayout will choose will always be 0,
  * even if there is already a SComponent at that position. If you
  * really need to be clever, explicitly set gridx and gridy,
  * especially if you plan to dynamically add and remove SComponents.
  * <P>
- *
+ * <p/>
  * The size of a cell can be influenced in two ways: either set
  * gridwidth/gridheight to a value larger than 1 to say how many
  * regular cells this cell should span or use weightx/weighty to tell
@@ -67,7 +64,7 @@ import org.wings.io.Device;
  * it might be easier to set these values only in the first
  * column/row.
  * <P>
- *
+ * <p/>
  * GridBagConstraints has many more options than those described
  * above, but the current implementation can't use them.
  *
@@ -75,8 +72,7 @@ import org.wings.io.Device;
  * @version $Revision $
  */
 public class SGridBagLayout
-    extends SAbstractLayoutManager implements SComponentListener
-{
+        extends SAbstractLayoutManager implements SComponentListener {
     /**
      * Map of all managed components (key: component, value: constraint)
      */
@@ -132,20 +128,20 @@ public class SGridBagLayout
      * the constraints.
      */
     protected GridBagConstraints defaultConstraints =
-    new GridBagConstraints();
+            new GridBagConstraints();
 
     /**
      * Contains a pre-calculated grid (or null)
      */
     protected Grid currentGrid;
-    
+
     /**
      * Indicates that the corresponding SComponent should be at the
      * end of the row/column. This value is only for internal use and
      * cannot be used with addComponent.
      */
     public static final int LAST_CELL = -1;
-    
+
     /**
      * creats a new gridbag layout
      */
@@ -155,14 +151,14 @@ public class SGridBagLayout
      * Add the given component with the given constraints to the
      * layout.
      *
-     * @param comp the component to add
+     * @param comp       the component to add
      * @param constraint instance of GridBagConstraints or null
-     * @param index ignored
+     * @param index      ignored
      */
     public void addComponent(SComponent comp, Object constraint, int index) {
         // The grid has to be rebuilt
         currentGrid = null;
-        
+
         GridBagConstraints c = (GridBagConstraints) constraint;
         if (c == null) {
             c = defaultConstraints;
@@ -173,7 +169,7 @@ public class SGridBagLayout
             if (c.gridx != nextVertCol) {
                 nextVertRow = 0;
             }
-            
+
             if (c.gridy < 0) {
                 c.gridy = nextVertRow;
             }
@@ -198,8 +194,8 @@ public class SGridBagLayout
                 nextHorRow = 0;
                 nextVertRow = 0;
             } else {
-                nextHorRow = c.gridy+1;
-                nextVertRow = c.gridy+1;
+                nextHorRow = c.gridy + 1;
+                nextVertRow = c.gridy + 1;
             }
             nextHorCol = 0;
             nextVertCol = 0;
@@ -207,8 +203,8 @@ public class SGridBagLayout
             if (c.gridy == LAST_CELL) {
                 nextHorRow = 0;
                 nextVertRow = 0;
-                nextHorCol = c.gridx+1;
-                nextVertCol = c.gridx+1;
+                nextHorCol = c.gridx + 1;
+                nextVertCol = c.gridx + 1;
             } else {
                 nextHorCol = c.gridx;
                 nextVertCol = c.gridx;
@@ -227,7 +223,7 @@ public class SGridBagLayout
                         nextHorCol++;
                     }
                 }
-                
+
                 if (c.gridheight == GridBagConstraints.RELATIVE) {
                     nextVertRow = LAST_CELL;
                 } else if (c.gridheight == GridBagConstraints.REMAINDER) {
@@ -259,7 +255,7 @@ public class SGridBagLayout
     public void componentMoved(SComponentEvent e) {
         // ignored
     }
-    
+
     public void componentResized(SComponentEvent e) {
         // ignored
     }
@@ -268,7 +264,7 @@ public class SGridBagLayout
         // The grid has to be rebuilt
         currentGrid = null;
     }
-        
+
     /**
      * Set the amount of padding between cells
      *
@@ -325,7 +321,7 @@ public class SGridBagLayout
     public void setHeader(boolean b) {
         header = b;
     }
-    
+
     /**
      * Query if the first row will be printed as header
      *
@@ -364,13 +360,13 @@ public class SGridBagLayout
          * The total column-weight of a row(!). The cumulated weightx
          * of all cells of a row..
          */
-        public double [] colweight;
+        public double[] colweight;
 
         /**
          * The total row-weight of a column(!). The cumulated weighty
          * of all cells of a column..
          */
-        public double [] rowweight;
+        public double[] rowweight;
 
         /**
          * The first row that contains cells
@@ -386,41 +382,41 @@ public class SGridBagLayout
          * Initialize all members
          *
          * @param map the component-map with all
-         * component/constraint-pairs
+         *            component/constraint-pairs
          */
         public Grid() {
             cols = 0;
             rows = 0;
-        
+
             for (Iterator i = components.keySet().iterator();
-                 i.hasNext(); ) {
+                 i.hasNext();) {
                 SComponent comp = (SComponent) i.next();
                 if (!comp.isVisible()) {
                     continue;
                 }
-                
+
                 GridBagConstraints c = (GridBagConstraints)
-                    components.get(comp);
+                        components.get(comp);
                 if (c.gridx != SGridBagLayout.LAST_CELL) {
                     int col = c.gridx;
                     if (c.gridwidth == GridBagConstraints.RELATIVE) {
                         col++;
                     } else if (c.gridwidth > 1) {
-                        col += c.gridwidth-1;
+                        col += c.gridwidth - 1;
                     }
-                
+
                     int row = c.gridy;
                     if (c.gridheight == GridBagConstraints.RELATIVE) {
                         row++;
                     } else if (c.gridheight > 1) {
-                        row += c.gridheight-1;
+                        row += c.gridheight - 1;
                     }
-                
+
                     if (col >= cols) {
-                        cols = col+1;
+                        cols = col + 1;
                     }
                     if (row >= rows) {
-                        rows = row+1;
+                        rows = row + 1;
                     }
                 }
             }
@@ -428,67 +424,67 @@ public class SGridBagLayout
             grid = new SComponent[cols][rows];
             rowweight = new double[cols];
             colweight = new double[rows];
-        
+
             for (Iterator i = components.keySet().iterator();
-                 i.hasNext(); ) {
+                 i.hasNext();) {
                 SComponent comp = (SComponent) i.next();
                 if (!comp.isVisible()) {
                     continue;
                 }
                 GridBagConstraints c = (GridBagConstraints)
-                    components.get(comp);
+                        components.get(comp);
 
-                int maxcol = c.gridx+c.gridwidth;
-                int maxrow = c.gridy+c.gridheight;
+                int maxcol = c.gridx + c.gridwidth;
+                int maxrow = c.gridy + c.gridheight;
 
                 if (c.gridwidth == GridBagConstraints.RELATIVE) {
-                    maxcol = cols-1;
+                    maxcol = cols - 1;
                 } else if (c.gridwidth == GridBagConstraints.REMAINDER) {
                     maxcol = cols;
                 }
                 if (c.gridheight == GridBagConstraints.RELATIVE) {
-                    maxrow = rows-1;
+                    maxrow = rows - 1;
                 } else if (c.gridheight == GridBagConstraints.REMAINDER) {
                     maxrow = rows;
                 }
                 int col = c.gridx;
                 if (col == SGridBagLayout.LAST_CELL) {
-                    col = cols-1;
+                    col = cols - 1;
                     maxcol = cols;
                 }
                 int row = c.gridy;
                 if (row == SGridBagLayout.LAST_CELL) {
-                    row = rows-1;
+                    row = rows - 1;
                     maxrow = rows;
                 }
                 colweight[row] += c.weightx;
                 rowweight[col] += c.weighty;
 
                 for (; col < maxcol; col++) {
-                    for (int r=row; r < maxrow; r++) {
+                    for (int r = row; r < maxrow; r++) {
                         grid[col][r] = comp;
                     }
                 }
             }
-            for (firstRow=0; firstRow<rows; firstRow++) {
+            for (firstRow = 0; firstRow < rows; firstRow++) {
                 int col;
-                for (col=0; col<cols; col++) {
+                for (col = 0; col < cols; col++) {
                     if (grid[col][firstRow] != null) {
                         break;
                     }
                 }
-                if (col<cols) {
+                if (col < cols) {
                     break;
                 }
             }
-            for (firstCol=0; firstCol<cols; firstCol++) {
+            for (firstCol = 0; firstCol < cols; firstCol++) {
                 int row;
-                for (row=0; row<rows; row++) {
+                for (row = 0; row < rows; row++) {
                     if (grid[firstCol][row] != null) {
                         break;
                     }
                 }
-                if (row<rows) {
+                if (row < rows) {
                     break;
                 }
             }
@@ -498,6 +494,7 @@ public class SGridBagLayout
     /**
      * Build a grid from the current configuration. Make sure the
      * layout is not altered while using the Grid!
+     *
      * @return the Grid-instance
      */
     public Grid getGrid() {
@@ -506,10 +503,11 @@ public class SGridBagLayout
         }
         return currentGrid;
     }
-    
+
     /**
      * Retrieve the constraint of a SComponent. The constraint must
      * not be altered!
+     *
      * @param comp the component
      * @return the constraint or null if the component is unknown
      */
@@ -520,10 +518,4 @@ public class SGridBagLayout
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,57 +1,49 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
-
 
 
 import org.wings.*;
 import org.wings.session.WingsStatistics;
 import org.wings.util.TimeMeasure;
 
-import javax.swing.*;
 import java.io.FileWriter;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.awt.event.KeyEvent;
-import java.awt.event.ActionEvent;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class WingSet
-{
+public class WingSet {
     static final boolean SHOW_STATISTICS = false;
 
     static final ClassLoader cl = WingSet.class.getClassLoader();
-    private final static SIcon brushedMetal = 
-        new SURLIcon("../icons/brushedMetal.gif");
+    private final static SIcon brushedMetal =
+            new SURLIcon("../icons/brushedMetal.gif");
 
-    private final static SIcon JAVA_CUP_ICON = 
-        new SResourceIcon("org/wings/icons/JavaCup.gif");
+    private final static SIcon JAVA_CUP_ICON =
+            new SResourceIcon("org/wings/icons/JavaCup.gif");
 
-    private final static SIcon SMALL_COW_ICON = 
-        new SURLIcon("../icons/cowSmall.gif");
+    private final static SIcon SMALL_COW_ICON =
+            new SURLIcon("../icons/cowSmall.gif");
 
 
     static final long birthday = System.currentTimeMillis();
-    
+
     static FileWriter infoWriter;
 
     static final Timer timer = new Timer();
@@ -60,69 +52,68 @@ public class WingSet
     static long oldSessionCount = 0;
 
     static final TimerTask infoTask = new TimerTask() {
-            public void run() {
-                StringBuffer result = new StringBuffer();
-                long totalmem = Runtime.getRuntime().totalMemory();
-                long freemem = Runtime.getRuntime().freeMemory();
+        public void run() {
+            StringBuffer result = new StringBuffer();
+            long totalmem = Runtime.getRuntime().totalMemory();
+            long freemem = Runtime.getRuntime().freeMemory();
 
-                WingsStatistics stats = WingsStatistics.getStatistics();
+            WingsStatistics stats = WingsStatistics.getStatistics();
 
-                result.append(System.currentTimeMillis()).append(' ')
+            result.append(System.currentTimeMillis()).append(' ')
                     .append(stats.getUptime()).append(' ')
                     .append(stats.getOverallSessionCount()).append(' ')
-                    .append(stats.getOverallSessionCount()-oldSessionCount).append(' ')
+                    .append(stats.getOverallSessionCount() - oldSessionCount).append(' ')
                     .append(stats.getActiveSessionCount()).append(' ')
                     .append(stats.getAllocatedSessionCount()).append(' ')
                     .append(stats.getRequestCount()).append(' ')
-                    .append(stats.getRequestCount()-oldRequestCount).append(' ')
+                    .append(stats.getRequestCount() - oldRequestCount).append(' ')
                     .append(totalmem).append(' ')
                     .append(freemem).append(' ')
-                    .append(totalmem-freemem).append('\n');
+                    .append(totalmem - freemem).append('\n');
 
-                oldRequestCount = stats.getRequestCount();
-                oldSessionCount = stats.getOverallSessionCount();
+            oldRequestCount = stats.getRequestCount();
+            oldSessionCount = stats.getOverallSessionCount();
 
-                try {
-                    infoWriter.write(result.toString());
-                    infoWriter.flush();
-                } catch ( Exception ex) {
-                    ex.printStackTrace();
-                } // end of try-catch
-                
-            }
-        };
+            try {
+                infoWriter.write(result.toString());
+                infoWriter.flush();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } // end of try-catch
+
+        }
+    };
 
     static {
-        
-        if ( SHOW_STATISTICS ) {
 
-        try {
-            infoWriter = new FileWriter("/tmp/wingsmemory", false);
+        if (SHOW_STATISTICS) {
 
-            StringBuffer result = new StringBuffer();
-            result.append("timestamp").append(' ')
-                .append("uptime").append(' ')
-                .append("overall_sessions").append(' ')
-                .append("new_sessions").append(' ')
-                .append("active_sessions").append(' ')
-                .append("allocated_sessions").append(' ')
-                .append("overall_processed requests").append(' ')
-                .append("processed_requests").append(' ')
-                .append("total_memory").append(' ')
-                .append("free_memory").append(' ')
-                .append("used_memory").append('\n');
-            infoWriter.write(result.toString());
-            infoWriter.flush();
-        } catch ( Exception ex) {
-            ex.printStackTrace();
-        } // end of try-catch
-            
-        timer.scheduleAtFixedRate(infoTask,
-                                  0,
-                                  10*1000);
+            try {
+                infoWriter = new FileWriter("/tmp/wingsmemory", false);
+
+                StringBuffer result = new StringBuffer();
+                result.append("timestamp").append(' ')
+                        .append("uptime").append(' ')
+                        .append("overall_sessions").append(' ')
+                        .append("new_sessions").append(' ')
+                        .append("active_sessions").append(' ')
+                        .append("allocated_sessions").append(' ')
+                        .append("overall_processed requests").append(' ')
+                        .append("processed_requests").append(' ')
+                        .append("total_memory").append(' ')
+                        .append("free_memory").append(' ')
+                        .append("used_memory").append('\n');
+                infoWriter.write(result.toString());
+                infoWriter.flush();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } // end of try-catch
+
+            timer.scheduleAtFixedRate(infoTask,
+                    0,
+                    10 * 1000);
         }
     }
-
 
 
     private SFrame frame;
@@ -151,8 +142,7 @@ public class WingSet
                 SRootLayout layout = new SRootLayout(templateURL);
                 frame.setLayout(layout);
             }
-        }
-        catch ( java.io.IOException except ) {
+        } catch (java.io.IOException except) {
             except.printStackTrace();
         }
         
@@ -161,7 +151,7 @@ public class WingSet
         tab.setName("examples");
         // tab.setMaxTabsPerLine(9);
         tab.setTabPlacement(STabbedPane.TOP);
-		//tab.setBackgroundImage(brushedMetal);
+        //tab.setBackgroundImage(brushedMetal);
 
         tab.add(new WingsImage(), "wingS!");
         tab.add(new LabelExample(), "Label");
@@ -221,13 +211,7 @@ public class WingSet
             });
         */
 
-    }    
+    }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

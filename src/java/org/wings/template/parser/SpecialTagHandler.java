@@ -69,12 +69,23 @@
  *
  */
 
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.template.parser;
 
-import java.io.*;
-
-import javax.servlet.http.*;
-import javax.servlet.ServletConfig;
+import java.io.IOException;
+import java.io.InputStream;
 
 public interface SpecialTagHandler {
     /**
@@ -83,7 +94,7 @@ public interface SpecialTagHandler {
      * this class is registered for is found.
      * It gets the ServletConfiguration of the PageParser
      * servet and a PositionReader, placed after name of
-     * the current tag.<p> 
+     * the current tag.<p>
      * The <CODE>parseTag()</CODE> method is called <em>before</em>
      * any processing is done. Its purpose is to parse the area
      * this tag spans and probably read in parameters used at
@@ -92,20 +103,21 @@ public interface SpecialTagHandler {
      * area handled by this handler (for server side included
      * servlets, this would be <CODE>&lt;/SERVLET&gt;</CODE>).
      * For simple one-tag Handlers this is simply the tag passed
-     * to this method. If the Handler decides not to handle this tag, this 
+     * to this method. If the Handler decides not to handle this tag, this
      * method should return <CODE>null</CODE>.
-     * @param config    Servlet configuration
-     * @param input     The PositionReader, located after the Name token 
-     *                  of the Tag
-     * @param startPos  The Position parsing of this token began
-     * @param startTag  the SGMLTag found in the file.
+     *
+     * @param config   Servlet configuration
+     * @param input    The PositionReader, located after the Name token
+     *                 of the Tag
+     * @param startPos The Position parsing of this token began
+     * @param startTag the SGMLTag found in the file.
      */
     SGMLTag parseTag(ParseContext context,
-		     PositionReader input, 
-		     long startPos,
-		     SGMLTag startTag)
-	throws IOException;
-  
+                     PositionReader input,
+                     long startPos,
+                     SGMLTag startTag)
+            throws IOException;
+
     /**
      * Get start position of the area in the sourcefile this
      * handler processes.
@@ -113,23 +125,24 @@ public interface SpecialTagHandler {
      * of the <code>&lt;SpecialTag&gt;</code> within the inputfile.
      */
     long getTagStart();
-  
+
     /**
      * Get the length of the area in the sourcefile.
      * The area this handler processes is skipped in the inputfile.
      * Usually this represents the length of the single
-     * <code>&lt;SpecialTag&gt;</code> or the 
+     * <code>&lt;SpecialTag&gt;</code> or the
      * area <code>&lt;SpecialTag&gt;...&lt;/SpecialTag&gt;</code>
      */
     long getTagLength();
-  
+
     /**
      * actually perform the action associated with this tag.
-     * @exception Exception anything can happen .. and throw an Exception 
-     *            which is caught in PageParser
+     *
+     * @throws Exception anything can happen .. and throw an Exception
+     *                   which is caught in PageParser
      */
-    void executeTag (ParseContext context, InputStream input)
-	throws Exception;
+    void executeTag(ParseContext context, InputStream input)
+            throws Exception;
 }
 
 /* 

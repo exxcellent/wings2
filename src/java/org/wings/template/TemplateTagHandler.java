@@ -1,40 +1,35 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.template;
-
-import java.io.*;
-import java.util.Map;
-import java.util.Iterator;
-
-import javax.servlet.http.*;
-import javax.servlet.ServletConfig;
-
-import org.wings.template.parser.*;
 
 import org.wings.SComponent;
 import org.wings.STemplateLayout;
 import org.wings.io.Device;
+import org.wings.template.parser.ParseContext;
+import org.wings.template.parser.SpecialTagHandler;
+
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
- * A TemplateTagHandler 
+ * A TemplateTagHandler
  *
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
  * @version $Revision$
  */
-abstract class TemplateTagHandler implements SpecialTagHandler
-{
+abstract class TemplateTagHandler implements SpecialTagHandler {
     long startPos;
     long endPos;
     Map properties;
@@ -44,7 +39,7 @@ abstract class TemplateTagHandler implements SpecialTagHandler
      * Get start position of the area in the sourcefile this
      * handler processes.
      */
-    public long getTagStart () {
+    public long getTagStart() {
         return startPos;
     }
 
@@ -56,18 +51,18 @@ abstract class TemplateTagHandler implements SpecialTagHandler
      * Since we just have a single tag, this is just the area
      * this tag spans:
      */
-    public long getTagLength () {
+    public long getTagLength() {
         return endPos - startPos;
     }
 
     /**
      * actually perform the action associated with this tag.
-     * @exception Exception anything can happen .. and throw an Exception
-     *            which is caught in PageParser
+     *
+     * @throws Exception anything can happen .. and throw an Exception
+     *                   which is caught in PageParser
      */
     public void executeTag(ParseContext context, InputStream input)
-        throws Exception
-    {
+            throws Exception {
         TemplateParseContext tcontext = (TemplateParseContext) context;
         Device sink = tcontext.getDevice();
 
@@ -75,19 +70,18 @@ abstract class TemplateTagHandler implements SpecialTagHandler
          * get the component that is associtated with this name. This has
          * been set as Layout Manager Constraint.
          */
-        SComponent c = tcontext.getComponent (name);
+        SComponent c = tcontext.getComponent(name);
         if (c == null) {
-            sink.print ("<!-- Template: '" + name + "' Component not given -->");
-        }
-        else {
+            sink.print("<!-- Template: '" + name + "' Component not given -->");
+        } else {
             // set properties; the STemplateLayout knows how
             if (properties.size() > 0) {
-                PropertyManager propManager = 
-                    STemplateLayout.getPropertyManager(c.getClass());
+                PropertyManager propManager =
+                        STemplateLayout.getPropertyManager(c.getClass());
 
                 if (propManager != null) {
                     Iterator iter = properties.keySet().iterator();
-                    while ( iter.hasNext()) {
+                    while (iter.hasNext()) {
                         String key = (String) iter.next();
                         String value = (String) properties.get(key);
                         // System.out.println("set Property " + key + "=" +value + "  for " + name);
@@ -101,10 +95,4 @@ abstract class TemplateTagHandler implements SpecialTagHandler
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

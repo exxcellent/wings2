@@ -1,44 +1,44 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.template;
 
-import java.io.*;
-import java.util.*;
-import org.wings.template.parser.*;
+import org.wings.template.parser.ParseContext;
+import org.wings.template.parser.PositionReader;
+import org.wings.template.parser.SGMLTag;
+
+import java.io.IOException;
 
 /**
- * A TemplateTagHandler 
+ * A TemplateTagHandler
  *
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
  * @version $Revision$
  */
-public class SimpleTagHandler extends TemplateTagHandler
-{
+public class SimpleTagHandler extends TemplateTagHandler {
     /**
      * Parse special tag.
-     * @param config    Servlet configuration
-     * @param input     The PositionReader, located after the Name token of the Tag
-     * @param startPos  The Position parsing of this token began
-     * @param startTag  the SGMLTag found in the file.
+     *
+     * @param config   Servlet configuration
+     * @param input    The PositionReader, located after the Name token of the Tag
+     * @param startPos The Position parsing of this token began
+     * @param startTag the SGMLTag found in the file.
      */
     public SGMLTag parseTag(ParseContext context,
                             PositionReader input,
                             long startPosition,
                             SGMLTag tag)
-        throws IOException
-    {
+            throws IOException {
         /*
          * parse the full tag to get all parameters
          * (i.e. an optional 'format'-parameter)
@@ -58,7 +58,7 @@ public class SimpleTagHandler extends TemplateTagHandler
         /*
          * get required properties
          */
-        name = tag.value ("NAME", null);
+        name = tag.value("NAME", null);
         if (name == null)
             return null;
         
@@ -69,7 +69,7 @@ public class SimpleTagHandler extends TemplateTagHandler
         String type = tag.value("TYPE", null);
         if (type != null && "RADIO".equals(type.toUpperCase())) {
             String value = tag.value("VALUE", null);
-            if (value != null) 
+            if (value != null)
                 name = name + "=" + value;
         }
 
@@ -84,10 +84,4 @@ public class SimpleTagHandler extends TemplateTagHandler
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

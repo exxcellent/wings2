@@ -1,28 +1,30 @@
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.style;
 
 import org.wings.SFont;
 import org.wings.io.Device;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
+import java.awt.*;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class CSSStyleSheet
-    implements StyleSheet {
+        implements StyleSheet {
     private static final Map lengthMapping = new HashMap();
 
     static {
@@ -51,11 +53,11 @@ public class CSSStyleSheet
     }
 
     public Style getStyle(String name) {
-        return (Style)map.get(name);
+        return (Style) map.get(name);
     }
 
     public Style removeStyle(String name) {
-        Style style = (Style)map.remove(name);
+        Style style = (Style) map.remove(name);
         style.setSheet(null);
         return style;
     }
@@ -70,20 +72,20 @@ public class CSSStyleSheet
     public void write(Device out) throws IOException {
         Iterator iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry)iterator.next();
+            Map.Entry entry = (Map.Entry) iterator.next();
             /*
             out.print((String)entry.getKey());
             out.print(" { ");
             out.print(entry.getValue().toString());
             out.print(" }\n");
             */
-            ((Style)entry.getValue()).write(out);
+            ((Style) entry.getValue()).write(out);
         }
         out.flush();
     }
 
     public void read(InputStream is)
-        throws IOException {
+            throws IOException {
         Reader r = new BufferedReader(new InputStreamReader(is));
         CssParser parser = new CssParser();
         parser.parse(null, r, false, false);
@@ -123,20 +125,20 @@ public class CSSStyleSheet
          * If the vertical alignment is set to either superscirpt or
          * subscript we reduce the font size by 2 points.
          */
-        String vAlign = (String)a.get(Style.VERTICAL_ALIGN);
+        String vAlign = (String) a.get(Style.VERTICAL_ALIGN);
 
         if (vAlign != null) {
             if ((vAlign.indexOf("sup") >= 0) ||
-                (vAlign.indexOf("sub") >= 0)) {
+                    (vAlign.indexOf("sub") >= 0)) {
                 size -= 2;
             }
         }
 
-        String family = (String)a.get(Style.FONT_FAMILY);
+        String family = (String) a.get(Style.FONT_FAMILY);
         anyFontAttribute |= (family != null);
 
         int style = Font.PLAIN;
-        String weight = (String)a.get(Style.FONT_WEIGHT);
+        String weight = (String) a.get(Style.FONT_WEIGHT);
         if (weight == null)
             ;
         else if (weight.equals("bold")) {
@@ -153,7 +155,7 @@ public class CSSStyleSheet
         }
         anyFontAttribute |= (weight != null);
 
-        String styleValue = (String)a.get(Style.FONT_STYLE);
+        String styleValue = (String) a.get(Style.FONT_STYLE);
         if ((styleValue != null) && (styleValue.indexOf(Style.ITALIC) >= 0))
             style |= Font.ITALIC;
         anyFontAttribute |= (styleValue != null);
@@ -167,7 +169,7 @@ public class CSSStyleSheet
      * is specified.
      */
     private static int getFontSize(AttributeSet attr) {
-        String value = (String)attr.get(Style.FONT_SIZE);
+        String value = (String) attr.get(Style.FONT_SIZE);
         if (value == null)
             return -1;
         try {
@@ -197,12 +199,12 @@ public class CSSStyleSheet
         int length = value.length();
         if (length >= 2) {
             String units = value.substring(length - 2, length);
-            Float scale = (Float)lengthMapping.get(units);
+            Float scale = (Float) lengthMapping.get(units);
 
             if (scale != null) {
                 try {
                     return Float.valueOf(value.substring(0, length - 2)).floatValue() *
-                        scale.floatValue();
+                            scale.floatValue();
                 } catch (NumberFormatException nfe) {
                 }
             } else {
@@ -247,7 +249,7 @@ public class CSSStyleSheet
     }
 
     static Color getColor(AttributeSet a, String key) {
-        String cv = (String)a.get(key);
+        String cv = (String) a.get(key);
         if (cv != null) {
             return stringToColor(cv);
         }
@@ -394,7 +396,7 @@ public class CSSStyleSheet
 
         // Skip non-decimal chars
         while (index[0] < length && (aChar = string.charAt(index[0])) != '-' &&
-            !Character.isDigit(aChar) && aChar != '.') {
+                !Character.isDigit(aChar) && aChar != '.') {
             index[0]++;
         }
 
@@ -404,27 +406,27 @@ public class CSSStyleSheet
             index[0]++;
         }
         while (index[0] < length &&
-            Character.isDigit(string.charAt(index[0]))) {
+                Character.isDigit(string.charAt(index[0]))) {
             index[0]++;
         }
         if (index[0] < length && string.charAt(index[0]) == '.') {
             // Decimal value
             index[0]++;
             while (index[0] < length &&
-                Character.isDigit(string.charAt(index[0]))) {
+                    Character.isDigit(string.charAt(index[0]))) {
                 index[0]++;
             }
         }
         if (start != index[0]) {
             try {
                 float value = Float.parseFloat(string.substring
-                                               (start, index[0]));
+                        (start, index[0]));
 
                 if (index[0] < length && string.charAt(index[0]) == '%') {
                     index[0]++;
                     value = value * 255f / 100f;
                 }
-                return Math.min(255, Math.max(0, (int)value));
+                return Math.min(255, Math.max(0, (int) value));
             } catch (NumberFormatException nfe) {
                 // Treat as 0
             }
@@ -437,7 +439,7 @@ public class CSSStyleSheet
             return null;
         }
         if (cssString.startsWith("url(") &&
-            cssString.endsWith(")")) {
+                cssString.endsWith(")")) {
             cssString = cssString.substring(4, cssString.length() - 1);
         }
         // Absolute first
@@ -491,7 +493,7 @@ public class CSSStyleSheet
     }
 
     class CssParser
-        implements CSSParser.CSSParserCallback {
+            implements CSSParser.CSSParserCallback {
         /**
          * Parses the passed in CSS declaration into an AttributeSet.
          */
@@ -515,7 +517,7 @@ public class CSSStyleSheet
          * Parse the given CSS stream
          */
         public void parse(URL base, Reader r, boolean parseDeclaration, boolean isLink)
-            throws IOException {
+                throws IOException {
             this.base = base;
 //            this.isLink = isLink;
 //            this.parsingDeclaration = parseDeclaration;
@@ -595,7 +597,7 @@ public class CSSStyleSheet
         public void endRule() {
             int n = selectors.size();
             for (int i = 0; i < n; i++) {
-                String[] selector = (String[])selectors.get(i);
+                String[] selector = (String[]) selectors.get(i);
                 for (int j = selector.length - 1; j >= 0; --j) {
                     CSSStyleSheet.this.putStyle(new Style(selector[j], declaration));
                 }
@@ -606,14 +608,16 @@ public class CSSStyleSheet
 
         private void addSelector() {
             String[] selector = new String[selectorTokens.size()];
-            selector = (String[])selectorTokens.toArray(selector);
+            selector = (String[]) selectorTokens.toArray(selector);
             selectors.add(selector);
             selectorTokens.clear();
         }
 
         List selectors = new LinkedList();
         List selectorTokens = new LinkedList();
-        /** Name of the current property. */
+        /**
+         * Name of the current property.
+         */
         String propertyName;
         AttributeSet declaration = new AttributeSet();
         /** True if parsing a declaration, that is the Reader will not
@@ -621,16 +625,12 @@ public class CSSStyleSheet
         // boolean parsingDeclaration;
         /** True if the attributes are coming from a linked/imported style. */
 //        boolean isLink;
-        /** Where the CSS stylesheet lives. */
+        /**
+         * Where the CSS stylesheet lives.
+         */
         URL base;
         CSSParser parser = new CSSParser();
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

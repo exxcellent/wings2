@@ -53,98 +53,106 @@
  *
  */
 
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.template.parser;
 
-import java.io.Reader;
 import java.io.IOException;
+import java.io.Reader;
 
 /**
- * PositionReader can be asked for the 
+ * PositionReader can be asked for the
  * current position in the stream.
+ *
  * @author <a href="mailto:zeller@think.de">Henner Zeller</a>
  * @version $Revision$ $Date$
  */
-public class PositionReader 
-  extends Reader {
-  
-  private Reader reader = null;
-  private long position;
-  private long savePosition = -1;
+public class PositionReader
+        extends Reader {
 
-  public PositionReader (Reader r) {
-    this.reader = r;
-    position = 0;
-  }
+    private Reader reader = null;
+    private long position;
+    private long savePosition = -1;
 
-  /* ---- PositionReader ---- */
-  public long getPosition () {
-    return position;
-  }
+    public PositionReader(Reader r) {
+        this.reader = r;
+        position = 0;
+    }
 
-  /* ---- Implementation of Reader ---- */
+    /* ---- PositionReader ---- */
+    public long getPosition() {
+        return position;
+    }
 
-  public int read () 
-    throws IOException {
-    int c = reader.read();
-    if (c != -1) position++;
-    return c;
-  }
+    /* ---- Implementation of Reader ---- */
 
-  public int read (char cbuff[]) 
-    throws IOException {
-    int num = reader.read (cbuff);
-    if (num > 0) position += num;
-    return num;
-  }
+    public int read()
+            throws IOException {
+        int c = reader.read();
+        if (c != -1) position++;
+        return c;
+    }
 
-  public int read (char cbuff[], int off, int len)
-    throws IOException {
-    int num = reader.read (cbuff, off, len);
-    if (num > 0) position += num;
-    return num;
-  }
+    public int read(char cbuff[])
+            throws IOException {
+        int num = reader.read(cbuff);
+        if (num > 0) position += num;
+        return num;
+    }
 
-  public long skip (long n) 
-    throws IOException {
-    long skipped = reader.skip (n);
-    position += skipped;
-    return skipped;
-  }
+    public int read(char cbuff[], int off, int len)
+            throws IOException {
+        int num = reader.read(cbuff, off, len);
+        if (num > 0) position += num;
+        return num;
+    }
 
-  public boolean ready () 
-    throws IOException {
-    return reader.ready();
-  }
+    public long skip(long n)
+            throws IOException {
+        long skipped = reader.skip(n);
+        position += skipped;
+        return skipped;
+    }
 
-  public boolean markSupported () {
-    return reader.markSupported();
-  }
+    public boolean ready()
+            throws IOException {
+        return reader.ready();
+    }
 
-  public void mark (int readAheadLimit) 
-    throws IOException {
-    savePosition = position;
-    reader.mark (readAheadLimit);
-  }
+    public boolean markSupported() {
+        return reader.markSupported();
+    }
 
-  public void reset () 
-    throws IOException {
-    reader.reset();
-    // this should be noticed by the reader before
-    if (savePosition < 0)
-      throw new IOException ("mark() not set before");
-    position = savePosition;
-  }
+    public void mark(int readAheadLimit)
+            throws IOException {
+        savePosition = position;
+        reader.mark(readAheadLimit);
+    }
 
-  public void close ()
-    throws IOException {
-    reader.close();
-  }
+    public void reset()
+            throws IOException {
+        reader.reset();
+        // this should be noticed by the reader before
+        if (savePosition < 0)
+            throw new IOException("mark() not set before");
+        position = savePosition;
+    }
+
+    public void close()
+            throws IOException {
+        reader.close();
+    }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

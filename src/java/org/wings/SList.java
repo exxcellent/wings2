@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.plaf.ListCG;
@@ -42,7 +41,7 @@ import java.util.List;
  * many states of many components, all at once. And events should arise
  * first, after we set the new state of all components. So as a trade-off we
  * decided to use the setValueIsAdjusting in the ListSelectionModel as an
- * indicator, 
+ * indicator,
  * if components are consistent. That is, if you get an SelectionEvent with
  * getValueIsAdjusting true, you cannot be sure, that component states are
  * consistent, so don't use that events. But you will get an event without
@@ -50,22 +49,18 @@ import java.util.List;
  * problem, just use the selection events from the list itself, register your
  * listener at SList rather than at the ListSelectionModel...
  *
+ * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
+ * @version $Revision$
+ * @beaninfo attribute: isContainer false
  * @see javax.swing.ListModel
  * @see SDefaultListModel
  * @see javax.swing.ListSelectionModel
  * @see SListCellRenderer
- *
- * @beaninfo
- *   attribute: isContainer false
- *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
- * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SList
-    extends SComponent
-    implements Scrollable, LowLevelEventListener, ListDataListener
-{
+        extends SComponent
+        implements Scrollable, LowLevelEventListener, ListDataListener {
     public static final String SELECTOR_SELECTION = "SELECTION";
 
     /**
@@ -116,8 +111,7 @@ public class SList
     /**
      * Construct a SList that displays the elements in the specified model.
      */
-    public SList(ListModel dataModel)
-    {
+    public SList(ListModel dataModel) {
         if (dataModel == null) {
             throw new IllegalArgumentException("dataModel must not be null");
         }
@@ -133,16 +127,16 @@ public class SList
      * Construct a SList that displays the elements in the specified
      * array.
      */
-    public SList(final Object[] listData)
-    {
-        this ( new AbstractListModel() {
-                public int getSize() {
-                    return listData.length;
-                }
-                public Object getElementAt(int i) {
-                    return listData[i];
-                }
-            });
+    public SList(final Object[] listData) {
+        this(new AbstractListModel() {
+            public int getSize() {
+                return listData.length;
+            }
+
+            public Object getElementAt(int i) {
+                return listData[i];
+            }
+        });
     }
 
 
@@ -151,14 +145,15 @@ public class SList
      * Vector.
      */
     public SList(final List listData) {
-        this ( new AbstractListModel() {
-                public int getSize() {
-                    return listData.size();
-                }
-                public Object getElementAt(int i) {
-                    return listData.get(i);
-                }
-            });
+        this(new AbstractListModel() {
+            public int getSize() {
+                return listData.size();
+            }
+
+            public Object getElementAt(int i) {
+                return listData.get(i);
+            }
+        });
     }
 
 
@@ -166,13 +161,15 @@ public class SList
      * Constructs a SList with an empty model.
      */
     public SList() {
-        this ( new AbstractListModel() {
+        this(new AbstractListModel() {
             public int getSize() {
                 return 0;
             }
+
             public Object getElementAt(int i) {
                 return "No Data Model";
-            } } );
+            }
+        });
     }
 
     /**
@@ -189,10 +186,9 @@ public class SList
      * Sets the renderer that's used to write out each cell in the list.
      *
      * @param cellRenderer the SListCellRenderer that paints list cells
-     * @see #getCellRenderer
-     * @beaninfo
-     *       bound: true
+     * @beaninfo bound: true
      * description: The component used to draw the cells.
+     * @see #getCellRenderer
      */
     public void setCellRenderer(SListCellRenderer cellRenderer) {
         SListCellRenderer oldValue = this.cellRenderer;
@@ -203,14 +199,16 @@ public class SList
 
     /**
      * Return the background color.
+     *
      * @return the background color
      */
     public Color getSelectionBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((AttributeSet)dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
      * Set the foreground color.
+     *
      * @param color the new foreground color
      */
     public void setSelectionBackground(Color color) {
@@ -219,14 +217,16 @@ public class SList
 
     /**
      * Return the foreground color.
+     *
      * @return the foreground color
      */
     public Color getSelectionForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((AttributeSet)dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
      * Set the foreground color.
+     *
      * @param color the new foreground color
      */
     public void setSelectionForeground(Color color) {
@@ -235,6 +235,7 @@ public class SList
 
     /**
      * Set the font.
+     *
      * @param font the new font
      */
     public void setSelectionFont(SFont font) {
@@ -243,10 +244,11 @@ public class SList
 
     /**
      * Return the font.
+     *
      * @return the font
      */
     public SFont getSelectionFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((AttributeSet)dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
@@ -263,17 +265,16 @@ public class SList
     /**
      * Set the preferred number of rows in the list that can be displayed
      * without a scollbar.
-     * <p>
+     * <p/>
      * The default value of this property is 8.
      *
-     * @param visibleRowCount  the preferred number of visible rows
-     * @see #getVisibleRowCount
-     * @beaninfo
-     *       bound: true
+     * @param visibleRowCount the preferred number of visible rows
+     * @beaninfo bound: true
      * description: The preferred number of cells that can be displayed without a scrollbar.
+     * @see #getVisibleRowCount
      */
     public void setVisibleRowCount(int visibleRowCount) {
-        if ( this.visibleRowCount!=visibleRowCount ) {
+        if (this.visibleRowCount != visibleRowCount) {
             this.visibleRowCount = Math.max(0, visibleRowCount);
             reload();
             //firePropertyChange("visibleRowCount", oldValue, visibleRowCount);
@@ -299,17 +300,16 @@ public class SList
     /**
      * Sets the model
      *
-     * @param model  the ListModel that provides the list of items
-     * @see #getModel
-     * @beaninfo
-     *       bound: true
+     * @param model the ListModel that provides the list of items
+     * @beaninfo bound: true
      * description: The object that contains the data to be shownin the list.
+     * @see #getModel
      */
     public void setModel(ListModel model) {
         if (model == null) {
             throw new IllegalArgumentException("model must be non null");
         }
-        if ( isDifferent(dataModel, model) ) {
+        if (isDifferent(dataModel, model)) {
             clearSelection();
             dataModel = model;
             dataModel.addListDataListener(this);
@@ -331,9 +331,11 @@ public class SList
             public int getSize() {
                 return listData.length;
             }
+
             public Object getElementAt(int i) {
                 return listData[i];
-            } } );
+            }
+        });
     }
 
 
@@ -346,18 +348,19 @@ public class SList
      */
     public void setListData(final List listData) {
         setModel(new AbstractListModel() {
-                public int getSize() {
-                    return listData.size();
-                }
-                public Object getElementAt(int i) {
-                    return listData.get(i);
-                }
-            });
+            public int getSize() {
+                return listData.size();
+            }
+
+            public Object getElementAt(int i) {
+                return listData.get(i);
+            }
+        });
     }
 
     /**
      * creates the default selection model. It uses the swing
-     * DefaultListSelectionModel, and wraps some methods to support 
+     * DefaultListSelectionModel, and wraps some methods to support
      * {@link SConstants#NO_SELECTION}
      */
     protected SListSelectionModel createSelectionModel() {
@@ -366,12 +369,12 @@ public class SList
 
 
     /**
-     * Returns the current selection model. If selection mode is 
+     * Returns the current selection model. If selection mode is
      * {@link SConstants#NO_SELECTION} it return <em>null</em>
      *
-     * @return the ListSelectionModel that implements list selections. 
-     * If selection mode is {@link SConstants#NO_SELECTION} it return
-     * <em>null</em> 
+     * @return the ListSelectionModel that implements list selections.
+     *         If selection mode is {@link SConstants#NO_SELECTION} it return
+     *         <em>null</em>
      * @see #setSelectionModel
      * @see ListSelectionModel
      */
@@ -389,8 +392,7 @@ public class SList
      * @see EventListenerList
      */
     protected void fireSelectionValueChanged(int firstIndex, int lastIndex,
-                                             boolean isAdjusting)
-    {
+                                             boolean isAdjusting) {
         Object[] listeners = getListenerList();
         ListSelectionEvent e = null;
 
@@ -398,9 +400,9 @@ public class SList
             if (listeners[i] == ListSelectionListener.class) {
                 if (e == null) {
                     e = new ListSelectionEvent(this, firstIndex, lastIndex,
-                                               isAdjusting);
+                            isAdjusting);
                 }
-                ((ListSelectionListener)listeners[i+1]).valueChanged(e);
+                ((ListSelectionListener) listeners[i + 1]).valueChanged(e);
             }
         }
     }
@@ -410,14 +412,13 @@ public class SList
      * A handler that forwards ListSelectionEvents from the selectionModel
      * to the SList ListSelectionListeners.
      */
-    private final class ListSelectionHandler 
-        implements ListSelectionListener, Serializable 
-    {
+    private final class ListSelectionHandler
+            implements ListSelectionListener, Serializable {
 
         public void valueChanged(ListSelectionEvent e) {
             fireSelectionValueChanged(e.getFirstIndex(),
-                                      e.getLastIndex(),
-                                      e.getValueIsAdjusting());
+                    e.getLastIndex(),
+                    e.getValueIsAdjusting());
             reload();
         }
     }
@@ -457,12 +458,11 @@ public class SList
      * Returns an array of all the <code>ListSelectionListener</code>s added
      * to this JList with addListSelectionListener().
      *
-     * @return all of the ListSelectionListener added 
+     * @return all of the ListSelectionListener added
      * @since 1.4
      */
     public ListSelectionListener[] getListSelectionListeners() {
-        return (ListSelectionListener[])getListeners(
-                ListSelectionListener.class);
+        return (ListSelectionListener[]) getListeners(ListSelectionListener.class);
     }
 
 
@@ -470,10 +470,9 @@ public class SList
      * Set the selectionModel for the list.
      * The selection model keeps track of which items are selected.
      *
-     * @see #getSelectionModel
-     * @beaninfo
-     *       bound: true
+     * @beaninfo bound: true
      * description: The selection model, recording which cells are selected.
+     * @see #getSelectionModel
      */
     public void setSelectionModel(SListSelectionModel selectionModel) {
         if (selectionModel == null) {
@@ -494,18 +493,16 @@ public class SList
      * Allow / permit multiple selection
      * <ul>
      * <li> <code>SINGLE_SELECTION</code>
-     *   Only one list index can be selected at a time.
+     * Only one list index can be selected at a time.
      * <li> <code>MULTIPLE_INTERVAL_SELECTION</code>
-     *   Multiple items can be selected.
+     * Multiple items can be selected.
      * </ul>
      *
      * @param selectionMode single or multiple selections
-     *
+     * @beaninfo description: The selection mode
+     * enum: SINGLE_SELECTION            ListSelectionModel.SINGLE_SELECTION
+     * MULTIPLE_INTERVAL_SELECTION ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
      * @see #getSelectionMode
-     * @beaninfo
-     * description: The selection mode
-     *        enum: SINGLE_SELECTION            ListSelectionModel.SINGLE_SELECTION
-     *              MULTIPLE_INTERVAL_SELECTION ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
      */
     public void setSelectionMode(int selectionMode) {
         selectionModel.setSelectionMode(selectionMode);
@@ -513,6 +510,7 @@ public class SList
 
     /**
      * Returns whether single-item or multiple-item selections are allowed.
+     *
      * @return The value of the selectionMode property.
      * @see #setSelectionMode
      */
@@ -535,12 +533,11 @@ public class SList
 
     /**
      * @return The index that most recently ended a interval selection.
+     * @beaninfo description: The lead selection index.
      * @see ListSelectionModel#getLeadSelectionIndex
      * @see #addSelectionInterval
      * @see #setSelectionInterval
      * @see #addListSelectionListener
-     * @beaninfo
-     * description: The lead selection index.
      */
     public int getLeadSelectionIndex() {
         return getSelectionModel().getLeadSelectionIndex();
@@ -604,7 +601,7 @@ public class SList
 
     /**
      * @param anchor The first index to select
-     * @param lead The last index to select
+     * @param lead   The last index to select
      * @see ListSelectionModel#setSelectionInterval
      * @see #addSelectionInterval
      * @see #removeSelectionInterval
@@ -617,7 +614,7 @@ public class SList
 
     /**
      * @param anchor The first index to add to the selection
-     * @param lead The last index to add to the selection
+     * @param lead   The last index to add to the selection
      * @see ListSelectionModel#addSelectionInterval
      * @see #setSelectionInterval
      * @see #removeSelectionInterval
@@ -674,9 +671,9 @@ public class SList
             return new int[0];
         }
 
-        int[] rvTmp = new int[1+ (iMax - iMin)];
+        int[] rvTmp = new int[1 + (iMax - iMin)];
         int n = 0;
-        for(int i = iMin; i <= iMax; i++) {
+        for (int i = iMin; i <= iMax; i++) {
             if (sm.isSelectedIndex(i)) {
                 rvTmp[n++] = i;
             }
@@ -691,11 +688,10 @@ public class SList
      * Select a single cell.
      *
      * @param index The index of the one cell to select
+     * @beaninfo description: The index of the selected cell.
      * @see ListSelectionModel#setSelectionInterval
      * @see #isSelectedIndex
      * @see #addListSelectionListener
-     * @beaninfo
-     * description: The index of the selected cell.
      */
     public void setSelectedIndex(int index) {
         getSelectionModel().setSelectionInterval(index, index);
@@ -713,7 +709,7 @@ public class SList
     public void setSelectedIndices(int[] indices) {
         ListSelectionModel sm = getSelectionModel();
         sm.clearSelection();
-        for(int i = 0; i < indices.length; i++) {
+        for (int i = 0; i < indices.length; i++) {
             sm.addSelectionInterval(indices[i], indices[i]);
         }
     }
@@ -722,7 +718,7 @@ public class SList
     /**
      * Return the values of the selected cells.
      * Returns only the selected elements which are in the model.
-     * If the selection model indices a selection outside the the datamodel it is ignored 
+     * If the selection model indices a selection outside the the datamodel it is ignored
      *
      * @return the selected values
      * @see #isSelectedIndex
@@ -740,10 +736,10 @@ public class SList
             return new Object[0];
         }
 
-        Object[] rvTmp = new Object[1+ (iMax - iMin)];
+        Object[] rvTmp = new Object[1 + (iMax - iMin)];
         int n = 0;
-        for(int i = iMin; i <= iMax; i++) {
-            if (sm.isSelectedIndex(i) && i<dm.getSize() ) {
+        for (int i = iMin; i <= iMax; i++) {
+            if (sm.isSelectedIndex(i) && i < dm.getSize()) {
                 rvTmp[n++] = dm.getElementAt(i);
             }
         }
@@ -783,16 +779,16 @@ public class SList
     /**
      * Selects the specified object.
      *
-     * @param anObject      the Object to be selected     
+     * @param anObject the Object to be selected
      */
     public void setSelectedValue(Object anObject) {
-        if(anObject == null)
+        if (anObject == null)
             setSelectedIndex(-1);
-        else if(!anObject.equals(getSelectedValue())) {
-            int i,c;
+        else if (!anObject.equals(getSelectedValue())) {
+            int i, c;
             ListModel dm = getModel();
-            for(i=0,c=dm.getSize();i<c;i++)
-                if(anObject.equals(dm.getElementAt(i))){
+            for (i = 0, c = dm.getSize(); i < c; i++)
+                if (anObject.equals(dm.getElementAt(i))) {
                     setSelectedIndex(i);
                     return;
                 }
@@ -814,7 +810,7 @@ public class SList
      * @param t the type
      */
     public void setType(String t) {
-        if ( t != null )
+        if (t != null)
             type = t;
         else
             type = SConstants.UNORDERED_LIST;
@@ -852,11 +848,10 @@ public class SList
      * <code>null</code> is default style.
      */
     public void setType(String[] t) {
-        if ( t == null ) {
-            setType( (String) null );
-            setOrderType( null );
-        }
-        else if ( t.length == 2 ) {
+        if (t == null) {
+            setType((String) null);
+            setOrderType(null);
+        } else if (t.length == 2) {
             setType(t[0]);
             setOrderType(t[1]);
         }
@@ -864,9 +859,6 @@ public class SList
 
     /**
      * <li start="...">
-     * TODO: documentation
-     *
-     * @param s
      */
     public void setStart(int s) {
         start = s;
@@ -874,8 +866,6 @@ public class SList
 
     /**
      * <li start="...">
-     *
-     * @return
      */
     public int getStart() {
         return start;
@@ -911,17 +901,17 @@ public class SList
         if (getShowAsFormComponent()) {
 
             ArrayList selectedIndices = new ArrayList();
-            for ( int i=0; i<values.length; i++ ) {
+            for (int i = 0; i < values.length; i++) {
 
 
-                if ( values[i].length()<2 ) continue; // false format
+                if (values[i].length() < 2) continue; // false format
 
                 String indexString = values[i].substring(1);
                 try {
                     int index = Integer.parseInt(indexString);
                     
                     // in a form all parameters are select parameters...
-                    if ( values[i].charAt(0)=='a' ) {
+                    if (values[i].charAt(0) == 'a') {
                         selectedIndices.add(new Integer(index));
                         addSelectionInterval(index, index);
                     }
@@ -931,26 +921,26 @@ public class SList
             }
             // remove all selected indices, which are not explicitely selected
             // by a parameter
-            for ( int i=0; i<getModel().getSize(); i++ ) {
-                if ( isSelectedIndex(i) && 
-                     !selectedIndices.contains(new Integer(i)) ) {
-                        removeSelectionInterval(i, i);
+            for (int i = 0; i < getModel().getSize(); i++) {
+                if (isSelectedIndex(i) &&
+                        !selectedIndices.contains(new Integer(i))) {
+                    removeSelectionInterval(i, i);
                 }
             }
         } else {
 
-            for ( int i=0; i<values.length; i++ ) {
+            for (int i = 0; i < values.length; i++) {
 
-                if ( values[i].length()<2 ) continue; // false format
+                if (values[i].length() < 2) continue; // false format
 
                 // first char is select/deselect operator
                 String indexString = values[i].substring(1);
                 try {
                     int index = Integer.parseInt(indexString);
-                    
-                    if ( values[i].charAt(0)=='a' ) {
+
+                    if (values[i].charAt(0) == 'a') {
                         addSelectionInterval(index, index);
-                    } else if ( values[i].charAt(0)=='r' ) {
+                    } else if (values[i].charAt(0) == 'r') {
                         removeSelectionInterval(index, index);
                     } // else ignore, this is not the correct format...
                 } catch (Exception ex) {
@@ -978,10 +968,11 @@ public class SList
 
     /**
      * Set the visible viewport size.
+     *
      * @param d the visible viewport size
      */
     public void setViewportSize(Rectangle d) {
-        if ( isDifferent(viewport, d) ) {
+        if (isDifferent(viewport, d)) {
             viewport = d;
             reload();
         }
@@ -1015,19 +1006,12 @@ public class SList
     // do not initalize with null!
     private SCellRendererPane cellRendererPane = new SCellRendererPane();
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public SCellRendererPane getCellRendererPane() {
         return cellRendererPane;
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     public void removeCellRendererPane() {
         cellRendererPane.setParent(null);
         cellRendererPane = null;
@@ -1038,8 +1022,8 @@ public class SList
     }
 
     public String getToggleSelectionParameter(int index) {
-        return isSelectedIndex(index) ? getDeselectionParameter(index) : 
-            getSelectionParameter(index);
+        return isSelectedIndex(index) ? getDeselectionParameter(index) :
+                getSelectionParameter(index);
     }
 
     public String getSelectionParameter(int index) {
@@ -1050,28 +1034,23 @@ public class SList
         return "r" + Integer.toString(index);
     }
 
-    /****
-     * Changes of the List Model should reflect in a reload if possible 
-     **/
-    
+    /**
+     * *
+     * Changes of the List Model should reflect in a reload if possible
+     */
+
     public void contentsChanged(javax.swing.event.ListDataEvent e) {
-      reload();
+        reload();
     }
-    
+
     public void intervalAdded(javax.swing.event.ListDataEvent e) {
-      reload();
+        reload();
     }
-    
+
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
-      reload();
+        reload();
     }
-    
+
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

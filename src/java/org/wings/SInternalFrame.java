@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.event.SInternalFrameEvent;
@@ -23,9 +22,8 @@ import org.wings.plaf.InternalFrameCG;
  * @version $Revision$
  */
 public class SInternalFrame
-    extends SRootContainer
-    implements LowLevelEventListener
-{
+        extends SRootContainer
+        implements LowLevelEventListener {
     private boolean iconifyable = true;
     private boolean maximizable = true;
     private boolean closable = true;
@@ -45,18 +43,21 @@ public class SInternalFrame
     public void setIconifyable(boolean v) {
         reloadIfChange(iconifyable, v);
     }
+
     public boolean isIconifyable() { return iconifyable; }
 
     public void setMaximizable(boolean v) {
         maximizable = v;
         reloadIfChange(maximizable, v);
     }
+
     public boolean isMaximizable() { return maximizable; }
 
     public void setClosable(boolean v) {
         closable = v;
         reloadIfChange(closable, v);
     }
+
     public boolean isClosable() { return closable; }
 
     public void setIconified(boolean v) {
@@ -69,6 +70,7 @@ public class SInternalFrame
                 setMaximized(false);
         }
     }
+
     public boolean isIconified() { return iconified; }
 
     public void setMaximized(boolean v) {
@@ -81,6 +83,7 @@ public class SInternalFrame
                 setIconified(false);
         }
     }
+
     public boolean isMaximized() { return maximized; }
 
     public void setClosed(boolean v) {
@@ -90,10 +93,11 @@ public class SInternalFrame
         if (old != closed)
             reload();
     }
+
     public boolean isClosed() { return closed; }
 
     public void setIcon(SIcon i) {
-        if ( i!=icon || i!=null && !i.equals(icon) ) {
+        if (i != icon || i != null && !i.equals(icon)) {
             icon = i;
             reload();
         }
@@ -107,7 +111,7 @@ public class SInternalFrame
         String oldTitle = title;
         title = t;
         if ((title == null && oldTitle != null) ||
-            (title != null && !title.equals(oldTitle)))
+                (title != null && !title.equals(oldTitle)))
             reload();
     }
 
@@ -116,7 +120,7 @@ public class SInternalFrame
     }
 
     public void dispose() {
-        SDesktopPane desktop = (SDesktopPane)getParent();
+        SDesktopPane desktop = (SDesktopPane) getParent();
         desktop.remove(this);
     }
 
@@ -152,28 +156,28 @@ public class SInternalFrame
         super.processLowLevelEvent(action, values);
 
         switch (new Integer(values[0]).intValue()) {
-        case SInternalFrameEvent.INTERNAL_FRAME_CLOSED:
-            setClosed(true);
-            break;
+            case SInternalFrameEvent.INTERNAL_FRAME_CLOSED:
+                setClosed(true);
+                break;
 
-        case SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED:
-            setIconified(true);
-            break;
+            case SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED:
+                setIconified(true);
+                break;
 
-        case SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED:
-            setIconified(false);
-            break;
+            case SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED:
+                setIconified(false);
+                break;
 
-        case SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED:
-            setMaximized(true);
-            break;
+            case SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED:
+                setMaximized(true);
+                break;
 
-        case SInternalFrameEvent.INTERNAL_FRAME_UNMAXIMIZED:
-            setMaximized(false);
-            break;
+            case SInternalFrameEvent.INTERNAL_FRAME_UNMAXIMIZED:
+                setMaximized(false);
+                break;
 
-        default:
-            throw new RuntimeException("unknown id: " + values[0]);
+            default:
+                throw new RuntimeException("unknown id: " + values[0]);
         }
 
         event = new SInternalFrameEvent(this, new Integer(values[0]).intValue());
@@ -187,30 +191,30 @@ public class SInternalFrame
         Object[] listeners = getListenerList();
         // Process the listeners last to first, notifying
         // those that are interested in this event
-        for (int i = listeners.length-2; i>=0; i-=2) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == SInternalFrameListener.class) {
                 SInternalFrameListener listener;
-                listener = (SInternalFrameListener) listeners[i+1];
+                listener = (SInternalFrameListener) listeners[i + 1];
                 switch (event.getID()) {
-                case SInternalFrameEvent.INTERNAL_FRAME_CLOSED:
-                    listener.internalFrameClosed(event);
-                    break;
-                    
-                case SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED:
-                    listener.internalFrameIconified(event);
-                    break;
-                    
-                case SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED:
-                    listener.internalFrameDeiconified(event);
-                    break;
-                    
-                case SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED:
-                    listener.internalFrameMaximized(event);
-                    break;
-                    
-                case SInternalFrameEvent.INTERNAL_FRAME_UNMAXIMIZED:
-                    listener.internalFrameUnmaximized(event);
-                    break;
+                    case SInternalFrameEvent.INTERNAL_FRAME_CLOSED:
+                        listener.internalFrameClosed(event);
+                        break;
+
+                    case SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED:
+                        listener.internalFrameIconified(event);
+                        break;
+
+                    case SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED:
+                        listener.internalFrameDeiconified(event);
+                        break;
+
+                    case SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED:
+                        listener.internalFrameMaximized(event);
+                        break;
+
+                    case SInternalFrameEvent.INTERNAL_FRAME_UNMAXIMIZED:
+                        listener.internalFrameUnmaximized(event);
+                        break;
                 }
             }
         }
@@ -227,10 +231,4 @@ public class SInternalFrame
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

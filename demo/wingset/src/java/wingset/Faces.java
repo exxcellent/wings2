@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
 
 import org.wings.*;
@@ -24,28 +23,25 @@ import java.util.Iterator;
 import java.util.Random;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class Faces
-    extends WingSetPane
-{
+        extends WingSetPane {
     static final ClassLoader cl = WingSet.class.getClassLoader();
-    static final SIcon sel = 
-        new SURLIcon("../icons/RadioButtonSelectedIcon.gif");
-    static final SIcon nsel = 
-        new SURLIcon("../icons/RadioButtonIcon.gif");
-    static final SIcon pressed = 
-        new SURLIcon("../icons/RadioButtonPressedIcon.gif");
-    static final SIcon rollsel = 
-        new SURLIcon("../icons/RadioButtonRolloverSelectedIcon.gif");
-    static final SIcon rollnsel = 
-        new SURLIcon("../icons/RadioButtonRolloverIcon.gif");
+    static final SIcon sel =
+            new SURLIcon("../icons/RadioButtonSelectedIcon.gif");
+    static final SIcon nsel =
+            new SURLIcon("../icons/RadioButtonIcon.gif");
+    static final SIcon pressed =
+            new SURLIcon("../icons/RadioButtonPressedIcon.gif");
+    static final SIcon rollsel =
+            new SURLIcon("../icons/RadioButtonRolloverSelectedIcon.gif");
+    static final SIcon rollnsel =
+            new SURLIcon("../icons/RadioButtonRolloverIcon.gif");
 
     static final Face henner = new Face("Henner");
-    static final Face armin  = new Face("Armin");
+    static final Face armin = new Face("Armin");
     static final Face holger = new Face("Holger");
 
     static final Random random = new Random();
@@ -71,12 +67,12 @@ public class Faces
     }
 
     public SComponent createSwitcher() {
-        nameBorder = new SEmptyBorder(10,10,10,10);
+        nameBorder = new SEmptyBorder(10, 10, 10, 10);
 
 
         faces = new ArrayList();
 
-        layout = new SGridLayout(4, faces.size()+1);
+        layout = new SGridLayout(4, faces.size() + 1);
         layout.setCellPadding(0);
         layout.setCellSpacing(0);
         facePanel = new SPanel(layout);
@@ -91,10 +87,10 @@ public class Faces
         SForm shuffleForm = new SForm();
         SButton shuffleButton = new SButton("Shuffle");
         shuffleButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-		    shuffle();
-                }
-            });
+            public void actionPerformed(ActionEvent e) {
+                shuffle();
+            }
+        });
         shuffleForm.add(shuffleButton);
 
         facePanel.add(shuffleForm);
@@ -104,27 +100,27 @@ public class Faces
 
         hairGroup = new SButtonGroup();
         hairGroup.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    int index = Integer.parseInt(e.getActionCommand());
-                    hair.setIcon(getFace(index).hair);
-                }
-            });
+            public void actionPerformed(ActionEvent e) {
+                int index = Integer.parseInt(e.getActionCommand());
+                hair.setIcon(getFace(index).hair);
+            }
+        });
 
         eyeGroup = new SButtonGroup();
         eyeGroup.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    int index = Integer.parseInt(e.getActionCommand());
-                    eye.setIcon(getFace(index).eyes);
-                }
-            });
+            public void actionPerformed(ActionEvent e) {
+                int index = Integer.parseInt(e.getActionCommand());
+                eye.setIcon(getFace(index).eyes);
+            }
+        });
 
         mouthGroup = new SButtonGroup();
         mouthGroup.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    int index = Integer.parseInt(e.getActionCommand());
-                    mouth.setIcon(getFace(index).mouth);
-                }
-            });
+            public void actionPerformed(ActionEvent e) {
+                int index = Integer.parseInt(e.getActionCommand());
+                mouth.setIcon(getFace(index).mouth);
+            }
+        });
 
         addFace(henner);
         addFace(armin);
@@ -143,9 +139,9 @@ public class Faces
 
     protected void shuffle(SButtonGroup g) {
         int selIndex = getRandomFaceIndex();
-        for ( Iterator iter=g.iterator(); iter.hasNext(); ) {
-            if ( selIndex==0 ) {
-                g.setSelected((SRadioButton)iter.next(), true);
+        for (Iterator iter = g.iterator(); iter.hasNext();) {
+            if (selIndex == 0) {
+                g.setSelected((SRadioButton) iter.next(), true);
                 return;
             }
             iter.next();
@@ -154,18 +150,18 @@ public class Faces
     }
 
     protected Face getFace(int index) {
-        return (Face)faces.get(index);
+        return (Face) faces.get(index);
     }
 
     public void addFace(Face f) {
-        if ( faces.size()>maxFaces ) 
+        if (faces.size() > maxFaces)
             return;
 
-        layout.setColumns(faces.size()+2);
+        layout.setColumns(faces.size() + 2);
 
         SButton name = new SButton(f.name);
         name.setBorder(nameBorder);
-        facePanel.add(name, faces.size() + 0*(faces.size()+2));
+        facePanel.add(name, faces.size() + 0 * (faces.size() + 2));
 
         final int faceNumber = faces.size();
         // hair
@@ -173,22 +169,22 @@ public class Faces
         decorateButton(hair);
         hair.setActionCommand("" + faceNumber);
         hairGroup.add(hair);
-        facePanel.add(hair, faces.size() + 1*(faces.size()+2));
+        facePanel.add(hair, faces.size() + 1 * (faces.size() + 2));
 
         // eye
         final SRadioButton eye = new SRadioButton();
         decorateButton(eye);
         eye.setActionCommand("" + faceNumber);
         eyeGroup.add(eye);
-        facePanel.add(eye, faces.size() + 2*(faces.size()+2));
+        facePanel.add(eye, faces.size() + 2 * (faces.size() + 2));
         
         // mouth
         final SRadioButton mouth = new SRadioButton();
         decorateButton(mouth);
         mouth.setActionCommand("" + faceNumber);
         mouthGroup.add(mouth);
-        facePanel.add(mouth, faces.size() + 3*(faces.size()+2));
-        
+        facePanel.add(mouth, faces.size() + 3 * (faces.size() + 2));
+
         faces.add(f);
         
         /*
@@ -196,12 +192,12 @@ public class Faces
          * that Face.
          */
         name.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    hairGroup.setSelected(hair, true);
-                    eyeGroup.setSelected(eye, true);
-                    mouthGroup.setSelected(mouth, true);
-                }
-            });
+            public void actionPerformed(ActionEvent e) {
+                hairGroup.setSelected(hair, true);
+                eyeGroup.setSelected(eye, true);
+                mouthGroup.setSelected(mouth, true);
+            }
+        });
 
     }
 
@@ -216,7 +212,7 @@ public class Faces
     }
 
     int getRandomFaceIndex() {
-        synchronized ( random ) {
+        synchronized (random) {
             return random.nextInt(faces.size());
         }
     }
@@ -245,10 +241,4 @@ public class Faces
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

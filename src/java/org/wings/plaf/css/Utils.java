@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -29,7 +29,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public final class Utils
-    extends org.wings.plaf.Utils {
+        extends org.wings.plaf.Utils {
 
     final static char[] hexDigits = {
         '0', '1', '2', '3', '4', '5',
@@ -43,13 +43,12 @@ public final class Utils
      * Renders a container
      */
     public static void renderContainer(Device d, SContainer c)
-        throws IOException {
+            throws IOException {
         SLayoutManager layout = c.getLayout();
 
         if (layout != null) {
             layout.write(d);
-        }
-        else {
+        } else {
             for (int i = 0; i < c.getComponentCount(); i++) {
                 c.getComponent(i).write(d);
             }
@@ -57,7 +56,7 @@ public final class Utils
     }
 
     public static void writeEvents(Device d, SComponent c)
-        throws IOException {
+            throws IOException {
         ScriptListener[] listeners = c.getScriptListeners();
         if (listeners.length > 0) {
             Map eventScripts = new HashMap();
@@ -67,25 +66,25 @@ public final class Utils
                 String eventScriptCode = script.getCode();
 
                 if (event == null
-                    || event.length() == 0
-                    || eventScriptCode == null
-                    || eventScriptCode.length() == 0) {
+                        || event.length() == 0
+                        || eventScriptCode == null
+                        || eventScriptCode.length() == 0) {
                     continue;
                 }
 
                 if (eventScripts.containsKey(event)) {
-                    String savedEventScriptCode = (String)eventScripts.get(event);
+                    String savedEventScriptCode = (String) eventScripts.get(event);
                     eventScriptCode = savedEventScriptCode
-                        + (savedEventScriptCode.trim().endsWith(";") ? "" : ";")
-                        + eventScriptCode;
+                            + (savedEventScriptCode.trim().endsWith(";") ? "" : ";")
+                            + eventScriptCode;
                 }
                 eventScripts.put(event, eventScriptCode);
             }
 
             Iterator it = eventScripts.keySet().iterator();
             while (it.hasNext()) {
-                String event = (String)it.next();
-                String code = (String)eventScripts.get(event);
+                String event = (String) it.next();
+                String code = (String) eventScripts.get(event);
                 d.print(" ");
                 d.print(event);
                 d.print("=\"");
@@ -137,7 +136,7 @@ public final class Utils
     final static byte[] VALIGN_BASELINE = " valign=\"baseline\"".getBytes();
 
     public static void printTableHorizontalAlignment(Device d, int align)
-        throws IOException {
+            throws IOException {
         switch (align) {
             case SConstants.NO_ALIGN:
             case SConstants.LEFT:
@@ -156,7 +155,7 @@ public final class Utils
     }
 
     public static void printTableVerticalAlignment(Device d, int align)
-        throws IOException {
+            throws IOException {
         switch (align) {
             case SConstants.NO_ALIGN:
             case SConstants.CENTER:
@@ -174,7 +173,7 @@ public final class Utils
     }
 
     public static void printTableCellAlignment(Device d, SComponent c)
-        throws IOException {
+            throws IOException {
         printTableHorizontalAlignment(d, c.getHorizontalAlignment());
         printTableVerticalAlignment(d, c.getVerticalAlignment());
     }
@@ -195,7 +194,7 @@ public final class Utils
     }
 
     public static void writeAttributes(Device d, SComponent component)
-        throws IOException {
+            throws IOException {
 
         java.awt.Color fgColor = component.getForeground();
         java.awt.Color bgcolor = component.getBackground();
@@ -223,7 +222,8 @@ public final class Utils
         }
     }
 
-    public static void writeIconTextCompound(Device d, String icon, String text, int horizontal, int vertical) throws IOException {
+    public static void writeIconTextCompound(Device d, String icon, String text, int horizontal, int vertical)
+            throws IOException {
         if (icon == null && text != null)
             d.print(text);
         else if (icon != null && text == null)
@@ -235,31 +235,28 @@ public final class Utils
 
             d.print("<table>");
             if (vertical != TOP && horizontal == LEFT ||
-                vertical != BOTTOM && horizontal == RIGHT) {
+                    vertical != BOTTOM && horizontal == RIGHT) {
                 d.print("<tr><td>");
                 write(d, first);
                 d.print("</td><td></td></tr><tr><td></td><td>");
                 write(d, last);
                 d.print("</td></tr>");
-            }
-            else if (vertical != TOP && horizontal == RIGHT ||
-                vertical != BOTTOM && horizontal == LEFT) {
+            } else if (vertical != TOP && horizontal == RIGHT ||
+                    vertical != BOTTOM && horizontal == LEFT) {
                 d.print("<tr><td></td><td>");
                 write(d, first);
                 d.print("</td></tr><tr><td>");
                 write(d, last);
                 d.print("</td><td></td></tr>");
-            }
-            else if (vertical != TOP && horizontal == CENTER ||
-                vertical != BOTTOM && horizontal == CENTER) {
+            } else if (vertical != TOP && horizontal == CENTER ||
+                    vertical != BOTTOM && horizontal == CENTER) {
                 d.print("<tr><td>");
                 write(d, first);
                 d.print("</td></tr><tr><td>");
                 write(d, last);
                 d.print("</td></tr>");
-            }
-            else if (vertical != CENTER && horizontal == LEFT ||
-                vertical != CENTER && horizontal == RIGHT) {
+            } else if (vertical != CENTER && horizontal == LEFT ||
+                    vertical != CENTER && horizontal == RIGHT) {
                 d.print("<tr><td>");
                 write(d, first);
                 d.print("</td><td>");

@@ -1,20 +1,19 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.event;
 
-import java.awt.event.*;
+
 
 /**
  * The listener interface for receiving component events.
@@ -27,7 +26,7 @@ import java.awt.event.*;
  * component's size, location, or visibility
  * changes, the relevant method in the listener object is invoked,
  * and the ComponentEvent is passed to it.
- *
+ * <p/>
  * Component events are provided for notification purposes ONLY;
  * WingS will automatically handle component moves and resizes
  * internally so that GUI layout works properly regardless of
@@ -39,8 +38,7 @@ import java.awt.event.*;
  * @see org.wings.event.SComponentEvent
  */
 public interface SComponentListener
-    extends java.util.EventListener
-{
+        extends java.util.EventListener {
     /**
      * Invoked when the component has been made invisible.
      */
@@ -62,10 +60,4 @@ public interface SComponentListener
     public void componentShown(SComponentEvent e);
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

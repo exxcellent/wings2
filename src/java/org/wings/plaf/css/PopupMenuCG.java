@@ -1,6 +1,19 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -48,7 +61,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
     public static final SIcon RIGHT_ARROW = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
 
     public static final JavaScriptListener SCRIPT_LOADER =
-        new JavaScriptListener("", "", loadScript());
+            new JavaScriptListener("", "", loadScript());
 
     public static String loadScript() {
         InputStream in = null;
@@ -64,27 +77,23 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
             buffer.append(line).append("\n");
 
             return buffer.toString();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
-        }
-        finally {
+        } finally {
             try {
                 in.close();
-            }
-            catch (Exception ign) {
+            } catch (Exception ign) {
             }
             try {
                 reader.close();
-            }
-            catch (Exception ign1) {
+            } catch (Exception ign1) {
             }
         }
     }
 
     protected void writePopup(final Device device, SPopupMenu menu)
-        throws IOException {
+            throws IOException {
         String componentId = menu.getName();
         String popupId = componentId + "_pop";
 
@@ -123,23 +132,20 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
                         device.write(___2);
 
                         device.write(__class_menu);
-                    }
-                    else {
+                    } else {
                         device.write(__class_disabled);
                     }
-                }
-                else {
+                } else {
                     if (menuItem.isEnabled()) {
                         if (menuItem instanceof SMenuItem) {
 
                             device.write(__onClick_window);
-                            writeAnchorAddress(device, (SMenuItem)menuItem);
+                            writeAnchorAddress(device, (SMenuItem) menuItem);
                             device.write(___3);
                         }
 
                         device.write(__class_menuitem);
-                    }
-                    else {
+                    } else {
                         device.write(__class_disabled_1);
                     }
                 }
@@ -167,23 +173,23 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
             SComponent menuItem = menu.getMenuComponent(i);
 
             if (menuItem.isVisible() && menuItem.isEnabled() && menuItem instanceof SMenu) {
-                writePopup(device, (SPopupMenu)menu.getMenuComponent(i));
+                writePopup(device, (SPopupMenu) menu.getMenuComponent(i));
             }
         }
     }
 
     protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
-        throws IOException {
+            throws IOException {
         RequestURL addr = abstractButton.getRequestURL();
         addr.addParameter(abstractButton,
-            abstractButton.getToggleSelectionParameter());
+                abstractButton.getToggleSelectionParameter());
         addr.write(d);
     }
 
     public void writeContent(final Device device, final SComponent _c)
-        throws IOException {
+            throws IOException {
 
-        SPopupMenu menu = (SPopupMenu)_c;
+        SPopupMenu menu = (SPopupMenu) _c;
         writePopup(device, menu);
     }
 }

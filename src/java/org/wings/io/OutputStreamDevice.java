@@ -1,20 +1,21 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.io;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 /**
  * A Device encapsulating a ServletOutputStream
@@ -22,16 +23,10 @@ import java.io.*;
  * @author <a href="mailto:hengels@to.com">Holger Engels</a>
  * @version $Revision$
  */
-public final class OutputStreamDevice implements Device
-{
+public final class OutputStreamDevice implements Device {
     private PrintStream out;
 
-    /**
-     * TODO: documentation
-     *
-     * @param out
-     * @return
-     */
+
     public OutputStreamDevice(OutputStream out) {
         this.out = new PrintStream(out);
     }
@@ -41,48 +36,48 @@ public final class OutputStreamDevice implements Device
     /**
      * Flush this Stream.
      */
-    public void flush () throws IOException {
+    public void flush() throws IOException {
         out.flush();
     }
 
-    public void close() throws IOException { 
-        out.close(); 
+    public void close() throws IOException {
+        out.close();
     }
 
     /**
      * Print a String.
      */
-    public Device print (String s)  throws IOException {
+    public Device print(String s) throws IOException {
         if (s == null)
-            out.print ("null");
+            out.print("null");
         else
-            out.print (s);
+            out.print(s);
         return this;
     }
 
     /**
      * Print an integer.
      */
-    public Device print (int i)    throws IOException {
-        out.print (i);
+    public Device print(int i) throws IOException {
+        out.print(i);
         return this;
     }
 
     /**
      * Print any Object
      */
-    public Device print (Object o) throws IOException {
+    public Device print(Object o) throws IOException {
         if (o == null)
-            out.print ("null");
+            out.print("null");
         else
-            out.print (o.toString());
+            out.print(o.toString());
         return this;
     }
 
     /**
      * Print a character.
      */
-    public Device print (char c) throws IOException {
+    public Device print(char c) throws IOException {
         out.print(c);
         return this;
     }
@@ -90,16 +85,16 @@ public final class OutputStreamDevice implements Device
     /**
      * Print an array of chars.
      */
-    public Device print (char[] c) throws IOException {
-        return print(c, 0, c.length-1);
+    public Device print(char[] c) throws IOException {
+        return print(c, 0, c.length - 1);
     }
 
     /**
      * Print a character array.
      */
-    public Device print (char[] c, int start, int len) throws IOException {
-        final int end = start+len;
-        for (int i=start; i < end; ++i)
+    public Device print(char[] c, int start, int len) throws IOException {
+        final int end = start + len;
+        for (int i = start; i < end; ++i)
             out.print(c[i]);
         return this;
     }
@@ -107,8 +102,8 @@ public final class OutputStreamDevice implements Device
     /**
      * Writes the specified byte to this data output stream.
      */
-    public Device write (int c) throws IOException {
-        out.write (c);
+    public Device write(int c) throws IOException {
+        out.write(c);
         return this;
     }
 
@@ -117,7 +112,7 @@ public final class OutputStreamDevice implements Device
      * output stream.
      */
     public Device write(byte b[]) throws IOException {
-        out.write (b);
+        out.write(b);
         return this;
     }
 
@@ -126,15 +121,9 @@ public final class OutputStreamDevice implements Device
      * off to this output stream.
      */
     public Device write(byte b[], int off, int len) throws IOException {
-        out.write (b, off, len);
+        out.write(b, off, len);
         return this;
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,6 +1,19 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 import org.wings.SComponent;
@@ -14,7 +27,7 @@ import java.io.IOException;
  * @version $Revision$
  */
 public abstract class IconTextCompound
-    implements SConstants {
+        implements SConstants {
     public void writeCompound(Device device, SComponent component, int horizontal, int vertical) throws IOException {
         if (horizontal == NO_ALIGN)
             horizontal = RIGHT;
@@ -28,38 +41,34 @@ public abstract class IconTextCompound
         device.print(">");
 
         if (vertical == TOP && horizontal == LEFT ||
-            vertical == BOTTOM && horizontal == RIGHT) {
+                vertical == BOTTOM && horizontal == RIGHT) {
             device.print("<tr><td align=\"left\" valign=\"top\">");
             first(device, order);
             device.print("</td><td></td></tr><tr><td></td><td align=\"right\" valign=\"bottom\">");
             last(device, order);
             device.print("</td></tr>");
-        }
-        else if (vertical == TOP && horizontal == RIGHT ||
-            vertical == BOTTOM && horizontal == LEFT) {
+        } else if (vertical == TOP && horizontal == RIGHT ||
+                vertical == BOTTOM && horizontal == LEFT) {
             device.print("<tr><td></td><td align=\"right\" valign=\"top\">");
             first(device, order);
             device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\">");
             last(device, order);
             device.print("</td><td></td></tr>");
-        }
-        else if (vertical == TOP && horizontal == CENTER ||
-            vertical == BOTTOM && horizontal == CENTER) {
+        } else if (vertical == TOP && horizontal == CENTER ||
+                vertical == BOTTOM && horizontal == CENTER) {
             device.print("<tr><td align=\"center\" valign=\"top\">");
             first(device, order);
             device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\">");
             last(device, order);
             device.print("</td></tr>");
-        }
-        else if (vertical == CENTER && horizontal == LEFT ||
-            vertical == CENTER && horizontal == RIGHT) {
+        } else if (vertical == CENTER && horizontal == LEFT ||
+                vertical == CENTER && horizontal == RIGHT) {
             device.print("<tr><td align=\"left\">");
             first(device, order);
             device.print("</td><td align=\"right\">");
             last(device, order);
             device.print("</td></tr>");
-        }
-        else {
+        } else {
             System.out.println("WARNING");
             System.out.println("horizontal = " + horizontal);
             System.out.println("vertical = " + vertical);

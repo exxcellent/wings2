@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -194,13 +194,6 @@ public class SFileChooser
     }
 
     /**
-     * @deprecated use {@link #getFileName()}
-     */
-    public String getFilename() throws IOException {
-        return getFileName();
-    }
-
-    /**
      * Returns the filename, that has been given by the user in the
      * upload text-field.
      *
@@ -214,13 +207,6 @@ public class SFileChooser
             throw exception;
 
         return fileName;
-    }
-
-    /**
-     * @deprecated use {@link #getFileDir()}
-     */
-    public String getFiledir() throws IOException {
-        return getFileDir();
     }
 
     /**
@@ -242,13 +228,6 @@ public class SFileChooser
     }
 
     /**
-     * @deprecated use {@link #getFileId()}
-     */
-    public String getFileid() throws IOException {
-        return getFileId();
-    }
-
-    /**
      * Returns the internal ID of this file, that has been assigned at upload
      * time. This ID is unique to prevent clashes with other uploaded files.
      * You won't need this, unless you want to access the file directly. Don't
@@ -265,13 +244,6 @@ public class SFileChooser
             throw exception;
 
         return fileId;
-    }
-
-    /**
-     * @deprecated use {@link #getFileType()}
-     */
-    public String getFiletype() throws IOException {
-        return getFileType();
     }
 
     /**
@@ -372,11 +344,7 @@ public class SFileChooser
         return filter;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public FilterOutputStream getUploadFilterInstance() {
         return UploadFilterManager.getFilterInstance(getLowLevelEventId());
     }
@@ -471,10 +439,4 @@ public class SFileChooser
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

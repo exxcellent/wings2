@@ -1,11 +1,28 @@
 /* $Id$ */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.recorder;
 
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.methods.*;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author hengels
@@ -33,9 +50,8 @@ public abstract class Script {
     public void delay(long time) {
         if (delay > 0.0) {
             try {
-                Thread.sleep((long)(time * delay));
-            }
-            catch (InterruptedException e) { /* shit happens */ }
+                Thread.sleep((long) (time * delay));
+            } catch (InterruptedException e) { /* shit happens */ }
         }
     }
 
@@ -64,7 +80,7 @@ public abstract class Script {
     private void addHeaders(Request request, GetMethod post) {
         List headers = request.getHeaders();
         for (Iterator iterator = headers.iterator(); iterator.hasNext();) {
-            Request.Header header = (Request.Header)iterator.next();
+            Request.Header header = (Request.Header) iterator.next();
             post.addRequestHeader(header.getName(), header.getValue());
         }
     }
@@ -73,14 +89,14 @@ public abstract class Script {
         List events = request.getEvents();
         int size = 0;
         for (Iterator iterator = events.iterator(); iterator.hasNext();) {
-            Request.Event event = (Request.Event)iterator.next();
+            Request.Event event = (Request.Event) iterator.next();
             size += event.getValues().length;
         }
 
         NameValuePair[] nvps = new NameValuePair[size];
         int index = 0;
         for (Iterator iterator = events.iterator(); iterator.hasNext();) {
-            Request.Event event = (Request.Event)iterator.next();
+            Request.Event event = (Request.Event) iterator.next();
             String[] values = event.getValues();
             for (int i = 0; i < values.length; i++) {
                 String value = values[i];
@@ -98,7 +114,7 @@ public abstract class Script {
         float delay = args.length == 3 ? Float.parseFloat(args[2]) : 1.0f;
 
         Class clazz = Class.forName(name);
-        Script script = (Script)clazz.newInstance();
+        Script script = (Script) clazz.newInstance();
         script.setUrl(url);
         script.setDelay(delay);
         script.execute();

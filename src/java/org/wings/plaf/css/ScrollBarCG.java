@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.plaf.css;
 
 import org.wings.*;
@@ -27,8 +26,8 @@ import java.io.IOException;
  * @author <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
  */
 public class ScrollBarCG
-    extends org.wings.plaf.css.AbstractComponentCG
-    implements org.wings.plaf.ScrollBarCG {
+        extends org.wings.plaf.css.AbstractComponentCG
+        implements org.wings.plaf.ScrollBarCG {
     public static final int SCROLLBAR_STEPS = 15;
     /*
      * these colors should be distinguishable, otherwise the scroller
@@ -51,8 +50,8 @@ public class ScrollBarCG
     }
 
     public void writeContent(Device d, SComponent c)
-        throws IOException {
-        SScrollBar sb = (SScrollBar)c;
+            throws IOException {
+        SScrollBar sb = (SScrollBar) c;
 
         d.print("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"");
         d.print(sb.getStyle() != null ? sb.getStyle() : "scrollbar");
@@ -63,19 +62,19 @@ public class ScrollBarCG
     }
 
     protected void writePrefix(Device d, SContainer container)
-        throws IOException {
+            throws IOException {
     }
 
     protected void writePostfix(Device d, SContainer container)
-        throws IOException {
-        SScrollBar sb = (SScrollBar)container;
+            throws IOException {
+        SScrollBar sb = (SScrollBar) container;
         writeScrollBar(d, sb);
     }
 
     protected void writeScrollBar(Device d, SScrollBar sb)
-        throws IOException {
-        int p = (int)((100.0f - 2.0f) / (float)SCROLLBAR_STEPS);
-        int s = (int)((float)(100.0f - SCROLLBAR_STEPS * p) / 2.0f);
+            throws IOException {
+        int p = (int) ((100.0f - 2.0f) / (float) SCROLLBAR_STEPS);
+        int s = (int) ((float) (100.0f - SCROLLBAR_STEPS * p) / 2.0f);
 
         String el_pre;
         String el_post;
@@ -89,8 +88,7 @@ public class ScrollBarCG
             el_s = " width=\"";
             fwalign = "valign=\"middle\" align=\"right\"";
             bwalign = "valign=\"middle\" align=\"left\"";
-        }
-        else {
+        } else {
             el_pre = "<tr>";
             el_post = "</tr>";
             el_s = " height=\"";
@@ -108,7 +106,7 @@ public class ScrollBarCG
         d.print(el_post);
 
         writeSBBackground(d, sb, transIcon != null ? transIcon.getURL().toString() : null,
-            el_pre, el_post, el_s + p);
+                el_pre, el_post, el_s + p);
 
         // fw
         d.print(el_pre);
@@ -129,7 +127,7 @@ public class ScrollBarCG
      */
     public void writeSBBackground(Device d, SScrollBar sb, String fillIcon,
                                   String prefix, String postfix, String size)
-        throws IOException {
+            throws IOException {
         float scrollerWidth = 0f;
         float scrollerHeight = 0f;
 
@@ -137,24 +135,23 @@ public class ScrollBarCG
         Dimension scrollerDim = getScrollerSize(sb);
         if (sb.getOrientation() == SConstants.HORIZONTAL) {
             if (sbDim == null) sbDim = defaultDimensionHorizontal;
-            scrollerWidth = ((float)sbDim.getIntWidth() -
-                scrollerDim.width) /
-                ((float)SCROLLBAR_STEPS);
-            scrollerHeight = (float)scrollerDim.height;
-        }
-        else {
+            scrollerWidth = ((float) sbDim.getIntWidth() -
+                    scrollerDim.width) /
+                    ((float) SCROLLBAR_STEPS);
+            scrollerHeight = (float) scrollerDim.height;
+        } else {
             if (sbDim == null) sbDim = defaultDimensionVertical;
-            scrollerHeight = ((float)sbDim.getIntHeight() -
-                scrollerDim.height) /
-                ((float)SCROLLBAR_STEPS);
-            scrollerWidth = (float)scrollerDim.width;
+            scrollerHeight = ((float) sbDim.getIntHeight() -
+                    scrollerDim.height) /
+                    ((float) SCROLLBAR_STEPS);
+            scrollerWidth = (float) scrollerDim.width;
         }
 
         int range = sb.getMaximum() - sb.getMinimum();
-        int mark = (int)(SCROLLBAR_STEPS *
-            ((double)(sb.getValue() - sb.getMinimum()) / (double)range));
-        int len = (int)(SCROLLBAR_STEPS *
-            ((double)sb.getVisibleAmount() / (double)range));
+        int mark = (int) (SCROLLBAR_STEPS *
+                ((double) (sb.getValue() - sb.getMinimum()) / (double) range));
+        int len = (int) (SCROLLBAR_STEPS *
+                ((double) sb.getVisibleAmount() / (double) range));
         int bordercorrection = 0;
 
         if (mark < 0) mark = 0;
@@ -165,18 +162,17 @@ public class ScrollBarCG
             if (i >= mark && len-- > 0) {
                 d.print("<td style=\"border-width: 0px; border-style: outset;\" bgcolor=").print(SCROLLER_COLOR);
                 bordercorrection = 2;
-            }
-            else {
+            } else {
                 d.print("<td bgcolor=").print(SCROLLER_BACKGROUND);
                 bordercorrection = 0;
             }
             d.print(size).print("%");
             d.print("\"><img src=\"").print(fillIcon)
-                .print("\" width=\"")
-                .print((int)(scrollerWidth * (i + 1)) - (int)(scrollerWidth * i) - bordercorrection)
-                .print("\" height=\"")
-                .print((int)(scrollerHeight * (i + 1)) - (int)(scrollerHeight * i) - bordercorrection)
-                .print("\"></td>");
+                    .print("\" width=\"")
+                    .print((int) (scrollerWidth * (i + 1)) - (int) (scrollerWidth * i) - bordercorrection)
+                    .print("\" height=\"")
+                    .print((int) (scrollerHeight * (i + 1)) - (int) (scrollerHeight * i) - bordercorrection)
+                    .print("\"></td>");
             d.print(postfix);
         }
     }
@@ -188,18 +184,17 @@ public class ScrollBarCG
         int width = 0;
         int height = 0;
         for (int s = 0; s < 2; s++) {
-            SContainer scrollerp = (SContainer)sb.getComponent(s);
+            SContainer scrollerp = (SContainer) sb.getComponent(s);
             int c = scrollerp.getComponentCount();
             if (sb.getOrientation() == SConstants.HORIZONTAL) {
                 for (int i = 0; i < c; i++) {
-                    SIcon icon = ((SClickable)scrollerp.getComponent(i)).getIcon();
+                    SIcon icon = ((SClickable) scrollerp.getComponent(i)).getIcon();
                     width += icon.getIconWidth();
                     height = Math.max(icon.getIconHeight(), height);
                 }
-            }
-            else {
+            } else {
                 for (int i = 0; i < c; i++) {
-                    SIcon icon = ((SClickable)scrollerp.getComponent(i)).getIcon();
+                    SIcon icon = ((SClickable) scrollerp.getComponent(i)).getIcon();
                     width = Math.max(icon.getIconWidth(), width);
                     height += icon.getIconHeight();
                 }
@@ -210,10 +205,4 @@ public class ScrollBarCG
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -41,46 +41,48 @@
         <servlet-name>WingSet</servlet-name>
     </filter-mapping-->
 
-  <servlet>
-    <servlet-name>
+    <servlet>
+        <servlet-name>
       WingSet
-    </servlet-name>
-    <servlet-class>
+        </servlet-name>
+        <servlet-class>
       org.wings.session.WingServlet
-    </servlet-class>
-    <init-param>
-      <param-name>wings.mainclass</param-name>
-      <param-value>wingset.WingSet</param-value>
-    </init-param>
-    <init-param>
-      <param-name>wings.lookandfeel.factory</param-name>
-      <param-value>org.wings.plaf.LookAndFeelFactory$Default</param-value>
-    </init-param>
-    <init-param>
-      <param-name>wings.lookandfeel.default</param-name>
-      <param-value>org.wings.plaf.css.LookAndFeel</param-value>
-    </init-param>
-      <!--init-param>
-          <param-name>wings.event.usenames</param-name>
-          <param-value>true</param-value>
-      </init-param-->
-      <!--init-param>
-          <param-name>wings.servlet.lookupname</param-name>
-          <param-value>Recording</param-value>
-      </init-param-->
-  </servlet>
+        </servlet-class>
+        <init-param>
+            <param-name>wings.mainclass</param-name>
+            <param-value>wingset.WingSet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>wings.lookandfeel.factory</param-name>
+            <param-value>org.wings.plaf.LookAndFeelFactory$Default</param-value>
+        </init-param>
+        <init-param>
+            <param-name>wings.lookandfeel.default</param-name>
+            <param-value>org.wings.plaf.css.LookAndFeel</param-value>
+        </init-param>
+        <!--init-param>
+            <param-name>wings.event.usenames</param-name>
+            <param-value>true</param-value>
+        </init-param-->
+        <!--init-param>
+            <param-name>wings.servlet.lookupname</param-name>
+            <param-value>Recording</param-value>
+        </init-param-->
+    </servlet>
 
-<!-- url mapping -->
+    <!-- url mapping -->
 
-  <servlet-mapping>
-    <servlet-name>
+    <servlet-mapping>
+        <servlet-name>
       WingSet
-    </servlet-name>
-    <url-pattern>
+        </servlet-name>
+        <url-pattern>
       /WingSet/*
-    </url-pattern>
-  </servlet-mapping>
+        </url-pattern>
+    </servlet-mapping>
 
-    <session-config><session-timeout>10</session-timeout></session-config>
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
 
 </web-app>

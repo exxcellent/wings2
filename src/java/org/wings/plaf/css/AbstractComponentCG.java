@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.plaf.css;
 
 import org.wings.*;
@@ -32,7 +31,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public abstract class AbstractComponentCG
-    implements ComponentCG, SConstants, Serializable {
+        implements ComponentCG, SConstants, Serializable {
     protected final static Logger logger = Logger.getLogger("org.wings.plaf");
 
     protected AbstractComponentCG() {
@@ -75,15 +74,15 @@ public abstract class AbstractComponentCG
 
     protected void writePrefix(Device device, SComponent component) throws IOException {
         device
-            .print("<div id=\"")
-            .print(component.getName())
-            .print("\" class=\"")
-            .print(component.getStyle());
+                .print("<div id=\"")
+                .print(component.getName())
+                .print("\" class=\"")
+                .print(component.getStyle());
 
         if (component instanceof LowLevelEventListener) {
-            LowLevelEventListener lowLevelEventListener = (LowLevelEventListener)component;
+            LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
             device.print("\" event=\"")
-                .print(lowLevelEventListener.getEncodedLowLevelEventId());
+                    .print(lowLevelEventListener.getEncodedLowLevelEventId());
         }
 
         final SDimension dim = component.getPreferredSize();
@@ -91,21 +90,21 @@ public abstract class AbstractComponentCG
             device.print("\" style=\"");
             if (dim.width != null)
                 device
-                    .print("width:")
-                    .print(dim.width)
-                    .print(";");
+                        .print("width:")
+                        .print(dim.width)
+                        .print(";");
             if (dim.height != null)
                 device
-                    .print(" height:")
-                    .print(dim.height)
-                    .print(";");
+                        .print(" height:")
+                        .print(dim.height)
+                        .print(";");
         }
 
         String toolTip = component.getToolTipText();
         if (toolTip != null)
             device.print("\" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
-                .print(toolTip)
-                .print("', 'predefined', 'default'));");
+                    .print(toolTip)
+                    .print("', 'predefined', 'default'));");
 
         InputMap inputMap = component.getInputMap();
         if (inputMap != null && !(inputMap instanceof VersionedInputMap)) {
@@ -115,8 +114,8 @@ public abstract class AbstractComponentCG
         }
 
         if (inputMap != null) {
-            VersionedInputMap versionedInputMap = (VersionedInputMap)inputMap;
-            Integer inputMapVersion = (Integer)component.getClientProperty("inputMapVersion");
+            VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
+            Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
             if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
                 System.out.println("inputMapVersion = " + inputMapVersion);
                 InputMapScriptListener.install(component);
@@ -138,11 +137,11 @@ public abstract class AbstractComponentCG
         }
 
         device
-            .print("\">\n");
+                .print("\">\n");
 
         final SBorder border = component.getBorder();
         if (border instanceof STitledBorder) {
-            STitledBorder titledBorder = (STitledBorder)border;
+            STitledBorder titledBorder = (STitledBorder) border;
 
             device.print("<div class=\"legend\" style=\"");
             titledBorder.getTitleAttributes().write(device);
@@ -169,8 +168,8 @@ public abstract class AbstractComponentCG
         component.setInheritsPopupMenu(backup);
 
         device
-            .print("</div><!-- ")
-            .print(component.getName())
-            .print("-->\n");
+                .print("</div><!-- ")
+                .print(component.getName())
+                .print("-->\n");
     }
 }

@@ -1,17 +1,30 @@
 /* $Id $ */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.text;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.event.EventListenerList;
+import org.wings.event.SDocumentEvent;
+import org.wings.event.SDocumentListener;
 
-import org.wings.event.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.text.BadLocationException;
 
 /**
  * @author hengels
  * @version $Revision$
  */
-public class DefaultDocument implements SDocument
-{
+public class DefaultDocument implements SDocument {
     private final StringBuffer buffer = new StringBuffer();
     private EventListenerList listeners = null;
 
@@ -39,8 +52,7 @@ public class DefaultDocument implements SDocument
     public String getText(int offset, int length) throws BadLocationException {
         try {
             return buffer.substring(offset, length);
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             throw new BadLocationException(e.getMessage(), offset);
         }
     }
@@ -56,8 +68,7 @@ public class DefaultDocument implements SDocument
         try {
             buffer.delete(offset, offset + length);
             fireRemoveUpdate(offset, length);
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             throw new BadLocationException(e.getMessage(), offset);
         }
     }
@@ -69,8 +80,7 @@ public class DefaultDocument implements SDocument
         try {
             buffer.insert(offset, string);
             fireInsertUpdate(offset, string.length());
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             throw new BadLocationException(e.getMessage(), offset);
         }
     }
@@ -95,7 +105,7 @@ public class DefaultDocument implements SDocument
 
         Object[] listeners = this.listeners.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
-                ((SDocumentListener)listeners[i + 1]).insertUpdate(e);
+            ((SDocumentListener) listeners[i + 1]).insertUpdate(e);
         }
     }
 
@@ -107,7 +117,7 @@ public class DefaultDocument implements SDocument
 
         Object[] listeners = this.listeners.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            ((SDocumentListener)listeners[i + 1]).removeUpdate(e);
+            ((SDocumentListener) listeners[i + 1]).removeUpdate(e);
         }
     }
 
@@ -119,7 +129,7 @@ public class DefaultDocument implements SDocument
 
         Object[] listeners = this.listeners.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            ((SDocumentListener)listeners[i + 1]).changedUpdate(e);
+            ((SDocumentListener) listeners[i + 1]).changedUpdate(e);
         }
     }
 }

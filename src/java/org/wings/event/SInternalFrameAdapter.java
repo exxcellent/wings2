@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -14,15 +14,13 @@
 package org.wings.event;
 
 /**
+ * @author Holger Engels
+ * @version $Revision$
  * @see SInternalFrameEvent
  * @see SInternalFrameListener
- *
- * @version $Revision$
- * @author Holger Engels
  */
 public abstract class SInternalFrameAdapter
-    implements SInternalFrameListener
-{
+        implements SInternalFrameListener {
     /**
      * Invoked when an internal frame has been opened.
      */
@@ -54,10 +52,4 @@ public abstract class SInternalFrameAdapter
     public void internalFrameUnmaximized(SInternalFrameEvent e) {}
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

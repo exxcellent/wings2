@@ -1,35 +1,26 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.Collection;
-import java.net.URL;
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-
-import org.wings.*;
-import org.wings.plaf.*;
-import org.wings.io.*;
 
 import org.wings.template.*;
 import org.wings.template.parser.PageParser;
+
+import java.io.File;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /*
  * STemplateLayout.java
@@ -62,22 +53,19 @@ import org.wings.template.parser.PageParser;
  */
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author Jochen Woehrle
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$
  */
 public class STemplateLayout
-    extends SAbstractLayoutManager
-{
+        extends SAbstractLayoutManager {
     /*
      * Dieser PropertyManager behandelt alle Properties, zu denen kein eigener
      * PropertyManager gefunden wurde.
      */
     private static final PropertyManager defaultPropertyManager =
-        new PropertyManager() {
+            new PropertyManager() {
                 final Class[] empty = new Class[0];
 
                 public void setProperty(SComponent c, String name,
@@ -121,10 +109,7 @@ public class STemplateLayout
      */
     protected PageParser pageParser = PageParser.getInstance();
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     public STemplateLayout() {}
 
     /**
@@ -168,7 +153,7 @@ public class STemplateLayout
      * Read the template from an URL.
      * The content is cached.
      *
-     * @param  url the URL to read the template from.
+     * @param url the URL to read the template from.
      * @throws java.io.IOException
      */
     public STemplateLayout(URL url) throws java.io.IOException {
@@ -180,12 +165,12 @@ public class STemplateLayout
      * derived class. Goes up the hierarchy.
      */
     public static final PropertyManager getPropertyManager(Class c) {
-        if ( c == null )
+        if (c == null)
             return defaultPropertyManager;
 
         PropertyManager p = (PropertyManager) propertyManager.get(c);
 
-        if ( p == null )
+        if (p == null)
             return getPropertyManager(c.getSuperclass());
 
         return p;
@@ -200,15 +185,15 @@ public class STemplateLayout
      * is <em>not</em> added.
      */
     public static final void addPropertyManager(PropertyManager p) {
-        if ( p == null )
+        if (p == null)
             return;
 
         Class[] cl = p.getSupportedClasses();
-        if ( cl == null )
+        if (cl == null)
             return;
 
-        for ( int i=0; i<cl.length; i++ ) {
-            if ( !propertyManager.containsKey(cl[i]) )
+        for (int i = 0; i < cl.length; i++) {
+            if (!propertyManager.containsKey(cl[i]))
                 propertyManager.put(cl[i], p);
         }
     }
@@ -220,7 +205,7 @@ public class STemplateLayout
      * @throws java.io.IOException
      */
     public void setTemplate(String templateFileName)
-        throws java.io.IOException {
+            throws java.io.IOException {
         setTemplate(new File(templateFileName));
     }
 
@@ -242,7 +227,7 @@ public class STemplateLayout
      * @throws java.io.IOException
      */
     public void setTemplate(URL templateURL) throws java.io.IOException {
-        if ( "file".equals(templateURL.getProtocol()) ) {
+        if ("file".equals(templateURL.getProtocol())) {
             setTemplate(new File(templateURL.getFile()));
         } else {
             setTemplate(new CachedFileTemplateSource(templateURL));
@@ -253,8 +238,8 @@ public class STemplateLayout
      * Sets the template from the DataSource. Use this, if you hold your
      * templates in databases etc. and write your own DataSource.
      *
-     * @see org.wings.template.TemplateSource
      * @param source the source this template is to be read.
+     * @see org.wings.template.TemplateSource
      */
     public void setTemplate(TemplateSource source) {
         templateSource = source;
@@ -265,17 +250,18 @@ public class STemplateLayout
      * TemplateLayout is the value of the name attribute of the object in
      * the HTML-template.
      *
-     * @param c the component to be added
+     * @param c          the component to be added
      * @param constraint the string describing the
      */
     public void addComponent(SComponent c, Object constraint, int index) {
-        if ( constraint == null )
+        if (constraint == null)
             throw new IllegalArgumentException("null constraint not allowed here");
         components.put(constraint.toString(), c);
     }
 
     /**
      * removes the given component.
+     *
      * @param comp the component to be removed.
      */
     public void removeComponent(SComponent comp) {
@@ -291,7 +277,7 @@ public class STemplateLayout
      * returns a map of the constraint/component.
      */
     public SComponent getComponent(String name) {
-        return (SComponent)components.get(name);
+        return (SComponent) components.get(name);
     }
 
     public TemplateSource getTemplateSource() {
@@ -299,14 +285,8 @@ public class STemplateLayout
     }
 
     /**
-     * @deprecated this will be solved differently.
-     */
-    public Map getLabels() {
-        return pageParser.getLabels(getTemplateSource());
-    }
-
-    /**
      * Retrieve the PageParser of this instance
+     *
      * @return the current PageParser
      */
     public PageParser getPageParser() {
@@ -315,6 +295,7 @@ public class STemplateLayout
 
     /**
      * Set the PageParser for this instance
+     *
      * @param pageParser the new PageParser
      */
     public void setPageParser(PageParser pageParser) {
@@ -322,10 +303,4 @@ public class STemplateLayout
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -53,31 +53,49 @@
  *
  */
 
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.template.parser;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.HashMap;
 
 /**
  * Convenient class for parsing SGML tokens from a page.
- *
+ * <p/>
  * <p>This class is optimized for speed, not ease of use.
  * (Though I'd contend its fairly easy to use anyway!).
- *
+ * <p/>
  * <p>Other than earlier versions of this class this one reads
  * its content from a <code>Reader</code> to avoid reading
  * the whole file into a String before parsing it.
  * The Reader is required to support the <code>mark()</code>
  * operation.
- *
+ * <p/>
  * <p>Tags are only read enough to find out what the tag name is;
  * If you want to read the full tag call <code>parse(inputReader)</code>.
  * This is done so that applications don't spend time processing
  * tags about which they care little.
- *
+ * <p/>
  * <p>Here's a sample piece of code which uses this class to read
  * all SGML tags on a page:
- *
+ * <p/>
  * <pre>
  * void showTags(PrintWriter out, Reader input)
  * {
@@ -95,7 +113,7 @@ import java.util.*;
  */
 
 /*
- * ToDo: (hen)
+ * TODO: (hen)
  * - read incomplete TAGs <input type="checkbox" checked> => checked=1
  */
 
@@ -106,9 +124,8 @@ public class SGMLTag {
     /**
      * Name of this SGML tag, in uppercase format.
      * This is only public for compatibility reasons.
-     * @deprecated do not use; use getName() instead
      */
-    public String name = null;
+    private String name = null;
 
     /**
      * The token that closes this tag.
@@ -124,46 +141,38 @@ public class SGMLTag {
     /* These attributes are to be compatible with the 'old'
      * SGMLTag using Strings
      */
-    /**
-     * @deprecated
-     */
-    public int start = 0;
-    /**
-     * @deprecated
-     */
-    public int end = 0;
+    private int start = 0;
+    private int end = 0;
 
     // private stuff
     private LinkedList attrs = null;            // tag attributes (mixed)
     private LinkedHashMap values = null;        // tag attribute values (uc)
     private boolean wellFormed = true;      // looks good?
     private boolean attr_ready = false;
-  
+
     // comment delimitation
     static final String COMMENT_START = "!--", COMMENT_END = "-->";
     static final String SSI_START = COMMENT_START + "#", SSI_END = COMMENT_END;
-  
-   /**
-    * for historical reasons only; behaves like the
-    * old SGMLTag().
-    *
-    * @deprecated use the Reader based constructors instead
-    */
-    public SGMLTag(String textContent, int begin) {
-      PositionReader r = new PositionReader (new StringReader (textContent));
-      try {
-	r.skip (begin);
-	offset = begin;
-	searchStart (r);
-	start = offset;
-	// do a full parse here; since the usage of the
-	// String based SGMLTag() is deprecated this
-	// performance penalty doesn't matter
-	parse (r); 
-      } catch (IOException reading_from_string_should_never_fail) {
-	offset = -1;
-      }
-      end = (int) r.getPosition();
+
+    /**
+     * for historical reasons only; behaves like the
+     * old SGMLTag().
+     */
+    private SGMLTag(String textContent, int begin) {
+        PositionReader r = new PositionReader(new StringReader(textContent));
+        try {
+            r.skip(begin);
+            offset = begin;
+            searchStart(r);
+            start = offset;
+            // do a full parse here; since the usage of the
+            // String based SGMLTag() is deprecated this
+            // performance penalty doesn't matter
+            parse(r);
+        } catch (IOException reading_from_string_should_never_fail) {
+            offset = -1;
+        }
+        end = (int) r.getPosition();
     }
 
     /**
@@ -174,137 +183,149 @@ public class SGMLTag {
      * Tag may not be well-formed: if interested, call "parse(input)"
      * directly afterwards (without reading any characters
      * from the Reader) to get the attributes.
-     *
+     * <p/>
      * <p>Note that this constructor skips over any HTML-style comments,
      * as denoted by matched <tt>&lt;--</tt> ... <tt>--&gt;</tt> pairs.
-     * @param input the Reader being parsed for SGML tags
+     *
+     * @param input   the Reader being parsed for SGML tags
      * @param parseIt boolean which denotes if SGMLTag should be
      *                parsed fully
      * @see #attributes
      */
-     public SGMLTag (Reader input, boolean parseIt) 
-       throws IOException {
-      searchStart (input);
-      if (parseIt) readAttributes (input);
-     }
+    public SGMLTag(Reader input, boolean parseIt)
+            throws IOException {
+        searchStart(input);
+        if (parseIt) readAttributes(input);
+    }
 
     /**
      * Create new SGML tag reference, starting at current location
      * of the Reader. Read all attributes.
-     *
+     * <p/>
      * <p>Note that this constructor skips over any HTML-style comments,
      * as denoted by matched <tt>&lt;--</tt> ... <tt>--&gt;</tt> pairs.
+     *
      * @param input the Reader being parsed for SGML tags
      * @see #attributes
      */
-    public SGMLTag (Reader input)
-      throws IOException {
-      this (input, true);
+    public SGMLTag(Reader input)
+            throws IOException {
+        this(input, true);
     }
 
-    public void parse (Reader input) 
-      throws IOException {
-      readAttributes (input);
+    public void parse(Reader input)
+            throws IOException {
+        readAttributes(input);
     }
 
     /**
      * Skip over any HTML-style comments,
      * as denoted by matched <tt>&lt;--</tt> ... <tt>--&gt;</tt> pairs.
      *
-     * @param reader the reader being parsed for SGMLtags
+     * @param input the reader being parsed for SGMLtags
      */
-  protected void searchStart (Reader input)
-    throws IOException {
-      int c = 0, num;
-      char buff[] = new char[8]; // must at least hold the length of COMMENT_(START|END)
-      String cmpStr;
-      
-      // skipping over comments, find first tag
+    protected void searchStart(Reader input)
+            throws IOException {
+        int c = 0, num;
+        char buff[] = new char[8]; // must at least hold the length of COMMENT_(START|END)
+        String cmpStr;
+
+        // skipping over comments, find first tag
         while (true) {
-	  // find starting character of SGML tag
-	  while (c >= 0 && c != '<') {
-	    c = input.read();
-	    offset++;
-	  }
-	  if (c == -1) { offset = -1; return; } // EOF
-	  offset--;
+            // find starting character of SGML tag
+            while (c >= 0 && c != '<') {
+                c = input.read();
+                offset++;
+            }
+            if (c == -1) {
+                offset = -1;
+                return;
+            } // EOF
+            offset--;
 
-	  /* -- check if we just found a comment
-	   * <!--# - SSI Commands start just like
-	   * ordinary comments, so we've to make sure
-	   * that exclude these (<!--) but not those (<!--#)
-	   */
-	  input.mark (SSI_START.length());
-	  int pos;
-	  num=0;
-	  for (pos=0; pos >= 0 && num < SSI_START.length(); num+=pos)
-	      pos = input.read (buff, pos, SSI_START.length()-pos);
-	  if (pos == -1) { offset = -1; return; } // EOF
+            /* -- check if we just found a comment
+             * <!--# - SSI Commands start just like
+             * ordinary comments, so we've to make sure
+             * that exclude these (<!--) but not those (<!--#)
+             */
+            input.mark(SSI_START.length());
+            int pos;
+            num = 0;
+            for (pos = 0; pos >= 0 && num < SSI_START.length(); num += pos)
+                pos = input.read(buff, pos, SSI_START.length() - pos);
+            if (pos == -1) {
+                offset = -1;
+                return;
+            } // EOF
 
-	  cmpStr = new String (buff, 0, num);
-	  if (SSI_START.equals(cmpStr) || 
-	      !(cmpStr.startsWith (COMMENT_START))) {
-	    input.reset();
-	    break;         // No comment .. real start of a SGML / SSI Tag
-	  }
+            cmpStr = new String(buff, 0, num);
+            if (SSI_START.equals(cmpStr) ||
+                    !(cmpStr.startsWith(COMMENT_START))) {
+                input.reset();
+                break;         // No comment .. real start of a SGML / SSI Tag
+            }
 
-	  /*
-	   * ok, we got an comment; but since we read SSI_START length
-	   * characters, we've to reset and just read COMMENT_START so
-	   * we're in a defined state ..
-	   */
-	  input.reset();
-	  num = 0;
-	  for (pos=0; pos >= 0 && num < COMMENT_START.length(); num+=pos)
-	      pos = input.read (buff, pos, COMMENT_START.length()-pos);
-	  // since length(COMMENT_START) < length(SSI_START) (which we
-	  // already successfully read), we don't have to check for EOF here
+            /*
+             * ok, we got an comment; but since we read SSI_START length
+             * characters, we've to reset and just read COMMENT_START so
+             * we're in a defined state ..
+             */
+            input.reset();
+            num = 0;
+            for (pos = 0; pos >= 0 && num < COMMENT_START.length(); num += pos)
+                pos = input.read(buff, pos, COMMENT_START.length() - pos);
+            // since length(COMMENT_START) < length(SSI_START) (which we
+            // already successfully read), we don't have to check for EOF here
 
-	  offset += COMMENT_START.length() + 1; // +1 for the starting '<'
-	  // otherwise skip extent of commented area
-	  boolean endOfComment = false;
-	  int len=0, ringHead = 0;
-	  int checkpos, p;
-	  while (!endOfComment) {
-	    c = input.read();
-	    if (c == -1) { offset=-1; return; } // EOF
-	    len++;
-	    offset++;
-	    // since we don't have '-1' here anymore, cast is save:
-	    buff[ringHead] = (char) c;  // buffer is a ringbuffer
-	    if (len >= COMMENT_END.length()) {
-	      // compare, beginning from the last position backward
-	      for (checkpos = ringHead + buff.length, p = COMMENT_END.length()-1 ; 
-		   p >= 0 ; --checkpos, --p) {
-		if (COMMENT_END.charAt(p) != buff[checkpos % buff.length])
-		  break;
-	      }
-	      endOfComment = (p == -1);
-	    }
-	    ringHead = (++ringHead) % buff.length;
-	  } 
+            offset += COMMENT_START.length() + 1; // +1 for the starting '<'
+            // otherwise skip extent of commented area
+            boolean endOfComment = false;
+            int len = 0, ringHead = 0;
+            int checkpos, p;
+            while (!endOfComment) {
+                c = input.read();
+                if (c == -1) {
+                    offset = -1;
+                    return;
+                } // EOF
+                len++;
+                offset++;
+                // since we don't have '-1' here anymore, cast is save:
+                buff[ringHead] = (char) c;  // buffer is a ringbuffer
+                if (len >= COMMENT_END.length()) {
+                    // compare, beginning from the last position backward
+                    for (checkpos = ringHead + buff.length, p = COMMENT_END.length() - 1;
+                         p >= 0; --checkpos, --p) {
+                        if (COMMENT_END.charAt(p) != buff[checkpos % buff.length])
+                            break;
+                    }
+                    endOfComment = (p == -1);
+                }
+                ringHead = (++ringHead) % buff.length;
+            }
 
-	}
-	
-	// get the name
-	// do not skip Whitespaces, since the Tagname must
-	// start just after the '<'
-        name = nextToken(input, false); 
+        }
+
+        // get the name
+        // do not skip Whitespaces, since the Tagname must
+        // start just after the '<'
+        name = nextToken(input, false);
         if (name != null)
             name = name.toUpperCase();
 
-	// set the token that closes this tag
-	if (name != null && name.startsWith(SSI_START)) {
-	    closeTag = SSI_END; // SSI tag
-	} else {
-	    closeTag = ">"; // SGML tag
-	}
+        // set the token that closes this tag
+        if (name != null && name.startsWith(SSI_START)) {
+            closeTag = SSI_END; // SSI tag
+        } else {
+            closeTag = ">"; // SGML tag
+        }
     }
 
 
     /**
      * Checked whether this tag indicates we're at the end of the list.
      * Note: The end tag is not usuable as an SGML tag.
+     *
      * @return true if this tag represents end of tags, and is not usuable
      */
     public boolean finished() {
@@ -314,6 +335,7 @@ public class SGMLTag {
     /**
      * Check name of tag.
      * (Comparision is case-insensitive.)
+     *
      * @return true if passed tag matches this one.
      */
     public boolean isNamed(String name) {
@@ -323,6 +345,7 @@ public class SGMLTag {
     /**
      * Check for well-formedness of this tag.
      * Note that calling this method causes rest of tag to be parsed.
+     *
      * @return true if tag is a well-formed SGML tag, false otherwise
      */
     public boolean isWellFormed() {
@@ -331,12 +354,12 @@ public class SGMLTag {
         return wellFormed;
     }
 
-   /**
-    * returns the number of chars skipped before the
-    * starting '&lt'
-    */
-    public int getOffset () {
-      return offset;
+    /**
+     * returns the number of chars skipped before the
+     * starting '&lt'
+     */
+    public int getOffset() {
+        return offset;
     }
 
     /**
@@ -345,17 +368,18 @@ public class SGMLTag {
      * This value is set to null when whitespace or another
      * problem was encountered where the tag would be.
      */
-    public String getName () {
-      return name;
+    public String getName() {
+        return name;
     }
 
     /**
      * Get list of attribute names.
+     *
      * @param upperCase true returns names in all uppercase (good for
-     * case-insensitive applications), false returns attribute names
-     * with same case as in original text
+     *                  case-insensitive applications), false returns attribute names
+     *                  with same case as in original text
      * @return enumeration of attribute names specified as strings,
-     * or null if this tag is poorly formed
+     *         or null if this tag is poorly formed
      */
     public Iterator attributes(boolean upperCase) {
         // check to make sure attributes have been read
@@ -376,27 +400,29 @@ public class SGMLTag {
      * result as <tt>value("A")</tt>.  Note also that if wish to
      * check whether value was set, you can pass <tt>null</tt>
      * as the defaultValue.
+     *
      * @param attributeName attribute for which to check
-     * @param default value if attribute unset
+     * @param defaultValue       value if attribute unset
      * @return value of attribute, or defaultValue if not available
      */
     public String value(String attributeName, String defaultValue) {
         if (!isWellFormed())
-	  return null;
+            return null;
         String value = (String) values.get(attributeName.toUpperCase());
         return value == null ? defaultValue : value;
     }
 
     /**
      * Attempt to read attributes from tag if not already read.
+     *
      * @return true if everything was read fine, false otherwise
      */
-    private boolean readAttributes(Reader input) 
-    throws IOException {
-      // just try to read Attributes once
+    private boolean readAttributes(Reader input)
+            throws IOException {
+        // just try to read Attributes once
 
         if (attr_ready)
-	  return wellFormed && values != null;
+            return wellFormed && values != null;
         attr_ready = true;
 
         if (values == null && wellFormed) {
@@ -406,59 +432,183 @@ public class SGMLTag {
             values = new LinkedHashMap();
 
             while (true) {
-		// check for valid value tag (or end delimiter)
-		if (key == null)
-		    key = nextToken(input);
+                // check for valid value tag (or end delimiter)
+                if (key == null)
+                    key = nextToken(input);
 
-		// close-Tag
-		if (key != null && key.equals(closeTag)) {
-		    wellFormed = true;
-		    break;
-		}
+                // close-Tag
+                if (key != null && key.equals(closeTag)) {
+                    wellFormed = true;
+                    break;
+                }
 
-		// close-Tag
-		if (key != null && key.equals("/>")) {
-		    wellFormed = true;
-		    break;
-		}
+                // close-Tag
+                if (key != null && key.equals("/>")) {
+                    wellFormed = true;
+                    break;
+                }
 
-		// 'key'-part 
-		if (key == null 
-		    || isDelimiter(key.charAt(0))
-		    || key.charAt(0) == doubleQuote
-		    || key.charAt(0) == singleQuote)
-		    break;
+                // 'key'-part
+                if (key == null
+                        || isDelimiter(key.charAt(0))
+                        || key.charAt(0) == doubleQuote
+                        || key.charAt(0) == singleQuote)
+                    break;
 
-		// ok, we have a key. Now insure that we have an equals sign
-		token = nextToken(input);
-		if (token == null || token.charAt(0) != '=') {
-		    attrs.add(key);
-		    if (token == null)
-			break;
-		    key = token; // this token is the next key
-		    continue;
-		}
+                // ok, we have a key. Now insure that we have an equals sign
+                token = nextToken(input);
+                if (token == null || token.charAt(0) != '=') {
+                    attrs.add(key);
+                    if (token == null)
+                        break;
+                    key = token; // this token is the next key
+                    continue;
+                }
 
-		// read value of tag
-		token = nextToken(input);
-		if (token == null || isDelimiter(token.charAt(0)))
-		    break;
+                // read value of tag
+                token = nextToken(input);
+                if (token == null || isDelimiter(token.charAt(0)))
+                    break;
 
-		// strip quotes
-		if (token.charAt(0) == doubleQuote || token.charAt(0) == singleQuote) 
-		    token = token.substring(1, token.length() - 1);
+                // strip quotes
+                if (token.charAt(0) == doubleQuote || token.charAt(0) == singleQuote)
+                    token = token.substring(1, token.length() - 1);
 
-		// store attribute name with original case
-		String upperCase = key.toUpperCase();
-		if (!values.containsKey(upperCase))
-		    attrs.add(key);
+                // store attribute name with original case
+                String upperCase = key.toUpperCase();
+                if (!values.containsKey(upperCase))
+                    attrs.add(key);
 
-		// store assignment in case-insensitive manner
-		values.put(upperCase, token);
-		key = null; // clear this key; next token is our next key.
+                // store assignment in case-insensitive manner
+                values.put(upperCase, token);
+                key = null; // clear this key; next token is our next key.
             }
         }
         return wellFormed && values != null;
+    }
+
+    /**
+     * Read next token from string.
+     * A token is a space-delimited word, a string in quotes
+     * (returned with quotes), a delimiter such as a greater-than,
+     * less-than, or equals sign.
+     * Quotes marks inside quoted strings may be escaped with a
+     * backslash (\) character.
+     *
+     * @return next token, or null if whitespace was encountered
+     */
+    public String nextToken(Reader input)
+            throws IOException {
+        return nextToken(input, true);
+    }
+
+    /**
+     * Read next token from string.
+     * A token is a space-delimited word, a string in quotes
+     * (returned with quotes), a delimiter such as a greater-than,
+     * less-than, or equals sign.
+     * Quotes marks inside quoted strings may be escaped with a
+     * backslash (\) character.
+     *
+     * @return next token, or null if whitespace was encountered
+     */
+    public String nextToken(Reader input, boolean skipWhitespaces)
+            throws IOException {
+        StringBuffer token = new StringBuffer();
+
+        if (skipWhitespaces)
+            skipWhiteSpace(input);
+
+        input.mark(1);
+        int c = input.read();
+
+        if (c == -1) {
+            offset = -1;
+            return null;
+        }
+
+        // quoted string? (handle both single and double)
+        if (c == doubleQuote || c == singleQuote) {
+            boolean inSingle = false;
+            boolean inDouble = false;
+            if (c == singleQuote) inSingle = true; else inDouble = true;
+            token.append((char) c);
+            do {
+                c = input.read();
+                if (c == -1) {
+                    offset = -1;
+                    String reportString = token.toString();
+                    if (reportString.length() > 30) {
+                        reportString = reportString.substring(0, 30) +
+                                " (truncated, length is " + reportString.length() + ")";
+                    }
+                    throw new IOException("EOF in String: " + reportString);
+                }
+                if (c == '\\') {
+                    int quoted = input.read();
+                    if (quoted >= 0) token.append((char) quoted);
+                } else
+                    token.append((char) c);
+            } while ((inDouble && c != doubleQuote) || (inSingle && c != singleQuote));
+        }
+
+        // parameter delimiter? read just one
+        else if (isDelimiter((char) c)) {
+            token.append((char) c);
+        }
+
+        // Inserted for token "-->".
+        // Like a word token, but includes the delimiter ">".
+        else if (c == '-') {
+            do {
+                token.append((char) c);
+                input.mark(1);
+                c = input.read();
+            } while (c >= 0 &&
+                    !Character.isWhitespace((char) c) &&
+                    !isDelimiter((char) c));
+            input.reset();
+            token.append((char) input.read());
+        }
+
+        // If we did not skip Whitespaces but actually got one
+        // this token is empty.
+        else if (!skipWhitespaces &&
+                Character.isWhitespace((char) c)) {
+            input.reset();
+            return null;
+        }
+
+        // word token or />
+        else {
+            do {
+                token.append((char) c);
+                input.mark(1);
+                c = input.read();
+            } while (c >= 0 &&
+                    !Character.isWhitespace((char) c) &&
+                    !isDelimiter((char) c));
+            if (token.length() == 1 && token.charAt(0) == '/')
+                token.append((char) c);
+            else
+                input.reset();
+        }
+        return token.toString();
+    }
+
+    /**
+     * could be overwritten
+     */
+    public static int skipWhiteSpace(Reader r)
+            throws IOException {
+        int c, len = 0;
+        do {
+            r.mark(1);
+            c = r.read();
+            len++;
+        } while (c >= 0 && Character.isWhitespace((char) c));
+        r.reset();
+        return len - 1;
     }
 
     /**
@@ -476,8 +626,6 @@ public class SGMLTag {
 
     /**
      * Return tag attributes and values.
-     * @param ignoreCase false converts all keys to uppercase, true leaves
-     * case of values alone
      * @return parameter key / value pairs
      * @deprecated use <tt>attributes()</tt> and <tt>value()</tt> instead
      * @see #attributes
@@ -488,154 +636,27 @@ public class SGMLTag {
     }
 
     /**
-     * Read next token from string.
-     * A token is a space-delimited word, a string in quotes
-     * (returned with quotes), a delimiter such as a greater-than,
-     * less-than, or equals sign.
-     * Quotes marks inside quoted strings may be escaped with a
-     * backslash (\) character.
-     * @param string string begin parsed
-     * @param index location within string to start examining
-     * @return next token, or null if whitespace was encountered
-     */
-    public String nextToken(Reader input) 
-	throws IOException {
-	return nextToken (input, true);
-    }
-
-    /**
-     * Read next token from string.
-     * A token is a space-delimited word, a string in quotes
-     * (returned with quotes), a delimiter such as a greater-than,
-     * less-than, or equals sign.
-     * Quotes marks inside quoted strings may be escaped with a
-     * backslash (\) character.
-     * @param string string begin parsed
-     * @param index location within string to start examining
-     * @return next token, or null if whitespace was encountered
-     */
-    public String nextToken(Reader input, boolean skipWhitespaces) 
-	throws IOException {
-	StringBuffer token = new StringBuffer();
-
-	if (skipWhitespaces) 
-	    skipWhiteSpace (input);
-      
-	input.mark(1);
-	int c = input.read();
-
-	if (c == -1) { offset = -1; return null; }
-
-	// quoted string? (handle both single and double)
-	if (c == doubleQuote || c == singleQuote) {
-	    boolean inSingle = false;
-	    boolean inDouble = false;
-	    if (c == singleQuote) inSingle = true; else inDouble = true;
-	    token.append ((char) c);
-	    do {
-		c = input.read();
-		if (c == -1) {
-		    offset = -1;
-		    String reportString = token.toString();
-		    if (reportString.length() > 30) {
-			reportString = reportString.substring(0, 30) + 
-			    " (truncated, length is " + reportString.length() + ")";
-		    }
-		    throw new IOException ("EOF in String: " +  reportString);
-		}
-		if (c == '\\') {
-		    int quoted = input.read();
-		    if (quoted >= 0) token.append ((char) quoted);
-		}
-		else 
-		    token.append((char) c);
-	    } while ((inDouble && c != doubleQuote) || (inSingle && c != singleQuote));
-	} 
-
-	// parameter delimiter? read just one
-	else if (isDelimiter((char) c)) { 
-	    token.append((char) c);
-	}
-
-	// Inserted for token "-->".
-	// Like a word token, but includes the delimiter ">".
-	else if (c == '-') {
-	    do { 
-		token.append((char) c); 
-		input.mark(1);
-		c = input.read(); 
-	    } 
-	    while (c >= 0 && 
-		   !Character.isWhitespace((char) c) && 
-		   !isDelimiter((char) c));
-	    input.reset();
-	    token.append((char) input.read());
-	}
-
-	// If we did not skip Whitespaces but actually got one
-	// this token is empty.
-	else if (!skipWhitespaces && 
-		 Character.isWhitespace((char) c)) {
-	    input.reset();
-	    return null;
-	}
-	
-	// word token or />
-	else {
-	    do { 
-		token.append((char) c); 
-		input.mark(1);
-		c = input.read(); 
-	    } 
-	    while (c >= 0 && 
-		   !Character.isWhitespace((char) c) && 
-		   !isDelimiter((char) c));
-	    if (token.length() == 1 && token.charAt(0) == '/')
-		token.append((char)c);
-	    else
-		input.reset();
-	}
-	return token.toString();
-    }
-
-    /**
-   * could be overwritten
-   */
-    public static int skipWhiteSpace(Reader r) 
-	throws IOException {
-	int c, len=0;
-	do {
-	    r.mark(1);
-	    c = r.read();
-	    len++;
-	} 
-	while (c >= 0 && Character.isWhitespace((char) c));
-	r.reset();
-	return len - 1;
-    }
-
-    /**
      * Decide whether character is SGML delimiter or equals.
+     *
      * @param c character in question
-     * @deprecated this is an internal function an should not be used
-     *             and may be private some time
      * @return true if character is an SGML delimiter
      */
-    public static boolean isDelimiter(char c) {
+    private static boolean isDelimiter(char c) {
         return c == '<' || c == '=' || c == '>';
     }
 
     /**
      * Render this tag as a string.
+     *
      * @return SGML tag as string, showing range and values
      */
     public String toString() {
-      StringBuffer str = new StringBuffer();
-      str.append("[SGMLTag ").append(name).append(": (").append(getOffset()).append(",---)");
+        StringBuffer str = new StringBuffer();
+        str.append("[SGMLTag ").append(name).append(": (").append(getOffset()).append(",---)");
         if (attrs != null && wellFormed) {
             Iterator iter = attributes(true);
             while (iter.hasNext()) {
-                String key = (String)iter.next();
+                String key = (String) iter.next();
                 str.append(" ").append(key).append("=\"").append(value(key, null)).append("\"");
             }
         } else {
@@ -647,10 +668,4 @@ public class SGMLTag {
 }
 
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

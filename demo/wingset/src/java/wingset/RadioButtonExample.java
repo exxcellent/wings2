@@ -1,47 +1,41 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
-
-import javax.swing.Icon;
 
 import org.wings.*;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class RadioButtonExample
-    extends WingSetPane
-{
+        extends WingSetPane {
     static final ClassLoader cl = WingSet.class.getClassLoader();
-    static final SIcon sel = 
-        new SURLIcon("../icons/RadioButtonSelectedIcon.gif");
-    static final SIcon nsel = 
-        new SURLIcon("../icons/RadioButtonIcon.gif");
-    static final SIcon pressed = 
-        new SURLIcon("../icons/RadioButtonPressedIcon.gif");
-    static final SIcon dissel = 
-        new SURLIcon("../icons/RadioButtonDisabledSelectedIcon.gif");
-    static final SIcon disnsel = 
-        new SURLIcon("../icons/RadioButtonDisabledIcon.gif");
-    static final SIcon rollsel = 
-        new SURLIcon("../icons/RadioButtonRolloverSelectedIcon.gif");
-    static final SIcon rollnsel = 
-        new SURLIcon("../icons/RadioButtonRolloverIcon.gif");
+    static final SIcon sel =
+            new SURLIcon("../icons/RadioButtonSelectedIcon.gif");
+    static final SIcon nsel =
+            new SURLIcon("../icons/RadioButtonIcon.gif");
+    static final SIcon pressed =
+            new SURLIcon("../icons/RadioButtonPressedIcon.gif");
+    static final SIcon dissel =
+            new SURLIcon("../icons/RadioButtonDisabledSelectedIcon.gif");
+    static final SIcon disnsel =
+            new SURLIcon("../icons/RadioButtonDisabledIcon.gif");
+    static final SIcon rollsel =
+            new SURLIcon("../icons/RadioButtonRolloverSelectedIcon.gif");
+    static final SIcon rollnsel =
+            new SURLIcon("../icons/RadioButtonRolloverIcon.gif");
 
 
     public SComponent createExample() {
@@ -71,8 +65,8 @@ public class RadioButtonExample
         SPanel text = new SPanel();
 
         SButtonGroup group = new SButtonGroup();
-        for ( int i=0; i<3; i++ ) {
-            SRadioButton b = new SRadioButton("text " + (i+1));
+        for (int i = 0; i < 3; i++) {
+            SRadioButton b = new SRadioButton("text " + (i + 1));
             group.add(b);
             // b.setBorder(new SLineBorder(1));
             text.add(b);
@@ -95,7 +89,7 @@ public class RadioButtonExample
         boxes[7] = new SRadioButton("testBC");
         boxes[8] = new SRadioButton("testBR");
 
-        for ( int i=0; i<boxes.length; i++ ) {
+        for (int i = 0; i < boxes.length; i++) {
             group.add(boxes[i]);
             boxes[i].setToolTipText("RadioButton " + i);
             boxes[i].setIcon(nsel);
@@ -142,11 +136,11 @@ public class RadioButtonExample
 
         SPanel erg = new SPanel(new SFlowDownLayout());
 
-        SGridLayout grid = new SGridLayout(3,3);
+        SGridLayout grid = new SGridLayout(3, 3);
         grid.setBorder(1);
         SPanel b = new SPanel(grid);
 
-        for ( int i=0; i<boxes.length; i++ )
+        for (int i = 0; i < boxes.length; i++)
             b.add(boxes[i]);
 
         erg.add(b);
@@ -155,10 +149,4 @@ public class RadioButtonExample
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,29 +1,28 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 
 /**
  * An icon-text compound, where you can set an event by hand or which could be
- * used as 
+ * used as
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SClickable
-    extends SAbstractClickable {
+        extends SAbstractClickable {
 
     /**
      * if this is set (!=null) this event is rendered as anchor. If it is null,
@@ -68,10 +67,10 @@ public class SClickable
      * Creates a new <code>SClickable</code> instance with the specified icon
      * (alligned as specified) and no text.
      *
-     * @param icon The image to be displayed by the clickable.
+     * @param icon                The image to be displayed by the clickable.
      * @param horizontalAlignment One of the following constants defined in
-     *        <code>SConstants</code>:
-     *        <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
+     *                            <code>SConstants</code>:
+     *                            <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
      * @see SConstants
      */
     public SClickable(SIcon icon, int horizontalAlignment) {
@@ -95,11 +94,11 @@ public class SClickable
      * Creates a new <code>SClickable</code> instance with the specified icon
      * and the specified text (alligned as specified).
      *
-     * @param text The text to be displayed by the SClickable.
-     * @param icon The image to be displayed by the SClickable.
+     * @param text                The text to be displayed by the SClickable.
+     * @param icon                The image to be displayed by the SClickable.
      * @param horizontalAlignment One of the following constants defined in
-     *        <code>SConstants</code>:
-     *        <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
+     *                            <code>SConstants</code>:
+     *                            <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
      * @see SConstants
      */
     public SClickable(String text, SIcon icon, int horizontalAlignment) {
@@ -112,10 +111,10 @@ public class SClickable
      * Creates a new <code>SClickable</code> instance with the specified text
      * (alligned as specified) and no icon.
      *
-     * @param text The text to be displayed by the SClickable.
+     * @param text                The text to be displayed by the SClickable.
      * @param horizontalAlignment One of the following constants defined in
-     *        <code>SConstants</code>:
-     *        <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
+     *                            <code>SConstants</code>:
+     *                            <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
      * @see SConstants
      */
     public SClickable(String text, int horizontalAlignment) {
@@ -181,7 +180,7 @@ public class SClickable
             }
 
             u.addParameter(getEventTarget(),
-                           getEvent());
+                    getEvent());
             return u;
         } else {
             return null;
@@ -191,10 +190,4 @@ public class SClickable
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

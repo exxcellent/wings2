@@ -1,27 +1,23 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.plaf.xhtml;
 
-import java.io.IOException;
-
-import java.awt.Color;
-
 import org.wings.*;
-import org.wings.border.*;
-import org.wings.style.*;
+import org.wings.border.SBorder;
 import org.wings.io.Device;
+
+import java.io.IOException;
 
 /**
  * @author Holger Engels
@@ -39,23 +35,22 @@ public final class Utils implements SConstants {
     }
 
     public static void writeContainerContents(Device d, SContainer c)
-        throws IOException {
+            throws IOException {
         SLayoutManager layout = c.getLayout();
 
         if (layout != null) {
             layout.write(d);
-        }
-        else {
+        } else {
             for (int i = 0; i < c.getComponentCount(); i++)
                 c.getComponent(i).write(d);
         }
     }
 
     public static void writeHiddenComponent(Device d, String name, String value)
-        throws IOException {
+            throws IOException {
         d.print("<input type=\"hidden\" name=\"")
-            .print(name).print("\" value=\"")
-            .print(value).print("\" />");
+                .print(name).print("\" value=\"")
+                .print(value).print("\" />");
     }
 
 
@@ -103,15 +98,13 @@ public final class Utils implements SConstants {
                 d.print(chars, last, (pos - last));
                 if (c == '\n' && quoteNewline) {
                     d.print("<br>");
-                }
-                else {
+                } else {
                     d.print("&#");
-                    d.print((int)c);
+                    d.print((int) c);
                     d.print(";");
                 } // end of if ()
                 last = pos + 1;
-            }
-            else
+            } else
                 switch (c) {
                     case '&':
                         d.print(chars, last, (pos - last));
@@ -167,8 +160,7 @@ public final class Utils implements SConstants {
         if (s == null) return;
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
-        }
-        else {
+        } else {
             quote(d, s, false);
         }
     }
@@ -189,7 +181,7 @@ public final class Utils implements SConstants {
     }
 
     public static void printTableCellAlignment(Device s, SComponent c)
-        throws IOException {
+            throws IOException {
         org.wings.plaf.css.Utils.printTableHorizontalAlignment(s, c.getHorizontalAlignment());
         org.wings.plaf.css.Utils.printTableVerticalAlignment(s, c.getVerticalAlignment());
     }
@@ -198,7 +190,7 @@ public final class Utils implements SConstants {
      * Encolors the actual table cell with the background of the contained component.
      */
     public static void printTableCellColors(Device s, SComponent c)
-        throws IOException {
+            throws IOException {
 /*         if (c.getForeground()!=null)
              s.print(" COLOR=#").print(toColorString(c.getForeground()));
 */
@@ -209,8 +201,8 @@ public final class Utils implements SConstants {
                 .print("\"");
  */
             s.print("background-color:#")
-                .print(toColorString(c.getBackground()))
-                .print(";");
+                    .print(toColorString(c.getBackground()))
+                    .print(";");
         }
         if (c.getForeground() != null) {
             s.print("font-color:#").print(toColorString(c.getForeground())).print(";");
@@ -224,13 +216,13 @@ public final class Utils implements SConstants {
 
 
     public static void printTableCellAttributes(Device s, SComponent c)
-        throws IOException {
+            throws IOException {
         printTableCellColors(s, c);
         printTableCellAlignment(s, c);
     }
 
     public static void printIcon(Device d, SIcon icon, String align)
-        throws IOException {
+            throws IOException {
         if (icon == null)
             return;
 
@@ -250,11 +242,11 @@ public final class Utils implements SConstants {
     public static void printBlindIcon(Device d, SIcon icon, int height,
                                       int width) throws IOException {
         d.print("<img src=\"").
-            print(icon.getURL()).
-            print("\"").
-            print(" width=\"").print(width).print("\"").
-            print(" height=\"").print(height).print("\"").
-            print(" border=\"0\">");
+                print(icon.getURL()).
+                print("\"").
+                print(" width=\"").print(width).print("\"").
+                print(" height=\"").print(height).print("\"").
+                print(" border=\"0\">");
 
     }
 
@@ -275,7 +267,7 @@ public final class Utils implements SConstants {
      *         in css syntax otherwise.
      */
     public static void writeSpanAttributes(Device d, SComponent component)
-        throws IOException {
+            throws IOException {
         if (!hasSpanAttributes(component))
             return;
 
@@ -289,7 +281,7 @@ public final class Utils implements SConstants {
      * @return null, the attributes  in css syntax
      */
     public static void writeAttributes(Device d, SComponent component)
-        throws IOException {
+            throws IOException {
         java.awt.Color bgcolor = component.getBackground();
         java.awt.Color fgcolor = component.getForeground();
         SFont font = component.getFont();
@@ -331,10 +323,4 @@ public final class Utils implements SConstants {
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/Dialog.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -27,7 +40,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
      */
     public DialogCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
-        setCloseIcon((SIcon)manager.getObject("DialogCG.closeIcon", SIcon.class));
+        setCloseIcon((SIcon) manager.getObject("DialogCG.closeIcon", SIcon.class));
     }
 
     private void writeIcon(Device device, SIcon icon) throws IOException {
@@ -57,15 +70,14 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
 
 
     public void write(final Device device, final SComponent component)
-        throws IOException
-    {
+            throws IOException {
         device.print("<table border=\"0\" width=\"100%\" height=\"100%\"><tr><td align=\"center\" valign=\"middle\">\n");
         super.write(device, component);
         device.print("</td></tr></table>\n");
     }
 
     protected void writeContent(final Device device, final SComponent component) throws IOException {
-        final SDialog dialog = (SDialog)component;
+        final SDialog dialog = (SDialog) component;
         device.print("<table><tr>");
         int cols = 0;
         String text = dialog.getTitle();

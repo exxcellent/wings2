@@ -1,13 +1,26 @@
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.io;
 
-import java.io.*;
-import java.util.logging.*;
+import org.wings.externalizer.ExternalizedResource;
+import org.wings.session.SessionManager;
 
-import org.wings.session.*;
-import org.wings.externalizer.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public abstract class DeviceFactory
-{
+public abstract class DeviceFactory {
     private static Logger logger = Logger.getLogger("org.wings.io");
 
     private static String DEFAULT_DEVICE_FACTORY = "org.wings.io.DeviceFactory$Default";
@@ -17,55 +30,51 @@ public abstract class DeviceFactory
     public static void setDeviceFactory(DeviceFactory factory) {
         DeviceFactory.factory = factory;
     }
+
     public static DeviceFactory getDeviceFactory() {
         if (factory == null) {
-	    synchronized (DeviceFactory.class) {
-		if (factory == null) {
-		    String className = (String)SessionManager.getSession().getProperty("wings.device.factory");
-		    if (className == null)
-			className = DEFAULT_DEVICE_FACTORY;
+            synchronized (DeviceFactory.class) {
+                if (factory == null) {
+                    String className = (String) SessionManager.getSession().getProperty("wings.device.factory");
+                    if (className == null)
+                        className = DEFAULT_DEVICE_FACTORY;
 
-		    try {
-			Class factoryClass = null;
-			try {
-			    factoryClass = Class.forName(className, true,
-							 Thread.currentThread()
-							 .getContextClassLoader());
-			}
-			catch (ClassNotFoundException e) {
-			    // fallback, in case the servlet container fails to set the
-			    // context class loader.
-			    factoryClass = Class.forName(className);
-			}
-			factory = (DeviceFactory)factoryClass.newInstance();
-		    }
-		    catch (Exception e) {
-			logger.log(Level.SEVERE, "could not load wings.device.factory: " +
-				   className, e);
-			throw new RuntimeException("could not load wings.device.factory: " +
-				   className + "(" + e.getMessage() +")");
-		    }
-		}
-	    }
+                    try {
+                        Class factoryClass = null;
+                        try {
+                            factoryClass = Class.forName(className, true,
+                                    Thread.currentThread()
+                                    .getContextClassLoader());
+                        } catch (ClassNotFoundException e) {
+                            // fallback, in case the servlet container fails to set the
+                            // context class loader.
+                            factoryClass = Class.forName(className);
+                        }
+                        factory = (DeviceFactory) factoryClass.newInstance();
+                    } catch (Exception e) {
+                        logger.log(Level.SEVERE, "could not load wings.device.factory: " +
+                                className, e);
+                        throw new RuntimeException("could not load wings.device.factory: " +
+                                className + "(" + e.getMessage() + ")");
+                    }
+                }
+            }
         }
         return factory;
     }
 
     public static Device createDevice(ExternalizedResource externalizedResource)
-	throws IOException
-    {
+            throws IOException {
         return getDeviceFactory().create(externalizedResource);
     }
 
     protected abstract Device create(ExternalizedResource externalizedResource) throws IOException;
 
     static class Default
-	extends DeviceFactory
-    {
-	protected Device create(ExternalizedResource externalizedResource)
-	    throws IOException
-	{
-	    return new ServletDevice(SessionManager.getSession().getServletResponse().getOutputStream());
-	}
+            extends DeviceFactory {
+        protected Device create(ExternalizedResource externalizedResource)
+                throws IOException {
+            return new ServletDevice(SessionManager.getSession().getServletResponse().getOutputStream());
+        }
     }
 }

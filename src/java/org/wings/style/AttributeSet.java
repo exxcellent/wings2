@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2001 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -13,11 +13,12 @@
  */
 package org.wings.style;
 
-import org.wings.io.Device;
 import org.wings.Renderable;
+import org.wings.io.Device;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
-import java.io.*;
 
 /**
  * A straightforward implementation of AttributeSet using a hash map.
@@ -26,22 +27,23 @@ import java.io.*;
  * @version $Revision$
  */
 public class AttributeSet
-    implements Renderable, Serializable, Cloneable
-{
+        implements Renderable, Serializable, Cloneable {
     public static final AttributeSet EMPTY_ATTRIBUTESET =
-        new AttributeSet() {
-            private String doThrow() throws UnsupportedOperationException {
-                throw new UnsupportedOperationException("cannot change values for the global EMPTY_ATTRIBUTESET. You attempted to modify this unmodifiable AttributeSet: create your own instance of a AttributeSet first!");
-            }
-            public String put(String name, String value) {
-                doThrow();
-                return null; // make compiler happy.
-            }
-            public boolean putAll(AttributeSet attributes) {
-                doThrow();
-                return false; // make compiler happy.
-            }
-        };
+            new AttributeSet() {
+                private String doThrow() throws UnsupportedOperationException {
+                    throw new UnsupportedOperationException("cannot change values for the global EMPTY_ATTRIBUTESET. You attempted to modify this unmodifiable AttributeSet: create your own instance of a AttributeSet first!");
+                }
+
+                public String put(String name, String value) {
+                    doThrow();
+                    return null; // make compiler happy.
+                }
+
+                public boolean putAll(AttributeSet attributes) {
+                    doThrow();
+                    return false; // make compiler happy.
+                }
+            };
 
     private Map map;
 
@@ -127,7 +129,7 @@ public class AttributeSet
     /**
      * Adds an attribute to the list.
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public String put(String name, String value) {
@@ -194,7 +196,8 @@ public class AttributeSet
 
     /**
      * Returns a hashcode for this set of attributes.
-     * @return     a hashcode value for this set of attributes.
+     *
+     * @return a hashcode value for this set of attributes.
      */
     public int hashCode() {
         return map == null ? 0 : map.hashCode();
@@ -227,14 +230,14 @@ public class AttributeSet
      * Write style definition to the device
      */
     public void write(Device d)
-        throws IOException {
+            throws IOException {
         if (map != null) {
             Iterator names = map.entrySet().iterator();
             while (names.hasNext()) {
                 Map.Entry next = (Map.Entry) names.next();
                 d.print(next.getKey()).print(":")
-                    .print(next.getValue())
-                    .print("; ");
+                        .print(next.getValue())
+                        .print("; ");
             }
         }
     }
@@ -261,10 +264,4 @@ public class AttributeSet
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

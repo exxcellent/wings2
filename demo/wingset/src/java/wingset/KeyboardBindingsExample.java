@@ -2,6 +2,19 @@
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
 
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package wingset;
 
 import org.wings.SComponent;
@@ -17,8 +30,7 @@ import java.awt.event.KeyEvent;
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class KeyboardBindingsExample extends WingSetPane
-{
+public class KeyboardBindingsExample extends WingSetPane {
     private SLabel label = new SLabel();
     private STextField textField = new STextField();
     private SForm form = new SForm();
@@ -84,7 +96,7 @@ public class KeyboardBindingsExample extends WingSetPane
         form.setActionMap(actionMap);
 
         form.add(new SLabel("<html>f1 through f10 are captured by the STextField<br/>" +
-            "shift f1 through shift f10 are bubbling up to the containing SForm"));
+                "shift f1 through shift f10 are bubbling up to the containing SForm"));
         form.add(textField);
         form.add(label);
 

@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.plaf.FrameCG;
@@ -40,11 +39,11 @@ import java.util.List;
  * @version $Revision$
  */
 public class SFrame
-    extends SRootContainer
-    implements PropertyChangeListener {
+        extends SRootContainer
+        implements PropertyChangeListener {
 
     /**
-     *  The Title of the Frame.
+     * The Title of the Frame.
      */
     protected String title;
 
@@ -53,7 +52,9 @@ public class SFrame
      */
     protected List headers;
 
-    /** the style sheet used in certain look and feels. */
+    /**
+     * the style sheet used in certain look and feels.
+     */
     protected StyleSheet styleSheet;  // IMPORTANT: initialization with null causes errors;
     // These: all properties, that are installed by the plaf, are installed during the initialization of
     // SComponent. The null initializations happen afterwards and overwrite the plaf installed values.
@@ -155,7 +156,6 @@ public class SFrame
     }
 
     /**
-     *
      * @param m is typically a {@link Renderable}.
      */
     public void addHeader(Object m) {
@@ -231,7 +231,7 @@ public class SFrame
     }
 
     public void invite(ComponentVisitor visitor)
-        throws Exception {
+            throws Exception {
         visitor.visit(this);
     }
 

@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import java.util.HashMap;
@@ -24,11 +23,7 @@ import java.util.Iterator;
  * @version $Revision$
  */
 public class SCardLayout
-    extends SAbstractLayoutManager
-{
-    /**
-     * TODO: documentation
-     */
+        extends SAbstractLayoutManager {
     protected HashMap tab = new HashMap();
 
     /**
@@ -44,7 +39,7 @@ public class SCardLayout
     }
 
     public void removeComponent(SComponent c) {
-        for (Iterator e = tab.keySet().iterator() ; e.hasNext() ; ) {
+        for (Iterator e = tab.keySet().iterator(); e.hasNext();) {
             Object key = e.next();
             if (tab.get(key) == c) {
                 tab.remove(key);
@@ -65,13 +60,14 @@ public class SCardLayout
 
     /**
      * Flips to the first card of the container.
-     * @param     parent   the name of the parent container
-     *                          in which to do the layout.
+     *
+     * @param parent the name of the parent container
+     *               in which to do the layout.
      */
     public void first(SContainer parent) {
         checkLayout(parent);
-        for (int i = 0 ; i < parent.getComponentCount(); i++)
-            if ( i>0 )
+        for (int i = 0; i < parent.getComponentCount(); i++)
+            if (i > 0)
                 parent.getComponent(i).setVisible(false);
             else
                 parent.getComponent(i).setVisible(true);
@@ -81,17 +77,18 @@ public class SCardLayout
      * Flips to the next card of the specified container. If the
      * currently visible card is the last one, this method flips to the
      * first card in the layout.
-     * @param     parent   the name of the parent container
-     *                          in which to do the layout.
+     *
+     * @param parent the name of the parent container
+     *               in which to do the layout.
      */
     public void next(SContainer parent) {
         checkLayout(parent);
         int ncomponents = parent.getComponentCount();
-        for (int i = 0 ; i < ncomponents; i++) {
+        for (int i = 0; i < ncomponents; i++) {
             SComponent comp = parent.getComponent(i);
-            if ( comp.isVisible() ) {
+            if (comp.isVisible()) {
                 comp.setVisible(false);
-                comp = parent.getComponent((i + 1 < ncomponents) ? i+1 : 0);
+                comp = parent.getComponent((i + 1 < ncomponents) ? i + 1 : 0);
                 comp.setVisible(true);
                 return;
             }
@@ -102,17 +99,18 @@ public class SCardLayout
      * Flips to the previous card of the specified container. If the
      * currently visible card is the first one, this method flips to the
      * last card in the layout.
-     * @param     parent   the name of the parent container
-     *                          in which to do the layout.
+     *
+     * @param parent the name of the parent container
+     *               in which to do the layout.
      */
     public void previous(SContainer parent) {
         checkLayout(parent);
         int ncomponents = parent.getComponentCount();
-        for (int i = 0 ; i < ncomponents ; i++) {
+        for (int i = 0; i < ncomponents; i++) {
             SComponent comp = parent.getComponent(i);
-            if ( comp.isVisible() ) {
+            if (comp.isVisible()) {
                 comp.setVisible(false);
-                comp = parent.getComponent((i > 0) ? i-1 : ncomponents-1);
+                comp = parent.getComponent((i > 0) ? i - 1 : ncomponents - 1);
                 comp.setVisible(true);
                 return;
             }
@@ -121,14 +119,15 @@ public class SCardLayout
 
     /**
      * Flips to the last card of the container.
-     * @param     parent   the name of the parent container
-     *                          in which to do the layout.
+     *
+     * @param parent the name of the parent container
+     *               in which to do the layout.
      */
     public void last(SContainer parent) {
         checkLayout(parent);
         int ncomponents = parent.getComponentCount();
-        for (int i = 0 ; i < ncomponents ; i++) {
-            if (i < ncomponents-1)
+        for (int i = 0; i < ncomponents; i++) {
+            if (i < ncomponents - 1)
                 parent.getComponent(i).setVisible(false);
             else
                 parent.getComponent(i).setVisible(true);
@@ -140,11 +139,11 @@ public class SCardLayout
      * Flips to the component
      */
     public void show(SComponent comp) {
-        for (Iterator en = tab.values().iterator() ; en.hasNext() ; ) {
-            SComponent c = (SComponent)en.next();
+        for (Iterator en = tab.values().iterator(); en.hasNext();) {
+            SComponent c = (SComponent) en.next();
             c.setVisible(false);
         }
-       comp.setVisible(true);
+        comp.setVisible(true);
     }
 
     /**
@@ -152,9 +151,9 @@ public class SCardLayout
      */
     public void show(Object constraint) {
         SComponent visibleComponent = (SComponent) tab.get(constraint);
-        if ( visibleComponent!=null ) {
-            for (Iterator en = tab.values().iterator() ; en.hasNext() ; ) {
-                SComponent c = (SComponent)en.next();
+        if (visibleComponent != null) {
+            for (Iterator en = tab.values().iterator(); en.hasNext();) {
+                SComponent c = (SComponent) en.next();
                 c.setVisible(false);
             }
             visibleComponent.setVisible(true);
@@ -165,43 +164,36 @@ public class SCardLayout
      * Flips to the component that was added to this layout with the
      * specified <code>name</code>, using <code>addLayoutComponent</code>.
      * If no such component exists, then nothing happens.
-     * @param     parent   the name of the parent container
-     *                     in which to do the layout.
-     * @param     name     the component name.
+     *
+     * @param parent the name of the parent container
+     *               in which to do the layout.
+     * @param name   the component name.
      */
     public void show(SContainer parent, Object name) {
         checkLayout(parent);
-        SComponent next = (SComponent)tab.get(name);
+        SComponent next = (SComponent) tab.get(name);
         if ((next != null) && !next.isVisible()) {
-            for (int i = 0 ; i < parent.getComponentCount(); i++)
+            for (int i = 0; i < parent.getComponentCount(); i++)
                 parent.getComponent(i).setVisible(false);
             next.setVisible(true);
         }
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public SComponent getVisibleComponent() {
-        for (Iterator en = tab.values().iterator() ; en.hasNext() ; ) {
-            SComponent c = (SComponent)en.next();
+        for (Iterator en = tab.values().iterator(); en.hasNext();) {
+            SComponent c = (SComponent) en.next();
             if (c.isVisible())
                 return c;
         }
         return null;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public Object getVisibleConstraint() {
-        for (Iterator en = tab.keySet().iterator() ; en.hasNext() ; ) {
+        for (Iterator en = tab.keySet().iterator(); en.hasNext();) {
             Object constraint = en.next();
-            SComponent c = (SComponent)tab.get(constraint);
+            SComponent c = (SComponent) tab.get(constraint);
             if (c.isVisible())
                 return constraint;
         }
@@ -209,10 +201,4 @@ public class SCardLayout
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

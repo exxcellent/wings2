@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.externalizer.ExternalizeManager;
@@ -26,8 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$
@@ -82,7 +79,7 @@ public abstract class StaticResource extends Resource {
                     SessionManager.getSession().getProperty("Resource.MaxSizeToBuffer");
 
             if (prop != null &&
-                prop instanceof Number) {
+                    prop instanceof Number) {
 
                 maxSizeToBuffer = ((Number) prop).intValue();
             }
@@ -179,7 +176,7 @@ public abstract class StaticResource extends Resource {
                 byte[] copyBuffer = new byte[1024];
                 int read;
                 while (buffer.isValid()
-                       && (read = resource.read(copyBuffer)) > 0) {
+                        && (read = resource.read(copyBuffer)) > 0) {
                     buffer.write(copyBuffer, 0, read);
                 }
                 resource.close();
@@ -188,7 +185,7 @@ public abstract class StaticResource extends Resource {
                 }
             } else {
                 logger.log(Level.SEVERE,
-                           "Resource returned empty stream: " + this);
+                        "Resource returned empty stream: " + this);
                 buffer.setValid(false);
             }
         }
@@ -265,11 +262,7 @@ public abstract class StaticResource extends Resource {
         return propertyService;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String toString() {
         return getId();
     }
@@ -298,7 +291,7 @@ public abstract class StaticResource extends Resource {
             int index = baseName.lastIndexOf('.');
             if (index != -1) {
                 fileName = baseName.substring(0, index).replace('.', '/')
-                           + "/" + fileName;
+                        + "/" + fileName;
             }
         } else {
             fileName = fileName.substring(1);
@@ -309,9 +302,4 @@ public abstract class StaticResource extends Resource {
     protected abstract InputStream getResourceStream() throws IOException;
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * End:
- */
+

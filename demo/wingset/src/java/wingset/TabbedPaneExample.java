@@ -1,6 +1,19 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package wingset;
 
 
@@ -85,7 +98,7 @@ public class TabbedPaneExample extends WingSetPane {
 
         for (int i = 0; i < clrs.length; i += 2) {
             SRadioButton btn = new SRadioButton(clrs[i].toString());
-            btn.putClientProperty("color", clrs[i+1]);
+            btn.putClientProperty("color", clrs[i + 1]);
             btn.addActionListener(new ColorActionListener(tabbedPane));
             btn.setShowAsFormComponent(false);
             group.add(btn);
@@ -129,8 +142,8 @@ public class TabbedPaneExample extends WingSetPane {
         }
 
         public void actionPerformed(ActionEvent ae) {
-            SComponent source = (SComponent)ae.getSource();
-            Integer placement = (Integer)source.getClientProperty("placement");
+            SComponent source = (SComponent) ae.getSource();
+            Integer placement = (Integer) source.getClientProperty("placement");
             tpane.setTabPlacement(placement.intValue());
         }
     }
@@ -143,8 +156,8 @@ public class TabbedPaneExample extends WingSetPane {
         }
 
         public void actionPerformed(ActionEvent ae) {
-            SComponent source = (SComponent)ae.getSource();
-            Color color= (Color)source.getClientProperty("color");
+            SComponent source = (SComponent) ae.getSource();
+            Color color = (Color) source.getClientProperty("color");
             tabs.setBackground(color);
         }
     }

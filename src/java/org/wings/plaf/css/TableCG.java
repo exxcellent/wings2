@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/Table.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -12,8 +25,8 @@ import java.awt.*;
 import java.io.IOException;
 
 public class TableCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.TableCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.TableCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __table_1 = "</table>".getBytes();
@@ -33,22 +46,22 @@ public class TableCG
      */
     public TableCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
-        setFixedTableBorderWidth((String)manager.getObject("TableCG.fixedTableBorderWidth", String.class));
+        setFixedTableBorderWidth((String) manager.getObject("TableCG.fixedTableBorderWidth", String.class));
     }
 
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        final STable component = (STable)comp;
+        final STable component = (STable) comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         value = manager.getObject("STable.defaultRenderer", STableCellRenderer.class);
         if (value != null) {
-            component.setDefaultRenderer((STableCellRenderer)value);
+            component.setDefaultRenderer((STableCellRenderer) value);
         }
         value = manager.getObject("STable.headerRenderer", STableCellRenderer.class);
         if (value != null) {
-            component.setHeaderRenderer((STableCellRenderer)value);
+            component.setHeaderRenderer((STableCellRenderer) value);
         }
     }
 
@@ -56,11 +69,11 @@ public class TableCG
      * write a specific cell to the device
      */
     protected void writeCell(Device device, STable table, SCellRendererPane rendererPane, int row, int col)
-        throws IOException {
+            throws IOException {
         SComponent component = null;
         boolean isEditingCell = table.isEditing()
-            && row == table.getEditingRow()
-            && col == table.getEditingColumn();
+                && row == table.getEditingRow()
+                && col == table.getEditingColumn();
         boolean selectable = table.getSelectionMode() != SListSelectionModel.NO_SELECTION && !table.isEditable();
         boolean showAsFormComponent = table.getShowAsFormComponent();
 
@@ -116,8 +129,7 @@ public class TableCG
                 device.print("\" value=\"");
                 org.wings.plaf.Utils.write(device, parameter);
                 device.print("\">");
-            }
-            else {
+            } else {
                 RequestURL selectionAddr = table.getRequestURL();
                 selectionAddr.addParameter(Utils.event(table), parameter);
 
@@ -125,8 +137,7 @@ public class TableCG
                 org.wings.plaf.Utils.write(device, selectionAddr.toString());
                 device.print("\">");
             }
-        }
-        else
+        } else
             device.write("<span>".getBytes());
 
         rendererPane.writeComponent(device, component, table);
@@ -136,8 +147,7 @@ public class TableCG
                 device.print("</button>");
             else
                 device.print("</a>");
-        }
-        else
+        } else
             device.print("</span>");
 
         device.print("</td>\n");
@@ -147,7 +157,7 @@ public class TableCG
     protected void writeHeaderCell(Device device, STable table,
                                    SCellRendererPane rendererPane,
                                    int c)
-        throws IOException {
+            throws IOException {
         SComponent comp = table.prepareHeaderRenderer(c);
 
         device.write("<th>".getBytes());
@@ -157,10 +167,10 @@ public class TableCG
 
 
     public void writeContent(final Device device, final SComponent _c)
-        throws IOException {
-        final STable component = (STable)_c;
+            throws IOException {
+        final STable component = (STable) _c;
 
-        STable table = (STable)component;
+        STable table = (STable) component;
         boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
 
         SDimension intercellPadding = table.getIntercellPadding();
@@ -233,11 +243,10 @@ public class TableCG
                     device.print("\">");
                     device.print(r);
                     device.print("</button>");
-                }
-                else {
+                } else {
                     RequestURL selectionAddr = table.getRequestURL();
                     selectionAddr.addParameter(org.wings.plaf.css.Utils.event(table),
-                        table.getToggleSelectionParameter(r, -1));
+                            table.getToggleSelectionParameter(r, -1));
 
                     device.write("<a href=\"".getBytes());
                     org.wings.plaf.Utils.write(device, selectionAddr.toString());

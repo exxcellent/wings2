@@ -1,23 +1,35 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package wingset;
 
 import org.wings.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Iterator;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 /**
  * @author hengels
  * @version $Revision$
  */
 public class ComponentControls
-    extends SPanel
-{
+        extends SPanel {
     protected List components = new LinkedList();
     protected STextField widthTextField;
     protected STextField heightTextField;
@@ -47,7 +59,7 @@ public class ComponentControls
                     preferredSize.setHeight(height);
 
                 for (Iterator iterator = components.iterator(); iterator.hasNext();) {
-                    SComponent component = (SComponent)iterator.next();
+                    SComponent component = (SComponent) iterator.next();
                     component.setPreferredSize(preferredSize);
                 }
             }

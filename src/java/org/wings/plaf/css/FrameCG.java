@@ -1,13 +1,26 @@
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
 import org.wings.*;
-import org.wings.resource.DefaultURLResource;
-import org.wings.resource.DynamicCodeResource;
 import org.wings.header.Link;
 import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+import org.wings.resource.DefaultURLResource;
+import org.wings.resource.DynamicCodeResource;
 import org.wings.script.DynamicScriptResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
@@ -34,13 +47,13 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     public FrameCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
 
-        setDocumentType((String)manager.getObject("FrameCG.documentType", String.class));
-        setRenderXmlDeclaration((Boolean)manager.getObject("FrameCG.renderXmlDeclaration", Boolean.class));
+        setDocumentType((String) manager.getObject("FrameCG.documentType", String.class));
+        setRenderXmlDeclaration((Boolean) manager.getObject("FrameCG.renderXmlDeclaration", Boolean.class));
     }
 
 
     public void installCG(final SComponent comp) {
-        final SFrame component = (SFrame)comp;
+        final SFrame component = (SFrame) comp;
 
         DynamicCodeResource dynamicCodeRessource;
         DynamicStyleSheetResource styleSheetResource;
@@ -79,7 +92,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     }
 
     public void uninstallCG(final SComponent comp) {
-        final SFrame component = (SFrame)comp;
+        final SFrame component = (SFrame) comp;
 
         component.removeDynamicResource(DynamicCodeResource.class);
         component.removeDynamicResource(DynamicStyleSheetResource.class);
@@ -98,7 +111,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     new JavaScriptListener("", "", loadScript("org/wings/plaf/css/DateChooser.js"));
     */
     public static final JavaScriptListener FORM_SCRIPT_LOADER =
-        new JavaScriptListener("", "", loadScript("org/wings/plaf/css/Form.js"));
+            new JavaScriptListener("", "", loadScript("org/wings/plaf/css/Form.js"));
 
     public static String loadScript(String resource) {
         InputStream in = null;
@@ -113,21 +126,17 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             buffer.append(line).append("\n");
 
             return buffer.toString();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
-        }
-        finally {
+        } finally {
             try {
                 in.close();
-            }
-            catch (Exception ign) {
+            } catch (Exception ign) {
             }
             try {
                 reader.close();
-            }
-            catch (Exception ign1) {
+            } catch (Exception ign1) {
             }
         }
     }
@@ -138,14 +147,14 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
     public void write(final Device device,
                       final SComponent _c)
-        throws IOException {
+            throws IOException {
         if (!_c.isVisible()) return;
         _c.fireRenderEvent(SComponent.START_RENDERING);
-        final SFrame component = (SFrame)_c;
+        final SFrame component = (SFrame) _c;
 
         org.wings.session.Browser browser = SessionManager.getSession().getUserAgent();
 
-        SFrame frame = (SFrame)component;
+        SFrame frame = (SFrame) component;
 
         String language = SessionManager.getSession().getLocale().getLanguage();
         String title = frame.getTitle();
@@ -153,10 +162,9 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         String encoding = SessionManager.getSession().getCharacterEncoding();
 
         if ("MSIE".equals(browser.getBrowserName()) &&
-            browser.getMajorVersion() < 4) {
+                browser.getMajorVersion() < 4) {
             device.write("<html>\n".getBytes());
-        }
-        else {
+        } else {
             if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
                 device.write("<?xml version=\"1.0\" encoding=\"".getBytes());
                 org.wings.plaf.Utils.write(device, encoding);
@@ -185,9 +193,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         while (it.hasNext()) {
             Object next = it.next();
             if (next instanceof Renderable) {
-                ((Renderable)next).write(device);
-            }
-            else {
+                ((Renderable) next).write(device);
+            } else {
                 org.wings.plaf.Utils.write(device, next.toString());
             }
             device.write("\n".getBytes());
@@ -215,15 +222,15 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         // TODO: move this to a dynamic script resource
         SToolTipManager toolTipManager = component.getSession().getToolTipManager();
         device
-            .print("<script language=\"JavaScript\" type=\"text/javascript\">\n")
-            .print("domTT_addPredefined('default', 'caption', false");
+                .print("<script language=\"JavaScript\" type=\"text/javascript\">\n")
+                .print("domTT_addPredefined('default', 'caption', false");
         if (toolTipManager.isFollowMouse())
             device.print(", 'trail', true");
         device.print(", 'delay', ").print(toolTipManager.getInitialDelay());
         device.print(", 'lifetime', ").print(toolTipManager.getDismissDelay());
         device
-            .print(");\n")
-            .print("</script>\n");
+                .print(");\n")
+                .print("</script>\n");
 
         device.write("</head>\n".getBytes());
         device.write("<body ".getBytes());

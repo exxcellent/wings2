@@ -1,22 +1,34 @@
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.event;
 
 import java.lang.ref.WeakReference;
-
 
 
 /**
  * A SRequestListener implementation, which uses WeakReference. This is
  * important for volatile objects, which needs to be registered as request
  * listener at the wings session, but which are not removed anymore from the
- * session. To make them 
+ * session. To make them
  * garbage collectable, they should use this proxy for registering as a request
- * listener. 
+ * listener.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public final class WeakRequestListenerProxy extends WeakReference implements SRequestListener {
-    
+
     /**
      * 
      */
@@ -32,9 +44,9 @@ public final class WeakRequestListenerProxy extends WeakReference implements SRe
      * @param e a <code>SRequestEvent</code> value
      */
     public void processRequest(SRequestEvent e) {
-        SRequestListener requestListener = (SRequestListener)get();
+        SRequestListener requestListener = (SRequestListener) get();
 
-        if (  requestListener==null ) {
+        if (requestListener == null) {
             org.wings.session.SessionManager.getSession().removeRequestListener(this);
         } else {
             requestListener.processRequest(e);
@@ -44,7 +56,7 @@ public final class WeakRequestListenerProxy extends WeakReference implements SRe
     public int hashCode() {
         Object requestListener = get();
 
-        if (  requestListener==null ) {
+        if (requestListener == null) {
             return 0;
         } else {
             return requestListener.hashCode();
@@ -54,18 +66,18 @@ public final class WeakRequestListenerProxy extends WeakReference implements SRe
     public boolean equals(WeakRequestListenerProxy p) {
         Object requestListener = get();
 
-        if (  requestListener==null ) {
-            return p.get()==null;
+        if (requestListener == null) {
+            return p.get() == null;
         } else {
             return requestListener.equals(p.get());
         } // end of if ()
     }
 
     public boolean equals(Object o) {
-        if ( o instanceof WeakRequestListenerProxy ) {
-            return equals((WeakRequestListenerProxy)o);
+        if (o instanceof WeakRequestListenerProxy) {
+            return equals((WeakRequestListenerProxy) o);
         } else {
-            return false;   
+            return false;
         } // end of if ()
     }
 
@@ -73,8 +85,15 @@ public final class WeakRequestListenerProxy extends WeakReference implements SRe
 
 /*
    $Log$
-   Revision 1.1  2004/10/04 16:13:16  hengels
-   Initial revision
+   Revision 1.2  2004/11/24 18:12:54  blueshift
+   TOTAL CLEANUP:
+   - removed document me TODOs
+   - updated/added java file headers
+   - removed emacs stuff
+   - removed deprecated methods
+
+   Revision 1.1.1.1  2004/10/04 16:13:16  hengels
+   o start development of wings 2
 
    Revision 1.2  2003/03/24 17:05:37  arminhaaf
    o add equals and hashcode methods

@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.plaf.xhtml.css1;
 
 import org.wings.SComponent;
@@ -32,7 +31,7 @@ import java.io.IOException;
  * @version $Revision$
  */
 public final class Utils
-    implements SConstants {
+        implements SConstants {
     final static char[] hexDigits = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'a', 'b',
@@ -58,21 +57,21 @@ public final class Utils
     }
 
     public static void writeStyleAttribute(Device d, String prefix, String style)
-        throws IOException {
+            throws IOException {
         if (style == null)
             return;
         writeStyleAttribute(d, prefix, style, "");
     }
 
     public static void writeStyleAttribute(Device d, String prefix, String style, String postfix)
-        throws IOException {
+            throws IOException {
         if (style == null)
             return;
         writeStyleAttribute(d, prefix + style + postfix);
     }
 
     public static void writeStyleAttribute(Device d, String style)
-        throws IOException {
+            throws IOException {
         if (style == null)
             return;
 
@@ -89,7 +88,7 @@ public final class Utils
      * @param component the component to get style and bg-color from
      */
     public static void writeSpanWithStyleAttributePrefix(Device d, SComponent component)
-        throws IOException {
+            throws IOException {
         String style = component.getStyle();
         boolean hasAttr = org.wings.plaf.xhtml.Utils.hasSpanAttributes(component);
         if (style == null && !hasAttr)
@@ -114,10 +113,10 @@ public final class Utils
      * @param component the component to get style and bg-color from
      */
     public static void writeSpanWithStyleAttributePostfix(Device d, SComponent component)
-        throws IOException {
+            throws IOException {
         if (
-            component.getStyle() == null &&
-            org.wings.plaf.xhtml.Utils.hasSpanAttributes(component)
+                component.getStyle() == null &&
+                org.wings.plaf.xhtml.Utils.hasSpanAttributes(component)
         )
             return;
 
@@ -125,7 +124,7 @@ public final class Utils
     }
 
     public static void writeSpanWithStyleAttributePrefix(Device d, String style)
-        throws IOException {
+            throws IOException {
         if (style == null)
             return;
 
@@ -135,7 +134,7 @@ public final class Utils
     }
 
     public static void writeSpanWithStyleAttributePostfix(Device d, String style)
-        throws IOException {
+            throws IOException {
         if (style == null)
             return;
 
@@ -143,7 +142,7 @@ public final class Utils
     }
 
     public static void writeDivWithStyleAttributePrefix(Device d, String style)
-        throws IOException {
+            throws IOException {
         if (style == null)
             return;
 
@@ -153,7 +152,7 @@ public final class Utils
     }
 
     public static void writeDivWithStyleAttributePostfix(Device d, String style)
-        throws IOException {
+            throws IOException {
         if (style == null)
             return;
 
@@ -161,10 +160,10 @@ public final class Utils
     }
 
     static void writeHiddenComponent(Device d, String name, String value)
-        throws IOException {
+            throws IOException {
         d.print("<input type=\"hidden\" name=\"").
-            print(name).print("\" value=\"").
-            print(value).print("\" />\n");
+                print(name).print("\" value=\"").
+                print(value).print("\" />\n");
     }
 
     public static String toHexString(int rgb) {
@@ -183,12 +182,12 @@ public final class Utils
     }
 
     public static void writeFontPrefix(Device d, SFont font)
-        throws IOException {
+            throws IOException {
         writeFontPrefix(d, font, null);
     }
 
     public static void writeFontPrefix(Device d, SFont font, Color color)
-        throws IOException {
+            throws IOException {
         if (font == null && color == null)
             return;
 
@@ -224,12 +223,12 @@ public final class Utils
     }
 
     public static void writeFontPostfix(Device d, SFont font)
-        throws IOException {
+            throws IOException {
         writeFontPostfix(d, font, null);
     }
 
     public static void writeFontPostfix(Device d, SFont font, Color color)
-        throws IOException {
+            throws IOException {
         if (font == null && color == null)
             return;
 
@@ -245,10 +244,4 @@ public final class Utils
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

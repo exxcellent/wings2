@@ -1,21 +1,21 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
-import java.io.*;
 import org.wings.io.Device;
+
+import java.io.IOException;
 
 /**
  * This class handles a HTTP GET Address that can be updated
@@ -24,10 +24,9 @@ import org.wings.io.Device;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class RequestURL extends SimpleURL
-{
+public class RequestURL extends SimpleURL {
     private static final byte[] _delimiter = "_".getBytes();
-    private static final byte[] _ampStr    = "&amp;".getBytes();
+    private static final byte[] _ampStr = "&amp;".getBytes();
     private static final byte[] _questMark = "?".getBytes();
     private static final String DEFAULT_RESOURCE_NAME = "_";
 
@@ -44,7 +43,7 @@ public class RequestURL extends SimpleURL
     /**
      * 
      */
-    public RequestURL() { 
+    public RequestURL() {
     }
 
     /**
@@ -62,7 +61,7 @@ public class RequestURL extends SimpleURL
     /**
      * 
      */
-    public RequestURL(String baseURL, String encodedBaseURL) { 
+    public RequestURL(String baseURL, String encodedBaseURL) {
         setBaseURL(baseURL, encodedBaseURL);
     }
 
@@ -101,11 +100,11 @@ public class RequestURL extends SimpleURL
         baseURL = b;
 
         baseParameters = encoded.substring(b.length());
-        if ( baseParameters.length()==0 )
+        if (baseParameters.length() == 0)
             baseParameters = null;
 
-        if ( baseParameters!=null )
-            hasQuestMark = baseParameters.indexOf('?')>=0;
+        if (baseParameters != null)
+            hasQuestMark = baseParameters.indexOf('?') >= 0;
         else
             hasQuestMark = false;
     }
@@ -119,8 +118,8 @@ public class RequestURL extends SimpleURL
      * @return a reference to <code>this</code> to simplify 'call chaining'
      */
     public RequestURL addParameter(String parameter) {
-        if (parameter!=null) {
-            if (parameters == null) 
+        if (parameter != null) {
+            if (parameters == null)
                 parameters = new StringBuffer();
             else
                 parameters.append("&amp;");
@@ -145,10 +144,10 @@ public class RequestURL extends SimpleURL
 
     /**
      * Add an additional name/value pair to be included in the GET paramter
-     * list. The added name will be the encoded LowLevelEventId of the 
+     * list. The added name will be the encoded LowLevelEventId of the
      * LowLevelEventListener.
      *
-     * @param comp 
+     * @param comp
      * @param value the value of the parameter
      * @return a reference to <code>this</code> to simplify 'call chaining'
      */
@@ -190,7 +189,7 @@ public class RequestURL extends SimpleURL
      * Tries to avoid charset conversion as much as possible by precalculating the
      * byteArray representation of the non-parameter part.
      *
-     * @param d the Device to write to 
+     * @param d the Device to write to
      */
     public void write(Device d) throws IOException {
         super.write(d);
@@ -202,22 +201,21 @@ public class RequestURL extends SimpleURL
 
         if (resource != null) {
             d.print(resource);
-        }
-        else {
+        } else {
             /*
              * The default resource name. Work around a bug in some
              * browsers that fail to assemble URLs.
              * (TODO: verify and give better explanation here).
              */
-            d.print( DEFAULT_RESOURCE_NAME );
+            d.print(DEFAULT_RESOURCE_NAME);
         }
 
-        if ( baseParameters!=null ) {
+        if (baseParameters != null) {
             d.print(baseParameters);
         }
 
         if (parameters != null && parameters.length() > 0) {
-            d.write (hasQuestMark ? _ampStr : _questMark);
+            d.write(hasQuestMark ? _ampStr : _questMark);
             d.print(parameters.toString());
         }
     }
@@ -231,23 +229,22 @@ public class RequestURL extends SimpleURL
     public String toString() {
         StringBuffer erg = new StringBuffer();
 
-        if ( baseURL!=null ) {
+        if (baseURL != null) {
             erg.append(baseURL);
         }
 
-        if ( resource!=null && epoch!=null ) {
+        if (resource != null && epoch != null) {
             erg.append(epoch);
             erg.append("_");
         }
 
-        if ( resource!=null ) {
+        if (resource != null) {
             erg.append(resource);
-        }
-        else {
-            erg.append( DEFAULT_RESOURCE_NAME );
+        } else {
+            erg.append(DEFAULT_RESOURCE_NAME);
         }
 
-        if ( baseParameters!=null ) {
+        if (baseParameters != null) {
             erg.append(baseParameters);
         }
 
@@ -274,15 +271,16 @@ public class RequestURL extends SimpleURL
                 && eq(parameters, other.parameters));
     }
 
-    /** 
+    /**
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
         return baseURL != null ? baseURL.hashCode() : 0;
     }
-    
+
     /**
      * Deep copy.
+     *
      * @return object with cloned contents
      */
     public Object clone() {
@@ -290,10 +288,4 @@ public class RequestURL extends SimpleURL
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

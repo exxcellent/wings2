@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/ProgressBar.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -9,8 +22,8 @@ import org.wings.plaf.CGManager;
 import java.io.IOException;
 
 public class ProgressBarCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.ProgressBarCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.ProgressBarCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __table_border_0 = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>".getBytes();
@@ -34,29 +47,29 @@ public class ProgressBarCG
     private final static byte[] __span = "</span>".getBytes();
 
     public void installCG(final SComponent comp) {
-        final SProgressBar component = (SProgressBar)comp;
+        final SProgressBar component = (SProgressBar) comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         Object previous;
         value = manager.getObject("SProgressBar.borderColor", java.awt.Color.class);
         if (value != null) {
-            component.setBorderColor((java.awt.Color)value);
+            component.setBorderColor((java.awt.Color) value);
         }
         value = manager.getObject("SProgressBar.filledColor", java.awt.Color.class);
         if (value != null) {
-            component.setFilledColor((java.awt.Color)value);
+            component.setFilledColor((java.awt.Color) value);
         }
         value = manager.getObject("SProgressBar.foreground", java.awt.Color.class);
         if (value != null) {
-            component.setForeground((java.awt.Color)value);
+            component.setForeground((java.awt.Color) value);
         }
         value = manager.getObject("SProgressBar.preferredSize", SDimension.class);
         if (value != null) {
-            component.setPreferredSize((SDimension)value);
+            component.setPreferredSize((SDimension) value);
         }
         value = manager.getObject("SProgressBar.unfilledColor", java.awt.Color.class);
         if (value != null) {
-            component.setUnfilledColor((java.awt.Color)value);
+            component.setUnfilledColor((java.awt.Color) value);
         }
     }
 
@@ -72,8 +85,8 @@ public class ProgressBarCG
 
     public void writeContent(final Device device,
                              final SComponent _c)
-        throws IOException {
-        final SProgressBar component = (SProgressBar)_c;
+            throws IOException {
+        final SProgressBar component = (SProgressBar) _c;
 
 //--- code from write-template.
         String style = org.wings.plaf.css.Utils.style(component);
@@ -99,7 +112,7 @@ public class ProgressBarCG
         device.write(__img);
         org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.write(__width);
-        org.wings.plaf.Utils.write(device, (int)(width * component.getPercentComplete()));
+        org.wings.plaf.Utils.write(device, (int) (width * component.getPercentComplete()));
         device.write(___1);
         device.write(__height);
         org.wings.plaf.Utils.write(device, height);
@@ -110,7 +123,7 @@ public class ProgressBarCG
         device.write(__img);
         org.wings.plaf.Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.write(__width);
-        org.wings.plaf.Utils.write(device, (int)(width * (1 - component.getPercentComplete())));
+        org.wings.plaf.Utils.write(device, (int) (width * (1 - component.getPercentComplete())));
         device.write(___1);
         device.write(__height);
         org.wings.plaf.Utils.write(device, height);

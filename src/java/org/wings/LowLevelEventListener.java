@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 /**
@@ -22,8 +21,8 @@ package org.wings;
  * dispatching:
  * <ol>
  * <li>process http requests ({@link #processLowLevelEvent}): If a component is
- * registered at the session specific 
- * {@link org.wings.session.LowLevelEventDispatcher} it gets all the 
+ * registered at the session specific
+ * {@link org.wings.session.LowLevelEventDispatcher} it gets all the
  * parameters is is registered for. This parameter consists of a name-value
  * pair. Most time the component itself has encoded this parameter, so it is
  * able to decode it and change its internal state. This should be done in
@@ -48,19 +47,19 @@ package org.wings;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public interface LowLevelEventListener
-{
+public interface LowLevelEventListener {
     /**
      * Deliver low level/http events (parameters).
      * The name-value-pairs of the HTTPRequest are considered low level events.
-     * @param name the name-value-pair's name
+     *
+     * @param name  the name-value-pair's name
      * @param value the name-value-pair's value
      */
     void processLowLevelEvent(String name, String[] values);
 
     /**
      * The id of an event which will be forwarded by the dispatcher to this
-     * component for processing. A component is registered at the 
+     * component for processing. A component is registered at the
      * {@link org.wings.session.LowLevelEventDispatcher dispatcher}. This
      * dispatcher forwards servlet parameters (low level events) to each
      * LowLevelEventListener registered for this event. A LowLevelEventListener
@@ -70,9 +69,9 @@ public interface LowLevelEventListener
     String getLowLevelEventId();
 
     /**
-     * Get the encoded low level event id. This is a convenience method for 
+     * Get the encoded low level event id. This is a convenience method for
      * SComponent.encodeLowLevelEventId(getLowLevelEventId());
-     * Encodes a low level event id for using it in a request parameter. Every 
+     * Encodes a low level event id for using it in a request parameter. Every
      * {@link LowLevelEventListener} should encode its LowLevelEventId before
      * using it in a request parameter. This encoding adds consistency checking
      * for outtimed requests ("Back Button"). Mainly used in CG's
@@ -85,7 +84,7 @@ public interface LowLevelEventListener
      * http request you might give an action a special name, like
      * "ActivateUpload" to make uploads possible. This action is a SButton in
      * wings with the name "ActivateUpload" and an ActionListener which make the
-     * upload form visible. A designer might call your servlet with 
+     * upload form visible. A designer might call your servlet with
      * "servlet/_?ActivateUpload=1" to make the upload form visible by hand. Be
      * careful, this so called "Named Events" are not under control of wings, so
      * they will no be outtimed and might lead to strange effects.

@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/List.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -11,8 +24,8 @@ import org.wings.script.JavaScriptListener;
 import java.io.IOException;
 
 public class ListCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.ListCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.ListCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __select = "<select".getBytes();
@@ -28,12 +41,12 @@ public class ListCG
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        final SList component = (SList)comp;
+        final SList component = (SList) comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         value = manager.getObject("SList.cellRenderer", SDefaultListCellRenderer.class);
         if (value != null) {
-            component.setCellRenderer((SDefaultListCellRenderer)value);
+            component.setCellRenderer((SDefaultListCellRenderer) value);
         }
     }
 
@@ -104,8 +117,7 @@ public class ListCG
                     }
                 }
                 device.print(chars, pos, chars.length - pos);
-            }
-            else {
+            } else {
                 device.print(model.getElementAt(i).toString());
             }
 
@@ -130,7 +142,7 @@ public class ListCG
     }
 
     public void writeAnchorList(Device device, SList list)
-        throws IOException {
+            throws IOException {
         boolean showAsFormComponent = list.getShowAsFormComponent();
         boolean renderSelection = list.getSelectionMode() != SConstants.NO_SELECTION;
 
@@ -173,8 +185,7 @@ public class ListCG
                     device.print("\" value=\"");
                     org.wings.plaf.Utils.write(device, list.getToggleSelectionParameter(i));
                     device.print("\"");
-                }
-                else {
+                } else {
                     RequestURL selectionAddr = list.getRequestURL();
                     selectionAddr.addParameter(Utils.event(list), list.getToggleSelectionParameter(i));
 
@@ -184,8 +195,7 @@ public class ListCG
                 }
                 org.wings.plaf.Utils.optAttribute(device, "focus", renderer.getName());
                 device.print(">");
-            }
-            else
+            } else
                 device.print("<span>");
 
             rendererPane.writeComponent(device, renderer, list);
@@ -195,8 +205,7 @@ public class ListCG
                     device.print("</button>");
                 else
                     device.print("</a>");
-            }
-            else
+            } else
                 device.print("</span>");
 
             device.print("</li>\n");
@@ -213,14 +222,13 @@ public class ListCG
 
     public void writeContent(final Device device,
                              final SComponent _c)
-        throws IOException {
-        final SList component = (SList)_c;
+            throws IOException {
+        final SList component = (SList) _c;
 
-        SList list = (SList)component;
+        SList list = (SList) component;
         if (list.getShowAsFormComponent()) {
             writeFormList(device, list);
-        }
-        else {
+        } else {
             writeAnchorList(device, list);
         }
     }

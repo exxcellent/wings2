@@ -1,36 +1,31 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.tree;
 
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.TreePath;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.tree.DefaultTreeSelectionModel;
-import javax.swing.tree.TreePath;
-import javax.swing.event.TreeSelectionEvent;
-
 /**
- *
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SDefaultTreeSelectionModel 
-    extends DefaultTreeSelectionModel
-    implements STreeSelectionModel
-{
+public class SDefaultTreeSelectionModel
+        extends DefaultTreeSelectionModel
+        implements STreeSelectionModel {
 
     /**
      * indicates if we should fire event immediately when they arise, or if we
@@ -59,10 +54,10 @@ public class SDefaultTreeSelectionModel
      * fire event with isValueIsAdjusting true
      */
     public void fireDelayedIntermediateEvents() {}
-    
+
     public void fireDelayedFinalEvents() {
-        for ( Iterator iter=delayedEvents.iterator(); iter.hasNext(); ) {
-            TreeSelectionEvent e = (TreeSelectionEvent)iter.next();
+        for (Iterator iter = delayedEvents.iterator(); iter.hasNext();) {
+            TreeSelectionEvent e = (TreeSelectionEvent) iter.next();
 
             fireValueChanged(e);
         }
@@ -70,7 +65,7 @@ public class SDefaultTreeSelectionModel
     }
 
     protected void fireValueChanged(TreeSelectionEvent e) {
-        if ( delayEvents ) {
+        if (delayEvents) {
             delayedEvents.add(e);
         } else {
             super.fireValueChanged(e);
@@ -82,30 +77,30 @@ public class SDefaultTreeSelectionModel
      * Unique shared instance.
      */
     public static final SDefaultTreeSelectionModel NO_SELECTION_MODEL =
-        new SDefaultTreeSelectionModel() {
-                /** A null implementation that selects nothing */
+            new SDefaultTreeSelectionModel() {
+                /**
+                 * A null implementation that selects nothing
+                 */
                 public void setSelectionPaths(TreePath[] pPaths) {
                 }
-                
-                /** A null implementation that adds nothing */
+
+                /**
+                 * A null implementation that adds nothing
+                 */
                 public void addSelectionPaths(TreePath[] paths) {
                 }
-                
-                /** A null implementation that removes nothing */
+
+                /**
+                 * A null implementation that removes nothing
+                 */
                 public void removeSelectionPaths(TreePath[] paths) {
                 }
-                
+
                 // don't fire events, because there should be not state change
                 protected void fireValueChanged(TreeSelectionEvent e) {}
-        
+
             };
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

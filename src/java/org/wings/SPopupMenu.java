@@ -1,6 +1,19 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings;
 
 import org.wings.plaf.PopupMenuCG;
@@ -13,8 +26,7 @@ import java.util.List;
  * @version $Revision$
  */
 public class SPopupMenu
-    extends SComponent
-{
+        extends SComponent {
     protected final List menuItems = new ArrayList();
 
     /**
@@ -35,8 +47,8 @@ public class SPopupMenu
 
     public void setParentFrame(SFrame f) {
         super.setParentFrame(f);
-        for ( int i=0; i<menuItems.size(); i++ )
-            ((SComponent)menuItems.get(i)).setParentFrame(f);
+        for (int i = 0; i < menuItems.size(); i++)
+            ((SComponent) menuItems.get(i)).setParentFrame(f);
     }
 
     /**
@@ -47,7 +59,7 @@ public class SPopupMenu
     }
 
     public SComponent getMenuComponent(int pos) {
-        return (SComponent)menuItems.get(pos);
+        return (SComponent) menuItems.get(pos);
     }
 
     /**
@@ -61,7 +73,7 @@ public class SPopupMenu
      * Remove all {@link SMenuItem} from this menu.
      */
     public void removeAll() {
-        while ( menuItems.size()>0 ) {
+        while (menuItems.size() > 0) {
             remove(0);
         }
     }

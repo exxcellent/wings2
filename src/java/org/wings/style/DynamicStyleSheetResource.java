@@ -1,29 +1,30 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.style;
 
-import org.wings.*;
-import org.wings.resource.DynamicResource;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SFrame;
 import org.wings.border.SBorder;
-import org.wings.plaf.ComponentCG;
 import org.wings.io.Device;
+import org.wings.plaf.ComponentCG;
+import org.wings.resource.DynamicResource;
 import org.wings.util.ComponentVisitor;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Traverses the component hierarchy of a frame and gathers the dynamic styles
@@ -33,40 +34,34 @@ import java.util.Collection;
  * @version $Revision$
  */
 public class DynamicStyleSheetResource
-    extends DynamicResource
-{
+        extends DynamicResource {
     public DynamicStyleSheetResource(SFrame frame) {
         super(frame, "css", "text/css");
     }
 
     public void write(Device out)
-        throws IOException
-    {
+            throws IOException {
         try {
             StyleSheetWriter visitor = new StyleSheetWriter(out);
             getFrame().invite(visitor);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw e;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new IOException(e.getMessage()); // UndeclaredThrowable
         }
     }
 
     protected static class StyleSheetWriter
-        implements ComponentVisitor
-    {
+            implements ComponentVisitor {
         Device out;
 
         public StyleSheetWriter(Device out) {
             this.out = out;
         }
-        
+
         private void writeAttributesFrom(SComponent component)
-            throws IOException
-        {
+                throws IOException {
             String selectorPrefix = "#" + component.getName();
             if (component instanceof SFrame)
                 selectorPrefix = "body";
@@ -75,7 +70,7 @@ public class DynamicStyleSheetResource
             if (dynamicStyles != null) {
                 ComponentCG cg = component.getCG();
                 for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
-                    Style style = (Style)iterator.next();
+                    Style style = (Style) iterator.next();
                     String selector = style.getSelector();
                     selector = cg.mapSelector(selector);
                     writeAttributes(selectorPrefix + selector, style);
@@ -87,10 +82,9 @@ public class DynamicStyleSheetResource
                 writeAttributes(selectorPrefix, border.getAttributes());
             }
         }
-        
+
         private void writeAttributes(String selector, Style style)
-            throws IOException
-        {
+                throws IOException {
             String backup = style.getSelector();
             style.setSelector(selector);
             style.write(out);
@@ -98,8 +92,7 @@ public class DynamicStyleSheetResource
         }
 
         private void writeAttributes(String selector, AttributeSet attributes)
-            throws IOException
-        {
+                throws IOException {
             out.print(selector).print("{");
             attributes.write(out);
             out.print("}\n");

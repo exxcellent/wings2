@@ -1,6 +1,19 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -10,8 +23,8 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 public class CheckBoxCG
-    extends ButtonCG
-    implements SConstants, org.wings.plaf.CheckBoxCG {
+        extends ButtonCG
+        implements SConstants, org.wings.plaf.CheckBoxCG {
     private boolean useIconsInForm = false;
 
     public boolean isUseIconsInForm() {
@@ -24,24 +37,24 @@ public class CheckBoxCG
 
     public void installCG(SComponent component) {
         super.installCG(component);
-        final SAbstractButton button = (SAbstractButton)component;
+        final SAbstractButton button = (SAbstractButton) component;
         installIcons(button);
     }
 
     protected void installIcons(final SAbstractButton button) {
         org.wings.plaf.CGManager manager = button.getSession().getCGManager();
-        button.setIcon((SIcon)manager.getObject("SCheckBox.icon", SIcon.class));
-        button.setSelectedIcon((SIcon)manager.getObject("SCheckBox.selectedIcon", SIcon.class));
-        button.setRolloverIcon((SIcon)manager.getObject("SCheckBox.rolloverIcon", SIcon.class));
-        button.setRolloverSelectedIcon((SIcon)manager.getObject("SCheckBox.rolloverSelectedIcon", SIcon.class));
-        button.setPressedIcon((SIcon)manager.getObject("SCheckBox.pressedIcon", SIcon.class));
-        button.setDisabledIcon((SIcon)manager.getObject("SCheckBox.disabledIcon", SIcon.class));
-        button.setDisabledSelectedIcon((SIcon)manager.getObject("SCheckBox.disabledSelectedIcon", SIcon.class));
+        button.setIcon((SIcon) manager.getObject("SCheckBox.icon", SIcon.class));
+        button.setSelectedIcon((SIcon) manager.getObject("SCheckBox.selectedIcon", SIcon.class));
+        button.setRolloverIcon((SIcon) manager.getObject("SCheckBox.rolloverIcon", SIcon.class));
+        button.setRolloverSelectedIcon((SIcon) manager.getObject("SCheckBox.rolloverSelectedIcon", SIcon.class));
+        button.setPressedIcon((SIcon) manager.getObject("SCheckBox.pressedIcon", SIcon.class));
+        button.setDisabledIcon((SIcon) manager.getObject("SCheckBox.disabledIcon", SIcon.class));
+        button.setDisabledSelectedIcon((SIcon) manager.getObject("SCheckBox.disabledSelectedIcon", SIcon.class));
     }
 
     public void writeContent(final Device device, final SComponent component)
-        throws IOException {
-        final SAbstractButton button = (SAbstractButton)component;
+            throws IOException {
+        final SAbstractButton button = (SAbstractButton) component;
 
         final boolean showAsFormComponent = button.getShowAsFormComponent();
         final String text = button.getText();
@@ -53,8 +66,7 @@ public class CheckBoxCG
             org.wings.plaf.Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             org.wings.plaf.Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
-        }
-        else if (showAsFormComponent && !useIconsInForm)
+        } else if (showAsFormComponent && !useIconsInForm)
             device.print("<span");
         else {
             device.write("<a href=\"".getBytes());

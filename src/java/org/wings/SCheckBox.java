@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.plaf.CheckBoxCG;
@@ -28,12 +27,12 @@ import java.util.Arrays;
  * Deshalb wird hintenan immer ein Hidden Form Element gehaengt,
  * welches rueckmeldet, dass die Checkbox bearbeitet wurde.
  */
+
 /**
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SCheckBox extends SAbstractButton
-{
+public class SCheckBox extends SAbstractButton {
     public SCheckBox() {
         this(false);
     }
@@ -58,15 +57,15 @@ public class SCheckBox extends SAbstractButton
     }
 
     protected void setGroup(SButtonGroup g) {
-        if ( g!=null ) {
+        if (g != null) {
             throw new IllegalArgumentException("SCheckBox don`t support button groups, use SRadioButton");
         } // end of if ()
     }
 
     public final void setType(String t) {
-        if ( !CHECKBOX.equals(t) )
+        if (!CHECKBOX.equals(t))
             throw new IllegalArgumentException("type change not supported, type is fix: checkbox");
-        
+
         super.setType(t);
     }
 
@@ -78,15 +77,15 @@ public class SCheckBox extends SAbstractButton
         super.processLowLevelEvent(action, values);
 
         boolean requestSelection;
-        if ( Arrays.asList(values).contains("hidden_reset") ) {
+        if (Arrays.asList(values).contains("hidden_reset")) {
             // one hidden and one checked event from the form says select
             // it, else deselect it (typically only the hidden event)
-            requestSelection = values.length==2;
+            requestSelection = values.length == 2;
         } else {
             requestSelection = parseSelectionToggle(values[0]);
-        }        
- 
-        if ( requestSelection!=isSelected() ) {
+        }
+
+        if (requestSelection != isSelected()) {
             delayEvents(true);
             setSelected(requestSelection);
             // got an event, that is a select...
@@ -100,27 +99,21 @@ public class SCheckBox extends SAbstractButton
      * for me.
      */
     protected boolean parseSelectionToggle(String toggleParameter) {
-	// a button/image in a form has no value, so just toggle selection...
-	if ( getShowAsFormComponent() ) {
-	    return !isSelected();
-	} // end of if ()
+        // a button/image in a form has no value, so just toggle selection...
+        if (getShowAsFormComponent()) {
+            return !isSelected();
+        } // end of if ()
 
-	if ( "1".equals(toggleParameter) )
-	    return true;
-	else if ( "0".equals(toggleParameter) )
-	    return false;
-	
-	
-	// don't change...
-	return isSelected();
+        if ("1".equals(toggleParameter))
+            return true;
+        else if ("0".equals(toggleParameter))
+            return false;
+
+
+        // don't change...
+        return isSelected();
     }
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -23,11 +23,10 @@ import java.awt.*;
 /**
  * @version $Revision$
  */
-public class STitledBorder extends SAbstractBorder
-{
-	private SBorder border;
+public class STitledBorder extends SAbstractBorder {
+    private SBorder border;
 
-	private String title;
+    private String title;
     private AttributeSet titleAttributes = new AttributeSet();
 
     /**
@@ -40,8 +39,9 @@ public class STitledBorder extends SAbstractBorder
 
     /**
      * Constructor for STitledBorder.
+     *
      * @param border the border to use
-     * @param title the title to display
+     * @param title  the title to display
      */
     public STitledBorder(SBorder border, String title) {
         this(border);
@@ -49,7 +49,7 @@ public class STitledBorder extends SAbstractBorder
     }
 
     /**
-     * Constructor for STitledBorder. Default border 
+     * Constructor for STitledBorder. Default border
      * type is {@link SEtchedBorder}, thickness 2
      */
     public STitledBorder(String title) {
@@ -60,6 +60,7 @@ public class STitledBorder extends SAbstractBorder
 
     /**
      * Gets the border.
+     *
      * @return Returns a SBorder
      */
     public SBorder getBorder() {
@@ -68,6 +69,7 @@ public class STitledBorder extends SAbstractBorder
 
     /**
      * Sets the border.
+     *
      * @param border The border to set
      */
     public void setBorder(SBorder border) {
@@ -77,6 +79,7 @@ public class STitledBorder extends SAbstractBorder
 
     /**
      * Gets the title.
+     *
      * @return Returns a String
      */
     public String getTitle() {
@@ -85,6 +88,7 @@ public class STitledBorder extends SAbstractBorder
 
     /**
      * Sets the title.
+     *
      * @param title The title to set
      */
     public void setTitle(String title) {
@@ -97,6 +101,7 @@ public class STitledBorder extends SAbstractBorder
 
     /**
      * Gets the title color.
+     *
      * @return Returns a Color
      */
     public Color getTitleColor() {
@@ -105,6 +110,7 @@ public class STitledBorder extends SAbstractBorder
 
     /**
      * Sets the title color.
+     *
      * @param color the title color to set
      */
     public void setTitleColor(Color color) {
@@ -112,24 +118,26 @@ public class STitledBorder extends SAbstractBorder
     }
 
     /**
-      * Set the border color.
-      */
+     * Set the border color.
+     */
     public void setTitleBackground(Color color) {
         titleAttributes.put(Style.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
-      * Get the border color.
-      * @return the color or <code>null</code>,
-      *     if border is <code>null</code>
-      * @see #setBorder(SBorder)
-      */
+     * Get the border color.
+     *
+     * @return the color or <code>null</code>,
+     *         if border is <code>null</code>
+     * @see #setBorder(SBorder)
+     */
     public Color getTitleBackground() {
         return CSSStyleSheet.getBackground(titleAttributes);
     }
 
     /**
      * Gets the title font.
+     *
      * @return Returns a SFont
      */
     public SFont getTitleFont() {
@@ -138,6 +146,7 @@ public class STitledBorder extends SAbstractBorder
 
     /**
      * Sets the title font.
+     *
      * @param titleFont The title font to set
      */
     public void setTitleFont(SFont titleFont) {

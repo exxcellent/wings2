@@ -1,3 +1,16 @@
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 import org.wings.SComponent;
@@ -5,16 +18,15 @@ import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * @author hengels
  * @version $Revision$
  */
 class InputMapScriptListener
-    extends JavaScriptListener
-{
+        extends JavaScriptListener {
     public InputMapScriptListener(String event, String code, String script) {
         super(event, code, script);
     }
@@ -29,7 +41,7 @@ class InputMapScriptListener
         }
 
         InputMap inputMap = component.getInputMap();
-        
+
         StringBuffer pressed = new StringBuffer();
         StringBuffer typed = new StringBuffer();
         StringBuffer released = new StringBuffer();
@@ -59,19 +71,19 @@ class InputMapScriptListener
 
         if (pressed.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeydown", "pressed_" + component.getName() + "(event)",
-                "function pressed_" + component.getName() + "(event) {\n  " +
-                "event = getEvent(event); target = getTarget(event);\n  " +
-                pressed.toString() + "  return false;\n}\n"));
+                    "function pressed_" + component.getName() + "(event) {\n  " +
+                    "event = getEvent(event); target = getTarget(event);\n  " +
+                    pressed.toString() + "  return false;\n}\n"));
         if (typed.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeypress", "typed_" + component.getName() + "(event)",
-                "function typed_" + component.getName() + "(event) {\n  " +
-                "event = getEvent(event); target = getTarget(event);\n  " +
-                typed.toString() + "  return false;\n}\n"));
+                    "function typed_" + component.getName() + "(event) {\n  " +
+                    "event = getEvent(event); target = getTarget(event);\n  " +
+                    typed.toString() + "  return false;\n}\n"));
         if (released.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeyup", "released_" + component.getName() + "(event)",
-                "function released_" + component.getName() + "(event) {\n" +
-                "event = getEvent(event); target = getTarget(event);\n  " +
-                released.toString() + "  return false;\n}\n"));
+                    "function released_" + component.getName() + "(event) {\n" +
+                    "event = getEvent(event); target = getTarget(event);\n  " +
+                    released.toString() + "  return false;\n}\n"));
     }
 
     private static void writeMatch(StringBuffer buffer, KeyStroke keyStroke) {

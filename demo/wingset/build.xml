@@ -21,7 +21,6 @@
 
     <target name="prepare" depends="dependencies">
         <tstamp/>
-        <mkdir dir="lib"/>
         <mkdir dir="build"/>
         <mkdir dir="build/class"/>
         <mkdir dir="build/web"/>

@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2002 Holger Engels.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the Smart Client Container (http://smartcc.sourceforge.net).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * SmartCC is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -13,8 +13,11 @@
  */
 package org.wings.recorder;
 
-import java.io.*;
-import java.util.*;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Simulator {
     public static void main(String[] args) {
@@ -49,8 +52,7 @@ public class Simulator {
 
                 index += 2;
             }
-        }
-        catch (Exception e) { fail = true; }
+        } catch (Exception e) { fail = true; }
 
         if (fail || args.length < index + 2) {
             printUsage();
@@ -68,8 +70,7 @@ public class Simulator {
             String b = args[index + 2].substring(pos + 1);
             firstUser = Integer.valueOf(a).intValue();
             lastUser = Integer.valueOf(b).intValue();
-        }
-        else {
+        } else {
             firstUser = 1;
             lastUser = Integer.valueOf(args[index + 2]).intValue();
         }
@@ -78,10 +79,10 @@ public class Simulator {
             Class scriptClass = Class.forName(scriptClassName);
 
             System.out.println("INFO: initializing clients for " +
-                               userid + firstUser + " to " + userid + lastUser);
+                    userid + firstUser + " to " + userid + lastUser);
             List clients = new LinkedList();
             for (int i = firstUser; i <= lastUser; i++) {
-                Script script = (Script)scriptClass.newInstance();
+                Script script = (Script) scriptClass.newInstance();
                 script.setUrl(url);
                 script.setDelay(delay);
 
@@ -97,11 +98,10 @@ public class Simulator {
             System.out.println("INFO: starting clients");
             Iterator it = clients.iterator();
             while (it.hasNext()) {
-                Client client = (Client)it.next();
+                Client client = (Client) it.next();
                 client.start();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
         }
@@ -117,20 +117,12 @@ public class Simulator {
         System.err.println("  -d, --delay      [0..t] factor, that is applied to the recorded delays");
         System.err.println("                   0.0 for no delays, 1.0 for same tempo as during recording (default)");
         System.err.println("  -a, --auth       the auth type, one of HTTP, JBoss (more to follow), defaults to HTTP");
-        System.err.println(
-            "  -u, --userid     the base userid, to which firstUser .. lastUser will be appended, defaults to 'demo'");
+        System.err.println("  -u, --userid     the base userid, to which firstUser .. lastUser will be appended, defaults to 'demo'");
         System.err.println("  -p, --password   the password for all users");
-        System.err.println(
-            "  -i, --iterations number of iterations a virtual user runs the script, defaults to 'start'");
-        System.err.println(
-            "  -r, --ramp       load ramp, n'th client is started after n times the delay in ms, default is 0");
+        System.err.println("  -i, --iterations number of iterations a virtual user runs the script, defaults to 'start'");
+        System.err.println("  -r, --ramp       load ramp, n'th client is started after n times the delay in ms, default is 0");
         System.err.println("  -o, --output     redirect output to a file");
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * End:
- */
+

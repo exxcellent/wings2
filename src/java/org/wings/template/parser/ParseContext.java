@@ -53,6 +53,19 @@
  *
  */
 
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.template.parser;
 
 import java.io.OutputStream;
@@ -66,19 +79,15 @@ import java.io.OutputStream;
  * @see PageParser
  */
 public interface ParseContext {
-    OutputStream getOutputStream ();
-    void startTag (int number);
-    void doneTag (int number);
+    OutputStream getOutputStream();
+
+    void startTag(int number);
+
+    void doneTag(int number);
 }
 
 
 
 
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

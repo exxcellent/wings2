@@ -1,31 +1,26 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
-import org.wings.plaf.*;
-import org.wings.io.Device;
+import org.wings.plaf.TextAreaCG;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class STextArea
-    extends STextComponent
-{
+        extends STextComponent {
     private int rows = 5;
 
     private int columns = 20;
@@ -38,29 +33,16 @@ public class STextArea
     private int lineWrap = SConstants.VIRTUAL_WRAP;
 
 
-    /**
-     * TODO: documentation
-     *
-     * @param text
-     */
     public STextArea(String text) {
         super(text);
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     public STextArea() {
         super();
     }
 
 
-    /**
-     * TODO: documentation
-     *
-     * @param rows
-     */
     public void setRows(int r) {
         int oldRows = rows;
         rows = r;
@@ -68,21 +50,12 @@ public class STextArea
             reload();
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public int getRows() {
         return rows;
     }
 
 
-    /**
-     * TODO: documentation
-     *
-     * @param c
-     */
     public void setColumns(int c) {
         int oldColumns = columns;
         columns = c;
@@ -90,31 +63,18 @@ public class STextArea
             reload();
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public int getColumns() {
         return columns;
     }
 
 
-    /**
-     * TODO: documentation
-     *
-     * @param lw
-     */
     public void setLineWrap(int lw) {
-        if ( lw >= 0 && lw < 3 )
+        if (lw >= 0 && lw < 3)
             lineWrap = lw;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public int getLineWrap() {
         return lineWrap;
     }
@@ -124,10 +84,4 @@ public class STextArea
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.util;
 
 import java.util.StringTokenizer;
@@ -22,8 +21,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class StringUtil
-{
+public class StringUtil {
     /**
      * replaces substrings with content 'toFind' with 'replace' in
      * s and returns the result ('s/$toFind/$replace/g')
@@ -33,19 +31,18 @@ public class StringUtil
      * @param replace The replacement.
      * @return the string with all replacements.
      */
-    public static final String replace(String s, 
+    public static final String replace(String s,
                                        String toFind, String replace) {
         StringBuffer erg = new StringBuffer();
 
         int lastindex = 0;
         int indexOf = s.indexOf(toFind);
-        if ( indexOf == -1 ) return s;
-        while ( indexOf != -1 )
-            {
-                erg.append(s.substring(lastindex, indexOf)).append(replace);
-                lastindex = indexOf + toFind.length();
-                indexOf = s.indexOf(toFind, lastindex);
-            }
+        if (indexOf == -1) return s;
+        while (indexOf != -1) {
+            erg.append(s.substring(lastindex, indexOf)).append(replace);
+            lastindex = indexOf + toFind.length();
+            indexOf = s.indexOf(toFind, lastindex);
+        }
 
         erg.append(s.substring(lastindex));
 
@@ -66,19 +63,19 @@ public class StringUtil
      */
 
     /**
-     * replaces all newlines in the given String 's' with the replacement 
+     * replaces all newlines in the given String 's' with the replacement
      * string 'r'. Each line is trimmed from leading and trailing whitespaces,
      * then the new line-delimiter is added.
      *
-     * @param s  the source string.
-     * @param r  the new line delimiter
-     * @return   the resulting string.
+     * @param s the source string.
+     * @param r the new line delimiter
+     * @return the resulting string.
      */
     public static final String replaceNewLines(String s, String r) {
         StringBuffer result = new StringBuffer();
 
         StringTokenizer t = new StringTokenizer(s, "\n");
-        while ( t.hasMoreTokens() ) {
+        while (t.hasMoreTokens()) {
             result.append(t.nextToken().trim()).append(r);
         }
         return result.toString();
@@ -87,6 +84,7 @@ public class StringUtil
 
     /**
      * concatenates two arrays of strings.
+     *
      * @param s1 the first array of strings.
      * @param s2 the second array of strings.
      * @return the resulting array with all strings in s1 and s2
@@ -101,11 +99,11 @@ public class StringUtil
     }
 
     private final static char[] ALPHAS = {
-                                'a' , 'b' ,
-        'c' , 'd' , 'e' , 'f' , 'g' , 'h' ,
-        'i' , 'j' , 'k' , 'l' , 'm' , 'n' ,
-        'o' , 'p' , 'q' , 'r' , 's' , 't' ,
-        'u' , 'v' , 'w' , 'x' , 'y' , 'z' ,
+        'a', 'b',
+        'c', 'd', 'e', 'f', 'g', 'h',
+        'i', 'j', 'k', 'l', 'm', 'n',
+        'o', 'p', 'q', 'r', 's', 't',
+        'u', 'v', 'w', 'x', 'y', 'z',
     };
 
     /**
@@ -116,12 +114,12 @@ public class StringUtil
      * names for CSSs. Grrr.
      */
     private final static char[] DIGITS = {
-        '0' , '1' , '2' , '3' , '4' , '5' ,
-        '6' , '7' , '8' , '9' , 'a' , 'b' ,
-        'c' , 'd' , 'e' , 'f' , 'g' , 'h' ,
-        'i' , 'j' , 'k' , 'l' , 'm' , 'n' ,
-        'o' , 'p' , 'q' , 'r' , 's' , 't' ,
-        'u' , 'v' , 'w' , 'x' , 'y' , 'z' ,
+        '0', '1', '2', '3', '4', '5',
+        '6', '7', '8', '9', 'a', 'b',
+        'c', 'd', 'e', 'f', 'g', 'h',
+        'i', 'j', 'k', 'l', 'm', 'n',
+        'o', 'p', 'q', 'r', 's', 't',
+        'u', 'v', 'w', 'x', 'y', 'z',
         /* This %@&!-IE is case insensitive for certain
          * URLs and IDs
          * 'A' , 'B' ,
@@ -138,44 +136,45 @@ public class StringUtil
      * Codes number up to radix 62.
      * Note, this method is only public for backward compatiblity. don't
      * use it.
+     *
      * @param minDigits returns a string with a least minDigits digits
      */
     public static String toString(long i, int radix, int minDigits) {
         char[] buf = new char[65];
 
         radix = Math.min(Math.abs(radix), MAX_RADIX);
-        minDigits = Math.min(buf.length-1, Math.abs(minDigits));
+        minDigits = Math.min(buf.length - 1, Math.abs(minDigits));
 
 
-        int charPos = buf.length-1;
+        int charPos = buf.length - 1;
 
         boolean negative = (i < 0);
         if (negative) {
             i = -i;
         }
-        
+
         while (i >= radix) {
-            buf[charPos--] = DIGITS[(int)(i % radix)];
+            buf[charPos--] = DIGITS[(int) (i % radix)];
             i /= radix;
         }
-        buf[charPos] = DIGITS[(int)i];
+        buf[charPos] = DIGITS[(int) i];
 
         // if minimum length of the result string is set, pad it with the
         // zero-representation (that is: '0')
-        while ( charPos>buf.length-minDigits )
+        while (charPos > buf.length - minDigits)
             buf[--charPos] = DIGITS[0];
-        
+
         if (negative) {
             buf[--charPos] = '-';
         }
-        
-        return new String(buf, charPos, buf.length-charPos);
+
+        return new String(buf, charPos, buf.length - charPos);
     }
 
     /**
      * creates a shortest possible string representation of the given
      * long number that qualifies as an identifier in common programming
-     * languages (and HTML-id's :-) 
+     * languages (and HTML-id's :-)
      * That is, it must start with a letter.
      *
      * @param val the long value to be encoded
@@ -187,7 +186,7 @@ public class StringUtil
         int i = 0;
         if (val < 0) {
             buf[i++] = '_';
-            val = -(val+1);
+            val = -(val + 1);
         }
         buf[i++] = ALPHAS[(int) (val % ALPHAS.length)];
         val /= ALPHAS.length;
@@ -207,7 +206,7 @@ public class StringUtil
     }
 
     /**
-     * generates a shortest representation as string for the given with 
+     * generates a shortest representation as string for the given with
      * at least minDigits digits. Unused digits are padded with zero.
      */
     public static String toShortestAlphaNumericString(long i, int minDigits) {
@@ -221,7 +220,7 @@ public class StringUtil
             return "";
 
         StringBuffer buffer = new StringBuffer("" + array[0]);
-        for (int i=1; i < array.length; i++) {
+        for (int i = 1; i < array.length; i++) {
             if (array[i] == null)
                 buffer.append(", null");
             else {
@@ -258,13 +257,7 @@ public class StringUtil
     */
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+
 
 
 

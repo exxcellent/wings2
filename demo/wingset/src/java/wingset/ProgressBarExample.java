@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
 
 import org.wings.*;
@@ -20,13 +19,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class ProgressBarExample extends WingSetPane
-{
+public class ProgressBarExample extends WingSetPane {
 
     public SComponent createExample() {
         final SButton forward1Percent = new SButton("+1");
@@ -37,21 +33,21 @@ public class ProgressBarExample extends WingSetPane
         final SProgressBar progressBar = new SProgressBar(0, 100);
 
         ActionListener al = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    int valueChange = 0;
-                    if ( e.getSource()==forward1Percent ) {
-                        valueChange = 1;
-                    } else if ( e.getSource()==forward10Percent ) {
-                        valueChange = 10;
-                    } else if ( e.getSource()==backward1Percent ) {
-                        valueChange = -1;
-                    } else if ( e.getSource()==backward10Percent ) {
-                        valueChange = -10;
-                    } // end of if ()
-                    
-                    progressBar.setValue(progressBar.getValue()+valueChange);
-                }
-            };
+            public void actionPerformed(ActionEvent e) {
+                int valueChange = 0;
+                if (e.getSource() == forward1Percent) {
+                    valueChange = 1;
+                } else if (e.getSource() == forward10Percent) {
+                    valueChange = 10;
+                } else if (e.getSource() == backward1Percent) {
+                    valueChange = -1;
+                } else if (e.getSource() == backward10Percent) {
+                    valueChange = -10;
+                } // end of if ()
+
+                progressBar.setValue(progressBar.getValue() + valueChange);
+            }
+        };
         forward1Percent.addActionListener(al);
         forward10Percent.addActionListener(al);
         backward1Percent.addActionListener(al);
@@ -62,7 +58,7 @@ public class ProgressBarExample extends WingSetPane
         progressBar.setForeground(java.awt.Color.red);
         progressBar.setBorderColor(java.awt.Color.black);
         progressBar.setStringPainted(true);
-        progressBar.setPreferredSize(new SDimension(200,5));
+        progressBar.setPreferredSize(new SDimension(200, 5));
 
         progressBar.setValue(20);
 
@@ -72,7 +68,7 @@ public class ProgressBarExample extends WingSetPane
             java.net.URL templateURL = getSession().getServletContext().getResource("/templates/ProgressBarExample.thtml");
             STemplateLayout layout = new STemplateLayout(templateURL);
             panel.setLayout(layout);
-        } catch ( Exception ex ) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -89,10 +85,4 @@ public class ProgressBarExample extends WingSetPane
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

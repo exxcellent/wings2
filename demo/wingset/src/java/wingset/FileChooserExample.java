@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
 
 import org.wings.*;
@@ -28,14 +27,11 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public class FileChooserExample
-    extends WingSetPane
-{
+        extends WingSetPane {
     final static String TEMPLATE = "/templates/FileChooserExample.thtml";
     final static Color WARN_COLOR = new Color(255, 255, 127);
 
@@ -69,7 +65,7 @@ public class FileChooserExample
      * label for unknown content.
      */
     SLabel unknownLabel;
-    
+
     /**
      * remember the previous file to remove it.
      */
@@ -79,16 +75,15 @@ public class FileChooserExample
         SPanel p = new SPanel();
 
         try {
-            java.net.URL templateURL = getSession().getServletContext().getResource( TEMPLATE );
-            p.setLayout( new STemplateLayout( templateURL ) );
-        }
-        catch ( Exception e ) {
+            java.net.URL templateURL = getSession().getServletContext().getResource(TEMPLATE);
+            p.setLayout(new STemplateLayout(templateURL));
+        } catch (Exception e) {
             // template not found ?
         }
 
         p.add(createControlForm(), "controlForm");
-        p.add(createUpload(),      "uploadForm");
-        p.add(createPreview(),     "previewArea");
+        p.add(createUpload(), "uploadForm");
+        p.add(createPreview(), "previewArea");
 
         return p;
     }
@@ -101,20 +96,20 @@ public class FileChooserExample
          * modify the displayed indentation depth.
          */
         controlForm.add(new SLabel("influence maximum accepted Content Length (in kB): "));
-        Object[] values = {new Integer(1), new Integer(2), new Integer(4), 
-                           new Integer(8), new Integer(16), new Integer(32), 
+        Object[] values = {new Integer(1), new Integer(2), new Integer(4),
+                           new Integer(8), new Integer(16), new Integer(32),
                            new Integer(64)};
 
         final SComboBox comboBox = new SComboBox(values);
         comboBox.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
-                    getSession().setMaxContentLength(((Integer) comboBox.getSelectedItem()).intValue());
-                }
-            });
+            public void itemStateChanged(ItemEvent e) {
+                getSession().setMaxContentLength(((Integer) comboBox.getSelectedItem()).intValue());
+            }
+        });
 
         comboBox.setSelectedItem(new
-            Integer(getSession().getMaxContentLength()));
-        
+                Integer(getSession().getMaxContentLength()));
+
         controlForm.add(comboBox);
 
         SButton submit = new SButton("OK");
@@ -124,7 +119,6 @@ public class FileChooserExample
 
         return controlForm;
     }
-        
 
 
     protected String getText(File f) {
@@ -133,13 +127,13 @@ public class FileChooserExample
             BufferedReader reader = new BufferedReader(new FileReader(f));
 
             String line = reader.readLine();
-            while ( line!=null ) {
+            while (line != null) {
                 buffer.append(line).append("\n");
                 line = reader.readLine();
             }
 
             return buffer.toString();
-        } catch ( Exception ex ) {
+        } catch (Exception ex) {
             return "got exception " + ex.getMessage();
         }
     }
@@ -150,18 +144,18 @@ public class FileChooserExample
             previousFile = null;
         }
         try {
-            if ( chooser.getFileType().startsWith("text/") ) {
+            if (chooser.getFileType().startsWith("text/")) {
                 textArea.setText(getText(chooser.getFile()));
                 contentSwitcher.show(textForm);
-            } else if ( chooser.getFileType().startsWith("image/") ) {
+            } else if (chooser.getFileType().startsWith("image/")) {
                 iconLabel.setIcon(new SFileIcon(chooser.getFile(), null,
-                                                    chooser.getFileType()));
+                        chooser.getFileType()));
                 contentSwitcher.show(iconLabel);
             } else {
                 contentSwitcher.show(unknownLabel);
             }
             previousFile = chooser.getFile();
-        } catch ( Exception ex ) {
+        } catch (Exception ex) {
             contentSwitcher.show(unknownLabel);
         }
     }
@@ -189,7 +183,7 @@ public class FileChooserExample
         textArea.setEditable(false);
 
         unknownLabel = new SLabel("Unknown Content");
-        unknownLabel.setBackground( WARN_COLOR );
+        unknownLabel.setBackground(WARN_COLOR);
 
         contentPane.add(iconLabel, "ICON");
 
@@ -199,7 +193,7 @@ public class FileChooserExample
         contentPane.add(unknownLabel, "UNKNOWN");
 
         contentSwitcher.show(unknownLabel);
-        
+
         contentPane.setBorder(new SEmptyBorder(10, 20, 0, 0));
         p.add(contentPane);
         return p;
@@ -245,22 +239,21 @@ public class FileChooserExample
         form.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if ( chooser.getFile()!=null ) {
+                    if (chooser.getFile() != null) {
                         message.setText("OK");
                         message.setBackground(null);
                         filename.setText(chooser.getFileName());
                         fileid.setText(chooser.getFileId());
                         filetype.setText(chooser.getFileType());
-                        size.setText(""+chooser.getFile().length());
+                        size.setText("" + chooser.getFile().length());
                         adaptPreview();
                     } else {
                         message.setText("No file chosen");
-                        message.setBackground( WARN_COLOR );
+                        message.setBackground(WARN_COLOR);
                     }
-                } 
-                catch ( IOException ex ) {
+                } catch (IOException ex) {
                     message.setText(ex.getMessage());
-                    message.setBackground( WARN_COLOR );
+                    message.setBackground(WARN_COLOR);
                     filename.setText("");
                     fileid.setText("");
                     filetype.setText("");
@@ -268,7 +261,8 @@ public class FileChooserExample
                     contentSwitcher.show(unknownLabel);
                 }
                 chooser.reset();
-            }});
+            }
+        });
 
         form.setVerticalAlignment(TOP);
 
@@ -276,10 +270,4 @@ public class FileChooserExample
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,29 +1,28 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.EventListenerList;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
 import java.util.EventListener;
 
 
 /**
  * SPagingBoundedRangeModel.java
- *
- *
+ * <p/>
+ * <p/>
  * Created: Tue Nov 19 12:39:33 2002
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
@@ -38,7 +37,9 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      */
     protected transient ChangeEvent changeEvent = null;
 
-    /** The listeners waiting for model changes. */
+    /**
+     * The listeners waiting for model changes.
+     */
     protected EventListenerList listenerList = new EventListenerList();
 
     protected int value = 0;
@@ -71,6 +72,7 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
 
     /**
      * Returns the model's current value.
+     *
      * @return the model's current value
      * @see #setValue
      * @see javax.swing.BoundedRangeModel#getValue
@@ -82,6 +84,7 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
 
     /**
      * Returns the model's extent.
+     *
      * @return the model's extent
      * @see #setExtent
      * @see javax.swing.BoundedRangeModel#getExtent
@@ -93,6 +96,7 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
 
     /**
      * Returns the model's minimum.
+     *
      * @return the model's minimum
      * @see #setMinimum
      * @see javax.swing.BoundedRangeModel#getMinimum
@@ -104,7 +108,8 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
 
     /**
      * Returns the model's maximum.
-     * @return  the model's maximum
+     *
+     * @return the model's maximum
      * @see #setMaximum
      * @see javax.swing.BoundedRangeModel#getMaximum
      */
@@ -134,6 +139,7 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * <pre>
      *     minimum <= value <= maximum
      * </pre>
+     *
      * @see javax.swing.BoundedRangeModel#setExtent
      */
     public void setExtent(int n) {
@@ -147,6 +153,7 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * <pre>
      *     minimum <= value <= maximum
      * </pre>
+     *
      * @see #getMinimum
      * @see javax.swing.BoundedRangeModel#setMinimum
      */
@@ -161,10 +168,11 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * <pre>
      *     minimum <= value <= maximum
      * </pre>
+     *
      * @see javax.swing.BoundedRangeModel#setMaximum
      */
     public void setMaximum(int n) {
-        setRangeProperties(Math.min(value,n), extent, min, n, isAdjusting);
+        setRangeProperties(Math.min(value, n), extent, min, n, isAdjusting);
     }
 
 
@@ -197,7 +205,7 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * <pre>
      *     minimum <= value <= maximum
      * </pre>
-     * <p>
+     * <p/>
      * At most, one <code>ChangeEvent</code> is generated.
      *
      * @see javax.swing.BoundedRangeModel#setRangeProperties
@@ -226,11 +234,11 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
         }
 
         boolean isChange =
-            (newValue != value) ||
-            (newExtent != extent) ||
-            (newMin != min) ||
-            (newMax != max) ||
-            (adjusting != isAdjusting);
+                (newValue != value) ||
+                (newExtent != extent) ||
+                (newMin != min) ||
+                (newMax != max) ||
+                (adjusting != isAdjusting);
 
         if (isChange) {
             value = newValue;
@@ -284,15 +292,12 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * @return all of this model's <code>ChangeListener</code>s
      *         or an empty
      *         array if no change listeners are currently registered
-     *
      * @see #addChangeListener
      * @see #removeChangeListener
-     *
      * @since 1.4
      */
     public ChangeListener[] getChangeListeners() {
-        return (ChangeListener[]) listenerList.getListeners(
-            ChangeListener.class);
+        return (ChangeListener[]) listenerList.getListeners(ChangeListener.class);
     }
 
 
@@ -325,11 +330,11 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      */
     public String toString() {
         String modelString =
-            "value=" + getValue() + ", " +
-            "extent=" + getExtent() + ", " +
-            "min=" + getMinimum() + ", " +
-            "max=" + getMaximum() + ", " +
-            "adj=" + getValueIsAdjusting();
+                "value=" + getValue() + ", " +
+                "extent=" + getExtent() + ", " +
+                "min=" + getMinimum() + ", " +
+                "max=" + getMaximum() + ", " +
+                "adj=" + getValueIsAdjusting();
 
         return getClass().getName() + "[" + modelString + "]";
     }
@@ -340,33 +345,31 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * upon this model.
      * <code><em>Foo</em>Listener</code>s
      * are registered using the <code>add<em>Foo</em>Listener</code> method.
-     * <p>
+     * <p/>
      * You can specify the <code>listenerType</code> argument
      * with a class literal, such as <code><em>Foo</em>Listener.class</code>.
      * For example, you can query a <code>DefaultBoundedRangeModel</code>
      * instance <code>m</code>
      * for its change listeners
      * with the following code:
-     *
+     * <p/>
      * <pre>ChangeListener[] cls = (ChangeListener[])(m.getListeners(ChangeListener.class));</pre>
-     *
+     * <p/>
      * If no such listeners exist,
      * this method returns an empty array.
      *
-     * @param listenerType  the type of listeners requested;
-     *          this parameter should specify an interface
-     *          that descends from <code>java.util.EventListener</code>
+     * @param listenerType the type of listeners requested;
+     *                     this parameter should specify an interface
+     *                     that descends from <code>java.util.EventListener</code>
      * @return an array of all objects registered as
-     *          <code><em>Foo</em>Listener</code>s
-     *          on this model,
-     *          or an empty array if no such
-     *          listeners have been added
-     * @exception ClassCastException if <code>listenerType</code> doesn't
-     *          specify a class or interface that implements
-     *          <code>java.util.EventListener</code>
-     *
+     *         <code><em>Foo</em>Listener</code>s
+     *         on this model,
+     *         or an empty array if no such
+     *         listeners have been added
+     * @throws ClassCastException if <code>listenerType</code> doesn't
+     *                            specify a class or interface that implements
+     *                            <code>java.util.EventListener</code>
      * @see #getChangeListeners
-     *
      * @since 1.3
      */
     public EventListener[] getListeners(Class listenerType) {
@@ -391,8 +394,15 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
 
 /*
    $Log$
-   Revision 1.1  2004/10/04 16:13:09  hengels
-   Initial revision
+   Revision 1.2  2004/11/24 18:13:21  blueshift
+   TOTAL CLEANUP:
+   - removed document me TODOs
+   - updated/added java file headers
+   - removed emacs stuff
+   - removed deprecated methods
+
+   Revision 1.1.1.1  2004/10/04 16:13:09  hengels
+   o start development of wings 2
 
    Revision 1.2  2004/03/09 15:01:23  arminhaaf
    o fix bug setting maximum smaller then current value

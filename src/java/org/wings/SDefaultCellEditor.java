@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -13,18 +13,14 @@
  */
 package org.wings;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import org.wings.table.STableCellEditor;
 
-import java.util.EventObject;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
-
-import org.wings.event.SRequestEvent;
-import org.wings.event.SRequestListener;
-import org.wings.session.SessionManager;
-import org.wings.table.STableCellEditor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.EventObject;
 
 /**
  * A default Table cell Editor. In order to see the graphics, you need the
@@ -34,7 +30,7 @@ import org.wings.table.STableCellEditor;
  * @version $Revision$
  */
 public class SDefaultCellEditor
-    implements STableCellEditor {
+        implements STableCellEditor {
     /**
      * The default ok button icon.
      */
@@ -82,8 +78,7 @@ public class SDefaultCellEditor
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == ok) {
                 stopCellEditing();
-            }
-            else if (e.getSource() == cancel) {
+            } else if (e.getSource() == cancel) {
                 cancelCellEditing();
             }
         }
@@ -138,13 +133,13 @@ public class SDefaultCellEditor
                 super.setValue(v);
 
                 if (v != null)
-                    ((STextField)editorComponent).setText(v.toString());
+                    ((STextField) editorComponent).setText(v.toString());
                 else
-                    ((STextField)editorComponent).setText(null);
+                    ((STextField) editorComponent).setText(null);
             }
 
             public Object getCellEditorValue() {
-                return ((STextField)editorComponent).getText();
+                return ((STextField) editorComponent).getText();
             }
 
             public boolean stopCellEditing() {
@@ -169,27 +164,24 @@ public class SDefaultCellEditor
                 // Try my best to do the right thing with v
                 boolean bool;
                 if (v instanceof Boolean) {
-                    bool = ((Boolean)v).booleanValue();
-                }
-                else if (v instanceof String) {
-                    Boolean b = Boolean.valueOf((String)v);
+                    bool = ((Boolean) v).booleanValue();
+                } else if (v instanceof String) {
+                    Boolean b = Boolean.valueOf((String) v);
                     bool = b.booleanValue();
-                }
-                else {
+                } else {
                     bool = false;
                 }
 
                 if (fastEditSupport) {
-                    ((SCheckBox)editorComponent).setSelected(!bool);
+                    ((SCheckBox) editorComponent).setSelected(!bool);
                     SDefaultCellEditor.this.stopCellEditing();
-                }
-                else {
-                    ((SCheckBox)editorComponent).setSelected(bool);
+                } else {
+                    ((SCheckBox) editorComponent).setSelected(bool);
                 }
             }
 
             public Object getCellEditorValue() {
-                return Boolean.valueOf(((SCheckBox)editorComponent).isSelected());
+                return Boolean.valueOf(((SCheckBox) editorComponent).isSelected());
             }
 
             public boolean stopCellEditing() {
@@ -305,7 +297,7 @@ public class SDefaultCellEditor
             if (listeners[i] == CellEditorListener.class) {
                 if (changeEvent == null)
                     changeEvent = new ChangeEvent(this);
-                ((CellEditorListener)listeners[i + 1]).editingStopped(changeEvent);
+                ((CellEditorListener) listeners[i + 1]).editingStopped(changeEvent);
             }
         }
     }
@@ -324,7 +316,7 @@ public class SDefaultCellEditor
             if (listeners[i] == CellEditorListener.class) {
                 if (changeEvent == null)
                     changeEvent = new ChangeEvent(this);
-                ((CellEditorListener)listeners[i + 1]).editingCanceled(changeEvent);
+                ((CellEditorListener) listeners[i + 1]).editingCanceled(changeEvent);
             }
         }
     }

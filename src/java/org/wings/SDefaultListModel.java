@@ -1,97 +1,62 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
-import java.util.List;
+import javax.swing.*;
 import java.util.ArrayList;
-
-import javax.swing.AbstractListModel;
-import javax.swing.event.ListDataListener;
+import java.util.List;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SDefaultListModel
-    extends AbstractListModel
-{
-    /**
-     * TODO: documentation
-     */
+        extends AbstractListModel {
     protected final ArrayList data = new ArrayList(2);
 
-    /**
-     * TODO: documentation
-     *
-     * @param d
-     */
+
     public SDefaultListModel(List d) {
         data.clear();
-        if ( d != null ) {
-            for ( int i=0; i<d.size(); i++ )
+        if (d != null) {
+            for (int i = 0; i < d.size(); i++)
                 data.add(d.get(i));
         }
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param d
-     */
+
     public SDefaultListModel(Object[] d) {
         data.clear();
-        if ( d != null ) {
-            for ( int i=0; i<d.length; i++ )
+        if (d != null) {
+            for (int i = 0; i < d.length; i++)
                 data.add(d[i]);
         }
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     public SDefaultListModel() {
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public int getSize() {
         return data.size();
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param i
-     * @return
-     */
+
     public Object getElementAt(int i) {
         return data.get(i);
     }
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

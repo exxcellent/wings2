@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -26,7 +26,9 @@ import java.util.logging.Logger;
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  */
 public class LocaleCharSet {
-    /** The default character encoding "ISO-8859-1". */
+    /**
+     * The default character encoding "ISO-8859-1".
+     */
     public final static String DEFAULT_ENCODING = "ISO-8859-1";
     private static LocaleCharSet fInstance = null;
     private static Logger logger = Logger.getLogger("org.wings.util");
@@ -38,10 +40,9 @@ public class LocaleCharSet {
             InputStream in = this.getClass().getClassLoader().getResourceAsStream("org/wings/util/charset.properties");
             fCharSet.load(in);
             in.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             logger.log(Level.WARNING, "Unexpected error on loading org/wings/util/charset.properties via CP.", e);
-        } 
+        }
     }
 
     /**
@@ -60,7 +61,6 @@ public class LocaleCharSet {
      * Try to find a matching character set for this locale.
      *
      * @param aLocale The Locale to retrieve the default charset for.
-     *
      * @return if found the charset, DEFAULT_ENCODING otherwise
      */
     public String getCharSet(Locale aLocale) {

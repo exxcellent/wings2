@@ -1,20 +1,19 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.io;
 
-import java.io.IOException;
+
 
 /**
  * Device, that discards everything. For debugging purposes.
@@ -25,8 +24,7 @@ import java.io.IOException;
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$
  */
-public final class NullDevice implements Device
-{
+public final class NullDevice implements Device {
     private long byteCount;
 
     public NullDevice() {
@@ -38,9 +36,10 @@ public final class NullDevice implements Device
     /**
      * Flush this Device.
      */
-    public void flush () { }
+    public void flush() { }
+
     public void close() { }
-    
+
     /**
      * returns the number of bytes written to this data sink.
      */
@@ -54,23 +53,26 @@ public final class NullDevice implements Device
     /**
      * Print a character.
      */
-    public Device print (char c) { ++byteCount; return this; }
+    public Device print(char c) {
+        ++byteCount;
+        return this;
+    }
 
     /**
      * Print a character array.
      */
-    public Device print (char[] c) { 
+    public Device print(char[] c) {
         if (c != null) byteCount += c.length;
-        return this; 
+        return this;
     }
 
     /**
      * Print len characters from the specified char array starting at offset
      * off to this Device.
      */
-    public Device print (char[] c, int start, int len) { 
+    public Device print(char[] c, int start, int len) {
         byteCount += len;
-        return this; 
+        return this;
     }
 
     //-- print basic objects --
@@ -78,25 +80,25 @@ public final class NullDevice implements Device
     /**
      * Print a String.
      */
-    public Device print (String s) { 
+    public Device print(String s) {
         if (s != null) byteCount += s.length();
-        return this; 
+        return this;
     }
 
     /**
      * Print an integer.
      */
-    public Device print (int i) { 
+    public Device print(int i) {
         byteCount += String.valueOf(i).length();
-        return this; 
+        return this;
     }
 
     /**
      * Print any Object
      */
-    public Device print (Object o) { 
+    public Device print(Object o) {
         if (o != null) byteCount += o.toString().length();
-        return this; 
+        return this;
     }
 
     /*-------------*
@@ -106,18 +108,18 @@ public final class NullDevice implements Device
     /**
      * Writes the specified byte to this data output stream.
      */
-    public Device write (int c) { 
+    public Device write(int c) {
         ++byteCount;
-        return this; 
+        return this;
     }
 
     /**
      * Writes b.length bytes from the specified byte array to this
      * output stream.
      */
-    public Device write(byte b[]) { 
+    public Device write(byte b[]) {
         if (b != null) byteCount += b.length;
-        return this; 
+        return this;
     }
 
     /**
@@ -126,14 +128,8 @@ public final class NullDevice implements Device
      */
     public Device write(byte b[], int off, int len) {
         if (b != null) byteCount += len;
-        return this; 
+        return this;
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

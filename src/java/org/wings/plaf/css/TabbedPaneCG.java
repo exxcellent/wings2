@@ -1,6 +1,19 @@
 /*
  * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -13,19 +26,18 @@ import org.wings.session.Browser;
 import org.wings.session.SessionManager;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Properties;
-import java.awt.event.KeyEvent;
-import java.awt.event.ActionEvent;
 
 public class TabbedPaneCG
-    extends AbstractComponentCG
-    implements SConstants
-{
+        extends AbstractComponentCG
+        implements SConstants {
     public void installCG(SComponent component) {
         super.installCG(component);
 
-        final STabbedPane tab = (STabbedPane)component;
+        final STabbedPane tab = (STabbedPane) component;
         InputMap inputMap = new InputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK, false), "previous");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK, false), "next");
@@ -35,7 +47,7 @@ public class TabbedPaneCG
             public void actionPerformed(ActionEvent e) {
                 if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand()))
                     tab.setSelectedIndex(tab.getSelectedIndex() - 1);
-                else if (tab.getSelectedIndex() < tab.getTabCount() -1 && "next".equals(e.getActionCommand()))
+                else if (tab.getSelectedIndex() < tab.getTabCount() - 1 && "next".equals(e.getActionCommand()))
                     tab.setSelectedIndex(tab.getSelectedIndex() + 1);
                 tab.requestFocus();
             }
@@ -48,14 +60,14 @@ public class TabbedPaneCG
     }
 
     public void writeContent(final Device device, final SComponent component)
-        throws java.io.IOException {
-        STabbedPane tabbedPane = (STabbedPane)component;
+            throws java.io.IOException {
+        STabbedPane tabbedPane = (STabbedPane) component;
         String style = component.getStyle();
         boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
         int placement = tabbedPane.getTabPlacement();
 
         device
-            .print("<table cellspacing=\"0\"");
+                .print("<table cellspacing=\"0\"");
         if (childSelectorWorkaround)
             Utils.childSelectorWorkaround(device, style);
 
@@ -63,20 +75,20 @@ public class TabbedPaneCG
 
         Utils.writeEvents(device, component);
         device
-            .print(">");
+                .print(">");
 
         if (placement == STabbedPane.TOP)
             device
-                .print("<tr><th placement=\"top\"");
+                    .print("<tr><th placement=\"top\"");
         else if (placement == STabbedPane.LEFT)
             device
-                .print("<tr><th placement=\"left\"");
+                    .print("<tr><th placement=\"left\"");
         else if (placement == STabbedPane.RIGHT)
             device
-                .print("<tr><td");
+                    .print("<tr><td");
         else if (placement == STabbedPane.BOTTOM)
             device
-                .print("<tr><td");
+                    .print("<tr><td");
 
         if (childSelectorWorkaround) {
             if (placement == STabbedPane.TOP)
@@ -90,23 +102,23 @@ public class TabbedPaneCG
         device.print(">");
 
         if (placement == STabbedPane.TOP
-            || placement == STabbedPane.LEFT)
+                || placement == STabbedPane.LEFT)
             writeTabs(device, tabbedPane);
         else
             writePane(device, tabbedPane);
 
         if (placement == STabbedPane.TOP)
             device
-                .print("</th></tr><tr><td");
+                    .print("</th></tr><tr><td");
         else if (placement == STabbedPane.LEFT)
             device
-                .print("</th><td");
+                    .print("</th><td");
         else if (placement == STabbedPane.RIGHT)
             device
-                .print("</td><th placement=\"right\"");
+                    .print("</td><th placement=\"right\"");
         else if (placement == STabbedPane.BOTTOM)
             device
-                .print("</td></tr><tr><th placement=\"bottom\"");
+                    .print("</td></tr><tr><th placement=\"bottom\"");
 
         if (childSelectorWorkaround) {
             if (placement == STabbedPane.RIGHT)
@@ -120,15 +132,14 @@ public class TabbedPaneCG
         device.print(">");
 
         if (placement == STabbedPane.TOP
-            || placement == STabbedPane.LEFT) {
+                || placement == STabbedPane.LEFT) {
             writePane(device, tabbedPane);
             device
-                .print("</td></tr></table>");
-        }
-        else {
+                    .print("</td></tr></table>");
+        } else {
             writeTabs(device, tabbedPane);
             device
-                .print("</th></tr></table>");
+                    .print("</th></tr></table>");
         }
     }
 
@@ -150,17 +161,17 @@ public class TabbedPaneCG
 
             if (showAsFormComponent)
                 device
-                    .print("<button type=\"submit\" name=\"")
-                    .print(Utils.event(tabbedPane))
-                    .print("\" value=\"")
-                    .print(i)
-                    .print("\"");
+                        .print("<button type=\"submit\" name=\"")
+                        .print(Utils.event(tabbedPane))
+                        .print("\" value=\"")
+                        .print(i)
+                        .print("\"");
             else
                 device
-                    .print("<a href=\"")
-                    .print(tabbedPane.getRequestURL()
-                    .addParameter(Utils.event(tabbedPane) + "=" + i).toString())
-                    .print("\"");
+                        .print("<a href=\"")
+                        .print(tabbedPane.getRequestURL()
+                        .addParameter(Utils.event(tabbedPane) + "=" + i).toString())
+                        .print("\"");
 
             if (i == tabbedPane.getSelectedIndex()) {
                 device.print(" selected=\"true\"");

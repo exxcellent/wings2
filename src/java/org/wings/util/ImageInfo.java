@@ -14,6 +14,19 @@
  * Last modification 2004-02-29
  */
 
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.util;
 
 import java.io.DataInput;
@@ -313,8 +326,8 @@ public class ImageInfo {
         }
         bitsPerPixel = getShortLittleEndian(a, 26);
         if (bitsPerPixel != 1 && bitsPerPixel != 4 &&
-            bitsPerPixel != 8 && bitsPerPixel != 16 &&
-            bitsPerPixel != 24 && bitsPerPixel != 32) {
+                bitsPerPixel != 8 && bitsPerPixel != 16 &&
+                bitsPerPixel != 24 && bitsPerPixel != 32) {
             return false;
         }
         int x = (int) (getIntLittleEndian(a, 36) * 0.0254);
@@ -337,7 +350,7 @@ public class ImageInfo {
             return false;
         }
         if ((!equals(a, 0, GIF_MAGIC_89A, 0, 4)) &&
-            (!equals(a, 0, GIF_MAGIC_87A, 0, 4))) {
+                (!equals(a, 0, GIF_MAGIC_87A, 0, 4))) {
             return false;
         }
         format = FORMAT_GIF;
@@ -445,7 +458,7 @@ public class ImageInfo {
         }
         int type = getIntBigEndian(a, 6);
         if (type != 0x494c424d && // type must be ILBM...
-            type != 0x50424d20) { // ...or PBM
+                type != 0x50424d20) { // ...or PBM
             return false;
         }
         // loop chunks to find BMHD chunk
@@ -521,7 +534,7 @@ public class ImageInfo {
                 format = FORMAT_JPEG;
                 bitsPerPixel = (data[0] & 0xff) * (data[5] & 0xff);
                 progressive = marker == 0xffc2 || marker == 0xffc6 ||
-                              marker == 0xffca || marker == 0xffce;
+                        marker == 0xffca || marker == 0xffce;
                 width = getShortBigEndian(data, 3);
                 height = getShortBigEndian(data, 1);
                 return true;
@@ -553,7 +566,7 @@ public class ImageInfo {
         int bits = a[1];
         int planes = a[63];
         if (planes == 1 &&
-            (bits == 1 || bits == 2 || bits == 4 || bits == 8)) {
+                (bits == 1 || bits == 2 || bits == 4 || bits == 8)) {
             // paletted
             bitsPerPixel = bits;
         } else if (planes == 3 && bits == 8) {
@@ -1003,16 +1016,16 @@ public class ImageInfo {
 
     private static void printCompact(String sourceName, ImageInfo imageInfo) {
         System.out.println(imageInfo.getFormatName() + ";" +
-                           imageInfo.getMimeType() + ";" +
-                           imageInfo.getWidth() + ";" +
-                           imageInfo.getHeight() + ";" +
-                           imageInfo.getBitsPerPixel() + ";" +
-                           imageInfo.getNumberOfImages() + ";" +
-                           imageInfo.getPhysicalWidthDpi() + ";" +
-                           imageInfo.getPhysicalHeightDpi() + ";" +
-                           imageInfo.getPhysicalWidthInch() + ";" +
-                           imageInfo.getPhysicalHeightInch() + ";" +
-                           imageInfo.isProgressive());
+                imageInfo.getMimeType() + ";" +
+                imageInfo.getWidth() + ";" +
+                imageInfo.getHeight() + ";" +
+                imageInfo.getBitsPerPixel() + ";" +
+                imageInfo.getNumberOfImages() + ";" +
+                imageInfo.getPhysicalWidthDpi() + ";" +
+                imageInfo.getPhysicalHeightDpi() + ";" +
+                imageInfo.getPhysicalWidthInch() + ";" +
+                imageInfo.getPhysicalHeightInch() + ";" +
+                imageInfo.isProgressive());
     }
 
     private static void printLine(int indentLevels, String text, float value, float minValidValue) {

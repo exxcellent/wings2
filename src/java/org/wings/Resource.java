@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.session.Session;
@@ -32,8 +31,6 @@ import java.util.logging.Logger;
  */
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$
@@ -46,14 +43,8 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
      */
     protected String id;
 
-    /**
-     * TODO: documentation
-     */
     protected String extension;
 
-    /**
-     * TODO: documentation
-     */
     protected String mimeType;
 
     protected Collection headers;
@@ -66,20 +57,12 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
     protected Resource() {
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public int getLength() {
         return -1;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String getExtension() {
         return extension;
     }
@@ -110,11 +93,7 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
 
     public abstract SimpleURL getURL();
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String toString() {
         return getId();
     }
@@ -166,7 +145,7 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
 
         public int hashCode() {
             return (key == null ? 0 : key.hashCode()) ^
-                   (value == null ? 0 : value.hashCode());
+                    (value == null ? 0 : value.hashCode());
         }
 
         public String toString() {
@@ -177,10 +156,4 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2001 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -15,13 +15,12 @@ package org.wings.io;
 
 import java.io.IOException;
 
-public final class CountingDeviceDelegator implements Device
-{
+public final class CountingDeviceDelegator implements Device {
     private final Device deligee;
     private long byteCount;
-    
+
     public CountingDeviceDelegator(Device d) {
-	deligee = d;
+        deligee = d;
         byteCount = 0;
     }
 
@@ -30,9 +29,10 @@ public final class CountingDeviceDelegator implements Device
     /**
      * Flush this Device.
      */
-    public void flush () throws IOException { deligee.flush(); }
+    public void flush() throws IOException { deligee.flush(); }
+
     public void close() throws IOException { deligee.close(); }
-    
+
     /**
      * returns the number of bytes written to this data sink.
      */
@@ -46,29 +46,29 @@ public final class CountingDeviceDelegator implements Device
     /**
      * Print a character.
      */
-    public Device print (char c) throws IOException { 
-	++byteCount; 
-	deligee.print(c);
-	return this;
+    public Device print(char c) throws IOException {
+        ++byteCount;
+        deligee.print(c);
+        return this;
     }
 
     /**
      * Print a character array.
      */
-    public Device print (char[] c) throws IOException { 
+    public Device print(char[] c) throws IOException {
         if (c != null) byteCount += c.length;
         deligee.print(c);
-	return this;
+        return this;
     }
 
     /**
      * Print len characters from the specified char array starting at offset
      * off to this Device.
      */
-    public Device print (char[] c, int start, int len) throws IOException { 
+    public Device print(char[] c, int start, int len) throws IOException {
         byteCount += len;
-	deligee.print(c, start, len);
-	return this;
+        deligee.print(c, start, len);
+        return this;
     }
 
     //-- print basic objects --
@@ -76,28 +76,28 @@ public final class CountingDeviceDelegator implements Device
     /**
      * Print a String.
      */
-    public Device print (String s) throws IOException { 
+    public Device print(String s) throws IOException {
         if (s != null) byteCount += s.length();
-	deligee.print(s);
-	return this;
+        deligee.print(s);
+        return this;
     }
 
     /**
      * Print an integer.
      */
-    public Device print (int i) throws IOException { 
+    public Device print(int i) throws IOException {
         byteCount += String.valueOf(i).length();
-	deligee.print(i);
-	return this;
+        deligee.print(i);
+        return this;
     }
 
     /**
      * Print any Object
      */
-    public Device print (Object o) throws IOException { 
+    public Device print(Object o) throws IOException {
         if (o != null) byteCount += o.toString().length();
-	deligee.print(o);
-	return this;
+        deligee.print(o);
+        return this;
     }
 
     /*-------------*
@@ -107,20 +107,20 @@ public final class CountingDeviceDelegator implements Device
     /**
      * Writes the specified byte to this data output stream.
      */
-    public Device write (int c) throws IOException { 
+    public Device write(int c) throws IOException {
         ++byteCount;
-	deligee.write(c);
-	return this;
+        deligee.write(c);
+        return this;
     }
 
     /**
      * Writes b.length bytes from the specified byte array to this
      * output stream.
      */
-    public Device write(byte b[]) throws IOException { 
+    public Device write(byte b[]) throws IOException {
         if (b != null) byteCount += b.length;
-	deligee.write(b);
-	return this;
+        deligee.write(b);
+        return this;
     }
 
     /**
@@ -129,23 +129,9 @@ public final class CountingDeviceDelegator implements Device
      */
     public Device write(byte b[], int off, int len) throws IOException {
         if (b != null) byteCount += len;
-	deligee.write(b, off, len);
-	return this;
+        deligee.write(b, off, len);
+        return this;
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

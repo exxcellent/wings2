@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.plaf.TableCG;
@@ -36,8 +35,8 @@ import java.util.HashMap;
  * @version $Revision$
  */
 public class STable
-    extends SComponent
-    implements TableModelListener, Scrollable, CellEditorListener, LowLevelEventListener, SForm.FormComponent {
+        extends SComponent
+        implements TableModelListener, Scrollable, CellEditorListener, LowLevelEventListener, SForm.FormComponent {
 
     /**
      * <p>the table model.</p>
@@ -52,49 +51,49 @@ public class STable
     /**
      * <p>The default renderer is used if no other renderer is set for the
      * content of a cell.</p>
-     **/
+     */
     protected STableCellRenderer defaultRenderer;
 
     /**
      * <p>The <code>headerRenderer</code> is used to render the header line.</p>
-     **/
+     */
     protected STableCellRenderer headerRenderer;
 
     /**
      * <p>In this <code>Map</code>, the renderers for the different
      * classes of cell content are stored.</p><p>The class is treated
      * as key, the renderer as the value.</p>
-     **/
+     */
     protected final HashMap renderer = new HashMap();
 
     protected boolean editable = true;
 
     /**
      * <p>If editing, this is the <code>SComponent</code> that is handling the editing.
-     **/
+     */
     transient protected SComponent editorComp;
 
     /**
      * <p>The object that overwrites the screen real estate occupied by the
      * current cell and allows the user to change those contents.</p>
-     **/
+     */
     transient protected STableCellEditor cellEditor;
 
     /**
      * <p>Identifies the column of the cell being edited.</p>
-     **/
+     */
     transient protected int editingColumn = -1;
 
     /**
      * <p>Identifies the row of the cell being edited.</p>
-     **/
+     */
     transient protected int editingRow = -1;
 
     /**
      * <p>In this <code>Map</code>, the <code>STableCellEditor</code>s for the different
      * classes of cell content are stored.</p><p>The class is treated
      * as key, the <code>STableCellEditor</code> as the value.</p>
-     **/
+     */
     protected final HashMap editors = new HashMap();
 
     /**
@@ -108,13 +107,13 @@ public class STable
     /**
      * <p>Determines if horizontal lines in the table should be
      * painted.</p><p>This is off by default.</p>
-     **/
+     */
     protected boolean showHorizontalLines = false;
 
     /**
      * <p>Determines if vertical lines in the table should be
      * painted.</p><p>This is off by default.</p>
-     **/
+     */
     protected boolean showVerticalLines = false;
 
     protected SDimension intercellSpacing;
@@ -128,7 +127,7 @@ public class STable
 
     /**
      * <p>Creates a new <code>STable</code>.</p>
-     **/
+     */
     public STable() {
         this(null);
     }
@@ -137,7 +136,7 @@ public class STable
      * <p>Creates a new <code>STable</code>.</p>
      *
      * @param tm the <code>TableModel</code> for the table's contents.
-     **/
+     */
     public STable(TableModel tm) {
         setSelectionModel(new SDefaultListSelectionModel());
         createDefaultEditors();
@@ -148,7 +147,7 @@ public class STable
      * <p>Sets the model of the table.</p>
      *
      * @param tm the <code>TableModel</code> to set.
-     **/
+     */
     public void setModel(TableModel tm) {
         if (model != null)
             model.removeTableModelListener(this);
@@ -322,16 +321,16 @@ public class STable
 
     public SComponent prepareRenderer(STableCellRenderer r, int row, int col) {
         return r.getTableCellRendererComponent(this,
-                                               model.getValueAt(row, col),
-                                               isRowSelected(row),
-                                               row, col);
+                model.getValueAt(row, col),
+                isRowSelected(row),
+                row, col);
     }
 
     public SComponent prepareHeaderRenderer(int col) {
         return headerRenderer.getTableCellRendererComponent(this,
-                                                            col >= 0 ? model.getColumnName(col) : null,
-                                                            false,
-                                                            -1, col);
+                col >= 0 ? model.getColumnName(col) : null,
+                false,
+                -1, col);
     }
 
     public boolean isEditable() {
@@ -351,9 +350,9 @@ public class STable
      * If editor is null, remove the default editor for this
      * column class.
      *
-     * @see     TableModel#isCellEditable
-     * @see     #getDefaultEditor
-     * @see     #setDefaultRenderer
+     * @see TableModel#isCellEditable
+     * @see #getDefaultEditor
+     * @see #setDefaultRenderer
      */
     public void setDefaultEditor(Class columnClass, STableCellEditor r) {
         editors.remove(columnClass);
@@ -396,11 +395,11 @@ public class STable
      * Programmatically starts editing the cell at <I>row</I> and
      * <I>column</I>, if the cell is editable.
      *
-     * @param   row                             the row to be edited
-     * @param   column                          the column to be edited
-     * @exception IllegalArgumentException      If <I>row</I> or <I>column</I>
-     *                                          are not in the valid range
-     * @return  false if for any reason the cell cannot be edited.
+     * @param row    the row to be edited
+     * @param column the column to be edited
+     * @return false if for any reason the cell cannot be edited.
+     * @throws IllegalArgumentException If <I>row</I> or <I>column</I>
+     *                                  are not in the valid range
      */
     public boolean editCellAt(int row, int column) {
         return editCellAt(row, column, null);
@@ -413,13 +412,13 @@ public class STable
      * cell value, return false from the isCellEditable() method in the
      * TableModel interface.
      *
-     * @param   row                             the row to be edited
-     * @param   column                          the column to be edited
-     * @param   e                               event to pass into
-     *                                          shouldSelectCell
-     * @exception IllegalArgumentException      If <I>row</I> or <I>column</I>
-     *                                          are not in the valid range
-     * @return  false if for any reason the cell cannot be edited.
+     * @param row    the row to be edited
+     * @param column the column to be edited
+     * @param e      event to pass into
+     *               shouldSelectCell
+     * @return false if for any reason the cell cannot be edited.
+     * @throws IllegalArgumentException If <I>row</I> or <I>column</I>
+     *                                  are not in the valid range
      */
     public boolean editCellAt(int row, int column, EventObject e) {
         if (isEditing()) {
@@ -462,9 +461,9 @@ public class STable
      * is editable.  Otherwise, setValueAt() on the cell will not change
      * the value of that cell.
      *
-     * @param   row      the row whose value is to be looked up
-     * @param   col the column whose value is to be looked up
-     * @return  true if the cell is editable.
+     * @param row the row whose value is to be looked up
+     * @param col the column whose value is to be looked up
+     * @return true if the cell is editable.
      * @see #setValueAt
      */
     public boolean isCellEditable(int row, int col) {
@@ -477,9 +476,9 @@ public class STable
     /**
      * Returns  true is the table is editing a cell.
      *
-     * @return  true is the table is editing a cell
-     * @see     #editingColumn
-     * @see     #editingRow
+     * @return true is the table is editing a cell
+     * @see #editingColumn
+     * @see #editingRow
      */
     public boolean isEditing() {
         return (cellEditor == null) ? false : true;
@@ -489,7 +488,7 @@ public class STable
      * If the receiver is currently editing this will return the Component
      * that was returned from the CellEditor.
      *
-     * @return  SComponent handling editing session
+     * @return SComponent handling editing session
      */
     public SComponent getEditorComponent() {
         return editorComp;
@@ -498,7 +497,7 @@ public class STable
     /**
      * This returns the index of the editing column.
      *
-     * @return  the index of the column being edited
+     * @return the index of the column being edited
      * @see #editingRow
      */
     public int getEditingColumn() {
@@ -508,7 +507,7 @@ public class STable
     /**
      * Returns the index of the editing row.
      *
-     * @return  the index of the row being edited
+     * @return the index of the row being edited
      * @see #editingColumn
      */
     public int getEditingRow() {
@@ -528,7 +527,7 @@ public class STable
     /**
      * Set the cellEditor variable.
      *
-     * @param anEditor  the STableCellEditor that does the editing
+     * @param anEditor the STableCellEditor that does the editing
      * @see #cellEditor
      */
     protected void setCellEditor(STableCellEditor anEditor) {
@@ -565,8 +564,8 @@ public class STable
      * If not, find the class of the data in this column (using getColumnClass())
      * and return the default editor for this type of data.
      *
-     * @param row       the row of the cell to edit, where 0 is the first
-     * @param column    the column of the cell to edit, where 0 is the first
+     * @param row    the row of the cell to edit, where 0 is the first
+     * @param column the column of the cell to edit, where 0 is the first
      */
     public STableCellEditor getCellEditor(int row, int column) {
         // TableColumn tableColumn = getColumnModel().getColumn(column);
@@ -581,15 +580,15 @@ public class STable
     /**
      * Prepares the specified editor using the value at the specified cell.
      *
-     * @param editor  the TableCellEditor to set up
-     * @param row     the row of the cell to edit, where 0 is the first
-     * @param col     the column of the cell to edit, where 0 is the first
+     * @param editor the TableCellEditor to set up
+     * @param row    the row of the cell to edit, where 0 is the first
+     * @param col    the column of the cell to edit, where 0 is the first
      */
     protected SComponent prepareEditor(STableCellEditor editor, int row, int col) {
         return editor.getTableCellEditorComponent(this,
-                                                  model.getValueAt(row, col),
-                                                  isRowSelected(row), // true?
-                                                  row, col);
+                model.getValueAt(row, col),
+                isRowSelected(row), // true?
+                row, col);
     }
 
     /**
@@ -667,11 +666,6 @@ public class STable
     }
 
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
     public SListSelectionModel getSelectionModel() {
         return selectionModel;
     }
@@ -679,10 +673,10 @@ public class STable
     /**
      * Sets the row selection model for this table to <code>model</code>.
      *
-     * @param   model        the new selection model
-     * @exception IllegalArgumentException    if <code>model</code>
-     *                                        is <code>null</code>
-     * @see     #getSelectionModel
+     * @param model the new selection model
+     * @throws IllegalArgumentException if <code>model</code>
+     *                                  is <code>null</code>
+     * @see #getSelectionModel
      */
     public void setSelectionModel(SListSelectionModel model) {
         if (getSelectionModel() != null) {
@@ -697,11 +691,7 @@ public class STable
         addSelectionListener(reloadOnSelectionChangeListener);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public int getSelectedRowCount() {
         int result = 0;
         for (int i = getSelectionModel().getMinSelectionIndex();
@@ -713,11 +703,7 @@ public class STable
         return result;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public int getSelectedRow() {
         return getSelectionModel().getMinSelectionIndex();
     }
@@ -743,12 +729,6 @@ public class STable
     }
 
 
-    /**
-     * TODO: documentation
-     *
-     * @param row
-     * @return
-     */
     public boolean isRowSelected(int row) {
         return getSelectionModel().isSelectedIndex(row);
     }
@@ -758,11 +738,11 @@ public class STable
      * <UL>
      * <LI> {@link SConstants#NO_SELECTION}
      * <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
-     *      {@link SConstants#SINGLE_SELECTION}
+     * {@link SConstants#SINGLE_SELECTION}
      * <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
-     *      {@link SConstants#SINGLE_INTERVAL_SELECTION}
+     * {@link SConstants#SINGLE_INTERVAL_SELECTION}
      * <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
-     *      {@link SConstants#MULTIPLE_SELECTION}
+     * {@link SConstants#MULTIPLE_SELECTION}
      * </UL>
      */
     public void setSelectionMode(int s) {
@@ -770,36 +750,26 @@ public class STable
     }
 
     /**
-     * TODO: documentation
-     * @return
-     * <UL>
-     * <LI> {@link SConstants#NO_SELECTION}
-     * <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
-     *      {@link SConstants#SINGLE_SELECTION}
-     * <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
-     *      {@link SConstants#SINGLE_INTERVAL_SELECTION}
-     * <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
-     *      {@link SConstants#MULTIPLE_SELECTION}
-     * </UL>
+     * @return <UL>
+     *         <LI> {@link SConstants#NO_SELECTION}
+     *         <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
+     *         {@link SConstants#SINGLE_SELECTION}
+     *         <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
+     *         {@link SConstants#SINGLE_INTERVAL_SELECTION}
+     *         <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
+     *         {@link SConstants#MULTIPLE_SELECTION}
+     *         </UL>
      */
     public int getSelectionMode() {
         return getSelectionModel().getSelectionMode();
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param listener
-     */
+
     public void addSelectionListener(ListSelectionListener listener) {
         getSelectionModel().addListSelectionListener(listener);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param listener
-     */
+
     public void removeSelectionListener(ListSelectionListener listener) {
         getSelectionModel().removeListSelectionListener(listener);
     }
@@ -817,11 +787,7 @@ public class STable
         return true;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param e
-     */
+
     public void tableChanged(TableModelEvent e) {
         // kill active editors
         editingCanceled(null);
@@ -834,13 +800,13 @@ public class STable
                 case TableModelEvent.INSERT:
                     if (e.getFirstRow() >= 0)
                         getSelectionModel().insertIndexInterval(e.getFirstRow(),
-                                                                e.getLastRow(), true);
+                                e.getLastRow(), true);
                     break;
 
                 case TableModelEvent.DELETE:
                     if (e.getFirstRow() >= 0)
                         getSelectionModel().removeIndexInterval(e.getFirstRow(),
-                                                                e.getLastRow());
+                                e.getLastRow());
                     break;
             }
         }
@@ -849,14 +815,16 @@ public class STable
 
     /**
      * Return the background color.
+     *
      * @return the background color
      */
     public Color getSelectionBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((AttributeSet)dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
      * Set the foreground color.
+     *
      * @param color the new foreground color
      */
     public void setSelectionBackground(Color color) {
@@ -865,14 +833,16 @@ public class STable
 
     /**
      * Return the foreground color.
+     *
      * @return the foreground color
      */
     public Color getSelectionForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((AttributeSet)dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
      * Set the foreground color.
+     *
      * @param color the new foreground color
      */
     public void setSelectionForeground(Color color) {
@@ -881,6 +851,7 @@ public class STable
 
     /**
      * Set the font.
+     *
      * @param font the new font
      */
     public void setSelectionFont(SFont font) {
@@ -889,22 +860,25 @@ public class STable
 
     /**
      * Return the font.
+     *
      * @return the font
      */
     public SFont getSelectionFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((AttributeSet)dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
      * Return the background color.
+     *
      * @return the background color
      */
     public Color getHeaderBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getBackground((AttributeSet)dynamicStyles.get(SELECTOR_HEADER));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_HEADER));
     }
 
     /**
      * Set the foreground color.
+     *
      * @param color the new foreground color
      */
     public void setHeaderBackground(Color color) {
@@ -913,14 +887,16 @@ public class STable
 
     /**
      * Return the foreground color.
+     *
      * @return the foreground color
      */
     public Color getHeaderForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getForeground((AttributeSet)dynamicStyles.get(SELECTOR_HEADER));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_HEADER));
     }
 
     /**
      * Set the foreground color.
+     *
      * @param color the new foreground color
      */
     public void setHeaderForeground(Color color) {
@@ -929,6 +905,7 @@ public class STable
 
     /**
      * Set the font.
+     *
      * @param font the new font
      */
     public void setHeaderFont(SFont font) {
@@ -937,10 +914,11 @@ public class STable
 
     /**
      * Return the font.
+     *
      * @return the font
      */
     public SFont getHeaderFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getFont((AttributeSet)dynamicStyles.get(SELECTOR_HEADER));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_HEADER));
     }
 
     public void setHeaderVisible(boolean hv) {
@@ -990,7 +968,7 @@ public class STable
         SDimension oldIntercellSpacing = intercellSpacing;
         intercellSpacing = d;
         if ((intercellSpacing == null && oldIntercellSpacing != null) ||
-            intercellSpacing != null && !intercellSpacing.equals(oldIntercellSpacing))
+                intercellSpacing != null && !intercellSpacing.equals(oldIntercellSpacing))
             reload();
     }
 
@@ -1008,7 +986,7 @@ public class STable
         SDimension oldIntercellPadding = intercellPadding;
         intercellPadding = d;
         if ((intercellPadding == null && oldIntercellPadding != null) ||
-            intercellPadding != null && !intercellPadding.equals(oldIntercellPadding))
+                intercellPadding != null && !intercellPadding.equals(oldIntercellPadding))
             reload();
     }
 
@@ -1067,17 +1045,11 @@ public class STable
      * if selection changes, we have to reload code...
      */
     protected final ListSelectionListener reloadOnSelectionChangeListener =
-        new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                reload();
-            }
-        };
+            new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e) {
+                    reload();
+                }
+            };
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

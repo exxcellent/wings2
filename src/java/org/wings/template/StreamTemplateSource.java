@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.template;
 
 import java.io.IOException;
@@ -42,20 +41,21 @@ public class StreamTemplateSource implements TemplateSource {
 
     /**
      * <p>generates a new StreamDataSource with the given Stream</p>
+     *
      * @param iStream the InputStream from which the template is read.
      */
-    public StreamTemplateSource (InputStream iStream) {
-        setInputStream( iStream );
+    public StreamTemplateSource(InputStream iStream) {
+        setInputStream(iStream);
     }
 
     /**
      * <p>sets the InputStream and the modificationTime</p>
-     * @param iStream the InputStream from which the template is read.
      *
+     * @param iStream the InputStream from which the template is read.
      */
-    public void setInputStream( InputStream iStream ) {
+    public void setInputStream(InputStream iStream) {
         if (iStream == null) {
-            throw new IllegalArgumentException ("stream is null, this is invalid!!");
+            throw new IllegalArgumentException("stream is null, this is invalid!!");
         }
         this.iStream = iStream;
         setModificationTime();
@@ -70,6 +70,7 @@ public class StreamTemplateSource implements TemplateSource {
 
     /**
      * <p>returns the canonical name of the inputStream (uaaaah!)</p>
+     *
      * @return <p>always null, because stream is always to be parsed</p>
      */
     public String getCanonicalName() {
@@ -93,6 +94,7 @@ public class StreamTemplateSource implements TemplateSource {
 
     /**
      * Gets an InputStream of the File.
+     *
      * @return the actually set InputStream
      */
     public InputStream getInputStream() throws IOException {
@@ -101,10 +103,4 @@ public class StreamTemplateSource implements TemplateSource {
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

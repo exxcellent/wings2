@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.session;
 
 
@@ -19,9 +18,9 @@ import org.wings.*;
 import org.wings.event.*;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
+import org.wings.plaf.CGManager;
 import org.wings.plaf.LookAndFeel;
 import org.wings.plaf.LookAndFeelFactory;
-import org.wings.plaf.CGManager;
 import org.wings.util.LocaleCharSet;
 import org.wings.util.StringUtil;
 import org.wings.util.WeakPropertyChangeSupport;
@@ -39,25 +38,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public class Session
-    implements PropertyService, Serializable {
+        implements PropertyService, Serializable {
 
     private final static Logger logger = Logger.getLogger("org.wings.session");
 
     /**
      * The property name of the locale
-     *
      */
     public final static String LOCALE_PROPERTY = "locale";
 
     /**
      * The property name of the look&feel
-     *
      */
     public final static String LOOK_AND_FEEL_PROPERTY = "lookAndFeel";
 
@@ -118,30 +113,8 @@ public class Session
 
     /**
      * Store here only weak references.
-     *
      */
     private final EventListenerList listenerList = new EventListenerList();
-
-    /**
-     * @deprecated use {@link WingsStatistics#getStatistics} instead
-     */
-    public final int getOverallSessions() {
-        return WingsStatistics.getStatistics().getOverallSessionCount();
-    }
-
-    /**
-     * @deprecated use {@link WingsStatistics#getStatistics} instead
-     */
-    public final int getActiveSessions() {
-        return WingsStatistics.getStatistics().getActiveSessionCount();
-    }
-
-    /**
-     * @deprecated use {@link WingsStatistics#getStatistics} instead
-     */
-    public final int getAllocatedSessions() {
-        return WingsStatistics.getStatistics().getAllocatedSessionCount();
-    }
 
     public final SessionStatistics getStatistics() {
         return statistics;
@@ -150,15 +123,15 @@ public class Session
     static boolean collectStatistics = true;
 
     static final SRequestListener SESSION_STATISTIC_COLLECTOR = new SRequestListener() {
-            public void processRequest(SRequestEvent e) {
-                Session session = SessionManager.getSession();
-                if (session == null) {
-                    /* while exiting or destroy() the session: it 
-                     * might already be null in the session manager.
-                     */
-                    return;
-                }
-                switch (e.getType()) {
+        public void processRequest(SRequestEvent e) {
+            Session session = SessionManager.getSession();
+            if (session == null) {
+                /* while exiting or destroy() the session: it
+                 * might already be null in the session manager.
+                 */
+                return;
+            }
+            switch (e.getType()) {
                 case SRequestEvent.DISPATCH_START:
                     session.getStatistics().startDispatching();
                     break;
@@ -177,14 +150,11 @@ public class Session
                 case SRequestEvent.REQUEST_END:
                     session.getStatistics().endRequest();
                     break;
-                }
             }
-        };
+        }
+    };
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     public Session() {
         if (collectStatistics) {
             WingsStatistics.getStatistics().incrementSessionCount();
@@ -201,7 +171,7 @@ public class Session
      *
      * @param config
      * @param request a <code>HttpServletRequest</code> value
-     * @exception ServletException if an error occurs
+     * @throws ServletException if an error occurs
      */
     public void init(ServletConfig config, HttpServletRequest request) throws ServletException {
         servletContext = config.getServletContext();
@@ -214,10 +184,9 @@ public class Session
         try {
             LookAndFeel lookAndFeel = LookAndFeelFactory.getLookAndFeelFactory().create();
             CGManager.setLookAndFeel(lookAndFeel);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             logger.log(Level.SEVERE, "could not load look and feel: " +
-                                     config.getInitParameter("wings.lookandfeel.factory"), ex);
+                    config.getInitParameter("wings.lookandfeel.factory"), ex);
             throw new ServletException(ex);
         }
 
@@ -293,6 +262,7 @@ public class Session
     /**
      * Get the user agent (userAgent) used for
      * this session by the user.
+     *
      * @return a <code>Browser</code> value
      */
     public Browser getUserAgent() {
@@ -313,11 +283,7 @@ public class Session
         }
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public LowLevelEventDispatcher getDispatcher() {
         return dispatcher;
     }
@@ -351,6 +317,7 @@ public class Session
 
     /**
      * The root frame is the first shown frame.
+     *
      * @return a <code>SFrame</code> value
      */
     public SFrame getRootFrame() {
@@ -376,9 +343,9 @@ public class Session
     /**
      * Gets the session property indicated by the specified key.
      *
-     * @param      key   the name of the session property.
-     * @return     the string value of the session property,
-     *             or <code>null</code> if there is no property with that key.
+     * @param key the name of the session property.
+     * @return the string value of the session property,
+     *         or <code>null</code> if there is no property with that key.
      */
     public Object getProperty(String key) {
         return props.get(key);
@@ -387,11 +354,11 @@ public class Session
     /**
      * Gets the session property indicated by the specified key.
      *
-     * @param      key   the name of the session property.
-     * @param      def   a default value.
-     * @return     the string value of the session property,
-     *             or the default value if there is no property with that key.
-     * @see        org.wings.session.PropertyService#getProperties()
+     * @param key the name of the session property.
+     * @param def a default value.
+     * @return the string value of the session property,
+     *         or the default value if there is no property with that key.
+     * @see org.wings.session.PropertyService#getProperties()
      */
     public Object getProperty(String key, Object def) {
         if (!props.containsKey(key)) {
@@ -404,12 +371,12 @@ public class Session
     /**
      * Sets the session property indicated by the specified key.
      *
-     * @param      key   the name of the session property.
-     * @param      value the value of the session property.
-     * @return     the previous value of the session property,
-     *             or <code>null</code> if it did not have one.
-     * @see        org.wings.session.PropertyService#getProperty(java.lang.String)
-     * @see        org.wings.session.PropertyService#getProperty(java.lang.String, java.lang.Object)
+     * @param key   the name of the session property.
+     * @param value the value of the session property.
+     * @return the previous value of the session property,
+     *         or <code>null</code> if it did not have one.
+     * @see org.wings.session.PropertyService#getProperty(java.lang.String)
+     * @see org.wings.session.PropertyService#getProperty(java.lang.String, java.lang.Object)
      */
     public Object setProperty(String key, Object value) {
         //System.err.print("DefaultSession.setProperty");
@@ -430,22 +397,14 @@ public class Session
     }
 
     private final WeakPropertyChangeSupport propertyChangeSupport =
-        new WeakPropertyChangeSupport(this);
+            new WeakPropertyChangeSupport(this);
 
-    /**
-     * TODO: documentation
-     *
-     * @param listener
-     */
+
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param listener
-     */
+
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
@@ -454,7 +413,7 @@ public class Session
      * Describe <code>addPropertyChangeListener</code> method here.
      *
      * @param propertyName a <code>String</code> value
-     * @param listener a <code>PropertyChangeListener</code> value
+     * @param listener     a <code>PropertyChangeListener</code> value
      */
     public void addPropertyChangeListener(String propertyName,
                                           PropertyChangeListener listener) {
@@ -465,7 +424,7 @@ public class Session
      * Describe <code>removePropertyChangeListener</code> method here.
      *
      * @param propertyName a <code>String</code> value
-     * @param listener a <code>PropertyChangeListener</code> value
+     * @param listener     a <code>PropertyChangeListener</code> value
      */
     public void removePropertyChangeListener(String propertyName,
                                              PropertyChangeListener listener) {
@@ -480,14 +439,14 @@ public class Session
      *
      * @param l the locale to be associated with this session.
      * @throws IllegalArgumentException if this locale is not supported, as
-     *         predefined with {@link #setSupportedLocales}.
+     *                                  predefined with {@link #setSupportedLocales}.
      */
     public void setLocale(Locale l) throws IllegalArgumentException {
         if (l == null || locale.equals(l))
             return;
         if (supportedLocales == null ||
-            supportedLocales.length == 0 ||
-            Arrays.asList(supportedLocales).contains(l)) {
+                supportedLocales.length == 0 ||
+                Arrays.asList(supportedLocales).contains(l)) {
             locale = l;
             propertyChangeSupport.firePropertyChange(LOCALE_PROPERTY, locale, l);
             logger.config("Set Locale " + l);
@@ -497,6 +456,7 @@ public class Session
 
     /**
      * The Locale of the current session. This Locale reflects the Locale of the clients userAgent.
+     *
      * @return a <code>Locale</code> value
      */
     public Locale getLocale() {
@@ -506,6 +466,7 @@ public class Session
     /**
      * Indicates if the wings session servlet should adopt the clients Locale provided by the
      * browsers in the HTTP header.
+     *
      * @param adoptLocale if true, try to determine, false ignore
      */
     public final void setLocaleFromHeader(boolean adoptLocale) {
@@ -540,8 +501,9 @@ public class Session
      * The current character encoding used for the communication with the clients userAgent.
      * If <code>null</code> then the current characterEncoding is determined by the current
      * session Locale via the charset.properties map.
+     *
      * @param characterEncoding The charcterEncoding which should be enforces for this session (i.e. "utf-8"),
-     * or <code>null</code> if it should be determined by the clients userAgent Locale.
+     *                          or <code>null</code> if it should be determined by the clients userAgent Locale.
      */
     public void setCharacterEncoding(String characterEncoding) {
         this.characterEncoding = characterEncoding;
@@ -551,6 +513,7 @@ public class Session
      * The current character encoding used for the communication with the clients userAgent.
      * If <code>null</code> then the current characterEncoding is determined by the current
      * session Locale via the charset.properties map.
+     *
      * @return The characterEncoding set for this sesson or determined by the current Locale.
      */
     public String getCharacterEncoding() {
@@ -578,6 +541,7 @@ public class Session
     /**
      * Get the maximum content length (file size) for a post
      * request.
+     *
      * @return maximum size in kB (1024 Byte)
      * @see org.wings.session.MultipartRequest
      */
@@ -588,6 +552,7 @@ public class Session
     /**
      * Set the maximum content length (file size) for a post
      * request.
+     *
      * @param l size in kB (1024 Byte)
      * @see org.wings.session.MultipartRequest
      */
@@ -597,7 +562,6 @@ public class Session
 
     /**
      * Describe <code>destroy</code> method here.
-     *
      */
     protected void destroy() {
 
@@ -639,13 +603,13 @@ public class Session
 
     /**
      * Exit the current session and redirect to other URL.
-     *
+     * <p/>
      * This removes the session and its associated
      * application from memory. The userAgent is redirected to the given
      * URL. Note, that it is not even possible for the user to re-enter
      * the application with the BACK-button, since all information is
      * removed.
-     *
+     * <p/>
      * <em>Always</em> exit an application by calling an
      * <code>exit()</code> method, especially, if it is an application
      * that requires a login and thus handles sensitive information accessible
@@ -665,13 +629,13 @@ public class Session
 
     /**
      * Exit the current session and redirect to new application instance.
-     *
+     * <p/>
      * This removes the session and its associated
      * application from memory. The userAgent is redirected to the same
      * application with a fresh session. Note, that it is not even
      * possible for the user to re-enter the old application with the
      * BACK-button, since all information is removed.
-     *
+     * <p/>
      * <em>Always</em> exit an application by calling an
      * <code>exit()</code> method, especially, if it is an application
      * that requires an login and thus handles sensitive information accessible
@@ -701,24 +665,15 @@ public class Session
     }
 
 
-    /**
-     * TODO: documentation
-     *
-     * @param listener
-     */
     public void addExitListener(SExitListener listener) {
         listenerList.add(SExitListener.class,
-                         listener);
+                listener);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param listener
-     */
+
     public void removeExitListener(SExitListener listener) {
         listenerList.remove(SExitListener.class,
-                            listener);
+                listener);
     }
 
     /**
@@ -759,20 +714,12 @@ public class Session
         }
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param listener
-     */
+
     public void addRequestListener(SRequestListener listener) {
         listenerList.add(SRequestListener.class, listener);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param listener
-     */
+
     public void removeRequestListener(SRequestListener listener) {
         listenerList.remove(SRequestListener.class, listener);
     }
@@ -810,10 +757,4 @@ public class Session
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

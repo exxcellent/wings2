@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 //import javax.swing.*;
@@ -28,9 +27,8 @@ import org.wings.plaf.LabelCG;
  * @version $Revision$
  */
 public class SLabel
-    extends SComponent
-    implements SConstants
-{
+        extends SComponent
+        implements SConstants {
     /**
      * The text to be displayed
      */
@@ -62,7 +60,7 @@ public class SLabel
      * Creates a new <code>SLabel</code> instance with no text and no icon.
      */
     public SLabel() {
-        this((String)null);
+        this((String) null);
     }
 
     /**
@@ -79,10 +77,10 @@ public class SLabel
      * Creates a new <code>SLabel</code> instance with the specified icon
      * (alligned as specified) and no text.
      *
-     * @param icon The image to be displayed by the label.
+     * @param icon                The image to be displayed by the label.
      * @param horizontalAlignment One of the following constants defined in
-     *        <code>SConstants</code>:
-     *        <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
+     *                            <code>SConstants</code>:
+     *                            <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
      * @see SConstants
      */
     public SLabel(SIcon icon, int horizontalAlignment) {
@@ -106,11 +104,11 @@ public class SLabel
      * Creates a new <code>SLabel</code> instance with the specified icon
      * and the specified text (alligned as specified).
      *
-     * @param text The text to be displayed by the label.
-     * @param icon The image to be displayed by the label.
+     * @param text                The text to be displayed by the label.
+     * @param icon                The image to be displayed by the label.
      * @param horizontalAlignment One of the following constants defined in
-     *        <code>SConstants</code>:
-     *        <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
+     *                            <code>SConstants</code>:
+     *                            <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
      * @see SConstants
      */
     public SLabel(String text, SIcon icon, int horizontalAlignment) {
@@ -123,10 +121,10 @@ public class SLabel
      * Creates a new <code>SLabel</code> instance with the specified text
      * (alligned as specified) and no icon.
      *
-     * @param text The text to be displayed by the label.
+     * @param text                The text to be displayed by the label.
      * @param horizontalAlignment One of the following constants defined in
-     *        <code>SConstants</code>:
-     *        <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
+     *                            <code>SConstants</code>:
+     *                            <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
      * @see SConstants
      */
     public SLabel(String text, int horizontalAlignment) {
@@ -134,7 +132,6 @@ public class SLabel
     }
 
     /**
-     *
      * @param t
      */
     public void setImageAbsBottom(boolean t) {
@@ -161,12 +158,12 @@ public class SLabel
 
     /**
      * Sets the horizontal position of the lable's text, relative to its icon.
-     * <p>
+     * <p/>
      * The default value of this property is CENTER.
      *
      * @param textPosition One of the following constants defined in
-     *        <code>SConstants</code>:
-     *        <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
+     *                     <code>SConstants</code>:
+     *                     <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
      */
     public void setHorizontalTextPosition(int textPosition) {
         horizontalTextPosition = textPosition;
@@ -174,12 +171,12 @@ public class SLabel
 
     /**
      * Sets the vertical position of the lable's text, relative to its icon.
-     * <p>
+     * <p/>
      * The default value of this property is CENTER.
      *
      * @param textPosition One of the following constants defined in
-     *        <code>SConstants</code>:
-     *        <code>TOP</code>, <code>CENTER</code>, <code>BOTTOM</code>.
+     *                     <code>SConstants</code>:
+     *                     <code>TOP</code>, <code>CENTER</code>, <code>BOTTOM</code>.
      */
     public void setVerticalTextPosition(int textPosition) {
         verticalTextPosition = textPosition;
@@ -247,10 +244,4 @@ public class SLabel
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -34,7 +34,9 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.beans.*;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -50,8 +52,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public abstract class SComponent
-    implements SConstants, Cloneable, Serializable, Renderable
-{
+        implements SConstants, Cloneable, Serializable, Renderable {
     public static final String SELECTOR_GLOBAL = "";
 
     public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
@@ -61,7 +62,9 @@ public abstract class SComponent
     /* */
     private String name;
 
-    /** the session */
+    /**
+     * the session
+     */
     private transient Session session;
 
     /**
@@ -70,40 +73,64 @@ public abstract class SComponent
      */
     protected transient ComponentCG cg;
 
-    /** Vertical alignment */
+    /**
+     * Vertical alignment
+     */
     protected int verticalAlignment = NO_ALIGN;
 
-    /** Horizontal alignment */
+    /**
+     * Horizontal alignment
+     */
     protected int horizontalAlignment = NO_ALIGN;
 
-    /** The name of the style class */
+    /**
+     * The name of the style class
+     */
     protected String style;
 
-    /** List of dynamic styles */
+    /**
+     * List of dynamic styles
+     */
     protected Map dynamicStyles;
 
-    /** Visibility. */
+    /**
+     * Visibility.
+     */
     protected boolean visible = true;
 
-    /** Enabled / disabled. */
+    /**
+     * Enabled / disabled.
+     */
     protected boolean enabled = true;
 
-    /** The container, this component resides in. */
+    /**
+     * The container, this component resides in.
+     */
     protected SContainer parent;
 
-    /** The frame, this component resides in. */
+    /**
+     * The frame, this component resides in.
+     */
     protected SFrame parentFrame;
 
-    /** The border for the component. */
+    /**
+     * The border for the component.
+     */
     protected SBorder border;
 
-    /** The tooltip for this component. */
+    /**
+     * The tooltip for this component.
+     */
     protected String tooltip;
 
-    /** The focus traversal Index */
+    /**
+     * The focus traversal Index
+     */
     protected int focusTraversalIndex = -1;
 
-    /** Preferred size of component in pixel. */
+    /**
+     * Preferred size of component in pixel.
+     */
     protected SDimension preferredSize;
 
     private boolean fireComponentChangeEvents = false;
@@ -137,6 +164,7 @@ public abstract class SComponent
 
     /**
      * Return the parent container.
+     *
      * @return the container this component resides in
      */
     public final SContainer getParent() {
@@ -192,17 +220,17 @@ public abstract class SComponent
     }
 
     public SPopupMenu getComponentPopupMenu() {
-        if(!getInheritsPopupMenu())
+        if (!getInheritsPopupMenu())
             return popupMenu;
 
-        if(popupMenu == null) {
+        if (popupMenu == null) {
             // Search parents for its popup
             SContainer parent = getParent();
             while (parent != null) {
-                if(parent instanceof SComponent) {
-                    return ((SComponent)parent).getComponentPopupMenu();
+                if (parent instanceof SComponent) {
+                    return ((SComponent) parent).getComponentPopupMenu();
                 }
-                if(parent instanceof SFrame)
+                if (parent instanceof SFrame)
                     break;
 
                 parent = parent.getParent();
@@ -226,6 +254,7 @@ public abstract class SComponent
      * missing implementations in the component cg or html properties.
      * If <i>width</i> or <i>height</i> is zero, it is ignored and the browser
      * defines the size.
+     *
      * @see org.wings.SComponent#getPreferredSize
      */
     public void setPreferredSize(SDimension preferredSize) {
@@ -235,6 +264,7 @@ public abstract class SComponent
 
     /**
      * Get the preferred size of this component.
+     *
      * @see SComponent#setPreferredSize
      */
     public SDimension getPreferredSize() {
@@ -246,10 +276,11 @@ public abstract class SComponent
      * Adds the specified component listener to receive component events from
      * this component.
      * If l is null, no exception is thrown and no action is performed.
-     * @param    l   the component listener.
-     * @see      org.wings.event.SComponentEvent
-     * @see      org.wings.event.SComponentListener
-     * @see      org.wings.SComponent#removeComponentListener
+     *
+     * @param l the component listener.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#removeComponentListener
      */
     public final void addComponentListener(SComponentListener l) {
         addEventListener(SComponentListener.class, l);
@@ -262,10 +293,11 @@ public abstract class SComponent
      * no function, nor does it throw an exception, if the listener
      * specified by the argument was not previously added to this component.
      * If l is null, no exception is thrown and no action is performed.
-     * @param    l   the component listener.
-     * @see      org.wings.event.SComponentEvent
-     * @see      org.wings.event.SComponentListener
-     * @see      org.wings.SComponent#addComponentListener
+     *
+     * @param l the component listener.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#addComponentListener
      */
     public final void removeComponentListener(SComponentListener l) {
         removeEventListener(SComponentListener.class, l);
@@ -273,6 +305,7 @@ public abstract class SComponent
 
     /**
      * Reports a component change.
+     *
      * @param aEvent report this event to all listeners
      * @see org.wings.event.SComponentListener
      */
@@ -284,8 +317,8 @@ public abstract class SComponent
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == SComponentListener.class) {
                 // Lazily create the event:
-                processComponentEvent((SComponentListener)listeners[i + 1],
-                                      aEvent);
+                processComponentEvent((SComponentListener) listeners[i + 1],
+                        aEvent);
             }
         }
 
@@ -295,7 +328,7 @@ public abstract class SComponent
      * Processes component events occurring on this component by
      * dispatching them to any registered
      * <code>SComponentListener</code> objects.
-     * <p>
+     * <p/>
      * This method is not called unless component events are
      * enabled for this component. Component events are enabled
      * when one of the following occurs:
@@ -303,10 +336,11 @@ public abstract class SComponent
      * <li>A <code>SComponentListener</code> object is registered
      * via <code>addComponentListener</code>.
      * </ul>
-     * @param       e the component event.
-     * @see         org.wings.event.SComponentEvent
-     * @see         org.wings.event.SComponentListener
-     * @see         org.wings.SComponent#addComponentListener
+     *
+     * @param e the component event.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#addComponentListener
      */
     protected void processComponentEvent(SComponentListener listener, SComponentEvent e) {
         int id = e.getID();
@@ -330,16 +364,16 @@ public abstract class SComponent
      * Adds the specified component listener to receive component events from
      * this component.
      * If l is null, no exception is thrown and no action is performed.
-     * @param    listener   the component listener.
-     * @see      org.wings.event.SComponentEvent
-     * @see      org.wings.event.SComponentListener
-     * @see      org.wings.SComponent#removeComponentListener
+     *
+     * @param listener the component listener.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#removeComponentListener
      */
     public final void addScriptListener(ScriptListener listener) {
         addEventListener(ScriptListener.class, listener);
     }
-    
-   
+
 
     /**
      * Removes the specified component listener so that it no longer
@@ -347,17 +381,18 @@ public abstract class SComponent
      * no function, nor does it throw an exception, if the listener
      * specified by the argument was not previously added to this component.
      * If l is null, no exception is thrown and no action is performed.
-     * @param    listener   the component listener.
-     * @see      org.wings.event.SComponentEvent
-     * @see      org.wings.event.SComponentListener
-     * @see      org.wings.SComponent#addComponentListener
+     *
+     * @param listener the component listener.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#addComponentListener
      */
     public final void removeScriptListener(ScriptListener listener) {
         removeEventListener(ScriptListener.class, listener);
     }
 
     public ScriptListener[] getScriptListeners() {
-        return (ScriptListener[])getListeners(ScriptListener.class);
+        return (ScriptListener[]) getListeners(ScriptListener.class);
     }
 
     public void setName(String name) {
@@ -399,7 +434,7 @@ public abstract class SComponent
      */
     private final void unregister() {
         if (getDispatcher() != null && this instanceof LowLevelEventListener) {
-            getDispatcher().unregister((LowLevelEventListener)this);
+            getDispatcher().unregister((LowLevelEventListener) this);
         }
     }
 
@@ -409,12 +444,13 @@ public abstract class SComponent
      */
     private final void register() {
         if (getDispatcher() != null && this instanceof LowLevelEventListener) {
-            getDispatcher().register((LowLevelEventListener)this);
+            getDispatcher().register((LowLevelEventListener) this);
         }
     }
 
     /**
      * Set the class of the laf-provided style.
+     *
      * @param value the new value for style
      */
     public void setStyle(String value) {
@@ -446,7 +482,7 @@ public abstract class SComponent
     public Style getDynamicStyle(String selector) {
         if (dynamicStyles == null)
             return null;
-        return (Style)dynamicStyles.get(selector);
+        return (Style) dynamicStyles.get(selector);
     }
 
     public void setDynamicStyles(Collection dynamicStyles) {
@@ -455,7 +491,7 @@ public abstract class SComponent
         if (this.dynamicStyles == null)
             this.dynamicStyles = new HashMap(4);
         for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
-            Style style = (Style)iterator.next();
+            Style style = (Style) iterator.next();
             this.dynamicStyles.put(style.getSelector(), style);
         }
         reload();
@@ -476,8 +512,7 @@ public abstract class SComponent
         if (style == null) {
             addDynamicStyle(new Style(selector, name, value));
             reload();
-        }
-        else {
+        } else {
             String old = style.put(name, value);
             reloadIfChange(old, value);
         }
@@ -493,8 +528,7 @@ public abstract class SComponent
         if (style == null) {
             addDynamicStyle(new Style(selector, attributes));
             reload();
-        }
-        else {
+        } else {
             boolean changed = style.putAll(attributes);
             if (changed)
                 reload();
@@ -503,14 +537,16 @@ public abstract class SComponent
 
     /**
      * Return the background color.
+     *
      * @return the background color
      */
     public Color getBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getBackground((AttributeSet)dynamicStyles.get(SELECTOR_GLOBAL));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_GLOBAL));
     }
 
     /**
      * Set the foreground color.
+     *
      * @param color the new foreground color
      */
     public void setBackground(Color color) {
@@ -519,14 +555,16 @@ public abstract class SComponent
 
     /**
      * Return the foreground color.
+     *
      * @return the foreground color
      */
     public Color getForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getForeground((AttributeSet)dynamicStyles.get(SELECTOR_GLOBAL));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_GLOBAL));
     }
 
     /**
      * Set the foreground color.
+     *
      * @param color the new foreground color
      */
     public void setForeground(Color color) {
@@ -535,6 +573,7 @@ public abstract class SComponent
 
     /**
      * Set the font.
+     *
      * @param font the new font
      */
     public void setFont(SFont font) {
@@ -543,24 +582,25 @@ public abstract class SComponent
 
     /**
      * Return the font.
+     *
      * @return the font
      */
     public SFont getFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getFont((AttributeSet)dynamicStyles.get(SELECTOR_GLOBAL));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_GLOBAL));
     }
 
     /**
      * Set the visibility.
+     *
      * @param visible wether this component will show or not
      */
     public void setVisible(boolean visible) {
         boolean old = this.visible;
         this.visible = visible;
         if (fireComponentChangeEvents && (visible != old)) {
-            fireComponentChangeEvent(
-                new SComponentEvent(this, visible
-                                          ? SComponentEvent.COMPONENT_SHOWN
-                                          : SComponentEvent.COMPONENT_HIDDEN));
+            fireComponentChangeEvent(new SComponentEvent(this, visible
+                    ? SComponentEvent.COMPONENT_SHOWN
+                    : SComponentEvent.COMPONENT_HIDDEN));
         }
     }
 
@@ -732,17 +772,16 @@ public abstract class SComponent
      *
      * @param s the Device to write into
      * @throws IOException Thrown if the connection to the client gets broken,
-     *         for example when the user stops loading
+     *                     for example when the user stops loading
      */
     public void write(Device s) throws IOException {
         try {
             if (visible) {
                 cg.write(s, this);
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             logger.log(Level.SEVERE, "exception during code generation for " +
-                                     getClass().getName(), t);
+                    getClass().getName(), t);
         }
     }
 
@@ -758,6 +797,7 @@ public abstract class SComponent
     /**
      * Generic implementation for generating a string that represents
      * the components configuration.
+     *
      * @return a string containing all properties
      */
     public String paramString() {
@@ -800,10 +840,10 @@ public abstract class SComponent
     private String encodeLowLevelEventId(String lowLevelEventId) {
         if (getParentFrame() != null)
             if (!(this instanceof LowLevelEventListener) ||
-                ((LowLevelEventListener)this).checkEpoch()) {
-                return ( getParentFrame().getEventEpoch()
-                    + SConstants.UID_DIVIDER
-                    + lowLevelEventId);
+                    ((LowLevelEventListener) this).checkEpoch()) {
+                return (getParentFrame().getEventEpoch()
+                        + SConstants.UID_DIVIDER
+                        + lowLevelEventId);
             }
         return lowLevelEventId;
     }
@@ -823,8 +863,8 @@ public abstract class SComponent
 
     private boolean getUseNamedEvents() {
         if (useNamedEvents == null) {
-            useNamedEvents = ("true".equalsIgnoreCase((String)getSession().getProperty("wings.event.usenames")))
-                ? Boolean.TRUE : Boolean.FALSE;
+            useNamedEvents = ("true".equalsIgnoreCase((String) getSession().getProperty("wings.event.usenames")))
+                    ? Boolean.TRUE : Boolean.FALSE;
         }
         return useNamedEvents.booleanValue();
     }
@@ -836,17 +876,6 @@ public abstract class SComponent
     public String getLowLevelEventId() {
         return getName();
     }
-
-    /**
-     * @deprecated use getEncodedLowLevelEventId()
-     */
-    public String getNamePrefix() {
-        if (this instanceof LowLevelEventListener) {
-            return encodeLowLevelEventId(this.getLowLevelEventId());
-        }
-        return getName();
-    }
-
 
     /**
      * Return the parent frame.
@@ -910,6 +939,7 @@ public abstract class SComponent
 
     /**
      * returns the focus traversal index.
+     *
      * @see #setFocusTraversalIndex(int)
      */
     public int getFocusTraversalIndex() {
@@ -932,6 +962,7 @@ public abstract class SComponent
 
     /**
      * Return the value of the horizontal alignment property.
+     *
      * @return the horizontal alignment
      * @see SConstants
      */
@@ -941,6 +972,7 @@ public abstract class SComponent
 
     /**
      * Set the horizontal alignment.
+     *
      * @param alignment new value for the horizontal alignment
      * @see SConstants
      */
@@ -950,6 +982,7 @@ public abstract class SComponent
 
     /**
      * Set the vertical alignment.
+     *
      * @param alignment new value for the vertical alignment
      * @see SConstants
      */
@@ -959,6 +992,7 @@ public abstract class SComponent
 
     /**
      * Return the value of the vertical alignment property.
+     *
      * @return the vertical alignment
      * @see SConstants
      */
@@ -999,7 +1033,7 @@ public abstract class SComponent
 
     /**
      * Add an arbitrary key/value "client property" to this component.
-     * <p>
+     * <p/>
      * The <code>get/putClientProperty<code> methods provide access to
      * a small per-instance hashtable. Callers can use get/putClientProperty
      * to annotate components that were created by another module, e.g. a
@@ -1007,12 +1041,12 @@ public abstract class SComponent
      * <pre>
      * componentA.putClientProperty("to the left of", componentB);
      * </pre>
-     * <p>
+     * <p/>
      * If value is null this method will remove the property.
      * Changes to client properties are reported with PropertyChange
      * events.  The name of the property (for the sake of PropertyChange
      * events) is <code>key.toString()</code>.
-     * <p>
+     * <p/>
      * The clientProperty dictionary is not intended to support large
      * scale extensions to SComponent nor should be it considered an
      * alternative to subclassing when designing a new component.
@@ -1038,12 +1072,11 @@ public abstract class SComponent
      * }
      * </pre>
      *
+     * @beaninfo bound: true
+     * description: The component's look and feel delegate
      * @see #updateCG
      * @see org.wings.plaf.CGManager#getLookAndFeel
      * @see org.wings.plaf.CGManager#getCG
-     * @beaninfo
-     *        bound: true
-     *  description: The component's look and feel delegate
      */
     public void setCG(ComponentCG newCG) {
         /* We do not check that the CG instance is different
@@ -1089,10 +1122,11 @@ public abstract class SComponent
     /**
      * Invite a ComponentVisitor.
      * Invokes visit(SComponent) on the ComponentVisitor.
+     *
      * @param visitor the visitor to be invited
      */
     public void invite(ComponentVisitor visitor)
-        throws Exception {
+            throws Exception {
         visitor.visit(this);
     }
 
@@ -1127,6 +1161,7 @@ public abstract class SComponent
 
     /**
      * Returns the number of listeners of the specified type for this component.
+     *
      * @param type The type of listeners
      * @return The number of listeners
      * @see EventListenerList
@@ -1142,9 +1177,10 @@ public abstract class SComponent
     /**
      * Returns all the listeners of this component. For performance reasons, this is the actual data
      * structure and so no modification of this array should be made.
+     *
      * @return All listeners of this component. The result array has a pair structure,
-     * the first element of each pair is the listener type, the second the listener
-     * itself. It is guaranteed that this returns a non-null array.
+     *         the first element of each pair is the listener type, the second the listener
+     *         itself. It is guaranteed that this returns a non-null array.
      * @see EventListenerList
      */
     protected final Object[] getListenerList() {
@@ -1157,6 +1193,7 @@ public abstract class SComponent
 
     /**
      * Creates an typed array of all listeners of the specified type
+     *
      * @param type All listeners of this type are added to the result array
      * @return an array of the specified type with all listeners of the specified type
      * @see EventListenerList
@@ -1165,7 +1202,7 @@ public abstract class SComponent
         if (listeners != null) {
             return listeners.getListeners(type);
         } else {
-            return (EventListener[])Array.newInstance(type, 0);
+            return (EventListener[]) Array.newInstance(type, 0);
         }
     }
 
@@ -1174,7 +1211,6 @@ public abstract class SComponent
 
     /**
      * for performance reasons
-     *
      */
     private boolean fireRenderEvents = false;
 
@@ -1205,10 +1241,10 @@ public abstract class SComponent
 
                     switch (type) {
                         case START_RENDERING:
-                            ((SRenderListener)listeners[i + 1]).startRendering(renderEvent);
+                            ((SRenderListener) listeners[i + 1]).startRendering(renderEvent);
                             break;
                         case DONE_RENDERING:
-                            ((SRenderListener)listeners[i + 1]).doneRendering(renderEvent);
+                            ((SRenderListener) listeners[i + 1]).doneRendering(renderEvent);
                             break;
                     }
                 }
@@ -1220,6 +1256,7 @@ public abstract class SComponent
      * Forwards the scrollRectToVisible() message to the SComponent's
      * parent. Components that can service the request, such as
      * SScrollPane, override this method and perform the scrolling.
+     *
      * @param aRect the visible Rectangle
      * @see SScrollPane
      */
@@ -1228,12 +1265,12 @@ public abstract class SComponent
             parent.scrollRectToVisible(aRect);
         }
     }
-    
+
     /**
      * requests the focus for this component
      */
-    public void requestFocus(){  
-        if(getParentFrame() != null){
+    public void requestFocus() {
+        if (getParentFrame() != null) {
             getParentFrame().setFocus(this);
         }
     }
@@ -1246,10 +1283,11 @@ public abstract class SComponent
      * Setting <i>showAsFormComponent</i> to <i>false</i> will
      * force displaying as href even if button is inside
      * a form.
+     *
      * @param showAsFormComponent if true, display as link, if false as html form component.
      */
     public void setShowAsFormComponent(boolean showAsFormComponent) {
-        if (this.showAsFormComponent!=showAsFormComponent ) {
+        if (this.showAsFormComponent != showAsFormComponent) {
             this.showAsFormComponent = showAsFormComponent;
             reload();
         }
@@ -1257,8 +1295,9 @@ public abstract class SComponent
 
     /**
      * Test, what display method is set.
-     * @see #setShowAsFormComponent(boolean)
+     *
      * @return treu, if displayed as link, false when displayed as html form component.
+     * @see #setShowAsFormComponent(boolean)
      */
     public boolean getShowAsFormComponent() {
         return showAsFormComponent && getResidesInForm();

@@ -1,21 +1,21 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.util;
 
-import java.util.*;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /*
  * Ein Klasse, die Zeitmessungen aufnimmt und diese in Relation zueineander
@@ -26,6 +26,7 @@ import java.text.MessageFormat;
  * Dauer der einzelnen Messungen an. Die Messung mit der laengsten Dauer ist
  * der Referenzwert (1.0).
  */
+
 /**
  * Some simple stop watch. It allows to measure multiple time periods
  * and prints them. Usage: call start(comment) and stop() for
@@ -34,8 +35,7 @@ import java.text.MessageFormat;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class TimeMeasure
-{
+public class TimeMeasure {
     protected final static double RESOLUTION = 100.0;
 
     /**
@@ -57,7 +57,7 @@ public class TimeMeasure
      * Simple TimeMesaure with default format.
      */
     public TimeMeasure() {
-        this (new MessageFormat ("{0}\t: {1}\t {2}x\n"));
+        this(new MessageFormat("{0}\t: {1}\t {2}x\n"));
     }
 
     /**
@@ -67,10 +67,10 @@ public class TimeMeasure
      * <li><code>{0}</code> the measurement comment</li>
      * <li><code>{1}</code> the time it took</li>
      * <li><code>{2}</code> how many times this is faster than the
-     *                      slowest measurement</li>
+     * slowest measurement</li>
      * </ul>
      */
-    public TimeMeasure (MessageFormat formatter) {
+    public TimeMeasure(MessageFormat formatter) {
         this.measures = new ArrayList();
         this.formatter = formatter;
     }
@@ -123,7 +123,7 @@ public class TimeMeasure
      * stop current time measurement and store it.
      */
     public void stop() {
-        if ( current != null ) {
+        if (current != null) {
             current.stop();
             measures.add(current);
             current = null;
@@ -132,19 +132,20 @@ public class TimeMeasure
 
     /**
      * determines the time duration of the longest or shortest time interval.
+     *
      * @param findShortest boolean 'true', if we are looking for the shortest
      *                     time interval; 'false' if we are looking for the
      *                     longest.
      */
     private long findReferenceValue(boolean findShortest) {
         long result = findShortest ? Long.MAX_VALUE : -1;
-        
+
         Iterator it = measures.iterator();
         while (it.hasNext()) {
             Measure m = (Measure) it.next();
             result = (findShortest
-                      ? Math.min(result, m.getDuration())
-                      : Math.max(result, m.getDuration()));
+                    ? Math.min(result, m.getDuration())
+                    : Math.max(result, m.getDuration()));
         }
         return result;
     }
@@ -159,6 +160,7 @@ public class TimeMeasure
      * measurements took place.
      * Writes the relative time to either the shortest or the longest
      * time interval.
+     *
      * @param shortestIsReference boolean true, if the shortest time interval
      *                            is the reference value (1.0). False, if the
      *                            longest is the reference.
@@ -172,11 +174,11 @@ public class TimeMeasure
             String factor = " -- ";
             long duration = m.getDuration();
             if (reference > 0) {
-                long tmp = (long)((duration * RESOLUTION ) / reference);
+                long tmp = (long) ((duration * RESOLUTION) / reference);
                 factor = String.valueOf(tmp / RESOLUTION);
             }
             Object[] args = {m.getComment(), (duration + "ms"), factor};
-            result.append (formatter.format (args));
+            result.append(formatter.format(args));
         }
         return result.toString();
     }
@@ -213,21 +215,16 @@ public class TimeMeasure
             start = System.currentTimeMillis();
             this.comment = comment;
         }
-        
+
         public void stop() {
             stop = System.currentTimeMillis();
             duration = stop - start;
         }
 
         public long getDuration() { return duration; }
+
         public String getComment() { return comment; }
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

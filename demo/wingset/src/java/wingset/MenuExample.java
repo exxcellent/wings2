@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
 
 import org.wings.*;
@@ -26,16 +25,15 @@ import java.awt.event.ActionListener;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class MenuExample extends WingSetPane
-{
+public class MenuExample extends WingSetPane {
 
     private SLabel selectionLabel;
 
     private final ActionListener menuItemListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                selectionLabel.setText(((SMenuItem)e.getSource()).getText());
-            }
-        };
+        public void actionPerformed(ActionEvent e) {
+            selectionLabel.setText(((SMenuItem) e.getSource()).getText());
+        }
+    };
 
     SMenuItem createMenuItem(TreeNode node) {
         SMenuItem item = new SMenuItem(node.toString());
@@ -47,9 +45,9 @@ public class MenuExample extends WingSetPane
     SMenu createMenu(TreeNode root) {
         SMenu menu = new SMenu(root.toString());
 
-        for ( int i=0; i<root.getChildCount(); i++ ) {
+        for (int i = 0; i < root.getChildCount(); i++) {
             TreeNode node = root.getChildAt(i);
-            if ( node.isLeaf() ) {
+            if (node.isLeaf()) {
                 menu.add(createMenuItem(node));
             } else {
                 menu.add(createMenu(node));
@@ -61,10 +59,10 @@ public class MenuExample extends WingSetPane
 
     SMenuBar createMenuBar(TreeNode root) {
         SMenuBar menuBar = new SMenuBar();
-        
-        for ( int i=0; i<root.getChildCount(); i++ ) {
+
+        for (int i = 0; i < root.getChildCount(); i++) {
             TreeNode node = root.getChildAt(i);
-            if ( node.isLeaf() ) {
+            if (node.isLeaf()) {
                 menuBar.add(createMenuItem(node));
             } else {
                 menuBar.add(createMenu(node));
@@ -97,10 +95,4 @@ public class MenuExample extends WingSetPane
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

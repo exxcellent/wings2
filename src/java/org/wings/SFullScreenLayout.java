@@ -1,19 +1,17 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
-
 
 
 /**
@@ -26,8 +24,7 @@ package org.wings;
  * @version $Revision$
  */
 public class SFullScreenLayout
-    extends SBorderLayout
-{
+        extends SBorderLayout {
     private final static SDimension fDim = new SDimension("100%", "100%");
 
     public SFullScreenLayout() {
@@ -42,25 +39,22 @@ public class SFullScreenLayout
         if (c.getHorizontalAlignment() == SConstants.NO_ALIGN) {
             if (constraint == WEST)
                 c.setHorizontalAlignment(SConstants.LEFT);
-            else
-                if (constraint == EAST)
-                    c.setHorizontalAlignment(SConstants.RIGHT);
+            else if (constraint == EAST)
+                c.setHorizontalAlignment(SConstants.RIGHT);
             /* CENTER, SOUTH, NORTH */
-                else
-                    c.setHorizontalAlignment(SConstants.CENTER);
+            else
+                c.setHorizontalAlignment(SConstants.CENTER);
         }
         if (c.getVerticalAlignment() == SConstants.NO_ALIGN) {
             if (constraint == CENTER)
                 c.setVerticalAlignment(SConstants.CENTER);
-            else
-                if (constraint == SOUTH)
-                    c.setVerticalAlignment(SConstants.BOTTOM);
-                else
-                    if (constraint == NORTH)
-                        c.setVerticalAlignment(SConstants.TOP);
+            else if (constraint == SOUTH)
+                c.setVerticalAlignment(SConstants.BOTTOM);
+            else if (constraint == NORTH)
+                c.setVerticalAlignment(SConstants.TOP);
             /* WEST, EAST */
-                    else
-                        c.setVerticalAlignment(SConstants.CENTER);
+            else
+                c.setVerticalAlignment(SConstants.CENTER);
         }
 
         super.addComponent(c, constraint, index);
@@ -68,10 +62,4 @@ public class SFullScreenLayout
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

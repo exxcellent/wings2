@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.plaf.xhtml;
 
 import org.wings.*;
@@ -23,15 +22,15 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GridLayoutCG
-    implements LayoutCG {
+        implements LayoutCG {
     /**
      * @param d the device to write the code to
      * @param l the layout manager
      * @throws IOException
      */
     public void write(Device d, SLayoutManager l)
-        throws IOException {
-        SGridLayout layout = (SGridLayout)l;
+            throws IOException {
+        SGridLayout layout = (SGridLayout) l;
         SContainer container = layout.getContainer();
         List components = layout.getComponents();
         SDimension dim = layout.getPreferredSize();
@@ -56,7 +55,7 @@ public class GridLayoutCG
                     d.print(";");
                 }
             }
-            Utils.writeSpanAttributes(d, (SComponent)container);
+            Utils.writeSpanAttributes(d, (SComponent) container);
             d.print("\" ");
         }
 
@@ -91,7 +90,7 @@ public class GridLayoutCG
                 firstRow = false;
             }
 
-            SComponent c = (SComponent)iter.next();
+            SComponent c = (SComponent) iter.next();
 
             if (firstRow && header)
                 d.print("<th");

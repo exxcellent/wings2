@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2002 Holger Engels.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the Smart Client Container (http://smartcc.sourceforge.net).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * SmartCC is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -14,7 +14,7 @@
 package org.wings.recorder;
 
 public class Client
-    extends Thread {
+        extends Thread {
     private Script script;
     protected String userid;
     protected String passwd;
@@ -46,8 +46,7 @@ public class Client
         try {
             if (initialDelay > 0)
                 sleep(initialDelay);
-        }
-        catch (InterruptedException e) { /* shit happens */ }
+        } catch (InterruptedException e) { /* shit happens */ }
 
         login();
 
@@ -57,12 +56,11 @@ public class Client
                 System.out.println("CLIENT: " + getUserid() + " begin (" + currentIteration + ")");
                 script.execute();
                 System.out.println("CLIENT: " + getUserid() + " end (" + currentIteration + ") after " +
-                                   (System.currentTimeMillis() - millis) + "ms");
-            }
-            catch (Exception e) {
+                        (System.currentTimeMillis() - millis) + "ms");
+            } catch (Exception e) {
                 System.out.println("CLIENT: " + getUserid() + " in iteration " + currentIteration
-                                   + " threw exception: " +
-                                   e.getClass().getName() + ": " + e.getMessage());
+                        + " threw exception: " +
+                        e.getClass().getName() + ": " + e.getMessage());
                 System.err.println(e.getMessage());
                 e.printStackTrace(System.err);
             }
@@ -72,9 +70,4 @@ public class Client
     protected void login() {}
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * End:
- */
+

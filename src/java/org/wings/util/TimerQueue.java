@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.util;
 
 /*
@@ -20,15 +19,13 @@ package org.wings.util;
  * Swing Event Threads Impulse gibt. Deshalb angepasst. Ich hoffe das
  * gibt keine Problemen mit dem Swing Team.
  */
+
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public final class TimerQueue
-    implements Runnable
-{
+        implements Runnable {
     /*
      * Es gibt nur eine Queue pro Application.
      */
@@ -202,15 +199,13 @@ public final class TimerQueue
                 timeToWait = postExpiredTimers();
                 try {
                     wait(timeToWait);
-                }
-                catch (InterruptedException e) { }
+                } catch (InterruptedException e) { }
             }
-        }
-        catch (ThreadDeath td) {
+        } catch (ThreadDeath td) {
             running = false;
             // Mark all the timers we contain as not being queued.
             Timer timer = firstTimer;
-            while(timer != null) {
+            while (timer != null) {
                 timer.eventQueued = false;
                 timer = timer.nextTimer;
             }
@@ -240,10 +235,4 @@ public final class TimerQueue
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

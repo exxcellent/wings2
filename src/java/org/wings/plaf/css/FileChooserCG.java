@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/FileChooser.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -10,8 +23,8 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 public class FileChooserCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.FileChooserCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.FileChooserCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __input_type_fil = "<input type=\"file\"".getBytes();
@@ -23,8 +36,8 @@ public class FileChooserCG
 
     public void writeContent(final Device device,
                              final SComponent _c)
-        throws IOException {
-        final SFileChooser component = (SFileChooser)_c;
+            throws IOException {
+        final SFileChooser component = (SFileChooser) _c;
 
         int columns = component.getColumns();
         /*
@@ -50,8 +63,7 @@ public class FileChooserCG
             device.write(__id);
             org.wings.plaf.Utils.write(device, component.getName());
             device.write(__);
-        }
-        else
+        } else
             device.write(__readonly_1);
 
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());

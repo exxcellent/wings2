@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.template;
 
 import org.wings.SComponent;
@@ -23,16 +22,15 @@ import org.wings.SFileChooser;
  * @version $Revision$
  */
 public class SFileChooserPropertyManager
-    extends SComponentPropertyManager
-{
+        extends SComponentPropertyManager {
     static final Class[] classes = {SFileChooser.class};
 
     public SFileChooserPropertyManager() {
     }
 
     public void setProperty(SComponent comp, String name, String value) {
-        SFileChooser c = (SFileChooser)comp;
-        if ( name.equals("SIZE") || name.equals("COLS") )
+        SFileChooser c = (SFileChooser) comp;
+        if (name.equals("SIZE") || name.equals("COLS"))
             c.setColumns(Integer.parseInt(value));
         /* maxsize should be the maximum content length, according to
          * RFC 1867. So we should set the sessions' content length here.
@@ -41,7 +39,7 @@ public class SFileChooserPropertyManager
         else if ( name.equals("MAXSIZE") )
             c.getSession().setMaxContentLength(Integer.parseInt(value)*1024);
         */
-        else if (name.equals("ACCEPT") || name.equals("FILTER") )
+        else if (name.equals("ACCEPT") || name.equals("FILTER"))
             c.setFileNameFilter(value);
         else
             super.setProperty(comp, name, value);
@@ -52,10 +50,4 @@ public class SFileChooserPropertyManager
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

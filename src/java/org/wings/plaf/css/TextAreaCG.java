@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/TextArea.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -10,8 +23,8 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 public class TextAreaCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.TextAreaCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.TextAreaCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __textarea = "<textarea".getBytes();
@@ -30,8 +43,8 @@ public class TextAreaCG
 
     public void writeContent(final Device device,
                              final SComponent _c)
-        throws IOException {
-        final STextArea component = (STextArea)_c;
+            throws IOException {
+        final STextArea component = (STextArea) _c;
 
         device.write(__textarea);
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
@@ -48,8 +61,7 @@ public class TextAreaCG
             device.write(__name);
             org.wings.plaf.Utils.write(device, Utils.event(component));
             device.write(___1);
-        }
-        else {
+        } else {
             device.write(__disabled_1);
         }
 

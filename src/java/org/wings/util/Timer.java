@@ -1,23 +1,22 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.util;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.Vector;
 
 /*
  * Die Klasse ist praktisch von der Swing Implementierung
@@ -25,15 +24,13 @@ import java.io.Serializable;
  * Swing Event Threads Impulse gibt. Deshalb angepasst. Ich hoffe das
  * gibt keine Problemen mit dem Swing Team.
  */
+
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public final class Timer
-    implements Serializable
-{
+        implements Serializable {
     /*
      * Die Verzoegerung, bis das erste mal ein Impuls (ActionEvent)
      * kommt.
@@ -85,8 +82,9 @@ public final class Timer
     /**
      * Creates a Timer that will notify its listeners every
      * <i>delay</i> milliseconds.
-     * @param delay     The number of milliseconds between listener notification
-     * @param listener  An initial listener
+     *
+     * @param delay    The number of milliseconds between listener notification
+     * @param listener An initial listener
      * @see #setInitialDelay
      * @see #setRepeats
      */
@@ -128,12 +126,14 @@ public final class Timer
     protected void fireActionPerformed(ActionEvent e) {
         // Process the listeners last to first, notifying
         // those that are interested in this event
-        for (int i = listenerList.size()-1; i>=0; i--) {
-            ((ActionListener)listenerList.elementAt(i)).actionPerformed(e);
+        for (int i = listenerList.size() - 1; i >= 0; i--) {
+            ((ActionListener) listenerList.elementAt(i)).actionPerformed(e);
         }
     }
 
-    /** Returns the timer queue. */
+    /**
+     * Returns the timer queue.
+     */
     TimerQueue timerQueue() {
         return TimerQueue.sharedInstance();
     }
@@ -142,7 +142,7 @@ public final class Timer
      * Enables or disables the timer log. When enabled, a message
      * is posted to System.out whenever the timer goes off.
      *
-     * @param flag  true to enable logging
+     * @param flag true to enable logging
      * @see #getLogTimers
      */
     public static void setLogTimers(boolean flag) {
@@ -162,6 +162,7 @@ public final class Timer
     /**
      * Sets the Timer's delay, the number of milliseconds between successive
      * <b>actionPerfomed()</b> messages to its listeners
+     *
      * @see #setInitialDelay
      */
     public void setDelay(long delay) {
@@ -182,6 +183,7 @@ public final class Timer
 
     /**
      * Returns the Timer's delay.
+     *
      * @see #setDelay
      */
     public long getDelay() {
@@ -192,18 +194,20 @@ public final class Timer
      * Sets the Timer's initial delay.  This will be used for the first
      * "ringing" of the Timer only.  Subsequent ringings will be spaced
      * using the delay property.
+     *
      * @see #setDelay
      */
     public void setInitialDelay(int initialDelay) {
         if (initialDelay < 0) {
             throw new RuntimeException("Invalid initial delay: " +
-                                       initialDelay);
+                    initialDelay);
         }
         this.initialDelay = initialDelay;
     }
 
     /**
      * Returns the Timer's initial delay.
+     *
      * @see #setDelay
      */
     public long getInitialDelay() {
@@ -221,6 +225,7 @@ public final class Timer
     /**
      * Returns <b>true</b> if the Timer will send a <b>actionPerformed()</b>
      * message to its listeners multiple times.
+     *
      * @see #setRepeats
      */
     public boolean isRepeats() {
@@ -245,6 +250,7 @@ public final class Timer
     /**
      * Returns <b>true</b> if the Timer coalesces multiple pending
      * <b>performCommand()</b> messages.
+     *
      * @see #setCoalesce
      */
     public boolean isCoalesce() {
@@ -254,6 +260,7 @@ public final class Timer
     /**
      * Starts the Timer, causing it to send <b>actionPerformed()</b> messages
      * to its listeners.
+     *
      * @see #stop
      */
     public void start() {
@@ -262,6 +269,7 @@ public final class Timer
 
     /**
      * Returns <b>true</b> if the Timer is running.
+     *
      * @see #start
      */
     public boolean isRunning() {
@@ -271,6 +279,7 @@ public final class Timer
     /**
      * Stops a Timer, causing it to stop sending <b>actionPerformed()</b>
      * messages to its Target.
+     *
      * @see #start
      */
     public void stop() {
@@ -298,7 +307,7 @@ public final class Timer
                 // TO CHANGE, adapt it to as logging
                 System.out.println("Timer ringing: " + Timer.this);
             }
-            if(eventQueued) {
+            if (eventQueued) {
                 fireActionPerformed(new ActionEvent(Timer.this, 0, this.actionCommand));
                 cancelEvent();
             }
@@ -306,10 +315,4 @@ public final class Timer
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

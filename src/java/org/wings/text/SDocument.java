@@ -1,16 +1,28 @@
 /* $Id $ */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.text;
 
-import javax.swing.text.BadLocationException;
-
 import org.wings.event.SDocumentListener;
+
+import javax.swing.text.BadLocationException;
 
 /**
  * @author hengels
  * @version $Revision$
  */
-public interface SDocument
-{
+public interface SDocument {
     /**
      * Returns number of characters of content currently
      * in the document.
@@ -46,11 +58,11 @@ public interface SDocument
      * listeners by calling the removeUpdate method on the
      * DocumentListeners.
      *
-     * @param offs  the offset from the beginning >= 0
-     * @param len   the number of characters to remove >= 0
-     * @exception BadLocationException  some portion of the removal range
-     *   was not a valid part of the document.  The location in the exception
-     *   is the first bad position encountered.
+     * @param offs the offset from the beginning >= 0
+     * @param len  the number of characters to remove >= 0
+     * @throws BadLocationException some portion of the removal range
+     *                              was not a valid part of the document.  The location in the exception
+     *                              is the first bad position encountered.
      * @see javax.swing.event.DocumentEvent
      * @see javax.swing.event.DocumentListener
      * @see javax.swing.event.UndoableEditEvent
@@ -67,9 +79,9 @@ public interface SDocument
      * The offset and length of the generated DocumentEvent
      * will indicate what change was actually made to the Document.
      *
-     * @param offset  the offset into the document to insert the content >= 0.
-     *    All positions that track change at or after the given location
-     *    will move.
+     * @param offset the offset into the document to insert the content >= 0.
+     *               All positions that track change at or after the given location
+     *               will move.
      * @param string the string to insert
      */
     public void insert(int offset, String string) throws BadLocationException;
@@ -79,13 +91,13 @@ public interface SDocument
      * Fetches the text contained within the given portion
      * of the document.
      *
-     * @param offset  the offset into the document representing the desired
-     *   start of the text >= 0
-     * @param length  the length of the desired string >= 0
+     * @param offset the offset into the document representing the desired
+     *               start of the text >= 0
+     * @param length the length of the desired string >= 0
      * @return the text, in a String of length >= 0
-     * @exception BadLocationException  some portion of the given range
-     *   was not a valid part of the document.  The location in the exception
-     *   is the first bad position encountered.
+     * @throws BadLocationException some portion of the given range
+     *                              was not a valid part of the document.  The location in the exception
+     *                              is the first bad position encountered.
      */
     public String getText(int offset, int length) throws BadLocationException;
 

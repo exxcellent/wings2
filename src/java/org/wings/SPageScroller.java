@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.border.SEmptyBorder;
@@ -21,10 +20,9 @@ import org.wings.border.SEmptyBorder;
  * @version $Revision$
  */
 public class SPageScroller
-    extends SAbstractAdjustable
-{
+        extends SAbstractAdjustable {
     private static final int DEFAULT_DIRECT_PAGES = 10;
-    private static final SEmptyBorder DEFAULT_DIRECT_CLICKABLE_BORDER = new SEmptyBorder(0,5,0,5);
+    private static final SEmptyBorder DEFAULT_DIRECT_CLICKABLE_BORDER = new SEmptyBorder(0, 5, 0, 5);
 
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
@@ -33,53 +31,52 @@ public class SPageScroller
 
     /**
      * Icons for both layout modes, both directions and enabled resp. disabled
-     **/
+     */
     private final static SIcon[][][] DEFAULT_ICONS =
-        new SIcon[2][4][SClickable.ICON_COUNT];
+            new SIcon[2][4][SClickable.ICON_COUNT];
 
     // Initialisiert (laedt) die Default Images
     static {
         String[] postfixes = new String[4];
         String[] prefixes = new String[4];
-        for ( int orientation=0; orientation<2; orientation++ ) {
+        for (int orientation = 0; orientation < 2; orientation++) {
             prefixes[BACKWARD] = "";
             prefixes[FORWARD] = "";
             prefixes[FIRST] = "Margin";
             prefixes[LAST] = "Margin";
-            if ( orientation==SConstants.VERTICAL ) {
+            if (orientation == SConstants.VERTICAL) {
                 postfixes[BACKWARD] = "Up";
                 postfixes[FORWARD] = "Down";
                 postfixes[FIRST] = "Up";
                 postfixes[LAST] = "Down";
-            }
-            else {
+            } else {
                 postfixes[BACKWARD] = "Left";
                 postfixes[FORWARD] = "Right";
                 postfixes[FIRST] = "Left";
                 postfixes[LAST] = "Right";
             }
 
-            for ( int direction=0; direction<postfixes.length; direction++ ) {
+            for (int direction = 0; direction < postfixes.length; direction++) {
                 DEFAULT_ICONS[orientation][direction][SClickable.ENABLED_ICON] =
-                    new SResourceIcon("org/wings/icons/"
-                                          + prefixes[direction]
-                                          + "Scroll"
-                                          + postfixes[direction] + ".gif");
+                        new SResourceIcon("org/wings/icons/"
+                        + prefixes[direction]
+                        + "Scroll"
+                        + postfixes[direction] + ".gif");
                 DEFAULT_ICONS[orientation][direction][SClickable.DISABLED_ICON] =
-                    new SResourceIcon("org/wings/icons/Disabled"
-                                          + prefixes[direction]
-                                          + "Scroll"
-                                          + postfixes[direction] + ".gif");
+                        new SResourceIcon("org/wings/icons/Disabled"
+                        + prefixes[direction]
+                        + "Scroll"
+                        + postfixes[direction] + ".gif");
                 DEFAULT_ICONS[orientation][direction][SClickable.PRESSED_ICON] =
-                    new SResourceIcon("org/wings/icons/Pressed"
-                                          + prefixes[direction]
-                                          + "Scroll"
-                                          + postfixes[direction] + ".gif");
+                        new SResourceIcon("org/wings/icons/Pressed"
+                        + prefixes[direction]
+                        + "Scroll"
+                        + postfixes[direction] + ".gif");
                 DEFAULT_ICONS[orientation][direction][SClickable.ROLLOVER_ICON] =
-                    new SResourceIcon("org/wings/icons/Rollover"
-                                          + prefixes[direction]
-                                          + "Scroll"
-                                          + postfixes[direction] + ".gif");
+                        new SResourceIcon("org/wings/icons/Rollover"
+                        + prefixes[direction]
+                        + "Scroll"
+                        + postfixes[direction] + ".gif");
             }
         }
     }
@@ -88,6 +85,7 @@ public class SPageScroller
     /**
      * Actual amount of page clickables; depends on the number of elemnts in the
      * model and on the models extent.
+     *
      * @see #setDirectPages
      */
     protected int directPages = DEFAULT_DIRECT_PAGES;
@@ -98,13 +96,16 @@ public class SPageScroller
      */
     protected int layoutMode;
 
-    /** contains the clickables forward, backward, first, last */
+    /**
+     * contains the clickables forward, backward, first, last
+     */
     protected SClickable[] clickables = new SClickable[4];
 
-    /** contains the direct page clickables. Size of this array is extend */
+    /**
+     * contains the direct page clickables. Size of this array is extend
+     */
     protected SClickable[] directPageClickables;
 
-    /**  */
     protected SLabel pageCountLabel = new SLabel();
 
     /**
@@ -113,8 +114,7 @@ public class SPageScroller
      * The "extent" is the size of the viewable area. It is also known
      * as the "visible amount".
      *
-     * @exception IllegalArgumentException if orientation is not one of VERTICAL, HORIZONTAL
-     *
+     * @throws IllegalArgumentException if orientation is not one of VERTICAL, HORIZONTAL
      * @see #setOrientation
      * @see #setValue
      * @see #setVisibleAmount
@@ -126,7 +126,7 @@ public class SPageScroller
         unitIncrement = extent;
         blockIncrement = extent;
 
-        for ( int i=0; i<clickables.length; i++ ) {
+        for (int i = 0; i < clickables.length; i++) {
             clickables[i] = new SClickable();
             clickables[i].setEventTarget(this);
         }
@@ -185,30 +185,33 @@ public class SPageScroller
     /**
      * to set your favorite icons and text of the clickable. Icons will be
      * reset to default, if you change the layout mode {@link #setLayoutMode}
+     *
      * @see #FORWARD
      * @see #BACKWARD
      * @see #FIRST
      * @see #LAST
-     **/
+     */
     public SClickable getClickable(int clickable) {
         return clickables[clickable];
     }
 
     /**
      * Are margin buttons visible
+     *
      * @see #FIRST
      * @see #LAST
-     **/
+     */
     public final boolean isMarginVisible() {
-        return clickables[FIRST].isVisible()  ||
-            clickables[LAST].isVisible();
+        return clickables[FIRST].isVisible() ||
+                clickables[LAST].isVisible();
     }
 
     /**
      * Are margin buttons visible
+     *
      * @see #FIRST
      * @see #LAST
-     **/
+     */
     public final void setMarginVisible(boolean b) {
         clickables[FIRST].setVisible(b);
         clickables[LAST].setVisible(b);
@@ -216,19 +219,21 @@ public class SPageScroller
 
     /**
      * Are step buttons visible
+     *
      * @see #FORWARD
      * @see #BACKWARD
-     **/
+     */
     public final boolean isStepVisible() {
-        return clickables[BACKWARD].isVisible()  ||
-            clickables[FORWARD].isVisible();
+        return clickables[BACKWARD].isVisible() ||
+                clickables[FORWARD].isVisible();
     }
 
     /**
      * Are step buttons visible
+     *
      * @see #FORWARD
      * @see #BACKWARD
-     **/
+     */
     public final void setStepVisible(boolean b) {
         clickables[FORWARD].setVisible(b);
         clickables[BACKWARD].setVisible(b);
@@ -237,17 +242,17 @@ public class SPageScroller
     /**
      * set how to layout components
      * {@link #VERTICAL} or {@link #HORIZONTAL}
-     **/
+     */
     public void setLayoutMode(int orientation) {
         switch (orientation) {
-        case SConstants.VERTICAL:
-        case SConstants.HORIZONTAL:
-            layoutMode = orientation;
-            resetIcons();
-            initLayout();
-            break;
-        default:
-            throw new IllegalArgumentException("layout mode must be one of: VERTICAL, HORIZONTAL");
+            case SConstants.VERTICAL:
+            case SConstants.HORIZONTAL:
+                layoutMode = orientation;
+                resetIcons();
+                initLayout();
+                break;
+            default:
+                throw new IllegalArgumentException("layout mode must be one of: VERTICAL, HORIZONTAL");
         }
     }
 
@@ -255,7 +260,7 @@ public class SPageScroller
      * Sets the default icons
      */
     public void resetIcons() {
-        for ( int i=0; i<clickables.length; i++ ) {
+        for (int i = 0; i < clickables.length; i++) {
             clickables[i].setIcons(DEFAULT_ICONS[layoutMode][i]);
         }
     }
@@ -269,10 +274,11 @@ public class SPageScroller
 
     /**
      * Sets the amount of page clickables to <code>count</code>.
+     *
      * @param count : New amount of page clickables.
      */
     public void setDirectPages(int count) {
-        if ( directPages!=count ) {
+        if (directPages != count) {
             directPages = count;
             initScrollers();
         }
@@ -280,36 +286,26 @@ public class SPageScroller
 
     public final int getPageCount() {
         // avoid division by zero
-        if ( getExtent()==0 )
+        if (getExtent() == 0)
             return 0;
-        return ((getMaximum()+1)+(getExtent()-1)-getMinimum()) / getExtent();
-    }
-
-    /**
-     * @deprecated use {@link #getCurrentPage()} instead. ActualPage is a
-     *             german-english misnomer.
-     */
-    public final int getActualPage() {
-        return getCurrentPage();
+        return ((getMaximum() + 1) + (getExtent() - 1) - getMinimum()) / getExtent();
     }
 
     /**
      * gets the current page number according to the Position we are
      * in.
+     *
      * @return the current page number
      */
     public final int getCurrentPage() {
         // avoid division by zero
-        if ( getExtent()==0 )
+        if (getExtent() == 0)
             return 0;
 
-        return (getValue()-getMinimum()+getExtent()-1)/getExtent();
+        return (getValue() - getMinimum() + getExtent() - 1) / getExtent();
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     protected SClickable createDirectPageClickable() {
         SClickable result = new SClickable();
         result.setBorder(DEFAULT_DIRECT_CLICKABLE_BORDER);
@@ -317,13 +313,10 @@ public class SPageScroller
         return result;
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     protected void initScrollers() {
         directPageClickables = new SClickable[directPages];
-        for (int i = 0; i<directPageClickables.length; i++) {
+        for (int i = 0; i < directPageClickables.length; i++) {
             directPageClickables[i] = createDirectPageClickable();
             directPageClickables[i].setEventTarget(this);
         }
@@ -331,17 +324,14 @@ public class SPageScroller
         initLayout();
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     protected void initLayout() {
         removeAll();
 
         SPanel forwardPanel = null;
         SPanel backwardPanel = null;
         SPanel middlePanel = null;
-        if ( layoutMode==SConstants.VERTICAL) {
+        if (layoutMode == SConstants.VERTICAL) {
             middlePanel = new SPanel(new SFlowDownLayout());
 
             backwardPanel = new SPanel(new SFlowDownLayout());
@@ -349,8 +339,7 @@ public class SPageScroller
 
             forwardPanel = new SPanel(new SFlowDownLayout());
             add(forwardPanel, SBorderLayout.SOUTH);
-        }
-        else {
+        } else {
             middlePanel = new SPanel(new SFlowLayout());
 
             backwardPanel = new SPanel(new SFlowLayout());
@@ -369,7 +358,7 @@ public class SPageScroller
         add(middlePanel, SBorderLayout.CENTER);
 
         // Clickables fuer die Seiten einfuegen
-        for (int i = 0; i<directPageClickables.length; i++) {
+        for (int i = 0; i < directPageClickables.length; i++) {
             middlePanel.add(directPageClickables[i]);
         }
 
@@ -378,30 +367,27 @@ public class SPageScroller
     }
 
     protected String formatDirectPageLabel(int page) {
-        return Integer.toString(page+1);
+        return Integer.toString(page + 1);
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
+
     protected void refreshComponents() {
         // lower bound
         clickables[BACKWARD].setEnabled(getValue() > getMinimum());
         clickables[FIRST].setEnabled(clickables[BACKWARD].isEnabled());
 
-        if ( clickables[BACKWARD].isEnabled() ) {
-            clickables[BACKWARD].setEvent(getEventParameter(getValue()-getExtent()));
+        if (clickables[BACKWARD].isEnabled()) {
+            clickables[BACKWARD].setEvent(getEventParameter(getValue() - getExtent()));
             clickables[FIRST].setEvent(getEventParameter(getMinimum()));
         }
 
         // upper bound: maximum - extent
-        clickables[FORWARD].setEnabled(getValue() < (getMaximum()+1)-getExtent());
+        clickables[FORWARD].setEnabled(getValue() < (getMaximum() + 1) - getExtent());
         clickables[LAST].setEnabled(clickables[FORWARD].isEnabled());
 
-        if ( clickables[FORWARD].isEnabled() ) {
-            clickables[FORWARD].setEvent(getEventParameter(getValue()+getExtent()));
-            clickables[LAST].setEvent(getEventParameter((getMaximum()+1)-getExtent()));
+        if (clickables[FORWARD].isEnabled()) {
+            clickables[FORWARD].setEvent(getEventParameter(getValue() + getExtent()));
+            clickables[LAST].setEvent(getEventParameter((getMaximum() + 1) - getExtent()));
         }
 
 
@@ -413,31 +399,30 @@ public class SPageScroller
         int currentPage = getCurrentPage();
 
         // prefer forward
-        int firstDirectPage = currentPage - (directPages-1)/2;
-        firstDirectPage = Math.min(firstDirectPage, pages-directPages);
+        int firstDirectPage = currentPage - (directPages - 1) / 2;
+        firstDirectPage = Math.min(firstDirectPage, pages - directPages);
         firstDirectPage = Math.max(firstDirectPage, 0);
 
         // reset alle page clickables
-        for ( int i=0; i<directPageClickables.length; i++ ) {
+        for (int i = 0; i < directPageClickables.length; i++) {
             directPageClickables[i].setVisible(false);
         }
 
-        for ( int i=0;
-              i<Math.min(directPageClickables.length, pages-firstDirectPage);
-              i++ ) {
+        for (int i = 0;
+             i < Math.min(directPageClickables.length, pages - firstDirectPage);
+             i++) {
 
-            int page = firstDirectPage+i;
+            int page = firstDirectPage + i;
 
             directPageClickables[i].setText(formatDirectPageLabel(page));
             directPageClickables[i].setVisible(true);
 
-            directPageClickables[i].setEvent(getEventParameter(page*getExtent()));
+            directPageClickables[i].setEvent(getEventParameter(page * getExtent()));
 
-            if ( page == currentPage ) {
+            if (page == currentPage) {
                 directPageClickables[i].setEnabled(false);
                 directPageClickables[i].setSelected(true);
-            }
-            else {
+            } else {
                 directPageClickables[i].setEnabled(true);
                 directPageClickables[i].setSelected(false);
             }
@@ -452,6 +437,7 @@ public class SPageScroller
     /**
      * Set the visible amount of the scroller. This sets also the
      * unitincrement and the blockIncrement!
+     *
      * @param value the new extent
      */
     public void setExtent(int value) {
@@ -465,6 +451,7 @@ public class SPageScroller
     /**
      * Set the visible amount of the scroller. This sets also the
      * unitincrement and the blockIncrement!
+     *
      * @param value the new extent
      */
     public void setVisibleAmount(int value) {
@@ -478,6 +465,7 @@ public class SPageScroller
     /**
      * Set the current value of the scroller. The value will be
      * adjusted to a multiple of the extent.
+     *
      * @param value the new value
      */
     public void setValue(int value) {

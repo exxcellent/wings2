@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.plaf;
 
 import java.beans.PropertyChangeListener;
@@ -23,7 +22,7 @@ import java.util.HashMap;
  * mappings of its <code>parent</code> table.
  */
 public class CGDefaults
-    extends HashMap {
+        extends HashMap {
     private PropertyChangeSupport changeSupport;
     private CGDefaults parent;
 
@@ -49,7 +48,7 @@ public class CGDefaults
     public Object put(Object key, Object value) {
         Object oldValue = (value == null) ? super.remove(key) : super.put(key, value);
         if (key instanceof String) {
-            firePropertyChange((String)key, oldValue, value);
+            firePropertyChange((String) key, oldValue, value);
         }
         return oldValue;
     }
@@ -125,10 +124,4 @@ public class CGDefaults
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

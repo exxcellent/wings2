@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.externalizer;
 
 import java.util.Collection;
@@ -21,8 +20,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -41,32 +38,17 @@ public class ExternalizeManager extends AbstractExternalizeManager {
         ResourceExternalizer.SHARED_INSTANCE,
     };
 
-    /**
-     * TODO: documentation
-     */
     protected final HashMap externalizerByClass = new HashMap();
 
-    /**
-     * TODO: documentation
-     */
     protected final HashMap externalizerByMimeType = new HashMap();
 
-    /**
-     * TODO: documentation
-     */
     protected final Map externalized = Collections.synchronizedMap(new HashMap());
 
 
-    /**
-     * TODO: documentation
-     */
     public ExternalizeManager() {
         this(true);
     }
 
-    /**
-     * TODO: documentation
-     */
     public ExternalizeManager(boolean initWithDefaultExternalizers) {
         if (initWithDefaultExternalizers) {
             addDefaultExternalizers();
@@ -143,38 +125,21 @@ public class ExternalizeManager extends AbstractExternalizeManager {
     }
 
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
     public String externalize(Object obj) {
         return externalize(obj, SESSION);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String externalize(Object obj, Collection headers) {
         return externalize(obj, headers, SESSION);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String externalize(Object obj, int flags) {
         return externalize(obj, (Collection) null, flags);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String externalize(Object obj, Collection headers, int flags) {
         if (obj == null)
             throw new IllegalArgumentException("object must not be null");
@@ -182,45 +147,29 @@ public class ExternalizeManager extends AbstractExternalizeManager {
         Externalizer externalizer = getExternalizer(obj.getClass());
         if (externalizer == null) {
             logger.warning("could not find externalizer for " +
-                           obj.getClass().getName());
+                    obj.getClass().getName());
             return NOT_FOUND_IDENTIFIER;
         }
 
         return externalize(obj, externalizer, headers, flags);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String externalize(Object obj, String mimeType) {
         return externalize(obj, mimeType, SESSION);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String externalize(Object obj, String mimeType, Collection headers) {
         return externalize(obj, mimeType, headers, SESSION);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String externalize(Object obj, String mimeType, int flags) {
         return externalize(obj, mimeType, null, flags);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @return
-     */
+
     public String externalize(Object obj, String mimeType,
                               Collection headers, int flags) {
         if (obj == null)
@@ -250,9 +199,9 @@ public class ExternalizeManager extends AbstractExternalizeManager {
             if (mimeTypes != null)
                 for (int i = 0; i < mimeTypes.length; i++)
                     if (mimeTypes[i] != null &&
-                        mimeTypes[i].trim().length() > 0)
+                            mimeTypes[i].trim().length() > 0)
                         externalizerByMimeType.put(mimeTypes[i].trim().toLowerCase(),
-                                                   externalizer);
+                                externalizer);
         }
     }
 
@@ -321,7 +270,7 @@ public class ExternalizeManager extends AbstractExternalizeManager {
             if (externalizer == null) {
                 if (mimeType.indexOf('/') >= 0)
                     externalizer =
-                    getExternalizer(mimeType.substring(0, mimeType.indexOf('/')));
+                            getExternalizer(mimeType.substring(0, mimeType.indexOf('/')));
             }
         }
         return externalizer;
@@ -335,10 +284,4 @@ public class ExternalizeManager extends AbstractExternalizeManager {
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,35 +1,30 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
+import org.wings.plaf.TextFieldCG;
 
-import org.wings.plaf.*;
-import org.wings.io.Device;
+import javax.swing.event.EventListenerList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class STextField
-    extends STextComponent {
+        extends STextComponent {
 
     /**
      * maximum columns shown
@@ -134,7 +129,7 @@ public class STextField
      *         array if no listeners have been added
      */
     public ActionListener[] getActionListeners() {
-        return (ActionListener[])(getListeners(ActionListener.class));
+        return (ActionListener[]) (getListeners(ActionListener.class));
     }
 
     /**
@@ -156,12 +151,12 @@ public class STextField
                         actionCommand = getActionCommand();
                     }
                     e = new ActionEvent(this,
-                        ActionEvent.ACTION_PERFORMED,
-                        actionCommand,
-                        event.getWhen(),
-                        event.getModifiers());
+                            ActionEvent.ACTION_PERFORMED,
+                            actionCommand,
+                            event.getWhen(),
+                            event.getModifiers());
                 }
-                ((ActionListener)listeners[i + 1]).actionPerformed(e);
+                ((ActionListener) listeners[i + 1]).actionPerformed(e);
             }
         }
     }
@@ -187,8 +182,8 @@ public class STextField
                 if (listeners[i] == ActionListener.class) {
                     if (e == null)
                         e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
-                            getActionCommand());
-                    ((ActionListener)listeners[i + 1]).actionPerformed(e);
+                                getActionCommand());
+                    ((ActionListener) listeners[i + 1]).actionPerformed(e);
                 }
             }
             firingActionEvent = false;
@@ -203,10 +198,4 @@ public class STextField
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.plaf.xhtml;
 
 import org.wings.*;
@@ -22,21 +21,19 @@ import java.io.IOException;
 import java.util.List;
 
 public class FlowLayoutCG
-    implements LayoutCG {
+        implements LayoutCG {
     /**
-     * TODO: documentation
-     *
      * @param d the device to write the code to
      * @param l the layout manager
      * @throws IOException
      */
     public void write(Device d, SLayoutManager l)
-        throws IOException {
-        SFlowLayout layout = (SFlowLayout)l;
+            throws IOException {
+        SFlowLayout layout = (SFlowLayout) l;
         List components = layout.getComponents();
         int orientation = layout.getOrientation();
         int alignment = layout.getAlignment();
-        SComponent container = (SComponent)layout.getContainer();
+        SComponent container = (SComponent) layout.getContainer();
 
         if (components.size() > 0) {
             switch (alignment) {
@@ -50,25 +47,24 @@ public class FlowLayoutCG
 
             int count = 0;
             for (int i = 0; i < components.size(); i++) {
-                SComponent comp = (SComponent)components.get(i);
+                SComponent comp = (SComponent) components.get(i);
                 if (comp.isVisible()) {
                     if (count == 0) {
                         d.print("<table cellpadding=\"0\" cellspacing=\"0\"");
                         // CGUtil.writeSize( d, container );
                         if (Utils.hasSpanAttributes(container)) {
                             d.print(" style=\"");
-                            Utils.writeSpanAttributes(d, (SComponent)container);
+                            Utils.writeSpanAttributes(d, (SComponent) container);
                             d.print("\" ");
                         }
 
                         d.print("><tr><td");
-                    }
-                    else if (orientation == SConstants.VERTICAL)
+                    } else if (orientation == SConstants.VERTICAL)
                         d.print("</td></tr>\n<tr><td");
                     else
                         d.print("</td><td");
 
-                    SComponent c = ((SComponent)components.get(i));
+                    SComponent c = ((SComponent) components.get(i));
                     Utils.printTableCellAlignment(d, c);
                     if (c instanceof SContainer && Utils.hasSpanAttributes(c)) {
                         // Adapt inner styles (esp. width of containers)
@@ -104,10 +100,4 @@ public class FlowLayoutCG
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

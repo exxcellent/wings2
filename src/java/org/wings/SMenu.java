@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import org.wings.plaf.MenuBarCG;
@@ -63,8 +62,8 @@ public class SMenu extends SMenuItem {
 
     public void setParentFrame(SFrame f) {
         super.setParentFrame(f);
-        for ( int i=0; i<menuItems.size(); i++ )
-            ((SComponent)menuItems.get(i)).setParentFrame(f);
+        for (int i = 0; i < menuItems.size(); i++)
+            ((SComponent) menuItems.get(i)).setParentFrame(f);
     }
 
     /**
@@ -75,7 +74,7 @@ public class SMenu extends SMenuItem {
     }
 
     public SComponent getMenuComponent(int pos) {
-        return (SComponent)menuItems.get(pos);
+        return (SComponent) menuItems.get(pos);
     }
 
     /**
@@ -89,7 +88,7 @@ public class SMenu extends SMenuItem {
      * Remove all {@link SMenuItem} from this menu.
      */
     public void removeAll() {
-        while ( menuItems.size()>0 ) {
+        while (menuItems.size() > 0) {
             remove(0);
         }
     }
@@ -112,31 +111,27 @@ public class SMenu extends SMenuItem {
     public void setCG(MenuBarCG cg) {
         super.setCG(cg);
     }
-    
+
     /**
-      * Sets the visibility of the menu's popup.
-      * If the menu is not enabled, this method will have no effect.
-      * @param b a boolean value -- true to make the menu visible, false to hide it
-      */
+     * Sets the visibility of the menu's popup.
+     * If the menu is not enabled, this method will have no effect.
+     *
+     * @param b a boolean value -- true to make the menu visible, false to hide it
+     */
     public void setPopupMenuVisible(boolean b) {
         if (!isEnabled())
             return;
         popupMenuVisible = b;
     }
-    
+
     /**
-      * Returns true if the menu's popup window is visible.
-      * @return true if the menu is visible, else false.
-      */
+     * Returns true if the menu's popup window is visible.
+     *
+     * @return true if the menu is visible, else false.
+     */
     public boolean isPopupMenuVisible() {
         return popupMenuVisible;
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
 
 import org.wings.*;
@@ -29,8 +28,7 @@ import java.util.ArrayList;
  * @version $Revision$
  */
 public class PageScrollerExample
-    extends WingSetPane
-{
+        extends WingSetPane {
 
     SList list;
     SPageScroller scrollbar;
@@ -64,56 +62,56 @@ public class PageScrollerExample
 
     private SForm createControlForm() {
         SForm controlForm = new SForm(new SFlowLayout());
-        
+
         controlForm.add(new SLabel("Visible Rows: "));
-        Object[] visRowsValues = {new Integer(4), new Integer(8), new Integer(12), 
-                           new Integer(16), new Integer(20), new Integer(50)};
+        Object[] visRowsValues = {new Integer(4), new Integer(8), new Integer(12),
+                                  new Integer(16), new Integer(20), new Integer(50)};
         final SComboBox visRows = new SComboBox(visRowsValues);
         visRows.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
-                    list.setVisibleRowCount(((Integer)visRows.getSelectedItem()).intValue());
-                }
-            });
+            public void itemStateChanged(ItemEvent e) {
+                list.setVisibleRowCount(((Integer) visRows.getSelectedItem()).intValue());
+            }
+        });
         visRows.setSelectedItem(new Integer(list.getVisibleRowCount()));
         controlForm.add(visRows);
 
         controlForm.add(new SLabel("Direct Pages: "));
-        Object[] values = {new Integer(5), new Integer(10), new Integer(15), 
+        Object[] values = {new Integer(5), new Integer(10), new Integer(15),
                            new Integer(20), new Integer(50)};
         final SComboBox comboBox = new SComboBox(values);
         comboBox.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
-                    scrollbar.setDirectPages(((Integer) comboBox.getSelectedItem()).intValue());
-                }
-            });
+            public void itemStateChanged(ItemEvent e) {
+                scrollbar.setDirectPages(((Integer) comboBox.getSelectedItem()).intValue());
+            }
+        });
         comboBox.setSelectedItem(new Integer(scrollbar.getDirectPages()));
         controlForm.add(comboBox);
 
 
         controlForm.add(new SLabel("Layout: "));
-        Object[] constraints = { "Top", "Left", "Bottom", "Right" };
+        Object[] constraints = {"Top", "Left", "Bottom", "Right"};
         final SComboBox layout = new SComboBox(constraints);
         layout.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
-                    if ( "Top".equals(layout.getSelectedItem()) ) {
-                        scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
-                        scroller.setHorizontalScrollBar(scrollbar, 
-                                                        SBorderLayout.NORTH);
-                    } else if ( "Bottom".equals(layout.getSelectedItem()) ) {
-                        scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
-                        scroller.setHorizontalScrollBar(scrollbar, 
-                                                        SBorderLayout.SOUTH);
-                    } else if ( "Left".equals(layout.getSelectedItem()) ) {
-                        scrollbar.setLayoutMode(Adjustable.VERTICAL);
-                        scroller.setHorizontalScrollBar(scrollbar, 
-                                                        SBorderLayout.WEST);
-                    } else if ( "Right".equals(layout.getSelectedItem()) ) {
-                        scrollbar.setLayoutMode(Adjustable.VERTICAL);
-                        scroller.setHorizontalScrollBar(scrollbar, 
-                                                        SBorderLayout.EAST);
-                    } 
+            public void itemStateChanged(ItemEvent e) {
+                if ("Top".equals(layout.getSelectedItem())) {
+                    scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
+                    scroller.setHorizontalScrollBar(scrollbar,
+                            SBorderLayout.NORTH);
+                } else if ("Bottom".equals(layout.getSelectedItem())) {
+                    scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
+                    scroller.setHorizontalScrollBar(scrollbar,
+                            SBorderLayout.SOUTH);
+                } else if ("Left".equals(layout.getSelectedItem())) {
+                    scrollbar.setLayoutMode(Adjustable.VERTICAL);
+                    scroller.setHorizontalScrollBar(scrollbar,
+                            SBorderLayout.WEST);
+                } else if ("Right".equals(layout.getSelectedItem())) {
+                    scrollbar.setLayoutMode(Adjustable.VERTICAL);
+                    scroller.setHorizontalScrollBar(scrollbar,
+                            SBorderLayout.EAST);
                 }
-            });
+            }
+        });
         layout.setSelectedItem("Bottom");
         controlForm.add(layout);
 
@@ -121,39 +119,39 @@ public class PageScrollerExample
         final SCheckBox margin = new SCheckBox("Margin:");
         margin.setHorizontalTextPosition(SCheckBox.LEFT);
         margin.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    scrollbar.setMarginVisible(margin.isSelected());
-                }
-            });
+            public void actionPerformed(ActionEvent e) {
+                scrollbar.setMarginVisible(margin.isSelected());
+            }
+        });
         margin.setSelected(scrollbar.isMarginVisible());
         controlForm.add(margin);
 
         final SCheckBox step = new SCheckBox("Step:");
         step.setHorizontalTextPosition(SCheckBox.LEFT);
         step.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    scrollbar.setStepVisible(step.isSelected());
-                }
-            });
+            public void actionPerformed(ActionEvent e) {
+                scrollbar.setStepVisible(step.isSelected());
+            }
+        });
         step.setSelected(scrollbar.isStepVisible());
         controlForm.add(step);
 
-        
+
         SButton submit = new SButton("OK");
         controlForm.add(submit);
         return controlForm;
     }
 
     static void addChildNodes(TreeNode node, ArrayList list, int indent) {
-        if ( node!=null ) {
+        if (node != null) {
             StringBuffer name = new StringBuffer();
-            for ( int i=0; i<indent; i++ ) {
+            for (int i = 0; i < indent; i++) {
                 name.append(".");
             }
             name.append(node.toString());
             list.add(name.toString());
-            for ( int i=0; i<node.getChildCount(); i++ ) {
-                addChildNodes(node.getChildAt(i), list, indent+1);
+            for (int i = 0; i < node.getChildCount(); i++) {
+                addChildNodes(node.getChildAt(i), list, indent + 1);
             }
         }
     }
@@ -164,7 +162,7 @@ public class PageScrollerExample
         TreeNode root = HugeTreeModel.generateTree();
 
         ArrayList data = new ArrayList();
-        
+
         addChildNodes(root, data, 0);
 
         return data.toArray();
@@ -173,12 +171,6 @@ public class PageScrollerExample
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+
 
 

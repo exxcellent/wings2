@@ -1,43 +1,39 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
 
 import org.wings.*;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class CheckBoxExample
-    extends WingSetPane
-{
+        extends WingSetPane {
     static final ClassLoader cl = WingSet.class.getClassLoader();
-    static final SIcon sel = 
-        new SURLIcon("../icons/ComboBoxSelectedIcon.gif");
-    static final SIcon nsel = 
-        new SURLIcon("../icons/ComboBoxIcon.gif");
-    static final SIcon dissel = 
-        new SURLIcon("../icons/ComboBoxDisabledSelectedIcon.gif");
-    static final SIcon disnsel = 
-        new SURLIcon("../icons/ComboBoxDisabledIcon.gif");
-    static final SIcon rollsel = 
-        new SURLIcon("../icons/ComboBoxRolloverSelectedIcon.gif");
-    static final SIcon rollnsel = 
-        new SURLIcon("../icons/ComboBoxRolloverIcon.gif");
+    static final SIcon sel =
+            new SURLIcon("../icons/ComboBoxSelectedIcon.gif");
+    static final SIcon nsel =
+            new SURLIcon("../icons/ComboBoxIcon.gif");
+    static final SIcon dissel =
+            new SURLIcon("../icons/ComboBoxDisabledSelectedIcon.gif");
+    static final SIcon disnsel =
+            new SURLIcon("../icons/ComboBoxDisabledIcon.gif");
+    static final SIcon rollsel =
+            new SURLIcon("../icons/ComboBoxRolloverSelectedIcon.gif");
+    static final SIcon rollnsel =
+            new SURLIcon("../icons/ComboBoxRolloverIcon.gif");
 
     public SComponent createExample() {
         SPanel p = new SPanel(new SGridLayout(2));
@@ -67,8 +63,8 @@ public class CheckBoxExample
     SContainer createCheckBoxExample() {
         SPanel text = new SPanel();
 
-        for ( int i=0; i<3; i++ ) {
-            SCheckBox b = new SCheckBox("text " + (i+1));
+        for (int i = 0; i < 3; i++) {
+            SCheckBox b = new SCheckBox("text " + (i + 1));
             // b.setBorder(new SLineBorder(1));
             text.add(b);
         }
@@ -89,7 +85,7 @@ public class CheckBoxExample
         boxes[7] = new SCheckBox("testBC");
         boxes[8] = new SCheckBox("testBR");
 
-        for ( int i=0; i<boxes.length; i++ ) {
+        for (int i = 0; i < boxes.length; i++) {
             boxes[i].setIcon(nsel);
             boxes[i].setSelectedIcon(sel);
             boxes[i].setDisabledIcon(disnsel);
@@ -135,11 +131,11 @@ public class CheckBoxExample
 
         SPanel erg = new SPanel(new SFlowDownLayout());
 
-        SGridLayout grid = new SGridLayout(3,3);
+        SGridLayout grid = new SGridLayout(3, 3);
         grid.setBorder(1);
         SPanel b = new SPanel(grid);
 
-        for ( int i=0; i<boxes.length; i++ )
+        for (int i = 0; i < boxes.length; i++)
             b.add(boxes[i]);
 
         erg.add(b);
@@ -148,10 +144,4 @@ public class CheckBoxExample
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

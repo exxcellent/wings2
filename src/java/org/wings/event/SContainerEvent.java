@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2001 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -13,27 +13,27 @@
  */
 package org.wings.event;
 
-import org.wings.SContainer;
 import org.wings.SComponent;
+import org.wings.SContainer;
 
 /**
- * A container event, that is issued, whenever a 
+ * A container event, that is issued, whenever a
  * component is added or removed from an container.
  *
- * @see org.wings.SContainer#addContainerListener(SContainerListener)
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
+ * @see org.wings.SContainer#addContainerListener(SContainerListener)
  */
 public class SContainerEvent extends SComponentEvent {
     /**
      * The first number of used IDs for container events.
      */
-    public static final int CONTAINER_FIRST   = 11000;
+    public static final int CONTAINER_FIRST = 11000;
 
     /**
      * An event with this ID indicates, that a component was added to
      * the container.
      */
-    public static final int COMPONENT_ADDED   = CONTAINER_FIRST;
+    public static final int COMPONENT_ADDED = CONTAINER_FIRST;
 
     /**
      * An event with this ID indicates, that a component was removed from
@@ -44,7 +44,7 @@ public class SContainerEvent extends SComponentEvent {
     /**
      * The last number of used IDs for container events.
      */
-    public static final int CONTAINER_LAST    = COMPONENT_REMOVED;
+    public static final int CONTAINER_LAST = COMPONENT_REMOVED;
 
     /**
      * the child component that has been added or removed.
@@ -54,23 +54,24 @@ public class SContainerEvent extends SComponentEvent {
     /**
      * create a new container event issued by 'source' and affecting
      * 'child'.
+     *
      * @param source the Container issuing this event
      * @param id     the integer ID describing the action; one of
-     *               <code>COMPONENT_ADDED</code> 
+     *               <code>COMPONENT_ADDED</code>
      *               or <code>COMPONENT_REMOVED</code>.
-     * @param child the component that is affected by this event, i.e. that
+     * @param child  the component that is affected by this event, i.e. that
      *               is added or removed.
      */
     public SContainerEvent(SContainer source, int id, SComponent child) {
-	super(source, id);
-	this.child = child;
+        super(source, id);
+        this.child = child;
     }
-    
+
     /**
      * returns the source container, this event origins from.
      */
-    public SContainer getContainer() { 
-	return (SContainer) source;
+    public SContainer getContainer() {
+        return (SContainer) source;
     }
 
     /**
@@ -78,30 +79,24 @@ public class SContainerEvent extends SComponentEvent {
      * is reported by this event.
      */
     public SComponent getChild() {
-	return child;
+        return child;
     }
 
     public String paramString() {
-	switch (id) {
-	case COMPONENT_ADDED:
-	    return "COMPONENT_ADDED";
-	case COMPONENT_REMOVED:
-	    return "COMPONENT_REMOVED";
-	default:
-	    return super.paramString();
-	}
+        switch (id) {
+            case COMPONENT_ADDED:
+                return "COMPONENT_ADDED";
+            case COMPONENT_REMOVED:
+                return "COMPONENT_REMOVED";
+            default:
+                return super.paramString();
+        }
     }
-    
+
     public String toString() {
-        return "ContainerEvent[container=" + source + "; " + paramString() + 
-            "child=" + child + "]";
+        return "ContainerEvent[container=" + source + "; " + paramString() +
+                "child=" + child + "]";
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

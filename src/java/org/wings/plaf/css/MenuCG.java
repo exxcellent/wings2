@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/Menu.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -52,7 +65,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
     public static final SIcon RIGHT_ARROW = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
 
     public static final JavaScriptListener SCRIPT_LOADER =
-        new JavaScriptListener("", "", loadScript());
+            new JavaScriptListener("", "", loadScript());
 
     public static String loadScript() {
         InputStream in = null;
@@ -68,27 +81,23 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
             buffer.append(line).append("\n");
 
             return buffer.toString();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
-        }
-        finally {
+        } finally {
             try {
                 in.close();
-            }
-            catch (Exception ign) {
+            } catch (Exception ign) {
             }
             try {
                 reader.close();
-            }
-            catch (Exception ign1) {
+            } catch (Exception ign1) {
             }
         }
     }
 
     protected void writePopup(final Device device, SMenu menu)
-        throws IOException {
+            throws IOException {
         String componentId = menu.getName();
         String popupId = componentId + "_pop";
 
@@ -127,25 +136,22 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                         device.write(___2);
 
                         device.write(__class_menu);
-                    }
-                    else {
+                    } else {
 
                         device.write(__class_disabled);
                     }
 
-                }
-                else {
+                } else {
                     if (menuItem.isEnabled()) {
                         if (menuItem instanceof SMenuItem) {
 
                             device.write(__onClick_window);
-                            writeAnchorAddress(device, (SMenuItem)menuItem);
+                            writeAnchorAddress(device, (SMenuItem) menuItem);
                             device.write(___3);
                         }
 
                         device.write(__class_menuitem);
-                    }
-                    else {
+                    } else {
 
                         device.write(__class_disabled_1);
                     }
@@ -176,13 +182,13 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
             SComponent menuItem = menu.getMenuComponent(i);
 
             if (menuItem.isVisible() && menuItem.isEnabled() && menuItem instanceof SMenu) {
-                writePopup(device, (SMenu)menu.getMenuComponent(i));
+                writePopup(device, (SMenu) menu.getMenuComponent(i));
             }
         }
     }
 
     protected void writeItem(final Device device, SMenuItem menu)
-        throws IOException {
+            throws IOException {
         boolean hasParent = menu.getParentMenu() != null;
 
         String parentId = hasParent ? "'" + menu.getParentMenu().getName() + "_pop'" : "null";
@@ -219,17 +225,17 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
     }
 
     protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
-        throws IOException {
+            throws IOException {
         RequestURL addr = abstractButton.getRequestURL();
         addr.addParameter(abstractButton,
-            abstractButton.getToggleSelectionParameter());
+                abstractButton.getToggleSelectionParameter());
         addr.write(d);
     }
 
     public void writeContent(final Device device,
                              final SComponent _c)
-        throws IOException {
-        final SMenu component = (SMenu)_c;
+            throws IOException {
+        final SMenu component = (SMenu) _c;
 
         SMenu menu = component;
         writeItem(device, menu);

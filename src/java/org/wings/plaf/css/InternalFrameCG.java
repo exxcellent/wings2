@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/InternalFrame.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -11,8 +24,8 @@ import org.wings.session.SessionManager;
 import java.io.IOException;
 
 public class InternalFrameCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.InternalFrameCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.InternalFrameCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __img_border_0 = "<img border=\"0\"".getBytes();
@@ -45,21 +58,21 @@ public class InternalFrameCG
     public InternalFrameCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
 
-        setCloseIcon((SIcon)manager.getObject("InternalFrameCG.closeIcon", SIcon.class));
-        setDeiconifyIcon((SIcon)manager.getObject("InternalFrameCG.deiconifyIcon", SIcon.class));
-        setIconifyIcon((SIcon)manager.getObject("InternalFrameCG.iconifyIcon", SIcon.class));
-        setMaximizeIcon((SIcon)manager.getObject("InternalFrameCG.maximizeIcon", SIcon.class));
-        setUnmaximizeIcon((SIcon)manager.getObject("InternalFrameCG.unmaximizeIcon", SIcon.class));
+        setCloseIcon((SIcon) manager.getObject("InternalFrameCG.closeIcon", SIcon.class));
+        setDeiconifyIcon((SIcon) manager.getObject("InternalFrameCG.deiconifyIcon", SIcon.class));
+        setIconifyIcon((SIcon) manager.getObject("InternalFrameCG.iconifyIcon", SIcon.class));
+        setMaximizeIcon((SIcon) manager.getObject("InternalFrameCG.maximizeIcon", SIcon.class));
+        setUnmaximizeIcon((SIcon) manager.getObject("InternalFrameCG.unmaximizeIcon", SIcon.class));
     }
 
 
     public void installCG(final SComponent comp) {
-        final SInternalFrame component = (SInternalFrame)comp;
+        final SInternalFrame component = (SInternalFrame) comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
         value = manager.getObject("SInternalFrame.style", String.class);
         if (value != null) {
-            component.setStyle((String)value);
+            component.setStyle((String) value);
         }
     }
 
@@ -97,8 +110,8 @@ public class InternalFrameCG
 
     public void writeContent(final Device device,
                              final SComponent _c)
-        throws IOException {
-        final SInternalFrame component = (SInternalFrame)_c;
+            throws IOException {
+        final SInternalFrame component = (SInternalFrame) _c;
 
 //--- code from write-template.
         SInternalFrame frame = component;
@@ -129,31 +142,31 @@ public class InternalFrameCG
         // optional icons.
         if (frame.isIconifyable() && !frame.isIconified() && iconifyIcon != null) {
             writeWindowIcon(device, frame,
-                SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED,
-                iconifyIcon);
+                    SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED,
+                    iconifyIcon);
             ++columns;
         }
 
         if (frame.isIconified() && deiconifyIcon != null) {
             writeWindowIcon(device, frame,
-                SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED,
-                deiconifyIcon);
+                    SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED,
+                    deiconifyIcon);
             ++columns;
         }
 
         if (frame.isMaximizable()
-            && !frame.isMaximized()
-            && !frame.isIconified()
-            && maximizeIcon != null) {
+                && !frame.isMaximized()
+                && !frame.isIconified()
+                && maximizeIcon != null) {
             writeWindowIcon(device, frame,
-                SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED,
-                maximizeIcon);
+                    SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED,
+                    maximizeIcon);
             ++columns;
         }
 
         if (frame.isClosable() && closeIcon != null) {
             writeWindowIcon(device, frame,
-                SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon);
+                    SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon);
             ++columns;
         }
         device.write(__tr);

@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.plaf.xhtml;
 
 import org.wings.SBorderLayout;
@@ -24,18 +23,18 @@ import java.io.IOException;
 import java.util.Map;
 
 public class BorderLayoutCG
-    implements LayoutCG {
+        implements LayoutCG {
 
     public void write(Device d, SLayoutManager l)
-        throws IOException {
-        SBorderLayout layout = (SBorderLayout)l;
+            throws IOException {
+        SBorderLayout layout = (SBorderLayout) l;
         Map components = layout.getComponents();
 
-        SComponent north = (SComponent)components.get(SBorderLayout.NORTH);
-        SComponent east = (SComponent)components.get(SBorderLayout.EAST);
-        SComponent center = (SComponent)components.get(SBorderLayout.CENTER);
-        SComponent west = (SComponent)components.get(SBorderLayout.WEST);
-        SComponent south = (SComponent)components.get(SBorderLayout.SOUTH);
+        SComponent north = (SComponent) components.get(SBorderLayout.NORTH);
+        SComponent east = (SComponent) components.get(SBorderLayout.EAST);
+        SComponent center = (SComponent) components.get(SBorderLayout.CENTER);
+        SComponent west = (SComponent) components.get(SBorderLayout.WEST);
+        SComponent south = (SComponent) components.get(SBorderLayout.SOUTH);
 
         int cols = 0;
         if (west != null) cols++;
@@ -79,15 +78,9 @@ public class BorderLayoutCG
     }
 
     protected void writeComponent(Device d, SComponent c)
-        throws IOException {
+            throws IOException {
         c.write(d);
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,31 +1,29 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of the wingS demo (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * The wingS demo is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package wingset;
 
 import org.wings.*;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class ScrollPaneExample
-    extends WingSetPane
-{
+        extends WingSetPane {
 
     public SComponent createExample() {
         SForm p = new SForm();
@@ -44,13 +42,13 @@ public class ScrollPaneExample
         final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
         showAsFormComponent.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ((SScrollBar)scroller.getHorizontalScrollBar()).setShowAsFormComponent(showAsFormComponent.isSelected());
-                ((SScrollBar)scroller.getVerticalScrollBar()).setShowAsFormComponent(showAsFormComponent.isSelected());
+                ((SScrollBar) scroller.getHorizontalScrollBar()).setShowAsFormComponent(showAsFormComponent.isSelected());
+                ((SScrollBar) scroller.getVerticalScrollBar()).setShowAsFormComponent(showAsFormComponent.isSelected());
             }
         });
         showAsFormComponent.setShowAsFormComponent(false);
-        ((SScrollBar)scroller.getHorizontalScrollBar()).setShowAsFormComponent(false);
-        ((SScrollBar)scroller.getVerticalScrollBar()).setShowAsFormComponent(false);
+        ((SScrollBar) scroller.getHorizontalScrollBar()).setShowAsFormComponent(false);
+        ((SScrollBar) scroller.getVerticalScrollBar()).setShowAsFormComponent(false);
 
         p.add(showAsFormComponent);
         p.add(scroller);
@@ -59,10 +57,4 @@ public class ScrollPaneExample
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,10 +1,10 @@
 /*
  * $Id$
- * (c) Copyright 2001 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * A root container.
  * The classes derived from this class ({@link SFrame} and
  * {@link SInternalFrame}) render in the content pane of this RootContainer.
- *
+ * <p/>
  * <p>The RootContainer has a stack of components. Ususally, the stack
  * contains only <em>one</em> element, the content pane; this is the bottommost
  * component. When dialogs are added to the RootContainer, then these dialogs
@@ -52,6 +52,7 @@ public abstract class SRootContainer extends SContainer {
     /**
      * Push a new dialog on top of the stack. If this RootContainer is
      * rendered, then only this dialog is shown.
+     *
      * @param dialog the SDialog that is to be shown on top.
      */
     public void pushDialog(SDialog dialog) {
@@ -116,10 +117,4 @@ public abstract class SRootContainer extends SContainer {
 
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

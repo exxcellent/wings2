@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.session;
 
 import org.wings.LowLevelEventListener;
@@ -31,8 +30,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public final class LowLevelEventDispatcher
-    implements java.io.Serializable
-{
+        implements java.io.Serializable {
     // not the package name but event dispatcher subsystem:
     private final static Logger logger = Logger.getLogger("org.wings.event");
 
@@ -42,24 +40,23 @@ public final class LowLevelEventDispatcher
 
     public LowLevelEventDispatcher() {}
 
-    public final void addLowLevelEventListener(LowLevelEventListener gl, 
+    public final void addLowLevelEventListener(LowLevelEventListener gl,
                                                String eventId) {
-        List l = (List)listener.get(eventId);
-        if ( l==null ) {
+        List l = (List) listener.get(eventId);
+        if (l == null) {
             l = new ArrayList(2);
             l.add(gl);
             listener.put(eventId, l);
-        }
-        else if ( !l.contains(gl) )
+        } else if (!l.contains(gl))
             l.add(gl);
     }
-    
+
     public final void removeLowLevelEventListener(LowLevelEventListener gl,
                                                   String eventId) {
-        List l = (List)listener.get(eventId);
-        if ( l!=null ) {
+        List l = (List) listener.get(eventId);
+        if (l != null) {
             l.remove(gl);
-            if ( l.size()==0 )
+            if (l.size() == 0)
                 listener.remove(eventId);
         }
     }
@@ -70,12 +67,12 @@ public final class LowLevelEventDispatcher
 
     /**
      * Registers a listener. The NamePrefix of the listener is stored in the
-     * HashMap as key. The value is a Set (ArrayList) of 
+     * HashMap as key. The value is a Set (ArrayList) of
      *
      * @param gl listener
      */
     public void register(LowLevelEventListener gl) {
-        if ( gl==null )
+        if (gl == null)
             return;
 
         String key = gl.getLowLevelEventId();
@@ -85,22 +82,19 @@ public final class LowLevelEventDispatcher
 
         if (namedEvents) {
             key = gl.getName();
-            if ( key!=null && key.trim().length()>0 ) {
-                logger.finer("dispatcher: register named '" + key +"'");
+            if (key != null && key.trim().length() > 0) {
+                logger.finer("dispatcher: register named '" + key + "'");
                 addLowLevelEventListener(gl, key);
             }
         }
     }
 
     /**
-     * TODO:
      * This should remove the GetListener from the HashMap, not the Names of
      * the GetListener (Names may change)
-     *
-     * @param gl
      */
     public void unregister(LowLevelEventListener gl) {
-        if ( gl==null )
+        if (gl == null)
             return;
 
         String key = gl.getLowLevelEventId();
@@ -109,7 +103,7 @@ public final class LowLevelEventDispatcher
         removeLowLevelEventListener(gl, key);
 
         key = gl.getName();
-        if ( key!=null && key.trim().length()>0 ) {
+        if (key != null && key.trim().length() > 0) {
             logger.finer("unregister named '" + key + "'");
             removeLowLevelEventListener(gl, key);
         }
@@ -137,9 +131,8 @@ public final class LowLevelEventDispatcher
         // make ImageButtons work in Forms .. browsers return
         // the click position as .x and .y suffix of the name
         if (name.endsWith(".x") || name.endsWith(".X")) {
-            name = name.substring(0, name.length()-2);
-        }
-        else if (name.endsWith(".y") || name.endsWith(".Y")) {
+            name = name.substring(0, name.length() - 2);
+        } else if (name.endsWith(".y") || name.endsWith(".Y")) {
             // .. but don't process the same event twice.
             logger.finer("discard '.y' part of image event");
             return false;
@@ -148,24 +141,24 @@ public final class LowLevelEventDispatcher
         // is value encoded in name ? Then append it to the values we have.
         int p = name.indexOf(SConstants.UID_DIVIDER);
         if (p > -1) {
-            String v = name.substring(p+1);
+            String v = name.substring(p + 1);
             name = name.substring(0, p);
-            String[] va = new String[values.length+1];
+            String[] va = new String[values.length + 1];
             System.arraycopy(values, 0, va, 0, values.length);
             va[values.length] = v;
             values = va;
         }
-        
-        List l = (List)listener.get(name);
-        if (l != null && l.size() > 0 ) {
+
+        List l = (List) listener.get(name);
+        if (l != null && l.size() > 0) {
             logger.fine("process event '" + epoch + "_" + name + "'");
-            for (int i=0; i < l.size(); ++i) {
-                LowLevelEventListener gl = (LowLevelEventListener)l.get(i);
-                if ( gl.isEnabled() ) {
-                    if ( checkEpoch(epoch, name, gl) ) {
+            for (int i = 0; i < l.size(); ++i) {
+                LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
+                if (gl.isEnabled()) {
+                    if (checkEpoch(epoch, name, gl)) {
                         logger.fine("process event '" + name + "' by " +
-                                    gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                    ")" );
+                                gl.getClass() + "(" + gl.getLowLevelEventId() +
+                                ")");
                         gl.processLowLevelEvent(name, values);
                         result = true;
                     }
@@ -175,24 +168,24 @@ public final class LowLevelEventDispatcher
         return result;
     }
 
-    protected boolean checkEpoch(String epoch, String name, 
-                                 LowLevelEventListener gl){
+    protected boolean checkEpoch(String epoch, String name,
+                                 LowLevelEventListener gl) {
         if (epoch != null) {
-            SFrame frame = ((SComponent)gl).getParentFrame();
-            if ( frame==null ) {
+            SFrame frame = ((SComponent) gl).getParentFrame();
+            if (frame == null) {
                 if (logger.isLoggable(Level.FINE))
                     logger.fine("request for dangling component '" + epoch +
-                                "_" + name);
+                            "_" + name);
                 unregister(gl);
                 return false;
-            } 
+            }
             if (!epoch.equals(frame.getEventEpoch())) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("### got outdated event '" + epoch + "_" + name
-                                + "' from frame '"
-                                + frame.getName()
-                                + "'; expected epoch: " 
-                                + frame.getEventEpoch());
+                            + "' from frame '"
+                            + frame.getName()
+                            + "'; expected epoch: "
+                            + frame.getEventEpoch());
                 }
                 return false;
             }
@@ -205,10 +198,4 @@ public final class LowLevelEventDispatcher
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

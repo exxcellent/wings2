@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings;
 
 import java.util.HashMap;
@@ -28,8 +27,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class SBorderLayout
-    extends SAbstractLayoutManager
-{
+        extends SAbstractLayoutManager {
     Map components = new HashMap(5);
 
     public static final String NORTH = "North";
@@ -58,7 +56,7 @@ public class SBorderLayout
 
         Iterator iterator = components.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry)iterator.next();
+            Map.Entry entry = (Map.Entry) iterator.next();
             if (c.equals(entry.getValue())) {
                 iterator.remove();
                 break;
@@ -90,10 +88,4 @@ public class SBorderLayout
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,13 +1,27 @@
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.util;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.LogRecord;
 
 public class ExtendedFormatter
-    extends java.util.logging.Formatter
-{
+        extends java.util.logging.Formatter {
     private DateFormat dateFormatter;
 
     public ExtendedFormatter() {
@@ -20,23 +34,23 @@ public class ExtendedFormatter
         msg.append(" ");
         msg.append(record.getLevel());
         msg.append(" ");
-	msg.append(record.getSourceClassName());
-	msg.append(" ");
-	msg.append(record.getSourceMethodName());
+        msg.append(record.getSourceClassName());
+        msg.append(" ");
+        msg.append(record.getSourceMethodName());
         msg.append(": ");
         msg.append(formatMessage(record));
         msg.append("\n");
-	if (record.getThrown() != null)
-	    msg.append(getBackTrace(record.getThrown()));
+        if (record.getThrown() != null)
+            msg.append(getBackTrace(record.getThrown()));
 
         return msg.toString();
     }
 
     protected String getBackTrace(Throwable theThrown) {
-	StringWriter sw = new StringWriter();
-	PrintWriter pw = new PrintWriter(sw);
-	theThrown.printStackTrace(pw);
-	pw.close();
-	return sw.getBuffer().toString();
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        theThrown.printStackTrace(pw);
+        pw.close();
+        return sw.getBuffer().toString();
     }
 }

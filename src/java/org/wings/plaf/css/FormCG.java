@@ -1,4 +1,17 @@
 // DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/Form.plaf'
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.plaf.css;
 
 
@@ -8,8 +21,8 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 public class FormCG
-    extends AbstractComponentCG
-    implements SConstants, org.wings.plaf.FormCG {
+        extends AbstractComponentCG
+        implements SConstants, org.wings.plaf.FormCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __form_method = "<form method=\"".getBytes();
@@ -53,17 +66,16 @@ public class FormCG
 
 
     protected void writeContent(final Device device,
-                             final SComponent _c)
-        throws IOException {
-        final SForm component = (SForm)_c;
+                                final SComponent _c)
+            throws IOException {
+        final SForm component = (SForm) _c;
 
 //--- code from write-template.
 
         device.write(__form_method);
         if (component.isPostMethod()) {
             device.write(__post);
-        }
-        else {
+        } else {
             device.write(__get);
         }
         device.write(__);

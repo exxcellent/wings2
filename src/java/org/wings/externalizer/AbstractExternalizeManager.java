@@ -1,17 +1,16 @@
 /*
  * $Id$
- * (c) Copyright 2000 wingS development team.
+ * Copyright 2000,2005 j-wingS development team.
  *
- * This file is part of wingS (http://wings.mercatis.de).
+ * This file is part of j-wingS (http://www.j-wings.org).
  *
- * wingS is free software; you can redistribute it and/or modify
+ * j-wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
  */
-
 package org.wings.externalizer;
 
 import org.wings.io.Device;
@@ -227,7 +226,7 @@ public abstract class AbstractExternalizeManager {
             throw new IllegalStateException("no externalizer");
 
         return externalize(obj, externalizer, externalizer.getMimeType(obj),
-                           null, flags);
+                null, flags);
     }
 
     /**
@@ -251,7 +250,7 @@ public abstract class AbstractExternalizeManager {
             throw new IllegalStateException("no externalizer");
 
         return externalize(obj, externalizer, externalizer.getMimeType(obj),
-                           headers, flags);
+                headers, flags);
     }
 
     /**
@@ -314,7 +313,7 @@ public abstract class AbstractExternalizeManager {
             headers = externalizer.getHeaders(obj);
 
         ExternalizedResource extInfo = new ExternalizedResource(obj, externalizer,
-                                                                mimeType, headers, flags);
+                mimeType, headers, flags);
 
         if ((flags & GLOBAL) > 0) {
             // session encoding is not necessary here
@@ -418,14 +417,14 @@ public abstract class AbstractExternalizeManager {
                 Map.Entry entry = (Map.Entry) it.next();
                 if (entry.getValue() instanceof String) {
                     response.addHeader((String) entry.getKey(),
-                                       (String) entry.getValue());
+                            (String) entry.getValue());
                 } else if (entry.getValue() instanceof Date) {
                     response.addDateHeader((String) entry.getKey(),
-                                           ((Date) entry.getValue()).getTime());
+                            ((Date) entry.getValue()).getTime());
 
                 } else if (entry.getValue() instanceof Integer) {
                     response.addIntHeader((String) entry.getKey(),
-                                          ((Integer) entry.getValue()).intValue());
+                            ((Integer) entry.getValue()).intValue());
 
                 } // end of if ()
             }
@@ -445,8 +444,8 @@ public abstract class AbstractExternalizeManager {
             // .. so do this for now, which is the best approximation of what
             // we want.
             response.setDateHeader("Expires",
-                                   System.currentTimeMillis()
-                                   + (1000 * FINAL_EXPIRES));
+                    System.currentTimeMillis()
+                    + (1000 * FINAL_EXPIRES));
         }
 
         extInfo.getExternalizer().write(extInfo.getObject(), out);
@@ -457,10 +456,4 @@ public abstract class AbstractExternalizeManager {
     }
 }
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+

@@ -1,19 +1,35 @@
 /* $Id$ */
+/*
+ * $Id$
+ * Copyright 2000,2005 j-wingS development team.
+ *
+ * This file is part of j-wingS (http://www.j-wings.org).
+ *
+ * j-wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
 package org.wings.recorder;
 
-import javax.servlet.Filter;
 import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
-import java.util.logging.*;
+import java.util.logging.Logger;
 
 /**
  * @author hengels
  */
 public class Recorder
-    implements Filter
-{
+        implements Filter {
     private static Logger logger = Logger.getLogger(Recorder.class.getPackage().getName());
     public static final String RECORDER_START = "recorder_start";
     public static final String RECORDER_STOP = "recorder_stop";
@@ -39,14 +55,14 @@ public class Recorder
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
         try {
             if (servletRequest instanceof HttpServletRequest) {
-                HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
+                HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
                 Map map = servletRequest.getParameterMap();
                 if (map.containsKey(RECORDER_SCRIPT)) {
                     logger.info("recorder_script " + map.get(RECORDER_SCRIPT));
-                    String[] values = (String[])map.get(RECORDER_SCRIPT);
+                    String[] values = (String[]) map.get(RECORDER_SCRIPT);
                     scriptName = values[0];
                 }
                 if (map.containsKey(RECORDER_START)) {
@@ -54,15 +70,13 @@ public class Recorder
                         return;
                     logger.info(RECORDER_START);
                     list = new LinkedList();
-                }
-                else if (map.containsKey(RECORDER_STOP)) {
+                } else if (map.containsKey(RECORDER_STOP)) {
                     if (list == null)
                         return;
                     logger.info(RECORDER_STOP);
                     writeCode();
                     list = null;
-                }
-                else if (list != null) {
+                } else if (list != null) {
                     String resource = httpServletRequest.getPathInfo();
                     logger.finer("PATH_INFO: " + resource);
 
@@ -74,25 +88,24 @@ public class Recorder
 
                     Enumeration parameterNames = httpServletRequest.getParameterNames();
                     while (parameterNames.hasMoreElements()) {
-                        String name = (String)parameterNames.nextElement();
+                        String name = (String) parameterNames.nextElement();
                         String[] values = httpServletRequest.getParameterValues(name);
                         addEvent(record, name, values);
                     }
                     Enumeration headerNames = httpServletRequest.getHeaderNames();
                     while (headerNames.hasMoreElements()) {
-                        String name = (String)headerNames.nextElement();
+                        String name = (String) headerNames.nextElement();
                         if (name.equalsIgnoreCase("cookie") ||
-                            name.equalsIgnoreCase("referer"))
+                                name.equalsIgnoreCase("referer"))
                             continue;
                         addHeader(record, name, httpServletRequest.getHeader(name));
                     }
                     list.add(record);
                 }
             }
-        }
-        finally {
+        } finally {
             if (servletResponse instanceof HttpServletResponse) {
-                filterChain.doFilter(servletRequest, new HttpServletResponseWrapper((HttpServletResponse)servletResponse) {
+                filterChain.doFilter(servletRequest, new HttpServletResponseWrapper((HttpServletResponse) servletResponse) {
                     public ServletOutputStream getOutputStream() throws IOException {
                         final ServletOutputStream out = super.getOutputStream();
                         return new ServletOutputStream() {
@@ -112,30 +125,27 @@ public class Recorder
                         };
                     }
                 });
-            }
-            else
+            } else
                 filterChain.doFilter(servletRequest, servletResponse);
         }
     }
 
     private void addHeader(Request record, String name, String value) {
         if (record instanceof GET) {
-            GET get = (GET)record;
+            GET get = (GET) record;
             get.addHeader(name, value);
-        }
-        else if (record instanceof POST) {
-            POST post = (POST)record;
+        } else if (record instanceof POST) {
+            POST post = (POST) record;
             post.addHeader(name, value);
         }
     }
 
     private void addEvent(Request record, String name, String[] values) {
         if (record instanceof GET) {
-            GET get = (GET)record;
+            GET get = (GET) record;
             get.addEvent(name, values);
-        }
-        else if (record instanceof POST) {
-            POST post = (POST)record;
+        } else if (record instanceof POST) {
+            POST post = (POST) record;
             post.addEvent(name, values);
         }
     }
@@ -150,7 +160,7 @@ public class Recorder
             return;
         try {
             for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-                Request record = (Request)iterator.next();
+                Request record = (Request) iterator.next();
                 if (record.getResource().indexOf(".") == -1)
                     record.setResource("");
             }
@@ -166,19 +176,19 @@ public class Recorder
             out.println("        throws Exception");
             out.println("    {");
 
-            long millis = ((Request)list.get(0)).getMillis();
+            long millis = ((Request) list.get(0)).getMillis();
 
             int index = 0;
             for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-                Request record = (Request)iterator.next();
+                Request record = (Request) iterator.next();
                 if (index > 0)
                     out.println();
                 out.println("        delay(" + (record.getMillis() - millis) + ");");
                 out.print("        " + record.getMethod() + " request" + index +
-                          " = new " + record.getMethod() + "(\"" + record.getResource() + "\")");
+                        " = new " + record.getMethod() + "(\"" + record.getResource() + "\")");
 
                 for (Iterator iterator2 = record.getHeaders().iterator(); iterator2.hasNext();) {
-                    Request.Header header = (Request.Header)iterator2.next();
+                    Request.Header header = (Request.Header) iterator2.next();
                     out.println();
                     out.print("            .addHeader(\"");
                     out.print(header.getName());
@@ -187,7 +197,7 @@ public class Recorder
                     out.print("\")");
                 }
                 for (Iterator iterator2 = record.getEvents().iterator(); iterator2.hasNext();) {
-                    Request.Event event = (Request.Event)iterator2.next();
+                    Request.Event event = (Request.Event) iterator2.next();
                     out.println();
                     out.print("            .addEvent(\"");
                     out.print(event.getName());
@@ -209,11 +219,11 @@ public class Recorder
             out.println("    }");
             out.println("}");
             out.flush();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-          try { out.close(); } catch (Exception ign) {};
+            try { out.close(); } catch (Exception ign) {}
+            ;
         }
     }
 
@@ -223,13 +233,12 @@ public class Recorder
 
         int lastindex = 0;
         int indexOf = s.indexOf(toFind);
-        if ( indexOf == -1 ) return s;
-        while ( indexOf != -1 )
-            {
-                erg.append(s.substring(lastindex, indexOf)).append(replace);
-                lastindex = indexOf + toFind.length();
-                indexOf = s.indexOf(toFind, lastindex);
-            }
+        if (indexOf == -1) return s;
+        while (indexOf != -1) {
+            erg.append(s.substring(lastindex, indexOf)).append(replace);
+            lastindex = indexOf + toFind.length();
+            indexOf = s.indexOf(toFind, lastindex);
+        }
 
         erg.append(s.substring(lastindex));
 
