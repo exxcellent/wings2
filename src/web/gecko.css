@@ -767,15 +767,14 @@ div.SMenuBar_css li li li li:hover ul
 
 /* Styling for Expand */
 
-div.SMenuBar_css a.x, div.SMenuBar_css a.x:visited{
+div.SMenuBar_css a.x, div.SMenuBar_css a.x:visited,
+div.SMenuBar_css a.y, div.SMenuBar_css a.y:visited, div.SMenuBar_css a.y:hover
+{
 background:#eee url(icons/MenuArrowRight.gif) no-repeat center right;
 }
 
 div.SMenuBar_css a.x:hover{
 background:#66b url(icons/MenuArrowRight.gif) no-repeat center right;
-}
-
-div.SMenuBar_css a.x:active{
 }
 
 /* End CSS Popout Menu */

@@ -81,8 +81,12 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
                                 writeAnchorAddress(device, (SMenuItem) menuItem);
                                 device.print("\"");
                             }
-                            if (menuItem instanceof SMenu && menuItem.isEnabled()) {
-                                device.print(" class=\"x\"");
+                            if (menuItem instanceof SMenu) {
+                                if (menuItem.isEnabled()) {
+                                    device.print(" class=\"x\"");
+                                } else {
+                                    device.print(" class=\"y\"");
+                                }
                             }
                             device.print(">");
                     }
