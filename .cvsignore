@@ -1,2 +1,6 @@
 build
 dist
+*.iml
+*.ipr
+*.iws
+
