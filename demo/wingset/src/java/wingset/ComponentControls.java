@@ -26,15 +26,14 @@ import java.util.List;
  * @version $Revision$
  */
 public class ComponentControls
-        extends SPanel {
+        extends SToolbar {
     protected List components = new LinkedList();
     protected STextField widthTextField;
     protected STextField heightTextField;
     private SButton button;
 
     public ComponentControls() {
-        super(new SFlowLayout());
-
+        setAttribute("border-bottom", "1px solid #cccccc");
         button = new SButton("apply");
         widthTextField = new STextField();
         heightTextField = new STextField();

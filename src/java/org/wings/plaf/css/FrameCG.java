@@ -163,23 +163,19 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         List headers = frame.headers();
         String encoding = SessionManager.getSession().getCharacterEncoding();
 
-        if ("MSIE".equals(browser.getBrowserName()) &&
-                browser.getMajorVersion() < 4) {
-            device.write("<html>\n".getBytes());
-        } else {
-            if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
-                device.write("<?xml version=\"1.0\" encoding=\"".getBytes());
-                org.wings.plaf.Utils.write(device, encoding);
-                device.write("\"?>\n".getBytes());
-            }
-            org.wings.plaf.Utils.writeRaw(device, documentType);
-            device.write("\n".getBytes());
-            device.write("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".getBytes());
-            org.wings.plaf.Utils.write(device, language);
-            device.write("\" lang=\"".getBytes());
-            org.wings.plaf.Utils.write(device, language);
-            device.write("\">\n".getBytes());
+        if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
+            device.write("<?xml version=\"1.0\" encoding=\"".getBytes());
+            org.wings.plaf.Utils.write(device, encoding);
+            device.write("\"?>\n".getBytes());
         }
+
+        org.wings.plaf.Utils.writeRaw(device, documentType);
+        device.write("\n".getBytes());
+        device.write("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".getBytes());
+        org.wings.plaf.Utils.write(device, language);
+        device.write("\" lang=\"".getBytes());
+        org.wings.plaf.Utils.write(device, language);
+        device.write("\">\n".getBytes());
 
         device.write("<head>".getBytes());
         if (title != null) {
@@ -191,9 +187,9 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         device.write("<meta http-equiv=\"Content-type\" content=\"text/html; charset=".getBytes());
         org.wings.plaf.Utils.write(device, encoding);
         device.write("\"/>\n".getBytes());
-        Iterator it = headers.iterator();
-        while (it.hasNext()) {
-            Object next = it.next();
+
+        for (Iterator iterator = headers.iterator(); iterator.hasNext();) {
+            Object next = iterator.next();
             if (next instanceof Renderable) {
                 ((Renderable) next).write(device);
             } else {

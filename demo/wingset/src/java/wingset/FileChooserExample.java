@@ -31,8 +31,8 @@ import java.io.IOException;
  * @version $Revision$
  */
 public class FileChooserExample
-        extends WingSetPane {
-    final static String TEMPLATE = "/templates/FileChooserExample.thtml";
+        extends WingSetPane
+{
     final static Color WARN_COLOR = new Color(255, 255, 127);
 
     /**
@@ -59,7 +59,7 @@ public class FileChooserExample
     /**
      * form, that contains the text-area
      */
-    SForm textForm;
+    SPanel textForm;
 
     /**
      * label for unknown content.
@@ -70,56 +70,21 @@ public class FileChooserExample
      * remember the previous file to remove it.
      */
     File previousFile;
+    private FileChooserControls controls;
 
     public SComponent createExample() {
-        SPanel p = new SPanel();
+        controls = new FileChooserControls();
 
-        try {
-            java.net.URL templateURL = getSession().getServletContext().getResource(TEMPLATE);
-            p.setLayout(new STemplateLayout(templateURL));
-        } catch (Exception e) {
-            // template not found ?
-        }
+        SForm p = new SForm(new SBorderLayout());
+        p.setEncodingType("multipart/form-data");
 
-        p.add(createControlForm(), "controlForm");
-        p.add(createUpload(), "uploadForm");
-        p.add(createPreview(), "previewArea");
+        p.add(controls, SBorderLayout.NORTH);
+        p.add(createUpload(), SBorderLayout.WEST);
+        p.add(createPreview(), SBorderLayout.CENTER);
 
+        controls.addSizable(chooser);
         return p;
     }
-
-
-    private SForm createControlForm() {
-        SForm controlForm = new SForm();
-
-        /*
-         * modify the displayed indentation depth.
-         */
-        controlForm.add(new SLabel("influence maximum accepted Content Length (in kB): "));
-        Object[] values = {new Integer(1), new Integer(2), new Integer(4),
-                           new Integer(8), new Integer(16), new Integer(32),
-                           new Integer(64)};
-
-        final SComboBox comboBox = new SComboBox(values);
-        comboBox.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                getSession().setMaxContentLength(((Integer) comboBox.getSelectedItem()).intValue());
-            }
-        });
-
-        comboBox.setSelectedItem(new
-                Integer(getSession().getMaxContentLength()));
-
-        controlForm.add(comboBox);
-
-        SButton submit = new SButton("OK");
-        controlForm.add(submit);
-
-        controlForm.setBorder(new SEmptyBorder(10, 10, 0, 0));
-
-        return controlForm;
-    }
-
 
     protected String getText(File f) {
         try {
@@ -175,7 +140,7 @@ public class FileChooserExample
 
         iconLabel = new SLabel();
 
-        textForm = new SForm();
+        textForm = new SPanel();
 
         textArea = new STextArea();
         textArea.setColumns(50);
@@ -200,9 +165,8 @@ public class FileChooserExample
     }
 
     protected SComponent createUpload() {
-        SForm form = new SForm(new SFlowDownLayout());
+        SPanel form = new SPanel(new SFlowDownLayout());
         form.setBorder(new SEmptyBorder(10, 5, 0, 0));
-        form.setEncodingType("multipart/form-data");
 
         chooser = new SFileChooser();
         form.add(chooser);
@@ -236,7 +200,7 @@ public class FileChooserExample
         form.add(p);
 
 
-        form.addActionListener(new ActionListener() {
+        submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (chooser.getFile() != null) {
@@ -268,6 +232,23 @@ public class FileChooserExample
 
         return form;
     }
+
+    class FileChooserControls extends ComponentControls {
+        public FileChooserControls() {
+            Object[] values = {new Integer(1), new Integer(2), new Integer(4),
+                               new Integer(8), new Integer(16), new Integer(32),
+                               new Integer(64)};
+
+            final SComboBox comboBox = new SComboBox(values);
+            comboBox.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    getSession().setMaxContentLength(((Integer) comboBox.getSelectedItem()).intValue());
+                }
+            });
+            comboBox.setSelectedItem(new Integer(getSession().getMaxContentLength()));
+
+            add(new SLabel("Maximum Content Length [kB]: "));
+            add(comboBox);
+        }
+    }
 }
-
-

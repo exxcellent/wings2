@@ -52,17 +52,15 @@ public class LabelExample extends WingSetPane {
         testLabel.setAttribute("font-weight", "bold");
         controls.addSizable(testLabel);
 
-        SPanel p = new SPanel(new SGridLayout(1));
+        SPanel p = new SPanel(new SGridLayout(2));
         p.add(new SLabel("Control the label's text position"));
         p.add(new SLabel("Result"));
         p.add(createRoundRadio(testLabel));
         p.add(testLabel);
 
-        SForm form = new SForm(new SFlowDownLayout());
-        form.add(controls);
-        form.add(new SSeparator());
-        form.add(p);
-
+        SForm form = new SForm(new SBorderLayout());
+        form.add(controls, SBorderLayout.NORTH);
+        form.add(p, SBorderLayout.CENTER);
         return form;
     }
 

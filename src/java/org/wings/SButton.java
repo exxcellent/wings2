@@ -87,6 +87,29 @@ public class SButton extends SAbstractButton {
         return false;
     }
 
+    private String actionCommandToFire;
+
+    public void processLowLevelEvent(String action, String[] values) {
+        processKeyEvents(values);
+
+        // got an event, that is a select...
+        SForm.addArmedComponent(this);
+
+        if (getShowAsFormComponent() &&
+                getActionCommand() != null) {
+            actionCommandToFire = getActionCommand();
+        } else {
+            actionCommandToFire = values[0];
+        }
+    }
+
+    public void fireFinalEvents() {
+        fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, actionCommandToFire));
+        if (getGroup() != null) {
+            getGroup().fireDelayedFinalEvents();
+        }
+    }
+
     public String getSelectionParameter() {
         return getActionCommand() != null ? getActionCommand() : "1";
     }

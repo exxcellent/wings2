@@ -21,6 +21,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /**
  * Example for STabbedPane.
@@ -38,7 +40,7 @@ public class TabbedPaneExample extends WingSetPane {
         controls = new TabbedPaneControls();
 
         SForm c = new SForm(new SBorderLayout());
-        c.add(controls, "North");
+        c.add(controls, SBorderLayout.NORTH);
 
         tabbedPane = new STabbedPane();
         tabbedPane.setBackground(new java.awt.Color(200, 200, 255));

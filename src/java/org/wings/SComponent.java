@@ -1321,8 +1321,10 @@ public abstract class SComponent
     }
 
     protected void processLowLevelEvent(String name, String[] values) {
-        System.out.println(name + " " + Arrays.asList(values));
-        
+        processKeyEvents(values);
+    }
+
+    protected void processKeyEvents(String[] values) {
         if (actionMap == null)
             return;
 

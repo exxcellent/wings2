@@ -80,7 +80,7 @@ public class Editor
         textArea = new STextArea();
         textArea.setColumns(80);
         textArea.setRows(24);
-        textArea.setPreferredSize(new SDimension("100%", "100%"));
+        textArea.setPreferredSize(new SDimension("100%", null));
         
         SForm form = new SForm();
         form.add(toolbar);

@@ -45,6 +45,7 @@ public class Desktop
 
     public Desktop() {
         frame = new SFrame("Desktop");
+        frame.setAttribute("margin", "4px");
 
         SContainer contentPane = frame.getContentPane();
         editorNumber = 0;

@@ -14,6 +14,8 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.event.SDocumentListener;
+import org.wings.event.SDocumentEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,17 +28,24 @@ public class TextComponentExample
         extends WingSetPane {
     private int i = 1;
 
+    private ComponentControls controls;
+
     public SComponent createExample() {
-        SPanel p = new SPanel();
+        controls = new ComponentControls();
+
+        SPanel p = new SPanel(new SGridLayout(2));
         STextField textField = new STextField();
         textField.setName("textfield");
         p.add(createTextComponentExample(textField));
-        p.add(new SSeparator());
 
         STextArea textArea = new STextArea();
         textArea.setName("textarea");
         p.add(createTextComponentExample(textArea));
-        return p;
+
+        SPanel f = new SPanel(new SBorderLayout());
+        f.add(controls, SBorderLayout.NORTH);
+        f.add(p, SBorderLayout.CENTER);
+        return f;
     }
 
     SForm createTextComponentExample(STextComponent textComp) {
@@ -51,13 +60,22 @@ public class TextComponentExample
         final SLabel result = new SLabel("");
         final SLabel buttonDesc = new SLabel("");
 
-        /* TODO FIXME 
-          textComp.addTextListener(new TextListener() {
-            public void textValueChanged(TextEvent evt) {
-                result.setText(((STextComponent) evt.getSource()).getText());
+        textComp.addDocumentListener(new SDocumentListener() {
+            public void insertUpdate(SDocumentEvent e) {
+                result.setText(((STextComponent) e.getSource()).getText());
                 buttonDesc.setText("button not pressed");
             }
-        }); */
+
+            public void removeUpdate(SDocumentEvent e) {
+                result.setText(((STextComponent) e.getSource()).getText());
+                buttonDesc.setText("button not pressed");
+            }
+
+            public void changedUpdate(SDocumentEvent e) {
+                result.setText(((STextComponent) e.getSource()).getText());
+                buttonDesc.setText("button not pressed");
+            }
+        });
 
         SButton button = new SButton("Submit");
         button.setName("submit" + (i++));

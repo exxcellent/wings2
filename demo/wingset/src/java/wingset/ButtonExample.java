@@ -36,11 +36,9 @@ public class ButtonExample
         controls = new ButtonControls();
         SContainer p = createButtonExample();
 
-        SForm form = new SForm(new SFlowDownLayout());
-        form.add(controls);
-        form.add(new SSeparator());
-        form.add(p);
-
+        SForm form = new SForm(new SBorderLayout());
+        form.add(controls, SBorderLayout.NORTH);
+        form.add(p, SBorderLayout.CENTER);
         return form;
     }
 

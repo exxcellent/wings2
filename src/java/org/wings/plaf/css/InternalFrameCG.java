@@ -48,7 +48,6 @@ public class InternalFrameCG
 
     public void installCG(SComponent component) {
         super.installCG(component);
-        component.setPreferredSize(new SDimension("100%", null));
     }
 
     private void writeIcon(Device device, SIcon icon) throws IOException {

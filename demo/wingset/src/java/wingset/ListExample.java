@@ -37,12 +37,10 @@ public class ListExample
         p.add(createComboBoxExample());
         p.add(createAnchorListExample());
 
-        SForm form = new SForm(new SFlowDownLayout());
-        form.add(controls);
-        form.add(new SSeparator());
-        form.add(p);
-
-        form.add(new SButton("SUBMIT"));
+        SForm form = new SForm(new SBorderLayout());
+        form.add(controls, SBorderLayout.NORTH);
+        form.add(p, SBorderLayout.CENTER);
+        form.add(new SButton("SUBMIT"), SBorderLayout.SOUTH);
         return form;
     }
 

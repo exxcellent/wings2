@@ -33,12 +33,12 @@ public class PageScrollerExample
     SList list;
     SPageScroller scrollbar;
     SScrollPane scroller;
+    private PageScrollerControls controls;
 
     public SComponent createExample() {
-        SPanel p = new SPanel(new SBorderLayout());
-
         list = new SList(listData);
         list.setVisibleRowCount(8);
+        list.setShowAsFormComponent(false);
 
         scrollbar = new SPageScroller(Adjustable.VERTICAL);
         scrollbar.setName("scrollbar");
@@ -53,93 +53,13 @@ public class PageScrollerExample
         // maximum of 50 visible rows...
         scroller.setVerticalExtent(50);
 
-        p.add(scroller, SBorderLayout.CENTER);
+        controls = new PageScrollerControls();
+        controls.addSizable(scroller);
 
-        p.add(createControlForm(), SBorderLayout.NORTH);
-
-        return p;
-    }
-
-    private SForm createControlForm() {
-        SForm controlForm = new SForm(new SFlowLayout());
-
-        controlForm.add(new SLabel("Visible Rows: "));
-        Object[] visRowsValues = {new Integer(4), new Integer(8), new Integer(12),
-                                  new Integer(16), new Integer(20), new Integer(50)};
-        final SComboBox visRows = new SComboBox(visRowsValues);
-        visRows.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                list.setVisibleRowCount(((Integer) visRows.getSelectedItem()).intValue());
-            }
-        });
-        visRows.setSelectedItem(new Integer(list.getVisibleRowCount()));
-        controlForm.add(visRows);
-
-        controlForm.add(new SLabel("Direct Pages: "));
-        Object[] values = {new Integer(5), new Integer(10), new Integer(15),
-                           new Integer(20), new Integer(50)};
-        final SComboBox comboBox = new SComboBox(values);
-        comboBox.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                scrollbar.setDirectPages(((Integer) comboBox.getSelectedItem()).intValue());
-            }
-        });
-        comboBox.setSelectedItem(new Integer(scrollbar.getDirectPages()));
-        controlForm.add(comboBox);
-
-
-        controlForm.add(new SLabel("Layout: "));
-        Object[] constraints = {"Top", "Left", "Bottom", "Right"};
-        final SComboBox layout = new SComboBox(constraints);
-        layout.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if ("Top".equals(layout.getSelectedItem())) {
-                    scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
-                    scroller.setHorizontalScrollBar(scrollbar,
-                            SBorderLayout.NORTH);
-                } else if ("Bottom".equals(layout.getSelectedItem())) {
-                    scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
-                    scroller.setHorizontalScrollBar(scrollbar,
-                            SBorderLayout.SOUTH);
-                } else if ("Left".equals(layout.getSelectedItem())) {
-                    scrollbar.setLayoutMode(Adjustable.VERTICAL);
-                    scroller.setHorizontalScrollBar(scrollbar,
-                            SBorderLayout.WEST);
-                } else if ("Right".equals(layout.getSelectedItem())) {
-                    scrollbar.setLayoutMode(Adjustable.VERTICAL);
-                    scroller.setHorizontalScrollBar(scrollbar,
-                            SBorderLayout.EAST);
-                }
-            }
-        });
-        layout.setSelectedItem("Bottom");
-        controlForm.add(layout);
-
-
-        final SCheckBox margin = new SCheckBox("Margin:");
-        margin.setHorizontalTextPosition(SCheckBox.LEFT);
-        margin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                scrollbar.setMarginVisible(margin.isSelected());
-            }
-        });
-        margin.setSelected(scrollbar.isMarginVisible());
-        controlForm.add(margin);
-
-        final SCheckBox step = new SCheckBox("Step:");
-        step.setHorizontalTextPosition(SCheckBox.LEFT);
-        step.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                scrollbar.setStepVisible(step.isSelected());
-            }
-        });
-        step.setSelected(scrollbar.isStepVisible());
-        controlForm.add(step);
-
-
-        SButton submit = new SButton("OK");
-        controlForm.add(submit);
-        return controlForm;
+        SForm form = new SForm(new SBorderLayout());
+        form.add(controls, SBorderLayout.NORTH);
+        form.add(scroller, SBorderLayout.CENTER);
+        return form;
     }
 
     static void addChildNodes(TreeNode node, ArrayList list, int indent) {
@@ -169,8 +89,80 @@ public class PageScrollerExample
     }
 
 
+    class PageScrollerControls extends ComponentControls {
+        public PageScrollerControls() {
+            add(new SLabel("Visible Rows: "));
+            Object[] visRowsValues = {new Integer(4), new Integer(8), new Integer(12),
+                                      new Integer(16), new Integer(20), new Integer(50)};
+            final SComboBox visRows = new SComboBox(visRowsValues);
+            visRows.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    list.setVisibleRowCount(((Integer) visRows.getSelectedItem()).intValue());
+                }
+            });
+            visRows.setSelectedItem(new Integer(list.getVisibleRowCount()));
+            add(visRows);
+
+            add(new SLabel("Direct Pages: "));
+            Object[] values = {new Integer(5), new Integer(10), new Integer(15),
+                               new Integer(20), new Integer(50)};
+            final SComboBox comboBox = new SComboBox(values);
+            comboBox.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    scrollbar.setDirectPages(((Integer) comboBox.getSelectedItem()).intValue());
+                }
+            });
+            comboBox.setSelectedItem(new Integer(scrollbar.getDirectPages()));
+            add(comboBox);
+
+
+            add(new SLabel("Layout: "));
+            Object[] constraints = {"Top", "Left", "Bottom", "Right"};
+            final SComboBox layout = new SComboBox(constraints);
+            layout.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    if ("Top".equals(layout.getSelectedItem())) {
+                        scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
+                        scroller.setHorizontalScrollBar(scrollbar,
+                                SBorderLayout.NORTH);
+                    } else if ("Bottom".equals(layout.getSelectedItem())) {
+                        scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
+                        scroller.setHorizontalScrollBar(scrollbar,
+                                SBorderLayout.SOUTH);
+                    } else if ("Left".equals(layout.getSelectedItem())) {
+                        scrollbar.setLayoutMode(Adjustable.VERTICAL);
+                        scroller.setHorizontalScrollBar(scrollbar,
+                                SBorderLayout.WEST);
+                    } else if ("Right".equals(layout.getSelectedItem())) {
+                        scrollbar.setLayoutMode(Adjustable.VERTICAL);
+                        scroller.setHorizontalScrollBar(scrollbar,
+                                SBorderLayout.EAST);
+                    }
+                }
+            });
+            layout.setSelectedItem("Bottom");
+            add(layout);
+
+
+            final SCheckBox margin = new SCheckBox("Margin: ");
+            margin.setHorizontalTextPosition(SCheckBox.LEFT);
+            margin.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    scrollbar.setMarginVisible(margin.isSelected());
+                }
+            });
+            margin.setSelected(scrollbar.isMarginVisible());
+            add(margin);
+
+            final SCheckBox step = new SCheckBox("Step: ");
+            step.setHorizontalTextPosition(SCheckBox.LEFT);
+            step.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    scrollbar.setStepVisible(step.isSelected());
+                }
+            });
+            step.setSelected(scrollbar.isStepVisible());
+            add(step);
+        }
+    }
 }
-
-
-
-

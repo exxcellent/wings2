@@ -27,6 +27,8 @@ public class OptionPaneExample
         implements SConstants {
     public OptionPaneExample(SFrame f) {
 
+        SToolbar panel = new SToolbar();
+
         final SFrame frame = f;
         SButton msg = new SButton("show Message");
         msg.addActionListener(new ActionListener() {
@@ -34,7 +36,7 @@ public class OptionPaneExample
                 SOptionPane.showMessageDialog(frame, "This is a simple message", "A Message");
             }
         });
-        add(msg);
+        panel.add(msg);
 
         SButton question = new SButton("show Question");
         final ActionListener comment = new ActionListener() {
@@ -52,7 +54,7 @@ public class OptionPaneExample
                         "A Question", comment);
             }
         });
-        add(question);
+        panel.add(question);
 
         SButton yesno = new SButton("show Yes No");
         final ActionListener feedback = new ActionListener() {
@@ -77,8 +79,7 @@ public class OptionPaneExample
             }
         });
 
-        add(yesno);
+        panel.add(yesno);
+        add(panel);
     }
 }
-
-
