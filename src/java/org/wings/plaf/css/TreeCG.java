@@ -236,11 +236,7 @@ public class TreeCG
             nextPathCount = nextPath.getPathCount();
         }
         if ( pathCount < nextPathCount ) {
-            device.print("<div");
-            if (!isLastChild(component.getModel(), path, pathCount-1)) {
-                device.print(" class=\"SSubTree\"");
-            }
-            device.print("><ul class=\"STree\">\n");
+            indentOnce(device, component, path);
         } else if ( pathCount > nextPathCount ) {
             device.print("</li>\n");
             for (int i = nextPathCount; i < pathCount; i++) {
@@ -273,14 +269,50 @@ public class TreeCG
         device.print("<ul class=\"STree\"");
         Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
         device.print(">");
+        if (start != 0) {
+            TreePath path = component.getPathForRow(start);
+            indentRecursive(device, component, path.getParentPath());
+        }
 
-        for (int i = start; i < count; ++i)
+        for (int i = start; i < start + count; ++i) {
             writeTreeNode(component, device, i, depth);
-        
+        }
         device.print("</ul>");
     }
 
-//--- setters and getters for the properties.
+    /**
+     * Recursively indents the Tree in case it isn't displayed from the root
+     * node. reversely traverses the {@link TreePath} and renders afterwards. 
+     * @param device
+     * @param component
+     * @param path
+     * @throws IOException
+     */
+    private void indentRecursive(Device device, STree component, TreePath path) throws IOException {
+        if (path == null) return;
+        indentRecursive(device, component, path.getParentPath());
+        device.print("<li>");
+        indentOnce(device, component, path);
+    }
+
+
+    /**
+     * Helper method for code reuse
+     * @param device
+     * @param component
+     * @param path
+     * @throws IOException
+     */
+    private void indentOnce(Device device, STree component, TreePath path) throws IOException {
+        device.print("<div");
+        if (!isLastChild(component.getModel(), path, path.getPathCount()-1)) {
+            device.print(" class=\"SSubTree\"");
+        }
+        device.print("><ul class=\"STree\">\n");
+    }
+
+
+    //--- setters and getters for the properties.
     public SIcon getCollapseControlIcon() {
         return collapseControlIcon;
     }

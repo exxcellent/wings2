@@ -13,12 +13,27 @@
  */
 package wingset;
 
-import org.wings.*;
-
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
+
+import javax.swing.tree.DefaultTreeModel;
+
+import org.wings.SBorderLayout;
+import org.wings.SButtonGroup;
+import org.wings.SCheckBox;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SForm;
+import org.wings.SLabel;
+import org.wings.SList;
+import org.wings.SRadioButton;
+import org.wings.SResourceIcon;
+import org.wings.SScrollBar;
+import org.wings.SScrollPane;
+import org.wings.SScrollPaneLayout;
+import org.wings.STable;
+import org.wings.STree;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -29,13 +44,19 @@ public class ScrollPaneExample
 {
     private ScrollPaneControls controls;
     private STable table;
+    private STree tree;
     private SScrollPane scrollPane;
+    static final SResourceIcon javaCup = new SResourceIcon("org/wings/icons/JavaCup.gif");
 
     public SComponent createExample() {
         table = new STable(new TableExample.ROTableModel(15, 15));
         table.setShowAsFormComponent(true);
         table.setDefaultRenderer(new TableExample.MyCellRenderer());
 
+        tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
+        tree.setName("scrolltree");
+        tree.setShowAsFormComponent(false);
+        
         scrollPane = new SScrollPane(table);
         scrollPane.getHorizontalScrollBar().setBlockIncrement(3);
         scrollPane.getVerticalScrollBar().setBlockIncrement(3);
@@ -52,6 +73,15 @@ public class ScrollPaneExample
         return p;
     }
 
+    /**
+     * @param table
+     */
+    protected void showInPane(SComponent comp) {
+        //scrollPane.removeAll();
+        //scrollPane.add(comp);
+        scrollPane.setViewportView(comp);
+    }
+    
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
@@ -74,6 +104,27 @@ public class ScrollPaneExample
             });
             paging.setSelected(true);
             add(paging);
+
+            final SRadioButton tableButton = new SRadioButton("table");
+            final SRadioButton treeButton = new SRadioButton("tree");
+            final SButtonGroup group = new SButtonGroup();
+            group.add(tableButton);
+            group.add(treeButton);
+            tableButton.setSelected(true);
+
+            group.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (tableButton.isSelected()) {
+                        showInPane(table);
+                    } else {
+                        showInPane(tree);
+                    }
+                }
+                
+            });
+            add(new SLabel(" component to scroll "));
+            add(tableButton);
+            add(treeButton);
         }
     }
 }
