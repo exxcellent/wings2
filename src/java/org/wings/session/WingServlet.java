@@ -56,8 +56,7 @@ public final class WingServlet
     }
 
 
-    protected void initLookupName(ServletConfig config)
-            throws ServletException {
+    protected void initLookupName(ServletConfig config) {
         // with specified lookupname it is possible to handle different sessions
         // for servlet aliases/mappings
         lookupName = config.getInitParameter("wings.servlet.lookupname");
@@ -164,7 +163,7 @@ public final class WingServlet
                     log.debug("type: " + type);
                     if (f != null) {
                         log.debug("f.toString(): " + f.toString());
-                        log.debug("f.getName(): " + f.getName());
+                        log.debug("f.getDescription(): " + f.getName());
                         log.debug("f.exists(): " + f.exists());
                         log.debug("f.length(): " + f.length());
                         log.debug("\n");

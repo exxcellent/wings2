@@ -26,17 +26,18 @@ import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
-import org.wings.session.Session;
 import org.wings.session.SessionManager;
-import org.wings.style.DynamicStyleSheetResource;
 import org.wings.style.CSSSelector;
+import org.wings.style.DynamicStyleSheetResource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
@@ -46,12 +47,27 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
      * document i.e. esp. the CSS attribute inheritance does not work correctly on <code>table</code> elements.
      * See i.e. http://www.ericmeyeroncss.com/bonus/render-mode.html
      */
-    public final static String DEFAULT_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" " +
+    public final static String STRICT_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" " +
             "\"http://www.w3.org/TR/REC-html40/strict.dtd\">";
 
-    //--- properties of this plaf.
-    private String documentType;
-    private Boolean renderXmlDeclaration;
+    /**
+     * The HTML DOCTYPE setting all browsers to Quirks mode.
+     * We need this to force IE to use the correct box rendering model. It's the only browser
+     * you cannot reconfigure via an CSS tag.
+     */
+    public final static String QUIRKS_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
+
+    // Browser type for which we provided a custom css. Others switch to default
+    private final static Set providedBrowserCss;
+    static {
+        providedBrowserCss = new HashSet();
+        providedBrowserCss.add(BrowserType.IE);
+        providedBrowserCss.add(BrowserType.GECKO);
+    }
+
+    private String documentType = STRICT_DOCTYPE;
+
+    private Boolean renderXmlDeclaration = Boolean.FALSE;
 
     /**
      * Initialize properties from config
@@ -60,14 +76,12 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         final CGManager manager = SessionManager.getSession().getCGManager();
         final String userDocType = (String) manager.getObject("FrameCG.userDocType", String.class);
         final Boolean userRenderXmlDecl = (Boolean) manager.getObject("FrameCG.renderXmlDeclaration", Boolean.class);
+
         if (userDocType != null)
             setDocumentType(userDocType);
-        else
-            setDocumentType(DEFAULT_DOCTYPE);
+
         if (userRenderXmlDecl != null)
             setRenderXmlDeclaration(userRenderXmlDecl);
-        else
-            setRenderXmlDeclaration(Boolean.FALSE);
     }
 
 
@@ -97,16 +111,12 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         component.addHeader(new Script("JavaScript", "text/javascript", new DefaultURLResource("../domLib.js")));
         component.addHeader(new Script("JavaScript", "text/javascript", new DefaultURLResource("../domTT.js")));
 
-        Browser browser = component.getSession().getUserAgent();
-        String stylesheet = "../gecko.css";
-        if (browser.getBrowserType() == BrowserType.GECKO)
-            stylesheet = "../gecko.css";
-        else if (browser.getBrowserType() == BrowserType.IE)
-            stylesheet = "../msie.css";
-        else if (browser.getBrowserType() == BrowserType.KONQUEROR)
-            stylesheet = "../konqueror.css";
-
-        component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(stylesheet)));
+        // determine the stylesheet to use
+        BrowserType cssBrowserType = component.getSession().getUserAgent().getBrowserType();
+        if (providedBrowserCss.contains(cssBrowserType) == false)
+            cssBrowserType = BrowserType.GECKO; // fallback to gecko CSS
+        String cssURL = "../" + cssBrowserType.getShortName() + ".css";
+        component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(cssURL)));
 
         component.addScriptListener(FORM_SCRIPT);
         component.addScriptListener(FOCUS_SCRIPT);
@@ -124,7 +134,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         component.clearHeaders();
     }
 
-//--- code from common area in template.
+    //--- code from common area in template.
     /*
     public static final JavaScriptListener DATE_CHOOSER_SCRIPT_LOADER =
     new JavaScriptListener("", "", loadScript("org/wings/plaf/css/DateChooser.js"));
@@ -161,12 +171,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     }
 
 
-//--- end code from common area in template.
-
-
-    public void write(final Device device,
-                      final SComponent _c)
-            throws IOException {
+    public void write(final Device device,                      final SComponent _c)            throws IOException {
         if (!_c.isVisible()) return;
         _c.fireRenderEvent(SComponent.START_RENDERING);
         final SFrame component = (SFrame) _c;
@@ -187,7 +192,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
                 device.print("<!-- IE6 quirks mode switch -->\n");
             }
         }
-        
+
         if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
             device.print("<?xml version=\"1.0\" encoding=\"");
             Utils.write(device, encoding);
@@ -269,8 +274,6 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         _c.fireRenderEvent(SComponent.DONE_RENDERING);
     }
 
-    //--- setters and getters for the properties.
-
     public String getDocumentType() {
         return documentType;
     }
@@ -280,7 +283,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     }
 
     /**
-     * @return The current rendered DOCTYPE of this document. {@link #DEFAULT_DOCTYPE}
+     * @return The current rendered DOCTYPE of this document. {@link #STRICT_DOCTYPE}
      */
     public Boolean getRenderXmlDeclaration() {
         return renderXmlDeclaration;

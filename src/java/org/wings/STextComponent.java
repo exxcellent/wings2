@@ -105,7 +105,6 @@ public abstract class STextComponent
         processKeyEvents(values);
 
         if (isEditable() && isEnabled()) {
-            // System.out.println("getPerformed " + action + " : " + value);
             if (values[0] != null)
                 values[0] = values[0].trim();
             if (getText() == null || !getText().equals(values[0])) {

@@ -78,7 +78,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
         device.print("<table id=\"");
         Utils.write(device, popupId);
 
-        device.print("\" class=\"pdmenu\" style=\"display:none\">");
+        device.print("\" class=\"SMenuPopup\" style=\"display:none\">");
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
             SComponent menuItem = menu.getMenuComponent(i);
 
@@ -110,7 +110,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
 
                         device.print(" class=\"menu\"");
                     } else {
-                        device.print(" class=\"disabledmenu\"");
+                        device.print(" class=\"SMenuDisabledMenu\"");
                     }
                 } else {
                     if (menuItem.isEnabled()) {
@@ -121,9 +121,9 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
                             device.print("'\"");
                         }
 
-                        device.print(" class=\"menuitem\"");
+                        device.print(" class=\"SMenuPopupItem\"");
                     } else {
-                        device.print(" class=\"disabledmenuitem\"");
+                        device.print(" class=\"SMenuDisabledMenuitem\"");
                     }
                 }
 

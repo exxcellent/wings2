@@ -669,7 +669,7 @@ public abstract class SComponent
      */
     protected final void reloadIfChange(Object oldVal, Object newVal) {
         if (!((oldVal == newVal) || (oldVal != null && oldVal.equals(newVal)))) {
-            //System.err.println(getClass().getName() + ": reload. old:" + oldVal + "; new: "+ newVal);
+            //System.err.println(getClass().getDescription() + ": reload. old:" + oldVal + "; new: "+ newVal);
             reload();
         }
     }
@@ -836,7 +836,7 @@ public abstract class SComponent
                     Method getter = descriptors[i].getReadMethod();
                     if (getter == null || getter.getName().startsWith("getParent"))
                         continue;
-                    // System.out.println("invoking " + this.getClass().getName()+"."+getter.getName());
+                    // System.out.println("invoking " + this.getClass().getDescription()+"."+getter.getDescription());
                     Object value = getter.invoke(this, null);
                     if (first)
                         first = false;

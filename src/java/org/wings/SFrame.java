@@ -317,9 +317,7 @@ public class SFrame
         if (values.length == 1) {
             String eventId = values[0];
             eventId = eventId.substring("focus_".length());
-            System.out.println("eventId = " + eventId);
             SComponent component = (SComponent) getDispatcher().getLowLevelEventListener(eventId);
-            System.out.println("component = " + component);
             component.requestFocus();
         }
     }

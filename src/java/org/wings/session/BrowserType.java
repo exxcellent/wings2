@@ -20,40 +20,44 @@ public class BrowserType {
     /**
      * Unknown browser type
      */
-    public static final BrowserType UNKNOWN = new BrowserType(0, "Unknown");
+    public static final BrowserType UNKNOWN = new BrowserType(0, "default", "Unknown");
 
     /**
      * Gecko based browser type.
      */
-    public static final BrowserType GECKO = new BrowserType(1, "Gecko");
+    public static final BrowserType GECKO = new BrowserType(1, "gecko", "Gecko");
 
     /**
      * Old mozilla browser type.
      */
-    public static final BrowserType MOZILLA = new BrowserType(2, "Mozilla (non-Gecko)");
+    public static final BrowserType MOZILLA = new BrowserType(2, "mozilla", "Mozilla (non-Gecko)");
 
     /**
      * Internet Explorere variant.
      */
-    public static final BrowserType IE = new BrowserType(3, "Internet Exploder");
+    public static final BrowserType IE = new BrowserType(3, "msie", "Internet Exploder");
 
     /**
      * Opera browser type on Linux/KDE.
      */
-    public static final BrowserType OPERA = new BrowserType(4, "Opera");
+    public static final BrowserType OPERA = new BrowserType(4, "opera", "Opera");
 
     /**
      * Konqueror browser type on Linux/KDE.
      */
-    public static final BrowserType KONQUEROR = new BrowserType(5, "Konqueror");
+    public static final BrowserType KONQUEROR = new BrowserType(5, "konqueror", "Konqueror");
 
     private int id;
-    private String name;
+    private String description;
+    private String shortName;
 
-    /** Typesafe enum constructor. */
-    private BrowserType(int id, String name) {
+    /**
+     * Typesafe enum constructor.
+     */
+    private BrowserType(int id, String shortName, String description) {
         this.id = id;
-        this.name = name;
+        this.shortName = shortName;
+        this.description = description;
     }
 
     /**
@@ -66,11 +70,18 @@ public class BrowserType {
     /**
      * @return Clear-Text browserName of this browser type
      */
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @return Short name, used also to assemble i.e. css. file names
+     */
+    public String getShortName() {
+        return shortName;
     }
 
     public String toString() {
-        return getName();
+        return getDescription();
     }
 }

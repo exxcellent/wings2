@@ -2,50 +2,44 @@
    $Id$
    wings Default Style Sheet for IE Browser.
 
-   CURRENTLY NOT IN A WORKING STATE -- WE DEVEL ON GECKO!  
+   CURRENTLY NOT IN A WORKING STATE -- WE DEVEL ON GECKO!
+
+   Includes CSS definitions that are required for wings to work correctly.
+   - Please use additional user styles for visual application styling
+   - Please avoid generic/global css selectors and use the wings css classes in your selection path
 */
-html,body,textarea{ /* get rid of default scrollbars */
- overflow:auto;
+
+HTML,BODY,TEXTAREA {
+    overflow:auto;     /* get rid of default scrollbars */
 }
-BODY {
-    background: #dedede;
+
+/* BODY {
     position: relative;
     margin: 0px;
     font-family: sans-serif;
     font-style: normal;
     font-size: 14px;
     height: 100%;
-}
+} */
 
-div, form {
+/*DIV, FORM {
     font-size: 14px;
     padding: 0px;
     margin: 0px;
-}
+}*/
 
-A:link, A:visited {
-   color: #000066;
-   text-decoration: none;
-}
-
-A:active {
-   color: #0000FF;
-   text-decoration: none;
-}
-
-HR { 
-   margin-top: 0px;
-   margin-bottom: 0px; 
-}
-
+/* TODO -- move this too renderer? */
 IMG {
-    border: none !important;
-    vertical-align: middle;
+    border: none !important;     /* This is needed to avoid those ugly borders around linked imgs's */
+/* padding: 0px;
+    margin: 0px;
+    vertical-align: middle; */
 }
 
-TH, TD {
-    font-size: 14px;
-}
+/* HR {
+     margin-top: 0;
+     margin-bottom: 0
+} */
 
 .SLabel {
    font-family: sans-serif;
@@ -96,12 +90,7 @@ ul.STree li {
 ul.STree li * {
 	white-space: nowrap;
 }
-/*
-ul.STree li[selected="true"] {
-    background-color: #f6decc;
-    border: 1px dotted black;
-}
-*/
+
 ul.STree li button {
     border: none;
     background-color: inherit;
@@ -168,7 +157,7 @@ ul.STree li div.SSubTree {
 	background-color: #7777CC;
 }
 
-.disabledmenu {
+.SMenuDisabledMenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: darkgray;
@@ -179,7 +168,7 @@ ul.STree li div.SSubTree {
 	white-space: nowrap;
 }
 
-.amenu {
+.SMenuJSmenu {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
   	color: #ffffff;
@@ -190,7 +179,7 @@ ul.STree li div.SSubTree {
 	white-space: nowrap;
 }
 
-.pdmenu {
+.SMenuPopup {
 	background-color: #CCCCCC;
 	border-style: solid;
 	border-width: 2px;
@@ -222,7 +211,7 @@ div.pdmenu  div.menu img, div.pdmenu div.disabledmenu img {
 	margin: 0px;
 }
 
-.disabledmenuitem {
+.SMenuDisabledMenuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: darkgray;
@@ -233,7 +222,7 @@ div.pdmenu  div.menu img, div.pdmenu div.disabledmenu img {
 	margin: 0px;
 }
 
-.amenuitem {
+.SMenuJSmenuitem {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
   	color: #ffffff;
@@ -356,7 +345,6 @@ th.right {
 th.bottom {
     text-align: left;
 }
-
 
 
 div.SPanel, div.SContainer {

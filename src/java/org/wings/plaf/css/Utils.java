@@ -511,7 +511,6 @@ public final class Utils implements SConstants {
 
         write(d, "hello test&nbsp;\n");
         write(d, "<html>hallo test&nbsp;\n");
-        System.out.println(d.toString());
 
         d = new org.wings.io.NullDevice();
         long start = System.currentTimeMillis();

@@ -32,32 +32,30 @@ public class GridLayoutCG extends AbstractLayoutCG
      */
     public void write(Device d, SLayoutManager l)
             throws IOException {
-        SGridLayout layout = (SGridLayout) l;
-        List components = layout.getComponents();
-        boolean header = layout.getRenderFirstLineAsHeader();
-
+        final SGridLayout layout = (SGridLayout) l;
+        final List components = layout.getComponents();
+        final int rows = layout.getRows();
         int cols = layout.getColumns();
-        int rows = layout.getRows();
-
-        printLayouterTableHeader(d, "SGridLayout", layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout);
-
         if (cols <= 0)
             cols = components.size() / rows;
 
-        boolean firstRow = true;
+        printLayouterTableHeader(d, "SGridLayout", layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout);
 
+        boolean firstRow = true;
         int col = 0;
         for (Iterator iter = components.iterator(); iter.hasNext();) {
             if (col == 0)
                 d.print("<tr>");
             else if (col % cols == 0 && iter.hasNext()) {
-                d.print("</tr>\n<tr>");
+                d.print("</tr>");
+                Utils.printNewline(d, layout.getContainer());
+                d.print("<tr>");
                 firstRow = false;
             }
 
             SComponent c = (SComponent) iter.next();
 
-            if (firstRow && header)
+            if (firstRow && layout.getRenderFirstLineAsHeader())
                 d.print("<th");
             else
                 d.print("<td");
@@ -68,15 +66,17 @@ public class GridLayoutCG extends AbstractLayoutCG
 
             c.write(d); // Render component
 
-            if (firstRow && header)
+            if (firstRow && layout.getRenderFirstLineAsHeader())
                 d.print("</th>");
             else
                 d.print("</td>");
 
             col++;
 
-            if (!iter.hasNext())
-                d.print("</tr>\n");
+            if (!iter.hasNext()){
+                d.print("</tr>");
+                Utils.printNewline(d, layout.getContainer());
+            }
         }
 
         printLayouterTableFooter(d, "SGridLayout", layout);

@@ -134,7 +134,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         // Special handling: Render title of STitledBorder
         if (component.getBorder() instanceof STitledBorder) {
             STitledBorder titledBorder = (STitledBorder) component.getBorder();
-            device.print("<div class=\"legend\" style=\"");
+            device.print("<div class=\"STitledBorderLegend\" style=\"");
             titledBorder.getTitleAttributes().write(device);
             device.print("\">");
             device.print(titledBorder.getTitle());

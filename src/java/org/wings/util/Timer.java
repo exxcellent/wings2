@@ -13,6 +13,9 @@
  */
 package org.wings.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -31,6 +34,8 @@ import java.util.Vector;
  */
 public final class Timer
         implements Serializable {
+    private final static Log log = LogFactory.getLog(Timer.class);
+
     /*
      * Die Verzoegerung, bis das erste mal ein Impuls (ActionEvent)
      * kommt.
@@ -304,8 +309,7 @@ public final class Timer
         if (eventQueued == false) {
             eventQueued = true;
             if (logTimers) {
-                // TO CHANGE, adapt it to as logging
-                System.out.println("Timer ringing: " + Timer.this);
+                log.debug("Timer ringing: " + Timer.this);
             }
             if (eventQueued) {
                 fireActionPerformed(new ActionEvent(Timer.this, 0, this.actionCommand));

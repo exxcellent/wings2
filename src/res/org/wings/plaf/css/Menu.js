@@ -99,7 +99,7 @@ Menu.prototype.toggle = function(parentId, hookId, menuId) {
 Menu.prototype.show = function() {
     this.applyPosition();
     setMenuVisible(this.element, true);
-    setStyleClass(this.hookElement, "smenu");
+    setStyleClass(this.hookElement, "SMenu");
 
     for (var id in MENUS) {
         var menuItem = MENUS[id];
@@ -107,7 +107,7 @@ Menu.prototype.show = function() {
             setStyleClass(menuItem.hookElement, "menu");
             setMenuVisible(menuItem.element, false);
         } else {
-            setStyleClass(menuItem.hookElement, "smenu");
+            setStyleClass(menuItem.hookElement, "SMenu");
             setMenuVisible(menuItem.element, true);
         }
     }
@@ -199,17 +199,17 @@ Menu.prototype.setMouseMotion = function(element) {
 }
 
 Menu.prototype.setMouseMotionStyles = function(element) {
-    if ( element.className!="disabledmenu" &&
-         element.className!="disabledmenuitem" ) {
+    if ( element.className!="SMenuDisabledMenu" &&
+         element.className!="SMenuDisabledMenuitem" ) {
         element.onmouseover = function(event) { Menu.prototype.setMouseOverStyle(element); };
         element.onmouseout = function(event) { Menu.prototype.setMouseOutStyle(element); };
     }
 }
 
 Menu.prototype.setMouseOutStyle = function(element) {
-    if ( element.className!="smenu" ) {
-        if ( element.className == "amenuitem" ) {
-            setStyleClass(element, 'menuitem');
+    if ( element.className!="SMenu" ) {
+        if ( element.className == "SMenuJSmenuitem" ) {
+            setStyleClass(element, 'SMenuPopupItem');
         } else {
             setStyleClass(element, 'menu');
         }
@@ -218,11 +218,11 @@ Menu.prototype.setMouseOutStyle = function(element) {
 
 
 Menu.prototype.setMouseOverStyle = function(element) {
-    if ( element.className!="smenu" ) {
-        if ( element.className == "menuitem" ) {
-            setStyleClass(element, 'amenuitem');
+    if ( element.className!="SMenu" ) {
+        if ( element.className == "SMenuPopupItem" ) {
+            setStyleClass(element, 'SMenuJSmenuitem');
         } else {
-            setStyleClass(element, 'amenu');
+            setStyleClass(element, 'SMenuJSmenu');
         }
     }
 }
