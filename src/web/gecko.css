@@ -564,14 +564,16 @@ div.SMenuBar_js .SMenuDisabledMenu {
 	white-space: nowrap;
 }
 
-div.SMenuBar_js .SMenuJSmenu {
+div.SMenuBar_js .SMenuJSmenu,
+div.SPopupMenu .SMenuJSmenu {
   	color: #fff;
 	background-color: #66b;
 	white-space: nowrap;
 }
 
 
-div.SMenuBar_js .SMenuPopup {
+div.SMenuBar_js .SMenuPopup,
+div.SPopupMenu .SMenuPopup {
 	background-color: #eee;
 	border-style: solid;
 	border-width: 2px;
@@ -581,32 +583,38 @@ div.SMenuBar_js .SMenuPopup {
 	padding: 2px 2px 2px 0px;
 }
 
-div.SMenuBar_js div.SMenuPopup > div {
+div.SMenuBar_js div.SMenuPopup > div,
+div.SPopupMenu div.SMenuPopup > div {
 	padding: 0px 10px 0px 0px;
 }
 
-div.SMenuBar_js div.SMenuPopup > div > img {
+div.SMenuBar_js div.SMenuPopup > div > img,
+div.SPopupMenu div.SMenuPopup > div > img {
     position: absolute;
     right: 0px;
 }
 
-div.SMenuBar_js .SMenuPopupItem {
+div.SMenuBar_js .SMenuPopupItem,
+div.SPopupMenu .SMenuPopupItem {
 	color: #004;
 	background-color: #eee;
 	white-space: nowrap;
 }
 
-div.SMenuBar_js .SMenuDisabledMenuitem {
+div.SMenuBar_js .SMenuDisabledMenuitem,
+div.SPopupMenu .SMenuDisabledMenuitem {
 	color: gray;
 	background-color: #eee;
 	white-space: nowrap;
 }
 
-div.SMenuBar_js .SMenuJSmenuitem {
+div.SMenuBar_js .SMenuJSmenuitem,
+div.SPopupMenu .SMenuJSmenuitem {
 	color: #fff;
 	background-color: #66b;
 	white-space: nowrap;
 }
+
 /* END JS Menu */
 
 /* CSS Menus - Horizontal CSS Menu with Dropdown and Popout Menus - 20050131 */

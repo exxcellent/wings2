@@ -260,6 +260,10 @@ public abstract class SComponent
         }
         return popupMenu;
     }
+    
+    public boolean hasComponentPopupMenu() {
+        return popupMenu != null;
+    }
 
     public RequestURL getRequestURL() {
         SFrame p = getParentFrame();

@@ -16,7 +16,10 @@ package org.wings;
 import org.wings.plaf.PopupMenuCG;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
+
+import javax.swing.event.EventListenerList;
 
 /**
  * @author hengels
@@ -93,4 +96,5 @@ public class SPopupMenu
     public void setCG(PopupMenuCG cg) {
         super.setCG(cg);
     }
+
 }

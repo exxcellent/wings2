@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.plaf.MenuBarCG {
+public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.wings.plaf.MenuBarCG {
 
 
     public void installCG(final SComponent comp) {
@@ -46,7 +46,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
         String popupId = componentId + "_pop";
 
 
-        device.print("<table id=\"");
+        device.print("<div id=\"");
         Utils.write(device, popupId);
 
         device.print("\" class=\"SMenuPopup\" style=\"display:none\">");
@@ -58,7 +58,7 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
                 String itemHookId = itemComponentId + "_hook";
 
 
-                device.print("<tr id=\"");
+                device.print("<div id=\"");
                 Utils.write(device, itemHookId);
 
                 device.print("\"");
@@ -98,9 +98,9 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
                     }
                 }
 
-                device.print("><td>");
+                device.print(">");
                 menu.getMenuComponent(i).write(device);
-                device.print("</td><td>");
+                //device.print("</td><td>");
 
                 if (menu.getMenuComponent(i) instanceof SMenu) {
                     device.print("<img border=\"0\" align=\"middle\" src=\"");
@@ -112,11 +112,11 @@ public class PopupMenuCG extends MenuItemCG implements SConstants, org.wings.pla
                     device.print("/>");
                 }
 
-                device.print("</td></tr>");
+                device.print("</div>");
             }
         }
 
-        device.print("</table>");
+        device.print("</div>");
         for (int i = 0; i < menu.getMenuComponentCount(); i++) {
             SComponent menuItem = menu.getMenuComponent(i);
 

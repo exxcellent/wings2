@@ -16,6 +16,7 @@ package org.wings.script;
 import org.wings.SComponent;
 import org.wings.SContainer;
 import org.wings.SFrame;
+import org.wings.SPopupMenu;
 import org.wings.io.Device;
 import org.wings.resource.DynamicResource;
 import org.wings.util.ComponentVisitor;
@@ -82,6 +83,10 @@ public class DynamicScriptResource extends DynamicResource {
 
         public void visit(SComponent component) throws IOException {
             writeListenersFrom(component);
+            // Popup Menu needs Javascript, but is not in the component tree
+            if (component.hasComponentPopupMenu()) {
+                writeListenersFrom(component.getComponentPopupMenu());
+            }
         }
 
         public void visit(SContainer container) throws Exception {
