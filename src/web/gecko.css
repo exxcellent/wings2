@@ -428,7 +428,14 @@ div.SPanel, div.SContainer {
     height: 100%;
 }
 
-table.SBorderLayout {
+table.SBorderLayout
+/* the layouts should all have 100% width & height */
+/*,
+table.SBoxLayout,
+table.SGridLayout,
+table.SGridBagLayout,
+table.SFlowLayout
+*/ {
     width: 100%;
     height: 100%;
 }
