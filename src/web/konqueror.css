@@ -140,7 +140,7 @@ ul.STree > li {
 ul.STree > li * {
 	white-space: nowrap;
 }
-ul.STree > li[selected="true"] {
+ul.STree > li[selected="true"] > table {
     background-color: #f6decc;
     border: 1px dotted black;
 }
