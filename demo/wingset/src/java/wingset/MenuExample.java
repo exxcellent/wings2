@@ -14,16 +14,15 @@
 
 package wingset;
 
+import org.wings.*;
+
+import javax.swing.*;
+import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.tree.TreeNode;
-import javax.swing.DefaultComboBoxModel;
-import org.wings.*;
 
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

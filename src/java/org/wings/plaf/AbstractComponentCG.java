@@ -17,6 +17,7 @@ package org.wings.plaf;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
+import org.wings.SPopupMenu;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
@@ -99,6 +100,20 @@ public abstract class AbstractComponentCG
                 .print(toolTip)
                 .print("', 'predefined', 'default'));");
 
+
+        SPopupMenu menu = component.getComponentPopupMenu();
+        if (menu != null) {
+            String componentId = menu.getComponentId();
+            String popupId = componentId + "_pop";
+            String hookId = component.getComponentId();
+
+            device.print("\" onclick=\"Menu.prototype.toggle(null,'");
+            org.wings.plaf.Utils.write(device, hookId);
+            device.print("','");
+            org.wings.plaf.Utils.write(device, popupId);
+            device.print("')");
+        }
+
         device
             .print("\">\n");
 
@@ -121,6 +136,15 @@ public abstract class AbstractComponentCG
 
     protected void writePostfix(Device device, SComponent component) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
+
+        boolean backup = component.getInheritsPopupMenu();
+        component.setInheritsPopupMenu(false);
+
+        if (component.getComponentPopupMenu() != null)
+            component.getComponentPopupMenu().write(device);
+
+        component.setInheritsPopupMenu(backup);
+
         device
             .print("</div><!-- ")
             .print(component.getComponentId())

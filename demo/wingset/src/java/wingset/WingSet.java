@@ -188,6 +188,7 @@ public class WingSet
         tab.add(new ProgressBarExample(), "ProgressBar");
         tab.add(new MemUsageExample(), "Memory Usage");
         tab.add(new JavaScriptListenerExample(), "Script Listener");
+        tab.add(new PopupExample(), "Popup Menu");
 
         contentPane.add(tab, "WingSetApp");
         contentPane.add(timeMeasure, "TimeLabel");

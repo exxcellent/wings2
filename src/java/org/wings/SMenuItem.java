@@ -17,15 +17,13 @@ package org.wings;
 import org.wings.plaf.MenuBarCG;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SMenuItem extends SButton
 {
-    protected SMenu menuParent;
+    protected SComponent menuParent;
 
     public SMenuItem() {
     }
@@ -42,12 +40,12 @@ public class SMenuItem extends SButton
         super(text, icon);
     }
 
-    final void setParentMenu(SMenu menuParent) {
+    final void setParentMenu(SComponent menuParent) {
         this.menuParent = menuParent;
         setParentFrame(menuParent!=null ? menuParent.getParentFrame() : null);
     }
 
-    public SMenu getParentMenu() {
+    public SComponent getParentMenu() {
         return this.menuParent;
     }
 

@@ -128,6 +128,8 @@ public abstract class SComponent
     private Boolean useNamedEvents;
 
     private boolean showAsFormComponent = true;
+    private SPopupMenu popupMenu;
+    private boolean inheritsPopupMenu;
 
     /**
      * Default constructor.cript
@@ -186,7 +188,46 @@ public abstract class SComponent
             unregister();
             parentFrame = f;
             register();
+            if (this.popupMenu != null)
+                popupMenu.setParentFrame(parentFrame);
         }
+    }
+
+    public void setInheritsPopupMenu(boolean inheritsPopupMenu) {
+        this.inheritsPopupMenu = inheritsPopupMenu;
+    }
+
+    public boolean getInheritsPopupMenu() {
+        return inheritsPopupMenu;
+    }
+
+    public void setComponentPopupMenu(SPopupMenu popupMenu) {
+        if (this.popupMenu != null)
+            popupMenu.setParentFrame(null);
+        this.popupMenu = popupMenu;
+        if (this.popupMenu != null)
+            popupMenu.setParentFrame(getParentFrame());
+    }
+
+    public SPopupMenu getComponentPopupMenu() {
+        if(!getInheritsPopupMenu())
+            return popupMenu;
+
+        if(popupMenu == null) {
+            // Search parents for its popup
+            SContainer parent = getParent();
+            while (parent != null) {
+                if(parent instanceof SComponent) {
+                    return ((SComponent)parent).getComponentPopupMenu();
+                }
+                if(parent instanceof SFrame)
+                    break;
+
+                parent = parent.getParent();
+            }
+            return null;
+        }
+        return popupMenu;
     }
 
     public RequestURL getRequestURL() {

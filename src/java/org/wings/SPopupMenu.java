@@ -1,49 +1,21 @@
 /*
- * $Id$
- * (c) Copyright 2000 wingS development team.
- *
- * This file is part of wingS (http://wings.mercatis.de).
- *
- * wingS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- *
- * Please see COPYING for the complete licence.
+ * Copyright (c) 2004 Your Corporation. All Rights Reserved.
  */
-
 package org.wings;
 
-import org.wings.plaf.MenuBarCG;
+import org.wings.plaf.PopupMenuCG;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
- * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
+ * @author hengels
  * @version $Revision$
  */
-public class SMenu extends SMenuItem {
-    private boolean popupMenuVisible = false;
+public class SPopupMenu
+    extends SComponent
+{
     protected final List menuItems = new ArrayList();
-
-    public SMenu(String text) {
-        super(text);
-    }
-
-    public SMenu() {
-        super();
-    }
-
-    public SMenu(SIcon i) {
-        super(i);
-    }
-
-    public SMenu(String text, SIcon icon) {
-        super(text, icon);
-    }
-
 
     /**
      * Add a menu item to this menu.
@@ -109,34 +81,7 @@ public class SMenu extends SMenuItem {
         comp.setParentFrame(null);
     }
 
-    public void setCG(MenuBarCG cg) {
+    public void setCG(PopupMenuCG cg) {
         super.setCG(cg);
     }
-    
-    /**
-      * Sets the visibility of the menu's popup.
-      * If the menu is not enabled, this method will have no effect.
-      * @param b a boolean value -- true to make the menu visible, false to hide it
-      */
-    public void setPopupMenuVisible(boolean b) {
-        if (!isEnabled())
-            return;
-        popupMenuVisible = b;
-    }
-    
-    /**
-      * Returns true if the menu's popup window is visible.
-      * @return true if the menu is visible, else false.
-      */
-    public boolean isPopupMenuVisible() {
-        return popupMenuVisible;
-    }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
