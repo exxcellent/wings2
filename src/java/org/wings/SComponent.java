@@ -30,8 +30,10 @@ import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
 import org.wings.util.ComponentVisitor;
 
+import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.beans.*;
 import java.io.IOException;
 import java.io.Serializable;
@@ -48,8 +50,8 @@ import java.util.logging.Logger;
  * @version $Revision$
  */
 public abstract class SComponent
-    implements SConstants, Cloneable, Serializable, Renderable {
-
+    implements SConstants, Cloneable, Serializable, Renderable
+{
     public static final String SELECTOR_GLOBAL = "";
 
     public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
@@ -113,7 +115,6 @@ public abstract class SComponent
     /** Preferred size of component in pixel. */
     protected SDimension preferredSize;
 
-
     /**
      * This is for performance optimizations. With this flag is set, property change
      * events are generated and so every property setter method has to test if a property
@@ -130,6 +131,9 @@ public abstract class SComponent
     private boolean showAsFormComponent = true;
     private SPopupMenu popupMenu;
     private boolean inheritsPopupMenu;
+
+    private InputMap inputMap;
+    private ActionMap actionMap;
 
     /**
      * Default constructor.cript
@@ -1562,10 +1566,10 @@ public abstract class SComponent
                         case DONE_RENDERING:
                             ((SRenderListener)listeners[i + 1]).doneRendering(renderEvent);
                             break;
-                    } // end of switch ()
+                    }
                 }
             }
-        } // end of if ()
+        }
     }
 
     /**
@@ -1615,12 +1619,35 @@ public abstract class SComponent
     public boolean getShowAsFormComponent() {
         return showAsFormComponent && getResidesInForm();
     }
-}
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+    public void setActionMap(ActionMap actionMap) {
+        this.actionMap = actionMap;
+    }
+
+    public ActionMap getActionMap() {
+        if (actionMap == null)
+            actionMap = new ActionMap();
+        return actionMap;
+    }
+
+    public void setInputMap(InputMap inputMap) {
+        this.inputMap = inputMap;
+    }
+
+    public InputMap getInputMap() {
+        return inputMap;
+    }
+
+    protected void processLowLevelEvent(String name, String[] values) {
+        if (actionMap == null)
+            return;
+
+        for (int i = 0; i < values.length; i++) {
+            String value = values[i];
+            Action action = actionMap.get(value);
+            if (action != null)
+                action.actionPerformed(new ActionEvent(this, 0, value));
+        }
+        System.out.println(name + " " + Arrays.asList(values));
+    }
+}

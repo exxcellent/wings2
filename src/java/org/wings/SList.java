@@ -901,13 +901,8 @@ public class SList
      * @param value the value
      */
     public void processLowLevelEvent(String action, String[] values) {
-        // is it for me ?
-        /*
-        if ( !action.startsWith(getLowLevelEventId()) ) {
-            return; 
-        }
-        */
-        
+        super.processLowLevelEvent(action, values);
+
         // delay events...
         getSelectionModel().setDelayEvents(true);
 

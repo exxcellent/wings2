@@ -20,11 +20,14 @@ import org.wings.*;
 import org.wings.session.WingsStatistics;
 import org.wings.util.TimeMeasure;
 
+import javax.swing.*;
 import java.io.FileWriter;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 
 /**
  * TODO: documentation
@@ -189,6 +192,26 @@ public class WingSet
         tab.add(new MemUsageExample(), "Memory Usage");
         tab.add(new JavaScriptListenerExample(), "Script Listener");
         tab.add(new PopupExample(), "Popup Menu");
+        tab.add(new KeyboardBindingsExample(), "Keyboard Bindings");
+
+        InputMap inputMap = new InputMap();
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK), "previous");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK), "next");
+        tab.setInputMap(inputMap);
+
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand()))
+                    tab.setSelectedIndex(tab.getSelectedIndex() - 1);
+                else if (tab.getSelectedIndex() < tab.getTabCount() -1 && "next".equals(e.getActionCommand()))
+                    tab.setSelectedIndex(tab.getSelectedIndex() + 1);
+            }
+        };
+
+        ActionMap actionMap = new ActionMap();
+        actionMap.put("previous", action);
+        actionMap.put("next", action);
+        tab.setActionMap(actionMap);
 
         contentPane.add(tab, "WingSetApp");
         contentPane.add(timeMeasure, "TimeLabel");

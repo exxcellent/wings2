@@ -569,6 +569,8 @@ public class SComboBox
     }
 
     public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+
         delayEvent = true;
 
         int selectedIndex = -1;

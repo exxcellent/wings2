@@ -211,7 +211,9 @@ public class SDialog extends SForm {
     }
 
     // LowLevelEventListener interface. Handle own events.
-    public void processLowLevelEvent(String name, String[] values) {
+    public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+
         // is this a window event?
         try {
             switch (new Integer(values[0]).intValue()) {

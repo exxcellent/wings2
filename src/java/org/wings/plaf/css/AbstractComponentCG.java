@@ -14,15 +14,13 @@
 
 package org.wings.plaf.css;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SPopupMenu;
-import org.wings.plaf.ComponentCG;
+import org.wings.*;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
+import org.wings.plaf.ComponentCG;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Logger;
@@ -82,6 +80,12 @@ public abstract class AbstractComponentCG
             .print("\" class=\"")
             .print(component.getStyle());
 
+        if (component instanceof LowLevelEventListener) {
+            LowLevelEventListener lowLevelEventListener = (LowLevelEventListener)component;
+            device.print("\" event=\"")
+                .print(lowLevelEventListener.getEncodedLowLevelEventId());
+        }
+
         final SDimension dim = component.getPreferredSize();
         if (dim != null) {
             device.print("\" style=\"");
@@ -103,6 +107,22 @@ public abstract class AbstractComponentCG
                 .print(toolTip)
                 .print("', 'predefined', 'default'));");
 
+        InputMap inputMap = component.getInputMap();
+        if (inputMap != null && !(inputMap instanceof VersionedInputMap)) {
+            System.out.println("inputMap = " + inputMap);
+            inputMap = new VersionedInputMap(inputMap);
+            component.setInputMap(inputMap);
+        }
+
+        if (inputMap != null) {
+            VersionedInputMap versionedInputMap = (VersionedInputMap)inputMap;
+            Integer inputMapVersion = (Integer)component.getClientProperty("inputMapVersion");
+            if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
+                System.out.println("inputMapVersion = " + inputMapVersion);
+                InputMapScriptListener.install(component);
+                component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
+            }
+        }
 
         SPopupMenu menu = component.getComponentPopupMenu();
         if (menu != null) {

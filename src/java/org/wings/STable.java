@@ -223,6 +223,8 @@ public class STable
     }
 
     public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+
         // delay events...
         getSelectionModel().setDelayEvents(true);
         getSelectionModel().setValueIsAdjusting(true);

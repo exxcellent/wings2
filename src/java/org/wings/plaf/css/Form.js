@@ -12,9 +12,16 @@ function getTarget(event) {
     return event.target;
 }
 
-function submitForm(event, eventName, eventValue) {
+function preventDefault(event) {
+  if (event.preventDefault)
+    event.preventDefault();
+}
+
+function sendEvent(event, eventValue) {
     event = getEvent(event);
     var form = getParentByTagName(getTarget(event), "FORM");
+    var div = getParentByTagName(getTarget(event), "DIV");
+    var eventName = div.getAttribute("event");
 
     if ( form != null ) {
         var eventNode = document.createElement("input");
@@ -23,8 +30,9 @@ function submitForm(event, eventName, eventValue) {
         eventNode.setAttribute('value', eventValue);
         form.appendChild(eventNode);
         form.submit();
-    } else {
-        alert("form not found for " + getTarget(event));
+    }
+    else {
+        document.location = "?" + eventName + "=" + eventValue;
     }
 
     return false;
@@ -32,7 +40,7 @@ function submitForm(event, eventName, eventValue) {
 
 function getParentByTagName(element, tag) {
   while (element != null) {
-    if (tag.toUpperCase() == element.tagName.toUpperCase())
+    if (tag == element.tagName)
       return element;
     element = element.parentNode;
   }

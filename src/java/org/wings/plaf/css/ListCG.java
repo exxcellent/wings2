@@ -25,13 +25,6 @@ public class ListCG
     private final static byte[] __select_1 = "</select>".getBytes();
     private final static byte[] __input_type_hid = "<input type=\"hidden\"".getBytes();
     private final static byte[] ___2 = "/>".getBytes();
-    private final static byte[] __li_1 = "<li>".getBytes();
-    private final static byte[] __a_href = "<a href=\"".getBytes();
-    private final static byte[] __a = "</a>".getBytes();
-    private final static byte[] __a_href_onclick = "<a href=\"\" onclick=\"return submitForm(event, '".getBytes();
-    private final static byte[] ___5 = "','".getBytes();
-    private final static byte[] ___6 = "')\">".getBytes();
-    private final static byte[] ___7 = "\">".getBytes();
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);

@@ -846,6 +846,8 @@ public class STree
 
 
     public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+
         getSelectionModel().setDelayEvents(true);
         for ( int i=0; i<values.length; i++ ) {
             if ( values[i].length()<2 ) continue; // incorrect format

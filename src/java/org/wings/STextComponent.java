@@ -124,6 +124,8 @@ public abstract class STextComponent
     }
 
     public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+
         if ( isEditable() && isEnabled() ) {
             // System.out.println("getPerformed " + action + " : " + value);
             if ( values[0] != null )

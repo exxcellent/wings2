@@ -29,6 +29,8 @@ public class TabbedPaneCG
             .print("<table cellspacing=\"0\"");
         if (childSelectorWorkaround)
             Utils.childSelectorWorkaround(device, style);
+
+        Utils.writeEvents(device, component);
         device
             .print(">");
 

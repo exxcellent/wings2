@@ -50,6 +50,8 @@ public class SToggleButton extends SAbstractButton {
     }
 
     public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+
         boolean origSelected = isSelected();
 
         if (getGroup() != null) {

@@ -788,10 +788,10 @@ public class STabbedPane
      * Tab was clicked.
      * @see LowLevelEventListener#processLowLevelEvent(String, String[])
      */
-    public void processLowLevelEvent(String name, String[] values)
-    {
+    public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
         /*
-        if ( !name.startsWith(getLowLevelEventId()) ) {
+        if ( !action.startsWith(getLowLevelEventId()) ) {
             return;
         }
         */

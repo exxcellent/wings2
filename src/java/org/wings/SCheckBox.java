@@ -75,6 +75,8 @@ public class SCheckBox extends SAbstractButton
     }
 
     public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+
         boolean requestSelection;
         if ( Arrays.asList(values).contains("hidden_reset") ) {
             // one hidden and one checked event from the form says select

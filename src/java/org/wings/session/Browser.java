@@ -347,11 +347,9 @@ public class Browser
                 lang = Opera.getParen(10);
             }
 
-            System.out.println("is gecko ??");
             /* detect gecko */
             if (Gecko_Engine.match(agent))
             {
-                System.out.println("yes !!");
                 HasGecko = true;
                 if (Gecko_Engine.getParen(2) != null)
                 	Name = Gecko_Engine.getParen(2);
@@ -419,7 +417,6 @@ public class Browser
                 }
             }
         }
-        System.out.println("agent = " + agent + " " + hasGecko());
     }
 
     public boolean supportsChildSelector() {

@@ -64,6 +64,8 @@ public class SRadioButton
     }
 
     public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+
         boolean origSelected = isSelected();
 
         if (getShowAsFormComponent()) {

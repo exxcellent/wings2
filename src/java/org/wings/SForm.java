@@ -443,7 +443,9 @@ public class SForm
         return addr;
     }
 
-    public void processLowLevelEvent(String name, String[] values) {
+    public void processLowLevelEvent(String action, String[] values) {
+        super.processLowLevelEvent(action, values);
+        
         // we have to wait, until all changed states of our form have
         // changed, before we anything can happen.
         SForm.addArmedComponent(this);

@@ -247,7 +247,8 @@ public abstract class SAbstractButton
     }
   
     public void processLowLevelEvent(String action, String[] values) {
-    
+        super.processLowLevelEvent(action, values);
+
         boolean requestSelection = isSelected();
     
         int eventCount = 0;
