@@ -15,8 +15,6 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.session.Browser;
-import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 
 import java.io.IOException;
@@ -38,9 +36,10 @@ public class CSSLookAndFeel
         StringBuffer propertiesLocation = new StringBuffer(PROPERTIES_LOCATION_START);
         propertiesLocation.append(PROPERTIES_LOCATION_END);
         // browser dependent properties
+        String browserType = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
         StringBuffer browserPropertiesLocation = new StringBuffer(PROPERTIES_LOCATION_START);
         browserPropertiesLocation.append(".");
-        browserPropertiesLocation.append(SessionManager.getSession().getUserAgent().getBrowserType().getShortName());
+        browserPropertiesLocation.append(browserType);
         browserPropertiesLocation.append(PROPERTIES_LOCATION_END);
 
         Properties properties = new Properties();
@@ -48,6 +47,7 @@ public class CSSLookAndFeel
         try {
             in = SessionManager.getSession().getServletContext().getResourceAsStream(propertiesLocation.toString());
             properties.load(in);
+            in.close();
         } catch (Exception e) {
             final String error = "Unable to open " + propertiesLocation.toString() + " due to "+e+".\nPlease check deployment!";
             log.fatal(error);
@@ -55,11 +55,18 @@ public class CSSLookAndFeel
         }
         try {
             in = SessionManager.getSession().getServletContext().getResourceAsStream(browserPropertiesLocation.toString());
-            properties.load(in);
-            in.close();
+            if (in != null) { 
+                // file is there, so we should be able to load it.
+                properties.load(in);
+                in.close();
+            } 
+            /* else file is not there, we are not overriding any property.
+             * So we don't need to do anything.
+             */
         } catch (Exception e) {
-            final String warn = "Unable to open " + browserPropertiesLocation.toString() + " due to "+e+".\nMaybe it's using the defaults!";
-            log.warn(warn);
+            final String error = "Unable to open " + browserPropertiesLocation.toString() + " due to "+e+".\nPlease check deployment!";
+            log.error(error);
+            throw new IOException(error);
         }
         return properties;
     }
