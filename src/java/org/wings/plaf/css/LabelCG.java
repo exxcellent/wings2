@@ -34,8 +34,9 @@ public class LabelCG extends AbstractComponentCG implements SConstants, org.wing
         final SIcon icon = label.isEnabled() ? label.getIcon() : label.getDisabledIcon();
         final int horizontalTextPosition = label.getHorizontalTextPosition();
         final int verticalTextPosition = label.getVerticalTextPosition();
-        if (icon == null && text != null)
+        if (icon == null && text != null) {
             writeText(device, text);
+        }
         else if (icon != null && text == null)
             writeIcon(device, icon);
         else if (icon != null && text != null) {
@@ -43,7 +44,6 @@ public class LabelCG extends AbstractComponentCG implements SConstants, org.wing
                 protected void text(Device d) throws IOException {
                     writeText(d, text);
                 }
-
                 protected void icon(Device d) throws IOException {
                     writeIcon(d, icon);
                 }

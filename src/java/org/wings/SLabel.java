@@ -28,7 +28,6 @@ public class SLabel
         extends SComponent
         implements SConstants {
     
-    protected static final boolean PRE_WRAP_ENABLED = true;
     /**
      * The text to be displayed
      */
@@ -45,7 +44,6 @@ public class SLabel
     private int horizontalTextPosition = RIGHT;
     private int iconTextGap = 1;
     private boolean imageAbsBottom = false;
-    private boolean preWrap;
 
     /**
      * Creates a new <code>SLabel</code> instance with the specified text
@@ -111,27 +109,9 @@ public class SLabel
      * @see SConstants
      */
     public SLabel(String text, SIcon icon, int horizontalAlignment) {
-        this(text, icon, LEFT, PRE_WRAP_ENABLED);
-    }
-
-    /**
-     * Creates a new <code>SLabel</code> instance with the specified icon
-     * and the specified text (alligned as specified).
-     *
-     * @param text                The text to be displayed by the label.
-     * @param icon                The image to be displayed by the label.
-     * @param horizontalAlignment One of the following constants defined in
-     *                            <code>SConstants</code>:
-     *                            <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
-     * @param preWrapText         should the text be preformatted, spaces not collapsed?
-     * @see SConstants
-     */
-    public SLabel(String text, SIcon icon, int horizontalAlignment, boolean preWrapText) {
         setText(text);
         setIcon(icon);
         setHorizontalAlignment(horizontalAlignment);
-        this.preWrap = preWrapText;
-        setPreWrapText(preWrapText);
     }
 
     /**
@@ -252,25 +232,6 @@ public class SLabel
 
     public void setCG(LabelCG cg) {
         super.setCG(cg);
-    }
-    /**
-     * @return Returns if the Label text should be considered preformatted.
-     */
-    public boolean isPreWrapText() {
-        return preWrap;
-    }
-    /**
-     * When set to true, keeps HTML from replacing characters, for example
-     * multiple spaces with just one. This is a Swing compatibility feature,
-     * so the default is set to true.
-     * @param isPreformatted Should the text be considered preformatted.
-     */
-    public void setPreWrapText(boolean isPreformatted) {
-        if ((this.preWrap = isPreformatted) == true) {
-            setAttribute("white-space", "pre-wrap");
-        } else {
-            setAttribute("white-space", "normal");
-        }
     }
 }
 

@@ -154,7 +154,6 @@ public class LabelExample extends WingSetPane {
 
         return b;
     }
-
 }
 
 

@@ -93,9 +93,7 @@ div.SLabel_Box {
 }
 
 div.SLabel {
-    /*font-size: 12px;
-    color: #000044;
-	white-space: nowrap;*/
+	white-space: pre;
 }
 
 pre.label {
