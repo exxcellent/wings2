@@ -20,7 +20,10 @@ import org.wings.script.ScriptListener;
 import org.wings.style.Style;
 
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -559,6 +562,40 @@ public final class Utils implements SConstants {
             currentComponent = currentComponent.getParent();
         }
         return d;
+    }
+
+    /** loads a script from disk through the classloader.
+     * @param path the path where the script can be found
+     * @return the script as a String
+     */
+    public static String loadScript(String path) {
+        InputStream in = null;
+        BufferedReader reader = null;
+
+        try {
+            in = MenuJsCG.class.getClassLoader().getResourceAsStream(path);
+            reader = new BufferedReader(new InputStreamReader(in));
+            StringBuffer buffer = new StringBuffer();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line).append("\n");
+            }
+            buffer.append("\n");
+
+            return buffer.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        } finally {
+            try {
+                in.close();
+            } catch (Exception ign) {
+            }
+            try {
+                reader.close();
+            } catch (Exception ign1) {
+            }
+        }
     }
 
 }

@@ -185,8 +185,10 @@ public class SNumberFormatter extends SAbstractFormatter {
             reader = new BufferedReader(new InputStreamReader(in));
             StringBuffer buffer = new StringBuffer();
             String line;
-            while ((line = reader.readLine()) != null)
+            while ((line = reader.readLine()) != null) {
                 buffer.append(line).append("\n");
+            }
+            buffer.append("\n");
 
             return buffer.toString();
         } catch (Exception e) {

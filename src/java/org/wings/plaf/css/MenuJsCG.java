@@ -38,36 +38,7 @@ public class MenuJsCG extends org.wings.plaf.css.MenuItemCG implements SConstant
     public static final SIcon RIGHT_ARROW = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
 
     public static final JavaScriptListener SCRIPT_LOADER =
-            new JavaScriptListener("", "", loadScript());
-
-    public static String loadScript() {
-        InputStream in = null;
-        BufferedReader reader = null;
-
-        try {
-            in = MenuJsCG.class.getClassLoader().getResourceAsStream("org/wings/plaf/css/Menu.js");
-            reader = new BufferedReader(new InputStreamReader(in));
-            StringBuffer buffer = new StringBuffer();
-            String line;
-            while ((line = reader.readLine()) != null)
-                buffer.append(line).append("\n");
-            buffer.append(line).append("\n");
-
-            return buffer.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        } finally {
-            try {
-                in.close();
-            } catch (Exception ign) {
-            }
-            try {
-                reader.close();
-            } catch (Exception ign1) {
-            }
-        }
-    }
+            new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Menu.js"));
 
     protected void writePopup(final Device device, SMenu menu)
             throws IOException {

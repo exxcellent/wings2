@@ -137,39 +137,16 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     //--- code from common area in template.
     /*
     public static final JavaScriptListener DATE_CHOOSER_SCRIPT_LOADER =
-    new JavaScriptListener("", "", loadScript("org/wings/plaf/css/DateChooser.js"));
+    new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/DateChooser.js"));
     */
     public static final JavaScriptListener FORM_SCRIPT =
-            new JavaScriptListener("", "", loadScript("org/wings/plaf/css/Form.js"));
+            new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Form.js"));
 
     public static final JavaScriptListener FOCUS_SCRIPT =
             new JavaScriptListener("onfocus", "storeFocus(event)");
 
     public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
             new JavaScriptListener("onscroll", "storeScrollPosition(event)");
-
-    public static String loadScript(String resource) {
-        InputStream in = null;
-        BufferedReader reader = null;
-        try {
-            in = FrameCG.class.getClassLoader().getResourceAsStream(resource);
-            reader = new BufferedReader(new InputStreamReader(in));
-            StringBuffer buffer = new StringBuffer();
-            String line;
-            while ((line = reader.readLine()) != null)
-                buffer.append(line).append("\n");
-            buffer.append("\n");
-
-            return buffer.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        } finally {
-            try { in.close(); } catch (Exception ign) {}
-            try { reader.close(); } catch (Exception ign) {}
-        }
-    }
-
 
     public void write(final Device device, final SComponent _c)
             throws IOException {
