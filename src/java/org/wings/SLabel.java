@@ -13,8 +13,6 @@
  */
 package org.wings;
 
-//import javax.swing.*;
-
 import org.wings.plaf.LabelCG;
 
 /**
