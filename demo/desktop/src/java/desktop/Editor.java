@@ -74,7 +74,9 @@ public class Editor
 
     public Editor() {
         menuBar = createMenu();
-        getContentPane().add(menuBar);
+        SContainer contentPane = getContentPane();
+        contentPane.setLayout(new SFlowDownLayout());
+        contentPane.add(menuBar);
         toolbar = createToolbar();
 
         textArea = new STextArea();
@@ -82,10 +84,10 @@ public class Editor
         textArea.setRows(24);
         textArea.setPreferredSize(new SDimension("100%", null));
         
-        SForm form = new SForm();
+        SForm form = new SForm(new SFlowDownLayout());
         form.add(toolbar);
         form.add(textArea);
-        getContentPane().add(form);
+        contentPane.add(form);
 
         saveResource = new EditorDynamicResource();
 

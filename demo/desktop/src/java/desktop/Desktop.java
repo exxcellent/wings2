@@ -46,6 +46,7 @@ public class Desktop
         frame.setAttribute("margin", "4px");
 
         SContainer contentPane = frame.getContentPane();
+        contentPane.setLayout(new SFlowDownLayout());
         editorNumber = 0;
         SMenuBar menuBar = createMenu();
         contentPane.add(menuBar);
