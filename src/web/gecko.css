@@ -376,7 +376,7 @@ div.STabbedPane > table > tbody > tr > th > *[disabled="true"] {
 div.STabbedPane > table > tbody > tr > td {
     border: 2px ridge black;
     width: 100%;
-    height: auto;
+    height: 100%;
 }
 
 div.STabbedPane > table > tbody > tr > th[placement="top"] {
