@@ -93,10 +93,10 @@ public class ProgressBarCG
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"");
-        Utils.write(device, (int) (width * component.getPercentComplete()));
+        device.print(String.valueOf(width * component.getPercentComplete()));
         device.print("\"");
         device.print(" height=\"");
-        Utils.write(device, height);
+        device.print(String.valueOf(height));
         device.print("\"></td>");
         device.print("<td");
         Utils.optAttribute(device, "bgcolor", component.getUnfilledColor());
@@ -104,10 +104,10 @@ public class ProgressBarCG
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"");
-        Utils.write(device, (int) (width * (1 - component.getPercentComplete())));
+        device.print(String.valueOf(width * (1 - component.getPercentComplete())));
         device.print("\"");
         device.print(" height=\"");
-        Utils.write(device, height);
+        device.print(String.valueOf(height));
         device.print("\">");
         device.print("</td>");
         device.print("</tr>");

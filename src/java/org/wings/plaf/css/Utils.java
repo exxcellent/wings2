@@ -41,8 +41,6 @@ public final class Utils implements SConstants {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'a', 'b',
         'c', 'd', 'e', 'f'};
-    // fast conversion: translates directly into bytes (good for OutputStreams)
-    private final static byte[] digits = "0123456789ABCDEF".getBytes();
 
     protected Utils() {
     }
@@ -446,7 +444,7 @@ public final class Utils implements SConstants {
             d.print(" ");
             d.print(attr);
             d.print("=\"");
-            write(d, value);
+            d.print(String.valueOf(value));
             d.print("\"");
         }
     }
@@ -467,58 +465,6 @@ public final class Utils implements SConstants {
     }
 
     /**
-     * writes the given integer to the device. Speed optimized; character
-     * conversion avoided.
-     */
-    public static void write(Device d, int num) throws IOException {
-        int i = 10;
-        byte[] out = new byte[10];
-
-        if (num < 0) {
-            d.print("-");
-            num = -(num);
-            if (num < 0) {
-                /*
-                 * still negative ? Then we had Integer.MIN_VALUE
-                 */
-                out[--i] = digits[-(Integer.MIN_VALUE % 10)];
-                num = -(Integer.MIN_VALUE / 10);
-            }
-        }
-        do {
-            out[--i] = digits[num % 10];
-            num /= 10;
-        } while (num > 0);
-        d.write(out, i, 10 - i);
-    }
-
-    /**
-     * writes the given long integer to the device. Speed optimized; character
-     * conversion avoided.
-     */
-    public static void write(Device d, long num) throws IOException {
-        int i = 20;
-        byte[] out = new byte[20];
-
-        if (num < 0) {
-            d.print("-");
-            num = -(num);
-            if (num < 0) {
-                /*
-                 * still negative ? Then we had Long.MIN_VALUE
-                 */
-                out[--i] = digits[-(int) (Long.MIN_VALUE % 10)];
-                num = -(Long.MIN_VALUE / 10);
-            }
-        }
-        do {
-            out[--i] = digits[(int) (num % 10)];
-            num /= 10;
-        } while (num > 0);
-        d.write(out, i, 20 - i);
-    }
-
-    /**
      * writes the given java.awt.Color to the device. Speed optimized;
      * character conversion avoided.
      */
@@ -527,7 +473,7 @@ public final class Utils implements SConstants {
         int rgb = (c == null) ? 0 : c.getRGB();
         int mask = 0xf00000;
         for (int bitPos = 20; bitPos >= 0; bitPos -= 4) {
-            d.print((char)digits[(rgb & mask) >>> bitPos]);
+            d.print(hexDigits[(rgb & mask) >>> bitPos]);
             mask >>>= 4;
         }
     }
@@ -548,8 +494,8 @@ public final class Utils implements SConstants {
         Device d = new org.wings.io.StringBufferDevice();
         write(d, c);
         quote(d, "\nThis is a <abc> string \"; foo & sons\nmoin", true);
-        write(d, -42);
-        write(d, Integer.MIN_VALUE);
+        d.print(String.valueOf(-42));
+        d.print(String.valueOf(Integer.MIN_VALUE));
 
         write(d, "hello test&nbsp;\n");
         write(d, "<html>hallo test&nbsp;\n");

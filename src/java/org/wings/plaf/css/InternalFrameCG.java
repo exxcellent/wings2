@@ -150,7 +150,7 @@ public class InternalFrameCG
         // write the actual content
         if (!frame.isIconified()) {
             device.print("<tr><td colspan=\"");
-            Utils.write(device, columns);
+            device.print(String.valueOf(columns));
             device.print("\">");
             Utils.renderContainer(device, frame);
             device.print("</td></tr>");

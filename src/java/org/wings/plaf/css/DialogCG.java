@@ -135,7 +135,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
 
         // write the actual content
         device.print("<tr><td colspan=\"");
-        Utils.write(device, columns);
+        device.print(String.valueOf(columns));
         device.print("\">");
         Utils.renderContainer(device, dialog);
         device.print("</td></tr>");
