@@ -46,7 +46,7 @@ public class ComboBoxCG
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         if (!component.isEnabled())
             device.print(" disabled=\"true\"");

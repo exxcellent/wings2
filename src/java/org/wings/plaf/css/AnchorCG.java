@@ -33,7 +33,7 @@ public class AnchorCG
         device.print(component.getURL());
         device.print("\"");
 
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 

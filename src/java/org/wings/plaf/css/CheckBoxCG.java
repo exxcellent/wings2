@@ -73,7 +73,7 @@ public class CheckBoxCG        extends ButtonCG        implements SConstants, or
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
         }
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");

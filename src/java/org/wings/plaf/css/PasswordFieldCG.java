@@ -38,7 +38,7 @@ public class PasswordFieldCG
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());
         Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         if (!component.isEditable() || !component.isEnabled()) {
             device.print(" readonly=\"true\"");

@@ -267,7 +267,7 @@ public class TreeCG
         final int depth = component.getMaximumExpandedDepth();
 
         device.print("<ul class=\"STree\"");
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
         device.print(">");
         if (start != 0) {
             TreePath path = component.getPathForRow(start);

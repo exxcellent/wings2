@@ -288,6 +288,18 @@ public final class Utils implements SConstants {
     }
 
     /**
+     * Prints a HTML style attribute with widht/height of 100%.
+     * <p>Sample: <code> style="widht:100%;"</code>
+     *
+     * @param device        Device to print to
+     */
+    public static void printCSSInlineFullSize(Device device, SDimension preferredSize) throws IOException {
+        if (preferredSize != null && (preferredSize.isWidthDefined() || preferredSize.isHeightDefined())) {
+            device.print(" style=\"width:100%;height:100%\"");
+        }
+    }
+
+    /**
      * writes an {X|HT}ML quoted string according to RFC 1866.
      * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
      */

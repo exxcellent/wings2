@@ -43,7 +43,7 @@ public class FileChooserCG
         // maxLength = maxContent removed, since it does not work.
         device.print("<input type=\"file\"");
 
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         Utils.optAttribute(device, "size", columns);
         Utils.optAttribute(device, "accept", component.getFileNameFilter());

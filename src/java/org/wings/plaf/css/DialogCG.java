@@ -107,7 +107,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
             text = "Dialog";
 
         device.print("<table");
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
         device.print(">\n<tr>");
 
         // left icon

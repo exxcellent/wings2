@@ -171,7 +171,7 @@ public class TableCG
         SDimension intercellSpacing = table.getIntercellSpacing();
 
         device.print("<table");
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         // TODO: border="" should be obsolete
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse

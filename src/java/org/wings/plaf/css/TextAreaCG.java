@@ -45,7 +45,7 @@ public class TextAreaCG
                 break;
         }
 
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         if (!component.isEditable() || !component.isEnabled()) {
             device.print(" readonly=\"true\"");

@@ -56,7 +56,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
             list.addScriptListener(selectListener);
         }
 
-        Utils.printCSSInlinePreferredSize(device, list.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, list.getPreferredSize());
         Utils.writeEvents(device, list);
 
         device.print(">");
@@ -139,7 +139,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         Utils.optAttribute(device, "type", list.getOrderType());
         Utils.optAttribute(device, "start", list.getStart());
 
-        Utils.printCSSInlinePreferredSize(device, list.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, list.getPreferredSize());
         device.print(">");
 
         javax.swing.ListModel model = list.getModel();

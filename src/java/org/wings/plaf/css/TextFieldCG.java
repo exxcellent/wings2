@@ -40,7 +40,7 @@ public class TextFieldCG
         Utils.optAttribute(device, "size", component.getColumns());
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());
 
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
 
         if (!component.isEditable() || !component.isEnabled()) {
             device.print(" readonly=\"true\"");

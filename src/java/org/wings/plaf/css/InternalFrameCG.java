@@ -103,7 +103,7 @@ public class InternalFrameCG
             text = "wingS";
 
         device.print("<table");
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
         device.print(">\n<tr>");
 
         // left icon

@@ -87,7 +87,7 @@ public class ButtonCG
 
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
