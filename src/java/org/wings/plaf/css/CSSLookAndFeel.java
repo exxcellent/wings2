@@ -37,10 +37,12 @@ public class CSSLookAndFeel
             properties.load(in);
             in.close();
             return properties;
-        } catch (IOException e) {
-            log.fatal("Unable to open " + PROPERTIES_LOCATION, e);
-            throw e;
+        } catch (Exception e) {
+            final String error = "Unable to open " + PROPERTIES_LOCATION+" due to "+e+".\nPlease check deployment!";
+            log.fatal(error);
+            throw new IOException(error);
         }
+
     }
 }
 
