@@ -21,8 +21,6 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -49,17 +47,9 @@ public class ButtonExample
 
     SContainer createButtonExample() {
         SButton[] buttons = new SButton[9];
-        buttons[0] = new SButton("testTL");
-        buttons[1] = new SButton("testTC");
-        buttons[2] = new SButton("testTR");
-        buttons[3] = new SButton("testCL");
-        buttons[4] = new SButton("testCC");
-        buttons[5] = new SButton("testCR");
-        buttons[6] = new SButton("testBL");
-        buttons[7] = new SButton("testBC");
-        buttons[8] = new SButton("testBR");
 
         for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = new SButton("text " + (i+1));
             buttons[i].setActionCommand(buttons[i].getText());
             if (i != 4) {
                 buttons[i].setIcon(icon);
@@ -147,7 +137,7 @@ public class ButtonExample
                     boolean use = useImages.isSelected();
 
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
-                        SButton component = (SButton)iterator.next();
+                        SAbstractButton component = (SAbstractButton)iterator.next();
                         component.setIcon(use ? icon : null);
                         component.setDisabledIcon(use ? disabledIcon : null);
                         component.setRolloverIcon(use ? rolloverIcon : null);

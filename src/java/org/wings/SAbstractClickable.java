@@ -8,8 +8,7 @@ import org.wings.plaf.ClickableCG;
  * created at 24.02.2004 13:07:02
  */
 public abstract class SAbstractClickable
-    extends SAbstractIconTextCompound
-    implements ClickableRenderComponent {
+    extends SAbstractIconTextCompound {
 
     /**
      * Creates a new <code>SClickable</code> instance with the specified text

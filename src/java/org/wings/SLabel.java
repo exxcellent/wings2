@@ -29,7 +29,7 @@ import org.wings.plaf.LabelCG;
  */
 public class SLabel
     extends SComponent
-    implements SConstants, ClickableRenderComponent
+    implements SConstants
 {
     /**
      * The text to be displayed

@@ -187,11 +187,6 @@ public class SOptionPane
      * No Button
      */
     protected final SButton optionNo = createButton("No");
-    
-    /**
-     * Reset Button
-     */
-    private final SResetButton optionReset = createResetButton("Reset");
 
     final SBorder empty = new SEmptyBorder(new Insets(6,24,6,24));
     
@@ -394,8 +389,7 @@ public class SOptionPane
         optionButtons.add(optionYes, "YES");
         optionButtons.add(optionCancel, "CANCEL");
         optionButtons.add(optionNo, "NO");
-        optionButtons.add(optionReset, "RESET");
-        
+
         /*    images.add(messageLabel);
               messageLabel.setToolTipText("info");
               images.add(questionLabel);
@@ -426,19 +420,12 @@ public class SOptionPane
         return b;
     }
 
-    protected final SResetButton createResetButton(String label) {
-        SResetButton b = new SResetButton(label);
-        b.addActionListener(this);
-        return b;
-    }
-
     public void setLocale(Locale l) {
         super.setLocale(l);
         optionOK.setText("OK");
         optionCancel.setText("Cancel");
         optionYes.setText("Yes");
         optionNo.setText("No");
-        optionReset.setText("Reset");
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -468,7 +455,6 @@ public class SOptionPane
         optionYes.setVisible(false);
         optionCancel.setVisible(false);
         optionNo.setVisible(false);
-        optionReset.setVisible(false);
 
         //    messageLabel.setVisible(false);
         //    questionLabel.setVisible(false);
@@ -572,7 +558,6 @@ public class SOptionPane
         case OK_CANCEL_RESET_OPTION:
             optionOK.setVisible(true);
             optionCancel.setVisible(true);
-            optionReset.setVisible(true);
             break;
 
         case YES_NO_OPTION:
@@ -583,7 +568,6 @@ public class SOptionPane
         case YES_NO_RESET_OPTION:
             optionYes.setVisible(true);
             optionNo.setVisible(true);
-            optionReset.setVisible(true);
             break;
 
         case YES_NO_CANCEL_OPTION:
@@ -596,7 +580,6 @@ public class SOptionPane
             optionYes.setVisible(true);
             optionNo.setVisible(true);
             optionCancel.setVisible(true);
-            optionReset.setVisible(true);
             break;
         }
     }

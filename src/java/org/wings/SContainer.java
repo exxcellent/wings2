@@ -32,7 +32,7 @@ import java.util.Iterator;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SContainer extends SComponent implements ClickableRenderComponent
+public class SContainer extends SComponent
 {
     /**
      * The layout for the component.

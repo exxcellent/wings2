@@ -17,7 +17,7 @@ package org.wings;
 
 /**
  * An icon-text compound, where you can set an event by hand or which could be
- * used as {@link ClickableRenderComponent}
+ * used as 
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

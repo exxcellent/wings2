@@ -64,7 +64,7 @@ import java.util.List;
  */
 public class SList
     extends SComponent
-    implements Scrollable, LowLevelEventListener, ClickableRenderComponent, ListDataListener
+    implements Scrollable, LowLevelEventListener, ListDataListener
 {
     public static final String SELECTOR_SELECTION = "SELECTION";
 

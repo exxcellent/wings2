@@ -14,167 +14,104 @@
 
 package wingset;
 
-import java.awt.*;
-import java.awt.event.*;
-
 import org.wings.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
+
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class ToggleButtonExample
-    extends WingSetPane
-{
+    extends WingSetPane {
     static final ClassLoader cl = WingSet.class.getClassLoader();
-    static final SIcon icon = 
-        new SURLIcon("../icons/ButtonIcon.gif");
-    static final SIcon disabledIcon = 
-        new SURLIcon("../icons/ButtonDisabledIcon.gif");
-    static final SIcon pressedIcon = 
-        new SURLIcon("../icons/ButtonPressedIcon.gif");
-    static final SIcon selectedIcon = 
-        new SURLIcon("../icons/ButtonPressedIcon.gif");
-    static final SIcon rolloverIcon = 
-        new SURLIcon("../icons/ButtonRolloverIcon.gif");
-    
+    static final SIcon icon = new SURLIcon("../icons/ButtonIcon.gif");
+    static final SIcon disabledIcon = new SURLIcon("../icons/ButtonDisabledIcon.gif");
+    static final SIcon pressedIcon = new SURLIcon("../icons/ButtonPressedIcon.gif");
+    static final SIcon rolloverIcon = new SURLIcon("../icons/ButtonRolloverIcon.gif");
+    private ButtonControls controls;
+
     public SComponent createExample() {
-        SPanel p = new SPanel(new SGridLayout(2));
-        
-        p.add(new SLabel("<html><h4>ToggleButtons outside forms in a button group</h4>"));
-        p.add(new SLabel("<html><h4>Image toggleButtons outside forms</h4>"));
-        p.add(createToggleButtonExample());
-        p.add(createImageToggleButtonExample());
-        
-        SForm form = new SForm();
-        form.add(new SLabel("<html><h4>ToggleButtons in a form in a button group</h4>"));
-        form.add(createToggleButtonExample());
-        p.add(form);
-            
-        form = new SForm();
-        form.add(new SLabel("<html><h4>Image toggleButtons in a form</h4>"));
-        form.add(createImageToggleButtonExample());
-        p.add(form);
-        return p;
+        controls = new ButtonControls();
+        SContainer p = createButtonExample();
+
+        SForm form = new SForm(new SFlowDownLayout());
+        form.add(controls);
+        form.add(new SSeparator());
+        form.add(p);
+
+        return form;
     }
 
-    SContainer createToggleButtonExample() {
-        SPanel text = new SPanel();
+    SContainer createButtonExample() {
+        SButtonGroup group = new SButtonGroup();
+        SToggleButton[] buttons = new SToggleButton[9];
 
-        final SLabel pressed = new SLabel("no ToggleButton pressed");
-
-        ActionListener action = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                pressed.setText("ToggleButton \"" + e.getActionCommand() + "\" pressed");
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = new SToggleButton("text " + (i + 1));
+            buttons[i].setActionCommand("" + (i + 1));
+            if (i != 4) {
+                buttons[i].setIcon(icon);
+                buttons[i].setDisabledIcon(disabledIcon);
+                buttons[i].setRolloverIcon(rolloverIcon);
+                buttons[i].setPressedIcon(pressedIcon);
+                buttons[i].setSelectedIcon(pressedIcon);
             }
-        };
-
-        SButtonGroup group = new SButtonGroup();
-        for ( int i=0; i<3; i++ ) {
-            SToggleButton b = new SToggleButton("text " + (i+1));
-            b.setIcon(icon);
-            b.setDisabledIcon(disabledIcon);
-            b.setRolloverIcon(rolloverIcon);
-            b.setPressedIcon(pressedIcon);
-            b.setSelectedIcon(pressedIcon);
-            b.setActionCommand(b.getText());
-            // b.setBorder(new SLineBorder(1));
-            b.addActionListener(action);
-            group.add(b);
-            text.add(b);
-        }
-        text.add(new SLabel("<html><br />"));
-        text.add(pressed);
-
-        return text;
-    }
-
-    SContainer createImageToggleButtonExample() {
-
-        SButtonGroup group = new SButtonGroup();
-
-        SToggleButton[] toggleButtons = new SToggleButton[9];
-        toggleButtons[0] = new SToggleButton("testTL");
-        toggleButtons[1] = new SToggleButton("testTC");
-        toggleButtons[2] = new SToggleButton("testTR");
-        toggleButtons[3] = new SToggleButton("testCL");
-        toggleButtons[4] = new SToggleButton("testCC");
-        toggleButtons[5] = new SToggleButton("testCR");
-        toggleButtons[6] = new SToggleButton("testBL");
-        toggleButtons[7] = new SToggleButton("testBC");
-        toggleButtons[8] = new SToggleButton("testBR");
-
-        for ( int i=0; i<toggleButtons.length; i++ ) {
-            toggleButtons[i].setActionCommand(toggleButtons[i].getText());
-            group.add(toggleButtons[i]);
-            if ( i!=4 ) {
-                toggleButtons[i].setIcon(icon);
-                toggleButtons[i].setDisabledIcon(disabledIcon);
-                toggleButtons[i].setRolloverIcon(rolloverIcon);
-                toggleButtons[i].setPressedIcon(pressedIcon);
-                toggleButtons[i].setSelectedIcon(pressedIcon);
-                toggleButtons[i].setToolTipText("ToggleButton " + i);
-            } 
-            
+            buttons[i].setToolTipText("Button " + i);
+            buttons[i].setName(buttons[i].getText());
+            buttons[i].setShowAsFormComponent(false);
+            group.add(buttons[i]);
+            controls.addSizable(buttons[i]);
         }
 
+        buttons[0].setVerticalTextPosition(SConstants.TOP);
+        buttons[0].setHorizontalTextPosition(SConstants.LEFT);
 
-        toggleButtons[0].setVerticalTextPosition(SConstants.TOP);
-        toggleButtons[0].setHorizontalTextPosition(SConstants.LEFT);
+        buttons[1].setVerticalTextPosition(SConstants.TOP);
+        buttons[1].setHorizontalTextPosition(SConstants.CENTER);
 
-        toggleButtons[1].setVerticalTextPosition(SConstants.TOP);
-        toggleButtons[1].setHorizontalTextPosition(SConstants.CENTER);
+        buttons[2].setVerticalTextPosition(SConstants.TOP);
+        buttons[2].setHorizontalTextPosition(SConstants.RIGHT);
 
-        toggleButtons[2].setVerticalTextPosition(SConstants.TOP);
-        toggleButtons[2].setHorizontalTextPosition(SConstants.RIGHT);
+        buttons[3].setVerticalTextPosition(SConstants.CENTER);
+        buttons[3].setHorizontalTextPosition(SConstants.LEFT);
 
-        toggleButtons[3].setVerticalTextPosition(SConstants.CENTER);
-        toggleButtons[3].setHorizontalTextPosition(SConstants.LEFT);
+        buttons[4].setVerticalTextPosition(SConstants.CENTER);
+        buttons[4].setHorizontalTextPosition(SConstants.CENTER);
 
-        /* Huh?
-        toggleButtons[4].setVerticalTextPosition(SConstants.CENTER);
-        toggleButtons[4].setHorizontalTextPosition(SConstants.CENTER);
-        */
-        toggleButtons[4].setIcon(null);
+        buttons[5].setVerticalTextPosition(SConstants.CENTER);
+        buttons[5].setHorizontalTextPosition(SConstants.RIGHT);
 
-        toggleButtons[5].setVerticalTextPosition(SConstants.CENTER);
-        toggleButtons[5].setHorizontalTextPosition(SConstants.RIGHT);
+        buttons[6].setVerticalTextPosition(SConstants.BOTTOM);
+        buttons[6].setHorizontalTextPosition(SConstants.LEFT);
 
-        toggleButtons[6].setVerticalTextPosition(SConstants.BOTTOM);
-        toggleButtons[6].setHorizontalTextPosition(SConstants.LEFT);
+        buttons[7].setVerticalTextPosition(SConstants.BOTTOM);
+        buttons[7].setHorizontalTextPosition(SConstants.CENTER);
 
-        toggleButtons[7].setSelected(false);
-        toggleButtons[7].setEnabled(false);
-        toggleButtons[7].setVerticalTextPosition(SConstants.BOTTOM);
-        toggleButtons[7].setHorizontalTextPosition(SConstants.CENTER);
-
-        toggleButtons[8].setSelected(false);
-        toggleButtons[8].setEnabled(false);
-        toggleButtons[8].setVerticalTextPosition(SConstants.BOTTOM);
-        toggleButtons[8].setHorizontalTextPosition(SConstants.RIGHT);
+        buttons[8].setVerticalTextPosition(SConstants.BOTTOM);
+        buttons[8].setHorizontalTextPosition(SConstants.RIGHT);
 
         SPanel erg = new SPanel();
 
-        SGridLayout grid = new SGridLayout(3,3);
+        SGridLayout grid = new SGridLayout(3, 3);
         grid.setBorder(1);
         SPanel b = new SPanel(grid);
 
-        final SLabel pressed = new SLabel("no ToggleButton pressed");
+        final SLabel pressed = new SLabel("No button pressed");
 
         ActionListener action = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                pressed.setText("ToggleButton \"" + e.getActionCommand() + "\" pressed");
+                pressed.setText("Button \"" + e.getActionCommand() + "\" pressed");
             }
         };
 
-        for ( int i=0; i<toggleButtons.length; i++ ) {
-            toggleButtons[i].addActionListener(action);
-        }
+        for (int i = 0; i < buttons.length; i++)
+            buttons[i].addActionListener(action);
 
-        for ( int i=0; i<toggleButtons.length; i++ )
-            b.add(toggleButtons[i]);
+        for (int i = 0; i < buttons.length; i++)
+            b.add(buttons[i]);
 
         erg.add(b);
         erg.add(new SLabel("<html><br />"));
@@ -182,12 +119,36 @@ public class ToggleButtonExample
 
         return erg;
     }
-}
 
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */
+    class ButtonControls extends ComponentControls {
+        public ButtonControls() {
+            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
+            showAsFormComponent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+                        SComponent component = (SComponent)iterator.next();
+                        component.setShowAsFormComponent(showAsFormComponent.isSelected());
+                    }
+                }
+            });
+            add(showAsFormComponent);
+
+            final SCheckBox useImages = new SCheckBox("Use Icons");
+            useImages.setSelected(true);
+            useImages.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boolean use = useImages.isSelected();
+
+                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+                        SAbstractButton component = (SAbstractButton)iterator.next();
+                        component.setIcon(use ? icon : null);
+                        component.setDisabledIcon(use ? disabledIcon : null);
+                        component.setRolloverIcon(use ? rolloverIcon : null);
+                        component.setPressedIcon(use ? pressedIcon : null);
+                    }
+                }
+            });
+            add(useImages);
+        }
+    }
+}
