@@ -34,21 +34,31 @@ public class LabelCG extends AbstractComponentCG implements SConstants, org.wing
         final SIcon icon = label.isEnabled() ? label.getIcon() : label.getDisabledIcon();
         final int horizontalTextPosition = label.getHorizontalTextPosition();
         final int verticalTextPosition = label.getVerticalTextPosition();
-
+        final boolean preformatted = (component instanceof SLabel) && ((SLabel)component).isPreformattedText();
         if (icon == null && text != null)
-            writeText(device, text);
+            writeText(device, text, preformatted);
         else if (icon != null && text == null)
             writeIcon(device, icon);
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
-                    writeText(d, text);
+                    writeText(d, text, preformatted);
                 }
 
                 protected void icon(Device d) throws IOException {
                     writeIcon(d, icon);
                 }
             }.writeCompound(device, component, horizontalTextPosition, verticalTextPosition);
+        }
+    }
+
+    protected void writeText(Device device, String text, boolean preformatted) throws IOException {
+        if (preformatted) {
+            device.print("<pre>");
+        }
+        writeText(device, text);
+        if (preformatted) {
+            device.print("</pre>");
         }
     }
 

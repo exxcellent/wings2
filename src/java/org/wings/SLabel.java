@@ -45,6 +45,7 @@ public class SLabel
     private int horizontalTextPosition = RIGHT;
     private int iconTextGap = 1;
     private boolean imageAbsBottom = false;
+    private boolean preformattedText = true;
 
     /**
      * Creates a new <code>SLabel</code> instance with the specified text
@@ -235,6 +236,21 @@ public class SLabel
 
     public void setCG(LabelCG cg) {
         super.setCG(cg);
+    }
+    /**
+     * @return Returns if the Label text should be considered preformatted.
+     */
+    public boolean isPreformattedText() {
+        return preformattedText;
+    }
+    /**
+     * When set to true, keeps HTML from replacing characters, for example
+     * multiple spaces with just one. This is a Swing compatibility feature,
+     * so the default is set to true.
+     * @param preformattedText Should the text be considered preformatted.
+     */
+    public void setPreformattedText(boolean preformattedText) {
+        this.preformattedText = preformattedText;
     }
 }
 
