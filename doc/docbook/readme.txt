@@ -4,7 +4,7 @@ What you need to use DocBook
 
 1. Download and unpack the following
 
-   1. DocBook, Release 1.67.2, http://docbook.sourceforge.net/
+   1. DocBook XSL Stylesheets, Release 1.67.2, http://docbook.sourceforge.net/
    2. Saxon - XSLT processor, Release 6.5.3, http://saxon.sourceforge.net/
    3. Apache FOP, Release 0.20.5, http://xml.apache.org/fop/ 
 
