@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
 import org.wings.SConstants;
+import org.wings.SDimension;
 import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
@@ -75,6 +76,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     protected void writePrefix(Device device, SComponent component) throws IOException {
+        SDimension prefSize = component.getPreferredSize();
         Utils.printDebug(device, "\n<!-- ").print(component.getName()).print(" -->");
         device.print("<div");
         if (component.getStyle() != null && component.getStyle().length() > 0) {
@@ -82,10 +84,25 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print(component.getStyle());
             device.print("_Box\"");
         }
+
+        // if sizes are spec'd in percentages, we need the outer box to have full size...
+        boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.contains("%");
+        boolean isWidthPercentage = prefSize != null && prefSize.width != null && prefSize.width.contains("%");
+        if ( isHeightPercentage || isWidthPercentage ) {
+            device.print(" style=\"");
+            if (isHeightPercentage) {
+                device.print("height:100%;");
+            }
+            if (isWidthPercentage) {
+                device.print("width:100%;");
+            }
+            device.print("\"");
+        }
+        
         device.print(">");
         device.print("<div id=\"").print(component.getName()).print("\"");
         Utils.optAttribute(device, "class", component.getStyle());
-        Utils.printCSSInlinePreferredSize(device, component.getPreferredSize());
+        Utils.printCSSInlinePreferredSize(device, prefSize);
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
