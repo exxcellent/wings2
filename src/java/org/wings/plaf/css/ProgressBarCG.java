@@ -88,7 +88,12 @@ public class ProgressBarCG
         device.print("<table>");
         device.print("<tr>");
         device.print("<td");
-        Utils.optAttribute(device, "bgcolor", component.getFilledColor());
+        //Utils.optAttribute(device, "bgcolor", component.getFilledColor());
+        if (component.getFilledColor() != null) {
+            device.print(" style=\"background-color: ");
+            Utils.write(device, component.getFilledColor());
+            device.print(";\"");
+        }
         device.print(">");
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
@@ -99,7 +104,12 @@ public class ProgressBarCG
         device.print(String.valueOf(height));
         device.print("\"></td>");
         device.print("<td");
-        Utils.optAttribute(device, "bgcolor", component.getUnfilledColor());
+        //Utils.optAttribute(device, "bgcolor", component.getUnfilledColor());
+        if (component.getUnfilledColor() != null) {
+            device.print(" style=\"background-color: ");
+            Utils.write(device, component.getUnfilledColor());
+            device.print(";\"");
+        }
         device.print(">");
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
