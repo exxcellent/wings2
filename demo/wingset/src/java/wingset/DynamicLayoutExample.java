@@ -14,8 +14,8 @@
 package wingset;
 
 import org.wings.*;
-import org.wings.border.SLineBorder;
 import org.wings.border.SBorder;
+import org.wings.border.SLineBorder;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -29,7 +29,7 @@ import java.awt.event.ItemListener;
 public class DynamicLayoutExample extends WingSetPane {
     private final SForm panel = new SForm();
     private final SPanel[] demoPanels = {new FlowLayoutDemoPanel(), new GridBagDemoPanel(), new GridLayoutDemoPanel(), new BoxLayoutDemoPanel()};
-    private final static String[] demoManagerNames = {"SFlowLayout","SGridBagLayout", "SGridLayout","SBoxLayout"};
+    private final static String[] demoManagerNames = {"SFlowLayout", "SGridBagLayout", "SGridLayout", "SBoxLayout"};
     private final SComboBox selectLayoutManager = new SComboBox(demoManagerNames);
 
     protected SComponent createExample() {
@@ -46,31 +46,48 @@ public class DynamicLayoutExample extends WingSetPane {
         return panel;
     }
 
-    private static void addDummyLabels(final SPanel panel) {
-         for (int i = 0; i < 6; i++) {
-             final SLabel label = new SLabel("Label " + (i + 1));
-             panel.add(label);
-             if (i % 3 == 0) {
-                 label.setVerticalAlignment(TOP);
-             }
-             if (i % 3 == 1) {
-                 label.setHorizontalAlignment(CENTER);
-                 label.setVerticalAlignment(CENTER);
-             }
-             if (i % 3 == 2) {
-                 label.setForeground(Color.RED);
-                 label.setHorizontalAlignment(RIGHT);
-                 label.setVerticalAlignment(BOTTOM);
-             }
-         }
-     }
+    private static void addDummyLabels(final SPanel panel, final int amount) {
+        final String[] texts = {"<html><span>[%] A very short component</span>",
+                                "<html><span>[%] A much longer, unbreakable label for wrapping demonstration</span>",
+                                "<html><span>[%] And again a short one</span>"};
+        final SBorder greenLineBorder = new SLineBorder();
+        greenLineBorder.setColor(Color.green);
+
+        for (int i = 0; i < amount; i++) {
+            final SLabel label = new SLabel(texts[i%3].replace("%", Integer.toString((i + 1))));
+            label.setBorder(greenLineBorder);
+            panel.add(label);
+            if (i % 3 == 0) {
+                label.setVerticalAlignment(TOP);
+            }
+            if (i % 3 == 1) {
+                label.setHorizontalAlignment(CENTER);
+                label.setVerticalAlignment(CENTER);
+            }
+            if (i % 3 == 2) {
+                label.setForeground(Color.RED);
+                label.setHorizontalAlignment(RIGHT);
+                label.setVerticalAlignment(BOTTOM);
+            }
+        }
+    }
 
 
     private static class BoxLayoutDemoPanel extends SPanel {
         public BoxLayoutDemoPanel() {
-            SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.HORIZONTAL);
-            setLayout(boxLayout);
-            addDummyLabels(this);
+            add(new SLabel("Horizontal box layout with padding & border"));
+            SBoxLayout horizontalLayout = new SBoxLayout(SBoxLayout.HORIZONTAL);
+            horizontalLayout.setCellPadding(10);
+            horizontalLayout.setBorder(1);
+            SPanel horizontalPanel = new SPanel(horizontalLayout);
+            addDummyLabels(horizontalPanel, 6);
+            add(horizontalPanel);
+
+            add(new SLabel("Vertical vanilla box layout"));
+            SBoxLayout verticalLayout = new SBoxLayout(SBoxLayout.VERTICAL);
+            SPanel verticalPanel = new SPanel(verticalLayout);
+            addDummyLabels(verticalPanel, 6);
+            add(verticalPanel);
         }
     }
 
@@ -96,6 +113,12 @@ public class DynamicLayoutExample extends WingSetPane {
             final SPanel panel = new SPanel(layout);
             panel.setBorder(new SLineBorder());
             panel.setBackground(Color.LIGHT_GRAY);
+            addDummyLabels(panel, 3);
+
+            return panel;
+        }
+
+        private void addDummyLabels1(final SPanel panel) {
             final SLabel label1 = new SLabel("<html><span>A very short component</span>");
             final SLabel label2 = new SLabel("<html><span>A much longer, unbreakable label for wrapping demonstration</span>");
             final SLabel label3 = new SLabel("<html><span>And again a short one</span>");
@@ -108,7 +131,6 @@ public class DynamicLayoutExample extends WingSetPane {
             panel.add(label1);
             panel.add(label2);
             panel.add(label3);
-            return panel;
         }
     }
 
@@ -120,7 +142,7 @@ public class DynamicLayoutExample extends WingSetPane {
             layout1.setCellPadding(10);
             layout1.setCellSpacing(20);
             final SPanel panel1 = new SPanel(layout1);
-            addDummyLabels(panel1);
+            addDummyLabels(panel1, 6);
             add(panel1);
         }
     }
@@ -129,7 +151,7 @@ public class DynamicLayoutExample extends WingSetPane {
         public GridBagDemoPanel() {
             SFlowDownLayout flowLayout = new SFlowDownLayout();
             setLayout(flowLayout);
-            setHorizontalAlignment(CENTER);            
+            setHorizontalAlignment(CENTER);
 
             add(new SLabel("Horizontal adding using REMAINDER"));
             SGridBagLayout layout = new SGridBagLayout();
