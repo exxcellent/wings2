@@ -15,6 +15,7 @@ package wingset;
 
 import org.wings.*;
 import org.wings.border.SLineBorder;
+import org.wings.border.SBorder;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -75,20 +76,39 @@ public class DynamicLayoutExample extends WingSetPane {
 
     private static class FlowLayoutDemoPanel extends SPanel {
         public FlowLayoutDemoPanel() {
+            super(new SFlowDownLayout());
+            add(new SLabel("Horizontal, centered FlowLayout"));
             add(createPanel(new SFlowLayout(SFlowLayout.CENTER)));
+            add(new SLabel("Horizontal, left-aligned FlowLayout"));
             add(createPanel(new SFlowLayout(SFlowLayout.LEFT)));
+            add(new SLabel("Horizontal, right-aligned FlowLayout"));
             add(createPanel(new SFlowLayout(SFlowLayout.RIGHT)));
+            add(new SLabel("<html>&nbsp;"));
+            add(new SLabel("Vertical, centered FlowLayout"));
+            add(createPanel(new SFlowDownLayout(SConstants.CENTER)));
+            add(new SLabel("Vertical, left-aligned FlowLayout"));
             add(createPanel(new SFlowDownLayout()));
+            add(new SLabel("Vertical, right-aligned FlowLayout"));
+            add(createPanel(new SFlowDownLayout(SConstants.RIGHT)));
         }
 
         private SPanel createPanel(SLayoutManager layout) {
-            SPanel panel1 = new SPanel(layout);
-            panel1.setBorder(new SLineBorder());
-            panel1.setBackground(Color.LIGHT_GRAY);
-            panel1.add(new SLabel("<html><span>abcd</span>"));
-            panel1.add(new SLabel("<html><span>abcdfhsdkkfjhjksdhfjhsdjkfh jksdhfkjhsdjkhf kjdshkfjhsd k</span>"));
-            panel1.add(new SLabel("<html><span>abcdfhsdkkfjhjksdhfjhsdjkfh</span>"));
-            return panel1;
+            final SPanel panel = new SPanel(layout);
+            panel.setBorder(new SLineBorder());
+            panel.setBackground(Color.LIGHT_GRAY);
+            final SLabel label1 = new SLabel("<html><span>A very short component</span>");
+            final SLabel label2 = new SLabel("<html><span>A much longer, unbreakable label for wrapping demonstration</span>");
+            final SLabel label3 = new SLabel("<html><span>And again a short one</span>");
+            SBorder labelBorder = new SLineBorder();
+            labelBorder.setColor(Color.red);
+            label1.setBorder(labelBorder);
+            label2.setBorder(labelBorder);
+            label3.setBorder(labelBorder);
+
+            panel.add(label1);
+            panel.add(label2);
+            panel.add(label3);
+            return panel;
         }
     }
 
