@@ -62,12 +62,20 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     public void write(Device device, SComponent component) throws IOException {
         if (!component.isVisible())
             return;
-        org.wings.plaf.PrefixAndSuffixDelegate prefixSuffixDelegate = SessionManager.getSession().getCGManager().getPrefixSuffixDelegate();
-        prefixSuffixDelegate.writePrefix(device, component);
+        writePrefix(device, component);
         writeContent(device, component);
-        prefixSuffixDelegate.writeSuffix(device, component);
+        writePostfix(device, component);
     }
-
+    
+    
+    protected void writePrefix(Device device, SComponent component) throws IOException {
+        SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writePrefix(device, component);
+    }
+    
+    protected void writePostfix(Device device, SComponent component) throws IOException {
+        SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writeSuffix(device, component);
+    }
+    
     public CSSSelector mapSelector(CSSSelector selector) {
         return selector;
     }
