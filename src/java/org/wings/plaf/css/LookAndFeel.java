@@ -21,7 +21,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.session.SessionManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -29,7 +28,7 @@ import java.util.Properties;
 public class LookAndFeel
         extends org.wings.plaf.LookAndFeel {
     private final transient static Log log = LogFactory.getLog(LookAndFeel.class);
-    private static final String PROPERTIES_LOCATION = "WEB-INF"+ File.separator + LookAndFeel.class.getPackage().getName() + ".properties";
+    private static final String PROPERTIES_LOCATION = "WEB-INF/" + LookAndFeel.class.getPackage().getName() + ".properties";
 
     public LookAndFeel() throws IOException {
         super(loadProperties());
