@@ -16,7 +16,9 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
+import org.wings.plaf.CGManager;
 import org.wings.script.ScriptListener;
+import org.wings.session.SessionManager;
 import org.wings.style.Style;
 
 import java.awt.*;
@@ -55,13 +57,38 @@ public final class Utils implements SConstants {
             throws IOException {
         SLayoutManager layout = c.getLayout();
 
-        if (layout != null) {
-            layout.write(d);
-        } else {
+        if (layout == null) {
+            // lookup the default Layout Behaviour
+            final CGManager manager = c.getSession().getCGManager();
+            Object value;
+            value = manager.getObject("SContainer.defaultLayoutBehaviour", String.class);
+            if (value != null && value instanceof String) {
+                if ("classic".equals(((String)value).toLowerCase())) {
+                    System.out.println("classic");
+                    layout = new SBoxLayout(SBoxLayout.VERTICAL);
+                }
+                else if ("standard".equals(((String)value).toLowerCase())) {
+                    System.out.println("standard");
+                    layout = new SFlowLayout(SFlowLayout.LEFT);
+                }
+                else { // fallback
+                    System.out.println("fallback");
+                    layout = new SFlowLayout(SFlowLayout.LEFT);
+                }
+            } else {
+                System.out.println("no property");
+                // Swing default LayoutManager is FlowLayout
+                layout = new SFlowLayout(SFlowLayout.LEFT);
+            }
+            System.out.println("Hi I have no layoutmanager "+c.getClass().getName());
             for (int i = 0; i < c.getComponentCount(); i++) {
                 c.getComponent(i).write(d);
             }
+
+            c.setLayout(layout);
+            return;
         }
+        layout.write(d);
     }
 
     public static void writeEvents(Device d, SComponent c)
