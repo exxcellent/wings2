@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuBarCG {
+public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
 
 //--- byte array converted template snippets.
     private final static byte[] __table_cellpadd = "<table cellpadding=\"0\" cellspacing=\"0\" id=\"".getBytes();

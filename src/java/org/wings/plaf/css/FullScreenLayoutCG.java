@@ -11,17 +11,20 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.xhtml;
+package org.wings.plaf.css;
 
-import org.wings.SCardLayout;
-import org.wings.SComponent;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
 
-public class CardLayoutCG implements LayoutCG {
+/**
+ * CG for <a href="../../SFullScreenLayout.html">SFullScreenLayout</a>.
+ *
+ * @author <a href="mailto:andre@lison.de">Andre Lison</a>
+ * @version $Revision$
+ */
+public class FullScreenLayoutCG extends BorderLayoutCG {
     /**
      * @param d the device to write the code to
      * @param l the layout manager
@@ -29,26 +32,9 @@ public class CardLayoutCG implements LayoutCG {
      */
     public void write(Device d, SLayoutManager l)
             throws IOException {
-        SCardLayout layout = (SCardLayout) l;
-        SComponent c = layout.getVisibleComponent();
-
-        if (c == null) return;
-        /*
-if ( Utils.hasSpanAttributes( component ) )
-{
-                 d.print("<span style=\"");
-                Utils.writeSpanAttributes( d, component );
-d.print("\">");
-             }
-*/
-        c.write(d);
-        /*
-        if ( Utils.hasSpanAttributes( component ) )
-         {
-         	d.print("</span>");
-         }
-
-        */
+        d.print("\n<div style=\"position:absolute; z-index:1; left: 0; top: 0; width: 100%; height: 100%\">");
+        super.write(d, l);
+        d.print("</div>");
     }
 }
 

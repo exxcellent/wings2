@@ -19,6 +19,7 @@ import org.wings.SFrame;
 import org.wings.border.SBorder;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
+import org.wings.plaf.ComponentCG;
 import org.wings.resource.DynamicResource;
 import org.wings.util.ComponentVisitor;
 

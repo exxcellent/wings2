@@ -11,10 +11,9 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.xhtml;
+package org.wings.plaf.css;
 
 import org.wings.SComponent;
-import org.wings.SContainer;
 import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
@@ -23,7 +22,7 @@ import org.wings.plaf.LayoutCG;
 import java.awt.*;
 import java.io.IOException;
 
-public class GridBagLayoutCG
+public class GridBagLayoutCG extends AbstractLayoutCG
         implements LayoutCG {
     /**
      * @param d the device to write the code to
@@ -33,49 +32,17 @@ public class GridBagLayoutCG
     public void write(Device d, SLayoutManager l)
             throws IOException {
         SGridBagLayout layout = (SGridBagLayout) l;
-        SContainer container = layout.getContainer();
-
         boolean header = layout.getHeader();
-        int cellSpacing = layout.getCellSpacing();
-        int cellPadding = layout.getCellPadding();
-        int border = layout.getBorder();
-
+        int cellSpacing = layout.getCellSpacing() >= 0 ? layout.getCellSpacing() : 0;
+        int cellPadding = layout.getCellPadding() >= 0 ? layout.getCellPadding() : 0;
+        int border = layout.getBorder() >= 0 ? layout.getBorder() : 0;
         SGridBagLayout.Grid grid = layout.getGrid();
+
         if (grid.cols == 0) {
             return;
         }
 
-        d.print("\n<table ");
-        if (Utils.hasSpanAttributes(container)) {
-            d.print(" style=\"");
-            Utils.writeSpanAttributes(d, container);
-            d.print("\" ");
-        }
-
-        if (cellSpacing >= 0)
-            d.print(" cellspacing=\"").print(cellSpacing).print("\"");
-        else
-            d.print(" cellspacing=\"0\"");
-
-        if (cellPadding >= 0)
-            d.print(" cellpadding=\"").print(cellPadding).print("\"");
-        else
-            d.print(" cellpadding=\"0\"");
-
-        // CGUtil.writeSize( d, container );
-
-        if (border > 0)
-            d.print(" border=\"").print(border).print("\"");
-        else
-            d.print(" border=\"0\"");
-
-        /*
-        if (container != null && container.getBackground() != null)
-            d.print(" bgcolor=\"#").
-                print(Utils.toColorString(container.getBackground())).print("\"");
-        */
-        d.print(">\n");
-
+        printLayouterTableHeader(d, cellSpacing, cellPadding, border, layout.getContainer());
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
             d.print("<tr>\n");
@@ -97,7 +64,8 @@ public class GridBagLayoutCG
                             d.print("<td");
                         }
 
-                        Utils.printTableCellAttributes(d, comp);
+                        Utils.printTableCellAlignment(d, comp);
+                        Utils.printCSSInlineStyleAttributes(d, comp);
 
                         int gridwidth = c.gridwidth;
                         if (gridwidth == GridBagConstraints.RELATIVE) {
@@ -142,8 +110,11 @@ public class GridBagLayoutCG
             }
             d.print("</tr>\n");
         }
-        d.print("</table>\n");
+        printLayouterTableFooter(d);
     }
+
+
+
 }
 
 

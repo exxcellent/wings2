@@ -11,9 +11,12 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.xhtml;
+package org.wings.plaf.css;
 
-import org.wings.*;
+import org.wings.SBoxLayout;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
@@ -32,20 +35,16 @@ public class BoxLayoutCG implements LayoutCG {
         SBoxLayout layout = (SBoxLayout) l;
         SContainer container = layout.getContainer();
         List components = layout.getComponents();
-        SDimension dim = layout.getPreferredSize();
-
 
         d.print("\n<table ");
-        if (Utils.hasSpanAttributes(container)) {
+        if (false) {
             d.print("style=\"");
-            Utils.writeSpanAttributes(d, (SComponent) container);
             d.print("\" ");
         }
 
         org.wings.plaf.css.Utils.printTableHorizontalAlignment(d, layout.getHorizontalAlignment());
         org.wings.plaf.css.Utils.printTableVerticalAlignment(d, layout.getVerticalAlignment());
         d.print(" cellspacing=\"0\" cellpadding=\"0\">\n");
-
 
         if (layout.getOrientation() == SBoxLayout.X_AXIS) {
             d.print("<tr>");
@@ -54,16 +53,8 @@ public class BoxLayoutCG implements LayoutCG {
                 SComponent c = (SComponent) iter.next();
 
                 d.print("<td");
-
                 Utils.printTableCellAlignment(d, c);
-                if (c instanceof SContainer && c.isVisible() && Utils.hasSpanAttributes(c)) {
-                    // Adapt inner styles (esp. width of containers)
-                    // maybe better restrict to dimension styles only?
-                    d.print(" style=\"");
-                    Utils.writeAttributes(d, c);
-                    d.print("\"");
-
-                }
+                Utils.printCSSInlineStyleAttributes(d, c);
                 d.print(">");
 
                 c.write(d);
@@ -82,14 +73,7 @@ public class BoxLayoutCG implements LayoutCG {
                 d.print("<td");
 
                 Utils.printTableCellAlignment(d, c);
-                if (c instanceof SContainer && c.isVisible() && Utils.hasSpanAttributes(c)) {
-                    // Adapt inner styles (esp. width of containers)
-                    // maybe better restrict to dimension styles only?
-                    d.print(" style=\"");
-                    Utils.writeAttributes(d, c);
-                    d.print("\"");
-
-                }
+                Utils.printCSSInlineStyleAttributes(d, c);
                 d.print(">");
 
                 c.write(d);

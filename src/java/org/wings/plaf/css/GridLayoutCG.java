@@ -11,9 +11,11 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.xhtml;
+package org.wings.plaf.css;
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SGridLayout;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
@@ -21,7 +23,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class GridLayoutCG
+public class GridLayoutCG extends AbstractLayoutCG
         implements LayoutCG {
     /**
      * @param d the device to write the code to
@@ -31,37 +33,13 @@ public class GridLayoutCG
     public void write(Device d, SLayoutManager l)
             throws IOException {
         SGridLayout layout = (SGridLayout) l;
-        SContainer container = layout.getContainer();
         List components = layout.getComponents();
-        SDimension dim = layout.getPreferredSize();
-
-        boolean header = layout.getHeader();
-        int cellSpacing = layout.getCellSpacing();
-        int cellPadding = layout.getCellPadding();
-        int border = layout.getBorder();
+        boolean header = layout.getRenderFirstLineAsHeader();
 
         int cols = layout.getColumns();
         int rows = layout.getRows();
 
-        d.print("\n<table ");
-        org.wings.plaf.css.Utils.innerPreferredSize(d, container.getPreferredSize());
-
-        if (cellSpacing >= 0)
-            d.print(" cellspacing=\"").print(cellSpacing).print("\"");
-        else
-            d.print(" cellspacing=\"0\"");
-
-        if (cellPadding >= 0)
-            d.print(" cellpadding=\"").print(cellPadding).print("\"");
-        else
-            d.print(" cellpadding=\"0\"");
-
-        if (border > 0)
-            d.print(" border=\"").print(border).print("\"");
-        else
-            d.print(" border=\"0\"");
-
-        d.print(">\n");
+        printLayouterTableHeader(d, layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout.getContainer());
 
         if (cols <= 0)
             cols = components.size() / rows;
@@ -85,16 +63,10 @@ public class GridLayoutCG
                 d.print("<td");
 
             Utils.printTableCellAlignment(d, c);
-            if (c instanceof SContainer && c.isVisible() && Utils.hasSpanAttributes(c)) {
-                // Adapt inner styles (esp. width of containers)
-                // maybe better restrict to dimension styles only?
-                d.print(" style=\"");
-                Utils.writeAttributes(d, c);
-                d.print("\"");
-            }
+            Utils.printCSSInlineStyleAttributes(d, c);
             d.print(">");
 
-            c.write(d);
+            c.write(d); // Render component
 
             if (firstRow && header)
                 d.print("</th>");
@@ -107,6 +79,6 @@ public class GridLayoutCG
                 d.print("</tr>\n");
         }
 
-        d.print("</table>");
+        printLayouterTableFooter(d);
     }
 }

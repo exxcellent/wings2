@@ -13,6 +13,7 @@
  */
 package org.wings.plaf;
 
+
 public interface MenuCG extends ComponentCG {
 }
 

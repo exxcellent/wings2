@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.plaf.OptionPaneCG;
+import org.wings.plaf.OptionPaneCG;
 
 import javax.swing.*;
 import java.awt.*;

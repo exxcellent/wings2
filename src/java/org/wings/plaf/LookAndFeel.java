@@ -33,16 +33,14 @@ import java.util.*;
 /**
  * A Look-and-Feel consists of a bunch of CGs and resource properties.
  * wingS provides a pluggable look-and-feel (laf or plaf) concept similar to that of Swing.
- * A certain plaf implementation normally adresses a specific browser.
+ * A certain plaf implementation normally adresses a specific browser platform.
  *
  * @see org.wings.plaf.ComponentCG
  */
-public class LookAndFeel
-        implements Serializable {
+public class LookAndFeel        implements Serializable {
     private final transient static Log log = LogFactory.getLog(LookAndFeel.class);
 
     private static Map wrappers = new HashMap();
-
     static {
         wrappers.put(Boolean.TYPE, Boolean.class);
         wrappers.put(Character.TYPE, Character.class);

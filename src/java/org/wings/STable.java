@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.plaf.TableCG;
+import org.wings.plaf.TableCG;
 import org.wings.style.AttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;

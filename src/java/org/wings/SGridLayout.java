@@ -25,26 +25,18 @@ import java.util.List;
 public class SGridLayout
         extends SAbstractLayoutManager {
     protected ArrayList components = new ArrayList(2);
-
     protected int rows = 1;
     protected int cols = 1;
-
     protected int border = 0;
-
-    protected boolean header = false;
-    //protected boolean relative = false;
-
-    //protected int width = -1;
+    protected boolean renderFirstLineAsHeader = false;
     protected int cellPadding = -1;
     protected int cellSpacing = -1;
 
     /**
      * creates a new grid layout with 1 row and 1 column extent
      */
-
     public SGridLayout() {
-        this.setPreferredSize(new SDimension("100%", null));
-        //this.setRelative(true);
+        this.setPreferredSize(new SDimension("100%", "100%"));
     }
 
     /**
@@ -82,7 +74,9 @@ public class SGridLayout
      *
      * @return number of columns
      */
-    public int getColumns() { return cols; }
+    public int getColumns() {
+        return cols;
+    }
 
     /**
      * sets the number of rows
@@ -98,7 +92,9 @@ public class SGridLayout
      *
      * @return number of rows
      */
-    public int getRows() { return rows; }
+    public int getRows() {
+        return rows;
+    }
 
     public void addComponent(SComponent c, Object constraint, int index) {
         components.add(index, c);
@@ -122,42 +118,42 @@ public class SGridLayout
         cellPadding = p;
     }
 
-    public int getCellPadding() { return cellPadding; }
+    public int getCellPadding() {
+        return cellPadding;
+    }
 
 
     public void setCellSpacing(int s) {
         cellSpacing = s;
     }
 
-    public int getCellSpacing() { return cellSpacing; }
+    public int getCellSpacing() {
+        return cellSpacing;
+    }
 
 
     public void setBorder(int pixel) {
         border = pixel;
     }
 
-    public int getBorder() { return border; }
-
-
-    /*public void setWidth(int width) {
-        this.width = width;
+    public int getBorder() {
+        return border;
     }
 
-    public int getWidth() { return width; }*/
-
-
-    /*public void setRelative(boolean relative) {
-        this.relative = relative;
+    /**
+     * Renders the first line as HTML <code>&lt;th&gt;</code> instead regular <code>&lt;tr&gt;</code>.
+     * @param b true if first line should be rendered as header
+     */
+    public void setRenderFirstLineAsHeader(boolean b) {
+        renderFirstLineAsHeader = b;
     }
 
-    public boolean isRelative() { return relative; } */
-
-
-    public void setHeader(boolean b) {
-        header = b;
+    /**
+     * {@link #setRenderFirstLineAsHeader(boolean)}
+     */
+    public boolean getRenderFirstLineAsHeader() {
+        return renderFirstLineAsHeader;
     }
-
-    public boolean getHeader() { return header; }
 }
 
 

@@ -16,6 +16,7 @@ package org.wings;
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.plaf.ContainerCG;
+import org.wings.plaf.ContainerCG;
 import org.wings.style.StyleConstants;
 import org.wings.util.ComponentVisitor;
 

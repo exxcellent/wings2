@@ -14,6 +14,8 @@
 package org.wings;
 
 import org.wings.plaf.ProgressBarCG;
+import org.wings.plaf.ProgressBarCG;
+import org.wings.plaf.ProgressBarCG;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -773,6 +775,11 @@ public class SProgressBar extends SComponent {
 
 /*
    $Log$
+   Revision 1.6  2005/01/23 19:31:36  blueshift
+   o reworked grid, gridbag and flowlayout
+   o some bugfixes in plaf.utils and formcg...
+   o dropped plaf.xhtml package
+
    Revision 1.5  2004/12/01 07:54:07  hengels
    o wings is not j-wings
    o styles are not lower case (they're derived from the class name)

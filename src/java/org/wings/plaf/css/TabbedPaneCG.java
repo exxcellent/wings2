@@ -61,14 +61,14 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             throws java.io.IOException {
         STabbedPane tabbedPane = (STabbedPane) component;
         String style = component.getStyle();
-        boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
+        boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
         int placement = tabbedPane.getTabPlacement();
 
         device.print("<table cellspacing=\"0\"");
         if (childSelectorWorkaround)
             Utils.childSelectorWorkaround(device, style);
 
-        Utils.innerPreferredSize(device, component.getPreferredSize());
+        Utils.printInnerPreferredSize(device, component.getPreferredSize());
 
         Utils.writeEvents(device, component);
         device.print(">");
@@ -132,7 +132,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     }
 
     private void writeTabs(Device device, STabbedPane tabbedPane) throws IOException {
-        boolean childSelectorWorkaround = !tabbedPane.getSession().getUserAgent().supportsChildSelector();
+        boolean childSelectorWorkaround = !tabbedPane.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = tabbedPane.getShowAsFormComponent();
         boolean konquerorWorkaround = "Konqueror".equals(tabbedPane.getSession().getUserAgent().getBrowserName());
 

@@ -11,21 +11,18 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.xhtml;
+package org.wings.plaf.css;
 
+import org.wings.SCardLayout;
+import org.wings.SComponent;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
+import org.wings.plaf.LayoutCG;
+import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
 
-/**
- * CG for <a href="../../SFullScreenLayout.html">SFullScreenLayout</a>.
- *
- * @author <a href="mailto:andre@lison.de">Andre Lison</a>
- * @version $Revision$
- */
-public class FullScreenLayoutCG
-        extends BorderLayoutCG {
+public class CardLayoutCG implements LayoutCG {
     /**
      * @param d the device to write the code to
      * @param l the layout manager
@@ -33,10 +30,12 @@ public class FullScreenLayoutCG
      */
     public void write(Device d, SLayoutManager l)
             throws IOException {
-        d.print("\n<div style=\"position:absolute; z-index:1; left: 0; top: 0; width: 100%; height: 100%\">");
-        super.write(d, l);
-        System.out.println("Div Fullscreenlayout");
-        d.print("</div>");
+        SCardLayout cardLayout = (SCardLayout) l;
+        SComponent c = cardLayout.getVisibleComponent();
+        // Just present visible component
+        if (c != null) {
+            c.write(d);
+        }
     }
 }
 

@@ -73,7 +73,7 @@ public class TextFieldCG
                 component.addScriptListener(submitListener);
             }
         }
-        Utils.innerPreferredSize(device, component.getPreferredSize());
+        Utils.printInnerPreferredSize(device, component.getPreferredSize());
         Utils.writeEvents(device, component);
 
         org.wings.plaf.Utils.optAttribute(device, "value", component.getText());

@@ -13,5 +13,7 @@
  */
 package org.wings.plaf;
 
+
+
 public interface OptionPaneCG extends ComponentCG {
 }

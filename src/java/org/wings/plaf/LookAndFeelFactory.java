@@ -71,7 +71,7 @@ public abstract class LookAndFeelFactory {
     public abstract LookAndFeel create() throws IOException;
 
     static class Default extends LookAndFeelFactory {
-        private static String DEFAULT_LOOKANDFEEL = "org.wings.plaf.css.LookAndFeel";
+        private static String DEFAULT_LOOKANDFEEL = "org.wings.plaf.css.CSSLookAndFeel";
         private LookAndFeel laf;
 
         public LookAndFeel create()

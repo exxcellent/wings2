@@ -15,6 +15,9 @@ package org.wings;
 
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.TabbedPaneCG;
+import org.wings.plaf.ComponentCG;
+import org.wings.plaf.TabbedPaneCG;
+import org.wings.plaf.ComponentCG;
 import org.wings.style.AttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;

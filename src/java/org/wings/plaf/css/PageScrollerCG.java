@@ -186,7 +186,7 @@ public class PageScrollerCG
     }
 
     private void writePage(Device device, SPageScroller pageScroller, int page) throws IOException {
-        boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsChildSelector();
+        boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
         if (showAsFormComponent)
@@ -211,7 +211,7 @@ public class PageScrollerCG
     }
 
     private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event) throws IOException {
-        boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsChildSelector();
+        boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
         if (showAsFormComponent)

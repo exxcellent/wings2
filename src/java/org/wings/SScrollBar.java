@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.plaf.ScrollBarCG;
+import org.wings.plaf.ScrollBarCG;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>

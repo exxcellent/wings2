@@ -15,10 +15,9 @@ package wingset;
 
 import org.wings.*;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -29,7 +28,6 @@ public class LabelExample extends WingSetPane {
     private static final String directions[] = {"nw", "n", "ne", "w", "e", "sw", "s", "se"};
     private static final SIcon onIcons[];
     private static final SIcon offIcons[];
-    private List sizables = new LinkedList();
     private ComponentControls controls;
 
     static {
@@ -45,17 +43,19 @@ public class LabelExample extends WingSetPane {
     public SComponent createExample() {
         controls = new ComponentControls();
 
-        final SLabel testLabel = new SLabel("LabelText");
+        final SLabel testLabel = new SLabel("A yellow, bold text");
         testLabel.setHorizontalAlignment(LEFT);
         testLabel.setIcon(WAIT_ICON);
-        testLabel.setAttribute("color", "#AA0000");
-        testLabel.setAttribute("font-weight", "bold");
+        testLabel.setForeground(Color.YELLOW);
+        testLabel.setFont(new SFont("Arial Black",SFont.ITALIC,SFont.FONT+1));
         controls.addSizable(testLabel);
 
-        SPanel p = new SPanel(new SGridLayout(2));
+        SPanel p = new SPanel(new SGridLayout(3));
         p.add(new SLabel("Control the label's text position"));
+        p.add(new SSpacer(100,1));
         p.add(new SLabel("Result"));
         p.add(createRoundRadio(testLabel));
+        p.add(new SLabel());
         p.add(testLabel);
 
         SForm form = new SForm(new SBorderLayout());

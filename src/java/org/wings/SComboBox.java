@@ -14,6 +14,8 @@
 package org.wings;
 
 import org.wings.plaf.ComboBoxCG;
+import org.wings.plaf.ComboBoxCG;
+import org.wings.plaf.ComboBoxCG;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -356,6 +358,15 @@ public class SComboBox
      */
     public void removeItemListener(ItemListener listener) {
         removeEventListener(ItemListener.class, listener);
+    }
+
+    /**
+     * Returns an array of all the ItemListener added to this SComboBox
+     *
+     * @return all ItemListener added or an empty array if no listeners are there
+     */
+    public ItemListener[] getItemListener() {
+        return (ItemListener[]) getListeners(ItemListener.class);
     }
 
     /**

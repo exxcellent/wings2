@@ -22,49 +22,22 @@ import java.util.StringTokenizer;
 
 
 /**
- * Detect the browser from the user-agent string.
+ * Detect the browser from the user-agent string passed in the HTTP header.
  *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @version $Revision$
  */
 public class Browser {
-    /**
-     * Operating system information could not be found.
-     */
-    public static final int OS_UNKNOWN = 0;
-
-    /**
-     * Browser os is of type Unix.
-     */
-    public static final int UNIX = 1;
-
-    /**
-     * Browser os is of type Windows.
-     */
-    public static final int WINDOWS = 2;
-
-    /**
-     * Browser os is of type MacOS
-     */
-    public static final int MACOS = 3;
-
-    /**
-     * Browser os is of type IBM-OS.
-     * <br>f.e. OS/2
-     */
-    public static final int IBMOS = 4;
-
     protected String agent;
-
-    private String Name;
-    private int MajorVersion;
-    private double MinorVersion;
-    private String Release;
-    private String OS;
-    private int OSType = OS_UNKNOWN;
-    private String OSVersion;
-    private Locale BLocale;
-    private boolean HasGecko = false;
+    private int majorVersion;
+    private double minorVersion;
+    private String release;
+    private String os;
+    private OSType osType = OSType.UNKNOWN;
+    private String osVersion;
+    private String browserName;
+    private Locale browserLocale;
+    private BrowserType browserType = BrowserType.UNKNOWN;
 
     /**
      * Create a new browser object and start scanning for
@@ -79,10 +52,17 @@ public class Browser {
     }
 
     /**
-     * Get the browser name (Mozilla, MSIE, Opera etc.).
+     * Get the browser browserName (Mozilla, MSIE, Opera etc.).
      */
     public String getBrowserName() {
-        return Name;
+        return browserName;
+    }
+
+    /**
+     * @return A classification of the browser {@link BrowserType}
+     */
+    public BrowserType getBrowserType() {
+        return browserType;
     }
 
     /**
@@ -92,7 +72,7 @@ public class Browser {
      * @return the major version or <i>0</i> if not found
      */
     public int getMajorVersion() {
-        return MajorVersion;
+        return majorVersion;
     }
 
     /**
@@ -103,7 +83,7 @@ public class Browser {
      * @return the minor version if found, <i>0</i> otherwise
      */
     public double getMinorVersion() {
-        return MinorVersion;
+        return minorVersion;
     }
 
     /**
@@ -113,16 +93,16 @@ public class Browser {
      * @return the release or <i>null</i>, if not available.
      */
     public String getRelease() {
-        return Release;
+        return release;
     }
 
     /**
-     * Get the operating system name.
+     * Get the operating system string provided by the browser. {@link OSType}
      *
-     * @return the os name or <i>null</i>, if not available.
+     * @return the os browserName or <i>null</i>, if not available.
      */
-    public String getOS() {
-        return OS;
+    public String getOs() {
+        return os;
     }
 
     /**
@@ -130,23 +110,17 @@ public class Browser {
      *
      * @return the os version or <i>null</i>, if not available.
      */
-    public String getOSVersion() {
-        return OSVersion;
+    public String getOsVersion() {
+        return osVersion;
     }
-
 
     /**
      * Get the operating system type.
      *
-     * @return one of
-     *         <li>{@link #OS_UNKNOWN}</li>
-     *         <li>{@link #UNIX}</li>
-     *         <li>{@link #WINDOWS}</li>
-     *         <li>{@link #MACOS}</i>
-     *         <li>{@link #IBMOS}</i>
+     * @return A valid {@link OSType}
      */
-    public int getOSType() {
-        return OSType;
+    public OSType getOsType() {
+        return osType;
     }
 
     /**
@@ -156,202 +130,200 @@ public class Browser {
      *         specified by {@link Locale#getDefault} if not found.
      */
     public Locale getClientLocale() {
-        return BLocale;
+        return browserLocale;
     }
 
-    /**
-     * Get if the browser uses netscape gecko
-     * rendering engine.
-     *
-     * @return true, if it is a netscape6/mozilla clone,
-     *         false otherwise.
-     */
-    public boolean hasGecko() {
-        return HasGecko;
-    }
+    /* regexps are not threadsafe, we have to create them. */
+    protected final RE RE_START = new RE("^([a-zA-Z0-9_\\-]+)(/([0-9])\\.([0-9]+))?");
+    protected final RE RE_MSIE = new RE("RE_MSIE ([0-9])\\.([0-9]+)([a-z])?");
+    protected final RE RE_MSIE_WIN_LANG_OS = new RE("[wW]in(dows)? ([A-Z0-9]+) ?([0-9]\\.[0-9])?");
+    protected final RE RE_MSIE_MAC_LANG_OS = new RE("Mac_PowerPC");
+    protected final RE RE_NS_LANG_OS = new RE("\\[([a-z-]+)\\][ a-zA-Z0-9-]*\\(([a-zA-Z\\-]+)/?([0-9]* ?[.a-zA-Z0-9 ]*);");
+    protected final RE RE_NS_X11_LANG_OS = new RE("\\(X11; U; ([a-zA-Z-]+) ([0-9\\.]+)[^\\);]+\\)");
+    protected final RE RE_NS6_LANG_OS = new RE("\\(([a-zA-Z0-9]+); [a-zA-Z]+; ([a-zA-Z0-9_]+)( ([a-zA-Z0-9]+))?; ([_a-zA-Z-]+);");
+    protected final RE RE_LANG = new RE("\\[([_a-zA-Z-]+)\\]");
+    protected final RE RE_OPERA = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)(; U)?\\) RE_OPERA ([0-9]+)\\.([0-9]+)[ ]+\\[([_a-zA-Z-]+)\\]");
+    protected final RE RE_OPERA_LANG_OS = new RE("\\(([a-zA-Z0-9\\-]+) ([0-9\\.]+)[^)]+\\)[ \t]*\\[([a-z_]+)\\]");
+    protected final RE RE_KONQUEROR_OS = new RE("Konqueror/([0-9\\.]+); ([a-zA-Z0-9\\-]+)");
+    protected final RE RE_GALEON_OS = new RE("\\(([a-zA-Z0-9]+); U; Galeon; ([0-9]+)\\.([0-9]+);");
+    protected final RE Gecko_Engine = new RE("Gecko/[0-9]*( ([a-zA-Z]+)+[0-9]*/([0-9]+)\\.([0-9]+)([a-zA-Z0-9]*))?");
 
     /**
      * That does all the work.
-     * TODO: use pre-compiled regexps in final stage.
      */
     protected void detect()
             throws org.apache.regexp.RESyntaxException {
         if (agent == null || agent.length() == 0)
             return;
 
-        /* regexps are not threadsafe, we have to create them. */
-        RE Start = new RE("^([a-zA-Z0-9_\\-]+)(/([0-9])\\.([0-9]+))?");
-        RE MSIE = new RE("MSIE ([0-9])\\.([0-9]+)([a-z])?");
-        RE MSIE_Win_Lang_Os = new RE("[wW]in(dows)? ([A-Z0-9]+) ?([0-9]\\.[0-9])?");
-        RE MSIE_Mac_Lang_Os = new RE("Mac_PowerPC");
-        RE NS_Lang_Os = new RE("\\[([a-z-]+)\\][ a-zA-Z0-9-]*\\(([a-zA-Z\\-]+)/?([0-9]* ?[.a-zA-Z0-9 ]*);");
-        RE NS_X11_Lang_Os = new RE("\\(X11; U; ([a-zA-Z-]+) ([0-9\\.]+)[^\\);]+\\)");
-        RE NS6_Lang_Os = new RE("\\(([a-zA-Z0-9]+); [a-zA-Z]+; ([a-zA-Z0-9_]+)( ([a-zA-Z0-9]+))?; ([_a-zA-Z-]+);");
-        RE Lang = new RE("\\[([_a-zA-Z-]+)\\]");
-        RE Opera = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)(; U)?\\) Opera ([0-9]+)\\.([0-9]+)[ ]+\\[([_a-zA-Z-]+)\\]");
-        RE Opera_Lang_Os = new RE("\\(([a-zA-Z0-9\\-]+) ([0-9\\.]+)[^)]+\\)[ \t]*\\[([a-z_]+)\\]");
-        RE Konqueror_Os = new RE("Konqueror/([0-9\\.]+); ([a-zA-Z0-9\\-]+)");
-        RE Galeon_Os = new RE("\\(([a-zA-Z0-9]+); U; Galeon; ([0-9]+)\\.([0-9]+);");
-        RE Gecko_Engine = new RE("Gecko/[0-9]*( ([a-zA-Z]+)+[0-9]*/([0-9]+)\\.([0-9]+)([a-zA-Z0-9]*))?");
-
         String mav, miv, lang = null;
 
-        if (Start.match(agent)) {
-            Name = Start.getParen(1);
-            mav = Start.getParen(3);
-            miv = Start.getParen(4);
+        if (RE_START.match(agent)) {
+            browserName = RE_START.getParen(1);
+            mav = RE_START.getParen(3);
+            miv = RE_START.getParen(4);
             
-            /* MSIE hides itself behind Mozilla or different name,
+            /* RE_MSIE hides itself behind Mozilla or different browserName,
                good idea, congratulation Bill !
             */
-            if (MSIE.match(agent)) {
-                Name = "MSIE";
-                mav = MSIE.getParen(1);
-                miv = MSIE.getParen(2);
-                Release = MSIE.getParen(3);
+            if (RE_MSIE.match(agent)) {
+                browserName = "MSIE";
+                browserType = BrowserType.IE;
+                mav = RE_MSIE.getParen(1);
+                miv = RE_MSIE.getParen(2);
+                release = RE_MSIE.getParen(3);
 
-                if (MSIE_Win_Lang_Os.match(agent)) {
-                    OS = "Windows";
-                    OSVersion = MSIE_Win_Lang_Os.getParen(2) +
-                            (MSIE_Win_Lang_Os.getParen(3) == null ?
+                if (RE_MSIE_WIN_LANG_OS.match(agent)) {
+                    osType = OSType.WINDOWS;
+                    os = "Windows";
+                    osVersion = RE_MSIE_WIN_LANG_OS.getParen(2) +
+                            (RE_MSIE_WIN_LANG_OS.getParen(3) == null ?
                             "" :
-                            " " + MSIE_Win_Lang_Os.getParen(3));
-                } else if (MSIE_Mac_Lang_Os.match(agent)) {
-                    OS = "MacOS";
-                    OSType = MACOS;
+                            " " + RE_MSIE_WIN_LANG_OS.getParen(3));
+                } else if (RE_MSIE_MAC_LANG_OS.match(agent)) {
+                    os = "MacOS";
+                    osType = OSType.MACOS;
                 }
             }
             /* Mozilla has to different id's; one up to version 4
                and a second for version >= 5
             */
-            else if (Name.equals("Mozilla") || Name == null) {
-                Name = "Mozilla";
-                
-                /* old mozilla */
-                if (NS_Lang_Os.match(agent)) {
-                    lang = NS_Lang_Os.getParen(1);
-                    OS = NS_Lang_Os.getParen(2);
-                    OSVersion = NS_Lang_Os.getParen(3);
+            else if (browserName.equals("Mozilla") || browserName == null) {
+                browserName = "Mozilla";
+                browserType = BrowserType.MOZILLA;
 
-                    if (OS.equals("X")) {
-                        if (NS_X11_Lang_Os.match(agent)) {
-                            OS = NS_X11_Lang_Os.getParen(1);
-                            OSVersion = NS_X11_Lang_Os.getParen(2);
-                            OSType = UNIX;
+                /* old mozilla */
+                if (RE_NS_LANG_OS.match(agent)) {
+                    lang = RE_NS_LANG_OS.getParen(1);
+                    os = RE_NS_LANG_OS.getParen(2);
+                    osVersion = RE_NS_LANG_OS.getParen(3);
+
+                    if (os.equals("X")) {
+                        if (RE_NS_X11_LANG_OS.match(agent)) {
+                            os = RE_NS_X11_LANG_OS.getParen(1);
+                            osVersion = RE_NS_X11_LANG_OS.getParen(2);
+                            osType = OSType.UNIX;
                         }
                     }
                 }
                 /* NS5, NS6 Galeon etc. */
-                else if (Galeon_Os.match(agent)) {
-                    Name = "Galeon";
-                    OS = Galeon_Os.getParen(1);
-                    if (OS.equals("X11")) {
-                        OS = "Unix";
-                        OSType = UNIX;
+                else if (RE_GALEON_OS.match(agent)) {
+                    browserName = "Galeon";
+                    browserType = BrowserType.GECKO;
+                    os = RE_GALEON_OS.getParen(1);
+                    if (os.equals("X11")) {
+                        os = "Unix";
+                        osType = OSType.UNIX;
                     }
-                    mav = Galeon_Os.getParen(2);
-                    miv = Galeon_Os.getParen(3);
-                    HasGecko = true;
-                } else if (NS6_Lang_Os.match(agent)) {
-                    OS = NS6_Lang_Os.getParen(2);
-                    lang = NS6_Lang_Os.getParen(5);
-                    HasGecko = true;
+                    mav = RE_GALEON_OS.getParen(2);
+                    miv = RE_GALEON_OS.getParen(3);
+                } else if (RE_NS6_LANG_OS.match(agent)) {
+                    os = RE_NS6_LANG_OS.getParen(2);
+                    lang = RE_NS6_LANG_OS.getParen(5);
                 }
                 /* realy seldom but is there */
-                else if (MSIE_Win_Lang_Os.match(agent)) {
-                    OS = "Windows";
-                    OSType = WINDOWS;
-                    OSVersion = MSIE_Win_Lang_Os.getParen(2) +
-                            (MSIE_Win_Lang_Os.getParen(3) == null ?
+                else if (RE_MSIE_WIN_LANG_OS.match(agent)) {
+                    os = "Windows";
+                    osType = OSType.WINDOWS;
+                    osVersion = RE_MSIE_WIN_LANG_OS.getParen(2) +
+                            (RE_MSIE_WIN_LANG_OS.getParen(3) == null ?
                             "" :
-                            " " + MSIE_Win_Lang_Os.getParen(3));
+                            " " + RE_MSIE_WIN_LANG_OS.getParen(3));
                 }
                 /* Konqueror */
-                else if (Konqueror_Os.match(agent)) {
-                    Name = "Konqueror";
-                    StringTokenizer strtok = new StringTokenizer(Konqueror_Os.getParen(1), ".");
+                else if (RE_KONQUEROR_OS.match(agent)) {
+                    browserName = "Konqueror";
+                    browserType = BrowserType.KONQUEROR;
+                    StringTokenizer strtok = new StringTokenizer(RE_KONQUEROR_OS.getParen(1), ".");
                     mav = strtok.nextToken();
                     if (strtok.hasMoreTokens())
                         miv = strtok.nextToken();
                     if (strtok.hasMoreTokens())
-                        Release = strtok.nextToken();
-                    OS = Konqueror_Os.getParen(2);
+                        release = strtok.nextToken();
+                    os = RE_KONQUEROR_OS.getParen(2);
                 }
                 /* f*ck, what's that ??? */
                 else {
-                    Name = "Mozilla";
+                    browserName = "Mozilla";
+                    browserType = BrowserType.MOZILLA;
                 }
                 
                 /* reformat browser os */
-                if (OS != null && OS.startsWith("Win") &&
-                        (OSVersion == null || OSVersion.length() == 0)
+                if (os != null && os.startsWith("Win") &&
+                        (osVersion == null || osVersion.length() == 0)
                 ) {
-                    OSVersion = OS.substring(3, OS.length());
-                    OS = "Windows";
-                    OSType = WINDOWS;
+                    osVersion = os.substring(3, os.length());
+                    os = "Windows";
+                    osType = OSType.WINDOWS;
                 }
                 /* just any windows */
-                if (OS != null && OS.equals("Win")) {
-                    OS = "Windows";
-                    OSType = WINDOWS;
+                if (os != null && os.equals("Win")) {
+                    os = "Windows";
+                    osType = OSType.WINDOWS;
                 }
             }
             /* Opera identified as opera, that's easy! */
-            else if (Name.equals("Opera")) {
-                if (MSIE_Win_Lang_Os.match(agent)) {
-                    OS = "Windows";
-                    OSType = WINDOWS;
-                    OSVersion = MSIE_Win_Lang_Os.getParen(2) +
-                            (MSIE_Win_Lang_Os.getParen(3) == null ?
+            else if (browserName.equals("Opera")) {
+                browserType = BrowserType.OPERA;
+                if (RE_MSIE_WIN_LANG_OS.match(agent)) {
+                    os = "Windows";
+                    osType = OSType.WINDOWS;
+                    osVersion = RE_MSIE_WIN_LANG_OS.getParen(2) +
+                            (RE_MSIE_WIN_LANG_OS.getParen(3) == null ?
                             "" :
-                            " " + MSIE_Win_Lang_Os.getParen(3));
-                } else if (Opera_Lang_Os.match(agent)) {
-                    OS = Opera_Lang_Os.getParen(1);
-                    OSVersion = Opera_Lang_Os.getParen(2);
-                    lang = Opera_Lang_Os.getParen(3);
+                            " " + RE_MSIE_WIN_LANG_OS.getParen(3));
+                } else if (RE_OPERA_LANG_OS.match(agent)) {
+                    os = RE_OPERA_LANG_OS.getParen(1);
+                    osVersion = RE_OPERA_LANG_OS.getParen(2);
+                    lang = RE_OPERA_LANG_OS.getParen(3);
                 }
             }
             
             /* Opera identified as something else (Mozilla, IE ...) */
-            if (Opera.match(agent)) {
-                Name = "Opera";
-                OS = Opera.getParen(3);
-                OSVersion = Opera.getParen(4);
-                mav = Opera.getParen(7);
-                miv = Opera.getParen(8);
-                lang = Opera.getParen(10);
+            if (RE_OPERA.match(agent)) {
+                browserName = "Opera";
+                browserType = BrowserType.OPERA;
+                os = RE_OPERA.getParen(3);
+                osVersion = RE_OPERA.getParen(4);
+                mav = RE_OPERA.getParen(7);
+                miv = RE_OPERA.getParen(8);
+                lang = RE_OPERA.getParen(10);
             }
 
             /* detect gecko */
             if (Gecko_Engine.match(agent)) {
-                HasGecko = true;
+                browserType = BrowserType.GECKO;
                 if (Gecko_Engine.getParen(2) != null)
-                    Name = Gecko_Engine.getParen(2);
+                    browserName = Gecko_Engine.getParen(2);
                 if (Gecko_Engine.getParen(3) != null)
                     mav = Gecko_Engine.getParen(3);
                 if (Gecko_Engine.getParen(4) != null)
                     miv = Gecko_Engine.getParen(4);
                 if (Gecko_Engine.getParen(5) != null)
-                    Release = Gecko_Engine.getParen(5);
+                    release = Gecko_Engine.getParen(5);
             }
             
-            /* try to find language in uncommon places 
-               if not detected before
-            */
+            /* try to find language in uncommon places if not detected before */
             if (lang == null) {
-                if (Lang.match(agent)) {
-                    lang = Lang.getParen(1);
+                if (RE_LANG.match(agent)) {
+                    lang = RE_LANG.getParen(1);
                 }
             }
 
-            try { MajorVersion = new Integer(mav).intValue(); } catch (NumberFormatException ex) { MajorVersion = 0; }
+            try {
+                majorVersion = new Integer(mav).intValue();
+            } catch (NumberFormatException ex) {
+                majorVersion = 0;
+            }
 
-            try { MinorVersion = new Double("0." + miv).doubleValue(); } catch (NumberFormatException ex) {
-                MinorVersion = 0f;
+            try {
+                minorVersion = new Double("0." + miv).doubleValue();
+            } catch (NumberFormatException ex) {
+                minorVersion = 0f;
             }
 
             if (lang == null)
-                BLocale = Locale.getDefault();
+                browserLocale = Locale.getDefault();
             else {
                 /* Mozilla does that, maybe any other browser too ? */
                 lang = lang.replace('-', '_');
@@ -360,34 +332,37 @@ public class Browser {
                 StringTokenizer strtok = new StringTokenizer(lang, "_");
                 String l = strtok.nextToken();
                 if (strtok.hasMoreElements())
-                    BLocale = new Locale(l, strtok.nextToken());
+                    browserLocale = new Locale(l, strtok.nextToken());
                 else
-                    BLocale = new Locale(l, "");
+                    browserLocale = new Locale(l, "");
             }
 
-            if (OSType == OS_UNKNOWN && OS != null) {
-                if (OS.equals("Windows"))
-                    OSType = WINDOWS;
-                else if (OS.equals("MacOS"))
-                    OSType = MACOS;
+            if (osType == OSType.UNKNOWN && os != null) {
+                if (os.equals("Windows"))
+                    osType = OSType.WINDOWS;
+                else if (os.equals("MacOS"))
+                    osType = OSType.MACOS;
                 else if (
-                        OS.equals("Linux") ||
-                        OS.equals("AIX") ||
-                        OS.equals("SunOS") ||
-                        OS.equals("HP-UX") ||
-                        OS.equals("Solaris") ||
-                        OS.equals("BSD")
+                        os.equals("Linux") ||
+                        os.equals("AIX") ||
+                        os.equals("SunOS") ||
+                        os.equals("HP-UX") ||
+                        os.equals("Solaris") ||
+                        os.equals("BSD")
                 ) {
-                    OSType = UNIX;
-                } else if (OS.equals("OS")) {
-                    OSType = IBMOS;
+                    osType = OSType.UNIX;
+                } else if (os.equals("os")) {
+                    osType = OSType.IBMOS;
                 }
             }
         }
     }
 
-    public boolean supportsChildSelector() {
-        return !"MSIE".equals(Name);
+    /**
+     * @return true if browser supports the following notation for CSS selectors: <code>DIV > P</code>
+     */
+    public boolean supportsCssChildSelector() {
+        return browserType != BrowserType.IE;
     }
 
     /**
@@ -413,31 +388,12 @@ public class Browser {
     }
 
     /**
-     * Get a full human readable representation of
-     * the browser.
+     * Get a full human readable representation of the browser.
      */
     public String toString() {
-        String t = "";
-        switch (OSType) {
-            case UNIX:
-                t = "Unix";
-                break;
-            case WINDOWS:
-                t = "Windows";
-                break;
-            case MACOS:
-                t = "MacOS";
-                break;
-            case IBMOS:
-                t = "IBM OS";
-                break;
-            default:
-                t = "Unknown os";
-                break;
-        }
-        return Name + " v" + (MajorVersion + MinorVersion) + (Release == null ? "" : "-" + Release) +
-                ", " + BLocale +
-                ", " + t + ": " + OS + " " + OSVersion +
-                (HasGecko ? " + Gecko-Engine" : "");
+        return browserName + " v" + (majorVersion + minorVersion) + (release == null ? "" : "-" + release) +
+                "["+browserType+"], " + browserLocale + ", " + osType.getName() + ": " + os + " " + osVersion;
     }
+
+
 }

@@ -58,7 +58,7 @@
         </init-param>
         <init-param>
             <param-name>wings.lookandfeel.default</param-name>
-            <param-value>org.wings.plaf.css.LookAndFeel</param-value>
+            <param-value>org.wings.plaf.css.CSSLookAndFeel</param-value>
         </init-param>
         <init-param>
             <description>See KeyStroke.getKeyStroke(String s).</description>

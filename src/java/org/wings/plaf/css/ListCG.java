@@ -23,21 +23,7 @@ import org.wings.script.JavaScriptListener;
 
 import java.io.IOException;
 
-public class ListCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.ListCG {
-
-//--- byte array converted template snippets.
-    private final static byte[] __select = "<select".getBytes();
-    private final static byte[] __disabled_1 = " disabled=\"1\"".getBytes();
-    private final static byte[] __option = "\n<option".getBytes();
-    private final static byte[] __selected_selec = " selected=\"selected\"".getBytes();
-    private final static byte[] ___1 = "\"".getBytes();
-    private final static byte[] __style = " style=\"".getBytes();
-    private final static byte[] __option_1 = "</option>".getBytes();
-    private final static byte[] __select_1 = "</select>".getBytes();
-    private final static byte[] __input_type_hid = "<input type=\"hidden\"".getBytes();
-    private final static byte[] ___2 = "/>".getBytes();
+public class ListCG extends AbstractComponentCG implements SConstants, org.wings.plaf.ListCG {
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -54,15 +40,15 @@ public class ListCG
 
     protected void writeFormList(Device device, SList list) throws IOException {
 
-        device.write(__select);
-        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(list));
-        org.wings.plaf.Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
-        org.wings.plaf.Utils.optAttribute(device, "size", list.getVisibleRowCount());
-        org.wings.plaf.Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SConstants.MULTIPLE_SELECTION) ? "multiple" : null);
-        org.wings.plaf.Utils.optAttribute(device, "focus", list.getName());
+        device.print("<select");
+        Utils.optAttribute(device, "name", Utils.event(list));
+        Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
+        Utils.optAttribute(device, "size", list.getVisibleRowCount());
+        Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SConstants.MULTIPLE_SELECTION) ? "multiple" : null);
+        Utils.optAttribute(device, "focus", list.getName());
 
         if (!list.isEnabled()) {
-            device.write(__disabled_1);
+            device.print(" disabled=\"1\"");
         }
 
         list.removeScriptListener(selectListener);
@@ -70,10 +56,10 @@ public class ListCG
             list.addScriptListener(selectListener);
         }
 
-        Utils.innerPreferredSize(device, list.getPreferredSize());
+        Utils.printInnerPreferredSize(device, list.getPreferredSize());
         Utils.writeEvents(device, list);
 
-        device.write(">".getBytes());
+        device.print(">".getBytes());
         javax.swing.ListModel model = list.getModel();
         int size = model.getSize();
 
@@ -85,21 +71,23 @@ public class ListCG
                 renderer = cellRenderer.getListCellRendererComponent(list, model.getElementAt(i), false, i);
             }
 
-            device.write(__option);
-            org.wings.plaf.Utils.optAttribute(device, "value", list.getSelectionParameter(i));
+            device.print("\n<option");
+            Utils.optAttribute(device, "value", list.getSelectionParameter(i));
             if (list.isSelectedIndex(i)) {
-                device.write(__selected_selec);
+                device.print(" selected=\"selected\"");
             }
 
             org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
-            org.wings.plaf.xhtml.Utils.writeAttributes(stringBufferDevice, renderer);
+
+            Utils.printCSSInlineStyleAttributes(stringBufferDevice, renderer);
+
             String styleString = stringBufferDevice.toString();
             if (styleString != null && styleString.length() > 0) {
-                device.write(__style);
-                org.wings.plaf.Utils.write(device, styleString);
-                device.write(___1);
+                device.print(" style=\"");
+                Utils.write(device, styleString);
+                device.print("\"");
             }
-            device.write(">".getBytes());
+            device.print(">");
 
             if (renderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
@@ -121,14 +109,14 @@ public class ListCG
                 device.print(model.getElementAt(i).toString());
             }
 
-            device.write(__option_1);
+            device.print("</option>");
         }
 
-        device.write(__select_1);
-        device.write(__input_type_hid);
-        org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(list));
-        org.wings.plaf.Utils.optAttribute(device, "value", -1);
-        device.write(___2);
+        device.print("</select>");
+        device.print("<input type=\"hidden\"");
+        Utils.optAttribute(device, "name", Utils.event(list));
+        Utils.optAttribute(device, "value", -1);
+        device.print("/>");
     }
 
     private org.wings.io.StringBufferDevice stringBufferDevice = null;
@@ -147,11 +135,11 @@ public class ListCG
         boolean renderSelection = list.getSelectionMode() != SConstants.NO_SELECTION;
 
         device.print("<");
-        org.wings.plaf.Utils.write(device, list.getType());
-        org.wings.plaf.Utils.optAttribute(device, "type", list.getOrderType());
-        org.wings.plaf.Utils.optAttribute(device, "start", list.getStart());
+        Utils.write(device, list.getType());
+        Utils.optAttribute(device, "type", list.getOrderType());
+        Utils.optAttribute(device, "start", list.getStart());
 
-        Utils.innerPreferredSize(device, list.getPreferredSize());
+        Utils.printInnerPreferredSize(device, list.getPreferredSize());
         device.print(">");
 
         javax.swing.ListModel model = list.getModel();
@@ -180,19 +168,19 @@ public class ListCG
             if (renderSelection) {
                 if (showAsFormComponent) {
                     device.print("<button type=\"submit\" name=\"");
-                    org.wings.plaf.Utils.write(device, Utils.event(list));
+                    Utils.write(device, Utils.event(list));
                     device.print("\" value=\"");
-                    org.wings.plaf.Utils.write(device, list.getToggleSelectionParameter(i));
+                    Utils.write(device, list.getToggleSelectionParameter(i));
                     device.print("\"");
                 } else {
                     RequestURL selectionAddr = list.getRequestURL();
                     selectionAddr.addParameter(Utils.event(list), list.getToggleSelectionParameter(i));
 
-                    device.write("<a href=\"".getBytes());
-                    org.wings.plaf.Utils.write(device, selectionAddr.toString());
+                    device.print("<a href=\"".getBytes());
+                    Utils.write(device, selectionAddr.toString());
                     device.print("\"");
                 }
-                org.wings.plaf.Utils.optAttribute(device, "focus", renderer.getName());
+                Utils.optAttribute(device, "focus", renderer.getName());
                 device.print(">");
             } else
                 device.print("<span>");
@@ -211,7 +199,7 @@ public class ListCG
         }
 
         device.print("</");
-        org.wings.plaf.Utils.write(device, list.getType());
+        Utils.write(device, list.getType());
         device.print(">");
     }
 

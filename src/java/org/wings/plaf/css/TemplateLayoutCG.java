@@ -11,9 +11,8 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.xhtml;
+package org.wings.plaf.css;
 
-import org.wings.SComponent;
 import org.wings.SLayoutManager;
 import org.wings.STemplateLayout;
 import org.wings.io.Device;
@@ -45,24 +44,21 @@ public class TemplateLayoutCG
 
     private void write(Device device, STemplateLayout layout)
             throws IOException {
-
         final TemplateSource source = layout.getTemplateSource();
-        SComponent container = (SComponent) layout.getContainer();
 
         if (source == null) {
             device.print("Unable to open template-file <b>'");
             device.print(source);
             device.print("'</b>");
         } else {
-            if (Utils.hasSpanAttributes(container)) {
+            if (false) {
                 device.print(" <span style=\"");
-                Utils.writeSpanAttributes(device, container);
                 device.print("\">");
             }
 
             layout.getPageParser().process(source, new TemplateParseContext(device, layout));
 
-            if (Utils.hasSpanAttributes(container)) {
+            if (false) {
                 device.print("</span>");
             }
         }
@@ -75,7 +71,6 @@ public class TemplateLayoutCG
      */
     public void write(Device device, SLayoutManager manager)
             throws IOException {
-
         write(device, (STemplateLayout) manager);
     }
 }

@@ -13,6 +13,8 @@
  */
 package org.wings.plaf;
 
+
+
 public interface TextAreaCG extends ComponentCG {
 }
 

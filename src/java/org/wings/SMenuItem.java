@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.plaf.MenuBarCG;
+import org.wings.plaf.MenuBarCG;
 
 /**
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>

@@ -19,9 +19,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class CheckBoxCG
-        extends ButtonCG
-        implements SConstants, org.wings.plaf.CheckBoxCG {
+public class CheckBoxCG        extends ButtonCG        implements SConstants, org.wings.plaf.CheckBoxCG {
     private boolean useIconsInForm = false;
 
     public boolean isUseIconsInForm() {

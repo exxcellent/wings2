@@ -15,6 +15,7 @@ package org.wings;
 
 import org.wings.io.Device;
 import org.wings.plaf.DesktopPaneCG;
+import org.wings.plaf.DesktopPaneCG;
 
 import java.io.IOException;
 

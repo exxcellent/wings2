@@ -24,7 +24,7 @@ import java.io.Serializable;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public interface SLayoutManager extends Serializable, Renderable {
+public interface SLayoutManager extends SConstants, Serializable, Renderable {
     /**
      * Adds a component to the layout manager
      *

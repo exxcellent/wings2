@@ -11,30 +11,25 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.xhtml;
+package org.wings.plaf.css;
 
 import org.wings.SBorderLayout;
 import org.wings.SComponent;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
-import java.util.Map;
 
-public class BorderLayoutCG
-        implements LayoutCG {
+public class BorderLayoutCG extends AbstractLayoutCG {
 
     public void write(Device d, SLayoutManager l)
             throws IOException {
         SBorderLayout layout = (SBorderLayout) l;
-        Map components = layout.getComponents();
-
-        SComponent north = (SComponent) components.get(SBorderLayout.NORTH);
-        SComponent east = (SComponent) components.get(SBorderLayout.EAST);
-        SComponent center = (SComponent) components.get(SBorderLayout.CENTER);
-        SComponent west = (SComponent) components.get(SBorderLayout.WEST);
-        SComponent south = (SComponent) components.get(SBorderLayout.SOUTH);
+        SComponent north = (SComponent) layout.getComponents().get(SBorderLayout.NORTH);
+        SComponent east = (SComponent) layout.getComponents().get(SBorderLayout.EAST);
+        SComponent center = (SComponent) layout.getComponents().get(SBorderLayout.CENTER);
+        SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
+        SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
         int cols = 0;
         if (west != null) cols++;

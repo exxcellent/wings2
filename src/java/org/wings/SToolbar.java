@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.plaf.ToolbarCG;
+import org.wings.plaf.ToolbarCG;
 
 /**
  * The basic SToolbar is just an SPanel without an SLayoutManager.

@@ -6,6 +6,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
+import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class ScrollPaneLayoutCG
         SComponent south = (SComponent) components.get(SScrollPaneLayout.SOUTH);
 
         d.print("\n<table class=\"SScrollPaneLayout\" cellpadding=\"0\" cellspacing=\"0\"");
-        Utils.innerPreferredSize(d, container.getPreferredSize());
+        Utils.printInnerPreferredSize(d, container.getPreferredSize());
         d.print("><tbody>");
 
         if (north != null) {

@@ -52,7 +52,7 @@ public class TextAreaCG
         org.wings.plaf.Utils.optAttribute(device, "rows", component.getRows());
         org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.innerPreferredSize(device, component.getPreferredSize());
+        Utils.printInnerPreferredSize(device, component.getPreferredSize());
 
         if (!component.isEditable()) {
             device.write(__readonly_1);

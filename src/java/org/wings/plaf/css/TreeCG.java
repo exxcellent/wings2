@@ -98,7 +98,7 @@ public class TreeCG
 
     private void writeTreeNode(STree component, Device device, int row, int depth)
             throws IOException {
-        boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
+        boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
         final TreePath path = component.getPathForRow(row);
         final int nodeIndentDepth = component.getNodeIndentDepth();
 
@@ -269,7 +269,7 @@ public class TreeCG
         final int depth = component.getMaximumExpandedDepth();
 
         device.print("<table");
-        Utils.innerPreferredSize(device, component.getPreferredSize());
+        Utils.printInnerPreferredSize(device, component.getPreferredSize());
         device.print(">");
 
         for (int i = start; i < count; ++i)

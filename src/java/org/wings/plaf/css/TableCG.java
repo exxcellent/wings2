@@ -173,13 +173,13 @@ public class TableCG
         final STable component = (STable) _c;
 
         STable table = (STable) component;
-        boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsChildSelector();
+        boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
 
         SDimension intercellPadding = table.getIntercellPadding();
         SDimension intercellSpacing = table.getIntercellSpacing();
 
         device.print("<table");
-        Utils.innerPreferredSize(device, component.getPreferredSize());
+        Utils.printInnerPreferredSize(device, component.getPreferredSize());
 
         // TODO: border="" should be obsolete
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse

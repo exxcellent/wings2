@@ -41,8 +41,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.*;
 import java.net.SocketException;
+import java.util.*;
 
 /**
  * The basic component implementation for all components in this package.
@@ -793,18 +793,21 @@ public abstract class SComponent
      */
     public void write(Device s) throws IOException {
         try {
+            boolean debugComments = this instanceof SContainer;
+            if (debugComments)
+                s.print("<!--"+this.getClass().getName()+".START-->");
             if (visible) {
                 cg.write(s, this);
             }
+            if (debugComments)
+                s.print("<!--"+this.getClass().getName()+".END-->");
         }
         catch (SocketException se) {
             // Typical double-clicks. Not severe
-            log.info( "Exception during code generation for " +
-                    getClass().getName(), se);
+            log.info( "Exception during code generation for " + getClass().getName(), se);
 
         } catch (Throwable t) {
-            log.fatal( "Exception during code generation for " +
-                    getClass().getName(), t);
+            log.fatal( "Exception during code generation for " + getClass().getName(), t);
         }
     }
 

@@ -3,6 +3,8 @@
  */
 package org.wings.plaf;
 
+
+
 public interface PageScrollerCG extends ComponentCG {
 }
 

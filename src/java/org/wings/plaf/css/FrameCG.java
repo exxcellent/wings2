@@ -25,6 +25,7 @@ import org.wings.script.DynamicScriptResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Browser;
+import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 import org.wings.style.DynamicStyleSheetResource;
 
@@ -47,8 +48,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             "\"http://www.w3.org/TR/REC-html40/strict.dtd\">";
 
     //--- properties of this plaf.
-    private String documentType = DEFAULT_DOCTYPE;
-    private Boolean renderXmlDeclaration = Boolean.FALSE;
+    private String documentType;
+    private Boolean renderXmlDeclaration;
 
     /**
      * Initialize properties from config
@@ -59,8 +60,12 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         final Boolean userRenderXmlDecl = (Boolean) manager.getObject("FrameCG.renderXmlDeclaration", Boolean.class);
         if (userDocType != null)
             setDocumentType(userDocType);
+        else
+            setDocumentType(DEFAULT_DOCTYPE);
         if (userRenderXmlDecl != null)
             setRenderXmlDeclaration(userRenderXmlDecl);
+        else
+            setRenderXmlDeclaration(Boolean.FALSE);
     }
 
 
@@ -92,11 +97,11 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
 
         Browser browser = component.getSession().getUserAgent();
         String stylesheet = "../gecko.css";
-        if (browser.hasGecko())
+        if (browser.getBrowserType() == BrowserType.GECKO)
             stylesheet = "../gecko.css";
-        else if ("MSIE".equals(browser.getBrowserName()))
+        else if (browser.getBrowserType() == BrowserType.IE)
             stylesheet = "../msie.css";
-        else if ("Konqueror".equals(browser.getBrowserName()))
+        else if (browser.getBrowserType() == BrowserType.KONQUEROR)
             stylesheet = "../konqueror.css";
 
         component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(stylesheet)));

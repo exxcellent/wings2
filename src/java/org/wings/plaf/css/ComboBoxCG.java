@@ -27,23 +27,6 @@ public class ComboBoxCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.ComboBoxCG {
 
-//--- byte array converted template snippets.
-    private final static byte[] __select_size_1 = "<select size=\"1\"".getBytes();
-    private final static byte[] __disabled_1 = " disabled=\"1\"".getBytes();
-    private final static byte[] __ = ">".getBytes();
-    private final static byte[] __renderer_null = "<!--renderer==null-->".getBytes();
-    private final static byte[] __option = "\n<option".getBytes();
-    private final static byte[] __selected_selec = " selected=\"selected\"".getBytes();
-    private final static byte[] __title = " title=\"".getBytes();
-    private final static byte[] ___1 = "\"".getBytes();
-    private final static byte[] __style = " style=\"".getBytes();
-    private final static byte[] __cellrenderer_n = "<!--cellrenderer==null, use toString-->".getBytes();
-    private final static byte[] __option_1 = "</option>".getBytes();
-    private final static byte[] __select = "\n</select>".getBytes();
-    private final static byte[] __input_type_hid = "<input type=\"hidden\"".getBytes();
-    private final static byte[] ___2 = "/>".getBytes();
-    private final static byte[] ___3 = "\n".getBytes();
-
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         final SComboBox component = (SComboBox) comp;
@@ -60,25 +43,25 @@ public class ComboBoxCG
 
     protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
 
-        device.write(__select_size_1);
+        device.print("<select size=\"1\"");
         org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(component));
         org.wings.plaf.Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.innerPreferredSize(device, component.getPreferredSize());
+        Utils.printInnerPreferredSize(device, component.getPreferredSize());
 
         if (!component.isEnabled()) {
-            device.write(__disabled_1);
+            device.print(" disabled=\"1\"");
         }
 
         component.removeScriptListener(submitListener);
-        if (component.getActionListeners().length > 0) {
+        if (component.getActionListeners().length > 0 || component.getItemListener().length > 0 ) {
             component.addScriptListener(submitListener);
         }
 
         Utils.writeEvents(device, component);
 
-        device.write(__);
+        device.print(">");
         javax.swing.ComboBoxModel model = component.getModel();
         int size = model.getSize();
         int selected = component.getSelectedIndex();
@@ -91,39 +74,39 @@ public class ComboBoxCG
                 cellRenderer = renderer.getListCellRendererComponent(component, model.getElementAt(i), false, i);
             } else {
 
-                device.write(__renderer_null);
+                device.print("<!--renderer==null-->");
             }
 
 
-            device.write(__option);
+            device.print("\n<option");
             org.wings.plaf.Utils.optAttribute(device, "value", component.getSelectionParameter(i));
             if (selected == i) {
 
-                device.write(__selected_selec);
+                device.print(" selected=\"selected\"");
             }
 
             if (cellRenderer != null) {
                 if (cellRenderer.getToolTipText() != null) {
 
-                    device.write(__title);
+                    device.print(" title=\"");
                     org.wings.plaf.Utils.write(device, cellRenderer.getToolTipText());
 
-                    device.write(___1);
+                    device.print("\"");
                 }
 
                 org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
-                org.wings.plaf.xhtml.Utils.writeAttributes(stringBufferDevice, cellRenderer);
+                Utils.printCSSInlineStyleAttributes(stringBufferDevice, cellRenderer);
                 String styleString = stringBufferDevice.toString();
                 if (styleString != null && styleString.length() > 0) {
 
-                    device.write(__style);
+                    device.print(" style=\"");
                     org.wings.plaf.Utils.write(device, styleString);
 
-                    device.write(___1);
+                    device.print("\"");
                 }
             }
 
-            device.write(__);
+            device.print(">");
             if (cellRenderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
                 org.wings.io.StringBufferDevice string = getStringBufferDevice();
@@ -142,22 +125,22 @@ public class ComboBoxCG
                 device.print(chars, pos, chars.length - pos);
             } else {
 
-                device.write(__cellrenderer_n);
+                device.print("<!--cellrenderer==null, use toString-->");
                 device.print(model.getElementAt(i).toString());
             }
 
-            device.write(__option_1);
+            device.print("</option>");
         }
 
 
-        device.write(__select);
+        device.print("\n</select>");
         // util method
 
-        device.write(__input_type_hid);
+        device.print("<input type=\"hidden\"");
         org.wings.plaf.Utils.optAttribute(device, "name", Utils.event(component));
         org.wings.plaf.Utils.optAttribute(device, "value", -1);
 
-        device.write(___2);
+        device.print("/>");
     }
 
     private org.wings.io.StringBufferDevice stringBufferDevice = null;
@@ -187,7 +170,7 @@ public class ComboBoxCG
         //} else {
         //    writeAnchorComboBox(device, comboBox);
         // }
-        device.write(___3);
+        device.print("\n");
 
 //--- end code from write-template.
     }

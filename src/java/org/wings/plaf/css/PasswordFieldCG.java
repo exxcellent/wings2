@@ -47,7 +47,7 @@ public class PasswordFieldCG
         org.wings.plaf.Utils.optAttribute(device, "maxlength", component.getMaxColumns());
         org.wings.plaf.Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.innerPreferredSize(device, component.getPreferredSize());
+        Utils.printInnerPreferredSize(device, component.getPreferredSize());
 
         if (!component.isEditable()) {
             device.write(__readonly_1);

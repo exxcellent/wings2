@@ -214,7 +214,7 @@ public class ScrollBarCG
     }
 
     private void writeButton(Device device, SScrollBar scrollBar, SIcon icon, String event) throws IOException {
-        boolean childSelectorWorkaround = !scrollBar.getSession().getUserAgent().supportsChildSelector();
+        boolean childSelectorWorkaround = !scrollBar.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = scrollBar.getShowAsFormComponent();
 
         if (showAsFormComponent)

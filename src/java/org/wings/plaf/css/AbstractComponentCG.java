@@ -28,8 +28,7 @@ import java.io.Serializable;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public abstract class AbstractComponentCG
-        implements ComponentCG, SConstants, Serializable {
+public abstract class AbstractComponentCG  implements ComponentCG, SConstants, Serializable {
 
     protected AbstractComponentCG() {    }
 
@@ -40,12 +39,11 @@ public abstract class AbstractComponentCG
      */
     public void installCG(SComponent component) {
         Class clazz = component.getClass();
-        while (!"org.wings".equals(clazz.getPackage().getName()))
+        while ("org.wings".equals(clazz.getPackage().getName()) == false)
             clazz = clazz.getSuperclass();
-
         String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);
-        component.setStyle(style);
+        component.setStyle(style); // set default style name to component class (ie. SLabel).
     }
 
     /**
@@ -85,15 +83,11 @@ public abstract class AbstractComponentCG
         if (dim != null) {
             device.print("\" style=\"");
             if (dim.width != null)
-                device
-                        .print("width:")
-                        .print(dim.width)
-                        .print("px;");
+                device.print("width:").print(dim.width);
+                        // .print("px;"); Don't do this! setPreferredSize(new Sdim("100%",null);
             if (dim.height != null)
-                device
-                        .print(" height:")
-                        .print(dim.height)
-                        .print("px;");
+                device.print(" height:").print(dim.height);
+                        // .print("px;"); Don't do this! setPreferredSize(new Sdim("100%",null);
         }
 
         String toolTip = component.getToolTipText();

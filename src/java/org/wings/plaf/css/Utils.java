@@ -117,49 +117,40 @@ public final class Utils
         //return event(component, component.getLowLevelEventId());
     }
 
-    private final static String ALIGN_CENTER = " align=\"center\"";
-    private final static String ALIGN_LEFT = " align=\"left\"";
-    private final static String ALIGN_RIGHT = " align=\"right\"";
-    private final static String ALIGN_JUSTIFY = " align=\"justify\"";
-    private final static String VALIGN_TOP = " valign=\"top\"";
-    private final static String VALIGN_BOTTOM = " valign=\"bottom\"";
-    private final static String VALIGN_BASELINE = " valign=\"baseline\"";
-
-    public static void printTableHorizontalAlignment(Device d, int align)
-            throws IOException {
-        switch (align) {
-            case SConstants.NO_ALIGN:
-            case SConstants.LEFT:
-                d.print(ALIGN_LEFT);
-                break;
-            case SConstants.CENTER:
-                d.print(ALIGN_CENTER);
-                break;
-            case SConstants.RIGHT:
-                d.print(ALIGN_RIGHT);
-                break;
-            case SConstants.JUSTIFY:
-                d.print(ALIGN_JUSTIFY);
-                break;
-        }
-
+    /**
+     * HTML allows 4 values for align property of a div element.
+     * @param d Output
+     * @param align Please refer {@link SConstants}
+     * @throws IOException
+     */
+    public static void printDivHorizontalAlignment(Device d, int align) throws IOException {
+        printTableHorizontalAlignment(d, align);
     }
 
+    // TODO ? may obsolete?
+    public static void printTableHorizontalAlignment(Device d, int align)
+            throws IOException {
+        if (align == SConstants.NO_ALIGN || align == SConstants.LEFT) {
+            d.print(" align=\"left\"");
+        } else if (align == SConstants.CENTER) {
+            d.print(" align=\"center\"");
+        } else if (align == SConstants.RIGHT) {
+            d.print(" align=\"right\"");
+        } else if (align == SConstants.JUSTIFY) {
+            d.print(" align=\"justify\"");
+        }
+    }
+
+    // TODO ? may obsolete?
     public static void printTableVerticalAlignment(Device d, int align)
             throws IOException {
-        switch (align) {
-            case SConstants.NO_ALIGN:
-            case SConstants.CENTER:
-                break;
-            case SConstants.TOP:
-                d.print(VALIGN_TOP);
-                break;
-            case SConstants.BOTTOM:
-                d.print(VALIGN_BOTTOM);
-                break;
-            case SConstants.BASELINE:
-                d.print(VALIGN_BASELINE);
-                break;
+        if (align == SConstants.NO_ALIGN || align == SConstants.CENTER) {
+        } else if (align == SConstants.TOP) {
+            d.print(" valign=\"top\"");
+        } else if (align == SConstants.BOTTOM) {
+            d.print(" valign=\"bottom\"");
+        } else if (align == SConstants.BASELINE) {
+            d.print(" valign=\"baseline\"");
         }
     }
 
@@ -184,8 +175,19 @@ public final class Utils
         return toColorString(c.getRGB());
     }
 
-    public static void writeAttributes(Device d, SComponent component)
-            throws IOException {
+    /**
+     * Writes out the following CSS attributes as CSS inline style
+     * <ul>
+     * <li>Background/Foreground color</li>
+     * <li>Font size,style,weight,family</li>
+     * <li>Preferred Dimension height and width</li>
+     * </ul>. Sample: <code> style="width:100%; color:#ff0000;"</code>
+     * @param d Output device
+     * @param component Component having CSS attributes
+     * @throws IOException
+     */
+    public static void printCSSInlineStyleAttributes(Device d, SComponent component) throws IOException {
+        d.print(" style=\"");
 
         java.awt.Color fgColor = component.getForeground();
         java.awt.Color bgcolor = component.getBackground();
@@ -196,7 +198,7 @@ public final class Utils
             d.print("background-color:#").print(toColorString(bgcolor)).print(";");
 
         if (fgColor != null) {
-            d.print("font-color:#").print(toColorString(fgColor)).print(";");
+            // not necessary? d.print("font-color:#").print(toColorString(fgColor)).print(";");
             d.print("color:#").print(toColorString(fgColor)).print(";");
         }
         if (font != null) {
@@ -211,9 +213,11 @@ public final class Utils
             if (dim.width != null) d.print("width:").print(dim.width).print(";");
             if (dim.height != null) d.print("height:").print(dim.height).print(";");
         }
+
+        d.print("\"");
     }
 
-    public static void writeIconTextCompound(Device d, String icon, String text, int horizontal, int vertical)
+    public static void printIconTextCompound(Device d, String icon, String text, int horizontal, int vertical)
             throws IOException {
         if (icon == null && text != null)
             d.print(text);
@@ -258,13 +262,13 @@ public final class Utils
         }
     }
 
-    public static void innerPreferredSize(Device device, SDimension preferredSize) throws IOException {
+    public static void printInnerPreferredSize(Device device, SDimension preferredSize) throws IOException {
         if (preferredSize != null) {
             device.print(" style=\"");
             if (preferredSize.getWidth() != null)
-                device.print("width:100%;");
+                device.print("width:").print(preferredSize.getWidth()).print(";");
             if (preferredSize.getHeight() != null)
-                device.print("height:100%");
+                device.print("height:").print(preferredSize.getHeight()).print(";");
             device.print("\"");
         }
     }

@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.plaf.PopupMenuCG;
+import org.wings.plaf.PopupMenuCG;
 
 import java.util.ArrayList;
 import java.util.List;

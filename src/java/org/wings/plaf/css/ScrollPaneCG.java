@@ -11,18 +11,15 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.xhtml;
+package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
 
-import java.io.IOException;
 import java.awt.*;
+import java.io.IOException;
 
-public class ScrollPaneCG
-        extends org.wings.plaf.css.AbstractComponentCG
-        implements org.wings.plaf.ScrollPaneCG
-{
+public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
     public void write(Device device, SComponent component) throws IOException {
         SScrollPane scrollPane = (SScrollPane) component;
         Scrollable scrollable = scrollPane.getScrollable();
@@ -37,24 +34,20 @@ public class ScrollPaneCG
                 center.setPreferredSize(component.getPreferredSize());
                 component.setPreferredSize(null);
                 super.write(device, component);
-            }
-            finally {
+            } finally {
                 component.setPreferredSize(center.getPreferredSize());
                 scrollable.setViewportSize(viewportSize);
                 center.setPreferredSize(preferredSize);
             }
-        }
-        else
+        } else
             super.write(device, component);
     }
 
     public void writeContent(Device d, SComponent c)
-            throws IOException
-    {
+            throws IOException {
         SScrollPane scrollPane = (SScrollPane) c;
         scrollPane.synchronizeAdjustables();
-
-        Utils.writeContainerContents(d, scrollPane);
+        Utils.renderContainer(d, scrollPane);
     }
 }
 

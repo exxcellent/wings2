@@ -21,12 +21,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class LookAndFeel
+public class CSSLookAndFeel
         extends org.wings.plaf.LookAndFeel {
-    private final transient static Log log = LogFactory.getLog(LookAndFeel.class);
-    private static final String PROPERTIES_LOCATION = "WEB-INF/" + LookAndFeel.class.getPackage().getName() + ".properties";
+    private final transient static Log log = LogFactory.getLog(CSSLookAndFeel.class);
+    private static final String PROPERTIES_LOCATION = "WEB-INF/" + CSSLookAndFeel.class.getPackage().getName() + ".properties";
 
-    public LookAndFeel() throws IOException {
+    public CSSLookAndFeel() throws IOException {
         super(loadProperties());
     }
 

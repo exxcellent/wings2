@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.plaf.AnchorCG;
+import org.wings.plaf.AnchorCG;
 
 import java.net.URL;
 

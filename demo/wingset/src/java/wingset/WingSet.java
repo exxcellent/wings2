@@ -180,6 +180,7 @@ public class WingSet {
         tab.add(new JavaScriptListenerExample(), "Script Listener");
         tab.add(new PopupExample(), "Popup Menu");
         tab.add(new KeyboardBindingsExample(), "Keyboard Bindings");
+        tab.add(new DynamicLayoutExample(), "Dynamic Layouts");
 
         contentPane.add(tab, "WingSetApp");
         contentPane.add(timeMeasure, "TimeLabel");
