@@ -51,6 +51,10 @@ class InputMapScriptListener
             KeyStroke keyStroke = keyStrokes[i];
             Object binding = inputMap.get(keyStroke);
 
+            writeMatch(typed, keyStroke);
+            writeRequest(typed, binding);
+
+            /*
             switch (keyStroke.getKeyEventType()) {
                 case KeyEvent.KEY_PRESSED:
                     writeMatch(pressed, keyStroke);
@@ -67,37 +71,44 @@ class InputMapScriptListener
                     System.out.println("released binding = " + binding);
                     break;
             }
+            */
         }
 
         if (pressed.length() > 0)
-            component.addScriptListener(new InputMapScriptListener("onkeydown", "pressed_" + component.getName() + "(event)",
+            component.addScriptListener(new InputMapScriptListener("onkeydown", "return pressed_" + component.getName() + "(event)",
                     "function pressed_" + component.getName() + "(event) {\n  " +
-                    "event = getEvent(event); target = getTarget(event);\n  " +
-                    pressed.toString() + "  return false;\n}\n"));
+                    "event = getEvent(event);\n  " +
+                    pressed.toString() + "  return true;\n}\n"));
         if (typed.length() > 0)
-            component.addScriptListener(new InputMapScriptListener("onkeypress", "typed_" + component.getName() + "(event)",
+            component.addScriptListener(new InputMapScriptListener("onkeypress", "return typed_" + component.getName() + "(event)",
                     "function typed_" + component.getName() + "(event) {\n  " +
-                    "event = getEvent(event); target = getTarget(event);\n  " +
-                    typed.toString() + "  return false;\n}\n"));
+                    "event = getEvent(event);\n  " +
+                    typed.toString() + "  return true;\n}\n"));
         if (released.length() > 0)
-            component.addScriptListener(new InputMapScriptListener("onkeyup", "released_" + component.getName() + "(event)",
+            component.addScriptListener(new InputMapScriptListener("onkeyup", "return released_" + component.getName() + "(event)",
                     "function released_" + component.getName() + "(event) {\n" +
-                    "event = getEvent(event); target = getTarget(event);\n  " +
-                    released.toString() + "  return false;\n}\n"));
+                    "event = getEvent(event);\n  " +
+                    released.toString() + "  return true;\n}\n"));
     }
 
     private static void writeMatch(StringBuffer buffer, KeyStroke keyStroke) {
         buffer.append("if (event.keyCode == " + keyStroke.getKeyCode());
         if ((keyStroke.getModifiers() & InputEvent.SHIFT_DOWN_MASK) != 0)
             buffer.append(" && event.shiftKey");
+        else
+            buffer.append(" && !event.shiftKey");
         if ((keyStroke.getModifiers() & InputEvent.CTRL_DOWN_MASK) != 0)
             buffer.append(" && event.ctrlKey");
+        else
+            buffer.append(" && !event.ctrlKey");
         if ((keyStroke.getModifiers() & InputEvent.ALT_DOWN_MASK) != 0)
             buffer.append(" && event.altKey");
+        else
+            buffer.append(" && !event.altKey");
         buffer.append(")");
     }
 
     private static void writeRequest(StringBuffer buffer, Object binding) {
-        buffer.append(" { preventDefault(event); sendEvent(event, \"").append(binding).append("\"); }\n");
+        buffer.append(" { sendEvent(event, \"").append(binding).append("\"); return false; }\n");
     }
 }

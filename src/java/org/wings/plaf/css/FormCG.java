@@ -31,7 +31,7 @@ public class FormCG
     private final static byte[] __ = "\"".getBytes();
     private final static byte[] __name = " name=\"".getBytes();
     private final static byte[] __input_type_ima = "><input type=\"image\" name=\"_capture_enter1\" border=\"0\" ".getBytes();
-    private final static byte[] __width_0_height = " width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;;margin:0pxposition:absolute\"/>".getBytes();
+    private final static byte[] __width_0_height = " width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>".getBytes();
     private final static byte[] __input_type_hid = "<input type=\"hidden\" name=\"".getBytes();
     private final static byte[] __value = "\" value=\"".getBytes();
     private final static byte[] ___1 = "\" />".getBytes();

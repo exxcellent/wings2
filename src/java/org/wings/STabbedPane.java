@@ -245,8 +245,11 @@ public class STabbedPane
      * @see #getModel
      */
     public void setModel(SingleSelectionModel model) {
+        if (this.model != null)
+            this.model.removeChangeListener(this);
         this.model = model;
-        model.addChangeListener(this);
+        if (this.model != null)
+            this.model.addChangeListener(this);
     }
 
     /**

@@ -34,11 +34,6 @@ function sendEvent(event, eventValue) {
     var form = getParentByTagName(getTarget(event), "FORM");
     var div = getParentByTagName(getTarget(event), "DIV");
     var eventName = div.getAttribute("event");
-    /*
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    event.preventDefault();
-*/
 
     if ( form != null ) {
         var eventNode = document.createElement("input");
@@ -51,8 +46,6 @@ function sendEvent(event, eventValue) {
     else {
         document.location = "?" + eventName + "=" + eventValue;
     }
-
-    return false;
 }
 
 function requestFocus(id) {

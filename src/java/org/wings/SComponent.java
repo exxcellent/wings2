@@ -1323,12 +1323,18 @@ public abstract class SComponent
         if (actionMap == null)
             return;
 
+        boolean actionPerformed = false;
+
         for (int i = 0; i < values.length; i++) {
             String value = values[i];
             Action action = actionMap.get(value);
-            if (action != null)
+            if (action != null) {
                 action.actionPerformed(new ActionEvent(this, 0, value));
+                actionPerformed = true;
+            }
         }
+        if (actionPerformed)
+            requestFocus();
         System.out.println(name + " " + Arrays.asList(values));
     }
 }

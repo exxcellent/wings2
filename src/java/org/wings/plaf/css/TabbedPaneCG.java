@@ -38,8 +38,8 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
 
         final STabbedPane tab = (STabbedPane) component;
         InputMap inputMap = new InputMap();
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK, false), "previous");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK, false), "next");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK, false), "previous");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK, false), "next");
         tab.setInputMap(inputMap);
 
         Action action = new AbstractAction() {
@@ -48,7 +48,6 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                     tab.setSelectedIndex(tab.getSelectedIndex() - 1);
                 else if (tab.getSelectedIndex() < tab.getTabCount() - 1 && "next".equals(e.getActionCommand()))
                     tab.setSelectedIndex(tab.getSelectedIndex() + 1);
-                tab.requestFocus();
             }
         };
 
