@@ -71,7 +71,7 @@ public class SDimension
         if (width > -1)
             this.width = width + "px";
         else
-            this.height = null;
+            this.width = null;
     }
 
     /**

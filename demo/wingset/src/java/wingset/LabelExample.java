@@ -43,11 +43,11 @@ public class LabelExample extends WingSetPane {
     public SComponent createExample() {
         controls = new ComponentControls();
 
-        final SLabel testLabel = new SLabel("A yellow, bold text");
+        final SLabel testLabel = new SLabel("A red, bold, italic, serif text");
         testLabel.setHorizontalAlignment(LEFT);
         testLabel.setIcon(WAIT_ICON);
-        testLabel.setForeground(Color.YELLOW);
-        testLabel.setFont(new SFont("Arial Black",SFont.ITALIC,SFont.FONT+1));
+        testLabel.setForeground(Color.RED);
+        testLabel.setFont(new SFont("serif", SFont.ITALIC | SFont.BOLD, 10));
         controls.addSizable(testLabel);
 
         SPanel p = new SPanel(new SGridLayout(3));

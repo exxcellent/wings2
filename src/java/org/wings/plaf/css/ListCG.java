@@ -59,7 +59,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         Utils.printInnerPreferredSize(device, list.getPreferredSize());
         Utils.writeEvents(device, list);
 
-        device.print(">".getBytes());
+        device.print(">");
         javax.swing.ListModel model = list.getModel();
         int size = model.getSize();
 
@@ -135,7 +135,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         boolean renderSelection = list.getSelectionMode() != SConstants.NO_SELECTION;
 
         device.print("<");
-        Utils.write(device, list.getType());
+        device.print(list.getType());
         Utils.optAttribute(device, "type", list.getOrderType());
         Utils.optAttribute(device, "start", list.getStart());
 
@@ -176,7 +176,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
                     RequestURL selectionAddr = list.getRequestURL();
                     selectionAddr.addParameter(Utils.event(list), list.getToggleSelectionParameter(i));
 
-                    device.print("<a href=\"".getBytes());
+                    device.print("<a href=\"");
                     Utils.write(device, selectionAddr.toString());
                     device.print("\"");
                 }

@@ -84,10 +84,8 @@ public abstract class AbstractComponentCG  implements ComponentCG, SConstants, S
             device.print("\" style=\"");
             if (dim.width != null)
                 device.print("width:").print(dim.width);
-                        // .print("px;"); Don't do this! setPreferredSize(new Sdim("100%",null);
             if (dim.height != null)
                 device.print(" height:").print(dim.height);
-                        // .print("px;"); Don't do this! setPreferredSize(new Sdim("100%",null);
         }
 
         String toolTip = component.getToolTipText();
