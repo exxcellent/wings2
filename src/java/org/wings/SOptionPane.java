@@ -14,18 +14,17 @@
 
 package org.wings;
 
-import java.awt.Insets;
-import java.util.Locale;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-import java.util.logging.*;
-import java.awt.event.ActionListener;
+import org.wings.border.SBorder;
+import org.wings.border.SEmptyBorder;
+import org.wings.plaf.OptionPaneCG;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
-
-import javax.swing.JOptionPane;
-
-import org.wings.border.*;
-import org.wings.plaf.*;
+import java.awt.event.ActionListener;
+import java.util.Locale;
+import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 /**
  * TODO: documentation
@@ -427,20 +426,12 @@ public class SOptionPane
         return b;
     }
 
-    /**
-     * TODO: documentation
-     */
     protected final SResetButton createResetButton(String label) {
         SResetButton b = new SResetButton(label);
         b.addActionListener(this);
         return b;
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param l
-     */
     public void setLocale(Locale l) {
         super.setLocale(l);
         optionOK.setText("OK");
@@ -450,11 +441,6 @@ public class SOptionPane
         optionReset.setText("Reset");
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param e
-     */
     public void actionPerformed(ActionEvent e) {
         logger.fine("action " + e);
         hide();
@@ -477,10 +463,6 @@ public class SOptionPane
         }
     }
 
-    /**
-     * TODO: documentation
-     *
-     */
     protected void resetOptions() {
         optionOK.setVisible(false);
         optionYes.setVisible(false);
@@ -496,9 +478,6 @@ public class SOptionPane
 
     SContainer customButtons = null;
 
-    /**
-     * TODO: documentation
-     */
     public void setOptions(Object[] options ) {
         resetOptions();
 
@@ -577,11 +556,6 @@ public class SOptionPane
         return messageType;
     }
   
-    /**
-     * TODO: documentation
-     *
-     * @param newType
-     */
     public void setOptionType(int newType) {
         resetOptions();
 
@@ -647,32 +621,20 @@ public class SOptionPane
         show(c);
     }
 
-    /**
-     * TODO: documentation
-     */
-    public static void showMessageDialog(SComponent parent, Object message, 
+    public static void showMessageDialog(SComponent parent, Object message,
                                          ActionListener al) {
         showMessageDialog(parent, message, null, 0, al);
     }
 
-    /**
-     * TODO: documentation
-     */
     public static void showMessageDialog(SComponent parent, Object message) {
         showMessageDialog(parent, message, null, 0, null);
     }
 
-    /**
-     * TODO: documentation
-     */
     public static void showMessageDialog(SComponent parent, Object message, String title) {
         showMessageDialog(parent, message, title, 0, null);
     }
 
-    /**
-     * TODO: documentation
-     */
-    public static void showMessageDialog(SComponent parent, Object message, 
+    public static void showMessageDialog(SComponent parent, Object message,
                                          String title, int messageType, ActionListener al) {
         SOptionPane p = new SOptionPane();
 
@@ -680,19 +642,13 @@ public class SOptionPane
         p.addActionListener(al);
     }
 
-    /**
-     * TODO: documentation
-     */
-    public static void showPlainMessageDialog(SComponent parent, Object message, 
+    public static void showPlainMessageDialog(SComponent parent, Object message,
                                               String title) {
         showPlainMessageDialog(parent, message, title, 0, null);
     }
 
 
-    /**
-     * TODO: documentation
-     */
-    public static void showPlainMessageDialog(SComponent parent, Object message, 
+    public static void showPlainMessageDialog(SComponent parent, Object message,
                                               String title, int messageType,
                                               ActionListener al) {
         SOptionPane p = new SOptionPane();
@@ -703,9 +659,6 @@ public class SOptionPane
         //    p.messageLabel.setVisible(false);
     }
 
-    /**
-     * TODO: documentation
-     */
     public void showPlainMessage(SComponent parent, Object message,  String title) {
         showOption(parent, title, message);
 
@@ -714,10 +667,6 @@ public class SOptionPane
         //    messageLabel.setVisible(true);
     }
 
-
-    /**
-     * TODO: documentation
-     */
     public void showQuestion(SComponent parent,  Object message, String title) {
         showOption(parent, title, message);
         
@@ -736,12 +685,6 @@ public class SOptionPane
         //    questionLabel.setVisible(true);
     }
 
-    /**
-     * TODO: documentation
-     *
-     * @param message
-     * @return
-     */
     // protected String getSimpleInput(Object message) {
     //     return JOptionPane.showInputDialog(this, message);
     // }
@@ -756,9 +699,6 @@ public class SOptionPane
         p.addActionListener(al);
     }
 
-    /**
-     * TODO: documentation
-     */
     public static void showQuestionDialog(SComponent parent, Object question,
                                           String title,  ActionListener al) {
         SOptionPane p = new SOptionPane();
@@ -767,9 +707,6 @@ public class SOptionPane
         p.addActionListener(al);
     }
 
-    /**
-     * TODO: documentation
-     */
     public static void showPlainQuestionDialog(SComponent parent, Object question,
                                                String title, ActionListener al) {
         SOptionPane p = new SOptionPane();
@@ -781,41 +718,26 @@ public class SOptionPane
     }
 
 
-    /**
-     * TODO: documentation
-     */
-    public static void showConfirmDialog(SComponent parent, Object message, 
+    public static void showConfirmDialog(SComponent parent, Object message,
                                          String title) {
         showConfirmDialog(parent, message, title, 0, null);
     }
 
-    /**
-     * TODO: documentation
-     */
     public static void showConfirmDialog(SComponent parent, Object message,
                                          String title, ActionListener al) {
         showConfirmDialog(parent, message, title, 0, al);
     }
 
-    /**
-     * TODO: documentation
-     */
-    public static void showConfirmDialog(SComponent parent, Object message, 
+    public static void showConfirmDialog(SComponent parent, Object message,
                                          String title, int type) {
         showConfirmDialog(parent, message, title, type, null);
     }
 
-    /**
-     * TODO: documentation
-     */
     public static void showConfirmDialog(SComponent parent, Object message,
                                          String title, int type, ActionListener al) {
         showConfirmDialog(parent, message, title, type, al, null);
     }
 
-    /**
-     * TODO: documentation
-     */
     public static void showConfirmDialog(SComponent parent, Object message,
                                          String title, int type, ActionListener al, 
                                          SLayoutManager layout) {
@@ -841,9 +763,6 @@ public class SOptionPane
         setMessageType(QUESTION_MESSAGE);
     }
 
-    /**
-     * TODO: documentation
-     */
     public static void showYesNoDialog(SComponent parent, Object question,
                                        String title, ActionListener al) {
         SOptionPane p = new SOptionPane();
@@ -856,11 +775,3 @@ public class SOptionPane
         super.setCG(cg);
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

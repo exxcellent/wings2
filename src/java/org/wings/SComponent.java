@@ -523,6 +523,7 @@ public abstract class SComponent
     }
 
     public void setAttributes(AttributeSet attributes) {
+        System.out.println("attributes = " + attributes);
         setAttributes(SELECTOR_GLOBAL, attributes);
     }
 

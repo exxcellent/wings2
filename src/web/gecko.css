@@ -49,25 +49,29 @@ TH, TD {
     font-size: 14px;
 }
 
-.SLabel {
-   font-family: sans-serif;
-   font-weight: bold;
-   font-style: normal;
+div.SLabel {
    font-size: 14px;
    color: #000044
 }
 
-.STextField {
+div.SButton {
+   font-size: 14px;
+   color: #000044
+}
+
+div.SButton > button {
+   border: 1px outset gray;
+}
+
+div.SButton > button:hover {
+   border: 1px inset gray;
+}
+
+div.STextField {
    font-family: sans-serif;
    font-weight: normal;
    font-style: normal;
    color: #000000 
-}
-
-.href { 
-   color: #990000;
-   text-decoration: none;
-   font-weight: bold 
 }
 
 .selection {
@@ -462,6 +466,40 @@ table.SBorderLayout > tbody > tr > td {
    padding-left: 0.4em;
    padding-right: 0.4em;
 }
+
+div.SDialog > table {
+   border: 1px outset gray;
+   border-collapse: collapse;
+}
+
+div.SDialog > table > tbody > tr > th {
+   background-color: #aaaaff;
+   color: #ffffff;
+   text-align: left;
+   padding-left: 8px;
+}
+
+div.SDialog > table > tbody > tr > td {
+   border: 1px inset #aaaaff;
+}
+
+
+div.SOptionPane > table {
+   border: 1px outset gray;
+   border-collapse: collapse;
+}
+
+div.SOptionPane > table > tbody > tr > th {
+   background-color: #aaaaff;
+   color: #ffffff;
+   text-align: left;
+   padding-left: 8px;
+}
+
+div.SOptionPane > table > tbody > tr > td {
+   border: 1px inset #aaaaff;
+}
+
 
 div.domTT {
     border: 1px solid #333333;

@@ -12,7 +12,6 @@ import org.wings.script.ScriptListener;
 import org.wings.session.Browser;
 import org.wings.session.SessionManager;
 import org.wings.style.DynamicStyleSheetResource;
-import org.wings.util.AnchorRenderStack;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -142,129 +141,105 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         _c.fireRenderEvent(SComponent.START_RENDERING);
         final SFrame component = (SFrame)_c;
 
-//--- code from write-template.
         org.wings.session.Browser browser = SessionManager.getSession().getUserAgent();
 
         SFrame frame = (SFrame)component;
-        try {
-            String language = SessionManager.getSession().getLocale().getLanguage();
-            String title = frame.getTitle();
-            List headers = frame.headers();
-            String encoding = SessionManager.getSession().getCharacterEncoding();
 
-            if ("MSIE".equals(browser.getBrowserName()) &&
-                browser.getMajorVersion() < 4) {
-                device.write("<html>\n".getBytes());
+        String language = SessionManager.getSession().getLocale().getLanguage();
+        String title = frame.getTitle();
+        List headers = frame.headers();
+        String encoding = SessionManager.getSession().getCharacterEncoding();
+
+        if ("MSIE".equals(browser.getBrowserName()) &&
+            browser.getMajorVersion() < 4) {
+            device.write("<html>\n".getBytes());
+        }
+        else {
+            if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
+                device.write("<?xml version=\"1.0\" encoding=\"".getBytes());
+                org.wings.plaf.Utils.write(device, encoding);
+                device.write("\"?>\n".getBytes());
+            }
+            org.wings.plaf.Utils.writeRaw(device, documentType);
+            device.write("\n".getBytes());
+            device.write("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".getBytes());
+            org.wings.plaf.Utils.write(device, language);
+            device.write("\" lang=\"".getBytes());
+            org.wings.plaf.Utils.write(device, language);
+            device.write("\">\n".getBytes());
+        }
+
+        device.write("<head>".getBytes());
+        if (title != null) {
+            device.write("<title>".getBytes());
+            org.wings.plaf.Utils.write(device, title);
+            device.write("</title>\n".getBytes());
+        }
+
+        if (frame.getBaseTarget() != null) {
+            device.write("<base target=\"".getBytes());
+            org.wings.plaf.Utils.write(device, frame.getBaseTarget());
+            device.write("\"/>\n".getBytes());
+        }
+
+        device.write("<meta http-equiv=\"Content-type\" content=\"text/html; charset=".getBytes());
+        org.wings.plaf.Utils.write(device, encoding);
+        device.write("\"/>\n".getBytes());
+        Iterator it = headers.iterator();
+        while (it.hasNext()) {
+            Object next = it.next();
+            if (next instanceof Renderable) {
+                ((Renderable)next).write(device);
             }
             else {
-                if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
-                    device.write("<?xml version=\"1.0\" encoding=\"".getBytes());
-                    org.wings.plaf.Utils.write(device, encoding);
-                    device.write("\"?>\n".getBytes());
-                }
-                org.wings.plaf.Utils.writeRaw(device, documentType);
-                device.write("\n".getBytes());
-                device.write("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".getBytes());
-                org.wings.plaf.Utils.write(device, language);
-                device.write("\" lang=\"".getBytes());
-                org.wings.plaf.Utils.write(device, language);
-                device.write("\">\n".getBytes());
+                org.wings.plaf.Utils.write(device, next.toString());
             }
-
-            device.write("<head>".getBytes());
-            if (title != null) {
-                device.write("<title>".getBytes());
-                org.wings.plaf.Utils.write(device, title);
-                device.write("</title>\n".getBytes());
-            }
-
-            if (frame.getBaseTarget() != null) {
-                device.write("<base target=\"".getBytes());
-                org.wings.plaf.Utils.write(device, frame.getBaseTarget());
-                device.write("\"/>\n".getBytes());
-            }
-
-            device.write("\n<style type=\"text/css\">\n".getBytes());
-            if (frame.getBackground() != null || frame.getForeground() != null) {
-                device.write("    body { ".getBytes());
-                if (frame.getBackground() != null) {
-                    device.write("background-color:#".getBytes());
-                    org.wings.plaf.Utils.write(device, org.wings.plaf.xhtml.css1.Utils.toColorString(frame.getBackground()));
-                    device.write(";".getBytes());
-                }
-                if (frame.getForeground() != null) {
-                    device.write("color:#".getBytes());
-                    org.wings.plaf.Utils.write(device, org.wings.plaf.xhtml.css1.Utils.toColorString(frame.getForeground()));
-                    device.write(";".getBytes());
-                }
-                device.write("\n    }".getBytes());
-            }
-
-            device.write("\n</style>\n".getBytes());
-            device.write("<meta http-equiv=\"Content-type\" content=\"text/html; charset=".getBytes());
-            org.wings.plaf.Utils.write(device, encoding);
-            device.write("\"/>\n".getBytes());
-            Iterator it = headers.iterator();
-            while (it.hasNext()) {
-                Object next = it.next();
-                if (next instanceof Renderable) {
-                    ((Renderable)next).write(device);
-                }
-                else {
-                    org.wings.plaf.Utils.write(device, next.toString());
-                }
-                device.write("\n".getBytes());
-            }
-
-            SComponent focus = frame.getFocus();
-            Object lastFocus = frame.getClientProperty("focus");
-            if (focus != lastFocus) {
-                if (lastFocus != null) {
-                    ScriptListener[] scriptListeners = frame.getScriptListeners();
-
-                    for (int i = 0; i < scriptListeners.length; i++) {
-                        ScriptListener scriptListener = scriptListeners[i];
-                        if (scriptListener instanceof FocusScriptListener)
-                            component.removeScriptListener(scriptListener);
-                    }
-                }
-                if (focus != null) {
-                    FocusScriptListener listener = new FocusScriptListener("onload", "requestFocus('" + focus.getComponentId() + "')");
-                    frame.addScriptListener(listener);
-                }
-                frame.putClientProperty("focus", focus);
-            }
-
-            // TODO: move this to a dynamic script resource
-            SToolTipManager toolTipManager = component.getSession().getToolTipManager();
-            device
-                .print("<script language=\"JavaScript\" type=\"text/javascript\">\n")
-                .print("domTT_addPredefined('default', 'caption', false");
-            if (toolTipManager.isFollowMouse())
-                device.print(", 'trail', true");
-            device.print(", 'delay', ").print(toolTipManager.getInitialDelay());
-            device.print(", 'lifetime', ").print(toolTipManager.getDismissDelay());
-            device
-                .print(");\n")
-                .print("</script>\n");
-
-            device.write("</head>\n".getBytes());
-            device.write("<body ".getBytes());
-            org.wings.plaf.Utils.optAttribute(device, "class", Utils.style(frame));
-            Utils.writeEvents(device, frame);
-            org.wings.plaf.Utils.optAttribute(device, "bgcolor", frame.getBackground());
-            device.write(">\n".getBytes());
-            if (frame.isVisible()) {
-                frame.getLayout().write(device);
-            }
-
-            device.write("</body></html>".getBytes());
+            device.write("\n".getBytes());
         }
-        finally {
-            // cleanup, in case someone didn't do this correctly.
-            AnchorRenderStack.reset();
+
+        SComponent focus = frame.getFocus();
+        Object lastFocus = frame.getClientProperty("focus");
+        if (focus != lastFocus) {
+            if (lastFocus != null) {
+                ScriptListener[] scriptListeners = frame.getScriptListeners();
+
+                for (int i = 0; i < scriptListeners.length; i++) {
+                    ScriptListener scriptListener = scriptListeners[i];
+                    if (scriptListener instanceof FocusScriptListener)
+                        component.removeScriptListener(scriptListener);
+                }
+            }
+            if (focus != null) {
+                FocusScriptListener listener = new FocusScriptListener("onload", "requestFocus('" + focus.getComponentId() + "')");
+                frame.addScriptListener(listener);
+            }
+            frame.putClientProperty("focus", focus);
         }
-        device.write("\n".getBytes());
+
+        // TODO: move this to a dynamic script resource
+        SToolTipManager toolTipManager = component.getSession().getToolTipManager();
+        device
+            .print("<script language=\"JavaScript\" type=\"text/javascript\">\n")
+            .print("domTT_addPredefined('default', 'caption', false");
+        if (toolTipManager.isFollowMouse())
+            device.print(", 'trail', true");
+        device.print(", 'delay', ").print(toolTipManager.getInitialDelay());
+        device.print(", 'lifetime', ").print(toolTipManager.getDismissDelay());
+        device
+            .print(");\n")
+            .print("</script>\n");
+
+        device.write("</head>\n".getBytes());
+        device.write("<body ".getBytes());
+        org.wings.plaf.Utils.optAttribute(device, "class", Utils.style(frame));
+        Utils.writeEvents(device, frame);
+        device.write(">\n".getBytes());
+        if (frame.isVisible()) {
+            frame.getLayout().write(device);
+        }
+
+        device.write("</body></html>\n".getBytes());
+        _c.fireRenderEvent(SComponent.DONE_RENDERING);
     }
 
     public String mapSelector(String selector) {

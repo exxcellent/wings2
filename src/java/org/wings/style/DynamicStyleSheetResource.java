@@ -34,14 +34,6 @@ import java.util.Collection;
 public class DynamicStyleSheetResource
     extends DynamicResource
 {
-    /*
-     * watchout: names beginning with underscore don't work on
-     * MS-IE.
-     */
-    public static final String NORMAL_ATTR_PREFIX = "n__";
-    public static final String SELECT_ATTR_PREFIX = "s__";
-
-    
     public DynamicStyleSheetResource(SFrame frame) {
         super(frame, "css", "text/css");
     }
@@ -76,7 +68,7 @@ public class DynamicStyleSheetResource
         {
             String selectorPrefix = "#" + component.getComponentId();
             if (component instanceof SFrame)
-                selectorPrefix = "";
+                selectorPrefix = "body";
 
             Collection dynamicStyles = component.getDynamicStyles();
             if (dynamicStyles != null) {

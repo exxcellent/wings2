@@ -13,9 +13,9 @@
  */
 package org.wings;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 public class SRootLayout
     extends STemplateLayout
@@ -24,13 +24,13 @@ public class SRootLayout
      * Use the default template.
      */
     public SRootLayout() {
-	try {
-	    setTemplate(getClass().getResource("template/default.thtml"));
-	}
-	catch (IOException e) {
-	    System.err.println(e.getMessage());
-	    e.printStackTrace(System.err);
-	}
+        try {
+            setTemplate(getClass().getResource("template/default.thtml"));
+        }
+        catch (IOException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
+        }
     }
 
     /**
@@ -56,9 +56,6 @@ public class SRootLayout
     /**
      * Read the template from an URL.
      * The content is cached.
-     * 
-     * @param tmplFile
-     * @throws java.io.IOException
      */
     public SRootLayout(URL url) throws java.io.IOException {
         setTemplate(url);
@@ -68,23 +65,16 @@ public class SRootLayout
     public void removeComponent(SComponent comp) {}
 
     public SComponent getComponent(String name) {
-	if (!"content".equals(name))
-	    return null;
+        if (!"content".equals(name))
+            return null;
 
-	int topmost = container.getComponentCount() - 1;
+        int topmost = container.getComponentCount() - 1;
         return container.getComponent(topmost);
     }
 
     // this has been overridden as noop in STemplateLayout
     // give it back the original behaviour
     public void setContainer(SContainer container) {
-	this.container = container;
+        this.container = container;
     }
 }
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

@@ -61,7 +61,7 @@ public abstract class AbstractComponentCG
     public void uninstallCG(SComponent component) {
     }
 
-    public final void write(Device device, SComponent component) throws IOException {
+    public void write(Device device, SComponent component) throws IOException {
         if (!component.isVisible())
             return;
         writePrefix(device, component);

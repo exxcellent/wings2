@@ -14,13 +14,12 @@
 
 package wingset;
 
-import java.awt.event.*;
-
 import org.wings.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
- * TODO: documentation
- *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

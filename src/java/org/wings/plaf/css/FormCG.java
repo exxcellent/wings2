@@ -52,7 +52,7 @@ public class FormCG
 //--- end code from common area in template.
 
 
-    public void writeContent(final Device device,
+    protected void writeContent(final Device device,
                              final SComponent _c)
         throws IOException {
         final SForm component = (SForm)_c;
