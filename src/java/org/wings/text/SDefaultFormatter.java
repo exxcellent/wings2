@@ -28,7 +28,9 @@ import org.wings.script.JavaScriptListener;
  *
  * @author theresia
  */
-public class SDefaultFormatter extends SAbstractFormatter {
+public class SDefaultFormatter
+        extends SAbstractFormatter
+{
     /**
      * Creates a new instance of SDefaultFormatter
      */
@@ -55,5 +57,4 @@ public class SDefaultFormatter extends SAbstractFormatter {
             return new JavaScriptListener("", "");
         }
     }
-
 }

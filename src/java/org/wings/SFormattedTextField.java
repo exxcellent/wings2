@@ -26,16 +26,12 @@ import java.awt.event.ActionListener;
 
 
 /*
- * 
- *
  * @author  theresia
  */
-
-public class SFormattedTextField extends STextField {
-
-
+public class SFormattedTextField
+        extends STextField
+{
     private SAbstractFormatter formatter = null;
-
 
     public SFormattedTextField() {
     }

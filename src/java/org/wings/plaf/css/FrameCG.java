@@ -154,14 +154,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             e.printStackTrace();
             return "";
         } finally {
-            try {
-                in.close();
-            } catch (Exception ign) {
-            }
-            try {
-                reader.close();
-            } catch (Exception ign1) {
-            }
+            try { in.close(); } catch (Exception ign) {}
+            try { reader.close(); } catch (Exception ign) {}
         }
     }
 

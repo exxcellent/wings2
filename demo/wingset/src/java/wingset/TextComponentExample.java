@@ -14,11 +14,13 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.text.SNumberFormatter;
 import org.wings.event.SDocumentListener;
 import org.wings.event.SDocumentEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 /**
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
@@ -43,7 +45,13 @@ public class TextComponentExample
                 }
 
                 public void changedUpdate(SDocumentEvent e) {
-                    documentEvent.setText(((STextComponent) e.getSource()).getName());
+                    if (e.getSource() instanceof STextComponent) {
+                        STextComponent component = (STextComponent) e.getSource();
+                        documentEvent.setText(((STextComponent) e.getSource()).getName());
+                    }
+                    else {
+                        System.out.println("e.getSource().getClass() = " + e.getSource().getClass());
+                    }
                     actionEvent.setText("button not pressed");
                 }
             };
@@ -51,19 +59,34 @@ public class TextComponentExample
     public SComponent createExample() {
         controls = new ComponentControls();
 
-        SPanel p = new SPanel(new SGridLayout(2));
+        SGridLayout gridLayout = new SGridLayout(2);
+        gridLayout.setCellPadding(4);
+        SPanel p = new SPanel(gridLayout);
 
-        p.add(new SLabel("STextField: "));
+        SLabel l = new SLabel("STextField: ");
+        l.setVerticalAlignment(SConstants.TOP);
+        p.add(l);
         STextField textField = new STextField();
         textField.setName("textfield");
         textField.addDocumentListener(documentListener);
         p.add(textField);
 
-        p.add(new SLabel("STextArea: "));
+        l = new SLabel("STextArea: ");
+        l.setVerticalAlignment(SConstants.TOP);
+        p.add(l);
         STextArea textArea = new STextArea();
         textArea.setName("textarea");
         textArea.addDocumentListener(documentListener);
         p.add(textArea);
+
+        l = new SLabel("SFormattedTextField: ");
+        l.setVerticalAlignment(SConstants.TOP);
+        p.add(l);
+        SNumberFormatter formatter = new SNumberFormatter(NumberFormat.getNumberInstance(getSession().getLocale()));
+        SFormattedTextField formattedTextField = new SFormattedTextField(formatter);
+        formattedTextField.setName("formattedTextField");
+        formattedTextField.addDocumentListener(documentListener);
+        p.add(formattedTextField);
 
         p.add(new SLabel("DocumentEvent: "));
         p.add(documentEvent);

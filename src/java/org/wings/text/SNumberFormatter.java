@@ -20,6 +20,8 @@
 package org.wings.text;
 
 import org.wings.SFormattedTextField;
+import org.wings.session.SessionManager;
+import org.wings.session.Session;
 import org.wings.script.JavaScriptListener;
 
 import java.io.BufferedReader;
@@ -31,9 +33,10 @@ import java.text.NumberFormat;
 
 
 /**
- * The Formatter can only be configured before the parent Frame is installed,
- * because until now it isn't possible to add JavaScript-Functions correctly
- * after that.
+ * SNumberFormater supports NumberFormat.parseIntegerOnly,
+ * NumberFormat.maxIntegerDigits, NumberFormat.minIntegerDigits, NumberFormat.maxFractionDigits,
+ * NumberFormat.minIntegerDigits.
+ * Additional it's possible to set a maximal or a minimal valid value.
  *
  * @author theresia & erik
  */
@@ -49,21 +52,14 @@ public class SNumberFormatter extends SAbstractFormatter {
 
     /*
      * Creates a new instance of SNumberFormatter.
-     * SNumberFormater supports NumberFormat.parseIntegerOnly,
-     * NumberFormat.maxIntegerDigits, NumberFormat.minIntegerDigits, NumberFormat.maxFractionDigits, 
-     * NumberFormat.minIntegerDigits. 
-     * Additional it's possible to set a maximal or a minimal valid value.
      */
-
     public SNumberFormatter() {
+        Session session = SessionManager.getSession();
+        numberFormat = session != null ? NumberFormat.getNumberInstance(session.getLocale()) : NumberFormat.getNumberInstance();
     }
 
     /*
      * Creates a new instance of SNumberFormatter.
-     * NumberFormater supports NumberFormat.parseIntegerOnly,
-     * maxIntegerDigits, minIntegerDigits, maxFractionDigits, minIntegerDigits.
-     * Additional it's possible to set a maximal valid value or a minimal valid value.
-     *
      * @param NumberFormat nf the NumberFormat for the SFormattedTextField
      */
     public SNumberFormatter(NumberFormat nf) {
@@ -105,8 +101,7 @@ public class SNumberFormatter extends SAbstractFormatter {
     }
 
     /*
-     * sets the maximal possible value. Doesn't work after the Frame is installed, because
-     * until now it's  not possible to add a JavaScriptFunction correctly after that.
+     * sets the maximal possible value.
      * @param double maxVal the maximal possible value for the SFormattedTextField.
      */
     public void setMaxVal(double maxVal) {
@@ -119,8 +114,7 @@ public class SNumberFormatter extends SAbstractFormatter {
     }
 
     /*
-    * sets the minimal possible value. Doesn't work after the Frame is installed, because
-    * until now it's  not possible to add a JavaScriptFunction correctly after that.
+    * sets the minimal possible value.
     * @param double minVal the minimal possible value for the SFormattedTextField.
     */
     public void setMinVal(double minVal) {
