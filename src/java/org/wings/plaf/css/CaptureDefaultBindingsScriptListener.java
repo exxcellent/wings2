@@ -3,14 +3,14 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.event.InputEvent;
+import java.util.StringTokenizer;
+
+import javax.swing.KeyStroke;
+
 import org.wings.SComponent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
-
-import javax.swing.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.StringTokenizer;
 
 /**
  * @author hengels

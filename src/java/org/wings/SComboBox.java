@@ -14,8 +14,6 @@
 package org.wings;
 
 import org.wings.plaf.ComboBoxCG;
-import org.wings.plaf.ComboBoxCG;
-import org.wings.plaf.ComboBoxCG;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;

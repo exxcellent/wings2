@@ -15,11 +15,14 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.io.Device;
-import org.wings.plaf.CGManager;
-
 import java.io.IOException;
+
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDesktopPane;
+import org.wings.SDimension;
+import org.wings.SInternalFrame;
+import org.wings.io.Device;
 
 public class DesktopPaneCG
         extends AbstractComponentCG

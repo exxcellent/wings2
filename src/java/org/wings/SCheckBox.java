@@ -14,7 +14,6 @@
 package org.wings;
 
 import org.wings.plaf.CheckBoxCG;
-import org.wings.plaf.CheckBoxCG;
 
 import java.util.Arrays;
 

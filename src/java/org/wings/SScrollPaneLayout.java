@@ -3,12 +3,9 @@
  */
 package org.wings;
 
-import org.wings.io.Device;
-
-import java.io.IOException;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author hengels

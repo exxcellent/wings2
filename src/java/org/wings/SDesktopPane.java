@@ -13,11 +13,10 @@
  */
 package org.wings;
 
+import java.io.IOException;
+
 import org.wings.io.Device;
 import org.wings.plaf.DesktopPaneCG;
-import org.wings.plaf.DesktopPaneCG;
-
-import java.io.IOException;
 
 /**
  * A DesktopPane holds SInternalFrames.

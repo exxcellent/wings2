@@ -15,8 +15,6 @@ package org.wings;
 
 
 import org.wings.plaf.RadioButtonCG;
-import org.wings.plaf.RadioButtonCG;
-import org.wings.plaf.RadioButtonCG;
 
 /**
  * <form>

@@ -27,7 +27,6 @@ import org.wings.util.LocaleCharSet;
 import org.wings.util.StringUtil;
 import org.wings.util.WeakPropertyChangeSupport;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -14,7 +14,6 @@
 package org.wings;
 
 import org.wings.plaf.TextAreaCG;
-import org.wings.plaf.TextAreaCG;
 
 /**
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>

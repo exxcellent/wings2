@@ -16,7 +16,6 @@ package org.wings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.DialogCG;
-import org.wings.plaf.DialogCG;
 import org.wings.session.SessionManager;
 
 /**

@@ -13,7 +13,6 @@
  */
 package org.wings;
 
-import org.wings.border.SEmptyBorder;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>

@@ -13,19 +13,22 @@
  */
 package org.wings;
 
-import org.wings.plaf.ComponentCG;
+import java.awt.Color;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import javax.swing.DefaultSingleSelectionModel;
+import javax.swing.GrayFilter;
+import javax.swing.ImageIcon;
+import javax.swing.SingleSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import org.wings.plaf.TabbedPaneCG;
 import org.wings.style.AttributeSet;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.io.Serializable;
-import java.util.ArrayList;
 
 // fixme: refactorize.
 

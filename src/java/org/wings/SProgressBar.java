@@ -13,17 +13,17 @@
  */
 package org.wings;
 
-import org.wings.plaf.ProgressBarCG;
-import org.wings.plaf.ProgressBarCG;
-import org.wings.plaf.ProgressBarCG;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.Color;
 import java.io.Serializable;
 import java.text.Format;
 import java.text.NumberFormat;
+
+import javax.swing.BoundedRangeModel;
+import javax.swing.DefaultBoundedRangeModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.wings.plaf.ProgressBarCG;
 
 
 /**
@@ -775,9 +775,14 @@ public class SProgressBar extends SComponent {
 
 /*
    $Log$
+   Revision 1.7  2005/01/31 10:59:52  oliverscheck
+   removed duplicate import stmts
+
    Revision 1.6  2005/01/23 19:31:36  blueshift
    o reworked grid, gridbag and flowlayout
+
    o some bugfixes in plaf.utils and formcg...
+
    o dropped plaf.xhtml package
 
    Revision 1.5  2004/12/01 07:54:07  hengels

@@ -16,7 +16,6 @@ package org.wings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.FileChooserCG;
-import org.wings.plaf.FileChooserCG;
 
 import javax.servlet.http.HttpUtils;
 import java.io.File;
