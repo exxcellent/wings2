@@ -74,7 +74,9 @@
     <!-- ==================== Generate API Docs ==================== -->
     <target depends="prepare" name="doc">
         <mkdir dir="build/doc/api"/>
-        <javadoc bottom="wingS swings ;-)" classpathref="build.classpath" destdir="build/doc/api" doctitle="wingS ${j-wings.version}" link="http://java.sun.com/j2se/1.4/docs/api/" maxmemory="128m" packagenames="org.wings.*" sourcepath="src/java" use="true" version="true" windowtitle="wingS ${wings.version}"/>
+        <javadoc bottom="wingS swings ;-)" classpathref="build.classpath" destdir="build/doc/api" doctitle="wingS ${j-wings.version}" link="http://java.sun.com/j2se/1.4/docs/api/" maxmemory="128m" packagenames="org.wings.*" sourcepath="src/java" use="true" version="true" windowtitle="wingS ${wings.version}">
+	  <tag scope="all" name="beaninfo" description="Bean Info:"/>
+	</javadoc>
     </target>
 
     <target depends="prepare,all,javadoc" name="dist">
