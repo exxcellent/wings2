@@ -154,7 +154,7 @@ public final class LowLevelEventDispatcher
 
         List l = (List) listeners.get(name);
         if (l != null && l.size() > 0) {
-            log.debug("process event '" + epoch + "_" + name + "'");
+            log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
             for (int i = 0; i < l.size(); ++i) {
                 LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
                 if (gl.isEnabled()) {
@@ -177,18 +177,14 @@ public final class LowLevelEventDispatcher
             SFrame frame = ((SComponent) gl).getParentFrame();
             if (frame == null) {
                 if (log.isDebugEnabled())
-                    log.debug("request for dangling component '" + epoch +
-                            "_" + name);
+                    log.debug("request for dangling component '" + epoch + SConstants.UID_DIVIDER + name);
                 unregister(gl);
                 return false;
             }
             if (!epoch.equals(frame.getEventEpoch())) {
                 if (log.isDebugEnabled()) {
-                    log.debug("### got outdated event '" + epoch + "_" + name
-                            + "' from frame '"
-                            + frame.getName()
-                            + "'; expected epoch: "
-                            + frame.getEventEpoch());
+                    log.debug("### got outdated event '" + epoch + SConstants.UID_DIVIDER + name
+                            + "' from frame '" + frame.getName() + "'; expected epoch: " + frame.getEventEpoch());
                 }
                 return false;
             }
