@@ -203,20 +203,15 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     }
 
     public String mapSelector(String selector) {
-        log.debug("selector = " + selector);
-        log.debug("selector = " + geckoMappings.getProperty(selector));
         Browser browser = SessionManager.getSession().getUserAgent();
-        if (browser.hasGecko())
-            return geckoMappings.getProperty(selector, selector);
-        else if ("MSIE".equals(browser.getBrowserName()))
+        if ("MSIE".equals(browser.getBrowserName()))
             return msieMappings.getProperty(selector, selector);
         else
-            return defaultMappings.getProperty(selector, selector);
+            return geckoMappings.getProperty(selector, selector);
     }
 
     private static final Properties msieMappings = new Properties();
     private static final Properties geckoMappings = new Properties();
-    private static final Properties defaultMappings = new Properties();
 
     static {
         msieMappings.setProperty(STabbedPane.SELECTOR_SELECTION, " *.selected");
@@ -225,8 +220,5 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
         geckoMappings.setProperty(STabbedPane.SELECTOR_SELECTION, " > table > tbody > tr > th > *[selected=\"true\"]");
         geckoMappings.setProperty(STabbedPane.SELECTOR_CONTENT, " > table > tbody > tr > td");
         geckoMappings.setProperty(STabbedPane.SELECTOR_TABS, " > table > tbody > tr > th");
-        defaultMappings.setProperty(STabbedPane.SELECTOR_SELECTION, " > table > tr > th > *[selected=\"true\"]");
-        defaultMappings.setProperty(STabbedPane.SELECTOR_CONTENT, " > table > tr > td");
-        defaultMappings.setProperty(STabbedPane.SELECTOR_TABS, " > table > tr > th");
     }
 }

@@ -134,9 +134,11 @@ public class SDialog extends SForm {
     /**
      * Removes all <code>SComponents</code> from the pane
      */
-    public void dispose() {
+      public void dispose() {
+        if (visible)
+            hide();
         removeAll();
-    }
+      }
 
     /**
      * Remove this dialog from its frame.

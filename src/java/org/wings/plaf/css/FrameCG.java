@@ -243,10 +243,6 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         _c.fireRenderEvent(SComponent.DONE_RENDERING);
     }
 
-    public String mapSelector(String selector) {
-        return selector;
-    }
-
 //--- setters and getters for the properties.
     public String getDocumentType() {
         return documentType;

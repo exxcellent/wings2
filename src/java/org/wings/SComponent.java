@@ -198,7 +198,7 @@ public abstract class SComponent
     /**
      * Sets the parent frame.
      *
-     * @param f the frame
+     * @param parentFrame the frame
      */
     protected void setParentFrame(SFrame parentFrame) {
         if (this.parentFrame == parentFrame)
@@ -1366,5 +1366,12 @@ public abstract class SComponent
             action.actionPerformed(event);
         }
         actionEvents.clear();
+    }
+
+    /**
+     * Makes this <code>SComponent</code> unavalable
+     * This Method is called internal and should not be called directly
+     **/
+    public void removeNotify() {
     }
 }

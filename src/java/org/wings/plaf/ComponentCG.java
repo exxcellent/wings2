@@ -52,5 +52,3 @@ public interface ComponentCG
 
     String mapSelector(String selector);
 }
-
-
