@@ -13,6 +13,7 @@
  */
 package org.wings.io;
 
+import java.io.Serializable;
 
 
 /**
@@ -24,7 +25,10 @@ package org.wings.io;
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$
  */
-public final class NullDevice implements Device {
+public final class NullDevice implements Device, Serializable {
+
+    public static NullDevice DEFAULT = new NullDevice();
+
     private long byteCount;
 
     public NullDevice() {

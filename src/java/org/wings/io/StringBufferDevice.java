@@ -16,6 +16,7 @@ package org.wings.io;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 /**
  * A Device encapsulating a StringBuffer
@@ -23,7 +24,7 @@ import java.io.OutputStream;
  * @author <a href="mailto:hzeller@to.com">Henner Zeller</a>
  * @version $Revision$
  */
-public final class StringBufferDevice implements Device {
+public final class StringBufferDevice implements Device, Serializable {
     private StringBuffer buffer;
     private ByteArrayOutputStream byteStream = null;
 
