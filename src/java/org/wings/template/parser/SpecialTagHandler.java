@@ -104,7 +104,8 @@ public interface SpecialTagHandler {
      * to this method. If the Handler decides not to handle this tag, this
      * method should return <CODE>null</CODE>.
      *
-     * @param config   Servlet configuration
+     * @param context The context used while parsing; contains
+     *                at least the HttpServletRequest and HttpServletResponse.
      * @param input    The PositionReader, located after the Name token
      *                 of the Tag
      * @param startPos The Position parsing of this token began

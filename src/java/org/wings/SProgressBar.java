@@ -467,8 +467,6 @@ public class SProgressBar extends SComponent {
 
     /**
      * Returns the color in which the fille region is painted
-     *
-     * @param c a <code>Color</code> value
      */
     public Color getFilledColor() {
         return filledColor;
@@ -485,9 +483,7 @@ public class SProgressBar extends SComponent {
 
     /**
      * Returns the color in which the unfilled region is painted
-     *
-     * @param c a <code>Color</code> value
-     */
+    */
     public Color getUnfilledColor() {
         return unfilledColor;
     }
@@ -495,7 +491,7 @@ public class SProgressBar extends SComponent {
     /**
      * Sets the look-and-feel object that renders this component.
      *
-     * @param ui a <code>ProgressBarCG</code> object
+     * @param cg a <code>ProgressBarCG</code> object
      */
     public void setCG(ProgressBarCG cg) {
         super.setCG(cg);
@@ -570,7 +566,7 @@ public class SProgressBar extends SComponent {
      * The event instance
      * is created if necessary.
      *
-     * @see EventListenerList
+     * @see javax.swing.event.EventListenerList
      */
     protected void fireStateChanged() {
         // Guaranteed to return a non-null array
@@ -777,11 +773,18 @@ public class SProgressBar extends SComponent {
 
 /*
    $Log$
+   Revision 1.4  2004/11/28 22:49:59  oliverscheck
+   Fixed javadoc warning.
+
    Revision 1.3  2004/11/24 18:13:21  blueshift
    TOTAL CLEANUP:
+
    - removed document me TODOs
+
    - updated/added java file headers
+
    - removed emacs stuff
+
    - removed deprecated methods
 
    Revision 1.2  2004/11/20 17:04:48  hengels

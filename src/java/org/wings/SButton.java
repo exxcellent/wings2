@@ -42,7 +42,7 @@ public class SButton extends SAbstractButton {
      * Creates a button where properties are taken from the
      * Action supplied.
      *
-     * @param a the Action used to specify the new button
+     * @param action the Action used to specify the new button
      */
     public SButton(Action action) {
         super(action);
@@ -58,7 +58,7 @@ public class SButton extends SAbstractButton {
     /**
      * Creates a button with a icon
      *
-     * @param icon the Icon image to display on the button
+     * @param i the Icon image to display on the button
      */
     public SButton(SIcon i) {
         super();
@@ -69,7 +69,7 @@ public class SButton extends SAbstractButton {
      * Creates a button with initial text and an icon.
      *
      * @param text the text of the button
-     * @param icon the Icon image to display on the button
+     * @param i    the Icon image to display on the button
      */
 
     public SButton(String text, SIcon i) {

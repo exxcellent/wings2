@@ -53,7 +53,7 @@ public class CGManager implements Serializable {
      * is delegated to the laf's defaults table.
      *
      * @param key the lookup key
-     * @param key the class of the object in question
+     * @param clazz the class of the object in question
      */
     public Object getObject(String key, Class clazz) {
         return getDefaults().get(key, clazz);

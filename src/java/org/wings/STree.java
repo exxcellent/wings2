@@ -423,7 +423,7 @@ public class STree
      *
      * @param index0 an int specifying a display row, where 0 is the
      *               first row in the display
-     * @param index0 an int specifying a second display row
+     * @param index1 an int specifying a second display row
      * @return an array of TreePath objects, one for each node between
      *         index0 and index1, inclusive
      */
@@ -666,7 +666,7 @@ public class STree
      *
      * @param index0 an int specifying a display row, where 0 is the
      *               first row in the display
-     * @param index0 an int specifying a second display row
+     * @param index1 an int specifying a second display row
      */
     public void removeSelectionInterval(int index0, int index1) {
         TreePath[] paths = getPathBetweenRows(index0, index1);

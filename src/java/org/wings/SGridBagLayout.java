@@ -380,9 +380,6 @@ public class SGridBagLayout
 
         /**
          * Initialize all members
-         *
-         * @param map the component-map with all
-         *            component/constraint-pairs
          */
         public Grid() {
             cols = 0;

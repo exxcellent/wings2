@@ -31,8 +31,8 @@ public class SimpleTagHandler extends TemplateTagHandler {
      *
      * @param config   Servlet configuration
      * @param input    The PositionReader, located after the Name token of the Tag
-     * @param startPos The Position parsing of this token began
-     * @param startTag the SGMLTag found in the file.
+     * @param startPosition The Position parsing of this token began
+     * @param tag      the SGMLTag found in the file.
      */
     public SGMLTag parseTag(ParseContext context,
                             PositionReader input,

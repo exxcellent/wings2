@@ -17,7 +17,7 @@ import java.io.IOException;
 
 /**
  * A Device, that buffers the data written to it to be
- * written to some other Device later (see {@link writeTo(Device)})
+ * written to some other Device later (see {@link #writeTo(Device)})
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

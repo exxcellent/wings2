@@ -110,7 +110,7 @@ public class PngEncoderB extends PngEncoder {
     /**
      * Set the BufferedImage to be encoded
      *
-     * @param BufferedImage A Java BufferedImage object
+     * @param image A Java BufferedImage object
      */
     public void setImage(BufferedImage image) {
         this.image = image;

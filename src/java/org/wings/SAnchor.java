@@ -93,7 +93,7 @@ public class SAnchor extends SContainer {
     /**
      * set the url this anchor points to.
      *
-     * @param ref the url.
+     * @param r the url.
      */
     public void setURL(SimpleURL r) {
         SimpleURL oldURL = url;
@@ -107,7 +107,7 @@ public class SAnchor extends SContainer {
     /**
      * set the url this anchor points to.
      *
-     * @param ref the url.
+     * @param url the url.
      */
     public void setURL(String url) {
         setURL(new SimpleURL(url));

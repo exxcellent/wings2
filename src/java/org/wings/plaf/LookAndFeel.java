@@ -170,7 +170,7 @@ public class LookAndFeel
     /**
      * Utility method that creates an AttributeSet from a String
      *
-     * @param attributes attributes string
+     * @param string attributes string
      * @return a newly allocated AttributeSet
      */
     public static AttributeSet makeAttributeSet(String string) {
@@ -190,7 +190,7 @@ public class LookAndFeel
     /**
      * Utility method that creates a styleSheet from a string
      *
-     * @param value styleSheet as a string
+     * @param resourceName styleSheet as a string
      * @return the styleSheet
      */
     public static Resource makeResource(String resourceName) {

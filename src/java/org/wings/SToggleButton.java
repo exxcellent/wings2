@@ -31,7 +31,7 @@ public class SToggleButton extends SAbstractButton {
      * Creates a button where properties are taken from the
      * Action supplied.
      *
-     * @param a the Action used to specify the new button
+     * @param action the Action used to specify the new button
      */
     public SToggleButton(Action action) {
         super(action);

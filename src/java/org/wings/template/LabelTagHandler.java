@@ -36,7 +36,7 @@ public class LabelTagHandler
     /**
      * @param context  the parsing context
      * @param input    the PositionReader, located after the name token of the tag
-     * @param startPos the position where parsing of this token began
+     * @param startPosition the position where parsing of this token began
      * @param startTag the SGMLTag found in the file.
      */
     public SGMLTag parseTag(ParseContext context,

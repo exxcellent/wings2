@@ -96,7 +96,7 @@ public class SGridLayout
     /**
      * returns the number of rows
      *
-     * @returns number of rows
+     * @return number of rows
      */
     public int getRows() { return rows; }
 

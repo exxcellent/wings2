@@ -53,7 +53,7 @@ public interface LowLevelEventListener {
      * The name-value-pairs of the HTTPRequest are considered low level events.
      *
      * @param name  the name-value-pair's name
-     * @param value the name-value-pair's value
+     * @param values the name-value-pair's values
      */
     void processLowLevelEvent(String name, String[] values);
 

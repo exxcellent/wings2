@@ -613,7 +613,7 @@ public class SGMLTag {
     /**
      * Return value of attribute (parameter) setting in SGML tag.
      * @param key name (uppercase) of attribute for which to check
-     * @param default value if attribute unset
+     * @param defaultValue value if attribute unset
      * @deprecated use <tt>attributes()</tt> and <tt>value()</tt> instead
      * @see #attributes
      * @see #value

@@ -80,10 +80,10 @@ public class PageParser {
     /**
      * Process a general DataStore representing a Template
      *
-     * @param source       The template TemplateSource
-     * @param ParseContext The context used while parsing; contains
-     *                     at least the HttpServletRequest and
-     *                     HttpServletResponse.
+     * @param source  The template TemplateSource
+     * @param context The context used while parsing; contains
+     *                at least the HttpServletRequest and
+     *                HttpServletResponse.
      * @see ParseContext
      * @see TemplateSource
      */
@@ -96,10 +96,9 @@ public class PageParser {
     /**
      * Processes a file.
      *
-     * @param file         The file containing SGML markup
-     * @param ParseContext The context used while parsing; contains
-     *                     at least the HttpServletRequest and
-     *                     HttpServletResponse.
+     * @param file    The file containing SGML markup
+     * @param context The context used while parsing; contains
+     *                at least the HttpServletRequest and HttpServletResponse.
      * @see ParseContext
      */
     public void process(File file, ParseContext context)
@@ -298,7 +297,9 @@ public class PageParser {
      * This Vector is used within <CODE>interpretPage()</CODE>
      * to create the output.
      *
-     * @param souce source to open and process
+     * @param source source to open and process
+     * @param context The context used while parsing; contains
+     *                at least the HttpServletRequest and HttpServletResponse
      * @return TemplateSourceInfo containing page elements.
      *         <!-- see private <a href="#interpretPage">interpretPage()</a> -->
      */

@@ -118,7 +118,7 @@ public class ExternalizedResource {
      * The HashCode of the externalized resource is
      * the hash code of the to be externalized object
      * (the externalized resource). Together with the implementation
-     * of the {@link equals(Object)}-Method, this makes sure, that
+     * of the {@link #equals(Object)}-Method, this makes sure, that
      * the same resource gets the same ID.
      *
      * @return the has code of the externalized object.
@@ -142,7 +142,7 @@ public class ExternalizedResource {
 
     /**
      * @return true, if the other object is an ExternalizedResource
-     *         and {@link equals(ExternalizedResource)} returns true.
+     *         and {@link #equals(ExternalizedResource)} returns true.
      */
     public final boolean equals(Object o) {
         if (o instanceof ExternalizedResource) {

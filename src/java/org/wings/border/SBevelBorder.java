@@ -53,7 +53,7 @@ public class SBevelBorder
      *
      * @param bevelType one of the following constants:
      *                  <code>RAISED</code> or <code>LOWERED</code>
-     * @param padding   (space between border and component) around
+     * @param insets   (space between border and component) around
      */
     public SBevelBorder(int bevelType, Insets insets) {
         super(Color.black, 2, insets);

@@ -81,7 +81,7 @@ public class SComponentEvent
      * Constructs a ComponentEvent object.
      *
      * @param aSource the Component object that originated the event
-     * @param aId     an integer indicating the type of event
+     * @param anId    an integer indicating the type of event
      */
     public SComponentEvent(SComponent aSource, int anId) {
         super(aSource, anId);

@@ -106,7 +106,7 @@ public class STextField
     /**
      * Adds an ActionListener to the button.
      *
-     * @param l the ActionListener to be added
+     * @param listener the ActionListener to be added
      */
     public void addActionListener(ActionListener listener) {
         addEventListener(ActionListener.class, listener);
@@ -133,7 +133,7 @@ public class STextField
     /**
      * Fire an ActionEvent at each registered listener.
      *
-     * @param teh supplied ActionEvent
+     * @param event the supplied ActionEvent
      */
     protected void fireActionPerformed(ActionEvent event) {
         // Guaranteed to return a non-null array
