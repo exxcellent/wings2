@@ -119,9 +119,10 @@ public class ScrollBarCG
                 .print("<td><table height=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody>\n");
 
         int range = maximum - minimum;
-        verticalArea(d, "#eeeeff", value * 100 / range);
-        verticalArea(d, "#cccccc", extent * 100 / range);
-        verticalArea(d, "#eeeeff", (range - value - extent) * 100 / range);
+        int iconWidth = DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0].getIconWidth();
+        verticalArea(d, "#eeeeff", value * 100 / range, iconWidth);
+        verticalArea(d, "#cccccc", extent * 100 / range, iconWidth);
+        verticalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconWidth);
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
@@ -143,11 +144,13 @@ public class ScrollBarCG
                 .print("</tbody></table>");
     }
 
-    private void verticalArea(Device d, String s, int v) throws IOException {
+    private void verticalArea(Device d, String s, int v, int iconWidth) throws IOException {
         d.print("<tr><td style=\"background-color: ");
         d.print(s);
         d.print("\" height=\"");
         d.print(v + "%");
+        d.print("\" width=\"");
+        d.print(iconWidth);
         d.print("\"></td></tr>\n");
     }
 
@@ -178,9 +181,10 @@ public class ScrollBarCG
                 .print("<td width=\"100%\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
 
         int range = maximum - minimum;
-        horizontalArea(d, "#eeeeff", value * 100 / range);
-        horizontalArea(d, "#cccccc", extent * 100 / range);
-        horizontalArea(d, "#eeeeff", (range - value - extent) * 100 / range);
+        int iconHeight = DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0].getIconHeight();
+        horizontalArea(d, "#eeeeff", value * 100 / range, iconHeight);
+        horizontalArea(d, "#cccccc", extent * 100 / range, iconHeight);
+        horizontalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconHeight);
 
         d.print("</tr></tbody></table></td>\n")
                 .print("<td width=\"1%\"><table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>\n");
@@ -199,11 +203,13 @@ public class ScrollBarCG
                 .print("</tr></tbody></table>");
     }
 
-    private void horizontalArea(Device d, String s, int v) throws IOException {
+    private void horizontalArea(Device d, String s, int v, int iconHeight) throws IOException {
         d.print("<td style=\"background-color: ");
         d.print(s);
         d.print("\" width=\"");
         d.print(v + "%");
+        d.print("\" height=\"");
+        d.print(iconHeight);
         d.print("\"></td>\n");
     }
 

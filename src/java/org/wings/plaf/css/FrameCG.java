@@ -260,4 +260,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         this.renderXmlDeclaration = renderXmlDeclaration;
     }
 
+    public String mapSelector(String selector) {
+        return selector;
+    }
 }

@@ -22,6 +22,11 @@ div, form, td, th {
     font: inherit;
 }
 
+textarea, input[type="text"], select {
+    background-color: #f6decc;
+    border: 1px solid #e66e32;
+}
+
 a, button {
     display: table;
     border: 0px;
@@ -29,6 +34,10 @@ a, button {
     margin: 0px;
     color: inherit;
     background-color: inherit;
+}
+
+button > * {
+    margin: -2px -3px -1px -4px
 }
 
 img {
@@ -131,7 +140,7 @@ div.STree > table > tbody > tr > td * {
 }
 
 div.STree > table > tbody > tr > td[selected="true"] {
-    background-color: #aaaaff;
+    background-color: #f6decc;
     border: 1px dotted black;
 }
 
@@ -157,7 +166,7 @@ div.STable > table > tbody > tr[odd="true"] {
 }
 
 div.STable > table > tbody > tr[selected="true"] {
-    background-color: #aaaaff !important;
+    background-color: #f6decc !important;
 }
 
 div.STable > table > thead > tr > th {
@@ -186,7 +195,7 @@ div.SList > * {
 }
 
 div.SList > * > li[selected="true"] {
-    background-color: #aaaaff !important;
+    background-color: #f6decc !important;
     border: 1px dotted black;
     cursor: pointer
 }
@@ -309,38 +318,26 @@ div.SList > * > li[selected="true"] {
    color: #000000;
 }
 
-div.SScrollBar {
+div.SScrollBar, div.SPageScroller {
     height: 100%;
     width: 100%;
     background-color: #eeeeff;
 }
 
-div.SScrollBar > table[orientation="vertical"] {
+div.SScrollBar > table[orientation="vertical"], div.SPageScroller > table[orientation="vertical"] {
     height: 100%;
 }
 
-div.SScrollBar > table[orientation="horizontal"] {
+div.SScrollBar > table[orientation="horizontal"], div.SPageScroller > table[orientation="horizontal"] {
     width: 100%;
 }
 
-div.SScrollBar > table[orientation="vertical"] > tbody > tr > td > table > tbody > tr > td {
-    width: 14px;
-}
-
-div.SScrollBar > table[orientation="horizontal"] > tbody > tr > td > table > tbody > tr > td {
-    height: 14px;
-}
-
-div.SScrollBar button, div.SScrollBar a {
+div.SScrollBar button, div.SScrollBar a, div.SPageScroller button, div.SPageScroller a {
    border: 1px solid #cccccc;
 }
 
-div.SScrollBar button:hover, div.SScrollBar a:hover {
+div.SScrollBar button:hover, div.SScrollBar a:hover, div.SPageScroller button:hover, div.SPageScroller a:hover {
    border: 1px outset #cccccc;
-}
-
-.selection {
-   background-color: #AAAAFF;
 }
 
 div.STabbedPane, div.STabbedPane > table {
@@ -356,7 +353,7 @@ div.STabbedPane > table > tbody > tr > th > * {
     line-height: 1.6em;
 }
 div.STabbedPane > table > tbody > tr > th > *[selected="true"] {
-    background-color: #aaaaff;
+    background-color: #f6decc;
 }
 div.STabbedPane > table > tbody > tr > th > *[disabled="true"] {
     color : #808080;
