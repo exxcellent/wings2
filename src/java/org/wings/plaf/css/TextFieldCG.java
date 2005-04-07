@@ -29,8 +29,6 @@ public class TextFieldCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.TextFieldCG {
 
-    private static final JavaScriptListener submitListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submit()");
-
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {
@@ -54,13 +52,6 @@ public class TextFieldCG
         }
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 
-        if (!(component instanceof SFormattedTextField)) {
-            component.removeScriptListener(submitListener);
-            if (component.getActionListeners().length > 0) {
-                component.addScriptListener(submitListener);
-            }
-        }
-        
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 

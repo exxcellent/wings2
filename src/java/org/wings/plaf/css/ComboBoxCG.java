@@ -27,8 +27,6 @@ public class ComboBoxCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.ComboBoxCG {
 
-    private static final JavaScriptListener submitListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submit()");
-
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         final SComboBox component = (SComboBox) comp;
@@ -52,12 +50,6 @@ public class ComboBoxCG
             device.print(" disabled=\"true\"");
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
-
-
-        component.removeScriptListener(submitListener);
-        if (component.getActionListeners().length > 0 || component.getItemListener().length > 0 ) {
-            component.addScriptListener(submitListener);
-        }
 
         Utils.writeEvents(device, component);
 
