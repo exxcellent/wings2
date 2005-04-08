@@ -177,6 +177,7 @@ public class WingSet implements Serializable {
         tab.add(new PopupExample(), "Popup Menu");
         tab.add(new KeyboardBindingsExample(), "Keyboard Bindings");
         tab.add(new DynamicLayoutExample(), "Dynamic Layouts");
+        tab.add(new BackButtonExample(),"Browser Back");
 
         contentPane.add(tab, "WingSetApp");
         contentPane.add(timeMeasure, "TimeLabel");
