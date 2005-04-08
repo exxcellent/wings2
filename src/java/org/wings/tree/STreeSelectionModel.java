@@ -14,6 +14,7 @@
 package org.wings.tree;
 
 import org.wings.SDelayedEventModel;
+import org.wings.SListSelectionModel;
 
 import javax.swing.tree.TreeSelectionModel;
 
@@ -22,6 +23,18 @@ import javax.swing.tree.TreeSelectionModel;
  * @version $Revision$
  */
 public interface STreeSelectionModel extends TreeSelectionModel, SDelayedEventModel {
+    /**
+     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     */
+    public static final int SINGLE_SELECTION = SListSelectionModel.SINGLE_SELECTION;
+    /**
+     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     */
+    public static final int SINGLE_INTERVAL_SELECTION = SListSelectionModel.SINGLE_INTERVAL_SELECTION;
+    /**
+     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     */
+    public static final int MULTIPLE_INTERVAL_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 }
 
 

@@ -19,8 +19,10 @@ import javax.swing.*;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public interface SListSelectionModel
-        extends ListSelectionModel, SDelayedEventModel {
+public interface SListSelectionModel extends ListSelectionModel, SDelayedEventModel {
+    /**
+     * A value for the selection mode disallowing selection of any list element
+     */
     int NO_SELECTION = -1;
 }
 

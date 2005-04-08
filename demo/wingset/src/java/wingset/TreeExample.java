@@ -66,11 +66,11 @@ public class TreeExample
             selectionMode.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     if ("no".equals(selectionMode.getSelectedItem()))
-                        tree.getSelectionModel().setSelectionMode(NO_SELECTION);
+                        tree.getSelectionModel().setSelectionMode(STree.NO_SELECTION);
                     else if ("single".equals(selectionMode.getSelectedItem()))
-                        tree.getSelectionModel().setSelectionMode(SINGLE_SELECTION);
+                        tree.getSelectionModel().setSelectionMode(STree.SINGLE_SELECTION);
                     else if ("multiple".equals(selectionMode.getSelectedItem()))
-                        tree.getSelectionModel().setSelectionMode(MULTIPLE_SELECTION);
+                        tree.getSelectionModel().setSelectionMode(STree.MULTIPLE_SELECTION);
                 }
             });
 

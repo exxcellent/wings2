@@ -44,7 +44,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         Utils.optAttribute(device, "name", Utils.event(list));
         Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", list.getVisibleRowCount());
-        Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SConstants.MULTIPLE_SELECTION) ? "multiple" : null);
+        Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SList.MULTIPLE_SELECTION) ? "multiple" : null);
 
         if (!list.isEnabled())
             device.print(" disabled=\"true\"");
@@ -132,7 +132,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
     public void writeAnchorList(Device device, SList list)
             throws IOException {
         boolean showAsFormComponent = list.getShowAsFormComponent();
-        boolean renderSelection = list.getSelectionMode() != SConstants.NO_SELECTION;
+        boolean renderSelection = list.getSelectionMode() != SList.NO_SELECTION;
 
         device.print("<");
         device.print(list.getType());

@@ -107,7 +107,7 @@ public class SDefaultListSelectionModel
 
     public int getSelectionMode() {
         if (noSelection) {
-            return SConstants.NO_SELECTION;
+            return NO_SELECTION;
         } else {
             return super.getSelectionMode();
         }

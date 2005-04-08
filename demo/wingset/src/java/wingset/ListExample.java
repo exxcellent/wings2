@@ -49,7 +49,7 @@ public class ListExample
         cont.add(new SLabel("List with single selection"));
         SList sinlgeSelectionList = new SList();
         sinlgeSelectionList.setName("single");
-        sinlgeSelectionList.setSelectionMode(SINGLE_SELECTION);
+        sinlgeSelectionList.setSelectionMode(SList.SINGLE_SELECTION);
         addListElements(sinlgeSelectionList);
         cont.add(sinlgeSelectionList);
         controls.addSizable(sinlgeSelectionList);
@@ -62,7 +62,7 @@ public class ListExample
         cont.add(new SLabel("List with multiple selection"));
         SList multiSelectionList = new SList();
         multiSelectionList.setName("multiple");
-        multiSelectionList.setSelectionMode(MULTIPLE_SELECTION);
+        multiSelectionList.setSelectionMode(SList.MULTIPLE_SELECTION);
         addListElements(multiSelectionList);
         cont.add(multiSelectionList);
         controls.addSizable(multiSelectionList);
@@ -87,7 +87,7 @@ public class ListExample
         SList anchorList = new SList();
         anchorList.setName("noform");
         anchorList.setShowAsFormComponent(false);
-        anchorList.setSelectionMode(SConstants.SINGLE_SELECTION);
+        anchorList.setSelectionMode(SList.SINGLE_SELECTION);
         addAnchorElements(anchorList);
         cont.add(anchorList);
         controls.addSizable(anchorList);
@@ -166,6 +166,6 @@ public class ListExample
         color.setText(Color.green.toString());
 
         list.setModel(listModel);
-        list.setType(ORDER_TYPE_NORMAL);
+        list.setType(SList.ORDER_TYPE_NORMAL);
     }
 }

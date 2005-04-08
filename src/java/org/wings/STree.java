@@ -13,27 +13,6 @@
  */
 package org.wings;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-
-import javax.swing.event.EventListenerList;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeExpansionListener;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeWillExpandListener;
-import javax.swing.tree.AbstractLayoutCache;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.ExpandVetoException;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-import javax.swing.tree.VariableHeightLayoutCache;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.TreeCG;
@@ -41,14 +20,43 @@ import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.tree.STreeCellRenderer;
 import org.wings.tree.STreeSelectionModel;
 
+import javax.swing.event.*;
+import javax.swing.tree.*;
+import java.awt.*;
+import java.util.ArrayList;
+
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class STree
-        extends SComponent
-        implements LowLevelEventListener, Scrollable {
+public class STree extends SComponent implements LowLevelEventListener, Scrollable {
+    /**
+     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     */
+    public static final int NO_SELECTION = SListSelectionModel.NO_SELECTION;
+
+    /**
+     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     */
+    public static final int SINGLE_SELECTION = SListSelectionModel.SINGLE_SELECTION;
+
+    /**
+     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     */
+    public static final int SINGLE_INTERVAL_SELECTION = SListSelectionModel.SINGLE_INTERVAL_SELECTION;
+
+    /**
+     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     */
+    public static final int MULTIPLE_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
+    /**
+     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     */
+    public static final int MULTIPLE_INTERVAL_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
     private final transient static Log log = LogFactory.getLog(STree.class);
+
     private int nodeIndentDepth;
 
     /**
@@ -414,8 +422,6 @@ public class STree
      *
      * @param selectionModel the TreeSelectionModel to use, or null to
      *                       disable selections
-     * @beaninfo bound: true
-     * description: The tree's selection model.
      * @see TreeSelectionModel
      */
     public void setSelectionModel(STreeSelectionModel selectionModel) {

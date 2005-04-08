@@ -15,9 +15,9 @@ package org.wings;
 
 import org.wings.plaf.ListCG;
 import org.wings.style.AttributeSet;
+import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
-import org.wings.style.CSSSelector;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -58,7 +58,7 @@ import java.util.List;
  * @see javax.swing.ListSelectionModel
  * @see SListCellRenderer
  */
-public class SList        extends SComponent        implements Scrollable, LowLevelEventListener, ListDataListener {
+public class SList extends SComponent implements Scrollable, LowLevelEventListener, ListDataListener {
 
     /**
      * The type for an ordered list. See {@link #setType(String)} and ORDER_TYPE_xxx
@@ -117,7 +117,30 @@ public class SList        extends SComponent        implements Scrollable, LowLe
      */
     public static final String[] ORDER_TYPE_SMALL_ROMAN = {"ol", "i"};
 
-    /** The Selector for this component. */
+    /**
+     * Table selection model. See {@link SList#setSelectionMode(int)}
+     */
+    public static final int NO_SELECTION = SListSelectionModel.NO_SELECTION;
+    /**
+     * Table selection model. See {@link SList#setSelectionMode(int)}
+     */
+    public static final int SINGLE_SELECTION = SListSelectionModel.SINGLE_SELECTION;
+    /**
+     * Table selection model. See {@link SList#setSelectionMode(int)}
+     */
+    public static final int SINGLE_INTERVAL_SELECTION = SListSelectionModel.SINGLE_INTERVAL_SELECTION;
+    /**
+     * Table selection model. See {@link SList#setSelectionMode(int)}
+     */
+    public static final int MULTIPLE_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+    /**
+     * Table selection model. See {@link SList#setSelectionMode(int)}
+     */
+    public static final int MULTIPLE_INTERVAL_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
+    /**
+     * The Selector for this component.
+     */
     public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
     /**
@@ -142,7 +165,9 @@ public class SList        extends SComponent        implements Scrollable, LowLe
      */
     private Rectangle viewport = null;
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     private boolean epochCheckEnabled = true;
 
     /**
@@ -238,7 +263,7 @@ public class SList        extends SComponent        implements Scrollable, LowLe
      * Sets the renderer that's used to write out each cell in the list.
      *
      * @param cellRenderer the SListCellRenderer that paints list cells
-     * description: The component used to draw the cells.
+     *                     description: The component used to draw the cells.
      * @see #getCellRenderer
      */
     public void setCellRenderer(SListCellRenderer cellRenderer) {
@@ -320,7 +345,7 @@ public class SList        extends SComponent        implements Scrollable, LowLe
      * The default value of this property is 8.
      *
      * @param visibleRowCount the preferred number of visible rows
-     * description: The preferred number of cells that can be displayed without a scrollbar.
+     *                        description: The preferred number of cells that can be displayed without a scrollbar.
      * @see #getVisibleRowCount
      */
     public void setVisibleRowCount(int visibleRowCount) {
@@ -351,7 +376,7 @@ public class SList        extends SComponent        implements Scrollable, LowLe
      * Sets the model
      *
      * @param model the ListModel that provides the list of items
-     * description: The object that contains the data to be shownin the list.
+     *              description: The object that contains the data to be shownin the list.
      * @see #getModel
      */
     public void setModel(ListModel model) {
@@ -518,8 +543,9 @@ public class SList        extends SComponent        implements Scrollable, LowLe
     /**
      * Set the selectionModel for the list.
      * The selection model keeps track of which items are selected.
-     *
+     * <p/>
      * description: The selection model, recording which cells are selected.
+     *
      * @see #getSelectionModel
      */
     public void setSelectionModel(SListSelectionModel selectionModel) {
@@ -547,8 +573,8 @@ public class SList        extends SComponent        implements Scrollable, LowLe
      * </ul>
      *
      * @param selectionMode single or multiple selections
-     * enum: SINGLE_SELECTION            ListSelectionModel.SINGLE_SELECTION
-     * MULTIPLE_INTERVAL_SELECTION ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
+     *                      enum: SINGLE_SELECTION            ListSelectionModel.SINGLE_SELECTION
+     *                      MULTIPLE_INTERVAL_SELECTION ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
      * @see #getSelectionMode
      */
     public void setSelectionMode(int selectionMode) {
@@ -922,12 +948,16 @@ public class SList        extends SComponent        implements Scrollable, LowLe
         getSelectionModel().fireDelayedFinalEvents();
     }
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     public boolean isEpochCheckEnabled() {
         return epochCheckEnabled;
     }
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     public void setEpochCheckEnabled(boolean epochCheckEnabled) {
         this.epochCheckEnabled = epochCheckEnabled;
     }
@@ -1031,7 +1061,9 @@ public class SList        extends SComponent        implements Scrollable, LowLe
      *
      * @return the visible viewport size
      */
-    public final Rectangle getViewportSize() { return viewport; }
+    public final Rectangle getViewportSize() {
+        return viewport;
+    }
 
     public Dimension getPreferredExtent() {
         return new Dimension(1, Math.min(getVisibleRowCount(), getModel().getSize()));

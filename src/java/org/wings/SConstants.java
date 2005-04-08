@@ -82,27 +82,6 @@ public interface SConstants {
      */
     int BASELINE = 6;
 
-    /**
-     * Table selection model. See {@link SListSelectionModel}
-     */
-    int NO_SELECTION = SListSelectionModel.NO_SELECTION;
-    /**
-     * Table selection model. See {@link SListSelectionModel}
-     */
-    int SINGLE_SELECTION = SListSelectionModel.SINGLE_SELECTION;
-    /**
-     * Table selection model. See {@link SListSelectionModel}
-     */
-    int SINGLE_INTERVAL_SELECTION = SListSelectionModel.SINGLE_INTERVAL_SELECTION;
-    /**
-     * Table selection model. See {@link SListSelectionModel}
-     */
-    int MULTIPLE_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-    /**
-     * Table selection model. See {@link SListSelectionModel}
-     */
-    int MULTIPLE_INTERVAL_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-
     int VERTICAL = 1;
     int HORIZONTAL = 0;
 

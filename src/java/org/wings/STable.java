@@ -35,9 +35,30 @@ import java.util.HashMap;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class STable
-        extends SComponent
+public class STable extends SComponent
         implements TableModelListener, Scrollable, CellEditorListener, LowLevelEventListener {
+
+    /**
+     * Table selection model. See {@link STable#setSelectionMode(int)}
+     */
+    public static final int NO_SELECTION = SListSelectionModel.NO_SELECTION;
+    /**
+     * Table selection model. See {@link STable#setSelectionMode(int)}
+     */
+    public static final int SINGLE_SELECTION = SListSelectionModel.SINGLE_SELECTION;
+    /**
+     * Table selection model. See {@link STable#setSelectionMode(int)}
+     */
+    public static final int SINGLE_INTERVAL_SELECTION = SListSelectionModel.SINGLE_INTERVAL_SELECTION;
+    /**
+     * Table selection model. See {@link STable#setSelectionMode(int)}
+     */
+    public static final int MULTIPLE_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+    /**
+     * Table selection model. See {@link STable#setSelectionMode(int)}
+     */
+    public static final int MULTIPLE_INTERVAL_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
 
     /**
      * <p>the table model.</p>
@@ -123,7 +144,9 @@ public class STable
 
     protected Rectangle viewport;
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     protected boolean epochCheckEnabled = true;
 
     public static final CSSSelector SELECTOR_HEADER = new CSSSelector.Pseudo("HEADER");
@@ -736,13 +759,13 @@ public class STable
     /**
      * Sets the selection mode. Use one of the following values:
      * <UL>
-     * <LI> {@link SConstants#NO_SELECTION}
+     * <LI> {@link NO_SELECTION}
      * <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
-     * {@link SConstants#SINGLE_SELECTION}
+     * {@link SINGLE_SELECTION}
      * <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
-     * {@link SConstants#SINGLE_INTERVAL_SELECTION}
+     * {@link SINGLE_INTERVAL_SELECTION}
      * <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
-     * {@link SConstants#MULTIPLE_SELECTION}
+     * {@link MULTIPLE_SELECTION}
      * </UL>
      */
     public void setSelectionMode(int s) {
@@ -751,13 +774,13 @@ public class STable
 
     /**
      * @return <UL>
-     *         <LI> {@link SConstants#NO_SELECTION}
+     *         <LI> {@link NO_SELECTION}
      *         <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
-     *         {@link SConstants#SINGLE_SELECTION}
+     *         {@link SINGLE_SELECTION}
      *         <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
-     *         {@link SConstants#SINGLE_INTERVAL_SELECTION}
+     *         {@link SINGLE_INTERVAL_SELECTION}
      *         <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
-     *         {@link SConstants#MULTIPLE_SELECTION}
+     *         {@link MULTIPLE_SELECTION}
      *         </UL>
      */
     public int getSelectionMode() {
@@ -784,12 +807,16 @@ public class STable
         getSelectionModel().fireDelayedFinalEvents();
     }
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     public boolean isEpochCheckEnabled() {
         return epochCheckEnabled;
     }
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     public void setEpochCheckEnabled(boolean epochCheckEnabled) {
         this.epochCheckEnabled = epochCheckEnabled;
     }

@@ -60,7 +60,7 @@ public class TableExample
         table = new STable(new MyTableModel(7, 5));
         table.setName("table");
         table.setShowGrid(true);
-        table.setSelectionMode(NO_SELECTION);
+        table.setSelectionMode(STable.NO_SELECTION);
         table.setDefaultRenderer(cellRenderer);
         table.setShowAsFormComponent(false);
         table.setEditable(false);
@@ -271,11 +271,11 @@ public class TableExample
             selectionMode.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     if ("no".equals(selectionMode.getSelectedItem()))
-                        table.setSelectionMode(NO_SELECTION);
+                        table.setSelectionMode(STable.NO_SELECTION);
                     else if ("single".equals(selectionMode.getSelectedItem()))
-                        table.setSelectionMode(SINGLE_SELECTION);
+                        table.setSelectionMode(STable.SINGLE_SELECTION);
                     else if ("multiple".equals(selectionMode.getSelectedItem()))
-                        table.setSelectionMode(MULTIPLE_SELECTION);
+                        table.setSelectionMode(STable.MULTIPLE_SELECTION);
                 }
             });
 
