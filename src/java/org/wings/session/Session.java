@@ -57,6 +57,10 @@ public class Session
 
     private final SessionStatistics statistics = new SessionStatistics();
 
+    /**
+     * Every session has its own {@link CGManager}.
+     *
+     */
     private CGManager CGManager = new CGManager();
 
     private SToolTipManager toolTipManager = new SToolTipManager();
@@ -74,7 +78,7 @@ public class Session
     private long uniqueIdCounter = 1;
 
     /**
-     * Maximum upload content length. This is used by the {@link org.wings.Session.SessionServlet}
+     * Maximum upload content length. This is used by the {@link SessionServlet}
      * to avoid denial of service attacks.
      */
     private int maxContentLength = 64;
@@ -307,7 +311,7 @@ public class Session
      *
      * @return a <code>Set</code> value
      */
-    public Set frames() {
+    public Set getFrames() {
         return frames;
     }
 

@@ -14,32 +14,26 @@
 
 package desktop;
 
-import java.awt.event.*;
-import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
-import java.beans.PropertyChangeEvent;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.swing.*;
-
 import org.wings.*;
-import org.wings.resource.FileResource;
-import org.wings.resource.DynamicResource;
+import org.wings.event.SInternalFrameEvent;
+import org.wings.event.SInternalFrameListener;
+import org.wings.externalizer.AbstractExternalizeManager;
 import org.wings.externalizer.ExternalizeManager;
+import org.wings.io.Device;
+import org.wings.resource.DynamicResource;
+import org.wings.resource.FileResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
-import org.wings.externalizer.*;
-import org.wings.event.*;
-import org.wings.border.SBorder;
-import org.wings.border.SBevelBorder;
-import org.wings.io.Device;
-import org.wings.io.ServletDevice;
-import org.wings.session.*;
-import org.wings.util.*;
+import org.wings.session.SessionManager;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Desktop example demonstrates the use of internal frames as well as
@@ -275,7 +269,7 @@ public class Editor
                     return true;
                 }
 
-                public boolean isEpochChecking() { return true; }
+                public boolean isEpochCheckEnabled() { return true; }
                 });
 
         }

@@ -22,6 +22,7 @@ import org.wings.io.Device;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -31,12 +32,10 @@ import java.util.Date;
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class DynamicCodeResource
-        extends DynamicResource {
+public class DynamicCodeResource extends DynamicResource {
     private final transient static Log log = LogFactory.getLog(DynamicCodeResource.class);
 
     private static final ArrayList DEFAULT_CODE_HEADER = new ArrayList();
-
     static {
         DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Expires", new Date(1000)));
         DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Cache-Control", "no-store, no-cache, must-revalidate"));
@@ -47,20 +46,25 @@ public class DynamicCodeResource
 
     /**
      * Create a code resource for the specified frame.
+     * <p>The MIME-type for this frame will be <code>text/html; charset=<i>current encoding</i></code>
      */
     public DynamicCodeResource(SFrame f) {
         super(f, null, provideMimeType(f));
     }
 
+    /**
+     * The MIME-type for this {@link Resource}.
+     *
+     * @return
+     */
     private static String provideMimeType(SFrame frame) {
         return "text/html; charset=" + frame.getSession().getCharacterEncoding();
     }
 
     /**
-     * Write the code of the whole frame to the Device.
+     * Renders and write the code of the {@link SFrame} attached to this <code>DynamicCodeResource</code>.
      */
-    public void write(Device out)
-            throws IOException {
+    public void write(Device out) throws IOException {
         try {
             getFrame().write(out);
         } catch (IOException e) {
@@ -71,8 +75,19 @@ public class DynamicCodeResource
         }
     }
 
+    /**
+     * The HTTP header parameteres attached to this dynamic code ressource.
+     * This <b>static</b> list will by default contain entries to disable caching
+     * on the server side. Call <code>getHeaders().clear()</code> to avoid this
+     * i.e. if you want to enable back buttons.
+     *
+     * @return A <code>Collection</code> of {@link HeaderEntry} objects.
+     */
     public Collection getHeaders() {
-        return DEFAULT_CODE_HEADER;
+        if (getFrame().isNoCaching())
+            return DEFAULT_CODE_HEADER;
+        else
+            return Collections.EMPTY_SET;
     }
 }
 
