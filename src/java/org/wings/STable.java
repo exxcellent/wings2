@@ -123,6 +123,9 @@ public class STable
 
     protected Rectangle viewport;
 
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    protected boolean epochCheckEnabled = true;
+
     public static final CSSSelector SELECTOR_HEADER = new CSSSelector.Pseudo("HEADER");
     public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
@@ -781,10 +784,15 @@ public class STable
         getSelectionModel().fireDelayedFinalEvents();
     }
 
-    public boolean checkEpoch() {
-        return true;
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
     }
 
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
+    }
 
     public void tableChanged(TableModelEvent e) {
         // kill active editors

@@ -35,8 +35,7 @@ public class SDownloadButton extends SAbstractClickable {
         resource = pResource;
     }
 
-
-    public boolean checkEpoch() {
+    public boolean isEpochCheckEnabled() {
         return false;
     }
 

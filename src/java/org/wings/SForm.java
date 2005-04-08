@@ -26,14 +26,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/*
- * Ein Form Container. In HTML ist die einzige Moeglichkeit
- * Benutzerinteraktion zu haben durch Forms gegeben. Alle
- * HTML Komponenten, die auf Benutzerinteraktion angewiesen sind
- * muessen in einen Form Container eingebettet sein.
- */
 
 /**
+ * A Form Container. In HTML you need to wrap input fields (i.e. <code>STextField</code>)
+ * in a SForm object to work correctly. The browser uses this object/tag to identify
+ * how (POST or GET) and where to send an request originating from any input
+ * inside this form.
+ *
+ * <p><b>Note:</b>Please be aware, that some components render differently if
+ * places inside a <code>SForm</code> or not. 
+ *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -83,37 +85,62 @@ public class SForm
         }
     };
 
+    /**
+     * Create a standard form component.
+     */
+    public SForm() {
+    }
 
+    /**
+     * Create a standard form component but redirects the request to the passed
+     * URL. Use this i.e. to address other servlets.
+     *
+     * @param action The target URL.
+     */
     public SForm(URL action) {
         setAction(action);
     }
 
-    public SForm() {
-    }
 
-
+    /**
+     * Create a standard form component.
+     *
+     * @param layout The layout to apply to this container.
+     * @see SContainer
+     */
     public SForm(SLayoutManager layout) {
         super(layout);
     }
 
-
-    public void setActionCommand(String ac) {
-        actionCommand = ac;
+    /**
+     * A SForm fires an event each time it was triggered (i.e. pressing asubmit button inside)
+     *
+     * @param actionCommand The action command to place insiside the {@link ActionEvent}
+     */
+    public void setActionCommand(String actionCommand) {
+        this.actionCommand = actionCommand;
     }
 
-
+    /**
+     * @see #setActionCommand(String)
+     */
     public String getActionCommand() {
         return actionCommand;
     }
 
     /**
-     * Set the default button. The button is triggered whenever the form is
-     * triggered but no other button has been activated.
+     * Set the default button activated upon <b>enter</b>.
+     * The button is triggered if you press <b>enter</b> inside a form to submit it.
+     * @param defaultButton A button which will be rendered <b>invisible</b>.
+     * If <code>null</code> enter key pressed will be catched by the wings framework.
      */
     public void setDefaultButton(SButton defaultButton) {
         this.defaultButton = defaultButton;
     }
 
+    /**
+     * @see #setDefaultButton(SButton)
+     */
     public SButton getDefaultButton() {
         return this.defaultButton;
     }
@@ -315,7 +342,11 @@ public class SForm
 
     /**
      * Returns, whether this form is transmitted via <code>POST</code> (true)
-     * or <code>GET</code> (false).
+     * or <code>GET</code> (false). <p>
+     * <b>Default</b> is <code>true</code>.
+     *
+     * @return <code>true</code> if form postedt via <code>POST</code>,
+     * <code>false</code> if via <code>GET</code> (false).
      */
     public boolean isPostMethod() {
         return postMethod;
@@ -410,8 +441,17 @@ public class SForm
         fireActionPerformed(getActionCommand());
     }
 
-    public boolean checkEpoch() {
-        return true;
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    private boolean epochCheckEnabled = true;
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
+    }
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
     }
 
     public SComponent addComponent(SComponent c, Object constraint, int index) {

@@ -27,6 +27,10 @@ public class SFont implements SConstants, Serializable {
     public SFont() {
     }
 
+    public SFont(int style) {
+        setStyle(style);
+    }
+
     /*
      * @parameter size if Integer.MIN_VALUE the size is ignored
      */

@@ -110,6 +110,10 @@ public class STree
      */
     protected Rectangle viewport;
 
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    protected boolean epochCheckEnabled = true;
+
+
     /**
      * used to forward the selection to the selection Listeners of the tree
      */
@@ -322,10 +326,15 @@ public class STree
         getSelectionModel().fireDelayedFinalEvents();
     }
 
-    public boolean checkEpoch() {
-        return true;
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
     }
 
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
+    }
 
     public void setRootVisible(boolean rootVisible) {
         treeState.setRootVisible(rootVisible);

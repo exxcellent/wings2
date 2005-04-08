@@ -443,14 +443,14 @@ final class SessionServlet
                     || firstRequest) {
                 log.debug("delivering default frame");
 
-                if (session.frames().size() == 0)
+                if (session.getFrames().size() == 0)
                     throw new ServletException("no frame visible");
                 
                 // get the first frame from the set and walk up the hierarchy.
                 // this should work in most cases. if there are more than one
                 // toplevel frames, the developer has to care about the resource
                 // ids anyway ..
-                SFrame defaultFrame = (SFrame) session.frames().iterator().next();
+                SFrame defaultFrame = (SFrame) session.getFrames().iterator().next();
                 while (defaultFrame.getParent() != null)
                     defaultFrame = (SFrame) defaultFrame.getParent();
 

@@ -223,7 +223,7 @@ public class SInternalFrame
         event = null;
     }
 
-    public boolean checkEpoch() {
+    public boolean isEpochCheckEnabled() {
         return true;
     }
 

@@ -13,22 +13,18 @@
  */
 package org.wings;
 
-import java.awt.Color;
-import java.io.Serializable;
-import java.util.ArrayList;
-
-import javax.swing.DefaultSingleSelectionModel;
-import javax.swing.GrayFilter;
-import javax.swing.ImageIcon;
-import javax.swing.SingleSelectionModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import org.wings.plaf.TabbedPaneCG;
 import org.wings.style.AttributeSet;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 // fixme: refactorize.
 
@@ -86,6 +82,10 @@ public class STabbedPane
      * lowlevelevent
      */
     private int lleChangedIndex = -1;
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    private boolean epochCheckEnabled = true;
+
 
     /**
      * Creates a new empty Tabbed Pane with the tabs at the top.
@@ -873,8 +873,14 @@ public class STabbedPane
         lleChangedIndex = -1;
     }
 
-    public boolean checkEpoch() {
-        return true;
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
+    }
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
     }
 
     /**

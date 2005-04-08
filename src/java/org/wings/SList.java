@@ -85,6 +85,9 @@ public class SList
      */
     private Rectangle viewport = null;
 
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    private boolean epochCheckEnabled = true;
+
     /**
      * <li type="...">
      */
@@ -862,8 +865,14 @@ public class SList
         getSelectionModel().fireDelayedFinalEvents();
     }
 
-    public boolean checkEpoch() {
-        return true;
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
+    }
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
     }
 
     /*

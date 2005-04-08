@@ -23,8 +23,9 @@ public class SPageScroller
 {
     private static final int DEFAULT_DIRECT_PAGES = 10;
 
-    boolean marginVisible;
-    boolean stepVisible;
+    private boolean marginVisible;
+
+    private boolean stepVisible;
 
     /**
      * Actual amount of page clickables; depends on the number of elemnts in the
@@ -79,6 +80,7 @@ public class SPageScroller
         setMarginVisible(false);
         setHorizontalAlignment(CENTER);
         setVerticalAlignment(CENTER);
+        setEpochCheckEnabled(false);
     }
 
     /**
@@ -108,16 +110,10 @@ public class SPageScroller
         this(SConstants.VERTICAL);
     }
 
-    /**
-     *
-     **/
     public SLabel getPageCountLabel() {
         return pageCountLabel;
     }
 
-    /**
-     *
-     **/
     protected void setPageCountText(int pages) {
         pageCountLabel.setText("/" + pages);
     }
@@ -183,10 +179,6 @@ public class SPageScroller
         return Integer.toString(page + 1);
     }
 
-
-    public boolean checkEpoch() {
-        return false;
-    }
 
     public boolean isMarginVisible() {
         return marginVisible;

@@ -13,6 +13,10 @@
  */
 package org.wings;
 
+import org.wings.event.InvalidLowLevelEvent;
+import org.wings.event.SInvalidLowLevelEventListener;
+import org.wings.event.SRenderListener;
+import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.DynamicResource;
@@ -22,6 +26,7 @@ import org.wings.util.ComponentVisitor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +76,28 @@ public class SFrame
     private SComponent focusComponent = null;                //Component which requests the focus
 
     /**
+     * @see #setBackButton(SButton)
+     */
+    private SButton backButton;
+
+    /**
+     * @see #fireDefaultBackButton()
+     */
+    private long defaultBackButtonLastPressedTime;
+
+    /**
+     * @see #setNoCaching(boolean)
+     */
+    private boolean noCaching = true;
+
+    /**
+     * For performance reasons.
+     *
+     * @see #fireInvalidLowLevelEventListener
+     */
+    private boolean fireInvalidLowLevelEvents = false;
+
+    /**
      * Creates a new SFrame
      */
     public SFrame() {
@@ -90,6 +117,7 @@ public class SFrame
 
     /**
      * Adds a dynamic ressoure.
+     *
      * @see #getDynamicResource(Class)
      */
     public void addDynamicResource(DynamicResource d) {
@@ -101,8 +129,9 @@ public class SFrame
 
     /**
      * Removes the instance of the dynamic ressource of the given class.
-     * @see #getDynamicResource(Class)
+     *
      * @param dynamicResourceClass Class of dynamic ressource to remove
+     * @see #getDynamicResource(Class)
      */
     public void removeDynamicResource(Class dynamicResourceClass) {
         if (dynamicResources != null) {
@@ -193,6 +222,7 @@ public class SFrame
 
     /**
      * Add an {@link Renderable}  into the header of the HTML page
+     *
      * @param m is typically a {@link org.wings.header.Link} or {@link DynamicResource}.
      * @see org.wings.header.Link
      * @see org.wings.script.DynamicScriptResource
@@ -203,13 +233,16 @@ public class SFrame
             headers.add(m);
     }
 
-    /** @see #addHeader(Object) */
+    /**
+     * @see #addHeader(Object)
+     */
     public void removeHeader(Object m) {
         headers.remove(m);
     }
 
     /**
      * Removes all headers. Be carful about what you do!
+     *
      * @see #addHeader(Object)
      */
     public void clearHeaders() {
@@ -247,13 +280,53 @@ public class SFrame
         statusLine = s;
     }
 
+    /**
+     * @return <code>true</code> if the generated HTML code of this frame/page should
+     *         not be cached by browser, <code>false</code> if no according HTTP/HTML headers
+     *         should be rendered
+     * @see #setNoCaching(boolean)
+     */
+    public boolean isNoCaching() {
+        return noCaching;
+    }
+
+    public void write(Device s) throws IOException {
+        if (isNoCaching())
+            reload(); // invalidate frame on each rendering!
+        super.write(s);
+    }
+
+    /**
+     * Typically you don't want any wings application to operate on old 'views' meaning
+     * old pages. Hence all generated HTML pages (<code>SFrame</code> objects
+     * rendered through {@link DynamicCodeResource} are marked as <b>do not cache</b>
+     * inside the HTTP response header and the generated HTML frame code.
+     * <p>If for any purpose (i.e. you a writing a read only application) you want
+     * th user to be able to work on old views then set this to <code>false</code>
+     * and Mark the according <code>SComponent</code>s to be not epoch checked
+     * (i.e. {@link SAbstractButton#setEpochCheckEnabled(boolean)})
+     *
+     * @param noCaching The noCaching to set.
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     * @see org.wings.session.LowLevelEventDispatcher
+     */
+    public void setNoCaching(boolean noCaching) {
+        this.noCaching = noCaching;
+    }
+
+    /**
+     * Shows this frame. This means it gets registered at the session.
+     *
+     * @see org.wings.session.Session#getFrames()
+     */
     public void show() {
         setVisible(true);
     }
 
     /**
      * Hides this frame. This means it gets removed at the session.
-     * @see org.wings.session.Session#frames()
+     *
+     * @see org.wings.session.Session#getFrames()
      */
     public void hide() {
         setVisible(false);
@@ -261,7 +334,8 @@ public class SFrame
 
     /**
      * Shows or hide this frame. This means it gets (un)registered at the session.
-     * @see org.wings.session.Session#frames()
+     *
+     * @see org.wings.session.Session#getFrames()
      */
     public void setVisible(boolean b) {
         if (b) {
@@ -322,10 +396,115 @@ public class SFrame
         }
     }
 
+    /**
+     * Registers an {@link SInvalidLowLevelEventListener} in this frame.
+     *
+     * @param l The listener to notify about outdated reqests
+     * @see org.wings.event.InvalidLowLevelEvent
+     */
+    public final void addInvalidLowLevelEventListener(SInvalidLowLevelEventListener l) {
+        addEventListener(SInvalidLowLevelEventListener.class, l);
+        fireInvalidLowLevelEvents = true;
+    }
+
+    /**
+     * Removes the passed {@link SInvalidLowLevelEventListener} from this frame.
+     *
+     * @param l The listener to remove
+     * @see org.wings.event.InvalidLowLevelEvent
+     */
+
+    public final void removeDispatchListener(SInvalidLowLevelEventListener l) {
+        removeEventListener(SRenderListener.class, l);
+    }
+
+    /**
+     * Notify all {@link SInvalidLowLevelEventListener} about an outdated request
+     * on the passed component
+     *
+     * @param source The <code>SComponent</code> received an outdated event
+     * @see org.wings.session.LowLevelEventDispatcher
+     */
+    public final void fireInvalidLowLevelEventListener(LowLevelEventListener source) {
+        if (fireInvalidLowLevelEvents) {
+            Object[] listeners = getListenerList();
+            InvalidLowLevelEvent e = null;
+            for (int i = listeners.length - 2; i >= 0; i -= 2) {
+                if (listeners[i] == SInvalidLowLevelEventListener.class) {
+                    // Lazily create the event:
+                    if (e == null)
+                        e = new InvalidLowLevelEvent(source);
+                    ((SInvalidLowLevelEventListener) listeners[i + 1]).invalidLowLevelEvent(e);
+                }
+            }
+        }
+        fireDefaultBackButton();
+    }
+
+
+    /**
+     * A button activated on detected browser back clicks.
+     *
+     * @return Returns the backButton.
+     * @see #setBackButton(SButton)
+     */
+    public SButton getBackButton() {
+        return backButton;
+    }
+
+    /**
+     * This button allows you to programattically react on Back buttons pressed in the browser itselfs.
+     * This is a convenience method in contrast to {@link #addInvalidLowLevelEventListener(SInvalidLowLevelEventListener)}.
+     * While the listener throws an event on every detected component receiving an invalid
+     * request, this button is only activated if
+     * <ul>
+     * <li>Maximum once per request
+     * <li>Only if some time passed by to avoid double-clicks to be recognized as back button clicks.
+     * </ul>
+     * <b>Note:</b> To work correctly you should set use GET posting
+     * {@link SForm#setPostMethod(boolean)} and use {@link SFrame#setNoCaching(boolean)} for
+     * no caching. This will advise the browser to reload every back page.
+     *
+     * @param defaultBackButton A button to trigger upon detected invalid epochs.
+     */
+    public void setBackButton(SButton defaultBackButton) {
+        this.backButton = defaultBackButton;
+    }
+
+    /**
+     * Fire back button only once and if some time already passed by to avoid double clicks.
+     */
+    private void fireDefaultBackButton() {
+        final int TIME_TO_ASSUME_DOUBLECLICKS_MS = 750;
+        if (this.backButton != null) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - defaultBackButtonLastPressedTime > TIME_TO_ASSUME_DOUBLECLICKS_MS) {
+                // Simulate a button press
+                backButton.processLowLevelEvent(null, new String[]{"1"});
+            }
+            defaultBackButtonLastPressedTime = currentTime;
+        }
+    }
+
     public void fireIntermediateEvents() {
     }
 
-    public boolean checkEpoch() {
-        return true;
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
+    private boolean epochCheckEnabled = true;
+
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
+    }
+
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
     }
 }

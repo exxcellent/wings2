@@ -873,7 +873,7 @@ public abstract class SComponent
     private String encodeLowLevelEventId(String lowLevelEventId) {
         if (getParentFrame() != null)
             if (!(this instanceof LowLevelEventListener) ||
-                    ((LowLevelEventListener) this).checkEpoch()) {
+                    ((LowLevelEventListener) this).isEpochCheckEnabled()) {
                 return (getParentFrame().getEventEpoch()
                         + SConstants.UID_DIVIDER
                         + lowLevelEventId);

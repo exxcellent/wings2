@@ -51,6 +51,9 @@ public abstract class SAbstractButton
 
     private String mnemonic;
 
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    private boolean epochCheckEnabled = true;
+
     /**
      * Create a button with given text.
      *
@@ -337,11 +340,6 @@ public abstract class SAbstractButton
             buttonGroup.fireDelayedFinalEvents();
     }
 
-    public boolean checkEpoch() {
-        return true;
-    }
-
-
     public final String getEventTarget() {
         return eventTarget;
     }
@@ -490,5 +488,15 @@ public abstract class SAbstractButton
 
     public String getMnemonic() {
         return mnemonic;
+    }
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
+    }
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
     }
 }

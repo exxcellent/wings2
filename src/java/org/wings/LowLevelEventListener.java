@@ -106,7 +106,19 @@ public interface LowLevelEventListener {
      */
     void fireFinalEvents();
 
+    /**
+     * SCompontents are typically implemntors of this interface. No disabled component
+     * should receive any event.
+     * @return <code>true</code>, if LowLevelEventListener should be addressed
+     */
     boolean isEnabled();
 
-    boolean checkEpoch();
+    /**
+     * Asks the low-level event listener if epoch checking should be perfomed on it.
+     * If <code>true</code> the Dispatcher will ignore request originating from old views
+     * (typically iniated by triggering browser back and clicking somewhere.)
+     * @return <code>true</code> if epoch checking should be perfomed, <code>false</code>
+     * if all request for this component should be processed.
+     */
+    boolean isEpochCheckEnabled();
 }

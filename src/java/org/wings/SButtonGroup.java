@@ -158,6 +158,12 @@ public class SButtonGroup implements SDelayedEventModel {
         return getComponentId();
     }
 
+    /**
+     * Adds an action listener to this group of buttons.
+     * If one of the buttons contained in this group gets selected, an action event will occur.
+     *
+     * @param listener
+     */
     public void addActionListener(ActionListener listener) {
         listenerList.add(ActionListener.class, listener);
     }

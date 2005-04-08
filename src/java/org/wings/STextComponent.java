@@ -26,12 +26,16 @@ import java.awt.event.TextListener;
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public abstract class STextComponent
-        extends SComponent
-        implements LowLevelEventListener, SDocumentListener {
+public abstract class STextComponent extends SComponent implements LowLevelEventListener, SDocumentListener {
+
     private boolean editable = true;
 
     private SDocument document;
+
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
+    private boolean epochCheckEnabled = true;
 
     public STextComponent() {
         this(new DefaultDocument(), true);
@@ -98,7 +102,8 @@ public abstract class STextComponent
     public void append(String text) {
         try {
             document.insert(document.getLength(), text);
-        } catch (BadLocationException e) {}
+        } catch (BadLocationException e) {
+        }
     }
 
     public void processLowLevelEvent(String action, String[] values) {
@@ -145,8 +150,18 @@ public abstract class STextComponent
         fireTextValueChanged();
     }
 
-    public boolean checkEpoch() {
-        return true;
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
+    }
+
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
     }
 
     //-- implement SDocumentListener to notify TextListeners

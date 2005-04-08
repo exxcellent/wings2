@@ -15,13 +15,26 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.JavaScriptEvent;
 import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class ButtonCG
-        extends LabelCG
-        implements SConstants, org.wings.plaf.ButtonCG {
+public class ButtonCG        extends LabelCG        implements SConstants, org.wings.plaf.ButtonCG {
+
+    /**
+     * Use this java script implementation to
+     */
+    // TODO: Implement handling of formless submits
+    // TODO: Avoid triggering of enter key catchers
+    // TODO: Use Utils.loadScript("org/wings/plaf/css/xxx.js")
+    public final static String JS_FORM_SUBMIT_SCRIPT = "javascript:this.form.submit();";
+
+    /**
+     * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.
+     */
+    public final static JavaScriptListener JS_ON_CHANGE_SUBMIT = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, JS_FORM_SUBMIT_SCRIPT);
 
     private void writeDynamicIcons(final Device device, SAbstractButton abstractButton, SIcon origIcon,
                                    String iconName, boolean renderNameAttribute)

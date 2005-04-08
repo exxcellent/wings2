@@ -21,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
  * A root container.
  * The classes derived from this class ({@link SFrame} and
  * {@link SInternalFrame}) render in the content pane of this RootContainer.
- * <p/>
+ *
  * <p>The RootContainer has a stack of components. Ususally, the stack
  * contains only <em>one</em> element, the content pane; this is the bottommost
  * component. When dialogs are added to the RootContainer, then these dialogs

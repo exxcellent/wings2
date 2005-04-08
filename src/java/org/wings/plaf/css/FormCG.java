@@ -20,42 +20,18 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class FormCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.FormCG {
+public class FormCG extends AbstractComponentCG implements SConstants, org.wings.plaf.FormCG {
 
     static final SIcon BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
 
-    /*
-    * we render two icons into the page that captures pressing simple 'return'
-    * in the page. Why ? Depending on the Browser, the Browser sends the 
-    * first or the last submit-button it finds in the page as 'default'-Submit
-    * when we simply press 'return' somewhere.
-    *
-    * However, we don't want to have this arbitrary behaviour in wingS.
-    * So we add these two (invisible image-) submit-Buttons, either of it
-    * gets triggered on simple 'return'. No real wingS-Button will then be
-    * triggered but only the ActionListener added to the SForm. So we have 
-    * a way to distinguish between Forms that have been sent as default and
-    * pressed buttons.
-    *
-    * Watchout: the style of these images once had been changed to display:none;
-    * to prevent taking some pixel renderspace. However, display:none; made
-    * the Internet Explorer not accept this as an input getting the default-focus,
-    * so it fell back to the old behaviour. So changed that style to no-padding,
-    * no-margin, no-whatever (HZ).
-    */
-
-    protected void writeContent(final Device device,
-                                final SComponent c)
-            throws IOException {
+    protected void writeContent(final Device device, final SComponent c) throws IOException {
         final SForm component = (SForm) c;
 
         device.print("<form method=\"");
         if (component.isPostMethod()) {
-            device.print("post");
+            device.print("POST");
         } else {
-            device.print("get");
+            device.print("GET");
         }
         device.print("\"");
 
@@ -67,9 +43,30 @@ public class FormCG
 
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
+        /*
+        * we render two icons into the page that captures pressing simple 'return'
+        * in the page. Why ? Depending on the Browser, the Browser sends the
+        * first or the last submit-button it finds in the page as 'default'-Submit
+        * when we simply press 'return' somewhere.
+        *
+        * However, we don't want to have this arbitrary behaviour in wingS.
+        * So we add these two (invisible image-) submit-Buttons, either of it
+        * gets triggered on simple 'return'. No real wingS-Button will then be
+        * triggered but only the ActionListener added to the SForm. So we have
+        * a way to distinguish between Forms that have been sent as default and
+        * pressed buttons.
+        *
+        * Watchout: the style of these images once had been changed to display:none;
+        * to prevent taking some pixel renderspace. However, display:none; made
+        * the Internet Explorer not accept this as an input getting the default-focus,
+        * so it fell back to the old behaviour. So changed that style to no-padding,
+        * no-margin, no-whatever (HZ).
+        */
         device.print("><input type=\"image\" name=\"_capture_enter1\" border=\"0\" ");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
+
+        // Not sure: Think this was for optionally expiring old GET views?!
         device.print("<input type=\"hidden\" name=\"");
         Utils.write(device, Utils.event(component));
         device.print("\" value=\"");
@@ -77,8 +74,10 @@ public class FormCG
         Utils.write(device, SConstants.UID_DIVIDER);
         device.print("\" />");
 
-        renderContainer(device, component);
+        // Render the container itself
+        Utils.renderContainer(device, component);
 
+        // Enter capture at end of form
         device.print("<input type=\"image\" name=\"_capture_enter2\" border=\"0\" ");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
@@ -86,7 +85,4 @@ public class FormCG
         device.print("</form>");
     }
 
-    protected void renderContainer(final Device device, final SForm component) throws IOException {
-        Utils.renderContainer(device, component);
-    }
 }

@@ -449,11 +449,6 @@ public abstract class SAbstractAdjustable
         getModel().fireDelayedFinalEvents();
     }
 
-    public boolean checkEpoch() {
-        return true;
-    }
-
-
     /**
      * Adds an AdjustmentListener.  Adjustment listeners are notified
      * each time the scrollbar's model changes.  Adjustment events are
@@ -522,4 +517,18 @@ public abstract class SAbstractAdjustable
             reload();
         }
     }
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    private boolean epochCheckEnabled = true;
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
+    }
+
+    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
+    }
+
 }

@@ -186,6 +186,7 @@ public final class LowLevelEventDispatcher
                     log.debug("### got outdated event '" + epoch + SConstants.UID_DIVIDER + name
                             + "' from frame '" + frame.getName() + "'; expected epoch: " + frame.getEventEpoch());
                 }
+                frame.fireInvalidLowLevelEventListener(gl);
                 return false;
             }
         }
