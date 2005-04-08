@@ -19,8 +19,21 @@ import org.wings.plaf.TextAreaCG;
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class STextArea
-        extends STextComponent {
+public class STextArea        extends STextComponent {
+
+    /**
+     * Text wrapping behaviour for {@link STextArea#setLineWrap(int)}: Don't wrap.
+     */
+    public final static int NO_WRAP = 0;
+    /**
+     * Text wrapping behaviour for {@link STextArea#setLineWrap(int)}: Wrap at width.
+     */
+    public final static int VIRTUAL_WRAP = 1;
+    /**
+     * Text wrapping behaviour for {@link STextArea#setLineWrap(int)}: Wrap at physical input box borders.
+     */
+    public final static int PHYSICAL_WRAP = 2;
+
     private int rows = 5;
 
     private int columns = 20;
@@ -30,7 +43,7 @@ public class STextArea
      * are off(0), virtual(1), physical(2)
      * default value is off
      */
-    private int lineWrap = SConstants.VIRTUAL_WRAP;
+    private int lineWrap = VIRTUAL_WRAP;
 
 
     public STextArea(String text) {
@@ -68,7 +81,10 @@ public class STextArea
         return columns;
     }
 
-
+    /**
+     * Valid values are {@link #NO_WRAP} {@link #VIRTUAL_WRAP} and {@link #PHYSICAL_WRAP}
+     * @param lw
+     */
     public void setLineWrap(int lw) {
         if (lw >= 0 && lw < 3)
             lineWrap = lw;

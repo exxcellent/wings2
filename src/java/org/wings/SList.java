@@ -58,9 +58,66 @@ import java.util.List;
  * @see javax.swing.ListSelectionModel
  * @see SListCellRenderer
  */
-public class SList
-        extends SComponent
-        implements Scrollable, LowLevelEventListener, ListDataListener {
+public class SList        extends SComponent        implements Scrollable, LowLevelEventListener, ListDataListener {
+
+    /**
+     * The type for an ordered list. See {@link #setType(String)} and ORDER_TYPE_xxx
+     */
+    public static final String ORDERED_LIST = "ol";
+
+    /**
+     * The type for an unordered list. See {@link #setType(String)}
+     */
+    public static final String UNORDERED_LIST = "ul";
+
+    /**
+     * The type for an menu-like list. See {@link #setType(String)}
+     */
+    public static final String MENU_LIST = "menu";
+
+    /**
+     * The type for an TODO list. See {@link #setType(String)}
+     */
+    public static final String DIR_LIST = "dir";
+
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_CIRCLE = {"ul", "circle"};
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_SQUARE = {"ul", "square"};
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_DISC = {"ul", "disc"};
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_BIG_ALPHA = {"ol", "A"};
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_SMALL_ALPHA = {"ol", "a"};
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_NUMBER = {"ol", null};
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_NORMAL = {"ul", null};
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_BIG_ROMAN = {"ol", "I"};
+    /**
+     * Order type for for {@link #setOrderType(String)}
+     */
+    public static final String[] ORDER_TYPE_SMALL_ROMAN = {"ol", "i"};
+
+    /** The Selector for this component. */
     public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
     /**
@@ -91,7 +148,7 @@ public class SList
     /**
      * <li type="...">
      */
-    protected String type = SConstants.UNORDERED_LIST;
+    protected String type = UNORDERED_LIST;
 
     /**
      * <li type="...">
@@ -801,7 +858,7 @@ public class SList
         if (t != null)
             type = t;
         else
-            type = SConstants.UNORDERED_LIST;
+            type = UNORDERED_LIST;
     }
 
     /**

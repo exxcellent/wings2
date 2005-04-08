@@ -83,80 +83,6 @@ public interface SConstants {
     int BASELINE = 6;
 
     /**
-     * List type for for {@link SList}
-     */
-    String ORDERED_LIST = "ol";
-    /**
-     * List type for for {@link SList}
-     */
-    String UNORDERED_LIST = "ul";
-    /**
-     * List type for for {@link SList}
-     */
-    String MENU_LIST = "menu";
-    /**
-     * List type for for {@link SList}
-     */
-    String DIR_LIST = "dir";
-
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_CIRCLE = {"ul", "circle"};
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_SQUARE = {"ul", "square"};
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_DISC = {"ul", "disc"};
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_BIG_ALPHA = {"ol", "A"};
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_SMALL_ALPHA = {"ol", "a"};
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_NUMBER = {"ol", null};
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_NORMAL = {"ul", null};
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_BIG_ROMAN = {"ol", "I"};
-    /**
-     * Order type for for {@link SList}
-     */
-    String[] ORDER_TYPE_SMALL_ROMAN = {"ol", "i"};
-
-    // Textarea related
-    /**
-     * Text wrapping behaviour for {@link STextArea}: Don't wrap.
-     */
-    int NO_WRAP = 0;
-    /**
-     * Text wrapping behaviour for {@link STextArea}: Wrap at width.
-     */
-    int VIRTUAL_WRAP = 1;
-    /**
-     * Text wrapping behaviour for {@link STextArea}: Wrap at physical input box borders.
-     */
-    int PHYSICAL_WRAP = 2;
-
-    /* Obsolete?
-    int CLEAR_NO = 0;
-    int CLEAR_LEFT = 1;
-    int CLEAR_RIGHT = 2;
-    int CLEAR_ALL = 3;*/
-
-    /**
      * Table selection model. See {@link SListSelectionModel}
      */
     int NO_SELECTION = SListSelectionModel.NO_SELECTION;
@@ -180,45 +106,6 @@ public interface SConstants {
     int VERTICAL = 1;
     int HORIZONTAL = 0;
 
-    /**
-     * Default Form encoding type. {@link SForm}
-     */
-    String ENC_TYPE_TEXT_PLAIN = "text/plain";
-    /**
-     * Multipart form encoding. Needed for file uploads. {@link SForm}
-     */
-    String ENC_TYPE_MULTIPART_FORM = "multipart/form-data";
-
-    // Obsolete FrameSet support
-    /*int VERTICAL_SPLIT = VERTICAL;
-    int HORIZONTAL_SPLIT = HORIZONTAL;
-    String JAVASCRIPT_LOAD_TWO_FRAMES =
-            "  function loadTwoFrames(F1, URL1, F2, URL2) {\n" +
-            "    F1.location.href=URL1;\n" +
-            "    F2.location.href=URL2;\n" +
-            "  }";
-     */
-
-    //int FONT = 1;
-    //int BASEFONT = 2;
-
-    /**
-     * Plain font style for {@link SFont} constructor.
-     */
-    int PLAIN = java.awt.Font.PLAIN;
-    /**
-     * Italic font style for {@link SFont} constructor.
-     */
-    int ITALIC = java.awt.Font.ITALIC;
-    /**
-     * Bold font style for {@link SFont} constructor.
-     */
-    int BOLD = java.awt.Font.BOLD;
-
-    /**
-     * Default font size for {@link SFont} constructor.
-     */
-    int DEFAULT_SIZE = -1;
 }
 
 

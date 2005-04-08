@@ -20,6 +20,24 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public class SFont implements SConstants, Serializable {
+    /**
+     * Plain font style for {@link SFont#setStyle(int)}. Can be combined with adding (i.e. SFont.BOLD+SFont.ITALIC)
+     */
+    public final static int PLAIN = java.awt.Font.PLAIN;
+    /**
+     * Italic font style for {@link SFont#setStyle(int)}. Can be combined with adding (i.e. SFont.BOLD+SFont.ITALIC)
+     */
+    public final static int ITALIC = java.awt.Font.ITALIC;
+    /**
+     * Bold font style for {@link SFont#setStyle(int)}. Can be combined with adding (i.e. SFont.BOLD+SFont.ITALIC)
+     */
+    public final static int BOLD = java.awt.Font.BOLD;
+
+    /**
+     * Default font size for {@link SFont} constructor.
+     */
+    public final static int DEFAULT_SIZE = -1;
+
     protected int style = PLAIN;
     protected String face = null;
     protected int size = DEFAULT_SIZE;

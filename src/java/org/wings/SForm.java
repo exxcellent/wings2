@@ -39,12 +39,21 @@ import java.util.List;
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SForm
-        extends SContainer
-        implements LowLevelEventListener {
+public class SForm        extends SContainer        implements LowLevelEventListener {
     private final transient static Log log = LogFactory.getLog(SForm.class);
 
-    public static final String MULTIPART_ENCODING = "multipart/form-data";
+    /**
+     * Default Form encoding type. See {@link #setEncodingType(String)}.
+     */
+    // TODO check this encoding type!
+    public final static String ENC_TYPE_TEXT_PLAIN = "text/plain";
+    /**
+     * Multipart form encoding. Needed for file uploads. See {@link #setEncodingType(String)}.
+     */
+    public final static String ENC_TYPE_MULTIPART_FORM = "multipart/form-data";
+    /**
+     * URL form encoding. See {@link #setEncodingType(String)}.
+     */
     public static final String URL_ENCODING = "application/x-www-form-urlencoded";
 
     /**
@@ -393,7 +402,7 @@ public class SForm
             SComponent tComponent = pContainer.getComponent(i);
 
             if (tComponent instanceof SFileChooser) {
-                return MULTIPART_ENCODING;
+                return ENC_TYPE_MULTIPART_FORM;
             } else if (tComponent instanceof SContainer) {
                 String tContainerEncoding = detectEncodingType((SContainer) tComponent);
 
