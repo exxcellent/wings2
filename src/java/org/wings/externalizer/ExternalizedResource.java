@@ -34,10 +34,10 @@ public class ExternalizedResource {
     private String id;
 
     public ExternalizedResource(Object obj, Externalizer ext,
-                                String mt, Collection headers, int flags) {
+                                String mimeType, Collection headers, int flags) {
         extObject = obj;
         externalizer = ext;
-        mimeType = mt;
+        this.mimeType = mimeType;
         this.flags = flags;
 
         if (externalizer == null || extObject == null) {
@@ -50,7 +50,7 @@ public class ExternalizedResource {
 
 
     public final String getMimeType() {
-        return mimeType;
+        return mimeType == null ? externalizer.getMimeType(extObject) : mimeType;
     }
 
 
@@ -65,7 +65,7 @@ public class ExternalizedResource {
 
 
     public final Collection getHeaders() {
-        return headers;
+        return headers == null ?  externalizer.getHeaders(extObject) : headers;
     }
 
 

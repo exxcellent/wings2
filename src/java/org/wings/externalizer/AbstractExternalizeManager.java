@@ -298,12 +298,6 @@ public abstract class AbstractExternalizeManager {
         if (externalizer == null)
             throw new IllegalStateException("no externalizer");
 
-        if (mimeType == null)
-            mimeType = externalizer.getMimeType(obj);
-
-        if (headers == null)
-            headers = externalizer.getHeaders(obj);
-
         ExternalizedResource extInfo = new ExternalizedResource(obj, externalizer,
                 mimeType, headers, flags);
 
