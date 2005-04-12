@@ -17,6 +17,9 @@ import java.io.*;
 import java.net.URL;
 import java.util.Hashtable;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * A <CODE>CachedFileDataSource</CODE> implements a DataSource
  * for a file, but caches small ones.
@@ -26,6 +29,7 @@ import java.util.Hashtable;
  */
 public class CachedFileTemplateSource
         extends FileTemplateSource {
+    private final transient static Log log = LogFactory.getLog(CachedFileTemplateSource.class);
     private final static class CacheEntry {
         private byte[] filebuffer = null;
         private long lastModified;
@@ -34,7 +38,11 @@ public class CachedFileTemplateSource
         public CacheEntry(File f) throws IOException {
             this.file = f;
             lastModified = -1;
-            checkModified();
+            // we want to throw an IOException here if the file is not found
+            if (file != null) {
+                lastModified = file.lastModified();
+                refresh();
+            }
         }
 
         public CacheEntry(URL url) throws IOException {
@@ -85,7 +93,14 @@ public class CachedFileTemplateSource
                 lastModified = timestamp;
                 try {
                     refresh();
-                } catch (IOException e) { /* ignore currently */ }
+                } catch (IOException e) {
+                    /* ignore currently, file might have been deleted, but is
+                     * still in cache.
+                     */ 
+                    if (log.isErrorEnabled()) {
+                        log.error(file.getAbsolutePath() + " not found. Maybe it has been deleted from the filesystem.");
+                    }
+                }
             }
         }
 
