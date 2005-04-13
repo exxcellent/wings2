@@ -71,7 +71,7 @@ div {
 */
 }
 
-/* TODO -- move this too renderer? */
+/* TODO -- move this to renderer? */
 IMG {
 /*    padding: 0px;
     margin: 0px;*/
@@ -442,7 +442,7 @@ table.SFlowLayout
     height: 100%;
 }
 
-.SLabel .STitledBorderLegend {
+.STitledBorderLegend {
     position: absolute;
     margin-top: -1.7em;
     margin-left: 1.0em;
@@ -546,104 +546,13 @@ div.domTTContent {
     background-color: #F1F1FF;
 }
 
-/* SMenu common */
+/* Menus */
 
-div.SMenuBar {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-    text-align:left;
-}
-
-/* JS Menu*/
-
-div.SMenuBar_js {
-    color: #004;
-    background-color: #eef;
-    border-bottom: 1px solid #ccc;
-}
-
-div.SMenuBar_js > span > span {
-	padding:1px 3px 1px 3px;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #EEE #999 #999 #eee;
-}
-
-div.SMenuBar_js .SMenu {
-	white-space: nowrap;
-  	color: #004;
-	background-color: #77c;
-}
-
-div.SMenuBar_js .SMenuDisabledMenu {
-	color: gray;
-	background-color: #eee;
-	white-space: nowrap;
-}
-
-div.SMenuBar_js .SMenuJSmenu,
-div.SPopupMenu .SMenuJSmenu {
-  	color: #fff;
-	background-color: #66b;
-	white-space: nowrap;
-}
-
-
-div.SMenuBar_js .SMenuPopup,
-div.SPopupMenu .SMenuPopup {
-	background-color: #eee;
-	border-style: solid;
-	border-width: 2px;
-	border-color: #EEE #999 #999 #eee;
-	position: absolute;
-	overflow: visible;
-	padding: 2px 2px 2px 0px;
-}
-
-div.SMenuBar_js div.SMenuPopup > div,
-div.SPopupMenu div.SMenuPopup > div {
-	padding: 0px 10px 0px 0px;
-}
-
-div.SMenuBar_js div.SMenuPopup > div > img,
-div.SPopupMenu div.SMenuPopup > div > img {
-    position: absolute;
-    right: 0px;
-}
-
-div.SMenuBar_js .SMenuPopupItem,
-div.SPopupMenu .SMenuPopupItem {
-	color: #004;
-	background-color: #eee;
-	white-space: nowrap;
-}
-
-div.SMenuBar_js .SMenuDisabledMenuitem,
-div.SPopupMenu .SMenuDisabledMenuitem {
-	color: gray;
-	background-color: #eee;
-	white-space: nowrap;
-}
-
-div.SMenuBar_js .SMenuJSmenuitem,
-div.SPopupMenu .SMenuJSmenuitem {
-	color: #fff;
-	background-color: #66b;
-	white-space: nowrap;
-}
-
-/* END JS Menu */
-
-/* CSS Menus - Horizontal CSS Menu with Dropdown and Popout Menus - 20050131 */
-
-/* Begin CSS Popout Menu */
-
-div.SMenuBar_css{
+div.SMenuBar{
 width:100%;
 background-color: #eef;
 border-bottom: 1px solid #ccc;
 color: #000044;
-float:left;
-clear:right;
 }
 
 /* clears the menu */
@@ -651,87 +560,87 @@ div.SMenuBar div.spacer {
 clear: both;
 }
 
-div.SMenuBar_css a, div.SMenuBar_css span{
-display:block;
+div.SMenuBar div.SMenu{
+float:left;
+clear:right;
+border-style: solid;
+border-width: 1px;
+border-color: #eee #999 #999 #eee;
+padding:1px 3px 1px 3px;
+color: #004;
+background:#eef;
 white-space:nowrap;
 margin:0;
 }
 
-div.SMenuBar_css span{
-color: #004;
-background:#eef;
+div.SMenu a,
+div.SPopupMenu a{
 padding:1px 3px 1px 3px;
+display:block;
+white-space:nowrap;
+margin:0;
 }
-
-div.SMenuBar_css a {
-width:100%;
-}
-
-div.SMenuBar_css a, div.SMenuBar_css a:visited{
+ 
+div.SMenu a, .SMenu a:visited,
+div.SPopupMenu a, .SPopupMenu a:visited{
 color:#000;
 }
 
-div.SMenuBar_css a:hover{
+div.SMenu a:hover,
+div.SPopupMenu a:hover{
 color:#fff;
 background:#66b;
 }
 
-div.SMenuBar_css a:active{
+div.SMenu a:active,
+div.SPopupMenu a:active{
 color:#aaa;
 background:#66b;
 }
 
-div.SMenuBar_css .SMenu_Disabled a:hover,
-div.SMenuBar_css .SMenuItem_Disabled a:hover{
+div.SMenu .SMenu_Disabled a,
+div.SMenu .SMenuItem_Disabled a,
+div.SPopupMenu .SMenu_Disabled a,
+div.SPopupMenu .SMenuItem_Disabled a{
+color:#666;
+}
+
+div.SMenu .SMenu_Disabled a:hover,
+div.SMenu .SMenuItem_Disabled a:hover,
+div.SPopupMenu .SMenu_Disabled a:hover,
+div.SPopupMenu .SMenuItem_Disabled a:hover{
 background:#eee;
 }
 
-div.SMenuBar_css ul{
-list-style:none;
-margin:0;
-padding:0;
-float:left;
-}
-
-div.SMenuBar_css ul.SMenu{
-border-top: 1px solid #eee;
-border-bottom: 1px solid #999;
-}
-
-div.SMenuBar_css ul.SMenu li{
+div.SMenu li,
+div.SPopupMenu li{
+position:relative;
 background: #eee;
 border-left: 1px solid #eee;
 border-right: 1px solid #999;
+width:auto;
 }
 
-div.SMenuBar_css li.SMenu_Disabled a,
-div.SMenuBar_css li.SMenuItem_Disabled a,
-div.SMenuBar_css span.TopMenu_Disabled {
-color: #666;
-}
-
-div.SMenuBar_css li{
-position:relative;
-display:block;
-}
-
-div.SMenuBar_css ul ul{
+div.SMenu ul,
+div.SPopupMenu ul{
+list-style:none;
+margin:0px;
+padding:0px;
 position:absolute;
 z-index:500;
 top:auto;
 display:none;
+border-top: 1px solid #eee;
+border-bottom: 1px solid #999;
+width:auto;
 }
 
-div.SMenuBar_css ul ul ul{
+div.SMenu ul ul,
+div.SPopupMenu ul ul{
 top:-1px;
 left:100%;
 }
 
-div.SMenuBar_css ul.SMenu_Main {
-border-style: solid;
-border-width: 1px;
-border-color: #eee #999 #999 #eee;
-}
 /* Begin non-anchor hover selectors */
 
 /* Enter the more specific element (div) selector
@@ -740,39 +649,45 @@ older version of csshover.htc - V1.21.041022. It
 improves IE's performance speed to use the older
 file and this method */
 
-div.SMenuBar_css span.TopMenu:hover{
-background:#dde;
-}
-
-div.SMenuBar_css li:hover{
+div.SMenu li:hover,
+div.SPopupMenu li:hover{
 cursor:pointer;
 z-index:100;
 }
 
-div.SMenuBar_css li:hover ul ul,
-div.SMenuBar_css li li:hover ul ul,
-div.SMenuBar_css li li li:hover ul ul,
-div.SMenuBar_css li li li li:hover ul ul
+div.SMenu li:hover ul ul,
+div.SMenu li li:hover ul ul,
+div.SMenu li li li:hover ul ul,
+div.SMenu li li li li:hover ul ul,
+div.SPopupMenu li:hover ul ul,
+div.SPopupMenu li li:hover ul ul,
+div.SPopupMenu li li li:hover ul ul,
+div.SPopupMenu li li li li:hover ul ul
 {display:none;}
 
-div.SMenuBar_css li:hover ul,
-div.SMenuBar_css li li:hover ul,
-div.SMenuBar_css li li li:hover ul,
-div.SMenuBar_css li li li li:hover ul
+div.SMenu li:hover ul,
+div.SMenu li li:hover ul,
+div.SMenu li li li:hover ul,
+div.SMenu li li li li:hover ul,
+div.SPopupMenu li:hover ul,
+div.SPopupMenu li li:hover ul,
+div.SPopupMenu li li li:hover ul,
+div.SPopupMenu li li li li:hover ul
 {display:block;}
 
 /* End of non-anchor hover selectors */
 
 /* Styling for Expand */
 
-div.SMenuBar_css a.x, div.SMenuBar_css a.x:visited,
-div.SMenuBar_css a.y, div.SMenuBar_css a.y:visited, div.SMenuBar_css a.y:hover
-{
+div.SMenu a.x, div.SMenu a.x:visited,
+div.SMenu a.y, div.SMenu a.y:visited, div.SMenu a.y:hover,
+div.SPopupMenu a.x, div.SPopupMenu a.x:visited,
+div.SPopupMenu a.y, div.SPopupMenu a.y:visited, div.SPopupMenu a.y:hover{
 background:#eee url(icons/MenuArrowRight.gif) no-repeat center right;
+padding-right:10px;
 }
 
-div.SMenuBar_css a.x:hover{
+div.SMenu a.x:hover,
+div.SPopupMenu a.x:hover{
 background:#66b url(icons/MenuArrowRight.gif) no-repeat center right;
 }
-
-/* End CSS Popout Menu */
