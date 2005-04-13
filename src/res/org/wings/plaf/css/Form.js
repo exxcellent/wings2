@@ -80,7 +80,7 @@ function requestFocus(id) {
         }
     }
     /* this produces javascript errors on konqueror, so hide (2005-03-11) */
-    if (!(navigator.userAgent.toLowerCase().indexOf('konqueror') + 1)) {
+    if (!(wu_konqueror)) {
 	    var elements = div.getElementsByTagName("BUTTON");
 	    for (var i = 0; i < elements.length; i++) {
 	        if (elements[i].getAttribute("focus") == id) {
