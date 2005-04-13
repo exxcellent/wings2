@@ -103,29 +103,6 @@ public class MenuExample extends WingSetPane {
         panel.add(new SLabel("<html><br>textarea(stay visible):"));
         panel.add(new STextArea("wingS is a great framework for implementing complex web applications"), "TextArea");
 
-        SButtonGroup cgGroup = new SButtonGroup();
-
-        // switch between css and js menu
-        final SRadioButton cssMenu=new SRadioButton("css menu");
-        final SRadioButton jsMenu=new SRadioButton("javascript menu");
-        cgGroup.add(cssMenu);
-        cgGroup.add(jsMenu);
-        controls.add(cssMenu);
-        controls.add(jsMenu);
-        
-        cgGroup.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if ( jsMenu.isSelected() ) {
-                        setJsCG();
-                    } else if (cssMenu.isSelected()){
-                        //tree.setCG(getSession().getCGManager().getCG("TreeCG"));
-                        setCssCG();
-                    }
-                        
-                }
-            });
-        cssMenu.setSelected(true);
-
         // enable / disable some menuitems
         final SCheckBox switchEnable = new SCheckBox("disable some menuitems");
         controls.add(switchEnable);
@@ -162,34 +139,6 @@ public class MenuExample extends WingSetPane {
             }
         }
     }
-
-    /**
-     * 
-     */
-    protected void setJsCG() {
-//        menuBar.setAllCGs(
-//                (MenuBarCG) getSession().getCGManager().getCG("org.wings.SMenuBarCSS"),
-//                (MenuCG) getSession().getCGManager().getCG("org.wings.SMenuCSS"),
-//                (MenuItemCG) getSession().getCGManager().getCG("org.wings.SMenuItem"));
-        menuBar.setCG((MenuBarCG) getSession().getCGManager().getCG("org.wings.SMenuBarJS"));
-        menuBar.setMenuCG((MenuCG) getSession().getCGManager().getCG("org.wings.SMenuJS"));
-        menuBar.setMenuItemCG((MenuItemCG) getSession().getCGManager().getCG("org.wings.SMenuItem"));
-    }
-
-    /**
-     * 
-     */
-    protected void setCssCG() {
-//        menuBar.setAllCGs(
-//                (MenuBarCG) getSession().getCGManager().getCG("org.wings.SMenuBarJS"),
-//                (MenuCG) getSession().getCGManager().getCG("org.wings.SMenuJS"),
-//                (MenuItemCG) getSession().getCGManager().getCG("org.wings.SMenuItem"));
-        menuBar.setCG((MenuBarCG) getSession().getCGManager().getCG("org.wings.SMenuBarCSS"));
-        menuBar.setMenuCG((MenuCG) getSession().getCGManager().getCG("org.wings.SMenuCSS"));
-        menuBar.setMenuItemCG((MenuItemCG) getSession().getCGManager().getCG("org.wings.SMenuItem"));
-   }
-
-
 }
 
 

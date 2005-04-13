@@ -93,5 +93,4 @@ public class SPopupMenu
     public void setCG(PopupMenuCG cg) {
         super.setCG(cg);
     }
-
 }

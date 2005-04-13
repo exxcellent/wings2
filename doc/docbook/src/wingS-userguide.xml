@@ -249,7 +249,7 @@ frame.addHeader(new Link("stylesheet",
         SComponent.setStyle()method to override their CSS style class (i.e.
         the name for the CSS class which bundles together their display
         attributes). The individual display attributes are stored in a
-        AttributeSet member. See for example SComponent.setAttribute.</para>
+        AttributeSet member. See for example SComponent.setAttribute().</para>
       </sect2>
     </sect1>
 

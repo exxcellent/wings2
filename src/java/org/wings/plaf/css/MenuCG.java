@@ -17,10 +17,11 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
+public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -32,28 +33,36 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
 //--- code from common area in template.
     public static final SIcon RIGHT_ARROW = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
 
-    protected void writePopup(final Device device, SMenu menu)
+    public void writePopup(final Device device, SMenu menu)
             throws IOException {
         String componentId = menu.getName();
-        // calculate max length of children texts for sizing of layer
-        int maxLength = 0;
-        for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-            if (!(menu.getMenuComponent(i) instanceof SMenuItem))
-                continue;
-            String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
-            if (text != null && text.length() > maxLength) {
-                maxLength = ((SMenuItem)menu.getMenuComponent(i)).getText().length();
-                if (menu.getMenuComponent(i) instanceof SMenu) {
-                        maxLength = maxLength + 2; //graphics
-                }
-            }
-        }
         if (menu.isEnabled()) {
             device.print("<ul");
-            device.print(" style=\"width:");
-            String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
-            device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
-            device.print("em;\" class=\"SMenu\">");
+            boolean hasParent = menu.getParentMenu() != null;
+            if (hasParent) {
+                // calculate max length of children texts for sizing of layer
+                int maxLength = 0;
+                for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+                    if (!(menu.getMenuComponent(i) instanceof SMenuItem))
+                        continue;
+                    String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
+                    if (text != null && text.length() > maxLength) {
+                        maxLength = ((SMenuItem)menu.getMenuComponent(i)).getText().length();
+                        if (menu.getMenuComponent(i) instanceof SMenu) {
+                                maxLength = maxLength + 2; //graphics
+                        }
+                    }
+                }
+                device.print(" style=\"width:");
+                String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
+                device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
+                device.print("em;\"");
+            } else {
+                device.print(" id=\"");
+                device.print(menu.getName());
+                device.print("_pop\"");
+            }
+            device.print(" class=\"SMenu\">");
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
                 SComponent menuItem = menu.getMenuComponent(i);
     
@@ -65,16 +74,13 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
                         } else {
                             device.print(" class=\"SMenu_Disabled\"");
                         }
-    
                     } else {
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenuItem\"");
                         } else {
-    
                             device.print(" class=\"SMenuItem_Disabled\"");
                         }
                     }
-    
                     device.print(">");
                     if (menuItem instanceof SMenuItem) {
                             device.print("<a");
@@ -97,7 +103,7 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
                         device.print("</a>");
                     }
                     if (menuItem.isEnabled() && menuItem instanceof SMenu) {
-                        writePopup(device, (SMenu) menuItem);
+                        ((SMenu)menuItem).writePopup(device);
                     }
                     device.print("</li>\n");
                 }
@@ -109,21 +115,7 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
 
     protected void writeItem(final Device device, SMenuItem menu)
             throws IOException {
-        boolean hasParent = menu.getParentMenu() != null;
-
-        // parent, hook, menu
-        if (!hasParent) {
-            if (menu.isEnabled()) {
-                device.print("<span class=\"TopMenu\">");
-            } else {
-                device.print("<span class=\"TopMenu_Disabled\">");
-            }
-            
-        }
-        writeItemContent(device, menu);
-        if (!hasParent) {
-            device.print("</span>");
-        }
+            writeItemContent(device, menu);
     }
 
     protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
@@ -137,11 +129,18 @@ public class MenuCssCG extends org.wings.plaf.css.MenuItemCG implements SConstan
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {
-        final SMenu component = (SMenu) _c;
-
-        SMenu menu = component;
+        SMenu menu = (SMenu) _c;
+        boolean hasParent = menu.getParentMenu() != null;
+        if (hasParent) {
         writeItem(device, menu);
+        } else {
+            SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writePrefix(device, _c);
+        }
         if (menu.getParentMenu() == null)
             writePopup(device, menu);
+        if (!hasParent) {
+            SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writeSuffix(device, _c);
+        }
+        
     }
 }

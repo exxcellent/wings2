@@ -19,6 +19,7 @@ import org.wings.plaf.MenuItemCG;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * An implementation of a MenuBar. You add SMenu objects to the
@@ -44,7 +45,6 @@ public class SMenuBar extends SContainer {
 
     private boolean paintBorder = true;
     private Insets margin = null;
-    private double widthScaleFactor = 0.8f;
 
     /**
      * Creates a new menu bar.
@@ -255,44 +255,6 @@ public class SMenuBar extends SContainer {
         super.setCG(cg);
     }
     
-    /** Sets the specified cg on all children that are an instance
-     *  of SMenu.
-     * @param cg The CG to set.
-     */
-    public void setMenuCG(MenuCG cg) {
-        for (int i = 0; i < this.getComponentCount(); i++) {
-            SComponent tempComp = this.getComponent(i);
-            if (tempComp instanceof SMenu) {
-                ((SMenu)tempComp).setMenuCG(cg);
-            }
-        }
-    }
-    
-    /** Sets the specified cg on all children that are an instance of
-     *  SMenuItem.
-     * 
-     * @param cg The CG to set.
-     */
-    public void setMenuItemCG(MenuItemCG cg) {
-        for (int i = 0; i < this.getComponentCount(); i++) {
-            SComponent tempComp = this.getComponent(i);
-            if (tempComp instanceof SMenu) {
-                ((SMenu)tempComp).setMenuItemCG(cg);
-            } else {
-                if (tempComp instanceof SMenuItem) {
-                    tempComp.setCG(cg);
-                }
-            }
-            
-        }
-    }
-    
-    public void setAllCGs(MenuBarCG menuBarCG, MenuCG menuCG, MenuItemCG menuItemCG) {
-        setCG(menuBarCG);
-        setMenuCG(menuCG);
-        setMenuItemCG(menuItemCG);
-    }
-
     /**
      * Close all currently open menus.
      */
@@ -304,27 +266,22 @@ public class SMenuBar extends SContainer {
             }*/
     }
 
-    /**
-     * Returns the scale factor for the width of the MenuBar components. 
-     * The length of the menu texts is multiplied by this factor and set as
-     * width (in em) for the menus. Only works with the css implementation.
-     * 
-     * @return Returns the widthScaleFactor.
-     */
-    public double getWidthScaleFactor() {
-        return widthScaleFactor;
-    }
-    /**
-     * Sets the scale factor for the width of the MenuBar components. 
-     * The length of the menu texts is multiplied by this factor and set as
-     * width (in em) for the menus. Only works with the css implementation.
-     * 
-     * Default value is 0.8.
-     * 
-     * @param widthScaleFactor The widthScaleFactor to set.
-     */
-    public void setWidthScaleFactor(double widthScaleFactor) {
-        this.widthScaleFactor = widthScaleFactor;
+    public ArrayList getMenus() {
+        ArrayList menus = new ArrayList();
+        if (isVisible()) {
+            SPopupMenu pmenu = getComponentPopupMenu();
+            if (pmenu != null) {
+                menus.add(pmenu);
+            }
+            for (int i = 0; i < getComponentCount(); i++) {
+                SMenu menu = (SMenu)getComponent(i);
+                if (menus.contains(menu)) {
+                    remove(menu);
+                }
+                menus.add(menu);
+            }
+        }
+        return menus;
     }
 }
 

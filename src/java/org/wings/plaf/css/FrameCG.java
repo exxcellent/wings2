@@ -115,6 +115,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         String cssURL = "../" + cssBrowserType.getShortName() + ".css";
         component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(cssURL)));
 
+        component.addScriptListener(UTILS_SCRIPT);
         component.addScriptListener(FORM_SCRIPT);
         component.addScriptListener(FOCUS_SCRIPT);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
@@ -127,6 +128,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         component.removeDynamicResource(DynamicCodeResource.class);
         component.removeDynamicResource(DynamicStyleSheetResource.class);
         component.removeDynamicResource(DynamicScriptResource.class);
+        component.removeScriptListener(UTILS_SCRIPT);
         component.removeScriptListener(FORM_SCRIPT);
         component.clearHeaders();
     }
@@ -136,8 +138,10 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     public static final JavaScriptListener DATE_CHOOSER_SCRIPT_LOADER =
     new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/DateChooser.js"));
     */
+    public static final JavaScriptListener UTILS_SCRIPT =
+        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Utils.js"));
     public static final JavaScriptListener FORM_SCRIPT =
-            new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Form.js"));
+        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Form.js"));
 
     public static final JavaScriptListener FOCUS_SCRIPT =
             new JavaScriptListener("onfocus", "storeFocus(event)");
@@ -159,8 +163,10 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         String encoding = SessionManager.getSession().getCharacterEncoding();
 
         /**
-         *  we need to put ie 6 into quirks mode
-         *  for box model compatibility. (border-box)
+         *  We need to put IE6 into quirks mode
+         *  for box model compatibility. (border-box).
+         *  For that we make use of a comment in the first line.
+         *  This is a known bug in IE6
          */
         if (BrowserType.IE.equals(browser.getBrowserType())) {
             if (browser.getMajorVersion() == 6) {
@@ -262,9 +268,15 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         device.print(">\n");
         if (frame.isVisible()) {
             frame.getLayout().write(device);
+            device.print("\n");
+            // now add all menus
+            Iterator iter = frame.getMenus().iterator();
+            while (iter.hasNext()) {
+                SComponent menu = (SComponent)iter.next();
+                menu.write(device);
+            }
         }
-
-        device.print("</body></html>\n");
+        device.print("\n</body></html>\n");
         _c.fireRenderEvent(SComponent.DONE_RENDERING);
     }
 

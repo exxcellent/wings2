@@ -13,8 +13,14 @@
  */
 package org.wings.plaf;
 
+import java.io.IOException;
+
+import org.wings.SMenu;
+import org.wings.io.Device;
+
 
 public interface MenuCG extends ComponentCG {
+    public void writePopup(Device device, SMenu menu) throws IOException;
 }
 
 

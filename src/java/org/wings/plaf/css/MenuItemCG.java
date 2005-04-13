@@ -27,22 +27,15 @@ public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.M
     protected void writeItemContent(final Device device, SMenuItem menuItem)
             throws IOException {
         SIcon icon = getIcon(menuItem);
-
-
         if (icon != null) {
-
             device.print("<img border=\"0\" align=\"middle\" src=\"");
             Utils.write(device, icon.getURL());
-
             device.print("\"");
             Utils.optAttribute(device, "width", icon.getIconWidth());
             Utils.optAttribute(device, "height", icon.getIconHeight());
-
             device.print("/>");
         }
-
         String text = menuItem.getText();
-
         if (text != null) {
             Utils.write(device, text);
         }
@@ -57,7 +50,6 @@ public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.M
     public void writeContent(final Device device, final SComponent component)
             throws IOException {
         final SMenuItem menuItem = (SMenuItem) component;
-
         writeItemContent(device, menuItem);
     }
 }

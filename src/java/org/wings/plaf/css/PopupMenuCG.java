@@ -16,111 +16,95 @@ package org.wings.plaf.css;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.script.JavaScriptListener;
 
 public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.wings.plaf.MenuBarCG {
 
+    private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        comp.addScriptListener(SCRIPT_LOADER);
+        comp.addScriptListener(UTILS_SCRIPT_LOADER);
+        comp.addScriptListener(MENU_SCRIPT_LOADER);
+        SFrame parentFrame = comp.getParentFrame();
+        if (parentFrame != null) {
+            log.info("attached js listener to parent frame");
+            parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
+        } else {
+            log.error("No parent frame to attach the body click handler onto!");
+        }
     }
 
     public void uninstallCG(final SComponent comp) {
     }
 
-//--- code from common area in template.
-    public static final SIcon RIGHT_ARROW = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
-
-    public static final JavaScriptListener SCRIPT_LOADER =
-            new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Menu.js"));
+    public static final JavaScriptListener UTILS_SCRIPT_LOADER =
+        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Utils.js"));
+    public static final JavaScriptListener MENU_SCRIPT_LOADER =
+        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Menu.js"));
+    public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
+        new JavaScriptListener("onclick", "wpm_handleBodyClicks()");
 
     protected void writePopup(final Device device, SPopupMenu menu)
             throws IOException {
-        String componentId = menu.getName();
-        String popupId = componentId + "_pop";
-
-
-        device.print("<div id=\"");
-        Utils.write(device, popupId);
-
-        device.print("\" class=\"SMenuPopup\" style=\"display:none\">");
-        for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-            SComponent menuItem = menu.getMenuComponent(i);
-
-            if (menuItem.isVisible()) {
-                String itemComponentId = menu.getMenuComponent(i).getName();
-                String itemHookId = itemComponentId + "_hook";
-
-
-                device.print("<div id=\"");
-                Utils.write(device, itemHookId);
-
-                device.print("\"");
-                if (menu.getMenuComponent(i) instanceof SMenu) {
-                    if (menuItem.isEnabled()) {
-                        String itemParentId = popupId;
-                        String itemPopupId = itemComponentId + "_pop";
-
-
-                        device.print(" onMouseDown=\"Menu.prototype.toggle('");
-                        Utils.write(device, itemParentId);
-
-                        device.print("','");
-                        Utils.write(device, itemHookId);
-
-                        device.print("','");
-                        Utils.write(device, itemPopupId);
-
-                        device.print("')\"");
-
-                        device.print(" class=\"menu\"");
-                    } else {
-                        device.print(" class=\"SMenuDisabledMenu\"");
-                    }
-                } else {
-                    if (menuItem.isEnabled()) {
-                        if (menuItem instanceof SMenuItem) {
-
-                            device.print(" onClick=\"window.location.href='");
-                            writeAnchorAddress(device, (SMenuItem) menuItem);
-                            device.print("'\"");
+        if (menu.isEnabled()) {
+            String componentId = menu.getName();
+            device.print("<ul id=\"");
+            device.print(componentId);
+            device.print("_pop\">");
+            for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+                SComponent menuItem = menu.getMenuComponent(i);
+    
+                if (menuItem.isVisible()) {
+                    device.print("<li");
+                    if (menuItem instanceof SMenu) {
+                        if (menuItem.isEnabled()) {
+                            device.print(" class=\"SMenu\"");
+                        } else {
+                            device.print(" class=\"SMenu_Disabled\"");
                         }
-
-                        device.print(" class=\"SMenuPopupItem\"");
                     } else {
-                        device.print(" class=\"SMenuDisabledMenuitem\"");
+                        if (menuItem.isEnabled()) {
+                            device.print(" class=\"SMenuItem\"");
+                        } else {
+    
+                            device.print(" class=\"SMenuItem_Disabled\"");
+                        }
                     }
+                    device.print(">");
+                    if (menuItem instanceof SMenuItem) {
+                            device.print("<a");
+                            if (menuItem.isEnabled()) {
+                                device.print(" href=\"");
+                                writeAnchorAddress(device, (SMenuItem) menuItem);
+                                device.print("\"");
+                            }
+                            if (menuItem instanceof SMenu) {
+                                if (menuItem.isEnabled()) {
+                                    device.print(" class=\"x\"");
+                                } else {
+                                    device.print(" class=\"y\"");
+                                }
+                            }
+                            device.print(">");
+                    }
+                    menuItem.write(device);
+                    if (menuItem instanceof SMenuItem) {
+                        device.print("</a>");
+                    }
+                    if (menuItem.isEnabled() && menuItem instanceof SMenu) {
+                        ((SMenu)menuItem).writePopup(device);
+                    }
+                    device.print("</li>\n");
                 }
-
-                device.print(">");
-                menu.getMenuComponent(i).write(device);
-                //device.print("</td><td>");
-
-                if (menu.getMenuComponent(i) instanceof SMenu) {
-                    device.print("<img border=\"0\" align=\"middle\" src=\"");
-                    Utils.write(device, RIGHT_ARROW.getURL());
-
-                    device.print("\"");
-                    Utils.optAttribute(device, "width", RIGHT_ARROW.getIconWidth());
-                    Utils.optAttribute(device, "height", RIGHT_ARROW.getIconHeight());
-                    device.print("/>");
-                }
-
-                device.print("</div>");
             }
+            device.print("</ul>");
         }
-
-        device.print("</div>");
-        for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-            SComponent menuItem = menu.getMenuComponent(i);
-
-            if (menuItem.isVisible() && menuItem.isEnabled() && menuItem instanceof SMenu) {
-                writePopup(device, (SPopupMenu) menu.getMenuComponent(i));
-            }
-        }
+        device.print("\n");
     }
 
     protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)

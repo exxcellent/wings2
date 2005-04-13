@@ -21,7 +21,9 @@ import org.wings.SDimension;
 import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
+import org.wings.plaf.ComponentCG;
 import org.wings.plaf.css.InputMapScriptListener;
+import org.wings.plaf.css.PopupMenuCG;
 import org.wings.plaf.css.Utils;
 import org.wings.plaf.css.VersionedInputMap;
 
@@ -77,15 +79,16 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
 
         SPopupMenu menu = component.getComponentPopupMenu();
         if (menu != null) {
+            ComponentCG menuCG = menu.getCG();
             String componentId = menu.getName();
             String popupId = componentId + "_pop";
             String hookId = component.getName();
-
-            device.print(" onclick=\"Menu.prototype.toggle(null,'");
-            Utils.write(device, hookId);
-            device.print("','");
-            Utils.write(device, popupId);
-            device.print("')\"");
+            System.out.println(menuCG.getClass().getName());
+            device.print(" onContextMenu=\"javascript:return wpm_menuPopup(event, '");
+            device.print(popupId);
+            device.print("');\" onMouseDown=\"javascript:return wpm_menuPopup(event, '");
+            device.print(popupId);
+            device.print("');\"");
         }
 
         device.print("><tr><td>"); // table
@@ -105,15 +108,6 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
 
     public void writeSuffix(Device device, SComponent component) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
-
-        boolean backup = component.getInheritsPopupMenu();
-        component.setInheritsPopupMenu(false);
-
-        if (component.getComponentPopupMenu() != null)
-            component.getComponentPopupMenu().write(device);
-
-        component.setInheritsPopupMenu(backup);
-
         device.print("</td></tr></table>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }

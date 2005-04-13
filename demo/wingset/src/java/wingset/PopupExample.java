@@ -28,11 +28,27 @@ public class PopupExample extends WingSetPane {
         menu.add(new SMenuItem("Copy"));
         menu.add(new SMenuItem("Paste"));
 
+        SMenu subMenu = new SMenu("Help");
+        subMenu.add(new SMenuItem("About"));
+        subMenu.add(new SMenuItem("Topics"));
+        menu.add(subMenu);
+        
+        SPopupMenu menu2 = new SPopupMenu();
+        menu2.add(new SMenuItem("Open"));
+        menu2.add(new SMenuItem("Save"));
+        menu2.add(new SMenuItem("Close"));
+
         SLabel testLabel = new SLabel("This label has a context menu.");
         testLabel.setComponentPopupMenu(menu);
+        SLabel testLabel2 = new SLabel("This label has the same context menu.");
+        testLabel2.setComponentPopupMenu(menu);
+        SLabel testLabel3 = new SLabel("This label has another context menu.");
+        testLabel3.setComponentPopupMenu(menu2);
 
         SPanel all = new SPanel();
         all.add(testLabel);
+        all.add(testLabel2);
+        all.add(testLabel3);
         return all;
     }
 }

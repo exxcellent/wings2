@@ -240,23 +240,24 @@ public abstract class SComponent
     }
 
     public SPopupMenu getComponentPopupMenu() {
-        if (!getInheritsPopupMenu())
-            return popupMenu;
-
-        if (popupMenu == null) {
-            // Search parents for its popup
-            SContainer parent = getParent();
-            while (parent != null) {
-                if (parent instanceof SComponent) {
-                    return ((SComponent) parent).getComponentPopupMenu();
-                }
-                if (parent instanceof SFrame)
-                    break;
-
-                parent = parent.getParent();
-            }
-            return null;
-        }
+        /* (OL) we probably don't need the recursive stuff here... */
+//        if (!getInheritsPopupMenu())
+//            return popupMenu;
+//
+//        if (popupMenu == null) {
+//            // Search parents for its popup
+//            SContainer parent = getParent();
+//            while (parent != null) {
+//                if (parent instanceof SComponent) {
+//                    return ((SComponent) parent).getComponentPopupMenu();
+//                }
+//                if (parent instanceof SFrame)
+//                    break;
+//
+//                parent = parent.getParent();
+//            }
+//            return null;
+//        }
         return popupMenu;
     }
     
@@ -1402,5 +1403,16 @@ public abstract class SComponent
      * This Method is called internal and should not be called directly
      */
     public void removeNotify() {
+    }
+
+    public ArrayList getMenus() {
+        ArrayList menus = new ArrayList();
+        if (isVisible()) {
+            SPopupMenu pmenu = getComponentPopupMenu();
+            if (pmenu != null) {
+                menus.add(pmenu);
+            }
+        }
+        return menus;
     }
 }

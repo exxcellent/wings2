@@ -606,7 +606,7 @@ public final class Utils implements SConstants {
         BufferedReader reader = null;
 
         try {
-            in = MenuJsCG.class.getClassLoader().getResourceAsStream(path);
+            in = Utils.class.getClassLoader().getResourceAsStream(path);
             reader = new BufferedReader(new InputStreamReader(in));
             StringBuffer buffer = new StringBuffer();
             String line;

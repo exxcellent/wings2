@@ -472,4 +472,22 @@ public class SContainer extends SComponent {
         }
         super.removeNotify();
     }
+
+    public ArrayList getMenus() {
+        ArrayList menus = new ArrayList();
+        if (isVisible()) {
+            Iterator iter = getComponentList().iterator();
+            while (iter.hasNext()) {
+                SComponent comp = (SComponent)iter.next();
+                ArrayList compMenus = comp.getMenus();
+                compMenus.removeAll(menus);
+                menus.addAll(compMenus);
+            }
+            SPopupMenu pmenu = getComponentPopupMenu();
+            if (pmenu != null && !menus.contains(pmenu)) {
+                menus.add(pmenu);
+            }
+        }
+        return menus;
+    }
 }
