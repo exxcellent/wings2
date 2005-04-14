@@ -58,7 +58,7 @@ public abstract class SComponent
     public static final CSSSelector SELECTOR_GLOBAL = CSSSelector.GLOBAL;
 
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
-    private static final Log log = LogFactory.getLog("org.wings");
+    private static final Log log = LogFactory.getLog(SComponent.class);
 
     /* Components unique name. */
     private String name;
@@ -157,6 +157,9 @@ public abstract class SComponent
     private ActionMap actionMap;
 
     private Map actionEvents = new HashMap();
+    
+    private Collection frameScriptListenersQueue = new LinkedList();
+    private Collection frameScriptListenersRemovalQueue = new LinkedList();
 
     /**
      * Default constructor.cript
@@ -233,10 +236,10 @@ public abstract class SComponent
     public void setComponentPopupMenu(SPopupMenu popupMenu) {
         reloadIfChange(this.popupMenu, popupMenu);
         if (this.popupMenu != null)
-            popupMenu.setParentFrame(null);
+            this.popupMenu.setParentFrame(null);
         this.popupMenu = popupMenu;
         if (this.popupMenu != null)
-            popupMenu.setParentFrame(getParentFrame());
+            this.popupMenu.setParentFrame(getParentFrame());
     }
 
     public SPopupMenu getComponentPopupMenu() {
@@ -389,6 +392,8 @@ public abstract class SComponent
      * Adds the specified component listener to receive component events from
      * this component.
      * If l is null, no exception is thrown and no action is performed.
+     * If there is already a ScriptListener which is equal, the new one is not
+     * added.
      *
      * @param listener the component listener.
      * @see org.wings.event.SComponentEvent
@@ -396,6 +401,12 @@ public abstract class SComponent
      * @see org.wings.SComponent#removeComponentListener
      */
     public final void addScriptListener(ScriptListener listener) {
+        ScriptListener[] listeners = getScriptListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            if (listeners[i].equals(listener)) {
+                return;
+            }
+        }
         addEventListener(ScriptListener.class, listener);
     }
 
@@ -1181,7 +1192,6 @@ public abstract class SComponent
         if (listeners == null) {
             listeners = new EventListenerList();
         }
-
         listeners.add(type, listener);
     }
 
@@ -1414,5 +1424,67 @@ public abstract class SComponent
             }
         }
         return menus;
+    }
+
+    /** Add a ScriptListener to the parent Frame. If the parent Frame is not
+     *  already accessible, queue the listener for addition as soon as the
+     *  parent Frame is accessible.
+     *  
+     * @param listener the ScriptListener to add.
+     */
+    public void addScriptListenerToParentFrame(ScriptListener listener) {
+        SFrame parentFrame = getParentFrame();
+        if (parentFrame != null) {
+            parentFrame.addScriptListener(listener);
+        } else {
+            frameScriptListenersQueue.add(listener);
+        }
+    }
+
+    /** Remove a ScriptListener from the parent Frame. If the parent Frame is
+     *  not already accessible, queue the listener for removal as soon as the
+     *  parent Frame is accessible.
+     *  
+     * @param listener the ScriptListener to remove.
+     */
+    public void removeScriptListenerFromParentFrame(ScriptListener listener) {
+        SFrame parentFrame = getParentFrame();
+        if (parentFrame != null) {
+            parentFrame.removeScriptListener(listener);
+        } else {
+            if (frameScriptListenersQueue != null) {
+                if (!frameScriptListenersQueue.remove(listener)) {
+                    frameScriptListenersRemovalQueue.add(listener);
+                }
+            }
+        }
+    }
+    
+    /** fetches the listener queue for the parent frame. while fetching, the
+     *  queue is cleared of entries, avoiding registering multiply.
+     *  
+     * @return The queue as a Collection
+     */
+    public Collection fetchParentFrameScriptListenerQueue() {
+        // collect own listeners
+        Collection result = frameScriptListenersQueue;
+        if (hasComponentPopupMenu()) {
+            result.addAll(getComponentPopupMenu().fetchParentFrameScriptListenerQueue());
+        }
+        frameScriptListenersQueue = new LinkedList();
+        return result;
+    }
+    
+    /**
+     * fetches the listener queue for removing from the parent frame. while
+     * fetching, the queue is cleared of entries, avoiding deregistering
+     * multiply.
+     * 
+     * @return The queue as a Collection
+     */
+    public Collection fetchParentFrameScriptListenerRemovalQueue() {
+        Collection result = frameScriptListenersRemovalQueue;
+        frameScriptListenersRemovalQueue = new LinkedList();
+        return result;
     }
 }

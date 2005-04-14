@@ -130,4 +130,48 @@ public class JavaScriptListener
 
         return buffer.toString();
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj) {
+        if (obj.getClass() != JavaScriptListener.class)
+            return false;
+        JavaScriptListener testObj = (JavaScriptListener) obj;
+        
+        if (testObj.getEvent() == null) {
+            if (getEvent() != null)
+                return false;
+        } else {
+            if (!testObj.getEvent().equals(getEvent()))
+                return false;
+        }
+        
+        if (testObj.getCode() == null) {
+            if (getCode() != null)
+                return false;
+        } else {
+            if (!testObj.getCode().equals(getCode()))
+                return false;
+        }
+        
+        if (testObj.getComponents() == null) {
+            if (getComponents() != null)
+                return false;
+        } else {
+            if (!testObj.getComponents().equals(getComponents()))
+                return false;
+        }
+        
+        if (testObj.getScript() == null) {
+            if (getScript() != null)
+                return false;
+        } else {
+            if (!testObj.getScript().equals(getScript()))
+                return false;
+        }
+
+        return true;
+    }
+    
 }

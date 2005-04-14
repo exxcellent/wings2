@@ -13,8 +13,13 @@
  */
 package org.wings;
 
+import java.util.Iterator;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.event.SContainerEvent;
+import org.wings.event.SContainerListener;
+import org.wings.script.ScriptListener;
 
 
 /**
@@ -47,6 +52,17 @@ public abstract class SRootContainer extends SContainer {
      */
     public SRootContainer() {
         contentPane = new SPanel();
+        contentPane.addContainerListener(new SContainerListener() {
+
+            public void componentAdded(SContainerEvent e) {
+                addQueuedScriptListeners(e.getComponent());
+            }
+
+            public void componentRemoved(SContainerEvent e) {
+                removeQueuedScriptListeners(e.getComponent());
+            }
+            
+        });
         super.setLayout(new SRootLayout());
         super.addComponent(getContentPane(), null, getComponentCount());
     }
@@ -116,4 +132,33 @@ public abstract class SRootContainer extends SContainer {
     public void remove(SComponent c) {
         throw new IllegalArgumentException("use getContentPane().removeComponent()");
     }
+
+    /**
+     * Add the queued script listeners of the component. This method is called
+     * after a component has been added to the content pane.
+     * 
+     * @param c
+     *            the component to get the listeners from
+     */
+    public void addQueuedScriptListeners(SComponent c) {
+        Iterator iter = c.fetchParentFrameScriptListenerQueue().iterator();
+        while (iter.hasNext()) {
+            addScriptListener((ScriptListener)iter.next());
+        }
+    }
+
+    /**
+     * Remove the queued script listeners of the component. This method is
+     * called after a component has been removed from the content pane.
+     * 
+     * @param c
+     *            the component to get the listeners from
+     */
+    public void removeQueuedScriptListeners(SComponent c) {
+        Iterator iter = c.fetchParentFrameScriptListenerRemovalQueue().iterator();
+        while (iter.hasNext()) {
+            removeScriptListener((ScriptListener)iter.next());
+        }
+    }
+
 }

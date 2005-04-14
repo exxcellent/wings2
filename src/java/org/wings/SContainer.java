@@ -13,15 +13,20 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.plaf.ContainerCG;
+import org.wings.script.ScriptListener;
 import org.wings.style.StyleConstants;
 import org.wings.style.CSSSelector;
 import org.wings.util.ComponentVisitor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 
 /**
@@ -33,6 +38,7 @@ import java.util.Iterator;
  * @see SComponent
  */
 public class SContainer extends SComponent {
+    private static final Log log = LogFactory.getLog(SContainer.class);
     /**
      * The layout for the component.
      */
@@ -266,7 +272,17 @@ public class SContainer extends SComponent {
         if (getComponentList().remove(c)) {
             getConstraintList().remove(index);
 
-            fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
+            SFrame mainFrame = getParentFrame();
+            if (mainFrame != null) {
+                mainFrame.removeQueuedScriptListeners(c);
+            } else {
+                // adopt the listeners of the removed component 
+                Iterator iter = c.fetchParentFrameScriptListenerRemovalQueue().iterator();
+                while (iter.hasNext()) {
+                    removeScriptListenerFromParentFrame((ScriptListener)iter.next());
+                }
+            }
+             fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
             reload();
@@ -391,6 +407,10 @@ public class SContainer extends SComponent {
             if (layout != null)
                 layout.addComponent(c, constraint, index);
 
+            SFrame mainFrame = getParentFrame();
+            if (mainFrame != null) {
+                mainFrame.addQueuedScriptListeners(c);
+            }
             fireContainerEvent(SContainerEvent.COMPONENT_ADDED, c);
             reload();
         }
@@ -489,5 +509,33 @@ public class SContainer extends SComponent {
             }
         }
         return menus;
+    }
+
+    /* (non-Javadoc)
+     * @see org.wings.SComponent#fetchParentFrameScriptListenerQueue()
+     */
+    public Collection fetchParentFrameScriptListenerQueue() {
+        Collection result = super.fetchParentFrameScriptListenerQueue();
+        if (hasComponentPopupMenu()) {
+            result.addAll(getComponentPopupMenu().fetchParentFrameScriptListenerQueue());
+        }
+        for (int i = 0; i < getComponentCount(); i++) {
+            result.addAll(getComponent(i).fetchParentFrameScriptListenerQueue());
+        }
+        return result; 
+    }
+
+    /* (non-Javadoc)
+     * @see org.wings.SComponent#fetchParentFrameScriptListenerRemovalQueue()
+     */
+    public Collection fetchParentFrameScriptListenerRemovalQueue() {
+        Collection result = super.fetchParentFrameScriptListenerRemovalQueue();
+        if (hasComponentPopupMenu()) {
+            result.addAll(getComponentPopupMenu().fetchParentFrameScriptListenerRemovalQueue());
+        }
+        for (int i = 0; i < getComponentCount(); i++) {
+            result.addAll(getComponent(i).fetchParentFrameScriptListenerRemovalQueue());
+        }
+        return result; 
     }
 }

@@ -30,13 +30,7 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
         super.installCG(comp);
         comp.addScriptListener(UTILS_SCRIPT_LOADER);
         comp.addScriptListener(MENU_SCRIPT_LOADER);
-        SFrame parentFrame = comp.getParentFrame();
-        if (parentFrame != null) {
-            log.info("attached js listener to parent frame");
-            parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
-        } else {
-            log.error("No parent frame to attach the body click handler onto!");
-        }
+        comp.addScriptListenerToParentFrame(BODY_ONMOUSEDOWN_SCRIPT);
     }
 
     public void uninstallCG(final SComponent comp) {
@@ -46,8 +40,8 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
         new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Utils.js"));
     public static final JavaScriptListener MENU_SCRIPT_LOADER =
         new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Menu.js"));
-    public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
-        new JavaScriptListener("onclick", "wpm_handleBodyClicks()");
+    public static final JavaScriptListener BODY_ONMOUSEDOWN_SCRIPT =
+        new JavaScriptListener("onmousedown", "wpm_handleBodyClicks(event)");
 
     protected void writePopup(final Device device, SPopupMenu menu)
             throws IOException {

@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.event.InvalidLowLevelEvent;
 import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderListener;
@@ -46,6 +48,8 @@ import java.util.List;
 public class SFrame
         extends SRootContainer
         implements PropertyChangeListener, LowLevelEventListener {
+
+    private final transient static Log log = LogFactory.getLog(SFrame.class);
 
     /**
      * The Title of the Frame.
