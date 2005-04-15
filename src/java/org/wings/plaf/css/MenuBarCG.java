@@ -24,6 +24,7 @@ import org.wings.SMenu;
 import org.wings.SMenuBar;
 import org.wings.io.Device;
 import org.wings.script.JavaScriptListener;
+import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
@@ -37,6 +38,13 @@ public class MenuBarCG
         super.installCG(comp);
         comp.addScriptListener(UTILS_SCRIPT_LOADER);
         comp.addScriptListener(MENU_SCRIPT_LOADER);
+        /* accessing the parent frame via the sessionmanager works as long as
+         * we have only one frame. the other method via 
+         * comp.addScriptListenerToParentFrame will always work, but is cost
+         * intensive. it involves checking every component when it is 
+         * added/removed.
+         */
+        //SessionManager.getSession().getRootFrame().addScriptListener(BODY_ONMOUSEDOWN_SCRIPT);
         comp.addScriptListenerToParentFrame(BODY_ONMOUSEDOWN_SCRIPT);
     }
 
@@ -70,7 +78,7 @@ public class MenuBarCG
                 } else {
                     device.print("<div class=\"SMenu_Disabled\">");
                 }
-                device.print(((SMenu)menu).getText());
+                Utils.write(device, ((SMenu)menu).getText());
                 device.print("</div>");
             }
         }

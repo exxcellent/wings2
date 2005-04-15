@@ -47,7 +47,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                         continue;
                     String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
                     if (text != null && text.length() > maxLength) {
-                        maxLength = ((SMenuItem)menu.getMenuComponent(i)).getText().length();
+                        maxLength = text.length();
                         if (menu.getMenuComponent(i) instanceof SMenu) {
                                 maxLength = maxLength + 2; //graphics
                         }
@@ -59,7 +59,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                 device.print("em;\"");
             } else {
                 device.print(" id=\"");
-                device.print(menu.getName());
+                device.print(componentId);
                 device.print("_pop\"");
             }
             device.print(" class=\"SMenu\">");

@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.script.JavaScriptListener;
+import org.wings.session.SessionManager;
 
 public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.wings.plaf.MenuBarCG {
 
@@ -30,6 +31,13 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
         super.installCG(comp);
         comp.addScriptListener(UTILS_SCRIPT_LOADER);
         comp.addScriptListener(MENU_SCRIPT_LOADER);
+        /* accessing the parent frame via the sessionmanager works as long as
+         * we have only one frame. the other method via 
+         * comp.addScriptListenerToParentFrame will always work, but is cost
+         * intensive. it involves checking every component when it is 
+         * added/removed.
+         */
+        //SessionManager.getSession().getRootFrame().addScriptListener(BODY_ONMOUSEDOWN_SCRIPT);
         comp.addScriptListenerToParentFrame(BODY_ONMOUSEDOWN_SCRIPT);
     }
 

@@ -44,8 +44,9 @@ public class SPopupMenu
 
     public void setParentFrame(SFrame f) {
         super.setParentFrame(f);
-        for (int i = 0; i < menuItems.size(); i++)
+        for (int i = 0; i < menuItems.size(); i++) {
             ((SComponent) menuItems.get(i)).setParentFrame(f);
+        }
     }
 
     /**
