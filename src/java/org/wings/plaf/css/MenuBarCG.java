@@ -44,8 +44,8 @@ public class MenuBarCG
          * intensive. it involves checking every component when it is 
          * added/removed.
          */
-        //SessionManager.getSession().getRootFrame().addScriptListener(BODY_ONMOUSEDOWN_SCRIPT);
-        comp.addScriptListenerToParentFrame(BODY_ONMOUSEDOWN_SCRIPT);
+        //SessionManager.getSession().getRootFrame().addScriptListener(BODY_ONCLICK_SCRIPT);
+        comp.addScriptListenerToParentFrame(BODY_ONCLICK_SCRIPT);
     }
 
     public void uninstallCG(final SComponent comp) {
@@ -55,8 +55,8 @@ public class MenuBarCG
         new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Utils.js"));
     public static final JavaScriptListener MENU_SCRIPT_LOADER =
         new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Menu.js"));
-    public static final JavaScriptListener BODY_ONMOUSEDOWN_SCRIPT =
-        new JavaScriptListener("onmousedown", "wpm_handleBodyClicks(event)");
+    public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
+        new JavaScriptListener("onClick", "wpm_handleBodyClicks(event)");
 
     public void writeContent(final Device device,
                              final SComponent _c)
@@ -72,7 +72,7 @@ public class MenuBarCG
             SComponent menu = mbar.getComponent(i);
             if (menu.isVisible()) {
                 if (menu.isEnabled()) {
-                    device.print("<div class=\"SMenu\" onMouseDown=\"javascript:wpm_menu(event,'");
+                    device.print("<div class=\"SMenu\" onClick=\"javascript:wpm_menu(event,'");
                     device.print(menu.getName());
                     device.print("_pop');\">");
                 } else {

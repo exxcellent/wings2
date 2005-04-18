@@ -102,7 +102,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             String popupId = componentId + "_pop";
             device.print(" onContextMenu=\"javascript:return wpm_menuPopup(event, '");
             device.print(popupId);
-            device.print("');\" onMouseDown=\"javascript:return wpm_menuPopup(event, '");
+            device.print("');\" onClick=\"javascript:return wpm_menuPopup(event, '");
             device.print(popupId);
             device.print("');\"");
         }
