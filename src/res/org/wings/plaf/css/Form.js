@@ -50,44 +50,45 @@ function sendEvent(event, eventValue) {
 
 function requestFocus(id) {
     var div = document.getElementById(id);
-
-    var elements = div.getElementsByTagName("INPUT");
-    for (var i = 0; i < elements.length; i++) {
-        if (elements[i].getAttribute("focus") == id) {
-            elements[i].focus();
-            return;
-        }
-    }
-    var elements = div.getElementsByTagName("SELECT");
-    for (var i = 0; i < elements.length; i++) {
-        if (elements[i].getAttribute("focus") == id) {
-            elements[i].focus();
-            return;
-        }
-    }
-    var elements = div.getElementsByTagName("TEXTAREA");
-    for (var i = 0; i < elements.length; i++) {
-        if (elements[i].getAttribute("focus") == id) {
-            elements[i].focus();
-            return;
-        }
-    }
-    var elements = div.getElementsByTagName("A");
-    for (var i = 0; i < elements.length; i++) {
-        if (elements[i].getAttribute("focus") == id) {
-            elements[i].focus();
-            return;
-        }
-    }
-    /* this produces javascript errors on konqueror, so hide (2005-03-11) */
-    if (!(wu_konqueror)) {
-	    var elements = div.getElementsByTagName("BUTTON");
+	if (div) {
+	    var elements = div.getElementsByTagName("INPUT");
 	    for (var i = 0; i < elements.length; i++) {
 	        if (elements[i].getAttribute("focus") == id) {
 	            elements[i].focus();
 	            return;
 	        }
 	    }
+	    var elements = div.getElementsByTagName("SELECT");
+	    for (var i = 0; i < elements.length; i++) {
+	        if (elements[i].getAttribute("focus") == id) {
+	            elements[i].focus();
+	            return;
+	        }
+	    }
+	    var elements = div.getElementsByTagName("TEXTAREA");
+	    for (var i = 0; i < elements.length; i++) {
+	        if (elements[i].getAttribute("focus") == id) {
+	            elements[i].focus();
+	            return;
+	        }
+	    }
+	    var elements = div.getElementsByTagName("A");
+	    for (var i = 0; i < elements.length; i++) {
+	        if (elements[i].getAttribute("focus") == id) {
+	            elements[i].focus();
+	            return;
+	        }
+	    }
+	    /* this produces javascript errors on konqueror, so hide (2005-03-11) */
+	    if (!(wu_konqueror)) {
+		    var elements = div.getElementsByTagName("BUTTON");
+		    for (var i = 0; i < elements.length; i++) {
+		        if (elements[i].getAttribute("focus") == id) {
+		            elements[i].focus();
+		            return;
+		        }
+		    }
+		}
 	}
 }
 

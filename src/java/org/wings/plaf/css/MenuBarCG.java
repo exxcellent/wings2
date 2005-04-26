@@ -72,7 +72,7 @@ public class MenuBarCG
             SComponent menu = mbar.getComponent(i);
             if (menu.isVisible()) {
                 if (menu.isEnabled()) {
-                    device.print("<div class=\"SMenu\" onClick=\"javascript:wpm_menu(event,'");
+                    device.print("<div class=\"SMenu\" onMouseDown=\"javascript:wpm_menu(event,'");
                     device.print(menu.getName());
                     device.print("_pop');\">");
                 } else {

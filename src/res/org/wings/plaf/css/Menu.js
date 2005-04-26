@@ -13,15 +13,13 @@ var wpm_lastCoord = new wpm_point(0,0); // position of currently active menu
    This circumvents mutiple events and thus enables the use of
    cascaded menus.
 */ 
-var wpm_timeOut = 100;
+var wpm_timeOut = 1000;
 /* ClickDelta in px. When a click is recieved, the coordinates of the click
    are compared with the coordinates of the event that was recieved last. If
    the clicks are not farther apart than the ClickDelta in x and y, the event
    might be invalid.
    This circumvents mutiple events and thus enables the use of
    cascaded menus.
-   This might not be needed. Leaving it in for testing purposes (all browsers).
-   Firefox seems ok (on a fast machine).
 */ 
 var wpm_clickDelta = 0;
 
@@ -90,7 +88,7 @@ function wpm_findPosY(obj)
 
 function wpm_isValidEvent(coord) {
 	if ( (Math.abs(wpm_lastCoord.x - coord.x) <= wpm_clickDelta) && (Math.abs(wpm_lastCoord.y - coord.y) <= wpm_clickDelta) && (wpm_menuCalled == 1) ) {
-		// see timeout comment above
+		// see timeout and clickdelta comments
 		return false;
 	} else return true;
 }
@@ -112,7 +110,6 @@ function wpm_menuPopup(e, menu) {
 	if (!wpm_isValidEvent(coord)) return false;
 	if (e.type == 'mousedown') {
 		if (wu_konqueror || wu_opera || wu_safari) {
-			alert('konq');
 			if (e.ctrlKey && (e.button == 2)) {
 				// ctrl right click
 				wpm_hideActiveMenu();

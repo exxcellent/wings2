@@ -86,7 +86,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             System.out.println(menuCG.getClass().getName());
             device.print(" onContextMenu=\"javascript:return wpm_menuPopup(event, '");
             device.print(popupId);
-            device.print("');\" onClick=\"javascript:return wpm_menuPopup(event, '");
+            device.print("');\" onMouseDown=\"javascript:return wpm_menuPopup(event, '");
             device.print(popupId);
             device.print("');\"");
         }
