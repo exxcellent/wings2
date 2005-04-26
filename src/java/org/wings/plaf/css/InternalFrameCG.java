@@ -50,8 +50,14 @@ public class InternalFrameCG
         super.installCG(component);
     }
 
-    private void writeIcon(Device device, SIcon icon) throws IOException {
-        device.print("<img border=\"0\"");
+    private void writeIcon(Device device, SIcon icon, String cssClass) throws IOException {
+        device.print("<img");
+        if (cssClass != null) {
+            device.print(" class=\"");
+            device.print(cssClass);
+            device.print("\"");
+        }
+        device.print(" border=\"0\"");
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
@@ -62,33 +68,27 @@ public class InternalFrameCG
                                  int event, SIcon icon) throws IOException {
         boolean showAsFormComponent = frame.getShowAsFormComponent();
 
-        RequestURL addr = frame.getRequestURL();
-        addr.addParameter(Utils.event(frame), event);
-
-        device.print("<th");
-        Utils.optAttribute(device, "width", getIconWidth(icon));
-        device.print(">");
+        //RequestURL addr = frame.getRequestURL();
+        //addr.addParameter(Utils.event(frame), event);
 
         if (showAsFormComponent)
-            device.print("<button name=\"")
+            device.print("<button class=\"WindowButton\" name=\"")
                     .print(Utils.event(frame))
                     .print("\" value=\"")
                     .print(event)
                     .print("\">");
         else
-            device.print("<a href=\"")
+            device.print("<a class=\"WindowButton\" href=\"")
                     .print(frame.getRequestURL()
                     .addParameter(Utils.event(frame) + "=" + event).toString())
                     .print("\">");
 
-        writeIcon(device, icon);
+        writeIcon(device, icon, null);
 
         if (showAsFormComponent)
             device.print("</button>");
         else
             device.print("</a>");
-
-        device.print("</th>");
     }
 
 
@@ -102,60 +102,38 @@ public class InternalFrameCG
         if (text == null)
             text = "wingS";
 
-        device.print("<table");
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-        device.print(">\n<tr height=\"0%\">");
-
-        // left icon
-        if (frame.getIcon() != null) {
-            SIcon icon = frame.getIcon();
-            device.print("<th");
-            Utils.optAttribute(device, "width", getIconWidth(icon));
-            device.print(">");
-            writeIcon(device, icon);
-            device.print("</th>");
-            ++columns;
-        }
-
-        device.print("<th col=\"title\">&nbsp;");
-        Utils.write(device, text);
-        device.print("</th>");
-        ++columns;
-
-        if (frame.isMaximizable() && !frame.isMaximized() && !frame.isIconified() && maximizeIcon != null) {
-            writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, maximizeIcon);
-            ++columns;
-        }
-
-        if (frame.isIconifyable() && !frame.isIconified() && iconifyIcon != null) {
-            writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, iconifyIcon);
-            ++columns;
-        }
-
-        if (frame.isIconified() && deiconifyIcon != null) {
-            writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED, deiconifyIcon);
-            ++columns;
-        }
-
+        device.print("<div class=\"WindowBar\">");
+        // these following icons will be floated to the right by the style sheet...
         if (frame.isClosable() && closeIcon != null) {
             writeWindowIcon(device, frame,
                     SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon);
-            ++columns;
         }
-        device.print("</tr>");
+        if (frame.isIconified() && deiconifyIcon != null) {
+            writeWindowIcon(device, frame,
+                    SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED, deiconifyIcon);
+        }
+        if (frame.isIconifyable() && !frame.isIconified() && iconifyIcon != null) {
+            writeWindowIcon(device, frame,
+                    SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, iconifyIcon);
+        }
+        if (frame.isMaximizable() && !frame.isMaximized() && !frame.isIconified() && maximizeIcon != null) {
+            writeWindowIcon(device, frame,
+                    SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, maximizeIcon);
+        }
+        // float right end
+        if (frame.getIcon() != null) {
+            writeIcon(device, frame.getIcon(), "WindowIcon");
+        }
+        device.print(text);
+
+        device.print("</div>");
 
         // write the actual content
         if (!frame.isIconified()) {
-            device.print("<tr height=\"100%\"><td colspan=\"");
-            device.print(String.valueOf(columns));
-            device.print("\">");
+            device.print("<div class=\"WindowContent\">");
             Utils.renderContainer(device, frame);
-            device.print("</td></tr>");
+            device.print("</div>");
         }
-        device.print("</table>\n");
     }
 
     private String getIconWidth(SIcon icon) {

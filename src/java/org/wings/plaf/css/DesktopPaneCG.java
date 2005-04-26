@@ -39,17 +39,11 @@ public class DesktopPaneCG
         final SDesktopPane component = (SDesktopPane) _c;
         SDesktopPane desktop = (SDesktopPane) component;
 
-        device.print("<table");
-        Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
-        device.print(">\n");
-
         int componentCount = desktop.getComponentCount();
         for (int i = 0; i < componentCount; i++) {
             SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
             if (!frame.isClosed() && frame.isMaximized()) {
-                device.print("<tr><td>");
                 frame.write(device);
-                device.print("</td></tr></table>");
                 return;
             }
         }
@@ -57,12 +51,8 @@ public class DesktopPaneCG
         for (int i = 0; i < componentCount; i++) {
             SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
             if (!frame.isClosed()) {
-                device.print("<tr><td>");
                 frame.write(device);
-                device.print("</td></tr>");
             }
         }
-
-        device.print("</table>\n");
     }
 }

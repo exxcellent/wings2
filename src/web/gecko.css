@@ -451,33 +451,6 @@ table.SFlowLayout
     background-color: inherit;
 }
 
-div.SDesktopPane > table > tbody > tr > td {
-    padding-top: 1em;
-}
-
-div.SInternalFrame {
-    border: 1px solid #cccccc;
-}
-
-div.SInternalFrame > table > tbody > tr > th {
-    padding-left: 1px;
-    padding-right: 1px;
-}
-
-div.SInternalFrame > table > tbody > tr > th[col="title"] {
-    background-color: #aaaaff;
-    text-align: left;
-    width: 100%;
-}
-
-div.SInternalFrame > table > tbody > tr > td {
-    vertical-align: top;
-}
-
-div.SInternalFrame > table > tbody > tr > * {
-    border: 1px solid #cccccc;
-}
-
 div.SDialog_Box {
     display: table;
 }
@@ -698,4 +671,24 @@ padding-right:10px;
 div.SMenu a.x:hover,
 div.SPopupMenu a.x:hover{
 background:#66b url(icons/MenuArrowRight.gif) no-repeat center right;
+}
+
+div.SInternalFrame {
+    border: 1px solid #cccccc;
+    margin: .2em;
+}
+
+div.SInternalFrame > div.WindowBar {	
+	padding:.2em;
+	background-color: #aaaaff;
+/*	white-space:pre; for konqueror */
+}
+
+div.SInternalFrame > div.WindowBar > a.WindowButton,
+div.SInternalFrame > div.WindowBar > button.WindowButton {
+	float: right;
+}
+
+div.SInternalFrame > div.WindowContent {
+	padding: .2em;
 }
