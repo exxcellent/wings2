@@ -693,6 +693,10 @@ div.SInternalFrame > div.WindowBar > button.WindowButton {
 	float: right;
 }
 
+div.SInternalFrame > div.WindowBar > a.DeiconifyButton {
+	display: inline;
+}
+
 div.SInternalFrame > div.WindowContent {
 	padding: .2em;
 }

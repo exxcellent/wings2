@@ -27,6 +27,8 @@ public class InternalFrameCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.InternalFrameCG
 {
+    private static final String WINDOWICON_CLASSNAME = "WindowIcon";
+    private static final String BUTTONICON_CLASSNAME = "WindowButton";
     private SIcon closeIcon;
     private SIcon deiconifyIcon;
     private SIcon iconifyIcon;
@@ -65,30 +67,40 @@ public class InternalFrameCG
     }
 
     private void writeWindowIcon(Device device, SInternalFrame frame,
-                                 int event, SIcon icon) throws IOException {
+            int event, SIcon icon, String cssClass) throws IOException {
         boolean showAsFormComponent = frame.getShowAsFormComponent();
 
-        //RequestURL addr = frame.getRequestURL();
-        //addr.addParameter(Utils.event(frame), event);
+        // RequestURL addr = frame.getRequestURL();
+        // addr.addParameter(Utils.event(frame), event);
 
-        if (showAsFormComponent)
-            device.print("<button class=\"WindowButton\" name=\"")
-                    .print(Utils.event(frame))
-                    .print("\" value=\"")
-                    .print(event)
+        if (showAsFormComponent) {
+            device.print("<button");
+            if (cssClass != null) {
+                device.print(" class=\"");
+                device.print(cssClass);
+                device.print("\"");
+            }
+            device.print(" name=\"").print(Utils.event(frame)).print(
+                    "\" value=\"").print(event).print("\">");
+        } else {
+            device.print("<a");
+            if (cssClass != null) {
+                device.print(" class=\"");
+                device.print(cssClass);
+                device.print("\"");
+            }
+            device.print(" href=\"").print(
+                    frame.getRequestURL().addParameter(
+                            Utils.event(frame) + "=" + event).toString())
                     .print("\">");
-        else
-            device.print("<a class=\"WindowButton\" href=\"")
-                    .print(frame.getRequestURL()
-                    .addParameter(Utils.event(frame) + "=" + event).toString())
-                    .print("\">");
-
+        }
         writeIcon(device, icon, null);
 
-        if (showAsFormComponent)
+        if (showAsFormComponent) {
             device.print("</button>");
-        else
+        } else {
             device.print("</a>");
+        }
     }
 
 
@@ -103,29 +115,44 @@ public class InternalFrameCG
             text = "wingS";
 
         device.print("<div class=\"WindowBar\">");
-        // these following icons will be floated to the right by the style sheet...
-        if (frame.isClosable() && closeIcon != null) {
-            writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon);
+        if (frame.isIconified()) {
+            // frame is rendered in taskbar
+            if (frame.getIcon() != null) {
+                writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
+            }
+            if (deiconifyIcon != null) {
+                device.print(text);
+                writeWindowIcon(device, frame,
+                        SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED, deiconifyIcon, "DeiconifyButton");
+            } else {
+                device.print("<a href=\"").print(
+                        frame.getRequestURL().addParameter(
+                                Utils.event(frame) + "=" + SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED).toString())
+                        .print("\">");
+                device.print(text);
+                device.print("</a>");
+            }
+        } else {
+            // frame is rendered in desktopPane
+            // these following icons will be floated to the right by the style sheet...
+            if (frame.isClosable() && closeIcon != null) {
+                writeWindowIcon(device, frame,
+                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon, BUTTONICON_CLASSNAME);
+            }
+            if (frame.isIconifyable() && iconifyIcon != null) {
+                writeWindowIcon(device, frame,
+                        SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, iconifyIcon, BUTTONICON_CLASSNAME);
+            }
+            if (frame.isMaximizable() && !frame.isMaximized() && maximizeIcon != null) {
+                writeWindowIcon(device, frame,
+                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, maximizeIcon, BUTTONICON_CLASSNAME);
+            }
+            // float right end
+            if (frame.getIcon() != null) {
+                writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
+            }
+            device.print(text);
         }
-        if (frame.isIconified() && deiconifyIcon != null) {
-            writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED, deiconifyIcon);
-        }
-        if (frame.isIconifyable() && !frame.isIconified() && iconifyIcon != null) {
-            writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, iconifyIcon);
-        }
-        if (frame.isMaximizable() && !frame.isMaximized() && !frame.isIconified() && maximizeIcon != null) {
-            writeWindowIcon(device, frame,
-                    SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, maximizeIcon);
-        }
-        // float right end
-        if (frame.getIcon() != null) {
-            writeIcon(device, frame.getIcon(), "WindowIcon");
-        }
-        device.print(text);
-
         device.print("</div>");
 
         // write the actual content

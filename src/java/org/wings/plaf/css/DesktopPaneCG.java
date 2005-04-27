@@ -38,23 +38,37 @@ public class DesktopPaneCG
     {
         final SDesktopPane component = (SDesktopPane) _c;
         SDesktopPane desktop = (SDesktopPane) component;
-
+        // is one window maximized? if yes, skip rendering of other windows
+        boolean maximized = false;
+        
         device.print("<div class=\"spacer\">&nbsp;</div>");
         int componentCount = desktop.getComponentCount();
         for (int i = 0; i < componentCount; i++) {
             SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
             if (!frame.isClosed() && frame.isMaximized()) {
                 frame.write(device);
-                return;
+                maximized = true;
             }
         }
-
-        for (int i = 0; i < componentCount; i++) {
-            SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
-            if (!frame.isClosed()) {
-                frame.write(device);
+        
+        if (!maximized) {
+            for (int i = 0; i < componentCount; i++) {
+                SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
+                if (!frame.isClosed() && !frame.isIconified()) {
+                    frame.write(device);
+                }
             }
         }
         device.print("<div class=\"spacer\">&nbsp;</div>");
+        if (!maximized) {
+            for (int i = 0; i < componentCount; i++) {
+                SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
+                if (!frame.isClosed() && frame.isIconified()) {
+                    frame.write(device);
+                }
+            }
+        }
+        device.print("<div class=\"spacer\">&nbsp;</div>");
+        
     }
 }
