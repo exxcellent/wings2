@@ -21,7 +21,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.script.JavaScriptListener;
-import org.wings.session.SessionManager;
 
 public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.wings.plaf.MenuBarCG {
 
@@ -119,7 +118,6 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
 
     public void writeContent(final Device device, final SComponent _c)
             throws IOException {
-
         SPopupMenu menu = (SPopupMenu) _c;
         writePopup(device, menu);
     }

@@ -14,19 +14,26 @@ public class DesktopPaneExample extends WingSetPane {
     private static SIcon windowIcon = (SIcon)SessionManager.getSession().getCGManager()
                                             .getObject("TableCG.editIcon", SIcon.class);
 
-    private static final int FRAME_COUNT = 5;
+    private static final int FRAME_COUNT = 8;
 
     protected SComponent createExample() {
         SDesktopPane desktopPane = new SDesktopPane();
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
             iFrame.setTitle("Frame " + (i+1));
-            // set some icons
-            if ((i % 2) == 0) {
-                iFrame.setIcon(windowIcon);
-            }
             desktopPane.add(iFrame);
             fillFrame(iFrame);
+            // set some special contents & icons
+            if ((i % 2) == 0) {
+                iFrame.setIcon(windowIcon);
+                StringBuffer labelText = new StringBuffer("some extra label...");
+                for (int j = 0; j <= i; j++) {
+                    labelText.append("extra-");
+                    iFrame.getContentPane().add(new SLabel(labelText.toString()));
+                }
+                labelText.append("long.");
+                iFrame.getContentPane().add(new SLabel(labelText.toString()));
+            }
         }
         return desktopPane;
     }

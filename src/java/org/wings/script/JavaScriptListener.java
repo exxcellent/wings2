@@ -35,7 +35,7 @@ public class JavaScriptListener
      * @param event  one of 'onclick', 'onmouseover', ..
      * @param code   the code that is written as a value of the event attribute
      * @param script larger code block (java script functions), that is written
-     *               to a separate script file, that is linked in the header
+     *               to a combined script file, that is linked in the header
      */
     public JavaScriptListener(String event, String code, String script) {
         this.event = event;
