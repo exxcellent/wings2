@@ -39,7 +39,7 @@ public class DesktopPaneCG
         final SDesktopPane component = (SDesktopPane) _c;
         SDesktopPane desktop = (SDesktopPane) component;
 
-        device.print("<div class=\"spacer\"></div>");
+        device.print("<div class=\"spacer\">&nbsp;</div>");
         int componentCount = desktop.getComponentCount();
         for (int i = 0; i < componentCount; i++) {
             SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
@@ -55,6 +55,6 @@ public class DesktopPaneCG
                 frame.write(device);
             }
         }
-        device.print("<div class=\"spacer\"></div>");
+        device.print("<div class=\"spacer\">&nbsp;</div>");
     }
 }

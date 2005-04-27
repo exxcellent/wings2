@@ -530,6 +530,7 @@ color: #000044;
 
 /* clears the menu */
 div.SMenuBar div.spacer {
+height:0px;
 clear: both;
 }
 
@@ -698,5 +699,6 @@ div.SInternalFrame > div.WindowContent {
 
 /* clears the windows */
 div.SDesktopPane div.spacer {
+height:0px;
 clear: both;
 }
