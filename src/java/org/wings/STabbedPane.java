@@ -897,6 +897,12 @@ public class STabbedPane
         fireStateChanged();
     }
 
+    public void removeAllTabs() {
+        while (getTabCount() != 0) {
+            removeTabAt(0);
+        }
+    }
+
 }
 
 
