@@ -1083,6 +1083,10 @@ public class STable extends SComponent
                     reload();
                 }
             };
+
+    public void setSelectedRow(int selectedIndex) {
+        getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
+    }
 }
 
 
