@@ -86,8 +86,12 @@
             <arg line="-o build/${docname}.${target}"/>
             <arg value="src/${docname}.xml"/>
             <arg value="${docbook_folder}/${target}/docbook.xsl"/>
+            <arg value="paper.type=A4"/>
+            <arg value="section.autolabel=1"/>
+            <arg value="programlisting.font.master=8"/>
             <sysproperty key="http.proxyHost" value="${http.proxyHost}"/>
             <sysproperty key="http.proxyPort" value="${http.proxyPort}"/>
+            <sysproperty key="http.proxySet" value="${http.proxySet}"/>
         </java>
     </target>
 

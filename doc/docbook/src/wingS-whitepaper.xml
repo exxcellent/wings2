@@ -75,7 +75,7 @@
     <para>A summary of reasons you might consider wingS for your next project
     follows.</para>
 
-    <para><emphasis>Clean Architecture</emphasis></para>
+    <para><emphasis role="bold">Clean Architecture</emphasis></para>
 
     <para>The majority of the API is in Java and presents a high-level
     interface using familiar concepts such as windows, widgets, and events.
@@ -84,25 +84,25 @@
     style sheets and a small amount of JavaScript. You are unlikely to be
     interested in this unless you intend customising the look and feel.</para>
 
-    <para><emphasis>Open Architecture</emphasis></para>
+    <para><emphasis role="bold">Open Architecture</emphasis></para>
 
     <para>Use of Java allows a cross platform "back-end", and reliance on
     basic web standards allows a cross-browser "front-end". No special
     plug-ins are required.</para>
 
-    <para><emphasis>Open Licence</emphasis></para>
+    <para><emphasis role="bold">Open Licence</emphasis></para>
 
     <para>wingS is licenced using the GNU "LESSER GENERAL PUBLIC LICENSE"
     (LGPL) which means you can freely modify the source code, as well as
     safely use it for your own proprietary development.</para>
 
-    <para><emphasis>Stable and Robust</emphasis></para>
+    <para><emphasis role="bold">Stable and Robust</emphasis></para>
 
     <para>wingS has been in use in commercial production environments for
     several years. These include vertical domains such as retail,
     manufacturing, logistics, financial services and local government.</para>
 
-    <para><emphasis>Secure</emphasis></para>
+    <para><emphasis role="bold">Secure</emphasis></para>
 
     <para>Since wingS is a pure Java Servlet toolkit, deployment is very
     clean, this normally being a matter of copying over a few jar files, or a
@@ -115,7 +115,7 @@
     than URL encoded. If you combine this with a standard SSL connection an
     application will be very hard to compromise.</para>
 
-    <para><emphasis>Efficient</emphasis></para>
+    <para><emphasis role="bold">Efficient</emphasis></para>
 
     <para>Use of programmatically generated HTML tends to result in HTML pages
     that are more efficient to download (requiring fewer round trips to the
@@ -124,14 +124,14 @@
     moderately sized and has a modest memory footprint bt the standards of
     typical Java applications.</para>
 
-    <para><emphasis>Scalable</emphasis></para>
+    <para><emphasis role="bold">Scalable</emphasis></para>
 
     <para>Nothing in the wingS toolkit prevents you writing applications that
     can "scale out" to many concurrent users. The scalability limits are
     likely to depend on the other technologies you use in your
     application.</para>
 
-    <para><emphasis>Easily Integrated</emphasis></para>
+    <para><emphasis role="bold">Easily Integrated</emphasis></para>
 
     <para>wingS uses standard Java Servlet sessions, so if you need to
     integrate other front-end technologies you can still access the normal
@@ -142,13 +142,52 @@
   <section>
     <title>Deployed User Base</title>
 
-    <para>To be done.</para>
+    <para>Here's a list of companies volunteering to share with you what they
+    have developed.</para>
+
+    <table>
+      <title>wingS Applications</title>
+
+      <tgroup align="left" cols="2">
+        <thead>
+          <row>
+            <entry align="center">Application</entry>
+
+            <entry align="center">Company</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row valign="top">
+            <entry valign="top"><para>Financial management application for
+            marketing programs in EMEA</para><para>Research system for
+            electrical wires, connectors and components in the automotive
+            area</para><para>Project and Resource management
+            application</para></entry>
+
+            <entry><ulink url="http://www.exxcellent.de">eXXcellent solutions
+            gmbH</ulink></entry>
+          </row>
+
+          <row valign="top">
+            <entry valign="top"><para>eCommerce shop, (B2B,
+            B2C)</para><para>Corporate LDAP management
+            application</para><para>Web directory, <ulink
+            url="http://www.innovationsregion.ulm.de">http://www.innovationsregion-ulm.de</ulink></para>Warehouse
+            dispatcher software, PDA-based (wireless)</entry>
+
+            <entry><ulink url="http://www.mercatis.de">mercatis information
+            systems GmbH</ulink></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>Please contact the project, if you want to be added.</para>
   </section>
 
   <section>
     <title>Technology Comparison</title>
-
-    <para></para>
 
     <section>
       <title>Comparision with JSF</title>
@@ -156,63 +195,67 @@
       <para>Comparison of wingS with Java Server Faces (JSF), and to a lesser
       extent Java Server Pages (JSP).</para>
 
-      <para><emphasis>Reasons to Choose JSF</emphasis></para>
-
-      <para>It is backed by Sun</para>
-
-      <para><emphasis>Reason to Choose wingS</emphasis></para>
+      <para><emphasis role="bold">Reasons to Choose JSF</emphasis></para>
 
       <itemizedlist>
         <listitem>
-          <para>You want to program in a single high level language. JSF
-          spreads the application logic across multiple technologies - pure
-          Java, tag-libraries, XML based action configuration and JSP
-          pages.</para>
-        </listitem>
-
-        <listitem>
-          <para>You don't want to learn a new syntax for writing HTML (via the
-          JSF tag-libraries), or for binding the tag-library directives to
-          Java code.</para>
-        </listitem>
-
-        <listitem>
-          <para>You want more insulation from the low level details of HTML
-          rendering</para>
-        </listitem>
-
-        <listitem>
-          <para>You prefer compile time errors to debugging runtime errors.
-          The decoupled structure of the various modules of JSF creates a
-          heavy burden of runtime testing.</para>
-        </listitem>
-
-        <listitem>
-          <para>JSF requires extra state management on your part</para>
-        </listitem>
-
-        <listitem>
-          <para>Your view layout is more complex, or more dynamic, than can be
-          easily represented using a "static" JSF file specification.</para>
-        </listitem>
-
-        <listitem>
-          <para>Your application logic is more complex than can be easily
-          handled using the simple navigation specification mechanism of
-          "action files"</para>
-        </listitem>
-
-        <listitem>
-          <para>All debugging can be handled within java code</para>
-        </listitem>
-
-        <listitem>
-          <para>You are already familiar with the Java Swing API and related
-          concepts</para>
+          <para>It is backed by Sun.</para>
         </listitem>
       </itemizedlist>
 
-      <para><emphasis>JSP Comments</emphasis></para>
+      <para><emphasis role="bold">Reason to Choose
+      wingS</emphasis><itemizedlist>
+          <listitem>
+            <para>You want to program in a single high level language. JSF
+            spreads the application logic across multiple technologies - pure
+            Java, tag-libraries, XML based action configuration and JSP
+            pages.</para>
+          </listitem>
+
+          <listitem>
+            <para>You don't want to learn a new syntax for writing HTML (via
+            the JSF tag-libraries), or for binding the tag-library directives
+            to Java code.</para>
+          </listitem>
+
+          <listitem>
+            <para>You want more insulation from the low level details of HTML
+            rendering</para>
+          </listitem>
+
+          <listitem>
+            <para>You prefer compile time errors to debugging runtime errors.
+            The decoupled structure of the various modules of JSF creates a
+            heavy burden of runtime testing.</para>
+          </listitem>
+
+          <listitem>
+            <para>JSF requires extra state management on your part</para>
+          </listitem>
+
+          <listitem>
+            <para>Your view layout is more complex, or more dynamic, than can
+            be easily represented using a "static" JSF file
+            specification.</para>
+          </listitem>
+
+          <listitem>
+            <para>Your application logic is more complex than can be easily
+            handled using the simple navigation specification mechanism of
+            "action files"</para>
+          </listitem>
+
+          <listitem>
+            <para>All debugging can be handled within java code</para>
+          </listitem>
+
+          <listitem>
+            <para>You are already familiar with the Java Swing API and related
+            concepts</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para><emphasis role="bold">JSP Comments</emphasis></para>
 
       <para>JSF was conceived to address the severe shortcomings of JSP.
       However by taking this as a starting point it inherits most of the
@@ -234,7 +277,8 @@
       disadvantages, created a new pure windows client library, and require
       yet another technology for mobile devices).</para>
 
-      <para><emphasis>Reasons to Choose Scripting</emphasis><itemizedlist>
+      <para><emphasis role="bold">Reasons to Choose
+      Scripting</emphasis><itemizedlist>
           <listitem>
             <para>Quick solution for small applications</para>
           </listitem>
@@ -245,7 +289,8 @@
           </listitem>
         </itemizedlist></para>
 
-      <para><emphasis>Reasons to Choose wingS</emphasis><itemizedlist>
+      <para><emphasis role="bold">Reasons to Choose
+      wingS</emphasis><itemizedlist>
           <listitem>
             <para>Single technology</para>
           </listitem>
@@ -293,12 +338,35 @@
   <section>
     <title>Standard Compiance</title>
 
-    <para>To be done.</para>
+    <para>wingS is based on and compiled with Sun's Servlet API version 2.2.
+    It uses Jakarta Commons Logging, Regexp, and HTTPClient for record/replay
+    of session, as well as bsh-core. There are no other dependecies.</para>
+
+    <para>Due to this non-invasive nature wingS is relatively light-weight and
+    can easily be used in combination with other Servlet-based
+    technologies.</para>
   </section>
 
   <section>
-    <title>Future Directions</title>
+    <title>Principles of Future Development</title>
 
-    <para>To be done.</para>
+    <para>The wingS team recognizes and subscribes to the following
+    principles:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Swing API and behaviour - adhere to as close as possible &amp;
+        sensible</para>
+      </listitem>
+
+      <listitem>
+        <para>W3C standards</para>
+      </listitem>
+
+      <listitem>
+        <para>Support old JRE versions (currently JDK1.2), do not make latest
+        JRE a requirement</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </article>

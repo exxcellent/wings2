@@ -4,45 +4,56 @@
 <book>
   <title>wingS User Guide</title>
 
+  <bookinfo>
+    <date>May 7, 2005</date>
+  </bookinfo>
+
   <preface>
     <title>Preface</title>
 
     <section>
       <title>Target Audience</title>
 
-      <para>TODO: This paragraph has to be reworked.</para>
+      <para>This document is intended to serve curious novices, developers
+      using wingS, and developers willing to look into its internals. The
+      further you progress in this document, the deeper you are getting to the
+      core of wingS.</para>
 
-      <para>This document is intended as an architectural orientation to aid
-      in understanding how wingS works. It is not a step-by-step tutorial on
-      how to write a wingS application. Instead it tries to fill in enough
-      background information such that a newcomer will be able to quickly
-      understand wingS source code and code examples since there is plenty of
-      demo code that you can look at. Basic user interface concepts are
-      probably familiar to the reader. What however will be unfamiliar is the
-      mechanism that wingS uses to deliver this as a java servlet API.</para>
+      <para>Chapter 1 provides an introduction to the concepts of wingS.
+      Chapter 2 takes you through a step-by-step tutorial on how to write a
+      wingS application and make it fly. Once you decide to develop an
+      application chapter 3 will lead you through the wingS tool- and mindset.
+      Chapter 4 is an architectural orientation to aid in understanding how
+      wingS works. It tries to fill in enough background information such that
+      a newcomer will be able to quickly understand wingS source code and code
+      examples since there is plenty of demo code that you can look at.</para>
+
+      <para>For management-oriented information please refer to the "<ulink
+      url="http://www.j-wings.org/tiki-index.php?page=Documentation">wingS
+      Whitepaper</ulink>".</para>
     </section>
 
     <section>
       <title>Typographical Conventions</title>
 
-      <para>session.Session - a wingS class name (the org.wings part of the
-      full name is elided, but subnames, as in this example are shown)</para>
+      <para><code>session.Session</code> - a wingS class name (the org.wings
+      part of the full name is elided, but subnames, as in this example are
+      shown)</para>
 
-      <para>SessionManager.getSession() - source code fragment</para>
+      <para>"TODO" labels call out to you. Yes, you! Participate in the effort
+      to build a first-class documentation, give something back! </para>
     </section>
 
     <section>
       <title>Credits</title>
 
       <para>Contributions to this documentation were provided by Ian Gardner,
-      Volker Fritzsch, and Oliver Scheck.</para>
+      Volker Fritzsch, Benjamin Schmid, and Oliver Scheck.</para>
     </section>
   </preface>
 
   <chapter>
     <title>The Basics</title>
-
-    <para>TODO</para>
 
     <section>
       <title>The Swing in wingS</title>
@@ -114,7 +125,8 @@
   <chapter>
     <title>The Developer's Perspective</title>
 
-    <para>TODO</para>
+    <para>This chapter presents what you need to know to develop with the
+    wingS library.</para>
 
     <sect1>
       <title>Application Startup and Configuration</title>
@@ -146,8 +158,8 @@
         <title>Entry Field</title>
 
         <para>Recall that user input for entry fields must be contained in a
-        SForm. The first task is to create the form and entry field (layout
-        details omitted):<programlisting>SForm form = new SForm();
+        <code>SForm</code>. The first task is to create the form and entry
+        field (layout details omitted):<programlisting>SForm form = new SForm();
 // ... add to top pane, add layout
 // The following assumes a template layout, the names "W1", "W2" 
 // identify layout components
@@ -214,10 +226,11 @@ submit.addActionListener(al);</programlisting>
       <sect2>
         <title>Default Styles</title>
 
-        <para>wingS makes heavy use of CSS styles.  Whereever it is possible, 
-        CSS is used in order to style elements, so users can develop custom
-        styles themselves. The basic CSS Styles are (of course) very
-        Swing-centric and should be overridden with custom styles.</para>
+        <para>wingS makes heavy use of CSS styles. The default wingS
+        distribution contains a file plaf/xhtml/css1/default.css which is the
+        main stylesheet for all components. A related file
+        plaf/xhtml/css1/default.properties configures the mapping between
+        various components and their default style, among other things.</para>
       </sect2>
 
       <sect2>
@@ -244,12 +257,14 @@ frame.addHeader(new Link("stylesheet",
   background-color: #FFCC99 
 }</programlisting>
 
-        <para>By using a call to STable.setHeaderStyle("table_hdr") the
-        default table style is overriden. Note that all components have a
-        SComponent.setStyle()method to override their CSS style class (i.e.
-        the name for the CSS class which bundles together their display
-        attributes). The individual display attributes are stored in a
-        AttributeSet member. See for example SComponent.setAttribute().</para>
+        <para>By using a call to
+        <code>STable.setHeaderStyle("table_hdr")</code> the default table
+        style is overriden. Note that all components have a
+        <code>SComponent.setStyle()</code> method to override their CSS style
+        class (i.e. the name for the CSS class which bundles together their
+        display attributes). The individual display attributes are stored in a
+        <code>AttributeSet</code> member. See for example
+        <code>SComponent.setAttribute</code>().</para>
       </sect2>
     </sect1>
 
@@ -259,7 +274,7 @@ frame.addHeader(new Link("stylesheet",
       <para>Architectural requirements often suggest a break-up of a web
       application into multiple servlets. Sharing common resources can be
       achieved with the ServletContext interface's methods for handling
-      attributes. </para>
+      attributes.</para>
 
       <para>To make a resource (any Java object) available across servlets use
       the setAttribute() method:</para>
@@ -277,7 +292,8 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
 
       <para>The approach presented above particularily makes sense if you have
       decided to use a mixed approach of wingS and other Servlet API based
-      components as ServletContext is a Servlet API interface.</para>
+      components as <code>ServletContext</code> is a Servlet API
+      interface.</para>
     </sect1>
 
     <sect1>
@@ -292,7 +308,7 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
       <sect2>
         <title>File Download</title>
 
-        <para>One way of providing a download is to implement your own Servlet
+        <para>One way of providing a download is implementing your own Servlet
         with the Servlet API directly:</para>
 
         <para><programlisting>public class XLSServlet extends HttpServlet {
@@ -309,12 +325,157 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
       throws ServletException, IOException {
 
     HSSFWorkbook sheet = HSSFWorkbook();
-    response.setContentType("application/x-msexcel");
+    response.setContentType("application/vnd.ms-excel");
     ServletOutputStream out = response.getOutputStream();
     out.write(sheet.toBytes()));
     response.flushBuffer();
   }
 } </programlisting></para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Back Button Navigation</title>
+
+      <para>The back button was conceived in the very beginning of the web
+      when static content prevailed. Today's web landscape is dramatically
+      different. The majority of content is created dynamically and web
+      applications bring state and transactions into play.</para>
+
+      <para>As intuitive and helpful back button navigation is using static
+      pages, web application developers often wish they could just
+      disable<footnote>
+          <para>It can not be disabled, but the effect of the back button can
+          be mitigated by telling the browser not to cache responses and
+          redirecting it to a page containing explanatory information.</para>
+        </footnote> it. Yet, we developers have to live with users clicking on
+      back whenever they please. And let's face it, putting a message "Do NOT
+      click the back button!" is a miserable solution, manifesting the
+      incapacity of the applications creator.</para>
+
+      <para>Therefore wingS gives you the power to detect and control the
+      behaviour of back button events. The approach relies on our epoch
+      checking mechanism. It enables you to handle the browsers back button
+      navigation in three different ways:<orderedlist>
+          <listitem>
+            <para><emphasis role="bold">Default behaviour</emphasis> - ignore
+            requests from old views and redisplay just the current view</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">Allow back navigation</emphasis> - do
+            nothing on back navigation, allow manipulations and clicks on
+            hand-selected components</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">Back navigation detection</emphasis> -
+            advise the browser to reload the page on every back navigation and
+            try to detect this event</para>
+          </listitem>
+        </orderedlist></para>
+
+      <para>Let's take a look at the details.</para>
+
+      <sect2>
+        <title>Default Behaviour</title>
+
+        <para>This mode is the default and safest way to cope with the browser
+        back facility. It ensures that the user can only operate on the
+        current view and is not able to perform any operations on expired
+        views, which might lead to unexpected results.</para>
+
+        <para>Let's look at a short example how frameworks like Apache Struts
+        or Sun JSF might react. Suppose you were building an email application
+        presenting a list of received emails with a delete button beneath each
+        list entry. After clicking such a delete button, the application would
+        present a confirmation dialog. If you had built your application in a
+        way that the delete buttons referred to an index, a browser back click
+        and click on another delete button would delete the wrong email! In
+        the default configuration wingS avoids this by ignoring the last
+        deletion click and it will just redisplay the first confirmation
+        dialog.</para>
+
+        <para>Please keep in mind, that you will be most likely using the HTTP
+        POST operation to receive any form data from the browser. On pressing
+        the back button this will typically display a query window, asking the
+        user if he really wants to submit his last data again.</para>
+      </sect2>
+
+      <sect2>
+        <title>Allow Back Navigation</title>
+
+        <para>Another approach supported by wingS is to allow back navigation
+        and support operations on hand-selected components. In this case three
+        things must be triggered.<itemizedlist>
+            <listitem>
+              <para>Firstly, SForm needs to use HTTP GET to avoid the nagging
+              confirmation dialog of the browsers on back navigations.</para>
+
+              <para><code>form.setPostMethod(false);</code></para>
+            </listitem>
+
+            <listitem>
+              <para>Secondly, disable page expiration. Otherwise every back
+              navigation leads to a page reload presenting the current view
+              again.</para>
+
+              <para><code>form.getParentFrame().setNoCaching(true);</code></para>
+            </listitem>
+
+            <listitem>
+              <para>Lastly, you have to disable the epoch checking on the
+              desired components.</para>
+
+              <para><code>anAlwaysValidComponent.setEpochCheckEnabled(false);</code></para>
+            </listitem>
+          </itemizedlist>On disabling the epoch check on a component you
+        should be aware that consequently this component might receive input
+        events at any time from developer's perspective. You must ensure that
+        the action triggered will always lead to valid actions in your
+        application. If you obey this you will be able to build web
+        applications with the full comfort of modern web browsers and the
+        comfort of object-oriented design.</para>
+      </sect2>
+
+      <sect2>
+        <title>Back Navigation Detection</title>
+
+        <para>The last technique implemented in wingS is to determine back
+        navigations heuristically. Therefore the root <code>SFrame</code>
+        offers a method to declare a virtual back button. But first we'll take
+        a quick look behind the scenes. </para>
+
+        <para>As mentioned wingS uses the epoch check feature to detect back
+        operations. For this operation mode we do the following:<itemizedlist>
+            <listitem>
+              <para>Advise the browser to reload every page immediately
+              (default).</para>
+
+              <para><code>rootFrame.setNoCaching(false);</code></para>
+            </listitem>
+
+            <listitem>
+              <para>Register a virtual back button.</para>
+
+              <para><code>rootFrame.setBackButton(virtualBackButton);</code></para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para>To ensure that this feature will work reliable you should use a
+        global <code>SForm</code> element contained in every page. This form
+        component will have it's own epoch like all other input elements. As
+        we advise the browser to refresh every page on each entry, a browser's
+        back navigation will lead to an immediate reload of the last page.
+        This last page will also contain the (expired) form component and
+        therefore lead to an <code>InvalidLowLevelEvent</code>. Hence, the
+        root frame will be notified about this
+        <code>InvalidLowLevelEvent</code> and interpret this as a result of a
+        back navigation event. After triggering the virtual back button all
+        further <code>InvalidLowLevelEvent</code> will be ignored for a short
+        period of time to avoid multiple triggers and/or false detected back
+        navigations as a result of inadvertent double-clicks on the client
+        side.</para>
       </sect2>
     </sect1>
   </chapter>
@@ -343,13 +504,13 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
       The particular value of the cookie then identifies to which session the
       request belongs. This mapping is all part of the standard java servlet
       framework. This in turn delegates handling of each request to
-      session.WingServlet - you will set up the mapping between your web
-      application name and this class as part of your servlet container
-      configuration. (See the servlet tag in web.xml in an example
+      <code>session.WingServlet</code> - you will set up the mapping between
+      your web application name and this class as part of your servlet
+      container configuration. (See the servlet tag in web.xml in an example
       application)</para>
 
-      <para>The main servlet class, session.WingServlet, handles requests
-      directly for resources that do not change (e.g. static images),
+      <para>The main servlet class, <code>session.WingServlet</code>, handles
+      requests directly for resources that do not change (e.g. static images),
       otherwise it creates a session.SessionServlet instance appropriately for
       each new session and and delegates to this. The sessions's
       session.SessionServlet is thus the main coordinator and router of events
@@ -358,43 +519,44 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
       "init-param" named "wings.mainclass" in your servlet container
       configuration). It also creates a session.Session instance which holds
       some useful instance data as well as sharing the implementation burden
-      with session.SessionServlet. This instance is also transiently
-      associated with the thread which is processing the HTTP request (since
-      this will not change for the duration of the request) using
-      session.SessionManager so that you can conveniently retrieve the session
-      from your own application code using: SessionManager.getSession()</para>
+      with <code>session.SessionServlet</code>. This instance is also
+      transiently associated with the thread which is processing the HTTP
+      request (since this will not change for the duration of the request)
+      using session.SessionManager so that you can conveniently retrieve the
+      session from your own application code using:
+      <code>SessionManager.getSession()</code></para>
 
-      <para>The first task for session.SessionServlet is to extract any
-      parameters from the HTTP request, since this is how visual components
-      will notify of some action like a user pressing a button, and to then
-      trigger the appropriate wingS events. This is the stage where your
-      application code will receive callbacks for any action listeners that
-      you have registered, and in turn drive your whole application's logic.
-      This is handled by passing any HTTP request parameters to the session's
-      session.LowLevelEventDispatcher instance.</para>
+      <para>The first task for <code>session.SessionServlet</code> is to
+      extract any parameters from the HTTP request, since this is how visual
+      components will notify of some action like a user pressing a button, and
+      to then trigger the appropriate wingS events. This is the stage where
+      your application code will receive callbacks for any action listeners
+      that you have registered, and in turn drive your whole application's
+      logic. This is handled by passing any HTTP request parameters to the
+      session's <code>session.LowLevelEventDispatcher</code> instance.</para>
 
-      <para>After delivering all events session.SessionServlet needs to
-      deliver the externalised representation of the appropriate resource as
-      the HTTP response. If the requested resource indicates that it is for
-      the default resource, i.e. the top level frame of your application, then
-      it looks for the topmost frame associated with the session and
-      "displays" this. Otherwise the request will be for an explicit resource,
-      probably this will have been generated automatically using the
-      externalisation framework when "displaying" some sub-component of the
-      user-interface. It is rare that you need to explicitly know how to
-      address user interface components. (This is covered in more detail later
-      in this document).</para>
+      <para>After delivering all events <code>session.SessionServlet</code>
+      needs to deliver the externalised representation of the appropriate
+      resource as the HTTP response. If the requested resource indicates that
+      it is for the default resource, i.e. the top level frame of your
+      application, then it looks for the topmost frame associated with the
+      session and "displays" this. Otherwise the request will be for an
+      explicit resource, probably this will have been generated automatically
+      using the externalisation framework when "displaying" some sub-component
+      of the user-interface. It is rare that you need to explicitly know how
+      to address user interface components. (This is covered in more detail
+      later in this document).</para>
 
       <para>There is a magic identifier "_" which can be used to force the
       display of the top-level frame. This is very useful for debugging, and
       also for navigation back to the "home page" of your application.</para>
 
-      <para>Top level frames are derived from SFrame. The show/hide methods
-      actually add/remove the frame from the collection maintained by
-      session.SessionServlet. This is how you can switch the "main window" in
-      your application. Hence you can keep multiple windows "in the
-      background" by holding the instances in your main application class, and
-      switch rapidly between them.</para>
+      <para>Top level frames are derived from <code>SFrame</code>. The
+      show/hide methods actually add/remove the frame from the collection
+      maintained by <code>session.SessionServlet</code>. This is how you can
+      switch the "main window" in your application. Hence you can keep
+      multiple windows "in the background" by holding the instances in your
+      main application class, and switch rapidly between them.</para>
 
       <para>Your main application instance will be garbage collected when the
       session finishes, and typically you will access any "top level"
@@ -407,9 +569,9 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
 
       <para>If you need to integrate some other piece of web technology you
       can use the functionality of the standard java servlet
-      HttpServletRequest and HttpSession classes to communicate any common
-      data required by different modules by using named session attributes.
-      This keeps the code decoupled. For example:</para>
+      <code>HttpServletRequest</code> and <code>HttpSession</code> classes to
+      communicate any common data required by different modules by using named
+      session attributes. This keeps the code decoupled. For example:</para>
 
       <programlisting>public void setSessionFoo(HttpServletRequest request, MyFoo foo) 
     throws ServletException {
@@ -441,41 +603,48 @@ public MyFoo getSessionHelper(HttpServletRequest request)
 
       <itemizedlist>
         <listitem>
-          <para>Be referred to by a URL, hence implements URLResource</para>
+          <para>Be referred to by a URL, hence implements
+          <code>URLResource</code></para>
         </listitem>
 
         <listitem>
           <para>Render itself onto the HTTP response stream, hence implements
-          Renderable</para>
+          <code>Renderable</code></para>
         </listitem>
       </itemizedlist>
 
-      <para>URLs can be entirely arbitrary, in which case use a SimpleURL
+      <para>URLs can be entirely arbitrary, in which case use a <ulink
+      url="http://www.j-wings.org/javadoc/org/wings/SimpleURL.html"><code>SimpleURL</code></ulink>
       (e.g. to refer to another web application), or they can be relative to
-      your web application context in which case use a RequestURL (e.g. for a
-      resource deployed under your web application deployment directory). For
-      further options see AbstractExternalizeManager flags. Resources will
-      choose the type which is most suitable for themselves.</para>
+      your web application context in which case use a <code>RequestURL</code>
+      (e.g. for a resource deployed under your web application deployment
+      directory). For further options see <ulink
+      url="http://www.j-wings.org/javadoc/org/wings/externalizer/AbstractExternalizeManager.html"><code>AbstractExternalizeManager</code></ulink>
+      flags. Resources will choose the type which is most suitable for
+      themselves.</para>
 
       <section>
         <title>Resource Types</title>
 
-        <para>The following resource classes are provided by wingS:</para>
-
-        <para><itemizedlist>
+        <para>The following resource classes are provided by
+        wingS:<itemizedlist>
             <listitem>
-              <para>StaticResource - base class for components whose
-              representation does not change, e.g. images. Much of the
-              implementation can be put into this base class so it has methods
-              to write the raw data and represent its URL.</para>
+              <para><ulink
+              url="http://www.j-wings.org/javadoc/org/wings/StaticResource.html"><code>StaticResource</code></ulink>
+              - base class for components whose representation does not
+              change, e.g. images. Much of the implementation can be put into
+              this base class so it has methods to write the raw data and
+              represent its URL.</para>
 
               <para><itemizedlist>
                   <listitem>
-                    <para>ClasspathResource - a static resource that is loaded
-                    by a class loader. This is useful when you want to jar up
-                    a bunch of resources (e.g. images) along with your java
-                    classes for deployment to the servlet container. You can
-                    then refer to them using your class namespace, e.g.
+                    <para><ulink
+                    url="http://www.j-wings.org/javadoc/org/wings/ClasspathResource.html"><code>ClasspathResource</code></ulink>
+                    - a static resource that is loaded by a class loader. This
+                    is useful when you want to jar up a bunch of resources
+                    (e.g. images) along with your java classes for deployment
+                    to the servlet container. You can then refer to them using
+                    your class namespace, e.g.
                     "com/acme/myapp/prettypicture.jpeg". You may not need to
                     use this directly (wingS uses it for static stylesheets),
                     but you are very likely to need the derived
@@ -484,40 +653,49 @@ public MyFoo getSessionHelper(HttpServletRequest request)
                   </listitem>
 
                   <listitem>
-                    <para>FileResource - a static resource wrapped around a
-                    file stream. If the resource is an image then use the
-                    derived FileImageIcon, which will try and deduce
-                    dimensions.</para>
+                    <para><ulink
+                    url="http://www.j-wings.org/javadoc/org/wings/FileResource.html"><code>FileResource</code></ulink>
+                    - a static resource wrapped around a file stream. If the
+                    resource is an image then use the derived FileImageIcon,
+                    which will try and deduce dimensions.</para>
                   </listitem>
                 </itemizedlist></para>
             </listitem>
 
             <listitem>
-              <para>StringResource - use this if you already have the raw
-              representation data of some static resource as a string.</para>
+              <para><ulink
+              url="http://www.j-wings.org/javadoc/org/wings/StringResource.html"><code>StringResource</code></ulink>
+              - use this if you already have the raw representation data of
+              some static resource as a string.</para>
             </listitem>
 
             <listitem>
-              <para>DynamicResource - base class for components whose
-              representation changes, i.e. most user interface widgets.
-              Because of the dynamic nature the URL of these resources is not
-              constant, it is forced to a unique value on each subsequent
-              request by an "epoch counter". This allows wingS to check that a
-              request is for the most current representation of a resource,
-              which is also an important security feature.<itemizedlist>
+              <para><ulink
+              url="http://www.j-wings.org/javadoc/org/wings/DynamicResource.html"><code>DynamicResource</code></ulink>
+              - base class for components whose representation changes, i.e.
+              most user interface widgets. Because of the dynamic nature the
+              URL of these resources is not constant, it is forced to a unique
+              value on each subsequent request by an "epoch counter". This
+              allows wingS to check that a request is for the most current
+              representation of a resource, which is also an important
+              security feature.<itemizedlist>
                   <listitem>
-                    <para>script.DynamicScriptResource - implements
-                    externalisation for dynamic javascript</para>
+                    <para><ulink
+                    url="http://www.j-wings.org/javadoc/org/wings/script/DynamicScriptResource.html"><code>script.DynamicScriptResource</code></ulink>
+                    - implements externalisation for dynamic javascript</para>
                   </listitem>
 
                   <listitem>
-                    <para>style.DynamicStyleSheetResource - implements
-                    externalisation for dynamic stylesheet</para>
+                    <para><ulink
+                    url="http://www.j-wings.org/javadoc/org/wings/style/DynamicStyleSheetResource.html"><code>style.DynamicStyleSheetResource</code></ulink>
+                    - implements externalisation for dynamic stylesheet</para>
                   </listitem>
 
                   <listitem>
-                    <para>DynamicCodeResource - actually only used for SFrame
-                    components. Delegates externalisation to the frame.</para>
+                    <para><ulink
+                    url="http://www.j-wings.org/javadoc/org/wings/DynamicCodeResource.html"><code>DynamicCodeResource</code></ulink>
+                    - actually only used for SFrame components. Delegates
+                    externalisation to the frame.</para>
                   </listitem>
                 </itemizedlist></para>
             </listitem>
@@ -535,30 +713,32 @@ public MyFoo getSessionHelper(HttpServletRequest request)
         each new object since the different resources listed above need
         different strategies for how to be referenced. Hence this process is
         managed by different externalizer.ExternalizeManager instances. This
-        class (and its base class externalizer.AbstractExternalizeManager)
-        maintains the mapping between id and resource. This happens on-demand
-        when Resource.getId is called, which in turn calls
+        class (and its base class
+        <code>externalizer.AbstractExternalizeManager</code>) maintains the
+        mapping between id and resource. This happens on-demand when
+        Resource.getId is called, which in turn calls
         externalizer.AbstractExternalizeManager.externalize. Note that at this
         stage no HTML is written, it simply initialises the resource so that
         it can be addressed. Once this is done a
-        externalizer.ExternalizedResource instance is used to hold various
-        bits of information that will be needed for subsequent
+        <code>externalizer.ExternalizedResource</code> instance is used to
+        hold various bits of information that will be needed for subsequent
         externalisation, such as MIME type and whether any special HTTP
         headers are needed.</para>
 
         <para>The final stage of externalisation (called from SessionServlet)
         will call on the appropriate externalizer.ExternalizeManager to write
         an externalised representation of the
-        externalizer.ExternalizedResource. This is delegated to a
+        <code>externalizer.ExternalizedResource</code>. This is delegated to a
         externalizer.Externalizer implementation specific to the MIME type of
         the resource (since this is how HTTP identifies different resource
         data types).</para>
 
         <para>There is also a system-wide manager,
-        externalizer.SystemExternalizeManager, which is used for resources
-        which are not bound to a session (e.g. static files). The
-        session.WingsServlet identifies these requests at an early stage since
-        the resource id starts with a minus character ("-").</para>
+        <code>externalizer.SystemExternalizeManager</code>, which is used for
+        resources which are not bound to a session (e.g. static files). The
+        <code>session.WingsServlet</code> identifies these requests at an
+        early stage since the resource id starts with a minus character
+        ("-").</para>
       </section>
     </section>
 
@@ -572,21 +752,21 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       limitations of HTTP, these events must be encoded in the HTTP request,
       either in the URL or in posted form data. Hence the first task for
       session.SessionServlet is to extract any parameters from the HTTP
-      request, and pass these to the session's session.LowLevelEventDispatcher
-      instance. This extracts encoded events then passes them on to any
-      LowLevelEventListener instances which have registered interest - these
-      will be the actual user interface widgets like buttons, lists and
-      tables.</para>
+      request, and pass these to the session's
+      <code>session.LowLevelEventDispatcher</code> instance. This extracts
+      encoded events then passes them on to any LowLevelEventListener
+      instances which have registered interest - these will be the actual user
+      interface widgets like buttons, lists and tables.</para>
 
       <para>The dispatcher does some initial decoding of the HTTP request
       parameters, for example, an additional value may be encoded into the
       HTTP request parameter name using a "_" seperator. It then passes the
       events on to the listeners using
-      LowLevelEventListener.processLowLevelEvent. The specific widget will
-      then turn this "low level" event into something semantically meaningful
-      like a button selection. Widget implementors have to go to some trouble
-      to ensure that events fire in the correct order so events are
-      categorised as<itemizedlist>
+      <code>LowLevelEventListener.processLowLevelEvent()</code>. The specific
+      widget will then turn this "low level" event into something semantically
+      meaningful like a button selection. Widget implementors have to go to
+      some trouble to ensure that events fire in the correct order so events
+      are categorised as<itemizedlist>
           <listitem>
             <para>Low level - the raw events from HTTP request</para>
           </listitem>
@@ -623,23 +803,41 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       write the actual representation on to a stream.</para>
 
       <para>First the session.SessionServlet must create an output stream. It
-      uses a factory instance, io.DeviceFactory to create the appropriate
-      io.Device derived stream. You can configure your own device factory
-      class using the "wings.device.factory" init-param of your wingS
-      application servlet. This is a very useful hook for debugging the raw
-      output.</para>
+      uses a factory instance, <code>io.DeviceFactory</code> to create the
+      appropriate <code>io.Device</code> derived stream. You can configure
+      your own device factory class using the "wings.device.factory"
+      init-param of your wingS application servlet. This is a very useful hook
+      for debugging the raw output.</para>
 
       <para>The session.SessionServlet locates the top-level frame, and then
       calls externalizer.ExternalizeManager.deliver on its
       externalizer.ExternalizedResource. This method sets up various HTTP
       headers appropriately for the kind of resource (e.g. MIME type, caching)
-      and then it delegates to externalizer.Externalizer.write. Different
-      derived classes are used depending on resource type. For example images
-      must be appropriately encoded in GIF or PNG format, whereas static and
-      dynamic resources delegate to the interface Renderable. This is probably
-      the simplest interface, but can have a very complicated implementation !
-      The majority of objects you are likely to be interested in externalise
-      themselves via the Renderable interface.</para>
+      and then it delegates to <code>externalizer.Externalizer.write()</code>.
+      Different derived classes are used depending on resource type. For
+      example images must be appropriately encoded in GIF or PNG format,
+      whereas static and dynamic resources delegate to the interface
+      <code>Renderable</code>. This is probably the simplest interface, but
+      can have a very complicated implementation ! The majority of objects you
+      are likely to be interested in externalise themselves via the
+      <code>Renderable</code> interface.</para>
     </section>
   </chapter>
+
+  <appendix>
+    <title>Resources</title>
+
+    <para>The wingS project is hosted by SourceForge at <ulink
+    url="http://sourceforge.net/projects/j-wings">http://sourceforge.net/projects/j-wings</ulink>.
+    Here you find the latest releases, the CVS repository, and our mailing
+    lists.</para>
+
+    <para>Project members on the mailing lists wingS-users and
+    wingS-developers provide fast and thorough answers to your
+    questions.</para>
+
+    <para>Professional support for wingS is provided by <ulink
+    url="http://www.mercatis.com">mercatis information
+    technologies</ulink>.</para>
+  </appendix>
 </book>
