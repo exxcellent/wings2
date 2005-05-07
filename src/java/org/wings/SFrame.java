@@ -84,8 +84,8 @@ public class SFrame
      */
     private SButton backButton;
 
-    /**
-     * @see #fireDefaultBackButton()
+    /*
+     * see fireDefaultBackButton()
      */
     private long defaultBackButtonLastPressedTime;
 

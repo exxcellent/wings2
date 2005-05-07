@@ -96,7 +96,7 @@ public class Session
     private long uniqueIdCounter = 1;
 
     /**
-     * Maximum upload content length. This is used by the {@link SessionServlet}
+     * Maximum upload content length. This is used by the {@link org.wings.session.SessionServlet}
      * to avoid denial of service attacks.
      */
     private int maxContentLength = 64;
