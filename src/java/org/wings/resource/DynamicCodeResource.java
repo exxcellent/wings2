@@ -81,7 +81,7 @@ public class DynamicCodeResource extends DynamicResource {
      * on the server side. Call <code>getHeaders().clear()</code> to avoid this
      * i.e. if you want to enable back buttons.
      *
-     * @return A <code>Collection</code> of {@link HeaderEntry} objects.
+     * @return A <code>Collection</code> of {@link org.wings.Resource.HeaderEntry} objects.
      */
     public Collection getHeaders() {
         if (getFrame().isNoCaching())

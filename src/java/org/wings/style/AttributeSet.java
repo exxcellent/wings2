@@ -13,12 +13,17 @@
  */
 package org.wings.style;
 
-import org.wings.Renderable;
-import org.wings.io.Device;
-
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.wings.Renderable;
+import org.wings.io.Device;
 
 /**
  * A straightforward implementation of AttributeSet using a hash map.
@@ -228,8 +233,8 @@ public class AttributeSet
 
     /**
      * Write style definition to the device. If include is true, write those
-     * contained in the {@link List}. If include is false, write those not contained
-     * in the {@link List}.
+     * contained in the {@link java.util.List}. If include is false, write those not contained
+     * in the {@link java.util.List}.
      * Basically this is a filter on the styles, so we can separate styles for
      * one logical component onto multiple real html elements.  
      */

@@ -14,10 +14,37 @@
 package org.wings.session;
 
 
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.EventListener;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.swing.event.EventListenerList;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
-import org.wings.event.*;
+import org.wings.DefaultReloadManager;
+import org.wings.ReloadManager;
+import org.wings.SContainer;
+import org.wings.SFrame;
+import org.wings.SToolTipManager;
+import org.wings.event.ExitVetoException;
+import org.wings.event.SExitEvent;
+import org.wings.event.SExitListener;
+import org.wings.event.SRequestEvent;
+import org.wings.event.SRequestListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
 import org.wings.plaf.CGManager;
@@ -26,15 +53,6 @@ import org.wings.plaf.LookAndFeelFactory;
 import org.wings.util.LocaleCharSet;
 import org.wings.util.StringUtil;
 import org.wings.util.WeakPropertyChangeSupport;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.swing.event.EventListenerList;
-import java.beans.PropertyChangeListener;
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>

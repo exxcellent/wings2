@@ -759,13 +759,13 @@ public class STable extends SComponent
     /**
      * Sets the selection mode. Use one of the following values:
      * <UL>
-     * <LI> {@link NO_SELECTION}
+     * <LI> {@link #NO_SELECTION}
      * <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
-     * {@link SINGLE_SELECTION}
+     * {@link #SINGLE_SELECTION}
      * <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
-     * {@link SINGLE_INTERVAL_SELECTION}
+     * {@link #SINGLE_INTERVAL_SELECTION}
      * <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
-     * {@link MULTIPLE_SELECTION}
+     * {@link #MULTIPLE_SELECTION}
      * </UL>
      */
     public void setSelectionMode(int s) {
@@ -774,13 +774,13 @@ public class STable extends SComponent
 
     /**
      * @return <UL>
-     *         <LI> {@link NO_SELECTION}
+     *         <LI> {@link #NO_SELECTION}
      *         <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
-     *         {@link SINGLE_SELECTION}
+     *         {@link #SINGLE_SELECTION}
      *         <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
-     *         {@link SINGLE_INTERVAL_SELECTION}
+     *         {@link #SINGLE_INTERVAL_SELECTION}
      *         <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
-     *         {@link MULTIPLE_SELECTION}
+     *         {@link #MULTIPLE_SELECTION}
      *         </UL>
      */
     public int getSelectionMode() {

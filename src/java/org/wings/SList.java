@@ -435,7 +435,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     /**
      * creates the default selection model. It uses the swing
      * DefaultListSelectionModel, and wraps some methods to support
-     * {@link SConstants#NO_SELECTION}
+     * {@link SListSelectionModel#NO_SELECTION}
      */
     protected SListSelectionModel createSelectionModel() {
         return new SDefaultListSelectionModel();
@@ -444,12 +444,12 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
 
     /**
      * Returns the current selection model. If selection mode is
-     * {@link SConstants#NO_SELECTION} it return <em>null</em>
+     * {@link SListSelectionModel#NO_SELECTION} it return <em>null</em>
      *
      * @return the ListSelectionModel that implements list selections.
-     *         If selection mode is {@link SConstants#NO_SELECTION} it return
+     *         If selection mode is {@link SListSelectionModel#NO_SELECTION} it return
      *         <em>null</em>
-     * @see #setSelectionModel
+     * @see #setSelectionMode(int)
      * @see ListSelectionModel
      */
     public SListSelectionModel getSelectionModel() {

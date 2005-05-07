@@ -748,7 +748,7 @@ public class SProgressBar extends SComponent {
      * attribute: visualUpdate true
      * description: Set whether the progress bar is indeterminate (true)
      * or normal (false).
-     * @see #isIndeterminate
+     * @see #isIndeterminate()
      * @see javax.swing.plaf.basic.BasicProgressBarUI
      * @since 1.4
      */
@@ -775,6 +775,9 @@ public class SProgressBar extends SComponent {
 
 /*
    $Log$
+   Revision 1.8  2005/05/07 16:40:53  oliverscheck
+   fixed javadoc laments
+
    Revision 1.7  2005/01/31 10:59:52  oliverscheck
    removed duplicate import stmts
 
