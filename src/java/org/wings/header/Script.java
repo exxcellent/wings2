@@ -13,10 +13,13 @@
  */
 package org.wings.header;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.Renderable;
 import org.wings.SimpleURL;
 import org.wings.URLResource;
 import org.wings.io.Device;
+import org.wings.script.JavaScriptListener;
 
 import java.io.IOException;
 
@@ -25,6 +28,7 @@ import java.io.IOException;
  * @version $Revision$
  */
 public class Script implements Renderable {
+    private final transient static Log log = LogFactory.getLog(Script.class);
     protected String language = null;
     protected String type = null;
     protected URLResource urlSource = null;
@@ -47,7 +51,7 @@ public class Script implements Renderable {
 
     public String getType() { return type; }
 
-    public SimpleURL getURL() { return urlSource.getURL(); }
+    public SimpleURL getURL() { return urlSource!=null?urlSource.getURL():null; }
 
     public void write(Device d)
             throws IOException {
@@ -64,6 +68,48 @@ public class Script implements Renderable {
         }
         d.print("></script>");
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj) {
+        if (obj.getClass() != Script.class) {
+            return false;
+        }
+        Script testObj = (Script) obj;
+        
+        if (testObj.getLanguage() == null) {
+            if (getLanguage() != null) {
+                return false;
+            }
+        } else {
+            if (!testObj.getLanguage().equals(getLanguage())) {
+                return false;
+            }
+        }
+        
+        if (testObj.getType() == null) {
+            if (getType() != null) {
+                return false;
+            }
+        } else {
+            if (!testObj.getType().equals(getType())) {
+                return false;
+            }
+        }
+        
+        if (testObj.getURL() == null) {
+            if (getURL() != null) {
+                return false;
+            }
+        } else {
+            if (!testObj.getURL().toString().equals(getURL().toString())) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
 }
 
 

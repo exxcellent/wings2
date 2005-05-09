@@ -14,11 +14,15 @@
 package org.wings.plaf.css;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Link;
 import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.script.DynamicScriptResource;
@@ -37,6 +41,7 @@ import java.util.List;
 import java.util.Set;
 
 public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
+    private final transient static Log log = LogFactory.getLog(FrameCG.class);
 
     /**
      * The default DOCTYPE enforcing standard (non-quirks mode) in all current browsers.
@@ -54,18 +59,9 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
      */
     public final static String QUIRKS_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
 
-    // Browser type for which we provided a custom css. Others switch to default
-    private final static Set providedBrowserCss;
-    static {
-        providedBrowserCss = new HashSet();
-        providedBrowserCss.add(BrowserType.IE);
-        providedBrowserCss.add(BrowserType.GECKO);
-    }
-
     private String documentType = STRICT_DOCTYPE;
 
     private Boolean renderXmlDeclaration = Boolean.FALSE;
-
     /**
      * Initialize properties from config
      */
@@ -80,6 +76,63 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         if (userRenderXmlDecl != null)
             setRenderXmlDeclaration(userRenderXmlDecl);
     }
+
+    private static final String PROPERTY_STYLESHEET = "Stylesheet.";
+    private static final String BROWSER_DEFAULT = "default";
+    
+    private final static Set javascriptResourceKeys;
+    static {
+        javascriptResourceKeys = new HashSet();
+        javascriptResourceKeys.add("FrameCG.JScripts.domlib");
+        javascriptResourceKeys.add("FrameCG.JScripts.domtt");
+    }
+    
+    
+    /** 
+     * externalizes the style sheet for this session. The style sheet is 
+     * loaded from the class path.
+     * @return the URL under which the css was externalized
+     */
+    private String externalizeBrowserStylesheet() {
+        final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
+        final CGManager manager = SessionManager.getSession().getCGManager();
+        final String browserName = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
+        final String cssResource = PROPERTY_STYLESHEET + browserName;
+        String cssClassPath = (String)manager.getObject(cssResource, String.class);
+        // catch missing browser entry in properties file
+        if (cssClassPath == null) {
+            cssClassPath = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
+        }
+        ClasspathResource res = new ClasspathResource(cssClassPath, "text/css");
+        return extManager.externalize(res);
+    }
+
+
+    /**
+     * @param jsResKey
+     * @return
+     */
+    private String externalizeJavaScript(String jsResKey) {
+        final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
+        final CGManager manager = SessionManager.getSession().getCGManager();
+        String jsClassPath = (String)manager.getObject(jsResKey, String.class);
+        // catch missing script entry in properties file
+        if (jsClassPath != null) {
+            ClasspathResource res = new ClasspathResource(jsClassPath, "text/javascript");
+            return extManager.externalize(res);
+        }
+        return null;
+    }
+
+    public static final String UTILS_SCRIPT = "org/wings/plaf/css/Utils.js";
+
+    public static final String FORM_SCRIPT = "org/wings/plaf/css/Form.js";
+
+    public static final JavaScriptListener FOCUS_SCRIPT =
+            new JavaScriptListener("onfocus", "storeFocus(event)");
+
+    public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
+            new JavaScriptListener("onscroll", "storeScrollPosition(event)");
 
 
     public void installCG(final SComponent comp) {
@@ -105,21 +158,35 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         component.addDynamicResource(scriptResource);
         component.addHeader(new Script("JavaScript", "text/javascript", scriptResource));
 
-        component.addHeader(new Script("JavaScript", "text/javascript", new DefaultURLResource("../domLib.js")));
-        component.addHeader(new Script("JavaScript", "text/javascript", new DefaultURLResource("../domTT.js")));
+        Iterator iter = javascriptResourceKeys.iterator();
+        while (iter.hasNext()) {
+            String jsResKey = (String) iter.next();
+            String jScriptUrl = externalizeJavaScript(jsResKey);
+            if (jScriptUrl != null) {
+                component.addHeader(new Script("JavaScript", "text/javascript", new DefaultURLResource(jScriptUrl)));
+            }
+        }
 
-        // determine the stylesheet to use
-        BrowserType cssBrowserType = component.getSession().getUserAgent().getBrowserType();
-        if (providedBrowserCss.contains(cssBrowserType) == false)
-            cssBrowserType = BrowserType.GECKO; // fallback to gecko CSS
-        String cssURL = "../" + cssBrowserType.getShortName() + ".css";
-        component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(cssURL)));
-
-        component.addScriptListener(UTILS_SCRIPT);
-        component.addScriptListener(FORM_SCRIPT);
+        final String browserStyle = externalizeBrowserStylesheet();
+        component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(browserStyle)));
+        
+        addExternalizedHeader(component, UTILS_SCRIPT, "text/javascript");
+        addExternalizedHeader(component, FORM_SCRIPT, "text/javascript");
         component.addScriptListener(FOCUS_SCRIPT);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);
+    }
+
+    /** 
+     * adds the file found at the classPath to the parentFrame header with
+     * the specified mimeType
+     * @param classPath the classPath to look in for the file
+     * @param mimeType the mimetype of the file
+     */
+    private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
+        ClasspathResource res = new ClasspathResource(classPath, mimeType);
+        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res);
+        parentFrame.addHeader(new Script("JavaScript", mimeType, new DefaultURLResource(jScriptUrl)));
     }
 
     public void uninstallCG(final SComponent comp) {
@@ -128,26 +195,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         component.removeDynamicResource(DynamicCodeResource.class);
         component.removeDynamicResource(DynamicStyleSheetResource.class);
         component.removeDynamicResource(DynamicScriptResource.class);
-        component.removeScriptListener(UTILS_SCRIPT);
-        component.removeScriptListener(FORM_SCRIPT);
         component.clearHeaders();
     }
-
-    //--- code from common area in template.
-    /*
-    public static final JavaScriptListener DATE_CHOOSER_SCRIPT_LOADER =
-    new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/DateChooser.js"));
-    */
-    public static final JavaScriptListener UTILS_SCRIPT =
-        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Utils.js"));
-    public static final JavaScriptListener FORM_SCRIPT =
-        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Form.js"));
-
-    public static final JavaScriptListener FOCUS_SCRIPT =
-            new JavaScriptListener("onfocus", "storeFocus(event)");
-
-    public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
-            new JavaScriptListener("onscroll", "storeScrollPosition(event)");
 
     public void write(final Device device, final SComponent _c)
             throws IOException {

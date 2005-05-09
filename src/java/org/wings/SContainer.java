@@ -272,17 +272,7 @@ public class SContainer extends SComponent {
         if (getComponentList().remove(c)) {
             getConstraintList().remove(index);
 
-            SFrame mainFrame = getParentFrame();
-            if (mainFrame != null) {
-                mainFrame.removeQueuedScriptListeners(c);
-            } else {
-                // adopt the listeners of the removed component 
-                Iterator iter = c.fetchParentFrameScriptListenerRemovalQueue().iterator();
-                while (iter.hasNext()) {
-                    removeScriptListenerFromParentFrame((ScriptListener)iter.next());
-                }
-            }
-             fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
+            fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
             reload();
@@ -404,12 +394,8 @@ public class SContainer extends SComponent {
             getConstraintList().add(index, constraint);
             c.setParent(this);
 
-            if (layout != null)
+            if (layout != null) {
                 layout.addComponent(c, constraint, index);
-
-            SFrame mainFrame = getParentFrame();
-            if (mainFrame != null) {
-                mainFrame.addQueuedScriptListeners(c);
             }
             fireContainerEvent(SContainerEvent.COMPONENT_ADDED, c);
             reload();
@@ -509,33 +495,5 @@ public class SContainer extends SComponent {
             }
         }
         return menus;
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.SComponent#fetchParentFrameScriptListenerQueue()
-     */
-    public Collection fetchParentFrameScriptListenerQueue() {
-        Collection result = super.fetchParentFrameScriptListenerQueue();
-        if (hasComponentPopupMenu()) {
-            result.addAll(getComponentPopupMenu().fetchParentFrameScriptListenerQueue());
-        }
-        for (int i = 0; i < getComponentCount(); i++) {
-            result.addAll(getComponent(i).fetchParentFrameScriptListenerQueue());
-        }
-        return result; 
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.SComponent#fetchParentFrameScriptListenerRemovalQueue()
-     */
-    public Collection fetchParentFrameScriptListenerRemovalQueue() {
-        Collection result = super.fetchParentFrameScriptListenerRemovalQueue();
-        if (hasComponentPopupMenu()) {
-            result.addAll(getComponentPopupMenu().fetchParentFrameScriptListenerRemovalQueue());
-        }
-        for (int i = 0; i < getComponentCount(); i++) {
-            result.addAll(getComponent(i).fetchParentFrameScriptListenerRemovalQueue());
-        }
-        return result; 
     }
 }

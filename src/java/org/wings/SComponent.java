@@ -17,6 +17,8 @@ package org.wings;
 import org.wings.border.SBorder;
 import org.wings.event.SComponentEvent;
 import org.wings.event.SComponentListener;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
@@ -110,7 +112,7 @@ public abstract class SComponent
     protected SContainer parent;
 
     /**
-     * The frame, this component resides in.
+     * The frame in which this component resides.
      */
     protected SFrame parentFrame;
 
@@ -142,6 +144,8 @@ public abstract class SComponent
      */
     private boolean fireComponentChangeEvents = false;
 
+    private boolean fireParentFrameChangeEvents = false;
+
     private EventListenerList listeners;
 
     private Boolean useNamedEvents;
@@ -157,9 +161,6 @@ public abstract class SComponent
     private ActionMap actionMap;
 
     private Map actionEvents = new HashMap();
-    
-    private Collection frameScriptListenersQueue = new LinkedList();
-    private Collection frameScriptListenersRemovalQueue = new LinkedList();
 
     /**
      * Default constructor.cript
@@ -207,19 +208,26 @@ public abstract class SComponent
      * @param parentFrame the frame
      */
     protected void setParentFrame(SFrame parentFrame) {
-        if (this.parentFrame == parentFrame)
+        if (this.parentFrame == parentFrame) {
             return;
+        }
 
-        if (this.parentFrame != null)
+        if (this.parentFrame != null) {
             unregister();
-
+            fireParentFrameEvent(new SParentFrameEvent(this, SParentFrameEvent.PARENTFRAME_REMOVED, this.parentFrame));
+        }
+        
         this.parentFrame = parentFrame;
 
-        if (this.parentFrame != null)
+        if (this.parentFrame != null) {
             register();
-
-        if (this.popupMenu != null)
+            // notify the listeners...
+            fireParentFrameEvent(new SParentFrameEvent(this, SParentFrameEvent.PARENTFRAME_ADDED, this.parentFrame));
+        }
+        
+        if (this.popupMenu != null) {
             popupMenu.setParentFrame(parentFrame);
+        }
 
         reload();
     }
@@ -332,6 +340,37 @@ public abstract class SComponent
     }
 
     /**
+     * Adds the specified parent frame listener to receive events from
+     * this component.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param l the parent frame listener.
+     * @see org.wings.event.SParentFrameEvent
+     * @see org.wings.event.SParentFrameListener
+     * @see org.wings.SComponent#removeParentFrameListener
+     */
+    public final void addParentFrameListener(SParentFrameListener l) {
+        addEventListener(SParentFrameListener.class, l);
+        fireParentFrameChangeEvents = true;
+    }
+
+    /**
+     * Removes the specified parent frame listener so that it no longer
+     * receives events from this component. This method performs
+     * no function, nor does it throw an exception, if the listener
+     * specified by the argument was not previously added to this component.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param l the parent frame listener.
+     * @see org.wings.event.SParentFrameEvent
+     * @see org.wings.event.SParentFrameListener
+     * @see org.wings.SComponent#addParentFrameListener
+     */
+    public final void removeParentFrameListener(SParentFrameListener l) {
+        removeEventListener(SParentFrameListener.class, l);
+    }
+
+    /**
      * Reports a component change.
      *
      * @param aEvent report this event to all listeners
@@ -350,6 +389,49 @@ public abstract class SComponent
             }
         }
 
+    }
+
+    /**
+     * Reports a parent frame change.
+     *
+     * @param aEvent report this event to all listeners
+     * @see org.wings.event.SParentFrameListener
+     */
+    private void fireParentFrameEvent(SParentFrameEvent aEvent) {
+        // are listeners registered?
+        if (fireParentFrameChangeEvents) {
+            // maybe the better way to do this is to user the getListenerList
+            // and iterate through all listeners, this saves the creation of
+            // an array but it must cast to the apropriate listener
+            Object[] listeners = getListenerList();
+            for (int i = listeners.length - 2; i >= 0; i -= 2) {
+                if (listeners[i] == SParentFrameListener.class) {
+                    // Lazily create the event:
+                    processParentFrameEvent((SParentFrameListener) listeners[i + 1],
+                            aEvent);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Processes parent frame events occurring on this component by
+     * dispatching them to any registered
+     * <code>SParentFrameListener</code> objects.
+     * <p/>
+     *
+     */
+    private void processParentFrameEvent(SParentFrameListener listener, SParentFrameEvent event) {
+        int id = event.getID();
+        switch (id) {
+            case SParentFrameEvent.PARENTFRAME_ADDED:
+                listener.parentFrameAdded(event);
+                break;
+            case SParentFrameEvent.PARENTFRAME_REMOVED:
+                listener.parentFrameRemoved(event);
+                break;
+        }
     }
 
     /**
@@ -1424,67 +1506,5 @@ public abstract class SComponent
             }
         }
         return menus;
-    }
-
-    /** Add a ScriptListener to the parent Frame. If the parent Frame is not
-     *  already accessible, queue the listener for addition as soon as the
-     *  parent Frame is accessible.
-     *  
-     * @param listener the ScriptListener to add.
-     */
-    public void addScriptListenerToParentFrame(ScriptListener listener) {
-        SFrame parentFrame = getParentFrame();
-        if (parentFrame != null) {
-            parentFrame.addScriptListener(listener);
-        } else {
-            frameScriptListenersQueue.add(listener);
-        }
-    }
-
-    /** Remove a ScriptListener from the parent Frame. If the parent Frame is
-     *  not already accessible, queue the listener for removal as soon as the
-     *  parent Frame is accessible.
-     *  
-     * @param listener the ScriptListener to remove.
-     */
-    public void removeScriptListenerFromParentFrame(ScriptListener listener) {
-        SFrame parentFrame = getParentFrame();
-        if (parentFrame != null) {
-            parentFrame.removeScriptListener(listener);
-        } else {
-            if (frameScriptListenersQueue != null) {
-                if (!frameScriptListenersQueue.remove(listener)) {
-                    frameScriptListenersRemovalQueue.add(listener);
-                }
-            }
-        }
-    }
-    
-    /** fetches the listener queue for the parent frame. while fetching, the
-     *  queue is cleared of entries, avoiding registering multiply.
-     *  
-     * @return The queue as a Collection
-     */
-    public Collection fetchParentFrameScriptListenerQueue() {
-        // collect own listeners
-        Collection result = frameScriptListenersQueue;
-        if (hasComponentPopupMenu()) {
-            result.addAll(getComponentPopupMenu().fetchParentFrameScriptListenerQueue());
-        }
-        frameScriptListenersQueue = new LinkedList();
-        return result;
-    }
-    
-    /**
-     * fetches the listener queue for removing from the parent frame. while
-     * fetching, the queue is cleared of entries, avoiding deregistering
-     * multiply.
-     * 
-     * @return The queue as a Collection
-     */
-    public Collection fetchParentFrameScriptListenerRemovalQueue() {
-        Collection result = frameScriptListenersRemovalQueue;
-        frameScriptListenersRemovalQueue = new LinkedList();
-        return result;
     }
 }

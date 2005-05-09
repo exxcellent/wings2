@@ -113,10 +113,11 @@ public abstract class DynamicResource
 
     public SimpleURL getURL() {
         RequestURL requestURL = (RequestURL) getPropertyService().getProperty("request.url");
-        requestURL = (RequestURL) requestURL.clone();
-        requestURL.setEpoch(getEpoch());
-        requestURL.setResource(getId());
-
+        if (requestURL != null) {
+            requestURL = (RequestURL) requestURL.clone();
+            requestURL.setEpoch(getEpoch());
+            requestURL.setResource(getId());
+        }
         return requestURL;
     }
 

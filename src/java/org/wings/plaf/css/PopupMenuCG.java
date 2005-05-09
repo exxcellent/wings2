@@ -19,35 +19,30 @@ import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
+import org.wings.externalizer.ExternalizeManager;
+import org.wings.header.Script;
 import org.wings.io.Device;
+import org.wings.resource.ClasspathResource;
+import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptListener;
+import org.wings.session.SessionManager;
 
-public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.wings.plaf.MenuBarCG {
-
+public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.wings.plaf.MenuBarCG, SParentFrameListener {
     private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        comp.addScriptListener(UTILS_SCRIPT_LOADER);
-        comp.addScriptListener(MENU_SCRIPT_LOADER);
-        /* accessing the parent frame via the sessionmanager works as long as
-         * we have only one frame. the other method via 
-         * comp.addScriptListenerToParentFrame will always work, but is cost
-         * intensive. it involves checking every component when it is 
-         * added/removed.
-         */
-        //SessionManager.getSession().getRootFrame().addScriptListener(BODY_ONCLICK_SCRIPT);
-        comp.addScriptListenerToParentFrame(BODY_ONCLICK_SCRIPT);
+        comp.addParentFrameListener(this);
     }
 
     public void uninstallCG(final SComponent comp) {
     }
 
-    public static final JavaScriptListener UTILS_SCRIPT_LOADER =
-        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Utils.js"));
-    public static final JavaScriptListener MENU_SCRIPT_LOADER =
-        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Menu.js"));
-    public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
+    private static final String UTILS_JS = "org/wings/plaf/css/Utils.js";
+    private static final String MENU_JS = "org/wings/plaf/css/Menu.js";
+    private static final JavaScriptListener BODY_ONCLICK_SCRIPT =
         new JavaScriptListener("onClick", "wpm_handleBodyClicks(event)");
 
     protected void writePopup(final Device device, SPopupMenu menu)
@@ -120,5 +115,30 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
             throws IOException {
         SPopupMenu menu = (SPopupMenu) _c;
         writePopup(device, menu);
+    }
+
+    public void parentFrameAdded(SParentFrameEvent e) {
+        SFrame parentFrame = e.getParentFrame();
+        parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
+        addExternalizedHeader(parentFrame, UTILS_JS, "text/javascript");
+        addExternalizedHeader(parentFrame, MENU_JS, "text/javascript");
+    }
+
+    /** 
+     * adds the file found at the classPath to the parentFrame header with
+     * the specified mimeType
+     * @param parentFrame the parent frame of the component
+     * @param classPath the classPath to look in for the file
+     * @param mimeType the mimetype of the file
+     */
+    private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
+        ClasspathResource res = new ClasspathResource(classPath, mimeType);
+        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res);
+        parentFrame.addHeader(new Script("JavaScript", mimeType, new DefaultURLResource(jScriptUrl)));
+    }
+
+    public void parentFrameRemoved(SParentFrameEvent e) {
+        // TODO Auto-generated method stub
+        
     }
 }

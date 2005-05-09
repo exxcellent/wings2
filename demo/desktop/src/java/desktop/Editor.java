@@ -246,13 +246,13 @@ public class Editor
             url.addParameter("clear=X");
 
             final ScriptListener script = new JavaScriptListener("onload", "parent.location='" + url + "'");
-            addScriptListenerToParentFrame(script);
+            parentFrame.addScriptListener(script);
 
             // register a request listener, that handles the named event "clear"
             getSession().getDispatcher().register(new LowLevelEventListener() {
                     public void processLowLevelEvent(String name, String[] values) {
                         //logger.info("remove java script");
-                        removeScriptListenerFromParentFrame(script);
+                        parentFrame.removeScriptListener(script);
                     }
                     
                     public String getName() { return "clear"; }

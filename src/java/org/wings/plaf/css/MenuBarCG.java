@@ -22,7 +22,15 @@ import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.SMenu;
 import org.wings.SMenuBar;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
+import org.wings.externalizer.ExternalizeManager;
+import org.wings.header.Link;
+import org.wings.header.Script;
 import org.wings.io.Device;
+import org.wings.plaf.CGManager;
+import org.wings.resource.ClasspathResource;
+import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 
@@ -30,33 +38,22 @@ import java.io.IOException;
 
 public class MenuBarCG
         extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.MenuBarCG {
+        implements SConstants, org.wings.plaf.MenuBarCG, SParentFrameListener {
 
     private final transient static Log log = LogFactory.getLog(MenuBarCG.class);
 
+    private static final String UTILS_JS = "org/wings/plaf/css/Utils.js";
+    private static final String MENU_JS = "org/wings/plaf/css/Menu.js";
+    public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
+        new JavaScriptListener("onClick", "wpm_handleBodyClicks(event)");
+
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        comp.addScriptListener(UTILS_SCRIPT_LOADER);
-        comp.addScriptListener(MENU_SCRIPT_LOADER);
-        /* accessing the parent frame via the sessionmanager works as long as
-         * we have only one frame. the other method via 
-         * comp.addScriptListenerToParentFrame will always work, but is cost
-         * intensive. it involves checking every component when it is 
-         * added/removed.
-         */
-        //SessionManager.getSession().getRootFrame().addScriptListener(BODY_ONCLICK_SCRIPT);
-        comp.addScriptListenerToParentFrame(BODY_ONCLICK_SCRIPT);
+        comp.addParentFrameListener(this);
     }
 
     public void uninstallCG(final SComponent comp) {
     }
-
-    public static final JavaScriptListener UTILS_SCRIPT_LOADER =
-        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Utils.js"));
-    public static final JavaScriptListener MENU_SCRIPT_LOADER =
-        new JavaScriptListener("", "", Utils.loadScript("org/wings/plaf/css/Menu.js"));
-    public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
-        new JavaScriptListener("onClick", "wpm_handleBodyClicks(event)");
 
     public void writeContent(final Device device,
                              final SComponent _c)
@@ -85,5 +82,35 @@ public class MenuBarCG
         device.print("<div class=\"spacer\">&nbsp;</div>");
 
 //--- end code from write-template.
+    }
+
+    /* (non-Javadoc)
+     * @see org.wings.event.SParentFrameListener#parentFrameAdded(org.wings.event.SParentFrameEvent)
+     */
+    public void parentFrameAdded(SParentFrameEvent e) {
+        SFrame parentFrame = e.getParentFrame();
+        parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
+        addExternalizedHeader(parentFrame, UTILS_JS, "text/javascript");
+        addExternalizedHeader(parentFrame, MENU_JS, "text/javascript");
+    }
+
+    /** 
+     * adds the file found at the classPath to the parentFrame header with
+     * the specified mimeType
+     * @param parentFrame the parent frame of the component
+     * @param classPath the classPath to look in for the file
+     * @param mimeType the mimetype of the file
+     */
+    private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
+        ClasspathResource res = new ClasspathResource(classPath, mimeType);
+        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res);
+        parentFrame.addHeader(new Script("JavaScript", mimeType, new DefaultURLResource(jScriptUrl)));
+    }
+
+    /* (non-Javadoc)
+     * @see org.wings.event.SParentFrameListener#parentFrameRemoved(org.wings.event.SParentFrameEvent)
+     */
+    public void parentFrameRemoved(SParentFrameEvent e) {
+        //e.getParentFrame().removeScriptListener(BODY_ONCLICK_SCRIPT);
     }
 }

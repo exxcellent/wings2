@@ -295,9 +295,9 @@ public abstract class AbstractExternalizeManager {
      */
     public String externalize(Object obj, Externalizer externalizer,
                               String mimeType, Collection headers, int flags) {
-        if (externalizer == null)
+        if (externalizer == null) {
             throw new IllegalStateException("no externalizer");
-
+        }
         ExternalizedResource extInfo = new ExternalizedResource(obj, externalizer,
                 mimeType, headers, flags);
 
@@ -325,11 +325,10 @@ public abstract class AbstractExternalizeManager {
 
             storeExternalizedResource(identifier, extInfo);
             reverseExternalized.put(extInfo, identifier);
-
-            String extension = extInfo.getExtension();
-            if (extension != null)
-                identifier += ("." + extension);
-
+        }
+        String extension = extInfo.getExtension();
+        if (extension != null) {
+            identifier += ("." + extension);
         }
 
         return identifier + sessionEncoding;
