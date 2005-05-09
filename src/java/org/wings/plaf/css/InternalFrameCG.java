@@ -15,6 +15,8 @@
 package org.wings.plaf.css;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
@@ -27,6 +29,7 @@ public class InternalFrameCG
         extends AbstractComponentCG
         implements SConstants, org.wings.plaf.InternalFrameCG
 {
+    private final static transient Log log = LogFactory.getLog(InternalFrameCG.class);
     private static final String WINDOWICON_CLASSNAME = "WindowIcon";
     private static final String BUTTONICON_CLASSNAME = "WindowButton";
     private SIcon closeIcon;
