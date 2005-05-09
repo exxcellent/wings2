@@ -16,6 +16,7 @@ package wingset;
 import org.wings.*;
 import org.wings.border.SBorder;
 import org.wings.border.SLineBorder;
+import org.wings.script.JavaScriptListener;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -39,6 +40,7 @@ public class DynamicLayoutExample extends WingSetPane {
                 panel.add(demoPanels[selectLayoutManager.getSelectedIndex()]);
             }
         });
+        selectLayoutManager.addScriptListener(new JavaScriptListener("onChange", "this.form.submit()"));
 
         panel.add(selectLayoutManager);
         panel.add(demoPanels[0]);
