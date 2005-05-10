@@ -20,6 +20,12 @@
 package org.wings.text;
 
 import org.wings.SFormattedTextField;
+import org.wings.SFrame;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
+import org.wings.header.Script;
+import org.wings.resource.ClasspathResource;
+import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
 import org.wings.script.JavaScriptListener;
@@ -40,7 +46,7 @@ import java.text.NumberFormat;
  *
  * @author theresia & erik
  */
-public class SNumberFormatter extends SAbstractFormatter {
+public class SNumberFormatter extends SAbstractFormatter implements SParentFrameListener {
 
     private NumberFormat numberFormat;
     private double maxVal = Double.MAX_VALUE;
@@ -50,6 +56,11 @@ public class SNumberFormatter extends SAbstractFormatter {
 
     private JavaScriptListener javaScriptListener;
 
+    private static String functStr = "saveOld(this)";
+
+    private static final JavaScriptListener SCRIPT_SAVEOLD = new JavaScriptListener("onfocus", functStr);
+
+    private static final String SNUMBERFORMATTER_JS = "org/wings/text/SNumberFormatter.js";
     /*
      * Creates a new instance of SNumberFormatter.
      */
@@ -149,7 +160,10 @@ public class SNumberFormatter extends SAbstractFormatter {
      **/
     public JavaScriptListener generateJavaScript(SFormattedTextField field, boolean b) {
 
-        field.addScriptListener(SCRIPT_NUMBERFORMATTER);
+        if (field.getParentFrame() != null) {
+            addExternalizedHeader(field.getParentFrame(), SNUMBERFORMATTER_JS, "text/javascript");
+        }
+        field.addParentFrameListener(this);
 
         field.removeScriptListener(SCRIPT_SAVEOLD);
         field.addScriptListener(SCRIPT_SAVEOLD);
@@ -171,32 +185,18 @@ public class SNumberFormatter extends SAbstractFormatter {
         return alert;
     }
 
-    private static String functStr = "saveOld(this)";
+    public void parentFrameAdded(SParentFrameEvent e) {
+        addExternalizedHeader(e.getParentFrame(), SNUMBERFORMATTER_JS, "text/javascript");
+    }
 
-    private static final JavaScriptListener SCRIPT_NUMBERFORMATTER = new JavaScriptListener("", "", loadScript());
+    private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
+        ClasspathResource res = new ClasspathResource(classPath, mimeType);
+        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res);
+        parentFrame.addHeader(new Script("JavaScript", mimeType, new DefaultURLResource(jScriptUrl)));
+    }
 
-    private static final JavaScriptListener SCRIPT_SAVEOLD = new JavaScriptListener("onfocus", functStr);
-
-    private static String loadScript() {
-        InputStream in = null;
-        BufferedReader reader = null;
-        try {
-            in = SNumberFormatter.class.getClassLoader().getResourceAsStream("org/wings/text/SNumberFormatter.js");
-            reader = new BufferedReader(new InputStreamReader(in));
-            StringBuffer buffer = new StringBuffer();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line).append("\n");
-            }
-            buffer.append("\n");
-
-            return buffer.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        } finally {
-            try { in.close(); } catch (Exception ign) {}
-            try { reader.close(); } catch (Exception ign) {}
-        }
+    public void parentFrameRemoved(SParentFrameEvent e) {
+        // TODO Auto-generated method stub
+        
     }
 }

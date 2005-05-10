@@ -34,6 +34,10 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
+        SFrame parentFrame = comp.getParentFrame();
+        if (parentFrame != null) {
+            addListenersToParentFrame(parentFrame);
+        }
         comp.addParentFrameListener(this);
     }
 
@@ -119,6 +123,15 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
 
     public void parentFrameAdded(SParentFrameEvent e) {
         SFrame parentFrame = e.getParentFrame();
+        addListenersToParentFrame(parentFrame);
+    }
+
+    /**
+     * adds the necessary listeners to the parent frame. is called by
+     * parent frame listener or from install.
+     * @param parentFrame
+     */
+    private void addListenersToParentFrame(SFrame parentFrame) {
         parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
         addExternalizedHeader(parentFrame, UTILS_JS, "text/javascript");
         addExternalizedHeader(parentFrame, MENU_JS, "text/javascript");
