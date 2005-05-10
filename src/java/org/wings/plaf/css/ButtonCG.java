@@ -24,7 +24,7 @@ import java.io.IOException;
 public class ButtonCG        extends LabelCG        implements SConstants, org.wings.plaf.ButtonCG {
 
     /**
-     * Use this java script implementation to
+     * Use this java script implementation to submit forms on button click
      */
     // TODO: Implement handling of formless submits
     // TODO: Avoid triggering of enter key catchers
