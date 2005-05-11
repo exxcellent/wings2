@@ -23,6 +23,8 @@ import org.wings.SFormattedTextField;
 import org.wings.SFrame;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
+import org.wings.externalizer.ExternalizeManager;
+import org.wings.externalizer.Externalizer;
 import org.wings.header.Script;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
@@ -191,7 +193,7 @@ public class SNumberFormatter extends SAbstractFormatter implements SParentFrame
 
     private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
         ClasspathResource res = new ClasspathResource(classPath, mimeType);
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res);
+        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         parentFrame.addHeader(new Script("JavaScript", mimeType, new DefaultURLResource(jScriptUrl)));
     }
 
