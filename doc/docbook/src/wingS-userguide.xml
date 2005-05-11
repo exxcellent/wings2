@@ -255,10 +255,9 @@ submit.addActionListener(al);</programlisting>
         <title>Default Styles</title>
 
         <para>wingS makes heavy use of CSS styles. The default wingS
-        distribution contains a file plaf/xhtml/css1/default.css which is the
-        main stylesheet for all components. A related file
-        plaf/xhtml/css1/default.properties configures the mapping between
-        various components and their default style, among other things.</para>
+        distribution contains stylesheets on a per browser basis at
+        org/wings/plaf/css/browsername.css. These stylesheets contain the
+        necessary styles for wingS to function and the basic styling.</para>
       </sect2>
 
       <sect2>
@@ -359,7 +358,33 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
     response.flushBuffer();
   }
 } </programlisting></para>
-      </sect2>
+
+	  <para>Another way is to extend a DynamicResource and overwrite its write()
+	  method. (Code example not tested, can anyone confirm/rework?)</para>
+
+	  <para><programlisting>
+		public final class DynamicPDFDownload extends DynamicResource {
+
+        /* (non-Javadoc)
+         * @see org.wings.Renderable#write(org.wings.io.Device)
+         */
+        public void write( Device out ) throws IOException {
+            DeviceOutputStream stream = new DeviceOutputStream( out );
+            writePDF( baseDir, stream );
+        
+            stream.flush();
+            out.close();
+        }
+	  </programlisting></para>
+
+	  <para>Then you can externalize it via the ExternalizeManager.</para>
+
+ 	  <para><programlisting>
+            Map/*<String,String>*/ headers = new HashMap/*<String,String>*/();
+            headers.put("Content-Disposition", "attachment; filename=" + getFilename() );
+		    String url = SessionManager.getSession().getExternalizeManager().externalize(pdfDownload, headers);
+	  </programlisting></para>
+     </sect2>
     </sect1>
 
     <sect1>
