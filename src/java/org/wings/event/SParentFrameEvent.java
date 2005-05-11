@@ -3,6 +3,10 @@ package org.wings.event;
 import org.wings.SComponent;
 import org.wings.SFrame;
 
+/**
+ * @author ole
+ * @version $Revision$
+ */
 public class SParentFrameEvent extends SComponentEvent {
     /**
      * The first number of used IDs for parentFrame events.

@@ -30,9 +30,6 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
     public void uninstallCG(final SComponent comp) {
     }
 
-//--- code from common area in template.
-    public static final SIcon RIGHT_ARROW = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
-
     public void writePopup(final Device device, SMenu menu)
             throws IOException {
         String componentId = menu.getName();

@@ -18,10 +18,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.externalizer.ExternalizeManager;
+import org.wings.externalizer.Externalizer;
 import org.wings.header.Link;
 import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+import org.wings.resource.ClassPathStylesheetResource;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.DynamicCodeResource;
@@ -83,8 +85,8 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     private final static Set javascriptResourceKeys;
     static {
         javascriptResourceKeys = new HashSet();
-        javascriptResourceKeys.add("FrameCG.JScripts.domlib");
-        javascriptResourceKeys.add("FrameCG.JScripts.domtt");
+        javascriptResourceKeys.add("JScripts.domlib");
+        javascriptResourceKeys.add("JScripts.domtt");
     }
     
     
@@ -103,8 +105,9 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         if (cssClassPath == null) {
             cssClassPath = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
         }
-        ClasspathResource res = new ClasspathResource(cssClassPath, "text/css");
-        return extManager.externalize(res);
+        ClassPathStylesheetResource res = new ClassPathStylesheetResource(cssClassPath, "text/css");
+        
+        return extManager.externalize(res, ExternalizeManager.GLOBAL);
     }
 
 
@@ -119,14 +122,18 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         // catch missing script entry in properties file
         if (jsClassPath != null) {
             ClasspathResource res = new ClasspathResource(jsClassPath, "text/javascript");
-            return extManager.externalize(res);
+            return extManager.externalize(res, ExternalizeManager.GLOBAL);
         }
         return null;
     }
 
-    public static final String UTILS_SCRIPT = "org/wings/plaf/css/Utils.js";
+    public static final String UTILS_SCRIPT = (String) SessionManager
+            .getSession().getCGManager().getObject("JScripts.utils",
+                    String.class);
 
-    public static final String FORM_SCRIPT = "org/wings/plaf/css/Form.js";
+    public static final String FORM_SCRIPT = (String) SessionManager
+            .getSession().getCGManager().getObject("JScripts.form",
+                    String.class);
 
     public static final JavaScriptListener FOCUS_SCRIPT =
             new JavaScriptListener("onfocus", "storeFocus(event)");
@@ -185,7 +192,7 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
      */
     private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
         ClasspathResource res = new ClasspathResource(classPath, mimeType);
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res);
+        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         parentFrame.addHeader(new Script("JavaScript", mimeType, new DefaultURLResource(jScriptUrl)));
     }
 
@@ -289,9 +296,16 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
         
         // let ie understand hover css styles on elements other than anchors
         if (BrowserType.IE.equals(browser.getBrowserType())) {
+            // externalize hover behavior
+            final String classPath = (String)SessionManager.getSession().getCGManager().getObject("Behaviors.ieHover", String.class);
+            ClasspathResource res = new ClasspathResource(classPath, "text/x-component");
+            String behaviorUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
             device.print("<style type=\"text/css\" media=\"screen\">\n");
-            device.print("body{behavior:url(../csshover.htc);}\n");
+            device.print("body{behavior:url(");
+            device.print(behaviorUrl);
+            device.print(");}\n");
             device.print("</style>\n");
+            log.info("behaviorUrl: " + behaviorUrl);
         }
         
 

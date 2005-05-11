@@ -44,8 +44,12 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
     public void uninstallCG(final SComponent comp) {
     }
 
-    private static final String UTILS_JS = "org/wings/plaf/css/Utils.js";
-    private static final String MENU_JS = "org/wings/plaf/css/Menu.js";
+    public static final String UTILS_JS = (String) SessionManager
+    .getSession().getCGManager().getObject("JScripts.utils",
+            String.class);
+    private static final String MENU_JS = (String) SessionManager
+    .getSession().getCGManager().getObject("JScripts.menu",
+            String.class);
     private static final JavaScriptListener BODY_ONCLICK_SCRIPT =
         new JavaScriptListener("onClick", "wpm_handleBodyClicks(event)");
 
@@ -146,7 +150,7 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
      */
     private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
         ClasspathResource res = new ClasspathResource(classPath, mimeType);
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res);
+        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         parentFrame.addHeader(new Script("JavaScript", mimeType, new DefaultURLResource(jScriptUrl)));
     }
 

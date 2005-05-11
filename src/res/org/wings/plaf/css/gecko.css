@@ -223,7 +223,7 @@ ul.STree > li button {
 }
 
 ul.STree > li > div.SSubTree {
-	background-image: url(icons/TreeLine.gif);
+	background-image: url( org/wings/icons/TreeLine.gif );
 	background-repeat:repeat-y;
 	background-position: 0px 100px;
 }
@@ -665,13 +665,13 @@ div.SMenu a.x, div.SMenu a.x:visited,
 div.SMenu a.y, div.SMenu a.y:visited, div.SMenu a.y:hover,
 div.SPopupMenu a.x, div.SPopupMenu a.x:visited,
 div.SPopupMenu a.y, div.SPopupMenu a.y:visited, div.SPopupMenu a.y:hover{
-background:#eee url(icons/MenuArrowRight.gif) no-repeat center right;
+background:#eee url( 'org/wings/icons/MenuArrowRight.gif' ) no-repeat center right;
 padding-right:10px;
 }
 
 div.SMenu a.x:hover,
 div.SPopupMenu a.x:hover{
-background:#66b url(icons/MenuArrowRight.gif) no-repeat center right;
+background:#66b url("org/wings/icons/MenuArrowRight.gif") no-repeat center right;
 }
 
 div.SInternalFrame {

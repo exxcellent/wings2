@@ -6,7 +6,7 @@ import java.util.EventListener;
  * This Listener is called when a component's parent frame reference is
  * updated. It is used for registering things like headers or listeners.
  * @author ole
- *
+ * @version $Revision$
  */
 public interface SParentFrameListener extends EventListener {
     /**
