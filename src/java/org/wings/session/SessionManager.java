@@ -16,6 +16,8 @@ package org.wings.session;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.session.Session;
 
 
@@ -29,6 +31,7 @@ import org.wings.session.Session;
  */
 public class SessionManager {
 	
+    private final transient static Log log = LogFactory.getLog(SessionManager.class);
     private static final Map sessions = new Hashtable();
 
     /**
