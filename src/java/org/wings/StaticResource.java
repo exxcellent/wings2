@@ -20,6 +20,8 @@ import org.wings.io.Device;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 
+import com.sun.corba.se.connection.GetEndPointInfoAgainException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +42,11 @@ public abstract class StaticResource extends Resource {
      * A buffer for temporal storage of the resource
      */
     protected transient LimitedBuffer buffer;
+    
+    /**
+     * The max size of the buffer
+     */
+    protected int maxBufferSize = -1;
 
     /**
      * The size of this resource. Initially, this will be '-1', but
@@ -52,7 +59,7 @@ public abstract class StaticResource extends Resource {
      * MAX_SIZE_TO_BUFFER. Is able to write to an Device.
      */
     protected final static class LimitedBuffer extends ByteArrayOutputStream {
-        public static final int MAX_SIZE_TO_BUFFER = 8 * 1024; // 24 KByte
+        public static final int MAX_SIZE_TO_BUFFER = 8 * 1024; // 8 KByte
 
         private boolean withinLimit;
 
@@ -70,6 +77,15 @@ public abstract class StaticResource extends Resource {
             withinLimit = true;
 
             initMaxSizeToBuffer();
+        }
+        
+        /**
+         * creates a new buffer with the specified max buffer size
+         * @param maxSizeToBuffer the max size in bytes
+         */
+        LimitedBuffer(int maxSizeToBuffer) {
+            this();
+            this.maxSizeToBuffer = maxSizeToBuffer;
         }
 
         private void initMaxSizeToBuffer() {
@@ -170,7 +186,11 @@ public abstract class StaticResource extends Resource {
      */
     protected LimitedBuffer bufferResource() throws IOException {
         if (buffer == null) {
-            buffer = new LimitedBuffer();
+            if (maxBufferSize != -1) {
+                buffer = new LimitedBuffer(maxBufferSize);
+            } else {
+                buffer = new LimitedBuffer();
+            }
             InputStream resource = getResourceStream();
             if (resource != null) {
                 byte[] copyBuffer = new byte[1024];
@@ -297,6 +317,15 @@ public abstract class StaticResource extends Resource {
     }
 
     protected abstract InputStream getResourceStream() throws IOException;
+
+    public int getMaxBufferSize() {
+        return maxBufferSize;
+    }
+    
+    public void setMaxBufferSize(int maxBufferSize) {
+        this.maxBufferSize = maxBufferSize;
+    }
+    
 }
 
 
