@@ -10,6 +10,7 @@
     <property name="regexp.version" value="jakarta-regexp-1.2.jar" />
     <property name="beanshell.version" value="bsh-core.jar" />
     <property name="httpclient.version" value="commons-httpclient-2.0-beta1.jar" />
+    <property name="httpclient.version" value="jlfgr-1_0.jar" />
 
     <path id="build.classpath">
         <fileset dir="${lib}">
@@ -18,6 +19,7 @@
             <include name="${regexp.version}"/>
             <include name="${beanshell.version}"/>
             <include name="${httpclient.version}"/>
+            <include name="${jlfgr.version}"/>
         </fileset>
     </path>
 
