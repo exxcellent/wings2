@@ -48,42 +48,49 @@ function wpm_getMenuPosition(e) {
 		el = e.srcElement;
 	} else {
 		el = e.target;
+        if (el.nodeType == 3) // defeat KHTML bug
+            el = el.parentNode;
 	}
 	return new wpm_point(wpm_findPosX(el), wpm_findPosY(el) + el.offsetHeight);
 }
 
 function wpm_findPosX(obj)
 {
-        var curleft = 0;
-        if (obj.offsetParent)
+    var curleft = 0;
+    if (obj.offsetParent)
+    {
+        while (obj.offsetParent)
         {
-                while (obj.offsetParent)
-                {
-                        curleft += obj.offsetLeft
-                        obj = obj.offsetParent;
-                }
+                curleft += obj.offsetLeft
+                obj = obj.offsetParent;
         }
-        else if (obj.x)
-                curleft += obj.x;
-        if (wu_opera) curleft += 10; // why?
-        return curleft;
+    } else if (obj.x) {
+        curleft += obj.x;
+    } else if (obj.offsetLeft) {
+        curleft += obj.offsetLeft;
+    }
+    if (wu_opera) curleft += 10; // why?
+    return curleft;
 }
 
 function wpm_findPosY(obj)
 {
-        var curtop = 0;
-        if (obj.offsetParent)
+    var curtop = 0;
+    if (obj.offsetParent)
+    {
+        while (obj.offsetParent)
         {
-                while (obj.offsetParent)
-                {
-                        curtop += obj.offsetTop
-                        obj = obj.offsetParent;
-                }
+            curtop += obj.offsetTop
+            obj = obj.offsetParent;
         }
-        else if (obj.y)
-                curtop += obj.y;
-        if (wu_opera) curtop += 10; // why?
-        return curtop;
+    }
+    else if (obj.y) {
+        curtop += obj.y;
+    } else if (obj.offsetTop) {
+        curtop += obj.offsetTop;
+    }
+    if (wu_opera) curtop += 10; // why?
+    return curtop;
 }
 
 function wpm_isValidEvent(coord) {
