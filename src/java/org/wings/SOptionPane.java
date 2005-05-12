@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.plaf.OptionPaneCG;
+import org.wings.session.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -187,22 +188,26 @@ public class SOptionPane
     /**
      * Icon for Inform Dialog
      */
-    protected static final SIcon messageImage = new SResourceIcon("org/wings/icons/Inform.gif");
+    private static final SIcon messageImage = (SIcon) SessionManager.getSession()
+    .getCGManager().getObject("SOptionPane.messageIcon", SIcon.class);
 
     /**
      * Icon for Input Dialog
      */
-    protected static final SIcon questionImage = new SResourceIcon("org/wings/icons/Question.gif");
+    private static final SIcon questionImage = (SIcon) SessionManager.getSession()
+    .getCGManager().getObject("SOptionPane.questionIcon", SIcon.class);
 
     /**
      * Icon for Show Confirm Dialog
      */
-    protected static final SIcon yesnoImage = new SResourceIcon("org/wings/icons/Question.gif");
+    private static final SIcon yesnoImage = (SIcon) SessionManager.getSession()
+    .getCGManager().getObject("SOptionPane.yesnoIcon", SIcon.class);
 
     /**
      * Icon for Error Dialog
      */
-    protected static final SIcon errorImage = new SResourceIcon("org/wings/icons/Warn.gif");
+    private static final SIcon errorImage = (SIcon) SessionManager.getSession()
+    .getCGManager().getObject("SOptionPane.errorIcon", SIcon.class);
 
     //  protected final SLabel messageLabel  = new SLabel(messageImage);
     //  protected final SLabel questionLabel = new SLabel(questionImage);

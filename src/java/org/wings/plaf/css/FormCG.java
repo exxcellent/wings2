@@ -17,13 +17,15 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
 public class FormCG extends AbstractComponentCG implements SConstants, org.wings.plaf.FormCG {
 
-    static final SIcon BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
-
+    private static final SIcon BLIND_ICON = (SIcon) SessionManager.getSession()
+            .getCGManager().getObject("FormCG.blindIcon", SIcon.class);
+    
     protected void writeContent(final Device device, final SComponent c) throws IOException {
         final SForm component = (SForm) c;
 

@@ -18,6 +18,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
@@ -58,8 +59,8 @@ public class ProgressBarCG
     }
 
 //--- code from common area in template.
-    private static final SIcon BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
-
+    private static final SIcon BLIND_ICON = (SIcon) SessionManager.getSession()
+    .getCGManager().getObject("ProgressBarCG.blindIcon", SIcon.class);
 
 //--- end code from common area in template.
 

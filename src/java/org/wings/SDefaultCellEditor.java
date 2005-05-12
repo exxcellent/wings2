@@ -13,6 +13,7 @@
  */
 package org.wings;
 
+import org.wings.session.SessionManager;
 import org.wings.table.STableCellEditor;
 
 import javax.swing.event.CellEditorListener;
@@ -34,13 +35,14 @@ public class SDefaultCellEditor
     /**
      * The default ok button icon.
      */
-    public static final SIcon OK_BUTTON_ICON = new SResourceIcon("toolbarButtonGraphics/general/Save16.gif");
+    private static final SIcon OK_BUTTON_ICON = (SIcon) SessionManager.getSession()
+    .getCGManager().getObject("SDefaultCellEditor.okIcon", SIcon.class);
 
     /**
      * The default cancel button icon.
      */
-    public static final SIcon CANCEL_BUTTON_ICON = new SResourceIcon("toolbarButtonGraphics/general/Stop16.gif");
-
+    private static final SIcon CANCEL_BUTTON_ICON = (SIcon) SessionManager.getSession()
+    .getCGManager().getObject("SDefaultCellEditor.cancelIcon", SIcon.class);
 
     /**
      * Label for displaying (error)-messages. It is unvisible, until a message
