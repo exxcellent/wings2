@@ -149,6 +149,10 @@
       <title>wingS Applications</title>
 
       <tgroup align="left" cols="2">
+        <colspec colwidth="1.5*" />
+
+        <colspec colwidth="1*" />
+
         <thead>
           <row>
             <entry align="center">Application</entry>
@@ -158,27 +162,51 @@
         </thead>
 
         <tbody>
-          <row valign="top">
-            <entry valign="top"><para>Financial management application for
-            marketing programs in EMEA</para><para>Research system for
-            electrical wires, connectors and components in the automotive
-            area</para><para>Project and Resource management
-            application</para></entry>
+          <row>
+            <entry valign="top">Financial management application for marketing
+            programs in EMEA</entry>
 
-            <entry><ulink url="http://www.exxcellent.de">eXXcellent solutions
+            <entry morerows="2"><ulink
+            url="http://www.exxcellent.de">eXXcellent solutions
             gmbH</ulink></entry>
           </row>
 
-          <row valign="top">
-            <entry valign="top"><para>eCommerce shop, (B2B,
-            B2C)</para><para>Corporate LDAP management
-            application</para><para><ulink
-            url="http://www.innovationsregion-ulm.de">Web
-            directory</ulink></para>Warehouse dispatcher software, PDA-based
-            (wireless)</entry>
+          <row>
+            <entry>Research system for electrical wires, connectors and
+            components in the automotive area</entry>
+          </row>
 
-            <entry><ulink url="http://www.mercatis.de">mercatis information
-            systems GmbH</ulink></entry>
+          <row>
+            <entry>Project and Resource management application</entry>
+          </row>
+
+          <row>
+            <entry>eCommerce solution, (B2B, B2C)</entry>
+
+            <entry morerows="3"><ulink url="http://www.mercatis.de">mercatis
+            information systems GmbH</ulink></entry>
+          </row>
+
+          <row>
+            <entry>Corporate LDAP management application</entry>
+          </row>
+
+          <row>
+            <entry><ulink url="http://www.innovationsregion-ulm.de">Web
+            directory</ulink></entry>
+          </row>
+
+          <row>
+            <entry>Warehouse dispatcher software, PDA-based (wireless)</entry>
+          </row>
+
+          <row>
+            <entry>Retail investment management performance reporting
+            (intranet and extranet). Used by a group company of Close Brothers
+            Group PLC, a FTSE250 company.</entry>
+
+            <entry><ulink url="http://www.scinapps.com">Scinapps
+            Ltd</ulink></entry>
           </row>
         </tbody>
       </tgroup>
@@ -349,7 +377,7 @@
   </section>
 
   <section>
-    <title>Principles of Future Development</title>
+    <title>Principles for Future Development</title>
 
     <para>The wingS team recognizes and subscribes to the following
     principles:</para>
@@ -367,6 +395,11 @@
       <listitem>
         <para>Support old JRE versions (currently JDK1.2), do not make latest
         JRE a requirement</para>
+      </listitem>
+
+      <listitem>
+        <para>Monitor and embrace new developements in the web application
+        arena </para>
       </listitem>
     </itemizedlist>
   </section>
