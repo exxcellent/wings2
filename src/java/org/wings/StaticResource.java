@@ -20,8 +20,6 @@ import org.wings.io.Device;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 
-import com.sun.corba.se.connection.GetEndPointInfoAgainException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
