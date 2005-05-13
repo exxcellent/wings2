@@ -13,8 +13,9 @@
  */
 package org.wings.resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.Resource;
-import org.wings.StaticResource;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.session.SessionManager;
 
@@ -31,22 +32,14 @@ import java.io.InputStream;
  * @version $$
  */
 public class ClassPathStylesheetResource
-        extends StaticResource {
+        extends ClasspathResource {
+    private final transient static Log log = LogFactory.getLog(ClassPathStylesheetResource.class);
     /**
      * The default max size for the buffer. since we do some replacement every time we
      * read the input stream, we want this to be high, so we can cache the
      * interpreted style sheet.
      */
     private static final int MAX_BUFFER_SIZE = 24 * 1024; // 24kb
-    /**
-     * The class loader from which the resource is loaded
-     */
-    protected final ClassLoader classLoader;
-
-    /**
-     * The name that identifies the resource in the classpath
-     */
-    protected final String resourceFileName;
 
     private ExternalizeManager extManager;
 
@@ -82,7 +75,7 @@ public class ClassPathStylesheetResource
      * @param mimeType         the mimetype of the resource
      */
     public ClassPathStylesheetResource(ClassLoader classLoader, String resourceFileName, String mimeType) {
-        this(classLoader, resourceFileName, "unknown", MAX_BUFFER_SIZE);
+        this(classLoader, resourceFileName, mimeType, MAX_BUFFER_SIZE);
     }
 
     /**
@@ -95,20 +88,11 @@ public class ClassPathStylesheetResource
      *                         big enough, stylesheet is cached, else parsed again. 
      */
     public ClassPathStylesheetResource(ClassLoader classLoader, String resourceFileName, String mimeType, int maxBufferSize) {
-        super(null, mimeType);
-        this.classLoader = classLoader;
-        this.resourceFileName = resourceFileName;
-        int dotIndex = resourceFileName.lastIndexOf('.');
-        if (dotIndex > -1) {
-            extension = resourceFileName.substring(dotIndex + 1);
-        }
-        externalizerFlags = ExternalizeManager.GLOBAL | ExternalizeManager.FINAL;
+        super(classLoader, resourceFileName, mimeType);
+        // need to set it here, because at this moment there is a session in the sessionManager
         extManager = SessionManager.getSession().getExternalizeManager();
-    }
-
-
-    public String toString() {
-        return getId() + " " + resourceFileName;
+        // we need a bigger buffer, so that the parsing only happens once
+        setMaxBufferSize(maxBufferSize);
     }
 
     /* (non-Javadoc)
@@ -126,29 +110,17 @@ public class ClassPathStylesheetResource
      */
 
     /**
-     * resources using the same classloader and are denoting the same
-     * name, do have the same hashCode(). Thus the same resources get the
-     * same ID in the System externalizer.
+     * Two ClassPathStylesheetResource are equal if both of them are instances
+     * of ClassPathStylesheetResource and the equals method of ClasspathResource
+     * is true.
      *
-     * @return a hashcode, comprised from the hashcodes of the classloader
-     *         and from the file name of the resource.
-     */
-    public int hashCode() {
-        return classLoader.hashCode() ^ resourceFileName.hashCode();
-    }
-
-    /**
-     * Two ClasspathResouces are equal if both of them use the same
-     * classloader and point to a resource with the same name.
-     *
-     * @return true if classloader and resource name are equal.
+     * @return true if the two instances are equal.
      */
     public boolean equals(Object o) {
         if (o instanceof ClassPathStylesheetResource) {
-            ClassPathStylesheetResource other = (ClassPathStylesheetResource) o;
-            return ((this == other)
-                    || (classLoader.equals(other.classLoader)
-                    && resourceFileName.equals(other.resourceFileName)));
+            if (super.equals(o)) {
+                return true;
+            }
         }
         return false;
     }
@@ -157,9 +129,12 @@ public class ClassPathStylesheetResource
      * @see org.wings.StaticResource#bufferResource()
      */
     protected LimitedBuffer bufferResource() throws IOException {
-        // we need a bigger buffer, so that the parsing only happens once
-        setMaxBufferSize(MAX_BUFFER_SIZE);
-        return super.bufferResource();
+        try {
+            return super.bufferResource();
+        } catch (IOException e) {
+            log.error("Unable to retrieve css file from classpath: '"+resourceFileName); 
+            throw e; 
+        }
     }
 }
 

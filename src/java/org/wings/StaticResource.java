@@ -181,6 +181,7 @@ public abstract class StaticResource extends Resource {
      * @return buffered resource as LimitedBuffer, that may be invalid,
      *         if the size of the resource is beyond MAX_SIZE_TO_BUFFER. It is
      *         null, if the Resource returned an invalid stream.
+     * @throws IOException 
      */
     protected LimitedBuffer bufferResource() throws IOException {
         if (buffer == null) {

@@ -85,7 +85,7 @@ public class ClasspathResource
         return getId() + " " + resourceFileName;
     }
 
-    protected final InputStream getResourceStream() {
+    protected InputStream getResourceStream() {
         return classLoader.getResourceAsStream(resourceFileName);
     }
 

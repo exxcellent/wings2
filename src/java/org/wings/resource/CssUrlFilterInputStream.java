@@ -113,6 +113,7 @@ public class CssUrlFilterInputStream extends BufferedInputStream {
         ClasspathResource res = new ClasspathResource(classPath, mimeType);
         if (res.getResourceStream() == null) {
             // no resource found at classPath, return old string
+            log.debug("Could not find resource at classpath: " + classPath);
             return "";
         }
         StringBuffer imageUrl = new StringBuffer("'");
