@@ -20,6 +20,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * This template layout is the default layout for all SContainers.    
+ * 
+ * There might be situations when you want to use a custom SRootLayout. Why?
+ * Because by setting an SFrame's layout you can change the looks of an 
+ * application. Since only the object called "content" will be replaced with
+ * the content element, you can statically define XHTML elements such as a 
+ * border, a title or a footer line with defining your own template.
+ */
 public class SRootLayout extends STemplateLayout {
     private final static transient Log log = LogFactory.getLog(SRootLayout.class);
 
