@@ -24,7 +24,6 @@ import org.wings.SFrame;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
-import org.wings.externalizer.Externalizer;
 import org.wings.header.Script;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
@@ -32,9 +31,6 @@ import org.wings.session.SessionManager;
 import org.wings.session.Session;
 import org.wings.script.JavaScriptListener;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;

@@ -14,8 +14,6 @@
 package org.wings;
 
 import org.wings.plaf.MenuBarCG;
-import org.wings.plaf.MenuCG;
-import org.wings.plaf.MenuItemCG;
 
 import javax.swing.*;
 import java.awt.*;

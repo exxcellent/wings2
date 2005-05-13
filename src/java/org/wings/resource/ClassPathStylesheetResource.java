@@ -17,11 +17,9 @@ import org.wings.Resource;
 import org.wings.StaticResource;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.session.SessionManager;
-import org.wings.template.StreamTemplateSource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * A ClassPathStylesheetResource is a static resource whose content is

@@ -23,7 +23,6 @@ import org.wings.border.STitledBorder;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.css.InputMapScriptListener;
-import org.wings.plaf.css.PopupMenuCG;
 import org.wings.plaf.css.Utils;
 import org.wings.plaf.css.VersionedInputMap;
 

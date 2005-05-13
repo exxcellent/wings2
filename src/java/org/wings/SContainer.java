@@ -18,15 +18,12 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.plaf.ContainerCG;
-import org.wings.script.ScriptListener;
 import org.wings.style.StyleConstants;
 import org.wings.style.CSSSelector;
 import org.wings.util.ComponentVisitor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 
 /**

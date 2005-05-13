@@ -17,11 +17,8 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.SFormattedTextField;
 import org.wings.STextField;
 import org.wings.io.Device;
-import org.wings.script.JavaScriptEvent;
-import org.wings.script.JavaScriptListener;
 
 import java.io.IOException;
 

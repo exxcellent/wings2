@@ -19,7 +19,6 @@ import org.wings.Renderable;
 import org.wings.SimpleURL;
 import org.wings.URLResource;
 import org.wings.io.Device;
-import org.wings.script.JavaScriptListener;
 
 import java.io.IOException;
 

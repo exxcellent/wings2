@@ -18,7 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.externalizer.ExternalizeManager;
-import org.wings.externalizer.Externalizer;
 import org.wings.header.Link;
 import org.wings.header.Script;
 import org.wings.io.Device;

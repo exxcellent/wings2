@@ -1,16 +1,12 @@
 package org.wings.resource;
 
 import java.io.BufferedInputStream;
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.externalizer.ExternalizeManager;
-import org.wings.externalizer.SystemExternalizeManager;
-import org.wings.header.Script;
-import org.wings.session.SessionManager;
 
 /**
  * filters an input stream of a css file for occurences of "url([classPath])".

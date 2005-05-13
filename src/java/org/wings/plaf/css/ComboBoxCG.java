@@ -18,8 +18,6 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
-import org.wings.script.JavaScriptEvent;
-import org.wings.script.JavaScriptListener;
 
 import java.io.IOException;
 
