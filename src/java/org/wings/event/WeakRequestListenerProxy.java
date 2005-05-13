@@ -79,36 +79,5 @@ public final class WeakRequestListenerProxy extends WeakReference implements SRe
         } // end of if ()
     }
 
-}// WeakRequestListenerProxy
+}
 
-/*
-   $Log$
-   Revision 1.4  2004/12/01 07:54:08  hengels
-   o wings is not j-wings
-   o styles are not lower case (they're derived from the class name)
-   o the gecko.css should be modified carefully, because the konqueror.css is following it
-   o the css files should be as small as possible
-
-   Revision 1.3  2004/11/24 21:40:20  blueshift
-   + commons logging
-   + further empty javdoc removal
-
-   Revision 1.2  2004/11/24 18:12:54  blueshift
-   TOTAL CLEANUP:
-   - removed document me TODOs
-   - updated/added java file headers
-   - removed emacs stuff
-   - removed deprecated methods
-
-   Revision 1.1.1.1  2004/10/04 16:13:16  hengels
-   o start development of wings 2
-
-   Revision 1.2  2003/03/24 17:05:37  arminhaaf
-   o add equals and hashcode methods
-
-   Revision 1.1  2002/10/25 16:29:16  ahaaf
-   o add cancel editing button
-   o change the table editor handling to support events on the preparation of the editor
-   o change the way SDefaultCellEditor works
-
-*/

@@ -2,9 +2,13 @@
    $Id$
    wings core CSS Style Sheet for gecko Browser (Mozilla, FireFox).
 
+   >> This file contains CORE CSS declarations needed for correct operation.  <<
+   >> Porting changes in this file to other browsers is REQUIRED              <<
+
    Includes CSS definitions that are required for wings to work correctly.
-   - Please use additional user styles for visual application styling
-   - Please avoid generic/global css selectors and use the wings css classes in your selection path
+   - Please use gecko-optional.css for purely optional visual stylings
+   - Please avoid generic/global css selectors and use the wings css
+     classes in your selection path
 */
 
 /* needed for strict mode height scaling */
@@ -110,52 +114,8 @@ div.SButton {
     color: #000044;
 }
 
-div.SButton > button {
-    border: 1px solid #cccccc;
-    background-color: #eeeeff;
-}
-
-div.SButton > button:hover {
-    border: 1px outset #cccccc;
-}
-
-div.SButton > button[disabled="true"] * {
-    opacity: 0.7;
-}
-
-div.SButton > button:hover[disabled="true"] {
-    border: 1px solid #cccccc;
-}
-
 div.SRadioButton_Box {
 	display: table;
-}
-
-div.SClickable > button {
-    background-color: inherit;
-    border: 1px none;
-}
-
-div.SClickable > button:hover {
-    border: 1px solid gray;
-}
-
-div.SToolbar {
-}
-
-div.SToolbar > table {
-    background-color: inherit !important;
-    border: 1px none !important;
-}
-
-div.SToolbar > table > tbody > tr > td {
-    background-color: inherit !important;
-    padding: 2px;
-}
-
-div.SToolbar div.SButton {
-    background-color: inherit !important;
-    border: 1px none !important;
 }
 
 div.STextField {
@@ -165,27 +125,11 @@ div.STextField {
     color: #000000;
 }
 
-div.STextField > input[disabled="true"] {
-    opacity: 0.7;
-}
-
-div.STextField > input[readonly="true"] {
-    background-color: #eeeeff;
-}
-
 div.SFormattedTextField {
     font-family: sans-serif;
     font-weight: normal;
     font-style: normal;
     color: #000000;
-}
-
-div.SFormattedTextField > input[disabled="true"] {
-    opacity: 0.7;
-}
-
-div.SFormattedTextField > input[readonly="true"] {
-    background-color: #eeeeff;
 }
 
 div.STree {
@@ -451,58 +395,12 @@ table.SFlowLayout
     background-color: inherit;
 }
 
-div.SDialog_Box {
-    display: table;
-}
 
-div.SDialog {
-    border: 1px solid #cccccc;
-}
-
-div.SDialog > table > tbody > tr > th {
-    padding-left: 1px;
-    padding-right: 1px;
-}
-
-div.SDialog > table > tbody > tr > th[col="title"] {
-    background-color: #aaaaff;
-    text-align: left;
-    width: 100%;
-}
-
-div.SDialog > table > tbody > tr > * {
-    border: 1px solid #cccccc;
-}
-
-div.SOptionPane_Box {
-    display: table;
-}
-
-div.SOptionPane {
-	display: table-cell;
-    border: 1px solid #cccccc;
-}
-
-div.SOptionPane > table > tbody > tr > th {
-    padding-left: 1px;
-    padding-right: 1px;
-}
-
-div.SOptionPane > table > tbody > tr > th[col="title"] {
-    background-color: #aaaaff;
-    text-align: left;
-    width: 100%;
-}
-
-div.SOptionPane > table > tbody > tr > * {
-    border: 1px solid #cccccc;
-}
-
+/* ---------- DOM ToolTips */
 div.domTT {
     border: 1px solid #333333;
     -moz-opacity: 0.8;
 }
-
 div.domTTCaption {
     font-family: serif;
     font-size: 12px;
@@ -511,7 +409,6 @@ div.domTTCaption {
     color: #FFFFFF;
     background-color: #333333;
 }
-
 div.domTTContent {
     font-size: 12px;
     font-family: sans-serif;
@@ -519,108 +416,107 @@ div.domTTContent {
     background-color: #F1F1FF;
 }
 
-/* Menus */
-
+/* ---------- Menus */
 div.SMenuBar{
-width:100%;
-background-color: #eef;
-border-bottom: 1px solid #ccc;
-color: #000044;
+    width:100%;
+    background-color: #eef;
+    border-bottom: 1px solid #ccc;
+    color: #000044;
 }
 
 /* clears the menu */
 div.SMenuBar div.spacer {
-height:0px;
-clear: both;
+    height:0px;
+    clear: both;
 }
 
 div.SMenuBar div.SMenu,
-div.SMenuBar div.SMenu_Disabled{
-float:left;
-clear:right;
-border-style: solid;
-border-width: 1px;
-border-color: #eee #999 #999 #eee;
-padding:1px 3px 1px 3px;
-background:#eef;
-white-space:nowrap;
-margin:0;
+div.SMenuBar div.SMenu_Disabled {
+    float:left;
+    clear:right;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #eee #999 #999 #eee;
+    padding:1px 3px 1px 3px;
+    background:#eef;
+    white-space:nowrap;
+    margin:0;
 }
 
 div.SMenuBar div.SMenu{
-color: #004;
+    color: #004;
 }
 
-div.SMenuBar div.SMenu_Disabled{
-color: #666;
+div.SMenuBar div.SMenu_Disabled {
+    color: #666;
 }
 
-div.SMenu a,
-div.SPopupMenu a{
-padding:1px 3px 1px 3px;
-display:block;
-white-space:nowrap;
-margin:0;
+div.SMenu A,
+div.SPopupMenu A {
+    padding:1px 3px 1px 3px;
+    display:block;
+    white-space:nowrap;
+    margin:0;
 }
  
 div.SMenu a, .SMenu a:visited,
-div.SPopupMenu a, .SPopupMenu a:visited{
-color:#000;
+div.SPopupMenu a, .SPopupMenu a:visited {
+    color:#000;
 }
 
 div.SMenu a:hover,
-div.SPopupMenu a:hover{
-color:#fff;
-background:#66b;
+div.SPopupMenu a:hover {
+    color:#fff;
+    background:#66b;
 }
 
 div.SMenu a:active,
 div.SPopupMenu a:active{
-color:#aaa;
-background:#66b;
+    color:#aaa;
+    background:#66b;
 }
 
 div.SMenu .SMenu_Disabled a,
 div.SMenu .SMenuItem_Disabled a,
 div.SPopupMenu .SMenu_Disabled a,
-div.SPopupMenu .SMenuItem_Disabled a{
-color:#666;
+div.SPopupMenu .SMenuItem_Disabled a {
+    color:#666;
 }
 
 div.SMenu .SMenu_Disabled a:hover,
 div.SMenu .SMenuItem_Disabled a:hover,
 div.SPopupMenu .SMenu_Disabled a:hover,
 div.SPopupMenu .SMenuItem_Disabled a:hover{
-background:#eee;
+    background:#eee;
 }
 
 div.SMenu li,
-div.SPopupMenu li{
-position:relative;
-background: #eee;
-border-left: 1px solid #eee;
-border-right: 1px solid #999;
-width:auto;
+div.SPopupMenu li {
+    position:relative;
+    background: #eee;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #999;
+    width:auto;
 }
 
 div.SMenu ul,
 div.SPopupMenu ul{
-list-style:none;
-margin:0px;
-padding:0px;
-position:absolute;
-z-index:500;
-top:auto;
-display:none;
-border-top: 1px solid #eee;
-border-bottom: 1px solid #999;
-width:auto;
+    list-style:none;
+    margin:0px;
+    padding:0px;
+    position:absolute;
+    z-index:500;
+    top:auto;
+    display:none;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #999;
+    width:auto;
 }
 
 div.SMenu ul ul,
-div.SPopupMenu ul ul{
-top:-1px;
-left:100%;
+    div.SPopupMenu ul ul{
+    top:-1px;
+    left:100%;
 }
 
 /* Begin non-anchor hover selectors */
@@ -665,13 +561,13 @@ div.SMenu a.x, div.SMenu a.x:visited,
 div.SMenu a.y, div.SMenu a.y:visited, div.SMenu a.y:hover,
 div.SPopupMenu a.x, div.SPopupMenu a.x:visited,
 div.SPopupMenu a.y, div.SPopupMenu a.y:visited, div.SPopupMenu a.y:hover{
-background:#eee url( 'org/wings/icons/MenuArrowRight.gif' ) no-repeat center right;
-padding-right:10px;
+    background:#eee url( 'org/wings/icons/MenuArrowRight.gif' ) no-repeat center right;
+    padding-right:10px;
 }
 
 div.SMenu a.x:hover,
 div.SPopupMenu a.x:hover{
-background:#66b url("org/wings/icons/MenuArrowRight.gif") no-repeat center right;
+    background:#66b url("org/wings/icons/MenuArrowRight.gif") no-repeat center right;
 }
 
 div.SInternalFrame {
@@ -703,6 +599,6 @@ div.SInternalFrame > div.WindowContent {
 
 /* clears the windows */
 div.SDesktopPane div.spacer {
-height:0px;
-clear: both;
+    height:0px;
+    clear: both;
 }

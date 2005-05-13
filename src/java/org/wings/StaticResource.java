@@ -159,7 +159,7 @@ public abstract class StaticResource extends Resource {
      * @return the externalization id
      */
     public String getId() {
-        if (id == null) {
+        if (id == null && SessionManager.getSession() != null) {
             ExternalizeManager ext = SessionManager.getSession().getExternalizeManager();
             id = ext.getId(ext.externalize(this, externalizerFlags));
             log.debug("new " + getClass().getName() + " with id " + id);

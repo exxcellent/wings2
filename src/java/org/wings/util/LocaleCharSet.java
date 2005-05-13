@@ -16,7 +16,6 @@ package org.wings.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
@@ -34,15 +33,16 @@ public class LocaleCharSet {
     private static LocaleCharSet fInstance = null;
     private final transient static Log log = LogFactory.getLog(LocaleCharSet.class);
     private Properties fCharSet;
+    private final static String CHARSET_PROPERTIES = "org/wings/util/charset.properties";
 
     protected LocaleCharSet() {
         fCharSet = new Properties();
         try {
-            InputStream in = this.getClass().getClassLoader().getResourceAsStream("org/wings/util/charset.properties");
+            InputStream in = this.getClass().getClassLoader().getResourceAsStream(CHARSET_PROPERTIES);
             fCharSet.load(in);
             in.close();
-        } catch (IOException e) {
-            log.warn("Unexpected error on loading org/wings/util/charset.properties via CP.", e);
+        } catch (Exception e) {
+            log.warn("Unexpected error on loading " + CHARSET_PROPERTIES + " via class path.", e);
         }
     }
 

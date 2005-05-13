@@ -202,7 +202,7 @@ public final class WingServlet
             log.debug("time to create a new session " + (System.currentTimeMillis() - timestamp));
             return sessionServlet;
         } catch (Exception e) {
-            log.fatal(null, e);
+            log.fatal("Error on creating new wingS session", e);
             throw new ServletException(e);
         }
     }

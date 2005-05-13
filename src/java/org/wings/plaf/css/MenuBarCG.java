@@ -22,6 +22,7 @@ import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.SMenu;
 import org.wings.SMenuBar;
+import org.wings.externalizer.ExternalizeManager;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;

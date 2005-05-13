@@ -36,10 +36,7 @@ import org.wings.style.CSSSelector;
 import org.wings.style.DynamicStyleSheetResource;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     private final transient static Log log = LogFactory.getLog(FrameCG.class);
@@ -90,23 +87,33 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
     
     
     /** 
-     * externalizes the style sheet for this session. The style sheet is 
-     * loaded from the class path.
-     * @return the URL under which the css was externalized
+     * Externalizes the style sheet(s) for this session.
+     * Look up according style sheet file name in org.wings.plaf.css.properties file under Stylesheet.BROWSERNAME.
+     * The style sheet is loaded from the class path.
+     * @return the URLs under which the css file(s) was externalized
      */
-    private String externalizeBrowserStylesheet() {
+    private List externalizeBrowserStylesheets() {
         final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
         final CGManager manager = SessionManager.getSession().getCGManager();
         final String browserName = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
         final String cssResource = PROPERTY_STYLESHEET + browserName;
-        String cssClassPath = (String)manager.getObject(cssResource, String.class);
+        String cssClassPaths = (String)manager.getObject(cssResource, String.class);
         // catch missing browser entry in properties file
-        if (cssClassPath == null) {
-            cssClassPath = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
+        if (cssClassPaths == null) {
+            cssClassPaths = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
         }
-        ClassPathStylesheetResource res = new ClassPathStylesheetResource(cssClassPath, "text/css");
-        
-        return extManager.externalize(res, ExternalizeManager.GLOBAL);
+
+        StringTokenizer tokenizer = new StringTokenizer(cssClassPaths,",");
+        ArrayList cssUrls = new ArrayList();
+        while (tokenizer.hasMoreTokens()) {
+            String cssClassPath = tokenizer.nextToken();
+            ClassPathStylesheetResource res = new ClassPathStylesheetResource(cssClassPath, "text/css");
+            String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
+            if (cssUrl != null)
+                cssUrls.add(cssUrl);
+        }
+
+        return cssUrls;
     }
 
 
@@ -173,9 +180,11 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             }
         }
 
-        final String browserStyle = externalizeBrowserStylesheet();
-        component.headers().add(0, new Link("stylesheet", null, "text/css", null, new DefaultURLResource(browserStyle)));
-        
+        final List externalizedBrowserCssUrls = externalizeBrowserStylesheets();
+        for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
+              component.headers().add(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));;
+        }
+
         addExternalizedHeader(component, UTILS_SCRIPT, "text/javascript");
         addExternalizedHeader(component, FORM_SCRIPT, "text/javascript");
         component.addScriptListener(FOCUS_SCRIPT);

@@ -1,12 +1,12 @@
 package org.wings.resource;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.externalizer.ExternalizeManager;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * filters an input stream of a css file for occurences of "url([classPath])".
@@ -49,7 +49,6 @@ public class CssUrlFilterInputStream extends BufferedInputStream {
     public CssUrlFilterInputStream(InputStream in, ExternalizeManager extManager) {
         super(in);
         this.extManager = extManager;
-        // TODO Auto-generated constructor stub
     }
 
     /* (non-Javadoc)

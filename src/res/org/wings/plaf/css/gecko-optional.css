@@ -1,0 +1,112 @@
+/*
+   $Id$
+   wings advanced CSS Style Sheet for gecko Browser (Mozilla, FireFox).
+
+   >> This file containes advanced, optional css declarations for styling only.  <<
+   >> Porting changes in this file to other browsers is OPTIONAL                 <<
+
+   Please avoid generic/global css selectors and use the wings css classes in your selection path
+*/
+
+/* ----------- DISABLED COMPONENTS OPACITY = 0.7*/
+
+/* Disabled button transparent */
+div.SButton > button[disabled="true"] * {
+    opacity: 0.7;
+}
+/* Disabled button transparent */
+div.STextField > input[disabled="true"] {
+    opacity: 0.7;
+}
+div.SFormattedTextField > input[disabled="true"] {
+    opacity: 0.7;
+}
+
+/* ----------- READONLY TEXTFIELDS: Grey background */
+div.STextField > input[readonly="true"] {
+    background-color: #eeeeff;
+}
+div.SFormattedTextField > input[readonly="true"] {
+    background-color: #eeeeff;
+}
+
+
+/* ----------- FANCY BUTTONS */
+
+/* Fancy flat buttons. */
+div.SButton > button {
+    border: 1px solid #cccccc;
+    background-color: #eeeeff;
+}
+/* Hover button on mouse-over. */
+div.SButton > button:hover {
+    border: 1px outset #cccccc;
+}
+/* Don't hover if disabled button. */
+div.SButton > button:hover[disabled="true"] {
+    border: 1px solid #cccccc;
+}
+
+/* ----------- ???????????? */
+
+/* I have no clue ?! This seems to have no effect.                                               CHECKME!
+div.SClickable > button {
+    background-color: inherit;
+    border: 1px none;
+}
+
+div.SClickable > button:hover {
+    border: 1px solid gray;
+}
+*/
+
+/* ----------- DESKTOP PANE */
+
+/* Thin grey border around buttons in SToolbar. See desktop demo. */
+div.SToolbar {
+}
+div.SToolbar > table {
+    background-color: inherit !important;
+    border: 1px none !important;
+}
+div.SToolbar > table > tbody > tr > td {
+    background-color: inherit !important;
+    padding: 2px;
+}
+div.SToolbar div.SButton {
+    background-color: inherit !important;
+    border: 1px none !important;
+}
+
+
+/* ----------- SOPTIONPANE / SDIALOG */
+
+/*  Note: SOptionPane extends SDialog. */
+
+/* HONESTLY I DON'T REALIZE ANY EFFECT --> Commented out                                        CHECKME!
+div.SDialog_Box,
+div.SOptionPane_Box {
+    display: table;
+}
+div.SDialog,
+div.SOptionPane {
+    border: 1px solid #cccccc;
+}
+div.SOptionPane {
+	display: table-cell;
+}
+div.SDialog > table > tbody > tr > th,
+div.SOptionPane > table > tbody > tr > th {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+div.SDialog > table > tbody > tr > th[col="title"],
+div.SOptionPane > table > tbody > tr > th[col="title"] {
+    background-color: #aaaaff;
+    text-align: left;
+    width: 100%;
+}
+div.SDialog > table > tbody > tr > *,
+div.SOptionPane > table > tbody > tr > * {
+    border: 1px solid #cccccc;
+}*/

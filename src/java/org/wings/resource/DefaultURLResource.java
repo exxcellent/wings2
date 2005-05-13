@@ -17,7 +17,7 @@ import org.wings.SimpleURL;
 import org.wings.URLResource;
 
 /**
- * Default implementation of an URLResource
+ * Default implementation of an Resource accessible via an HTTP URL.
  *
  * @author armin
  *         created at 15.01.2004 17:58:29
@@ -26,8 +26,11 @@ public class DefaultURLResource implements URLResource {
 
     private final SimpleURL url;
 
-    public DefaultURLResource(String s) {
-        url = new SimpleURL(s);
+    /**
+     * @param urlString The URL to access this ressource.
+     */
+    public DefaultURLResource(String urlString) {
+        url = new SimpleURL(urlString);
     }
 
     public SimpleURL getURL() {

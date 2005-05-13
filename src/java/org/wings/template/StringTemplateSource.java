@@ -71,29 +71,3 @@ public class StringTemplateSource implements TemplateSource {
 
 }// StringTemplateSource
 
-/*
-   $Log$
-   Revision 1.4  2004/12/01 07:54:28  hengels
-   o wings is not j-wings
-   o styles are not lower case (they're derived from the class name)
-   o the gecko.css should be modified carefully, because the konqueror.css is following it
-   o the css files should be as small as possible
-
-   Revision 1.3  2004/11/24 21:40:25  blueshift
-   + commons logging
-   + further empty javdoc removal
-
-   Revision 1.2  2004/11/24 18:13:18  blueshift
-   TOTAL CLEANUP:
-   - removed document me TODOs
-   - updated/added java file headers
-   - removed emacs stuff
-   - removed deprecated methods
-
-   Revision 1.1.1.1  2004/10/04 16:13:30  hengels
-   o start development of wings 2
-
-   Revision 1.1  2002/10/26 11:59:43  ahaaf
-   o initial
-
-*/

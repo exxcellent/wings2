@@ -27,14 +27,7 @@
 package org.wings.template;
 
 /**
- * <!--
- * PropertyValueConverter.java
- * Created: Tue Aug  6 17:11:12 2002
- * -->
- * <p/>
  * A PropertyValueConverter is able to convert a property value (a string) to an Java object.
- * <p/>
- * <p><b>(c)2002 <a href="http://www.mercatis.de">mercatis information systems GmbH</a></b></p>
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
@@ -54,28 +47,3 @@ public interface PropertyValueConverter {
 
 }// PropertyValueConverter
 
-/*
-   $Log$
-   Revision 1.3  2004/12/01 07:54:28  hengels
-   o wings is not j-wings
-   o styles are not lower case (they're derived from the class name)
-   o the gecko.css should be modified carefully, because the konqueror.css is following it
-   o the css files should be as small as possible
-
-   Revision 1.2  2004/11/24 18:13:17  blueshift
-   TOTAL CLEANUP:
-   - removed document me TODOs
-   - updated/added java file headers
-   - removed emacs stuff
-   - removed deprecated methods
-
-   Revision 1.1.1.1  2004/10/04 16:13:30  hengels
-   o start development of wings 2
-
-   Revision 1.2  2002/11/19 15:38:28  ahaaf
-   o add doku
-
-   Revision 1.1  2002/08/06 16:45:55  ahaaf
-   add DefaultPropertyManager using reflection and bean shell scripting support
-
-*/

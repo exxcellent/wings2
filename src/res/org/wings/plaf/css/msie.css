@@ -2,10 +2,13 @@
    $Id$
    wings Default Style Sheet for IE Browser.
 
+   >> This file contains CORE CSS declarations needed for correct operation.  <<
+   >> Porting changes in this file to other browsers is REQUIRED              <<
+
    CURRENTLY NOT IN A WORKING STATE -- WE DEVEL ON GECKO!
 
    Includes CSS definitions that are required for wings to work correctly.
-   - Please use additional user styles for visual application styling
+   - Please use msie-advanced.css for visual only styling
    - Please avoid generic/global css selectors and use the wings css classes in your selection path
 */
 
@@ -55,7 +58,7 @@ IMG {
 }
 
 .SLabel_Box {
-	display:table;
+/*	display:table;      ILLEGAL FOR MSIE6 according to TopStyle */
 }
 
 .SLabel {
@@ -110,7 +113,7 @@ ul.STree li * {
 
 ul.STree li button {
     border: none;
-    background-color: inherit;
+/*	    background-color: inherit; ILLEGAL FOR MSIE6 according to TopStyle */
     padding: 0px;
     text-decoration: none;
     font-family: sans-serif;
@@ -383,91 +386,91 @@ table.SBorderLayout {
 /* Begin CSS Popout Menu */
 
 div.SMenuBar div.SMenuBar{
-font-family: Verdana, Arial, Helvetica, sans-serif;
-width:100%;
-float:left;
-/*clear:right;*/
-background-color: #eef;
-border-bottom: 1px solid #ccc;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    width:100%;
+    float:left;
+    /*clear:right;*/
+    background-color: #eef;
+    border-bottom: 1px solid #ccc;
 }
 
 div.SMenuBar_Spacer {
-padding-bottom: 12px;
-margin-bottom:12px;
+    padding-bottom: 12px;
+    margin-bottom:12px;
 }
 
 .SMenuBar a, .SMenuBar span{
-display:block;
-/*border-width:1px;
-border-style:solid;
-border-color:#ccc #888 #555 #bbb;*/
-white-space:nowrap;
-margin:0;
-padding:1px 3px 1px 3px;
+    display:block;
+    /*border-width:1px;
+    border-style:solid;
+    border-color:#ccc #888 #555 #bbb;*/
+    white-space:nowrap;
+    margin:0;
+    padding:1px 3px 1px 3px;
 }
 
 .SMenuBar span{
-color: #004;
-background:#eef;
+    color: #004;
+    background:#eef;
 }
 
 .SMenuBar a{
-background: #eee;
+    background: #eee;
 }
 
 .SMenuBar a, .SMenuBar a:visited{
-color:#000;
+    color:#000;
 }
 
 .SMenuBar a:hover{
-color:#fff;
-background:#66b;
+    color:#fff;
+    background:#66b;
 }
 
 .SMenuBar a:active{
-color:#aaa;
-background:#66b;
+    color:#aaa;
+    background:#66b;
 }
 
 .SMenuBar ul{
-list-style:none;
-margin:0;
-padding:0;
-float:left;
-width:9em;
+    list-style:none;
+    margin:0;
+    padding:0;
+    float:left;
+    width:9em;
 }
 
 .SMenuBar ul.SMenu{
-border-top: 1px solid #eee;
-border-bottom: 1px solid #999;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #999;
 }
 
 .SMenuBar ul.SMenu li{
-border-left: 1px solid #eee;
-border-right: 1px solid #999;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #999;
 }
 
 .SMenuBar li{
-position:relative;
+    position:relative;
 }
 
 .SMenuBar ul ul{
-position:absolute;
-z-index:500;
-top:auto;
-display:none;
-width:9em;
+    position:absolute;
+    z-index:500;
+    top:auto;
+    display:none;
+    width:9em;
 }
 
 .SMenuBar ul ul ul{
-top:-1px;
-left:100%;
+    top:-1px;
+    left:100%;
 }
 
 .SMenuBar ul.SMenu_Main {
-border-style: solid;
-border-width: 1px;
-border-color: #eee #999 #999 #eee;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #eee #999 #999 #eee;
 }
 /* Begin non-anchor hover selectors */
 
@@ -478,14 +481,13 @@ improves IE's performance speed to use the older
 file and this method */
 
 div.SMenuBar span:hover{
-background:#dde;
+    background:#dde;
 }
 
 div.SMenuBar li.SMenu:hover{
-cursor:pointer;
-z-index:100;
+    cursor:pointer;
+    z-index:100;
 }
-
 
 div.SMenuBar li.SMenu:hover ul.SMenu ul.SMenu,
 div.SMenuBar li.SMenu li.SMenu:hover ul.SMenu ul.SMenu,
@@ -503,11 +505,11 @@ div.SMenuBar li.SMenu li.SMenu li.SMenu li.SMenu:hover ul.SMenu
 /* Styling for Expand */
 
 div.SMenuBar a.x, .SMenuBar a.x:visited{
-background:#eee url(icons/MenuArrowRight.gif) no-repeat center right;
+    background:#eee url(icons/MenuArrowRight.gif) no-repeat center right;
 }
 
 div.SMenuBar a.x:hover{
-background:#66b url(icons/MenuArrowRight.gif) no-repeat center right;
+    background:#66b url(icons/MenuArrowRight.gif) no-repeat center right;
 }
 
 div.SMenuBar a.x:active{

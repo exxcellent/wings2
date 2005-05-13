@@ -13,17 +13,15 @@
  */
 package org.wings;
 
-import java.awt.Color;
+import org.wings.plaf.ProgressBarCG;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.io.Serializable;
 import java.text.Format;
 import java.text.NumberFormat;
-
-import javax.swing.BoundedRangeModel;
-import javax.swing.DefaultBoundedRangeModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.wings.plaf.ProgressBarCG;
 
 
 /**
@@ -288,10 +286,6 @@ public class SProgressBar extends SComponent {
      * @param newOrientation <code>HORIZONTAL</code> or <code>VERTICAL</code>
      * @throws IllegalArgumentException if <code>newOrientation</code>
      *                                  is an illegal value
-     * @beaninfo preferred: true
-     * bound: true
-     * attribute: visualUpdate true
-     * description: Set the progress bar's orientation.
      * @see #getOrientation
      */
     public void setOrientation(int newOrientation) {
@@ -333,9 +327,6 @@ public class SProgressBar extends SComponent {
      * or might support them only when the progress bar is in determinate mode.
      *
      * @param b <code>true</code> if the progress bar should render a string
-     * @beaninfo bound: true
-     * attribute: visualUpdate true
-     * description: Whether the progress bar should render a string.
      * @see #isStringPainted
      * @see #setString
      */
@@ -382,9 +373,6 @@ public class SProgressBar extends SComponent {
      * the <code>isStringPainted</code> method returns <code>true</code>.
      *
      * @param s the value of the percent string
-     * @beaninfo bound: true
-     * attribute: visualUpdate true
-     * description: Specifies the progress string to paint
      * @see #getString
      * @see #setStringPainted
      * @see #isStringPainted
@@ -412,7 +400,6 @@ public class SProgressBar extends SComponent {
      * Returns the <code>borderPainted</code> property.
      *
      * @return the value of the <code>borderPainted</code> property
-     * @beaninfo description: Does the progress bar paint its border
      * @see #setBorderPainted
      */
     public boolean isBorderPainted() {
@@ -429,9 +416,6 @@ public class SProgressBar extends SComponent {
      * @param b <code>true</code> if the progress bar
      *          should paint its border;
      *          otherwise, <code>false</code>
-     * @beaninfo bound: true
-     * attribute: visualUpdate true
-     * description: Whether the progress bar should paint its border.
      * @see #isBorderPainted
      */
     public void setBorderPainted(boolean b) {
@@ -599,7 +583,6 @@ public class SProgressBar extends SComponent {
      * Sets the data model used by the <code>SProgressBar</code>.
      *
      * @param newModel the <code>BoundedRangeModel</code> to use
-     * @beaninfo expert: true
      * description: The data model used by the SProgressBar.
      */
     public void setModel(BoundedRangeModel newModel) {
@@ -675,7 +658,6 @@ public class SProgressBar extends SComponent {
      * all change listeners are notified.
      *
      * @param n the new value
-     * @beaninfo preferred: true
      * description: The progress bar's current value.
      * @see #getValue
      * @see BoundedRangeModel#setValue
@@ -697,7 +679,6 @@ public class SProgressBar extends SComponent {
      * all change listeners are notified.
      *
      * @param n the new minimum
-     * @beaninfo preferred: true
      * description: The progress bar's minimum value.
      * @see #getMinimum
      * @see #addChangeListener
@@ -715,7 +696,6 @@ public class SProgressBar extends SComponent {
      * all change listeners are notified.
      *
      * @param n the new maximum
-     * @beaninfo preferred: true
      * description: The progress bar's maximum value.
      * @see #getMaximum
      * @see #addChangeListener
@@ -744,10 +724,6 @@ public class SProgressBar extends SComponent {
      * @param newValue <code>true</code> if the progress bar
      *                 should change to indeterminate mode;
      *                 <code>false</code> if it should revert to normal.
-     * @beaninfo bound: true
-     * attribute: visualUpdate true
-     * description: Set whether the progress bar is indeterminate (true)
-     * or normal (false).
      * @see #isIndeterminate()
      * @see javax.swing.plaf.basic.BasicProgressBarUI
      * @since 1.4
@@ -761,7 +737,6 @@ public class SProgressBar extends SComponent {
      * Returns the value of the <code>indeterminate</code> property.
      *
      * @return the value of the <code>indeterminate</code> property
-     * @beaninfo description: Is the progress bar indeterminate (true)
      * or normal (false)?
      * @see #setIndeterminate
      * @since 1.4
@@ -773,55 +748,3 @@ public class SProgressBar extends SComponent {
 
 }// SProgressBar
 
-/*
-   $Log$
-   Revision 1.8  2005/05/07 16:40:53  oliverscheck
-   fixed javadoc laments
-
-   Revision 1.7  2005/01/31 10:59:52  oliverscheck
-   removed duplicate import stmts
-
-   Revision 1.6  2005/01/23 19:31:36  blueshift
-   o reworked grid, gridbag and flowlayout
-
-   o some bugfixes in plaf.utils and formcg...
-
-   o dropped plaf.xhtml package
-
-   Revision 1.5  2004/12/01 07:54:07  hengels
-   o wings is not j-wings
-   o styles are not lower case (they're derived from the class name)
-   o the gecko.css should be modified carefully, because the konqueror.css is following it
-   o the css files should be as small as possible
-
-   Revision 1.4  2004/11/28 22:49:59  oliverscheck
-   Fixed javadoc warning.
-
-   Revision 1.3  2004/11/24 18:13:21  blueshift
-   TOTAL CLEANUP:
-
-   - removed document me TODOs
-
-   - updated/added java file headers
-
-   - removed emacs stuff
-
-   - removed deprecated methods
-
-   Revision 1.2  2004/11/20 17:04:48  hengels
-   o remove property change support
-
-   Revision 1.1.1.1  2004/10/04 16:13:09  hengels
-   o start development of wings 2
-
-   Revision 1.3  2002/11/18 14:50:48  ahaaf
-   o reload code on model change
-
-   Revision 1.2  2002/10/29 19:00:59  ahaaf
-   o use property constants
-   o remove tabs
-
-   Revision 1.1  2002/10/28 19:56:54  ahaaf
-   o add ProgressBar component
-
-*/

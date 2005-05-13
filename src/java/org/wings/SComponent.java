@@ -903,10 +903,9 @@ public abstract class SComponent
         try {
             if (visible)
                 cg.write(s, this);
-        }
-        catch (SocketException se) {
+        } catch (SocketException se) {
             // Typical double-clicks. Not severe
-            log.debug( "Exception during code generation for " + getClass().getName(), se);
+            log.debug( "Socket exception during code generation for " + getClass().getName() + se);
         } catch (Throwable t) {
             log.warn( "Exception during code generation for " + getClass().getName(), t);
         }
