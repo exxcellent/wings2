@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
 "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd">
-<book>
+<book lang="en">
   <title>wingS User Guide</title>
 
   <bookinfo>
-    <date>May 7, 2005</date>
+    <date>May 13, 2005</date>
 
     <author>
       <surname>wingS Project Team</surname>
@@ -169,9 +169,21 @@
     </sect1>
 
     <sect1>
-      <title>Layout Managers</title>
+      <title id="LayoutManager">Layout Managers</title>
 
       <para>TODO</para>
+
+      <sect2>
+        <title>Swing-like Layout Managers</title>
+
+        <para>TODO</para>
+      </sect2>
+
+      <sect2 id="STemplateLayout">
+        <title>STemplateLayout</title>
+
+        <para>TODO</para>
+      </sect2>
     </sect1>
 
     <sect1>
@@ -324,6 +336,73 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
     </sect1>
 
     <sect1>
+      <title>Client Side Script Listeners</title>
+
+      <para>wingS applications typically work with server side events. That
+      is, whenever you press a button in a wingS application, a form is
+      submitted or a link is pressed that calls the server side's registered
+      ActionListener. From a user's point of view this creates the brief
+      annoying pause between request and response, an effect intrinsic to web
+      applications in general. Interestingly though, users have silently
+      accepted this shift in UI behaviour from client apps to web
+      applications.</para>
+
+      <para>Is that acceptance by the user an excuse for not trying to improve
+      this? No. In fact, there are several fascinating initialives<footnote>
+          <para>Currently the wingS team is integrating the <ulink
+          url="http://www.getahead.ltd.uk/dwr/">DWR</ulink> framework into
+          wingS. Have a look at the WingSet demo.</para>
+        </footnote> determined to improve the latency of web
+      applications.</para>
+
+      <para>Back to wingS. This is how you can integrate JavaScript in a wingS
+      application:</para>
+
+      <para>TODO: Explain general concept in wingS.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>explain JavaScriptEvents, JavaScriptListener and how they can
+          be added to components</para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>explain a simple application with a JavaScript Listener doing
+          just a submit().</para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>explain JavaScript listeners, that reference other components
+          like in this example from wingset/JavaScriptListenerExample</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>TODO: Explain demo.</para>
+
+      <programlisting>STextField firstField  = new STextField();
+STextField secondField  = new STextField();
+STextField sumField  = new STextField();
+
+ /*
+  * Add the client side script listener. The variables
+  * in curly braces are replaced by the actual IDs of the components.
+  */
+  SComponent[] jsParams = new SComponent[]{firstField, secondField,
+                                           sumField};
+  JavaScriptListener jsListener;
+  jsListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE,
+                                      JS_ADD_SCRIPT,
+                                      jsParams);
+
+  firstField.addScriptListener(jsListener);
+  secondField.addScriptListener(jsListener);</programlisting>
+    </sect1>
+
+    <sect1>
       <title>File Upload and Download</title>
 
       <sect2>
@@ -359,32 +438,25 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
   }
 } </programlisting></para>
 
-	  <para>Another way is to extend a DynamicResource and overwrite its write()
-	  method. (Code example not tested, can anyone confirm/rework?)</para>
+        <para>Another way is to extend a DynamicResource and overwrite its
+        write() method. (TODO: Code example not tested, can anyone
+        confirm/rework?)</para>
 
-	  <para><programlisting>
-		public final class DynamicPDFDownload extends DynamicResource {
+        <para><programlisting>public final class DynamicPDFDownload extends DynamicResource {
 
-        /* (non-Javadoc)
-         * @see org.wings.Renderable#write(org.wings.io.Device)
-         */
-        public void write( Device out ) throws IOException {
-            DeviceOutputStream stream = new DeviceOutputStream( out );
-            writePDF( baseDir, stream );
-        
-            stream.flush();
-            out.close();
-        }
-	  </programlisting></para>
+  public void write(Device out) throws IOException {
+    DeviceOutputStream stream = new DeviceOutputStream(out);
+    writePDF(baseDir, stream);
+    stream.flush();
+    out.close();
+  }
+} </programlisting></para>
 
-	  <para>Then you can externalize it via the ExternalizeManager.</para>
-
- 	  <para><programlisting>
-            Map/*<String,String>*/ headers = new HashMap/*<String,String>*/();
-            headers.put("Content-Disposition", "attachment; filename=" + getFilename() );
-		    String url = SessionManager.getSession().getExternalizeManager().externalize(pdfDownload, headers);
-	  </programlisting></para>
-     </sect2>
+        <para>Then you can externalize it via the
+        ExternalizeManager.<programlisting>Map/*&lt;String,String&gt;*/ headers = new HashMap/*&lt;String,String&gt;*/();
+headers.put("Content-Disposition", "attachment; filename=" + getFilename() );
+String url = SessionManager.getSession().getExternalizeManager().externalize(pdfDownload, headers);  </programlisting></para>
+      </sect2>
     </sect1>
 
     <sect1>
@@ -428,7 +500,8 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
           </listitem>
         </orderedlist></para>
 
-      <para>Let's take a look at the details.</para>
+      <para>Let's take a look at the details in the next three
+      sections.</para>
 
       <sect2>
         <title>Default Behaviour</title>
@@ -530,6 +603,70 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
         navigations as a result of inadvertent double-clicks on the client
         side.</para>
       </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Best Practices</title>
+
+      <para>Cherish the following principles, and you will lead a happier
+      wingS developer's life.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>STemplateLayout - Understand how this layout manager works.
+          The minimal overhead of using it pays off quickly. Your web designer
+          will be able to style your application without touching your Java
+          code. Read <xref linkend="STemplateLayout" /> for details. </para>
+        </listitem>
+
+        <listitem>
+          <para>SRootLayout - If you set a SFrame's layout to a custom
+          STemplateLayout containing <code>&lt;object
+          name="content"&gt;&lt;/object&gt;</code>, you can define static
+          XHTML components like a border or title appearing on every page, no
+          matter what the content will be like.</para>
+        </listitem>
+
+        <listitem>
+          <para>The total sum of testing cycles quickly justifies the
+          investment of learning how to efficiently deploy a web application
+          into the servlet container. If Jakarta Tomcat is your choice, learn
+          how to use the so-called "manager". With its predefined ant tasks
+          you can install and remove web applications in the wink of an eye
+          without the expensive stop and start of Tomcat and without writing
+          it into the webapps folder first.</para>
+        </listitem>
+
+        <listitem>
+          <para>Beginning with Tomcat 5.0 a new default session manager was
+          introduced. To quiet it's exceptions use the following section in
+          your web applications context definition.</para>
+
+          <programlisting>&lt;Context&gt;
+   &lt;Manager    
+       className="org.apache.catalina.session.StandardManager"
+        pathname=""&gt;
+   &lt;/Manager&gt;
+&lt;/Context&gt;</programlisting>
+        </listitem>
+
+        <listitem>
+          <para>Beware the consequences of using a servlet container. Multiple
+          requests will traverse static methods in parallel!</para>
+        </listitem>
+
+        <listitem>
+          <para>Avoid setting visual features in Java code, instead define CSS
+          classes with <code>SComponent.setStyle("xyz")</code>and reference a
+          CSS where you determine the rendering with <code>.xyz { &lt;your
+          style definitions&gt; }</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>TODO: Explain loading as resource and benefit of changing the
+          file during runtime.</para>
+        </listitem>
+      </orderedlist>
     </sect1>
   </chapter>
 
@@ -896,11 +1033,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
 
   <appendix id="gfdl">
     <appendixinfo>
-       
-
       <title>GNU Free Documentation License</title>
-
-       
 
       <pubdate>Version 1.2, November 2002</pubdate>
 
@@ -917,17 +1050,11 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       </legalnotice>
 
       <releaseinfo>Version 1.2, November 2002</releaseinfo>
-
-       
     </appendixinfo>
-
-     
 
     <title>GNU Free Documentation License</title>
 
     <section id="gfdl-0">
-       
-
       <title>PREAMBLE</title>
 
       <para>The purpose of this License is to make a manual, textbook, or
