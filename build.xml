@@ -66,7 +66,10 @@
                 <exclude name="org/wings/plaf/css/**"/>
             </fileset>
             <fileset dir="src/res">
-                <include name="org/**"/>
+                <exclude name="**/*.js"/>
+                <exclude name="**/*.css"/>
+                <exclude name="**/*.htc"/>
+                <exclude name="**/*.java.in"/>
             </fileset>
         </jar>
         <jar jarfile="dist/web/WEB-INF/lib/css.jar">
@@ -76,6 +79,11 @@
             </fileset>
             <fileset dir="src/java">
                 <include name="org/wings/plaf/css/*.js"/>
+            </fileset>
+            <fileset dir="src/res">
+                <include name="**/*.js"/>
+                <include name="**/*.css"/>
+                <include name="**/*.htc"/>
             </fileset>
         </jar>
         <copy todir="dist/lib">
