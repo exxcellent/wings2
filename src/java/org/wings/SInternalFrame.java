@@ -133,8 +133,12 @@ public class SInternalFrame
 
     public void show() {
         super.setVisible(true);
-        if (isIconified())
+        if (isIconified()) {
             setIconified(false);
+        }
+        if (isClosed()) {
+            setClosed(false);
+        }
     }
 
     public void hide() {
