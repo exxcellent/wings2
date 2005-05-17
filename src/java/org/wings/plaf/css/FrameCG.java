@@ -313,7 +313,6 @@ public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
             device.print(behaviorUrl);
             device.print(");}\n");
             device.print("</style>\n");
-            log.info("behaviorUrl: " + behaviorUrl);
         }
         
 
