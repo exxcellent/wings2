@@ -25,8 +25,11 @@ import org.wings.session.SessionManager;
 import org.wings.util.ComponentVisitor;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Traverses the component hierarchy of a frame and gathers the dynamic styles
@@ -37,6 +40,16 @@ import java.util.Iterator;
  */
 public class DynamicStyleSheetResource
         extends DynamicResource {
+
+    /**
+     * The selectors in this List will be inherited by tables in IE.
+     * Circumvents using quirks mode. 
+     */
+    private static List inheritedSelectors = Arrays.asList(new String[] {
+            Style.COLOR, Style.FONT, Style.FONT_FAMILY, Style.FONT_SIZE,
+            Style.FONT_STYLE, Style.FONT_VARIANT, Style.FONT_WEIGHT,
+            Style.TEXT_DECORATION, Style.TEXT_TRANSFORM, Style.LETTER_SPACING,
+            Style.LINE_HEIGHT, Style.BACKGROUND_COLOR });
 
     public DynamicStyleSheetResource(SFrame frame) {
         super(frame, "css", "text/css");
@@ -77,15 +90,15 @@ public class DynamicStyleSheetResource
                     Style style = (Style) iterator.next();
                     // Map pseudo css selectors to real selectors
                     CSSSelector selector = cg.mapSelector(style.getSelector());
-                    out.print(selectorPrefix).print(selector.getSelectorString());
+                    String selectorString = selector.getSelectorString();
+                    out.print(selectorPrefix).print(selectorString);
 
                     // IE Workaround: We need to operate IE in quirks mode. Hence we have to inherit props
                     // over tables.
                     BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
-                    if (BrowserType.IE.equals(currentBrowser) ) {
-                        out.print(", ").print(selectorPrefix).print(selector.getSelectorString()).print(" table ");
+                    if (BrowserType.IE.equals(currentBrowser) && inheritedSelectors.contains(selectorString)) {
+                        out.print(", ").print(selectorPrefix).print(selectorString).print(" table ");
                     }
-
                     out.print("{");
                     style.write(out);
                     out.print("}\n");
