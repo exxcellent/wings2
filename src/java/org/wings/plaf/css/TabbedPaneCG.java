@@ -26,6 +26,8 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
@@ -37,6 +39,17 @@ import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
 
 public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
+    private final transient static Log log = LogFactory.getLog(TabbedPaneCG.class);
+
+    private static final Map placements = new HashMap();
+    
+    static {
+        placements.put(new Integer(STabbedPane.TOP), "top");
+        placements.put(new Integer(STabbedPane.BOTTOM), "bottom");
+        placements.put(new Integer(STabbedPane.LEFT), "left");
+        placements.put(new Integer(STabbedPane.RIGHT), "right");
+    }
+
     public void installCG(SComponent component) {
         super.installCG(component);
 
@@ -64,6 +77,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
 
     public void writeContent(final Device device, final SComponent component)
             throws java.io.IOException {
+        log.info("writeContent");
         STabbedPane tabbedPane = (STabbedPane) component;
         if (tabbedPane.getTabCount() > 0) {
             String style = component.getStyle();
@@ -183,10 +197,14 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                 device.print(" disabled=\"true\"");
 
             if (childSelectorWorkaround) {
-                if (i == tabbedPane.getSelectedIndex())
-                    Utils.childSelectorWorkaround(device, "selected");
-                if (!tabbedPane.isEnabledAt(i))
-                    Utils.childSelectorWorkaround(device, "disabled");
+                String cssClassName = "STabbedPane_Tab_" + placements.get(new Integer(tabbedPane.getTabPlacement()));
+                if (i == tabbedPane.getSelectedIndex()) {
+                    Utils.childSelectorWorkaround(device, cssClassName + " STabbedPane_Tab_selected");
+                } else if (!tabbedPane.isEnabledAt(i)) {
+                    Utils.childSelectorWorkaround(device, cssClassName + " STabbedPane_Tab_disabled");
+                } else {
+                    Utils.childSelectorWorkaround(device, cssClassName);
+                }
             }
             device.print(">");
 

@@ -329,16 +329,37 @@ div.pdmenu  div.menu img, div.pdmenu div.disabledmenu img {
    background-color: #AAAAFF;
 }
 
-a.STabbedPane, button.STabbedPane {
+.STabbedPane_Tab_top,
+.STabbedPane_Tab_bottom,
+.STabbedPane_Tab_left,
+.STabbedPane_Tab_right {
     border: 1px solid black;
+    white-space: nowrap;
     padding-left: 8px;
     padding-right: 8px;
     line-height: 1.6em;
 }
-a.selected, button.selected {
-    background-color: #aaaaff;
+
+.STabbedPane_Tab_top {
+    border-bottom: none !important;
 }
-a.disabled, button.disabled {
+.STabbedPane_Tab_bottom {
+    border-top: none !important;
+}
+
+.STabbedPane_Tab_left {
+    border-right: none !important;
+}
+
+.STabbedPane_Tab_right {
+    border-left: none !important;
+}
+
+.STabbedPane_Tab_selected {
+    background-color: #f6decc;
+}
+
+.STabbedPane_Tab_disabled {
     color : #808080;
 }
 
