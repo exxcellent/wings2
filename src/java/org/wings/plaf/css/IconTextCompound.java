@@ -26,7 +26,7 @@ import java.io.IOException;
  * @author hengels
  * @version $Revision$
  */
-abstract class IconTextCompound implements SConstants {
+public abstract class IconTextCompound implements SConstants {
     private final static transient Log log = LogFactory.getLog(IconTextCompound.class);
     
     public void writeCompound(Device device, SComponent component, int horizontal, int vertical) throws IOException {
