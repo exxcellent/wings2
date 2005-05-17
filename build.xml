@@ -84,13 +84,11 @@
                 <include name="**/*.js"/>
                 <include name="**/*.css"/>
                 <include name="**/*.htc"/>
+                <include name="**/*.properties"/>
             </fileset>
         </jar>
         <copy todir="dist/lib">
             <fileset dir="lib" includes="*.jar"/>
-        </copy>
-        <copy todir="dist/web">
-            <fileset dir="src/web"/>
         </copy>
         <copy todir="dist/web/WEB-INF/lib">
             <fileset dir="lib">

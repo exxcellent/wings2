@@ -23,49 +23,104 @@ import java.util.Properties;
 
 public class CSSLookAndFeel
         extends org.wings.plaf.LookAndFeel {
+    private static final String WEB_INF = "WEB-INF/";
     private final transient static Log log = LogFactory.getLog(CSSLookAndFeel.class);
-    private static final String PROPERTIES_LOCATION_START = "WEB-INF/" + CSSLookAndFeel.class.getPackage().getName();
-    private static final String PROPERTIES_LOCATION_END = ".properties";
+    private static final String PROPERTIES_FILENAME_START = CSSLookAndFeel.class.getPackage().getName();
+    private static final String PROPERTIES_FILENAME_END = ".properties";
+    private static final String PROPERTIES_CLASSPATH = PROPERTIES_FILENAME_START.replace('.','/').concat("/");
 
     public CSSLookAndFeel() throws IOException {
         super(loadProperties());
     }
 
-    private static Properties loadProperties() throws IOException {
+    private static Properties loadProperties() throws IOException{
         // default properties
-        StringBuffer propertiesLocation = new StringBuffer(PROPERTIES_LOCATION_START);
-        propertiesLocation.append(PROPERTIES_LOCATION_END);
+        StringBuffer propertiesFilename = new StringBuffer(PROPERTIES_FILENAME_START);
+        propertiesFilename.append(PROPERTIES_FILENAME_END);
         // browser dependent properties
         String browserType = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
-        StringBuffer browserPropertiesLocation = new StringBuffer(PROPERTIES_LOCATION_START);
-        browserPropertiesLocation.append(".");
-        browserPropertiesLocation.append(browserType);
-        browserPropertiesLocation.append(PROPERTIES_LOCATION_END);
+        StringBuffer browserPropertiesFilename = new StringBuffer(PROPERTIES_FILENAME_START);
+        browserPropertiesFilename.append(".");
+        browserPropertiesFilename.append(browserType);
+        browserPropertiesFilename.append(PROPERTIES_FILENAME_END);
 
+        Properties properties;
+        properties = loadProperties(propertiesFilename);
+        // catch IOExceptions b/c these files are totally optional
+        try {
+            properties.putAll(loadProperties(browserPropertiesFilename));
+        } catch (IOException e) {
+            log.info("the (optional) browser properties files did not get loaded.\n If this is ok (default), ignore the log messages above.");
+        }
+        return properties;
+    }
+
+    /**
+     * Loads properties from a file. First looks in the classPath for the
+     * default file. Throws an exception if that is not found. Then looks 
+     * for an overriding file in the webapp container. If this is not found,
+     * log this info.
+     * @param propertiesFilename the name of the properties file.
+     * @throws IOException if default (in classPath) is not found.
+     * @return The Properties loaded
+     */
+    private static Properties loadProperties(StringBuffer propertiesFilename) throws IOException{
+        Properties properties;
+        InputStream in;
+        IOException finalException = null;
+        // first load defaults from classpath, and if it fails, throw Exception
+        final String classPath = PROPERTIES_CLASSPATH + propertiesFilename.toString();
+        try {
+            properties = loadPropertiesFromClasspath(classPath);
+        } catch (IOException e) {
+            properties = new Properties();
+            finalException = e;
+        }
+        // now load from webapp folder, log if fails.
+        String webappUrl = WEB_INF + propertiesFilename.toString();
+        properties.putAll(loadPropertiesFromContainer(webappUrl));
+        // throw delayed exception
+        if (finalException != null) {
+            throw finalException;
+        }
+        return properties;
+    }
+
+    /**
+     * Loads a file from the webapp's dir into a properties file.
+     * @param webappUrl the file's url
+     * @return The Properties loaded
+     */
+    private static Properties loadPropertiesFromContainer(String webappUrl) {
         Properties properties = new Properties();
         InputStream in;
         try {
-            in = SessionManager.getSession().getServletContext().getResourceAsStream(propertiesLocation.toString());
+            in = SessionManager.getSession().getServletContext().getResourceAsStream(webappUrl);
             properties.load(in);
             in.close();
         } catch (Exception e) {
-            final String error = "Unable to open " + propertiesLocation.toString() + " due to "+e+".\nPlease check deployment!";
-            log.fatal(error);
-            throw new IOException(error);
-        }
+            final String error = "Unable to open " + webappUrl + " due to "+e+".\nIt seems you didn't provide a custom config file.";
+            log.warn(error);
+        } 
+        return properties;
+    }
+
+    /**
+     * Loads a file from the webapp's classpath into a properties file.
+     * @param classPath the file's classpath
+     * @return The Properties loaded
+     * @throws IOException
+     */
+    private static Properties loadPropertiesFromClasspath(final String classPath) throws IOException {
+        Properties properties = new Properties();
+        InputStream in;
         try {
-            in = SessionManager.getSession().getServletContext().getResourceAsStream(browserPropertiesLocation.toString());
-            if (in != null) { 
-                // file is there, so we should be able to load it.
-                properties.load(in);
-                in.close();
-            } 
-            /* else file is not there, we are not overriding any property.
-             * So we don't need to do anything.
-             */
+            in = CSSLookAndFeel.class.getClassLoader().getResourceAsStream(classPath);
+            properties.load(in);
+            in.close();
         } catch (Exception e) {
-            final String error = "Unable to open " + browserPropertiesLocation.toString() + " due to "+e+".\nPlease check deployment!";
-            log.error(error);
+            final String error = "Unable to open " + classPath + " from classPath due to "+e+".\nPlease check deployment!";
+            log.warn(error);
             throw new IOException(error);
         }
         return properties;
