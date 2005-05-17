@@ -51,7 +51,7 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
     .getSession().getCGManager().getObject("JScripts.menu",
             String.class);
     private static final JavaScriptListener BODY_ONCLICK_SCRIPT =
-        new JavaScriptListener("onClick", "wpm_handleBodyClicks(event)");
+        new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
 
     protected void writePopup(final Device device, SPopupMenu menu)
             throws IOException {
