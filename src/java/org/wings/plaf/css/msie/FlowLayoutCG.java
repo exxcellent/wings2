@@ -41,7 +41,7 @@ public class FlowLayoutCG extends org.wings.plaf.css.FlowLayoutCG {
            final SContainer container = layout.getContainer();
 
            Utils.printNewline(d, container);
-           d.print("<div");
+           d.print("<table");
            Utils.printDivHorizontalAlignment(d, alignment);
            d.print(" class=\"SFlowLayout\">");
 
@@ -69,7 +69,7 @@ public class FlowLayoutCG extends org.wings.plaf.css.FlowLayoutCG {
             }
 
            Utils.printNewline(d, container);
-           d.print("</div>");
+           d.print("</table>");
        } else {
            // For all other cases the default implementation should work. 
            super.write(d, l);
