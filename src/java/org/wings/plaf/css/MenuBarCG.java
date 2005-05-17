@@ -48,7 +48,7 @@ public class MenuBarCG
     .getSession().getCGManager().getObject("JScripts.menu",
             String.class);
     public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
-        new JavaScriptListener("onClick", "wpm_handleBodyClicks(event)");
+        new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
