@@ -113,7 +113,7 @@ ul.STree li * {
 
 ul.STree li button {
     border: none;
-/*	    background-color: inherit; ILLEGAL FOR MSIE6 according to TopStyle */
+    background-color: inherit; /* ILLEGAL FOR MSIE6 according to TopStyle */
     padding: 0px;
     text-decoration: none;
     font-family: sans-serif;
@@ -122,11 +122,10 @@ ul.STree li button {
     color: #000000;
 }
 ul.STree li div.SSubTree {
-	background-image: url(icons/TreeLine.gif);
+	background-image: url(org/wings/icons/TreeLine.gif);
 	background-repeat:repeat-y;
 	background-position: 0px 100px;
 }
-
 
 .STable {
    border-style: solid;
