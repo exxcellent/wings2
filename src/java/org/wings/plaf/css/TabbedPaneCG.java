@@ -77,7 +77,6 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
 
     public void writeContent(final Device device, final SComponent component)
             throws java.io.IOException {
-        log.info("writeContent");
         STabbedPane tabbedPane = (STabbedPane) component;
         if (tabbedPane.getTabCount() > 0) {
             String style = component.getStyle();
@@ -104,11 +103,11 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     
             if (childSelectorWorkaround) {
                 if (placement == STabbedPane.TOP)
-                    Utils.childSelectorWorkaround(device, "top");
+                    Utils.childSelectorWorkaround(device, "STabbedPane_top");
                 else if (placement == STabbedPane.LEFT)
-                    Utils.childSelectorWorkaround(device, "left");
+                    Utils.childSelectorWorkaround(device, "STabbedPane_left");
                 else
-                    Utils.childSelectorWorkaround(device, "pane");
+                    Utils.childSelectorWorkaround(device, "STabbedPane_pane");
             }
             device.print(">");
     
@@ -128,11 +127,11 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     
             if (childSelectorWorkaround) {
                 if (placement == STabbedPane.RIGHT)
-                    Utils.childSelectorWorkaround(device, "right");
+                    Utils.childSelectorWorkaround(device, "STabbedPane_right");
                 else if (placement == STabbedPane.BOTTOM)
-                    Utils.childSelectorWorkaround(device, "bottom");
+                    Utils.childSelectorWorkaround(device, "STabbedPane_bottom");
                 else
-                    Utils.childSelectorWorkaround(device, "pane");
+                    Utils.childSelectorWorkaround(device, "STabbedPane_pane");
             }
             device.print(">");
     
@@ -207,6 +206,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                 }
             }
             device.print(">");
+            device.print("&nbsp;");
 
             if (icon != null && tabbedPane.getTabPlacement() != STabbedPane.RIGHT) {
                 device.print("<img");
@@ -218,6 +218,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             }
 
             Utils.write(device, title);
+            device.print("&nbsp;");
 
             if (icon != null && tabbedPane.getTabPlacement() == STabbedPane.RIGHT) {
                 device.print("&nbsp;<img");
@@ -252,9 +253,9 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     private static final Map msieMappings = new HashMap();
     private static final Map geckoMappings = new HashMap();
     static {
-        msieMappings.put(STabbedPane.SELECTOR_SELECTION, new CSSSelector (" *.selected"));
-        msieMappings.put(STabbedPane.SELECTOR_CONTENT, new CSSSelector (" td.content"));
-        msieMappings.put(STabbedPane.SELECTOR_TABS, new CSSSelector (" th"));
+        msieMappings.put(STabbedPane.SELECTOR_SELECTION, new CSSSelector (" *.STabbedPane_selected"));
+        msieMappings.put(STabbedPane.SELECTOR_CONTENT, new CSSSelector (" td.STabbedPane_pane"));
+        msieMappings.put(STabbedPane.SELECTOR_TABS, new CSSSelector (" table.STabbedPane th"));
         geckoMappings.put(STabbedPane.SELECTOR_SELECTION, new CSSSelector (" > table > tbody > tr > th > *[selected=\"true\"]"));
         geckoMappings.put(STabbedPane.SELECTOR_CONTENT, new CSSSelector (" > table > tbody > tr > td"));
         geckoMappings.put(STabbedPane.SELECTOR_TABS, new CSSSelector (" > table > tbody > tr > th"));

@@ -301,8 +301,6 @@ div.STabbedPane, div.STabbedPane > table {
 div.STabbedPane > table > tbody > tr > th > * {
     display: inline;
     border: 1px solid black;
-    padding-left: 8px;
-    padding-right: 8px;
     white-space: nowrap;
     line-height: 1.6em;
 }

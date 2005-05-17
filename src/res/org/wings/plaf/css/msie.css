@@ -329,15 +329,33 @@ div.pdmenu  div.menu img, div.pdmenu div.disabledmenu img {
    background-color: #AAAAFF;
 }
 
+.STabbedPane_right {
+    vertical-align: top;
+    text-align: left;
+}
+
+.STabbedPane_left {
+    vertical-align: top;
+    text-align: right;
+}
+
+.STabbedPane_top,
+.STabbedPane_bottom {
+    text-align: left;
+}
+
 .STabbedPane_Tab_top,
 .STabbedPane_Tab_bottom,
 .STabbedPane_Tab_left,
 .STabbedPane_Tab_right {
     border: 1px solid black;
     white-space: nowrap;
-    padding-left: 8px;
-    padding-right: 8px;
     line-height: 1.6em;
+}
+td.STabbedPane_pane {
+    border: 2px ridge black;
+    width: 100%;
+    height: 100%;
 }
 
 .STabbedPane_Tab_top {
@@ -349,10 +367,16 @@ div.pdmenu  div.menu img, div.pdmenu div.disabledmenu img {
 
 .STabbedPane_Tab_left {
     border-right: none !important;
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 .STabbedPane_Tab_right {
     border-left: none !important;
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 .STabbedPane_Tab_selected {
@@ -362,31 +386,6 @@ div.pdmenu  div.menu img, div.pdmenu div.disabledmenu img {
 .STabbedPane_Tab_disabled {
     color : #808080;
 }
-
-td.pane {
-    border: 2px ridge black;
-    width: 100%;
-    height: 100%;
-}
-
-th.top {
-    text-align: left;
-}
-
-th.left {
-    vertical-align: top;
-    text-align: right;
-}
-
-th.right {
-    vertical-align: top;
-    text-align: left;
-}
-
-th.bottom {
-    text-align: left;
-}
-
 
 .SPanel, .SContainer{
     width: 100%;
