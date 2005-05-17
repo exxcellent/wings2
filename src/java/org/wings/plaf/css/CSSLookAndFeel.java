@@ -33,7 +33,7 @@ public class CSSLookAndFeel
         super(loadProperties());
     }
 
-    private static Properties loadProperties() throws IOException{
+    private static Properties loadProperties() throws IOException {
         // default properties
         StringBuffer propertiesFilename = new StringBuffer(PROPERTIES_FILENAME_START);
         propertiesFilename.append(PROPERTIES_FILENAME_END);
@@ -44,13 +44,12 @@ public class CSSLookAndFeel
         browserPropertiesFilename.append(browserType);
         browserPropertiesFilename.append(PROPERTIES_FILENAME_END);
 
-        Properties properties;
+        Properties properties = new Properties();
         properties = loadProperties(propertiesFilename);
-        // catch IOExceptions b/c these files are totally optional
         try {
             properties.putAll(loadProperties(browserPropertiesFilename));
         } catch (IOException e) {
-            log.info("the (optional) browser properties files did not get loaded.\n If this is ok (default), ignore the log messages above.");
+            log.info("An Exception occured while loading browser specific properties. This is OK.");
         }
         return properties;
     }
@@ -63,26 +62,18 @@ public class CSSLookAndFeel
      * @param propertiesFilename the name of the properties file.
      * @throws IOException if default (in classPath) is not found.
      * @return The Properties loaded
+     * @throws IOException 
      */
-    private static Properties loadProperties(StringBuffer propertiesFilename) throws IOException{
+    private static Properties loadProperties(StringBuffer propertiesFilename) throws IOException {
         Properties properties;
         InputStream in;
         IOException finalException = null;
         // first load defaults from classpath, and if it fails, throw Exception
         final String classPath = PROPERTIES_CLASSPATH + propertiesFilename.toString();
-        try {
-            properties = loadPropertiesFromClasspath(classPath);
-        } catch (IOException e) {
-            properties = new Properties();
-            finalException = e;
-        }
+        properties = loadPropertiesFromClasspath(classPath);
         // now load from webapp folder, log if fails.
         String webappUrl = WEB_INF + propertiesFilename.toString();
         properties.putAll(loadPropertiesFromContainer(webappUrl));
-        // throw delayed exception
-        if (finalException != null) {
-            throw finalException;
-        }
         return properties;
     }
 
