@@ -86,7 +86,7 @@ public class ButtonCG        extends LabelCG        implements SConstants, org.w
         final SAbstractButton button = (SAbstractButton) component;
 
         if (button.getShowAsFormComponent()) {
-            device.print("<button name=\"");
+            device.print("<button type=\"submit\" name=\"");
             Utils.write(device, Utils.event(button));
             device.print("\"");
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
