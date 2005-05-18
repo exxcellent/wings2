@@ -1,4 +1,3 @@
-// DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/TextArea.plaf'
 /*
  * $Id$
  * Copyright 2000,2005 wingS development team.
