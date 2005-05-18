@@ -566,6 +566,7 @@ div.SPopupMenu a.y, div.SPopupMenu a.y:visited, div.SPopupMenu a.y:hover{
 div.SMenu a.x:hover,
 div.SPopupMenu a.x:hover{
     background:#66b url("org/wings/icons/MenuArrowRight.gif") no-repeat center right;
+    padding-right:10px;
 }
 
 div.SInternalFrame {

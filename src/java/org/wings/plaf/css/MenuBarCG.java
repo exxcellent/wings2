@@ -71,7 +71,7 @@ public class MenuBarCG
         SMenuBar mbar = (SMenuBar) component;
         int mcount = mbar.getComponentCount();
 
-        device.print("<div class=\"spacer\">&nbsp;</div>");
+        printSpacer(device);
         for (int i = 0; i < mcount; i++) {
             SComponent menu = mbar.getComponent(i);
             if (menu.isVisible()) {
@@ -86,9 +86,17 @@ public class MenuBarCG
                 device.print("</div>");
             }
         }
-        device.print("<div class=\"spacer\">&nbsp;</div>");
+        printSpacer(device);
 
 //--- end code from write-template.
+    }
+
+    /**
+     * @param device
+     * @throws IOException
+     */
+    protected void printSpacer(final Device device) throws IOException {
+        device.print("<div class=\"spacer\">&nbsp;</div>");
     }
 
     /* (non-Javadoc)

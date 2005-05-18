@@ -144,6 +144,7 @@ function wpm_menuPopup(e, menu) {
 function wpm_hideActiveMenu() {
 	if (wpm_menuOpen == 1) {
 		document.getElementById(wpm_activeMenu).style.display = 'none';
+		toggleFormElements(true);
 		wpm_menuOpen = 0;
 	}
 }
@@ -152,6 +153,7 @@ function wpm_showMenu(menuId, coord, eventCoord) {
 	elStyle = document.getElementById(menuId).style;
 	elStyle.top = coord.y + 'px';
 	elStyle.left = coord.x + 'px';
+	toggleFormElements(false);
 	elStyle.display = 'block';
 	wpm_menuCalled = 1;
 	wpm_menuOpen = 1;
@@ -165,6 +167,24 @@ function wpm_handleBodyClicks(e) {
 	e = wpm_getEvent(e);
 	coords = wpm_getCoordinates(e);
 	if (wpm_isValidEvent(coords)) {
-		wpm_hideActiveMenu();	
+		wpm_hideActiveMenu();
 	}
+}
+
+function toggleFormElements(visible) {
+	if ( wu_ie5 ) {
+		// only ie needs to hide select elements
+	    var selects = document.getElementsByTagName('select');
+		for ( var i=0; i<selects.length; i++ ) {
+			setVisible(selects[i], visible);
+		}
+	}
+}
+
+function setVisible(element, visible) {
+    if (visible) {
+        element.style.visibility = 'visible';
+    } else {
+        element.style.visibility= 'hidden';
+    }
 }

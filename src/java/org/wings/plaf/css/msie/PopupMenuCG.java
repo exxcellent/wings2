@@ -1,4 +1,3 @@
-// DO NOT EDIT! Your changes will be lost: generated from '/home/hengels/jdevel/wings/src/org/wings/plaf/css1/Menu.plaf'
 /*
  * $Id$
  * Copyright 2000,2005 wingS development team.
@@ -12,54 +11,51 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.css;
+package org.wings.plaf.css.msie;
 
-
-import org.wings.*;
-import org.wings.io.Device;
-import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.*;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
+import org.wings.externalizer.ExternalizeManager;
+import org.wings.header.Script;
+import org.wings.io.Device;
+import org.wings.resource.ClasspathResource;
+import org.wings.resource.DefaultURLResource;
+import org.wings.script.JavaScriptListener;
+import org.wings.session.SessionManager;
 
-    public void installCG(final SComponent comp) {
-        super.installCG(comp);
-    }
+public class PopupMenuCG extends org.wings.plaf.css.PopupMenuCG {
+    private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 
-    public void uninstallCG(final SComponent comp) {
-    }
-
-    public void writePopup(final Device device, SMenu menu)
+    protected void writePopup(final Device device, SPopupMenu menu)
             throws IOException {
-        String componentId = menu.getName();
         if (menu.isEnabled()) {
+            String componentId = menu.getName();
             device.print("<ul");
-            boolean hasParent = menu.getParentMenu() != null;
-            if (hasParent) {
-                // calculate max length of children texts for sizing of layer
-                int maxLength = 0;
-                for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-                    if (!(menu.getMenuComponent(i) instanceof SMenuItem))
-                        continue;
-                    String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
-                    if (text != null && text.length() > maxLength) {
-                        maxLength = text.length();
-                        if (menu.getMenuComponent(i) instanceof SMenu) {
-                                maxLength = maxLength + 2; //graphics
-                        }
+            // calculate max length of children texts for sizing of layer
+            int maxLength = 0;
+            for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+                if (!(menu.getMenuComponent(i) instanceof SMenuItem))
+                    continue;
+                String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
+                if (text != null && text.length() > maxLength) {
+                    maxLength = text.length();
+                    if (menu.getMenuComponent(i) instanceof SMenu) {
+                            maxLength = maxLength + 2; //graphics
                     }
                 }
-                device.print(" style=\"width:");
-                String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
-                device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
-                device.print("em;\"");
-            } else {
-                device.print(" id=\"");
-                device.print(componentId);
-                device.print("_pop\"");
             }
-            device.print(" class=\"SMenu\">");
+            device.print(" style=\"width:");
+            String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
+            device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
+            device.print("em;\" id=\"");
+            device.print(componentId);
+            device.print("_pop\">");
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
                 SComponent menuItem = menu.getMenuComponent(i);
     
@@ -75,6 +71,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenuItem\"");
                         } else {
+    
                             device.print(" class=\"SMenuItem_Disabled\"");
                         }
                     }
@@ -108,33 +105,5 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
             device.print("</ul>");
         }
         device.print("\n");
-    }
-
-    protected void writeItem(final Device device, SMenuItem menu)
-            throws IOException {
-            writeItemContent(device, menu);
-    }
-
-    protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
-            throws IOException {
-        RequestURL addr = abstractButton.getRequestURL();
-        addr.addParameter(abstractButton,
-                abstractButton.getToggleSelectionParameter());
-        addr.write(d);
-    }
-
-    public void writeContent(final Device device,
-                             final SComponent _c)
-            throws IOException {
-        SMenu menu = (SMenu) _c;
-        boolean hasParent = menu.getParentMenu() != null;
-        if (hasParent) {
-        writeItem(device, menu);
-        } else {
-            SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writePrefix(device, _c);
-            writePopup(device, menu);
-            SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writeSuffix(device, _c);
-        }
-        
     }
 }

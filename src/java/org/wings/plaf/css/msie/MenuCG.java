@@ -12,7 +12,7 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.css;
+package org.wings.plaf.css.msie;
 
 
 import org.wings.*;
@@ -21,14 +21,7 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
-
-    public void installCG(final SComponent comp) {
-        super.installCG(comp);
-    }
-
-    public void uninstallCG(final SComponent comp) {
-    }
+public class MenuCG extends org.wings.plaf.css.MenuCG {
 
     public void writePopup(final Device device, SMenu menu)
             throws IOException {
@@ -36,29 +29,26 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         if (menu.isEnabled()) {
             device.print("<ul");
             boolean hasParent = menu.getParentMenu() != null;
-            if (hasParent) {
-                // calculate max length of children texts for sizing of layer
-                int maxLength = 0;
-                for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-                    if (!(menu.getMenuComponent(i) instanceof SMenuItem))
-                        continue;
-                    String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
-                    if (text != null && text.length() > maxLength) {
-                        maxLength = text.length();
-                        if (menu.getMenuComponent(i) instanceof SMenu) {
-                                maxLength = maxLength + 2; //graphics
-                        }
+            // calculate max length of children texts for sizing of layer
+            int maxLength = 0;
+            for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+                if (!(menu.getMenuComponent(i) instanceof SMenuItem))
+                    continue;
+                String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
+                if (text != null && text.length() > maxLength) {
+                    maxLength = text.length();
+                    if (menu.getMenuComponent(i) instanceof SMenu) {
+                            maxLength = maxLength + 2; //graphics
                     }
                 }
-                device.print(" style=\"width:");
-                String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
-                device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
-                device.print("em;\"");
-            } else {
-                device.print(" id=\"");
-                device.print(componentId);
-                device.print("_pop\"");
             }
+            device.print(" style=\"width:");
+            String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
+            device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
+            device.print("em;\"");
+            device.print(" id=\"");
+            device.print(componentId);
+            device.print("_pop\"");
             device.print(" class=\"SMenu\">");
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
                 SComponent menuItem = menu.getMenuComponent(i);
@@ -108,33 +98,5 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
             device.print("</ul>");
         }
         device.print("\n");
-    }
-
-    protected void writeItem(final Device device, SMenuItem menu)
-            throws IOException {
-            writeItemContent(device, menu);
-    }
-
-    protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
-            throws IOException {
-        RequestURL addr = abstractButton.getRequestURL();
-        addr.addParameter(abstractButton,
-                abstractButton.getToggleSelectionParameter());
-        addr.write(d);
-    }
-
-    public void writeContent(final Device device,
-                             final SComponent _c)
-            throws IOException {
-        SMenu menu = (SMenu) _c;
-        boolean hasParent = menu.getParentMenu() != null;
-        if (hasParent) {
-        writeItem(device, menu);
-        } else {
-            SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writePrefix(device, _c);
-            writePopup(device, menu);
-            SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writeSuffix(device, _c);
-        }
-        
     }
 }

@@ -25,6 +25,7 @@ import java.util.List;
 public class SPopupMenu
         extends SComponent {
     protected final List menuItems = new ArrayList();
+    private double widthScaleFactor = 0.7f;
 
     /**
      * Add a menu item to this menu.
@@ -93,5 +94,28 @@ public class SPopupMenu
 
     public void setCG(PopupMenuCG cg) {
         super.setCG(cg);
+    }
+
+    /**
+     * Returns the scale factor for the width of the Menu components. 
+     * The length of the children texts is multiplied by this factor and set as
+     * width (in em) for the children.
+     * 
+     * @return Returns the widthScaleFactor.
+     */
+    public double getWidthScaleFactor() {
+        return widthScaleFactor;
+    }
+    /**
+     * Sets the scale factor for the width of the Menu components. 
+     * The length of the children texts is multiplied by this factor and set as
+     * width (in em) for the children.
+     * 
+     * Default value is 0.8.
+     * 
+     * @param widthScaleFactor The widthScaleFactor to set.
+     */
+    public void setWidthScaleFactor(double widthScaleFactor) {
+        this.widthScaleFactor = widthScaleFactor;
     }
 }

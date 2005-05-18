@@ -90,7 +90,7 @@ public class MenuExample extends WingSetPane {
         controls.addSizable(menuBar);
         panel.add(controls);
         panel.add(menuBar, "MenuBar");
-        panel.add(new SLabel("<html><br>Form components are overlayed. Selected Menu: "), "Intro");
+        panel.add(new SLabel("<html><br>Form components are overlayed or hidden (in IE). Selected Menu: "), "Intro");
         panel.add(selectionLabel, "SelectionLabel");
         panel.add(new SLabel("<html><hr><br>combobox :"));
         panel.add(new SComboBox(new DefaultComboBoxModel(ListExample.createElements())), "ComboBox");
