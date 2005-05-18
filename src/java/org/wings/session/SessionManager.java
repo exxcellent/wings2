@@ -13,12 +13,8 @@
  */
 package org.wings.session;
 
-import java.util.Hashtable;
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.session.Session;
 
 
 
@@ -30,9 +26,8 @@ import org.wings.session.Session;
  * @version $Revision$
  */
 public class SessionManager {
-	
     private final transient static Log log = LogFactory.getLog(SessionManager.class);
-    private static final Map sessions = new Hashtable();
+    private static final ThreadLocal currentSession = new ThreadLocal();
 
     /**
      * Get the Session that is currently associated with this Thread.
@@ -40,7 +35,7 @@ public class SessionManager {
      * @return the Session
      */
     public static Session getSession() {
-		return (Session) sessions.get(getKey());
+        return (Session) currentSession.get();
     }
 
     /**
@@ -51,26 +46,12 @@ public class SessionManager {
      * @param session the Session
      */
     public static void setSession(Session session) {
-		sessions.put(getKey(), session);
+        currentSession.set(session);
     }
 
     public static void removeSession() {
-		sessions.remove(getKey());
+        currentSession.set(null);
     }
-	
-	
-	
-	/* ----------------------------------------------------------------------
-	 * private methods
-	 * ---------------------------------------------------------------------- */
-	
-	/**
-	 * Returns the key a session is stored with
-	 * @return Object as key
-	 */
-	private static Object getKey() {
-		return Thread.currentThread().getThreadGroup();
-	}
 }
 
 
