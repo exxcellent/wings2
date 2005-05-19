@@ -207,7 +207,7 @@ div.STable > table > tbody > tr > td button {
     padding: 0px
 }
 
-div.SList > * > li[selected="true"] {
+div.SList > * > li.SList_selected {
     background-color: #f6decc !important;
     border: 1px dotted black;
     cursor: pointer

@@ -90,6 +90,12 @@ IMG {
    color: #000000;
 }
 
+table.SList li.SList_selected {
+    background-color: #f6decc !important;
+    border: 1px dotted black;
+    cursor: pointer
+}
+
 div.STree {
 	vertical-align: top;
 	text-align: left;
@@ -144,106 +150,6 @@ ul.STree li div.SSubTree {
 .SToolbar {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	background-color: #CCCCCC;
-}
-
-.SMenuBar {
-	color: #000066;
-	background-color: #CCCCCC;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	padding-right: 0px;
-	padding-left: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-width: 1px;
-   padding : 0px;
-}
-
-.SMenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
-	white-space: nowrap;
-  	color: #ffffff;
-	background-color: #7777CC;
-}
-
-.SMenuDisabledMenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: darkgray;
-	background-color: #CCCCCC;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
-	white-space: nowrap;
-}
-
-.SMenuJSmenu {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-  	color: #ffffff;
-	background-color: #5555AA;
-	border-width: 0px;
-	margin: 0px;
-	padding: 0px;
-	white-space: nowrap;
-}
-
-.SMenuPopup {
-	background-color: #CCCCCC;
-	border-style: solid;
-	border-width: 2px;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	position: absolute;
-	overflow: visible;
-	padding: 2px 2px 2px 0px;
-	margin: 0px;
-}
-
-div.pdmenu div.menu, div.pdmenu div.disabledmenu {
-    width: 100%;
-}
-
-div.pdmenu  div.menu img, div.pdmenu div.disabledmenu img {
-    position: absolute;
-    right: 0px;
-}
-
-
-.SMenuItem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: #000066;
-	background-color: #CCCCCC;
-	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
-}
-
-.SMenuDisabledMenuitem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: darkgray;
-	background-color: #CCCCCC;
-	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
-}
-
-.SMenuJSmenuitem {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-  	color: #ffffff;
-	background-color: #5555AA;
-	white-space: nowrap;
-	border-width: 0px;
-	padding: 0px;
-	margin: 0px;
 }
 
 .SSeparator {
