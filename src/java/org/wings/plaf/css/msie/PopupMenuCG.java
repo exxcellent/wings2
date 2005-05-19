@@ -32,78 +32,26 @@ import org.wings.session.SessionManager;
 public class PopupMenuCG extends org.wings.plaf.css.PopupMenuCG {
     private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 
-    protected void writePopup(final Device device, SPopupMenu menu)
-            throws IOException {
-        if (menu.isEnabled()) {
-            String componentId = menu.getName();
-            device.print("<ul");
-            // calculate max length of children texts for sizing of layer
-            int maxLength = 0;
-            for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-                if (!(menu.getMenuComponent(i) instanceof SMenuItem))
-                    continue;
-                String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
-                if (text != null && text.length() > maxLength) {
-                    maxLength = text.length();
-                    if (menu.getMenuComponent(i) instanceof SMenu) {
-                            maxLength = maxLength + 2; //graphics
-                    }
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.PopupMenuCG#writeListAttributes(org.wings.io.Device, org.wings.SPopupMenu)
+     */
+    protected void writeListAttributes(final Device device, SPopupMenu menu) throws IOException {
+        // calculate max length of children texts for sizing of layer
+        int maxLength = 0;
+        for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+            if (!(menu.getMenuComponent(i) instanceof SMenuItem))
+                continue;
+            String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
+            if (text != null && text.length() > maxLength) {
+                maxLength = text.length();
+                if (menu.getMenuComponent(i) instanceof SMenu) {
+                        maxLength = maxLength + 2; //graphics
                 }
             }
-            device.print(" style=\"width:");
-            String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
-            device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
-            device.print("em;\" id=\"");
-            device.print(componentId);
-            device.print("_pop\">");
-            for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-                SComponent menuItem = menu.getMenuComponent(i);
-    
-                if (menuItem.isVisible()) {
-                    device.print("<li");
-                    if (menuItem instanceof SMenu) {
-                        if (menuItem.isEnabled()) {
-                            device.print(" class=\"SMenu\"");
-                        } else {
-                            device.print(" class=\"SMenu_Disabled\"");
-                        }
-                    } else {
-                        if (menuItem.isEnabled()) {
-                            device.print(" class=\"SMenuItem\"");
-                        } else {
-    
-                            device.print(" class=\"SMenuItem_Disabled\"");
-                        }
-                    }
-                    device.print(">");
-                    if (menuItem instanceof SMenuItem) {
-                            device.print("<a");
-                            if (menuItem.isEnabled()) {
-                                device.print(" href=\"");
-                                writeAnchorAddress(device, (SMenuItem) menuItem);
-                                device.print("\"");
-                            }
-                            if (menuItem instanceof SMenu) {
-                                if (menuItem.isEnabled()) {
-                                    device.print(" class=\"x\"");
-                                } else {
-                                    device.print(" class=\"y\"");
-                                }
-                            }
-                            device.print(">");
-                    }
-                    menuItem.write(device);
-                    if (menuItem instanceof SMenuItem) {
-                        device.print("</a>");
-                    }
-                    if (menuItem.isEnabled() && menuItem instanceof SMenu) {
-                        ((SMenu)menuItem).writePopup(device);
-                    }
-                    device.print("</li>\n");
-                }
-            }
-            device.print("</ul>");
         }
-        device.print("\n");
+        device.print(" style=\"width:");
+        String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
+        device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
+        device.print("em;\"");
     }
 }

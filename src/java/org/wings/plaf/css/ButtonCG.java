@@ -92,11 +92,9 @@ public class ButtonCG        extends LabelCG        implements SConstants, org.w
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         } else {
-            device.print("<a href=\"");
             RequestURL addr = button.getRequestURL();
             addr.addParameter(button, button.getToggleSelectionParameter());
-            addr.write(device);
-            device.print("\"");
+            writeLinkStart(device, addr);
 
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
@@ -135,6 +133,19 @@ public class ButtonCG        extends LabelCG        implements SConstants, org.w
             device.print("</button>");
         else
             device.print("</a>");
+    }
+
+    /** 
+     * Convenience method to keep differences between default and msie
+     * implementations small
+     * @param device
+     * @param addr
+     * @throws IOException
+     */
+    protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
+        device.print("<a href=\"");
+        addr.write(device);
+        device.print("\"");
     }
 
     protected SIcon getIcon(SAbstractButton abstractButton) {

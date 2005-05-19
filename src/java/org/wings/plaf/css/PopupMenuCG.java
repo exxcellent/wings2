@@ -57,7 +57,9 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
             throws IOException {
         if (menu.isEnabled()) {
             String componentId = menu.getName();
-            device.print("<ul id=\"");
+            device.print("<ul");
+            writeListAttributes(device, menu);
+            device.print(" id=\"");
             device.print(componentId);
             device.print("_pop\">");
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
@@ -109,6 +111,17 @@ public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.
             device.print("</ul>");
         }
         device.print("\n");
+    }
+
+    /** 
+     * Convenience method to keep differences between default and msie
+     * implementations small
+     * @param device
+     * @param menu
+     * @throws IOException
+     */
+    protected void writeListAttributes(Device device, SPopupMenu menu) throws IOException {
+        // do nothing...
     }
 
     protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)

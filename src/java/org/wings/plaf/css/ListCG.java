@@ -158,7 +158,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
             boolean selected = list.isSelectedIndex(i);
 
             if (renderSelection && selected)
-                device.print("<li selected=\"true\">");
+                device.print("<li class=\"SList_selected\"");
             else
                 device.print("<li>");
 
@@ -175,9 +175,7 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
                     RequestURL selectionAddr = list.getRequestURL();
                     selectionAddr.addParameter(Utils.event(list), list.getToggleSelectionParameter(i));
 
-                    device.print("<a href=\"");
-                    Utils.write(device, selectionAddr.toString());
-                    device.print("\"");
+                    writeLinkStart(device, selectionAddr);
                 }
                 Utils.optAttribute(device, "focus", renderer.getName());
                 device.print(">");
@@ -200,6 +198,19 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         device.print("</");
         Utils.write(device, list.getType());
         device.print(">");
+    }
+
+    /** 
+     * Convenience method to keep differences between default and msie
+     * implementations small
+     * @param device
+     * @param selectionAddr
+     * @throws IOException
+     */
+    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
+        device.print("<a href=\"");
+        Utils.write(device, selectionAddr.toString());
+        device.print("\"");
     }
 
 

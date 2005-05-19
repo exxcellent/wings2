@@ -34,30 +34,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
         String componentId = menu.getName();
         if (menu.isEnabled()) {
             device.print("<ul");
-            boolean hasParent = menu.getParentMenu() != null;
-            if (hasParent) {
-                // calculate max length of children texts for sizing of layer
-                int maxLength = 0;
-                for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-                    if (!(menu.getMenuComponent(i) instanceof SMenuItem))
-                        continue;
-                    String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
-                    if (text != null && text.length() > maxLength) {
-                        maxLength = text.length();
-                        if (menu.getMenuComponent(i) instanceof SMenu) {
-                                maxLength = maxLength + 2; //graphics
-                        }
-                    }
-                }
-                device.print(" style=\"width:");
-                String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
-                device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
-                device.print("em;\"");
-            } else {
-                device.print(" id=\"");
-                device.print(componentId);
-                device.print("_pop\"");
-            }
+            writeListAttributes(device, menu);
             device.print(" class=\"SMenu\">");
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
                 SComponent menuItem = menu.getMenuComponent(i);
@@ -107,6 +84,39 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants,
             device.print("</ul>");
         }
         device.print("\n");
+    }
+
+    /** 
+     * Convenience method to keep differences between default and msie
+     * implementations small
+     * @param device
+     * @param menu
+     * @throws IOException
+     */
+    protected void writeListAttributes(final Device device, SMenu menu) throws IOException {
+        if (menu.getParentMenu() != null) {
+            // calculate max length of children texts for sizing of layer
+            int maxLength = 0;
+            for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+                if (!(menu.getMenuComponent(i) instanceof SMenuItem))
+                    continue;
+                String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
+                if (text != null && text.length() > maxLength) {
+                    maxLength = text.length();
+                    if (menu.getMenuComponent(i) instanceof SMenu) {
+                            maxLength = maxLength + 2; //graphics
+                    }
+                }
+            }
+            device.print(" style=\"width:");
+            String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
+            device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
+            device.print("em;\"");
+        } else {
+            device.print(" id=\"");
+            device.print(menu.getName());
+            device.print("_pop\"");
+        }
     }
 
     protected void writeItem(final Device device, SMenuItem menu)

@@ -65,11 +65,9 @@ public class CheckBoxCG extends ButtonCG implements SConstants,
         } else if (showAsFormComponent && !useIconsInForm)
             device.print("<span");
         else {
-            device.print("<a href=\"");
             RequestURL addr = button.getRequestURL();
             addr.addParameter(button, button.getToggleSelectionParameter());
-            addr.write(device);
-            device.print("\"");
+            writeLinkStart(device, addr);
 
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
@@ -112,6 +110,19 @@ public class CheckBoxCG extends ButtonCG implements SConstants,
             device.print("</span>");
         else
             device.print("</a>");
+    }
+
+    /** 
+     * Convenience method to keep differences between default and msie
+     * implementations small
+     * @param device
+     * @param addr
+     * @throws IOException
+     */
+    protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
+        device.print("<a href=\"");
+        addr.write(device);
+        device.print("\"");
     }
 
     protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
