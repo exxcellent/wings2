@@ -147,6 +147,11 @@ public class SProgressBar extends SComponent {
     private Color unfilledColor;
 
     /**
+     * The Dimension of the ProgressBar. We can't use the component size.
+     */
+    private SDimension progressBarDimension;
+
+    /**
      * Creates a horizontal progress bar
      * that displays a border but no progress string.
      * The initial and minimum values are 0,
@@ -744,6 +749,23 @@ public class SProgressBar extends SComponent {
     public boolean isIndeterminate() {
         return indeterminate;
     }
+
+    /**
+     * sets the size of the ProgressBar
+     * @param dimension the size as dimension
+     */
+    public void setProgressBarDimension(SDimension dimension) {
+        progressBarDimension = dimension;
+        
+    }
+
+    /**
+     * @return the size as dimension if it has been set, else null
+     */
+    public SDimension getProgressBarDimension() {
+        return progressBarDimension;
+    }
+    
 
 
 }// SProgressBar

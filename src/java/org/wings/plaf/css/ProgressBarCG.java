@@ -28,6 +28,7 @@ public class ProgressBarCG
 //--- byte array converted template snippets.
 
     public void installCG(final SComponent comp) {
+        super.installCG(comp);
         final SProgressBar component = (SProgressBar) comp;
         final CGManager manager = component.getSession().getCGManager();
         Object value;
@@ -72,23 +73,27 @@ public class ProgressBarCG
 //--- code from write-template.
         String style = component.getStyle();
 
-        SDimension size = component.getPreferredSize();
+        /* FIXME: The problem here is that the component size is used as the
+         * size for the progressbar. If text is rendered below
+         * (isStringPainted), then that text is out of the component box. So
+         * either create a distinct ProgressBar size or subtract some height.
+         * OL: created distinct height. other solution is removing string 
+         * completely.
+         */
+        
+        SDimension size = component.getProgressBarDimension();
         int width = size != null ? size.getIntWidth() : 200;
         int height = size != null ? size.getIntHeight() : 5;
 
-        if (component.isStringPainted()) {
-            device.print("<table><tr><td>");
-        }
         if (component.isBorderPainted()) {
-            device.print("<table cellpadding=\"1\"><tr><td");
-            Utils.optAttribute(device, "bgcolor", component.getBorderColor());
-            device.print(">");
+            device.print("<div style=\"width: 100%;height:100%;border: 1px solid ");
+            Utils.write(device, component.getBorderColor());
+            device.print(";\">");
+            width -= 2; //compensate for border
+            height -= 2;
         }
 
-        device.print("<table>");
-        device.print("<tr>");
-        device.print("<td");
-        //Utils.optAttribute(device, "bgcolor", component.getFilledColor());
+        device.print("<table><tr><td");
         if (component.getFilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getFilledColor());
@@ -98,46 +103,39 @@ public class ProgressBarCG
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"");
-        device.print(String.valueOf(width * component.getPercentComplete()));
+        device.print(String.valueOf(Math.round(width * component.getPercentComplete())));
         device.print("\"");
         device.print(" height=\"");
         device.print(String.valueOf(height));
         device.print("\"></td>");
         device.print("<td");
-        //Utils.optAttribute(device, "bgcolor", component.getUnfilledColor());
         if (component.getUnfilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getUnfilledColor());
-            device.print(";\"");
+           device.print(";\"");
         }
         device.print(">");
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         device.print(" width=\"");
-        device.print(String.valueOf(width * (1 - component.getPercentComplete())));
-        device.print("\"");
-        device.print(" height=\"");
+        device.print(String.valueOf(Math.round(width * (1 - component.getPercentComplete()))));
+        device.print("\" height=\"");
         device.print(String.valueOf(height));
-        device.print("\">");
-        device.print("</td>");
-        device.print("</tr>");
-        device.print("</table>");
+        device.print("\"></td></tr></table>");
         if (component.isBorderPainted()) {
-            device.print("</td></tr></table>");
+            device.print("</div>");
         }
 
         if (component.isStringPainted()) {
-            device.print("</td></tr><tr><td align=\"center\">");
+            device.print("<div style=\"width: 100%; text-align: center;\"");
             if (style != null) {
-                device.print("<span class=\"");
+                device.print(" class=\"");
                 Utils.write(device, style);
-                device.print("\">");
+                device.print("_string\"");
             }
+            device.print(">");
             Utils.write(device, component.getString());
-            if (style != null) {
-                device.print("</span>");
-            }
-            device.print("</td></tr></table>");
+            device.print("</div>");
         }
 //--- end code from write-template.
     }
