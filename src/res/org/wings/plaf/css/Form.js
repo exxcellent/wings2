@@ -33,7 +33,7 @@ function sendEvent(event, eventValue) {
     event = getEvent(event);
     var form = getParentByTagName(event.currentTarget, "FORM");
     var div = getParentByTagName(event.currentTarget, "DIV");
-    var eventName = div.getAttribute("event");
+    var eventName = div.getAttribute("eid");
 
     if ( form != null ) {
         var eventNode = document.createElement("input");

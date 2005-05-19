@@ -68,7 +68,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
-            device.print(" event=\"")
+            device.print(" eid=\"")
                     .print(lowLevelEventListener.getEncodedLowLevelEventId()).print("\"");
         }
 
