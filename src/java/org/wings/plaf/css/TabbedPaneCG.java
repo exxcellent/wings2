@@ -159,13 +159,19 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     private void writeTabs(Device device, STabbedPane tabbedPane) throws IOException {
         boolean childSelectorWorkaround = !tabbedPane.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = tabbedPane.getShowAsFormComponent();
-        boolean konquerorWorkaround = tabbedPane.getSession().getUserAgent().getBrowserType().equals(BrowserType.KONQUEROR);
+        final Browser browser = tabbedPane.getSession().getUserAgent();
+        // substitute whitespaces for konqueror and ie5.0x
+        boolean nbspWorkaround = browser.getBrowserType().equals(
+                BrowserType.KONQUEROR)
+                || (browser.getBrowserType().equals(BrowserType.IE)
+                        && browser.getMajorVersion() == 5 && browser
+                        .getMinorVersion() <= .1);
 
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             SIcon icon = tabbedPane.getIconAt(i);
             String title = tabbedPane.getTitleAt(i);
             String tooltip = tabbedPane.getToolTipText();
-            if (konquerorWorkaround)
+            if (nbspWorkaround)
                 title = nonBreakingSpaces(title);
             
             /*
@@ -206,7 +212,6 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                 }
             }
             device.print(">");
-            device.print("&nbsp;");
 
             if (icon != null && tabbedPane.getTabPlacement() != STabbedPane.RIGHT) {
                 device.print("<img");
@@ -214,8 +219,9 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                 Utils.optAttribute(device, "alt", tooltip);
                 Utils.optAttribute(device, "width", icon.getIconWidth());
                 Utils.optAttribute(device, "height", icon.getIconHeight());
-                device.print("/>&nbsp;");
+                device.print(" style=\"margin-left:0.2em;\"/>");
             }
+            device.print("&nbsp;");
 
             Utils.write(device, title);
             device.print("&nbsp;");
