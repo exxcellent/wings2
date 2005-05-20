@@ -572,7 +572,11 @@ div.SInternalFrame {
 div.SInternalFrame > div.WindowBar {	
 	padding:.2em;
 	background-color: #aaf;
-/*	white-space:pre; for konqueror */
+}
+
+div.SInternalFrame > div.WindowBar > div.WindowBar_title {	
+	padding-right:4em;
+	white-space:pre;
 }
 
 div.SInternalFrame > div.WindowBar  a.WindowButton,

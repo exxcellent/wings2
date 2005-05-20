@@ -60,7 +60,7 @@ IMG {
 }
 
 .SLabel {
-   white-space: pre;
+    white-space: nowrap;
 }
 
 .STextField {
@@ -306,7 +306,7 @@ table.SMenuBar{
     width:100%;
     background-color: #eef;
     border-bottom: 1px solid #ccc;
-    color: #000044;
+    color: #004;
 }
 
 table.SMenuBar div.SMenu,
@@ -319,7 +319,7 @@ table.SMenuBar div.SMenu_Disabled {
     padding:1px 3px 1px 3px;
     background:#eef;
     white-space:nowrap;
-    margin:0;
+    margin:0px;
 }
 
 table.SMenuBar div.SMenu{
@@ -335,7 +335,7 @@ table.SPopupMenu A {
     padding:1px 3px 1px 3px;
     display:block;
     white-space:nowrap;
-    margin:0;
+    margin:0px;
 }
  
 table.SMenu a, table.SMenu a:visited,
@@ -470,7 +470,11 @@ table.SInternalFrame {
 table.SInternalFrame div.WindowBar {	
 	padding:.2em;
 	background-color: #aaf;
-/*	white-space:pre; for konqueror */
+}
+
+table.SInternalFrame div.WindowBar div.WindowBar_title {	
+    white-space: nowrap;
+	margin-right:4em;
 }
 
 table.SInternalFrame div.WindowBar  a.WindowButton,

@@ -20,7 +20,7 @@ public class DesktopPaneExample extends WingSetPane {
         SDesktopPane desktopPane = new SDesktopPane();
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
-            iFrame.setTitle("Title of Frame " + (i+1));
+            iFrame.setTitle("A Long Title of Frame " + (i+1));
             desktopPane.add(iFrame);
             fillFrame(iFrame);
             // set some special contents & icons

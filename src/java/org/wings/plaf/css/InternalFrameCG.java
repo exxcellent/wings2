@@ -111,11 +111,28 @@ public class InternalFrameCG
         final SInternalFrame component = (SInternalFrame) _c;
 
         SInternalFrame frame = component;
+
+        writeWindowBar(device, frame);
+
+        // write the actual content
+        if (!frame.isIconified()) {
+            device.print("<div class=\"WindowContent\">");
+            Utils.renderContainer(device, frame);
+            device.print("</div>");
+        }
+    }
+
+    /** 
+     * Convenience method to keep differences between default and msie
+     * implementations small
+     * @param device
+     * @param frame
+     * @throws IOException
+     */
+    protected void writeWindowBar(final Device device, SInternalFrame frame) throws IOException {
         String text = frame.getTitle();
-        int columns = 0;
         if (text == null)
             text = "wingS";
-
         device.print("<div class=\"WindowBar\">");
         if (frame.isIconified()) {
             // frame is rendered in taskbar
@@ -149,20 +166,15 @@ public class InternalFrameCG
                 writeWindowIcon(device, frame,
                         SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, maximizeIcon, BUTTONICON_CLASSNAME);
             }
+            device.print("<div class=\"WindowBar_title\">");
             // float right end
             if (frame.getIcon() != null) {
                 writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
             }
             device.print(text);
-        }
-        device.print("</div>");
-
-        // write the actual content
-        if (!frame.isIconified()) {
-            device.print("<div class=\"WindowContent\">");
-            Utils.renderContainer(device, frame);
             device.print("</div>");
         }
+        device.print("</div>");
     }
 
     private String getIconWidth(SIcon icon) {
