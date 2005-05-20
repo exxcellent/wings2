@@ -21,18 +21,16 @@ BODY {
 
 /* either use this or cellpadding/cellspacing/border in table element.
    css overwrites all attributes! */
-table {
+
+/** Class for all invisible HTML tables used for layouting purposes. */
+table.SLayout,
+td.SLayout {
     border-collapse: collapse;
     padding: 0px;
     margin: 0px;
     border: none;
 }
 
-th, td {
-    padding: 0px;
-    margin: 0px;
-	border: none; /* gecko bug (OL) */
-}
 
 /* tables inherit certain properties from their parents. These need to be
    defined here. This works with konq, moz, opera. */
@@ -74,13 +72,6 @@ IMG {
     /* Avoid those ugly borders around linked imgs's */
     border: none !important;
 }
-
-
-/* HR {
-     margin-top: 0;
-     margin-bottom: 0
-} */
-
 
 div.SLabel_Box {
 	display: table;
@@ -362,12 +353,13 @@ div.SPanel, div.SContainer {
     height: 100%;
 }
 
-table.SBorderLayout
-/* the layouts should all have 100% width & height */
-/*,
+
+/* the layouts should all expand to 100% width & height of the surrounding SPanel */
+table.SBorderLayout,
+table.SGridBagLayout
+/*
 table.SBoxLayout,
 table.SGridLayout,
-table.SGridBagLayout,
 table.SFlowLayout
 */ {
     width: 100%;
