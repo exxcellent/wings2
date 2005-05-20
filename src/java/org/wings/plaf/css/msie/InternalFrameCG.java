@@ -35,10 +35,10 @@ public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
             if (frame.getIcon() != null) {
                 writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
             }
-            if (deiconifyIcon != null) {
+            if (getDeiconifyIcon() != null) {
                 device.print(text);
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED, deiconifyIcon, "DeiconifyButton");
+                        SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED, getDeiconifyIcon(), "DeiconifyButton");
             } else {
                 device.print("<a href=\"").print(
                         frame.getRequestURL().addParameter(
@@ -50,17 +50,17 @@ public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
         } else {
             // frame is rendered in desktopPane
             // these following icons will be floated to the right by the style sheet...
-            if (frame.isClosable() && closeIcon != null) {
+            if (frame.isClosable() && getCloseIcon() != null) {
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon, BUTTONICON_CLASSNAME);
+                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon(), BUTTONICON_CLASSNAME);
             }
-            if (frame.isIconifyable() && iconifyIcon != null) {
+            if (frame.isIconifyable() && getIconifyIcon() != null) {
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, iconifyIcon, BUTTONICON_CLASSNAME);
+                        SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, getIconifyIcon(), BUTTONICON_CLASSNAME);
             }
-            if (frame.isMaximizable() && !frame.isMaximized() && maximizeIcon != null) {
+            if (frame.isMaximizable() && !frame.isMaximized() && getMaximizeIcon() != null) {
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, maximizeIcon, BUTTONICON_CLASSNAME);
+                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, getMaximizeIcon(), BUTTONICON_CLASSNAME);
             }
             device.print("<div class=\"WindowBar_title\">");
             // float right end

@@ -29,8 +29,8 @@ public class InternalFrameCG
         implements SConstants, org.wings.plaf.InternalFrameCG
 {
     private final static transient Log log = LogFactory.getLog(InternalFrameCG.class);
-    private static final String WINDOWICON_CLASSNAME = "WindowIcon";
-    private static final String BUTTONICON_CLASSNAME = "WindowButton";
+    protected static final String WINDOWICON_CLASSNAME = "WindowIcon";
+    protected static final String BUTTONICON_CLASSNAME = "WindowButton";
     private SIcon closeIcon;
     private SIcon deiconifyIcon;
     private SIcon iconifyIcon;
@@ -54,7 +54,7 @@ public class InternalFrameCG
         super.installCG(component);
     }
 
-    private void writeIcon(Device device, SIcon icon, String cssClass) throws IOException {
+    protected void writeIcon(Device device, SIcon icon, String cssClass) throws IOException {
         device.print("<img");
         if (cssClass != null) {
             device.print(" class=\"");
@@ -68,7 +68,7 @@ public class InternalFrameCG
         device.print("/>");
     }
 
-    private void writeWindowIcon(Device device, SInternalFrame frame,
+    protected void writeWindowIcon(Device device, SInternalFrame frame,
             int event, SIcon icon, String cssClass) throws IOException {
         boolean showAsFormComponent = frame.getShowAsFormComponent();
 
