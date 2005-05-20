@@ -69,8 +69,6 @@ div {
 
 /* TODO -- move this to renderer? */
 IMG {
-/*    padding: 0px;
-    margin: 0px;*/
 	/* keeps images inside tabs */
     vertical-align: middle;
     /* Avoid those ugly borders around linked imgs's */
@@ -518,9 +516,9 @@ improves IE's performance speed to use the older
 file and this method */
 
 div.SMenu li:hover,
+div.SMenuBar div.SMenu:hover,
 div.SPopupMenu li:hover{
 cursor:pointer;
-z-index:100;
 }
 
 div.SMenu li:hover ul ul,
@@ -593,7 +591,9 @@ div.SInternalFrame > div.WindowContent {
 }
 
 /* clears the windows */
-div.SDesktopPane div.spacer {
+div.SDesktopPane div.spacer,
+.SFlowLayout div.spacer {
     height:0px;
     clear: both;
 }
+

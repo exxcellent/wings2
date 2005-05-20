@@ -50,10 +50,6 @@ IMG {
     vertical-align: middle; */
 }
 
-/* HR {
-     margin-top: 0;
-     margin-bottom: 0
-} */
 
 .SToolBar {
 	width:100%
@@ -68,16 +64,6 @@ IMG {
    font-weight: normal;
    font-style: normal;
    color: #000000; 
-}
-
-.href { 
-   color: #990000;
-   text-decoration: none;
-   font-weight: bold; 
-}
-
-.selection {
-  background-color: #99cccc;
 }
 
 .SList {
@@ -138,11 +124,6 @@ ul.STree li div.SSubTree {
    color: #000000;
 }
 
-.tableheader {
-   font-weight: bold;
-   background-color: #dedede;
-}
-
 .SAnchor {
    color: #000044;
 }
@@ -162,70 +143,14 @@ ul.STree li div.SSubTree {
 	border-width: 1px;
 }
 
-
-.framebutton {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-        background-color: #DEDEDE;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-}
-
-.frametitle {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-   	color: #ffffff;
-	background-color: #5555AA;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 8px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-}
-
-.frameborder {
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 2px;
-	border-right-width: 2px;
-	border-bottom-width: 2px;
-	border-left-width: 2px;
-}
-
 .STextArea {
 	width: 100%;
 }
 
-.titledbordertitle {
-   font-family: sans-serif;
-   font-size: 12px;
-   color: #000000;
-}
 
 .SScrollBar {
 	font-size: 1px;
 	border-width: 0px;
-}
-
-.selection {
-   background-color: #AAAAFF;
 }
 
 .STabbedPane_right {
@@ -407,9 +332,9 @@ improves IE's performance speed to use the older
 file and this method */
 
 table.SMenu li:hover,
+table.SMenuBar div.SMenu:hover,
 table.SPopupMenu li:hover{
 cursor:pointer;
-z-index:100;
 }
 
 table.SMenu li:hover ul ul,
@@ -474,7 +399,6 @@ table.SInternalFrame div.WindowBar {
 
 table.SInternalFrame div.WindowBar div.WindowBar_title {	
     white-space: nowrap;
-	margin-right:4em;
 }
 
 table.SInternalFrame div.WindowBar  a.WindowButton,
@@ -491,7 +415,99 @@ table.SInternalFrame div.WindowContent {
 }
 
 /* clears the windows */
-table.SDesktopPane div.spacer {
+table.SDesktopPane div.spacer,
+.SFlowLayout div.spacer,
+table.SMenuBar div.spacer {
     height:0px;
     clear: both;
+    display:none;
 }
+
+
+
+/* ------------deprecated --------------- */
+
+
+/* HR {
+     margin-top: 0;
+     margin-bottom: 0
+} */
+/* not used
+.href { 
+   color: #990000;
+   text-decoration: none;
+   font-weight: bold; 
+}
+
+.selection {
+  background-color: #99cccc;
+}*/
+
+
+/* not used
+.titledbordertitle {
+   font-family: sans-serif;
+   font-size: 12px;
+   color: #000000;
+}
+.selection {
+   background-color: #AAAAFF;
+}
+
+*/
+
+
+/* not used
+.framebutton {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+        background-color: #DEDEDE;
+	border-color: #EEEEEE #999999 #999999 #eeeeee;
+	overflow: visible;
+	padding: 0px;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+
+.frametitle {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border-color: #EEEEEE #999999 #999999 #eeeeee;
+   	color: #ffffff;
+	background-color: #5555AA;
+	overflow: visible;
+	padding-right: 0px;
+	padding-left: 8px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 0px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+
+.frameborder {
+	border-color: #EEEEEE #999999 #999999 #eeeeee;
+	overflow: visible;
+	padding-right: 0px;
+	padding-left: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-style: solid;
+	border-top-width: 2px;
+	border-right-width: 2px;
+	border-bottom-width: 2px;
+	border-left-width: 2px;
+}
+*/
+/* not used
+.tableheader {
+   font-weight: bold;
+   background-color: #dedede;
+}
+*/
+

@@ -36,7 +36,7 @@ public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
                 writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
             }
             if (getDeiconifyIcon() != null) {
-                device.print(text);
+                device.print(Utils.nonBreakingSpaces(text));
                 writeWindowIcon(device, frame,
                         SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED, getDeiconifyIcon(), "DeiconifyButton");
             } else {
@@ -44,31 +44,35 @@ public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
                         frame.getRequestURL().addParameter(
                                 Utils.event(frame) + "=" + SInternalFrameEvent.INTERNAL_FRAME_DEICONIFIED).toString())
                         .print("\">");
-                device.print(text);
+                device.print(Utils.nonBreakingSpaces(text));
                 device.print("</a>");
             }
         } else {
-            // frame is rendered in desktopPane
-            // these following icons will be floated to the right by the style sheet...
-            if (frame.isClosable() && getCloseIcon() != null) {
-                writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon(), BUTTONICON_CLASSNAME);
-            }
-            if (frame.isIconifyable() && getIconifyIcon() != null) {
-                writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, getIconifyIcon(), BUTTONICON_CLASSNAME);
-            }
-            if (frame.isMaximizable() && !frame.isMaximized() && getMaximizeIcon() != null) {
-                writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, getMaximizeIcon(), BUTTONICON_CLASSNAME);
-            }
-            device.print("<div class=\"WindowBar_title\">");
-            // float right end
+            device.print("<table width=\"100%\"><tr><td width=\"100%\"><div class=\"WindowBar_title\">");
             if (frame.getIcon() != null) {
                 writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
             }
-            device.print(text);
-            device.print("</div>");
+            device.print(Utils.nonBreakingSpaces(text));
+            device.print("</div></td>");
+            if (frame.isClosable() && getCloseIcon() != null) {
+                device.print("<td>");
+                writeWindowIcon(device, frame,
+                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon(), BUTTONICON_CLASSNAME);
+                device.print("</td>");
+            }
+            if (frame.isIconifyable() && getIconifyIcon() != null) {
+                device.print("<td>");
+                writeWindowIcon(device, frame,
+                        SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, getIconifyIcon(), BUTTONICON_CLASSNAME);
+                device.print("</td>");
+            }
+            if (frame.isMaximizable() && !frame.isMaximized() && getMaximizeIcon() != null) {
+                device.print("<td>");
+                writeWindowIcon(device, frame,
+                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, getMaximizeIcon(), BUTTONICON_CLASSNAME);
+                device.print("</td>");
+            }
+            device.print("<td>&nbsp;&nbsp;</td></tr></table>");
         }
         device.print("</div>");
     }

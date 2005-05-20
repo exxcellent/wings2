@@ -631,4 +631,13 @@ public final class Utils implements SConstants {
         }
     }
 
+    /**
+     * prints a String. Substitutes spaces with nbsp's
+     * @param text
+     * @return
+     */
+    public static String nonBreakingSpaces(String text) {
+        return text.replace(' ', '\u00A0');
+    }
+
 }

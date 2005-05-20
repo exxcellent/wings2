@@ -89,7 +89,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             device.print("');\"");
         }
 
-        device.print("><tr><td>"); // table
+        device.print("><tr><td valign=\"top\">"); // table
 
         // Special handling: Render title of STitledBorder
         if (component.getBorder() instanceof STitledBorder) {

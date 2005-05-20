@@ -172,7 +172,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             String title = tabbedPane.getTitleAt(i);
             String tooltip = tabbedPane.getToolTipText();
             if (nbspWorkaround)
-                title = nonBreakingSpaces(title);
+                title = Utils.nonBreakingSpaces(title);
             
             /*
              * needed here so that the tabs can be wrapped. else they are in
@@ -240,10 +240,6 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             else
                 device.print("</a>");
         }
-    }
-
-    private String nonBreakingSpaces(String title) {
-        return title.replace(' ', '\u00A0');
     }
 
     public CSSSelector  mapSelector(CSSSelector selector) {

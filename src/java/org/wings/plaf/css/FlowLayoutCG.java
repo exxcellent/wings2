@@ -61,7 +61,7 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
         if (components.size() > 0) {
             /* We need two spacer divs (end/beginning) so that the sourrounding flow layout takes up
                the whole space instead of 0px heigth. See http://www.alistapart.com/articles/practicalcss/ */
-            d.print("<div style=\"clear:both;\"></div>");
+            d.print("<div class=\"spacer\">&nbsp;</div>");
 
             for (Iterator componentIterator = components.iterator(); componentIterator.hasNext();) {
                 SComponent component = (SComponent) componentIterator.next();
@@ -77,7 +77,7 @@ public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
             }
 
             /* Second spacer. See upper. */
-            d.print("<div style=\"clear:both;\"></div>");
+            d.print("<div class=\"spacer\">&nbsp;</div>");
         }
         Utils.printNewline(d, container);
         d.print("</div>");
