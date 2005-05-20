@@ -13,17 +13,12 @@
  */
 package org.wings.style;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.wings.Renderable;
 import org.wings.io.Device;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * A straightforward implementation of AttributeSet using a hash map.
@@ -35,18 +30,16 @@ public class AttributeSet
         implements Renderable, Serializable, Cloneable {
     public static final AttributeSet EMPTY_ATTRIBUTESET =
             new AttributeSet() {
-                private String doThrow() throws UnsupportedOperationException {
-                    throw new UnsupportedOperationException("cannot change values for the global EMPTY_ATTRIBUTESET. You attempted to modify this unmodifiable AttributeSet: create your own instance of a AttributeSet first!");
+                private UnsupportedOperationException  doThrow() {
+                    return new UnsupportedOperationException("cannot change values for the global EMPTY_ATTRIBUTESET. You attempted to modify this unmodifiable AttributeSet: create your own instance of a AttributeSet first!");
                 }
 
                 public String put(String name, String value) {
-                    doThrow();
-                    return null; // make compiler happy.
+                    throw doThrow();
                 }
 
                 public boolean putAll(AttributeSet attributes) {
-                    doThrow();
-                    return false; // make compiler happy.
+                    throw doThrow();
                 }
             };
 
