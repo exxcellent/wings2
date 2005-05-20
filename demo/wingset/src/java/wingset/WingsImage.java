@@ -31,9 +31,8 @@ public class WingsImage
         SPanel p = new SPanel();
         final SBorderLayout layout = new SBorderLayout();
 
-        p.setHorizontalAlignment(CENTER);
+        setHorizontalAlignment(CENTER);
         p.setLayout(layout);
-        p.setPreferredSize(new SDimension("100%", null));
 
         SLabel label = new SLabel(WINGS_IMAGE);
         label.setHorizontalAlignment(CENTER);
