@@ -33,10 +33,11 @@ public class BoxLayoutCG extends AbstractLayoutCG implements LayoutCG {
         final SBoxLayout layout = (SBoxLayout) l;
         final List components = layout.getComponents();
         final int cols = layout.getOrientation() == SBoxLayout.HORIZONTAL ? components.size() : 1;
+        final int border = layout.getBorder();
 
-        printLayouterTableHeader(d, "SBoxLayout", layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout);
+        printLayouterTableHeader(d, "SBoxLayout", layout.getCellSpacing(), layout.getCellPadding(), border, layout);
 
-        printLayouterTableBody(d, cols, false, components);
+        printLayouterTableBody(d, cols, false, border, components);
 
         printLayouterTableFooter(d, "SBoxLayout", layout);
 

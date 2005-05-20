@@ -14,18 +14,6 @@
 package org.wings.plaf.css;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.KeyStroke;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
@@ -37,6 +25,13 @@ import org.wings.session.Browser;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
     private final transient static Log log = LogFactory.getLog(TabbedPaneCG.class);
@@ -83,7 +78,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
             int placement = tabbedPane.getTabPlacement();
     
-            device.print("<table cellspacing=\"0\"");
+            device.print("<table class=\"SLayout\"");
             if (childSelectorWorkaround)
                 Utils.childSelectorWorkaround(device, style);
     

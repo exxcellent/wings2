@@ -31,12 +31,12 @@ public class GridBagLayoutCG extends AbstractLayoutCG
      */
     public void write(Device d, SLayoutManager l)
             throws IOException {
-        SGridBagLayout layout = (SGridBagLayout) l;
-        boolean header = layout.getHeader();
-        int cellSpacing = layout.getCellSpacing() >= 0 ? layout.getCellSpacing() : 0;
-        int cellPadding = layout.getCellPadding() >= 0 ? layout.getCellPadding() : 0;
-        int border = layout.getBorder() >= 0 ? layout.getBorder() : 0;
-        SGridBagLayout.Grid grid = layout.getGrid();
+        final SGridBagLayout layout = (SGridBagLayout) l;
+        final boolean header = layout.getHeader();
+        final int cellSpacing = layout.getCellSpacing() >= 0 ? layout.getCellSpacing() : 0;
+        final int cellPadding = layout.getCellPadding() >= 0 ? layout.getCellPadding() : 0;
+        final int border = layout.getBorder() >= 0 ? layout.getBorder() : 0;
+        final SGridBagLayout.Grid grid = layout.getGrid();
 
         if (grid.cols == 0) {
             return;
@@ -50,24 +50,17 @@ public class GridBagLayoutCG extends AbstractLayoutCG
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 SComponent comp = grid.grid[col][row];
                 Utils.printNewline(d, layout.getContainer());
+                final boolean headerCell = row == grid.firstRow && header;
                 if (comp == null) {
-                    if (row == grid.firstRow && header) {
-                        d.print("<th></th>");
-                    } else {
-                        d.print("<td></td>");
-                    }
+                    openLayouterCell(d, headerCell, border, comp);
+                    d.print(">");
+                    closeLayouterCell(d, headerCell);
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
                     if ((c.gridx == SGridBagLayout.LAST_CELL || c.gridx == col) &&
                             (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
-                        if (row == grid.firstRow && header) {
-                            d.print("<th");
-                        } else {
-                            d.print("<td");
-                        }
 
-                        Utils.printTableCellAlignment(d, comp);
-                        Utils.printCSSInlineStyleAttributes(d, comp);
+                        openLayouterCell(d, headerCell, border, comp);
 
                         int gridwidth = c.gridwidth;
                         if (gridwidth == GridBagConstraints.RELATIVE) {
@@ -100,13 +93,11 @@ public class GridBagLayoutCG extends AbstractLayoutCG
                         }
 
                         d.print(">");
-                        comp.write(d);
 
-                        if (row == grid.firstRow && header) {
-                            d.print("</th>");
-                        } else {
-                            d.print("</td>");
-                        }
+                        Utils.printNewline(d, comp);
+                        comp.write(d); // Render component
+
+                        closeLayouterCell(d, headerCell);
                     }
                 }
             }

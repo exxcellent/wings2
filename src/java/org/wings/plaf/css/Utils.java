@@ -62,20 +62,17 @@ public final class Utils implements SConstants {
             Object value;
             value = manager.getObject("SContainer.defaultLayoutBehaviour", String.class);
             if (value != null && value instanceof String) {
-                if ("classic".equals(((String)value).toLowerCase())) {
+                if ("classic".equals(((String) value).toLowerCase())) {
                     layout = new SBoxLayout(SBoxLayout.VERTICAL);
-                }
-                else if ("standard".equals(((String)value).toLowerCase())) {
+                } else if ("standard".equals(((String) value).toLowerCase())) {
                     layout = new SFlowLayout(SFlowLayout.LEFT);
-                }
-                else if ("none".equals(((String)value).toLowerCase())) {
+                } else if ("none".equals(((String) value).toLowerCase())) {
                     // just write out the components one after another
                     for (int i = 0; i < c.getComponentCount(); i++) {
                         c.getComponent(i).write(d);
                     }
                     return;
-                }
-                else { // fallback
+                } else { // fallback
                     layout = new SFlowLayout(SFlowLayout.LEFT);
                 }
             } else {
@@ -225,37 +222,45 @@ public final class Utils implements SConstants {
      * @param d         Output device
      * @param component Component having CSS attributes
      * @throws IOException
+     * @deprecated Use #generateCSSComponentInlineStyle
      */
     public static void printCSSInlineStyleAttributes(Device d, SComponent component) throws IOException {
         if (component == null)
             return;
-        StringBuffer styleString = new StringBuffer();
-        java.awt.Color fgColor = component.getForeground();
-        java.awt.Color bgcolor = component.getBackground();
-        SFont font = component.getFont();
-        SDimension dim = component.getPreferredSize();
-
-        if (bgcolor != null)
-            styleString.append("background-color:#").append(toColorString(bgcolor)).append(";");
-
-        if (fgColor != null) {
-            styleString.append("color:#").append(toColorString(fgColor)).append(";");
-        }
-
-        if (font != null) {
-            int style = font.getStyle();
-            styleString.append("font-size:").append(font.getSize()).append("pt;");
-            styleString.append("font-style:").append((style & java.awt.Font.ITALIC) > 0 ? "italic;" : "normal;");
-            styleString.append("font-weight:").append((style & java.awt.Font.BOLD) > 0 ? "bold;" : "normal;");
-            styleString.append("font-family:").append(font.getFace()).append(";");
-        }
-
-        if (dim != null) {
-            if (dim.isWidthDefined()) styleString.append("width:").append(dim.getWidth()).append(";");
-            if (dim.isHeightDefined()) styleString.append("height:").append(dim.getHeight()).append(";");
-        }
+        StringBuffer styleString = generateCSSComponentInlineStyle(component);
 
         Utils.optAttribute(d, "style", styleString.toString());
+    }
+
+    public static StringBuffer generateCSSComponentInlineStyle(SComponent component) {
+        StringBuffer styleString = new StringBuffer();
+        if (component != null) {
+            final Color fgColor = component.getForeground();
+            final Color bgcolor = component.getBackground();
+            final SFont font = component.getFont();
+            final SDimension dim = component.getPreferredSize();
+
+            if (bgcolor != null)
+                styleString.append("background-color:#").append(toColorString(bgcolor)).append(";");
+
+            if (fgColor != null) {
+                styleString.append("color:#").append(toColorString(fgColor)).append(";");
+            }
+
+            if (font != null) {
+                int style = font.getStyle();
+                styleString.append("font-size:").append(font.getSize()).append("pt;");
+                styleString.append("font-style:").append((style & Font.ITALIC) > 0 ? "italic;" : "normal;");
+                styleString.append("font-weight:").append((style & Font.BOLD) > 0 ? "bold;" : "normal;");
+                styleString.append("font-family:").append(font.getFace()).append(";");
+            }
+
+            if (dim != null) {
+                if (dim.isWidthDefined()) styleString.append("width:").append(dim.getWidth()).append(";");
+                if (dim.isHeightDefined()) styleString.append("height:").append(dim.getHeight()).append(";");
+            }
+        }
+        return styleString;
     }
 
     public static void printIconTextCompound(Device d, String icon, String text, int horizontal, int vertical)
@@ -309,21 +314,46 @@ public final class Utils implements SConstants {
      *
      * @param device        Device to print to
      * @param preferredSize Preferred sitze. May be null or contain null attributes
+     * @deprecated Consolidate CSS Inline Styles Strings !!!
      */
     public static void printCSSInlinePreferredSize(Device device, SDimension preferredSize) throws IOException {
         if (preferredSize != null && (preferredSize.isWidthDefined() || preferredSize.isHeightDefined())) {
             device.print(" style=\"");
-            if (preferredSize.isWidthDefined())
-                device.print("width:").print(preferredSize.getWidth()).print(";");
-            if (preferredSize.isHeightDefined())
-                device.print("height:").print(preferredSize.getHeight()).print(";");
+            device.print(generateCSSInlinePreferredSize(preferredSize));
             device.print("\"");
         }
     }
 
     /**
+     * Generates a CSS Inline Style string for the passed SDimension.
+     * <p>Sample: <code>width:100%;heigth=15px"</code>
+     *
+     * @param preferredSize Preferred sitze. May be null or contain null attributes
+     * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
+     */
+    public static StringBuffer generateCSSInlinePreferredSize(SDimension preferredSize) {
+        StringBuffer styleString = new StringBuffer();
+        if (preferredSize != null && (preferredSize.isWidthDefined() || preferredSize.isHeightDefined())) {
+            if (preferredSize.isWidthDefined())
+                styleString.append("width:").append(preferredSize.getWidth()).append(";");
+            if (preferredSize.isHeightDefined())
+                styleString.append("height:").append(preferredSize.getHeight()).append(";");
+        }
+        return styleString;
+    }
+
+    public static StringBuffer generateCSSInlineBorder(int borderSize) {
+        StringBuffer styleString = new StringBuffer();
+        if (borderSize > 0)
+            styleString.append("border:").append(borderSize).append("px solid black;");
+        else
+            ; //styleString.append("border:none;"); Not necessary. Default
+        return styleString;
+    }
+
+    /**
      * Prints a HTML style attribute with widht/height of 100%.
-     * <p>Sample: <code> style="widht:100%;"</code>
+     * <p>Sample: <code> style="width:100%;"</code>
      *
      * @param device Device to print to
      */

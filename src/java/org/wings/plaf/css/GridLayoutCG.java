@@ -36,10 +36,11 @@ public class GridLayoutCG extends AbstractLayoutCG
         int cols = layout.getColumns();
         if (cols <= 0)
             cols = components.size() / rows;
+        final int border = layout.getBorder();
 
-        printLayouterTableHeader(d, "SGridLayout", layout.getCellSpacing(), layout.getCellPadding(), layout.getBorder(), layout);
+        printLayouterTableHeader(d, "SGridLayout", layout.getCellSpacing(), layout.getCellPadding(), border, layout);
 
-        printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), components);
+        printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), border, components);
 
         printLayouterTableFooter(d, "SGridLayout", layout);
     }

@@ -13,14 +13,14 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SLayoutManager;
 import org.wings.SComponent;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.
@@ -38,15 +38,18 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         Utils.printDebugNewline(d, layout.getContainer());
         Utils.printDebug(d, "<!-- START LAYOUT: ").print(styleClass).print(" -->");
 
+        // Generate CSS Inline Style
+        // we don't need to do that here once we have set all layoutmanagers
+        // to 100% width/height
+        StringBuffer styleString = Utils.generateCSSInlinePreferredSize(layout.getContainer().getPreferredSize());
+        styleString.append(Utils.generateCSSInlineBorder(border));
+
         Utils.printNewline(d, layout.getContainer());
         d.print("<table ");
         d.print(" cellspacing=\"").print(cellSpacing < 0 ? 0 : cellSpacing).print("\"");
         d.print(" cellpadding=\"").print(cellPadding < 0 ? 0 : cellPadding).print("\"");
-        d.print(" border=\"").print(border < 0 ? 0 : border).print("\"");
-        Utils.optAttribute(d, "class", styleClass);
-        // we don't need to do that here once we have set all layoutmanagers
-        // to 100% width/height 
-        Utils.printCSSInlinePreferredSize(d, layout.getContainer().getPreferredSize());
+        Utils.optAttribute(d, "class", styleClass != null ? styleClass + " SLayout" : "SLayout");
+        Utils.optAttribute(d, "style", styleString.toString());
         d.print("><tbody>");
         Utils.printNewline(d, layout.getContainer());
     }
@@ -66,12 +69,13 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      * Render passed list of components to a table body.
      * Use {@link #printLayouterTableHeader(org.wings.io.Device, String, int, int, int, org.wings.SLayoutManager)} in front
      * and {@link #printLayouterTableFooter(org.wings.io.Device, String, org.wings.SLayoutManager)} afterwards!
-     * @param d The device to write to
-     * @param cols Wrap after this amount of columns
+     *
+     * @param d                       The device to write to
+     * @param cols                    Wrap after this amount of columns
      * @param renderFirstLineAsHeader Render cells in first line as TH-Element or regular TD.
-     * @param components The components to layout
+     * @param components              The components to layout
      */
-    protected void printLayouterTableBody(Device d, int cols, final boolean renderFirstLineAsHeader, final List components)
+    protected void printLayouterTableBody(Device d, int cols, final boolean renderFirstLineAsHeader, int border, final List components)
             throws IOException {
         boolean firstRow = true;
         int col = 0;
@@ -87,30 +91,51 @@ public abstract class AbstractLayoutCG implements LayoutCG {
                 firstRow = false;
             }
 
-
-            if (firstRow && renderFirstLineAsHeader)
-                d.print("<th");
-            else
-                d.print("<td");
-
-            Utils.printTableCellAlignment(d, c);
-            Utils.printCSSInlineStyleAttributes(d, c);
+            openLayouterCell(d, firstRow && renderFirstLineAsHeader, border, c);
             d.print(">");
 
-            Utils.printNewline(d, c);            
+            Utils.printNewline(d, c);
             c.write(d); // Render component
 
-            if (firstRow && renderFirstLineAsHeader)
-                d.print("</th>");
-            else
-                d.print("</td>");
+            closeLayouterCell(d, firstRow && renderFirstLineAsHeader);
 
             col++;
 
-            if (!iter.hasNext()){
+            if (!iter.hasNext()) {
                 d.print("</tr>");
                 Utils.printNewline(d, c.getParent());
             }
         }
+    }
+
+    /**
+     * Opens a TD or TH cell of an invisible layouter table. This method also does component alignment.
+     * <b>Attention:</b> As you want to attach more attributes you need to close the tag with &gt; on your own!
+     *
+     * @param renderAsHeader Print TH instead of TD
+     */
+    public static void openLayouterCell(Device d, boolean renderAsHeader, int border, SComponent containedComponent) throws IOException {
+        if (renderAsHeader)
+            d.print("<th");
+        else
+            d.print("<td");
+
+        d.print(" class=\"SLayout\"");
+        Utils.printTableCellAlignment(d, containedComponent);
+
+        // CSS inline attributes
+        StringBuffer inlineAttributes = Utils.generateCSSInlineBorder(border);
+        // TODO FIXME This should not be done by the surrounding container cell but the component itself!
+        inlineAttributes.append(Utils.generateCSSComponentInlineStyle(containedComponent));
+        Utils.optAttribute(d, "style", inlineAttributes.toString());
+    }
+
+    /**
+     * Closes a TD or TH cell of an invisible layouter table.
+     *
+     * @param renderAsHeader Print TH instead of TD
+     */
+    public static void closeLayouterCell(Device d, boolean renderAsHeader) throws IOException {
+        d.print(renderAsHeader ? "</th>" : "</td>");
     }
 }
