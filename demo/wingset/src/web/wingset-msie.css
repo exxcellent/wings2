@@ -25,7 +25,13 @@ a:link, a:visited, a:active {
 }
 
 /* Input fields singe-dot lined, orange bg. */
-textarea, input, select {
+textarea, select {
     background-color: #f6decc;
     border: 1px solid #e66e32;
+}
+
+/* text input same as above */
+input {
+    background-color: expression(this.type=="text"?'#f6decc':'');
+    border: expression(this.type=="text"?'1px solid #e66e32':'');
 }
