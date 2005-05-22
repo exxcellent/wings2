@@ -9,7 +9,7 @@
 */
 
 /** All white, no border, smaller sans-serif-font */
-BODY {
+body {
     background: #ffffff;
     position: relative;
     margin: 0px;
@@ -19,7 +19,13 @@ BODY {
 }
 
 /* Links: No visited colour, no underline  */
-A:link, A:visited, A:active {
+a:link, a:visited, a:active {
     color: #000066;
     text-decoration: none;
+}
+
+/* Input fields singe-dot lined, orange bg. */
+textarea, input, select {
+    background-color: #f6decc;
+    border: 1px solid #e66e32;
 }
