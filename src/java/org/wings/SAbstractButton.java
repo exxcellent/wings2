@@ -454,7 +454,7 @@ public abstract class SAbstractButton
 
         public void propertyChange(PropertyChangeEvent e) {
             String propertyName = e.getPropertyName();
-            SButton button = (SButton) getTarget();
+            SAbstractButton button = (SAbstractButton) getTarget();
             if (button == null) {
                 Action action = (Action) e.getSource();
                 action.removePropertyChangeListener(this);
