@@ -78,4 +78,9 @@
         <session-timeout>10</session-timeout>
     </session-config>
 
+    <context-param>
+        <param-name>log4j-configuration</param-name>
+        <param-value>log4j.xml</param-value>
+    </context-param>
+
 </web-app>

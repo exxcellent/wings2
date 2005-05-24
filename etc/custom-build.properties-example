@@ -16,5 +16,11 @@
 # Do not show deprecation warnings?
 #build.deprecation=false
 
+# do not use the splash
+#nosplash
+
+# use log4j for the wingset demo
+#log4j
+
 # The home directory of your tomcat installation for deployment
 tomcat.home=C:/Devel/jakarta-tomcat-5.5.4

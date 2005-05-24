@@ -88,7 +88,14 @@
             </fileset>
         </jar>
         <copy todir="dist/lib">
-            <fileset dir="lib" includes="*.jar"/>
+        <fileset dir="${lib}">
+            <include name="${servlet.version}"/>
+            <include name="${commons-logging.version}"/>
+            <include name="${regexp.version}"/>
+            <include name="${beanshell.version}"/>
+            <include name="${httpclient.version}"/>
+            <include name="${lfgr.version}"/>
+        </fileset>
         </copy>
         <copy todir="dist/web/WEB-INF/lib">
             <fileset dir="lib">
