@@ -117,7 +117,7 @@ public class TableCG
 
         if (parameter != null && !isEditingCell) {
             if (showAsFormComponent) {
-                device.print("<button name=\"");
+                device.print("<button type=\"submit\" name=\"");
                 Utils.write(device, Utils.event(table));
                 device.print("\" value=\"");
                 Utils.write(device, parameter);

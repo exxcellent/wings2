@@ -1,3 +1,13 @@
+/* BUGFIX: adds a hidden form field for identification of button events in IE */
+function addHiddenField(form, name, value) {
+	var doc = window.document;
+	var input = doc.createElement("input");
+	input.setAttribute("type", "hidden");
+	input.setAttribute("name", name);
+	input.setAttribute("value", value);
+	form.appendChild(input);
+}
+
 function getEvent(event) {
   if (window.event)
     return window.event;
@@ -142,3 +152,4 @@ function storeFocus(event) {
     if (div && body)
         setCookie(body.getAttribute("id") + "_focus", "focus_" + div.getAttribute("id"), 1);
 }
+

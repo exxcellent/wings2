@@ -21,7 +21,8 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class ButtonCG        extends LabelCG        implements SConstants, org.wings.plaf.ButtonCG {
+public class ButtonCG extends LabelCG implements SConstants,
+        org.wings.plaf.ButtonCG {
 
     /**
      * Use this java script implementation to submit forms on button click
@@ -86,7 +87,8 @@ public class ButtonCG        extends LabelCG        implements SConstants, org.w
         final SAbstractButton button = (SAbstractButton) component;
 
         if (button.getShowAsFormComponent()) {
-            device.print("<button type=\"submit\" name=\"");
+            writeButtonStart(device, button);
+            device.print(" type=\"submit\" name=\"");
             Utils.write(device, Utils.event(button));
             device.print("\"");
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
@@ -100,10 +102,21 @@ public class ButtonCG        extends LabelCG        implements SConstants, org.w
         }
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
-        if (!button.isEnabled())
-            device.print(" disabled=\"true\"");
-        if (button.isSelected())
-            device.print(" checked=\"true\"");
+        // use class attribute instead of single attributes for IE compatibility
+        StringBuffer className = new StringBuffer();
+        if (!button.isEnabled()) {
+            className.append(component.getStyle());
+            className.append("_disabled ");
+        }
+        if (button.isSelected()) {
+            className.append(component.getStyle());
+            className.append("_selected ");
+        }
+        if (className.length() > 0) {
+            device.print(" class=\"");
+            device.print(className.toString());
+            device.print("\"");
+        }
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 
@@ -133,6 +146,14 @@ public class ButtonCG        extends LabelCG        implements SConstants, org.w
             device.print("</button>");
         else
             device.print("</a>");
+    }
+
+    /**
+     * @param device
+     * @throws IOException
+     */
+    protected void writeButtonStart(final Device device, final SAbstractButton comp) throws IOException {
+        device.print("<button");
     }
 
     /** 

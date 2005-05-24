@@ -33,19 +33,19 @@ div.SFormattedTextField > input[readonly="true"] {
 
 /* ----------- FANCY BUTTONS */
 
-/* Fancy flat buttons. */
+/* Fancy buttons. */
 div.SButton > button {
-    border: 1px solid #cccccc;
-    background-color: #eeeeff;
+    border-width: 2px;
 }
 /* Hover button on mouse-over. */
-div.SButton > button:hover {
+/*div.SButton > button:hover {
     border: 1px outset #cccccc;
-}
+}*/
 /* Don't hover if disabled button. */
-div.SButton > button:hover[disabled="true"] {
+/*div.SButton > button:hover[disabled="true"] {
     border: 1px solid #cccccc;
-}
+}*/
+
 
 /* ----------- ???????????? */
 
@@ -78,23 +78,10 @@ div.SToolbar div.SButton {
     border: 1px none !important;
 }
 
-
 /* ----------- SOPTIONPANE / SDIALOG */
 
 /*  Note: SOptionPane extends SDialog. */
 
-/* HONESTLY I DON'T REALIZE ANY EFFECT --> Commented out                                        CHECKME!
-div.SDialog_Box,
-div.SOptionPane_Box {
-    display: table;
-}
-div.SDialog,
-div.SOptionPane {
-    border: 1px solid #cccccc;
-}
-div.SOptionPane {
-	display: table-cell;
-}
 div.SDialog > table > tbody > tr > th,
 div.SOptionPane > table > tbody > tr > th {
     padding-left: 1px;
@@ -109,4 +96,5 @@ div.SOptionPane > table > tbody > tr > th[col="title"] {
 div.SDialog > table > tbody > tr > *,
 div.SOptionPane > table > tbody > tr > * {
     border: 1px solid #cccccc;
-}*/
+}
+

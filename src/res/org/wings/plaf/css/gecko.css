@@ -53,16 +53,9 @@ div {
     -moz-box-sizing: border-box;
 }
 
-/* Which of these do we need? and why? */
+/* links and buttons as tables? */
  A, BUTTON {
     display: table;
-/*
-    border: 0px;
-    padding: 0px;
-    margin: 0px;
-    color: inherit;
-    background-color: inherit;
-*/
 }
 
 /* TODO -- move this to renderer? */
@@ -92,7 +85,14 @@ div.SButton_Box {
 }
 
 div.SButton {
-    color: #000044;
+    color: #004;
+}
+
+/* selected state */
+div.SButton > button.SButton_selected,
+div.SToggleButton > button.SToggleButton_selected
+{
+    border-style: inset;
 }
 
 div.SRadioButton_Box {
@@ -103,14 +103,14 @@ div.STextField {
     font-family: sans-serif;
     font-weight: normal;
     font-style: normal;
-    color: #000000;
+    color: #000;
 }
 
 div.SFormattedTextField {
     font-family: sans-serif;
     font-weight: normal;
     font-style: normal;
-    color: #000000;
+    color: #000;
 }
 
 div.STree {
@@ -587,5 +587,21 @@ div.SDesktopPane div.spacer,
 .SFlowLayout div.spacer {
     height:0px;
     clear: both;
+	line-height:0px; /* for konq */
+    font-size: 1px; /* for konq */
 }
 
+/* ----------- SOPTIONPANE / SDIALOG */
+
+/*  Note: SOptionPane extends SDialog. */
+div.SDialog_Box,
+div.SOptionPane_Box {
+    display: table;
+}
+div.SDialog,
+div.SOptionPane {
+    border: 1px solid #cccccc;
+}
+div.SOptionPane {
+	display: table-cell;
+}

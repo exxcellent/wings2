@@ -306,6 +306,36 @@ table.SFlowLayout
     height: 100%;
 }
 
+table.SButton {
+    color: #004;
+}
+
+/* selected state */
+table.SButton > button.SButton_selected,
+table.SToggleButton > button.SToggleButton_selected
+{
+    border-style: inset;
+}
+
+/* ---------- DOM ToolTips */
+div.domTT {
+    border: 1px solid #333333;
+}
+div.domTTCaption {
+    font-family: serif;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 1px 2px;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+div.domTTContent {
+    font-size: 12px;
+    font-family: sans-serif;
+    padding: 3px 2px;
+    background-color: #F1F1FF;
+}
+
 /* ---------- Menus */
 table.SMenuBar{
     width:100%;
