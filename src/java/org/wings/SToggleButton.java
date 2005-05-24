@@ -27,6 +27,11 @@ public class SToggleButton extends SAbstractButton {
         super(text);
     }
 
+    public SToggleButton(SIcon icon) {
+        super();
+        setIcon(icon);
+    }
+
     /**
      * Creates a button where properties are taken from the
      * Action supplied.
