@@ -22,8 +22,7 @@ import org.wings.plaf.LayoutCG;
 import java.awt.*;
 import java.io.IOException;
 
-public class GridBagLayoutCG extends AbstractLayoutCG
-        implements LayoutCG {
+public class GridBagLayoutCG extends AbstractLayoutCG {
     /**
      * @param d the device to write the code to
      * @param l the layout manager

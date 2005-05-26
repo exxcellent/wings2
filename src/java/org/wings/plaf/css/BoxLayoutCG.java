@@ -21,7 +21,7 @@ import org.wings.plaf.LayoutCG;
 import java.io.IOException;
 import java.util.List;
 
-public class BoxLayoutCG extends AbstractLayoutCG implements LayoutCG {
+public class BoxLayoutCG extends AbstractLayoutCG {
     /**
      * @param d the device to write the code to
      * @param l the layout manager

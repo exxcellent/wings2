@@ -22,7 +22,7 @@ BODY {
 /* either use this or cellpadding/cellspacing/border in table element.
    css overwrites all attributes! */
 
-/** Class for all invisible HTML tables used for layouting purposes. */
+/* Class for all invisible HTML tables used for layouting purposes. */
 table.SLayout,
 td.SLayout {
     border-collapse: collapse;

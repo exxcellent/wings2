@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class FlowLayoutCG extends AbstractLayoutCG implements LayoutCG {
+public class FlowLayoutCG extends AbstractLayoutCG {
     /**
      * @param d the device to write the code to
      * @param l the layout manager

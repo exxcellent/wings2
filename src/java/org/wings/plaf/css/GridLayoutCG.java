@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GridLayoutCG extends AbstractLayoutCG
-        implements LayoutCG {
+        {
     /**
      * @param d the device to write the code to
      * @param l the layout manager

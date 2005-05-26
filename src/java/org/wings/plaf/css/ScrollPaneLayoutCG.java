@@ -13,8 +13,7 @@ import org.wings.plaf.LayoutCG;
 import java.io.IOException;
 import java.util.Map;
 
-public class ScrollPaneLayoutCG extends AbstractLayoutCG
-        implements LayoutCG {
+public class ScrollPaneLayoutCG extends AbstractLayoutCG {
 
     public void write(Device d, SLayoutManager l)
             throws IOException {

@@ -26,8 +26,7 @@ import java.io.IOException;
  * @author Achim Derigs
  * @version $Revision$
  */
-public class TemplateLayoutCG
-        implements LayoutCG {
+public class TemplateLayoutCG implements LayoutCG {
     /**
      * The parser looks for the '<OBJECT></OBJECT>' - tags.
      */
@@ -47,20 +46,11 @@ public class TemplateLayoutCG
         final TemplateSource source = layout.getTemplateSource();
 
         if (source == null) {
-            device.print("Unable to open template-file <b>'");
+            device.print("Unable to open template-file <em>'");
             device.print(source);
-            device.print("'</b>");
+            device.print("'</em>");
         } else {
-            if (false) {
-                device.print(" <span style=\"");
-                device.print("\">");
-            }
-
             layout.getPageParser().process(source, new TemplateParseContext(device, layout));
-
-            if (false) {
-                device.print("</span>");
-            }
         }
     }
 
