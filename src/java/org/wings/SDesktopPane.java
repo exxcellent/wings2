@@ -13,9 +13,7 @@
  */
 package org.wings;
 
-import java.io.IOException;
 
-import org.wings.io.Device;
 import org.wings.plaf.DesktopPaneCG;
 
 /**
@@ -25,11 +23,8 @@ import org.wings.plaf.DesktopPaneCG;
  * @version $Revision$
  */
 public class SDesktopPane extends SContainer {
-    SDesktopLayout layout = new SDesktopLayout();
-
     public SDesktopPane() {
         super();
-        super.setLayout(layout);
     }
 
     public void setLayout(SLayoutManager l) {}
@@ -89,57 +84,6 @@ public class SDesktopPane extends SContainer {
      */
     public int getPosition(SComponent c) {
         return getIndexOf(c);
-    }
-
-    private class SDesktopLayout extends SAbstractLayoutManager {
-        private SContainer container = null;
-
-        public SDesktopLayout() {}
-
-        public void updateCG() {}
-
-        public void addComponent(SComponent c, Object constraint, int index) {}
-
-        public void removeComponent(SComponent c) {}
-
-        public SComponent getComponentAt(int i) {
-            return (SComponent) container.getComponent(i);
-        }
-
-        public void setContainer(SContainer c) {
-            container = c;
-        }
-
-        // ** FIXME: move to plaf ..
-        public void write(Device d)
-                throws IOException {
-            d.print("<table cellspacing=\"7\" width=\"100%\">\n");
-
-            int componentCount = getComponentCount();
-            // hack ? einfach nur das erste maximized ausgeben, oder was ?
-            // das funktioniert nur unter der Annhame, dass der User nicht
-            // zwei maximieren kann. Vielleicht sollte das ueber eine
-            // button-group oder so gemacht werden ..
-            for (int i = 0; i < componentCount; i++) {
-                SInternalFrame frame = (SInternalFrame) container.getComponent(i);
-                if (!frame.isClosed() && frame.isMaximized()) {
-                    d.print("<tr><td>\n");
-                    frame.write(d);
-                    d.print("</td></tr></table>\n");
-                    return;
-                }
-            }
-
-            for (int i = 0; i < componentCount; i++) {
-                SInternalFrame frame = (SInternalFrame) container.getComponent(i);
-                if (!frame.isClosed()) {
-                    d.print("<tr><td>\n");
-                    frame.write(d);
-                    d.print("</td></tr>\n");
-                }
-            }
-            d.print("</table>\n");
-        }
     }
 
     public void setCG(DesktopPaneCG cg) {
