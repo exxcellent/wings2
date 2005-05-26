@@ -92,7 +92,7 @@ public class ProgressBarCG extends AbstractComponentCG implements
             height -= 2;
         }
 
-        device.print("<table><tr><td");
+        device.print("<table class=\"SLayout\"><tr><td class=\"SLayout\"");
         if (component.getFilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getFilledColor());
@@ -107,7 +107,7 @@ public class ProgressBarCG extends AbstractComponentCG implements
         device.print(" height=\"");
         device.print(String.valueOf(height));
         device.print("\"></td>");
-        device.print("<td");
+        device.print("<td class=\"SLayout\"");
         if (component.getUnfilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getUnfilledColor());
