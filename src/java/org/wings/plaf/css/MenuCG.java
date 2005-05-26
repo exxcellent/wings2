@@ -20,7 +20,8 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class MenuCG extends org.wings.plaf.css.MenuItemCG implements SConstants, org.wings.plaf.MenuCG {
+public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
+        org.wings.plaf.MenuCG {
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);

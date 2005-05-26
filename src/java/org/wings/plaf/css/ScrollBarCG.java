@@ -218,17 +218,19 @@ public class ScrollBarCG
         boolean childSelectorWorkaround = !scrollBar.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = scrollBar.getShowAsFormComponent();
 
-        if (showAsFormComponent)
-            device.print("<button name=\"")
+        if (showAsFormComponent) {
+            writeButtonStart(device, scrollBar, event);
+            device.print(" type=\"submit\" name=\"")
                     .print(Utils.event(scrollBar))
                     .print("\" value=\"")
                     .print(event)
                     .print("\"");
-        else
+        } else {
             device.print("<a href=\"")
                     .print(scrollBar.getRequestURL()
                     .addParameter(Utils.event(scrollBar) + "=" + event).toString())
                     .print("\"");
+        }
         device.print(">");
 
         device.print("<img");
@@ -241,5 +243,15 @@ public class ScrollBarCG
             device.print("</button>\n");
         else
             device.print("</a>\n");
+    }
+
+    /**
+     * @param device
+     * @param event 
+     * @param scrollBar 
+     * @throws IOException
+     */
+    protected void writeButtonStart(Device device, SScrollBar scrollBar, String event) throws IOException {
+        device.print("<button");
     }
 }

@@ -33,16 +33,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
+public class TabbedPaneCG extends AbstractComponentCG {
     private final transient static Log log = LogFactory.getLog(TabbedPaneCG.class);
 
     private static final Map placements = new HashMap();
     
     static {
-        placements.put(new Integer(STabbedPane.TOP), "top");
-        placements.put(new Integer(STabbedPane.BOTTOM), "bottom");
-        placements.put(new Integer(STabbedPane.LEFT), "left");
-        placements.put(new Integer(STabbedPane.RIGHT), "right");
+        placements.put(new Integer(SConstants.TOP), "top");
+        placements.put(new Integer(SConstants.BOTTOM), "bottom");
+        placements.put(new Integer(SConstants.LEFT), "left");
+        placements.put(new Integer(SConstants.RIGHT), "right");
     }
 
     public void installCG(SComponent component) {
@@ -87,51 +87,51 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             Utils.writeEvents(device, component);
             device.print(">");
     
-            if (placement == STabbedPane.TOP)
+            if (placement == SConstants.TOP)
                 device.print("<tr><th placement=\"top\"");
-            else if (placement == STabbedPane.LEFT)
+            else if (placement == SConstants.LEFT)
                 device.print("<tr><th placement=\"left\"");
-            else if (placement == STabbedPane.RIGHT)
+            else if (placement == SConstants.RIGHT)
                 device.print("<tr><td");
-            else if (placement == STabbedPane.BOTTOM)
+            else if (placement == SConstants.BOTTOM)
                 device.print("<tr><td");
     
             if (childSelectorWorkaround) {
-                if (placement == STabbedPane.TOP)
+                if (placement == SConstants.TOP)
                     Utils.childSelectorWorkaround(device, "STabbedPane_top");
-                else if (placement == STabbedPane.LEFT)
+                else if (placement == SConstants.LEFT)
                     Utils.childSelectorWorkaround(device, "STabbedPane_left");
                 else
                     Utils.childSelectorWorkaround(device, "STabbedPane_pane");
             }
             device.print(">");
     
-            if (placement == STabbedPane.TOP || placement == STabbedPane.LEFT)
+            if (placement == SConstants.TOP || placement == SConstants.LEFT)
                 writeTabs(device, tabbedPane);
             else
                 writeSelectedPaneContent(device, tabbedPane);
     
-            if (placement == STabbedPane.TOP)
+            if (placement == SConstants.TOP)
                 device.print("</th></tr><tr><td");
-            else if (placement == STabbedPane.LEFT)
+            else if (placement == SConstants.LEFT)
                 device.print("</th><td");
-            else if (placement == STabbedPane.RIGHT)
+            else if (placement == SConstants.RIGHT)
                 device.print("</td><th placement=\"right\"");
-            else if (placement == STabbedPane.BOTTOM)
+            else if (placement == SConstants.BOTTOM)
                 device.print("</td></tr><tr><th placement=\"bottom\"");
     
             if (childSelectorWorkaround) {
-                if (placement == STabbedPane.RIGHT)
+                if (placement == SConstants.RIGHT)
                     Utils.childSelectorWorkaround(device, "STabbedPane_right");
-                else if (placement == STabbedPane.BOTTOM)
+                else if (placement == SConstants.BOTTOM)
                     Utils.childSelectorWorkaround(device, "STabbedPane_bottom");
                 else
                     Utils.childSelectorWorkaround(device, "STabbedPane_pane");
             }
             device.print(">");
     
-            if (placement == STabbedPane.TOP
-                    || placement == STabbedPane.LEFT) {
+            if (placement == SConstants.TOP
+                    || placement == SConstants.LEFT) {
                 writeSelectedPaneContent(device, tabbedPane);
                 device.print("</td></tr></table>");
             } else {
@@ -175,18 +175,19 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
              */
             device.print("\n");
             
-            if (showAsFormComponent)
-                device.print("<button name=\"")
+            if (showAsFormComponent) {
+                writeButtonStart(device, tabbedPane, String.valueOf(i));
+                device.print(" type=\"submit\" name=\"")
                         .print(Utils.event(tabbedPane))
                         .print("\" value=\"")
                         .print(i)
                         .print("\"");
-            else
+            } else {
                 device.print("<a href=\"")
                         .print(tabbedPane.getRequestURL()
                         .addParameter(Utils.event(tabbedPane) + "=" + i).toString())
                         .print("\"");
-
+            }
             if (i == tabbedPane.getSelectedIndex()) {
                 device.print(" selected=\"true\"");
                 if (tabbedPane.isFocusOwner())
@@ -197,18 +198,22 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                 device.print(" disabled=\"true\"");
 
             if (childSelectorWorkaround) {
-                String cssClassName = "STabbedPane_Tab_" + placements.get(new Integer(tabbedPane.getTabPlacement()));
+                StringBuffer cssClassName = new StringBuffer("STabbedPane_Tab_");
+                if (showAsFormComponent) {
+                    cssClassName.append("button_");
+                }
+                cssClassName.append(placements.get(new Integer(tabbedPane.getTabPlacement())));
                 if (i == tabbedPane.getSelectedIndex()) {
-                    Utils.childSelectorWorkaround(device, cssClassName + " STabbedPane_Tab_selected");
+                    Utils.childSelectorWorkaround(device, cssClassName.toString() + " STabbedPane_Tab_selected");
                 } else if (!tabbedPane.isEnabledAt(i)) {
-                    Utils.childSelectorWorkaround(device, cssClassName + " STabbedPane_Tab_disabled");
+                    Utils.childSelectorWorkaround(device, cssClassName.toString() + " STabbedPane_Tab_disabled");
                 } else {
-                    Utils.childSelectorWorkaround(device, cssClassName);
+                    Utils.childSelectorWorkaround(device, cssClassName.toString());
                 }
             }
             device.print(">");
 
-            if (icon != null && tabbedPane.getTabPlacement() != STabbedPane.RIGHT) {
+            if (icon != null && tabbedPane.getTabPlacement() != SConstants.RIGHT) {
                 device.print("<img");
                 Utils.optAttribute(device, "src", icon.getURL());
                 Utils.optAttribute(device, "alt", tooltip);
@@ -221,7 +226,7 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
             Utils.write(device, title);
             device.print("&nbsp;");
 
-            if (icon != null && tabbedPane.getTabPlacement() == STabbedPane.RIGHT) {
+            if (icon != null && tabbedPane.getTabPlacement() == SConstants.RIGHT) {
                 device.print("&nbsp;<img");
                 Utils.optAttribute(device, "src", icon.getURL());
                 Utils.optAttribute(device, "alt", tooltip);
@@ -230,11 +235,30 @@ public class TabbedPaneCG extends AbstractComponentCG implements SConstants {
                 device.print("/>");
             }
 
-            if (showAsFormComponent)
-                device.print("</button>");
-            else
+            if (showAsFormComponent) {
+                writeButtonEnd(device);
+            } else {
                 device.print("</a>");
+            }
         }
+    }
+
+    /**
+     * @param device
+     * @throws IOException
+     */
+    protected void writeButtonEnd(Device device) throws IOException {
+        device.print("</button>");
+    }
+
+    /**
+     * @param device
+     * @param i 
+     * @param tabbedPane 
+     * @throws IOException
+     */
+    protected void writeButtonStart(Device device, STabbedPane tabbedPane, String value) throws IOException {
+        device.print("<button");
     }
 
     public CSSSelector  mapSelector(CSSSelector selector) {

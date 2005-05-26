@@ -29,7 +29,8 @@ import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 
-public class PopupMenuCG extends AbstractComponentCG implements SConstants, org.wings.plaf.MenuBarCG, SParentFrameListener {
+public class PopupMenuCG extends AbstractComponentCG implements
+        org.wings.plaf.MenuBarCG, SParentFrameListener {
     private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 
     public void installCG(final SComponent comp) {

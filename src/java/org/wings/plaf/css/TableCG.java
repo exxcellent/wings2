@@ -24,9 +24,8 @@ import org.wings.table.SDefaultTableCellRenderer;
 import java.awt.*;
 import java.io.IOException;
 
-public class TableCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.TableCG {
+public class TableCG extends AbstractComponentCG implements
+        org.wings.plaf.TableCG {
 
     private String fixedTableBorderWidth;
 
@@ -117,11 +116,12 @@ public class TableCG
 
         if (parameter != null && !isEditingCell) {
             if (showAsFormComponent) {
-                device.print("<button type=\"submit\" name=\"");
+                writeButtonStart(device, table, parameter);
+                device.print(" type=\"submit\" name=\"");
                 Utils.write(device, Utils.event(table));
-                device.print("\" value=\"");
+                device.print(SConstants.UID_DIVIDER);
                 Utils.write(device, parameter);
-                device.print("\">");
+                device.print("\" value=\"\">");
             } else {
                 RequestURL selectionAddr = table.getRequestURL();
                 selectionAddr.addParameter(Utils.event(table), parameter);
@@ -144,6 +144,17 @@ public class TableCG
             device.print("</span>");
 
         device.print("</td>\n");
+    }
+
+
+    /**
+     * @param device
+     * @param table
+     * @param parameter
+     * @throws IOException
+     */
+    protected void writeButtonStart(Device device, STable table, String parameter) throws IOException {
+        device.print("<button");
     }
 
 
@@ -232,11 +243,12 @@ public class TableCG
                 device.print(">");
 
                 if (showAsFormComponent) {
-                    device.print("<button name=\"");
+                    writeButtonStart(device, table, table.getToggleSelectionParameter(r, -1));
+                    device.print(" type=\"submit\" name=\"");
                     Utils.write(device, Utils.event(table));
-                    device.print("\" value=\"");
+                    device.print(SConstants.UID_DIVIDER);
                     Utils.write(device, table.getToggleSelectionParameter(r, -1));
-                    device.print("\">");
+                    device.print("\" value=\"\">");
                     device.print(r);
                     device.print("</button>");
                 } else {

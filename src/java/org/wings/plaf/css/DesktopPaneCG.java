@@ -17,16 +17,13 @@ package org.wings.plaf.css;
 import java.io.IOException;
 
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SDesktopPane;
 import org.wings.SDimension;
 import org.wings.SInternalFrame;
 import org.wings.io.Device;
 
-public class DesktopPaneCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.DesktopPaneCG
-{
+public class DesktopPaneCG extends AbstractComponentCG implements
+        org.wings.plaf.DesktopPaneCG {
     public void installCG(SComponent component) {
         super.installCG(component);
         component.setPreferredSize(new SDimension("100%", null));

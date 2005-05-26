@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.session.SessionManager;
 
 import javax.swing.event.EventListenerList;
@@ -50,6 +52,7 @@ import java.util.Iterator;
  * @see javax.swing.ButtonGroup
  */
 public class SButtonGroup implements SDelayedEventModel {
+    private final transient static Log log = LogFactory.getLog(SButtonGroup.class);
     public static final String SELECTION_CHANGED = "SelectionChanged";
 
     protected final ArrayList buttons = new ArrayList(2);
@@ -139,6 +142,11 @@ public class SButtonGroup implements SDelayedEventModel {
     public void setSelected(SAbstractButton b, boolean selected) {
         if (selected && b != selection && b != null) {
             setSelection(b);
+        }
+        // if button should be set to unselected, clear selection
+        if (!selected && b != null && b.equals(selection)) {
+            setSelection(null);
+            
         }
     }
 

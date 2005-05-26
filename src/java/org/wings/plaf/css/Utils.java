@@ -35,7 +35,7 @@ import java.util.Map;
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  * @version $Revision$
  */
-public final class Utils implements SConstants {
+public final class Utils {
     /**
      * Print debug information in generated HTML
      */
@@ -270,34 +270,34 @@ public final class Utils implements SConstants {
         else if (icon != null && text == null)
             d.print(icon);
         else if (icon != null && text != null) {
-            boolean textFirst = vertical == TOP || (vertical == CENTER && horizontal == LEFT);
+            boolean textFirst = vertical == SConstants.TOP || (vertical == SConstants.CENTER && horizontal == SConstants.LEFT);
             String first = textFirst ? text : icon;
             String last = textFirst ? icon : text;
 
             d.print("<table>");
-            if (vertical != TOP && horizontal == LEFT ||
-                    vertical != BOTTOM && horizontal == RIGHT) {
+            if (vertical != SConstants.TOP && horizontal == SConstants.LEFT ||
+                    vertical != SConstants.BOTTOM && horizontal == SConstants.RIGHT) {
                 d.print("<tr><td>");
                 write(d, first);
                 d.print("</td><td></td></tr><tr><td></td><td>");
                 write(d, last);
                 d.print("</td></tr>");
-            } else if (vertical != TOP && horizontal == RIGHT ||
-                    vertical != BOTTOM && horizontal == LEFT) {
+            } else if (vertical != SConstants.TOP && horizontal == SConstants.RIGHT ||
+                    vertical != SConstants.BOTTOM && horizontal == SConstants.LEFT) {
                 d.print("<tr><td></td><td>");
                 write(d, first);
                 d.print("</td></tr><tr><td>");
                 write(d, last);
                 d.print("</td><td></td></tr>");
-            } else if (vertical != TOP && horizontal == CENTER ||
-                    vertical != BOTTOM && horizontal == CENTER) {
+            } else if (vertical != SConstants.TOP && horizontal == SConstants.CENTER ||
+                    vertical != SConstants.BOTTOM && horizontal == SConstants.CENTER) {
                 d.print("<tr><td>");
                 write(d, first);
                 d.print("</td></tr><tr><td>");
                 write(d, last);
                 d.print("</td></tr>");
-            } else if (vertical != CENTER && horizontal == LEFT ||
-                    vertical != CENTER && horizontal == RIGHT) {
+            } else if (vertical != SConstants.CENTER && horizontal == SConstants.LEFT ||
+                    vertical != SConstants.CENTER && horizontal == SConstants.RIGHT) {
                 d.print("<tr><td>");
                 write(d, first);
                 d.print("</td><td>");

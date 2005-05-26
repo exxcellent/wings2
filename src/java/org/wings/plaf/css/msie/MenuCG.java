@@ -14,11 +14,11 @@
 package org.wings.plaf.css.msie;
 
 
-import org.wings.*;
-import org.wings.io.Device;
-import org.wings.session.SessionManager;
-
 import java.io.IOException;
+
+import org.wings.SMenu;
+import org.wings.SMenuItem;
+import org.wings.io.Device;
 
 public class MenuCG extends org.wings.plaf.css.MenuCG {
 

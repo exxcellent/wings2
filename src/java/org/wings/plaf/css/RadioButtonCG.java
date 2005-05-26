@@ -14,16 +14,14 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.SAbstractButton;
-import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.io.Device;
 
-import java.io.IOException;
-
-public class RadioButtonCG
-        extends CheckBoxCG
-        implements SConstants, org.wings.plaf.RadioButtonCG {
+public class RadioButtonCG extends CheckBoxCG implements
+        org.wings.plaf.RadioButtonCG {
     protected void installIcons(final SAbstractButton button) {
         org.wings.plaf.CGManager manager = button.getSession().getCGManager();
         button.setIcon((SIcon) manager.getObject("SRadioButton.icon", SIcon.class));

@@ -207,8 +207,8 @@ public class Faces
         b.setRolloverIcon(rollnsel);
         b.setRolloverSelectedIcon(rollsel);
         b.setPressedIcon(pressed);
-        b.setHorizontalAlignment(SRadioButton.CENTER);
-        b.setVerticalAlignment(SRadioButton.CENTER);
+        b.setHorizontalAlignment(SConstants.CENTER);
+        b.setVerticalAlignment(SConstants.CENTER);
     }
 
     int getRandomFaceIndex() {

@@ -98,7 +98,7 @@ public class SProgressBar extends SComponent {
     /**
      * The default orientation for a progress bar is <code>HORIZONTAL</code>.
      */
-    static final private int defaultOrientation = HORIZONTAL;
+    static final private int defaultOrientation = SConstants.HORIZONTAL;
 
     /**
      * Only one <code>ChangeEvent</code> is needed per instance since the
@@ -296,8 +296,8 @@ public class SProgressBar extends SComponent {
     public void setOrientation(int newOrientation) {
         if (orientation != newOrientation) {
             switch (newOrientation) {
-                case VERTICAL:
-                case HORIZONTAL:
+                case SConstants.VERTICAL:
+                case SConstants.HORIZONTAL:
                     int oldOrientation = orientation;
                     orientation = newOrientation;
                     reloadIfChange(oldOrientation, newOrientation);

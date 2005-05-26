@@ -16,19 +16,41 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class CheckBoxCG extends ButtonCG implements SConstants,
-        org.wings.plaf.CheckBoxCG {
-    protected boolean useIconsInForm = false;
+public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
+    private static final SIcon ICON_DISABLEDSELECTED = (SIcon) SessionManager
+            .getSession().getCGManager().getObject("SCheckBox.disabledSelectedIcon", SIcon.class);
+
+    private static final SIcon ICON_DISABLED = (SIcon) SessionManager
+            .getSession().getCGManager().getObject("SCheckBox.disabledIcon", SIcon.class);
+
+    private static final SIcon ICON_PRESSED = (SIcon) SessionManager
+            .getSession().getCGManager().getObject("SCheckBox.pressedIcon", SIcon.class);
+
+    private static final SIcon ICON_ROLLOVERSELECTED = (SIcon) SessionManager
+            .getSession().getCGManager().getObject("SCheckBox.rolloverSelectedIcon", SIcon.class);
+
+    private static final SIcon ICON_ROLLOVER = (SIcon) SessionManager
+            .getSession().getCGManager().getObject("SCheckBox.rolloverIcon", SIcon.class);
+
+    private static final SIcon ICON_DEFAULT = (SIcon) SessionManager
+            .getSession().getCGManager().getObject("SCheckBox.icon", SIcon.class);
+
+    private static final SIcon ICON_SELECTED = (SIcon) SessionManager
+                .getSession().getCGManager().getObject("SCheckBox.selectedIcon", SIcon.class);
+    
+    protected boolean useIconsInForms = false;
+    
 
     public boolean isUseIconsInForm() {
-        return useIconsInForm;
+        return useIconsInForms;
     }
 
     public void setUseIconsInForm(boolean useIconsInForm) {
-        this.useIconsInForm = useIconsInForm;
+        this.useIconsInForms = useIconsInForm;
     }
 
     public void installCG(SComponent component) {
@@ -39,13 +61,13 @@ public class CheckBoxCG extends ButtonCG implements SConstants,
 
     protected void installIcons(final SAbstractButton button) {
         org.wings.plaf.CGManager manager = button.getSession().getCGManager();
-        button.setIcon((SIcon) manager.getObject("SCheckBox.icon", SIcon.class));
-        button.setSelectedIcon((SIcon) manager.getObject("SCheckBox.selectedIcon", SIcon.class));
-        button.setRolloverIcon((SIcon) manager.getObject("SCheckBox.rolloverIcon", SIcon.class));
-        button.setRolloverSelectedIcon((SIcon) manager.getObject("SCheckBox.rolloverSelectedIcon", SIcon.class));
-        button.setPressedIcon((SIcon) manager.getObject("SCheckBox.pressedIcon", SIcon.class));
-        button.setDisabledIcon((SIcon) manager.getObject("SCheckBox.disabledIcon", SIcon.class));
-        button.setDisabledSelectedIcon((SIcon) manager.getObject("SCheckBox.disabledSelectedIcon", SIcon.class));
+        button.setIcon(ICON_DEFAULT);
+        button.setSelectedIcon(ICON_SELECTED);
+        button.setRolloverIcon(ICON_ROLLOVER);
+        button.setRolloverSelectedIcon(ICON_ROLLOVERSELECTED);
+        button.setPressedIcon(ICON_PRESSED);
+        button.setDisabledIcon(ICON_DISABLED);
+        button.setDisabledSelectedIcon(ICON_DISABLEDSELECTED);
     }
 
     public void writeContent(final Device device, final SComponent component)
@@ -56,15 +78,29 @@ public class CheckBoxCG extends ButtonCG implements SConstants,
         final String text = button.getText();
         final SIcon icon = getIcon(button);
 
-        if (showAsFormComponent && useIconsInForm) {
-            device.print("<button");
+        /* TODO for the button support in IE hack to be working, this component
+         * needs to always or never use buttons when rendered as form component.
+         * Therefore best would be to drop button support on this component, since
+         * one probably wants to change CheckBox state without submitting.
+         * Therefore replace button with table... 
+         * At this time it probably never uses buttons, since useIconsInForms is false
+         * by default (and probably never set). useIconsInForms should be dropped!
+         * Try #setShowAsFormComponent(false) if you want icon checkboxes in your
+         * application.
+         * (OL)
+         */
+        
+        if (showAsFormComponent && useIconsInForms) {
+            writeButtonStart(device, button);
+            device.print(" type=\"submit\" name=\"");
             Utils.write(device, Utils.event(button));
+            device.print("\"");
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.writeEvents(device, button);
-        } else if (showAsFormComponent && !useIconsInForm)
+        } else if (showAsFormComponent && !useIconsInForms) {
             device.print("<span");
-        else {
+        } else {
             RequestURL addr = button.getRequestURL();
             addr.addParameter(button, button.getToggleSelectionParameter());
             writeLinkStart(device, addr);
@@ -83,7 +119,7 @@ public class CheckBoxCG extends ButtonCG implements SConstants,
 
         device.print(">");
 
-        if (showAsFormComponent && !useIconsInForm && text == null)
+        if (showAsFormComponent && !useIconsInForms && text == null)
             inputTypeCheckbox(device, button);
         else if (icon != null && text == null)
             writeIcon(device, icon);
@@ -96,7 +132,7 @@ public class CheckBoxCG extends ButtonCG implements SConstants,
                 }
 
                 protected void icon(Device device) throws IOException {
-                    if (showAsFormComponent && !useIconsInForm)
+                    if (showAsFormComponent && !useIconsInForms)
                         inputTypeCheckbox(device, button);
                     else
                         writeIcon(device, icon);
@@ -104,12 +140,20 @@ public class CheckBoxCG extends ButtonCG implements SConstants,
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
-        if (showAsFormComponent && useIconsInForm)
+        if (showAsFormComponent && useIconsInForms)
             device.print("</button>");
-        else if (showAsFormComponent && !useIconsInForm)
+        else if (showAsFormComponent && !useIconsInForms)
             device.print("</span>");
         else
             device.print("</a>");
+    }
+
+    /**
+     * @param device
+     * @throws IOException
+     */
+    protected void writeButtonStart(final Device device, final SAbstractButton comp) throws IOException {
+        device.print("<button");
     }
 
     /** 

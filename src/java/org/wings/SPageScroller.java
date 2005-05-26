@@ -78,8 +78,8 @@ public class SPageScroller
 
         setOrientation(orientation);
         setMarginVisible(false);
-        setHorizontalAlignment(CENTER);
-        setVerticalAlignment(CENTER);
+        setHorizontalAlignment(SConstants.CENTER);
+        setVerticalAlignment(SConstants.CENTER);
         setEpochCheckEnabled(false);
     }
 

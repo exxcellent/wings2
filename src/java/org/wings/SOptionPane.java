@@ -161,7 +161,7 @@ public class SOptionPane
     /**
      * Panel with Option Buttons
      */
-    protected final SContainer optionButtons = new SPanel(new SFlowLayout(RIGHT));
+    protected final SContainer optionButtons = new SPanel(new SFlowLayout(SConstants.RIGHT));
 
     /**
      * OK Button

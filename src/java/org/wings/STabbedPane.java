@@ -47,7 +47,7 @@ public class STabbedPane
      *
      * @see #setTabPlacement
      */
-    protected int tabPlacement = TOP;
+    protected int tabPlacement = SConstants.TOP;
 
     /**
      * The default selection model
@@ -93,7 +93,7 @@ public class STabbedPane
      * @see #addTab
      */
     public STabbedPane() {
-        this(TOP);
+        this(SConstants.TOP);
     }
 
     /**
@@ -225,8 +225,8 @@ public class STabbedPane
      * @param tabPlacement the placement for the tabs relative to the content
      */
     public void setTabPlacement(int tabPlacement) {
-        if (tabPlacement != TOP && tabPlacement != LEFT &&
-                tabPlacement != BOTTOM && tabPlacement != RIGHT) {
+        if (tabPlacement != SConstants.TOP && tabPlacement != SConstants.LEFT &&
+                tabPlacement != SConstants.BOTTOM && tabPlacement != SConstants.RIGHT) {
             throw new IllegalArgumentException("illegal tab placement: must be TOP, BOTTOM, LEFT, or RIGHT");
         }
 

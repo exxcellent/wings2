@@ -48,8 +48,8 @@ public class SCheckBox extends SAbstractButton {
     public SCheckBox(boolean selected) {
         setSelected(selected);
 
-        setHorizontalTextPosition(NO_ALIGN);
-        setVerticalTextPosition(NO_ALIGN);
+        setHorizontalTextPosition(SConstants.NO_ALIGN);
+        setVerticalTextPosition(SConstants.NO_ALIGN);
 
         super.setType(CHECKBOX);
     }

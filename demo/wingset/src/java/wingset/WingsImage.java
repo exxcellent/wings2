@@ -31,20 +31,20 @@ public class WingsImage
         SPanel p = new SPanel();
         final SBorderLayout layout = new SBorderLayout();
 
-        setHorizontalAlignment(CENTER);
+        setHorizontalAlignment(SConstants.CENTER);
         p.setLayout(layout);
 
         SLabel label = new SLabel(WINGS_IMAGE);
-        label.setHorizontalAlignment(CENTER);
+        label.setHorizontalAlignment(SConstants.CENTER);
         p.add(label, SBorderLayout.CENTER);
 
         label = new SLabel("Welcome to");
-        label.setHorizontalAlignment(CENTER);
+        label.setHorizontalAlignment(SConstants.CENTER);
         p.add(label, SBorderLayout.NORTH);
 
 
         label = new SLabel("Have fun!");
-        label.setHorizontalAlignment(CENTER);
+        label.setHorizontalAlignment(SConstants.CENTER);
         p.add(label, SBorderLayout.SOUTH);
 
         return p;

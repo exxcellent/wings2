@@ -19,7 +19,7 @@ import java.io.Serializable;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SFont implements SConstants, Serializable {
+public class SFont implements Serializable {
     /**
      * Plain font style for {@link SFont#setStyle(int)}. Can be combined with adding (i.e. SFont.BOLD+SFont.ITALIC)
      */

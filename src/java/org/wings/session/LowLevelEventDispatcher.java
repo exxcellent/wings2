@@ -16,17 +16,24 @@ package org.wings.session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
-import org.wings.SAbstractButton;
-import org.wings.SAbstractIconTextCompound;
 import org.wings.SButton;
+import org.wings.SCheckBox;
+import org.wings.SClickable;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
+import org.wings.SPageScroller;
+import org.wings.SRadioButton;
+import org.wings.SScrollBar;
+import org.wings.STabbedPane;
+import org.wings.STable;
 import org.wings.SToggleButton;
+import org.wings.STree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -40,6 +47,16 @@ public final class LowLevelEventDispatcher
     private final HashMap listeners = new HashMap();
 
     protected boolean namedEvents = true;
+    
+    /** 
+     * This array contains classes whose events should be filtered, since they
+     * are caused by button tags, and IE's button tag support is buggy. 
+     * 
+     */
+    private static final List ieButtonFixClasses = Arrays.asList(new Class[] {
+            SButton.class, SToggleButton.class, SClickable.class,
+            SPageScroller.class, SRadioButton.class, SScrollBar.class,
+            STabbedPane.class, STable.class, STree.class});
 
     public LowLevelEventDispatcher() {}
 
@@ -182,17 +199,28 @@ public final class LowLevelEventDispatcher
          */
         if (isIE && name.equals(SConstants.IEFIX_BUTTONACTION)) {
             String buttonId = values[0];
+            String[] vals = new String[] {""};
+            int pos = buttonId.indexOf(SConstants.UID_DIVIDER);
+            if (pos > -1) {
+                String val = buttonId.substring(pos + 1);
+                buttonId = buttonId.substring(0, pos);
+                vals[0] = val;
+            }
             List l = (List) listeners.get(buttonId);
             if (l != null && l.size() > 0) {
-                log.debug("process special IE workaround event '" + epoch + SConstants.UID_DIVIDER + name + "'");
+                if (log.isDebugEnabled()) {
+                    log.debug("process special IE workaround event '" + epoch + SConstants.UID_DIVIDER + name + "'");
+                }
                 for (int i = 0; i < l.size(); ++i) {
                     LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
                     if (gl.isEnabled()) {
                         if (checkEpoch(epoch, buttonId, gl)) {
-                            log.debug("process event '" + buttonId + "' by " +
-                                    gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                    ")");
-                            gl.processLowLevelEvent(buttonId,new String[] {""});
+                            if (log.isDebugEnabled()) {
+                                log.debug("process event '" + buttonId + "' by " +
+                                        gl.getClass() + "(" + gl.getLowLevelEventId() +
+                                        ")");
+                            }
+                            gl.processLowLevelEvent(buttonId,vals);
                             result = true;
                         }
                     }
@@ -207,17 +235,17 @@ public final class LowLevelEventDispatcher
                 if (gl.isEnabled()) {
                     if (checkEpoch(epoch, name, gl)) {
                         if (isIE) {
-                            // see comment above, is this a button?
-                            boolean isButton = (gl.getClass().equals(SButton.class) || gl.getClass().equals(SToggleButton.class));
-                            if (isButton) {
+                            // see comment above, is this a form event?
+                            boolean isFormEvent = ((SComponent)gl).getResidesInForm() && ((SComponent)gl).getShowAsFormComponent(); 
+                            if (isFormEvent) {
                                 // was the button represented by a button html tag?
-                                boolean isFormEvent = isButton && ((SComponent)gl).getResidesInForm() && ((SComponent)gl).getShowAsFormComponent(); 
-                                if (isFormEvent) {
+                                boolean isButton = ieButtonFixClasses.contains(gl.getClass());
+                                if (isButton) {
                                     log.debug("circumventing IE bug, not processing event '" + name + "' by " +
                                             gl.getClass() + "(" + gl.getLowLevelEventId() +
                                             ")");
                                 } else {
-                                    log.debug("process button event outside form '" + name + "' by " +
+                                    log.debug("process form event not caused by a button tag'" + name + "' by " +
                                             gl.getClass() + "(" + gl.getLowLevelEventId() +
                                             ")");
                                     gl.processLowLevelEvent(name, values);

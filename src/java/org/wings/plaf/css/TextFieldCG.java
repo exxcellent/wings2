@@ -14,16 +14,14 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.STextField;
 import org.wings.io.Device;
 
-import java.io.IOException;
-
-public class TextFieldCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.TextFieldCG {
+public class TextFieldCG extends AbstractComponentCG implements
+        org.wings.plaf.TextFieldCG {
 
     public void writeContent(final Device device,
                              final SComponent _c)

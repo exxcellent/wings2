@@ -14,16 +14,15 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.SAnchor;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.io.Device;
-
-import java.io.IOException;
 
 public class AnchorCG
         extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.AnchorCG {
+        implements org.wings.plaf.AnchorCG {
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {

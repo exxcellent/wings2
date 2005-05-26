@@ -43,7 +43,7 @@ public class SClickable
      * @param text The text to be displayed by the label.
      */
     public SClickable(String text) {
-        this(text, null, LEFT);
+        this(text, null, SConstants.LEFT);
     }
 
     /**
@@ -60,7 +60,7 @@ public class SClickable
      * @param icon The image to be displayed by the label.
      */
     public SClickable(SIcon icon) {
-        this(icon, LEFT);
+        this(icon, SConstants.LEFT);
     }
 
     /**
@@ -87,7 +87,7 @@ public class SClickable
     public SClickable(String text, SIcon icon) {
         setText(text);
         setIcon(icon);
-        setHorizontalAlignment(LEFT);
+        setHorizontalAlignment(SConstants.LEFT);
     }
 
     /**

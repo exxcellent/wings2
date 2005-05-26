@@ -106,6 +106,6 @@ public class SScrollBar
     }
 
     public String toString() {
-        return "SScrollBar[orientation=" + ((orientation == SComponent.HORIZONTAL) ? "horizontal" : "vertical") + "]";
+        return "SScrollBar[orientation=" + ((orientation == SConstants.HORIZONTAL) ? "horizontal" : "vertical") + "]";
     }
 }

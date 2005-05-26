@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.ButtonCG;
 
 import javax.swing.*;
@@ -31,6 +33,8 @@ import java.beans.PropertyChangeListener;
 public abstract class SAbstractButton
         extends SAbstractIconTextCompound
         implements LowLevelEventListener {
+    private final transient static Log log = LogFactory.getLog(SAbstractButton.class);
+
     public static final String SUBMIT_BUTTON = "submit";
     public static final String RESET_BUTTON = "reset";
     public static final String IMAGE_BUTTON = "image";
@@ -241,9 +245,9 @@ public abstract class SAbstractButton
      */
     public void setSelected(boolean b) {
         if (isSelected() != b) {
-            if (buttonGroup != null)
+            if (buttonGroup != null) {
                 buttonGroup.setSelected(this, b);
-
+            }
             super.setSelected(b);
         }
     }

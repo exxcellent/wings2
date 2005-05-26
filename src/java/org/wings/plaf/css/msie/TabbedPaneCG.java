@@ -15,45 +15,42 @@ package org.wings.plaf.css.msie;
 
 import java.io.IOException;
 
-import org.wings.RequestURL;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
-import org.wings.SList;
+import org.wings.STabbedPane;
+import org.wings.STree;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
 
-public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameListener {
+/**
+ * @author ole
+ *
+ */
+public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SParentFrameListener {
     private static final String FORMS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.form",
             String.class);
 
 
     /* (non-Javadoc)
-     * @see org.wings.plaf.css.ListCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
+     * @see org.wings.plaf.css.TabbedPaneCG#writeButtonStart(org.wings.io.Device, org.wings.STabbedPane, java.lang.String)
      */
-    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a onclick=\"javascript:location.href='");
-        selectionAddr.write(device);
-        device.print("';\"");
-    }
-
-    protected void writeButtonStart(Device device, SList list, String value) throws IOException {
-        device.print("<button  onclick=\"addHiddenField(this.form,'");
-        device.print(list.getParentFrame().getEventEpoch());
+    protected void writeButtonStart(Device device, STabbedPane tabbedPane, String value) throws IOException {
+        device.print("<button onclick=\"addHiddenField(this.form,'");
+        device.print(tabbedPane.getParentFrame().getEventEpoch());
         device.print(SConstants.UID_DIVIDER);
         device.print(SConstants.IEFIX_BUTTONACTION);
         device.print("','");
-        device.print(list.getName());
+        device.print(tabbedPane.getName());
         device.print(SConstants.UID_DIVIDER);
-        Utils.write(device, value);
+        device.print(value);
         device.print("')\"");
     }
 
@@ -70,6 +67,14 @@ public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameLis
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
+    }
+
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.TabbedPaneCG#writeButtonEnd(org.wings.io.Device)
+     */
+    protected void writeButtonEnd(Device device) throws IOException {
+        super.writeButtonEnd(device);
+        device.print("<span> </span>");
     }
 
 }

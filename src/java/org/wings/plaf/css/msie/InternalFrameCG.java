@@ -54,10 +54,10 @@ public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
             }
             device.print(Utils.nonBreakingSpaces(text));
             device.print("</div></td>");
-            if (frame.isClosable() && getCloseIcon() != null) {
+            if (frame.isMaximizable() && !frame.isMaximized() && getMaximizeIcon() != null) {
                 device.print("<td>");
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon(), BUTTONICON_CLASSNAME);
+                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, getMaximizeIcon(), BUTTONICON_CLASSNAME);
                 device.print("</td>");
             }
             if (frame.isIconifyable() && getIconifyIcon() != null) {
@@ -66,10 +66,10 @@ public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
                         SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, getIconifyIcon(), BUTTONICON_CLASSNAME);
                 device.print("</td>");
             }
-            if (frame.isMaximizable() && !frame.isMaximized() && getMaximizeIcon() != null) {
+            if (frame.isClosable() && getCloseIcon() != null) {
                 device.print("<td>");
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, getMaximizeIcon(), BUTTONICON_CLASSNAME);
+                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon(), BUTTONICON_CLASSNAME);
                 device.print("</td>");
             }
             device.print("<td>&nbsp;&nbsp;</td></tr></table>");

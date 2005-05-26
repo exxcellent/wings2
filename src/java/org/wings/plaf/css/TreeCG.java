@@ -25,9 +25,8 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.io.IOException;
 
-public class TreeCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.TreeCG {
+public class TreeCG extends AbstractComponentCG implements
+        org.wings.plaf.TreeCG {
     private SIcon collapseControlIcon;
     private SIcon emptyFillIcon;
     private SIcon expandControlIcon;
@@ -146,7 +145,8 @@ public class TreeCG
                 writeIcon(device, leafControlIcon, false);
             } else {
                 if (component.getShowAsFormComponent()) {
-                    device.print("<button name=\"");
+                    writeButtonStart(component, device, component.getExpansionParameter(row, false));
+                    device.print(" type=\"submit\" name=\"");
                     Utils.write(device, Utils.event(component));
                     device.print("\" value=\"");
                     Utils.write(device, component.getExpansionParameter(row, false));
@@ -190,7 +190,8 @@ public class TreeCG
         SCellRendererPane rendererPane = component.getCellRendererPane();
         if (isSelectable) {
             if (component.getShowAsFormComponent()) {
-                device.print("<button name=\"");
+                writeButtonStart(component, device, component.getSelectionParameter(row, false));
+                device.print(" type=\"submit\" name=\"");
                 Utils.write(device, Utils.event(component));
                 device.print("\" value=\"");
                 Utils.write(device, component.getSelectionParameter(row, false));
@@ -245,6 +246,17 @@ public class TreeCG
         } else if ( path.getPathCount() == nextPathCount ) {
             device.print("</li>");
         }
+    }
+
+
+    /**
+     * @param component
+     * @param device
+     * @param row
+     * @throws IOException
+     */
+    protected void writeButtonStart(STree component, Device device, String value) throws IOException {
+        device.print("<button");
     }
 
 

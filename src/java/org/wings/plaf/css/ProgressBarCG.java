@@ -21,11 +21,10 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class ProgressBarCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.ProgressBarCG {
+public class ProgressBarCG extends AbstractComponentCG implements
+        org.wings.plaf.ProgressBarCG {
 
-//--- byte array converted template snippets.
+// --- byte array converted template snippets.
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);

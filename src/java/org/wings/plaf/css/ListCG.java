@@ -22,7 +22,8 @@ import org.wings.script.JavaScriptListener;
 
 import java.io.IOException;
 
-public class ListCG extends AbstractComponentCG implements SConstants, org.wings.plaf.ListCG {
+public class ListCG extends AbstractComponentCG implements
+        org.wings.plaf.ListCG {
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -166,7 +167,8 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
 
             if (renderSelection) {
                 if (showAsFormComponent) {
-                    device.print("<button name=\"");
+                    writeButtonStart(device, list, list.getToggleSelectionParameter(i));
+                    device.print(" name=\"");
                     Utils.write(device, Utils.event(list));
                     device.print("\" value=\"");
                     Utils.write(device, list.getToggleSelectionParameter(i));
@@ -198,6 +200,14 @@ public class ListCG extends AbstractComponentCG implements SConstants, org.wings
         device.print("</");
         Utils.write(device, list.getType());
         device.print(">");
+    }
+
+    /**
+     * @param device
+     * @throws IOException
+     */
+    protected void writeButtonStart(Device device, SList list, String value) throws IOException {
+        device.print("<button");
     }
 
     /** 

@@ -345,7 +345,7 @@ final class SessionServlet
 
             Enumeration en = req.getParameterNames();
             Cookie[] cookies = req.getCookies();
-            
+
             // are there parameters/low level events to dispatch
             if (en.hasMoreElements()) {
                 // only fire DISPATCH_START if we have parameters to dispatch

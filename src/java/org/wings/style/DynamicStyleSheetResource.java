@@ -25,7 +25,6 @@ import org.wings.session.SessionManager;
 import org.wings.util.ComponentVisitor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;

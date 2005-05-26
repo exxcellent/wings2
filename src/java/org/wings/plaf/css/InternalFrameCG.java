@@ -24,10 +24,8 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class InternalFrameCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.InternalFrameCG
-{
+public class InternalFrameCG extends AbstractComponentCG implements
+        org.wings.plaf.InternalFrameCG {
     private final static transient Log log = LogFactory.getLog(InternalFrameCG.class);
     protected static final String WINDOWICON_CLASSNAME = "WindowIcon";
     protected static final String BUTTONICON_CLASSNAME = "WindowButton";
@@ -75,16 +73,17 @@ public class InternalFrameCG
         // RequestURL addr = frame.getRequestURL();
         // addr.addParameter(Utils.event(frame), event);
 
-        if (showAsFormComponent) {
-            device.print("<button");
-            if (cssClass != null) {
-                device.print(" class=\"");
-                device.print(cssClass);
-                device.print("\"");
-            }
-            device.print(" name=\"").print(Utils.event(frame)).print(
-                    "\" value=\"").print(event).print("\">");
-        } else {
+        // we don't need this to be buttons
+//        if (showAsFormComponent) {
+//            device.print("<button");
+//            if (cssClass != null) {
+//                device.print(" class=\"");
+//                device.print(cssClass);
+//                device.print("\"");
+//            }
+//            device.print(" name=\"").print(Utils.event(frame)).print(
+//                    "\" value=\"").print(event).print("\">");
+//        } else {
             device.print("<a");
             if (cssClass != null) {
                 device.print(" class=\"");
@@ -95,14 +94,14 @@ public class InternalFrameCG
                     frame.getRequestURL().addParameter(
                             Utils.event(frame) + "=" + event).toString())
                     .print("\">");
-        }
+//        }
         writeIcon(device, icon, null);
 
-        if (showAsFormComponent) {
-            device.print("</button>");
-        } else {
+//        if (showAsFormComponent) {
+//            device.print("</button>");
+//        } else {
             device.print("</a>");
-        }
+//        }
     }
 
 

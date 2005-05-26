@@ -32,9 +32,13 @@
     <!-- Logger -->
 
     <logger name="org.wings">
-        <level value="DEBUG" />
+        <level value="WARN" />
     </logger>
 
+    <logger name="org.wings.session">
+        <level value="WARN" />
+    </logger>
+    
     <logger name="net">
         <level value="ALL"/>
     </logger>

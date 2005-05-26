@@ -14,13 +14,6 @@
 package org.wings.plaf.css.msie;
 
 
-import org.wings.SAbstractButton;
-import org.wings.SConstants;
-import org.wings.SIcon;
-import org.wings.io.Device;
-import org.wings.plaf.css.Utils;
-
-import java.io.IOException;
 
 public class RadioButtonCG extends CheckBoxCG {
 }

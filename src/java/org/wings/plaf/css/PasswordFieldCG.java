@@ -14,16 +14,14 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SPasswordField;
 import org.wings.io.Device;
 
-import java.io.IOException;
-
-public class PasswordFieldCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.PasswordFieldCG {
+public class PasswordFieldCG extends AbstractComponentCG implements
+        org.wings.plaf.PasswordFieldCG {
 
     public void writeContent(final Device device,
                              final SComponent _c)

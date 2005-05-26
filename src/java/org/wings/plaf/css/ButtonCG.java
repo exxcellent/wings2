@@ -21,8 +21,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class ButtonCG extends LabelCG implements SConstants,
-        org.wings.plaf.ButtonCG {
+public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
 
     /**
      * Use this java script implementation to submit forms on button click

@@ -24,9 +24,7 @@ import org.wings.plaf.DesktopPaneCG;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class SDesktopPane
-        extends SContainer
-        implements SConstants {
+public class SDesktopPane extends SContainer {
     SDesktopLayout layout = new SDesktopLayout();
 
     public SDesktopPane() {

@@ -21,9 +21,8 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class SeparatorCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.SeparatorCG {
+public class SeparatorCG extends AbstractComponentCG implements
+        org.wings.plaf.SeparatorCG {
 
 
     public void writeContent(final Device device,
@@ -37,13 +36,13 @@ public class SeparatorCG
         Utils.optAttribute(device, "size", component.getSize());
 
         switch (component.getAlignment()) {
-            case SSeparator.RIGHT_ALIGN:
+            case SConstants.RIGHT_ALIGN:
                 device.print(" align=\"right\"");
                 break;
-            case SSeparator.CENTER_ALIGN:
+            case SConstants.CENTER_ALIGN:
                 device.print(" align=\"center\"");
                 break;
-            case SSeparator.BLOCK_ALIGN:
+            case SConstants.BLOCK_ALIGN:
                 device.print(" align=\"justify\"");
                 break;
         }

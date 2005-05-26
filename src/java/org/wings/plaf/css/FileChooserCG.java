@@ -14,16 +14,14 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFileChooser;
 import org.wings.io.Device;
 
-import java.io.IOException;
-
-public class FileChooserCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.FileChooserCG {
+public class FileChooserCG extends AbstractComponentCG implements
+        org.wings.plaf.FileChooserCG {
 
     public void writeContent(final Device device,
                              final SComponent _c)

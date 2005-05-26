@@ -24,9 +24,7 @@ import org.wings.plaf.LabelCG;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SLabel
-        extends SComponent
-        implements SConstants {
+public class SLabel extends SComponent {
     
     /**
      * The text to be displayed
@@ -40,8 +38,8 @@ public class SLabel
 
     protected SIcon disabledIcon = null;
 
-    private int verticalTextPosition = CENTER;
-    private int horizontalTextPosition = RIGHT;
+    private int verticalTextPosition = SConstants.CENTER;
+    private int horizontalTextPosition = SConstants.RIGHT;
     private int iconTextGap = 1;
     private boolean imageAbsBottom = false;
 
@@ -52,7 +50,7 @@ public class SLabel
      * @param text The text to be displayed by the label.
      */
     public SLabel(String text) {
-        this(text, null, LEFT);
+        this(text, null, SConstants.LEFT);
     }
 
     /**
@@ -69,7 +67,7 @@ public class SLabel
      * @param icon The image to be displayed by the label.
      */
     public SLabel(SIcon icon) {
-        this(icon, LEFT);
+        this(icon, SConstants.LEFT);
     }
 
     /**
@@ -94,7 +92,7 @@ public class SLabel
      * @param icon The image to be displayed by the label.
      */
     public SLabel(String text, SIcon icon) {
-        this(text, icon, LEFT);
+        this(text, icon, SConstants.LEFT);
     }
 
     /**

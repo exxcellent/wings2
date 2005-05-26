@@ -29,7 +29,7 @@ public abstract class SAbstractClickable
      * @param text The text to be displayed by the label.
      */
     public SAbstractClickable(String text) {
-        this(text, null, LEFT);
+        this(text, null, SConstants.LEFT);
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class SAbstractClickable
      * @param icon The image to be displayed by the label.
      */
     public SAbstractClickable(SIcon icon) {
-        this(icon, LEFT);
+        this(icon, SConstants.LEFT);
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class SAbstractClickable
     public SAbstractClickable(String text, SIcon icon) {
         setText(text);
         setIcon(icon);
-        setHorizontalAlignment(LEFT);
+        setHorizontalAlignment(SConstants.LEFT);
     }
 
     /**

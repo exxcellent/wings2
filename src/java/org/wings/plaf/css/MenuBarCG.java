@@ -17,14 +17,12 @@ package org.wings.plaf.css;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.SMenu;
 import org.wings.SMenuBar;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
-import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.resource.ClasspathResource;
@@ -34,9 +32,8 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class MenuBarCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.MenuBarCG, SParentFrameListener {
+public class MenuBarCG extends AbstractComponentCG implements
+        org.wings.plaf.MenuBarCG, SParentFrameListener {
 
     private final transient static Log log = LogFactory.getLog(MenuBarCG.class);
 

@@ -15,45 +15,38 @@ package org.wings.plaf.css.msie;
 
 import java.io.IOException;
 
-import org.wings.RequestURL;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
-import org.wings.SList;
+import org.wings.STree;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
 
-public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameListener {
+/**
+ * @author ole
+ *
+ */
+public class TreeCG extends org.wings.plaf.css.TreeCG implements SParentFrameListener {
     private static final String FORMS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.form",
             String.class);
 
 
-    /* (non-Javadoc)
-     * @see org.wings.plaf.css.ListCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
-     */
-    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a onclick=\"javascript:location.href='");
-        selectionAddr.write(device);
-        device.print("';\"");
-    }
-
-    protected void writeButtonStart(Device device, SList list, String value) throws IOException {
-        device.print("<button  onclick=\"addHiddenField(this.form,'");
-        device.print(list.getParentFrame().getEventEpoch());
+    protected void writeButtonStart(STree component, Device device, String value) throws IOException {
+        device.print("<button onclick=\"addHiddenField(this.form,'");
+        device.print(component.getParentFrame().getEventEpoch());
         device.print(SConstants.UID_DIVIDER);
         device.print(SConstants.IEFIX_BUTTONACTION);
         device.print("','");
-        device.print(list.getName());
+        device.print(component.getName());
         device.print(SConstants.UID_DIVIDER);
-        Utils.write(device, value);
+        device.print(value);
         device.print("')\"");
     }
 
@@ -71,5 +64,4 @@ public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameLis
 
     public void parentFrameRemoved(SParentFrameEvent e) {
     }
-
 }

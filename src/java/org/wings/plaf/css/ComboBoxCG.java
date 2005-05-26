@@ -20,9 +20,8 @@ import org.wings.plaf.CGManager;
 
 import java.io.IOException;
 
-public class ComboBoxCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.ComboBoxCG {
+public class ComboBoxCG extends AbstractComponentCG implements
+        org.wings.plaf.ComboBoxCG {
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);

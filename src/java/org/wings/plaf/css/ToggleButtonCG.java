@@ -14,8 +14,8 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SConstants;
 
-public class ToggleButtonCG extends ButtonCG implements SConstants, org.wings.plaf.ToggleButtonCG {
+public class ToggleButtonCG extends ButtonCG implements
+        org.wings.plaf.ToggleButtonCG {
 
 }

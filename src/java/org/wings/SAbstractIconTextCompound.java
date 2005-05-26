@@ -79,9 +79,9 @@ public abstract class SAbstractIconTextCompound
 
     private SIcon rolloverSelectedIcon;
 
-    private int verticalTextPosition = CENTER;
+    private int verticalTextPosition = SConstants.CENTER;
 
-    private int horizontalTextPosition = RIGHT;
+    private int horizontalTextPosition = SConstants.RIGHT;
 
     private int iconTextGap = 0;
 

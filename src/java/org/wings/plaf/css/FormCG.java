@@ -20,7 +20,7 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class FormCG extends AbstractComponentCG implements SConstants, org.wings.plaf.FormCG {
+public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG {
 
     private static final SIcon BLIND_ICON = (SIcon) SessionManager.getSession()
             .getCGManager().getObject("FormCG.blindIcon", SIcon.class);

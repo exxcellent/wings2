@@ -14,15 +14,14 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SMenuItem;
 import org.wings.io.Device;
 
-import java.io.IOException;
-
-public class MenuItemCG extends ButtonCG implements SConstants, org.wings.plaf.MenuItemCG {
+public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
 
     protected void writeItemContent(final Device device, SMenuItem menuItem)
             throws IOException {

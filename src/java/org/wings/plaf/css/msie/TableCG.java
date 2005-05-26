@@ -15,11 +15,10 @@ package org.wings.plaf.css.msie;
 
 import java.io.IOException;
 
-import org.wings.RequestURL;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
-import org.wings.SList;
+import org.wings.STable;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
@@ -30,30 +29,21 @@ import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
 
-public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameListener {
+public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameListener {
+
     private static final String FORMS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.form",
             String.class);
 
-
-    /* (non-Javadoc)
-     * @see org.wings.plaf.css.ListCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
-     */
-    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a onclick=\"javascript:location.href='");
-        selectionAddr.write(device);
-        device.print("';\"");
-    }
-
-    protected void writeButtonStart(Device device, SList list, String value) throws IOException {
+    protected void writeButtonStart(Device device, STable table, String parameter) throws IOException {
         device.print("<button  onclick=\"addHiddenField(this.form,'");
-        device.print(list.getParentFrame().getEventEpoch());
+        device.print(table.getParentFrame().getEventEpoch());
         device.print(SConstants.UID_DIVIDER);
         device.print(SConstants.IEFIX_BUTTONACTION);
         device.print("','");
-        device.print(list.getName());
+        device.print(table.getName());
         device.print(SConstants.UID_DIVIDER);
-        Utils.write(device, value);
+        Utils.write(device, parameter);
         device.print("')\"");
     }
 
@@ -71,5 +61,4 @@ public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameLis
 
     public void parentFrameRemoved(SParentFrameEvent e) {
     }
-
 }

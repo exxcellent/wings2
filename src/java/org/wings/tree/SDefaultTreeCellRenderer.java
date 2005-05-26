@@ -14,6 +14,7 @@
 package org.wings.tree;
 
 import org.wings.SComponent;
+import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.STree;
@@ -46,7 +47,7 @@ public class SDefaultTreeCellRenderer
      * Create a SDefaultTreeCellRenderer with default properties.
      */
     public SDefaultTreeCellRenderer() {
-        setHorizontalAlignment(SLabel.LEFT);
+        setHorizontalAlignment(SConstants.LEFT);
         setLeafIcon(getDefaultLeafIcon());
         setClosedIcon(getDefaultClosedIcon());
         setOpenIcon(getDefaultOpenIcon());

@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
+import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
@@ -48,7 +49,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.indexOf("%") != -1;
         boolean isWidthPercentage = prefSize != null && prefSize.width != null && prefSize.width.indexOf("%") != -1;
         // special case of special case: if the component with relative size is vertically aligned, we must avoid 100% heigth
-        boolean isVAligned = (component.getVerticalAlignment() == SComponent.CENTER || component.getVerticalAlignment() == SComponent.BOTTOM );
+        boolean isVAligned = (component.getVerticalAlignment() == SConstants.CENTER || component.getVerticalAlignment() == SConstants.BOTTOM );
 
         if ( isHeightPercentage || isWidthPercentage ) {
             device.print(" style=\"");

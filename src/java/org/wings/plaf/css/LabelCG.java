@@ -14,15 +14,15 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.io.Device;
 
-import java.io.IOException;
-
-public class LabelCG extends AbstractComponentCG implements SConstants, org.wings.plaf.LabelCG {
+public class LabelCG extends AbstractComponentCG implements
+        org.wings.plaf.LabelCG {
     public LabelCG() {
     }
 

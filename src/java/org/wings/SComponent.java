@@ -56,7 +56,7 @@ import java.util.*;
  * @version $Revision$
  */
 public abstract class SComponent
-        implements SConstants, Cloneable, Serializable, Renderable {
+        implements Cloneable, Serializable, Renderable {
     public static final CSSSelector SELECTOR_GLOBAL = CSSSelector.GLOBAL;
 
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
@@ -79,12 +79,12 @@ public abstract class SComponent
     /**
      * Vertical alignment
      */
-    protected int verticalAlignment = NO_ALIGN;
+    protected int verticalAlignment = SConstants.NO_ALIGN;
 
     /**
      * Horizontal alignment
      */
-    protected int horizontalAlignment = NO_ALIGN;
+    protected int horizontalAlignment = SConstants.NO_ALIGN;
 
     /**
      * The name of the style class

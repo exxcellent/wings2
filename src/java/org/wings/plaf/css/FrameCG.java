@@ -38,7 +38,7 @@ import org.wings.style.DynamicStyleSheetResource;
 import java.io.IOException;
 import java.util.*;
 
-public class FrameCG implements SConstants, org.wings.plaf.FrameCG {
+public class FrameCG implements org.wings.plaf.FrameCG {
     private final transient static Log log = LogFactory.getLog(FrameCG.class);
 
     /**

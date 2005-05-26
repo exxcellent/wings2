@@ -22,7 +22,8 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, org.wings.plaf.DialogCG {
+public class DialogCG extends org.wings.plaf.css.FormCG implements
+        org.wings.plaf.DialogCG {
 
 //--- byte array converted template snippets.
 
@@ -56,13 +57,14 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
         Utils.optAttribute(device, "width", getIconWidth(icon));
         device.print(">");
 
-        if (showAsFormComponent)
-            device.print("<button name=\"")
-                    .print(Utils.event(dialog))
-                    .print("\" value=\"")
-                    .print(event)
-                    .print("\">");
-        else
+        // this really doesn't need to be shown as a form component
+//        if (showAsFormComponent)
+//            device.print("<button name=\"")
+//                    .print(Utils.event(dialog))
+//                    .print("\" value=\"")
+//                    .print(event)
+//                    .print("\">");
+//        else
             device.print("<a href=\"")
                     .print(dialog.getRequestURL()
                     .addParameter(Utils.event(dialog) + "=" + event).toString())
@@ -70,9 +72,9 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements SConstants, o
 
         writeIcon(device, icon);
 
-        if (showAsFormComponent)
-            device.print("</button>");
-        else
+//        if (showAsFormComponent)
+//            device.print("</button>");
+//        else
             device.print("</a>");
 
         device.print("</th>");

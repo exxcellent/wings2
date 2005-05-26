@@ -20,9 +20,8 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class ToolbarCG
-        extends AbstractComponentCG
-        implements SConstants, org.wings.plaf.ToolbarCG {
+public class ToolbarCG extends AbstractComponentCG implements
+        org.wings.plaf.ToolbarCG {
     public void writeContent(final Device device, final SComponent _c)
             throws IOException {
         final SToolbar toolbar = (SToolbar) _c;

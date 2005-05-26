@@ -14,24 +14,22 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.wings.SClickable;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.io.Device;
 
-import java.io.IOException;
-
-public class ClickableCG
-        extends LabelCG
-        implements SConstants, org.wings.plaf.ButtonCG {
+public class ClickableCG extends LabelCG implements org.wings.plaf.ButtonCG {
 
     public void writeContent(final Device device, final SComponent component)
             throws IOException {
         final SClickable button = (SClickable) component;
 
         if (button.getShowAsFormComponent()) {
-            device.print("<button name=\"");
+            writeButtonStart(device, button);
+            device.print(" name=\"");
             Utils.write(device, button.getEventTarget().getEncodedLowLevelEventId());
             device.print("\" value=\"");
             Utils.write(device, button.getEvent());
@@ -72,6 +70,10 @@ public class ClickableCG
             device.print("</button>");
         else
             device.print("</a>");
+    }
+
+    protected void writeButtonStart(Device device, SClickable button) throws IOException {
+        device.print("<button");
     }
 
     protected SIcon getIcon(SClickable abstractButton) {

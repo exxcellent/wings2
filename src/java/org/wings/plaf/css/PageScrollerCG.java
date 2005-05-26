@@ -188,17 +188,19 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
-        if (showAsFormComponent)
-            device.print("<button name=\"")
+        if (showAsFormComponent) {
+            writeButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()));
+            device.print(" type=\"submit\" name=\"")
                     .print(Utils.event(pageScroller))
                     .print("\" value=\"")
-                    .print("" + (page * pageScroller.getExtent()))
+                    .print(String.valueOf(page * pageScroller.getExtent()))
                     .print("\"");
-        else
+        } else {
             device.print("<a href=\"")
                     .print(pageScroller.getRequestURL()
                     .addParameter(Utils.event(pageScroller) + "=" + page * pageScroller.getExtent()).toString())
                     .print("\"");
+        }
         device.print(">");
 
         device.print(Integer.toString(page + 1));
@@ -213,17 +215,19 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
-        if (showAsFormComponent)
-            device.print("<button name=\"")
+        if (showAsFormComponent) {
+            writeButtonStart(device, pageScroller, event);
+            device.print(" type=\"submit\" name=\"")
                     .print(Utils.event(pageScroller))
                     .print("\" value=\"")
                     .print(event)
                     .print("\"");
-        else
+        } else {
             device.print("<a href=\"")
                     .print(pageScroller.getRequestURL()
                     .addParameter(Utils.event(pageScroller) + "=" + event).toString())
                     .print("\"");
+        }
         device.print(">");
 
         device.print("<img");
@@ -236,5 +240,12 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
             device.print("</button>\n");
         else
             device.print("</a>\n");
+    }
+
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.ScrollBarCG#writeButtonStart(org.wings.io.Device, org.wings.SScrollBar, java.lang.String)
+     */
+    protected void writeButtonStart(Device device, SPageScroller pageScroller, String event) throws IOException {
+        device.print("<button");
     }
 }

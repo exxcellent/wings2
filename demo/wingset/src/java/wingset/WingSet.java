@@ -148,7 +148,7 @@ public class WingSet implements Serializable {
         final STabbedPane tab = new STabbedPane();
         tab.setName("examples");
         // tab.setMaxTabsPerLine(9);
-        tab.setTabPlacement(STabbedPane.TOP);
+        tab.setTabPlacement(SConstants.TOP);
         //tab.setBackgroundImage(brushedMetal);
 
         tab.add(new WingsImage(), "wingS!");
