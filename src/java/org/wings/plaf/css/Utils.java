@@ -263,51 +263,6 @@ public final class Utils {
         return styleString;
     }
 
-    public static void printIconTextCompound(Device d, String icon, String text, int horizontal, int vertical)
-            throws IOException {
-        if (icon == null && text != null)
-            d.print(text);
-        else if (icon != null && text == null)
-            d.print(icon);
-        else if (icon != null && text != null) {
-            boolean textFirst = vertical == SConstants.TOP || (vertical == SConstants.CENTER && horizontal == SConstants.LEFT);
-            String first = textFirst ? text : icon;
-            String last = textFirst ? icon : text;
-
-            d.print("<table>");
-            if (vertical != SConstants.TOP && horizontal == SConstants.LEFT ||
-                    vertical != SConstants.BOTTOM && horizontal == SConstants.RIGHT) {
-                d.print("<tr><td>");
-                write(d, first);
-                d.print("</td><td></td></tr><tr><td></td><td>");
-                write(d, last);
-                d.print("</td></tr>");
-            } else if (vertical != SConstants.TOP && horizontal == SConstants.RIGHT ||
-                    vertical != SConstants.BOTTOM && horizontal == SConstants.LEFT) {
-                d.print("<tr><td></td><td>");
-                write(d, first);
-                d.print("</td></tr><tr><td>");
-                write(d, last);
-                d.print("</td><td></td></tr>");
-            } else if (vertical != SConstants.TOP && horizontal == SConstants.CENTER ||
-                    vertical != SConstants.BOTTOM && horizontal == SConstants.CENTER) {
-                d.print("<tr><td>");
-                write(d, first);
-                d.print("</td></tr><tr><td>");
-                write(d, last);
-                d.print("</td></tr>");
-            } else if (vertical != SConstants.CENTER && horizontal == SConstants.LEFT ||
-                    vertical != SConstants.CENTER && horizontal == SConstants.RIGHT) {
-                d.print("<tr><td>");
-                write(d, first);
-                d.print("</td><td>");
-                write(d, last);
-                d.print("</td></tr>");
-            }
-            d.print("</table>");
-        }
-    }
-
     /**
      * Prints a HTML style attribute with widht/height of passed SDimension.
      * <p>Sample: <code> style="widht:100%;"</code>

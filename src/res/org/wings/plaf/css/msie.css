@@ -71,8 +71,9 @@ table.STree button
 	width:100%
 }
 
-.SLabel {
-   white-space: pre;
+.SLabel,
+.SCheckBox {
+   white-space: nowrap; /* not working */
 }
 
 .STextField {
@@ -238,6 +239,10 @@ ul.STree li div.SSubTree {
 
 .selection {
    background-color: #AAAAFF;
+}
+
+.STabbedPane {
+	width:100%;
 }
 
 .STabbedPane_right {

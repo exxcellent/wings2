@@ -37,7 +37,7 @@ public abstract class IconTextCompound {
         boolean order = vertical == SConstants.TOP || (vertical == SConstants.CENTER && horizontal == SConstants.LEFT);
 
 
-        device.print("<table");
+        device.print("<table class=\"SLayout\"");
         SDimension prefSize = component.getPreferredSize();
         if (prefSize != null && (prefSize.getWidth() != null || prefSize.getHeight() != null)) {
             device.print(" style=\"width:100%;height:100%\"");
@@ -46,30 +46,30 @@ public abstract class IconTextCompound {
 
         if (vertical == SConstants.TOP && horizontal == SConstants.LEFT ||
                 vertical == SConstants.BOTTOM && horizontal == SConstants.RIGHT) {
-            device.print("<tr><td align=\"left\" valign=\"top\">");
+            device.print("<tr><td align=\"left\" valign=\"top\" class=\"SLayout\">");
             first(device, order);
-            device.print("</td><td></td></tr><tr><td></td><td align=\"right\" valign=\"bottom\">");
+            device.print("</td><td class=\"SLayout\"></td></tr><tr><td class=\"SLayout\"></td><td align=\"right\" valign=\"bottom\" class=\"SLayout\">");
             last(device, order);
             device.print("</td></tr>");
         } else if (vertical == SConstants.TOP && horizontal == SConstants.RIGHT ||
                 vertical == SConstants.BOTTOM && horizontal == SConstants.LEFT) {
-            device.print("<tr><td></td><td align=\"right\" valign=\"top\">");
+            device.print("<tr><td class=\"SLayout\"></td><td align=\"right\" valign=\"top\" class=\"SLayout\">");
             first(device, order);
-            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\">");
+            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\" class=\"SLayout\">");
             last(device, order);
-            device.print("</td><td></td></tr>");
+            device.print("</td><td class=\"SLayout\"></td></tr>");
         } else if (vertical == SConstants.TOP && horizontal == SConstants.CENTER ||
                 vertical == SConstants.BOTTOM && horizontal == SConstants.CENTER) {
-            device.print("<tr><td align=\"center\" valign=\"top\">");
+            device.print("<tr><td align=\"center\" valign=\"top\" class=\"SLayout\">");
             first(device, order);
-            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\">");
+            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\"> class=\"SLayout\"");
             last(device, order);
             device.print("</td></tr>");
         } else if (vertical == SConstants.CENTER && horizontal == SConstants.LEFT ||
                 vertical == SConstants.CENTER && horizontal == SConstants.RIGHT) {
-            device.print("<tr><td align=\"left\">");
+            device.print("<tr><td align=\"left\" class=\"SLayout\">");
             first(device, order);
-            device.print("</td><td align=\"right\">");
+            device.print("</td><td align=\"right\" class=\"SLayout\">");
             last(device, order);
             device.print("</td></tr>");
         } else {

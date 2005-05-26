@@ -70,7 +70,8 @@ div.SLabel_Box {
 	display: table;
 }
 
-div.SLabel {
+div.SLabel,
+div.SCheckBox {
 	white-space: pre;
 }
 

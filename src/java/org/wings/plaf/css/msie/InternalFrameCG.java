@@ -48,31 +48,31 @@ public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
                 device.print("</a>");
             }
         } else {
-            device.print("<table width=\"100%\"><tr><td width=\"100%\"><div class=\"WindowBar_title\">");
+            device.print("<table class=\"SLayout\" width=\"100%\"><tr><td width=\"100%\" class=\"SLayout\"><div class=\"WindowBar_title\">");
             if (frame.getIcon() != null) {
                 writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
             }
             device.print(Utils.nonBreakingSpaces(text));
             device.print("</div></td>");
             if (frame.isMaximizable() && !frame.isMaximized() && getMaximizeIcon() != null) {
-                device.print("<td>");
+                device.print("<td class=\"SLayout\">");
                 writeWindowIcon(device, frame,
                         SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, getMaximizeIcon(), BUTTONICON_CLASSNAME);
                 device.print("</td>");
             }
             if (frame.isIconifyable() && getIconifyIcon() != null) {
-                device.print("<td>");
+                device.print("<td class=\"SLayout\">");
                 writeWindowIcon(device, frame,
                         SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, getIconifyIcon(), BUTTONICON_CLASSNAME);
                 device.print("</td>");
             }
             if (frame.isClosable() && getCloseIcon() != null) {
-                device.print("<td>");
+                device.print("<td class=\"SLayout\">");
                 writeWindowIcon(device, frame,
                         SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon(), BUTTONICON_CLASSNAME);
                 device.print("</td>");
             }
-            device.print("<td>&nbsp;&nbsp;</td></tr></table>");
+            device.print("<td class=\"SLayout\">&nbsp;&nbsp;</td></tr></table>");
         }
         device.print("</div>");
     }

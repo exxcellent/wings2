@@ -90,7 +90,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements
     public void write(final Device device, final SComponent component)
             throws IOException {
         SDialog dialog = (SDialog) component;
-        device.print("<table border=\"0\" width=\"100%\" height=\"100%\"><tr><td align=\"center\" valign=\"middle\">");
+        device.print("<table border=\"0\" width=\"100%\" height=\"100%\" class=\"SLayout\"><tr><td align=\"center\" valign=\"middle\" class=\"SLayout\">");
         super.writeContent(device, dialog);
         device.print("</td></tr></table>\n");
     }
@@ -107,14 +107,14 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements
         if (text == null)
             text = "Dialog";
 
-        device.print("<table");
+        device.print("<table class=\"SLayout\"");
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
         device.print(">\n<tr>");
 
         // left icon
         if (dialog.getIcon() != null) {
             SIcon icon = dialog.getIcon();
-            device.print("<th");
+            device.print("<th class=\"SLayout\"");
             Utils.optAttribute(device, "width", getIconWidth(icon));
             device.print(">");
             writeIcon(device, icon);
@@ -122,7 +122,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements
             ++columns;
         }
 
-        device.print("<th col=\"title\">&nbsp;");
+        device.print("<th col=\"title\" class=\"SLayout\">&nbsp;");
         Utils.write(device, text);
         device.print("</th>");
         ++columns;
@@ -135,7 +135,7 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements
         device.print("</tr>");
 
         // write the actual content
-        device.print("<tr><td colspan=\"");
+        device.print("<tr><td class=\"SLayout\" colspan=\"");
         device.print(String.valueOf(columns));
         device.print("\">");
         Utils.renderContainer(device, dialog);
