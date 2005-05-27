@@ -14,6 +14,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.style.CSSProperty;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
@@ -162,7 +163,7 @@ public class JavaScriptListenerExample
 
     private STextField createNumberField() {
         STextField field = new STextField();
-        field.setAttribute("text-align", "right");
+        field.setAttribute(CSSProperty.TEXT_ALIGN, "right");
         return field;
     }
 }

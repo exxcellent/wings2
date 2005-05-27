@@ -15,6 +15,7 @@ package wingset;
 
 
 import org.wings.*;
+import org.wings.style.CSSProperty;
 import org.wings.header.Link;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.WingsStatistics;
@@ -35,18 +36,22 @@ import java.util.TimerTask;
  * @version $Revision$
  */
 public class WingSet implements Serializable {
+    private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
+    private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
+    private final static SURLIcon STANDARD_TAB_BACKGROUND = new SURLIcon("../icons/ButtonsBackground.gif");
+    private final static SURLIcon SELECTED_TAB_BACKGROUND = new SURLIcon("../icons/ButtonsBackgroundHighlighted.gif");
+
     static final boolean SHOW_STATISTICS = false;
-    private final static SIcon JAVA_CUP_ICON =
-            new SResourceIcon("org/wings/icons/JavaCup.gif");
-
-    private final static SIcon SMALL_COW_ICON =
-            new SURLIcon("../icons/cowSmall.gif");
-
     static final long birthday = System.currentTimeMillis();
     static FileWriter infoWriter;
     static final Timer timer = new Timer();
     static long oldRequestCount = 0;
     static long oldSessionCount = 0;
+
+    private SFrame frame;
+    // time measurement (a little hacky)
+    private SLabel timeMeasure;
+    private final TimeMeasure stopWatch;
 
     static final TimerTask infoTask = new TimerTask() {
         public void run() {
@@ -76,8 +81,7 @@ public class WingSet implements Serializable {
                 infoWriter.flush();
             } catch (Exception ex) {
                 ex.printStackTrace();
-            } // end of try-catch
-
+            }
         }
     };
 
@@ -102,26 +106,16 @@ public class WingSet implements Serializable {
                 infoWriter.flush();
             } catch (Exception ex) {
                 ex.printStackTrace();
-            } // end of try-catch
+            }
 
-            timer.scheduleAtFixedRate(infoTask,
-                    0,
-                    10 * 1000);
+            timer.scheduleAtFixedRate(infoTask,0,10 * 1000);
         }
     }
-
-
-    private SFrame frame;
-    /*
-     * time measurement (a little hacky)
-     */
-    private SLabel timeMeasure;
-    private final TimeMeasure stopWatch;
 
     public WingSet() {
         frame = new SFrame("WingSet");
         frame.setTitle("WingSet Demo");
-        frame.setAttribute("margin", "8px !important");
+        frame.setAttribute(CSSProperty.MARGIN, "8px !important");
 
         // Register our user style sheet
         final Browser browser = frame.getSession().getUserAgent();
@@ -144,12 +138,12 @@ public class WingSet implements Serializable {
             except.printStackTrace();
         }
         
-        //SForm form = new SForm();
         final STabbedPane tab = new STabbedPane();
         tab.setName("examples");
-        // tab.setMaxTabsPerLine(9);
         tab.setTabPlacement(SConstants.TOP);
-        //tab.setBackgroundImage(brushedMetal);
+
+        tab.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, STANDARD_TAB_BACKGROUND);
+        tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, SELECTED_TAB_BACKGROUND);
 
         tab.add(new WingsImage(), "wingS!");
         tab.add(new LabelExample(), "Label");

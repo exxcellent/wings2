@@ -14,6 +14,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.style.CSSProperty;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +34,7 @@ public class ComponentControls
     private SButton button;
 
     public ComponentControls() {
-        setAttribute("border-bottom", "1px solid #cccccc");
+        setAttribute(CSSProperty.BORDER_BOTTOM,"1px solid #cccccc");
         button = new SButton("apply");
         widthTextField = new STextField();
         heightTextField = new STextField();
