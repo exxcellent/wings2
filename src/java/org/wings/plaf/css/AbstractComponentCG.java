@@ -75,8 +75,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     protected void writePostfix(Device device, SComponent component) throws IOException {
         SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writeSuffix(device, component);
     }
-    
-    public CSSSelector mapSelector(CSSSelector selector) {
+
+    public CSSSelector mapSelector(SComponent addressedComponent, CSSSelector selector) {
+        // Default: Do not map/modify the passed CSS selector.
         return selector;
     }
 

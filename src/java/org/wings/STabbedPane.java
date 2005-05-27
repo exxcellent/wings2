@@ -14,19 +14,19 @@
 package org.wings;
 
 import org.wings.plaf.TabbedPaneCG;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
-import org.wings.style.CSSProperty;
-import org.wings.style.CSSAttributeSet;
 
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.*;
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.awt.*;
 
-// fixme: refactorize.
+// FIXME refactorize.
 
 /**
  * A tabbed pane shows one tab (usually a panel) at a moment.
@@ -36,11 +36,25 @@ import java.awt.*;
  *         <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
  * @version $Revision$
  */
-public class STabbedPane
-        extends SContainer
-        implements LowLevelEventListener, ChangeListener {
-    public static final String SELECTOR_TABS = "SELECTOR_TABS";
-    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
+public class STabbedPane extends SContainer implements LowLevelEventListener, ChangeListener {
+    /**
+     * A Pseudo CSS selector addressing the area which contains the tab buttons.
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_TAB_AREA = new CSSSelector.Pseudo("area containing the tab buttons");
+
+    /**
+     * A Pseudo CSS selector addressing the selected tab
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_SELECTED_TAB = new CSSSelector.Pseudo("the elements of the selected tab");
+
+    /**
+     * A Pseudo CSS selector addressing the unselected tab
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_UNSELECTED_TAB = new CSSSelector.Pseudo("the elements of the unselected tab");
+
 
     /**
      * Where the tabs are placed.
@@ -83,7 +97,9 @@ public class STabbedPane
      */
     private int lleChangedIndex = -1;
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     private boolean epochCheckEnabled = true;
 
 
@@ -115,7 +131,7 @@ public class STabbedPane
      * @return the background color
      */
     public Color getSelectionBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED_TAB) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED_TAB));
     }
 
     /**
@@ -124,7 +140,7 @@ public class STabbedPane
      * @param color the new foreground color
      */
     public void setSelectionBackground(Color color) {
-        setAttribute(SELECTOR_SELECTION, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -133,7 +149,7 @@ public class STabbedPane
      * @return the foreground color
      */
     public Color getSelectionForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED_TAB) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED_TAB));
     }
 
     /**
@@ -142,7 +158,7 @@ public class STabbedPane
      * @param color the new foreground color
      */
     public void setSelectionForeground(Color color) {
-        setAttribute(SELECTOR_SELECTION, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTED_TAB, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -151,7 +167,7 @@ public class STabbedPane
      * @param font the new font
      */
     public void setSelectionFont(SFont font) {
-        setAttributes(SELECTOR_SELECTION, CSSStyleSheet.getAttributes(font));
+        setAttributes(SELECTOR_SELECTED_TAB, CSSStyleSheet.getAttributes(font));
     }
 
     /**
@@ -160,7 +176,7 @@ public class STabbedPane
      * @return the font
      */
     public SFont getSelectionFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED_TAB) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED_TAB));
     }
 
     /**
@@ -289,7 +305,7 @@ public class STabbedPane
         if (index == -1) {
             return null;
         }
-        return ((Page)pages.get(index)).component;
+        return ((Page) pages.get(index)).component;
     }
 
     /**
@@ -486,7 +502,7 @@ public class STabbedPane
                  * tab to select before
                  */
                 int decrement = 1;
-                
+
                 while (newTabCount > decrement && !isEnabledAt(newTabCount - decrement)) {
                     decrement++;
                 }
@@ -525,7 +541,7 @@ public class STabbedPane
                         setSelectedIndex(-1);
                     }
                 }
-                
+
             }
         } else {
             // no tab left
@@ -873,12 +889,16 @@ public class STabbedPane
         lleChangedIndex = -1;
     }
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     public boolean isEpochCheckEnabled() {
         return epochCheckEnabled;
     }
 
-    /** @see LowLevelEventListener#isEpochCheckEnabled() */
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
     public void setEpochCheckEnabled(boolean epochCheckEnabled) {
         this.epochCheckEnabled = epochCheckEnabled;
     }

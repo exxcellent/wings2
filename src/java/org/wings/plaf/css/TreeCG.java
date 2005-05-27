@@ -121,9 +121,8 @@ public class TreeCG extends AbstractComponentCG implements
 
         if (isSelected) {
             device.print(" selected=\"true\"");
-
             if (childSelectorWorkaround)
-                Utils.childSelectorWorkaround(device, "selected");
+                Utils.optAttribute(device, "class", "selected");
         }
         device.print(">");
 
@@ -249,18 +248,9 @@ public class TreeCG extends AbstractComponentCG implements
     }
 
 
-    /**
-     * @param component
-     * @param device
-     * @param row
-     * @throws IOException
-     */
     protected void writeButtonStart(STree component, Device device, String value) throws IOException {
         device.print("<button");
     }
-
-
-//--- end code from common area in template.
 
 
     public void writeContent(final Device device, final SComponent _c)
@@ -310,10 +300,6 @@ public class TreeCG extends AbstractComponentCG implements
 
     /**
      * Helper method for code reuse
-     * @param device
-     * @param component
-     * @param path
-     * @throws IOException
      */
     private void indentOnce(Device device, STree component, TreePath path) throws IOException {
         device.print("<div");
@@ -325,6 +311,7 @@ public class TreeCG extends AbstractComponentCG implements
 
 
     //--- setters and getters for the properties.
+
     public SIcon getCollapseControlIcon() {
         return collapseControlIcon;
     }

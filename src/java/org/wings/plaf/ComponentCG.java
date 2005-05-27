@@ -58,8 +58,9 @@ public interface ComponentCG
      * responsibility of the CG to apply the styling to the respective areas. In case of HTML, one can use
      * arbitrary CSS selectors in order to style what ever is addressable by means of CSS selector.
      *
-     * @param pseudoSelector The pseudo selector
+     * @param  component The component addressed by the pseudo selector
+     * @param pseudoSelector A unqiue name naming a specific area of the passed component (i.e. content pane or button area).
      * @return The real-life css selector for the current browser.
      */
-    CSSSelector mapSelector(CSSSelector pseudoSelector);
+    CSSSelector mapSelector(SComponent component, CSSSelector pseudoSelector);
 }

@@ -14,16 +14,13 @@
 package org.wings.plaf.css;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.STabbedPane;
-import org.wings.io.Device;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
+import org.wings.io.Device;
 import org.wings.style.CSSSelector;
 
 import javax.swing.*;
@@ -34,8 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TabbedPaneCG extends AbstractComponentCG {
-    private final transient static Log log = LogFactory.getLog(TabbedPaneCG.class);
-
     private static final Map placements = new HashMap();
     
     static {
@@ -80,7 +75,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
     
             device.print("<table class=\"SLayout\"");
             if (childSelectorWorkaround)
-                Utils.childSelectorWorkaround(device, style);
+                Utils.optAttribute(device, "class", style);
     
             Utils.printCSSInlineFullSize(device, component.getPreferredSize());
     
@@ -98,11 +93,11 @@ public class TabbedPaneCG extends AbstractComponentCG {
     
             if (childSelectorWorkaround) {
                 if (placement == SConstants.TOP)
-                    Utils.childSelectorWorkaround(device, "STabbedPane_top");
+                    Utils.optAttribute(device, "class", "STabbedPane_top");
                 else if (placement == SConstants.LEFT)
-                    Utils.childSelectorWorkaround(device, "STabbedPane_left");
+                    Utils.optAttribute(device, "class", "STabbedPane_left");
                 else
-                    Utils.childSelectorWorkaround(device, "STabbedPane_pane");
+                    Utils.optAttribute(device, "class", "STabbedPane_pane");
             }
             device.print(">");
     
@@ -122,11 +117,11 @@ public class TabbedPaneCG extends AbstractComponentCG {
     
             if (childSelectorWorkaround) {
                 if (placement == SConstants.RIGHT)
-                    Utils.childSelectorWorkaround(device, "STabbedPane_right");
+                    Utils.optAttribute(device, "class", "STabbedPane_right");
                 else if (placement == SConstants.BOTTOM)
-                    Utils.childSelectorWorkaround(device, "STabbedPane_bottom");
+                    Utils.optAttribute(device, "class", "STabbedPane_bottom");
                 else
-                    Utils.childSelectorWorkaround(device, "STabbedPane_pane");
+                    Utils.optAttribute(device, "class", "STabbedPane_pane");
             }
             device.print(">");
     
@@ -152,7 +147,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
     }
 
     private void writeTabs(Device device, STabbedPane tabbedPane) throws IOException {
-        boolean childSelectorWorkaround = !tabbedPane.getSession().getUserAgent().supportsCssChildSelector();
+        boolean browserSupportCssChildSelector = !tabbedPane.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = tabbedPane.getShowAsFormComponent();
         final Browser browser = tabbedPane.getSession().getUserAgent();
         // substitute whitespaces for konqueror and ie5.0x
@@ -188,27 +183,25 @@ public class TabbedPaneCG extends AbstractComponentCG {
                         .addParameter(Utils.event(tabbedPane) + "=" + i).toString())
                         .print("\"");
             }
-            if (i == tabbedPane.getSelectedIndex()) {
-                device.print(" selected=\"true\"");
-                if (tabbedPane.isFocusOwner())
-                    Utils.optAttribute(device, "focus", tabbedPane.getName());
-            }
+
+            device.print(" selected=\"").print(Boolean.toString(i == tabbedPane.getSelectedIndex())).print("\"");
+            if (i == tabbedPane.getSelectedIndex() && tabbedPane.isFocusOwner())
+                Utils.optAttribute(device, "focus", tabbedPane.getName());
 
             if (!tabbedPane.isEnabledAt(i))
                 device.print(" disabled=\"true\"");
 
-            if (childSelectorWorkaround) {
+            if (browserSupportCssChildSelector) {
                 StringBuffer cssClassName = new StringBuffer("STabbedPane_Tab_");
-                if (showAsFormComponent) {
+                if (tabbedPane.getShowAsFormComponent())
                     cssClassName.append("button_");
-                }
                 cssClassName.append(placements.get(new Integer(tabbedPane.getTabPlacement())));
                 if (i == tabbedPane.getSelectedIndex()) {
-                    Utils.childSelectorWorkaround(device, cssClassName.toString() + " STabbedPane_Tab_selected");
+                    Utils.optAttribute(device, "class", cssClassName.append(" STabbedPane_Tab_selected").toString());
                 } else if (!tabbedPane.isEnabledAt(i)) {
-                    Utils.childSelectorWorkaround(device, cssClassName.toString() + " STabbedPane_Tab_disabled");
+                    Utils.optAttribute(device, "class", cssClassName.append(" STabbedPane_Tab_disabled").toString());
                 } else {
-                    Utils.childSelectorWorkaround(device, cssClassName.toString());
+                    Utils.optAttribute(device, "class", cssClassName.append(" STabbedPane_Tab_unselected").toString());
                 }
             }
             device.print(">");
@@ -243,42 +236,27 @@ public class TabbedPaneCG extends AbstractComponentCG {
         }
     }
 
-    /**
-     * @param device
-     * @throws IOException
-     */
     protected void writeButtonEnd(Device device) throws IOException {
         device.print("</button>");
     }
 
-    /**
-     * @param device
-     * @param i 
-     * @param tabbedPane 
-     * @throws IOException
-     */
     protected void writeButtonStart(Device device, STabbedPane tabbedPane, String value) throws IOException {
         device.print("<button");
     }
 
-    public CSSSelector  mapSelector(CSSSelector selector) {
-        Browser browser = SessionManager.getSession().getUserAgent();
+    public CSSSelector  mapSelector(SComponent addressedComponent, CSSSelector selector) {
         CSSSelector mappedSelector = null;
-        if (browser.getBrowserType().equals(BrowserType.IE))
-            mappedSelector = (CSSSelector) msieMappings.get(selector);
-        else
-            mappedSelector = (CSSSelector) geckoMappings.get(selector);
+            String selectorSuffix = (String) geckoMappings.get(selector);
+            if (selectorSuffix != null)
+                mappedSelector = new CSSSelector("#"+addressedComponent.getName()+selectorSuffix) ;
         return mappedSelector != null ? mappedSelector : selector;
     }
 
-    private static final Map msieMappings = new HashMap();
     private static final Map geckoMappings = new HashMap();
     static {
-        msieMappings.put(STabbedPane.SELECTOR_SELECTION, new CSSSelector (" *.STabbedPane_selected"));
-        msieMappings.put(STabbedPane.SELECTOR_CONTENT, new CSSSelector (" td.STabbedPane_pane"));
-        msieMappings.put(STabbedPane.SELECTOR_TABS, new CSSSelector (" table.STabbedPane th"));
-        geckoMappings.put(STabbedPane.SELECTOR_SELECTION, new CSSSelector (" > table > tbody > tr > th > *[selected=\"true\"]"));
-        geckoMappings.put(STabbedPane.SELECTOR_CONTENT, new CSSSelector (" > table > tbody > tr > td"));
-        geckoMappings.put(STabbedPane.SELECTOR_TABS, new CSSSelector (" > table > tbody > tr > th"));
+        geckoMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, " > table > tbody > tr > th > *[selected=\"true\"]");
+        geckoMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, " > table > tbody > tr > th > *[selected=\"false\"]");
+        geckoMappings.put(STabbedPane.SELECTOR_CONTENT, " > table > tbody > tr > td");
+        geckoMappings.put(STabbedPane.SELECTOR_TAB_AREA, " > table > tbody > tr > th");
     }
 }

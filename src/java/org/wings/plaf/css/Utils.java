@@ -415,13 +415,6 @@ public final class Utils {
         }
     }
 
-    public static void childSelectorWorkaround(Device d, String style)
-            throws IOException {
-        d.print(" class=\"");
-        d.print(style);
-        d.print("\"");
-    }
-
     /**
      * Prints an optional attribute. If the String value has a content
      * (value != null && value.length > 0), the attrib is added otherwise

@@ -85,7 +85,7 @@ public class DynamicStyleSheetResource
                 for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
                     CSSStyle style = (CSSStyle) iterator.next();
                     // Map pseudo css selectors to real selectors
-                    CSSSelector selector = cg.mapSelector((CSSSelector) style.getSelector());
+                    CSSSelector selector = cg.mapSelector(component, (CSSSelector) style.getSelector());
                     String selectorString = selector.getSelectorString();
                     out.print(selectorString);
 

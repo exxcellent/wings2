@@ -369,7 +369,8 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         this.renderXmlDeclaration = renderXmlDeclaration;
     }
 
-    public CSSSelector mapSelector(CSSSelector selector) {
+    public CSSSelector mapSelector(SComponent addressedComponent, CSSSelector selector) {
+        // Default: Do not map/modify the passed CSS selector.
         return selector;
     }
 }

@@ -44,9 +44,12 @@ public class SURLIcon extends SAbstractIcon {
         setIconHeight(height);
     }
 
-
     public SimpleURL getURL() {
         return url;
+    }
+
+    public String toString() {
+        return url.toString();
     }
 
 }// SURLIcon

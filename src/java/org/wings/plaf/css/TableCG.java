@@ -239,7 +239,7 @@ public class TableCG extends AbstractComponentCG implements
             if (numbering) {
                 device.print("<td col=\"numbering\"");
                 if (childSelectorWorkaround)
-                    Utils.childSelectorWorkaround(device, "numbering");
+                    Utils.optAttribute(device, "class", "numbering");
                 device.print(">");
 
                 if (showAsFormComponent) {

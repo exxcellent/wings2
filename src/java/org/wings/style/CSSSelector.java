@@ -39,14 +39,15 @@ public class CSSSelector implements Serializable {
     /**
      * We address a free CSS selector string.
      */
-    private String selectorString;
+    protected String selectorString;
     /**
      * We address a specific component.
      */
-    private SComponent addressedComponent;
+    protected SComponent addressedComponent;
 
     /**
      * Constructs a CSS selector with an free CSS Selector expression.
+     * In the dynamic style sheet these selectors are rendered exactly as the passed argument.
      *
      * @param selectorString A css selector expression. i.e. <code>DIV.SLabel &gt; table &gt; tr</code>
      */
@@ -56,13 +57,14 @@ public class CSSSelector implements Serializable {
 
     /**
      * Constructs a CSS selector which exactly addresses the passed component.
+     * In the dynamic style sheet these selectors appear as <code>#id</code>
      *
      * @param addressedComponent The SComponent to address via a dynamically generated CSS selector expression
      */
     public CSSSelector(SComponent addressedComponent) {
         this.addressedComponent = addressedComponent;
     }
-
+    
     /**
      * @return An valid CSS selection expression.
      */
@@ -110,8 +112,16 @@ public class CSSSelector implements Serializable {
      * This pseudo selecteor get mapped by the according CG to a real CSS selector.
      */
     public static class Pseudo extends CSSSelector {
+
+        /**
+         * Address an area of the specific component. Instances of this classes are converted to real
+         * CSS selector by the according component CG's
+         *
+         * @param pseudoSelectorName A unique name for the area.
+         */
         public Pseudo(String pseudoSelectorName) {
             super(pseudoSelectorName);
+            this.selectorString = pseudoSelectorName;
         }
     }
 }

@@ -53,7 +53,11 @@ public class SContainer extends SComponent {
      */
     private ArrayList constraintList;
 
-    public static final CSSSelector SELECTOR_CONTENT = new CSSSelector.Pseudo("container content");
+    /**
+     * A Pseudo selector addressing the container area of this container.
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_CONTENT = new CSSSelector.Pseudo("area of container content");
 
 
     /**
@@ -110,12 +114,7 @@ public class SContainer extends SComponent {
      */
     public void setBackgroundImage(SIcon icon) {
         backgroundImage = icon;
-        if (icon == null) {
-            setAttribute(SELECTOR_CONTENT, CSSProperty.BACKGROUND_IMAGE, null);
-        } else {
-            setAttribute(SELECTOR_CONTENT, CSSProperty.BACKGROUND_IMAGE,
-                    "url(" + icon.getURL().toString() + ")");
-        }
+        setAttribute(SELECTOR_CONTENT, CSSProperty.BACKGROUND_IMAGE, icon);
     }
 
     /**
