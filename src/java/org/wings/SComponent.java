@@ -14,6 +14,8 @@
 package org.wings;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
 import org.wings.event.SComponentEvent;
 import org.wings.event.SComponentListener;
@@ -27,15 +29,13 @@ import org.wings.script.ScriptListener;
 import org.wings.session.LowLevelEventDispatcher;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
-import org.wings.util.ComponentVisitor;
-import org.wings.style.CSSSelector;
 import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSStyle;
 import org.wings.style.CSSProperty;
+import org.wings.style.CSSSelector;
+import org.wings.style.CSSStyle;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.wings.util.ComponentVisitor;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -48,8 +48,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.net.SocketException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EventListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * The basic component implementation for all components in this package.
@@ -915,7 +921,7 @@ public abstract class SComponent
         try {
             if (visible)
                 cg.write(s, this);
-        } catch (SocketException se) {
+        } catch (IOException se) {
             // Typical double-clicks. Not severe
             log.debug( "Socket exception during code generation for " + getClass().getName() + se);
         } catch (Throwable t) {

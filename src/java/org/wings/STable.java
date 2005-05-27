@@ -153,8 +153,17 @@ public class STable extends SComponent
      */
     protected boolean epochCheckEnabled = true;
 
-    public static final CSSSelector SELECTOR_HEADER = new CSSSelector.Pseudo("HEADER");
-    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
+    /**
+     * A Pseudo CSS selector addressing the header row elements.
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_HEADER = new CSSSelector.Pseudo("HEADER");
+
+    /**
+     * A Pseudo CSS selector addressing the selected row elements.
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
     /**
      * <p>Creates a new <code>STable</code>.</p>

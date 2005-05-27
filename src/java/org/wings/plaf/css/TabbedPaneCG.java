@@ -168,7 +168,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
              * needed here so that the tabs can be wrapped. else they are in
              * one long line. noticed in firefox and konqueror.
              */
-            device.print("\n");
+            Utils.printNewline(device, tabbedPane);
             
             if (showAsFormComponent) {
                 writeButtonStart(device, tabbedPane, String.valueOf(i));
