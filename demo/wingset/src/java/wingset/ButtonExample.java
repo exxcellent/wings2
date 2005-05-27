@@ -13,7 +13,19 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SAbstractButton;
+import org.wings.SButton;
+import org.wings.SCheckBox;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.SURLIcon;
+import org.wings.border.SEmptyBorder;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,30 +35,44 @@ import java.util.Iterator;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class ButtonExample
-        extends WingSetPane {
-    static final ClassLoader cl = WingSet.class.getClassLoader();
-    static final SIcon icon = new SURLIcon("../icons/ButtonIcon.gif");
-    static final SIcon disabledIcon = new SURLIcon("../icons/ButtonDisabledIcon.gif");
-    static final SIcon pressedIcon = new SURLIcon("../icons/ButtonPressedIcon.gif");
-    static final SIcon rolloverIcon = new SURLIcon("../icons/ButtonRolloverIcon.gif");
+public class ButtonExample extends WingSetPane {
+    // icons
+    private static final SIcon icon = new SURLIcon("../icons/ButtonIcon.gif");
+    private static final SIcon disabledIcon = new SURLIcon("../icons/ButtonDisabledIcon.gif");
+    private static final SIcon pressedIcon = new SURLIcon("../icons/ButtonPressedIcon.gif");
+    private static final SIcon rolloverIcon = new SURLIcon("../icons/ButtonRolloverIcon.gif");
+
+    // pressed label & handler
+    private final SLabel buttonPressedLabel = new SLabel("No button pressed");
+    private final ActionListener reportButtonPressedAction = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            buttonPressedLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
+        }
+    };
+
+    // button control itself
     private ButtonControls controls;
 
     public SComponent createExample() {
         controls = new ButtonControls();
-        SContainer p = createButtonExample();
+        controls.getApplyButton().addActionListener(reportButtonPressedAction);
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(p, SBorderLayout.CENTER);
+        final SForm form = new SForm(new SGridLayout(1));
+        final SContainer buttonExamplePanel = createButtonExample(form);
+
+        form.add(controls);
+        form.add(buttonExamplePanel);
         return form;
     }
 
-    SContainer createButtonExample() {
-        SButton[] buttons = new SButton[9];
+    private SContainer createButtonExample(SForm containingForm) {
+        final SButton[] buttons = new SButton[9];
+        final int[] textHPos = new int[] {SConstants.LEFT, SConstants.CENTER, SConstants.RIGHT};
+        final int[] textVPos = new int[] {SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new SButton("Text " + (i + 1));
+            final String buttonName = "Text " + (i + 1);
+            buttons[i] = new SButton(buttonName);
             buttons[i].setActionCommand(buttons[i].getText());
             if (i != 4) {
                 buttons[i].setIcon(icon);
@@ -55,66 +81,45 @@ public class ButtonExample
                 buttons[i].setPressedIcon(pressedIcon);
             }
 
-            buttons[i].setToolTipText("Button " + (i+1));
-            buttons[i].setName("button" + (i+1));
+            buttons[i].setToolTipText("Button " + (i + 1));
+            buttons[i].setName("button" + (i + 1));
             buttons[i].setShowAsFormComponent(false);
+            buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
+            buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
+            buttons[i].setActionCommand(buttonName);
             controls.addSizable(buttons[i]);
         }
 
-        buttons[0].setVerticalTextPosition(SConstants.TOP);
-        buttons[0].setHorizontalTextPosition(SConstants.LEFT);
-
-        buttons[1].setVerticalTextPosition(SConstants.TOP);
-        buttons[1].setHorizontalTextPosition(SConstants.CENTER);
-
-        buttons[2].setVerticalTextPosition(SConstants.TOP);
-        buttons[2].setHorizontalTextPosition(SConstants.RIGHT);
-
-        buttons[3].setVerticalTextPosition(SConstants.CENTER);
-        buttons[3].setHorizontalTextPosition(SConstants.LEFT);
-
-        buttons[4].setVerticalTextPosition(SConstants.CENTER);
-        buttons[4].setHorizontalTextPosition(SConstants.CENTER);
-
-        buttons[5].setVerticalTextPosition(SConstants.CENTER);
-        buttons[5].setHorizontalTextPosition(SConstants.RIGHT);
-
-        buttons[6].setVerticalTextPosition(SConstants.BOTTOM);
-        buttons[6].setHorizontalTextPosition(SConstants.LEFT);
-
-        buttons[7].setVerticalTextPosition(SConstants.BOTTOM);
-        buttons[7].setHorizontalTextPosition(SConstants.CENTER);
-
-        buttons[8].setVerticalTextPosition(SConstants.BOTTOM);
-        buttons[8].setHorizontalTextPosition(SConstants.RIGHT);
-
-        SGridLayout grid = new SGridLayout(3, 3);
+        final SGridLayout grid = new SGridLayout(3);
+        final SPanel buttonGrid = new SPanel(grid);
         grid.setBorder(1);
-        SPanel b = new SPanel(grid);
+        grid.setCellSpacing(10);
+        buttonGrid.setHorizontalAlignment(CENTER);
+        buttonGrid.setBorder(new SEmptyBorder(10, 0, 10, 0));
 
-        final SLabel pressed = new SLabel("No button pressed");
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].addActionListener(reportButtonPressedAction);
+            buttonGrid.add(buttons[i]);
+        }
 
-        ActionListener action = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                pressed.setText("Button \"" + e.getActionCommand() + "\" pressed");
-            }
-        };
+        // default button handling ==> if enter is pressed
+        final SButton defaultButton = new SButton();
+        defaultButton.addActionListener(reportButtonPressedAction);
+        defaultButton.setActionCommand("Default Button (Enter key)");
+        containingForm.setDefaultButton(defaultButton);
 
-        for (int i = 0; i < buttons.length; i++)
-            buttons[i].addActionListener(action);
+        final SPanel panel = new SPanel(new SGridLayout(1));
+        final SLabel description = new SLabel("Click on the buttons and see how The label changes\n" +
+                "Click into a input box and press apply or enter to see the effect of the enter button capturing.");
+        panel.setBorder(new SEmptyBorder(10, 10, 10, 10));
+        panel.add(description);
+        panel.add(buttonGrid);
+        panel.add(buttonPressedLabel);
 
-        for (int i = 0; i < buttons.length; i++)
-            b.add(buttons[i]);
-
-        SPanel erg = new SPanel();
-        erg.add(b);
-        erg.add(new SLabel("<html><br />"));
-        erg.add(pressed);
-
-        return erg;
+        return panel;
     }
 
-    class ButtonControls extends ComponentControls {
+    private class ButtonControls extends ComponentControls {
         public ButtonControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
             showAsFormComponent.addActionListener(new ActionListener() {
@@ -143,6 +148,10 @@ public class ButtonExample
                 }
             });
             add(useImages);
+        }
+
+        public SButton getApplyButton() {
+            return super.applyButton;
         }
     }
 }

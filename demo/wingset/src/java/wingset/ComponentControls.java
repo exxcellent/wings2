@@ -28,18 +28,19 @@ import java.util.List;
  */
 public class ComponentControls
         extends SToolbar {
-    protected List components = new LinkedList();
-    protected STextField widthTextField;
-    protected STextField heightTextField;
-    private SButton button;
+    protected final List components = new LinkedList();
+    protected final STextField widthTextField;
+    protected final STextField heightTextField;
+    protected final SButton applyButton;
 
     public ComponentControls() {
         setAttribute(CSSProperty.BORDER_BOTTOM,"1px solid #cccccc");
-        button = new SButton("apply");
+        applyButton = new SButton("apply");
+        applyButton.setActionCommand("apply");
         widthTextField = new STextField();
         heightTextField = new STextField();
 
-        add(button);
+        add(applyButton);
         add(new SLabel("<html>&nbsp;&nbsp;&nbsp;width&nbsp;"));
         add(widthTextField);
         add(new SLabel("<html>&nbsp;&nbsp;&nbsp;height&nbsp;"));
@@ -89,6 +90,6 @@ public class ComponentControls
     }
 
     protected void addActionListener(ActionListener actionListener) {
-        button.addActionListener(actionListener);
+        applyButton.addActionListener(actionListener);
     }
 }
