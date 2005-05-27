@@ -226,7 +226,7 @@ final class SessionServlet
                         new RequestURL("", getSessionEncoding(response)));
             }
 
-            session.init(request);
+            session.init(config, request);
 
 
             try {

@@ -14,6 +14,7 @@ import org.wings.io.StringBufferDevice;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletConfig; 
 import javax.servlet.ServletException;
 import javax.servlet.jsp.JspWriter;
 import java.util.Map;
@@ -29,7 +30,7 @@ import java.io.IOException;
 public class WingsSession
         extends Session
 {
-    public static WingsSession getSession(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    public static WingsSession getSession(ServletConfig servletConfig, HttpServletRequest request, HttpServletResponse response) throws ServletException { 
         synchronized (request.getSession()) {
             String key = "Session:" + request.getSession().getServletContext().getServletContextName();
             WingsSession wingsSession = (WingsSession)request.getSession().getAttribute(key);
@@ -38,7 +39,7 @@ public class WingsSession
                 request.getSession().setAttribute(key, wingsSession);
                 SessionManager.setSession(wingsSession);
 
-                wingsSession.init(request);
+                wingsSession.init(servletConfig, request);
                 RequestURL requestURL = new RequestURL("", response.encodeURL("foo").substring(3));
                 wingsSession.setProperty("request.url", requestURL);
             }
@@ -50,6 +51,13 @@ public class WingsSession
             return wingsSession;
         }
     }
+
+protected static WingsSession getSession(HttpServletRequest request, HttpServletResponse response) throws ServletException { 
+// at this point, the session should already exist. 
+// by that, calling this method with a null pointer argument 
+// shouldn't do any harm. (volker) 
+return getSession(null, request, response); 
+} 
 
     public static void removeSession() {
         SessionManager.removeSession();

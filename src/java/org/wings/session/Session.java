@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletConfig; 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -190,15 +191,16 @@ public class Session
      * Detect user agent (userAgent). Copy init parameters. Set max content length for uploads / requests.
      * Install look and feel.
      *
+     * @param servletConfig a <code>ServletConfig</code> value 
      * @param request a <code>HttpServletRequest</code> value
      * @throws ServletException if an error occurs
      */
-    public void init(HttpServletRequest request) throws ServletException {
+    public void init(ServletConfig servletConfig, HttpServletRequest request) throws ServletException { 
         servletContext = request.getSession().getServletContext();
         setServletRequest(request);
         setUserAgentFromRequest(request);
 
-        initProps();
+        initProps(servletConfig);
         initMaxContentLength();
 
         try {
@@ -226,11 +228,11 @@ public class Session
     /**
      * Copy the init parameters.
      */
-    protected void initProps() {
-        Enumeration params = servletContext.getInitParameterNames();
+    protected void initProps(ServletConfig servletConfig) { 
+        Enumeration params = servletConfig.getInitParameterNames(); 
         while (params.hasMoreElements()) {
             String name = (String) params.nextElement();
-            props.put(name, servletContext.getInitParameter(name));
+            props.put(name, servletConfig.getInitParameter(name));
         }
     }
 

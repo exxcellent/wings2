@@ -10,6 +10,7 @@ import org.wings.io.Device;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletConfig; 
 import javax.servlet.ServletException;
 import java.io.IOException;
 
@@ -20,8 +21,21 @@ import java.io.IOException;
 public class ExternalizerServlet
         extends HttpServlet
 {
+private ServletConfig servletConfig; 
+
+/* (non-Javadoc) 
+* @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig) 
+*/ 
+public void init(ServletConfig servletConfig) throws ServletException { 
+this.servletConfig = servletConfig; 
+} 
+
+/* 
+* (non-Javadoc) 
+* @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) 
+*/ 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        WingsSession wingsSession = WingsSession.getSession(request, response);
+        WingsSession wingsSession = WingsSession.getSession(servletConfig, request, response); 
 
         synchronized (request.getSession()) {
             String path = request.getServletPath();
