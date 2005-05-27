@@ -125,12 +125,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
         // CSS inline attributes
         StringBuffer inlineAttributes = Utils.generateCSSInlineBorder(border);
-        // TODO FIXME This should not be done by the surrounding container cell but the component itself!
-        inlineAttributes.append(Utils.generateCSSComponentInlineStyle(containedComponent));
         Utils.optAttribute(d, "style", inlineAttributes.toString());
-        /* Benjamin, something is wrong here, look at the tabbedpane example.
-         * It has the bg color as style inline AND in the dynamic stylesheet.
-         * The style inline is too much. */
     }
 
     /**
