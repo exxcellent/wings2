@@ -14,21 +14,29 @@
 
 package desktop;
 
-import java.awt.event.*;
-import java.io.*;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.swing.*;
-
-import org.wings.*;
-import org.wings.io.Device;
-import org.wings.io.ServletDevice;
-import org.wings.session.*;
-import org.wings.util.*;
-
-import org.wings.event.SContainerListener;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SDesktopPane;
+import org.wings.SFileChooser;
+import org.wings.SFlowDownLayout;
+import org.wings.SFrame;
+import org.wings.SInternalFrame;
+import org.wings.SMenu;
+import org.wings.SMenuBar;
+import org.wings.SMenuItem;
+import org.wings.SOptionPane;
 import org.wings.event.SContainerEvent;
+import org.wings.event.SContainerListener;
+import org.wings.style.CSSProperty;
+import org.wings.util.ComponentVisitor;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
+import java.io.StringWriter;
 /**
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
@@ -43,7 +51,7 @@ public class Desktop
 
     public Desktop() {
         frame = new SFrame("Desktop");
-        frame.setAttribute("margin", "4px");
+        frame.setAttribute(CSSProperty.MARGIN, "4px");
 
         SContainer contentPane = frame.getContentPane();
         contentPane.setLayout(new SFlowDownLayout());
