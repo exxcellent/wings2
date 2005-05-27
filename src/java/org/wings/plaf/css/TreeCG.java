@@ -200,9 +200,7 @@ public class TreeCG extends AbstractComponentCG implements
                 selectionAddr.addParameter(Utils.event(component),
                         component.getSelectionParameter(row, false));
 
-                device.print("<a href=\"");
-                Utils.write(device, selectionAddr.toString());
-                device.print("\"");
+                writeLinkStart(device, selectionAddr);
             }
 
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
@@ -245,6 +243,18 @@ public class TreeCG extends AbstractComponentCG implements
         } else if ( path.getPathCount() == nextPathCount ) {
             device.print("</li>");
         }
+    }
+
+
+    /**
+     * @param device
+     * @param selectionAddr
+     * @throws IOException
+     */
+    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
+        device.print("<a href=\"");
+        Utils.write(device, selectionAddr.toString());
+        device.print("\"");
     }
 
 

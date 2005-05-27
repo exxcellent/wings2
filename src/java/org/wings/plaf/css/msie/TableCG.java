@@ -15,6 +15,7 @@ package org.wings.plaf.css.msie;
 
 import java.io.IOException;
 
+import org.wings.RequestURL;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
@@ -60,5 +61,11 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
+    }
+
+    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
+        device.print("<a onclick=\"javascript:location.href='");
+        Utils.write(device, selectionAddr.toString());
+        device.print("';\"");
     }
 }

@@ -126,9 +126,7 @@ public class TableCG extends AbstractComponentCG implements
                 RequestURL selectionAddr = table.getRequestURL();
                 selectionAddr.addParameter(Utils.event(table), parameter);
 
-                device.print("<a href=\"");
-                Utils.write(device, selectionAddr.toString());
-                device.print("\">");
+                writeLinkStart(device, selectionAddr);
             }
         } else
             device.print("<span>");
@@ -144,6 +142,18 @@ public class TableCG extends AbstractComponentCG implements
             device.print("</span>");
 
         device.print("</td>\n");
+    }
+
+
+    /**
+     * @param device
+     * @param selectionAddr
+     * @throws IOException
+     */
+    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
+        device.print("<a href=\"");
+        Utils.write(device, selectionAddr.toString());
+        device.print("\">");
     }
 
 

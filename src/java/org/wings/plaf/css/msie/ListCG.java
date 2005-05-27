@@ -41,7 +41,7 @@ public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameLis
      */
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
         device.print("<a onclick=\"javascript:location.href='");
-        selectionAddr.write(device);
+        Utils.write(device, selectionAddr.toString());
         device.print("';\"");
     }
 

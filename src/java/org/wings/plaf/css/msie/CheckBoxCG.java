@@ -25,6 +25,7 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
+import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
@@ -52,7 +53,7 @@ public class CheckBoxCG extends org.wings.plaf.css.CheckBoxCG implements SParent
      */
     protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
         device.print("<a onclick=\"javascript:location.href='");
-        addr.write(device);
+        Utils.write(device, addr.toString());
         device.print("';\"");
     }
 
