@@ -640,6 +640,10 @@ public abstract class SComponent
          setAttribute(thisComponentCssSelector, property, propertyValue);
     }
 
+    public void setAttribute(CSSSelector selector, CSSProperty property, SIcon icon) {
+        setAttribute(selector, property, icon != null ? "url('"+icon.getURL().toString()+"')" : "none");        
+    }
+
     public void setAttribute(CSSSelector selector, CSSProperty property, String propertyValue) {
         CSSStyle style = (CSSStyle) getDynamicStyle(selector);
         if (style == null) {
