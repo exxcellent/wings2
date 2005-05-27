@@ -109,10 +109,16 @@ table.SList li.SList_selected {
     cursor: pointer
 }
 
-div.STree {
+table.STree {
 	vertical-align: top;
 	text-align: left;
 }
+
+ul.STree li.selected table tr td a table {
+    background-color: #f6decc;
+    border: 1px dotted black;
+}
+
 ul.STree{
 	list-style: none;
 }
