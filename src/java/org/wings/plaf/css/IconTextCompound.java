@@ -62,7 +62,7 @@ public abstract class IconTextCompound {
                 vertical == SConstants.BOTTOM && horizontal == SConstants.CENTER) {
             device.print("<tr><td align=\"center\" valign=\"top\" class=\"SLayout\">");
             first(device, order);
-            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\"> class=\"SLayout\"");
+            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\" class=\"SLayout\">");
             last(device, order);
             device.print("</td></tr>");
         } else if (vertical == SConstants.CENTER && horizontal == SConstants.LEFT ||
