@@ -15,6 +15,8 @@ package wingset;
 
 
 import org.wings.*;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyleSheet;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -42,7 +44,9 @@ public class TabbedPaneExample extends WingSetPane {
         c.add(controls, SBorderLayout.NORTH);
 
         tabbedPane = new STabbedPane();
-        tabbedPane.setBackground(new java.awt.Color(200, 200, 255));
+        tabbedPane.setAttribute(STabbedPane.SELECTOR_CONTENT,
+                CSSProperty.BACKGROUND_COLOR, CSSStyleSheet
+                        .getAttribute(new java.awt.Color(200, 200, 255)));
         tabbedPane.setShowAsFormComponent(false);
         controls.addSizable(tabbedPane);
 
@@ -156,6 +160,8 @@ public class TabbedPaneExample extends WingSetPane {
         public void actionPerformed(ActionEvent ae) {
             SComponent source = (SComponent) ae.getSource();
             Color color = (Color) source.getClientProperty("color");
+            tabs.setAttribute(STabbedPane.SELECTOR_CONTENT,
+                    CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
             tabs.setBackground(color);
         }
     }
