@@ -14,10 +14,10 @@
 package org.wings;
 
 
-import org.wings.style.AttributeSet;
-import org.wings.style.CSSStyleSheet;
-import org.wings.style.Style;
 import org.wings.style.CSSSelector;
+import org.wings.style.CSSStyleSheet;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -285,7 +285,7 @@ public abstract class SAbstractIconTextCompound
      * @return the background color
      */
     public Color getSelectionBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
@@ -294,7 +294,7 @@ public abstract class SAbstractIconTextCompound
      * @param color the new foreground color
      */
     public void setSelectionBackground(Color color) {
-        setAttribute(SELECTOR_SELECTION, Style.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTION, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -303,7 +303,7 @@ public abstract class SAbstractIconTextCompound
      * @return the foreground color
      */
     public Color getSelectionForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
@@ -312,7 +312,7 @@ public abstract class SAbstractIconTextCompound
      * @param color the new foreground color
      */
     public void setSelectionForeground(Color color) {
-        setAttribute(SELECTOR_SELECTION, Style.COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTION, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -330,7 +330,7 @@ public abstract class SAbstractIconTextCompound
      * @return the font
      */
     public SFont getSelectionFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**

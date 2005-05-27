@@ -20,20 +20,33 @@ import java.io.InputStream;
 import java.util.Set;
 
 /**
+ * A StyleSheet is a set of {@link Style}s. Proably a instance of {@link CSSStyleSheet}.
+ *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public interface StyleSheet extends Renderable {
+    /**
+     * Register a {@link Style} in the style sheet.
+     * @param style
+     */
     void putStyle(Style style);
 
-    Style getStyle(String name);
-
-    Style removeStyle(String name);
-
+    /**
+     * The {@link Style}s contained in this style sheet.
+     * @return
+     */
     Set styles();
 
+    /**
+     * May this style sheet change during runtime?
+     */
     boolean isFinal();
 
+    /**
+     * Creates styles by parsing an input stream.
+     * @param inStream Stream containing style sheet source
+     */
     void read(InputStream inStream) throws IOException;
 }
 

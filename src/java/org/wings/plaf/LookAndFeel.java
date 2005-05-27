@@ -20,9 +20,10 @@ import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
 import org.wings.resource.ClasspathResource;
-import org.wings.style.AttributeSet;
+import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.StyleSheet;
+import org.wings.style.CSSProperty;
 
 import java.awt.*;
 import java.io.InputStream;
@@ -165,20 +166,19 @@ public class LookAndFeel        implements Serializable {
     }
 
     /**
-     * Utility method that creates an AttributeSet from a String
+     * Utility method that creates an CSSPropertySet from a String
      *
      * @param string attributes string
-     * @return a newly allocated AttributeSet
+     * @return a newly allocated CSSPropertySet
      */
-    public static AttributeSet makeAttributeSet(String string) {
-        AttributeSet attributes = new AttributeSet();
+    public static CSSAttributeSet makeAttributeSet(String string) {
+        CSSAttributeSet attributes = new CSSAttributeSet();
         StringTokenizer tokens = new StringTokenizer(string, ";");
         while (tokens.hasMoreTokens()) {
             String token = tokens.nextToken();
             int pos = token.indexOf(":");
             if (pos >= 0) {
-                attributes.put(token.substring(0, pos),
-                        token.substring(pos + 1));
+                attributes.put(new CSSProperty(token.substring(0, pos)), token.substring(pos + 1));
             }
         }
         return attributes;
@@ -293,7 +293,7 @@ public class LookAndFeel        implements Serializable {
                 value = makeIcon(property);
             else if (type.isAssignableFrom(Resource.class))
                 value = makeResource(property);
-            else if (type.isAssignableFrom(AttributeSet.class))
+            else if (type.isAssignableFrom(CSSAttributeSet.class))
                 value = makeAttributeSet(property);
             else if (type.isAssignableFrom(StyleSheet.class))
                 value = makeStyleSheet(property);

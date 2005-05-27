@@ -13,50 +13,40 @@
  */
 package org.wings.style;
 
+import org.wings.Renderable;
 
+import java.io.Serializable;
 
 /**
+ * A wings style. A
+ *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public final class Style
-        extends AttributeSet implements StyleConstants {
-    private StyleSheet sheet;
-    private CSSSelector selector;
-    private String name;
+public interface Style extends Renderable, Serializable, Cloneable {
 
-    public Style(CSSSelector selector, AttributeSet attributes) {
-        super(attributes);
-        this.selector = selector;
-    }
+    /**
+     * A object defining on what this styles applies to.
+     * @return
+     */
+    Object getSelector();
 
-    public Style(CSSSelector selector, String name, String value) {
-        super(name, value);
-        this.selector = selector;
-    }
+    /**
+     * The style sheet owning this style.
+     * @param sheet The style sheet owning this style.
+     */
+    void setSheet(StyleSheet sheet);
 
-    public void setSelector(CSSSelector selector) {
-        this.selector = selector;
-        name = null;
-    }
+     /**
+     * @return  The style sheet owning this style.
+     */
+    public StyleSheet getSheet();
 
-    public CSSSelector getSelector() { return selector; }
+    /**
+     * Defines a value for the given style propery.
+     */
+    Object put(Object styleProperty, Object styleValue);
 
-    public String getName() {
-        if (name == null && selector != null)
-            name = selector.getName();
-        return name;
-    }
-
-    public void setSheet(StyleSheet sheet) {
-        this.sheet = sheet;
-    }
-
-    public StyleSheet getSheet() { return sheet; }
-
-    public String toString() {
-        return selector.getSelectorString() + " { " + super.toString() + "}";
-    }
 }
 
 

@@ -13,6 +13,8 @@
  */
 package org.wings.border;
 
+import org.wings.style.CSSProperty;
+
 import java.awt.*;
 
 /**
@@ -46,7 +48,7 @@ public class SEtchedBorder
 
     public void setEtchedType(int etchedType) {
         this.etchedType = etchedType;
-        attributes.put("border-style", etchedType == RAISED ? "ridge" : "groove");
+        attributes.put(CSSProperty.BORDER_STYLE, etchedType == RAISED ? "ridge" : "groove");
     }
 
     public int getEtchedType() { return etchedType; }

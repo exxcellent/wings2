@@ -13,6 +13,8 @@
  */
 package org.wings.border;
 
+import org.wings.style.CSSProperty;
+
 import java.awt.*;
 
 /**
@@ -82,7 +84,7 @@ public class SBevelBorder
      */
     public void setBevelType(int bevelType) {
         this.bevelType = bevelType;
-        attributes.put("border-style", bevelType == RAISED ? "outset" : "inset");
+        attributes.put(CSSProperty.BORDER_STYLE, bevelType == RAISED ? "outset" : "inset");
     }
 
     /**

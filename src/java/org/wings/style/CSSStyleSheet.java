@@ -52,16 +52,6 @@ public class CSSStyleSheet
         style.setSheet(this);
     }
 
-    public Style getStyle(String name) {
-        return (Style) map.get(name);
-    }
-
-    public Style removeStyle(String name) {
-        Style style = (Style) map.remove(name);
-        style.setSheet(null);
-        return style;
-    }
-
     public Set styles() {
         return new HashSet(map.values());
     }
@@ -109,6 +99,7 @@ public class CSSStyleSheet
     public InputStream getInputStream() throws IOException {
         return null;
     };
+    
     public boolean isFinal() {
         return false;
     }
@@ -116,7 +107,7 @@ public class CSSStyleSheet
     /**
      * Fetches the font to use for the given set of attributes.
      */
-    public static SFont getFont(AttributeSet a) {
+    public static SFont getFont(CSSAttributeSet a) {
         boolean anyFontAttribute = false;
         int size = getFontSize(a);
         anyFontAttribute |= (size > 0);
@@ -125,7 +116,7 @@ public class CSSStyleSheet
          * If the vertical alignment is set to either superscirpt or
          * subscript we reduce the font size by 2 points.
          */
-        String vAlign = (String) a.get(Style.VERTICAL_ALIGN);
+        String vAlign = (String) a.get(CSSProperty.VERTICAL_ALIGN);
 
         if (vAlign != null) {
             if ((vAlign.indexOf("sup") >= 0) ||
@@ -134,11 +125,11 @@ public class CSSStyleSheet
             }
         }
 
-        String family = (String) a.get(Style.FONT_FAMILY);
+        String family = (String) a.get(CSSProperty.FONT_FAMILY);
         anyFontAttribute |= (family != null);
 
         int style = Font.PLAIN;
-        String weight = (String) a.get(Style.FONT_WEIGHT);
+        String weight = (String) a.get(CSSProperty.FONT_WEIGHT);
         if (weight == null)
             ;
         else if (weight.equals("bold")) {
@@ -155,9 +146,8 @@ public class CSSStyleSheet
         }
         anyFontAttribute |= (weight != null);
 
-        String styleValue = (String) a.get(Style.FONT_STYLE);
-        if ((styleValue != null) && (styleValue.indexOf(Style.ITALIC) >= 0))
-            style |= Font.ITALIC;
+        String styleValue = (String) a.get(CSSProperty.FONT_STYLE);
+        if ((styleValue != null) && (styleValue.toLowerCase().indexOf("italic") >= 0)) style |= Font.ITALIC;
         anyFontAttribute |= (styleValue != null);
         return anyFontAttribute ? new SFont(family, style, size) : null;
     }
@@ -168,8 +158,8 @@ public class CSSStyleSheet
      * parses the font size attribute. return -1, if no font size
      * is specified.
      */
-    private static int getFontSize(AttributeSet attr) {
-        String value = (String) attr.get(Style.FONT_SIZE);
+    private static int getFontSize(CSSAttributeSet attr) {
+        String value = (String) attr.get(CSSProperty.FONT_SIZE);
         if (value == null)
             return -1;
         try {
@@ -232,8 +222,8 @@ public class CSSStyleSheet
      * @param a the set of attributes
      * @return the color
      */
-    public static Color getForeground(AttributeSet a) {
-        return getColor(a, Style.COLOR);
+    public static Color getForeground(CSSAttributeSet a) {
+        return getColor(a, CSSProperty.COLOR);
     }
 
     /**
@@ -244,12 +234,12 @@ public class CSSStyleSheet
      * @param a the set of attributes
      * @return the color
      */
-    public static Color getBackground(AttributeSet a) {
-        return getColor(a, Style.BACKGROUND_COLOR);
+    public static Color getBackground(CSSAttributeSet a) {
+        return getColor(a, CSSProperty.BACKGROUND_COLOR);
     }
 
-    static Color getColor(AttributeSet a, String key) {
-        String cv = (String) a.get(key);
+    static Color getColor(CSSAttributeSet a, CSSProperty cssProperty) {
+        String cv = (String) a.get(cssProperty);
         if (cv != null) {
             return stringToColor(cv);
         }
@@ -461,26 +451,26 @@ public class CSSStyleSheet
         return null;
     }
 
-    public static AttributeSet getAttributes(SFont font) {
-        AttributeSet attributes = new AttributeSet();
+    public static CSSAttributeSet getAttributes(SFont font) {
+        CSSAttributeSet attributes = new CSSAttributeSet();
         if (font == null)
             return attributes;
-        attributes.put(Style.FONT_FAMILY, font.getFace());
+        attributes.put(CSSProperty.FONT_FAMILY, font.getFace());
 
         if ((font.getStyle() & Font.ITALIC) > 0)
-            attributes.put(Style.FONT_STYLE, "italic");
+            attributes.put(CSSProperty.FONT_STYLE, "italic");
 
         if ((font.getStyle() & Font.BOLD) > 0)
-            attributes.put(Style.FONT_WEIGHT, "bold");
+            attributes.put(CSSProperty.FONT_WEIGHT, "bold");
 
-        attributes.put(Style.FONT_SIZE, font.getSize() + "pt");
+        attributes.put(CSSProperty.FONT_SIZE, font.getSize() + "pt");
         return attributes;
     }
 
-    public static AttributeSet getAttributes(Color color, String key) {
-        AttributeSet attributes = new AttributeSet();
+    public static CSSAttributeSet getAttributes(Color color, CSSProperty cssProperty) {
+        CSSAttributeSet attributes = new CSSAttributeSet();
         if (color != null)
-            attributes.put(key, colorToHex(color));
+            attributes.put(cssProperty, colorToHex(color));
         return attributes;
     }
 
@@ -493,9 +483,9 @@ public class CSSStyleSheet
     class CssParser
             implements CSSParser.CSSParserCallback {
         /**
-         * Parses the passed in CSS declaration into an AttributeSet.
+         * Parses the passed in CSS declaration into an CSSPropertySet.
          */
-        public AttributeSet parseDeclaration(String string) {
+        public CSSAttributeSet parseDeclaration(String string) {
             try {
                 return parseDeclaration(new StringReader(string));
             } catch (IOException ioe) {
@@ -504,11 +494,11 @@ public class CSSStyleSheet
         }
 
         /**
-         * Parses the passed in CSS declaration into an AttributeSet.
+         * Parses the passed in CSS declaration into an CSSPropertySet.
          */
-        public AttributeSet parseDeclaration(Reader r) throws IOException {
+        public CSSAttributeSet parseDeclaration(Reader r) throws IOException {
             parse(base, r, true, false);
-            return new AttributeSet(declaration);
+            return new CSSAttributeSet(declaration);
         }
 
         /**
@@ -584,7 +574,7 @@ public class CSSStyleSheet
          */
         public void handleValue(String value) {
             if (propertyName != null) {
-                declaration.put(propertyName, value);
+                declaration.put(new CSSProperty(propertyName), value);
             }
             propertyName = null;
         }
@@ -597,7 +587,7 @@ public class CSSStyleSheet
             for (int i = 0; i < n; i++) {
                 String[] selector = (String[]) selectors.get(i);
                 for (int j = selector.length - 1; j >= 0; --j) {
-                    CSSStyleSheet.this.putStyle(new Style(new CSSSelector(selector[j]), declaration));
+                    CSSStyleSheet.this.putStyle(new CSSStyle(new CSSSelector(selector[j]), declaration));
                 }
             }
             declaration.clear();
@@ -617,7 +607,7 @@ public class CSSStyleSheet
          * Name of the current property.
          */
         String propertyName;
-        AttributeSet declaration = new AttributeSet();
+        CSSAttributeSet declaration = new CSSAttributeSet();
         /** True if parsing a declaration, that is the Reader will not
          * contain a selector. */
         // boolean parsingDeclaration;

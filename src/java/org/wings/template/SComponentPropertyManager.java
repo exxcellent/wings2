@@ -14,7 +14,7 @@
 package org.wings.template;
 
 import org.wings.SComponent;
-import org.wings.style.AttributeSet;
+import org.wings.style.CSSAttributeSet;
 
 import java.awt.*;
 
@@ -39,8 +39,8 @@ public class SComponentPropertyManager
         else if ("TABINDEX".equals(name))
             comp.setFocusTraversalIndex(Integer.parseInt(value));
         else if ("STYLE".equals(name)) {
-            PropertyValueConverter valueConverter = getValueConverter(AttributeSet.class);
-            comp.setAttributes((AttributeSet) valueConverter.convertPropertyValue(value, AttributeSet.class));
+            PropertyValueConverter valueConverter = getValueConverter(CSSAttributeSet.class);
+            comp.setAttributes((CSSAttributeSet) valueConverter.convertPropertyValue(value, CSSAttributeSet.class));
         } else if ("CLASS".equals(name)) {
             comp.setStyle(value);
         } else {

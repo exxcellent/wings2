@@ -27,11 +27,13 @@ import org.wings.script.ScriptListener;
 import org.wings.session.LowLevelEventDispatcher;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
-import org.wings.style.AttributeSet;
+import org.wings.util.ComponentVisitor;
+import org.wings.style.CSSSelector;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSStyle;
+import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
-import org.wings.style.CSSSelector;
-import org.wings.util.ComponentVisitor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -57,9 +59,8 @@ import java.util.*;
  */
 public abstract class SComponent
         implements Cloneable, Serializable, Renderable {
-    public static final CSSSelector SELECTOR_GLOBAL = CSSSelector.GLOBAL;
-
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+
     private static final Log log = LogFactory.getLog(SComponent.class);
 
     /* Components unique name. */
@@ -160,7 +161,9 @@ public abstract class SComponent
 
     private ActionMap actionMap;
 
-    private Map actionEvents = new HashMap();
+    private final Map actionEvents = new HashMap();
+
+    private final CSSSelector thisComponentCssSelector = new CSSSelector(this);
 
     /**
      * Default constructor.cript
@@ -216,7 +219,7 @@ public abstract class SComponent
             unregister();
             fireParentFrameEvent(new SParentFrameEvent(this, SParentFrameEvent.PARENTFRAME_REMOVED, this.parentFrame));
         }
-        
+
         this.parentFrame = parentFrame;
 
         if (this.parentFrame != null) {
@@ -224,7 +227,7 @@ public abstract class SComponent
             // notify the listeners...
             fireParentFrameEvent(new SParentFrameEvent(this, SParentFrameEvent.PARENTFRAME_ADDED, this.parentFrame));
         }
-        
+
         if (this.popupMenu != null) {
             popupMenu.setParentFrame(parentFrame);
         }
@@ -271,7 +274,7 @@ public abstract class SComponent
 //        }
         return popupMenu;
     }
-    
+
     public boolean hasComponentPopupMenu() {
         return popupMenu != null;
     }
@@ -604,7 +607,7 @@ public abstract class SComponent
         reload();
     }
 
-    public Style getDynamicStyle(CSSSelector selector) {
+    public Style getDynamicStyle(Object selector) {
         if (dynamicStyles == null)
             return null;
         return (Style) dynamicStyles.get(selector);
@@ -628,30 +631,35 @@ public abstract class SComponent
         return Collections.unmodifiableCollection(dynamicStyles.values());
     }
 
-    public void setAttribute(String name, String value) {
-        setAttribute(SELECTOR_GLOBAL, name, value);
+    /** @deprecated Use {@link #setAttribute(org.wings.style.CSSProperty, String)}  */
+    public void setAttribute(String cssPropertyName, String value) {
+        setAttribute(thisComponentCssSelector, new CSSProperty(cssPropertyName), value);
     }
 
-    public void setAttribute(CSSSelector selector, String name, String value) {
-        Style style = getDynamicStyle(selector);
+    public void setAttribute(CSSProperty property, String propertyValue) {
+         setAttribute(thisComponentCssSelector, property, propertyValue);
+    }
+
+    public void setAttribute(CSSSelector selector, CSSProperty property, String propertyValue) {
+        CSSStyle style = (CSSStyle) getDynamicStyle(selector);
         if (style == null) {
-            addDynamicStyle(new Style(selector, name, value));
+            addDynamicStyle(new CSSStyle(selector, property, propertyValue));
             reload();
         } else {
-            String old = style.put(name, value);
-            reloadIfChange(old, value);
+            String old = style.put(property, propertyValue);
+            reloadIfChange(old, propertyValue);
         }
     }
 
-    public void setAttributes(AttributeSet attributes) {
+    public void setAttributes(CSSAttributeSet attributes) {
         log.debug("attributes = " + attributes);
-        setAttributes(SELECTOR_GLOBAL, attributes);
+        setAttributes(thisComponentCssSelector, attributes);
     }
 
-    public void setAttributes(CSSSelector selector, AttributeSet attributes) {
-        Style style = getDynamicStyle(selector);
+    public void setAttributes(CSSSelector selector, CSSAttributeSet attributes) {
+        CSSStyle style = (CSSStyle) getDynamicStyle(selector);
         if (style == null) {
-            addDynamicStyle(new Style(selector, attributes));
+            addDynamicStyle(new CSSStyle(selector, attributes));
             reload();
         } else {
             boolean changed = style.putAll(attributes);
@@ -666,7 +674,7 @@ public abstract class SComponent
      * @return the background color
      */
     public Color getBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_GLOBAL));
+        return dynamicStyles == null || dynamicStyles.get(thisComponentCssSelector) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(thisComponentCssSelector));
     }
 
     /**
@@ -675,7 +683,7 @@ public abstract class SComponent
      * @param color the new foreground color
      */
     public void setBackground(Color color) {
-        setAttribute(SELECTOR_GLOBAL, Style.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(thisComponentCssSelector, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -684,7 +692,7 @@ public abstract class SComponent
      * @return the foreground color
      */
     public Color getForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_GLOBAL));
+        return dynamicStyles == null || dynamicStyles.get(thisComponentCssSelector) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(thisComponentCssSelector));
     }
 
     /**
@@ -693,7 +701,7 @@ public abstract class SComponent
      * @param color the new foreground color
      */
     public void setForeground(Color color) {
-        setAttribute(SELECTOR_GLOBAL, Style.COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(thisComponentCssSelector, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -702,7 +710,7 @@ public abstract class SComponent
      * @param font the new font
      */
     public void setFont(SFont font) {
-        setAttributes(SELECTOR_GLOBAL, CSSStyleSheet.getAttributes(font));
+        setAttributes(thisComponentCssSelector, CSSStyleSheet.getAttributes(font));
     }
 
     /**
@@ -711,7 +719,7 @@ public abstract class SComponent
      * @return the font
      */
     public SFont getFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_GLOBAL) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_GLOBAL));
+        return dynamicStyles == null || dynamicStyles.get(thisComponentCssSelector) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(thisComponentCssSelector));
     }
 
     /**

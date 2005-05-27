@@ -22,7 +22,7 @@ import org.wings.SIcon;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.LookAndFeel;
 import org.wings.resource.ClasspathResource;
-import org.wings.style.AttributeSet;
+import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.StyleSheet;
 
@@ -118,7 +118,7 @@ public class DefaultPropertyValueConverter implements PropertyValueConverter {
             return new ClasspathResource(value);
         }
 
-        if (AttributeSet.class.isAssignableFrom(targetClass)) {
+        if (CSSAttributeSet.class.isAssignableFrom(targetClass)) {
             return LookAndFeel.makeAttributeSet(value);
         }
 

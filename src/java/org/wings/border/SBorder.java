@@ -13,7 +13,7 @@
  */
 package org.wings.border;
 
-import org.wings.style.AttributeSet;
+import org.wings.style.CSSAttributeSet;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -70,5 +70,5 @@ public interface SBorder extends Serializable {
      */
     public void setThickness(int thickness);
 
-    AttributeSet getAttributes();
+    CSSAttributeSet getAttributes();
 }

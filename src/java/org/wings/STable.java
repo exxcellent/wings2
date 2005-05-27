@@ -14,20 +14,24 @@
 package org.wings;
 
 import org.wings.plaf.TableCG;
-import org.wings.style.AttributeSet;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
-import org.wings.style.Style;
 import org.wings.table.STableCellEditor;
 import org.wings.table.STableCellRenderer;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import java.awt.*;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.awt.*;
 
 
 /**
@@ -760,11 +764,11 @@ public class STable extends SComponent
      * Sets the selection mode. Use one of the following values:
      * <UL>
      * <LI> {@link #NO_SELECTION}
-     * <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
+     * <LI> {@link javax.swing.ListSelectionModel#SINGLE_SELECTION} or
      * {@link #SINGLE_SELECTION}
-     * <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
+     * <LI> {@link javax.swing.ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
      * {@link #SINGLE_INTERVAL_SELECTION}
-     * <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
+     * <LI> {@link javax.swing.ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
      * {@link #MULTIPLE_SELECTION}
      * </UL>
      */
@@ -775,11 +779,11 @@ public class STable extends SComponent
     /**
      * @return <UL>
      *         <LI> {@link #NO_SELECTION}
-     *         <LI> {@link ListSelectionModel#SINGLE_SELECTION} or
+     *         <LI> {@link javax.swing.ListSelectionModel#SINGLE_SELECTION} or
      *         {@link #SINGLE_SELECTION}
-     *         <LI> {@link ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
+     *         <LI> {@link javax.swing.ListSelectionModel#SINGLE_INTERVAL_SELECTION} or
      *         {@link #SINGLE_INTERVAL_SELECTION}
-     *         <LI> {@link ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
+     *         <LI> {@link javax.swing.ListSelectionModel#MULTIPLE_INTERVAL_SELECTION} or
      *         {@link #MULTIPLE_SELECTION}
      *         </UL>
      */
@@ -852,7 +856,7 @@ public class STable extends SComponent
      * @return the background color
      */
     public Color getSelectionBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
@@ -861,7 +865,7 @@ public class STable extends SComponent
      * @param color the new foreground color
      */
     public void setSelectionBackground(Color color) {
-        setAttribute(SELECTOR_SELECTION, Style.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTION, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -870,7 +874,7 @@ public class STable extends SComponent
      * @return the foreground color
      */
     public Color getSelectionForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
@@ -879,7 +883,7 @@ public class STable extends SComponent
      * @param color the new foreground color
      */
     public void setSelectionForeground(Color color) {
-        setAttribute(SELECTOR_SELECTION, Style.COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTION, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -897,7 +901,7 @@ public class STable extends SComponent
      * @return the font
      */
     public SFont getSelectionFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
@@ -906,7 +910,7 @@ public class STable extends SComponent
      * @return the background color
      */
     public Color getHeaderBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_HEADER));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_HEADER));
     }
 
     /**
@@ -915,7 +919,7 @@ public class STable extends SComponent
      * @param color the new foreground color
      */
     public void setHeaderBackground(Color color) {
-        setAttribute(SELECTOR_HEADER, Style.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_HEADER, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -924,7 +928,7 @@ public class STable extends SComponent
      * @return the foreground color
      */
     public Color getHeaderForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_HEADER));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_HEADER));
     }
 
     /**
@@ -933,7 +937,7 @@ public class STable extends SComponent
      * @param color the new foreground color
      */
     public void setHeaderForeground(Color color) {
-        setAttribute(SELECTOR_HEADER, Style.COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_HEADER, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -951,7 +955,7 @@ public class STable extends SComponent
      * @return the font
      */
     public SFont getHeaderFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_HEADER));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_HEADER));
     }
 
     public void setHeaderVisible(boolean hv) {

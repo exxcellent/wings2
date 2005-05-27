@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Traverses the component hierarchy of a frame and gathers the dynamic styles
@@ -41,14 +43,14 @@ public class DynamicStyleSheetResource
         extends DynamicResource {
 
     /**
-     * The selectors in this List will be inherited by tables in IE.
-     * Circumvents using quirks mode. 
+     * These CSS properties will not be inherited over tables in IE.
+     * Circumvents using quirks mode.
      */
-    private static List inheritedSelectors = Arrays.asList(new String[] {
-            Style.COLOR, Style.FONT, Style.FONT_FAMILY, Style.FONT_SIZE,
-            Style.FONT_STYLE, Style.FONT_VARIANT, Style.FONT_WEIGHT,
-            Style.TEXT_DECORATION, Style.TEXT_TRANSFORM, Style.LETTER_SPACING,
-            Style.LINE_HEIGHT, Style.BACKGROUND_COLOR });
+    private final static List tableResistantProperties = Arrays.asList(new CSSProperty[]{
+        CSSProperty.COLOR, CSSProperty.FONT, CSSProperty.FONT_FAMILY, CSSProperty.FONT_SIZE,
+        CSSProperty.FONT_STYLE, CSSProperty.FONT_VARIANT, CSSProperty.FONT_WEIGHT,
+        CSSProperty.TEXT_DECORATION, CSSProperty.TEXT_TRANSFORM, CSSProperty.LETTER_SPACING,
+        CSSProperty.LINE_HEIGHT, CSSProperty.BACKGROUND_COLOR});
 
     public DynamicStyleSheetResource(SFrame frame) {
         super(frame, "css", "text/css");
@@ -77,27 +79,27 @@ public class DynamicStyleSheetResource
 
         private void writeAttributesFrom(SComponent component)
                 throws IOException {
-            // default: components id
-            String selectorPrefix = "#" + component.getName();
-            if (component instanceof SFrame)
-                selectorPrefix = "body"; //special case: everything
-
             Collection dynamicStyles = component.getDynamicStyles();
             if (dynamicStyles != null) {
                 ComponentCG cg = component.getCG();
                 for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
-                    Style style = (Style) iterator.next();
+                    CSSStyle style = (CSSStyle) iterator.next();
                     // Map pseudo css selectors to real selectors
-                    CSSSelector selector = cg.mapSelector(style.getSelector());
+                    CSSSelector selector = cg.mapSelector((CSSSelector) style.getSelector());
                     String selectorString = selector.getSelectorString();
-                    out.print(selectorPrefix).print(selectorString);
+                    out.print(selectorString);
 
-                    // IE Workaround: We need to operate IE in quirks mode. Hence we have to inherit props
-                    // over tables.
-                    BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
-                    if (BrowserType.IE.equals(currentBrowser) && inheritedSelectors.contains(selectorString)) {
-                        out.print(", ").print(selectorPrefix).print(selectorString).print(" table ");
+                    final BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
+                    if (BrowserType.IE.equals(currentBrowser)) {
+                        // IE Workaround: We need to operate IE in quirks mode.
+                        // Hence we have to inherit some props manually over TABLE elements.
+                        final Set tableBlockedProperties = new HashSet(style.properties());
+                        tableBlockedProperties.retainAll(tableResistantProperties);
+                        // If this style containes a table blocked CSS property then add table as additional selector.
+                        if (tableBlockedProperties.size() > 0)
+                            out.print(", ").print(selectorString).print(" table ");
                     }
+
                     out.print("{");
                     style.write(out);
                     out.print("}\n");
@@ -106,12 +108,11 @@ public class DynamicStyleSheetResource
 
             SBorder border = component.getBorder();
             if (border != null) {
-                out.print(selectorPrefix).print("{");
+                out.print(CSSSelector.getSelectorString(component)).print("{");
                 border.getAttributes().write(out);
                 out.print("}\n");
             }
         }
-
 
         public void visit(SComponent component) throws Exception {
             writeAttributesFrom(component);

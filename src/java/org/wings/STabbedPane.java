@@ -14,17 +14,17 @@
 package org.wings;
 
 import org.wings.plaf.TabbedPaneCG;
-import org.wings.style.AttributeSet;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
-import org.wings.style.Style;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSAttributeSet;
 
-import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.awt.*;
 
 // fixme: refactorize.
 
@@ -115,7 +115,7 @@ public class STabbedPane
      * @return the background color
      */
     public Color getSelectionBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
@@ -124,7 +124,7 @@ public class STabbedPane
      * @param color the new foreground color
      */
     public void setSelectionBackground(Color color) {
-        setAttribute(SELECTOR_SELECTION, Style.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTION, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -133,7 +133,7 @@ public class STabbedPane
      * @return the foreground color
      */
     public Color getSelectionForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**
@@ -142,7 +142,7 @@ public class STabbedPane
      * @param color the new foreground color
      */
     public void setSelectionForeground(Color color) {
-        setAttribute(SELECTOR_SELECTION, Style.COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTION, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -160,7 +160,7 @@ public class STabbedPane
      * @return the font
      */
     public SFont getSelectionFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((AttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
     }
 
     /**

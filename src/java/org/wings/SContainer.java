@@ -13,12 +13,10 @@
  */
 package org.wings;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.plaf.ContainerCG;
-import org.wings.style.StyleConstants;
+import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.util.ComponentVisitor;
 
@@ -35,7 +33,6 @@ import java.util.Iterator;
  * @see SComponent
  */
 public class SContainer extends SComponent {
-    private static final Log log = LogFactory.getLog(SContainer.class);
     /**
      * The layout for the component.
      */
@@ -55,7 +52,8 @@ public class SContainer extends SComponent {
      * The constraints for the components.
      */
     private ArrayList constraintList;
-    public static final CSSSelector SELECTOR_CONTENT = CSSSelector.GLOBAL;
+
+    public static final CSSSelector SELECTOR_CONTENT = new CSSSelector.Pseudo("container content");
 
 
     /**
@@ -113,9 +111,9 @@ public class SContainer extends SComponent {
     public void setBackgroundImage(SIcon icon) {
         backgroundImage = icon;
         if (icon == null) {
-            setAttribute(SELECTOR_CONTENT, StyleConstants.BACKGROUND_IMAGE, null);
+            setAttribute(SELECTOR_CONTENT, CSSProperty.BACKGROUND_IMAGE, null);
         } else {
-            setAttribute(SELECTOR_CONTENT, StyleConstants.BACKGROUND_IMAGE,
+            setAttribute(SELECTOR_CONTENT, CSSProperty.BACKGROUND_IMAGE,
                     "url(" + icon.getURL().toString() + ")");
         }
     }

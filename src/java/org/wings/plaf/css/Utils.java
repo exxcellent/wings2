@@ -18,7 +18,6 @@ import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.plaf.CGManager;
 import org.wings.script.ScriptListener;
-import org.wings.style.Style;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -399,18 +398,6 @@ public final class Utils {
             writeRaw(d, s.substring(6));
         } else {
             quote(d, s, false);
-        }
-    }
-
-    /**
-     * Prints an optional attribute. If the String value has a content
-     * (value != null && value.length > 0), the attrib is added otherwise
-     * it is left out
-     */
-    public static void optAttribute(Device d, String attr, Style value)
-            throws IOException {
-        if (value != null) {
-            d.print(" ").print(attr).print("=\"").print(value.getName()).print("\"");
         }
     }
 

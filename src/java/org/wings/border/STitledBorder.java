@@ -14,9 +14,9 @@
 package org.wings.border;
 
 import org.wings.SFont;
-import org.wings.style.AttributeSet;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSStyleSheet;
-import org.wings.style.Style;
 
 import java.awt.*;
 
@@ -27,14 +27,14 @@ public class STitledBorder extends SAbstractBorder {
     private SBorder border;
 
     private String title;
-    private AttributeSet titleAttributes = new AttributeSet();
+    private CSSAttributeSet titleAttributes = new CSSAttributeSet();
 
     /**
      * Constructor for STitledBorder.
      */
     public STitledBorder(SBorder border) {
         setBorder(border);
-        attributes.put("padding-top", "1em");
+        attributes.put(CSSProperty.PADDING_TOP, "1em");
     }
 
     /**
@@ -95,7 +95,7 @@ public class STitledBorder extends SAbstractBorder {
         this.title = title;
     }
 
-    public AttributeSet getTitleAttributes() {
+    public CSSAttributeSet getTitleAttributes() {
         return titleAttributes;
     }
 
@@ -114,14 +114,14 @@ public class STitledBorder extends SAbstractBorder {
      * @param color the title color to set
      */
     public void setTitleColor(Color color) {
-        titleAttributes.put(Style.COLOR, CSSStyleSheet.getAttribute(color));
+        titleAttributes.put(CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
      * Set the border color.
      */
     public void setTitleBackground(Color color) {
-        titleAttributes.put(Style.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        titleAttributes.put(CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**

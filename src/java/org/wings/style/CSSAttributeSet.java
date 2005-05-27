@@ -21,24 +21,24 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * A straightforward implementation of AttributeSet using a hash map.
+ * A straightforward implementation of CSSPropertySet using a hash map.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class AttributeSet
+public class CSSAttributeSet
         implements Renderable, Serializable, Cloneable {
-    public static final AttributeSet EMPTY_ATTRIBUTESET =
-            new AttributeSet() {
+    public static final CSSAttributeSet EMPTY_ATTRIBUTESET =
+            new CSSAttributeSet() {
                 private UnsupportedOperationException  doThrow() {
-                    return new UnsupportedOperationException("cannot change values for the global EMPTY_ATTRIBUTESET. You attempted to modify this unmodifiable AttributeSet: create your own instance of a AttributeSet first!");
+                    return new UnsupportedOperationException("cannot change values for the global EMPTY_ATTRIBUTESET. You attempted to modify this unmodifiable CSSPropertySet: create your own instance of a CSSPropertySet first!");
                 }
 
                 public String put(String name, String value) {
                     throw doThrow();
                 }
 
-                public boolean putAll(AttributeSet attributes) {
+                public boolean putAll(CSSAttributeSet attributes) {
                     throw doThrow();
                 }
             };
@@ -46,20 +46,20 @@ public class AttributeSet
     private Map map;
 
     /**
-     * create a AttributeSet from the given HashMap.
+     * create a CSSPropertySet from the given HashMap.
      */
-    private AttributeSet(HashMap map) {
+    private CSSAttributeSet(HashMap map) {
         this.map = map;
     }
 
     /**
      * Creates a new, empty atribute set.
      */
-    public AttributeSet() {
+    public CSSAttributeSet() {
     }
 
-    public AttributeSet(String name, String value) {
-        put(name, value);
+    public CSSAttributeSet(CSSProperty cssProperty, String cssPropertyValue) {
+        put(cssProperty, cssPropertyValue);
     }
 
     /**
@@ -67,7 +67,7 @@ public class AttributeSet
      *
      * @param source the set of attributes
      */
-    public AttributeSet(AttributeSet source) {
+    public CSSAttributeSet(CSSAttributeSet source) {
         putAll(source);
     }
 
@@ -101,27 +101,27 @@ public class AttributeSet
      * @param name the attribute name
      * @return true if the attribute is defined
      */
-    public final boolean contains(String name) {
+    public final boolean contains(CSSProperty name) {
         return map == null ? false : map.containsKey(name);
     }
 
     /**
-     * Gets the names of the attributes in the set.
+     * Gets the defned CSS properties in the set.
      *
-     * @return the names as an <code>Enumeration</code>
+     * @return A set of {@link CSSProperty}
      */
-    public final Set names() {
+    public final Set properties() {
         return map == null ? Collections.EMPTY_SET : map.keySet();
     }
 
     /**
-     * Gets the value of an attribute.
+     * Gets the value of an css property.
      *
-     * @param name the attribute name
+     * @param property the attribute property
      * @return the value
      */
-    public final String get(String name) {
-        return map == null ? null : (String) map.get(name);
+    public final String get(CSSProperty property) {
+        return map == null ? null : (String) map.get(property);
     }
 
     /**
@@ -130,7 +130,7 @@ public class AttributeSet
      * @param name  the attribute name
      * @param value the attribute value
      */
-    public String put(String name, String value) {
+    public String put(CSSProperty name, String value) {
         if (map == null) {
             map = new HashMap(8);
         }
@@ -145,16 +145,16 @@ public class AttributeSet
      *
      * @param attributes the set of attributes to add
      */
-    public boolean putAll(AttributeSet attributes) {
+    public boolean putAll(CSSAttributeSet attributes) {
         if (map == null) {
             map = new HashMap(8);
         }
 
         boolean changed = false;
-        Iterator names = attributes.names().iterator();
+        Iterator names = attributes.properties().iterator();
         while (names.hasNext()) {
-            String name = (String) names.next();
-            changed = changed || (put(name, attributes.get(name)) != null);
+            CSSProperty property = (CSSProperty) names.next();
+            changed = changed || (put(property, attributes.get(property)) != null);
         }
         return changed;
     }
@@ -164,7 +164,7 @@ public class AttributeSet
      *
      * @param name the attribute name
      */
-    public String remove(String name) {
+    public String remove(CSSProperty name) {
         return map == null ? null : (String) map.remove(name);
     }
 
@@ -178,7 +178,7 @@ public class AttributeSet
     public Object clone() {
         /*
         try {
-            attr = (AttributeSet)super.clone();
+            attr = (CSSPropertySet)super.clone();
             attr.putAll(this);
         } catch (CloneNotSupportedException cnse) {
             attr = null;
@@ -186,9 +186,9 @@ public class AttributeSet
         */
 
         if (isEmpty()) {
-            return new AttributeSet();
+            return new CSSAttributeSet();
         } else {
-            return new AttributeSet((HashMap) ((HashMap) map).clone());
+            return new CSSAttributeSet((HashMap) ((HashMap) map).clone());
         }
     }
 
@@ -208,17 +208,17 @@ public class AttributeSet
      * @return true if the sets are equal, false otherwise
      */
     public boolean equals(Object object) {
-        if (!(object instanceof AttributeSet))
+        if (!(object instanceof CSSAttributeSet))
             return false;
-        AttributeSet other = (AttributeSet) object;
+        CSSAttributeSet other = (CSSAttributeSet) object;
 
         if (size() != other.size())
             return false;
 
-        Iterator names = other.names().iterator();
+        Iterator names = other.properties().iterator();
         while (names.hasNext()) {
-            String name = (String) names.next();
-            if (!other.get(name).equals(get(name)))
+            CSSProperty property = (CSSProperty) names.next();
+            if (!other.get(property).equals(get(property)))
                 return false;
         }
         return true;

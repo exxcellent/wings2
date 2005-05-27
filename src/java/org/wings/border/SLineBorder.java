@@ -13,6 +13,8 @@
  */
 package org.wings.border;
 
+import org.wings.style.CSSProperty;
+
 import java.awt.*;
 
 /**
@@ -59,7 +61,7 @@ public class SLineBorder
 
     public void setBorderStyle(String style) {
         this.borderStyle = style;
-        attributes.put("border-style", style);
+        attributes.put(CSSProperty.BORDER_STYLE, style);
     }
 
     public final String getBorderStyle() { return borderStyle; }

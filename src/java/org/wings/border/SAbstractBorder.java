@@ -13,8 +13,9 @@
  */
 package org.wings.border;
 
-import org.wings.style.AttributeSet;
+import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSStyleSheet;
+import org.wings.style.CSSProperty;
 
 import java.awt.*;
 
@@ -42,7 +43,7 @@ public abstract class SAbstractBorder
      */
     private int thickness;
 
-    protected AttributeSet attributes = new AttributeSet();
+    protected CSSAttributeSet attributes = new CSSAttributeSet();
 
     public SAbstractBorder() {
         this(Color.black, 2, new Insets(0, 0, 0, 0));
@@ -72,16 +73,16 @@ public abstract class SAbstractBorder
     public void setInsets(Insets insets) {
         this.insets = insets;
         if (insets != null) {
-            attributes.put("padding-top", insets.top + "px");
-            attributes.put("padding-left", insets.left + "px");
-            attributes.put("padding-right", insets.right + "px");
-            attributes.put("padding-bottom", insets.bottom + "px");
+            attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
+            attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
+            attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
+            attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
         }
         else {
-            attributes.remove("padding-top");
-            attributes.remove("padding-left");
-            attributes.remove("padding-right");
-            attributes.remove("padding-bottom");
+            attributes.remove(CSSProperty.PADDING_TOP);
+            attributes.remove(CSSProperty.PADDING_LEFT);
+            attributes.remove(CSSProperty.PADDING_RIGHT);
+            attributes.remove(CSSProperty.PADDING_BOTTOM);
         }
     }
 
@@ -104,7 +105,7 @@ public abstract class SAbstractBorder
      */
     public void setColor(Color color) {
         this.color = color;
-        attributes.put("border-color", CSSStyleSheet.getAttribute(color));
+        attributes.put(CSSProperty.BORDER_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -113,10 +114,10 @@ public abstract class SAbstractBorder
      */
     public void setThickness(int thickness) {
         this.thickness = thickness;
-        attributes.put("border-width", thickness + "px");
+        attributes.put(CSSProperty.BORDER_WIDTH, thickness + "px");
     }
 
-    public AttributeSet getAttributes() {
+    public CSSAttributeSet getAttributes() {
         return attributes;
     }
 
