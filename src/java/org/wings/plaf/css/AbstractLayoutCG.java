@@ -88,9 +88,9 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         for (Iterator iter = components.iterator(); iter.hasNext();) {
             final SComponent c = (SComponent) iter.next();
 
-            if (col == 0)
+            if (col == 0) {
                 d.print("<tr>");
-            else if (col % cols == 0) {
+            } else if (col % cols == 0) {
                 d.print("</tr>");
                 Utils.printNewline(d, c.getParent());
                 d.print("<tr>");
@@ -127,11 +127,12 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             int hPaddingBottom = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0 + 0.1); // round up
             int vPaddingLeft = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0);
             int vPaddingRight = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0 + 0.1); // round up
-            if (hPaddingBottom == hPaddingTop && hPaddingTop == vPaddingRight && vPaddingRight == vPaddingLeft)
+            if (hPaddingBottom == hPaddingTop && hPaddingTop == vPaddingRight && vPaddingRight == vPaddingLeft) {
                 inlineStyle.append("padding:").append(hPaddingTop).append("px;");
-            else
+            } else {
                 inlineStyle.append("padding:").append(hPaddingTop).append("px ").append(vPaddingRight).append("px ")
                         .append(hPaddingBottom).append("px ").append(vPaddingLeft).append("px;");
+            }
         }
         return inlineStyle;
     }
@@ -144,10 +145,11 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      */
     public static void openLayouterCell(Device d, boolean renderAsHeader, int hgap, int vgap, int border,
                                         SComponent containedComponent) throws IOException {
-        if (renderAsHeader)
+        if (renderAsHeader) {
             d.print("<th");
-        else
+        } else {
             d.print("<td");
+        }
 
         d.print(" class=\"SLayout\"");
         Utils.printTableCellAlignment(d, containedComponent);
