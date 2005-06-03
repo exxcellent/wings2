@@ -93,7 +93,8 @@ public class ButtonExample extends WingSetPane {
         final SGridLayout grid = new SGridLayout(3);
         final SPanel buttonGrid = new SPanel(grid);
         grid.setBorder(1);
-        grid.setCellSpacing(10);
+        grid.setHgap(10);
+        grid.setVgap(10);
         buttonGrid.setHorizontalAlignment(CENTER);
         buttonGrid.setBorder(new SEmptyBorder(10, 0, 10, 0));
 

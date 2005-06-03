@@ -16,7 +16,6 @@ package org.wings.plaf.css;
 import org.wings.SGridLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,14 +32,15 @@ public class GridLayoutCG extends AbstractLayoutCG
         final SGridLayout layout = (SGridLayout) l;
         final List components = layout.getComponents();
         final int rows = layout.getRows();
+
         int cols = layout.getColumns();
         if (cols <= 0)
             cols = components.size() / rows;
         final int border = layout.getBorder();
 
-        printLayouterTableHeader(d, "SGridLayout", layout.getCellSpacing(), layout.getCellPadding(), border, layout);
+        printLayouterTableHeader(d, "SGridLayout", layout.getHgap(), layout.getVgap(), border, layout);
 
-        printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), border, components);
+        printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), layout.getHgap(), layout.getVgap(),border, components);
 
         printLayouterTableFooter(d, "SGridLayout", layout);
     }

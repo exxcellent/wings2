@@ -132,7 +132,8 @@ public class DynamicLayoutExample extends WingSetPane {
         public BoxLayoutDemoPanel() {
             add(new SLabel("Horizontal box layout with padding & border"));
             SBoxLayout horizontalLayout = new SBoxLayout(SBoxLayout.HORIZONTAL);
-            horizontalLayout.setCellPadding(10);
+            horizontalLayout.setHgap(10);
+            horizontalLayout.setVgap(10);
             horizontalLayout.setBorder(1);
             add(createPanel(horizontalLayout, 5));
 
@@ -163,11 +164,11 @@ public class DynamicLayoutExample extends WingSetPane {
 
     private static class GridLayoutDemoPanel extends SPanel {
         public GridLayoutDemoPanel() {
-            add(new SLabel("Grid Layout panel with 3 colums, border, padding & spacing"));
+            add(new SLabel("Grid Layout panel with 3 colums, border, 10px horizontal gap, 80 vertical gap"));
             SGridLayout layout1 = new SGridLayout(3);
             layout1.setBorder(1);
-            layout1.setCellPadding(10);
-            layout1.setCellSpacing(20);
+            layout1.setHgap(10);
+            layout1.setVgap(80);
 
             add(createPanel(layout1, 12));
         }

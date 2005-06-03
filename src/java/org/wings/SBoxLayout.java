@@ -38,9 +38,21 @@ public class SBoxLayout
 
     protected int orientation = SConstants.HORIZONTAL;
     protected int align = SConstants.LEFT_ALIGN;
-    protected int cellSpacing = 0;
-    protected int cellPadding = 0;
     protected int borderThickness = 0;
+
+    /**
+     * The horizontal gap (in pixels) specifiying the space
+     * between columns.  They can be changed at any time.
+     * This should be a non-negative integer.
+     */
+    protected int hgap = 0;
+
+    /**
+     * The vertical gap (in pixels) which specifiying the space
+     * between rows.  They can be changed at any time.
+     * This should be a non negative integer.
+     */
+    protected int vgap = 0;
 
     /**
      * creates a new box layout with the given orientation
@@ -98,38 +110,6 @@ public class SBoxLayout
         return orientation;
     }
 
-    /**
-     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
-     * @param cellPadding cell padding in pixel
-     */
-    public void setCellPadding(int cellPadding) {
-        this.cellPadding = cellPadding;
-    }
-
-    /**
-     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
-     * @return cell padding in pixel
-     */
-    public int getCellPadding() {
-        return cellPadding;
-    }
-
-    /**
-     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
-     * @param cellSpacing The spacing between the layout cells. pixel
-     */
-    public void setCellSpacing(int cellSpacing) {
-        this.cellSpacing = cellSpacing;
-    }
-
-    /**
-     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
-     * @return The spacing between the layout cells. pixel
-     */
-    public int getCellSpacing() {
-        return cellSpacing;
-    }
-
 
     /**
      * Typical PLAFs will render this layout as invisible table (border = 0). Use this property to make it visible
@@ -145,6 +125,46 @@ public class SBoxLayout
      */
     public int getBorder() {
         return borderThickness;
+    }
+
+    /**
+     * Gets the horizontal gap between components in pixel. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
+     *
+     * @return the horizontal gap between components
+     */
+    public int getHgap() {
+        return hgap;
+    }
+
+    /**
+     * Sets the horizontal gap between components to the specified value in pixe. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
+     *
+     * @param hgap the horizontal gap between components
+     */
+    public void setHgap(int hgap) {
+        this.hgap = hgap;
+    }
+
+    /**
+     * Gets the vertical gap between components in pixel. Rendered half as margin top and margin bottom
+     * Some PLAFs might ignore this property.
+     *
+     * @return the vertical gap between components
+     */
+    public int getVgap() {
+        return vgap;
+    }
+
+    /**
+     * Sets the vertical gap between components to the specified value in pixel.
+     * Rendered half as margin top and margin bottom. Some PLAFs might ignore this property.
+     *
+     * @param vgap the vertical gap between components
+     */
+    public void setVgap(int vgap) {
+        this.vgap = vgap;
     }
 }
 

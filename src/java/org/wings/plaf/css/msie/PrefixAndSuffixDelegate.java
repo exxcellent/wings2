@@ -94,7 +94,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         }
 
         device.print("><tr>"); // table
-        AbstractLayoutCG.openLayouterCell(device, false, 0, component);
+        AbstractLayoutCG.openLayouterCell(device, false, 0, 0, 0, component);
         device.print(">");
 
         // Special handling: Render title of STitledBorder

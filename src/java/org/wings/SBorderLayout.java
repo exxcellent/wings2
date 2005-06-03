@@ -37,7 +37,21 @@ public class SBorderLayout
 
     protected Map components = new HashMap(5);
     protected int border = 0;
-    protected int cellspacing = 0;
+
+    /**
+     * The horizontal gap (in pixels) specifiying the space
+     * between columns.  They can be changed at any time.
+     * This should be a non-negative integer.
+     */
+    protected int hgap = 0;
+
+    /**
+     * The vertical gap (in pixels) which specifiying the space
+     * between rows.  They can be changed at any time.
+     * This should be a non negative integer.
+     */
+    protected int vgap = 0;
+
 
     /**
      * creates a new border layout
@@ -47,17 +61,11 @@ public class SBorderLayout
     /**
      * creates a new border layout
      */
-    public SBorderLayout(int spacing) {
-        this.cellspacing = spacing;
+    public SBorderLayout(int hgap, int vgap) {
+        setHgap(hgap);
+        setVgap(vgap);
     }
 
-    /**
-     * creates a new border layout
-     */
-    public SBorderLayout(int spacing, int border) {
-        this.cellspacing = spacing;
-        this.border = border;
-    }
 
     public void addComponent(SComponent c, Object constraint, int index) {
         if (constraint == null)
@@ -102,23 +110,45 @@ public class SBorderLayout
     public int getBorder() {
         return border;
     }
+
     /**
-     * Set the spacing of the parts.
-     * Default is 0, which means no spacing.
+     * Gets the horizontal gap between components in pixel. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
      *
-     * @param pixel thickness of the spacing
+     * @return the horizontal gap between components
      */
-    public void setSpacing(int pixel) {
-        cellspacing = pixel;
+    public int getHgap() {
+        return hgap;
     }
 
     /**
-     * Returns the thickness of the spacing.
+     * Sets the horizontal gap between components to the specified value in pixe. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
      *
-     * @return thickness of the spacing
+     * @param hgap the horizontal gap between components
      */
-    public int getSpacing() {
-        return cellspacing;
+    public void setHgap(int hgap) {
+        this.hgap = hgap;
+    }
+
+    /**
+     * Gets the vertical gap between components in pixel. Rendered half as margin top and margin bottom
+     * Some PLAFs might ignore this property.
+     *
+     * @return the vertical gap between components
+     */
+    public int getVgap() {
+        return vgap;
+    }
+
+    /**
+     * Sets the vertical gap between components to the specified value in pixel.
+     * Rendered half as margin top and margin bottom. Some PLAFs might ignore this property.
+     *
+     * @param vgap the vertical gap between components
+     */
+    public void setVgap(int vgap) {
+        this.vgap = vgap;
     }
 }
 

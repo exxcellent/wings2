@@ -60,7 +60,8 @@ public class TextComponentExample
         controls = new ComponentControls();
 
         SGridLayout gridLayout = new SGridLayout(2);
-        gridLayout.setCellPadding(4);
+        gridLayout.setHgap(4);
+        gridLayout.setVgap(4);
         SPanel p = new SPanel(gridLayout);
 
         SLabel l = new SLabel("STextField: ");

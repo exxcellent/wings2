@@ -22,15 +22,26 @@ import java.util.List;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SGridLayout
-        extends SAbstractLayoutManager {
+public class SGridLayout extends SAbstractLayoutManager {
     protected ArrayList components = new ArrayList(2);
     protected int rows = 1;
     protected int cols = 1;
     protected int border = 0;
     protected boolean renderFirstLineAsHeader = false;
-    protected int cellPadding = -1;
-    protected int cellSpacing = -1;
+
+    /**
+     * The horizontal gap (in pixels) specifiying the space
+     * between columns.  They can be changed at any time.
+     * This should be a non-negative integer.
+     */
+    protected int hgap = 0;
+
+    /**
+     * The vertical gap (in pixels) which specifiying the space
+     * between rows.  They can be changed at any time.
+     * This should be a non negative integer.
+     */
+    protected int vgap = 0;
 
     /**
      * creates a new grid layout with 1 row and 1 column extent
@@ -113,42 +124,82 @@ public class SGridLayout
         return components;
     }
 
-
     /**
-     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
-     * @param cellPadding cell padding in pixel
+     * Gets the horizontal gap between components in pixel. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
+     *
+     * @return the horizontal gap between components
      */
-    public void setCellPadding(int cellPadding) {
-        this.cellPadding = cellPadding;
+    public int getHgap() {
+        return hgap;
     }
 
     /**
-     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
-     * @return cell padding in pixel
+     * Sets the horizontal gap between components to the specified value in pixe. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
+     *
+     * @param hgap the horizontal gap between components
      */
-    public int getCellPadding() {
-        return cellPadding;
+    public void setHgap(int hgap) {
+        this.hgap = hgap;
     }
 
     /**
-     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
-     * @param cellSpacing The spacing between the layout cells. pixel
+     * Gets the vertical gap between components in pixel. Rendered half as margin top and margin bottom
+     * Some PLAFs might ignore this property.
+     *
+     * @return the vertical gap between components
      */
-    public void setCellSpacing(int cellSpacing) {
-        this.cellSpacing = cellSpacing;
+    public int getVgap() {
+        return vgap;
     }
 
     /**
-     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
-     * @return The spacing between the layout cells. pixel
+     * Sets the vertical gap between components to the specified value in pixel.
+     * Rendered half as margin top and margin bottom. Some PLAFs might ignore this property.
+     *
+     * @param vgap the vertical gap between components
      */
-    public int getCellSpacing() {
-        return cellSpacing;
+    public void setVgap(int vgap) {
+        this.vgap = vgap;
     }
+
+//    /**
+//     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+//     * @param cellPadding cell padding in pixel
+//     */
+//    public void setCellPadding(int cellPadding) {
+//        this.cellPadding = cellPadding;
+//    }
+//
+//    /**
+//     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+//     * @return cell padding in pixel
+//     */
+//    public int getCellPadding() {
+//        return cellPadding;
+//    }
+//
+//    /**
+//     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+//     * @param cellSpacing The spacing between the layout cells. pixel
+//     */
+//    public void setCellSpacing(int cellSpacing) {
+//        this.cellSpacing = cellSpacing;
+//    }
+//
+//    /**
+//     * The paddding between the layout cells in pixel. Some PLAFs might ignore this property.
+//     * @return The spacing between the layout cells. pixel
+//     */
+//    public int getCellSpacing() {
+//        return cellSpacing;
+//    }
 
 
     /**
      * Typical PLAFs will render this layout as invisible table (border = 0). Use this property to make it visible
+     *
      * @param borderWidth The rendered border with in pixel
      */
     public void setBorder(int borderWidth) {
@@ -157,6 +208,7 @@ public class SGridLayout
 
     /**
      * Typical PLAFs will render this layout as invisible table (border = 0). Use this property to make it visible
+     *
      * @return The rendered border with in pixel
      */
     public int getBorder() {
@@ -165,6 +217,7 @@ public class SGridLayout
 
     /**
      * Renders the first line as HTML <code>&lt;th&gt;</code> instead regular <code>&lt;tr&gt;</code>.
+     *
      * @param renderAsTH true if first line should be rendered as header
      */
     public void setRenderFirstLineAsHeader(boolean renderAsTH) {

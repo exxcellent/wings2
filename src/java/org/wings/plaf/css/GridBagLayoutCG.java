@@ -17,7 +17,6 @@ import org.wings.SComponent;
 import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 
 import java.awt.*;
 import java.io.IOException;
@@ -32,16 +31,13 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
             throws IOException {
         final SGridBagLayout layout = (SGridBagLayout) l;
         final boolean header = layout.getHeader();
-        final int cellSpacing = layout.getCellSpacing() >= 0 ? layout.getCellSpacing() : 0;
-        final int cellPadding = layout.getCellPadding() >= 0 ? layout.getCellPadding() : 0;
         final int border = layout.getBorder() >= 0 ? layout.getBorder() : 0;
         final SGridBagLayout.Grid grid = layout.getGrid();
 
-        if (grid.cols == 0) {
+        if (grid.cols == 0)
             return;
-        }
 
-        printLayouterTableHeader(d, "SGridBagLayout", cellSpacing, cellPadding, border, layout);
+        printLayouterTableHeader(d, "SGridBagLayout", layout.getHgap(), layout.getVgap(), border, layout);
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
             Utils.printNewline(d, layout.getContainer());
@@ -51,7 +47,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                 Utils.printNewline(d, layout.getContainer());
                 final boolean headerCell = row == grid.firstRow && header;
                 if (comp == null) {
-                    openLayouterCell(d, headerCell, border, comp);
+                    openLayouterCell(d, headerCell, layout.getHgap(), layout.getVgap(),border, comp);
                     d.print(">");
                     closeLayouterCell(d, headerCell);
                 } else {
@@ -59,7 +55,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                     if ((c.gridx == SGridBagLayout.LAST_CELL || c.gridx == col) &&
                             (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
 
-                        openLayouterCell(d, headerCell, border, comp);
+                        openLayouterCell(d, headerCell, layout.getHgap(), layout.getVgap(),border, comp);
 
                         int gridwidth = c.gridwidth;
                         if (gridwidth == GridBagConstraints.RELATIVE) {

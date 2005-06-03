@@ -32,7 +32,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     /**
      * Print HTML table element declaration of a typical invisible layouter table.
      */
-    protected void printLayouterTableHeader(Device d, String styleClass, int cellSpacing, int cellPadding,
+    protected void printLayouterTableHeader(Device d, String styleClass, int hgap, int vgap,
                                             int border, SLayoutManager layout)
             throws IOException {
         Utils.printDebugNewline(d, layout.getContainer());
@@ -43,11 +43,13 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         // to 100% width/height
         StringBuffer styleString = Utils.generateCSSInlinePreferredSize(layout.getContainer().getPreferredSize());
         styleString.append(Utils.generateCSSInlineBorder(border));
+        styleString.append(createInlineStylesForGaps(hgap, vgap));
 
         Utils.printNewline(d, layout.getContainer());
         d.print("<table ");
+        /* This won't work any longer as we override padding/spacing with default SLayout styles class
         d.print(" cellspacing=\"").print(cellSpacing < 0 ? 0 : cellSpacing).print("\"");
-        d.print(" cellpadding=\"").print(cellPadding < 0 ? 0 : cellPadding).print("\"");
+        d.print(" cellpadding=\"").print(cellPadding < 0 ? 0 : cellPadding).print("\""); */
         Utils.optAttribute(d, "class", styleClass != null ? styleClass + " SLayout" : "SLayout");
         Utils.optAttribute(d, "style", styleString.toString());
         d.print("><tbody>");
@@ -74,8 +76,12 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      * @param cols                    Wrap after this amount of columns
      * @param renderFirstLineAsHeader Render cells in first line as TH-Element or regular TD.
      * @param components              The components to layout
+     * @param hgap                    Horizontal gap between components in px
+     * @param vgap                    Vertical gap between components in px
+     * @param border                  Border width to draw.
      */
-    protected void printLayouterTableBody(Device d, int cols, final boolean renderFirstLineAsHeader, int border, final List components)
+    protected void printLayouterTableBody(Device d, int cols, final boolean renderFirstLineAsHeader,
+                                          int hgap, int vgap, int border, final List components)
             throws IOException {
         boolean firstRow = true;
         int col = 0;
@@ -91,7 +97,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
                 firstRow = false;
             }
 
-            openLayouterCell(d, firstRow && renderFirstLineAsHeader, border, c);
+            openLayouterCell(d, firstRow && renderFirstLineAsHeader, hgap, vgap, border, c);
             d.print(">");
 
             Utils.printNewline(d, c);
@@ -109,12 +115,35 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     }
 
     /**
+     * Converts a hgap/vgap in according inline css padding style.
+     *
+     * @param hgap Horizontal gap between components in px
+     * @param vgap Vertical gap between components in px
+     */
+    protected static StringBuffer createInlineStylesForGaps(int hgap, int vgap) {
+        StringBuffer inlineStyle = new StringBuffer();
+        if (hgap > 0 || vgap > 0) {
+            int hPaddingTop = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0);
+            int hPaddingBottom = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0 + 0.1); // round up
+            int vPaddingLeft = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0);
+            int vPaddingRight = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0 + 0.1); // round up
+            if (hPaddingBottom == hPaddingTop && hPaddingTop == vPaddingRight && vPaddingRight == vPaddingLeft)
+                inlineStyle.append("padding:").append(hPaddingTop).append("px;");
+            else
+                inlineStyle.append("padding:").append(hPaddingTop).append("px ").append(vPaddingRight).append("px ")
+                        .append(hPaddingBottom).append("px ").append(vPaddingLeft).append("px;");
+        }
+        return inlineStyle;
+    }
+
+    /**
      * Opens a TD or TH cell of an invisible layouter table. This method also does component alignment.
      * <b>Attention:</b> As you want to attach more attributes you need to close the tag with &gt; on your own!
      *
      * @param renderAsHeader Print TH instead of TD
      */
-    public static void openLayouterCell(Device d, boolean renderAsHeader, int border, SComponent containedComponent) throws IOException {
+    public static void openLayouterCell(Device d, boolean renderAsHeader, int hgap, int vgap, int border,
+                                        SComponent containedComponent) throws IOException {
         if (renderAsHeader)
             d.print("<th");
         else
@@ -125,6 +154,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
         // CSS inline attributes
         StringBuffer inlineAttributes = Utils.generateCSSInlineBorder(border);
+        inlineAttributes.append(createInlineStylesForGaps(hgap, vgap));
         Utils.optAttribute(d, "style", inlineAttributes.toString());
     }
 

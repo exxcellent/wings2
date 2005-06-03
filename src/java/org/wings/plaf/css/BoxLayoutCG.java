@@ -16,7 +16,6 @@ package org.wings.plaf.css;
 import org.wings.SBoxLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,9 +34,9 @@ public class BoxLayoutCG extends AbstractLayoutCG {
         final int cols = layout.getOrientation() == SBoxLayout.HORIZONTAL ? components.size() : 1;
         final int border = layout.getBorder();
 
-        printLayouterTableHeader(d, "SBoxLayout", layout.getCellSpacing(), layout.getCellPadding(), border, layout);
+        printLayouterTableHeader(d, "SBoxLayout", layout.getHgap(), layout.getVgap(), border, layout);
 
-        printLayouterTableBody(d, cols, false, border, components);
+        printLayouterTableBody(d, cols, false, layout.getHgap(), layout.getVgap(), border, components);
 
         printLayouterTableFooter(d, "SBoxLayout", layout);
 

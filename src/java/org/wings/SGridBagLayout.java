@@ -109,14 +109,18 @@ public class SGridBagLayout
     protected int border = 0;
 
     /**
-     * @see #getCellPadding
+     * The horizontal gap (in pixels) specifiying the space
+     * between columns.  They can be changed at any time.
+     * This should be a non-negative integer.
      */
-    protected int cellPadding = 0;
+    protected int hgap = 0;
 
     /**
-     * @see #getCellSpacing
+     * The vertical gap (in pixels) which specifiying the space
+     * between rows.  They can be changed at any time.
+     * This should be a non negative integer.
      */
-    protected int cellSpacing = 0;
+    protected int vgap = 0;
 
     /**
      * @see #getHeader
@@ -266,36 +270,44 @@ public class SGridBagLayout
     }
 
     /**
-     * Set the amount of padding between cells
+     * Gets the horizontal gap between components in pixel. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
      *
-     * @param p the new cell-padding
+     * @return the horizontal gap between components
      */
-    public void setCellPadding(int p) {
-        cellPadding = p;
+    public int getHgap() {
+        return hgap;
     }
 
     /**
-     * Get the amount of padding between cells
+     * Sets the horizontal gap between components to the specified value in pixe. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
      *
-     * @return the cell-padding
+     * @param hgap the horizontal gap between components
      */
-    public int getCellPadding() { return cellPadding; }
-
-    /**
-     * Set the amount of space between the cells and the outer border.
-     *
-     * @param s the new cell-spacing
-     */
-    public void setCellSpacing(int s) {
-        cellSpacing = s;
+    public void setHgap(int hgap) {
+        this.hgap = hgap;
     }
 
     /**
-     * Get the amount of space between the cells and the outer border.
+     * Gets the vertical gap between components in pixel. Rendered half as margin top and margin bottom
+     * Some PLAFs might ignore this property.
      *
-     * @return the cell-spacing
+     * @return the vertical gap between components
      */
-    public int getCellSpacing() { return cellSpacing; }
+    public int getVgap() {
+        return vgap;
+    }
+
+    /**
+     * Sets the vertical gap between components to the specified value in pixel.
+     * Rendered half as margin top and margin bottom. Some PLAFs might ignore this property.
+     *
+     * @param vgap the vertical gap between components
+     */
+    public void setVgap(int vgap) {
+        this.vgap = vgap;
+    }
 
     /**
      * Set the border width.

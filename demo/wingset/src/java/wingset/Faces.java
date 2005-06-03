@@ -68,13 +68,8 @@ public class Faces
 
     public SComponent createSwitcher() {
         nameBorder = new SEmptyBorder(10, 10, 10, 10);
-
-
         faces = new ArrayList();
-
         layout = new SGridLayout(4, faces.size() + 1);
-        layout.setCellPadding(0);
-        layout.setCellSpacing(0);
         facePanel = new SPanel(layout);
 
         final SLabel hair = new SLabel();
