@@ -13,7 +13,49 @@
  */
 package org.wings.plaf.css.msie;
 
+import java.io.IOException;
+
+import org.wings.SAbstractButton;
+import org.wings.SIcon;
+import org.wings.io.Device;
+import org.wings.plaf.css.Utils;
+
 
 
 public class RadioButtonCG extends CheckBoxCG {
+    protected void installIcons(final SAbstractButton button) {
+        org.wings.plaf.CGManager manager = button.getSession().getCGManager();
+        button.setIcon((SIcon) manager.getObject("SRadioButton.icon", SIcon.class));
+        button.setSelectedIcon((SIcon) manager.getObject("SRadioButton.selectedIcon", SIcon.class));
+        button.setRolloverIcon((SIcon) manager.getObject("SRadioButton.rolloverIcon", SIcon.class));
+        button.setRolloverSelectedIcon((SIcon) manager.getObject("SRadioButton.rolloverSelectedIcon", SIcon.class));
+        button.setPressedIcon((SIcon) manager.getObject("SRadioButton.pressedIcon", SIcon.class));
+        button.setDisabledIcon((SIcon) manager.getObject("SRadioButton.disabledIcon", SIcon.class));
+        button.setDisabledSelectedIcon((SIcon) manager.getObject("SRadioButton.disabledSelectedIcon", SIcon.class));
+    }
+
+    protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
+        device.print("<input type=\"hidden\" name=\"");
+        Utils.write(device, Utils.event(button));
+        device.print("\" value=\"");
+        Utils.write(device, button.getDeselectionParameter());
+        device.print("\"/>");
+
+        device.print("<input type=\"radio\" name=\"");
+        Utils.write(device, Utils.event(button));
+        device.print("\" value=\"");
+        Utils.write(device, button.getToggleSelectionParameter());
+        device.print("\"");
+
+        if (!button.isEnabled())
+            device.print(" disabled=\"true\"");
+        if (button.isFocusOwner())
+            Utils.optAttribute(device, "focus", button.getName());
+
+        if (button.isSelected())
+            device.print(" checked=\"true\"");
+
+        Utils.writeEvents(device, button);
+        device.print("/>");
+    }
 }
