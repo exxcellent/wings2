@@ -53,6 +53,11 @@ public class SResourceIcon extends ClasspathResource implements SIcon {
      */
     private int height = -1;
 
+    /**
+     * Title of icon, <code>""</code> if not set.
+     */
+    private String title = null;
+
 
     public SResourceIcon(String resourceFileName) {
         this(SResourceIcon.class.getClassLoader(), resourceFileName);
@@ -101,6 +106,14 @@ public class SResourceIcon extends ClasspathResource implements SIcon {
 
     public void setIconHeight(int height) {
         this.height = height;
+    }
+
+    public String getIconTitle() {
+        return (title!=null) ? title : "";
+    }
+    
+    public void setIconTitle(String title) {
+        this.title = title;
     }
 }
 

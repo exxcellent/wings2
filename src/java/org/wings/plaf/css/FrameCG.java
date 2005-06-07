@@ -169,14 +169,14 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         // dynamic java script resource.
         scriptResource = new DynamicScriptResource(component);
         component.addDynamicResource(scriptResource);
-        component.addHeader(new Script("JavaScript", "text/javascript", scriptResource));
+        component.addHeader(new Script("text/javascript", scriptResource));
 
         Iterator iter = javascriptResourceKeys.iterator();
         while (iter.hasNext()) {
             String jsResKey = (String) iter.next();
             String jScriptUrl = externalizeJavaScript(jsResKey);
             if (jScriptUrl != null) {
-                component.addHeader(new Script("JavaScript", "text/javascript", new DefaultURLResource(jScriptUrl)));
+                component.addHeader(new Script("text/javascript", new DefaultURLResource(jScriptUrl)));
             }
         }
 
@@ -201,7 +201,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
         ClasspathResource res = new ClasspathResource(classPath, mimeType);
         String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        parentFrame.addHeader(new Script("JavaScript", mimeType, new DefaultURLResource(jScriptUrl)));
+        parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
     }
 
     public void uninstallCG(final SComponent comp) {
@@ -250,7 +250,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         Utils.write(device, language);
         device.print("\" lang=\"");
         Utils.write(device, language);
-        device.print("\">\n");
+        device.print("\" />\n");
 
         /* Insert version and compile time.
          * Since the Version Class is generated on compile time, build errors
@@ -320,7 +320,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         // TODO: move this to a dynamic script resource
         SToolTipManager toolTipManager = component.getSession().getToolTipManager();
         device
-                .print("<script language=\"JavaScript\" type=\"text/javascript\">\n")
+                .print("<script type=\"text/javascript\">\n")
                 .print("domTT_addPredefined('default', 'caption', false");
         if (toolTipManager.isFollowMouse())
             device.print(", 'trail', true");

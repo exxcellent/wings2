@@ -41,6 +41,16 @@ public interface SIcon extends URLResource {
      * sets the height of the icon, -1 if unknown.
      */
     void setIconHeight(int height);
+
+    /**
+     * gets the title of the icon, empty String if unknown.
+     */
+    String getIconTitle();
+
+    /**
+     * sets the title of the icon, empty String if unknown.
+     */
+    void setIconTitle(String title);
 }
 
 

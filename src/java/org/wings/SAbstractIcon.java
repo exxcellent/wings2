@@ -36,6 +36,11 @@ public abstract class SAbstractIcon implements SIcon {
      */
     protected int height = -1;
 
+    /**
+     * Title of icon, <code>""</code> if not set.
+     */
+    protected String title = null;
+
 
     protected SAbstractIcon() {
     }
@@ -62,6 +67,12 @@ public abstract class SAbstractIcon implements SIcon {
         height = h;
     }
 
-
+    public String getIconTitle() {
+        return (title!=null) ? title : "";
+    }
+    
+    public void setIconTitle(String title) {
+        this.title = title;
+    }
 }// SAbstractIcon
 

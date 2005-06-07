@@ -50,7 +50,7 @@ public class DWRExample
         frame = new SFrame("DWRExample example");
         frame.getContentPane().add(form);
         frame.show();
-        frame.addHeader(new Script("JavaScript", "text/javascript", new DefaultURLResource("../dwr/engine.js")));
+        frame.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
     }
 
     public static class DateFormatter extends DWRFormatter {

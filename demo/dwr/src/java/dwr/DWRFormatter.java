@@ -21,7 +21,7 @@ public abstract class DWRFormatter extends SAbstractFormatter {
 
     public void install(SFormattedTextField field) {
         super.install(field);
-        header = new Script("JavaScript", "text/javascript",
+        header = new Script("text/javascript",
                             new DefaultURLResource("../dwr/interface/formatter_" + field.getName() + ".js"));
         field.getParentFrame().addHeader(header);
         CallableManager.getInstance().registerCallable("formatter_" + field.getName(), this);

@@ -59,11 +59,12 @@ public class InternalFrameCG extends AbstractComponentCG implements
             device.print(cssClass);
             device.print("\"");
         }
-        device.print(" border=\"0\"");
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.print("/>");
+        device.print(" alt=\"");
+        device.print(icon.getIconTitle());
+        device.print("\"/>");
     }
 
     protected void writeWindowIcon(Device device, SInternalFrame frame,

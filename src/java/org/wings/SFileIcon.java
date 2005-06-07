@@ -41,6 +41,12 @@ public class SFileIcon extends FileResource implements SIcon {
     private int height = -1;
 
     /**
+     * Title of icon, <code>""</code> if not set.
+     */
+    private String title = null;
+
+
+    /**
      * Create a new SFileIcon from the File. This constructor extracts
      * the extension from the file to be appended to the externalized resource
      * name.
@@ -104,6 +110,14 @@ public class SFileIcon extends FileResource implements SIcon {
 
     public void setIconHeight(int height) {
         this.height = height;
+    }
+
+    public String getIconTitle() {
+        return (title!=null) ? title : "";
+    }
+    
+    public void setIconTitle(String title) {
+        this.title = title;
     }
 }
 

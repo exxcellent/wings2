@@ -32,8 +32,20 @@ public class Script implements Renderable {
     protected String type = null;
     protected URLResource urlSource = null;
 
+    /**
+     * @deprecated language is deprecated, use Script(type, urlSource) instead
+     */
     public Script(String language, String type, URLResource urlSource) {
+        this(type,urlSource);
         this.language = language;
+    }
+
+    /**
+     * creates a script object which can be added to the frame
+     * @param type the type of the script
+     * @param urlSource the url of the script
+     */
+    public Script(String type, URLResource urlSource) {
         this.type = type;
         this.urlSource = urlSource;
     }
@@ -55,10 +67,11 @@ public class Script implements Renderable {
     public void write(Device d)
             throws IOException {
         d.print("<script");
-        if (language != null)
-            d.print(" language=\"" + language + "\"");
         if (type != null)
             d.print(" type=\"" + type + "\"");
+
+        if (language != null)
+            d.print(" language=\"" + language + "\"");
 
         if (urlSource != null && urlSource.getURL() != null) {
             d.print(" src=\"");

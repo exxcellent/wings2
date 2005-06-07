@@ -99,14 +99,15 @@ public class ProgressBarCG extends AbstractComponentCG implements
             device.print(";\"");
         }
         device.print(">");
+        final String completeWidth = String.valueOf(Math.round(width * component.getPercentComplete()));
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
-        device.print(" width=\"");
-        device.print(String.valueOf(Math.round(width * component.getPercentComplete())));
-        device.print("\"");
-        device.print(" height=\"");
-        device.print(String.valueOf(height));
-        device.print("\"></td>");
+        Utils.optAttribute(device, "width", completeWidth);
+        Utils.optAttribute(device, "height", String.valueOf(height));
+        device.print(" alt=\"");
+        device.print(BLIND_ICON.getIconTitle());
+        device.print("\"/>");
+        device.print("</td>");
         device.print("<td class=\"SLayout\"");
         if (component.getUnfilledColor() != null) {
             device.print(" style=\"background-color: ");
@@ -114,13 +115,15 @@ public class ProgressBarCG extends AbstractComponentCG implements
            device.print(";\"");
         }
         device.print(">");
+        final String incompleteWidth = String.valueOf(Math.round(width * (1 - component.getPercentComplete())));
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
-        device.print(" width=\"");
-        device.print(String.valueOf(Math.round(width * (1 - component.getPercentComplete()))));
-        device.print("\" height=\"");
-        device.print(String.valueOf(height));
-        device.print("\"></td></tr></table>");
+        Utils.optAttribute(device, "width", incompleteWidth);
+        Utils.optAttribute(device, "height", String.valueOf(height));
+        device.print(" alt=\"");
+        device.print(BLIND_ICON.getIconTitle());
+        device.print("\"/>");
+        device.print("</td></tr></table>");
         if (component.isBorderPainted()) {
             device.print("</div>");
         }

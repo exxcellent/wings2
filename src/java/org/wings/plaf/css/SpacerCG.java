@@ -33,12 +33,12 @@ public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.Spac
         final SSpacer component = (SSpacer) c;
         int height = component.getPreferredSize().getIntHeight();
         int width = component.getPreferredSize().getIntWidth();
-        device.print("<img src=\"");
-        device.print(BLIND_ICON.getURL());
-        device.print("\" height=\"");
-        device.print(height >= 0 ? height : 0);
-        device.print("\" width=\"");
-        device.print(width >= 0 ? width : 0);
+        device.print("<img");
+        Utils.optAttribute(device, "src", BLIND_ICON.getURL());
+        Utils.optAttribute(device, "width", width);
+        Utils.optAttribute(device, "height", height);
+        device.print(" alt=\"");
+        device.print(BLIND_ICON.getIconTitle());
         device.print("\"/>");
     }
 }

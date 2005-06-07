@@ -184,6 +184,12 @@ public class TabbedPaneCG extends AbstractComponentCG {
                         .print("\"");
             }
 
+            if (tooltip != null) {
+                device.print(" title=\"");
+                device.print(tooltip);
+                device.print("\"");
+            }
+
             device.print(" selected=\"").print(Boolean.toString(i == tabbedPane.getSelectedIndex())).print("\"");
             if (i == tabbedPane.getSelectedIndex() && tabbedPane.isFocusOwner())
                 Utils.optAttribute(device, "focus", tabbedPane.getName());
@@ -209,10 +215,11 @@ public class TabbedPaneCG extends AbstractComponentCG {
             if (icon != null && tabbedPane.getTabPlacement() != SConstants.RIGHT) {
                 device.print("<img");
                 Utils.optAttribute(device, "src", icon.getURL());
-                Utils.optAttribute(device, "alt", tooltip);
                 Utils.optAttribute(device, "width", icon.getIconWidth());
                 Utils.optAttribute(device, "height", icon.getIconHeight());
-                device.print(" style=\"margin-left:0.2em;\"/>");
+                device.print(" alt=\"");
+                device.print(icon.getIconTitle());
+                device.print("\" style=\"margin-left:0.2em;\"/>");
             }
             device.print("&nbsp;");
 
@@ -220,12 +227,13 @@ public class TabbedPaneCG extends AbstractComponentCG {
             device.print("&nbsp;");
 
             if (icon != null && tabbedPane.getTabPlacement() == SConstants.RIGHT) {
-                device.print("&nbsp;<img");
+                device.print("<img");
                 Utils.optAttribute(device, "src", icon.getURL());
-                Utils.optAttribute(device, "alt", tooltip);
                 Utils.optAttribute(device, "width", icon.getIconWidth());
                 Utils.optAttribute(device, "height", icon.getIconHeight());
-                device.print("/>");
+                device.print(" alt=\"");
+                device.print(icon.getIconTitle());
+                device.print("\" style=\"margin-right:0.2em;\"/>");
             }
 
             if (showAsFormComponent) {

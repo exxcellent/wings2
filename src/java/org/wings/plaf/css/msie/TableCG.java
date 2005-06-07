@@ -57,7 +57,7 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
         SFrame parentFrame = e.getParentFrame();
         ClasspathResource res = new ClasspathResource(FORMS_JS, "text/javascript");
         String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        parentFrame.addHeader(new Script("JavaScript", "text/javascript", new DefaultURLResource(jScriptUrl)));
+        parentFrame.addHeader(new Script("text/javascript", new DefaultURLResource(jScriptUrl)));
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {

@@ -27,12 +27,13 @@ public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
             throws IOException {
         SIcon icon = getIcon(menuItem);
         if (icon != null) {
-            device.print("<img border=\"0\" align=\"middle\" src=\"");
-            Utils.write(device, icon.getURL());
-            device.print("\"");
+            device.print("<img align=\"middle\"");
+            Utils.optAttribute(device, "src", icon.getURL());
             Utils.optAttribute(device, "width", icon.getIconWidth());
             Utils.optAttribute(device, "height", icon.getIconHeight());
-            device.print("/>");
+            device.print(" alt=\"");
+            device.print(icon.getIconTitle());
+            device.print("\"/>");
         }
         String text = menuItem.getText();
         if (text != null) {

@@ -55,16 +55,12 @@ public class LabelCG extends AbstractComponentCG implements
     }
 
     protected void writeIcon(Device device, SIcon icon) throws IOException {
-        device.print("<img src=\"")
-                .print(icon.getURL());
-        if (icon.getIconWidth() != -1) {
-            device.print("\" width=\"")
-                    .print(icon.getIconWidth());
-        }
-        if (icon.getIconHeight() != -1) {
-            device.print("\" height=\"")
-                    .print(icon.getIconHeight());
-        }
+        device.print("<img");
+        Utils.optAttribute(device, "src", icon.getURL());
+        Utils.optAttribute(device, "width", icon.getIconWidth());
+        Utils.optAttribute(device, "height", icon.getIconHeight());
+        device.print(" alt=\"");
+        device.print(icon.getIconTitle());
         device.print("\"/>");
     }
 }

@@ -237,7 +237,9 @@ public class ScrollBarCG
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.print("/>");
+        device.print(" alt=\"");
+        device.print(icon.getIconTitle());
+        device.print("\"/>");
 
         if (showAsFormComponent)
             device.print("</button>\n");

@@ -75,23 +75,23 @@ public class TreeCG extends AbstractComponentCG implements
 
         device.print("<img");
         Utils.optAttribute(device, "src", icon.getURL());
-        Utils.optAttribute(device, "width", width);
-        Utils.optAttribute(device, "height", height);
-        device.print("/>");
+        Utils.optAttribute(device, "width", icon.getIconWidth());
+        Utils.optAttribute(device, "height", icon.getIconHeight());
+        device.print(" alt=\"");
+        device.print(icon.getIconTitle());
+        device.print("\"/>");
     }
 
     private void writeIcon(Device device, SIcon icon, boolean nullBorder) throws IOException {
         if (icon == null) return;
 
         device.print("<img");
-        if (nullBorder) {
-            device.print(" border=\"0\"");
-        }
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-
-        device.print("/>");
+        device.print(" alt=\"");
+        device.print(icon.getIconTitle());
+        device.print("\"/>");
     }
 
     private void writeTreeNode(STree component, Device device, int row, int depth)

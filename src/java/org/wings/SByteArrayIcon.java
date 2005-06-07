@@ -37,6 +37,12 @@ public class SByteArrayIcon extends Resource implements SIcon {
     protected int width = -1;
     protected int height = -1;
 
+    /**
+     * Title of icon, <code>""</code> if not set.
+     */
+    private String title = null;
+
+
     public SByteArrayIcon(byte[] pIconData, String pExtension, String pMimeType) {
         setIconData(pIconData, pExtension, pMimeType);
     }
@@ -159,5 +165,13 @@ public class SByteArrayIcon extends Resource implements SIcon {
 
     public ImageInfo getImageInfo() {
         return imageInfo;
+    }
+
+    public String getIconTitle() {
+        return (title!=null) ? title : "";
+    }
+    
+    public void setIconTitle(String title) {
+        this.title = title;
     }
 }

@@ -43,7 +43,9 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.print("/>");
+        device.print(" alt=\"");
+        device.print(icon.getIconTitle());
+        device.print("\"/>");
     }
 
     private void writeWindowIcon(Device device, SDialog dialog,
