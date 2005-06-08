@@ -5,13 +5,13 @@
   <title>wingS User Guide</title>
 
   <bookinfo>
-    <date>May 13, 2005</date>
+    <date>June 8, 2005</date>
 
     <author>
       <surname>wingS Project Team</surname>
     </author>
 
-    <subtitle>How to write a wingS application and become airborne.</subtitle>
+    <subtitle>Writing and understanding wingS applications.</subtitle>
 
     <copyright>
       <year>2005</year>
@@ -80,36 +80,70 @@
     </section>
   </preface>
 
-  <chapter>
+  <chapter status="draft">
     <title>The Basics</title>
 
     <section>
       <title>The Swing in wingS</title>
 
-      <para>TODO</para>
+      <para>The Java Foundation Classes (JFC) and its Swing API are known by
+      nearly every Java developer. Its inherent MVC2 model is solid, yet
+      flexible and fairly easy to learn. These reasons led to the idea to
+      create an API with the Swing-feel, but generating and handling web
+      applications. This idea is the underlying theme of wingS.</para>
 
-      <section>
-        <title>MVC - Events and Listeners</title>
-
-        <para>TODO</para>
-      </section>
+      <para>So where is the Swing in wingS?</para>
 
       <section>
         <title>Widgets</title>
 
-        <para>TODO</para>
+        <para>Suppose you want to display a table. Having Swing in mind, you'd
+        implement an <code>AbstractTableModel</code> and associate it with a
+        <code>JTree</code> instance which you placed in a JFrame. Now with
+        wingS you do just the same, except you replace J's with S's. That's
+        it! Apart from this prefix character of widget names the code is
+        identical.</para>
+
+        <para>For nearly every J&lt;xxx&gt; component of Swing you find a
+        S&lt;xxx&gt; counterpart in wingS with similar or identical
+        behavior.</para>
+      </section>
+
+      <section>
+        <title>MVC - Events and Listeners</title>
+
+        <para>Futhermore, suppose you want to react on mouse clicks (selection
+        events) in your table. Again, doing it the Swing way, you'd provide a
+        <code>ListSelectionModel</code> implementaiton and register a
+        <code>ListSelectionListener</code>. The exact same code will work in
+        wingS, no difference to Swing.</para>
+
+        <para>So wingS relies on the model, listener and event infrastructure
+        of Swing, since there is no need to reinvent the wheel.</para>
       </section>
     </section>
 
     <section>
       <title>Web-related Concepts</title>
 
-      <para>TODO</para>
+      <para>With the Swing-iness in wingS, it is easy to forget that you do
+      live in a web application context.</para>
 
       <section>
         <title>Servlet API</title>
 
-        <para>TODO</para>
+        <para>Despite of all of wingS's magic, in the end a wingS applications
+        is nothing else but a servlet. Quite some servlet though.</para>
+
+        <para>This means you will need a servlet container, such as Tomcat,
+        Jetty, or JRun to execute wingS applications.</para>
+
+        <para>During application development you typically don't notice the
+        servlet environment your application wil run in. In fact, it is only
+        in the web.xml (<link linkend="web_xml_file">see</link>) that you
+        directly touch the servlet configuration. It proves useful to be aware
+        of it's underlying servlet foundation, as you will se in later
+        chapters.</para>
       </section>
 
       <section>
@@ -126,25 +160,25 @@
     </section>
   </chapter>
 
-  <chapter>
+  <chapter status="draft">
     <title>The 3-Step Quick Start</title>
 
     <para>TODO</para>
 
     <section>
-      <title>Writing a wingS Frame</title>
+      <title>Get ready - Writing a wingS Frame</title>
 
       <para>TODO</para>
     </section>
 
     <section>
-      <title>Preparing the web.xml File</title>
+      <title id="web_xml_file">Set - Preparing the web.xml File</title>
 
       <para>TODO</para>
     </section>
 
     <section>
-      <title>Deployment in Servlet Container and Go!</title>
+      <title>Go! - Deployment in Servlet Container</title>
 
       <para>TODO</para>
     </section>
@@ -209,9 +243,7 @@ STextField text = new STextField("initial value");
 form.add(text, "W2");</programlisting></para>
 
         <para>The text field variable might be made a class member variable so
-        that you can access it later to retrieve its contents:</para>
-
-        <programlisting>String dataValue = text.getText();</programlisting>
+        that you can access it later to retrieve its contents:<programlisting>String dataValue = text.getText();</programlisting></para>
 
         <para>Alternatively you might declare it as a local final variable,
         and access it from within a local closure callback, reacting to user
@@ -226,34 +258,28 @@ form.add(text, "W2");</programlisting></para>
         a push button and register a callback to receive notification when the
         button is pushed. Note that the button is declared final so that we
         can access it within the callback, alternatively we could have made it
-        a member variable</para>
-
-        <programlisting>final SButton submit = new SButton("Search");
+        a member variable<programlisting>final SButton submit = new SButton("Search");
 form.add(submit, "W3");
 ActionListener al = new ActionListener() {
   public void actionPerformed(ActionEvent e) { ... }
 };
-submit.addActionListener(al);</programlisting>
+submit.addActionListener(al);</programlisting></para>
 
         <para>In the above example the callback only receives events when the
         button is pushed. An alternative is to make the form the listener,
         since if the form is to have a "default" button (when the user hits
         the enter key) then it is the form which will be notified. In this
         case you would add the listener callback to the form instead of the
-        button:</para>
-
-        <programlisting>form.addActionListener(al);</programlisting>
+        button:<programlisting>form.addActionListener(al);</programlisting></para>
 
         <para>The ActionEvent.getSource() will determine whether the event
         comes from the button or the form so you can use the following tests
-        in your callback:</para>
-
-        <programlisting>public void actionPerformed(ActionEvent e) {
+        in your callback:<programlisting>public void actionPerformed(ActionEvent e) {
   if(submit == e.getSource())
   // submit button pushed
   if(form == e.getSource())
   // user hit enter key
-}</programlisting>
+}</programlisting></para>
 
         <para>You can extract data from the text field as shown above with a
         call to STextField.getText().</para>
@@ -279,22 +305,18 @@ submit.addActionListener(al);</programlisting>
         component's styles programmatically. An example of this is in the
         wingset demo. In this case the new styles are held in a global, static
         stylesheet file. Hence the stylesheet is added to the main frame to
-        ensure it can apply to all components.</para>
-
-        <programlisting>frame = new SFrame("WingSet");
+        ensure it can apply to all components.<programlisting>frame = new SFrame("WingSet");
 frame.addHeader(new Link("stylesheet", 
                          null,
                          "text/css",
                          null, 
                          new ClasspathResource("/wingset/css/myapp.css",
-                                               "text/css")));</programlisting>
+                                               "text/css")));</programlisting></para>
 
         <para>The stylesheet contains various customised styles, in this case
-        a custom table header:</para>
-
-        <programlisting>.table_hdr  { 
+        a custom table header:<programlisting>.table_hdr  { 
   background-color: #FFCC99 
-}</programlisting>
+}</programlisting></para>
 
         <para>By using a call to
         <code>STable.setHeaderStyle("table_hdr")</code> the default table
@@ -316,17 +338,15 @@ frame.addHeader(new Link("stylesheet",
       attributes.</para>
 
       <para>To make a resource (any Java object) available across servlets use
-      the setAttribute() method:</para>
+      the setAttribute() method:<programlisting>ServletContext context = SessionManager.getSession().getServletContext();
+context.setAttribute("app.resource", new SharedResource());</programlisting></para>
 
-      <para><programlisting>ServletContext context = SessionManager.getSession().getServletContext();
-context.setAttribute("app.resource", new SharedResource());</programlisting>Within
-      a second servlet use getAttribute() to retrieve a reference to the
-      resource:</para>
+      <para>Within a second servlet use getAttribute() to retrieve a reference
+      to the resource:<programlisting>ServletContext context = SessionManager.getSession().getServletContext();
+SharedResource resource = context.getAttribute("app.resource");</programlisting></para>
 
-      <para><programlisting>ServletContext context = SessionManager.getSession().getServletContext();
-SharedResource resource = context.getAttribute("app.resource");</programlisting>Attention
-      has to be paid to the attribute's namespace, as it might interfer with
-      other servlets. Prefixing the package name is an advisable
+      <para>Attention has to be paid to the attribute's namespace, as it might
+      interfer with other servlets. Prefixing the package name is an advisable
       convention.</para>
 
       <para>The approach presented above particularily makes sense if you have
@@ -365,16 +385,12 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
           <para>explain JavaScriptEvents, JavaScriptListener and how they can
           be added to components</para>
         </listitem>
-      </itemizedlist>
 
-      <itemizedlist>
         <listitem>
           <para>explain a simple application with a JavaScript Listener doing
           just a submit().</para>
         </listitem>
-      </itemizedlist>
 
-      <itemizedlist>
         <listitem>
           <para>explain JavaScript listeners, that reference other components
           like in this example from wingset/JavaScriptListenerExample</para>
@@ -387,19 +403,28 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
 STextField secondField  = new STextField();
 STextField sumField  = new STextField();
 
- /*
-  * Add the client side script listener. The variables
-  * in curly braces are replaced by the actual IDs of the components.
-  */
+  /*
+   * Add the client side script listener. The variables
+   * in curly braces are replaced by the actual IDs of the components.
+   */
+  private final static String JS_ADD_SCRIPT =
+            "document.getElementById('{2}').
+              getElementsByTagName('input')[0].value" +
+            " = ((1.0 * document.getElementById('{0}').
+              getElementsByTagName('input')[0].value)" +
+            " + (1.0 * document.getElementById('{1}').
+              getElementsByTagName('input')[0].value));"; 
   SComponent[] jsParams = new SComponent[]{firstField, secondField,
                                            sumField};
+  
   JavaScriptListener jsListener;
   jsListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE,
                                       JS_ADD_SCRIPT,
                                       jsParams);
 
   firstField.addScriptListener(jsListener);
-  secondField.addScriptListener(jsListener);</programlisting>
+  secondField.addScriptListener(jsListener);
+  sumField.addScriptListener(jsListener);</programlisting>
     </sect1>
 
     <sect1>
@@ -606,53 +631,161 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
     </sect1>
 
     <sect1>
+      <title>Session Recording and Playback</title>
+
+      <sect2>
+        <title>Overview</title>
+
+        <para>Session recording allows you to record a sequence of events by
+        simply clicking through your web application. The recorded data is
+        dumped into a java source file which - after compilation - can be used
+        to replay the recorded events at a selected pace.</para>
+      </sect2>
+
+      <sect2>
+        <title>Prerequisites</title>
+
+        <para>The code should be generated with the components' names (if
+        available) instead of the generated IDs. This makes it easier to
+        identify events in the recording:<programlisting>&lt;init-param&gt;
+  &lt;param-name&gt;wings.event.usenames&lt;/param-name&gt;
+  &lt;param-value&gt;true&lt;/param-value&gt;
+&lt;/init-param&gt;
+&lt;init-param&gt;
+  &lt;param-name&gt;wings.servlet.lookupname&lt;/param-name&gt;
+  &lt;param-value&gt;Recording&lt;/param-value&gt;
+&lt;/init-param&gt;</programlisting></para>
+
+        <para>If a component has a name (name property of SComponent), the
+        component receives events for this name as well (so-called named
+        events). Therefore you must set an application-wide unique name for
+        every component you want to click or modify.<programlisting>SButton button = new SButton("click");
+button.setName("UniqueName1");</programlisting></para>
+      </sect2>
+
+      <sect2>
+        <title>Generation of the session playback java source file</title>
+
+        <para>For session recording, you can use any available test tool
+        (jmeter, whatever ...). Alternatively, there is a servlet filter
+        (org.wings.recorder.Recorder), that can be used to generate java
+        sources for a client, that performes the recorded
+        requests:<programlisting>&lt;filter&gt;
+  &lt;filter-name&gt;Recorder&lt;/filter-name&gt;
+  &lt;filter-class&gt;org.wings.recorder.Recorder&lt;/filter-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;wings.servlet.recorder.file&lt;/param-name&gt;
+    &lt;param-value&gt;Recording&lt;/param-value&gt;
+  &lt;/init-param&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;wings.servlet.lookupname&lt;/param-name&gt;
+    &lt;param-value&gt;Recording&lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+  &lt;filter-name&gt;Recorder&lt;/filter-name&gt;
+  &lt;servlet-name&gt;WingSet&lt;/servlet-name&gt;
+&lt;/filter-mapping&gt;</programlisting></para>
+
+        <para>The filter appends a control panel at the end of the generated
+        page. The text field sets the name of the recording. It will be used
+        as the classname and filename of the generated source. The "start"
+        -button starts the recording. The "stop"-button stops the recording
+        and the sources will be generated. The java source file will be placed
+        in the current directory of the servlet engine / application server
+        jvm. Copy it to the wings main directory.</para>
+      </sect2>
+
+      <sect2>
+        <title>Playback</title>
+
+        <para>The playback tool (replay.sh) compiles the source and runs it in
+        single-client mode (regression test / functional test) or with n
+        clients in parallel (load test):<programlisting>replay.sh -d 1.0 http://localhost:8080/wingset/WingSet Recording 20</programlisting></para>
+
+        <para>The playback tool supports slow/fast motion, load ramp, i
+        iterations, n parallel clients.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
       <title>Best Practices</title>
 
-      <para>Cherish the following principles, and you will lead a happier
-      wingS developer's life.</para>
+      <para>Cherish the following principles and wingS projects will be a
+      smooth and enjoyable ride.</para>
 
       <orderedlist>
         <listitem>
           <para>STemplateLayout - Understand how this layout manager works.
           The minimal overhead of using it pays off quickly. Your web designer
           will be able to style your application without touching your Java
-          code. Read <xref linkend="STemplateLayout" /> for details. </para>
+          code. Read <xref linkend="STemplateLayout" /> for details.</para>
         </listitem>
 
         <listitem>
-          <para>SRootLayout - If you set a SFrame's layout to a custom
-          STemplateLayout containing <code>&lt;object
-          name="content"&gt;&lt;/object&gt;</code>, you can define static
-          XHTML components like a border or title appearing on every page, no
-          matter what the content will be like.</para>
+          <para>SRootLayout - Set a <code>SFrame</code>'s layout to a custom
+          <code>SRootLayout</code> referencing a template file. The source
+          code looks like this. <programlisting>URL url = 
+  Thread.currentThread().getContextClassLoader().getResource("layout.thtml");
+frame.setLayout(new SRootLayout(url));</programlisting></para>
+
+          <para>Insure that the template contains the element
+          <code>object</code> with attribute <code>content</code>. This
+          element will be replaced with the frame's content. <programlisting>&lt;div id="title"&gt;Application Title&lt;/div&gt;
+&lt;hr /&gt;
+<emphasis role="bold">&lt;object name="content"&gt;&lt;/object&gt;</emphasis>
+&lt;hr /&gt;
+&lt;div id="footer"&gt;company, copyright, license notice&lt;/div&gt;</programlisting>This
+          is a convenient way to define XHTML like a border or title appearing
+          on every page, no matter what the content will be like.</para>
         </listitem>
 
         <listitem>
           <para>The total sum of testing cycles quickly justifies the
           investment of learning how to efficiently deploy a web application
-          into the servlet container. If Jakarta Tomcat is your choice, learn
-          how to use the so-called "manager". With its predefined ant tasks
-          you can install and remove web applications in the wink of an eye
-          without the expensive stop and start of Tomcat and without writing
-          it into the webapps folder first.</para>
+          into the servlet container.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>If Jakarta Tomcat is your choice, learn how to use the
+              so-called "manager". With its predefined ant tasks you can
+              install and remove web applications in the wink of an eye
+              without the expensive stop and start of the complete Tomcat and
+              without writing it into the webapps folder first.</para>
+            </listitem>
+
+            <listitem>
+              <para>Alternatively, think about just deploying the context.xml
+              to webapps folder and pointing its base to your project's build
+              folder which then, of course, has to obey the webapps folder
+              rules.</para>
+            </listitem>
+          </itemizedlist>
         </listitem>
 
         <listitem>
-          <para>Beginning with Tomcat 5.0 a new default session manager was
-          introduced. To quiet it's exceptions use the following section in
-          your web applications context definition.</para>
+          <para>Beginning with Tomcat version 5.0 a new default session manager was
+          introduced, called SimpleTcpReplicationManager (a subclass of
+          StandardManager). It tries loading the persistence storage on
+          application startup and produces a warning-level exception looking
+          like this:<programlisting>SEVERE: Exception loading sessions from persistent storage
+java.io.WriteAbortedException: writing aborted;
+java.io.NotSerializableException:
+org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
+          non-clustered session manager use the following section in your web
+          application's context definition in /META-INF/context.xml.</para>
 
-          <programlisting>&lt;Context&gt;
-   &lt;Manager    
+          <programlisting>&lt;context&gt;
+   &lt;manager    
        className="org.apache.catalina.session.StandardManager"
         pathname=""&gt;
-   &lt;/Manager&gt;
-&lt;/Context&gt;</programlisting>
+   &lt;/manager&gt;
+&lt;/context&gt;</programlisting>
         </listitem>
 
         <listitem>
-          <para>Beware the consequences of using a servlet container. Multiple
-          requests will traverse static methods in parallel!</para>
+          <para>Beware of the consequences of using a servlet container.
+          Multiple requests can traverse static methods in parallel!</para>
         </listitem>
 
         <listitem>
@@ -664,7 +797,7 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
 
         <listitem>
           <para>TODO: Explain loading as resource and benefit of changing the
-          file during runtime.</para>
+          file at runtime.</para>
         </listitem>
       </orderedlist>
     </sect1>
@@ -672,6 +805,9 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
 
   <chapter>
     <title id="chapInsidewingS">Inside wingS</title>
+
+    <para>Developers interested in the architecture of wingS will find this
+    chapter useful as it helps unterstanding the source code.</para>
 
     <section>
       <title>Session Management</title>
