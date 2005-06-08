@@ -250,7 +250,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         Utils.write(device, language);
         device.print("\" lang=\"");
         Utils.write(device, language);
-        device.print("\" />\n");
+        device.print("\">\n");
 
         /* Insert version and compile time.
          * Since the Version Class is generated on compile time, build errors
