@@ -64,7 +64,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             return;
         writePrefix(device, component);
         writeContent(device, component);
-        writePostfix(device, component);
+        writeSuffix(device, component);
     }
     
     
@@ -72,7 +72,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writePrefix(device, component);
     }
     
-    protected void writePostfix(Device device, SComponent component) throws IOException {
+    protected void writeSuffix(Device device, SComponent component) throws IOException {
         SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writeSuffix(device, component);
     }
 
