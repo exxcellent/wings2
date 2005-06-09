@@ -16,6 +16,7 @@ package org.wings.tree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -74,7 +75,7 @@ public class SDefaultTreeSelectionModel
 
 
     /**
-     * Unique shared instance.
+     * Unique shared instance. No selection possible.
      */
     public static final SDefaultTreeSelectionModel NO_SELECTION_MODEL =
             new SDefaultTreeSelectionModel() {
@@ -99,8 +100,36 @@ public class SDefaultTreeSelectionModel
                 // don't fire events, because there should be not state change
                 protected void fireValueChanged(TreeSelectionEvent e) {}
 
-            };
+    };
 
+    /**
+     * Unique shared instance. Single selection possible.
+     */
+    public static final SDefaultTreeSelectionModel SINGLE_SELECTION_MODEL =
+            new SDefaultTreeSelectionModel() {
+                /**
+                 * An implementation that selects only one, the first
+                 */
+                public void setSelectionPaths(TreePath[] pPaths) {
+                    if (pPaths != null && pPaths.length > 0) {
+                        super.setSelectionPaths(new TreePath[] {pPaths[0]});
+                    }
+                }
+
+                /**
+                 * An implementation that selects only one, the first
+                 */
+                public void addSelectionPaths(TreePath[] paths) {
+                    setSelectionPaths(paths);
+                }
+    };
+
+    /**
+     * Unique shared instance. Multiple selection possible.
+     */
+    public static final SDefaultTreeSelectionModel MULTIPLE_SELECTION_MODEL =
+            new SDefaultTreeSelectionModel() {};
+            
 }
 
 

@@ -14,6 +14,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.util.PropertyAccessor;
 
 import javax.swing.tree.DefaultTreeModel;
@@ -64,12 +65,18 @@ public class TreeExample
             final SComboBox selectionMode = new SComboBox(SELECTION_MODES);
             selectionMode.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
-                    if ("no".equals(selectionMode.getSelectedItem()))
+                    if ("no".equals(selectionMode.getSelectedItem())) {
                         tree.getSelectionModel().setSelectionMode(STree.NO_SELECTION);
-                    else if ("single".equals(selectionMode.getSelectedItem()))
+                        tree.setSelectionModel(SDefaultTreeSelectionModel.NO_SELECTION_MODEL);
+                    }
+                    else if ("single".equals(selectionMode.getSelectedItem())) {
                         tree.getSelectionModel().setSelectionMode(STree.SINGLE_SELECTION);
-                    else if ("multiple".equals(selectionMode.getSelectedItem()))
+                        tree.setSelectionModel(SDefaultTreeSelectionModel.SINGLE_SELECTION_MODEL);
+                    }
+                    else if ("multiple".equals(selectionMode.getSelectedItem())) {
                         tree.getSelectionModel().setSelectionMode(STree.MULTIPLE_SELECTION);
+                        tree.setSelectionModel(SDefaultTreeSelectionModel.MULTIPLE_SELECTION_MODEL);
+                    }
                 }
             });
 
