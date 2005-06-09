@@ -51,7 +51,7 @@ public class TreeExample
     }
 
     class TreeControls extends ComponentControls {
-        private final String[] SELECTION_MODES = new String[]{"no", "single", "multiple"};
+        private final String[] SELECTION_MODES = new String[]{"single", "contiguous", "discontiguous"};
         private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
 
         public TreeControls() {
@@ -63,19 +63,18 @@ public class TreeExample
             });
 
             final SComboBox selectionMode = new SComboBox(SELECTION_MODES);
+            //sync selectionMode with tree
+            tree.getSelectionModel().setSelectionMode(STree.SINGLE_TREE_SELECTION);
             selectionMode.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
-                    if ("no".equals(selectionMode.getSelectedItem())) {
-                        tree.getSelectionModel().setSelectionMode(STree.NO_SELECTION);
-                        tree.setSelectionModel(SDefaultTreeSelectionModel.NO_SELECTION_MODEL);
+                    if (SELECTION_MODES[0].equals(selectionMode.getSelectedItem())) {
+                        tree.getSelectionModel().setSelectionMode(STree.SINGLE_TREE_SELECTION);
                     }
-                    else if ("single".equals(selectionMode.getSelectedItem())) {
-                        tree.getSelectionModel().setSelectionMode(STree.SINGLE_SELECTION);
-                        tree.setSelectionModel(SDefaultTreeSelectionModel.SINGLE_SELECTION_MODEL);
+                    else if (SELECTION_MODES[1].equals(selectionMode.getSelectedItem())) {
+                        tree.getSelectionModel().setSelectionMode(STree.CONTIGUOUS_TREE_SELECTION);
                     }
-                    else if ("multiple".equals(selectionMode.getSelectedItem())) {
-                        tree.getSelectionModel().setSelectionMode(STree.MULTIPLE_SELECTION);
-                        tree.setSelectionModel(SDefaultTreeSelectionModel.MULTIPLE_SELECTION_MODEL);
+                    else if (SELECTION_MODES[2].equals(selectionMode.getSelectedItem())) {
+                        tree.getSelectionModel().setSelectionMode(STree.DISCONTIGUOUS_TREE_SELECTION);
                     }
                 }
             });

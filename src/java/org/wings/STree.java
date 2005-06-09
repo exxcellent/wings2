@@ -31,29 +31,25 @@ import java.util.ArrayList;
  */
 public class STree extends SComponent implements LowLevelEventListener, Scrollable {
     /**
-     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     * Tree selection model.
+     * @see STreeSelectionModel#setSelectionMode(int)
+     * @see TreeSelectionModel#SINGLE_TREE_SELECTION
      */
-    public static final int NO_SELECTION = SListSelectionModel.NO_SELECTION;
+    public static final int SINGLE_TREE_SELECTION = TreeSelectionModel.SINGLE_TREE_SELECTION;
 
     /**
-     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     * Tree selection model.
+     * @see STreeSelectionModel#setSelectionMode(int)
+     * @see TreeSelectionModel#CONTIGUOUS_TREE_SELECTION
      */
-    public static final int SINGLE_SELECTION = SListSelectionModel.SINGLE_SELECTION;
-
+    public static final int CONTIGUOUS_TREE_SELECTION = TreeSelectionModel.CONTIGUOUS_TREE_SELECTION;
+    
     /**
-     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
+     * Tree selection model.
+     * @see STreeSelectionModel#setSelectionMode(int)
+     * @see TreeSelectionModel#DISCONTIGUOUS_TREE_SELECTION
      */
-    public static final int SINGLE_INTERVAL_SELECTION = SListSelectionModel.SINGLE_INTERVAL_SELECTION;
-
-    /**
-     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
-     */
-    public static final int MULTIPLE_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-
-    /**
-     * Tree selection model. See {@link STreeSelectionModel#setSelectionMode(int)}
-     */
-    public static final int MULTIPLE_INTERVAL_SELECTION = SListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+    public static final int DISCONTIGUOUS_TREE_SELECTION = TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION;
 
     private final transient static Log log = LogFactory.getLog(STree.class);
 

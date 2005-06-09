@@ -102,34 +102,6 @@ public class SDefaultTreeSelectionModel
 
     };
 
-    /**
-     * Unique shared instance. Single selection possible.
-     */
-    public static final SDefaultTreeSelectionModel SINGLE_SELECTION_MODEL =
-            new SDefaultTreeSelectionModel() {
-                /**
-                 * An implementation that selects only one, the first
-                 */
-                public void setSelectionPaths(TreePath[] pPaths) {
-                    if (pPaths != null && pPaths.length > 0) {
-                        super.setSelectionPaths(new TreePath[] {pPaths[0]});
-                    }
-                }
-
-                /**
-                 * An implementation that selects only one, the first
-                 */
-                public void addSelectionPaths(TreePath[] paths) {
-                    setSelectionPaths(paths);
-                }
-    };
-
-    /**
-     * Unique shared instance. Multiple selection possible.
-     */
-    public static final SDefaultTreeSelectionModel MULTIPLE_SELECTION_MODEL =
-            new SDefaultTreeSelectionModel() {};
-            
 }
 
 
