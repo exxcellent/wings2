@@ -121,10 +121,13 @@ ul.STree li.selected table tr td a table {
 
 ul.STree{
 	list-style: none;
+	margin-left:0px;
+	padding-left:0px;
 }
+
 ul.STree li {
-	padding-left: -20px;
-	margin-left: -20px;
+	padding-left: 0px;
+	margin-left: 0px;
 }
 ul.STree li * {
 	white-space: nowrap;

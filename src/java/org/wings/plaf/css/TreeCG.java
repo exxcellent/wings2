@@ -316,7 +316,10 @@ public class TreeCG extends AbstractComponentCG implements
         if (!isLastChild(component.getModel(), path, path.getPathCount()-1)) {
             device.print(" class=\"SSubTree\"");
         }
-        device.print("><ul class=\"STree\">\n");
+        device.print("><ul class=\"STree\"");
+        device.print(" style=\"margin-left:");
+        device.print(component.getNodeIndentDepth());
+        device.print("px;\">\n");
     }
 
 

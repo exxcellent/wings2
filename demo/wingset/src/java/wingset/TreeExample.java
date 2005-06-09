@@ -37,9 +37,8 @@ public class TreeExample
     private TreeControls controls;
 
     public SComponent createExample() {
-        controls = new TreeControls();
-
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
+        controls = new TreeControls();
         tree.setName("tree");
         tree.setShowAsFormComponent(false);
         controls.addSizable(tree);
@@ -52,7 +51,7 @@ public class TreeExample
 
     class TreeControls extends ComponentControls {
         private final String[] SELECTION_MODES = new String[]{"no", "single", "multiple"};
-        private final Integer[] WIDTHS = new Integer[]{new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
+        private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
 
         public TreeControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
@@ -75,6 +74,10 @@ public class TreeExample
             });
 
             final SComboBox indentationWidth = new SComboBox(WIDTHS);
+            // sync indentation width of tree with controller
+            indentationWidth.setSelectedIndex(3); // set to 24px indent
+            tree.setNodeIndentDepth(WIDTHS[3].intValue());
+            // now add the listener
             indentationWidth.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     tree.setNodeIndentDepth(((Integer) indentationWidth.getSelectedItem()).intValue());

@@ -57,7 +57,11 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
 
     private final transient static Log log = LogFactory.getLog(STree.class);
 
-    private int nodeIndentDepth;
+    
+    /**
+     * Indent depth in pixels
+     */
+    private int nodeIndentDepth = 20;
 
     /**
      * Creates and returns a sample TreeModel. Used primarily for beanbuilders.
@@ -889,7 +893,15 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
         getSelectionModel().setDelayEvents(false);
     }
 
+    /**
+     * Set the indent depth in pixel between two nodes of a different level.
+     * Note: only positive values apply, negative values are cut off at 0.
+     * @param depth the depth to set
+     */
     public void setNodeIndentDepth(int depth) {
+        if (depth < 0) {
+            depth = 0;
+        }
         nodeIndentDepth = depth;
     }
 
