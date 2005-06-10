@@ -100,8 +100,8 @@ public class ScrollBarCG
         boolean backEnabled = value > minimum;
         boolean forwardEnabled = value < maximum - extent;
 
-        d.print("<table orientation=\"vertical\" class=\"SLayout\"><tbody>\n")
-                .print("<tr height=\"1%\">\n")
+        d.print("<table orientation=\"vertical\" class=\"SLayout\" height=\"100%\"><tbody>\n")
+                .print("<tr>\n")
                 .print("<td height=\"1%\" class=\"SLayout\"><table class=\"SLayout\" area=\"buttons\"><tbody>\n");
 
         d.print("<tr><td class=\"SLayout\">");
@@ -116,7 +116,7 @@ public class ScrollBarCG
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
-                .print("<tr height=\"100%\">\n")
+                .print("<tr>\n")
                 .print("<td class=\"SLayout\"><table area=\"slider\" height=\"100%\" class=\"SLayout\"><tbody>\n");
 
         int range = maximum - minimum;
@@ -127,7 +127,7 @@ public class ScrollBarCG
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
-                .print("<tr height=\"1%\">\n")
+                .print("<tr>\n")
                 .print("<td height=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody>\n");
 
         d.print("<tr><td class=\"SLayout\">");

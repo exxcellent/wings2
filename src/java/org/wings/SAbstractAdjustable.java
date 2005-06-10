@@ -25,9 +25,7 @@ import java.io.Serializable;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public abstract class SAbstractAdjustable
-        extends SComponent
-        implements Adjustable, LowLevelEventListener {
+public abstract class SAbstractAdjustable extends SComponent implements Adjustable, LowLevelEventListener {
     public static final int UNIT = 0;
 
     public static final int BLOCK = 1;
@@ -121,10 +119,6 @@ public abstract class SAbstractAdjustable
     /**
      * Sets the model that handles the scrollbar's four
      * fundamental properties: minimum, maximum, value, extent.
-     *
-     * @beaninfo bound: true
-     * expert: true
-     * description: The scrollbar's BoundedRangeModel.
      * @see #getModel
      */
     public void setModel(SBoundedRangeModel newModel) {
@@ -166,9 +160,6 @@ public abstract class SAbstractAdjustable
     /**
      * Sets the unitIncrement property.
      *
-     * @beaninfo preferred: true
-     * bound: true
-     * description: The scrollbar's unit increment.
      * @see #getUnitIncrement
      */
     public void setUnitIncrement(int unitIncrement) {
@@ -202,10 +193,7 @@ public abstract class SAbstractAdjustable
 
     /**
      * Sets the blockIncrement property.
-     *
-     * @beaninfo preferred: true
-     * bound: true
-     * description: The scrollbar's block increment.
+     * The scrollbar's block increment.
      * @see #getBlockIncrement()
      */
     public void setBlockIncrement(int blockIncrement) {
@@ -251,9 +239,6 @@ public abstract class SAbstractAdjustable
      * Sets the scrollbar's value.  This method just forwards the value
      * to the model.
      *
-     * @beaninfo preferred: true
-     * bound: true
-     * description: The scrollbar's current value.
      * @see #getValue
      * @see BoundedRangeModel#setValue
      */
@@ -285,10 +270,9 @@ public abstract class SAbstractAdjustable
 
 
     /**
-     * Set the model's extent property.
+     * Set the model's extent property:
+     * The amount of the view that is currently visible.
      *
-     * @beaninfo preferred: true
-     * description: The amount of the view that is currently visible.
      * @see #getVisibleAmount
      * @see BoundedRangeModel#setExtent
      */
@@ -310,10 +294,9 @@ public abstract class SAbstractAdjustable
 
 
     /**
-     * Sets the model's minimum property.
+     * Sets the scrollbar's minimum value..
      *
-     * @beaninfo preferred: true
-     * description: The scrollbar's minimum value.
+     *
      * @see #getMinimum
      * @see BoundedRangeModel#setMinimum
      */
@@ -335,10 +318,8 @@ public abstract class SAbstractAdjustable
 
     /**
      * Sets the model's maximum property.  Note that the scrollbar's value
-     * can only be set to maximum - extent.
+     * can only be set to maximum - extent. The scrollbar's maximum value.
      *
-     * @beaninfo preferred: true
-     * description: The scrollbar's maximum value.
      * @see #getMaximum
      * @see BoundedRangeModel#setMaximum
      */
@@ -367,8 +348,12 @@ public abstract class SAbstractAdjustable
     public void setOrientation(int orientation) {
         switch (orientation) {
             case SConstants.VERTICAL:
+                this.orientation = orientation;
+                setPreferredSize(new SDimension(null, "100%"));
+                break;
             case SConstants.HORIZONTAL:
                 this.orientation = orientation;
+                setPreferredSize(new SDimension("100%", null));
                 break;
             default:
                 throw new IllegalArgumentException("orientation must be one of: VERTICAL, HORIZONTAL");
@@ -392,11 +377,8 @@ public abstract class SAbstractAdjustable
      * feel implementations should set this property to true when
      * a knob drag begins, and to false when the drag ends.  The
      * scrollbar model will not generate ChangeEvents while
-     * valueIsAdjusting is true.
+     * valueIsAdjusting is true. True if the scrollbar thumb is being dragged.
      *
-     * @beaninfo expert: true
-     * bound: true
-     * description: True if the scrollbar thumb is being dragged.
      * @see #getValueIsAdjusting
      * @see BoundedRangeModel#setValueIsAdjusting
      */
