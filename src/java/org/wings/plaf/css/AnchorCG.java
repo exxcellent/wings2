@@ -23,14 +23,15 @@ import org.wings.io.Device;
 public class AnchorCG
         extends AbstractComponentCG
         implements org.wings.plaf.AnchorCG {
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.AbstractComponentCG#writeContent(org.wings.io.Device, org.wings.SComponent)
+     */
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {
         final SAnchor component = (SAnchor) _c;
 
-        device.print("<a href=\"");
-        device.print(component.getURL());
-        device.print("\"");
+        writeLinkStart(device, component);
 
         Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
         if (component.isFocusOwner())
@@ -43,5 +44,18 @@ public class AnchorCG
         device.print(">");
         Utils.renderContainer(device, component);
         device.print("</a>");
+    }
+
+    /**
+     * Helper Function to ease choosing between normal and javascript links.
+     * Right now this is just for an IE workaround.
+     * @param device the device to output to
+     * @param component the component to be rendered
+     * @throws IOException 
+     */
+    protected void writeLinkStart(final Device device, final SAnchor component) throws IOException {
+        device.print("<a href=\"");
+        device.print(component.getURL());
+        device.print("\"");
     }
 }
