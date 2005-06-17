@@ -43,7 +43,7 @@ import java.util.Arrays;
  * HttpSession can be accessed by all Serlvets running in the engine. A
  * WingServlet creates one wings SessionServlet per HTTPSession and stores
  * it in its context.
- * As the SessionServlets acts as Wrapper for the WingsServlet, you can
+ * <p>As the SessionServlets acts as Wrapper for the WingsServlet, you can
  * access from there as used the  ServletContext and the HttpSession.
  * Additionally the SessionServlet containts also the wingS-Session with
  * all important services and the superordinated SFrame. To this SFrame all
@@ -96,8 +96,7 @@ final class SessionServlet
     }
 
     /**
-     * Overrides the session set for setLocaleFromHeader by a request
-     * parameter.
+     * Overrides the session set for setLocaleFromHeader by a request parameter.
      * Hence you can force the wings session to adopt the clients Locale.
      */
     public final void setLocaleFromHeader(String[] args) {
@@ -165,7 +164,7 @@ final class SessionServlet
     }
 
     /**
-     * Delegates log messages to the according WingsServlet or alternativley
+     * Delegates log messages to the according WingsServlet or alternativly
      * to the HttpServlet logger.
      *
      * @param msg The logmessage
@@ -198,10 +197,8 @@ final class SessionServlet
     /**
      * The error template which should be presented on any uncaught Exceptions can be set
      * via a property <code>wings.error.template</code> in the web.xml file.
-     *
-     * @throws ServletException
      */
-    protected void initErrorTemplate(ServletConfig config) throws ServletException {
+    protected void initErrorTemplate(ServletConfig config) {
         if (errorTemplateFile == null) {
             errorTemplateFile = config.getInitParameter("wings.error.template");
         }
@@ -260,7 +257,7 @@ final class SessionServlet
      * {@link #doGet(HttpServletRequest, HttpServletResponse)}
      */
     public final void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+            throws IOException {
         //value chosen to limit denial of service
         if (req.getContentLength() > getSession().getMaxContentLength() * 1024) {
             res.setContentType("text/html");
@@ -289,8 +286,7 @@ final class SessionServlet
      * werden kann.
      */
     public final synchronized void doGet(HttpServletRequest req,
-                                         HttpServletResponse response)
-            throws ServletException, IOException {
+                                         HttpServletResponse response) {
         SessionManager.setSession(session);
         session.setServletRequest(req);
         session.setServletResponse(response);
