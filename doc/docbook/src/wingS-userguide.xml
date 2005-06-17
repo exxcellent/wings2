@@ -126,30 +126,44 @@
     <section>
       <title>Web-related Concepts</title>
 
-      <para>With the Swing-iness in wingS, it is easy to forget that you do
-      live in a web application context.</para>
+      <para>With the Swing feel of wingS, you sometimes forget you develop for
+      a web application context. But there are concepts intrinsic to the web
+      that wingS neither hide, nor intend to hide. Understanding these simple
+      concepts help you in creating successful projects.</para>
 
       <section>
         <title>Servlet API</title>
 
-        <para>Despite of all of wingS's magic, in the end a wingS applications
-        is nothing else but a servlet. Quite some servlet though.</para>
+        <para>Despite all of wingS's magic, at the end of the day a wingS
+        applications is nothing else but a servlet. Quite some servlet
+        though.</para>
 
         <para>This means you will need a servlet container, such as Tomcat,
         Jetty, or JRun to execute wingS applications.</para>
 
         <para>During application development you typically don't notice the
         servlet environment your application wil run in. In fact, it is only
-        in the web.xml (<link linkend="web_xml_file">see</link>) that you
-        directly touch the servlet configuration. It proves useful to be aware
-        of it's underlying servlet foundation, as you will se in later
-        chapters.</para>
+        in the web.xml where you need to do anything servlet-related. It
+        certainly helps to be aware of it's underlying servlet foundation, as
+        you will see in succeeding chapters.</para>
       </section>
 
       <section>
-        <title>Templates - Separating UI and Logic</title>
+        <title>Templates - Separating View and Logic</title>
 
-        <para>TODO</para>
+        <para>When developing web applications it proves very useful—if not
+        necessary—to keep business logic separate from graphical
+        representation. Frankly, you shoud never set any visual attributes in
+        business logic. It will get you into trouble sooner or later.</para>
+
+        <para>wingS provides a simple, but empowering concept for this
+        separation. First, you create a XHTML template, structurally and
+        visually defining a component or the complete screen. Then, put in
+        <code>object</code> elements, give them a name. These elements will be
+        replaced with by the real components at runtime.</para>
+
+        <para>See <link linkend="STemplateLayout">STemplateLayout</link> for
+        how this is done.</para>
       </section>
 
       <section>
@@ -764,11 +778,11 @@ frame.setLayout(new SRootLayout(url));</programlisting></para>
         </listitem>
 
         <listitem>
-          <para>Beginning with Tomcat version 5.0 a new default session manager was
-          introduced, called SimpleTcpReplicationManager (a subclass of
-          StandardManager). It tries loading the persistence storage on
-          application startup and produces a warning-level exception looking
-          like this:<programlisting>SEVERE: Exception loading sessions from persistent storage
+          <para>Beginning with Tomcat version 5.0 a new default session
+          manager was introduced, called SimpleTcpReplicationManager (a
+          subclass of StandardManager). It attempts to load the persistence
+          storage on application startup and produces a warning-level
+          exception looking like this:<programlisting>SEVERE: Exception loading sessions from persistent storage
 java.io.WriteAbortedException: writing aborted;
 java.io.NotSerializableException:
 org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
