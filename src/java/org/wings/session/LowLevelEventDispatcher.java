@@ -33,6 +33,7 @@ import org.wings.STree;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -239,7 +240,12 @@ public final class LowLevelEventDispatcher
                             boolean isFormEvent = ((SComponent)gl).getResidesInForm() && ((SComponent)gl).getShowAsFormComponent(); 
                             if (isFormEvent) {
                                 // was the button represented by a button html tag?
-                                boolean isButton = ieButtonFixClasses.contains(gl.getClass());
+                                boolean isButton = false;
+                                for (Iterator iter = ieButtonFixClasses.iterator(); iter
+                                        .hasNext();) {
+                                    Class bla = (Class)iter.next();
+                                    isButton |= bla.isAssignableFrom(gl.getClass());
+                                }
                                 if (isButton) {
                                     log.debug("circumventing IE bug, not processing event '" + name + "' by " +
                                             gl.getClass() + "(" + gl.getLowLevelEventId() +
