@@ -16,6 +16,8 @@ package org.wings.plaf.css;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.session.SessionManager;
+import org.wings.session.BrowserType;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -91,17 +93,24 @@ public class ScrollBarCG
     }
 
     private void writeVerticalScrollbar(Device d, SScrollBar sb) throws IOException {
-        int value = sb.getValue();
-        int blockIncrement = sb.getBlockIncrement();
-        int extent = sb.getExtent();
-        int minimum = sb.getMinimum();
-        int maximum = sb.getMaximum();
-        int last = maximum - extent;
-        boolean backEnabled = value > minimum;
-        boolean forwardEnabled = value < maximum - extent;
+        final int value = sb.getValue();
+        final int blockIncrement = sb.getBlockIncrement();
+        final int extent = sb.getExtent();
+        final int minimum = sb.getMinimum();
+        final int maximum = sb.getMaximum();
+        final int last = maximum - extent;
 
-        d.print("<table orientation=\"vertical\" class=\"SLayout\" height=\"100%\"><tbody>\n")
-                .print("<tr>\n")
+        // Workaround -- enable this renderer for the MSIE.
+        // MSIE stretches the rows to the length of the universe if we advise the rows to be 100%/1% height
+        // Gecko fails to stretch if we do not advise the preffered sizes.
+        final boolean isMsIEBrowser = BrowserType.IE.equals(SessionManager.getSession().getUserAgent().getBrowserType());
+        final String rowHeightExpanded = isMsIEBrowser ? "" : " height=\"100%\"";
+        final String rowHeightFlattened = isMsIEBrowser ? "" : " height=\"1%\"";
+        // Regarding table height it is totally inveser. I love 'em.
+        final String tableHeight = isMsIEBrowser ? " height=\"100%\"" : "";
+
+        d.print("<table orientation=\"vertical\" class=\"SLayout\"").print(tableHeight).print("><tbody>\n")
+                .print("<tr").print(rowHeightFlattened).print(">\n")
                 .print("<td height=\"1%\" class=\"SLayout\"><table class=\"SLayout\" area=\"buttons\"><tbody>\n");
 
         d.print("<tr><td class=\"SLayout\">");
@@ -116,7 +125,7 @@ public class ScrollBarCG
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
-                .print("<tr>\n")
+                .print("<tr").print(rowHeightExpanded).print(">\n")
                 .print("<td class=\"SLayout\"><table area=\"slider\" height=\"100%\" class=\"SLayout\"><tbody>\n");
 
         int range = maximum - minimum;
@@ -127,7 +136,7 @@ public class ScrollBarCG
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
-                .print("<tr>\n")
+                .print("<tr").print(rowHeightFlattened).print(">\n")
                 .print("<td height=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody>\n");
 
         d.print("<tr><td class=\"SLayout\">");
