@@ -61,7 +61,7 @@ final class SessionServlet
     private final transient static Log log = LogFactory.getLog(SessionServlet.class);
 
     /**
-     * The parent WingsServlet
+     * The parent {@link WingServlet}
      */
     protected transient HttpServlet parent = this;
 
@@ -78,7 +78,7 @@ final class SessionServlet
     private boolean firstRequest = true;
 
     /**
-     * Default constructor-
+     * Default constructor.
      */
     protected SessionServlet() {
     }
@@ -287,8 +287,6 @@ final class SessionServlet
      * </UL>
      * Ist synchronized, damit nur ein Frame gleichzeitig bearbeitet
      * werden kann.
-     *
-     * @ deprecated -- bsc: warum? und was aendern?
      */
     public final synchronized void doGet(HttpServletRequest req,
                                          HttpServletResponse response)
@@ -334,8 +332,8 @@ final class SessionServlet
             }
 
             if (log.isDebugEnabled()) {
-                log.debug("RequestURL: " + requestURL);
-                log.debug("\nHEADER:");
+                log.debug("request URL: " + requestURL);
+                log.debug("HTTP header:");
                 for (Enumeration en = req.getHeaderNames(); en.hasMoreElements();) {
                     String header = (String) en.nextElement();
                     log.debug("   " + header + ": " + req.getHeader(header));
@@ -542,9 +540,7 @@ final class SessionServlet
 
 
     // Exception Handling
-
     private SFrame errorFrame;
-
     private SLabel errorStackTraceLabel;
     private SLabel errorMessageLabel;
 
