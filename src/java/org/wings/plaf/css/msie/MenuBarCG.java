@@ -20,14 +20,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.io.Device;
 
+/**
+ * This is the MSIE XHTML CSS plaf for the SMenuBar Component.
+ * @author ole
+ */
 public class MenuBarCG
         extends org.wings.plaf.css.MenuBarCG {
 
     private final transient static Log log = LogFactory.getLog(MenuBarCG.class);
 
-    /**
-     * @param device
-     * @throws IOException
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.MenuBarCG#printSpacer(org.wings.io.Device)
      */
     protected void printSpacer(final Device device) throws IOException {
         // do nothing, ie does not need spacers

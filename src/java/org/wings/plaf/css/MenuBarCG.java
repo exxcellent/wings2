@@ -32,20 +32,36 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
+/**
+ * This is the Default XHTML CSS plaf for the SMenuBar Component.
+ * @author ole
+ */
 public class MenuBarCG extends AbstractComponentCG implements
         org.wings.plaf.MenuBarCG, SParentFrameListener {
 
     private final transient static Log log = LogFactory.getLog(MenuBarCG.class);
 
+    /**
+     * the menu javascript needs this script as a helper (browser detection).
+     */
     public static final String UTILS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.utils",
             String.class);
+    /**
+     * javascript with the menu magic
+     */
     private static final String MENU_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.menu",
             String.class);
+    /**
+     * handler for clicks outside of menu. these clicks possibly close the menu.
+     */
     public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
         new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
 
+    /* (non-Javadoc)
+     * @see org.wings.plaf.ComponentCG#installCG(org.wings.SComponent)
+     */
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         SFrame parentFrame = comp.getParentFrame();
@@ -55,9 +71,15 @@ public class MenuBarCG extends AbstractComponentCG implements
         comp.addParentFrameListener(this);
     }
 
+    /* (non-Javadoc)
+     * @see org.wings.plaf.ComponentCG#uninstallCG(org.wings.SComponent)
+     */
     public void uninstallCG(final SComponent comp) {
     }
 
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.AbstractComponentCG#writeContent(org.wings.io.Device, org.wings.SComponent)
+     */
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {
@@ -88,7 +110,10 @@ public class MenuBarCG extends AbstractComponentCG implements
     }
 
     /**
-     * @param device
+     * Prints a spacer if necessary, depending on browser compatibility.
+     * Is inserted here for possible overwriting in inheriting plafs for
+     * other browsers.
+     * @param device the device to print on
      * @throws IOException
      */
     protected void printSpacer(final Device device) throws IOException {
