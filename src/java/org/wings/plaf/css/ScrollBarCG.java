@@ -15,10 +15,14 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
-import org.wings.session.SessionManager;
-import org.wings.session.BrowserType;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SIcon;
+import org.wings.SResourceIcon;
+import org.wings.SScrollBar;
 import org.wings.io.Device;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
@@ -27,10 +31,7 @@ import java.io.IOException;
  *
  * @author holger
  */
-public class ScrollBarCG
-        extends org.wings.plaf.css.AbstractComponentCG
-        implements org.wings.plaf.ScrollBarCG
-{
+public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollBarCG {
     private final static transient Log log = LogFactory.getLog(ScrollBarCG.class);
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
@@ -86,10 +87,11 @@ public class ScrollBarCG
         log.debug("write = " + c);
         SScrollBar sb = (SScrollBar) c;
 
-        if (sb.getOrientation() == SConstants.VERTICAL)
+        if (sb.getOrientation() == SConstants.VERTICAL) {
             writeVerticalScrollbar(d, sb);
-        else
+        } else {
             writeHorizontalScrollbar(d, sb);
+        }
     }
 
     private void writeVerticalScrollbar(Device d, SScrollBar sb) throws IOException {
@@ -165,14 +167,12 @@ public class ScrollBarCG
     }
 
     private void writeHorizontalScrollbar(Device d, SScrollBar sb) throws IOException {
-        int value = sb.getValue();
-        int blockIncrement = sb.getBlockIncrement();
-        int extent = sb.getExtent();
-        int minimum = sb.getMinimum();
-        int maximum = sb.getMaximum();
-        int last = maximum - extent;
-        boolean backEnabled = value > minimum;
-        boolean forwardEnabled = value < maximum - extent;
+        final int value = sb.getValue();
+        final int blockIncrement = sb.getBlockIncrement();
+        final int extent = sb.getExtent();
+        final int minimum = sb.getMinimum();
+        final int maximum = sb.getMaximum();
+        final int last = maximum - extent;
 
         d.print("<table orientation=\"horizontal\" class=\"SLayout\"><tbody><tr>\n")
                 .print("<td width=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody><tr>\n");
@@ -224,7 +224,6 @@ public class ScrollBarCG
     }
 
     private void writeButton(Device device, SScrollBar scrollBar, SIcon icon, String event) throws IOException {
-        boolean childSelectorWorkaround = !scrollBar.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = scrollBar.getShowAsFormComponent();
 
         if (showAsFormComponent) {
@@ -250,16 +249,17 @@ public class ScrollBarCG
         device.print(icon.getIconTitle());
         device.print("\"/>");
 
-        if (showAsFormComponent)
+        if (showAsFormComponent) {
             device.print("</button>\n");
-        else
+        } else {
             device.print("</a>\n");
+        }
     }
 
     /**
      * @param device
-     * @param event 
-     * @param scrollBar 
+     * @param event
+     * @param scrollBar
      * @throws IOException
      */
     protected void writeButtonStart(Device device, SScrollBar scrollBar, String event) throws IOException {
