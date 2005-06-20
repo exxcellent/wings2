@@ -15,6 +15,8 @@ package org.wings;
 
 import org.wings.plaf.MenuBarCG;
 
+import javax.swing.*;
+
 /**
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
@@ -24,6 +26,10 @@ public class SMenuItem extends SButton {
     protected SComponent menuParent;
 
     public SMenuItem() {
+    }
+
+    public SMenuItem(Action action) {
+        super(action);
     }
 
     public SMenuItem(String text) {
