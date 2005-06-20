@@ -56,7 +56,7 @@ public final class LowLevelEventDispatcher
      */
     private static final List ieButtonFixClasses = Arrays.asList(new Class[] {
             SButton.class, SToggleButton.class, SClickable.class,
-            SPageScroller.class, SRadioButton.class, SScrollBar.class,
+            SPageScroller.class, SScrollBar.class,
             STabbedPane.class, STable.class, STree.class});
 
     public LowLevelEventDispatcher() {}
