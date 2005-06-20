@@ -3,15 +3,13 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SComponent;
-import org.wings.SContainer;
-import org.wings.SLayoutManager;
-import org.wings.SScrollPaneLayout;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
 import java.util.Map;
+import java.awt.*;
 
 public class ScrollPaneLayoutCG extends AbstractLayoutCG {
 
@@ -28,7 +26,11 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
     private void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
+        Scrollable scrollable = (Scrollable)center;
+        Rectangle backup = scrollable.getViewportSize();
+        scrollable.setViewportSize(new Rectangle(0, 0, backup.width, backup.height));
         writeComponent(d, center);
+        scrollable.setViewportSize(backup);
     }
 
     private void writePaging(Device d, SScrollPaneLayout layout) throws IOException {
