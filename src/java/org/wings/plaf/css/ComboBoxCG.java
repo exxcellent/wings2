@@ -73,9 +73,8 @@ public class ComboBoxCG extends AbstractComponentCG implements
 
             if (cellRenderer != null) {
                 Utils.optAttribute(device, "title", cellRenderer.getToolTipText());
-                org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
-                Utils.printCSSInlineStyleAttributes(stringBufferDevice, cellRenderer);
-                Utils.optAttribute(device, "style", stringBufferDevice.toString());
+                StringBuffer buffer = Utils.generateCSSComponentInlineStyle(cellRenderer);
+                Utils.optAttribute(device, "style", buffer.toString());
             }
 
             device.print(">\n"); //option
@@ -115,7 +114,8 @@ public class ComboBoxCG extends AbstractComponentCG implements
         device.print("/>");
     }
 
-    private org.wings.io.StringBufferDevice stringBufferDevice = null;
+    private org.wings.io.StringBufferDevice
+            stringBufferDevice = null;
 
     protected org.wings.io.StringBufferDevice getStringBufferDevice() {
         if (stringBufferDevice == null) {

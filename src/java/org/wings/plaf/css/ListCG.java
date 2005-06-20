@@ -79,14 +79,8 @@ public class ListCG extends AbstractComponentCG implements
 
             org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
 
-            Utils.printCSSInlineStyleAttributes(stringBufferDevice, renderer);
-
-            String styleString = stringBufferDevice.toString();
-            if (styleString != null && styleString.length() > 0) {
-                device.print(" style=\"");
-                Utils.write(device, styleString);
-                device.print("\"");
-            }
+            StringBuffer buffer = Utils.generateCSSComponentInlineStyle(renderer);
+            Utils.optAttribute(device, "style", buffer.toString());
             device.print(">");
 
             if (renderer != null) {

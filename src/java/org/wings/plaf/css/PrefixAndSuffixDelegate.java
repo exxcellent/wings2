@@ -10,7 +10,8 @@
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
- */package org.wings.plaf.css;
+ */
+package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,7 +21,6 @@ import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
-import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 
@@ -45,12 +45,6 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             device.print(" class=\"");
             device.print(component.getStyle());
             device.print("_Box\"");
-        }
-        if (component instanceof DragSource) {
-            device.print(" id=\"");
-            device.print(component.getName());
-            device.print("_Box\"");
-            device.print(" style=\"position:relative\"");
         }
 
         // if sizes are spec'd in percentages, we need the outer box to have full size...

@@ -210,27 +210,6 @@ public final class Utils {
         return toColorString(c.getRGB());
     }
 
-    /**
-     * Writes out the following CSS attributes as CSS inline style
-     * <ul>
-     * <li>Background/Foreground color</li>
-     * <li>Font size,style,weight,family</li>
-     * <li>Preferred Dimension height and width</li>
-     * </ul>. Sample: <code> style="width:100%; color:#ff0000;"</code>
-     *
-     * @param d         Output device
-     * @param component Component having CSS attributes
-     * @throws IOException
-     * @deprecated Use #generateCSSComponentInlineStyle
-     */
-    public static void printCSSInlineStyleAttributes(Device d, SComponent component) throws IOException {
-        if (component == null)
-            return;
-        StringBuffer styleString = generateCSSComponentInlineStyle(component);
-
-        Utils.optAttribute(d, "style", styleString.toString());
-    }
-
     public static StringBuffer generateCSSComponentInlineStyle(SComponent component) {
         StringBuffer styleString = new StringBuffer();
         if (component != null) {
