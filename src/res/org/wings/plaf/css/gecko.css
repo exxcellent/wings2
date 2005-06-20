@@ -380,12 +380,17 @@ table.SFlowLayout
 }
 
 .STitledBorderLegend {
-    position: absolute;
-    margin-top: -1.7em;
+    position: relative;
+    top:-1.7em;
+	margin-bottom:-1em;
     margin-left: 1.0em;
     padding-left: 0.4em;
     padding-right: 0.4em;
     background-color: inherit;
+}
+
+.STitledBorder {
+    margin-top: 1em;
 }
 
 

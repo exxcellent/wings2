@@ -20,10 +20,12 @@ import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
+import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 
 import javax.swing.*;
+
 import java.io.IOException;
 
 /**
@@ -43,6 +45,12 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             device.print(" class=\"");
             device.print(component.getStyle());
             device.print("_Box\"");
+        }
+        if (component instanceof DragSource) {
+            device.print(" id=\"");
+            device.print(component.getName());
+            device.print("_Box\"");
+            device.print(" style=\"position:relative\"");
         }
 
         // if sizes are spec'd in percentages, we need the outer box to have full size...
@@ -64,7 +72,12 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         
         device.print(">");
         device.print("<div id=\"").print(component.getName()).print("\"");
-        Utils.optAttribute(device, "class", component.getStyle());
+        // Special handling: Mark Titled Borders for styling
+        if (component.getBorder() instanceof STitledBorder) {
+            Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder");
+        } else {
+            Utils.optAttribute(device, "class", component.getStyle());
+        }
         Utils.printCSSInlinePreferredSize(device, prefSize);
 
         if (component instanceof LowLevelEventListener) {
@@ -72,7 +85,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             device.print(" eid=\"")
                     .print(lowLevelEventListener.getEncodedLowLevelEventId()).print("\"");
         }
-
+        
         String toolTip = component.getToolTipText();
         if (toolTip != null)
             device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
