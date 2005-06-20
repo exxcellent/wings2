@@ -18,6 +18,7 @@ import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
+import org.wings.event.SContainerEvent;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -496,7 +497,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
         int newTabCount = getTabCount() - 1;
         int selected = getSelectedIndex();
         removePageAt(index);
-        if (newTabCount > 0) {
+        if (newTabCount > 0 && selected != -1) {
             if (selected >= (newTabCount)) {
                 /* last tab was selected and maybe removed, so try to find a 
                  * tab to select before
@@ -578,6 +579,15 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
     }
 
     /**
+     * Returns the component at <i>index</i>.
+     *
+     * @see #setComponentAt
+     */
+    public SComponent getComponentAt(int index) {
+        return getComponent(index);
+    }
+
+    /**
      * Returns the tab title at <i>index</i>.
      *
      * @see #setTitleAt
@@ -639,6 +649,20 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
      */
     public boolean isEnabledAt(int index) {
         return ((Page) pages.get(index)).enabled;
+    }
+
+    /**
+     * Sets the component at <i>index</i> to <i>component</i> which must not be null.
+     * An internal exception is raised if there is no tab at that index.
+     *
+     * @param index the tab index where the title should be set
+     * @param component the component for the tab
+     * @see #getComponentAt
+     */
+    public void setComponentAt(int index, SComponent component) {
+        contents.remove(index);
+        ((Page) pages.get(index)).component = component;
+        contents.add(component, component.getName(), index);
     }
 
     /**
