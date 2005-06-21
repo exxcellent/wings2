@@ -17,7 +17,7 @@
         </layout>
     </appender>
 
-    <appender name="EMAIL" class="org.apache.log4j.net.SMTPAppender">
+    <!--appender name="EMAIL" class="org.apache.log4j.net.SMTPAppender">
         <param name="SMTPHost" value="localhost" />
         <param name="EvaluatorClass" value="com.freiheit.commons.log4j.FatalTriggeringEventEvaluator" />
         <param name="From" value="wings-log4j@localhost" />
@@ -27,7 +27,7 @@
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%-5p [%t] - %d{dd.MM.yyyy HH:mm:ss}%n%c:%n%m%n%n" />
         </layout>
-    </appender>
+    </appender-->
 
     <!-- Logger -->
 
@@ -36,11 +36,11 @@
     </logger>
 
     <logger name="org.wings.dnd">
-        <level value="DEBUG" />
+        <level value="WARN" />
     </logger>
     
     <logger name="org.wings.session">
-        <level value="DEBUG" />
+        <level value="WARN" />
     </logger>
     
     <logger name="net">
