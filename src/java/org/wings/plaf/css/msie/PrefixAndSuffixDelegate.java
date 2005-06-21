@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.border.STitledBorder;
+import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.plaf.css.AbstractLayoutCG;
 import org.wings.plaf.css.InputMapScriptListener;
@@ -47,8 +48,17 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
 
         Utils.printDebugNewline(device, component);
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
+        
         device.print("<table id=\"").print(component.getName()).print("\"");
-        Utils.optAttribute(device, "class", "SLayout " + component.getStyle());
+        if (component instanceof DragSource) {
+            device.print(" style=\"position:relative;\"");
+        }
+        // Special handling: Mark Titled Borders for styling
+        if (component.getBorder() instanceof STitledBorder) {
+            Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder SLayout");
+        } else {
+            Utils.optAttribute(device, "class", component.getStyle() + " SLayout");
+        }
         Utils.optAttribute(device, "style", inlineStyles.toString());
 
         if (component instanceof LowLevelEventListener) {

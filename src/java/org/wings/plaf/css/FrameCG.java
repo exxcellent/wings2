@@ -17,6 +17,9 @@ package org.wings.plaf.css;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.dnd.DragAndDropManager;
+import org.wings.dnd.DragSource;
+import org.wings.dnd.DropTarget;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Link;
 import org.wings.header.Script;
@@ -57,6 +60,20 @@ public class FrameCG implements org.wings.plaf.FrameCG {
      */
     public final static String QUIRKS_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
 
+    /**
+     * javascript needed for Drag and Drop support
+     */
+    private static final String DND_JS = (String) SessionManager
+    .getSession().getCGManager().getObject("JScripts.dnd",
+            String.class);
+    
+    /**
+     * javascript needed for Drag and Drop support
+     */
+    private static final String WZ_DND_JS = (String) SessionManager
+    .getSession().getCGManager().getObject("JScripts.wzdragdrop",
+            String.class);
+    
     private String documentType = STRICT_DOCTYPE;
 
     private Boolean renderXmlDeclaration = Boolean.FALSE;
@@ -337,6 +354,22 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         Utils.writeEvents(device, frame);
         device.print(">\n");
         if (frame.isVisible()) {
+            // now add JS for DnD if neccessary.
+            DragAndDropManager dndManager = frame.getSession().getDragAndDropManager();
+            List dragComponents = dndManager.getDragSources();
+            List dropComponents = dndManager.getDropTargets();
+            Iterator dragIter = dragComponents.iterator();
+            Iterator dropIter = dropComponents.iterator();
+            if (dragIter.hasNext()) {
+                // this needs to be added to the body, so use device.print()
+                // TODO: is caching by the VM enough or make this only initialize once?
+                ClasspathResource res = new ClasspathResource(WZ_DND_JS, "text/javascript");
+                String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+                device.print("<script type=\"text/javascript\" src=\"");
+                device.print(jScriptUrl);
+                device.print("\"></script>\n"); 
+            }
+            
             frame.getLayout().write(device);
             device.print("\n");
             // now add all menus
@@ -344,6 +377,44 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             while (iter.hasNext()) {
                 SComponent menu = (SComponent)iter.next();
                 menu.write(device);
+            }
+            // now add final JS for DnD if neccessary.
+            if (dragIter.hasNext()) {
+                device.print("<script type=\"text/javascript\">\n<!--\n");
+                device.print("SET_DHTML();\n");
+                while (dragIter.hasNext()) {
+                    SComponent dragComp = (SComponent)dragIter.next();
+                    device.print("ADD_DHTML('");
+                    device.print(dragComp.getName());
+                    device.print("'+CLONE+TRANSPARENT);\n");
+                    device.print("dd.elements['");
+                    device.print(dragComp.getName());
+                    device.print("'].dragsource=1;\n");
+                }
+                while (dropIter.hasNext()) {
+                    SComponent dropComp = (SComponent)dropIter.next();
+                    if (dragComponents.contains(dropComp)) {
+                        // This is a draggable and a dropTarget, it's already
+                        // added.
+                    } else {
+                        device.print("ADD_DHTML('");
+                        device.print(dropComp.getName());
+                        device.print("'+NO_DRAG);\n");
+                    }
+                    device.print("dd.elements['");
+                    device.print(dropComp.getName());
+                    device.print("'].droptarget=1;\n");
+                }
+                device.print("var wdnd_managerId = '");
+                device.print(dndManager.getEncodedLowLevelEventId());
+                device.print("';\n");
+                device.print("//-->\n</script>");
+                // TODO: is caching by the VM enough or make this only initialize once?
+                ClasspathResource res = new ClasspathResource(DND_JS, "text/javascript");
+                String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+                device.print("<script type=\"text/javascript\" src=\"");
+                device.print(jScriptUrl);
+                device.print("\"></script>\n"); 
             }
         }
         device.print("\n</body></html>\n");

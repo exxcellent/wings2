@@ -41,6 +41,7 @@ import org.wings.ReloadManager;
 import org.wings.SContainer;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
+import org.wings.dnd.DragAndDropManager;
 import org.wings.event.ExitVetoException;
 import org.wings.event.SExitEvent;
 import org.wings.event.SExitListener;
@@ -117,6 +118,8 @@ public class Session
     private Locale locale = Locale.getDefault();
 
     private boolean localeFromHeader = true;
+    
+    private DragAndDropManager dndManager;
 
     /**
      * Which locales are supported by this servlet. If null, every locale from
@@ -775,6 +778,18 @@ public class Session
             WingsStatistics.getStatistics().decrementAllocatedSessionCount();
         } // end of if ()
     }
+
+    public boolean hasDragAndDropManager() {
+        return dndManager != null;
+    }
+    
+    public DragAndDropManager getDragAndDropManager() {
+        if (dndManager == null) {
+            dndManager = new DragAndDropManager();
+        }
+        return dndManager;
+    }
+    
 }
 
 

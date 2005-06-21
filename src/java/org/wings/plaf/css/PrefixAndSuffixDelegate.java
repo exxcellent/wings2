@@ -21,6 +21,7 @@ import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
+import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 
@@ -46,6 +47,12 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             device.print(component.getStyle());
             device.print("_Box\"");
         }
+        device.print(" id=\"");
+        device.print(component.getName());
+        device.print("\"");
+        if (component instanceof DragSource) {
+            device.print(" style=\"position:relative\"");
+        }
 
         // if sizes are spec'd in percentages, we need the outer box to have full size...
         boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.indexOf("%") != -1;
@@ -65,7 +72,8 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         }
         
         device.print(">");
-        device.print("<div id=\"").print(component.getName()).print("\"");
+        device.print("<div");
+        //id=\"").print(component.getName()).print("\"");
         // Special handling: Mark Titled Borders for styling
         if (component.getBorder() instanceof STitledBorder) {
             Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder");

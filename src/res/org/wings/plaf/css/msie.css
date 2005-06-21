@@ -235,10 +235,19 @@ ul.STree li div.SSubTree {
 	width: 100%;
 }
 
-.titledbordertitle {
-   font-family: sans-serif;
-   font-size: 12px;
-   color: #000000;
+.STitledBorderLegend {
+    position: relative;
+    top:-1em;
+	margin-bottom:-1em;
+    margin-left: 1.0em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    background-color: inherit;
+}
+
+.STitledBorder {
+    margin-top: 1em;
+    padding-top: 1em;
 }
 
 .SScrollBar {
