@@ -19,7 +19,7 @@
 # do not use the splash
 #nosplash
 
-# use log4j for the wingset demo
+# use log4j for the wingset demo (copy log4j.xml.example to log4j.xml and edit it)
 #log4j
 
 # The home directory of your tomcat installation for deployment

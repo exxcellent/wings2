@@ -35,8 +35,12 @@
         <level value="WARN" />
     </logger>
 
+    <logger name="org.wings.dnd">
+        <level value="DEBUG" />
+    </logger>
+    
     <logger name="org.wings.session">
-        <level value="WARN" />
+        <level value="DEBUG" />
     </logger>
     
     <logger name="net">
