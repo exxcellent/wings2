@@ -5,42 +5,6 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-    <!--filter>
-        <filter-name>Recorder</filter-name>
-        <filter-class>org.wings.recorder.Recorder</filter-class>
-        <init-param>
-            <param-name>wings.servlet.recorder.file</param-name>
-            <param-value>Recording</param-value>
-        </init-param>
-        <init-param>
-            <param-name>wings.servlet.lookupname</param-name>
-            <param-value>Recording</param-value>
-        </init-param>
-    </filter-->
-
-    <!--filter>
-        <filter-name>SmartURLs</filter-name>
-        <filter-class>org.wings.session.SmartURLsFilter</filter-class>
-        <init-param>
-            <param-name>wings.servlet.smarturls.parameterSeparator</param-name>
-            <param-value>;</param-value>
-        </init-param>
-        <init-param>
-            <param-name>wings.servlet.smarturls.nameValueSeparator</param-name>
-            <param-value>,</param-value>
-        </init-param>
-    </filter-->
-
-    <!--filter-mapping>
-        <filter-name>Recorder</filter-name>
-        <servlet-name>WingSet</servlet-name>
-    </filter-mapping-->
-
-    <!--filter-mapping>
-        <filter-name>SmartURLs</filter-name>
-        <servlet-name>WingSet</servlet-name>
-    </filter-mapping-->
-
     <servlet>
         <servlet-name>WingSet</servlet-name>
         <servlet-class>org.wings.session.WingServlet</servlet-class>
@@ -61,13 +25,7 @@
             <param-value>alt LEFT, alt RIGHT, F1</param-value>
 	    <description>See KeyStroke.getKeyStroke(String s).</description>
         </init-param>
-        <!--init-param>
-            <param-name>wings.servlet.lookupname</param-name>
-            <param-value>Recording</param-value>
-        </init-param-->
     </servlet>
-
-    <!-- url mapping -->
 
     <servlet-mapping>
         <servlet-name>WingSet</servlet-name>
@@ -77,10 +35,5 @@
     <session-config>
         <session-timeout>10</session-timeout>
     </session-config>
-
-    <context-param>
-        <param-name>log4j-configuration</param-name>
-        <param-value>log4j.xml</param-value>
-    </context-param>
 
 </web-app>
