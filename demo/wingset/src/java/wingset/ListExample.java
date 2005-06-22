@@ -47,12 +47,12 @@ public class ListExample
     public SContainer createListSingleSelExample() {
         SContainer cont = new SPanel(new SFlowDownLayout());
         cont.add(new SLabel("List with single selection"));
-        SList sinlgeSelectionList = new SList();
-        sinlgeSelectionList.setName("single");
-        sinlgeSelectionList.setSelectionMode(SList.SINGLE_SELECTION);
-        addListElements(sinlgeSelectionList);
-        cont.add(sinlgeSelectionList);
-        controls.addSizable(sinlgeSelectionList);
+        SList singleSelectionList = new SList();
+        singleSelectionList.setName("single");
+        singleSelectionList.setSelectionMode(SList.SINGLE_SELECTION);
+        addListElements(singleSelectionList);
+        cont.add(singleSelectionList);
+        controls.addSizable(singleSelectionList);
 
         return cont;
     }
