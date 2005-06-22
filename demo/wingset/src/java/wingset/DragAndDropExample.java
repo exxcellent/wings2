@@ -18,11 +18,12 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.SBoxLayout;
 import org.wings.SComponent;
 import org.wings.SLabel;
 import org.wings.SPanel;
+import org.wings.STextComponent;
 import org.wings.STextField;
-import org.wings.dnd.DragAndDropManager;
 import org.wings.dnd.DragSource;
 import org.wings.dnd.DropTarget;
 import org.wings.event.SComponentDropListener;
@@ -38,29 +39,67 @@ public class DragAndDropExample extends WingSetPane {
     private final SDndTextField dragSource = new SDndTextField("This is the DragSource.");
     private final SDndTextField dropTarget = new SDndTextField("This is the DropTarget.");
     private final SDndTextField normalField = new SDndTextField("This is a normal Label.");
-    private final SPanel container = new SPanel();
+    private final SDragLabel dragLabel = new SDragLabel("This is a draggable Label.");
     
     protected SComponent createExample() {
+        final SPanel container = new SPanel();
+        container.setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
+        // initialize the drag and drop components
         dragSource.setDragEnabled(true);
+        dragLabel.setDragEnabled(true);
+        // for dropTargets, adding a Listener is enough
         dropTarget.addComponentDropListener(new SComponentDropListener() {
 
             public boolean handleDrop(SComponent dragSource) {
-                if (dragSource instanceof STextField) {
+                boolean result = false;
+                if (dragSource instanceof STextComponent) {
                     // allow drop
-                    dropTarget.setText(((STextField)dragSource).getText());
+                    dropTarget.setText(((STextComponent)dragSource).getText());
+                    result = true;
                 }
-                container.add(new SLabel("Drag and Drop Action triggered"));
-                
-                return true;
+                if (dragSource instanceof SLabel) {
+                    // allow drop
+                    dropTarget.setText(((SLabel)dragSource).getText());
+                    result = true;
+                }
+                container.add(new SLabel("Drag and Drop Action triggered from " + dragSource.getClass().getName()));
+                return result;
             }
             
         });
+        // add the components to the container
         container.add(dragSource);
         container.add(normalField);
         container.add(dropTarget);
+        container.add(dragLabel);
+        
         return container;
     }
 
+    private class SDragLabel extends SLabel implements DragSource {
+
+        private boolean dragEnabled;
+
+        public SDragLabel(String string) {
+            super(string);
+        }
+
+        public boolean isDragEnabled() {
+            return dragEnabled;
+        }
+
+        public void setDragEnabled(boolean dragEnabled) {
+            this.dragEnabled = dragEnabled;
+            if (dragEnabled) {
+                SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+            } else {
+                SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+            }
+        }
+        
+    }
+    
+    
     /**
      * This class extends the STextField class with Drag and Drop functionality.
      * @author ole
@@ -71,11 +110,12 @@ public class DragAndDropExample extends WingSetPane {
         private ArrayList componentDropListeners = new ArrayList();
 
         public SDndTextField() {
-            super();
+            this("");
         }
 
         public SDndTextField(String string) {
             super(string);
+            this.setColumns(40);
         }
 
         /* (non-Javadoc)
@@ -91,9 +131,9 @@ public class DragAndDropExample extends WingSetPane {
         public void setDragEnabled(boolean dragEnabled) {
             this.dragEnabled = dragEnabled;
             if (dragEnabled) {
-                SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+                SessionManager.getSession().getDragAndDropManager().registerDragSource(this);
             } else {
-                SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+                SessionManager.getSession().getDragAndDropManager().deregisterDragSource(this);
             }
         }
 
@@ -102,7 +142,7 @@ public class DragAndDropExample extends WingSetPane {
          */
         public void addComponentDropListener(SComponentDropListener listener) {
             componentDropListeners.add(listener);
-            SessionManager.getSession().getDragAndDropManager().registerDropTarget((DropTarget)this);
+            SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
         }
 
         /* (non-Javadoc)

@@ -169,6 +169,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
                 while (listIter.hasNext()) {
                     log.debug("fireFinalEvents listener");
                     listener = (SComponentDropListener)listIter.next();
+                    // TODO: evaluate return value of handleDrop and visualize it in the client
                     listener.handleDrop((SComponent)source);
                 }
             }
