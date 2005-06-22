@@ -17,6 +17,7 @@ function my_PickFunc()
 		wdnd_textCopy.style.top=dd.obj.y+'px';
 		wdnd_textCopy.style.width=dd.obj.w+'px';
 		wdnd_textCopy.style.height=dd.obj.h+'px';
+		wdnd_textCopy.style.zIndex=dd.obj.z-1;
 		if (dd.n6) wdnd_textCopy.style.MozOpacity = 1;
 		if (dd.ie && !dd.iemac) wdnd_textCopy.style.filter = "Alpha(opacity=100)";
 		// add it to the body
