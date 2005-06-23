@@ -26,6 +26,8 @@ public class SDefaultTableCellRenderer
         extends SLabel
         implements STableCellRenderer
 {
+    StringBuffer nameBuffer = new StringBuffer();
+
     SIcon editIcon;
 
     public SIcon getEditIcon() {
@@ -41,6 +43,7 @@ public class SDefaultTableCellRenderer
                                                     boolean selected,
                                                     int row,
                                                     int col) {
+        setName(name(table, row, col));
         setText(null);
         setIcon(null);
 
@@ -56,5 +59,16 @@ public class SDefaultTableCellRenderer
             setText(value.toString());
 
         return this;
+    }
+
+    protected String name(SComponent component, int row, int col) {
+        nameBuffer.setLength(0);
+        nameBuffer.append(component.getName()).append("_");
+        if (row == -1)
+            nameBuffer.append('h');
+        else
+            nameBuffer.append(row);
+        nameBuffer.append("_").append(col);
+        return nameBuffer.toString();
     }
 }

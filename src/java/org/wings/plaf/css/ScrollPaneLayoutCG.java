@@ -27,10 +27,11 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
         Scrollable scrollable = (Scrollable)center;
-        Rectangle backup = scrollable.getViewportSize();
-        scrollable.setViewportSize(new Rectangle(0, 0, backup.width, backup.height));
+        Rectangle viewportSize = scrollable.getViewportSize();
+        Rectangle scrollableViewportSize = scrollable.getScrollableViewportSize();
+        scrollable.setViewportSize(scrollableViewportSize);
         writeComponent(d, center);
-        scrollable.setViewportSize(backup);
+        scrollable.setViewportSize(viewportSize);
     }
 
     private void writePaging(Device d, SScrollPaneLayout layout) throws IOException {

@@ -26,7 +26,10 @@ import org.wings.STree;
  */
 public class SDefaultTreeCellRenderer
         extends SLabel
-        implements STreeCellRenderer {
+        implements STreeCellRenderer
+{
+    private StringBuffer nameBuffer = new StringBuffer();
+
     // Icons
     /**
      * Icon used to show non-leaf nodes that aren't expanded.
@@ -137,6 +140,7 @@ public class SDefaultTreeCellRenderer
                                                    boolean leaf,
                                                    int row,
                                                    boolean hasFocus) {
+        setName(name(tree, row));
 
         if (value == null || value.toString() == null ||
                 value.toString().length() == 0) {
@@ -173,6 +177,12 @@ public class SDefaultTreeCellRenderer
             setDynamicStyles(tree.getDynamicStyles());
 
         return this;
+    }
+
+    protected String name(SComponent component, int row) {
+        nameBuffer.setLength(0);
+        nameBuffer.append(component.getName()).append("_").append(row);
+        return nameBuffer.toString();
     }
 
     /**

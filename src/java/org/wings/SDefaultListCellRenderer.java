@@ -13,12 +13,15 @@
  */
 package org.wings;
 
+import java.io.RandomAccessFile;
+
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SDefaultListCellRenderer extends SLabel implements SListCellRenderer {
 
+    private StringBuffer nameBuffer = new StringBuffer();
     /**
      * Style class to use for the foreground for selected nodes.
      */
@@ -65,36 +68,33 @@ public class SDefaultListCellRenderer extends SLabel implements SListCellRendere
     }
 
 
-    public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int index) {
+    public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int row) {
+        setName(name(list, row));
         setText(null);
         setIcon(null);
 
+        SComponent rendererComponent = this;
         if (value == null)
             setText("");
         else if (value instanceof SIcon)
             setIcon((SIcon) value);
-        else if (value instanceof SComponent) {
-            SComponent result = (SComponent) value;
-
-            if (selected && selectionStyle != null) {
-                result.setStyle(selectionStyle);
-            } else {
-                result.setStyle(nonSelectionStyle);
-            }
-
-            return result;
-        } else {
+        else if (value instanceof SComponent)
+            rendererComponent = (SComponent)value;
+        else
             setText(value.toString());
-        }
 
         if (selected && selectionStyle != null) {
-            setStyle(selectionStyle);
+            rendererComponent.setStyle(selectionStyle);
         } else {
-            setStyle(nonSelectionStyle);
+            rendererComponent.setStyle(nonSelectionStyle);
         }
 
-        return this;
+        return rendererComponent;
+    }
+
+    protected String name(SComponent component, int row) {
+        nameBuffer.setLength(0);
+        nameBuffer.append(component.getName()).append("_").append(row);
+        return nameBuffer.toString();
     }
 }
-
-
