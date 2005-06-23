@@ -142,7 +142,7 @@ public class Browser {
     protected final RE RE_NS_X11_LANG_OS = new RE("\\(X11; U; ([a-zA-Z-]+) ([0-9\\.]+)[^\\);]+\\)");
     protected final RE RE_NS6_LANG_OS = new RE("\\(([a-zA-Z0-9]+); [a-zA-Z]+; ([a-zA-Z0-9_]+)( ([a-zA-Z0-9]+))?; ([_a-zA-Z-]+);");
     protected final RE RE_LANG = new RE("\\[([_a-zA-Z-]+)\\]");
-    protected final RE RE_OPERA = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)(; U)?\\) RE_OPERA ([0-9]+)\\.([0-9]+)[ ]+\\[([_a-zA-Z-]+)\\]");
+    protected final RE RE_OPERA = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)(; U)?\\) Opera ([0-9]+)\\.([0-9]+)[ ]+\\[([_a-zA-Z-]+)\\]");
     protected final RE RE_OPERA_LANG_OS = new RE("\\(([a-zA-Z0-9\\-]+) ([0-9\\.]+)[^)]+\\)[ \t]*\\[([a-z_]+)\\]");
     protected final RE RE_KONQUEROR_OS = new RE("Konqueror/([0-9\\.]+); ([a-zA-Z0-9\\-]+)");
     protected final RE RE_GALEON_OS = new RE("\\(([a-zA-Z0-9]+); U; Galeon; ([0-9]+)\\.([0-9]+);");
@@ -184,7 +184,7 @@ public class Browser {
                     osType = OSType.MACOS;
                 }
             }
-            /* Mozilla has to different id's; one up to version 4
+            /* Mozilla has two different id's; one up to version 4
                and a second for version >= 5
             */
             else if (browserName.equals("Mozilla") || browserName == null) {
