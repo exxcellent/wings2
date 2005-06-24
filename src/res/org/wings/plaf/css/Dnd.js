@@ -33,9 +33,11 @@ function my_DropFunc()
 			if (tmpEl != dd.obj && tmpEl.droptarget) {
 				if ( (dd.e.x >= tmpEl.x) && (dd.e.x <= (tmpEl.x + tmpEl.w)) && (dd.e.y >= tmpEl.y) && (dd.e.y <= (tmpEl.y + tmpEl.h)) ) {
 					loc = document.location.href;
-					loc = loc.substring(0,loc.indexOf('?')+1); 
-					// + tmpEl.name.substring(0,tmpEl.name.indexOf('_Box')) + '=dropped' + dd.obj.name.substring(0,dd.obj.name.indexOf('_Box'));
-					loc = loc + wdnd_managerId + '=dropTarget' + tmpEl.name + '&' + wdnd_managerId + '=dragSource' + dd.obj.name;
+					if (loc.indexOf('?') != -1) {
+						loc = loc.substring(0,loc.indexOf('?'));
+					}
+					loc = loc + '?' + wdnd_managerId + '=dropTarget' + tmpEl.name + '&' + wdnd_managerId + '=dragSource' + dd.obj.name;
+					
 					document.location.href=loc;
 				}
 			}
