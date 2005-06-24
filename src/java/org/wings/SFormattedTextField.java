@@ -35,10 +35,6 @@ public class SFormattedTextField
 {
     private SAbstractFormatter formatter = null;
     private static final SAbstractFormatter NO_FORMATTER = new SAbstractFormatter() {
-        public JavaScriptListener generateJavaScript(SFormattedTextField field, boolean actionListener) {
-            return null;
-        }
-
         public Object stringToValue(String text) throws ParseException {
             return null;
         }

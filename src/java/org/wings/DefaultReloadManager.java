@@ -29,36 +29,43 @@ import java.util.Set;
  * @version $Revision$
  */
 public class DefaultReloadManager
-        implements ReloadManager {
+        implements ReloadManager
+{
     private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
+    /**
+     * a set of all components, manged by this ReloadManager, that are marked
+     * dirty.
+     */
+    protected final Set dirtyComponents = new HashSet();
     /**
      * a set of all resources, manged by this ReloadManager, that are marked
      * dirty.
      */
-    protected final Set dirtyResources;
+    protected final Set dirtyResources = new HashSet();
 
     public DefaultReloadManager() {
-        dirtyResources = new HashSet();
     }
 
     public void reload(SComponent component) {
+        dirtyComponents.add(component);
+
         SFrame parent = component.getParentFrame();
-
-        if (parent == null) {
-            return;
+        if (parent != null) {
+            markDirty(parent.getDynamicResource(DynamicCodeResource.class));
+            markDirty(parent.getDynamicResource(DynamicStyleSheetResource.class));
+            markDirty(parent.getDynamicResource(DynamicScriptResource.class));
         }
-
-        markDirty(parent.getDynamicResource(DynamicCodeResource.class));
-        markDirty(parent.getDynamicResource(DynamicStyleSheetResource.class));
-        markDirty(parent.getDynamicResource(DynamicScriptResource.class));
     }
 
-    public synchronized void markDirty(DynamicResource d) {
-        if (d == null) {
+    synchronized void markDirty(DynamicResource d) {
+        if (d == null)
             log.warn("markDirty: null");
-            return;
-        }
-        dirtyResources.add(d);
+        else
+            dirtyResources.add(d);
+    }
+
+    public Set getDirtyComponents() {
+        return dirtyComponents;
     }
 
     public Set getDirtyResources() {
@@ -66,6 +73,7 @@ public class DefaultReloadManager
     }
 
     public synchronized void clear() {
+        dirtyComponents.clear();
         dirtyResources.clear();
     }
 
@@ -76,6 +84,13 @@ public class DefaultReloadManager
             DynamicResource resource = (DynamicResource) it.next();
             resource.invalidate();
             it.remove();
+        }
+    }
+
+    public void notifyCGs() {
+        for (Iterator iterator = dirtyComponents.iterator(); iterator.hasNext();) {
+            SComponent component = (SComponent) iterator.next();
+            component.getCG().componentChanged(component);
         }
     }
 }

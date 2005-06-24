@@ -23,21 +23,19 @@ import java.util.Set;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public interface ReloadManager {
+public interface ReloadManager
+{
     void reload(SComponent component);
 
     /**
-     * Mark a <code>component</code> dirty.
-     * Frames that contain dirty components have to be reloaded.
-     *
-     * @param component the dirty component
+     * Return a set of all components that are marked dirty.
+     * @return a set of all components that have been marked dirty.
      */
-    void markDirty(DynamicResource component);
+    Set getDirtyComponents();
 
     /**
      * Return a set of all dynamic resources that are marked dirty.
-     *
-     * @return a set all dynamic resource that have been marked dirty.
+     * @return a set of all dynamic resource that have been marked dirty.
      */
     Set getDirtyResources();
 
@@ -47,4 +45,6 @@ public interface ReloadManager {
     void clear();
 
     void invalidateResources();
+
+    void notifyCGs();
 }

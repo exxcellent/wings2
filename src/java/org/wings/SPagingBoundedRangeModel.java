@@ -300,7 +300,7 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
 
 
     /**
-     * Runs each <code>ChangeListener</code>'s <code>stateChanged</code> method.
+     * Runs each <code>ChangeListener</code>'s <code>componentChanged</code> method.
      *
      * @see #setRangeProperties
      * @see EventListenerList
