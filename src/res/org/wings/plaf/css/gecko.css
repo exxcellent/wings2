@@ -11,14 +11,6 @@
      classes in your selection path
 */
 
-/* needed for strict mode height scaling */
-HTML {
-	height: 100%;
-}
-BODY {
-    height: 100%;
-}
-
 /* either use this or cellpadding/cellspacing/border in table element.
    css overwrites all attributes! */
 
