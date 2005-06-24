@@ -38,8 +38,8 @@
             <description>How verbose do we want logging to be?</description>
         </init-param>
         <init-param>
-            <param-name>creatorManager</param-name>
-            <param-value>dwr.SessionCreatorManager</param-value>
+            <param-name>uk.ltd.getahead.dwr.CreatorManager</param-name>
+            <param-value>org.wings.plaf.css.dwr.SessionCreatorManager</param-value>
             <description>Install a session local CreatorManager</description>
         </init-param>
         <load-on-startup>-1</load-on-startup>

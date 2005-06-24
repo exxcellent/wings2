@@ -32,8 +32,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public abstract class AbstractComponentCG implements ComponentCG, SConstants, Serializable {
-    private final static transient Log log = LogFactory.getLog(AbstractComponentCG.class);
-    
+
     protected AbstractComponentCG() {
     }
 
@@ -57,6 +56,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      * @param component the component
      */
     public void uninstallCG(SComponent component) {
+    }
+
+    public void componentChanged(SComponent c) {
     }
 
     public void write(Device device, SComponent component) throws IOException {

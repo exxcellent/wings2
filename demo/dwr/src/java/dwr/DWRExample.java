@@ -53,11 +53,10 @@ public class DWRExample
         frame.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
     }
 
-    public static class DateFormatter extends DWRFormatter {
+    public static class DateFormatter extends SAbstractFormatter {
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, SessionManager.getSession().getLocale());
 
         public Object stringToValue(String text) throws ParseException {
-            System.out.println("text = '" + text + "'");
             if (text == null || text.trim().length() == 0)
                 return null;
             else
@@ -70,20 +69,9 @@ public class DWRExample
             else
                 return format.format(value);
         }
-
-        public String validate(String text) {
-            try {
-                String s = valueToString(stringToValue(text));
-                System.out.println("return = '" + s + "'");
-                return s;
-            }
-            catch (ParseException e) {
-                return null;
-            }
-        }
     }
 
-    public static class NumberFormatter extends DWRFormatter {
+    public static class NumberFormatter extends SAbstractFormatter {
         NumberFormat format = NumberFormat.getNumberInstance(SessionManager.getSession().getLocale());
 
         public Object stringToValue(String text) throws ParseException {
@@ -98,15 +86,6 @@ public class DWRExample
                 return "";
             else
                 return format.format(value);
-        }
-
-        public String validate(String text) {
-            try {
-                return valueToString(stringToValue(text));
-            }
-            catch (ParseException e) {
-                return null;
-            }
         }
     }
 }

@@ -15,43 +15,86 @@ package org.wings.plaf.css;
 
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.wings.SComponent;
 import org.wings.STextField;
+import org.wings.SFormattedTextField;
+import org.wings.header.Script;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
+import org.wings.plaf.css.dwr.CallableManager;
+import org.wings.text.SAbstractFormatter;
 import org.wings.io.Device;
 
 public class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
 
+    public void componentChanged(SComponent component) {
+        final STextField textField = (STextField) component;
+
+        if (textField instanceof SFormattedTextField) {
+            SFormattedTextField formattedTextField = (SFormattedTextField) textField;
+            SAbstractFormatter formatter = formattedTextField.getFormatter();
+            String name = "formatter_" + System.identityHashCode(formatter);
+            if (!CallableManager.getInstance().containsCallable(name)) {
+                CallableManager.getInstance().registerCallable(name, formatter);
+                textField.putClientProperty("callable", name);
+                // keep a reference to the name, otherwise the callable will get garbage collected
+
+                ScriptListener[] scriptListeners = textField.getScriptListeners();
+
+                for (int i = 0; i < scriptListeners.length; i++) {
+                    ScriptListener scriptListener = scriptListeners[i];
+                    if (scriptListener instanceof DWRScriptListener)
+                        textField.removeScriptListener(scriptListener);
+                }
+
+                textField.addScriptListener(new DWRScriptListener("onblur",
+                        "document.getElementById('{0}').getElementsByTagName('input')[0].style.color = 'inherit';" +
+                        name +
+                        ".validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('input')[0].value)",
+                        "function callback_{0}(data) {\n" +
+                        "   if (!data && data != '') {\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('input')[0].focus();\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('input')[0].style.color = 'red';\n" +
+                        "   }\n" +
+                        "   else\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('input')[0].value = data;\n" +
+                        "}\n", new SComponent[] { textField }));
+            }
+        }
+    }
+
     public void writeContent(final Device device,
-                             final SComponent _c)
+                             final SComponent component)
             throws IOException {
-        final STextField component = (STextField) _c;
+        final STextField textField = (STextField) component;
 
         device.print("<input type=\"text\"");
-        Utils.optAttribute(device, "size", component.getColumns());
-        Utils.optAttribute(device, "maxlength", component.getMaxColumns());
+        Utils.optAttribute(device, "size", textField.getColumns());
+        Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
 
-        Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
-        if (!component.isEditable() || !component.isEnabled()) {
+        if (!textField.isEditable() || !textField.isEnabled()) {
             device.print(" readonly=\"true\"");
         }
-        if (component.isEnabled()) {
+        if (textField.isEnabled()) {
             device.print(" name=\"");
-            Utils.write(device, Utils.event(component));
+            Utils.write(device, Utils.event(textField));
             device.print("\"");
         } else {
             device.print(" disabled=\"true\"");
         }
-        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optAttribute(device, "tabindex", textField.getFocusTraversalIndex());
 
-        if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
+        if (textField.isFocusOwner())
+            Utils.optAttribute(device, "focus", textField.getName());
 
-        Utils.writeEvents(device, component);
+        Utils.writeEvents(device, textField);
 
-        Utils.optAttribute(device, "value", component.getText());
+        Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
     }
 }

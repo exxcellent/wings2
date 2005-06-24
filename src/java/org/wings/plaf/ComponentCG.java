@@ -36,6 +36,8 @@ public interface ComponentCG
      */
     void uninstallCG(SComponent c);
 
+    void componentChanged(SComponent c);
+
     /**
      * Writes the given component to the Device.
      * <p/>

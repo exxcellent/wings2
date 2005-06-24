@@ -74,6 +74,7 @@ public class TableExample
 
 
     static class MyCellRenderer extends SDefaultTableCellRenderer {
+        SCheckBox checkBox = new SCheckBox();
 
         public MyCellRenderer() {
             setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));
@@ -84,11 +85,18 @@ public class TableExample
                                                         boolean selected,
                                                         int row,
                                                         int col) {
+            name(table, row, col);
             if (value instanceof Color) {
                 Color c = (Color)value;
                 setText("<html><span style=\"color:" + colorToHex(c) + "\">" + colorToHex(c) + "</span>");
                 setIcon(null);
                 return this;
+            }
+            else if (value instanceof Boolean && row != -1) {
+                Boolean b = (Boolean)value;
+                checkBox.setName(name(table, row, col));
+                checkBox.setSelected(b.booleanValue());
+                return checkBox;
             }
             else
                 return super.getTableCellRendererComponent(table, value, selected, row, col);

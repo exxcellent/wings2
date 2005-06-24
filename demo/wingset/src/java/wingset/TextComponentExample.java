@@ -14,13 +14,20 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.border.SLineBorder;
+import org.wings.session.SessionManager;
 import org.wings.text.SNumberFormatter;
+import org.wings.text.SAbstractFormatter;
 import org.wings.event.SDocumentListener;
 import org.wings.event.SDocumentEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 import java.text.NumberFormat;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
@@ -30,8 +37,8 @@ public class TextComponentExample
         extends WingSetPane
 {
     private ComponentControls controls;
-    private SLabel documentEvent = new SLabel();
-    private SLabel actionEvent = new SLabel();
+    private SLabel documentEvent = new SLabel(" ");
+    private SLabel actionEvent = new SLabel(" ");
 
     SDocumentListener documentListener = new SDocumentListener() {
                 public void insertUpdate(SDocumentEvent e) {
@@ -64,30 +71,29 @@ public class TextComponentExample
         gridLayout.setVgap(4);
         SPanel p = new SPanel(gridLayout);
 
-        SLabel l = new SLabel("STextField: ");
-        l.setVerticalAlignment(SConstants.TOP);
-        p.add(l);
+        p.add(new SLabel("STextField: "));
         STextField textField = new STextField();
         textField.setName("textfield");
         textField.addDocumentListener(documentListener);
         p.add(textField);
 
-        l = new SLabel("STextArea: ");
-        l.setVerticalAlignment(SConstants.TOP);
-        p.add(l);
+        p.add(new SLabel("SFormattedTextField (NumberFormat): "));
+        SFormattedTextField numberTextField = new SFormattedTextField(new NumberFormatter());
+        numberTextField.setName("numberfield");
+        numberTextField.addDocumentListener(documentListener);
+        p.add(numberTextField);
+
+        p.add(new SLabel("SFormattedTextField (DateFormat): "));
+        SFormattedTextField dateTextField = new SFormattedTextField(new DateFormatter());
+        dateTextField.setName("datefield");
+        dateTextField.addDocumentListener(documentListener);
+        p.add(dateTextField);
+
+        p.add(new SLabel("STextArea: "));
         STextArea textArea = new STextArea();
         textArea.setName("textarea");
         textArea.addDocumentListener(documentListener);
         p.add(textArea);
-
-        l = new SLabel("SFormattedTextField: ");
-        l.setVerticalAlignment(SConstants.TOP);
-        p.add(l);
-        SNumberFormatter formatter = new SNumberFormatter(NumberFormat.getNumberInstance(getSession().getLocale()));
-        SFormattedTextField formattedTextField = new SFormattedTextField(formatter);
-        formattedTextField.setName("formattedTextField");
-        formattedTextField.addDocumentListener(documentListener);
-        p.add(formattedTextField);
 
         p.add(new SLabel("DocumentEvent: "));
         p.add(documentEvent);
@@ -109,13 +115,62 @@ public class TextComponentExample
             }
         });
 
+        for (int i = 0; i < p.getComponents().length; i++) {
+            SComponent component = p.getComponents()[i];
+            component.setVerticalAlignment(SConstants.TOP);
+            if (component instanceof STextComponent)
+                component.setPreferredSize(new SDimension("200px", null));
+        }
+        documentEvent.setBorder(new SLineBorder(1));
+        documentEvent.setBackground(Color.LIGHT_GRAY.brighter());
+        documentEvent.setPreferredSize(new SDimension("200px", null));
+        actionEvent.setBorder(new SLineBorder(1));
+        actionEvent.setBackground(Color.LIGHT_GRAY.brighter());
+        actionEvent.setPreferredSize(new SDimension("200px", null));
+
         controls.addSizable(textField);
         controls.addSizable(textArea);
-        controls.addSizable(formattedTextField);
+        controls.addSizable(dateTextField);
 
         f.add(controls, SBorderLayout.NORTH);
         f.add(p, SBorderLayout.CENTER);
         return f;
+    }
+
+    public static class DateFormatter extends SAbstractFormatter {
+        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, SessionManager.getSession().getLocale());
+
+        public Object stringToValue(String text) throws ParseException {
+            if (text == null || text.trim().length() == 0)
+                return null;
+            else
+                return format.parse(text.trim());
+        }
+
+        public String valueToString(Object value) throws ParseException {
+            if (value == null)
+                return "";
+            else
+                return format.format(value);
+        }
+    }
+
+    public static class NumberFormatter extends SAbstractFormatter {
+        NumberFormat format = NumberFormat.getNumberInstance(SessionManager.getSession().getLocale());
+
+        public Object stringToValue(String text) throws ParseException {
+            if (text == null || text.trim().length() == 0)
+                return null;
+            else
+                return format.parse(text.trim());
+        }
+
+        public String valueToString(Object value) throws ParseException {
+            if (value == null)
+                return "";
+            else
+                return format.format(value);
+        }
     }
 }
 

@@ -298,6 +298,7 @@ final class SessionServlet
 
         Device outputDevice = null;
 
+        ReloadManager reloadManager = session.getReloadManager();
         try {
             /*
              * The tomcat 3.x has a bug, in that it does not encode the URL
@@ -420,8 +421,9 @@ final class SessionServlet
             }
             
             // invalidate frames and resources
-            getSession().getReloadManager().invalidateResources();
-            
+            reloadManager.invalidateResources();
+            reloadManager.notifyCGs();
+
             // deliver resource. The
             // externalizer is able to handle static and dynamic resources
             ExternalizeManager extManager = getSession().getExternalizeManager();
@@ -494,7 +496,7 @@ final class SessionServlet
              * the session might be null due to destroy().
              */
             if (session != null) {
-                session.getReloadManager().clear();
+                reloadManager.clear();
                 session.setServletRequest(null);
                 session.setServletResponse(null);
             }

@@ -31,15 +31,8 @@ import java.text.ParseException;
  */
 public abstract class SAbstractFormatter {
 
-    private Vector textFields = null;
-    private Vector jScripts = null;
-
-
     public SAbstractFormatter() {
-        textFields = new Vector();
-        jScripts = new Vector();
     }
-
 
     /*
      * Installs a SFormattedTextField to the Formatter. This is important, because the
@@ -47,41 +40,13 @@ public abstract class SAbstractFormatter {
      * is changed.
      **/
     public void install(SFormattedTextField textField) {
-        boolean b = false;
-        if (textField != null) {
-            for (Iterator i = textFields.iterator(); i.hasNext();) {
-                if (i.next() == textField) {
-                    return;
-                }
-            }//for
-            textFields.add(textField);
-            if (textField.getActionListeners().length > 0) {
-                b = true;
-            }
-
-            JavaScriptListener jScriptListener = generateJavaScript(textField, b);
-
-            textField.addScriptListener(jScriptListener);
-
-            jScripts.add(jScriptListener);
-        }
     }
 
     /*
      * removes the Formatter
      */
     public void uninstall(SFormattedTextField textField) {
-        if (textField != null) {
-            for (int i = 0; i < textFields.size(); i++) {
-                if (textFields.get(i) == textField) {
-                    textField.removeScriptListener((JavaScriptListener) jScripts.get(i));
-                    jScripts.remove(i);
-                    textFields.remove(i);
-                }
-            }
-        }
     }
-
 
     /*
      * Generates the new JavaScript for all registered SFormattedTextFields.
@@ -89,32 +54,7 @@ public abstract class SAbstractFormatter {
      * a new ActionListener is registered.
      */
     public void updateFormatter() {
-        if (textFields.size() > 0) {
-            Vector tempJScripts = new Vector();
-            for (int i = 0; i < textFields.size(); i++) {
-                SFormattedTextField tf = (SFormattedTextField) textFields.get(i);
-                tf.removeScriptListener((JavaScriptListener) jScripts.get(i));
-                boolean b = false;
-                if (tf.getActionListeners().length > 0) {
-                    b = true;
-                }
-
-                JavaScriptListener jl = generateJavaScript(tf, b);
-                //JavaScriptListener jl = generateJavaScript(tf.getEncodedLowLevelEventId(), b);
-                tf.addScriptListener(jl);
-                tempJScripts.add(jl);
-
-            }
-            jScripts = tempJScripts;
-        }
-
-        /* if(javaScriptListener != null){
-             textField.removeScriptListener(javaScriptListener);
-         }
-         textField.addScriptListener(generateJavaScript(textField.getEncodedLowLevelEventId()));*/
     }
-
-    public abstract JavaScriptListener generateJavaScript(SFormattedTextField field, boolean actionListener);
 
     /**
      * @param text String to convert
@@ -127,4 +67,13 @@ public abstract class SAbstractFormatter {
      * @return String representation of value
      */
     public abstract String valueToString(Object value) throws ParseException;
+
+    public String validate(String text) {
+        try {
+            return valueToString(stringToValue(text));
+        }
+        catch (ParseException e) {
+            return null;
+        }
+    }
 }

@@ -25,6 +25,7 @@ import org.wings.header.Link;
 import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.resource.ClassPathStylesheetResource;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
@@ -188,6 +189,8 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         component.addDynamicResource(scriptResource);
         component.addHeader(new Script("text/javascript", scriptResource));
 
+        component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
+
         Iterator iter = javascriptResourceKeys.iterator();
         while (iter.hasNext()) {
             String jsResKey = (String) iter.next();
@@ -199,7 +202,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
 
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets();
         for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
-              component.headers().add(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));;
+            component.headers().add(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));;
         }
 
         addExternalizedHeader(component, UTILS_SCRIPT, "text/javascript");
@@ -228,6 +231,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         component.removeDynamicResource(DynamicStyleSheetResource.class);
         component.removeDynamicResource(DynamicScriptResource.class);
         component.clearHeaders();
+    }
+
+    public void componentChanged(SComponent c) {
     }
 
     public void write(final Device device, final SComponent _c)
@@ -290,7 +296,17 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         Utils.write(device, encoding);
         device.print("\"/>\n");
 
-        for (Iterator iterator = headers.iterator(); iterator.hasNext();) {
+        Collection callableNames = CallableManager.getInstance().callableNames();
+
+        Collection allHeaders = new ArrayList(headers.size() + callableNames.size());
+        allHeaders.addAll(headers);
+        for (Iterator iterator = callableNames.iterator(); iterator.hasNext();) {
+            String name = (String) iterator.next();
+            Script header = new Script("text/javascript", new DefaultURLResource("../dwr/interface/" + name + ".js"));
+            allHeaders.add(header);
+        }
+
+        for (Iterator iterator = allHeaders.iterator(); iterator.hasNext();) {
             Object next = iterator.next();
             if (next instanceof Renderable) {
                 ((Renderable) next).write(device);
@@ -318,7 +334,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             }
             frame.putClientProperty("focus", focus);
         }
-        
+
         // let ie understand hover css styles on elements other than anchors
         if (BrowserType.IE.equals(browser.getBrowserType())) {
             // externalize hover behavior

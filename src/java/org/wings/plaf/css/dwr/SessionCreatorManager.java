@@ -1,19 +1,24 @@
 /*
  * Copyright (c) 2005 Your Corporation. All Rights Reserved.
  */
-package dwr;
+package org.wings.plaf.css.dwr;
 
 import uk.ltd.getahead.dwr.CreatorManager;
 import uk.ltd.getahead.dwr.Creator;
 import uk.ltd.getahead.dwr.ExecutionContext;
 import org.w3c.dom.Element;
+import org.wings.plaf.css.dwr.SessionCreator;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.WeakHashMap;
 
 /**
+ * The callables are referenced weakly, only. Thus, most callables are destroyed as soon as there's
+ * no component's client property referencing them anymore.
+ *
  * @author hengels
  * @version $Revision$
  */
@@ -37,6 +42,9 @@ public class SessionCreatorManager
     public void addCreatorType(String typename, Class clazz) {
     }
 
+    public void addCreator(String typename, String scriptName, Map params) throws InstantiationException, IllegalAccessException, IllegalArgumentException {
+    }
+
     public void addCreator(String type, String javascript, Element allower) {
     }
 
@@ -48,6 +56,9 @@ public class SessionCreatorManager
     public Creator getCreator(String name) {
         Map map = getCreatorMap();
         return (Creator)map.get(name);
+    }
+
+    public void setCreators(Map creators) {
     }
 
     public void addCreator(String s, Object callable) {
@@ -64,7 +75,7 @@ public class SessionCreatorManager
         HttpSession session = ExecutionContext.get().getSession();
         Map map = (Map) session.getAttribute("CreatorMap");
         if (map == null) {
-            map = new HashMap();
+            map = new WeakHashMap();
             session.setAttribute("CreatorMap", map);
         }
         return map;

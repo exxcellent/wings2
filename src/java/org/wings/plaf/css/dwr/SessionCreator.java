@@ -1,11 +1,13 @@
 /*
  * Copyright (c) 2005 Your Corporation. All Rights Reserved.
  */
-package dwr;
+package org.wings.plaf.css.dwr;
 
 import uk.ltd.getahead.dwr.Creator;
 
 import org.w3c.dom.Element;
+
+import java.util.Map;
 
 /**
  * @author hengels
@@ -22,11 +24,18 @@ public class SessionCreator implements Creator
     public void init(Element config) {
     }
 
+    public void setProperties(Map params) throws IllegalArgumentException {
+    }
+
     public Class getType() {
         return callable.getClass();
     }
 
     public Object getInstance() {
         return callable;
+    }
+
+    public String getScope() {
+        return SESSION;
     }
 }
