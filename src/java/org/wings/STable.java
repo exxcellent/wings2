@@ -761,7 +761,10 @@ public class STable extends SComponent
      * Deselects all selected columns and rows.
      */
     public void clearSelection() {
-        getSelectionModel().clearSelection();
+        if (!getSelectionModel().isSelectionEmpty()) {
+            getSelectionModel().clearSelection();
+            reload();
+        }
     }
 
 
