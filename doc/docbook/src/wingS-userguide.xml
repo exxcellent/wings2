@@ -211,7 +211,7 @@
     </sect1>
 
     <sect1>
-      <title>Frames and Top Level Components</title>
+      <title>Frames and Top-Level Components</title>
 
       <para>TODO</para>
     </sect1>
@@ -642,6 +642,43 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
         navigations as a result of inadvertent double-clicks on the client
         side.</para>
       </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Error Page Display</title>
+
+      <para>By default, if an exception occurs inside a wingS application,
+      this error is logged via the logging mechanism. No other action is
+      triggered. However, you can provide the user with an error page. For
+      this, you need to provide a parameter in your application's web.xml
+      file, like this:<programlisting>&lt;init-param&gt;
+  &lt;param-name&gt;<emphasis role="bold">wings.error.template</emphasis>&lt;/param-name&gt;
+  &lt;param-value&gt;<emphasis role="bold">/templates/ErrorTemplate.thtml</emphasis>&lt;/param-value&gt;
+&lt;/init-param&gt;</programlisting></para>
+
+      <para>The value of the parameter is a path to a wingS template relative
+      to the directory the web application resides in. In this template you
+      can provide the following constraints:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis role="bold">EXCEPTION_MESSAGE</emphasis> - replaced
+          with the message of the exception</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">EXCEPTION_STACK_TRACE</emphasis> -
+          replaced with the stack trace of the exception</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">WINGS_VERSION</emphasis> - replaced with
+          the wingS version and compile time</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For an in-use example of this, look at the web.xml and
+      ErrorTemplate.thtml files of the wingSet demo.</para>
     </sect1>
 
     <sect1>
