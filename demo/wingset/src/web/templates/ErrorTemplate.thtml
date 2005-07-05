@@ -1,0 +1,7 @@
+<h1>wingS error</h1>
+<HR size="1" noshade="noshade">
+<p>An exception was thrown.</p>
+<p><b>message</b> <object name="EXCEPTION_MESSAGE"></object></p>
+<p><b>stack trace</b> <object name="EXCEPTION_STACK_TRACE"></object></p>
+<HR size="1" noshade="noshade">
+<h3><object name="WINGS_VERSION"></object></h3>

@@ -479,7 +479,7 @@ final class SessionServlet
 
         } catch (Throwable e) {
             log.fatal("exception: ", e);
-            handleException(req, response, e);
+            handleException(response, e);
         } finally {
             if (session != null) {
                 session.fireRequestEvent(SRequestEvent.REQUEST_END);
@@ -541,9 +541,20 @@ final class SessionServlet
     private SFrame errorFrame;
     private SLabel errorStackTraceLabel;
     private SLabel errorMessageLabel;
+    private SLabel versionLabel;
 
-    protected void handleException(HttpServletRequest req,
-                                   HttpServletResponse res, Throwable e) {
+    /** 
+     * In case of an error, display an error page to the user. This is only
+     * done when there is a property <code>wings.error.template</code> present
+     * in the web.xml file. This property must contain a path relative to the
+     * webapp which leads to a wingS template. In this template, placeholders
+     * must be defined for wingS components named 
+     * <code>EXCEPTION_STACK_TRACE</code>, 
+     * <code>EXCEPTION_MESSAGE</code> and <code>WINGS_VERSION</code>. 
+     * @param res the HTTP Response to use
+     * @param e the Exception to report
+     */
+    protected void handleException(HttpServletResponse res, Throwable e) {
         try {
             if (errorFrame == null) {
                 errorFrame = new SFrame();
@@ -552,8 +563,10 @@ final class SessionServlet
                  * will throw an Exception, so the StackTrace is NOT exposed
                  * to the user (may be security relevant)
                  */
-                errorFrame.getContentPane().
-                        setLayout(new STemplateLayout(errorTemplateFile));
+                errorFrame.getContentPane().setLayout(
+                        new STemplateLayout(SessionManager.getSession()
+                                .getServletContext().getRealPath(
+                                        errorTemplateFile)));
 
                 errorStackTraceLabel = new SLabel();
                 errorFrame.getContentPane().add(errorStackTraceLabel,
@@ -562,15 +575,23 @@ final class SessionServlet
                 errorMessageLabel = new SLabel();
                 errorFrame.getContentPane().add(errorMessageLabel,
                         "EXCEPTION_MESSAGE");
+
+                versionLabel = new SLabel();
+                errorFrame.getContentPane().add(versionLabel,
+                        "WINGS_VERSION");
+                
+                versionLabel.setText("wingS " + Version.getVersion() + " / " + Version.getCompileTime());
             }
 
             res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
             errorStackTraceLabel.setText(getStackTraceString(e));
-            errorMessageLabel.setText(e.getMessage());
+            errorMessageLabel.setText(e.getMessage()!=null?e.getMessage():"none");
             errorFrame.write(new ServletDevice(out));
         } catch (Exception ex) {
+            log.fatal("Exception handling failed.", ex);
         }
+        
     }
 
     /**

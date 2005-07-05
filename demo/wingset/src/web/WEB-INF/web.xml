@@ -21,6 +21,10 @@
             <param-value>org.wings.plaf.css.CSSLookAndFeel</param-value>
         </init-param>
         <init-param>
+            <param-name>wings.error.template</param-name>
+            <param-value>/templates/ErrorTemplate.thtml</param-value>
+        </init-param>
+        <init-param>
             <param-name>wings.capture.default.bindings</param-name>
             <param-value>alt LEFT, alt RIGHT, F1</param-value>
 	    <description>See KeyStroke.getKeyStroke(String s).</description>
