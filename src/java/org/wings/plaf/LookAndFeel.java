@@ -102,15 +102,28 @@ public class LookAndFeel        implements Serializable {
      * @return a new CG instance
      */
     public static Object makeCG(String className) {
-        Object result = finalResources.get(className);
-        if (result == null) {
-            try {
-                Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
-                result = cgClass.newInstance();
-                finalResources.put(className, result);
-            } catch (Exception ex) {
-                log.fatal(null, ex);
-            }
+//      Object result = finalResources.get(className);
+//      if (result == null) {
+//          try {
+//              Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+//              result = cgClass.newInstance();
+//              finalResources.put(className, result);
+//          } catch (Exception ex) {
+//              log.fatal(null, ex);
+//          }
+//      }
+//      return result;
+        /* changed this method due to NoClassDefFoundError at Tomcat startup.
+         * see http://sourceforge.net/mailarchive/forum.php?thread_id=7551328&forum_id=13034
+         */
+        Object result = null;
+        try {
+            Class cgClass = Class.forName(className, true, Thread
+                    .currentThread().getContextClassLoader());
+            result = cgClass.newInstance();
+            finalResources.put(className, result);
+        } catch (Exception ex) {
+            log.fatal(null, ex);
         }
         return result;
     }
