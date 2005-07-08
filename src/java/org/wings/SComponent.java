@@ -643,8 +643,12 @@ public abstract class SComponent
     }
 
     public void setAttribute(CSSProperty property, String propertyValue) {
-         setAttribute(thisComponentCssSelector, property, propertyValue);
-    }
+        setAttribute(thisComponentCssSelector, property, propertyValue);
+   }
+
+    public String getAttribute(CSSProperty property) {
+        return getAttribute(thisComponentCssSelector, property);
+   }
 
     public void setAttribute(CSSSelector selector, CSSProperty property, SIcon icon) {
         setAttribute(selector, property, icon != null ? "url('"+icon.getURL().toString()+"')" : "none");        
@@ -658,6 +662,15 @@ public abstract class SComponent
         } else {
             String old = style.put(property, propertyValue);
             reloadIfChange(old, propertyValue);
+        }
+    }
+
+    public String getAttribute(CSSSelector selector, CSSProperty property) {
+        CSSStyle style = (CSSStyle) getDynamicStyle(selector);
+        if (style == null) {
+            return null;
+        } else {
+            return style.get(property);
         }
     }
 

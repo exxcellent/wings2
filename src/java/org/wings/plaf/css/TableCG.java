@@ -69,10 +69,11 @@ public class TableCG extends AbstractComponentCG implements
         boolean selectable = table.getSelectionMode() != SListSelectionModel.NO_SELECTION && !table.isEditable();
         boolean showAsFormComponent = table.getShowAsFormComponent();
 
-        if (isEditingCell)
+        if (isEditingCell) {
             component = table.getEditorComponent();
-        else
+        } else {
             component = table.prepareRenderer(table.getCellRenderer(row, col), row, col);
+        }
 
         device.print("<td col=\"");
         device.print(col);
@@ -242,12 +243,12 @@ public class TableCG extends AbstractComponentCG implements
             if (selectionModel.isSelectedIndex(r))
                 device.print(" selected=\"true\"");
             if (r % 2 != 0)
-                device.print(" odd=\"true\">");
+                device.print(" odd=\"true\" class=\"odd\">");
             else
-                device.print(" even=\"true\">");
+                device.print(" even=\"true\" class=\"even\">");
 
             if (numbering) {
-                device.print("<td col=\"numbering\"");
+                device.print("<td col=\"numbering\" class=\"numbering\"");
                 if (childSelectorWorkaround)
                     Utils.optAttribute(device, "class", "numbering");
                 device.print(">");

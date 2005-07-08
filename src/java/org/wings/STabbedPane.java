@@ -565,7 +565,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
     }
 
     /**
-     * Sets the maximum tabs per line. tabs <= 0: No maximum.
+     * Sets the maximum tabs per line. tabs >= 0: No maximum.
      */
     public void setMaxTabsPerLine(int tabs) {
         maxTabsPerLine = tabs;

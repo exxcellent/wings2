@@ -154,13 +154,6 @@ div.STable > table {
     border-collapse: collapse;
 }
 
-div.STable > table > tbody > tr[odd="true"] {
-    background-color: #eeeeee;
-}
-
-div.STable > table > tbody > tr[selected="true"] {
-    background-color: #f6decc !important;
-}
 
 div.STable > table > thead > tr > th {
     border: 1px solid black;
@@ -188,7 +181,7 @@ div.STable > table > tbody > tr > td[col="numbering"] {
 div.STable > table > tbody > tr > td button {
     border: none;
     background-color: inherit;
-    padding: 0px
+    padding: 0px;
 }
 
 div.SCheckBox > button {

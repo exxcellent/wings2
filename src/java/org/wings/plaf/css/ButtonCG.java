@@ -92,6 +92,9 @@ public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
             device.print("\"");
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
+            if (!button.isEnabled()) {
+                device.print(" disabled=\"disabled\"");
+            }
         } else {
             RequestURL addr = button.getRequestURL();
             addr.addParameter(button, button.getToggleSelectionParameter());

@@ -28,7 +28,7 @@ function my_PickFunc()
 function my_DropFunc()
 {
 	if (dd.obj.dragsource) {
-		for(i=0;i<dd.elements.length;i++) {
+		for(var i=0;i<dd.elements.length;i++) {
 			var tmpEl = dd.elements[i];
 			if (tmpEl != dd.obj && tmpEl.droptarget) {
 				if ( (dd.e.x >= tmpEl.x) && (dd.e.x <= (tmpEl.x + tmpEl.w)) && (dd.e.y >= tmpEl.y) && (dd.e.y <= (tmpEl.y + tmpEl.h)) ) {
@@ -37,7 +37,6 @@ function my_DropFunc()
 						loc = loc.substring(0,loc.indexOf('?'));
 					}
 					loc = loc + '?' + wdnd_managerId + '=dropTarget' + tmpEl.name + '&' + wdnd_managerId + '=dragSource' + dd.obj.name;
-					
 					document.location.href=loc;
 				}
 			}

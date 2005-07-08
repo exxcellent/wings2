@@ -7,3 +7,14 @@
 
    Please avoid generic/global css selectors and use the wings css classes in your selection path
 */
+
+/* STable even / odd coloring */
+
+.STable table tbody tr.odd {
+    background-color: #eeeeee;
+}
+
+.STable table tbody tr.selected {
+    background-color: #f6decc !important;
+}
+

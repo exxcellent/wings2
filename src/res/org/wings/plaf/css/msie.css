@@ -160,6 +160,51 @@ ul.STree li div.SSubTree {
    color: #000000;
 }
 
+.STable table {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.STable table table{
+    border: 0px solid black;
+}
+
+.STable table thead tr th {
+    border: 1px solid black;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.STable table tbody tr td {
+    cursor: pointer;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-left: 1px solid black;
+}
+
+.STable table table tbody tr td {
+    padding-left: 0px;
+    padding-right: 0px;
+    border-left: 0px solid black;
+}
+
+/* let the link span the whole table */
+.STable table tbody tr td a {
+	display: block;
+	width: 100%;
+}
+
+.STable table tbody tr td.numbering {
+    text-align: right;
+}
+
+.STable table tbody tr td button {
+    border: none;
+    background-color: inherit;
+    padding: 0px;
+}
+
 .tableheader {
    font-weight: bold;
    background-color: #dedede;

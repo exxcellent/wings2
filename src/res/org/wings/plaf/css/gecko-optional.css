@@ -98,3 +98,13 @@ div.SOptionPane > table > tbody > tr > * {
     border: 1px solid #cccccc;
 }
 
+/* STable even / odd coloring */
+
+div.STable > table > tbody > tr[odd="true"] {
+    background-color: #eeeeee;
+}
+
+div.STable > table > tbody > tr[selected="true"] {
+    background-color: #f6decc !important;
+}
+
