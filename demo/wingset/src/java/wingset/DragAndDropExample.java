@@ -38,7 +38,8 @@ import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 
 /**
- * example for showing the drag and drop capabilities of wingS
+ * example for showing the drag and drop capabilities of wingS.
+ * And "it's got wingS ;)" 
  * @author ole
  *
  */
@@ -183,6 +184,11 @@ public class DragAndDropExample extends WingSetPane {
         }
     }
 
+    /**
+     * This class extends the SLabel class with Drag functionality.
+     * @author ole
+     *
+     */
     private class SDragLabel extends SLabel implements DragSource {
 
         private boolean dragEnabled;
@@ -204,7 +210,7 @@ public class DragAndDropExample extends WingSetPane {
     
     
     /**
-     * This class extends the STextField class with Drag and Drop functionality.
+     * This class extends the SLabel class with Drop functionality.
      * @author ole
      *
      */

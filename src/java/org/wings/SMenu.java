@@ -47,7 +47,6 @@ public class SMenu extends SMenuItem {
         super(text, icon);
     }
 
-
     /**
      * Add a menu item to this menu.
      */

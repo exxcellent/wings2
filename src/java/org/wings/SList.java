@@ -192,7 +192,6 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
         if (dataModel == null) {
             throw new IllegalArgumentException("dataModel must not be null");
         }
-
         if (this.dataModel != null) this.dataModel.removeListDataListener(this);
         this.dataModel = dataModel;
         this.dataModel.addListDataListener(this);
