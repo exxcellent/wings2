@@ -108,6 +108,8 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         device.print(">");
 
         // Special handling: Render title of STitledBorder
+        // TODO Attention - This may break CSS selectors as a new element is introduced inbetween.
+        // Maybe move out of DIV with the componentn ID.
         if (component.getBorder() instanceof STitledBorder) {
             STitledBorder titledBorder = (STitledBorder) component.getBorder();
             device.print("<div class=\"STitledBorderLegend\" style=\"");
