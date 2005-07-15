@@ -759,6 +759,36 @@ button.setName("UniqueName1");</programlisting></para>
       </sect2>
     </sect1>
 
+      <sect1>
+        <title>Internationalization and Character encoding</title>
+        <para>In contrast to earlier version of wingS, the character encoding
+        used to communicate between the the browser and the wingS framework no
+        longer defaults to local dependent character encodings, but UTF-8.
+        This enables wingS to display and proceess input containing
+        all characters represented in UTF-8. </para>
+
+          <para>Currently all wingS supported browser are capable of handling UTF-8
+        correctly, so this should be no issue.
+        Please be aware that you might need additional fonts installed
+        on your system (i.e. Arial Unicode in Microsoft Windows environments)
+        to be able to display i.e. chinese characters.
+        </para>
+
+        <para>Nevertheless you have the possibility to override this default
+        with your own character encodings depending on the locale configured
+        in the client browser. Just provide a properties file called
+        <code>org.wings.util.charset.properties</code> inside your <code>WEB-INF</code>
+        directory with a map of Locale names to character encoding names.
+
+        Refer to the example file in the WingSet demo or look at the
+        <code>charset.properties</code> in the wingS distribution for an details.
+        </para>
+
+          <para>Please be aware of one open pitfall in wingS: Currently the template
+          files for the layout managers are all expected to be in the ISO-8859-1 encoding.
+          So your need to escape special characters.</para>
+    </sect1>
+
     <sect1>
       <title>Best Practices</title>
 
