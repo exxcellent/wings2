@@ -14,76 +14,76 @@
 package wingset;
 
 import org.wings.SComponent;
+import org.wings.SFlowDownLayout;
 import org.wings.SForm;
 import org.wings.SLabel;
 import org.wings.STextField;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 
 /**
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public class KeyboardBindingsExample extends WingSetPane {
-    private SLabel label = new SLabel();
-    private STextField textField = new STextField();
-    private SForm form = new SForm();
+    private final SLabel label = new SLabel();
+    private final STextField textField = new STextField();
+    private final SForm form = new SForm(new SFlowDownLayout());
 
-    public SComponent createExample() {
-        InputMap inputMap = new InputMap();
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0, false), "f1");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0, false), "f2");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0, false), "f3");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0, false), "f4");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0, false), "f5");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0, false), "f6");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0, false), "f7");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0, false), "f8");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0, false), "f9");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0, false), "f10");
+    public KeyboardBindingsExample() {
+        final InputMap inputMap = new InputMap();
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0, false), "F1");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0, false), "F2");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0, false), "F3");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0, false), "F4");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0, false), "F5");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0, false), "F6");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0, false), "F7");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0, false), "F8");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0, false), "F9");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0, false), "F10");
 
-        InputMap formInputMap = new InputMap();
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.SHIFT_DOWN_MASK, false), "shift f1");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, KeyEvent.SHIFT_DOWN_MASK, false), "shift f2");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK, false), "shift f3");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.SHIFT_DOWN_MASK, false), "shift f4");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_DOWN_MASK, false), "shift f5");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.SHIFT_DOWN_MASK, false), "shift f6");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, KeyEvent.SHIFT_DOWN_MASK, false), "shift f7");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, KeyEvent.SHIFT_DOWN_MASK, false), "shift f8");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, KeyEvent.SHIFT_DOWN_MASK, false), "shift f9");
-        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, KeyEvent.SHIFT_DOWN_MASK, false), "shift f10");
+        final InputMap formInputMap = new InputMap();
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F1");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F2");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F3");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F4");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F5");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F6");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F7");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F8");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F9");
+        formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F10");
 
-
-        Action action = new AbstractAction() {
+        final Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 label.setText(e.getActionCommand());
             }
         };
 
-        ActionMap actionMap = new ActionMap();
-        actionMap.put("f1", action);
-        actionMap.put("f2", action);
-        actionMap.put("f3", action);
-        actionMap.put("f4", action);
-        actionMap.put("f5", action);
-        actionMap.put("f6", action);
-        actionMap.put("f7", action);
-        actionMap.put("f8", action);
-        actionMap.put("f9", action);
-        actionMap.put("f10", action);
-        actionMap.put("shift f1", action);
-        actionMap.put("shift f2", action);
-        actionMap.put("shift f3", action);
-        actionMap.put("shift f4", action);
-        actionMap.put("shift f5", action);
-        actionMap.put("shift f6", action);
-        actionMap.put("shift f7", action);
-        actionMap.put("shift f8", action);
-        actionMap.put("shift f9", action);
-        actionMap.put("shift f10", action);
+        final ActionMap actionMap = new ActionMap();
+        actionMap.put("F1", action);
+        actionMap.put("F2", action);
+        actionMap.put("F3", action);
+        actionMap.put("F4", action);
+        actionMap.put("F5", action);
+        actionMap.put("F6", action);
+        actionMap.put("F7", action);
+        actionMap.put("F8", action);
+        actionMap.put("F9", action);
+        actionMap.put("F10", action);
+        actionMap.put("Shift F1", action);
+        actionMap.put("Shift F2", action);
+        actionMap.put("Shift F3", action);
+        actionMap.put("Shift F4", action);
+        actionMap.put("Shift F5", action);
+        actionMap.put("Shift F6", action);
+        actionMap.put("Shift F7", action);
+        actionMap.put("Shift F8", action);
+        actionMap.put("Shift F9", action);
+        actionMap.put("Shift F10", action);
 
         textField.setInputMap(inputMap);
         textField.setActionMap(actionMap);
@@ -91,11 +91,18 @@ public class KeyboardBindingsExample extends WingSetPane {
         form.setInputMap(formInputMap);
         form.setActionMap(actionMap);
 
-        form.add(new SLabel("<html>f1 through f10 are captured by the STextField<br/>" +
-                "shift f1 through shift f10 are bubbling up to the containing SForm"));
+        form.add(new SLabel("&nbsp;"));
+        form.add(new SLabel("Try ALT-Left and ALT-Right to cycle inside the WingSet application between the different tabs"));
+        form.add(new SLabel("&nbsp;"));
+        form.add(new SLabel("<html>The keys F1 through F10 are captured by the STextField<br/>" +
+                "Shift F1 through Shift F10 are bubbling up to the containing SForm"));
         form.add(textField);
         form.add(label);
 
+        form.setHorizontalAlignment(CENTER);
+    }
+
+    public SComponent createExample() {
         return form;
     }
 }
