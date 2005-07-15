@@ -120,6 +120,14 @@ ul.STree li.selected table tr td button table {
     border: 1px dotted black;
 }
 
+/* bugfix: IE renders some margin into buttons by default, we hate that.
+   maybe extend this onto all buttons... ole 15.07.2005
+*/
+ul.STree li table tr td button {
+    overflow:visible;
+    width:1px;
+}
+
 ul.STree{
 	list-style: none;
 	margin-left:0px;
