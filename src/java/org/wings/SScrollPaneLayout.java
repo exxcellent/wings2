@@ -12,8 +12,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class SScrollPaneLayout
-        extends SAbstractLayoutManager
-{
+        extends SAbstractLayoutManager {
     public static final String VIEWPORT = "Viewport";
     public static final String NORTH = SBorderLayout.NORTH;
     public static final String WEST = SBorderLayout.WEST;
@@ -39,23 +38,29 @@ public class SScrollPaneLayout
 
     public void addSingletonComponent(SComponent component, Object constraint) {
         if (VIEWPORT.equals(constraint)) {
-            container.remove(viewport);
+            if (viewport != component) {
+                container.remove(viewport);
+            }
             viewport = component;
-        }
-        else if (NORTH.equals(constraint)) {
-            container.remove(north);
+        } else if (NORTH.equals(constraint)) {
+            if (viewport != component) {
+                container.remove(north);
+            }
             north = component;
-        }
-        else if (WEST.equals(constraint)) {
-            container.remove(west);
+        } else if (WEST.equals(constraint)) {
+            if (viewport != component) {
+                container.remove(west);
+            }
             west = component;
-        }
-        else if (EAST.equals(constraint)) {
-            container.remove(east);
+        } else if (EAST.equals(constraint)) {
+            if (viewport != component) {
+                container.remove(east);
+            }
             east = component;
-        }
-        else if (SOUTH.equals(constraint)) {
-            container.remove(south);
+        } else if (SOUTH.equals(constraint)) {
+            if (viewport != component) {
+                container.remove(south);
+            }
             south = component;
         }
     }
@@ -66,8 +71,9 @@ public class SScrollPaneLayout
     }
 
     public void removeComponent(SComponent c) {
-        if (c == null)
+        if (c == null) {
             return;
+        }
 
         String constraint = null;
         Iterator iterator = components.entrySet().iterator();
@@ -88,17 +94,13 @@ public class SScrollPaneLayout
     private void removeSingletonComponent(String constraint) {
         if (VIEWPORT.equals(constraint)) {
             viewport = null;
-        }
-        else if (NORTH.equals(constraint)) {
+        } else if (NORTH.equals(constraint)) {
             north = null;
-        }
-        else if (WEST.equals(constraint)) {
+        } else if (WEST.equals(constraint)) {
             west = null;
-        }
-        else if (EAST.equals(constraint)) {
+        } else if (EAST.equals(constraint)) {
             east = null;
-        }
-        else if (SOUTH.equals(constraint)) {
+        } else if (SOUTH.equals(constraint)) {
             south = null;
         }
     }
