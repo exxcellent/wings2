@@ -10,7 +10,8 @@
  * of the License, or (at your option) any later version.
  *
  * Please see COPYING for the complete licence.
- */package org.wings.plaf;
+ */
+package org.wings.plaf;
 
 import org.wings.SComponent;
 import org.wings.io.Device;
@@ -19,12 +20,27 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * wingS renders a HTML code in front an behind every component (for alginment, colouring, font style, etc.).
- * Implemntors of this interface do this for special browsers.
+ * wingS renders some HTML code in front and afetr every component (for alginment, colouring, font style, etc.).
+ * Implemntors of this interface do this rendering of prefix and suffix (html) code for special browsers.
  *
  * @author ole
  */
 public interface PrefixAndSuffixDelegate extends Serializable {
-    public void writePrefix(Device device, SComponent component) throws IOException;
-    public void writeSuffix(Device device, SComponent component) throws IOException;
+    /**
+     * Render prefix code to device
+     *
+     * @param device    Output device
+     * @param component Component to decorate with prefix
+     */
+    void writePrefix(Device device, SComponent component)
+            throws IOException;
+
+    /**
+     * Render suffix code to device
+     *
+     * @param device    Output device
+     * @param component Component to decorate with prefix
+     */
+    void writeSuffix(Device device, SComponent component)
+            throws IOException;
 }
