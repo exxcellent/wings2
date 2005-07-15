@@ -142,7 +142,8 @@ public class TableCG extends AbstractComponentCG implements
         } else
             device.print("</span>");
 
-        device.print("</td>\n");
+        device.print("</td>");
+        Utils.printNewline(device, component);
     }
 
 
@@ -177,22 +178,21 @@ public class TableCG extends AbstractComponentCG implements
 
         device.print("<th>");
         rendererPane.writeComponent(device, comp, table);
-        device.print("</th>\n");
+        device.print("</th>");
+        Utils.printNewline(device, comp);
     }
 
 
     public void writeContent(final Device device, final SComponent _c)
             throws IOException {
-        final STable component = (STable) _c;
-
-        STable table = (STable) component;
-        boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
+        final STable table = (STable) _c;
+        boolean childSelectorWorkaround = !table.getSession().getUserAgent().supportsCssChildSelector();
 
         SDimension intercellPadding = table.getIntercellPadding();
         SDimension intercellSpacing = table.getIntercellSpacing();
 
         device.print("<table");
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, table.getPreferredSize());
 
         // TODO: border="" should be obsolete
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse
@@ -200,7 +200,9 @@ public class TableCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "border", fixedTableBorderWidth);
         Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getIntWidth() : null));
         Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getIntHeight() : null));
-        device.print(">\n");
+        device.print(">");
+        Utils.printNewline(device, table);
+
         /*
         * get viewable area
         */

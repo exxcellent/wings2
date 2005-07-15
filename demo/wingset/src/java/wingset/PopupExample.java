@@ -13,10 +13,17 @@
  */
 package wingset;
 
+import org.wings.SComponent;
+import org.wings.SLabel;
+import org.wings.SMenu;
+import org.wings.SMenuItem;
+import org.wings.SPanel;
+import org.wings.SPopupMenu;
+import org.wings.SFont;
+import org.wings.border.SEmptyBorder;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import org.wings.*;
 
 /**
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
@@ -56,9 +63,12 @@ public class PopupExample extends WingSetPane {
         SLabel testLabel3 = new SLabel("This label has another context menu.");
         testLabel3.setComponentPopupMenu(menu2);
         SLabel selectionLabel = new SLabel("Selected Menu: ");
+        selectionLabel.setBorder(new SEmptyBorder(20,0,0,0));
         selection = new SLabel("none");
+        selection.setFont(new SFont(SFont.BOLD));
 
         SPanel all = new SPanel();
+        all.setHorizontalAlignment(CENTER);
         all.add(testLabel);
         all.add(testLabel2);
         all.add(testLabel3);

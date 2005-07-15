@@ -22,12 +22,8 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class DialogCG extends org.wings.plaf.css.FormCG implements
-        org.wings.plaf.DialogCG {
+public class DialogCG extends org.wings.plaf.css.FormCG implements org.wings.plaf.DialogCG {
 
-//--- byte array converted template snippets.
-
-//--- properties of this plaf.
     private SIcon closeIcon;
 
     /**
@@ -43,15 +39,13 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.print(" alt=\"");
-        device.print(icon.getIconTitle());
-        device.print("\"/>");
+        Utils.optAttribute(device, "alt", icon.getIconTitle());
+        device.print("/>");
     }
 
     private void writeWindowIcon(Device device, SDialog dialog,
                                  int event, SIcon icon) throws IOException {
-        boolean showAsFormComponent = dialog.getShowAsFormComponent();
-
+//        boolean showAsFormComponent = dialog.getShowAsFormComponent();
         RequestURL addr = dialog.getRequestURL();
         addr.addParameter(Utils.event(dialog), event);
 

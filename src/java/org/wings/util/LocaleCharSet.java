@@ -16,7 +16,6 @@ package org.wings.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -27,22 +26,21 @@ import java.util.Properties;
  */
 public class LocaleCharSet {
     /**
-     * The default character encoding "ISO-8859-1".
+     * The default character encoding "UTF-8".
      */
-    public final static String DEFAULT_ENCODING = "ISO-8859-1";
-    private static LocaleCharSet fInstance = null;
-    private final transient static Log log = LogFactory.getLog(LocaleCharSet.class);
-    private Properties fCharSet;
+    public final static String DEFAULT_ENCODING = "UTF-8";
+
     private final static String CHARSET_PROPERTIES = "org/wings/util/charset.properties";
+    private final static Log log = LogFactory.getLog(LocaleCharSet.class);
+    private Properties charsetMap;
+    private static LocaleCharSet instance = null;
 
     protected LocaleCharSet() {
-        fCharSet = new Properties();
         try {
-            InputStream in = this.getClass().getClassLoader().getResourceAsStream(CHARSET_PROPERTIES);
-            fCharSet.load(in);
-            in.close();
+            charsetMap = PropertyUtils.loadProperties(CHARSET_PROPERTIES);
         } catch (Exception e) {
             log.warn("Unexpected error on loading " + CHARSET_PROPERTIES + " via class path.", e);
+            charsetMap = new Properties();
         }
     }
 
@@ -52,10 +50,10 @@ public class LocaleCharSet {
      * @return Instance of LocaleCharset
      */
     public static LocaleCharSet getInstance() {
-        if (fInstance == null) {
-            fInstance = new LocaleCharSet();
+        if (instance == null) {
+            instance = new LocaleCharSet();
         }
-        return fInstance;
+        return instance;
     }
 
     /**
@@ -65,21 +63,21 @@ public class LocaleCharSet {
      * @return if found the charset, DEFAULT_ENCODING otherwise
      */
     public String getCharSet(Locale aLocale) {
-        String cs = null;
+        String charset = null;
         if (aLocale == null) {
             return DEFAULT_ENCODING;
         }
 
-        cs = fCharSet.getProperty(aLocale.getCountry() + "_" + aLocale.getLanguage());
+        charset = charsetMap.getProperty(aLocale.getCountry() + "_" + aLocale.getLanguage());
 
-        if (cs == null) {
-            cs = fCharSet.getProperty(aLocale.getCountry());
+        if (charset == null) {
+            charset = charsetMap.getProperty(aLocale.getCountry());
         }
 
-        if (cs == null) {
-            cs = fCharSet.getProperty(aLocale.getLanguage());
+        if (charset == null) {
+            charset = charsetMap.getProperty(aLocale.getLanguage());
         }
 
-        return cs != null ? cs : DEFAULT_ENCODING;
+        return charset != null ? charset : DEFAULT_ENCODING;
     }
 }
