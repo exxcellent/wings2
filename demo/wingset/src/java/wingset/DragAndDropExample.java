@@ -176,7 +176,6 @@ public class DragAndDropExample extends WingSetPane {
         for (int i = 0; i < dragIcons.length; i++) {
             SDragLabel dragIcon = dragIcons[i];
             dragIcon.setIcon(beeIcons[i]);
-            dragIcon.setDragEnabled(true);
         }
         // initialize the drop components
         for (int i = 0; i < dropIcons.length; i++) {

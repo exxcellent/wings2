@@ -159,12 +159,6 @@ public class ListExample
     private final ListModel listModel = createListModel();
 
     public void addAnchorElements(SList list) {
-        final SLabel img = new SLabel(javaCup);
-
-        final SLabel color = new SLabel("");
-        color.setForeground(Color.green);
-        color.setText(Color.green.toString());
-
         list.setModel(listModel);
         list.setType(SList.ORDER_TYPE_NORMAL);
     }

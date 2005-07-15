@@ -64,8 +64,11 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
      * @param dragSource the SComponent which is the DragSource
      */
     public void registerDragSource(DragSource dragSource) {
-        dragSources.add(dragSource);
-        namesToComponentsMap.put(((SComponent)dragSource).getName(), dragSource);
+        // don't add a component more than once
+        if (!dragSources.contains(dragSource)) {
+            dragSources.add(dragSource);
+            namesToComponentsMap.put(((SComponent)dragSource).getName(), dragSource);
+        }
     }
     
     /**
@@ -83,8 +86,11 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
      * @param dropTarget the SComponent which is the DropTarget
      */
     public void registerDropTarget(DropTarget dropTarget) {
-        dropTargets.add(dropTarget);
-        namesToComponentsMap.put(((SComponent)dropTarget).getName(), dropTarget);
+        // don't add a component more than once
+        if (!dropTargets.contains(dropTarget)) {
+            dropTargets.add(dropTarget);
+            namesToComponentsMap.put(((SComponent)dropTarget).getName(), dropTarget);
+        }
     }
 
     /**

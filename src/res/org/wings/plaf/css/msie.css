@@ -114,7 +114,8 @@ table.STree {
 	text-align: left;
 }
 
-ul.STree li.selected table tr td a table {
+ul.STree li.selected table tr td a table,
+ul.STree li.selected table tr td button table {
     background-color: #f6decc;
     border: 1px dotted black;
 }

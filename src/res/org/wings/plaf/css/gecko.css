@@ -126,7 +126,9 @@ ul.STree > li * {
 	white-space: nowrap;
 }
 
-ul.STree > li[selected="true"] > table > tbody > tr > td > a > div {
+ul.STree > li[selected="true"] > table > tbody > tr > td > a > div,
+ul.STree > li[selected="true"] > table > tbody > tr > td > button > div
+ {
     background-color: #f6decc;
     border: 1px dotted black;
 }
