@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!-- $Id$ -->
 
-<project name="wingS-docbook" basedir=".">
+<project name="wingS-docbook" basedir="." default="dist" >
 
     <!-- read properties from file -->
     <property file="etc/build.properties"/>
@@ -49,7 +49,7 @@
         <mkdir dir="dist"/>
     </target>
 
-    <target name="html" depends="init">
+    <target name="html" depends="init" description="Creates HTML version of the wingS documentation" >
         <antcall target="saxon">
             <param name="docname" value="wingS-whitepaper"/>
             <param name="target" value="html" />
@@ -71,7 +71,7 @@
         </antcall>
     </target>
 
-    <target name="pdf" depends="fo">
+    <target name="pdf" depends="fo" description="Creates PDF version of the wingS documentation">
         <antcall target="fop">
             <param name="docname" value="wingS-whitepaper"/>
         </antcall>
@@ -107,13 +107,13 @@
     </target>
 
 
-    <target name="dist" depends="clean,html,pdf">
+    <target name="dist" depends="clean,html,pdf" description="Creates HTML and PDF version of the wingS documentation" >
         <copy todir="dist">
             <fileset dir="build" includes="**/*.html,**/*.pdf"/>
         </copy>
     </target>
 
-    <target name="clean" description="clean up">
+    <target name="clean" description="Cleans all build files.">
         <delete dir="build"/>
         <delete dir="dist"/>
     </target>
