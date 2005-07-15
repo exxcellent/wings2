@@ -518,10 +518,20 @@ public abstract class SComponent
         removeEventListener(ScriptListener.class, listener);
     }
 
+    /**
+     * returns the script listeners of this component
+     * @return the ScriptListener Array.
+     */
     public ScriptListener[] getScriptListeners() {
         return (ScriptListener[]) getListeners(ScriptListener.class);
     }
 
+    /**
+     * Sets the name property of a component. This property is an identifier,
+     * so setting the same name multiple times can lead to strange results.
+     * If no name is set, it is generated when necessary.
+     * @param name The name to set.
+     */
     public void setName(String name) {
         if (name != null) {
             if (!Character.isJavaIdentifierStart(name.charAt(0)) || name.charAt(0) == '_')
@@ -534,6 +544,11 @@ public abstract class SComponent
         this.name = name;
     }
 
+    /**
+     * Gets the name property of a component. This property is an identifier,
+     * so it is unique.
+     * @return The name of the component.
+     */
     public final String getName() {
         if (name == null)
             name = getSession().createUniqueId();
