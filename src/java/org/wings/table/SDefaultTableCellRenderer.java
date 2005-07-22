@@ -48,7 +48,7 @@ public class SDefaultTableCellRenderer
         setIcon(null);
 
         if (value == null) {
-            if (editIcon != null && table.isCellEditable(row, col))
+            if (editIcon != null && table.isEditable() && table.isCellEditable(row, col))
                 setIcon(editIcon);
         }
         else if (value instanceof SIcon)

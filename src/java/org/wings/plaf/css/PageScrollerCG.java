@@ -165,7 +165,11 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
 
         for (int i = 0; i < Math.min(sb.getDirectPages(), sb.getPageCount() - firstDirectPage); i++) {
             int page = firstDirectPage + i;
-            d.print("<td class=\"SLayout\">");
+            d.print("<td class=\"SLayout");
+            if (sb.getCurrentPage() == page) {
+                d.print(" page_selected");
+            }
+            d.print("\">");
             writePage(d, sb, page);
             d.print("</td>\n");
         }
