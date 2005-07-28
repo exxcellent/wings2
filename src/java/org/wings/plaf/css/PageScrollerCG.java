@@ -99,8 +99,8 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
-                .print("<tr height=\"100%\">\n")
-                .print("<td class=\"SLayout\"><table area=\"pages\" height=\"100%\" class=\"SLayout\"><tbody>\n");
+                .print("<tr>\n")
+                .print("<td class=\"SLayout\"><table area=\"pages\" class=\"SLayout\"><tbody>\n");
 
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
@@ -157,7 +157,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td class=\"SLayout\" width=\"100%\"><table area=\"pages\" width=\"100%\"><tbody><tr>\n");
+                .print("<td class=\"SLayout\"><table area=\"pages\"><tbody><tr>\n");
 
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
