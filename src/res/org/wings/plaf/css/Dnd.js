@@ -8,7 +8,13 @@ var wdnd_textCopy;
 
 function my_PickFunc()
 {
-	if (dd.obj.dragsource && !dd.obj.oimg) { // we need a copy of this to stay in place while this is dragged around...
+	if (dd.obj.dragsource && !dd.obj.oimg) { 
+		/* we need a copy of this to stay in place while this is dragged around...
+           Problem is that we actually should drag the copy, but the library isn't
+           admittive. At some place in time we need to add a placeholder for this,
+		   add the copy at the place of this, and this as a child of the body (for konq
+           to function properly) and still drag this. Should solve all problems. */
+
 		srcDiv = dd.getDiv(dd.obj.name);
 		wdnd_textCopy=srcDiv.cloneNode(true);
 		// set some differing styles
@@ -22,6 +28,7 @@ function my_PickFunc()
 		if (dd.ie && !dd.iemac) wdnd_textCopy.style.filter = "Alpha(opacity=100)";
 		// add it to the body
 		document.getElementsByTagName('body')[0].appendChild(wdnd_textCopy);
+		//dd.obj.dragsource=wdnd_textCopy;
 	}
 }
 
