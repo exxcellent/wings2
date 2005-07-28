@@ -231,11 +231,11 @@ div.SScrollBar table[area="buttons"], div.SPageScroller table[area="buttons"] {
 }
 
 div.SScrollBar > table[orientation="vertical"], div.SPageScroller > table[orientation="vertical"] {
-    height: 100%;
+    /* height: 100%;  do we really want it this way? looks funny imho (ol) */
 }
 
 div.SScrollBar > table[orientation="horizontal"], div.SPageScroller > table[orientation="horizontal"] {
-    width: 100%;
+    /* width: 100%;  do we really want it this way? looks funny imho (ol) */
     height: auto;
 }
 
@@ -256,7 +256,7 @@ div.SPageScroller table[area="buttons"] button:hover, div.SPageScroller table[ar
 }
 
 div.SPageScroller table[area="pages"] button, div.SPageScroller table[area="pages"] a {
-    border: 1px none;
+    border: 1px solid transparent;
 }
 
 div.SPageScroller table[area="pages"] button:hover, div.SPageScroller table[area="pages"] a:hover {
