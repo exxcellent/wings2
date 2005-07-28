@@ -938,9 +938,13 @@ public abstract class SComponent
                 cg.write(s, this);
         } catch (IOException se) {
             // Typical double-clicks. Not severe
-            log.debug( "Socket exception during code generation for " + getClass().getName() + se);
+            log.debug( "Not Severe: Socket exception during code generation for " + getClass().getName() + se);
+        } catch (NoClassDefFoundError e) {
+            // Mostly happens when DWR jar is not in classpath
+            log.fatal( "Error during code generation for " + getClass().getName(), e);
         } catch (Throwable t) {
-            log.warn( "Exception during code generation for " + getClass().getName(), t);
+            // should we warn here? or maybe throw an error...
+            log.error( "Exception during code generation for " + getClass().getName(), t);
         }
     }
 
