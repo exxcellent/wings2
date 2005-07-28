@@ -22,6 +22,15 @@ import org.wings.event.SComponentDropListener;
  *
  */
 public interface DropTarget {
+    /** 
+     * add a DropListener to this Component.
+     * Don't forget to register the component with the @link{DragAndDropManager}
+     * @param listener the listener to add
+     */
     public void addComponentDropListener(SComponentDropListener listener);
+    /**
+     * get the List of DropListeners
+     * @return the list of listeners
+     */
     public List getComponentDropListeners();
 }

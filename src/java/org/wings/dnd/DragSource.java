@@ -27,8 +27,9 @@ public interface DragSource {
     public abstract boolean isDragEnabled();
 
     /**
-     * Getter for the property if dragging is enabled on this Component.
-     * @param dragEnabled
+     * Setter for the property if dragging is enabled on this Component.
+     * Don't forget to register the component with the @link{DragAndDropManager}
+     * @param dragEnabled should the component be draggable?
      */
     public abstract void setDragEnabled(boolean dragEnabled);
 }
