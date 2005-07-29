@@ -91,9 +91,9 @@ public class KeyboardBindingsExample extends WingSetPane {
         form.setInputMap(formInputMap);
         form.setActionMap(actionMap);
 
-        form.add(new SLabel("&nbsp;"));
+        form.add(new SLabel("<html>&nbsp;"));
         form.add(new SLabel("Try ALT-Left and ALT-Right to cycle inside the WingSet application between the different tabs"));
-        form.add(new SLabel("&nbsp;"));
+        form.add(new SLabel("<html>&nbsp;"));
         form.add(new SLabel("<html>The keys F1 through F10 are captured by the STextField<br/>" +
                 "Shift F1 through Shift F10 are bubbling up to the containing SForm"));
         form.add(textField);

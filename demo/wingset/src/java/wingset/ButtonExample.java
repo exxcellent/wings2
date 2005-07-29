@@ -19,6 +19,7 @@ import org.wings.SCheckBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
+import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SGridLayout;
 import org.wings.SIcon;
@@ -62,6 +63,7 @@ public class ButtonExample extends WingSetPane {
 
         form.add(controls);
         form.add(buttonExamplePanel);
+        form.setPreferredSize(SDimension.FULLWIDTH);
         return form;
     }
 
