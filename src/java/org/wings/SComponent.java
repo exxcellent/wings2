@@ -925,7 +925,7 @@ public abstract class SComponent
     }
 
     /**
-     * Let the code generator deletate write the component's code
+     * Let the code generator delegate write the component's code
      * to the device. The code generator is the actual 'plaf'.
      *
      * @param s the Device to write into

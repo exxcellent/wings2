@@ -146,7 +146,7 @@ public class LookAndFeel        implements Serializable {
     }
 
     /**
-     * Utility method that creates an java.awt.Color from a html color hex string
+     * Utility method that creates a dimension from a dimension string separated by comma 
      *
      * @return the create color
      */

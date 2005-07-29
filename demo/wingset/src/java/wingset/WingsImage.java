@@ -24,7 +24,9 @@ public class WingsImage
     private static final SIcon WINGS_IMAGE = new SURLIcon("../icons/wings-logo.png");
 
     public WingsImage() {
+        setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
         add(createExample());
+        setPreferredSize(SDimension.FULLWIDTH);
     }
 
     public SComponent createExample() {

@@ -23,6 +23,10 @@ import java.text.ParsePosition;
 public class SDimension
         implements Serializable {
     private final transient static Log log = LogFactory.getLog(SDimension.class);
+    
+    public static final SDimension FULLWIDTH = new SDimension("100%", null);
+    public static final SDimension FULLHEIGHT = new SDimension(null, "100%");
+    public static final SDimension FULLAREA = new SDimension("100%", "100%");
 
     public String width = null;
     public String height = null;

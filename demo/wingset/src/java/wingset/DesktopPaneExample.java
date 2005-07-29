@@ -2,7 +2,6 @@ package wingset;
 
 import org.wings.SComponent;
 import org.wings.SDesktopPane;
-import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SInternalFrame;
 import org.wings.SLabel;

@@ -26,7 +26,7 @@ public class DesktopPaneCG extends AbstractComponentCG implements
         org.wings.plaf.DesktopPaneCG {
     public void installCG(SComponent component) {
         super.installCG(component);
-        component.setPreferredSize(new SDimension("100%", null));
+        component.setPreferredSize(SDimension.FULLWIDTH);
     }
 
     public void writeContent(final Device device, final SComponent _c)

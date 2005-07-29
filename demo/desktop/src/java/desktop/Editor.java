@@ -76,7 +76,7 @@ public class Editor
         textArea = new STextArea();
         textArea.setColumns(80);
         textArea.setRows(24);
-        textArea.setPreferredSize(new SDimension("100%", null));
+        textArea.setPreferredSize(SDimension.FULLWIDTH);
         
         SForm form = new SForm(new SFlowDownLayout());
         form.add(toolbar);

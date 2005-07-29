@@ -82,7 +82,7 @@ public class MenuExample extends WingSetPane {
         ComponentControls controls = new ComponentControls();
         SForm panel = new SForm();
         panel.setLayout(new SBoxLayout(SConstants.VERTICAL));
-        panel.setPreferredSize(new SDimension("100%", null));
+        panel.setPreferredSize(SDimension.FULLWIDTH);
         
         
         selectionLabel = new SLabel("nothing selected");
