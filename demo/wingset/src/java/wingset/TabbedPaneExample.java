@@ -113,7 +113,7 @@ public class TabbedPaneExample extends WingSetPane {
         c.add(west, "West");
 
         textArea = new STextArea();
-        textArea.setPreferredSize(new SDimension("100%", "100%"));
+        textArea.setPreferredSize(SDimension.FULLAREA);
         for (int i = 0; i < INITIAL_TAB_COUNT; ++i) {
             SPanel p = new SPanel(new SBorderLayout());
             p.add(new SLabel("Tab # " + i), "North");

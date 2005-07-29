@@ -349,11 +349,11 @@ public abstract class SAbstractAdjustable extends SComponent implements Adjustab
         switch (orientation) {
             case SConstants.VERTICAL:
                 this.orientation = orientation;
-                setPreferredSize(new SDimension(null, "100%"));
+                setPreferredSize(SDimension.FULLHEIGHT);
                 break;
             case SConstants.HORIZONTAL:
                 this.orientation = orientation;
-                setPreferredSize(new SDimension("100%", null));
+                setPreferredSize(SDimension.FULLWIDTH);
                 break;
             default:
                 throw new IllegalArgumentException("orientation must be one of: VERTICAL, HORIZONTAL");
