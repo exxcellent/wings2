@@ -45,6 +45,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             prefSize = new SDimension("100%", null);
 
         StringBuffer inlineStyles = Utils.generateCSSInlinePreferredSize(prefSize);
+        Utils.appendCSSComponentInlineColorStyle(inlineStyles, component);
 
         Utils.printDebugNewline(device, component);
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");

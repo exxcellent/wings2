@@ -79,27 +79,46 @@ public class DynamicStyleSheetResource
 
         private void writeAttributesFrom(SComponent component)
                 throws IOException {
-            Collection dynamicStyles = component.getDynamicStyles();
+            final Collection dynamicStyles = component.getDynamicStyles();
             if (dynamicStyles != null) {
-                ComponentCG cg = component.getCG();
-                for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
-                    CSSStyle style = (CSSStyle) iterator.next();
-                    // Map pseudo css selectors to real selectors
-                    CSSSelector selector = cg.mapSelector(component, (CSSSelector) style.getSelector());
-                    String selectorString = selector.getSelectorString();
-                    out.print(selectorString);
+                final ComponentCG cg = component.getCG();
+                final BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
+                final boolean isMSIE = BrowserType.IE.equals(currentBrowser);
 
-                    final BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
-                    if (BrowserType.IE.equals(currentBrowser)) {
+                for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
+                    final CSSStyle style = (CSSStyle) iterator.next();
+                    // Map pseudo css selectors to real selectors
+                    final CSSSelector selector = cg.mapSelector(component, (CSSSelector) style.getSelector());
+
+                    // Output selector string
+                    String selectorString = selector.getSelectorString();
+
+                    if (isMSIE) {
                         // IE Workaround: We need to operate IE in quirks mode.
                         // Hence we have to inherit some props manually over TABLE elements.
                         final Set tableBlockedProperties = new HashSet(style.properties());
                         tableBlockedProperties.retainAll(tableResistantProperties);
                         // If this style containes a table blocked CSS property then add table as additional selector.
                         if (tableBlockedProperties.size() > 0)
-                            out.print(", ").print(selectorString).print(" table ");
+                            out.print(selectorString).print(" table ").print(", ");
+                    } else {
+                        // Non IE Workaround: In all other browsers we surround each component with two DIV
+                        // elements. The outer wears the component id, but the inner DIV is the one which
+                        // surrounds the component without any space (i.e. for setting component background)
+                        // If the ID of the outer DIV is e1 then the ID of the inner div is e1_i
+                        // we need to apply our styles to the inner div, not the outer div!
+
+                        // Selector string contains
+                        if (selectorString.indexOf('#') >= 0) {
+                            int pos = selectorString.indexOf('#')+1;
+                            while (pos < selectorString.length() && Character.isLetterOrDigit(selectorString.charAt(pos)))
+                                pos++;
+                            // make id to id_i
+                            selectorString = selectorString.substring(0, pos) + "_i" + selectorString.substring(pos);
+                        }
                     }
 
+                    out.print(selectorString);
                     out.print("{");
                     style.write(out);
                     out.print("}\n");

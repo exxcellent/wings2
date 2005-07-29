@@ -23,10 +23,8 @@ import org.wings.SPopupMenu;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
-import org.wings.plaf.ComponentCG;
 
 import javax.swing.*;
-
 import java.io.IOException;
 
 /**
@@ -35,44 +33,53 @@ import java.io.IOException;
 public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDelegate {
     private final static transient Log log = LogFactory.getLog(PrefixAndSuffixDelegate.class);
 
-    public PrefixAndSuffixDelegate() {}
-    
+    public PrefixAndSuffixDelegate() {
+    }
+
     public void writePrefix(Device device, SComponent component) throws IOException {
-        SDimension prefSize = component.getPreferredSize();
+        final SDimension prefSize = component.getPreferredSize();
+        final StringBuffer cssInlineStyle = new StringBuffer();
+
         Utils.printDebugNewline(device, component);
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
+
+        //------------------------ OUTER DIV
+
+        // This is the outer DIV element of a component
+        // it is responsible for Postioning (i.e. it take up all free space around to i.e. center
+        // the inner div inside this free space
         device.print("<div");
         if (component.getStyle() != null && component.getStyle().length() > 0) {
-            device.print(" class=\"");
-            device.print(component.getStyle());
-            device.print("_Box\"");
+            Utils.optAttribute(device, "class", component.getStyle() + "_Box");
         }
-        device.print(" id=\"");
-        device.print(component.getName());
-        device.print("\"");
+        Utils.optAttribute(device, "id", component.getName());
         if (component instanceof DragSource) {
-            device.print(" style=\"position:relative\"");
+            cssInlineStyle.append("position:relative;");
         }
 
         // if sizes are spec'd in percentages, we need the outer box to have full size...
-        boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.indexOf("%") != -1;
-        boolean isWidthPercentage = prefSize != null && prefSize.width != null && prefSize.width.indexOf("%") != -1;
+        final boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.indexOf("%") != -1;
+        final boolean isWidthPercentage = prefSize != null && prefSize.width != null && prefSize.width.indexOf("%") != -1;
         // special case of special case: if the component with relative size is vertically aligned, we must avoid 100% heigth
-        boolean isVAligned = (component.getVerticalAlignment() == SConstants.CENTER || component.getVerticalAlignment() == SConstants.BOTTOM );
-
-        if ( isHeightPercentage || isWidthPercentage ) {
-            device.print(" style=\"");
-            if (isHeightPercentage && isVAligned == false) {
-                device.print("height:100%;");
-            }
-            if (isWidthPercentage) {
-                device.print("width:100%;");
-            }
-            device.print("\"");
+        final boolean isVAligned = (component.getVerticalAlignment() == SConstants.CENTER
+                || component.getVerticalAlignment() == SConstants.BOTTOM);
+        if (isHeightPercentage && isVAligned == false) {
+            cssInlineStyle.append("height:100%;");
         }
-        
-        device.print(">");
+        if (isWidthPercentage) {
+            cssInlineStyle.append("width:100%;");
+        }
+
+        // Output collected inline CSS style
+        Utils.optAttribute(device, "style", cssInlineStyle);
+        device.print(">"); // div
+
+        //------------------------ INNER DIV
+
+        // This is the inner DIV around each component.
+        // It is responsible for component size, and other styles.
         device.print("<div");
+        Utils.optAttribute(device, "id", component.getName()+"_i");
         //id=\"").print(component.getName()).print("\"");
         // Special handling: Mark Titled Borders for styling
         if (component.getBorder() instanceof STitledBorder) {
@@ -80,30 +87,33 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         } else {
             Utils.optAttribute(device, "class", component.getStyle());
         }
-        Utils.printCSSInlinePreferredSize(device, prefSize);
+        Utils.optAttribute(device, "style", Utils.generateCSSInlinePreferredSize(prefSize).toString());
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
             device.print(" eid=\"")
                     .print(lowLevelEventListener.getEncodedLowLevelEventId()).print("\"");
         }
-        
-        String toolTip = component.getToolTipText();
-        if (toolTip != null)
+
+        // Tooltip handling
+        final String toolTip = component.getToolTipText();
+        if (toolTip != null) {
             device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
                     .print(toolTip)
                     .print("', 'predefined', 'default'));\"");
-
-        InputMap inputMap = component.getInputMap();
-        if (inputMap != null && !(inputMap instanceof VersionedInputMap)) {
-            log.debug("inputMap = " + inputMap);
-            inputMap = new VersionedInputMap(inputMap);
-            component.setInputMap(inputMap);
         }
 
+        // Key bindings
+        InputMap inputMap = component.getInputMap();
         if (inputMap != null) {
-            VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
-            Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
+            if (false == (inputMap instanceof VersionedInputMap)) {
+                log.debug("inputMap = " + inputMap);
+                inputMap = new VersionedInputMap(inputMap);
+                component.setInputMap(inputMap);
+            }
+
+            final VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
+            final Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
             if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
                 log.debug("inputMapVersion = " + inputMapVersion);
                 InputMapScriptListener.install(component);
@@ -111,11 +121,11 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             }
         }
 
-        SPopupMenu menu = component.getComponentPopupMenu();
+        // Component popup menu
+        final SPopupMenu menu = component.getComponentPopupMenu();
         if (menu != null) {
-            ComponentCG menuCG = menu.getCG();
-            String componentId = menu.getName();
-            String popupId = componentId + "_pop";
+            final String componentId = menu.getName();
+            final String popupId = componentId + "_pop";
             device.print(" onContextMenu=\"javascript:return wpm_menuPopup(event, '");
             device.print(popupId);
             device.print("');\" onMouseDown=\"javascript:return wpm_menuPopup(event, '");

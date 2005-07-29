@@ -3,13 +3,16 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SLayoutManager;
+import org.wings.SScrollPaneLayout;
+import org.wings.Scrollable;
 import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.Map;
-import java.awt.*;
 
 public class ScrollPaneLayoutCG extends AbstractLayoutCG {
 
@@ -17,16 +20,17 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
             throws IOException {
         SScrollPaneLayout layout = (SScrollPaneLayout) l;
 
-        if (layout.isPaging())
+        if (layout.isPaging()) {
             writePaging(d, layout);
-        else
+        } else {
             writeNonePaging(d, layout);
+        }
     }
 
     private void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
-        Scrollable scrollable = (Scrollable)center;
+        Scrollable scrollable = (Scrollable) center;
         Rectangle viewportSize = scrollable.getViewportSize();
         Rectangle scrollableViewportSize = scrollable.getScrollableViewportSize();
         scrollable.setViewportSize(scrollableViewportSize);
@@ -45,20 +49,22 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         SComponent south = (SComponent) components.get(SScrollPaneLayout.SOUTH);
 
         d.print("\n<table class=\"SScrollPaneLayout\"");
-        Utils.printCSSInlinePreferredSize(d, container.getPreferredSize());
+        Utils.optAttribute(d, "style", Utils.generateCSSInlinePreferredSize(container.getPreferredSize()).toString());
         d.print("><tbody>");
 
         if (north != null) {
             d.print("<tr height=\"0%\">");
-            if (west != null)
+            if (west != null) {
                 d.print("<td width=\"0%\"></td>");
+            }
 
             d.print("<td width=\"100%\">");
             writeComponent(d, north);
             d.print("</td>");
 
-            if (east != null)
+            if (east != null) {
                 d.print("<td width=\"0%\"></td>");
+            }
             d.print("</tr>\n");
         }
 
@@ -82,15 +88,17 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
 
         if (south != null) {
             d.print("<tr height=\"0%\">");
-            if (west != null)
+            if (west != null) {
                 d.print("<td width=\"0%\"></td>");
+            }
 
             d.print("<td width=\"100%\">");
             writeComponent(d, south);
             d.print("</td>");
 
-            if (east != null)
+            if (east != null) {
                 d.print("<td width=\"0%\"></td>");
+            }
             d.print("</tr>\n");
         }
 

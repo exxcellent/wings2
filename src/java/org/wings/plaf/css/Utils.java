@@ -13,7 +13,16 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
+import org.wings.LowLevelEventListener;
+import org.wings.Renderable;
+import org.wings.SBoxLayout;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SDimension;
+import org.wings.SFlowLayout;
+import org.wings.SFont;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.plaf.CGManager;
@@ -210,51 +219,54 @@ public final class Utils {
         return toColorString(c.getRGB());
     }
 
+    /**
+     * Generates a StringBuffer containing inlined CSS styles for the following properties of a SComponent:
+     * <p><ul><li>Preffered Size</li><li>Font</li><li>Background- and Foregroud color.</li></ul>
+     *
+     * @param component Component to grab parameters from.
+     * @return
+     */
     public static StringBuffer generateCSSComponentInlineStyle(SComponent component) {
-        StringBuffer styleString = new StringBuffer();
+        final StringBuffer styleString = generateCSSInlinePreferredSize(component != null ? component.getPreferredSize() : null);
+        appendCSSComponentInlineColorStyle(styleString, component);
+        appendCSSComponentInlineFontStyle(styleString, component);
+        return styleString;
+    }
+
+    /**
+     * Append a inline CSS style definition for the passed component of the aspect foreground- and background color.
+     * @param styleString StringBuffer to append to
+     * @param component Component to use as style source
+     * @return The passed styleString
+     */
+    public static StringBuffer appendCSSComponentInlineColorStyle(final StringBuffer styleString, final SComponent component) {
         if (component != null) {
-            final Color fgColor = component.getForeground();
-            final Color bgcolor = component.getBackground();
-            final SFont font = component.getFont();
-            final SDimension dim = component.getPreferredSize();
-
-            if (bgcolor != null)
-                styleString.append("background-color:#").append(toColorString(bgcolor)).append(";");
-
-            if (fgColor != null) {
-                styleString.append("color:#").append(toColorString(fgColor)).append(";");
+            if (component.getBackground() != null) {
+                styleString.append("background-color:#").append(toColorString(component.getBackground())).append(";");
             }
 
-            if (font != null) {
-                int style = font.getStyle();
-                styleString.append("font-size:").append(font.getSize()).append("pt;");
-                styleString.append("font-style:").append((style & Font.ITALIC) > 0 ? "italic;" : "normal;");
-                styleString.append("font-weight:").append((style & Font.BOLD) > 0 ? "bold;" : "normal;");
-                styleString.append("font-family:").append(font.getFace()).append(";");
-            }
-
-            if (dim != null) {
-                if (dim.isWidthDefined()) styleString.append("width:").append(dim.getWidth()).append(";");
-                if (dim.isHeightDefined()) styleString.append("height:").append(dim.getHeight()).append(";");
+            if (component.getForeground() != null) {
+                styleString.append("color:#").append(toColorString(component.getForeground())).append(";");
             }
         }
         return styleString;
     }
 
-    /**
-     * Prints a HTML style attribute with widht/height of passed SDimension.
-     * <p>Sample: <code> style="widht:100%;"</code>
-     *
-     * @param device        Device to print to
-     * @param preferredSize Preferred sitze. May be null or contain null attributes
-     * @deprecated Consolidate CSS Inline Styles Strings !!!
+        /**
+     * Append a inline CSS style definition for the passed component of the aspect font properties.
+     * @param styleString StringBuffer to append to
+     * @param component Component to use as style source
+     * @return The passed styleString
      */
-    public static void printCSSInlinePreferredSize(Device device, SDimension preferredSize) throws IOException {
-        if (preferredSize != null && (preferredSize.isWidthDefined() || preferredSize.isHeightDefined())) {
-            device.print(" style=\"");
-            device.print(generateCSSInlinePreferredSize(preferredSize));
-            device.print("\"");
+    public static StringBuffer appendCSSComponentInlineFontStyle(final StringBuffer styleString, final SComponent component) {
+        if (component != null && component.getFont() != null) {
+            final SFont font = component.getFont();
+            styleString.append("font-size:").append(font.getSize()).append("pt;");
+            styleString.append("font-style:").append((font.getStyle() & Font.ITALIC) > 0 ? "italic;" : "normal;");
+            styleString.append("font-weight:").append((font.getStyle() & Font.BOLD) > 0 ? "bold;" : "normal;");
+            styleString.append("font-family:").append(font.getFace()).append(";");
         }
+        return styleString;
     }
 
     /**
@@ -265,22 +277,25 @@ public final class Utils {
      * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
      */
     public static StringBuffer generateCSSInlinePreferredSize(SDimension preferredSize) {
-        StringBuffer styleString = new StringBuffer();
-        if (preferredSize != null && (preferredSize.isWidthDefined() || preferredSize.isHeightDefined())) {
-            if (preferredSize.isWidthDefined())
+        final StringBuffer styleString = new StringBuffer();
+        if (preferredSize != null) {
+            if (preferredSize.isWidthDefined()) {
                 styleString.append("width:").append(preferredSize.getWidth()).append(";");
-            if (preferredSize.isHeightDefined())
+            }
+            if (preferredSize.isHeightDefined()) {
                 styleString.append("height:").append(preferredSize.getHeight()).append(";");
+            }
         }
         return styleString;
     }
 
     public static StringBuffer generateCSSInlineBorder(int borderSize) {
-        StringBuffer styleString = new StringBuffer();
-        if (borderSize > 0)
+        final StringBuffer styleString = new StringBuffer();
+        if (borderSize > 0) {
             styleString.append("border:").append(borderSize).append("px solid black;");
-        else
+        } else {
             ; //styleString.append("border:none;"); Not necessary. Default
+        }
         return styleString;
     }
 
@@ -302,7 +317,9 @@ public final class Utils {
      */
     // not optimized yet
     private static void quote(Device d, String s, boolean quoteNewline) throws IOException {
-        if (s == null) return;
+        if (s == null) {
+            return;
+        }
         char[] chars = s.toCharArray();
         char c;
         int last = 0;
@@ -319,7 +336,7 @@ public final class Utils {
                     d.print(";");
                 } // end of if ()
                 last = pos + 1;
-            } else
+            } else {
                 switch (c) {
                     case '&':
                         d.print(chars, last, (pos - last));
@@ -355,12 +372,15 @@ public final class Utils {
                          *                                                       Henner
                          */
                 }
+            }
         }
         d.print(chars, last, chars.length - last);
     }
 
     public static void writeRaw(Device d, String s) throws IOException {
-        if (s == null) return;
+        if (s == null) {
+            return;
+        }
         d.print(s);
     }
 
@@ -372,12 +392,24 @@ public final class Utils {
      * HTML-code and is written as is (without the <html> tag).
      */
     public static void write(Device d, String s) throws IOException {
-        if (s == null) return;
+        if (s == null) {
+            return;
+        }
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
         } else {
             quote(d, s, false);
         }
+    }
+
+    /**
+     * Prints an optional attribute. If the String value has a content
+     * (value != null && value.length > 0), the attrib is added otherwise
+     * it is left out
+     */
+    public static void optAttribute(Device d, String attr, StringBuffer value)
+            throws IOException {
+        optAttribute(d, attr, value != null ? value.toString() : null);
     }
 
     /**
@@ -472,7 +504,9 @@ public final class Utils {
      * writes anything Renderable
      */
     public static void write(Device d, Renderable r) throws IOException {
-        if (r == null) return;
+        if (r == null) {
+            return;
+        }
         r.write(d);
     }
 
@@ -508,10 +542,11 @@ public final class Utils {
      * @return The original device or a {@link NullDevice}
      */
     public static Device printDebug(Device d, String s) throws IOException {
-        if (PRINT_DEBUG)
+        if (PRINT_DEBUG) {
             return d.print(s);
-        else
+        } else {
             return NullDevice.DEFAULT;
+        }
     }
 
     /**
@@ -519,10 +554,11 @@ public final class Utils {
      * {@link #printNewline(org.wings.io.Device, org.wings.SComponent)}
      */
     public static Device printDebugNewline(Device d, SComponent currentComponent) throws IOException {
-        if (PRINT_DEBUG)
+        if (PRINT_DEBUG) {
             return printNewline(d, currentComponent);
-        else
+        } else {
             return d;
+        }
     }
 
     /**
@@ -530,7 +566,9 @@ public final class Utils {
      */
     public static Device printNewline(Device d, SComponent currentComponent) throws IOException {
         if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
+        {
             return d;
+        }
         d.print("\n");
         while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
             d.print("\t");
@@ -577,8 +615,6 @@ public final class Utils {
 
     /**
      * prints a String. Substitutes spaces with nbsp's
-     * @param text
-     * @return
      */
     public static String nonBreakingSpaces(String text) {
         return text.replace(' ', '\u00A0');
