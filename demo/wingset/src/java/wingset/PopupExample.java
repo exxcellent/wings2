@@ -13,6 +13,7 @@
  */
 package wingset;
 
+import org.wings.SBoxLayout;
 import org.wings.SComponent;
 import org.wings.SLabel;
 import org.wings.SMenu;
@@ -67,7 +68,7 @@ public class PopupExample extends WingSetPane {
         selection = new SLabel("none");
         selection.setFont(new SFont(SFont.BOLD));
 
-        SPanel all = new SPanel();
+        SPanel all = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
         all.setHorizontalAlignment(CENTER);
         all.add(testLabel);
         all.add(testLabel2);

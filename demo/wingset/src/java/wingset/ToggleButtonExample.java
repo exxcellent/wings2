@@ -90,7 +90,8 @@ public class ToggleButtonExample
         buttons[8].setVerticalTextPosition(SConstants.BOTTOM);
         buttons[8].setHorizontalTextPosition(SConstants.RIGHT);
 
-        SPanel erg = new SPanel();
+        SPanel erg = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        
 
         SGridLayout grid = new SGridLayout(3, 3);
         grid.setBorder(1);

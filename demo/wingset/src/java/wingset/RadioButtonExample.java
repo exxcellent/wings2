@@ -45,24 +45,24 @@ public class RadioButtonExample
         p.add(createRadioButtonExample());
         p.add(createImageRadioButtonExample());
 
-        SForm form = new SForm();
+        SForm form = new SForm(new SBoxLayout(SBoxLayout.VERTICAL));
         form.add(new SLabel("<html><h4>RadioButtons in a form</h4>"));
         form.add(createRadioButtonExample());
-        form.add(new SLabel("<html><br />"));
+        form.add(new SLabel("<html>&nbsp;"));
         form.add(new SButton("submit"));
         p.add(form);
 
-        form = new SForm();
+        form = new SForm(new SBoxLayout(SBoxLayout.VERTICAL));
         form.add(new SLabel("<html><h4>Image RadioButtons in a form</h4>"));
         form.add(createImageRadioButtonExample());
-        form.add(new SLabel("<html><br />"));
+        form.add(new SLabel("<html>&nbsp;"));
         form.add(new SButton("submit"));
         p.add(form);
         return p;
     }
 
     SContainer createRadioButtonExample() {
-        SPanel text = new SPanel();
+        SPanel text = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
 
         SButtonGroup group = new SButtonGroup();
         for (int i = 0; i < 3; i++) {

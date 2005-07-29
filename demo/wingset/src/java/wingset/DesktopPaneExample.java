@@ -1,5 +1,6 @@
 package wingset;
 
+import org.wings.SBoxLayout;
 import org.wings.SComponent;
 import org.wings.SDesktopPane;
 import org.wings.SIcon;
@@ -19,6 +20,7 @@ public class DesktopPaneExample extends WingSetPane {
         SDesktopPane desktopPane = new SDesktopPane();
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
+            iFrame.getContentPane().setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
             iFrame.setTitle("A Long Title of Frame " + (i+1));
             desktopPane.add(iFrame);
             fillFrame(iFrame);

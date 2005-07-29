@@ -13,6 +13,7 @@
  */
 package wingset;
 
+import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SCheckBox;
 import org.wings.SComponent;
@@ -54,17 +55,17 @@ public class CheckBoxExample
         p.add(createCheckBoxExample());
         p.add(createImageCheckBoxExample());
 
-        SForm form = new SForm();
+        SForm form = new SForm(new SBoxLayout(SBoxLayout.VERTICAL));
         form.add(new SLabel("<html><h4>CheckBoxes in a form</h4>"));
         form.add(createCheckBoxExample());
-        form.add(new SLabel("<html><br />"));
+        form.add(new SLabel("<html>&nbsp;"));
         form.add(new SButton("submit"));
         p.add(form);
 
-        form = new SForm();
+        form = new SForm(new SBoxLayout(SBoxLayout.VERTICAL));
         form.add(new SLabel("<html><h4>Image CheckBoxes in a form</h4>"));
         form.add(createImageCheckBoxExample());
-        form.add(new SLabel("<html><br />"));
+        form.add(new SLabel("<html>&nbsp;"));
         form.add(new SButton("submit"));
         p.add(form);
         return p;
@@ -72,7 +73,8 @@ public class CheckBoxExample
 
 
     SContainer createCheckBoxExample() {
-        SPanel text = new SPanel();
+        SPanel text = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        
 
         for (int i = 0; i < 3; i++) {
             SCheckBox b = new SCheckBox("text " + (i + 1));

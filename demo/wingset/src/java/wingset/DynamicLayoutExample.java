@@ -118,7 +118,7 @@ public class DynamicLayoutExample extends WingSetPane {
 
         private SPanel wrap(SComponent c) {
             final Color[] colors = { Color.red, Color.green, Color.pink, Color.magenta, Color.gray, Color.cyan };
-            SPanel p = new SPanel();
+            SPanel p = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
             p.add(c);
             p.setPreferredSize(new SDimension("100%","100%"));
             p.setVerticalAlignment(c.getVerticalAlignment());
@@ -130,6 +130,7 @@ public class DynamicLayoutExample extends WingSetPane {
 
     private static class BoxLayoutDemoPanel extends SPanel {
         public BoxLayoutDemoPanel() {
+            super(new SFlowDownLayout());
             add(new SLabel("Horizontal box layout with padding & border"));
             SBoxLayout horizontalLayout = new SBoxLayout(SBoxLayout.HORIZONTAL);
             horizontalLayout.setHgap(10);
