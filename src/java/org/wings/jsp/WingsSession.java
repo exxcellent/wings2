@@ -30,7 +30,7 @@ import java.io.IOException;
 public class WingsSession
         extends Session
 {
-    public static WingsSession getSession(ServletConfig servletConfig, HttpServletRequest request, HttpServletResponse response) throws ServletException { 
+    public static WingsSession getSession(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         synchronized (request.getSession()) {
             String key = "Session:" + request.getSession().getServletContext().getServletContextName();
             WingsSession wingsSession = (WingsSession)request.getSession().getAttribute(key);
@@ -39,7 +39,7 @@ public class WingsSession
                 request.getSession().setAttribute(key, wingsSession);
                 SessionManager.setSession(wingsSession);
 
-                wingsSession.init(servletConfig, request);
+                wingsSession.init(request);
                 RequestURL requestURL = new RequestURL("", response.encodeURL("foo").substring(3));
                 wingsSession.setProperty("request.url", requestURL);
             }
@@ -52,24 +52,16 @@ public class WingsSession
         }
     }
 
-protected static WingsSession getSession(HttpServletRequest request, HttpServletResponse response) throws ServletException { 
-// at this point, the session should already exist. 
-// by that, calling this method with a null pointer argument 
-// shouldn't do any harm. (volker) 
-return getSession(null, request, response); 
-} 
-
     public static void removeSession() {
         SessionManager.removeSession();
     }
 
-    public static SFrame getFrame(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        String path = request.getServletPath();
+    public static SFrame getFrame(WingsSession wingsSession) throws ServletException {
+        String path = wingsSession.getServletRequest().getServletPath();
         int pos = path.lastIndexOf('/');
         path = path.substring(pos + 1);
 
-        synchronized (request.getSession()) {
-            WingsSession wingsSession = getSession(request, response);
+        synchronized (wingsSession.getServletRequest().getSession()) {
             Map frames = getFrames(wingsSession);
             SFrame frame = (SFrame)frames.get(path);
             if (frame == null) {
@@ -78,7 +70,6 @@ return getSession(null, request, response);
                 frame.show();
                 frames.put(path, frame);
             }
-            SessionManager.removeSession();
             return frame;
         }
     }
@@ -95,30 +86,36 @@ return getSession(null, request, response);
     public static void dispatchEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         synchronized (request.getSession()) {
             WingsSession wingsSession = getSession(request, response);
-            SForm.clearArmedComponents();
+            try {
+                SForm.clearArmedComponents();
 
-            Enumeration en = request.getParameterNames();
-            if (en.hasMoreElements()) {
-                wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_START);
+                Enumeration en = request.getParameterNames();
+                if (en.hasMoreElements()) {
+                    wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_START);
 
-                while (en.hasMoreElements()) {
-                    String paramName = (String) en.nextElement();
-                    String[] value = request.getParameterValues(paramName);
-                    wingsSession.getDispatcher().dispatch(paramName, value);
+                    while (en.hasMoreElements()) {
+                        String paramName = (String) en.nextElement();
+                        String[] value = request.getParameterValues(paramName);
+                        wingsSession.getDispatcher().dispatch(paramName, value);
+                    }
+                    SForm.fireEvents();
+
+                    wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
                 }
-                SForm.fireEvents();
 
-                wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
+                wingsSession.getReloadManager().invalidateResources();
+                wingsSession.getReloadManager().notifyCGs();
             }
-
-            wingsSession.getReloadManager().invalidateResources();
-            wingsSession.getReloadManager().clear();
-            SessionManager.removeSession();
+            finally {
+                wingsSession.getReloadManager().clear();
+                SessionManager.removeSession();
+                SForm.clearArmedComponents();
+            }
         }
     }
 
     public void addComponent(String name, SComponent component) throws ServletException {
-        SFrame frame = getFrame(getServletRequest(), getServletResponse());
+        SFrame frame = getFrame(this);
         frame.getContentPane().add(component, name);
         setProperty(name, component);
     }
@@ -128,16 +125,16 @@ return getSession(null, request, response);
     }
 
     public SComponent removeComponent(String name) throws ServletException {
-        SFrame frame = getFrame(getServletRequest(), getServletResponse());
-        SComponent component = (SComponent) getProperty(name);
+        SFrame frame = getFrame(this);
+        SComponent component = (SComponent) removeProperty(name);
         frame.getContentPane().remove(component);
         return component;
     }
 
     public static void writeHeaders(HttpServletRequest request, HttpServletResponse response, JspWriter out) throws IOException, ServletException {
         synchronized (request.getSession()) {
-            SFrame frame = getFrame(request, response);
             WingsSession wingsSession = getSession(request, response);
+            SFrame frame = getFrame(wingsSession);
 
             StringBufferDevice headerdev = new StringBufferDevice();
             for (Iterator iterator = frame.headers().iterator(); iterator.hasNext();) {

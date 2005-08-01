@@ -8,6 +8,35 @@
    Please avoid generic/global css selectors and use the wings css classes in your selection path
 */
 
+/* ----------- SOME GLOBALS */
+
+body {
+    background: #ffffff;
+    position: relative;
+    margin: 0px;
+    font-family: sans-serif;
+    font-style: normal;
+    font-size: 0.8em;
+}
+
+/* Links: No visited colour, no underline  */
+a:link, a:visited, a:active {
+    color: #000066;
+    text-decoration: none;
+}
+
+/* Input fields singe-dot lined, orange bg. */
+textarea, select {
+    background-color: #f6decc;
+    border: 1px solid #e66e32;
+}
+
+/* text input same as above */
+input {
+    background-color: expression(this.type=="text"?'#f6decc':'');
+    border: expression(this.type=="text"?'1px solid #e66e32':'');
+}
+
 /* STable even / odd coloring */
 
 .STable table tbody tr.odd {

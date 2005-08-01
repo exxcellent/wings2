@@ -41,7 +41,7 @@ public class WingSet implements Serializable {
     private final static SURLIcon STANDARD_TAB_BACKGROUND = new SURLIcon("../icons/ButtonsBackground.gif");
     private final static SURLIcon SELECTED_TAB_BACKGROUND = new SURLIcon("../icons/ButtonsBackgroundHighlighted.gif");
 
-    static final boolean SHOW_STATISTICS = false;
+    static final boolean SHOW_STATISTICS = true;
     static final long birthday = System.currentTimeMillis();
     static FileWriter infoWriter;
     static final Timer timer = new Timer();
@@ -116,13 +116,6 @@ public class WingSet implements Serializable {
         frame = new SFrame("WingSet");
         frame.setTitle("WingSet Demo");
         frame.setAttribute(CSSProperty.MARGIN, "8px !important");
-
-        // Register our user style sheet
-        final Browser browser = frame.getSession().getUserAgent();
-        String cssURL = "../wingset-gecko.css"; //"../wingset-" + browser.getBrowserType().getShortName() + ".css";
-        if (browser.getBrowserType().equals(BrowserType.IE))
-            cssURL = "../wingset-msie.css";
-        frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource(cssURL)));
 
         stopWatch = new TimeMeasure(new MessageFormat("<html><b>{0}</b>: {1} (<i>x {2}</i>)<br/>"));
         timeMeasure = new SLabel();

@@ -43,7 +43,7 @@ public class ExternalizerServlet extends HttpServlet {
     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        WingsSession wingsSession = WingsSession.getSession(servletConfig, request, response);
+        WingsSession wingsSession = WingsSession.getSession(request, response);
 
         synchronized (request.getSession()) {
             String path = request.getServletPath();
@@ -53,8 +53,12 @@ public class ExternalizerServlet extends HttpServlet {
             int pos = path.lastIndexOf('/');
             path = path.substring(pos + 1);
             ExternalizedResource extInfo = wingsSession.getExternalizeManager().getExternalizedResource(path);
-            Device outputDevice = DeviceFactory.createDevice(extInfo);
-            wingsSession.getExternalizeManager().deliver(extInfo, response, outputDevice);
+            if (extInfo != null) {
+                Device outputDevice = DeviceFactory.createDevice(extInfo);
+                wingsSession.getExternalizeManager().deliver(extInfo, response, outputDevice);
+            }
+            else
+                System.out.println("no resource with id " + path);
         }
     }
 }

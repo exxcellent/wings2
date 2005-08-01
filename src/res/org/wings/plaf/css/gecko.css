@@ -27,15 +27,15 @@ td.SLayout {
 /* tables inherit certain properties from their parents. These need to be
    defined here. This works with konq, moz, opera. */
 table tr {
-	text-align:inherit;
-	vertical-align:inherit;
-/*	these already work without specifying them
-	background-color:inherit;
-	font-family:inherit;
-	font-size:inherit;
-	font-style:inherit;
-	font-weight:inherit;
-	color:inherit;*/
+    text-align:inherit;
+    vertical-align:inherit;
+/*    these already work without specifying them
+    background-color:inherit;
+    font-family:inherit;
+    font-size:inherit;
+    font-style:inherit;
+    font-weight:inherit;
+    color:inherit;*/
 }
 
 /* this stays in here! 
@@ -52,25 +52,25 @@ div {
 
 /* TODO -- move this to renderer? */
 IMG {
-	/* keeps images inside tabs */
+    /* keeps images inside tabs */
     vertical-align: middle;
     /* Avoid those ugly borders around linked imgs's */
     border: none !important;
 }
 
 div.SLabel_Box {
-	display: table;
+    display: table;
 }
 
 div.SLabel,
 div.SCheckBox {
-	white-space: pre;
+    white-space: pre;
 }
 
 pre.label {
-	font-family: inherit;
-	margin: 0px;
-	padding: 0px;
+    font-family: inherit;
+    margin: 0px;
+    padding: 0px;
 }
 
 div.SButton_Box {
@@ -89,7 +89,7 @@ div.SToggleButton > button.SToggleButton_selected
 }
 
 div.SRadioButton_Box {
-	display: table;
+    display: table;
 }
 
 div.STextField {
@@ -107,23 +107,24 @@ div.SFormattedTextField {
 }
 
 div.STree {
-	vertical-align: top;
-	text-align: left;
+    vertical-align: top;
+    text-align: left;
 }
 
 ul.STree{
-	list-style: none;
-	margin-left:0px;
-	padding-left:0px;
+    list-style: none;
+    margin-left:0px;
+    padding-left:0px;
 }
 
 ul.STree > li {
-	padding-left: 0px;
-	margin-left: 0px;
+    padding-left: 0px;
+    margin-left: 0px;
 }
 
 ul.STree > li * {
-	white-space: nowrap;
+    white-space: nowrap;
+    padding-right: 2px;
 }
 
 ul.STree > li[selected="true"] > table > tbody > tr > td > a > div,
@@ -145,9 +146,9 @@ ul.STree > li button {
 }
 
 ul.STree > li > div.SSubTree {
-	background-image: url( org/wings/icons/TreeLine.gif );
-	background-repeat:repeat-y;
-	background-position: 0px 100px;
+    background-image: url( org/wings/icons/TreeLine.gif );
+    background-repeat:repeat-y;
+    background-position: 0px 100px;
 }
 
 div.STable > table {
@@ -172,8 +173,8 @@ div.STable > table > tbody > tr > td {
 
 /* let the link span the whole table */
 div.STable > table > tbody > tr > td > a {
-	display: block;
-	width: 100%;
+    display: block;
+    width: 100%;
 }
 
 div.STable > table > tbody > tr > td[col="numbering"] {
@@ -203,17 +204,17 @@ div.SList > * > li.SList_selected {
 }
 
 .SSeparator {
-	color: #CCCCCC;
-	height: 0px;
-	white-space: nowrap;
-	margin: 0px; 
-	padding: 0px;
-	border-style: inset;
-	border-width: 1px;
+    color: #CCCCCC;
+    height: 0px;
+    white-space: nowrap;
+    margin: 0px;
+    padding: 0px;
+    border-style: inset;
+    border-width: 1px;
 }
 
 .STextArea {
-	width: 100%;
+    width: 100%;
 }
 
 div.SScrollBar_Box {
@@ -369,7 +370,7 @@ table.SFlowLayout
 .STitledBorderLegend {
     position: relative;
     top:-1.7em;
-	margin-bottom:-1em;
+    margin-bottom:-1em;
     margin-left: 1.0em;
     padding-left: 0.4em;
     padding-right: 0.4em;
@@ -560,31 +561,31 @@ div.SInternalFrame {
     border: 1px solid #ccc;
     margin: .2em;
     float:left;
-/*	clear:right;*/
-	display:table;
+/*    clear:right;*/
+    display:table;
 }
 
-div.SInternalFrame > div.WindowBar {	
-	padding:.2em;
-	background-color: #aaf;
+div.SInternalFrame > div.WindowBar {
+    padding:.2em;
+    background-color: #aaf;
 }
 
-div.SInternalFrame > div.WindowBar > div.WindowBar_title {	
-	padding-right:4em;
-	white-space:pre;
+div.SInternalFrame > div.WindowBar > div.WindowBar_title {
+    padding-right:4em;
+    white-space:pre;
 }
 
 div.SInternalFrame > div.WindowBar  a.WindowButton,
 div.SInternalFrame > div.WindowBar  button.WindowButton {
-	float: right;
+    float: right;
 }
 
 div.SInternalFrame > div.WindowBar > a.DeiconifyButton {
-	display: inline;
+    display: inline;
 }
 
 div.SInternalFrame > div.WindowContent {
-	padding: .2em;
+    padding: .2em;
 }
 
 /* clears the windows */
@@ -592,7 +593,7 @@ div.SDesktopPane div.spacer,
 .SFlowLayout div.spacer {
     height:0px;
     clear: both;
-	line-height:0px; /* for konq */
+    line-height:0px; /* for konq */
     font-size: 1px; /* for konq */
 }
 
@@ -608,5 +609,5 @@ div.SOptionPane {
     border: 1px solid #cccccc;
 }
 div.SOptionPane {
-	display: table-cell;
+    display: table-cell;
 }

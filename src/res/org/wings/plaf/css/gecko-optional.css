@@ -8,6 +8,29 @@
    Please avoid generic/global css selectors and use the wings css classes in your selection path
 */
 
+/* ----------- SOME GLOBALS */
+
+BODY {
+    background: #ffffff;
+    margin: 0px;
+    font-family: sans-serif;
+    font-style: normal;
+    font-size: 0.8em;
+}
+
+/* Input fields singe-dot lined, orange bg. */
+TEXTAREA, INPUT[type="text"], select {
+    background-color: #f6decc;
+    border: 1px solid #e66e32;
+}
+
+/* Links: No visited colour, no underline  */
+A:link, A:visited, A:active {
+    color: #000066;
+    text-decoration: none;
+}
+
+
 /* ----------- DISABLED COMPONENTS OPACITY = 0.7*/
 
 /* Disabled button transparent */
@@ -107,4 +130,3 @@ div.STable > table > tbody > tr[odd="true"] {
 div.STable > table > tbody > tr[selected="true"] {
     background-color: #f6decc !important;
 }
-

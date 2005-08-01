@@ -194,11 +194,11 @@ public class Session
      * Detect user agent (userAgent). Copy init parameters. Set max content length for uploads / requests.
      * Install look and feel.
      *
-     * @param servletConfig a <code>ServletConfig</code> value 
+     * @param servletConfig a <code>ServletConfig</code> value
      * @param request a <code>HttpServletRequest</code> value
      * @throws ServletException if an error occurs
      */
-    public void init(ServletConfig servletConfig, HttpServletRequest request) throws ServletException { 
+    public void init(ServletConfig servletConfig, HttpServletRequest request) throws ServletException {
         servletContext = request.getSession().getServletContext();
         setServletRequest(request);
         setUserAgentFromRequest(request);
@@ -214,7 +214,31 @@ public class Session
                     servletContext.getInitParameter("wings.lookandfeel.factory"), ex);
             throw new ServletException(ex);
         }
+    }
 
+    /**
+     * Detect user agent (userAgent). Copy init parameters. Set max content length for uploads / requests.
+     * Install look and feel.
+     *
+     * @param request a <code>HttpServletRequest</code> value
+     * @throws ServletException if an error occurs
+     */
+    public void init(HttpServletRequest request) throws ServletException {
+        servletContext = request.getSession().getServletContext();
+        setServletRequest(request);
+        setUserAgentFromRequest(request);
+
+        initProps(request.getSession().getServletContext());
+        initMaxContentLength();
+
+        try {
+            LookAndFeel lookAndFeel = LookAndFeelFactory.getLookAndFeelFactory().create();
+            CGManager.setLookAndFeel(lookAndFeel);
+        } catch (Exception ex) {
+            log.fatal("could not load look and feel: " +
+                    servletContext.getInitParameter("wings.lookandfeel.factory"), ex);
+            throw new ServletException(ex);
+        }
     }
 
     protected void initMaxContentLength() {
@@ -231,11 +255,19 @@ public class Session
     /**
      * Copy the init parameters.
      */
-    protected void initProps(ServletConfig servletConfig) { 
+    protected void initProps(ServletConfig servletConfig) {
         Enumeration params = servletConfig.getInitParameterNames(); 
         while (params.hasMoreElements()) {
             String name = (String) params.nextElement();
             props.put(name, servletConfig.getInitParameter(name));
+        }
+    }
+
+    protected void initProps(ServletContext servletContext) {
+        Enumeration params = servletContext.getInitParameterNames();
+        while (params.hasMoreElements()) {
+            String name = (String) params.nextElement();
+            props.put(name, servletContext.getInitParameter(name));
         }
     }
 
