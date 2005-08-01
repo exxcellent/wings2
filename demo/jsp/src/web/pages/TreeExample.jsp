@@ -4,19 +4,16 @@
 <%@ page language="java"
 import="org.wings.*,
         org.wings.jsp.WingsSession,
-        jsp.NavigationTreeModel,
         javax.swing.tree.DefaultTreeModel,
-        jsp.NavigationTreeCellRenderer,
         org.wings.tree.STreeSelectionModel,
         org.wings.tree.SDefaultTreeSelectionModel,
         javax.swing.table.DefaultTableModel,
-        jsp.TasksTableModel,
         org.wings.plaf.css.TreeCG,
-        jsp.SubjectsTableModel,
         javax.swing.event.TreeSelectionListener,
         javax.swing.event.TreeSelectionEvent,
         javax.swing.tree.DefaultMutableTreeNode,
-        javax.swing.tree.TreePath"
+        javax.swing.tree.TreePath,
+        jsp.*"
 %>
 
 <%
@@ -28,6 +25,7 @@ import="org.wings.*,
     STable subjects = null;
     SPanel panel = null;
     SLabel tableLabel = null;
+    DocumentTools documentTools = null;
 
     synchronized (session) {
         try {
@@ -90,6 +88,12 @@ import="org.wings.*,
                     }
                 });
             }
+
+            documentTools = (DocumentTools) wingsSession.getComponent("documentTools");
+            if (documentTools == null) {
+                documentTools = new DocumentTools();
+                wingsSession.addComponent("documentTools", documentTools);
+            }
         }
         finally {
             // release the thread association
@@ -108,14 +112,24 @@ import="org.wings.*,
 <body bgcolor="#f0f0f0">
 
 <table>
-<tr style="background-color: #ccccff">
-<th align="left">Navigation</th>
-<th align="left"><%WingsSession.writeComponent(request, response, out, tableLabel);%></th>
+<tr>
+<th align="left" style="background-color: #ccccff">Navigation</th>
+<th align="left" style="background-color: #ccccff"><%WingsSession.writeComponent(request, response, out, tableLabel);%></th>
 </tr><tr>
-<td valign="top"><%WingsSession.writeComponent(request, response, out, tree);%></td>
-<td valign="top"><%WingsSession.writeComponent(request, response, out, panel);%>
+<td valign="top" rowspan="3"><%WingsSession.writeComponent(request, response, out, tree);%></td>
+<td valign="top"><%WingsSession.writeComponent(request, response, out, panel);%></td>
+</tr><tr>
+<th align="left" style="background-color: #ccccff; height: 22px">
+<table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0px">
+<tr><th>Bedarf</th><td align="right"><%WingsSession.writeComponent(request, response, out, documentTools);%></td></tr>
+</table></th>
+</tr><tr>
+<td valign="top" align="left"><button style="border: 1px solid grey">stornieren</button>
+<br>
+<br>
+Here goes the document ..
+</td>
 </tr>
-
 </table>
 
 </body>
