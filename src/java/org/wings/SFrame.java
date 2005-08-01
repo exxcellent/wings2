@@ -511,4 +511,14 @@ public class SFrame
     public void setEpochCheckEnabled(boolean epochCheckEnabled) {
         this.epochCheckEnabled = epochCheckEnabled;
     }
+
+    /**
+     * custom error handling. If you want to catch application errors,
+     * return true here. 
+     * @param e The throwable causing this.
+     * @return does this frame handle errors...
+     */
+    public boolean handleError(Throwable e) {
+        return false;
+    }
 }

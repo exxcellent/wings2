@@ -299,6 +299,9 @@ final class SessionServlet
         Device outputDevice = null;
 
         ReloadManager reloadManager = session.getReloadManager();
+        
+        boolean isErrorHandling = false;
+        
         try {
             /*
              * The tomcat 3.x has a bug, in that it does not encode the URL
@@ -452,7 +455,8 @@ final class SessionServlet
                 SFrame defaultFrame = (SFrame) session.getFrames().iterator().next();
                 while (defaultFrame.getParent() != null)
                     defaultFrame = (SFrame) defaultFrame.getParent();
-
+ 
+                
                 Resource resource = defaultFrame.getDynamicResource(DynamicCodeResource.class);
                 externalizeIdentifier = resource.getId();
 
@@ -478,10 +482,23 @@ final class SessionServlet
             }
 
         } catch (Throwable e) {
-            log.fatal("exception: ", e);
-            handleException(response, e);
+            /*
+             * error handling...implement it in SFrame
+             */
+            SFrame defaultFrame = (SFrame) session.getFrames().iterator().next();
+            while (defaultFrame.getParent() != null)
+                defaultFrame = (SFrame) defaultFrame.getParent();
+            if (defaultFrame != null && defaultFrame.handleError(e)) {
+                doGet(req, response);
+                isErrorHandling = true;
+                return;
+            } else {
+                log.fatal("exception: ", e);
+                handleException(response, e);
+            }
+            
         } finally {
-            if (session != null) {
+            if (session != null || !isErrorHandling) {
                 session.fireRequestEvent(SRequestEvent.REQUEST_END);
             }
 
@@ -495,7 +512,7 @@ final class SessionServlet
             /*
              * the session might be null due to destroy().
              */
-            if (session != null) {
+            if (session != null || !isErrorHandling) {
                 reloadManager.clear();
                 session.setServletRequest(null);
                 session.setServletResponse(null);
