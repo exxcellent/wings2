@@ -85,16 +85,18 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         int maximum = sb.getMaximum();
         boolean backEnabled = value > minimum;
         boolean forwardEnabled = value < maximum - extent;
+        boolean firstPage = (value == minimum);
+        boolean lastPage = (value == (maximum - extent));
 
         d.print("<table orientation=\"vertical\" class=\"SLayout\"><tbody>\n")
                 .print("<tr height=\"1%\">\n")
                 .print("<td height=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody>\n");
 
         d.print("<tr><td class=\"SLayout\">");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum);
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum, !firstPage);
         d.print("</td></tr>\n");
         d.print("<tr><td class=\"SLayout\">");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - extent));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - extent), backEnabled);
         d.print("</td></tr>\n");
 
         d.print("</tbody></table></td>\n")
@@ -108,8 +110,13 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
 
         for (int i = 0; i < Math.min(sb.getDirectPages(), sb.getPageCount() - firstDirectPage); i++) {
             int page = firstDirectPage + i;
-            d.print("<tr><td class=\"SLayout\">");
-            writePage(d, sb, page);
+            d.print("<tr><td class=\"SLayout");
+            boolean isCurrentPage = (sb.getCurrentPage() == page);
+            if (isCurrentPage) {
+                d.print(" page_selected");
+            }
+            d.print("\">");
+            writePage(d, sb, page, !isCurrentPage);
             d.print("</td></tr>\n");
         }
 
@@ -119,10 +126,10 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                 .print("<td height=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody>\n");
 
         d.print("<tr><td class=\"SLayout\">");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + extent));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + extent), forwardEnabled);
         d.print("</td></tr>\n");
         d.print("<tr><td class=\"SLayout\">");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + (maximum + 1 - extent));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + (maximum + 1 - extent), !lastPage);
         d.print("</td></tr>\n");
 
         d.print("</tbody></table></td>\n")
@@ -145,15 +152,17 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         int maximum = sb.getMaximum();
         boolean backEnabled = value > minimum;
         boolean forwardEnabled = value < maximum - extent;
+        boolean firstPage = (value == minimum);
+        boolean lastPage = (value >= (maximum - extent));
 
         d.print("<table class=\"SLayout\" orientation=\"horizontal\"><tbody><tr>\n")
-                .print("<td class=\"SLayout\" width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
+                .print("<td class=\"SLayout\"><table area=\"buttons\"><tbody><tr>\n");
 
         d.print("<td class=\"SLayout\">");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum);
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum, !firstPage);
         d.print("</td>\n");
         d.print("<td class=\"SLayout\">");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - extent));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - extent), backEnabled);
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
@@ -166,29 +175,30 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         for (int i = 0; i < Math.min(sb.getDirectPages(), sb.getPageCount() - firstDirectPage); i++) {
             int page = firstDirectPage + i;
             d.print("<td class=\"SLayout");
-            if (sb.getCurrentPage() == page) {
+            boolean isCurrentPage = (sb.getCurrentPage() == page);
+            if (isCurrentPage) {
                 d.print(" page_selected");
             }
             d.print("\">");
-            writePage(d, sb, page);
+            writePage(d, sb, page, !isCurrentPage);
             d.print("</td>\n");
         }
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td class=\"SLayout\" width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
+                .print("<td class=\"SLayout\"><table area=\"buttons\"><tbody><tr>\n");
 
         d.print("<td class=\"SLayout\">");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + extent));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + extent), forwardEnabled);
         d.print("</td>\n");
         d.print("<td class=\"SLayout\">");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + (maximum + 1 - extent));
+        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + (sb.getPageCount() - 1) * extent, !lastPage);
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
                 .print("</tr></tbody></table>");
     }
 
-    private void writePage(Device device, SPageScroller pageScroller, int page) throws IOException {
+    private void writePage(Device device, SPageScroller pageScroller, int page, boolean enabled) throws IOException {
         boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
@@ -199,11 +209,18 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                     .print("\" value=\"")
                     .print(String.valueOf(page * pageScroller.getExtent()))
                     .print("\"");
+            if (!enabled) {
+                device.print(" disabled=\"disabled\"");
+            }
         } else {
-            device.print("<a href=\"")
-                    .print(pageScroller.getRequestURL()
-                    .addParameter(Utils.event(pageScroller) + "=" + page * pageScroller.getExtent()).toString())
-                    .print("\"");
+            if (!enabled) {
+                device.print("<a href=\"#\" class=\"disabled\"");
+            } else {
+                device.print("<a href=\"")
+                        .print(pageScroller.getRequestURL()
+                        .addParameter(Utils.event(pageScroller) + "=" + page * pageScroller.getExtent()).toString())
+                        .print("\"");
+            }
         }
         device.print(">");
 
@@ -215,7 +232,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
             device.print("</a>\n");
     }
 
-    private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event) throws IOException {
+    private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event, boolean enabled) throws IOException {
         boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
 
@@ -226,11 +243,18 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                     .print("\" value=\"")
                     .print(event)
                     .print("\"");
+            if (!enabled) {
+                device.print(" disabled=\"disabled\"");
+            }
         } else {
-            device.print("<a href=\"")
-                    .print(pageScroller.getRequestURL()
-                    .addParameter(Utils.event(pageScroller) + "=" + event).toString())
-                    .print("\"");
+            if (!enabled) {
+                device.print("<a href=\"#\" class=\"disabled\"");
+            } else {
+                device.print("<a href=\"")
+                        .print(pageScroller.getRequestURL()
+                        .addParameter(Utils.event(pageScroller) + "=" + event).toString())
+                        .print("\"");
+            }
         }
         device.print(">");
 

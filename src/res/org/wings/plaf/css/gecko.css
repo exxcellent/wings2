@@ -264,6 +264,10 @@ div.SPageScroller table[area="pages"] button:hover, div.SPageScroller table[area
     border: 1px outset #cccccc;
 }
 
+div.SPageScroller table[area="pages"] button:hover[disabled="disabled"], div.SPageScroller table[area="pages"] a.disabled:hover {
+    border: 1px solid transparent;
+}
+
 
 div.SScrollPane > div.SList_Box, div.SScrollPane > div.STree_Box, div.SScrollPane > div.STable_Box {
     width: 100%;
