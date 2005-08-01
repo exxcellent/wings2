@@ -15,19 +15,19 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.SToolbar;
+import org.wings.SToolBar;
 import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class ToolbarCG extends AbstractComponentCG implements
-        org.wings.plaf.ToolbarCG {
+public class ToolBarCG extends AbstractComponentCG implements
+        org.wings.plaf.ToolBarCG {
     public void writeContent(final Device device, final SComponent _c)
             throws IOException {
-        final SToolbar toolbar = (SToolbar) _c;
+        final SToolBar toolBar = (SToolBar) _c;
 
         device.print("<table class=\"SLayout\"><tr>");
-        SComponent[] components = toolbar.getComponents();
+        SComponent[] components = toolBar.getComponents();
         for (int i = 0; i < components.length; i++) {
             SComponent component = components[i];
 

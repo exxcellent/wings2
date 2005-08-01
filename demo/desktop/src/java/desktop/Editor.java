@@ -60,7 +60,7 @@ public class Editor
 {
     private DynamicResource saveResource;
     private SMenuBar menuBar;
-    private SToolbar toolbar;
+    private SToolBar toolBar;
     private STextArea textArea;
 
     private String backup;
@@ -71,7 +71,7 @@ public class Editor
         SContainer contentPane = getContentPane();
         contentPane.setLayout(new SFlowDownLayout());
         contentPane.add(menuBar);
-        toolbar = createToolbar();
+        toolBar = createToolBar();
 
         textArea = new STextArea();
         textArea.setColumns(80);
@@ -79,7 +79,7 @@ public class Editor
         textArea.setPreferredSize(SDimension.FULLWIDTH);
         
         SForm form = new SForm(new SFlowDownLayout());
-        form.add(toolbar);
+        form.add(toolBar);
         form.add(textArea);
         contentPane.add(form);
 
@@ -146,7 +146,7 @@ public class Editor
         return menuBar;
     }
 
-    protected SToolbar createToolbar() {
+    protected SToolBar createToolBar() {
         try {
             SButton saveButton = new SButton(new SURLIcon("../icons/filesave.png"));
             saveButton.setToolTipText("save");
@@ -193,22 +193,22 @@ public class Editor
                 }
             });
 
-            SToolbar toolbar = new SToolbar();
-            toolbar.add(saveButton);
-            toolbar.add(revertButton);
-            toolbar.add(closeButton);
-            toolbar.add(new SLabel("<html>&nbsp;"));
-            toolbar.add(cutButton);
-            toolbar.add(copyButton);
-            toolbar.add(pasteButton);
+            SToolBar toolBar = new SToolBar();
+            toolBar.add(saveButton);
+            toolBar.add(revertButton);
+            toolBar.add(closeButton);
+            toolBar.add(new SLabel("<html>&nbsp;"));
+            toolBar.add(cutButton);
+            toolBar.add(copyButton);
+            toolBar.add(pasteButton);
 
-            return toolbar;
+            return toolBar;
         }
         catch (Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
         }
-        return new SToolbar();
+        return new SToolBar();
     }
 
     public void setText(String text) {

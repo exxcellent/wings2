@@ -13,24 +13,24 @@
  */
 package org.wings;
 
-import org.wings.plaf.ToolbarCG;
+import org.wings.plaf.ToolBarCG;
 
 /**
- * The basic SToolbar is just an SPanel without an SLayoutManager.
+ * The basic SToolBar is just an SPanel without an SLayoutManager.
  * However, the Plaf might choose to set a different layout manager.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SToolbar extends SPanel {
+public class SToolBar extends SPanel {
     /**
-     * create a new SToolbar.
+     * create a new SToolBar.
      */
-    public SToolbar() {
+    public SToolBar() {
         super(new SFlowLayout());
     }
 
-    public void setCG(ToolbarCG cg) {
+    public void setCG(ToolBarCG cg) {
         super.setCG(cg);
     }
 }

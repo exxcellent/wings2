@@ -15,7 +15,7 @@ package org.wings.plaf;
 
 
 
-public interface ToolbarCG extends ComponentCG {
+public interface ToolBarCG extends ComponentCG {
 }
 
 

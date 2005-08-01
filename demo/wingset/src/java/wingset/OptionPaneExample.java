@@ -26,7 +26,7 @@ public class OptionPaneExample
         extends WingSetPane
 {
     protected SComponent createExample() {
-        SToolbar toolbar = new SToolbar();
+        SToolBar toolBar = new SToolBar();
 
         SButton msg = new SButton("show Message");
         msg.addActionListener(new ActionListener() {
@@ -34,7 +34,7 @@ public class OptionPaneExample
                 SOptionPane.showMessageDialog(null, "This is a simple message", "A Message");
             }
         });
-        toolbar.add(msg);
+        toolBar.add(msg);
 
         SButton question = new SButton("show Question");
         final ActionListener comment = new ActionListener() {
@@ -52,7 +52,7 @@ public class OptionPaneExample
                         "A Question", comment);
             }
         });
-        toolbar.add(question);
+        toolBar.add(question);
 
         SButton yesno = new SButton("show Yes No");
         final ActionListener feedback = new ActionListener() {
@@ -77,7 +77,7 @@ public class OptionPaneExample
             }
         });
 
-        toolbar.add(yesno);
+        toolBar.add(yesno);
 
         final SLabel label = new SLabel();
         final ActionListener inputListener = new ActionListener() {
@@ -94,11 +94,11 @@ public class OptionPaneExample
                 SOptionPane.showInputDialog(null, "What's your profession?", "A Message", new STextField(), inputListener);
             }
         });
-        toolbar.add(input);
-        toolbar.add(label);
+        toolBar.add(input);
+        toolBar.add(label);
 
         SForm c = new SForm(new SBorderLayout());
-        c.add(toolbar, SBorderLayout.NORTH);
+        c.add(toolBar, SBorderLayout.NORTH);
         return c;
     }
 }

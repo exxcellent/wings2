@@ -27,7 +27,7 @@ import java.util.List;
  * @version $Revision$
  */
 public class ComponentControls
-        extends SToolbar {
+        extends SToolBar {
     protected final List components = new LinkedList();
     protected final STextField widthTextField;
     protected final STextField heightTextField;

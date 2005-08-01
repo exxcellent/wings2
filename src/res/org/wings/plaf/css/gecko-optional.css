@@ -85,18 +85,18 @@ div.SClickable > button:hover {
 
 /* ----------- DESKTOP PANE */
 
-/* Thin grey border around buttons in SToolbar. See desktop demo. */
-div.SToolbar {
+/* Thin grey border around buttons in SToolBar. See desktop demo. */
+div.SToolBar {
 }
-div.SToolbar > table {
+div.SToolBar > table {
     background-color: inherit !important;
     border: 1px none !important;
 }
-div.SToolbar > table > tbody > tr > td {
+div.SToolBar > table > tbody > tr > td {
     background-color: inherit !important;
     padding: 2px;
 }
-div.SToolbar div.SButton {
+div.SToolBar div.SButton {
     background-color: inherit !important;
     border: 1px none !important;
 }
