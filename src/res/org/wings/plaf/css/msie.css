@@ -31,6 +31,10 @@ td.SLayout {
     border: none;
 }
 
+table.SLayout {
+	width:100%;
+}
+
 /* BODY {
     position: relative;
     margin: 0px;
