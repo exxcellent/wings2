@@ -42,7 +42,10 @@ public class PageScrollerExample
 
         scrollbar = new SPageScroller(Adjustable.VERTICAL);
         scrollbar.setName("scrollbar");
-
+        // TODO this should work, but doesn't, leaving it in for testing
+        scrollbar.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
+        scrollbar.setVerticalAlignment(SConstants.BOTTOM_ALIGN);
+        
         // its a horizontal scrollbar, but scrolls vertical...
         scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
         scrollbar.setDirectPages(10);

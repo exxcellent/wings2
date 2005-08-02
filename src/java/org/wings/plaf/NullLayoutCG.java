@@ -19,7 +19,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class DefaultLayoutCG
+public class NullLayoutCG
         implements LayoutCG {
     public void write(Device d, SLayoutManager l) throws IOException {
         SContainer c = l.getContainer();
