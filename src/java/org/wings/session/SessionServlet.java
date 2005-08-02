@@ -498,7 +498,7 @@ final class SessionServlet
             }
             
         } finally {
-            if (session != null || !isErrorHandling) {
+            if (session != null && !isErrorHandling) {
                 session.fireRequestEvent(SRequestEvent.REQUEST_END);
             }
 
@@ -512,7 +512,7 @@ final class SessionServlet
             /*
              * the session might be null due to destroy().
              */
-            if (session != null || !isErrorHandling) {
+            if (session != null && !isErrorHandling) {
                 reloadManager.clear();
                 session.setServletRequest(null);
                 session.setServletResponse(null);
