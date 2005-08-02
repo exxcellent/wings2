@@ -45,7 +45,7 @@ public class Desktop
     implements SConstants
 {
     SFrame frame;
-    SDesktopPane desktop;
+    BirdsNest desktop;
     SMenu windowMenu;
     int editorNumber;
 
@@ -59,7 +59,7 @@ public class Desktop
         SMenuBar menuBar = createMenu();
         contentPane.add(menuBar);
 
-        desktop = new SDesktopPane();
+        desktop = new BirdsNest();
         // add the frames to the window-menu ..
         desktop.addContainerListener(new SContainerListener() {
                 public void componentAdded(SContainerEvent e) {
@@ -268,11 +268,3 @@ public class Desktop
         }
     }
 }
-
-/*
- * Local variables:
- * c-basic-offset: 4
- * indent-tabs-mode: nil
- * compile-command: "ant -emacs -find build.xml"
- * End:
- */

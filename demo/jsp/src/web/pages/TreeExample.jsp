@@ -39,7 +39,7 @@ import="org.wings.*,
                 tree = new STree();
                 tree.setRootVisible(false);
                 tree.setModel(new DefaultTreeModel(NavigationTreeModel.ROOT_NODE));
-                tree.getSelectionModel().setSelectionMode(STreeSelectionModel.SINGLE_SELECTION);
+                tree.getSelectionModel().setSelectionMode(STreeSelectionModel.SINGLE_TREE_SELECTION);
                 tree.setCellRenderer(new NavigationTreeCellRenderer());
                 TreeCG treeCG = ((TreeCG)tree.getCG());
                 treeCG.setLeafControlIcon(treeCG.getEmptyFillIcon());

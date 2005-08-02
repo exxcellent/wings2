@@ -55,7 +55,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class Editor
-    extends SInternalFrame
+    extends Bird
     implements SInternalFrameListener
 {
     private DynamicResource saveResource;
