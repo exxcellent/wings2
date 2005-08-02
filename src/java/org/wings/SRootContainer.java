@@ -46,7 +46,7 @@ public abstract class SRootContainer extends SContainer {
      * SRootContainer.
      */
     public SRootContainer() {
-        contentPane = new SPanel();
+        contentPane = new SPanel(new SNullLayout());
         super.setLayout(new SRootLayout());
         super.addComponent(getContentPane(), null, getComponentCount());
     }

@@ -75,6 +75,8 @@ public class TableCG extends AbstractComponentCG implements
             component = table.prepareRenderer(table.getCellRenderer(row, col), row, col);
         }
 
+        boolean selectableButClickable = selectable && (component instanceof SAbstractIconTextCompound);
+
         device.print("<td col=\"");
         device.print(col);
         device.print("\"");
@@ -115,7 +117,7 @@ public class TableCG extends AbstractComponentCG implements
         else if (selectable)
             parameter = table.getToggleSelectionParameter(row, col);
 
-        if (parameter != null && !isEditingCell) {
+        if (parameter != null && !isEditingCell && !selectableButClickable) {
             if (showAsFormComponent) {
                 writeButtonStart(device, table, parameter);
                 device.print(" type=\"submit\" name=\"");
@@ -134,7 +136,7 @@ public class TableCG extends AbstractComponentCG implements
 
         rendererPane.writeComponent(device, component, table);
 
-        if (parameter != null && !isEditingCell) {
+        if (parameter != null && !isEditingCell && !selectableButClickable) {
             if (showAsFormComponent)
                 device.print("</button>");
             else

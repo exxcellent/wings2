@@ -65,29 +65,11 @@ public final class Utils {
         SLayoutManager layout = c.getLayout();
 
         if (layout == null) {
-            // lookup the default Layout Behaviour
-            final CGManager manager = c.getSession().getCGManager();
-            Object value;
-            value = manager.getObject("SContainer.defaultLayoutBehaviour", String.class);
-            if (value != null && value instanceof String) {
-                if ("classic".equals(((String) value).toLowerCase())) {
-                    layout = new SBoxLayout(SBoxLayout.VERTICAL);
-                } else if ("standard".equals(((String) value).toLowerCase())) {
-                    layout = new SFlowLayout(SFlowLayout.LEFT);
-                } else if ("none".equals(((String) value).toLowerCase())) {
-                    // just write out the components one after another
-                    for (int i = 0; i < c.getComponentCount(); i++) {
-                        c.getComponent(i).write(d);
-                    }
-                    return;
-                } else { // fallback
-                    layout = new SFlowLayout(SFlowLayout.LEFT);
-                }
-            } else {
-                // Swing default LayoutManager is FlowLayout
-                layout = new SFlowLayout(SFlowLayout.LEFT);
+            // just write out the components one after another
+            for (int i = 0; i < c.getComponentCount(); i++) {
+                c.getComponent(i).write(d);
             }
-            c.setLayout(layout);
+            return;
         }
         layout.write(d);
     }

@@ -15,7 +15,9 @@ package org.wings;
 
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
+import org.wings.plaf.CGManager;
 import org.wings.plaf.ContainerCG;
+import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.util.ComponentVisitor;
@@ -36,8 +38,10 @@ public class SContainer extends SComponent {
     /**
      * The layout for the component.
      */
-    protected SLayoutManager layout;
-
+    private SLayoutManager layout;
+    
+    private static String defaultLayout;
+ 
     /**
      * background image, that is rendered for this container.
      */
@@ -70,10 +74,30 @@ public class SContainer extends SComponent {
     }
 
     /**
-     * creates a new container with no layout manager, i.e. the components
-     * are simply written in the same order they were added.
+     * creates a new container with a Flowlayout as layout manager, like the
+     * Swing default.
      */
-    public SContainer() {}
+    public SContainer() {
+        // init defaultLayout if not initialized yet
+        if (defaultLayout == null) {
+            // lookup the default Layout Behaviour
+            final CGManager manager = SessionManager.getSession().getCGManager();
+            defaultLayout = (String) manager.getObject("SContainer.defaultLayoutBehaviour", String.class);
+        }
+        SLayoutManager layout = null;
+        if (defaultLayout == null) {
+            layout = new SFlowLayout();
+        } else if ("classic".equals(defaultLayout.toLowerCase())) {
+            layout = new SBoxLayout(SBoxLayout.VERTICAL);
+        } else if ("standard".equals(defaultLayout.toLowerCase())) {
+            layout = new SFlowLayout();
+        } else if ("none".equals(defaultLayout.toLowerCase())) {
+            layout = new SNullLayout();
+        } else { // fallback
+            layout = new SFlowLayout();
+        }
+        setLayout(layout);
+    }
 
 
     public void updateCG() {
@@ -85,8 +109,9 @@ public class SContainer extends SComponent {
 
     /**
      * Sets a new layout manager.
-     *
-     * @param l new layout manager
+     * 
+     * @param l
+     *            new layout manager
      */
     public void setLayout(SLayoutManager l) {
         if (layout != null) {
