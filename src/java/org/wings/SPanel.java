@@ -26,11 +26,18 @@ import org.wings.plaf.PanelCG;
 public class SPanel
         extends SContainer {
 
+    /**
+     * Creates a panel with the default layout manager.
+     */
     public SPanel() {
         //setPreferredSize(new SDimension(SDimension.FULL_SIZE, SDimension.AUTO));
         // Nope -- Panels should expand to 100% where possible, but block only the minimum dimension!
     }
 
+    /**
+     * Creates a panel with the specified layout manager
+     * @param l the layout manager for the panel
+     */
     public SPanel(SLayoutManager l) {
         super(l);
         //setPreferredSize(new SDimension(SDimension.FULL_SIZE, SDimension.AUTO));
