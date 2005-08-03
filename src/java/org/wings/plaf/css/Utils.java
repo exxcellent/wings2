@@ -15,18 +15,17 @@ package org.wings.plaf.css;
 
 import org.wings.LowLevelEventListener;
 import org.wings.Renderable;
-import org.wings.SBoxLayout;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.SDimension;
-import org.wings.SFlowLayout;
 import org.wings.SFont;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
-import org.wings.plaf.CGManager;
 import org.wings.script.ScriptListener;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -296,9 +295,27 @@ public final class Utils {
     /**
      * writes an {X|HT}ML quoted string according to RFC 1866.
      * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
+     * wrapper to same emthod with more parameters.
+     * @param d The device to print out on
+     * @param s the String to print
+     * @param quoteNewline should newlines be transformed into br tags
+     * @throws IOException
      */
-    // not optimized yet
     private static void quote(Device d, String s, boolean quoteNewline) throws IOException {
+        quote(d,s,quoteNewline, false);
+    }
+
+    /**
+      * writes an {X|HT}ML quoted string according to RFC 1866.
+      * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
+      * @param d The device to print out on
+      * @param s the String to print
+      * @param quoteNewline should newlines be transformed into br tags
+      * @param quoteSpaces should spaces be transformed into nbsp chars
+      * @throws IOException
+      */
+     // not optimized yet
+    private static void quote(Device d, String s, boolean quoteNewline, boolean quoteSpaces) throws IOException {
         if (s == null) {
             return;
         }
@@ -352,13 +369,30 @@ public final class Utils {
                          *     isolatin-char 160, _not_ space.
                          * (at least Konqueror behaves this correct; mozilla does not)
                          *                                                       Henner
+                         *                                                       
+                         * But we must do this for IE, since it doesn't accept the
+                         * white-space: pre; property...so conditionalize it.
+                         *                                                       Ole
                          */
+                    case ' ':
+                        if (quoteSpaces) {
+                            d.print(chars, last, (pos - last));
+                            d.print("&nbsp;");
+                            last = pos + 1;
+                        }
+                        break;
                 }
             }
         }
         d.print(chars, last, chars.length - last);
     }
 
+    /**
+     * write string as it is
+     * @param d
+     * @param s
+     * @throws IOException
+     */
     public static void writeRaw(Device d, String s) throws IOException {
         if (s == null) {
             return;
@@ -379,6 +413,24 @@ public final class Utils {
         }
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
+        } else {
+            quote(d, s, false);
+        }
+    }
+    
+    /**
+     * write content string depending on browser (IE needs nbsp's in labels for
+     * example).
+     * @param d
+     * @param s
+     * @throws IOException
+     */
+    public static void writeContent(Device d, String s) throws IOException {
+        boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
+        if ((s.length() > 5) && (s.startsWith("<html>"))) {
+            writeRaw(d, s.substring(6));
+        } else if (isIE) {
+            quote(d, s, true, true);
         } else {
             quote(d, s, false);
         }

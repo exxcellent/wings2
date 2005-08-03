@@ -31,7 +31,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
+
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Enumeration;
@@ -483,12 +488,13 @@ final class SessionServlet
 
         } catch (Throwable e) {
             /*
-             * error handling...implement it in SFrame
+             * custom error handling...implement it in SFrame
              */
             SFrame defaultFrame = (SFrame) session.getFrames().iterator().next();
             while (defaultFrame.getParent() != null)
                 defaultFrame = (SFrame) defaultFrame.getParent();
             if (defaultFrame != null && defaultFrame.handleError(e)) {
+                // maybe just call defaultFrame.write(new ServletDevice(out)); instead of doGet()
                 doGet(req, response);
                 isErrorHandling = true;
                 return;
@@ -602,7 +608,12 @@ final class SessionServlet
 
             res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
-            errorStackTraceLabel.setText(getStackTraceString(e));
+            // build the stacktrace wrapped by pre's so line breaks are preserved
+            StringBuffer stackTrace = new StringBuffer("<html><pre>");
+            stackTrace.append(getStackTraceString(e));
+            stackTrace.append("</pre>");
+            errorStackTraceLabel.setText(stackTrace.toString());
+            // if there is a message, print it, otherwise print "none".
             errorMessageLabel.setText(e.getMessage()!=null?e.getMessage():"none");
             errorFrame.write(new ServletDevice(out));
         } catch (Exception ex) {

@@ -14,6 +14,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.style.CSSProperty;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.util.PropertyAccessor;
 
@@ -55,7 +56,8 @@ public class TreeExample
         private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
 
         public TreeControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
+            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
+            showAsFormComponent.setAttribute(CSSProperty.MARGIN_RIGHT, "1.5em");
             showAsFormComponent.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     tree.setShowAsFormComponent(showAsFormComponent.isSelected());

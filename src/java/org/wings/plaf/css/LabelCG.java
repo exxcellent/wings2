@@ -51,7 +51,7 @@ public class LabelCG extends AbstractComponentCG implements
     }
 
     protected void writeText(Device device, String text) throws IOException {
-        Utils.write(device, text);
+        Utils.writeContent(device, text);
     }
 
     protected void writeIcon(Device device, SIcon icon) throws IOException {
