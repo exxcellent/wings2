@@ -30,10 +30,15 @@ public class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
 
         // In CSS2 capable browsers a panel inside a border layout expands to full width
         // In MSIE we have to simulate this esp. the background colour aspect.
-        if (containedComponent != null && containedComponent.getBackground() != null) {
-            return "background: " + Utils.toColorString(containedComponent.getBackground()) + ";";
-        } else {
+        
+        // Benjamin: It doesn't always...this totally borked some examples...I'm commenting this out.
+        // might be needed for some things, but we need to do this another way.
+        // look at border example to see the mess. (OL)
+
+//        if (containedComponent != null && containedComponent.getBackground() != null) {
+//            return "background: " + Utils.toColorString(containedComponent.getBackground()) + ";";
+//        } else {
             return null;
-        }
+//        }
     }
 }
