@@ -37,7 +37,7 @@ public class DesktopPaneCG extends AbstractComponentCG implements
         // is one window maximized? if yes, skip rendering of other windows
         boolean maximized = false;
         
-        device.print("<div class=\"spacer\">&nbsp;</div>");
+        device.print("<div class=\"spacer\"></div>");
         int componentCount = desktop.getComponentCount();
         for (int i = 0; i < componentCount; i++) {
             SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
@@ -64,7 +64,7 @@ public class DesktopPaneCG extends AbstractComponentCG implements
                 }
             }
         }
-        device.print("<div class=\"spacer\">&nbsp;</div>");
+        device.print("<div class=\"spacer\"></div>");
         
     }
 }

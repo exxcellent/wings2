@@ -117,7 +117,7 @@ public class MenuBarCG extends AbstractComponentCG implements
      * @throws IOException
      */
     protected void printSpacer(final Device device) throws IOException {
-        device.print("<div class=\"spacer\">&nbsp;</div>");
+        device.print("<div class=\"spacer\"></div>");
     }
 
     /* (non-Javadoc)
