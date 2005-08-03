@@ -56,9 +56,9 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         }
         // Special handling: Mark Titled Borders for styling
         if (component.getBorder() instanceof STitledBorder) {
-            Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder SLayout");
+            Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder SContainer");
         } else {
-            Utils.optAttribute(device, "class", component.getStyle() + " SLayout");
+            Utils.optAttribute(device, "class", component.getStyle() + " SContainer");
         }
         Utils.optAttribute(device, "style", inlineStyles.toString());
 
