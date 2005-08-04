@@ -51,14 +51,15 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         
         device.print("<table id=\"").print(component.getName()).print("\"");
-        if (component instanceof DragSource) {
-            device.print(" style=\"position:relative;\"");
-        }
         // Special handling: Mark Titled Borders for styling
         if (component.getBorder() instanceof STitledBorder) {
             Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder SContainer");
         } else {
             Utils.optAttribute(device, "class", component.getStyle() + " SContainer");
+        }
+        // TODO these two are clashing...
+        if (component instanceof DragSource) {
+            device.print(" style=\"position:relative;\"");
         }
         Utils.optAttribute(device, "style", inlineStyles.toString());
 

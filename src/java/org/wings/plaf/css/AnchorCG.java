@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 
 import java.io.IOException;
 
+import org.wings.RequestURL;
 import org.wings.SAnchor;
 import org.wings.SComponent;
 import org.wings.io.Device;
@@ -31,7 +32,7 @@ public class AnchorCG
             throws IOException {
         final SAnchor component = (SAnchor) _c;
 
-        writeLinkStart(device, component);
+        writeLinkStart(device, component.getRequestURL());
 
         Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
         if (component.isFocusOwner())
@@ -53,9 +54,9 @@ public class AnchorCG
      * @param component the component to be rendered
      * @throws IOException 
      */
-    protected void writeLinkStart(final Device device, final SAnchor component) throws IOException {
+    protected void writeLinkStart(final Device device, final RequestURL addr) throws IOException {
         device.print("<a href=\"");
-        device.print(component.getURL());
+        device.print(addr.toString());
         device.print("\"");
     }
 }
