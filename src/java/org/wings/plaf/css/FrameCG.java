@@ -336,7 +336,10 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // let ie understand hover css styles on elements other than anchors
-        if (BrowserType.IE.equals(browser.getBrowserType())) {
+        boolean useHoverBehavior = ((String) SessionManager.getSession()
+                .getCGManager().getObject("Behaviors.ieHover.active",
+                        String.class)).equals("true");
+        if (BrowserType.IE.equals(browser.getBrowserType()) && useHoverBehavior) {
             // externalize hover behavior
             final String classPath = (String)SessionManager.getSession().getCGManager().getObject("Behaviors.ieHover", String.class);
             ClasspathResource res = new ClasspathResource(classPath, "text/x-component");

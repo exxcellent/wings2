@@ -207,7 +207,28 @@
     <sect1>
       <title>Application Startup and Configuration</title>
 
-      <para>TODO</para>
+      <para>still some TODO</para>
+      
+      <sect2>
+      	<title>Overwritable config files</title>
+	      <para>The default config files reside inside the jar file. Take a look
+	      at the jar container to learn what you can do with them. They should be
+	      documented. If you want to overwrite any of the settings in the config
+	      files, you can do that by providing a file in the WEB-INF directory of
+	      your web application. The naming scheme is the following: If you want to
+	      overwrite some properties from the file at classpath 
+	      <code>org/wings/plaf/css/default.properties</code>, you need to put a file named
+	      <code>org.wings.plaf.css.default.properties</code> into the WEB-INF directory. That
+	      file will then be read on top of the default file, so you just need to
+	      overwrite the settings you want to change.
+	      </para>
+	
+	      <para>The files that I know of you can change via this method are:
+	      <code>org/wings/plaf/css/default.properties</code>
+	      and
+	      <code>org/wings/util/charset.properties.</code>
+	      </para>
+	  </sect2>
     </sect1>
 
     <sect1>

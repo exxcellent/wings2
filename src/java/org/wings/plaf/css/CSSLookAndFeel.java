@@ -25,9 +25,9 @@ public class CSSLookAndFeel
         extends org.wings.plaf.LookAndFeel {
 
     private final transient static Log log = LogFactory.getLog(CSSLookAndFeel.class);
-    private static final String PROPERTIES_FILENAME_START = CSSLookAndFeel.class.getPackage().getName();
+    private static final String PROPERTIES_FILENAME_DEFAULT = "default";
     private static final String PROPERTIES_FILENAME_END = ".properties";
-    private static final String PROPERTIES_CLASSPATH = PROPERTIES_FILENAME_START.replace('.','/').concat("/");
+    private static final String PROPERTIES_CLASSPATH = CSSLookAndFeel.class.getPackage().getName().replace('.','/').concat("/");
 
     public CSSLookAndFeel() throws IOException {
         super(loadProperties());
@@ -35,25 +35,24 @@ public class CSSLookAndFeel
 
     private static Properties loadProperties() throws IOException {
         // default properties
-        StringBuffer propertiesFilename = new StringBuffer(PROPERTIES_FILENAME_START);
+        StringBuffer propertiesFilename = new StringBuffer(PROPERTIES_CLASSPATH);
+        propertiesFilename.append(PROPERTIES_FILENAME_DEFAULT);
         propertiesFilename.append(PROPERTIES_FILENAME_END);
         // browser dependent properties
         String browserType = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
 
-        StringBuffer browserPropertiesFilename = new StringBuffer(PROPERTIES_FILENAME_START);
-        browserPropertiesFilename.append(".");
+        StringBuffer browserPropertiesFilename = new StringBuffer(PROPERTIES_CLASSPATH);
         browserPropertiesFilename.append(browserType);
         browserPropertiesFilename.append(PROPERTIES_FILENAME_END);
 
-        Properties properties = PropertyUtils.loadProperties(PROPERTIES_CLASSPATH + propertiesFilename.toString());
+        Properties properties = PropertyUtils.loadProperties(propertiesFilename.toString());
         try {
-            properties.putAll(PropertyUtils.loadProperties(PROPERTIES_CLASSPATH + browserPropertiesFilename.toString()));
+            properties.putAll(PropertyUtils.loadProperties(browserPropertiesFilename.toString()));
         } catch (IOException e) {
-            log.info("Unable to open browser specific properties file '"+browserPropertiesFilename+"'. This is OK.");
+            log.info("Unable to open browser specific properties file '"+browserPropertiesFilename.toString()+"'. This is OK.");
         }
         return properties;
     }
-
 }
 
 
