@@ -32,7 +32,7 @@ public class AnchorCG
             throws IOException {
         final SAnchor component = (SAnchor) _c;
 
-        writeLinkStart(device, component.getRequestURL());
+        writeLinkStart(device, component);
 
         Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
         if (component.isFocusOwner())
@@ -54,9 +54,9 @@ public class AnchorCG
      * @param component the component to be rendered
      * @throws IOException 
      */
-    protected void writeLinkStart(final Device device, final RequestURL addr) throws IOException {
+    protected void writeLinkStart(final Device device, final SAnchor comp) throws IOException {
         device.print("<a href=\"");
-        device.print(addr.toString());
+        device.print(comp.getURL());
         device.print("\"");
     }
 }

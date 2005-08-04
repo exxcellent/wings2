@@ -16,6 +16,7 @@ package org.wings.plaf.css.msie;
 import java.io.IOException;
 
 import org.wings.RequestURL;
+import org.wings.SAnchor;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 
@@ -27,9 +28,9 @@ public class AnchorCG extends org.wings.plaf.css.AnchorCG {
     /* (non-Javadoc)
      * @see org.wings.plaf.css.CheckBoxCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
      */
-    protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
+    protected void writeLinkStart(final Device device, SAnchor comp) throws IOException {
         device.print("<a onclick=\"javascript:location.href='");
-        Utils.write(device, addr.toString());
+        Utils.write(device, comp.getURL());
         device.print("';\"");
     }
 }
