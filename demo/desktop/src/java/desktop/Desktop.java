@@ -14,18 +14,11 @@
 
 package desktop;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SDesktopPane;
-import org.wings.SFileChooser;
-import org.wings.SFlowDownLayout;
-import org.wings.SFrame;
-import org.wings.SInternalFrame;
-import org.wings.SMenu;
-import org.wings.SMenuBar;
-import org.wings.SMenuItem;
-import org.wings.SOptionPane;
+import org.wings.*;
+import org.wings.session.SessionManager;
+import org.wings.dnd.DragSource;
+import org.wings.resource.DefaultURLResource;
+import org.wings.header.Link;
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.style.CSSProperty;
@@ -74,9 +67,10 @@ public class Desktop
                 }
             });
         contentPane.add(desktop);
-        
+
         newEditor().setText(getStory());
 
+        frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../desktop.css")));
         frame.show();
     }
 
@@ -265,6 +259,31 @@ public class Desktop
                 return (frame != null && wme.frame == frame);
             }
             return false;
+        }
+    }
+
+    public static class Blub
+        extends SLabel
+        implements DragSource
+    {
+        private boolean dragEnabled;
+
+        public Blub(String text) {
+            super(text);
+            setDragEnabled(true);
+        }
+
+        public boolean isDragEnabled() {
+            return dragEnabled;
+        }
+
+        public void setDragEnabled(boolean dragEnabled) {
+            this.dragEnabled = dragEnabled;
+            if (dragEnabled) {
+                SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+            } else {
+                SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+            }
         }
     }
 }

@@ -62,8 +62,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     public void write(Device device, SComponent component) throws IOException {
-        if (!component.isVisible())
-            return;
         writePrefix(device, component);
         writeContent(device, component);
         writeSuffix(device, component);

@@ -75,7 +75,7 @@ public class Editor
 
         textArea = new STextArea();
         textArea.setColumns(80);
-        textArea.setRows(24);
+        textArea.setRows(12);
         textArea.setPreferredSize(SDimension.FULLWIDTH);
         
         SForm form = new SForm(new SFlowDownLayout());
@@ -308,8 +308,12 @@ public class Editor
     public void internalFrameOpened(SInternalFrameEvent e) {}
     public void internalFrameIconified(SInternalFrameEvent e) {}
     public void internalFrameDeiconified(SInternalFrameEvent e) {}
-    public void internalFrameMaximized(SInternalFrameEvent e) {}
-    public void internalFrameUnmaximized(SInternalFrameEvent e) {}
+    public void internalFrameMaximized(SInternalFrameEvent e) {
+        textArea.setRows(24);
+    }
+    public void internalFrameUnmaximized(SInternalFrameEvent e) {
+        textArea.setRows(12);
+    }
 
     private class EditorDynamicResource extends DynamicResource
     {

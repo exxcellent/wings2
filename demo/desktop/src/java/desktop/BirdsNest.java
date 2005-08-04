@@ -4,8 +4,6 @@
 package desktop;
 
 import org.wings.SDesktopPane;
-import org.wings.SComponent;
-import org.wings.event.SComponentDropListener;
 
 
 /**
@@ -15,20 +13,7 @@ import org.wings.event.SComponentDropListener;
 public class BirdsNest
         extends SDesktopPane
 {
-    public SComponent addComponent(SComponent component, final Object constraints, int index) {
-        if (component instanceof Bird) {
-            final Bird bird = (Bird)component;
-            bird.addComponentDropListener(new SComponentDropListener() {
-                public boolean handleDrop(SComponent dragSource) {
-                    if (dragSource == bird)
-                        return false;
-                    int index = getComponentList().indexOf(bird);
-                    remove(dragSource);
-                    BirdsNest.super.addComponent(dragSource, null, index);
-                    return true;
-                }
-            });
-        }
-        return super.addComponent(component, constraints, index);
+    public void updateCG() {
+        setCG(new BirdsNestCG());
     }
 }
