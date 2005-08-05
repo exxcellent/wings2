@@ -154,12 +154,8 @@ public class DynamicLayoutExample extends WingSetPane {
             add(new SLabel("Horizontal, right-aligned FlowLayout"));
             add(createPanel(new SFlowLayout(SFlowLayout.RIGHT), 4));
             add(new SLabel("<html>&nbsp;"));
-            add(new SLabel("Vertical, centered FlowLayout"));
-            add(createPanel(new SFlowDownLayout(SConstants.CENTER), 4));
-            add(new SLabel("Vertical, left-aligned FlowLayout"));
+            add(new SLabel("Vertical FlowLayout"));
             add(createPanel(new SFlowDownLayout(), 3));
-            add(new SLabel("Vertical, right-aligned FlowLayout"));
-            add(createPanel(new SFlowDownLayout(SConstants.RIGHT), 4));
         }
     }
 

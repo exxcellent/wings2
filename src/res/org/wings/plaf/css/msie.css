@@ -62,6 +62,29 @@ table.SForm {
     width: 100%;
 }
 
+/* Flowlayouts can't handle the 100% width of their children, so we try to set
+   their width to 1%. This leads to many rules, but is easily implementable. */
+table.SFlowLayout table.SForm {
+    width: 1%;
+}
+table.SFlowLayout table.SLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayouttable.SFlowLayout table.SLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SLayout table.SForm {
+    width: 100%;
+}
+table.SFlowLayout table.SFlowLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SForm,
+table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SForm {
+	width: 1%
+}
+
+
 /* TODO -- move this too renderer? */
 IMG {
     border: none !important;     /* This is needed to avoid those ugly borders around linked imgs's */

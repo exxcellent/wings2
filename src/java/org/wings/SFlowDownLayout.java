@@ -26,17 +26,7 @@ public class SFlowDownLayout extends SFlowLayout {
      * creates a new flow down layouts
      */
     public SFlowDownLayout() {
-        this(SConstants.LEFT_ALIGN);
-    }
-
-    /**
-     * creates a new flow down layouts
-     * @param alignment Align CENTER, LEFT or RIGHT
-     */
-    public SFlowDownLayout(int alignment) {
-        super();
         setOrientation(SConstants.VERTICAL);
-        setAlignment(alignment);
     }
 }
 
