@@ -50,6 +50,14 @@ div {
     display: table;
 }
 
+/* SFlowLayout can't flow if the immediate inner children has defined 100% width.
+   Some wingS component inheritly define 100% width i.e. like SForm.
+   We overwrite their width in this case to 1%. This leads to many rules, but is easily implementable. */
+div.SFlowLayout > div > div.SForm_Box  > div.SForm
+{
+    width: 1%;
+} 
+
 /* TODO -- move this to renderer? */
 IMG {
     /* keeps images inside tabs */

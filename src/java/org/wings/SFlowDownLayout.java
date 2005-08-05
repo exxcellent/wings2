@@ -15,8 +15,10 @@ package org.wings;
 
 
 /**
- * This is a flow down layout. This is a flow layout
- * with vertical orientation and left alignment.
+ * This is a flow down layout. This is a flow layout with vertical orientation.
+ *
+ * <p>The container to which this layout is applied will preferrably keep it's natural.
+ * Apply {@link SDimension#FULLWIDTH} as prefererred size on the container to take up the full width.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
@@ -26,8 +28,9 @@ public class SFlowDownLayout extends SFlowLayout {
      * creates a new flow down layouts
      */
     public SFlowDownLayout() {
-        setOrientation(SConstants.VERTICAL);
+        super();
     }
+
 }
 
 

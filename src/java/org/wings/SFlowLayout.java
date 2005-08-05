@@ -30,11 +30,6 @@ public class SFlowLayout
     protected final List components;
 
     /**
-     * Orientation (horizontally or vertically) of components.
-     */
-    protected int orientation;
-
-    /**
      * Alignment (left, center, right) of components.
      */
     protected int align;
@@ -45,7 +40,6 @@ public class SFlowLayout
      */
     public SFlowLayout() {
         components = new ArrayList(2);
-        setOrientation(SConstants.HORIZONTAL);
         setAlignment(SConstants.LEFT_ALIGN);
     }
 
@@ -92,26 +86,6 @@ public class SFlowLayout
     public SComponent getComponentAt(int i) {
         return (SComponent) components.get(i);
     }
-
-    /**
-     * Sets the orientation for this layout. Possible values are
-     * <ul>
-     * <li>{@link org.wings.SConstants#HORIZONTAL}
-     * <li>{@link org.wings.SConstants#VERTICAL}
-     * </ul>
-     *
-     * @param o one of the orientation values shown above
-     */
-    public void setOrientation(int o) {
-        orientation = o;
-    }
-
-    /**
-     * returns the orientation
-     *
-     * @return orientation
-     */
-    public int getOrientation() { return orientation; }
 
     /**
      * Sets the alignment for this layout. Possible values are

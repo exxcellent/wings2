@@ -13,9 +13,12 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SFlowLayout;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -31,31 +34,28 @@ public class FlowLayoutCG extends AbstractLayoutCG {
         final SFlowLayout layout = (SFlowLayout) l;
         final List components = layout.getComponents();
         final int alignment = layout.getAlignment();
-        final int orientation = layout.getOrientation();
         final SContainer container = layout.getContainer();
 
         Utils.printNewline(d, container);
         d.print("<div");
         Utils.printDivHorizontalAlignment(d, alignment);
-        if (alignment == SConstants.CENTER)
+        if (alignment == SConstants.CENTER) {
             // Cheat -- margin left/right to simulate center float. Will not wrap
             d.print(" style=\"display:table; margin-left:auto; margin-right:auto;\"");
-        else
+        } else {
             d.print(" style=\"display:table; width:100%;\""); // gecko bug workaround: inherit surrounding panel bg color.
+        }
         d.print(" class=\"SFlowLayout\">");
 
         final String alignmentStyle;
-        if (orientation == SConstants.HORIZONTAL) {
-            if (alignment == SConstants.LEFT)
-                alignmentStyle = "float:left;";
-            else if (alignment == SConstants.RIGHT)
-                alignmentStyle = "float:right;";
-            else if (alignment == SConstants.CENTER)
-                alignmentStyle = "float:left; "; // Floating does not work with center :-(
-            else
-                alignmentStyle = "";
+        if (alignment == SConstants.LEFT) {
+            alignmentStyle = "float:left;";
+        } else if (alignment == SConstants.RIGHT) {
+            alignmentStyle = "float:right;";
+        } else if (alignment == SConstants.CENTER) {
+            alignmentStyle = "float:left; "; // Floating does not work with center :-(
         } else {
-            alignmentStyle = "display:block;"; // Vertical align does not support floating!
+            alignmentStyle = "";
         }
 
         if (components.size() > 0) {

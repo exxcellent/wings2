@@ -34,9 +34,8 @@ public class FlowLayoutCG extends org.wings.plaf.css.FlowLayoutCG {
     public void write(Device d, SLayoutManager l) throws IOException {
        final SFlowLayout layout = (SFlowLayout) l;
        final int alignment = layout.getAlignment();
-       final int orientation = layout.getOrientation();
 
-       if (alignment == SConstants.CENTER && orientation == SConstants.HORIZONTAL) {
+       if (alignment == SConstants.CENTER) {
            final List components = layout.getComponents();
            final SContainer container = layout.getContainer();
 
