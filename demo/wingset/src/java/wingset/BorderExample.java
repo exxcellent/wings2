@@ -88,7 +88,11 @@ public class BorderExample
         panel.add(controls, SBorderLayout.NORTH);
         panel.add(buttons, SBorderLayout.WEST);
         panel.add(borderLabel, SBorderLayout.CENTER);
-        return panel;
+
+        SPanel wrapPanel = new SPanel(); // A wrapper panel that limits the panel to its natual size
+        wrapPanel.add(panel);
+
+        return wrapPanel;
     }
 
     class BorderControls extends ComponentControls {
