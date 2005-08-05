@@ -58,9 +58,9 @@ public class LabelExample extends WingSetPane {
         p.add(new SLabel());
         p.add(testLabel);
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(p, SBorderLayout.CENTER);
+        SForm form = new SForm(new SFlowDownLayout());
+        form.add(controls);
+        form.add(p);
         return form;
     }
 

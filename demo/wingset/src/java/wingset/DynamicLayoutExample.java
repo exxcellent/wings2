@@ -13,7 +13,20 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SDimension;
+import org.wings.SFlowDownLayout;
+import org.wings.SFlowLayout;
+import org.wings.SFont;
+import org.wings.SForm;
+import org.wings.SGridBagLayout;
+import org.wings.SGridLayout;
+import org.wings.SLabel;
+import org.wings.SLayoutManager;
+import org.wings.SPanel;
 import org.wings.border.SBorder;
 import org.wings.border.SLineBorder;
 import org.wings.script.JavaScriptListener;
@@ -28,9 +41,17 @@ import java.awt.event.ItemListener;
  * @author bschmid
  */
 public class DynamicLayoutExample extends WingSetPane {
-    private final SForm panel = new SForm();
-    private final SPanel[] demoPanels = {new BorderLayoutDemoPanel(), new FlowLayoutDemoPanel(), new GridBagDemoPanel(), new GridLayoutDemoPanel(), new BoxLayoutDemoPanel()};
-    private final static String[] demoManagerNames = {"SBorderLayout", "SFlowLayout", "SGridBagLayout", "SGridLayout", "SBoxLayout"};
+    private final SForm panel = new SForm(new SFlowDownLayout());
+    private final SPanel[] demoPanels = {new BorderLayoutDemoPanel(),
+                                         new FlowLayoutDemoPanel(),
+                                         new GridBagDemoPanel(),
+                                         new GridLayoutDemoPanel(),
+                                         new BoxLayoutDemoPanel()};
+    private final static String[] demoManagerNames = {"SBorderLayout",
+                                                      "SFlowLayout/SFlowDownLayout",
+                                                      "SGridBagLayout",
+                                                      "SGridLayout",
+                                                      "SBoxLayout"};
     private final SComboBox selectLayoutManager = new SComboBox(demoManagerNames);
 
     protected SComponent createExample() {
@@ -42,6 +63,7 @@ public class DynamicLayoutExample extends WingSetPane {
         });
         selectLayoutManager.addScriptListener(new JavaScriptListener("onChange", "this.form.submit()"));
 
+        panel.setPreferredSize(SDimension.FULLWIDTH); // Take all available space of wingsetpane
         panel.add(selectLayoutManager);
         panel.add(demoPanels[0]);
 
@@ -91,6 +113,7 @@ public class DynamicLayoutExample extends WingSetPane {
 
     private static class BorderLayoutDemoPanel extends SPanel {
         int i = 0;
+
         public BorderLayoutDemoPanel() {
             super(new SFlowDownLayout());
             add(new SLabel("Default"));
@@ -101,26 +124,26 @@ public class DynamicLayoutExample extends WingSetPane {
             borderDemoPanel1.add(wrap(createDummyLabel(3)), SBorderLayout.WEST);
             borderDemoPanel1.add(wrap(createDummyLabel(4)), SBorderLayout.CENTER);
             add(borderDemoPanel1);
-            borderDemoPanel1.setPreferredSize(new SDimension(800,200));
+            borderDemoPanel1.setPreferredSize(new SDimension(800, 200));
             borderDemoPanel1.setBackground(new Color(210, 210, 210));
 
             add(new SLabel("Spacing and Border"));
             SPanel borderDemoPanel2 = new SPanel(new SBorderLayout(10, 1));
-            borderDemoPanel2.add(wrap(createDummyLabel(0+3)), SBorderLayout.NORTH);
-            borderDemoPanel2.add(wrap(createDummyLabel(1+3)), SBorderLayout.SOUTH);
-            borderDemoPanel2.add(wrap(createDummyLabel(2+3)), SBorderLayout.EAST);
-            borderDemoPanel2.add(wrap(createDummyLabel(3+3)), SBorderLayout.WEST);
-            borderDemoPanel2.add(wrap(createDummyLabel(4+3)), SBorderLayout.CENTER);
+            borderDemoPanel2.add(wrap(createDummyLabel(0 + 3)), SBorderLayout.NORTH);
+            borderDemoPanel2.add(wrap(createDummyLabel(1 + 3)), SBorderLayout.SOUTH);
+            borderDemoPanel2.add(wrap(createDummyLabel(2 + 3)), SBorderLayout.EAST);
+            borderDemoPanel2.add(wrap(createDummyLabel(3 + 3)), SBorderLayout.WEST);
+            borderDemoPanel2.add(wrap(createDummyLabel(4 + 3)), SBorderLayout.CENTER);
             add(borderDemoPanel2);
-            borderDemoPanel2.setPreferredSize(new SDimension(800,200));
+            borderDemoPanel2.setPreferredSize(new SDimension(800, 200));
             borderDemoPanel2.setBackground(new Color(210, 210, 210));
         }
 
         private SPanel wrap(SComponent c) {
-            final Color[] colors = { Color.red, Color.green, Color.pink, Color.magenta, Color.gray, Color.cyan };
+            final Color[] colors = {Color.red, Color.green, Color.pink, Color.magenta, Color.gray, Color.cyan};
             SPanel p = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
             p.add(c);
-            p.setPreferredSize(new SDimension("100%","100%"));
+            p.setPreferredSize(new SDimension("100%", "100%"));
             p.setVerticalAlignment(c.getVerticalAlignment());
             p.setHorizontalAlignment(c.getHorizontalAlignment());
             p.setBackground(colors[i++ % colors.length]);
@@ -147,15 +170,34 @@ public class DynamicLayoutExample extends WingSetPane {
     private static class FlowLayoutDemoPanel extends SPanel {
         public FlowLayoutDemoPanel() {
             super(new SFlowDownLayout());
-            add(new SLabel("Horizontal, centered FlowLayout"));
-            add(createPanel(new SFlowLayout(SFlowLayout.CENTER), 4));
-            add(new SLabel("Horizontal, left-aligned FlowLayout"));
+
+            // SFlowLayout
+            add(new SLabel("SFlowLayout - Layout Alignment: default (SFlowLayout.LEFT) - Container alignment: default"));
             add(createPanel(new SFlowLayout(SFlowLayout.LEFT), 4));
-            add(new SLabel("Horizontal, right-aligned FlowLayout"));
-            add(createPanel(new SFlowLayout(SFlowLayout.RIGHT), 4));
-            add(new SLabel("<html>&nbsp;"));
-            add(new SLabel("Vertical FlowLayout"));
-            add(createPanel(new SFlowDownLayout(), 3));
+            add(new SLabel("SFlowLayout - Alignment: SFlowLayout.CENTER - Container alignment: center"));
+            final SPanel panel2 = createPanel(new SFlowLayout(SFlowLayout.CENTER), 4);
+            panel2.setHorizontalAlignment(CENTER);
+            add(panel2);
+            add(new SLabel("SFlowLayout - Alignment: SFlowLayout.RIGHT - Container alignment: right"));
+            final SPanel panel3 = createPanel(new SFlowLayout(SFlowLayout.RIGHT), 4);
+            panel3.setHorizontalAlignment(RIGHT);
+            add(panel3);
+
+            add(new SLabel());
+
+            // SFlowDownLayout
+            add(new SLabel("SFlowDownLayout - Container alignment: default"));
+            add(createPanel(new SFlowDownLayout(), 4));
+
+            add(new SLabel("SFlowDownLayout - Container alignment: center"));
+            final SPanel panel4 = createPanel(new SFlowDownLayout(), 3);
+            panel4.setHorizontalAlignment(CENTER);
+            add(panel4);
+
+            add(new SLabel("SFlowDownLayout - Container alignment: right"));
+            final SPanel panel5 = createPanel(new SFlowDownLayout(), 4);
+            panel5.setHorizontalAlignment(RIGHT);
+            add(panel5);
         }
     }
 

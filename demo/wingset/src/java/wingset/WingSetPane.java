@@ -23,6 +23,7 @@ import org.wings.SFlowDownLayout;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SResourceIcon;
+import org.wings.SDimension;
 import org.wings.event.SComponentAdapter;
 import org.wings.event.SComponentEvent;
 
@@ -39,6 +40,8 @@ abstract public class WingSetPane extends SPanel implements SConstants {
 
     public WingSetPane() {
         setLayout(new SFlowDownLayout());
+        // Stretch panel/layout to full available width of the tabbed pane
+        setPreferredSize(SDimension.FULLWIDTH);
 
         SAnchor anchor = new SAnchor("../" + getClass().getName().substring(getClass().getName().indexOf('.') + 1) + ".java");
         anchor.setTarget("sourceWindow");
