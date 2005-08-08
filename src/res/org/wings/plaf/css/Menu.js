@@ -22,6 +22,7 @@ var wpm_timeOut = 1000;
    cascaded menus.
 */ 
 var wpm_clickDelta = 0;
+var wpm_openMenus = new Array();
 
 function wpm_getEvent(e) {
 	if (window.event) return window.event;
@@ -144,7 +145,8 @@ function wpm_menuPopup(e, menu) {
 function wpm_hideActiveMenu() {
 	if (wpm_menuOpen == 1) {
 		document.getElementById(wpm_activeMenu).style.display = 'none';
-		toggleFormElements(true);
+		wpm_openMenus = new Array();
+		wpm_toggleFormElements();
 		wpm_menuOpen = 0;
 	}
 }
@@ -153,8 +155,9 @@ function wpm_showMenu(menuId, coord, eventCoord) {
 	elStyle = document.getElementById(menuId).style;
 	elStyle.top = coord.y + 'px';
 	elStyle.left = coord.x + 'px';
-	toggleFormElements(false);
 	elStyle.display = 'block';
+    wpm_openMenus[wpm_openMenus.length] = menuId;
+	wpm_toggleFormElements(wpm_buildBoundsArray(wpm_openMenus));
 	wpm_menuCalled = 1;
 	wpm_menuOpen = 1;
 	wpm_activeMenu = menuId;
@@ -171,20 +174,74 @@ function wpm_handleBodyClicks(e) {
 	}
 }
 
-function toggleFormElements(visible) {
-	if ( wu_ie5 ) {
-		// only ie needs to hide select elements
-	    var selects = document.getElementsByTagName('select');
-		for ( var i=0; i<selects.length; i++ ) {
-			setVisible(selects[i], visible);
-		}
-	}
-}
-
-function setVisible(element, visible) {
+function wpm_setVisible(element, visible) {
     if (visible) {
         element.style.visibility = 'visible';
     } else {
         element.style.visibility= 'hidden';
     }
+}
+
+function wpm_openMenu(id) {
+    document.getElementById(id).style.display='block';
+    wpm_openMenus[wpm_openMenus.length] = id;
+	wpm_toggleFormElements(wpm_buildBoundsArray(wpm_openMenus));
+}
+
+function wpm_closeMenu(id) {
+    document.getElementById(id).style.display='none';
+    wpm_openMenus = wpm_openMenus.slice(0,wpm_openMenus.length-1);
+}
+
+function wpm_toggleFormElements(elementBounds) {
+	if ( wu_ie5 ) {
+	    var selects = document.getElementsByTagName('select');
+	    if (!elementBounds) {
+		    for ( var i=0; i<selects.length; i++ ) {
+	        	wpm_setVisible(selects[i], true);
+		    }
+	    } else {
+		    for ( var i=0; i<selects.length; i++ ) {
+		          var select = selects[i];
+		        var selectBounds = new wpm_Bounds(select);
+		        var intersects = false;
+		        for (var b = 0; b < elementBounds.length; ++b) {
+		            var bounds = elementBounds[b];
+		            if (selectBounds.intersect(bounds)) {
+		                intersects = true;
+                      	break;
+                    }
+		        }
+		        if (intersects) {
+		        	wpm_setVisible(select, false);
+		        }
+		    } // rof
+		} // fi !elementBounds
+	}  // fi wu_ie5
+}
+
+function wpm_Bounds(object) {
+    this.x = wpm_findPosX(object);
+    this.y = wpm_findPosY(object);
+    this.width = object.offsetWidth;
+    this.height = object.offsetHeight;
+}
+
+wpm_Bounds.prototype.intersect = function(other) {
+    x1 = Math.max(this.x, other.x);
+    y1 = Math.max(this.y, other.y);
+    x2 = Math.min(this.x + this.width, other.x + other.width);
+    y2 = Math.min(this.y + this.height, other.y + other.height);
+    if (x1 >= x2 || y1 >= y2)
+        return false;
+    else
+        return true;
+}
+
+function wpm_buildBoundsArray(menuarray) {
+	var bounds = new Array(menuarray.length);
+	for (i = 0; i < menuarray.length; i++) {
+		bounds[i] = new wpm_Bounds(document.getElementById(menuarray[i]));
+	}
+	return bounds;
 }

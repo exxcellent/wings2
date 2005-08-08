@@ -45,6 +45,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
                     if (menuItem instanceof SMenu) {
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenu\"");
+                            printScriptHandlers(device, menuItem);
                         } else {
                             device.print(" class=\"SMenu_Disabled\"");
                         }
@@ -85,6 +86,15 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
             device.print("</ul>");
         }
         device.print("\n");
+    }
+
+    /**
+     * prints Javascript event handlers if necessary. atm only necessary for ie
+     * @param device the device to print on
+     * @param menuItem the menuItem to print the handlers for
+     * @throws IOException
+     */
+    protected void printScriptHandlers(final Device device, SComponent menuItem) throws IOException {
     }
 
     /** 

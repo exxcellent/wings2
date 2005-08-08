@@ -16,11 +16,23 @@ package org.wings.plaf.css.msie;
 
 import java.io.IOException;
 
+import org.wings.SComponent;
 import org.wings.SMenu;
 import org.wings.SMenuItem;
 import org.wings.io.Device;
 
 public class MenuCG extends org.wings.plaf.css.MenuCG {
+
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.MenuCG#printScriptHandlers(org.wings.io.Device, org.wings.SComponent)
+     */
+    protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
+        device.print(" onmouseover=\"javascript:wpm_openMenu('");
+        device.print(((SMenu)menuItem).getName());
+        device.print("_pop');\" onmouseout=\"javascript:wpm_closeMenu('");
+        device.print(((SMenu)menuItem).getName());
+        device.print("_pop');\"");
+    }
 
     /* (non-Javadoc)
      * @see org.wings.plaf.css.MenuCG#writeListAttributes(org.wings.io.Device, org.wings.SMenu)
