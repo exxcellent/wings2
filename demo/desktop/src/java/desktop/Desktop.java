@@ -26,6 +26,7 @@ import org.wings.util.ComponentVisitor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
@@ -39,18 +40,15 @@ public class Desktop
 {
     SFrame frame;
     BirdsNest desktop;
+    BirdsNest feeds;
     SMenu windowMenu;
-    int editorNumber;
+    int editorNumber = 0;
 
     public Desktop() {
         frame = new SFrame("Desktop");
         frame.setAttribute(CSSProperty.MARGIN, "4px");
 
-        SContainer contentPane = frame.getContentPane();
-        contentPane.setLayout(new SFlowDownLayout());
-        editorNumber = 0;
         SMenuBar menuBar = createMenu();
-        contentPane.add(menuBar);
 
         desktop = new BirdsNest();
         // add the frames to the window-menu ..
@@ -66,9 +64,28 @@ public class Desktop
                     windowMenu.remove(windowItem);
                 }
             });
-        contentPane.add(desktop);
+        desktop.setVerticalAlignment(SConstants.TOP_ALIGN);
+
+        feeds = new BirdsNest();
+        feeds.setVerticalAlignment(SConstants.TOP_ALIGN);
+
+        SContainer contentPane = frame.getContentPane();
+        contentPane.setLayout(new SGridBagLayout());
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.weightx = 1.0;
+        contentPane.add(menuBar, c);
+        c.gridwidth = GridBagConstraints.RELATIVE;
+        c.weightx = 0.7;
+        contentPane.add(desktop, c);
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.weightx = 0.3;
+        contentPane.add(feeds, c);
 
         newEditor().setText(getStory());
+        feeds.add(new RSSPortlet("file:///home/hengels/IssueNavigator.jspa.xml"));
+        feeds.add(new RSSPortlet("file:///home/hengels/IssueNavigator.jspa.xml"));
 
         frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../desktop.css")));
         frame.show();
@@ -82,20 +99,27 @@ public class Desktop
     }
 
     protected SMenuBar createMenu() {
-        SMenuItem newItem = new SMenuItem("New");
-	newItem.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent evt) {
-		    newEditor();
-		}
-	    });
-        SMenuItem openItem = new SMenuItem("Open");
-	openItem.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent evt) {
-		    openEditor();
-		}
-	    });
+        SMenuItem newFeedItem = new SMenuItem("New News-Feed");
+        newFeedItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                newFeed();
+            }
+        });
+        SMenuItem newItem = new SMenuItem("New Editor");
+        newItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                newEditor();
+            }
+        });
+        SMenuItem openItem = new SMenuItem("Open File in Editor");
+        openItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                openEditor();
+            }
+        });
 
         SMenu fileMenu = new SMenu("File");
+        fileMenu.add(newFeedItem);
         fileMenu.add(newItem);
         fileMenu.add(openItem);
 
@@ -106,6 +130,15 @@ public class Desktop
         menuBar.add(windowMenu);
 
         return menuBar;
+    }
+
+    private void newFeed() {
+        final STextField inputElement = new STextField("file:///home/hengels/IssueNavigator.jspa.xml");
+        SOptionPane.showInputDialog(desktop, "URL of the News-Feed", "News-Feed", inputElement, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                feeds.add(new RSSPortlet(inputElement.getText()));
+            }
+        });
     }
 
     /**
