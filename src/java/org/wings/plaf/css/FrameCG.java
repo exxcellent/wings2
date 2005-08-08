@@ -57,7 +57,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     /**
      * The HTML DOCTYPE setting all browsers to Quirks mode.
      * We need this to force IE to use the correct box rendering model. It's the only browser
-     * you cannot reconfigure via an CSS tag.
+     * you cannot reconfigure via a CSS tag.
      */
     public final static String QUIRKS_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
 
@@ -335,24 +335,6 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             frame.putClientProperty("focus", focus);
         }
 
-        // let ie understand hover css styles on elements other than anchors
-        boolean useHoverBehavior = ((String) SessionManager.getSession()
-                .getCGManager().getObject("Behaviors.ieHover.active",
-                        String.class)).equals("true");
-        if (BrowserType.IE.equals(browser.getBrowserType()) && useHoverBehavior) {
-            // externalize hover behavior
-            final String classPath = (String)SessionManager.getSession().getCGManager().getObject("Behaviors.ieHover", String.class);
-            ClasspathResource res = new ClasspathResource(classPath, "text/x-component");
-            String behaviorUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-            device.print("<style type=\"text/css\" media=\"screen\">\n");
-            device.print("body{behavior:url(");
-            device.print(behaviorUrl);
-            device.print(");}\n");
-            device.print("</style>\n");
-        }
-        
-
-
         // TODO: move this to a dynamic script resource
         SToolTipManager toolTipManager = component.getSession().getToolTipManager();
         device
@@ -375,18 +357,24 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         if (frame.isVisible()) {
             // now add JS for DnD if neccessary.
             DragAndDropManager dndManager = frame.getSession().getDragAndDropManager();
-            List dragComponents = dndManager.getDragSources();
-            List dropComponents = dndManager.getDropTargets();
-            Iterator dragIter = dragComponents.iterator();
-            Iterator dropIter = dropComponents.iterator();
-            if (dragIter.hasNext()) {
-                // this needs to be added to the body, so use device.print()
-                // TODO: is caching by the VM enough or make this only initialize once?
-                ClasspathResource res = new ClasspathResource(WZ_DND_JS, "text/javascript");
-                String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-                device.print("<script type=\"text/javascript\" src=\"");
-                device.print(jScriptUrl);
-                device.print("\"></script>\n"); 
+            List dragComponents = null;
+            List dropComponents = null;
+            Iterator dragIter = null;
+            Iterator dropIter = null;
+            if (dndManager.isVisible()) {
+                dragComponents = dndManager.getDragSources();
+                dropComponents = dndManager.getDropTargets();
+                dragIter = dragComponents.iterator();
+                dropIter = dropComponents.iterator();
+                if (dragIter.hasNext()) {
+                    // this needs to be added to the body, so use device.print()
+                    // TODO: is caching by the VM enough or make this only initialize once?
+                    ClasspathResource res = new ClasspathResource(WZ_DND_JS, "text/javascript");
+                    String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+                    device.print("<script type=\"text/javascript\" src=\"");
+                    device.print(jScriptUrl);
+                    device.print("\"></script>\n"); 
+                }
             }
             
             frame.getLayout().write(device);
@@ -398,7 +386,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
                 menu.write(device);
             }
             // now add final JS for DnD if neccessary.
-            if (dragIter.hasNext()) { // initialize only if dragSources are present
+            if (dndManager.isVisible() && dragIter.hasNext()) { // initialize only if dragSources are present
                 device.print("<script type=\"text/javascript\">\n<!--\n");
                 device.print("SET_DHTML();\n");
                 while (dragIter.hasNext()) {

@@ -195,4 +195,24 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
     public boolean isEpochCheckEnabled() {
         return true;
     }
+
+    public boolean isVisible() {
+        final Iterator dragIter = dragSources.iterator();
+        final Iterator dropIter = dropTargets.iterator();
+        boolean result = false;
+        while (dragIter.hasNext()) {
+            if (((SComponent)dragIter.next()).isVisible()) {
+                result = true;
+                break;
+            }
+        }
+        if (result) return true;
+        while (dropIter.hasNext()) {
+            if (((SComponent)dropIter.next()).isVisible()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 }
