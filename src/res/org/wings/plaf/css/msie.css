@@ -65,7 +65,8 @@ table.SForm {
 /* SFlowLayout can't flow if the immediate inner children has defined 100% width.
    Some wingS component inheritly define 100% width i.e. like SForm.
    We overwrite their width in this case to 1%. This leads to many rules, but is easily implementable. */
-div.SFlowLayout table.SForm,
+/* this doesn't seem to be working...(ol)
+table.SFlowLayout table.SForm,
 table.SFlowLayout table.SFlowLayout table.SForm,
 table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SForm,
 table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SForm,
@@ -75,7 +76,9 @@ table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SF
 {
     width: 1%;
 }
+*/
 /* Counterpart: If a table layout is in between --> reverse patch. */
+/*
 table.SFlowLayout table.SLayout table.SForm,
 table.SFlowLayout table.SFlowLayout table.SLayout table.SForm,
 table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SLayout table.SForm,
@@ -84,7 +87,7 @@ table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SF
 table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SLayout table.SForm
 {
     width: 100%;
-}
+}*/
 
 IMG {
     border: none !important;     /* This is needed to avoid those ugly borders around linked imgs's */

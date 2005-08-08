@@ -18,8 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.dnd.DragAndDropManager;
-import org.wings.dnd.DragSource;
-import org.wings.dnd.DropTarget;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Link;
 import org.wings.header.Script;

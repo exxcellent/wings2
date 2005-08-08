@@ -382,12 +382,14 @@ public class SForm        extends SContainer        implements LowLevelEventList
 
     /**
      * Get the current encoding type, as set with
-     * {@link #setEncodingType(String)}
+     * {@link #setEncodingType(String)}. If no encoding type was set, this
+     * method detects the best encoding type. This can be expensive, so if
+     * you can, set the encoding type. 
      *
-     * @return string containting the encoding type. This is something like
+     * @return string containing the encoding type. This is something like
      *         <code>multipart/form-data</code>,
      *         <code>application/x-www-form-urlencoded</code> .. or 'null'
-     *         by default.
+     *         by default. 
      */
     public String getEncodingType() {
         if (encType == null) {
@@ -397,21 +399,24 @@ public class SForm        extends SContainer        implements LowLevelEventList
         }
     }
 
+    /**
+     * detects if the Container contains a component that needs a certain
+     * encoding type
+     * @param pContainer
+     * @return
+     */
     protected String detectEncodingType(SContainer pContainer) {
         for (int i = 0; i < pContainer.getComponentCount(); i++) {
             SComponent tComponent = pContainer.getComponent(i);
-
-            if (tComponent instanceof SFileChooser) {
+            if (tComponent instanceof SFileChooser && tComponent.isVisible()) {
                 return ENC_TYPE_MULTIPART_FORM;
             } else if (tComponent instanceof SContainer) {
                 String tContainerEncoding = detectEncodingType((SContainer) tComponent);
-
                 if (tContainerEncoding != null) {
                     return tContainerEncoding;
                 }
             }
         }
-
         return null;
     }
 

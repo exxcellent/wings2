@@ -43,6 +43,8 @@ import java.util.Hashtable;
  * <p>The form, you add this SFileChooser to, needs to have the encoding type
  * <code>multipart/form-data</code> set
  * (form.{@link SForm#setEncodingType(String) setEncodingType("multipart/form-data")}).
+ * This is handled by the form. You can explicitly set it via the above
+ * method, though, in order to increase speed.
  * <p/>
  * <p>You can limit the size of files to be uploaded, so it is hard to make
  * a denial-of-service (harddisk, bandwidth) attack from outside to your

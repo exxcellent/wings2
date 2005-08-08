@@ -76,7 +76,6 @@ public class FileChooserExample
         controls = new FileChooserControls();
 
         SForm p = new SForm(new SBorderLayout());
-        p.setEncodingType("multipart/form-data");
 
         p.add(controls, SBorderLayout.NORTH);
         p.add(createUpload(), SBorderLayout.WEST);

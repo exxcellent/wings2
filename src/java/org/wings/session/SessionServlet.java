@@ -381,7 +381,6 @@ final class SessionServlet
 
             session.fireRequestEvent(SRequestEvent.PROCESS_REQUEST);
             
-            
             // if the user chose to exit the session as a reaction on an
             // event, we got an URL to redirect after the session.
             /*
@@ -471,13 +470,11 @@ final class SessionServlet
                     .getExternalizedResource(externalizeIdentifier);
             if (extInfo != null) {
                 outputDevice = DeviceFactory.createDevice(extInfo);
-                //outputDevice = createOutputDevice(req, response, extInfo);
 
                 session.fireRequestEvent(SRequestEvent.DELIVER_START, extInfo);
-
                 extManager.deliver(extInfo, response, outputDevice);
-
                 session.fireRequestEvent(SRequestEvent.DELIVER_DONE, extInfo);
+
             } else {
                 handleUnknownResourceRequested(req, response);
             }
