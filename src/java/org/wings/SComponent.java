@@ -763,12 +763,12 @@ public abstract class SComponent
     }
 
     /**
-     * Return the visibility.
-     *
+     * Return the visibility. If the Component has a parent which is invisible,
+     * this method returns an invisible status.
      * @return wether the component will show
      */
     public boolean isVisible() {
-        return visible;
+        return (parent!=null)?(visible&&parent.isVisible()):visible;
     }
 
     /**
