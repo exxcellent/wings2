@@ -84,8 +84,8 @@ public class Desktop
         contentPane.add(feeds, c);
 
         newEditor().setText(getStory());
-        feeds.add(new RSSPortlet("file:///home/hengels/IssueNavigator.jspa.xml"));
-        feeds.add(new RSSPortlet("file:///home/hengels/IssueNavigator.jspa.xml"));
+        feeds.add(new RSSPortlet("heise news ticker", "http://www.heise.de/english/newsticker/news.rdf"));
+        feeds.add(new RSSPortlet("the server side", "http://www.theserverside.com/rss/theserverside-rss2.xml"));
 
         frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../desktop.css")));
         frame.show();
@@ -136,7 +136,7 @@ public class Desktop
         final STextField inputElement = new STextField("file:///home/hengels/IssueNavigator.jspa.xml");
         SOptionPane.showInputDialog(desktop, "URL of the News-Feed", "News-Feed", inputElement, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                feeds.add(new RSSPortlet(inputElement.getText()));
+                feeds.add(new RSSPortlet("custom", inputElement.getText()));
             }
         });
     }

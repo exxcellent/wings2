@@ -1,35 +1,28 @@
-<xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0"
-    xmlns:xalan="http://xml.apache.org/xslt"
-    xmlns:java="http://xml.apache.org/xalan/java"
-    exclude-result-prefixes="java">
+<?xml version='1.0'?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-    <xsl:output method="html"
+   <xsl:output method="html"
         encoding="UTF-8"
-        indent="yes"
-        xalan:indent-amount="4"/>
+        indent="yes"/>
 
     <xsl:template match="text()">
     </xsl:template>
 
-    <xsl:template match="/rss/channel">
+    <xsl:template match="/">
         <table style="border:thin solid #f0f0f0">
-            <xsl:apply-templates/>
-        </table>
-    </xsl:template>
-
-    <xsl:template match="/rdf">
-        <table style="border:thin solid #f0f0f0">
-            <xsl:apply-templates/>
-        </table>
-    </xsl:template>
-
-    <xsl:template match="item">
+        <xsl:for-each select="//*[local-name() = 'item']">
         <tr>
             <td>
-                <b><xsl:value-of select="title/text()" disable-output-escaping="yes"/></b>
-            </td>
-        </tr>
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="*[local-name() = 'link']"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="*[local-name() = 'title']" disable-output-escaping="yes"/>
+                </xsl:element>
+             </td>
+         </tr>
+        </xsl:for-each>
+        </table>
     </xsl:template>
+
 </xsl:stylesheet>
