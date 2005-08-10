@@ -141,7 +141,15 @@ public class TreeCG extends AbstractComponentCG implements
             device.print("<table border=\"0\" class=\"SLayout\"><tr><td class=\"SLayout\">");
 
             if (isLeaf) {
+                // render a disabled button around this. firefox position bugfix (ol)
+                if (component.getShowAsFormComponent()) {
+                    writeButtonStart(component, device, component.getExpansionParameter(row, false));
+                    device.print(" disabled=\"disabled\">");
+                }
                 writeIcon(device, leafControlIcon, false);
+                if (component.getShowAsFormComponent()) {
+                    device.print("</button>");
+                }
             } else {
                 if (component.getShowAsFormComponent()) {
                     writeButtonStart(component, device, component.getExpansionParameter(row, false));
