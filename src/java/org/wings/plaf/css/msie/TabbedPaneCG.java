@@ -22,6 +22,7 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
+import org.wings.plaf.css.MSIEButtonFix;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
@@ -35,7 +36,7 @@ import java.util.Map;
  * @author ole
  *
  */
-public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SParentFrameListener {
+public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SParentFrameListener, MSIEButtonFix {
     private static final String FORMS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.form",
             String.class);

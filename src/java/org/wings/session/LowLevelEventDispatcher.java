@@ -29,6 +29,7 @@ import org.wings.STabbedPane;
 import org.wings.STable;
 import org.wings.SToggleButton;
 import org.wings.STree;
+import org.wings.plaf.css.MSIEButtonFix;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,16 +50,6 @@ public final class LowLevelEventDispatcher
 
     protected boolean namedEvents = true;
     
-    /** 
-     * This array contains classes whose events should be filtered, since they
-     * are caused by button tags, and IE's button tag support is buggy. 
-     * 
-     */
-    private static final List ieButtonFixClasses = Arrays.asList(new Class[] {
-            SButton.class, SToggleButton.class, SClickable.class,
-            SPageScroller.class, SScrollBar.class,
-            STabbedPane.class, STable.class, STree.class});
-
     public LowLevelEventDispatcher() {}
 
     public final void addLowLevelEventListener(LowLevelEventListener gl,
@@ -237,15 +228,10 @@ public final class LowLevelEventDispatcher
                     if (checkEpoch(epoch, name, gl)) {
                         if (isIE) {
                             // see comment above, is this a form event?
-                            boolean isFormEvent = ((SComponent)gl).getResidesInForm() && ((SComponent)gl).getShowAsFormComponent(); 
+                            boolean isFormEvent = (gl instanceof SComponent) &&((SComponent)gl).getResidesInForm() && ((SComponent)gl).getShowAsFormComponent(); 
                             if (isFormEvent) {
                                 // was the button represented by a button html tag?
-                                boolean isButton = false;
-                                for (Iterator iter = ieButtonFixClasses.iterator(); iter
-                                        .hasNext();) {
-                                    Class bla = (Class)iter.next();
-                                    isButton |= bla.isAssignableFrom(gl.getClass());
-                                }
+                                boolean isButton = ((SComponent)gl).getCG() instanceof MSIEButtonFix;
                                 if (isButton) {
                                     log.debug("circumventing IE bug, not processing event '" + name + "' by " +
                                             gl.getClass() + "(" + gl.getLowLevelEventId() +
