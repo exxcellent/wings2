@@ -158,7 +158,7 @@ public class SPageScroller
         // avoid division by zero
         if (getExtent() == 0)
             return 0;
-        return ((getMaximum() + 1) + (getExtent() - 1) - getMinimum()) / getExtent();
+        return ((getMaximum()) - getMinimum() + (getExtent() - 1)) / getExtent();
     }
 
     /**
