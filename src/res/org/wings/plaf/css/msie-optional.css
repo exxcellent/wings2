@@ -33,8 +33,8 @@ textarea, select {
 
 /* text input same as above */
 input {
-    background-color: expression(this.type=="text"?'#f6decc':'');
-    border: expression(this.type=="text"?'1px solid #e66e32':'');
+    background-color: expression(this.type=="text"?'#f6decc':'inherit');
+    border: expression(this.type=="text"?'1px solid #e66e32':'inherit');
 }
 
 /* STable even / odd coloring */
