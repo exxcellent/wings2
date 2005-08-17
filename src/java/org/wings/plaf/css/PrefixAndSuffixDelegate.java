@@ -105,7 +105,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
 
         // Key bindings
         InputMap inputMap = component.getInputMap();
-        if (inputMap != null) {
+        if (inputMap != null  && inputMap.size() > 0) {
             if (false == (inputMap instanceof VersionedInputMap)) {
                 log.debug("inputMap = " + inputMap);
                 inputMap = new VersionedInputMap(inputMap);

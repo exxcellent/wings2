@@ -39,11 +39,13 @@ function preventDefault(event) {
     event.cancelBubble = true;
 }
 
-function sendEvent(event, eventValue) {
+function sendEvent(event, eventValue, eventName) {
     event = getEvent(event);
     var form = getParentByTagName(event.currentTarget, "FORM");
-    var div = getParentByTagName(event.currentTarget, "DIV");
-    var eventName = div.getAttribute("eid");
+    if (!eventName) {
+        var div = getParentByTagName(event.currentTarget, "DIV");
+        eventName = div.getAttribute("eid");
+    }
 
     if ( form != null ) {
         var eventNode = document.createElement("input");

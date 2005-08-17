@@ -57,6 +57,18 @@ public class KeyboardBindingsExample extends WingSetPane {
         formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F9");
         formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F10");
 
+        final InputMap pageInputMap = new InputMap();
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.ALT_DOWN_MASK, false), "Alt F1");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, KeyEvent.ALT_DOWN_MASK, false), "Alt F2");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.ALT_DOWN_MASK, false), "Alt F3");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_DOWN_MASK, false), "Alt F4");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.ALT_DOWN_MASK, false), "Alt F5");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.ALT_DOWN_MASK, false), "Alt F6");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, KeyEvent.ALT_DOWN_MASK, false), "Alt F7");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, KeyEvent.ALT_DOWN_MASK, false), "Alt F8");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, KeyEvent.ALT_DOWN_MASK, false), "Alt F9");
+        pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, KeyEvent.ALT_DOWN_MASK, false), "Alt F10");
+        
         final Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 label.setText(e.getActionCommand());
@@ -84,18 +96,36 @@ public class KeyboardBindingsExample extends WingSetPane {
         actionMap.put("Shift F8", action);
         actionMap.put("Shift F9", action);
         actionMap.put("Shift F10", action);
+        actionMap.put("Alt F1", action);
+        actionMap.put("Alt F2", action);
+        actionMap.put("Alt F3", action);
+        actionMap.put("Alt F4", action);
+        actionMap.put("Alt F5", action);
+        actionMap.put("Alt F6", action);
+        actionMap.put("Alt F7", action);
+        actionMap.put("Alt F8", action);
+        actionMap.put("Alt F9", action);
+        actionMap.put("Alt F10", action);
 
+        // directly to textfield
         textField.setInputMap(inputMap);
         textField.setActionMap(actionMap);
+        
+        // onto whole frame
+        textField.setInputMap(pageInputMap, WHEN_IN_FOCUSED_FRAME);
 
         form.setInputMap(formInputMap);
+        // or:  form.setInputMap(formInputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
+        // same thing.
         form.setActionMap(actionMap);
 
         form.add(new SLabel("<html>&nbsp;"));
         form.add(new SLabel("Try ALT-Left and ALT-Right to cycle inside the WingSet application between the different tabs"));
         form.add(new SLabel("<html>&nbsp;"));
-        form.add(new SLabel("<html>The keys F1 through F10 are captured by the STextField<br/>" +
-                "Shift F1 through Shift F10 are bubbling up to the containing SForm"));
+        form.add(new SLabel("<html>The keys F1 through F10 are captured by the STextField.<br/>" +
+                "Shift F1 through Shift F10 are bubbling up to the containing SForm.\n" + 
+                "Alt F1 through Alt F10 are captured by the whole page, then routed back to the STextField\n" + 
+                "(that's the only shortcut that works no matter of focus)."));
         form.add(textField);
         form.add(label);
 

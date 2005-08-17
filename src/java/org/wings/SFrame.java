@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.InputMap;
+
 /**
  * The frame is the root component in every component hierarchie.
  * A SessionServlet requires an instance of SFrame to render the page.
@@ -520,5 +522,36 @@ public class SFrame
      */
     public boolean handleError(Throwable e) {
         return false;
+    }
+
+    /**
+     * we need to overwrite the inherited input map from SComponent.
+     */
+    InputMap myInputMap;
+    public InputMap getInputMap(int condition) {
+        // SFrame has only one inputMap
+        if (myInputMap == null) {
+            myInputMap = new InputMap();
+        }
+        return myInputMap;
+    }
+
+    public void setInputMap(InputMap inputMap, int condition) {
+        this.myInputMap = inputMap;
+    }
+
+    ArrayList globalInputMapComponents;
+    public void registerGlobalInputMapComponent(SComponent comp) {
+        if (globalInputMapComponents == null) {
+            globalInputMapComponents = new ArrayList();
+        }
+        if (!globalInputMapComponents.contains(comp)) {
+            // not yet registered
+            globalInputMapComponents.add(comp);
+        }
+    }
+    
+    public List getGlobalInputMapComponents() {
+        return globalInputMapComponents;
     }
 }

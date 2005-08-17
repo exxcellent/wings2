@@ -350,7 +350,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         device.print("<body");
         Utils.optAttribute(device, "id", frame.getName());
         Utils.optAttribute(device, "class", frame.getStyle());
-        Utils.writeEvents(device, frame);
+        Utils.writeFrameEvents(device, frame);
         device.print(">\n");
         if (frame.isVisible()) {
             // now add JS for DnD if neccessary.

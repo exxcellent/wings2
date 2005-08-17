@@ -13,6 +13,8 @@
  */
 package org.wings.plaf.css;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.Renderable;
 import org.wings.SComponent;
@@ -20,6 +22,7 @@ import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.SDimension;
 import org.wings.SFont;
+import org.wings.SFrame;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
@@ -27,14 +30,18 @@ import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import javax.swing.InputMap;
 
 /**
  * Utils.java
@@ -43,6 +50,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public final class Utils {
+    private final static transient Log log = LogFactory.getLog(Utils.class);
     /**
      * Print debug information in generated HTML
      */
@@ -109,6 +117,71 @@ public final class Utils {
                 d.print(code);
                 d.print("\"");
             }
+        }
+    }
+    
+    public static void writeFrameEvents(Device d, SFrame frame) throws IOException {
+        // here it goes, global input maps
+        ScriptListener[] scriptListeners = frame.getScriptListeners();
+        // first, delete all of them, they are from the last request...
+        for (int i = 0; i < scriptListeners.length; i++) {
+            ScriptListener scriptListener = scriptListeners[i];
+            if (scriptListener instanceof InputMapScriptListener)
+                frame.removeScriptListener(scriptListener);
+        }
+        // then install the ones we need for the request going on...
+        List inputMapComponents = frame.getGlobalInputMapComponents();
+        if (inputMapComponents != null) {
+            Iterator iter = inputMapComponents.iterator();
+            while (iter.hasNext()) {
+                SComponent comp = (SComponent)iter.next();
+                if (comp.isVisible()) {
+                    InputMap inputMap = comp.getInputMap(SComponent.WHEN_IN_FOCUSED_FRAME);
+                    if (inputMap != null) {
+                        InputMapScriptListener.installToFrame(frame, comp);
+                    }
+                }
+            }
+        }
+        
+        ScriptListener[] listeners = frame.getScriptListeners();
+        Map eventScripts = new HashMap();
+        if (listeners.length > 0) {
+            for (int i = 0; i < listeners.length; i++) {
+                final ScriptListener script = listeners[i];
+                final String event = script.getEvent();
+                String eventScriptCode = script.getCode();
+
+                if (event == null
+                        || event.length() == 0
+                        || eventScriptCode == null
+                        || eventScriptCode.length() == 0) {
+                    continue;
+                }
+
+                if (eventScripts.containsKey(event)) {
+                    String savedEventScriptCode = (String) eventScripts.get(event);
+                    eventScriptCode = savedEventScriptCode
+                            + (savedEventScriptCode.trim().endsWith(";") ? "" : ";")
+                            + eventScriptCode;
+                }
+                eventScripts.put(event, eventScriptCode);
+            }
+        }
+        
+        
+        
+
+        Iterator it = eventScripts.keySet().iterator();
+        while (it.hasNext()) {
+            String event = (String) it.next();
+            String code = (String) eventScripts.get(event);
+            d.print(" ");
+            d.print(event);
+            d.print("=\"");
+            d.print(code);
+            d.print("\"");
+
         }
     }
 
@@ -548,6 +621,8 @@ public final class Utils {
      * testing purposes.
      */
     public static void main(String argv[]) throws Exception {
+        
+        
         Color c = new Color(255, 254, 7);
         Device d = new org.wings.io.StringBufferDevice();
         write(d, c);

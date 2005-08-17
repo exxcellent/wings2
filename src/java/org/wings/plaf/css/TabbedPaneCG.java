@@ -47,8 +47,9 @@ public class TabbedPaneCG extends AbstractComponentCG {
         InputMap inputMap = new InputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK, false), "previous");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK, false), "next");
-        tab.setInputMap(inputMap);
-
+        tab.setInputMap(inputMap, SComponent.WHEN_IN_FOCUSED_FRAME);
+        
+        
         Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand()))
@@ -58,7 +59,6 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 tab.requestFocus();
             }
         };
-
         ActionMap actionMap = new ActionMap();
         actionMap.put("previous", action);
         actionMap.put("next", action);

@@ -69,6 +69,22 @@ public abstract class SComponent
 
     private static final Log log = LogFactory.getLog(SComponent.class);
 
+    /**
+     * Constants for conditions on which actions are triggered. Mainly two
+     * cases: the focus has either to be at the component (or at a child)
+     * or somewhere in the parent frame.
+     */
+    public static final int WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT = 0;
+
+    /**
+     * Constants for conditions on which actions are triggered. Mainly two
+     * cases: the focus has either to be at the component (or at a child)
+     * or somewhere in the parent frame.
+     */
+    public static final int WHEN_IN_FOCUSED_FRAME = 1;
+    
+    private static final int ACTION_CONDITIONS_AMOUNT = 2;
+
     /* Components unique name. */
     private String name;
 
@@ -163,14 +179,14 @@ public abstract class SComponent
 
     private boolean inheritsPopupMenu;
 
-    private InputMap inputMap;
+    private InputMap[] inputMaps;
 
     private ActionMap actionMap;
 
     private final Map actionEvents = new HashMap();
 
     private final CSSSelector thisComponentCssSelector = new CSSSelector(this);
-
+    
     /**
      * Default constructor.cript
      * The method updateCG is called to get a cg delegate installed.
@@ -1480,11 +1496,60 @@ public abstract class SComponent
     }
 
     public void setInputMap(InputMap inputMap) {
-        this.inputMap = inputMap;
+        setInputMap(inputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    public void setInputMap(InputMap inputMap, int condition) {
+        initInputMaps();
+        this.inputMaps[condition] = inputMap;
+        if (condition == WHEN_IN_FOCUSED_FRAME && inputMap != null) {
+            registerGlobalInputMapWithFrame();
+        }
+    }
+
+    private SParentFrameListener globalInputMapListener;
+    
+    private void registerGlobalInputMapWithFrame() {
+        final SComponent me = this;
+        final SFrame parentFrame = getParentFrame();
+        if (parentFrame != null) {
+            parentFrame.registerGlobalInputMapComponent(me);
+        } else {
+            if (globalInputMapListener == null) {
+                globalInputMapListener = new SParentFrameListener() {
+                    public void parentFrameAdded(SParentFrameEvent e) {
+                        e.getParentFrame().registerGlobalInputMapComponent(me);
+                    }
+                    public void parentFrameRemoved(SParentFrameEvent e) {
+                    }
+                };
+                addParentFrameListener(globalInputMapListener);
+            }
+        }
+    }
+
+    private void initInputMaps() {
+        if (inputMaps == null) {
+            inputMaps = new InputMap[ACTION_CONDITIONS_AMOUNT];
+        }
     }
 
     public InputMap getInputMap() {
-        return inputMap;
+        return getInputMap(WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+    
+    public InputMap getInputMap(int condition) {
+        initInputMaps();
+        InputMap result = inputMaps[condition];
+        if (result == null) {
+            inputMaps[condition] = new InputMap();
+            result = inputMaps[condition];
+        }
+        if (condition == WHEN_IN_FOCUSED_FRAME) {
+            // map could be filled
+            registerGlobalInputMapWithFrame();
+        }
+        return result;
     }
 
     protected void processLowLevelEvent(String name, String[] values) {

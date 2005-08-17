@@ -291,7 +291,9 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
      * @see SingleSelectionModel#setSelectedIndex
      */
     public void setSelectedIndex(int index) {
-        model.setSelectedIndex(index);
+        if (isEnabledAt(index)) {
+            model.setSelectedIndex(index);
+        }
     }
 
     /**

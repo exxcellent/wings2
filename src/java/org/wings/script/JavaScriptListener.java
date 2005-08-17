@@ -135,7 +135,10 @@ public class JavaScriptListener
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        if (obj.getClass() != JavaScriptListener.class)
+        /* only checking for instanceof, not exact class, so we don't
+         * need to implement this in inherited classes
+         */
+        if (!(obj instanceof JavaScriptListener))
             return false;
         JavaScriptListener testObj = (JavaScriptListener) obj;
         
