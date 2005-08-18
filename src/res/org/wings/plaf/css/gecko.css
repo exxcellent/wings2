@@ -517,6 +517,11 @@ div.SMenu ul ul,
     left:100%;
 }
 
+div.SMenu a span.accelerator {
+	font-size: .7em;
+	margin-left: 1.5em;
+}
+
 /* Begin non-anchor hover selectors */
 
 /* Enter the more specific element (div) selector

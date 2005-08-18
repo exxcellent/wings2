@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.KeyStroke;
+
 /**
  * @author <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -182,6 +184,12 @@ public class SMenu extends SMenuItem {
     public void writePopup(Device device) throws IOException {
         ((MenuCG)getCG()).writePopup(device, this);
     }
+
+    public void setAccelerator(KeyStroke keyStroke) {
+        throw new UnsupportedOperationException("Only invoke this on SMenuItem.");
+    }
+    
+    
 }
 
 

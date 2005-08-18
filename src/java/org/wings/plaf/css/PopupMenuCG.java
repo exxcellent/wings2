@@ -71,6 +71,7 @@ public class PopupMenuCG extends AbstractComponentCG implements
                     if (menuItem instanceof SMenu) {
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenu\"");
+                            printScriptHandlers(device, menuItem);
                         } else {
                             device.print(" class=\"SMenu_Disabled\"");
                         }
@@ -112,6 +113,10 @@ public class PopupMenuCG extends AbstractComponentCG implements
             device.print("</ul>");
         }
         device.print("\n");
+    }
+
+    protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
+        //default: do nothing
     }
 
     /** 

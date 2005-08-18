@@ -572,6 +572,11 @@ table.SPopupMenu ul ul{
     left:100%;
 }
 
+table.SMenu a span.accelerator {
+	font-size: .7em;
+	margin-left: 1.5em;
+}
+
 /* Begin non-anchor hover selectors */
 
 /* Enter the more specific element (div) selector
@@ -580,6 +585,7 @@ older version of csshover.htc - V1.21.041022. It
 improves IE's performance speed to use the older
 file and this method */
 
+/* we don't need these anymore
 table.SMenu li:hover,
 table.SPopupMenu li:hover{
 cursor:pointer;
@@ -605,7 +611,7 @@ table.SPopupMenu li li:hover ul,
 table.SPopupMenu li li li:hover ul,
 table.SPopupMenu li li li li:hover ul
 {display:block;}
-
+*/
 /* End of non-anchor hover selectors */
 
 /* Styling for Expand */

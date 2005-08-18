@@ -13,7 +13,10 @@
  */
 package org.wings;
 
+import java.awt.event.KeyEvent;
+
 import org.wings.plaf.MenuBarCG;
+import org.wings.util.KeystrokeUtil;
 
 import javax.swing.*;
 
@@ -24,6 +27,7 @@ import javax.swing.*;
  */
 public class SMenuItem extends SButton {
     protected SComponent menuParent;
+    private KeyStroke accelerator;
 
     public SMenuItem() {
     }
@@ -55,6 +59,18 @@ public class SMenuItem extends SButton {
 
     public void setCG(MenuBarCG cg) {
         super.setCG(cg);
+    }
+    
+    public void setAccelerator(KeyStroke keyStroke) {
+        accelerator = keyStroke;
+        if (accelerator != null) {
+            getInputMap(WHEN_IN_FOCUSED_FRAME).put(accelerator, "item_accelerator");
+            getActionMap().put("item_accelerator", getAction());
+        }
+    }
+    
+    public KeyStroke getAccelerator() {
+        return accelerator;
     }
 }
 

@@ -23,6 +23,7 @@ import javax.swing.tree.TreeNode;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -33,6 +34,7 @@ public class MenuExample extends WingSetPane {
 
     private SLabel selectionLabel;
     private SMenuBar menuBar;
+    private int shortcutKey = java.awt.event.KeyEvent.VK_A;
 
     private final ActionListener menuItemListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -44,6 +46,15 @@ public class MenuExample extends WingSetPane {
         SMenuItem item = new SMenuItem(node.toString());
         item.setToolTipText(node.toString());
         item.addActionListener(menuItemListener);
+        if (shortcutKey != 0) {
+            item.setAccelerator(KeyStroke.getKeyStroke(shortcutKey,
+                    java.awt.Event.CTRL_MASK));
+            if (shortcutKey == java.awt.event.KeyEvent.VK_Z) {
+                shortcutKey = 0;
+            } else {
+                shortcutKey++;
+            }
+        }
         return item;
     }
 
@@ -80,28 +91,36 @@ public class MenuExample extends WingSetPane {
 
     public SComponent createExample() {
         ComponentControls controls = new ComponentControls();
-        SForm panel = new SForm();
-        panel.setLayout(new SBoxLayout(SConstants.VERTICAL));
-        panel.setPreferredSize(SDimension.FULLWIDTH);
-        
-        
-        selectionLabel = new SLabel("nothing selected");
+        SPanel superPanel = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        superPanel.setPreferredSize(SDimension.FULLWIDTH);
         menuBar = createMenuBar(HugeTreeModel.ROOT_NODE);
         controls.addSizable(menuBar);
-        panel.add(controls);
-        panel.add(menuBar, "MenuBar");
-        panel.add(new SLabel("<html><br>Form components are overlayed or hidden (in IE). Selected Menu: "), "Intro");
-        panel.add(selectionLabel, "SelectionLabel");
-        panel.add(new SLabel("<html><hr><br>combobox :"));
-        panel.add(new SComboBox(new DefaultComboBoxModel(ListExample.createElements())), "ComboBox");
-        panel.add(new SLabel("<html><br>list:"));
+        superPanel.add(controls);
+        superPanel.add(menuBar);
+        
+        SPanel mainPanel = new SPanel(new SBoxLayout(SBoxLayout.HORIZONTAL));
+        SForm formPanel = new SForm();
+        formPanel.setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
+        formPanel.setPreferredSize(SDimension.FULLWIDTH);
+        mainPanel.add(formPanel);
+        SPanel messagePanel = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        mainPanel.add(messagePanel);
+        messagePanel.add(new SLabel("<html><br>Form components are overlayed or hidden (in IE). Selected Menu: "));
+        selectionLabel = new SLabel("nothing selected");
+        messagePanel.add(selectionLabel, "SelectionLabel");
+        messagePanel.add(new SLabel("<html><br>Try the menu accelerator keys. Ctrl-A to Ctrl-Z call menuitem actions (doesn't work on Konqueror)"));
+        
+        
+        formPanel.add(new SLabel("<html><hr>combobox :"));
+        formPanel.add(new SComboBox(new DefaultComboBoxModel(ListExample.createElements())));
+        formPanel.add(new SLabel("<html><br>list:"));
         SList list = new SList(ListExample.createListModel());
         list.setVisibleRowCount(3);
-        panel.add(list, "List");
-        panel.add(new SLabel("<html><br>textfield(stay visible):"));
-        panel.add(new STextField("wingS is great"), "TextField");
-        panel.add(new SLabel("<html><br>textarea(stay visible):"));
-        panel.add(new STextArea("wingS is a great framework for implementing complex web applications"), "TextArea");
+        formPanel.add(list, "List");
+        formPanel.add(new SLabel("<html><br>textfield(stay visible):"));
+        formPanel.add(new STextField("wingS is great"));
+        formPanel.add(new SLabel("<html><br>textarea(stay visible):"));
+        formPanel.add(new STextArea("wingS is a great framework for implementing complex web applications"));
 
         // enable / disable some menuitems
         final SCheckBox switchEnable = new SCheckBox("disable some menuitems");
@@ -112,8 +131,10 @@ public class MenuExample extends WingSetPane {
                 setMenuItemsEnabled(!switchEnable.isSelected());
             }
         });
+        
+        superPanel.add(mainPanel);
 
-        return panel;
+        return superPanel;
     }
 
     protected void setMenuItemsEnabled(boolean enabled) {

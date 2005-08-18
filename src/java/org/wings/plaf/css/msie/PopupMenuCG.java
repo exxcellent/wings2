@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.SComponent;
 import org.wings.SMenu;
 import org.wings.SMenuItem;
 import org.wings.SPopupMenu;
@@ -47,5 +48,13 @@ public class PopupMenuCG extends org.wings.plaf.css.PopupMenuCG {
         String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
         device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
         device.print("em;\"");
+    }
+
+    protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
+        device.print(" onmouseover=\"javascript:wpm_openMenu('");
+        device.print(((SMenu)menuItem).getName());
+        device.print("_pop');\" onmouseout=\"javascript:wpm_closeMenu('");
+        device.print(((SMenu)menuItem).getName());
+        device.print("_pop');\"");
     }
 }

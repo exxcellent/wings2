@@ -17,6 +17,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.session.SessionManager;
+import org.wings.util.KeystrokeUtil;
 
 import java.io.IOException;
 
@@ -111,7 +112,13 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
                 if (!(menu.getMenuComponent(i) instanceof SMenuItem))
                     continue;
-                String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
+                SMenuItem item = (SMenuItem)menu.getMenuComponent(i);
+                StringBuffer text = new StringBuffer(item.getText());
+                if (item.getAccelerator() != null) {
+                    text.append(" ");
+                    text.append(KeystrokeUtil.keyStroke2String(item.getAccelerator()));
+                }
+                
                 if (text != null && text.length() > maxLength) {
                     maxLength = text.length();
                     if (menu.getMenuComponent(i) instanceof SMenu) {

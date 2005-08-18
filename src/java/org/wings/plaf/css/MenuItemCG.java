@@ -16,10 +16,13 @@ package org.wings.plaf.css;
 
 import java.io.IOException;
 
+import javax.swing.KeyStroke;
+
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SMenuItem;
 import org.wings.io.Device;
+import org.wings.util.KeystrokeUtil;
 
 public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
 
@@ -38,6 +41,12 @@ public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
         String text = menuItem.getText();
         if (text != null) {
             Utils.write(device, text);
+        }
+        KeyStroke acc = menuItem.getAccelerator();
+        if (acc != null) {
+            device.print(" <span class=\"accelerator\">");
+            Utils.write(device, KeystrokeUtil.keyStroke2String(acc));
+            device.print("</span>");
         }
     }
 
