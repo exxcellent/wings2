@@ -28,39 +28,52 @@ public class TextAreaCG extends AbstractComponentCG implements
             throws IOException {
         final STextArea component = (STextArea) _c;
 
-        device.print("<textarea");
-        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-        Utils.optAttribute(device, "cols", component.getColumns());
-        Utils.optAttribute(device, "rows", component.getRows());
+        if (!component.isEditable() && (component.getLineWrap() == STextArea.NO_WRAP) && (component.getColumns() == 0) && (component.getRows() == 0)) {
+               /* A second way could be to calculate rows and columns and generate a textarea, but this will be 
+                * very time consuming at large texts. But if this way makes to much trouble, the other will be quite equal */
+            String text = component.getText();       
+            if (text != null) {
+                device.print("<nobr>");               /* Should we really ignore everything ? */
+                Utils.writeQuoted(device,text,true);    /* Write new text */
+                device.print("</nobr>");
+            }
 
-        switch (component.getLineWrap()) {
-            case STextArea.VIRTUAL_WRAP:
-                device.print(" wrap=\"virtual\"");
-                break;
-            case STextArea.PHYSICAL_WRAP:
-                device.print(" wrap=\"physical\"");
-                break;
-        }
-
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-
-        if (!component.isEditable() || !component.isEnabled()) {
-            device.print(" readonly=\"true\"");
-        }
-        if (component.isEnabled()) {
-            device.print(" name=\"");
-            Utils.write(device, Utils.event(component));
-            device.print("\"");
         } else {
-            device.print(" disabled=\"true\"");
+            device.print("<textarea");
+            Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+            
+            Utils.optAttribute(device, "cols", component.getColumns());
+            Utils.optAttribute(device, "rows", component.getRows());
+
+            switch (component.getLineWrap()) {
+                case STextArea.VIRTUAL_WRAP:
+                    device.print(" wrap=\"virtual\"");
+                    break;
+                case STextArea.PHYSICAL_WRAP:
+                    device.print(" wrap=\"physical\"");
+                    break;
+            }
+
+            Utils.printCSSInlineFullSize(device, component.getPreferredSize());
+
+            if (!component.isEditable() || !component.isEnabled()) {
+                device.print(" readonly=\"true\"");
+            }
+            if (component.isEnabled()) {
+                device.print(" name=\"");
+                Utils.write(device, Utils.event(component));
+                device.print("\"");
+            } else {
+                device.print(" disabled=\"true\"");
+            }
+
+            if (component.isFocusOwner())
+                Utils.optAttribute(device, "focus", component.getName());
+
+            Utils.writeEvents(device, component);
+            device.print(">");
+            Utils.writeRaw(device, component.getText());
+            device.print("</textarea>\n");
         }
-
-        if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
-
-        Utils.writeEvents(device, component);
-        device.print(">");
-        Utils.writeRaw(device, component.getText());
-        device.print("</textarea>\n");
     }
 }

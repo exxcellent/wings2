@@ -509,6 +509,25 @@ public final class Utils {
         }
     }
 
+     /**
+     * writes the given String to the device. The string is quoted, i.e.
+     * for all special characters in *ML, their appropriate entity is
+     * returned.
+     * If the String starts with '<html>', the content is regarded being
+     * HTML-code and is written as is (without the <html> tag).
+     * It is possible to define the newLine behavoiur
+     */
+    public static void writeQuoted(Device d, String s, boolean newLine) throws IOException {
+        if (s == null) {
+            return;
+        }
+        if ((s.length() > 5) && (s.startsWith("<html>"))) {
+            writeRaw(d, s.substring(6));
+        } else {
+            quote(d, s, newLine);
+        }
+    }
+    
     /**
      * Prints an optional attribute. If the String value has a content
      * (value != null && value.length > 0), the attrib is added otherwise
