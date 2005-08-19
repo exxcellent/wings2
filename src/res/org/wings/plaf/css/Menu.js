@@ -112,6 +112,16 @@ function wpm_menu(e, menu) {
 	} 
 }
 
+function wpm_changeMenu(e, menu) {
+	e = wpm_getEvent(e);
+	if (wpm_menuOpen && (wpm_activeMenu != menu)) {
+		menuPos = wpm_getMenuPosition(e);
+		eventPos = wpm_getCoordinates(e);
+		wpm_hideActiveMenu();
+		wpm_showMenu(menu, menuPos, eventPos);
+	}
+}
+
 function wpm_menuPopup(e, menu) {
 	e = wpm_getEvent(e);
 	var coord = wpm_getCoordinates(e);
