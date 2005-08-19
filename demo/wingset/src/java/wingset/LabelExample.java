@@ -61,6 +61,14 @@ public class LabelExample extends WingSetPane {
         SForm form = new SForm(new SFlowDownLayout());
         form.add(controls);
         form.add(p);
+        
+        p = new SPanel();
+        STextArea st = new STextArea("A very simple multiline text\nonly seperated by \\n width and height is controlled by\nthe size of the text.\nThis can be achieved with not editable STextArea");
+        st.setEditable(false);
+        st.setBorder(new org.wings.border.SLineBorder());
+        p.add(st);
+
+        form.add(p);
         return form;
     }
 

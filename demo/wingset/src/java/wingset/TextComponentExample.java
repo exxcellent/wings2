@@ -95,6 +95,16 @@ public class TextComponentExample
         textArea.addDocumentListener(documentListener);
         p.add(textArea);
 
+        p.add(new SLabel("Multiline Label: "));
+        SPanel sp = new SPanel();
+        STextArea disabledTextArea = new STextArea("A very simple multiline text\nonly seperated by \\n width and height is controlled by\nthe size of the text.\nThis can be achieved with not editable STextArea");
+        disabledTextArea.setName("multilineArea");
+        disabledTextArea.setEditable(false);
+        disabledTextArea.setBorder(new org.wings.border.SLineBorder());
+        sp.add(disabledTextArea);
+        p.add(sp);
+
+        
         p.add(new SLabel("DocumentEvent: "));
         p.add(documentEvent);
 
@@ -131,6 +141,7 @@ public class TextComponentExample
         controls.addSizable(textField);
         controls.addSizable(textArea);
         controls.addSizable(dateTextField);
+
 
         f.add(controls, SBorderLayout.NORTH);
         f.add(p, SBorderLayout.CENTER);
