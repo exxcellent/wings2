@@ -410,7 +410,7 @@ public class SForm        extends SContainer        implements LowLevelEventList
             SComponent tComponent = pContainer.getComponent(i);
             if (tComponent instanceof SFileChooser && tComponent.isVisible()) {
                 return ENC_TYPE_MULTIPART_FORM;
-            } else if (tComponent instanceof SContainer) {
+            } else if ((tComponent instanceof SContainer) && tComponent.isVisible()) {
                 String tContainerEncoding = detectEncodingType((SContainer) tComponent);
                 if (tContainerEncoding != null) {
                     return tContainerEncoding;
