@@ -784,7 +784,16 @@ public abstract class SComponent
      * @return wether the component will show
      */
     public boolean isVisible() {
-        return (parent!=null)?(visible&&parent.isVisible()):visible;
+        return visible;
+    }
+
+    /**
+     * Return the visibility. If the Component has a parent which is invisible,
+     * this method returns an invisible status.
+     * @return wether the component will show
+     */
+    public boolean isRecursivelyVisible() {
+        return visible && (parent == null || parent.isRecursivelyVisible());
     }
 
     /**

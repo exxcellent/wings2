@@ -201,14 +201,14 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         final Iterator dropIter = dropTargets.iterator();
         boolean result = false;
         while (dragIter.hasNext()) {
-            if (((SComponent)dragIter.next()).isVisible()) {
+            if (((SComponent)dragIter.next()).isRecursivelyVisible()) {
                 result = true;
                 break;
             }
         }
         if (result) return true;
         while (dropIter.hasNext()) {
-            if (((SComponent)dropIter.next()).isVisible()) {
+            if (((SComponent)dropIter.next()).isRecursivelyVisible()) {
                 result = true;
                 break;
             }

@@ -13,6 +13,19 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.InputMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
@@ -29,19 +42,6 @@ import org.wings.io.NullDevice;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.InputMap;
 
 /**
  * Utils.java
@@ -135,7 +135,7 @@ public final class Utils {
             Iterator iter = inputMapComponents.iterator();
             while (iter.hasNext()) {
                 SComponent comp = (SComponent)iter.next();
-                if (comp.isVisible()) {
+                if (comp.isRecursivelyVisible()) {
                     InputMap inputMap = comp.getInputMap(SComponent.WHEN_IN_FOCUSED_FRAME);
                     if (inputMap != null) {
                         InputMapScriptListener.installToFrame(frame, comp);
