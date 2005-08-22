@@ -96,13 +96,13 @@ public class TextComponentExample
         p.add(textArea);
 
         p.add(new SLabel("Multiline Label: "));
-        SPanel sp = new SPanel();
+        //SPanel sp = new SPanel();
         STextArea disabledTextArea = new STextArea("A very simple multiline text\nonly seperated by \\n width and height is controlled by\nthe size of the text.\nThis can be achieved with not editable STextArea");
         disabledTextArea.setName("multilineArea");
         disabledTextArea.setEditable(false);
         disabledTextArea.setBorder(new org.wings.border.SLineBorder());
-        sp.add(disabledTextArea);
-        p.add(sp);
+        p.add(disabledTextArea);
+        //p.add(sp);
 
         
         p.add(new SLabel("DocumentEvent: "));
@@ -128,7 +128,7 @@ public class TextComponentExample
         for (int i = 0; i < p.getComponents().length; i++) {
             SComponent component = p.getComponents()[i];
             component.setVerticalAlignment(SConstants.TOP);
-            if (component instanceof STextComponent)
+            if ((component instanceof STextComponent) && (component != disabledTextArea))
                 component.setPreferredSize(new SDimension("200px", null));
         }
         documentEvent.setBorder(new SLineBorder(1));
