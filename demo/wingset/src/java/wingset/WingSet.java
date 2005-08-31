@@ -167,6 +167,7 @@ public class WingSet implements Serializable {
         tab.add(new BackButtonExample(),"Browser Back");
         tab.add(new DesktopPaneExample(),"DesktopPane");
         tab.add(new DragAndDropExample(),"Drag and Drop");
+        tab.add(new RawTextComponentExample(),"Raw Text Component");
         tab.add(new ErrorPageExample(),"Error Page");
 
         contentPane.add(tab, "WingSetApp");
