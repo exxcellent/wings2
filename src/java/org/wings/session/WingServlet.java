@@ -131,7 +131,7 @@ public final class WingServlet
      * Parse POST request with <code>MultipartRequest</code> and passes to <code>doGet()</code>
      */
     public final void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+            throws ServletException {
         SessionServlet sessionServlet = getSessionServlet(req, res, true);
 
         if (log.isDebugEnabled()) {
@@ -425,6 +425,8 @@ public final class WingServlet
         return new ServletDevice(response.getOutputStream());
     }
 
+
+    // TODO BSC: This issue is still pending. Refer to http://jira.j-wings.org/browse/WGS-84
     /**
      * Workaround implementation for WebSphere.
      *
