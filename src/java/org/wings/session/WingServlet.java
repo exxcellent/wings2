@@ -115,7 +115,7 @@ public final class WingServlet
         } catch (Exception e) {
             return System.currentTimeMillis();
         }
-        String pathInfo = request.getPathInfo();
+        String pathInfo = getPathInfo(request);
         if (extMgr != null && pathInfo != null && pathInfo.length() > 1) {
             String identifier = pathInfo.substring(1);
             ExternalizedResource info = extMgr.getExternalizedResource(identifier);
@@ -134,10 +134,11 @@ public final class WingServlet
             throws ServletException, IOException {
         SessionServlet sessionServlet = getSessionServlet(req, res, true);
 
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug((sessionServlet != null) ?
                     lookupName :
                     "no session yet ..");
+        }
 
         // Wrap with MultipartRequest which can handle multipart/form-data
         // (file - upload), otherwise behaves like normal HttpServletRequest
@@ -310,7 +311,7 @@ public final class WingServlet
      * returns, whether this request is to serve an externalize request.
      */
     protected boolean isSystemExternalizeRequest(HttpServletRequest request) {
-        String pathInfo = request.getPathInfo();
+        String pathInfo = getPathInfo(request);
         return (pathInfo != null
                 && pathInfo.length() > 1
                 && pathInfo.startsWith("/-"));
@@ -323,15 +324,16 @@ public final class WingServlet
             return SystemExternalizeManager.getSharedInstance();
         } else {
             SessionServlet sessionServlet = getSessionServlet(req, null, false);
-            if (sessionServlet == null)
+            if (sessionServlet == null) {
                 return null;
+            }
             return sessionServlet.getSession().getExternalizeManager();
         }
     }
 
     public final void doGet(HttpServletRequest req,
                             HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException {
 
         try {
             /* 
@@ -349,7 +351,7 @@ public final class WingServlet
              * Thus emitted URLs are as short as possible and thus the
              * generated page size.
              */
-            String pathInfo = req.getPathInfo();
+            String pathInfo = getPathInfo(req);
 
             if (pathInfo == null || pathInfo.length() == 0) {
                 StringBuffer pathUrl = req.getRequestURL();
@@ -421,6 +423,22 @@ public final class WingServlet
                                         ExternalizedResource extInfo)
             throws IOException {
         return new ServletDevice(response.getOutputStream());
+    }
+
+    /**
+     * Workaround implementation for WebSphere.
+     *
+     * @return "/" if <code>request.getPathInfo()</code> returns null but URL indicates a trailing slash.
+     *         Otherwise original value is returned.
+     */
+    private static String getPathInfo(HttpServletRequest request) {
+        final String pathInfo = request.getPathInfo();
+        if (pathInfo == null) {
+            final String requestURL = request.getRequestURL().toString();
+            return (requestURL.lastIndexOf("/") == requestURL.length() - 1) ? "/" : null;
+        } else {
+            return pathInfo;
+        }
     }
 }
 
