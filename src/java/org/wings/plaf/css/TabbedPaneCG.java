@@ -262,8 +262,8 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
     private static final Map geckoMappings = new HashMap();
     static {
-        geckoMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, " > div > table > tbody > tr > th > *[selected=\"true\"]");
-        geckoMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, " > div > table > tbody > tr > th > *[selected=\"false\"]");
+        geckoMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, " > table > tbody > tr > th > *[selected=\"true\"]");
+        geckoMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, " > table > tbody > tr > th > *[selected=\"false\"]");
         geckoMappings.put(STabbedPane.SELECTOR_CONTENT, " > div > table > tbody > tr > td");
         geckoMappings.put(STabbedPane.SELECTOR_TAB_AREA, " > div > table > tbody > tr > th");
     }
