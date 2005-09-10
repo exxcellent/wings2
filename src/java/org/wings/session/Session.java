@@ -14,26 +14,6 @@
 package org.wings.session;
 
 
-import java.beans.PropertyChangeListener;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletConfig; 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.swing.event.EventListenerList;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.DefaultReloadManager;
@@ -56,7 +36,32 @@ import org.wings.util.LocaleCharSet;
 import org.wings.util.StringUtil;
 import org.wings.util.WeakPropertyChangeSupport;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.swing.event.EventListenerList;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.EventListener;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
 /**
+ * This class represents a wingS session. Please do not mix this with {@link javax.servlet.http.HttpSession}!
+ * <p/>A wings Session is a session instance inside the {@link WingServlet} servlet. It aggregates all per--user-session
+ * data (mainly the root {@link SFrame}s and provides some information about the client like the browser {@link #getUserAgent()},
+ * the current character encoding {@link #getCharacterEncoding()} or the used Locale {@link #getLocale()}.
+ *
+ *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
