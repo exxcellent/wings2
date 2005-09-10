@@ -56,11 +56,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This class represents a wingS session. Please do not mix this with {@link javax.servlet.http.HttpSession}!
- * <p/>A wings Session is a session instance inside the {@link WingServlet} servlet. It aggregates all per--user-session
+ * This class represents a wingS session meaning an application user session instance.
+ * Please do not mix this with a servlet {@link javax.servlet.http.HttpSession}!
+ * <p/>A wings Session is a session instance hold by the global {@link WingServlet} servlet. It aggregates all per--user-session
  * data (mainly the root {@link SFrame}s and provides some information about the client like the browser {@link #getUserAgent()},
  * the current character encoding {@link #getCharacterEncoding()} or the used Locale {@link #getLocale()}.
- *
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
