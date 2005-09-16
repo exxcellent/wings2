@@ -1,22 +1,17 @@
+<table><tr><td>
+
 <h3>Memory Usage</h3>
 
 <p/>
-
 <table>
-<tr>
-<td>
-<object name="InfoBar"></object>
-</td>
-<td>
-<object name="TotalMemory"></object>
-</td>
-</tr>
+<tr><td><object name="InfoBar"></object></td><td valign="top"><object name="TotalMemory"></object></td></tr>
 </table>
+<p/><object name="GC" text="Start garbage collection"></object>
+<p/><object name="refresh"></object>
 <p/>
-<!--<object name="GC" text="GC"></object>-->
-<p/>
+</td>
 
-
+<td>
 <h3>Session Info</h3>
 
 <p/>
@@ -54,5 +49,8 @@ Request Count:
 <object name="RequestCount"></object>
 </td>
 </tr>
+</table>
 
+
+</td>
 </table>

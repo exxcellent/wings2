@@ -27,64 +27,12 @@ import java.text.DecimalFormat;
  * @version $Revision$
  */
 public class MemUsageExample extends WingSetPane {
-
-    private static final long SECOND = 1000;
-    private static final long MINUTE = 60 * SECOND;
-    private static final long HOUR = 60 * MINUTE;
-    private static final long DAY = 24 * HOUR;
-
     private static final DecimalFormat megaByteFormatter = new DecimalFormat("#.###");
 
-    private static final String getByteString(long bytes) {
-        if (bytes < 1024) {
-            return Long.toString(bytes);
-        } // end of if ()
-
-        if (bytes < 1024 * 1024) {
-            return Long.toString(bytes / (1024)) + "kB";
-        } // end of if ()
-
-        return megaByteFormatter.format(new Double(((double) bytes) / (1024 * 1024))) + "MB";
-
-    }
-
-    private static final String getUptimeString(long uptime) {
-        StringBuffer result = new StringBuffer();
-
-        boolean doAppend = false;
-
-        if (uptime / DAY > 0) {
-            result.append(uptime / DAY).append("d ");
-            uptime %= DAY;
-            doAppend = true;
-        }
-
-        if (uptime / HOUR > 0 || doAppend) {
-            result.append(uptime / HOUR).append("h ");
-            uptime %= HOUR;
-            doAppend = true;
-        }
-
-        if (uptime / MINUTE > 0 || doAppend) {
-            result.append(uptime / MINUTE).append("m ");
-            uptime %= MINUTE;
-            doAppend = true;
-        }
-
-        if (uptime / SECOND > 0 || doAppend) {
-            result.append(uptime / SECOND).append("s ");
-            uptime %= SECOND;
-        }
-
-        result.append(uptime).append("ms");
-
-        return result.toString();
-    }
-
     public SComponent createExample() {
-        final SButton gc = new SButton("gc");
-
-        final SProgressBar infoBar = new SProgressBar();
+        final SButton gc = new SButton("gc"); // label overwritten via attribute in template
+        final SButton refresh = new SButton("Refresh");
+        final SProgressBar progressBar = new SProgressBar();
         final SLabel totalMemory = new SLabel();
         final SLabel freeMemory = new SLabel();
         final SLabel usedMemory = new SLabel();
@@ -92,22 +40,24 @@ public class MemUsageExample extends WingSetPane {
         final SLabel activeSessions = new SLabel();
         final SLabel uptime = new SLabel();
         final SLabel requestCount = new SLabel();
-        final SPanel panel = new SPanel();
+        final SForm panel = new SForm();
 
+        // Action listener for GC button trigger
         gc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.gc();
             }
         });
 
+        // This render listenre updates all lables when the page starts to render.
         SRenderListener renderListener = new SRenderListener() {
             public void startRendering(SRenderEvent e) {
                 long free = Runtime.getRuntime().freeMemory();
                 long total = Runtime.getRuntime().totalMemory();
 
-                infoBar.setMaximum((int) total);
-                infoBar.setValue((int) (total - free));
-                infoBar.setString(getByteString(total - free));
+                progressBar.setMaximum((int) total);
+                progressBar.setValue((int) (total - free));
+                progressBar.setString(getByteString(total - free));
 
                 totalMemory.setText(getByteString(total));
                 freeMemory.setText(getByteString(free));
@@ -122,18 +72,16 @@ public class MemUsageExample extends WingSetPane {
         };
         panel.addRenderListener(renderListener);
 
-
-        infoBar.setUnfilledColor(java.awt.Color.gray);
-        infoBar.setFilledColor(java.awt.Color.red);
-        infoBar.setForeground(java.awt.Color.red);
-        infoBar.setBorderColor(java.awt.Color.black);
-        infoBar.setStringPainted(true);
-        infoBar.setPreferredSize(new SDimension(200, 5));
-
+        // style progress bar
+        progressBar.setUnfilledColor(java.awt.Color.gray);
+        progressBar.setFilledColor(java.awt.Color.red);
+        progressBar.setForeground(java.awt.Color.red);
+        progressBar.setBorderColor(java.awt.Color.black);
+        progressBar.setStringPainted(true);
+        progressBar.setPreferredSize(new SDimension("200", null));
 
         try {
-            java.net.URL templateURL =
-                    getSession().getServletContext().getResource("/templates/MemUsageExample.thtml");
+            java.net.URL templateURL = getSession().getServletContext().getResource("/templates/MemUsageExample.thtml");
             STemplateLayout layout = new STemplateLayout(templateURL);
             panel.setLayout(layout);
         } catch (Exception ex) {
@@ -141,7 +89,8 @@ public class MemUsageExample extends WingSetPane {
         }
 
         panel.add(gc, "GC");
-        panel.add(infoBar, "InfoBar");
+        panel.add(refresh, "refresh");
+        panel.add(progressBar, "InfoBar");
         panel.add(totalMemory, "TotalMemory");
         panel.add(freeMemory, "FreeMemory");
         panel.add(usedMemory, "UsedMemory");
@@ -150,11 +99,51 @@ public class MemUsageExample extends WingSetPane {
         panel.add(requestCount, "RequestCount");
         panel.add(uptime, "Uptime");
 
-
         return panel;
     }
 
+    private static final String getByteString(long bytes) {
+        if (bytes < 1024) {
+            return Long.toString(bytes);
+        }
+        if (bytes < 1024 * 1024) {
+            return Long.toString(bytes / (1024)) + "kB";
+        }
+        return megaByteFormatter.format(new Double(((double) bytes) / (1024 * 1024))) + "MB";
 
+    }
+
+    private static final String getUptimeString(long uptime) {
+        final long SECOND = 1000;
+        final long MINUTE = 60 * SECOND;
+        final long HOUR = 60 * MINUTE;
+        final long DAY = 24 * HOUR;
+        final StringBuffer result = new StringBuffer();
+        boolean doAppend = false;
+
+        if (uptime / DAY > 0) {
+            result.append(uptime / DAY).append("d ");
+            uptime %= DAY;
+            doAppend = true;
+        }
+        if (uptime / HOUR > 0 || doAppend) {
+            result.append(uptime / HOUR).append("h ");
+            uptime %= HOUR;
+            doAppend = true;
+        }
+        if (uptime / MINUTE > 0 || doAppend) {
+            result.append(uptime / MINUTE).append("m ");
+            uptime %= MINUTE;
+            doAppend = true;
+        }
+        if (uptime / SECOND > 0 || doAppend) {
+            result.append(uptime / SECOND).append("s ");
+            uptime %= SECOND;
+        }
+        result.append(uptime).append("ms");
+
+        return result.toString();
+    }
 }
 
 

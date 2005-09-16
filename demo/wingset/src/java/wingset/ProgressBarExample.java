@@ -17,6 +17,7 @@ import org.wings.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -32,7 +33,7 @@ public class ProgressBarExample extends WingSetPane {
 
         final SProgressBar progressBar = new SProgressBar(0, 100);
 
-        ActionListener al = new ActionListener() {
+        final ActionListener al = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int valueChange = 0;
                 if (e.getSource() == forward1Percent) {
@@ -53,32 +54,30 @@ public class ProgressBarExample extends WingSetPane {
         backward1Percent.addActionListener(al);
         backward10Percent.addActionListener(al);
 
-        progressBar.setUnfilledColor(java.awt.Color.gray);
-        progressBar.setFilledColor(java.awt.Color.red);
-        progressBar.setForeground(java.awt.Color.red);
+        progressBar.setUnfilledColor(java.awt.Color.lightGray);
+        progressBar.setFilledColor(java.awt.Color.orange);
+        progressBar.setForeground(java.awt.Color.blue);
         progressBar.setBorderColor(java.awt.Color.black);
         progressBar.setStringPainted(true);
-        progressBar.setPreferredSize(new SDimension(250,-1));
+        progressBar.setPreferredSize(new SDimension(250,SDimension.AUTO_INT));
         progressBar.setProgressBarDimension(new SDimension(250,12));
 
         progressBar.setValue(20);
 
-        SContainer panel = new SPanel();
+        final SGridBagLayout gridBagLayout = new SGridBagLayout();
+        final SContainer panel = new SPanel(gridBagLayout);
+        panel.setPreferredSize(new SDimension("250",null));
 
-        try {
-            java.net.URL templateURL = getSession().getServletContext().getResource("/templates/ProgressBarExample.thtml");
-            STemplateLayout layout = new STemplateLayout(templateURL);
-            panel.setLayout(layout);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        panel.add(progressBar, "ProgressBar");
-        panel.add(forward1Percent, "Forward1Percent");
-        panel.add(forward10Percent, "Forward10Percent");
-        panel.add(backward1Percent, "Backward1Percent");
-        panel.add(backward10Percent, "Backward10Percent");
-
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        c1.gridwidth = GridBagConstraints.REMAINDER;
+        panel.add(progressBar, c1);
+        panel.add(backward10Percent, c0);
+        panel.add(forward10Percent, c1);
+        forward10Percent.setHorizontalAlignment(RIGHT_ALIGN);
+        panel.add(backward1Percent, c0);
+        panel.add(forward1Percent, c1);
+        forward1Percent.setHorizontalAlignment(RIGHT_ALIGN);
 
         return panel;
     }

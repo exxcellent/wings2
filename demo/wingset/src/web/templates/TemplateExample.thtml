@@ -7,7 +7,7 @@ write a simple HTML-page being the template for your components.
 The <em>constraints</em> of this
 layout manager are just the names of the components. Components can be 
 any of 
-<code>&lt;input name=&quot;compname&quot; ../&gt;</code> 
+<code>&lt;input name=&quot;compname&quot;&gt;</code>
 or simply anything which is embedded in 
 <code>&lt;object name=&quot;compname&quot;&gt;&lt;/object&gt;</code>
 and are replaced by the actual component given with the 
@@ -15,10 +15,13 @@ constraint named <code>&quot;compname&quot;</code>.
 <hr size="1" noshade="noshade" />
 In this example we just place input elements and a tree in a table; Note, that
 the size parameters of the input elements are taken from the template. The "Name"
-has also an inline style definition: style="background: #eeeeee; font-weight: bold"
+has also three inline properties set for the STextField component:<br/>
+<code>background="#eeffee" style="font-weight:bold; border:3px solid blue;" size="30"</code><br/>
+These inline properties overwrite the background color, the CSS attributes and the columns property
+of the according <code>STextField</code> object.
 <table cellpadding="2">
 <tr>
-   <td>Name:</td><td><input style="background:#eeeeee;font-weight:bold" size="30" name="NAME"></td>
+   <td>Name:</td><td><input background="#eeffee" style="font-weight:bold; border:3px solid blue;" size="30" name="NAME"></td>
    <td rowspan="2">
 <table>
   <tr><td><input type="radio" name="SELVAL" value="0"></td>
@@ -42,7 +45,7 @@ has also an inline style definition: style="background: #eeeeee; font-weight: bo
 <tr valign="top"><td>..or just place any other component; like this tree &nbsp;</td>
 <td><object name="TREE"></object></td>
 </table>
-or consider labels: <b><object name="theLabel"></object></b>.
+or consider labels (styled via template): <b><object name="theLabel" foreground="#990000"></object></b>.
 <p>
 This template layout manager caches the intermediate result of the internal
 parse stage, thus it is very fast generating pages. Templates can be read
