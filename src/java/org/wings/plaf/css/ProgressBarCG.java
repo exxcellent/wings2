@@ -21,18 +21,16 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class ProgressBarCG extends AbstractComponentCG implements
-        org.wings.plaf.ProgressBarCG {
+public class ProgressBarCG extends AbstractComponentCG implements        org.wings.plaf.ProgressBarCG {
 
-// --- byte array converted template snippets.
+    // Invisible icon as spacer
+    private static final SIcon INVISIBLE_ICON = (SIcon) SessionManager.getSession().getCGManager().getObject("ProgressBarCG.blindIcon", SIcon.class);
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         final SProgressBar component = (SProgressBar) comp;
         final CGManager manager = component.getSession().getCGManager();
-        Object value;
-        Object previous;
-        value = manager.getObject("SProgressBar.borderColor", java.awt.Color.class);
+        Object value = manager.getObject("SProgressBar.borderColor", java.awt.Color.class);
         if (value != null) {
             component.setBorderColor((java.awt.Color) value);
         }
@@ -54,23 +52,9 @@ public class ProgressBarCG extends AbstractComponentCG implements
         }
     }
 
-    public void uninstallCG(final SComponent comp) {
-    }
-
-//--- code from common area in template.
-    private static final SIcon BLIND_ICON = (SIcon) SessionManager.getSession()
-    .getCGManager().getObject("ProgressBarCG.blindIcon", SIcon.class);
-
-//--- end code from common area in template.
-
-
-    public void writeContent(final Device device,
-                             final SComponent _c)
-            throws IOException {
+    public void writeContent(final Device device, final SComponent _c) throws IOException {
         final SProgressBar component = (SProgressBar) _c;
-
-//--- code from write-template.
-        String style = component.getStyle();
+        final String style = component.getStyle();
 
         /* FIXME: The problem here is that the component size is used as the
          * size for the progressbar. If text is rendered below
@@ -79,10 +63,9 @@ public class ProgressBarCG extends AbstractComponentCG implements
          * OL: created distinct height. other solution is removing string 
          * completely.
          */
-        
-        SDimension size = component.getProgressBarDimension();
-        int width = size != null ? size.getIntWidth() : 200;
-        int height = size != null ? size.getIntHeight() : 5;
+        final SDimension size = component.getProgressBarDimension();
+        int width = (size != null && size.getWidthInt() > 0) ? size.getWidthInt() : 200;
+        int height = (size != null && size.getHeightInt() > 0) ? size.getHeightInt() : 10;
 
         if (component.isBorderPainted()) {
             device.print("<div style=\"width: 100%;height:100%;border: 1px solid ");
@@ -92,22 +75,22 @@ public class ProgressBarCG extends AbstractComponentCG implements
             height -= 2;
         }
 
-        device.print("<table class=\"SLayout\"><tr><td class=\"SLayout\"");
+        device.print("<table class=\"SLayout\"><tr>");
+
+        // Part with completed bar
+        final int completedWidth = (int) Math.round(width * component.getPercentComplete());
+        device.print("<td class=\"SLayout\"");
         if (component.getFilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getFilledColor());
             device.print(";\"");
         }
         device.print(">");
-        final String completeWidth = String.valueOf(Math.round(width * component.getPercentComplete()));
-        device.print("<img");
-        Utils.optAttribute(device, "src", BLIND_ICON.getURL());
-        Utils.optAttribute(device, "width", completeWidth);
-        Utils.optAttribute(device, "height", String.valueOf(height));
-        device.print(" alt=\"");
-        device.print(BLIND_ICON.getIconTitle());
-        device.print("\"/>");
+        printSpacerIcon(device, completedWidth, height);
         device.print("</td>");
+
+        // Part with remaining, incompleted bar
+        final int incompleteWidth = (int) Math.round(width * (1 - component.getPercentComplete()));
         device.print("<td class=\"SLayout\"");
         if (component.getUnfilledColor() != null) {
             device.print(" style=\"background-color: ");
@@ -115,14 +98,7 @@ public class ProgressBarCG extends AbstractComponentCG implements
            device.print(";\"");
         }
         device.print(">");
-        final String incompleteWidth = String.valueOf(Math.round(width * (1 - component.getPercentComplete())));
-        device.print("<img");
-        Utils.optAttribute(device, "src", BLIND_ICON.getURL());
-        Utils.optAttribute(device, "width", incompleteWidth);
-        Utils.optAttribute(device, "height", String.valueOf(height));
-        device.print(" alt=\"");
-        device.print(BLIND_ICON.getIconTitle());
-        device.print("\"/>");
+        printSpacerIcon(device, incompleteWidth, height);
         device.print("</td></tr></table>");
         if (component.isBorderPainted()) {
             device.print("</div>");
@@ -139,6 +115,15 @@ public class ProgressBarCG extends AbstractComponentCG implements
             Utils.write(device, component.getString());
             device.print("</div>");
         }
-//--- end code from write-template.
+    }
+
+    private void printSpacerIcon(final Device device, final int width, int height) throws IOException {
+        device.print("<img");
+        Utils.optAttribute(device, "src", INVISIBLE_ICON.getURL());
+        Utils.optAttribute(device, "width", width);
+        Utils.optAttribute(device, "height", String.valueOf(height));
+        device.print(" alt=\"");
+        device.print(INVISIBLE_ICON.getIconTitle());
+        device.print("\"/>");
     }
 }

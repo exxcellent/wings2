@@ -15,32 +15,22 @@ package org.wings;
 
 import org.wings.plaf.ProgressBarCG;
 
-import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import javax.swing.*;
 import java.io.Serializable;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.awt.*;
 
 
 /**
- * <!--
- * SProgressBar.java
- * Created: Mon Oct 28 18:55:02 2002
- * -->
+ * A graphical progress bar component which can be used to draw the progress of an operation.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SProgressBar extends SComponent {
-
-    public static final String STRING_PROPERTY = "_String_Property";
-    public static final String STRING_PAINTED_PROPERTY = "_String_Painted_Property";
-    public static final String BORDER_PAINTED_PROPERTY = "_Border_Painted_Property";
-    public static final String ORIENTATION_PROPERTY = "_Orientation_Property";
-
-
     /**
      * Whether the progress bar is horizontal or vertical.
      * The default is <code>HORIZONTAL</code>.
@@ -669,7 +659,6 @@ public class SProgressBar extends SComponent {
      */
     public void setValue(int n) {
         BoundedRangeModel brm = getModel();
-        int oldValue = brm.getValue();
         brm.setValue(n);
     }
 
@@ -712,46 +701,32 @@ public class SProgressBar extends SComponent {
      * Sets the <code>indeterminate</code> property of the progress bar,
      * which determines whether the progress bar is in determinate
      * or indeterminate mode.
-     * By default, the progress bar is determinate
-     * and this method returns <code>false</code>.
+     * By default, the progress bar is determinate.
      * An indeterminate progress bar continuously displays animation
      * indicating that an operation of unknown length is occurring.
-     * By default, this property is <code>false</code>.
      * Some look and feels might not support indeterminate progress bars;
      * they will ignore this property.
-     * <p/>
-     * <p/>
-     * <p/>
-     * See
-     * <a href="http://java.sun.com/docs/books/tutorial/uiswing/components/progress.html" target="_top">How to Monitor Progress</a>
-     * for examples of using indeterminate progress bars.
-     *
-     * @param newValue <code>true</code> if the progress bar
-     *                 should change to indeterminate mode;
+
+     * @param newValue <code>true</code> if the progress bar should change to indeterminate mode;
      *                 <code>false</code> if it should revert to normal.
      * @see #isIndeterminate()
-     * @see javax.swing.plaf.basic.BasicProgressBarUI
-     * @since 1.4
      */
     public void setIndeterminate(boolean newValue) {
-        boolean oldValue = indeterminate;
         indeterminate = newValue;
     }
 
     /**
      * Returns the value of the <code>indeterminate</code> property.
      *
-     * @return the value of the <code>indeterminate</code> property
-     * or normal (false)?
+     * @return the value of the <code>indeterminate</code> property or normal (false)?
      * @see #setIndeterminate
-     * @since 1.4
      */
     public boolean isIndeterminate() {
         return indeterminate;
     }
 
     /**
-     * sets the size of the ProgressBar
+     * Sets the size of the graphically  rendered progress bar element.
      * @param dimension the size as dimension
      */
     public void setProgressBarDimension(SDimension dimension) {
@@ -760,13 +735,11 @@ public class SProgressBar extends SComponent {
     }
 
     /**
-     * @return the size as dimension if it has been set, else null
+     * @return The size of the graphically  rendered progress bar element if it has been set, else null
      */
     public SDimension getProgressBarDimension() {
         return progressBarDimension;
     }
-    
 
-
-}// SProgressBar
+}
 

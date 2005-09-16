@@ -14,6 +14,15 @@
 package org.wings;
 
 import org.wings.template.*;
+import org.wings.template.propertymanagers.SAbstractButtonPropertyManager;
+import org.wings.template.propertymanagers.SAbstractIconTextCompoundPropertyManager;
+import org.wings.template.propertymanagers.SComponentPropertyManager;
+import org.wings.template.propertymanagers.SListPropertyManager;
+import org.wings.template.propertymanagers.SLabelPropertyManager;
+import org.wings.template.propertymanagers.STextFieldPropertyManager;
+import org.wings.template.propertymanagers.STablePropertyManager;
+import org.wings.template.propertymanagers.SFileChooserPropertyManager;
+import org.wings.template.propertymanagers.STextAreaPropertyManager;
 import org.wings.template.parser.PageParser;
 
 import java.io.File;
@@ -22,17 +31,33 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/*
- * STemplateLayout.java
- *
- * Diese Layout ist dazu gedacht HTML Componenten in ein
- * vordefiniertes HTML Layout (Template) einzusetzten. In dem Template
- * sollten Schluesselwoerter (Template-Tag:
- * <COMPONENT NAME=constraint ICON="image.gif"></COMPONENT> )
- * gesetzt sein, die mit der Componente
- * ersetzt werden, die mit dem Schluesselwort als Constraint
- * zum Layouter hinzugefuegt wurden. <br>
- * Beispiel: template<br>
+/**
+ * Contrary to the other layout managers the STemplateLayout is a static layout manager.
+ * Like any other layout manager it allows to place arbitrary elements, but you can
+ * write a simple HTML-page being the template for your container component.
+ * Though we encourage the use of the dynamic layout managers, this layout manager can be
+ * very usedful in realising the main page layout of your web application.
+ * <p/>
+ * To use this layout manager you have to define a template file required by the STemplateLayout
+ * instance. Inside this template file you can insert inside your custom HTML code desired
+ * wingS objects using tags like
+ * <p/>
+ * <code>&lt;input name=&quot;compname&quot;&gt;</code>
+ * <p/> or
+ * <p/><code>&lt;object name=&quot;compname&quot;&gt;&lt;/object&gt;</code>
+ * <p/>
+ * The name attribute of these <code>input</code> or <code>object</code> tag is the name
+ * you have to use as layout <em>constraint</em> when you add the desired component to the
+ * template layout managed {@link SContainer}:
+ * <p/><code>panel.add(new SLabel("a test label), "compname"));</code>
+ * <p/>
+ * Besides this simple inlining mechanism the STemplateLayout manager has also another
+ * very powerful feature: <b>Specific components bean attributes can be overwritten</b> by
+ * specific optional inline attributes attached to your <code>object</code> html tags i.e. like
+ * <p/><code>&lt;object name="compname" background="#ff0000" text="new text"&gt;&lt;/object&gt;</code><p/>
+ * Please refer to javadoc of {@link PropertyManager} for more information on this feature.
+ * <p/>
+ * <b>Sample template file:</b><br/>
  * <CODE>
  * &lt;HTML&gt;&lt;BODY&gt;
  * Name der Person: &lt;COMPONENT NAME=NAME&gt;&lt;BR&gt;
@@ -41,25 +66,20 @@ import java.util.Map;
  * &lt;/BODY&gt;&lt;/HTML&gt;
  * </CODE>
  * <BR>
- * Fuellen dieses Templates schaut dann so aus:<BR>
+ * <b>According java sample code:</b>:<BR>
  * <CODE>
+ * templateContainer.setLayout(new STemplateLayout("templatefile"));
  * templateContainer.addComponent(new SLabel("Haaf"), "NAME");
  * templateContainer.addComponent(new SButton("Armin"), "VORNAME");
  * templateContainer.addComponent(new SLabel("Neu-Ulm"), "WOHNORT");
  * </CODE>
  *
- * @author Armin Haaf
- * @author Henner Zeller
- */
-
-/**
+ * @see  PropertyManager
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author Jochen Woehrle
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
- * @version $Revision$
  */
-public class STemplateLayout
-        extends SAbstractLayoutManager {
+public class STemplateLayout extends SAbstractLayoutManager {
     /*
      * Dieser PropertyManager behandelt alle Properties, zu denen kein eigener
      * PropertyManager gefunden wurde.

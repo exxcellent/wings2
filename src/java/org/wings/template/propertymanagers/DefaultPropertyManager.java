@@ -11,12 +11,15 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.template;
+package org.wings.template.propertymanagers;
 
 import bsh.Interpreter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
+import org.wings.template.PropertyManager;
+import org.wings.template.DefaultPropertyValueConverter;
+import org.wings.template.PropertyValueConverter;
 import org.wings.session.SessionManager;
 
 import java.lang.reflect.Method;

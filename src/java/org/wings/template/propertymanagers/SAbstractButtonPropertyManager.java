@@ -11,26 +11,28 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.template;
+package org.wings.template.propertymanagers;
 
+import org.wings.SAbstractButton;
 import org.wings.SComponent;
-import org.wings.SList;
 
 /**
- * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
+ * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SListPropertyManager extends SComponentPropertyManager {
-    static final Class[] classes = {SList.class};
+public class SAbstractButtonPropertyManager extends SAbstractIconTextCompoundPropertyManager {
+    static final Class[] classes = {SAbstractButton.class};
 
-    public SListPropertyManager() {
+    public SAbstractButtonPropertyManager() {
     }
 
     public void setProperty(SComponent comp, String name, String value) {
-        SList l = (SList) comp;
-        if (name.equals("SIZE")) {
-            l.setVisibleRowCount(Integer.valueOf(value).intValue());
-        } else
+        SAbstractButton c = (SAbstractButton) comp;
+        if (name.equals("ACCESSKEY"))
+            c.setMnemonic(value);
+        else if (name.equals("TARGET"))
+            c.setEventTarget(value);
+        else
             super.setProperty(comp, name, value);
     }
 

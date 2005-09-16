@@ -11,10 +11,11 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.template;
+package org.wings.template.propertymanagers;
 
 import org.wings.SComponent;
 import org.wings.SFileChooser;
+import org.wings.template.propertymanagers.SComponentPropertyManager;
 
 /**
  * Property manager for a file chooser component.

@@ -31,8 +31,8 @@ public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.Spac
 
     public void writeContent(final Device device, final SComponent c) throws IOException {
         final SSpacer component = (SSpacer) c;
-        int height = component.getPreferredSize().getIntHeight();
-        int width = component.getPreferredSize().getIntWidth();
+        int height = component.getPreferredSize().getHeightInt();
+        int width = component.getPreferredSize().getWidthInt();
         device.print("<img");
         Utils.optAttribute(device, "src", BLIND_ICON.getURL());
         Utils.optAttribute(device, "width", width);

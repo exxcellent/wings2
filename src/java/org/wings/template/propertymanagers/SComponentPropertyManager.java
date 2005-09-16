@@ -11,9 +11,11 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.template;
+package org.wings.template.propertymanagers;
 
 import org.wings.SComponent;
+import org.wings.template.TemplateUtil;
+import org.wings.template.PropertyValueConverter;
 import org.wings.style.CSSAttributeSet;
 
 import java.awt.*;

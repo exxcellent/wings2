@@ -11,11 +11,12 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.template;
+package org.wings.template.propertymanagers;
 
 import org.wings.SComponent;
 import org.wings.SDimension;
 import org.wings.STable;
+import org.wings.template.propertymanagers.SComponentPropertyManager;
 
 import java.awt.*;
 

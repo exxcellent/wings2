@@ -11,7 +11,7 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.template;
+package org.wings.template.propertymanagers;
 
 import org.wings.SAbstractIconTextCompound;
 import org.wings.SComponent;

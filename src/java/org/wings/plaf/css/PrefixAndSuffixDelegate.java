@@ -58,8 +58,8 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         }
 
         // if sizes are spec'd in percentages, we need the outer box to have full size...
-        final boolean isHeightPercentage = prefSize != null && prefSize.height != null && prefSize.height.indexOf("%") != -1;
-        final boolean isWidthPercentage = prefSize != null && prefSize.width != null && prefSize.width.indexOf("%") != -1;
+        final boolean isHeightPercentage = prefSize != null && prefSize.getHeightUnit() != null && prefSize.getHeightUnit().indexOf("%") != -1;
+        final boolean isWidthPercentage = prefSize != null && prefSize.getWidthUnit()!= null && prefSize.getWidthUnit().indexOf("%") != -1;
         // special case of special case: if the component with relative size is vertically aligned, we must avoid 100% heigth
         final boolean isVAligned = (component.getVerticalAlignment() == SConstants.CENTER
                 || component.getVerticalAlignment() == SConstants.BOTTOM);

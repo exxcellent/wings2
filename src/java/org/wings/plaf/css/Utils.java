@@ -13,19 +13,6 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.InputMap;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
@@ -42,6 +29,17 @@ import org.wings.io.NullDevice;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Utils.java
@@ -333,10 +331,10 @@ public final class Utils {
     public static StringBuffer generateCSSInlinePreferredSize(SDimension preferredSize) {
         final StringBuffer styleString = new StringBuffer();
         if (preferredSize != null) {
-            if (preferredSize.isWidthDefined()) {
+            if (preferredSize.getWidth() != SDimension.AUTO) {
                 styleString.append("width:").append(preferredSize.getWidth()).append(";");
             }
-            if (preferredSize.isHeightDefined()) {
+            if (preferredSize.getHeight() != SDimension.AUTO) {
                 styleString.append("height:").append(preferredSize.getHeight()).append(";");
             }
         }
@@ -354,13 +352,14 @@ public final class Utils {
     }
 
     /**
-     * Prints a HTML style attribute with widht/height of 100%.
+     * Prints a HTML style attribute with widht/height of 100% if the passed dimension defines a height or width..
      * <p>Sample: <code> style="width:100%;"</code>
      *
      * @param device Device to print to
+     * @param preferredSize trigger dimension
      */
     public static void printCSSInlineFullSize(Device device, SDimension preferredSize) throws IOException {
-        if (preferredSize != null && (preferredSize.isWidthDefined() || preferredSize.isHeightDefined())) {
+        if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO)) {
             device.print(" style=\"width:100%;height:100%\"");
         }
     }

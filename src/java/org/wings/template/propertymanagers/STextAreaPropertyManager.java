@@ -11,32 +11,29 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.template;
+package org.wings.template.propertymanagers;
 
 import org.wings.SComponent;
-import org.wings.STextField;
+import org.wings.STextArea;
+import org.wings.template.propertymanagers.SComponentPropertyManager;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class STextFieldPropertyManager
+public class STextAreaPropertyManager
         extends SComponentPropertyManager {
-    static final Class[] classes = {STextField.class};
+    static final Class[] classes = {STextArea.class};
 
-    public STextFieldPropertyManager() {
+    public STextAreaPropertyManager() {
     }
 
     public void setProperty(SComponent comp, String name, String value) {
-        STextField c = (STextField) comp;
+        STextArea c = (STextArea) comp;
         if (name.equals("COLS"))
             c.setColumns(Integer.parseInt(value));
-        else if (name.equals("SIZE"))
-            c.setColumns(Integer.parseInt(value));
-        else if (name.equals("MAXSIZE"))
-            c.setMaxColumns(Integer.parseInt(value));
-        else if (name.equals("MAXLENGTH"))
-            c.setMaxColumns(Integer.parseInt(value));
+        else if (name.equals("ROWS"))
+            c.setRows(Integer.parseInt(value));
         else
             super.setProperty(comp, name, value);
     }

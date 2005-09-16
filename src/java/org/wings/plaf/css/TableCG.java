@@ -200,8 +200,8 @@ public class TableCG extends AbstractComponentCG implements
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse
         /* Tweaking: CG configured to have a fixed border="xy" width */
         Utils.optAttribute(device, "border", fixedTableBorderWidth);
-        Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getIntWidth() : null));
-        Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getIntHeight() : null));
+        Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getWidthInt() : null));
+        Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getHeightInt() : null));
         device.print(">");
         Utils.printNewline(device, table);
 
