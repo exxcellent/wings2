@@ -21,6 +21,8 @@ import javax.servlet.http.HttpUtils;
 import java.io.File;
 import java.io.FilterOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Hashtable;
 
 /**
@@ -359,7 +361,17 @@ public class SFileChooser
 
         exception = null;
 
-        String value = values[0];
+        String value;
+
+        try {
+            value = URLDecoder.decode(values[0], "UTF-8");
+        } catch (final UnsupportedEncodingException e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Failed to url-decode '" + values[0] + "'.");
+            }
+            
+            value = values[0];
+        }
 
         if ("exception".equals(value)) {
             exception = new IOException(values[1]);

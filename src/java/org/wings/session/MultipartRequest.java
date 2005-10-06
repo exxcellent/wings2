@@ -272,8 +272,7 @@ public class MultipartRequest
 
         MultipartInputStream mimeStream = null;
 
-
-        StringBuffer header = new StringBuffer();
+        ByteArrayOutputStream headerByteArray;
         StringBuffer content = new StringBuffer();
         HashMap headers = null;
         int currentByte = 0;
@@ -290,16 +289,16 @@ public class MultipartRequest
             while (currentByte != -1) {
                 // Read MIME part header line
                 done = false;
+                headerByteArray = new ByteArrayOutputStream();
                 while ((currentByte = mimeStream.read()) != -1 && !done) {
-                    header.append((char) currentByte); // okay -- let us asume no special characters in the header
+                    headerByteArray.write(currentByte);
                     done = (last == '\n' && currentByte == '\r');
                     last = currentByte;
                 }
                 if (currentByte == -1)
                     break;
 
-                headers = parseHeader(header.toString());
-                header.setLength(0);
+                headers = parseHeader(headerByteArray.toString(req.getCharacterEncoding()));
 
                 currentParam = (String) headers.get("name");
 
