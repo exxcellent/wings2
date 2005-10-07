@@ -28,13 +28,16 @@ import java.io.IOException;
  */
 public abstract class IconTextCompound {
     private final static transient Log log = LogFactory.getLog(IconTextCompound.class);
-    
-    public void writeCompound(Device device, SComponent component, int horizontal, int vertical) throws IOException {
-        if (horizontal == SConstants.NO_ALIGN)
-            horizontal = SConstants.RIGHT;
-        if (vertical == SConstants.NO_ALIGN)
-            vertical = SConstants.CENTER;
-        boolean order = vertical == SConstants.TOP || (vertical == SConstants.CENTER && horizontal == SConstants.LEFT);
+
+    public void writeCompound(Device device, SComponent component, int horizontalTextPosition, int verticalTextPosition) throws IOException {
+        // by default: text right side of icon
+        if (horizontalTextPosition == SConstants.NO_ALIGN)
+            horizontalTextPosition = SConstants.RIGHT;
+        // by default: text center aligned in height with icon
+        if (verticalTextPosition == SConstants.NO_ALIGN)
+            verticalTextPosition = SConstants.CENTER;
+        boolean renderTextFirst = verticalTextPosition == SConstants.TOP ||
+                (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT);
 
 
         device.print("<table class=\"SLayout\"");
@@ -44,53 +47,55 @@ public abstract class IconTextCompound {
         }
         device.print(">");
 
-        if (vertical == SConstants.TOP && horizontal == SConstants.LEFT ||
-                vertical == SConstants.BOTTOM && horizontal == SConstants.RIGHT) {
+        if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.LEFT ||
+                verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.RIGHT) {
             device.print("<tr><td align=\"left\" valign=\"top\" class=\"SLayout\">");
-            first(device, order);
-            device.print("</td><td class=\"SLayout\"></td></tr><tr><td class=\"SLayout\"></td><td align=\"right\" valign=\"bottom\" class=\"SLayout\">");
-            last(device, order);
-            device.print("</td></tr>");
-        } else if (vertical == SConstants.TOP && horizontal == SConstants.RIGHT ||
-                vertical == SConstants.BOTTOM && horizontal == SConstants.LEFT) {
-            device.print("<tr><td class=\"SLayout\"></td><td align=\"right\" valign=\"top\" class=\"SLayout\">");
-            first(device, order);
-            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\" class=\"SLayout\">");
-            last(device, order);
+            first(device, renderTextFirst);
             device.print("</td><td class=\"SLayout\"></td></tr>");
-        } else if (vertical == SConstants.TOP && horizontal == SConstants.CENTER ||
-                vertical == SConstants.BOTTOM && horizontal == SConstants.CENTER) {
-            device.print("<tr><td align=\"center\" valign=\"top\" class=\"SLayout\">");
-            first(device, order);
-            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\" class=\"SLayout\">");
-            last(device, order);
+            device.print("<tr><td class=\"SLayout\"></td><td align=\"right\" valign=\"bottom\" class=\"SLayout\">");
+            last(device, renderTextFirst);
             device.print("</td></tr>");
-        } else if (vertical == SConstants.CENTER && horizontal == SConstants.LEFT ||
-                vertical == SConstants.CENTER && horizontal == SConstants.RIGHT) {
+        } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.RIGHT ||
+                verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.LEFT) {
+            device.print("<tr><td class=\"SLayout\"></td><td align=\"right\" valign=\"top\" class=\"SLayout\">");
+            first(device, renderTextFirst);
+            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\" class=\"SLayout\">");
+            last(device, renderTextFirst);
+            device.print("</td><td class=\"SLayout\"></td></tr>");
+        } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.CENTER ||
+                verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.CENTER) {
+            device.print("<tr><td align=\"center\" valign=\"top\" class=\"SLayout\">");
+            first(device, renderTextFirst);
+            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\" class=\"SLayout\">");
+            last(device, renderTextFirst);
+            device.print("</td></tr>");
+        } else if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT ||
+                verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.RIGHT) {
             device.print("<tr><td align=\"left\" class=\"SLayout\">");
-            first(device, order);
+            first(device, renderTextFirst);
             device.print("</td><td align=\"right\" class=\"SLayout\">");
-            last(device, order);
+            last(device, renderTextFirst);
             device.print("</td></tr>");
         } else {
-            log.warn("horizontal = " + horizontal);
-            log.warn("vertical = " + vertical);
+            log.warn("horizontal = " + horizontalTextPosition);
+            log.warn("vertical = " + verticalTextPosition);
         }
         device.print("</table>");
     }
 
-    private void first(Device d, boolean order) throws IOException {
-        if (order)
-            text(d);
-        else
-            icon(d);
+    private void first(Device device, boolean textFirst) throws IOException {
+        if (textFirst) {
+            // avoid that in case that horizontalAlignment of text is right, that the text itself
+            // becomes right-aligned
+            device.print("<div style=\"text-align:left\">");           
+            text(device);
+            device.print("</div>");
+        } else
+            icon(device);
     }
 
-    private void last(Device d, boolean order) throws IOException {
-        if (!order)
-            text(d);
-        else
-            icon(d);
+    private void last(Device device, boolean textFirst) throws IOException {
+        first(device, !textFirst);
     }
 
     protected abstract void text(Device d) throws IOException;
