@@ -112,6 +112,12 @@ table.STree button
    white-space: nowrap; /* not working */
 }
 
+/* No vertical distance on writing down many labels. */
+.SLabel p {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+
 .STextField {
    font-family: sans-serif;
    font-weight: normal;

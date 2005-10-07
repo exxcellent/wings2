@@ -58,7 +58,6 @@ div.SFlowLayout > div > div.SForm_Box  > div.SForm
     width: 1%;
 } 
 
-/* TODO -- move this to renderer? */
 IMG {
     /* keeps images inside tabs */
     vertical-align: middle;
@@ -66,13 +65,21 @@ IMG {
     border: none !important;
 }
 
+/* Handle Labels as inline */
 div.SLabel_Box {
     display: table;
 }
 
+/* Do not break SLabels */
 div.SLabel,
 div.SCheckBox {
     white-space: pre;
+}
+
+/* No vertical distance on writing down many labels. */
+.SLabel p {
+    margin-top:0px;
+    margin-bottom:0px;
 }
 
 pre.label {
