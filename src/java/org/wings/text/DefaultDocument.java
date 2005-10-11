@@ -16,9 +16,11 @@ package org.wings.text;
 
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
-
+import org.wings.util.EditTranscriptGenerator;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.EventListenerList;
 import javax.swing.text.BadLocationException;
+import java.util.List;
 
 /**
  * @author hengels
@@ -41,9 +43,22 @@ public class DefaultDocument implements SDocument {
             return;
         }
         buffer.setLength(0);
-        if (text != null)
+        if (text != null){
             buffer.append(text);
-        fireChangeUpdate(0, buffer.length());
+            if(listeners.getListenerCount() > 0){
+                // If there are any document listeners: Generate document change events!
+            	List actions = EditTranscriptGenerator.generateEvents(origText, text);
+                // and fire them!
+            	for(int i = 0; i < actions.size(); i++){
+            		DocumentEvent de = (DocumentEvent) actions.get(i);
+            		if(de.getType().equals(DocumentEvent.EventType.INSERT)){
+            			fireInsertUpdate(de.getOffset(), de.getLength());
+            		} else if(de.getType().equals(DocumentEvent.EventType.REMOVE)){
+            			fireRemoveUpdate(de.getOffset(), de.getLength());
+            		}
+            	}
+            }
+        }
     }
 
     public String getText() {
@@ -114,7 +129,7 @@ public class DefaultDocument implements SDocument {
         if (listeners == null || listeners.getListenerCount() == 0)
             return;
 
-        SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.INSERT);
+        SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.REMOVE);
 
         Object[] listeners = this.listeners.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -126,7 +141,7 @@ public class DefaultDocument implements SDocument {
         if (listeners == null || listeners.getListenerCount() == 0)
             return;
 
-        SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.INSERT);
+        SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.CHANGE);
 
         Object[] listeners = this.listeners.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {

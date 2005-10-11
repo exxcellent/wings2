@@ -39,7 +39,10 @@ public interface SDocumentListener extends EventListener {
     public void removeUpdate(SDocumentEvent e);
 
     /**
-     * Gives notification that an attribute or set of attributes changed.
+     * Gives notification that an attribute or set of attributes changed for styled
+     * documents.
+     * <p><b>NOTE:</b> This is for swing compatibility. Currently you will not
+     * receive this event at any time inside web contexts!
      *
      * @param e the document event
      */
