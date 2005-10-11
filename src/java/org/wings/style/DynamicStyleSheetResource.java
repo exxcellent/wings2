@@ -23,14 +23,14 @@ import org.wings.resource.DynamicResource;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 import org.wings.util.ComponentVisitor;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 /**
  * Traverses the component hierarchy of a frame and gathers the dynamic styles
@@ -77,9 +77,24 @@ public class DynamicStyleSheetResource
             this.out = out;
         }
 
-        private void writeAttributesFrom(SComponent component)
+        private void writeAttributesFrom(final SComponent component)
                 throws IOException {
-            final Collection dynamicStyles = component.getDynamicStyles();
+
+            // grab component styles
+            Collection dynamicStyles = component.getDynamicStyles();
+
+            // append CSS styles reqired for border to component styles.
+            // (also to avoid duplicate implementation of non-msie workaround!)
+            final SBorder border = component.getBorder();
+            if (border != null && border.getAttributes() != null) {
+                if (dynamicStyles == null)
+                    dynamicStyles = new ArrayList(1);
+                else
+                    dynamicStyles = new ArrayList(dynamicStyles); // copy unmodifiable collection
+                dynamicStyles.add(new CSSStyle(new CSSSelector(component), border.getAttributes()));
+            }
+
+            // Render dynamic styles to style sheet
             if (dynamicStyles != null) {
                 final ComponentCG cg = component.getCG();
                 final BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
@@ -123,13 +138,6 @@ public class DynamicStyleSheetResource
                     style.write(out);
                     out.print("}\n");
                 }
-            }
-
-            SBorder border = component.getBorder();
-            if (border != null) {
-                out.print(CSSSelector.getSelectorString(component)).print("{");
-                border.getAttributes().write(out);
-                out.print("}\n");
             }
         }
 

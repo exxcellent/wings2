@@ -70,5 +70,8 @@ public interface SBorder extends Serializable {
      */
     public void setThickness(int thickness);
 
+    /**
+     * @return The CSS Attributes which need to be applied to the component to build up the border.
+     */
     CSSAttributeSet getAttributes();
 }
