@@ -13,142 +13,175 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBorderLayout;
+import org.wings.SButton;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SForm;
+import org.wings.SFormattedTextField;
+import org.wings.SGridLayout;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.STextArea;
+import org.wings.STextComponent;
+import org.wings.STextField;
 import org.wings.border.SLineBorder;
-import org.wings.session.SessionManager;
-import org.wings.text.SNumberFormatter;
-import org.wings.text.SAbstractFormatter;
-import org.wings.event.SDocumentListener;
 import org.wings.event.SDocumentEvent;
-
+import org.wings.event.SDocumentListener;
+import org.wings.event.SRenderEvent;
+import org.wings.event.SRenderListener;
+import org.wings.session.SessionManager;
+import org.wings.text.SAbstractFormatter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
-import java.text.NumberFormat;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Iterator;
 
 /**
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  * @version $Revision$
  */
-public class TextComponentExample
-        extends WingSetPane
-{
+public class TextComponentExample extends WingSetPane {
+    private final SLabel actionEvent = new SLabel("(no form or button event)");
+    private final STextArea eventLog = new STextArea();
     private ComponentControls controls;
-    private SLabel documentEvent = new SLabel(" ");
-    private SLabel actionEvent = new SLabel(" ");
 
-    SDocumentListener documentListener = new SDocumentListener() {
-                public void insertUpdate(SDocumentEvent e) {
-                    documentEvent.setText(((STextComponent) e.getSource()).getName());
-                    actionEvent.setText("button not pressed");
-                }
-
-                public void removeUpdate(SDocumentEvent e) {
-                    documentEvent.setText(((STextComponent) e.getSource()).getName());
-                    actionEvent.setText("button not pressed");
-                }
-
-                public void changedUpdate(SDocumentEvent e) {
-                    if (e.getSource() instanceof STextComponent) {
-                        STextComponent component = (STextComponent) e.getSource();
-                        documentEvent.setText(((STextComponent) e.getSource()).getName());
-                    }
-                    else {
-                        log.debug("e.getSource().getClass() = " + e.getSource().getClass());
-                    }
-                    actionEvent.setText("button not pressed");
-                }
-            };
 
     public SComponent createExample() {
         controls = new ComponentControls();
 
         SGridLayout gridLayout = new SGridLayout(2);
-        gridLayout.setHgap(4);
+        gridLayout.setHgap(10);
         gridLayout.setVgap(4);
         SPanel p = new SPanel(gridLayout);
 
         p.add(new SLabel("STextField: "));
         STextField textField = new STextField();
         textField.setName("textfield");
-        textField.addDocumentListener(documentListener);
+        textField.addDocumentListener(new MyDocumentListener(textField));
         p.add(textField);
 
         p.add(new SLabel("SFormattedTextField (NumberFormat): "));
         SFormattedTextField numberTextField = new SFormattedTextField(new NumberFormatter());
         numberTextField.setName("numberfield");
-        numberTextField.addDocumentListener(documentListener);
+        numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
         p.add(numberTextField);
 
         p.add(new SLabel("SFormattedTextField (DateFormat): "));
         SFormattedTextField dateTextField = new SFormattedTextField(new DateFormatter());
         dateTextField.setName("datefield");
-        dateTextField.addDocumentListener(documentListener);
+        dateTextField.addDocumentListener(new MyDocumentListener(dateTextField));
         p.add(dateTextField);
 
         p.add(new SLabel("STextArea: "));
-        STextArea textArea = new STextArea();
+        STextArea textArea = new STextArea("");
         textArea.setName("textarea");
-        textArea.addDocumentListener(documentListener);
+        textArea.addDocumentListener(new MyDocumentListener(textArea));
         p.add(textArea);
 
-        p.add(new SLabel("Multiline Label: "));
-        //SPanel sp = new SPanel();
-        STextArea disabledTextArea = new STextArea("A very simple multiline text\nonly seperated by \\n width and height is controlled by\nthe size of the text.\nThis can be achieved with not editable STextArea");
+        p.add(new SLabel("Multiline label: "));
+        STextArea disabledTextArea = new STextArea(
+                "A very simple multiline text only separated by \\n.\n" +
+                "Width and height is controlled by the size of the text.\n" +
+                "Like in Swing regular SLabels don't wrap, \n" +
+                "so use uneditable STextAreas as demonstrated.");
         disabledTextArea.setName("multilineArea");
         disabledTextArea.setEditable(false);
-        disabledTextArea.setBorder(new org.wings.border.SLineBorder());
+        disabledTextArea.setBorder(new SLineBorder());
         p.add(disabledTextArea);
-        //p.add(sp);
 
-        
-        p.add(new SLabel("DocumentEvent: "));
-        p.add(documentEvent);
 
-        SButton button = new SButton("Submit");
-        p.add(button);
+        p.add(new SLabel("SDocumentEvents: "));
+        p.add(eventLog);
+
+        SLabel actionEventsLabel = new SLabel("ActionEvents (try Submit vs. Enter):");
+        p.add(actionEventsLabel);
         p.add(actionEvent);
 
+        SButton button = new SButton("Submit");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                actionEvent.setText("Button pressed");
+                actionEvent.setText("Button clicked + ");
             }
         });
+        p.add(button);
 
-        SForm f = new SForm(new SBorderLayout());
-        f.addActionListener(new ActionListener() {
+        SForm frame = new SForm(new SBorderLayout());
+        frame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                actionEvent.setText(actionEvent.getText() + " + form event");
+                actionEvent.setText(actionEvent.getText() + " Form event");
             }
         });
 
+        // Styling of all components.
         for (int i = 0; i < p.getComponents().length; i++) {
             SComponent component = p.getComponents()[i];
             component.setVerticalAlignment(SConstants.TOP);
             if ((component instanceof STextComponent) && (component != disabledTextArea))
-                component.setPreferredSize(new SDimension("200px", null));
+                component.setPreferredSize(new SDimension("250px", null));
         }
-        documentEvent.setBorder(new SLineBorder(1));
-        documentEvent.setBackground(Color.LIGHT_GRAY.brighter());
-        documentEvent.setPreferredSize(new SDimension("200px", null));
+
+        eventLog.setEditable(false); // for multiline label
+        eventLog.setBorder(new SLineBorder(1));
+        eventLog.setBackground(Color.LIGHT_GRAY);
+
         actionEvent.setBorder(new SLineBorder(1));
-        actionEvent.setBackground(Color.LIGHT_GRAY.brighter());
-        actionEvent.setPreferredSize(new SDimension("200px", null));
+        actionEvent.setBackground(Color.LIGHT_GRAY);
 
         controls.addSizable(textField);
         controls.addSizable(textArea);
         controls.addSizable(dateTextField);
 
+        frame.add(controls, SBorderLayout.NORTH);
+        frame.add(p, SBorderLayout.CENTER);
 
-        f.add(controls, SBorderLayout.NORTH);
-        f.add(p, SBorderLayout.CENTER);
-        return f;
+        // Clear event log on rendering page
+        frame.addRenderListener(new SRenderListener() {
+            public void doneRendering(SRenderEvent e) {
+                eventLog.setText("");
+                actionEvent.setText("");
+            }
+
+            public void startRendering(SRenderEvent e) {
+                if (eventLog.getText().length() == 0)
+                    eventLog.setText("(no document events fired)");
+            }
+        });
+
+        return frame;
     }
 
-    public static class DateFormatter extends SAbstractFormatter {
+    /**
+     * Listener updating the document event log label.
+     */
+    private final class MyDocumentListener implements SDocumentListener {
+        private STextComponent eventSource;
+
+        public MyDocumentListener(STextComponent eventSource) {
+            this.eventSource = eventSource;
+        }
+
+        public void insertUpdate(SDocumentEvent e) {
+            String eventString = "insertUpdate() for " + eventSource.getName()
+                    + ": length: " + e.getLength() + " offset: " + e.getOffset() + "\n";
+            eventLog.setText(eventLog.getText() + eventString);
+        }
+
+        public void removeUpdate(SDocumentEvent e) {
+            String eventString = "removeUpdate() for " + eventSource.getName()
+                    + ": length: " + e.getLength() + " offset: " + e.getOffset() + "\n";
+            eventLog.setText(eventLog.getText() + eventString);
+        }
+
+
+        public void changedUpdate(SDocumentEvent e) {
+        } // Never called for unstyled documents
+    }
+
+    private static class DateFormatter extends SAbstractFormatter {
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, SessionManager.getSession().getLocale());
 
         public Object stringToValue(String text) throws ParseException {
@@ -166,7 +199,7 @@ public class TextComponentExample
         }
     }
 
-    public static class NumberFormatter extends SAbstractFormatter {
+    private static class NumberFormatter extends SAbstractFormatter {
         NumberFormat format = NumberFormat.getNumberInstance(SessionManager.getSession().getLocale());
 
         public Object stringToValue(String text) throws ParseException {
