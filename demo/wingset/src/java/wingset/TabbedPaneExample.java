@@ -162,7 +162,6 @@ public class TabbedPaneExample extends WingSetPane {
             Color color = (Color) source.getClientProperty("color");
             tabs.setAttribute(STabbedPane.SELECTOR_CONTENT,
                     CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
-            tabs.setBackground(color);
         }
     }
 

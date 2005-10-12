@@ -76,7 +76,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
             device.print("<table class=\"SLayout\"");
             if (childSelectorWorkaround)
                 Utils.optAttribute(device, "class", style);
-    
+
             Utils.printCSSInlineFullSize(device, component.getPreferredSize());
     
             Utils.writeEvents(device, component);
@@ -253,18 +253,24 @@ public class TabbedPaneCG extends AbstractComponentCG {
     }
 
     public CSSSelector  mapSelector(SComponent addressedComponent, CSSSelector selector) {
-        CSSSelector mappedSelector = null;
-            String selectorSuffix = (String) geckoMappings.get(selector);
-            if (selectorSuffix != null)
-                mappedSelector = new CSSSelector("#"+addressedComponent.getName()+selectorSuffix) ;
-        return mappedSelector != null ? mappedSelector : selector;
+        final String mappedSelector = (String) getSelectorMapping().get(selector);
+        if (mappedSelector != null) {
+            String cssSelector = mappedSelector.replaceAll("#compid", CSSSelector.getSelectorString(addressedComponent));
+            return new CSSSelector(cssSelector);
+        } else {
+            return selector;
+        }
+    }
+
+    protected Map getSelectorMapping() {
+        return geckoMappings;
     }
 
     private static final Map geckoMappings = new HashMap();
     static {
-        geckoMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, " > table > tbody > tr > th > *[selected=\"true\"]");
-        geckoMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, " > table > tbody > tr > th > *[selected=\"false\"]");
-        geckoMappings.put(STabbedPane.SELECTOR_CONTENT, " > div > table > tbody > tr > td");
-        geckoMappings.put(STabbedPane.SELECTOR_TAB_AREA, " > div > table > tbody > tr > th");
+        geckoMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, "#compid > table > tbody > tr > th > *[selected=\"true\"]");
+        geckoMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, "#compid > table > tbody > tr > th > *[selected=\"false\"]");
+        geckoMappings.put(STabbedPane.SELECTOR_CONTENT, "#compid > table > tbody > tr > td");
+        geckoMappings.put(STabbedPane.SELECTOR_TAB_AREA, "#compid > table > tbody > tr > th");
     }
 }

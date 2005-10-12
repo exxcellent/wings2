@@ -26,8 +26,6 @@ import org.wings.plaf.css.MSIEButtonFix;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
-import org.wings.style.CSSSelector;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,17 +78,16 @@ public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SPa
         device.print("<span> </span>");
     }
 
-    public CSSSelector  mapSelector(SComponent addressedComponent, CSSSelector selector) {
-        CSSSelector mappedSelector = (CSSSelector) msieMappings.get(selector);
-        return mappedSelector != null ? mappedSelector : selector;
+    protected Map getSelectorMapping() {
+        return msieMappings;
     }
 
-    private static final Map msieMappings = new HashMap();
+    private static final Map msieMappings = new HashMap(5);
     static {
-        msieMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, new CSSSelector (" *.STabbedPane_Tab_selected"));
-        msieMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, new CSSSelector (" *.STabbedPane_Tab_unselected"));
-        msieMappings.put(STabbedPane.SELECTOR_CONTENT, new CSSSelector (" td.STabbedPane_pane"));
-        msieMappings.put(STabbedPane.SELECTOR_TAB_AREA, new CSSSelector (" table.STabbedPane th"));
+        msieMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, "#compid *.STabbedPane_Tab_selected");
+        msieMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, "#compid *.STabbedPane_Tab_unselected");
+        msieMappings.put(STabbedPane.SELECTOR_CONTENT, "#compid td.STabbedPane_pane");
+        msieMappings.put(STabbedPane.SELECTOR_TAB_AREA, "#compid table.STabbedPane th");
     }
 
 
