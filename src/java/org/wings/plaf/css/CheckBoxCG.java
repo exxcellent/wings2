@@ -119,10 +119,22 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
 
         device.print(">");
 
-        if (showAsFormComponent && !useIconsInForms && text == null)
-            inputTypeCheckbox(device, button);
-        else if (icon != null && text == null)
-            writeIcon(device, icon);
+        if (showAsFormComponent && !useIconsInForms && text == null){
+        	if(button.getRolloverIcon() != null){
+            	inputRollOverCheckbox(device, icon, button, button.getEncodedLowLevelEventId(), true);
+        	}
+        	else{
+        		inputTypeCheckbox(device, button);
+        	}
+        }
+        else if (icon != null && text == null){
+        	if(button.getRolloverIcon() != null){
+        		writeRollOverIcon(device, icon, button, "Icon_"+button.getName(), true);
+        	}
+        	else{
+        		writeIcon(device, icon);
+        	}
+        }
         else if (text != null && icon == null)
             writeText(device, text);
         else if (text != null) {
@@ -132,10 +144,22 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
                 }
 
                 protected void icon(Device device) throws IOException {
-                    if (showAsFormComponent && !useIconsInForms)
-                        inputTypeCheckbox(device, button);
-                    else
-                        writeIcon(device, icon);
+                    if (showAsFormComponent && !useIconsInForms){
+                    	if(button.getRolloverIcon() != null){
+                    		inputRollOverCheckbox(device, icon, button, button.getEncodedLowLevelEventId(), true);
+                    	}
+                    	else{
+                    		inputTypeCheckbox(device, button);
+                    	}
+                    }
+                    else{
+                    	if(button.getRolloverIcon() != null){
+                    		writeRollOverIcon(device, icon, button, "Icon_"+button.getName(), true);
+                    	}
+                    	else{
+                    		writeIcon(device, icon);
+                    	}
+                    }
                 }
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }

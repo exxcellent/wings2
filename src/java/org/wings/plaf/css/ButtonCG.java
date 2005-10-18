@@ -44,6 +44,7 @@ public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
             // render rollover
             SIcon rolloverIcon = abstractButton.getRolloverIcon();
             SIcon pressedIcon = abstractButton.getPressedIcon();
+            SIcon rolloverSelectedIcon = abstractButton.getRolloverSelectedIcon();
 
             if (rolloverIcon != null || pressedIcon != null) {
                 if (renderNameAttribute) {
@@ -57,10 +58,13 @@ public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
 
                 if (rolloverIcon != null) {
 
-                    device.print(" onMouseover=\"if(document.images){this.src='");
-                    Utils.write(device, rolloverIcon.getURL());
+                    device.print(" onMouseOver=\"if(document.images){this.src='");
+                    if(abstractButton.isSelected())
+                    	Utils.write(device, rolloverSelectedIcon.getURL());
+                    else
+                    	Utils.write(device, rolloverIcon.getURL());
 
-                    device.print("';}\" onmouseout=\"if(document.images){this.src='");
+                    device.print("';}\" onMouseOut=\"if(document.images){this.src='");
                     Utils.write(device, origIcon.getURL());
 
                     device.print("';}\"");
@@ -68,11 +72,8 @@ public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
 
                 if (pressedIcon != null) {
 
-                    device.print(" onMousedown=\"if(document.images){this.src='");
+                    device.print(" onMouseDown=\"if(document.images){this.src='");
                     Utils.write(device, pressedIcon.getURL());
-
-                    device.print("';}\" onmouseup=\"if(document.images){this.src='");
-                    Utils.write(device, rolloverIcon != null ? rolloverIcon.getURL() : origIcon.getURL());
 
                     device.print("';}\"");
                 }
@@ -81,10 +82,42 @@ public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
 
     }
 
+    public void writeRollOverIcon(Device device, SIcon icon, SAbstractButton button, String str, boolean renderNameAttribute) throws IOException {
+        device.print("<img");
+        Utils.optAttribute(device, "src", icon.getURL());
+        Utils.optAttribute(device, "width", icon.getIconWidth());
+        Utils.optAttribute(device, "height", icon.getIconHeight());
+        Utils.optAttribute(device, "alt", icon.getIconTitle());
+
+        writeDynamicIcons(device, button, icon, str, renderNameAttribute);
+        
+        device.print("/>");
+    }
+    
+    public void inputRollOverCheckbox(Device device, SIcon icon, SAbstractButton button, String str, boolean renderNameAttribute) throws IOException {
+        device.print("<input type=\"image\"");
+        Utils.optAttribute(device, "src", icon.getURL());
+        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
+        Utils.optAttribute(device, "width", icon.getIconWidth());
+        Utils.optAttribute(device, "height", icon.getIconHeight());
+        Utils.optAttribute(device, "id", button.getName());
+        Utils.optAttribute(device, "alt", icon.getIconTitle());
+        
+        writeDynamicIcons(device, button, icon, str, renderNameAttribute);
+        
+        if (!button.isEnabled())
+            device.print(" disabled=\"true\"");
+        if (button.isSelected())
+            device.print(" checked=\"true\"");
+
+        Utils.writeEvents(device, button);
+        device.print("/>");
+    }
+    
     public void writeContent(final Device device, final SComponent component)
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
-
+        
         if (button.getShowAsFormComponent()) {
             writeButtonStart(device, button);
             device.print(" type=\"submit\" name=\"");
