@@ -199,6 +199,7 @@ public class SDialog extends SForm {
         }
         owner = (SRootContainer) frame;
         owner.pushDialog(this);
+        visible = true;
     }
 
     // LowLevelEventListener interface. Handle own events.
