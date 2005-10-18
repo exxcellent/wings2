@@ -78,6 +78,9 @@ final class SessionServlet
 
     private boolean firstRequest = true;
 
+    /** Refer to comment in {@link #doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)} */
+    private String exitSessionWorkaround;
+
     /**
      * Default constructor.
      */
@@ -288,6 +291,18 @@ final class SessionServlet
      */
     public final synchronized void doGet(HttpServletRequest req,
                                          HttpServletResponse response) {
+        // Special case: You double clicked i.e. a "logout button"
+        // First request arrives, second is on hold. First invalidates session and sends redirect as response,
+        // but browser ignores and expects response in second request. But second request has longer a valid session.
+        if (session == null) {
+            try {
+                response.sendRedirect(exitSessionWorkaround != null ? exitSessionWorkaround : "");
+                return;
+            } catch (IOException e) {
+                log.info("Session exit workaround failed to to IOException (triple click?)");
+            }
+        }
+
         SessionManager.setSession(session);
         session.setServletRequest(req);
         session.setServletResponse(response);
@@ -409,7 +424,7 @@ final class SessionServlet
                     }
                     req.getSession().invalidate(); // calls destroy implicitly
                     response.sendRedirect(redirectAddress);
-
+                    exitSessionWorkaround = redirectAddress;
                     return;
                 } catch (ExitVetoException ex) {
                     session.exit(null);
