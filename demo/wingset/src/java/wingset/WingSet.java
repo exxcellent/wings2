@@ -14,113 +14,64 @@
 package wingset;
 
 
-import org.wings.*;
+import org.wings.SConstants;
+import org.wings.SFrame;
+import org.wings.SIcon;
+import org.wings.SResourceIcon;
+import org.wings.SRootLayout;
+import org.wings.STabbedPane;
+import org.wings.SURLIcon;
 import org.wings.style.CSSProperty;
-import org.wings.header.Link;
-import org.wings.resource.DefaultURLResource;
-import org.wings.session.WingsStatistics;
-import org.wings.session.Browser;
-import org.wings.session.BrowserType;
-import org.wings.util.TimeMeasure;
-
-import java.io.FileWriter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import java.io.Serializable;
-import java.io.File;
 import java.net.URL;
-import java.text.MessageFormat;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
+ * The root of the WingSet demo application.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
+ * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
  * @version $Revision$
  */
 public class WingSet implements Serializable {
+    /**
+     * Jakarta commons logger.
+     */
+    private final static Log log = LogFactory.getLog(WingSet.class);
+
+    // Some different icons used inside the demo applciation
     private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
     private final static SURLIcon STANDARD_TAB_BACKGROUND = new SURLIcon("../icons/ButtonsBackground.gif");
     private final static SURLIcon SELECTED_TAB_BACKGROUND = new SURLIcon("../icons/ButtonsBackgroundHighlighted.gif");
 
-    static final boolean SHOW_STATISTICS = true;
-    static final long birthday = System.currentTimeMillis();
-    static FileWriter infoWriter;
-    static final Timer timer = new Timer();
-    static long oldRequestCount = 0;
-    static long oldSessionCount = 0;
-
-    private SFrame frame;
-    // time measurement (a little hacky)
-    private SLabel timeMeasure;
-    private final TimeMeasure stopWatch;
-
-    static final TimerTask infoTask = new TimerTask() {
-        public void run() {
-            StringBuffer result = new StringBuffer();
-            long totalmem = Runtime.getRuntime().totalMemory();
-            long freemem = Runtime.getRuntime().freeMemory();
-
-            WingsStatistics stats = WingsStatistics.getStatistics();
-
-            result.append(System.currentTimeMillis()).append(' ')
-                    .append(stats.getUptime()).append(' ')
-                    .append(stats.getOverallSessionCount()).append(' ')
-                    .append(stats.getOverallSessionCount() - oldSessionCount).append(' ')
-                    .append(stats.getActiveSessionCount()).append(' ')
-                    .append(stats.getAllocatedSessionCount()).append(' ')
-                    .append(stats.getRequestCount()).append(' ')
-                    .append(stats.getRequestCount() - oldRequestCount).append(' ')
-                    .append(totalmem).append(' ')
-                    .append(freemem).append(' ')
-                    .append(totalmem - freemem).append('\n');
-
-            oldRequestCount = stats.getRequestCount();
-            oldSessionCount = stats.getOverallSessionCount();
-
-            try {
-                infoWriter.write(result.toString());
-                infoWriter.flush();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    };
-
+    /**
+     * If true then use {@link StatisticsTimerTask} to log statistics on a regular basis to a logging file.
+     * (Typically a file named wings-statisticsxxxlog placed in jakarta-tomcat/temp directory)
+     */
+    private static final boolean LOG_STATISTICS_TO_FILE = true;
     static {
-        if (SHOW_STATISTICS) {
-            try {
-                infoWriter = new FileWriter(File.createTempFile("wingsmemory","log"), false);
-
-                StringBuffer result = new StringBuffer();
-                result.append("timestamp").append(' ')
-                        .append("uptime").append(' ')
-                        .append("overall_sessions").append(' ')
-                        .append("new_sessions").append(' ')
-                        .append("active_sessions").append(' ')
-                        .append("allocated_sessions").append(' ')
-                        .append("overall_processed requests").append(' ')
-                        .append("processed_requests").append(' ')
-                        .append("total_memory").append(' ')
-                        .append("free_memory").append(' ')
-                        .append("used_memory").append('\n');
-                infoWriter.write(result.toString());
-                infoWriter.flush();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            timer.scheduleAtFixedRate(infoTask,0,10 * 1000);
+        if (LOG_STATISTICS_TO_FILE) {
+            StatisticsTimerTask.startStatisticsLogging(60);
         }
     }
 
+    /**
+     * The root frame of the WingSet application.
+     */
+    private SFrame frame;
+
+    /**
+     * Constructor of the wingS application.
+     * This class is referenced in the <code>web.xml</code> as root entry point for the wingS application.
+     * For every new client an new session is created an instance of this class is constructed.
+     */
     public WingSet() {
-        frame = new SFrame("WingSet");
-        frame.setTitle("WingSet Demo");
-        frame.setAttribute(CSSProperty.MARGIN, "8px !important");
+        // Create root frame
+        frame = new SFrame("WingSet Demo");
 
-        stopWatch = new TimeMeasure(new MessageFormat("<html><b>{0}</b>: {1} (<i>x {2}</i>)<br/>"));
-        timeMeasure = new SLabel();
-
-        SContainer contentPane = frame.getContentPane();
+        // Apply custom layout template as template for the root frame
         try {
             URL templateURL = frame.getSession().getServletContext().getResource("/templates/ExampleFrame.thtml");
             if (templateURL != null) {
@@ -128,16 +79,25 @@ public class WingSet implements Serializable {
                 frame.setLayout(layout);
             }
         } catch (java.io.IOException except) {
-            except.printStackTrace();
+            log.warn("Exception",except);
         }
-        
-        final STabbedPane tab = new STabbedPane();
-        tab.setName("examples");
-        tab.setTabPlacement(SConstants.TOP);
 
+        // Set/Overwrite programatically a CSS style. But it's cleaner to define global styles in an external css file.
+        frame.setAttribute(CSSProperty.MARGIN, "8px !important");
+
+        // Create the tabbed pane containing all the wingset example tabs
+        final STabbedPane tab = new STabbedPane(SConstants.TOP);
+        tab.setName("examples");
+
+        // Here we demonstrate how you can style a component by setting CSS properties on the component.
+        // As we want to set styles on specific areas of the componentn and not the component itself, we use
+        // "CSS selectors" provided by the componentn to address these areas. They are dynamically resolved
+        // to the according CSS statements during the rednering process.
+        // Set a background image on selected and unselected tabs (gradient grey or orange)
         tab.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, STANDARD_TAB_BACKGROUND);
         tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, SELECTED_TAB_BACKGROUND);
 
+        // Assemble wingSet
         tab.add(new WingsImage(), "wingS!");
         tab.add(new LabelExample(), "Label");
         tab.add(new BorderExample(), "Border");
@@ -164,45 +124,18 @@ public class WingSet implements Serializable {
         tab.add(new PopupExample(), "Popup Menu");
         tab.add(new KeyboardBindingsExample(), "Keyboard Bindings");
         tab.add(new DynamicLayoutExample(), "Dynamic Layouts");
-        tab.add(new BackButtonExample(),"Browser Back");
-        tab.add(new DesktopPaneExample(),"DesktopPane");
-        tab.add(new DragAndDropExample(),"Drag and Drop");
-        tab.add(new RawTextComponentExample(),"Raw Text Component");
-        tab.add(new ErrorPageExample(),"Error Page");
+        tab.add(new BackButtonExample(), "Browser Back");
+        tab.add(new DesktopPaneExample(), "DesktopPane");
+        tab.add(new DragAndDropExample(), "Drag and Drop");
+        tab.add(new RawTextComponentExample(), "Raw Text Component");
+        tab.add(new ErrorPageExample(), "Error Page");
 
-        contentPane.add(tab, "WingSetApp");
-        contentPane.add(timeMeasure, "TimeLabel");
-
+        // Add component to content pane using a layout constraint (
+        frame.getContentPane().add(tab);
         frame.show();
-
-        /*  for testing purpose, to get information what events are requested
-
-        final SLabel paramLabel = new SLabel();
-        contentPane.add(paramLabel, "ParamLabel");
-
-        SessionManager.getSession().addRequestListener(new SRequestListener() {
-                public void processRequest(SRequestEvent e) {
-                    if ( e.getType()==SRequestEvent.DISPATCH_START ) {
-                        StringBuffer label = new StringBuffer();
-
-                        HttpServletRequest req = 
-                            SessionManager.getSession().getServletRequest();
-                        
-                        for (Enumeration en = req.getParameterNames(); en.hasMoreElements();) {
-                            String paramName = (String)en.nextElement();
-                            String[] value = req.getParameterValues(paramName);
-
-                            label.append(paramName).append(": ").
-                                append(value[0]).append("<br>");
-                        }
-
-                        paramLabel.setText(label.toString());
-                    }
-                }
-            });
-        */
-
     }
+
+
 }
 
 
