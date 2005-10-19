@@ -859,6 +859,11 @@ button.setName("UniqueName1");</programlisting></para>
 
     <sect1>
       <title>Best Practices</title>
+        <para>Focus Management</para>
+    </sect1>
+
+    <sect1>
+      <title>Best Practices</title>
 
       <para>Cherish the following principles and wingS projects will be a
       smooth and enjoyable ride.</para>
