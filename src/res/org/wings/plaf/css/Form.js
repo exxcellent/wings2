@@ -70,21 +70,21 @@ function requestFocus(id) {
 	            return;
 	        }
 	    }
-	    var elements = div.getElementsByTagName("SELECT");
+	    elements = div.getElementsByTagName("SELECT");
 	    for (var i = 0; i < elements.length; i++) {
 	        if (elements[i].getAttribute("focus") == id) {
 	            elements[i].focus();
 	            return;
 	        }
 	    }
-	    var elements = div.getElementsByTagName("TEXTAREA");
+	    elements = div.getElementsByTagName("TEXTAREA");
 	    for (var i = 0; i < elements.length; i++) {
 	        if (elements[i].getAttribute("focus") == id) {
 	            elements[i].focus();
 	            return;
 	        }
 	    }
-	    var elements = div.getElementsByTagName("A");
+	    elements = div.getElementsByTagName("A");
 	    for (var i = 0; i < elements.length; i++) {
 	        if (elements[i].getAttribute("focus") == id) {
 	            elements[i].focus();
@@ -93,7 +93,7 @@ function requestFocus(id) {
 	    }
 	    /* this produces javascript errors on konqueror, so hide (2005-03-11) */
 	    if (!(wu_konqueror)) {
-		    var elements = div.getElementsByTagName("BUTTON");
+		    elements = div.getElementsByTagName("BUTTON");
 		    for (var i = 0; i < elements.length; i++) {
 		        if (elements[i].getAttribute("focus") == id) {
 		            elements[i].focus();
