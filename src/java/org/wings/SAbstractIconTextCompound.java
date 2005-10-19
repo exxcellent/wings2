@@ -107,7 +107,7 @@ public abstract class SAbstractIconTextCompound
     public SButtonModel getModel() {
         return model;
     }
-
+    
     public void setModel(SButtonModel model) {
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
@@ -209,73 +209,147 @@ public abstract class SAbstractIconTextCompound
     public int getIconTextGap() {
         return iconTextGap;
     }
-
+    
+    /**
+     * Sets the icon for the compound.
+     *
+     * @param i the icon.
+     */
     public void setIcon(SIcon i) {
         reloadIfChange(icon, i);
         icon = i;
     }
-
+    
+    /**
+     * Returns the icon of the Compound.
+     *
+     * @see #setIcon(SIcon)
+     */
     public SIcon getIcon() {
         return icon;
     }
 
-    public void setPressedIcon(SIcon i) {
-        reloadIfChange(pressedIcon, i);
-        pressedIcon = i;
+    /**
+     * Sets the icon that is displayed when the compound is pressed with the mouse.
+     *
+     * @param icon to be shown when mouse button is pressed.
+     */
+    public void setPressedIcon(SIcon icon) {
+        reloadIfChange(pressedIcon, icon);
+        pressedIcon = icon;
     }
 
+    /**
+     * Returns the icon that is displayed when a compound is pressed with the mouse.
+     *
+     * @see #setPressedIcon(SIcon)
+     */
     public SIcon getPressedIcon() {
         return pressedIcon;
     }
 
-    public void setRolloverIcon(SIcon i) {
-        reloadIfChange(rolloverIcon, i);
-        rolloverIcon = i;
+    /**
+     * Sets the icon that is displayed as rollOver effect (meaning the icon
+     * shown when the mouse is just positioned over the compound).
+     *
+     * @param icon rollOver icon for unselected compound.
+     */
+    public void setRolloverIcon(SIcon icon) {
+        reloadIfChange(rolloverIcon, icon);
+        rolloverIcon = icon;
     }
 
+    /**
+     * Returns the icon that is displayed as rollOver effect (meaning the icon
+     * shown when the mouse is just positioned over the compound).
+     * 
+     * @see #setRolloverIcon(SIcon)
+     */
     public SIcon getRolloverIcon() {
         return rolloverIcon;
     }
 
-    public void setRolloverSelectedIcon(SIcon i) {
-        reloadIfChange(rolloverSelectedIcon, i);
-        rolloverSelectedIcon = i;
+    /**
+     * Sets the icon that is displayed as rollover effect of a selected compound 
+     * (meaning the icon shown when the mouse is just positioned over the selected compound).
+     *
+     * @param icon rollOver icon for selected compound.
+     */
+    public void setRolloverSelectedIcon(SIcon icon) {
+        reloadIfChange(rolloverSelectedIcon, icon);
+        rolloverSelectedIcon = icon;
     }
 
+    /**
+     * Returns the the rollOver icon of a selected compound.
+     *
+     * @see #setRolloverSelectedIcon(SIcon)
+     */
     public SIcon getRolloverSelectedIcon() {
         return rolloverSelectedIcon;
     }
 
-    public void setSelectedIcon(SIcon i) {
-        reloadIfChange(selectedIcon, i);
-        selectedIcon = i;
+    /**
+     * Sets the icon that is displayed when a compound is selected. 
+     *
+     * @param icon to be shown for a selected compound.
+     */
+    public void setSelectedIcon(SIcon icon) {
+        reloadIfChange(selectedIcon, icon);
+        selectedIcon = icon;
     }
 
+    /**
+     * Returns the icon of a selected compound.
+     *
+     * @see #setSelectedIcon(SIcon)
+     */
     public SIcon getSelectedIcon() {
         return selectedIcon;
     }
 
-    public void setDisabledSelectedIcon(SIcon i) {
-        reloadIfChange(disabledSelectedIcon, i);
-        disabledSelectedIcon = i;
+    /**
+     * Sets the Icon that is displayed when a selected compound is disabled .
+     *
+     * @param icon to be shown for a selected compound that is disabled.
+     */
+    public void setDisabledSelectedIcon(SIcon icon) {
+        reloadIfChange(disabledSelectedIcon, icon);
+        disabledSelectedIcon = icon;
     }
 
+    /**
+     * Returns the icon of a selected compound that is disabled.
+     *
+     * @see #setDisabledSelectedIcon(SIcon)
+     */
     public SIcon getDisabledSelectedIcon() {
         return disabledSelectedIcon;
     }
 
-    public void setDisabledIcon(SIcon i) {
-        reloadIfChange(disabledIcon, i);
-        disabledIcon = i;
+    /**
+     * Sets the icon that is displayed when a compound is disabled. 
+     *
+     * @param icon to be shown for a disabled compound.
+     */
+    public void setDisabledIcon(SIcon icon) {
+        reloadIfChange(disabledIcon, icon);
+        disabledIcon = icon;
     }
 
+    /**
+     * Returns the the icon of a compound that is disabled.
+     *
+     * @see #setDisabledIcon(SIcon)
+     */
     public SIcon getDisabledIcon() {
-        /**** TODO
+       // Creates disabled icon only for SImageIcons not for SURLIcons
+    	/*
          if(disabledIcon == null) {
-         if(icon != null && icon instanceof ImageIcon)
-         disabledIcon = new ImageIcon(GrayFilter.createDisabledImage(((ImageIcon)icon).getImage()));
+           if(icon != null && icon instanceof SImageIcon)
+             disabledIcon = new SImageIcon(GrayFilter.createDisabledImage(((SImageIcon)icon).getImage()));
          }
-         ***/
+        */
         return disabledIcon;
     }
 
@@ -341,6 +415,11 @@ public abstract class SAbstractIconTextCompound
         text = t;
     }
 
+    /**
+     * Return the text of the button.
+     *
+     * @return the text
+     */
     public String getText() {
         return text;
     }
