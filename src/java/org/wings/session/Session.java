@@ -186,6 +186,7 @@ public class Session
 
 
     public Session() {
+        log.debug("new session()");
         if (collectStatistics) {
             WingsStatistics.getStatistics().incrementSessionCount();
             WingsStatistics.getStatistics().incrementActiveSessionCount();
@@ -810,7 +811,7 @@ public class Session
     }
 
     protected void finalize() {
-        log.info("gc session");
+        log.debug("gc session");
         if (collectStatistics) {
             WingsStatistics.getStatistics().decrementAllocatedSessionCount();
         } // end of if ()

@@ -129,8 +129,8 @@ public abstract class AbstractExternalizeManager {
 
 
     public AbstractExternalizeManager() {
-        log.info("final scope expires in " + FINAL_EXPIRES + " seconds");
-        log.info("use prefix " + PREFIX_TIMESLICE_STRING);
+        log.info("Externalizer: Final scope expires in " + FINAL_EXPIRES + " seconds."+
+                "Using prefix: " + PREFIX_TIMESLICE_STRING);
 
         reverseExternalized = Collections.synchronizedMap(new HashMap());
     }
