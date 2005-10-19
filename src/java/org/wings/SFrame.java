@@ -25,15 +25,13 @@ import org.wings.resource.DynamicResource;
 import org.wings.session.SessionManager;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
-
+import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.swing.InputMap;
 
 /**
  * The frame is the root component in every component hierarchie.
@@ -381,14 +379,19 @@ public class SFrame
         visitor.visit(this);
     }
 
-    /*
-     * This function is called by SComponent.requestFocus().
-     * @param c the component which requests the focus.
+    /**
+     * Choose which component rendered inside this frame should gain the edit focus on next rendering
+     * This function is called by {@link SComponent#requestFocus()}
+     *
+     * @param focusOnComponent the component which requests the focus.
      */
-    public void setFocus(SComponent c) {
-        focusComponent = c;
+    public void setFocus(SComponent focusOnComponent) {
+        focusComponent = focusOnComponent;
     }
 
+    /**
+     * @see #setFocus(SComponent) 
+     */
     public SComponent getFocus() {
         return focusComponent;
     }

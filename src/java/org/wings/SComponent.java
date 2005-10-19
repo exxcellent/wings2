@@ -1452,7 +1452,8 @@ public abstract class SComponent
     }
 
     /**
-     * requests the focus for this component
+     * Requests the edit focus for this component for the following renderings
+     * by calling {@link SFrame#setFocus(SComponent)}.
      */
     public void requestFocus() {
         if (getParentFrame() != null) {
@@ -1460,6 +1461,12 @@ public abstract class SComponent
         }
     }
 
+    /**
+     * Returns <code>true</code> if this <code>SComponent</code> is owning the edit focus.
+     *
+     * @return <code>true</code> if this <code>SComponent</code> is owning the edit focus otherwise <code>false</code>
+     * @see #requestFocus() 
+     */
     public boolean isFocusOwner() {
         if (getParentFrame() != null)
             return this == getParentFrame().getFocus();
