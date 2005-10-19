@@ -40,6 +40,10 @@ import org.wings.style.DynamicStyleSheetResource;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * PLAF renderer for SFrames.
+ * Does quite many abritriray things i.e. registering diverse service scripts, etc.
+ */
 public class FrameCG implements org.wings.plaf.FrameCG {
     private final transient static Log log = LogFactory.getLog(FrameCG.class);
 
@@ -75,7 +79,12 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     
     private String documentType = STRICT_DOCTYPE;
 
+    /**
+     * Should the returned HTML page start with the &lt;?xml version="1.0" encoding="..."&gt;.
+     * This has effects which rendering mode the browsers will choose (quirks/strict)
+     */
     private Boolean renderXmlDeclaration = Boolean.FALSE;
+
     /**
      * Initialize properties from config
      */
@@ -91,6 +100,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             setRenderXmlDeclaration(userRenderXmlDecl);
     }
 
+    /**
+     * Lookup for a property Stylesheet.BROWSERNAME to know fitting stylesheets
+     */
     private static final String PROPERTY_STYLESHEET = "Stylesheet.";
     private static final String BROWSER_DEFAULT = "default";
     
@@ -99,54 +111,6 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         javascriptResourceKeys = new HashSet();
         javascriptResourceKeys.add("JScripts.domlib");
         javascriptResourceKeys.add("JScripts.domtt");
-    }
-    
-    
-    /** 
-     * Externalizes the style sheet(s) for this session.
-     * Look up according style sheet file name in org.wings.plaf.css.properties file under Stylesheet.BROWSERNAME.
-     * The style sheet is loaded from the class path.
-     * @return the URLs under which the css file(s) was externalized
-     */
-    private List externalizeBrowserStylesheets() {
-        final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
-        final CGManager manager = SessionManager.getSession().getCGManager();
-        final String browserName = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
-        final String cssResource = PROPERTY_STYLESHEET + browserName;
-        String cssClassPaths = (String)manager.getObject(cssResource, String.class);
-        // catch missing browser entry in properties file
-        if (cssClassPaths == null) {
-            cssClassPaths = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(cssClassPaths,",");
-        ArrayList cssUrls = new ArrayList();
-        while (tokenizer.hasMoreTokens()) {
-            String cssClassPath = tokenizer.nextToken();
-            ClassPathStylesheetResource res = new ClassPathStylesheetResource(cssClassPath, "text/css");
-            String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
-            if (cssUrl != null)
-                cssUrls.add(cssUrl);
-        }
-
-        return cssUrls;
-    }
-
-
-    /**
-     * @param jsResKey
-     * @return
-     */
-    private String externalizeJavaScript(String jsResKey) {
-        final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
-        final CGManager manager = SessionManager.getSession().getCGManager();
-        String jsClassPath = (String)manager.getObject(jsResKey, String.class);
-        // catch missing script entry in properties file
-        if (jsClassPath != null) {
-            ClasspathResource res = new ClasspathResource(jsClassPath, "text/javascript");
-            return extManager.externalize(res, ExternalizeManager.GLOBAL);
-        }
-        return null;
     }
 
     public static final String UTILS_SCRIPT = (String) SessionManager
@@ -164,6 +128,55 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             new JavaScriptListener("onscroll", "storeScrollPosition(event)");
 
 
+    /**
+     * Externalizes the style sheet(s) for this session.
+     * Look up according style sheet file name in org.wings.plaf.css.properties file under Stylesheet.BROWSERNAME.
+     * The style sheet is loaded from the class path.
+     * @return the URLs under which the css file(s) was externalized
+     */
+    private List externalizeBrowserStylesheets(SFrame forFrame) {
+        final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
+        final CGManager manager = SessionManager.getSession().getCGManager();
+        final String browserName = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
+        final String cssResource = PROPERTY_STYLESHEET + browserName;
+        String cssClassPaths = (String)manager.getObject(cssResource, String.class);
+        // catch missing browser entry in properties file
+        if (cssClassPaths == null) {
+            cssClassPaths = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
+        }
+
+        StringTokenizer tokenizer = new StringTokenizer(cssClassPaths,",");
+        ArrayList cssUrls = new ArrayList();
+        while (tokenizer.hasMoreTokens()) {
+            String cssClassPath = tokenizer.nextToken();
+            ClassPathStylesheetResource res = new ClassPathStylesheetResource(cssClassPath, "text/css");
+            String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
+            if (cssUrl != null) {
+                log.info("Attaching CSS Stylesheet "+cssClassPath+" found for browser "+browserName+" to frame. " +
+                        "(See Stylesheet.xxx entries in default.properties)");
+                cssUrls.add(cssUrl);
+            } else {
+                log.warn("Did not CSS Stylesheet "+cssClassPath+" for browser "+browserName+" to frame. " +
+                        "(See Stylesheet.xxx entries in default.properties)");
+            }
+        }
+
+        return cssUrls;
+    }
+
+
+    private String externalizeJavaScript(String jsResKey) {
+        final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
+        final CGManager manager = SessionManager.getSession().getCGManager();
+        String jsClassPath = (String)manager.getObject(jsResKey, String.class);
+        // catch missing script entry in properties file
+        if (jsClassPath != null) {
+            ClasspathResource res = new ClasspathResource(jsClassPath, "text/javascript");
+            return extManager.externalize(res, ExternalizeManager.GLOBAL);
+        }
+        return null;
+    }
+
     public void installCG(final SComponent comp) {
         final SFrame component = (SFrame) comp;
 
@@ -173,20 +186,23 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         Link stylesheetLink;
 
         // dynamic code resource.
+        // This Resource externalized the HTML page
         dynamicCodeRessource = new DynamicCodeResource(component);
         component.addDynamicResource(dynamicCodeRessource);
 
         // dynamic stylesheet resource.
+        // This resource externalise the dynamically generated CSS styles
         styleSheetResource = new DynamicStyleSheetResource(component);
         stylesheetLink = new Link("stylesheet", null, "text/css", null, styleSheetResource);
         component.addDynamicResource(styleSheetResource);
         component.addHeader(stylesheetLink);
 
         // dynamic java script resource.
+        // This resource externalizes dynamically attached jabascript listeners.
         scriptResource = new DynamicScriptResource(component);
         component.addDynamicResource(scriptResource);
         component.addHeader(new Script("text/javascript", scriptResource));
-
+        // By default: Register DWR scripts (see SFormattetTextField in wingSet)
         component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
 
         Iterator iter = javascriptResourceKeys.iterator();
@@ -198,7 +214,8 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
 
-        final List externalizedBrowserCssUrls = externalizeBrowserStylesheets();
+        // Retrieve list of static CSS files to be attached to this frame for this browser.
+        final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component);
         for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
             component.headers().add(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));;
         }
@@ -222,6 +239,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
     }
 
+    /**
+     * Uninstall renderer (i.e. other to apply other renderer).
+     */
     public void uninstallCG(final SComponent comp) {
         final SFrame component = (SFrame) comp;
 
@@ -234,18 +254,19 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     public void componentChanged(SComponent c) {
     }
 
-    public void write(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent pComp)
             throws IOException {
-        if (!_c.isVisible()) return;
-        _c.fireRenderEvent(SComponent.START_RENDERING);
-        final SFrame component = (SFrame) _c;
+        final SFrame frame = (SFrame) pComp;
+        if (!frame.isVisible())
+            return;
+        else
+            frame.fireRenderEvent(SComponent.START_RENDERING);
 
-        Browser browser = SessionManager.getSession().getUserAgent();
-        SFrame frame = (SFrame) component;
-        String language = SessionManager.getSession().getLocale().getLanguage();
-        String title = frame.getTitle();
-        List headers = frame.headers();
-        String encoding = SessionManager.getSession().getCharacterEncoding();
+        final Browser browser = SessionManager.getSession().getUserAgent();
+        final String language = SessionManager.getSession().getLocale().getLanguage();
+        final String title = frame.getTitle();
+        final List headers = frame.headers();
+        final String encoding = SessionManager.getSession().getCharacterEncoding();
 
         /**
          *  We need to put IE6 into quirks mode
@@ -259,14 +280,18 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
 
+        // <?xml version="1.0" encoding="...">
         if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
             device.print("<?xml version=\"1.0\" encoding=\"");
             Utils.write(device, encoding);
             device.print("\"?>\n");
         }
 
+        // <!DOCTYPE HTML PUBLIC ... >
         Utils.writeRaw(device, documentType);
         device.print("\n");
+
+        // <html> tag
         device.print("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"");
         Utils.write(device, language);
         device.print("\" lang=\"");
@@ -290,10 +315,13 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             device.print("</title>\n");
         }
 
+        // Character set encoding. default typically utf-8
         device.print("<meta http-equiv=\"Content-type\" content=\"text/html; charset=");
         Utils.write(device, encoding);
         device.print("\"/>\n");
 
+
+        // Register and render DWR callables
         Collection callableNames = CallableManager.getInstance().callableNames();
 
         Collection allHeaders = new ArrayList(headers.size() + callableNames.size());
@@ -314,19 +342,22 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             device.print("\n");
         }
 
-        SComponent focus = frame.getFocus();
-        Object lastFocus = frame.getClientProperty("focus");
+        // Focus management. Put focus in selected object.
+        final SComponent focus = frame.getFocus();
+        final Object lastFocus = frame.getClientProperty("focus");
         if (focus != lastFocus) {
             if (lastFocus != null) {
+                // Drop old focus gain script
                 ScriptListener[] scriptListeners = frame.getScriptListeners();
 
                 for (int i = 0; i < scriptListeners.length; i++) {
                     ScriptListener scriptListener = scriptListeners[i];
                     if (scriptListener instanceof FocusScriptListener)
-                        component.removeScriptListener(scriptListener);
+                        frame.removeScriptListener(scriptListener);
                 }
             }
             if (focus != null) {
+                // add new focus gain script
                 FocusScriptListener listener = new FocusScriptListener("onload", "requestFocus('" + focus.getName() + "')");
                 frame.addScriptListener(listener);
             }
@@ -334,7 +365,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // TODO: move this to a dynamic script resource
-        SToolTipManager toolTipManager = component.getSession().getToolTipManager();
+        SToolTipManager toolTipManager = frame.getSession().getToolTipManager();
         device
                 .print("<script type=\"text/javascript\">\n")
                 .print("domTT_addPredefined('default', 'caption', false");
@@ -427,7 +458,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
         device.print("\n</body></html>\n");
-        _c.fireRenderEvent(SComponent.DONE_RENDERING);
+        pComp.fireRenderEvent(SComponent.DONE_RENDERING);
     }
 
     public String getDocumentType() {
