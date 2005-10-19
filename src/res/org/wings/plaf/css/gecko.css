@@ -29,14 +29,15 @@ td.SLayout {
 table tr {
     text-align:inherit;
     vertical-align:inherit;
-/*    these already work without specifying them
+/*  these already work without specifying them
     background-color:inherit;
     font-family:inherit;
     font-size:inherit;
     font-style:inherit;
     font-weight:inherit;
-    color:inherit;*/
+    color:inherit;                              */
 }
+
 
 /* this stays in here! 
    it switches the gecko-compatible browsers into border-box mode */
@@ -45,10 +46,20 @@ div {
     -moz-box-sizing: border-box;
 }
 
-/* links and buttons as tables? */
- A, BUTTON {
-    display: table;
+/* This is necessary for konqueror. Otherwise component alignment does not work. */
+div {
+    text-align:inherit;
 }
+
+/* By Ole:
+     Simplified we use this declaration to make a's and buttons block elements
+   BUT
+     I can't really think of any at the moment, since we have the div's around
+     every element. maybe an element which has a link or button as a part...
+   So: Commented out to avoid negative effect on konqueror (alignment of logo failed)               */
+/*A, BUTTON {
+    display: table;
+}*/
 
 /* SFlowLayout can't flow if the immediate inner children has defined 100% width.
    Some wingS component inheritly define 100% width i.e. like SForm.
