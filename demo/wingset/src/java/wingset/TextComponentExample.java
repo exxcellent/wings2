@@ -33,6 +33,7 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.session.SessionManager;
 import org.wings.text.SAbstractFormatter;
+import org.wings.SPasswordField;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,13 +70,19 @@ public class TextComponentExample extends WingSetPane {
         numberTextField.setName("numberfield");
         numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
         p.add(numberTextField);
-
+        
         p.add(new SLabel("SFormattedTextField (DateFormat): "));
         SFormattedTextField dateTextField = new SFormattedTextField(new DateFormatter());
         dateTextField.setName("datefield");
         dateTextField.addDocumentListener(new MyDocumentListener(dateTextField));
         p.add(dateTextField);
 
+        p.add(new SLabel("SPasswordField: "));
+        SPasswordField passwordField = new SPasswordField();
+        passwordField.setName("passwordfield");
+        passwordField.addDocumentListener(new MyDocumentListener(passwordField));
+        p.add(passwordField);
+        
         p.add(new SLabel("STextArea: "));
         STextArea textArea = new STextArea("");
         textArea.setName("textarea");
