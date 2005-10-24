@@ -86,10 +86,10 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("<tr><th placement=\"top\"");
             else if (placement == SConstants.LEFT)
                 device.print("<tr><th placement=\"left\"");
-            else if (placement == SConstants.RIGHT)
+            else if (placement == SConstants.RIGHT || placement == SConstants.BOTTOM) {
                 device.print("<tr><td");
-            else if (placement == SConstants.BOTTOM)
-                device.print("<tr><td");
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent());
+            }
     
             if (childSelectorWorkaround) {
                 if (placement == SConstants.TOP)
@@ -106,11 +106,13 @@ public class TabbedPaneCG extends AbstractComponentCG {
             else
                 writeSelectedPaneContent(device, tabbedPane);
     
-            if (placement == SConstants.TOP)
+            if (placement == SConstants.TOP) {
                 device.print("</th></tr><tr><td");
-            else if (placement == SConstants.LEFT)
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent());
+            } else if (placement == SConstants.LEFT) {
                 device.print("</th><td");
-            else if (placement == SConstants.RIGHT)
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent());
+            } else if (placement == SConstants.RIGHT)
                 device.print("</td><th placement=\"right\"");
             else if (placement == SConstants.BOTTOM)
                 device.print("</td></tr><tr><th placement=\"bottom\"");
@@ -125,8 +127,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
             }
             device.print(">");
     
-            if (placement == SConstants.TOP
-                    || placement == SConstants.LEFT) {
+            if (placement == SConstants.TOP || placement == SConstants.LEFT) {
                 writeSelectedPaneContent(device, tabbedPane);
                 device.print("</td></tr></table>");
             } else {

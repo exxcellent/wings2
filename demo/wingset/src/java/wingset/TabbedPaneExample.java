@@ -56,10 +56,11 @@ public class TabbedPaneExample extends WingSetPane {
         // Create tabbed pane and tabulators
         tabbedPane = new STabbedPane();
         for (int i = 0; i < INITIAL_TAB_COUNT; ++i) {
-            SPanel panel = new SPanel(new SFlowDownLayout());
+            SPanel panel = new SPanel(new SGridLayout(1));
             panel.add(new SLabel("Tab # " + i));
             panel.add(textArea);
             panel.setVerticalAlignment(SConstants.TOP);
+            panel.setHorizontalAlignment(SConstants.CENTER);
             tabbedPane.add("Tab " + i, panel);
         }
         tabbedPane.setShowAsFormComponent(false);
