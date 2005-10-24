@@ -19,23 +19,24 @@ body {
     font-size: 0.8em;
 }
 
-/* Links: No visited colour, no underline  */
-a:link, a:visited, a:active {
-    color: #000066;
-    text-decoration: none;
-}
-
-/* Input fields singe-dot lined, orange bg. */
-textarea, select {
+/* Input text fields, dropdown lists, buttons: Orange background, orange outline. */
+TEXTAREA, select, button {
     background-color: #f6decc;
     border: 1px solid #e66e32;
 }
 
 /* text input same as above */
 input {
-    background-color: expression(this.type=="text"?'#f6decc':'inherit');
-    border: expression(this.type=="text"?'1px solid #e66e32':'inherit');
+    background-color: expression((this.type=="text" || this.type=="password") ? '#f6decc' : 'inherit');
+    border: expression((this.type=="text" || this.type=="password") ? '1px solid #e66e32' : 'inherit');
 }
+
+/* Links: No visited colour, no underline  */
+A:link, A:visited, A:active {
+    color: #000066;
+    text-decoration: none;
+}
+
 
 /* STable even / odd coloring */
 

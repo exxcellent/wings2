@@ -18,8 +18,8 @@ BODY {
     font-size: 0.8em;
 }
 
-/* Input fields singe-dot lined, orange bg. */
-TEXTAREA, INPUT[type="text"], select {
+/* Input text fields, dropdown lists, buttons: Orange background, orange outline. */
+TEXTAREA, INPUT[type="text"], INPUT[type="password"], select, button {
     background-color: #f6decc;
     border: 1px solid #e66e32;
 }
