@@ -112,7 +112,7 @@ public class KeyboardBindingsExample extends WingSetPane {
         textField.setActionMap(actionMap);
         
         // onto whole frame
-        textField.setInputMap(pageInputMap, WHEN_IN_FOCUSED_FRAME);
+        textField.setInputMap(WHEN_IN_FOCUSED_FRAME, pageInputMap);
 
         form.setInputMap(formInputMap);
         // or:  form.setInputMap(formInputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
