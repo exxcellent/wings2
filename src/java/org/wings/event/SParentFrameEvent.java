@@ -4,7 +4,11 @@ import org.wings.SComponent;
 import org.wings.SFrame;
 
 /**
+ * This event is fired if the parent frame of a {@link SComponent} is modified.
+ * To receive these events register via {@link SComponent#addParentFrameListener(SParentFrameListener)}
+ *
  * @author ole
+ * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
  * @version $Revision$
  */
 public class SParentFrameEvent extends SComponentEvent {
@@ -36,10 +40,16 @@ public class SParentFrameEvent extends SComponentEvent {
     private SFrame parentFrame;
 
 
-    public SParentFrameEvent(SComponent aSource, int anId, SFrame parentFrame) {
-        super(aSource, anId);
+    /**
+     * Event fired if parent frame of a component changes.
+     *
+     * @param modifiedComponent The {@link SComponent} whoose parent frame changed.
+     * @param eventType The type of modifcation (i.e. {@link #PARENTFRAME_ADDED} or {@link #PARENTFRAME_REMOVED}
+     * @param parentFrame
+     */
+    public SParentFrameEvent(SComponent modifiedComponent, int eventType, SFrame parentFrame) {
+        super(modifiedComponent, eventType);
         this.parentFrame = parentFrame;
-        // TODO Auto-generated constructor stub
     }
     
     /**
