@@ -16,19 +16,29 @@ package org.wings.event;
 import java.util.EventListener;
 
 /**
- * SRenderListener.java
- * <p/>
- * <p/>
+ * Render listener are called during the rendering process of a component.
+ * The rendering process starts after completion of the event processing (parsing and
+ * delegating the events contained in the initial request).
+ *
  * Created: Wed Nov  6 10:17:41 2002
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
+ * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
  * @version $Revision$
  */
 public interface SRenderListener extends EventListener {
 
-    public void startRendering(SRenderEvent e);
+    /**
+     * The rendering of the listened component is abut to start.
+     * @param renderEvent The render event information.
+     */
+    public void startRendering(SRenderEvent renderEvent);
 
-    public void doneRendering(SRenderEvent e);
+    /**
+     * The rendering of the listened component finished.
+     * @param renderEvent The render event information.
+     */
+    public void doneRendering(SRenderEvent renderEvent);
 
 }
 
