@@ -36,7 +36,6 @@ import org.wings.style.CSSStyle;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
 import org.wings.util.ComponentVisitor;
-
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
@@ -48,7 +47,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -63,26 +61,12 @@ import java.util.Map;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public abstract class SComponent
-        implements Cloneable, Serializable, Renderable {
+public abstract class SComponent implements Cloneable, Serializable, Renderable {
+
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
     private static final Log log = LogFactory.getLog(SComponent.class);
 
-    /**
-     * Constants for conditions on which actions are triggered. Mainly two
-     * cases: the focus has either to be at the component (or at a child)
-     * or somewhere in the parent frame.
-     */
-    public static final int WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT = 0;
-
-    /**
-     * Constants for conditions on which actions are triggered. Mainly two
-     * cases: the focus has either to be at the component (or at a child)
-     * or somewhere in the parent frame.
-     */
-    public static final int WHEN_IN_FOCUSED_FRAME = 1;
-    
     private static final int ACTION_CONDITIONS_AMOUNT = 2;
 
     /* Components unique name. */
@@ -167,8 +151,19 @@ public abstract class SComponent
      */
     private boolean fireComponentChangeEvents = false;
 
+    /**
+     * Generate and fire {@link SParentFrameEvent}s. Performace optimitation
+     */
     private boolean fireParentFrameChangeEvents = false;
 
+    /**
+     * Flag indiccating if {@link SRenderEvent}s should be fired. Used for performace reasons
+     */
+    private boolean fireRenderEvents = false;
+
+    /**
+     * All event listeners of this component
+     */
     private EventListenerList listeners;
 
     private Boolean useNamedEvents;
@@ -186,7 +181,39 @@ public abstract class SComponent
     private final Map actionEvents = new HashMap();
 
     private final CSSSelector thisComponentCssSelector = new CSSSelector(this);
-    
+
+    private transient SRenderEvent renderEvent;
+
+    private SParentFrameListener globalInputMapListener;
+
+
+    /**
+     * Internal constants for {@link #fireRenderEvent(int)}
+     */
+    public static final int START_RENDERING = 1;
+
+    /**
+     * Internal constants for {@link #fireRenderEvent(int)}
+     */
+    public static final int DONE_RENDERING = 2;
+
+    /**
+     * Constants for conditions on which actions are triggered. Mainly two
+     * cases: the focus has either to be at the component (or at a child)
+     * or somewhere in the parent frame.
+     * @see #setInputMap(int, javax.swing.InputMap)
+     */
+    public static final int WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT = 0;
+
+    /**
+     * Constants for conditions on which actions are triggered. Mainly two
+     * cases: the focus has either to be at the component (or at a child)
+     * or somewhere in the parent frame.
+     * @see #setInputMap(int, javax.swing.InputMap)
+     */
+    public static final int WHEN_IN_FOCUSED_FRAME = 1;
+
+
     /**
      * Default constructor.cript
      * The method updateCG is called to get a cg delegate installed.
@@ -365,11 +392,11 @@ public abstract class SComponent
     }
 
     /**
-     * Adds the specified parent frame listener to receive events from
-     * this component.
+     * Registers a "parent frame listener" to receive events from
+     * this component when the parent frame chanegs i.e. via {@link #setParentFrame(SFrame)}.
      * If l is null, no exception is thrown and no action is performed.
      *
-     * @param l the parent frame listener.
+     * @param l the parent frame listener. May be <code>null</code>.
      * @see org.wings.event.SParentFrameEvent
      * @see org.wings.event.SParentFrameListener
      * @see org.wings.SComponent#removeParentFrameListener
@@ -614,17 +641,21 @@ public abstract class SComponent
     }
 
     /**
-     * Set the class of the laf-provided style.
+     * Set an CSS class name provided by the laf-provided Cascading Style Sheet (CSS), which should
+     * be applied to this component.
+     * <p>Typically the PLAFs render this as an <code>class="<i>cssClassName</i>"</code> attribite
+     * inside the generated HTML code of this component.
      *
-     * @param value the new value for style
+     * @param cssClassName The new CSS name value for this component
      */
-    public void setStyle(String value) {
-        reloadIfChange(style, value);
-        this.style = value;
+    public void setStyle(String cssClassName) {
+        reloadIfChange(style, cssClassName);
+        this.style = cssClassName;
     }
 
     /**
-     * @return the current style
+     * @return The current CSS style class name. Defaults to <code>null</code>
+     * @see #setStyle(String)
      */
     public String getStyle() {
         return style;
@@ -1067,6 +1098,11 @@ public abstract class SComponent
 
     /**
      * Return the parent frame.
+     * <p><b>NOTE:</b> You will receive <code>null</code> if you call this i.e. during
+     * component creation time, as the parent frame is set when you add it to a visible {@link SContainer}.
+     * Use {@link #addParentFrameListener(org.wings.event.SParentFrameListener)} in this case.
+     *
+     * @see #addParentFrameListener(org.wings.event.SParentFrameListener)
      *
      * @return the parent frame
      */
@@ -1331,6 +1367,11 @@ public abstract class SComponent
         return !oldObject.equals(newObject);
     }
 
+    /**
+     * Adds an event listener for the given event class
+     * @param type The class/type of events to listen to.
+     * @param listener The listener itself.
+     */
     protected final void addEventListener(Class type, EventListener listener) {
         if (listeners == null) {
             listeners = new EventListenerList();
@@ -1338,6 +1379,11 @@ public abstract class SComponent
         listeners.add(type, listener);
     }
 
+    /**
+     * Removed named event listener.
+     * @param type The class/type of events to listen to.
+     * @param listener The listener itself.
+     */
     protected final void removeEventListener(Class type, EventListener listener) {
         if (listeners != null) {
             listeners.remove(type, listener);
@@ -1391,26 +1437,35 @@ public abstract class SComponent
         }
     }
 
-
-    private transient SRenderEvent renderEvent;
-
     /**
-     * for performance reasons
+     * Adds a listenere to this component which wil get notified when the rendering of
+     * this components starts. (This happens after all events / request has been processed and wingS
+     * starts to build the response).
+     *
+     * @param renderListener
+     * @see SRenderListener
      */
-    private boolean fireRenderEvents = false;
-
-    public static final int START_RENDERING = 1;
-    public static final int DONE_RENDERING = 2;
-
-    public final void addRenderListener(SRenderListener l) {
-        addEventListener(SRenderListener.class, l);
+    public final void addRenderListener(SRenderListener renderListener) {
+        addEventListener(SRenderListener.class, renderListener);
         fireRenderEvents = true;
     }
 
-    public final void removeRenderListener(SRenderListener l) {
-        removeEventListener(SRenderListener.class, l);
+
+    /**
+     * Removes the named render listener.
+     *
+     * @param renderListener Render listener to remove
+     * @see #addRenderListener(org.wings.event.SRenderListener)
+     * @see SRenderListener
+     */
+    public final void removeRenderListener(SRenderListener renderListener) {
+        removeEventListener(SRenderListener.class, renderListener);
     }
 
+    /**
+     * Called by the CGs to indicate different states of the rendering process.
+     * @param type
+     */
     public final void fireRenderEvent(int type) {
         if (fireRenderEvents) {
             // maybe the better way to do this is to user the getListenerList
@@ -1501,21 +1556,49 @@ public abstract class SComponent
         return showAsFormComponent && getResidesInForm();
     }
 
+    /**
+     * Binds action names to {@link Action}s. Use for key binding feature.
+     *
+     * @param actionMap The new action map.
+     * @see #setInputMap(javax.swing.InputMap)
+     * @see ActionMap
+     * @see InputMap
+     */
     public void setActionMap(ActionMap actionMap) {
         this.actionMap = actionMap;
     }
 
+    /**
+     * Action map for key binding feature
+     * @return The current action map
+     * @see #setActionMap(javax.swing.ActionMap)
+     */
     public ActionMap getActionMap() {
         if (actionMap == null)
             actionMap = new ActionMap();
         return actionMap;
     }
 
+
+    /**
+     * Map for key binding feature. (?) Binds input keystrokes to action names (?).
+     * @param inputMap The current input map.
+     * @see InputMap
+     * @see ActionMap
+     * @see #setActionMap(javax.swing.ActionMap)
+     * @see JComponent#setInputMap(int, javax.swing.InputMap)
+     */
     public void setInputMap(InputMap inputMap) {
-        setInputMap(inputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
+        setInputMap(WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap);
     }
 
-    public void setInputMap(InputMap inputMap, int condition) {
+    /**
+     * Sets The current input map.
+     * @param inputMap The new input map
+     * @param condition Either {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT} or {@link #WHEN_IN_FOCUSED_FRAME}
+     * @see JComponent#setInputMap(int, javax.swing.InputMap)
+     */
+    public void setInputMap(int condition, InputMap inputMap) {
         initInputMaps();
         this.inputMaps[condition] = inputMap;
         if (condition == WHEN_IN_FOCUSED_FRAME && inputMap != null) {
@@ -1523,8 +1606,34 @@ public abstract class SComponent
         }
     }
 
-    private SParentFrameListener globalInputMapListener;
-    
+    /**
+     * @return The input map for the condition {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT}
+     * @see #setInputMap(javax.swing.InputMap)
+     */
+    public InputMap getInputMap() {
+        return getInputMap(WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    /**
+     * @return The input map for the given condition.
+     * @see #setInputMap(int, javax.swing.InputMap)
+     * @param condition Either {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT} or {@link #WHEN_IN_FOCUSED_FRAME}
+     */
+    public InputMap getInputMap(int condition) {
+        initInputMaps();
+        InputMap result = inputMaps[condition];
+        if (result == null) {
+            inputMaps[condition] = new InputMap();
+            result = inputMaps[condition];
+        }
+        if (condition == WHEN_IN_FOCUSED_FRAME) {
+            // map could be filled
+            registerGlobalInputMapWithFrame();
+        }
+        return result;
+    }
+
+
     private void registerGlobalInputMapWithFrame() {
         final SComponent me = this;
         final SFrame parentFrame = getParentFrame();
@@ -1548,24 +1657,6 @@ public abstract class SComponent
         if (inputMaps == null) {
             inputMaps = new InputMap[ACTION_CONDITIONS_AMOUNT];
         }
-    }
-
-    public InputMap getInputMap() {
-        return getInputMap(WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
-    }
-    
-    public InputMap getInputMap(int condition) {
-        initInputMaps();
-        InputMap result = inputMaps[condition];
-        if (result == null) {
-            inputMaps[condition] = new InputMap();
-            result = inputMaps[condition];
-        }
-        if (condition == WHEN_IN_FOCUSED_FRAME) {
-            // map could be filled
-            registerGlobalInputMapWithFrame();
-        }
-        return result;
     }
 
     protected void processLowLevelEvent(String name, String[] values) {
@@ -1593,6 +1684,10 @@ public abstract class SComponent
         return arm;
     }
 
+    /**
+     * Internal event trigger used by CGs.
+     * This Method is called internal and should not be called directly
+     */
     public void fireFinalEvents() {
         fireKeyEvents();
     }
@@ -1614,7 +1709,8 @@ public abstract class SComponent
     public void removeNotify() {
     }
 
-    public ArrayList getMenus() {
+    // Nice: undocumented and useless
+    /*public ArrayList getMenus() {
         ArrayList menus = new ArrayList();
         if (isVisible()) {
             SPopupMenu pmenu = getComponentPopupMenu();
@@ -1623,5 +1719,5 @@ public abstract class SComponent
             }
         }
         return menus;
-    }
+    } */
 }
