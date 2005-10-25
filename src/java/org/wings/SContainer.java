@@ -498,15 +498,21 @@ public class SContainer extends SComponent {
         super.removeNotify();
     }
 
+    /**
+     * Collects all {@link SComponent#getComponentPopupMenu()} of all contained and visible components.
+     * @return
+     */
     public ArrayList getMenus() {
         ArrayList menus = new ArrayList();
         if (isVisible()) {
-            Iterator iter = getComponentList().iterator();
+            final Iterator iter = getComponentList().iterator();
             while (iter.hasNext()) {
-                SComponent comp = (SComponent)iter.next();
-                ArrayList compMenus = comp.getMenus();
-                compMenus.removeAll(menus);
-                menus.addAll(compMenus);
+                final SComponent comp = (SComponent)iter.next();
+                if (comp.isVisible()) {
+                    final SPopupMenu componentMenu = comp.getComponentPopupMenu();
+                    if (menus.contains(componentMenu) == false)
+                        menus.add(componentMenu);
+                }
             }
             SPopupMenu pmenu = getComponentPopupMenu();
             if (pmenu != null && !menus.contains(pmenu)) {
