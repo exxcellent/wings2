@@ -47,7 +47,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
         InputMap inputMap = new InputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK, false), "previous");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK, false), "next");
-        tab.setInputMap(inputMap, SComponent.WHEN_IN_FOCUSED_FRAME);
+        tab.setInputMap(SComponent.WHEN_IN_FOCUSED_FRAME, inputMap);
         
         
         Action action = new AbstractAction() {
