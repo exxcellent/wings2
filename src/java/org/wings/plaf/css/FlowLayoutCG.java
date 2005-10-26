@@ -70,6 +70,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
                     Utils.printNewline(d, component);
                     d.print("<div style=\"");
                     d.print(alignmentStyle);
+                    d.print( createInlineStylesForGaps(layout.getHgap(), layout.getVgap() ).toString() );
                     d.print("\">");
                     component.write(d); // Render contained component
                     Utils.printNewline(d, component);

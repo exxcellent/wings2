@@ -33,7 +33,21 @@ public class SFlowLayout
      * Alignment (left, center, right) of components.
      */
     protected int align;
+    
+    /**
+     * The horizontal gap (in pixels) specifiying the space
+     * between columns.  They can be changed at any time.
+     * This should be a non-negative integer.
+     */
+    protected int hgap = 0;
 
+    /**
+     * The vertical gap (in pixels) which specifiying the space
+     * between rows.  They can be changed at any time.
+     * This should be a non negative integer.
+     */
+    protected int vgap = 0;
+    
     /**
      * Creates a new <code>SFlowLayout</code> with horizontal orientation and
      * left alignment.
@@ -77,6 +91,46 @@ public class SFlowLayout
         return components;
     }
 
+    /**
+     * Gets the horizontal gap between components in pixel. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
+     *
+     * @return the horizontal gap between components
+     */
+    public int getHgap() {
+        return hgap;
+    }
+
+    /**
+     * Sets the horizontal gap between components to the specified value in pixe. Rendered half as margin left and margin right
+     * Some PLAFs might ignore this property.
+     *
+     * @param hgap the horizontal gap between components
+     */
+    public void setHgap(int hgap) {
+        this.hgap = hgap;
+    }
+
+    /**
+     * Gets the vertical gap between components in pixel. Rendered half as margin top and margin bottom
+     * Some PLAFs might ignore this property.
+     *
+     * @return the vertical gap between components
+     */
+    public int getVgap() {
+        return vgap;
+    }
+
+    /**
+     * Sets the vertical gap between components to the specified value in pixel.
+     * Rendered half as margin top and margin bottom. Some PLAFs might ignore this property.
+     *
+     * @param vgap the vertical gap between components
+     */
+    public void setVgap(int vgap) {
+        this.vgap = vgap;
+    }    
+    
     /**
      * returns the component at the given position
      *
