@@ -252,13 +252,14 @@ div.SScrollBar, div.SPageScroller {
     height: 100%;
     width: 100%;
 }
-
+/*
+no background color in IE as well
 div.SScrollBar table[area="buttons"], div.SPageScroller table[area="buttons"] {
     background-color: #eeeeff;
 }
-
+*/
 div.SScrollBar > table[orientation="vertical"], div.SPageScroller > table[orientation="vertical"] {
-    /* height: 100%;  do we really want it this way? looks funny imho (ol) */
+    height: 100%;
 }
 
 div.SScrollBar > table[orientation="horizontal"], div.SPageScroller > table[orientation="horizontal"] {
@@ -274,24 +275,69 @@ div.SScrollBar table[area="buttons"] button:hover, div.SScrollBar table[area="bu
     border: 1px outset #cccccc;
 }
 
-div.SPageScroller table[area="buttons"] button, div.SPageScroller table[area="buttons"] a {
+/*
+scroll arrows of PageScroller as form-components
+*/
+div.SPageScroller table[area="buttons"] button {
+    border: 1px solid #cccccc;
+	background-color: transparent;
+    width: 20px;
+}
+
+div.SPageScroller table[area="buttons"] button:hover {
+    border: 1px outset #cccccc;
+}
+/*
+paging numbers of PageScroller as form-components
+*/
+div.SPageScroller table[area="pages"] button {
+    border: 1px solid transparent;
+	background-color: transparent;
+    width: 20px;
+}
+
+div.SPageScroller table[area="pages"] button:hover {
+	background-color: #ECECEC;
+}
+
+div.SPageScroller table[area="pages"] button[disabled="disabled"] {
+    border: 1px solid transparent;
+    font-weight: bold;
+    color: #000000;
+    background-color: transparent;
+}
+/*
+scroll arrows of PageScroller as non-form-components
+*/
+div.SPageScroller table[area="buttons"] a {
     border: 1px solid #cccccc;
 }
 
-div.SPageScroller table[area="buttons"] button:hover, div.SPageScroller table[area="buttons"] a:hover {
+div.SPageScroller table[area="buttons"] a:hover {
     border: 1px outset #cccccc;
 }
-
-div.SPageScroller table[area="pages"] button, div.SPageScroller table[area="pages"] a {
-    border: 1px solid transparent;
+/*
+links around paging numbers of PageScroller as non-form-components
+*/
+div.SPageScroller table[area="pages"] a {
+     text-decoration: underline;
+     padding-left: 5px;
+     padding-right: 5px;
 }
 
-div.SPageScroller table[area="pages"] button:hover, div.SPageScroller table[area="pages"] a:hover {
-    border: 1px outset #cccccc;
+div.SPageScroller table[area="pages"] a:hover {
+	 background-color: #ECECEC;
 }
 
-div.SPageScroller table[area="pages"] button:hover[disabled="disabled"], div.SPageScroller table[area="pages"] a.disabled:hover {
-    border: 1px solid transparent;
+div.SPageScroller table[area="pages"] a.disabled:hover {
+	 font-weight: bold;
+	 background-color: transparent;
+}
+
+div.SPageScroller table[area="pages"] a.disabled {
+	 font-weight: bold;
+	 background-color: transparent;
+	 text-decoration: none;
 }
 
 

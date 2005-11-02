@@ -96,7 +96,6 @@ IMG {
 /* destyle buttons so they are not visible */
 table.SCheckBox button,
 table.SClickable button,
-table.SPageScroller button,
 table.SScrollBar button,
 table.STable button,
 table.STree button
@@ -105,6 +104,47 @@ table.STree button
     background: none; /* IE doesnt understand inherit */
     padding: 0px;
     margin:0px;
+}
+
+/*
+PageScroller as form-component
+*/
+table.SPageScroller button{
+    border: none;
+    background: none; /* IE doesnt understand inherit */
+    padding-left: 3px;
+    padding-right: 3px;
+    text-decoration: underline;
+}
+
+table.SPageScroller button.disabled{
+	font-weight: bold !important;
+}
+/*
+PageScroller as non-form-component
+*/
+table.SPageScroller a{
+   text-decoration: underline !important;
+   padding-left: 5px;
+   padding-right: 5px;
+}
+
+table.SPageScroller a:hover{
+   background-color: #ECECEC;
+}
+
+table.SPageScroller a.disabled{
+	text-decoration: none !important;
+	font-weight: bold !important;
+}
+
+table.SPageScroller a.disabled:hover{
+	background-color: transparent;
+}
+
+/* style for scroll arrows as non-form components */
+.scrollButton{
+	border: 1px solid #cccccc !important;
 }
 
 .SLabel,
