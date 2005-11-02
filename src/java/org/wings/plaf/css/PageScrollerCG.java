@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
  */
 public class PageScrollerCG extends AbstractComponentCG implements org.wings.plaf.PageScrollerCG {
     private final static transient Log log = LogFactory.getLog(PageScrollerCG.class);
-
+    
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
     public static final int FORWARD_BLOCK = 2;
@@ -116,7 +117,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                 d.print(" page_selected");
             }
             d.print("\">");
-            writePage(d, sb, page, !isCurrentPage);
+            writePage(d, sb, page, !isCurrentPage, firstDirectPage);
             d.print("</td></tr>\n");
         }
 
@@ -171,7 +172,6 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
         firstDirectPage = Math.max(firstDirectPage, 0);
-
         for (int i = 0; i < Math.min(sb.getDirectPages(), sb.getPageCount() - firstDirectPage); i++) {
             int page = firstDirectPage + i;
             d.print("<td class=\"SLayout");
@@ -180,7 +180,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                 d.print(" page_selected");
             }
             d.print("\">");
-            writePage(d, sb, page, !isCurrentPage);
+            writePage(d, sb, page, !isCurrentPage, firstDirectPage);
             d.print("</td>\n");
         }
 
@@ -198,10 +198,13 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                 .print("</tr></tbody></table>");
     }
 
-    private void writePage(Device device, SPageScroller pageScroller, int page, boolean enabled) throws IOException {
+    private void writePage(Device device, SPageScroller pageScroller, int page, boolean enabled, int firstDirectPage) throws IOException {
         boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
-
+    	Object separator = SessionManager.getSession().getCGManager().getObject("PageScrollerCG.pageSeparator", String.class);
+    	if(page != firstDirectPage)
+    	    device.print(separator.toString());
+    	
         if (showAsFormComponent) {
             writeButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()));
             device.print(" type=\"submit\" name=\"")
@@ -217,9 +220,10 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                 device.print("<a href=\"#\" class=\"disabled\"");
             } else {
                 device.print("<a href=\"")
-                        .print(pageScroller.getRequestURL()
-                        .addParameter(Utils.event(pageScroller) + "=" + page * pageScroller.getExtent()).toString())
-                        .print("\"");
+                      .print(pageScroller.getRequestURL()
+                      .addParameter(Utils.event(pageScroller) + "=" + page * pageScroller.getExtent()).toString());
+                device.print("\"");
+                device.print(" onClick=\"sendEvent(event, "+page * pageScroller.getExtent()+", 'scrollbar');\"");
             }
         }
         device.print(">");
@@ -251,17 +255,19 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                 device.print("<a href=\"#\" class=\"disabled\"");
             } else {
                 device.print("<a href=\"")
-                        .print(pageScroller.getRequestURL()
-                        .addParameter(Utils.event(pageScroller) + "=" + event).toString())
-                        .print("\"");
+                      .print(pageScroller.getRequestURL()
+                      .addParameter(Utils.event(pageScroller) + "=" + event).toString());
+                device.print("\"");
+                device.print(" onClick=\"sendEvent(event, "+event+", 'scrollbar');\"");
             }
         }
         device.print(">");
-
+        
         device.print("<img");
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
+        Utils.optAttribute(device, "class", "scrollButton");
         device.print(" alt=\"");
         device.print(icon.getIconTitle());
         device.print("\"/>");
