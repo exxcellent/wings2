@@ -13,8 +13,6 @@
  */
 package org.wings.plaf.css;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.io.Device;
@@ -43,7 +41,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      */
     public void installCG(SComponent component) {
         Class clazz = component.getClass();
-        while ("org.wings".equals(clazz.getPackage().getName()) == false)
+        while (clazz.getPackage() == null || "org.wings".equals(clazz.getPackage().getName()) == false)
             clazz = clazz.getSuperclass();
         String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);

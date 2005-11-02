@@ -510,7 +510,7 @@ public class SContainer extends SComponent {
                 final SComponent comp = (SComponent)iter.next();
                 if (comp.isVisible()) {
                     final SPopupMenu componentMenu = comp.getComponentPopupMenu();
-                    if (menus.contains(componentMenu) == false)
+                    if (componentMenu != null && menus.contains(componentMenu) == false)
                         menus.add(componentMenu);
                 }
             }
