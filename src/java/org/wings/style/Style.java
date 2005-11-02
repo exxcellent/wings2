@@ -45,7 +45,7 @@ public interface Style extends Renderable, Serializable, Cloneable {
     /**
      * Defines a value for the given style propery.
      */
-    Object put(Object styleProperty, Object styleValue);
+    String put(CSSProperty styleProperty, String styleValue);
 
 }
 

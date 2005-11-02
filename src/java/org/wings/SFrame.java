@@ -539,7 +539,7 @@ public class SFrame
         return myInputMap;
     }
 
-    public void setInputMap(InputMap inputMap, int condition) {
+    public void setInputMap(int condition, InputMap inputMap) {
         this.myInputMap = inputMap;
     }
 

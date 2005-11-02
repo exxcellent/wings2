@@ -63,8 +63,8 @@ public class CSSStyle extends CSSAttributeSet implements Style {
     }
 
     /* @see Style */
-    public Object put(Object styleProperty, Object styleValue) {
+    /*public Object put(Object styleProperty, Object styleValue) {
         return super.put((CSSProperty) styleProperty, (String) styleValue);
-    }
+    }*/
 
 }
