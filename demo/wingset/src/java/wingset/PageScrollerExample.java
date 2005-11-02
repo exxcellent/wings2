@@ -49,13 +49,14 @@ public class PageScrollerExample
         // its a horizontal scrollbar, but scrolls vertical...
         scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
         scrollbar.setDirectPages(10);
-
+        scrollbar.setShowAsFormComponent(false);
+        
         scrollPane = new SScrollPane(list);
         scrollPane.setHorizontalScrollBar(null);
         scrollPane.setVerticalScrollBar(null);
         scrollPane.setVerticalExtent(50);
         scrollPane.setPreferredSize(SDimension.FULLWIDTH);
-
+        
         controls = new PageScrollerControls();
         controls.addSizable(scrollPane);
 
@@ -93,6 +94,16 @@ public class PageScrollerExample
 
     class PageScrollerControls extends ComponentControls {
         public PageScrollerControls() {
+        	final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
+        	
+            showAsFormComponent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boolean selected = showAsFormComponent.isSelected();
+                    scrollbar.setShowAsFormComponent(selected);
+                }
+            });
+            add(showAsFormComponent);
+        	
             add(new SLabel("Visible Rows: "));
             Object[] visRowsValues = {new Integer(4), new Integer(8), new Integer(12),
                                       new Integer(16), new Integer(20), new Integer(50)};
