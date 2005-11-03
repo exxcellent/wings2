@@ -18,7 +18,6 @@ import org.wings.style.CSSProperty;
 import org.wings.border.SBorder;
 import org.wings.border.SLineBorder;
 import org.wings.script.JavaScriptListener;
-
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -70,30 +69,33 @@ public class DynamicLayoutExample extends WingSetPane {
     }
 
     private static SLabel createDummyLabel(int i) {
-        final String[] texts = {"<html><nobr>[%] A very short component (TopLeft)</nobr>",
-                                "<html><nobr>[%] A much longer, unbreakable label for wrapping demo (Default)</nobr>",
-                                "<html><nobr>[%] And again a short one (RightBottom, red)</nobr>",
-                                "<html><nobr>[%] A 2-line</nobr><br/><nobr>label (CenterCenter, bold-italic)</nobr>"};
-        final SFont boldItalic = new SFont(null, SFont.BOLD + SFont.ITALIC, SFont.DEFAULT_SIZE);
+        final String[] texts = {"[%] A very short component (Top/Left)",
+                                "[%] A much longer, unbreakable label for wrapping demo (Default)",
+                                "[%] And again a short one (Right/Bottom)",
+                                "[%] A 2-line\nlabel (Center/Center)"};
+        //final SFont boldItalic = new SFont(null, SFont.BOLD + SFont.ITALIC, SFont.DEFAULT_SIZE);
         final SBorder greenLineBorder = new SLineBorder();
-        final SLabel label = new SLabel(texts[i % 4].replace('%', Integer.toString((i + 1)).charAt(0)));
         greenLineBorder.setColor(Color.green);
+
+        final SLabel label = new SLabel(texts[i % 4].replace('%', Integer.toString((i + 1)).charAt(0)));
         label.setBorder(greenLineBorder);
+        label.setBackground(Color.yellow.brighter());
+
         if (i % texts.length == 0) {
             label.setVerticalAlignment(TOP);
             label.setHorizontalAlignment(LEFT);
-        }
-        if (i % texts.length == 1) ;
-        if (i % texts.length == 2) {
-            label.setForeground(Color.RED);
+        } else if (i % texts.length == 1)
+            ;
+        else if (i % texts.length == 2) {
+            //label.setForeground(Color.RED);
             label.setHorizontalAlignment(RIGHT);
             label.setVerticalAlignment(BOTTOM);
-        }
-        if (i % texts.length == 3) {
+        } else if (i % texts.length == 3) {
             label.setHorizontalAlignment(CENTER);
             label.setVerticalAlignment(CENTER);
-            label.setFont(boldItalic);
+            //label.setFont(boldItalic);
         }
+
         return label;
     }
 
@@ -132,11 +134,11 @@ public class DynamicLayoutExample extends WingSetPane {
             borderDemoPanel2.setBackground(new Color(210, 210, 210));
         }
 
-        private SPanel wrap(SComponent c) {
+        private SComponent wrap(SComponent c) {
             final Color[] colors = {Color.red, Color.green, Color.pink, Color.magenta, Color.gray, Color.cyan};
             SPanel p = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
             p.add(c);
-            p.setPreferredSize(new SDimension("100%", "100%"));
+            p.setPreferredSize(SDimension.FULLAREA);
             p.setVerticalAlignment(c.getVerticalAlignment());
             p.setHorizontalAlignment(c.getHorizontalAlignment());
             p.setBackground(colors[i++ % colors.length]);
