@@ -252,7 +252,8 @@ public class SComboBox
 
         if (selected == null) return -1;
 
-        for (int i = 0; i < getItemCount(); i++) {
+        int itemCount = getItemCount();
+        for (int i = 0; i < itemCount; i++) {
             if (selected.equals(getItemAt(i))) {
                 return i;
             }

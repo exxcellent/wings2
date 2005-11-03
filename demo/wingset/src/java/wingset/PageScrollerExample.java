@@ -156,7 +156,7 @@ public class PageScrollerExample
             layout.setSelectedItem("Bottom");
             add(layout);
 
-
+            /*
             final SCheckBox margin = new SCheckBox("Margin");
             margin.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -174,16 +174,7 @@ public class PageScrollerExample
             });
             step.setSelected(scrollbar.isStepVisible());
             add(step);
-
-            final SCheckBox paging = new SCheckBox("Paged Scrolling");
-            paging.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    boolean selected = paging.isSelected();
-                    ((SScrollPaneLayout)scrollPane.getLayout()).setPaging(selected);
-                }
-            });
-            paging.setSelected(true);
-            add(paging);
+            */
         }
     }
 }

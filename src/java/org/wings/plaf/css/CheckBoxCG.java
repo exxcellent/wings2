@@ -15,35 +15,15 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
+import org.wings.plaf.CGManager;
 import org.wings.io.Device;
 import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
 public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
-    private static final SIcon ICON_DISABLEDSELECTED = (SIcon) SessionManager
-            .getSession().getCGManager().getObject("SCheckBox.disabledSelectedIcon", SIcon.class);
 
-    private static final SIcon ICON_DISABLED = (SIcon) SessionManager
-            .getSession().getCGManager().getObject("SCheckBox.disabledIcon", SIcon.class);
-
-    private static final SIcon ICON_PRESSED = (SIcon) SessionManager
-            .getSession().getCGManager().getObject("SCheckBox.pressedIcon", SIcon.class);
-
-    private static final SIcon ICON_ROLLOVERSELECTED = (SIcon) SessionManager
-            .getSession().getCGManager().getObject("SCheckBox.rolloverSelectedIcon", SIcon.class);
-
-    private static final SIcon ICON_ROLLOVER = (SIcon) SessionManager
-            .getSession().getCGManager().getObject("SCheckBox.rolloverIcon", SIcon.class);
-
-    private static final SIcon ICON_DEFAULT = (SIcon) SessionManager
-            .getSession().getCGManager().getObject("SCheckBox.icon", SIcon.class);
-
-    private static final SIcon ICON_SELECTED = (SIcon) SessionManager
-                .getSession().getCGManager().getObject("SCheckBox.selectedIcon", SIcon.class);
-    
     protected boolean useIconsInForms = false;
-    
 
     public boolean isUseIconsInForm() {
         return useIconsInForms;
@@ -60,14 +40,14 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
     }
 
     protected void installIcons(final SAbstractButton button) {
-        org.wings.plaf.CGManager manager = button.getSession().getCGManager();
-        button.setIcon(ICON_DEFAULT);
-        button.setSelectedIcon(ICON_SELECTED);
-        button.setRolloverIcon(ICON_ROLLOVER);
-        button.setRolloverSelectedIcon(ICON_ROLLOVERSELECTED);
-        button.setPressedIcon(ICON_PRESSED);
-        button.setDisabledIcon(ICON_DISABLED);
-        button.setDisabledSelectedIcon(ICON_DISABLEDSELECTED);
+        CGManager manager = SessionManager.getSession().getCGManager();
+        button.setIcon((SIcon) manager.getObject("SCheckBox.icon", SIcon.class));
+        button.setSelectedIcon((SIcon) manager.getObject("SCheckBox.selectedIcon", SIcon.class));
+        button.setRolloverIcon((SIcon) manager.getObject("SCheckBox.rolloverIcon", SIcon.class));
+        button.setRolloverSelectedIcon((SIcon) manager.getObject("SCheckBox.rolloverSelectedIcon", SIcon.class));
+        button.setPressedIcon((SIcon) manager.getObject("SCheckBox.pressedIcon", SIcon.class));
+        button.setDisabledIcon((SIcon) manager.getObject("SCheckBox.disabledIcon", SIcon.class));
+        button.setDisabledSelectedIcon((SIcon) manager.getObject("SCheckBox.disabledSelectedIcon", SIcon.class));
     }
 
     public void writeContent(final Device device, final SComponent component)
@@ -119,49 +99,37 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
 
         device.print(">");
 
-        if (showAsFormComponent && !useIconsInForms && text == null){
-        	if(button.getRolloverIcon() != null){
-            	inputRollOverCheckbox(device, icon, button, button.getEncodedLowLevelEventId(), true);
-        	}
-        	else{
-        		inputTypeCheckbox(device, button);
-        	}
-        }
-        else if (icon != null && text == null){
-        	if(button.getRolloverIcon() != null){
-        		writeRollOverIcon(device, icon, button, "Icon_"+button.getName(), true);
-        	}
-        	else{
-        		writeIcon(device, icon);
-        	}
-        }
-        else if (text != null && icon == null)
-            writeText(device, text);
-        else if (text != null) {
-            new IconTextCompound() {
-                protected void text(Device device) throws IOException {
-                    writeText(device, text);
-                }
+        if (showAsFormComponent && !useIconsInForms) {
+            if (text == null)
+                writeInput(device, button);
+            else {
+                new IconTextCompound() {
+                    protected void text(Device device) throws IOException {
+                        writeText(device, text);
+                    }
 
-                protected void icon(Device device) throws IOException {
-                    if (showAsFormComponent && !useIconsInForms){
-                    	if(button.getRolloverIcon() != null){
-                    		inputRollOverCheckbox(device, icon, button, button.getEncodedLowLevelEventId(), true);
-                    	}
-                    	else{
-                    		inputTypeCheckbox(device, button);
-                    	}
+                    protected void icon(Device device) throws IOException {
+                        writeInput(device, button);
                     }
-                    else{
-                    	if(button.getRolloverIcon() != null){
-                    		writeRollOverIcon(device, icon, button, "Icon_"+button.getName(), true);
-                    	}
-                    	else{
-                    		writeIcon(device, icon);
-                    	}
+                }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+            }
+        }
+        else {
+            if (icon != null && text == null)
+                writeIcon(device, icon);
+            else if (text != null && icon == null)
+                writeText(device, text);
+            else if (text != null) {
+                new IconTextCompound() {
+                    protected void text(Device device) throws IOException {
+                        writeText(device, text);
                     }
-                }
-            }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+
+                    protected void icon(Device device) throws IOException {
+                        writeIcon(device, icon);
+                    }
+                }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+            }
         }
 
         if (showAsFormComponent && useIconsInForms)
@@ -172,28 +140,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             device.print("</a>");
     }
 
-    /**
-     * @param device
-     * @throws IOException
-     */
-    protected void writeButtonStart(final Device device, final SAbstractButton comp) throws IOException {
-        device.print("<button");
-    }
-
-    /** 
-     * Convenience method to keep differences between default and msie
-     * implementations small
-     * @param device
-     * @param addr
-     * @throws IOException
-     */
-    protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
-        device.print("<a href=\"");
-        addr.write(device);
-        device.print("\"");
-    }
-
-    protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
+    protected void writeInput(Device device, SAbstractButton button) throws IOException {
         device.print("<input type=\"hidden\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"hidden_reset\"/>");

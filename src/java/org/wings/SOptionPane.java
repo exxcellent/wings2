@@ -19,6 +19,7 @@ import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.plaf.OptionPaneCG;
 import org.wings.session.SessionManager;
+import org.wings.style.CSSProperty;
 
 import javax.swing.*;
 import java.awt.*;
@@ -365,7 +366,6 @@ public class SOptionPane
         this.initialValue = initialValue;
         this.icon = icon;
         SGridLayout layout = new SGridLayout(1);
-        layout.setBorder(1);
         setLayout(layout);
         initPanel();
         setOptionType(optionType);
@@ -390,6 +390,9 @@ public class SOptionPane
     }
 
     private final void initPanel() {
+        optionButtons.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
+        optionButtons.setAttribute(CSSProperty.PADDING_TOP, "6px");
+        ((SFlowLayout)optionButtons.getLayout()).setHgap(8);
         optionButtons.add(optionOK, "OK");
         optionButtons.add(optionYes, "YES");
         optionButtons.add(optionCancel, "CANCEL");
@@ -406,10 +409,12 @@ public class SOptionPane
         imageLabel.setToolTipText(null);
 
         optionData.setBorder(empty);
+        ((SFlowLayout)optionData.getLayout()).setVgap(8);
+
         contents.add(optionData, SBorderLayout.CENTER);
         contents.add(images, SBorderLayout.WEST);
-        add(contents);
 
+        add(contents);
         add(optionButtons);
     }
 
@@ -545,36 +550,43 @@ public class SOptionPane
         switch (newType) {
             case DEFAULT_OPTION:
                 optionOK.setVisible(true);
+                optionOK.requestFocus();
                 break;
 
             case OK_CANCEL_OPTION:
                 optionOK.setVisible(true);
+                optionOK.requestFocus();
                 optionCancel.setVisible(true);
                 break;
 
             case OK_CANCEL_RESET_OPTION:
                 optionOK.setVisible(true);
+                optionOK.requestFocus();
                 optionCancel.setVisible(true);
                 break;
 
             case YES_NO_OPTION:
                 optionYes.setVisible(true);
+                optionYes.requestFocus();
                 optionNo.setVisible(true);
                 break;
 
             case YES_NO_RESET_OPTION:
                 optionYes.setVisible(true);
+                optionYes.requestFocus();
                 optionNo.setVisible(true);
                 break;
 
             case YES_NO_CANCEL_OPTION:
                 optionYes.setVisible(true);
+                optionYes.requestFocus();
                 optionNo.setVisible(true);
                 optionCancel.setVisible(true);
                 break;
 
             case YES_NO_CANCEL_RESET_OPTION:
                 optionYes.setVisible(true);
+                optionYes.requestFocus();
                 optionNo.setVisible(true);
                 optionCancel.setVisible(true);
                 break;

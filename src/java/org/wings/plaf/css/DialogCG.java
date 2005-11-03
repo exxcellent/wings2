@@ -22,7 +22,9 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
-public class DialogCG extends org.wings.plaf.css.FormCG implements org.wings.plaf.DialogCG {
+public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
+    protected static final String WINDOWICON_CLASSNAME = "WindowIcon";
+    protected static final String BUTTONICON_CLASSNAME = "WindowButton";
 
     private SIcon closeIcon;
 
@@ -34,109 +36,91 @@ public class DialogCG extends org.wings.plaf.css.FormCG implements org.wings.pla
         setCloseIcon((SIcon) manager.getObject("DialogCG.closeIcon", SIcon.class));
     }
 
-    private void writeIcon(Device device, SIcon icon) throws IOException {
+    protected void writeIcon(Device device, SIcon icon, String cssClass) throws IOException {
         device.print("<img");
+        if (cssClass != null) {
+            device.print(" class=\"");
+            device.print(cssClass);
+            device.print("\"");
+        }
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-        Utils.optAttribute(device, "alt", icon.getIconTitle());
-        device.print("/>");
+        device.print(" alt=\"");
+        device.print(icon.getIconTitle());
+        device.print("\"/>");
     }
 
-    private void writeWindowIcon(Device device, SDialog dialog,
-                                 int event, SIcon icon) throws IOException {
-//        boolean showAsFormComponent = dialog.getShowAsFormComponent();
-        RequestURL addr = dialog.getRequestURL();
-        addr.addParameter(Utils.event(dialog), event);
+    protected void writeWindowIcon(Device device, SDialog frame,
+            int event, SIcon icon, String cssClass) throws IOException {
+        boolean showAsFormComponent = frame.getShowAsFormComponent();
 
-        device.print("<th");
-        Utils.optAttribute(device, "width", getIconWidth(icon));
-        device.print(">");
+        // RequestURL addr = frame.getRequestURL();
+        // addr.addParameter(Utils.event(frame), event);
 
-        // this really doesn't need to be shown as a form component
-//        if (showAsFormComponent)
-//            device.print("<button name=\"")
-//                    .print(Utils.event(dialog))
-//                    .print("\" value=\"")
-//                    .print(event)
-//                    .print("\">");
-//        else
-            device.print("<a href=\"")
-                    .print(dialog.getRequestURL()
-                    .addParameter(Utils.event(dialog) + "=" + event).toString())
+        if (showAsFormComponent) {
+            device.print("<button");
+            if (cssClass != null) {
+                device.print(" class=\"");
+                device.print(cssClass);
+                device.print("\"");
+            }
+            device.print(" name=\"").print(Utils.event(frame)).print(
+                    "\" value=\"").print(event).print("\">");
+        } else {
+            device.print("<a");
+            if (cssClass != null) {
+                device.print(" class=\"");
+                device.print(cssClass);
+                device.print("\"");
+            }
+            device.print(" href=\"").print(
+                    frame.getRequestURL().addParameter(
+                            Utils.event(frame) + "=" + event).toString())
                     .print("\">");
+        }
+        writeIcon(device, icon, null);
 
-        writeIcon(device, icon);
-
-//        if (showAsFormComponent)
-//            device.print("</button>");
-//        else
+        if (showAsFormComponent) {
+            device.print("</button>");
+        } else {
             device.print("</a>");
-
-        device.print("</th>");
+        }
     }
 
-    private String getIconWidth(SIcon icon) {
-        if (icon.getIconWidth() == -1)
-            return "0%";
-        else
-            return "" + icon.getIconWidth();
-    }
-
-    public void write(final Device device, final SComponent component)
+    public void writeContent(final Device device, final SComponent _c)
             throws IOException {
-        SDialog dialog = (SDialog) component;
-        device.print("<table border=\"0\" width=\"100%\" height=\"100%\" class=\"SLayout\"><tr><td align=\"center\" valign=\"middle\" class=\"SLayout\">");
-        super.writeContent(device, dialog);
-        device.print("</td></tr></table>\n");
+        final SDialog component = (SDialog) _c;
+        SDialog frame = component;
+        writeWindowBar(device, frame);
+
+        device.print("<div class=\"WindowContent\">");
+        super.writeContent(device, _c);
+        device.print("</div>");
     }
 
-    protected void renderContainer(Device device, SForm component) throws IOException {
-        super.write(device, component);
-    }
 
-    protected void writeContent(final Device device, final SComponent component) throws IOException {
-        final SDialog dialog = (SDialog) component;
-
-        String text = dialog.getTitle();
-        int columns = 0;
+    protected void writeWindowBar(final Device device, SDialog frame) throws IOException {
+        String text = frame.getTitle();
         if (text == null)
-            text = "Dialog";
+            text = "wingS";
+        device.print("<div class=\"WindowBar\">");
 
-        device.print("<table class=\"SLayout\"");
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-        device.print(">\n<tr>");
-
-        // left icon
-        if (dialog.getIcon() != null) {
-            SIcon icon = dialog.getIcon();
-            device.print("<th class=\"SLayout\"");
-            Utils.optAttribute(device, "width", getIconWidth(icon));
-            device.print(">");
-            writeIcon(device, icon);
-            device.print("</th>");
-            ++columns;
+        // frame is rendered in desktopPane
+        // these following icons will be floated to the right by the style sheet...
+        if (frame.isClosable() && closeIcon != null) {
+            writeWindowIcon(device, frame,
+                    SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon, BUTTONICON_CLASSNAME);
         }
-
-        device.print("<th col=\"title\" class=\"SLayout\">&nbsp;");
-        Utils.write(device, text);
-        device.print("</th>");
-        ++columns;
-
-        if (dialog.isClosable() && closeIcon != null) {
-            writeWindowIcon(device, dialog,
-                    SInternalFrameEvent.INTERNAL_FRAME_CLOSED, closeIcon);
-            ++columns;
+        device.print("<div class=\"WindowBar_title\">");
+        // float right end
+        if (frame.getIcon() != null) {
+            writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
         }
-        device.print("</tr>");
+        device.print(text);
+        device.print("</div>");
 
-        // write the actual content
-        device.print("<tr><td class=\"SLayout\" colspan=\"");
-        device.print(String.valueOf(columns));
-        device.print("\">");
-        Utils.renderContainer(device, dialog);
-        device.print("</td></tr>");
-        device.print("</table>\n");
+        device.print("</div>");
     }
 
     public SIcon getCloseIcon() {

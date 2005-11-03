@@ -51,6 +51,18 @@ div {
     text-align:inherit;
 }
 
+form {
+    margin: 0px;
+}
+
+button {
+    padding: 0px;
+}
+
+ul {
+    margin: 0px;
+}
+
 /* By Ole:
      Simplified we use this declaration to make a's and buttons block elements
    BUT
@@ -160,7 +172,7 @@ ul.STree > li[selected="true"] > table > tbody > tr > td > button > div
     border: 1px dotted black;
 }
 
-ul.STree > li button {
+ul.STree > li button, ul.STree > li a {
     border: none;
     background-color: inherit;
     padding: 0px;
@@ -172,7 +184,7 @@ ul.STree > li button {
 }
 
 ul.STree > li > div.SSubTree {
-    background-image: url( org/wings/icons/TreeLine.gif );
+    background-image: url( "org/wings/icons/TreeLine.gif" );
     background-repeat:repeat-y;
     background-position: 0px 100px;
 }
@@ -292,7 +304,7 @@ div.SPageScroller table[area="buttons"] button:hover {
 /*
 paging numbers of PageScroller as form-components
 */
-div.SPageScroller table[area="pages"] button {
+div.SPageScroller table[area="pages"] button, div.SPageScroller table[area="pages"] a {
     border: 1px solid transparent;
 	background-color: transparent;
     width: 20px;
@@ -640,6 +652,17 @@ div.SPopupMenu a.x:hover{
     padding-right:10px;
 }
 
+/* clears the windows */
+div.SDesktopPane div.spacer, .SFlowLayout div.spacer {
+    height:0px;
+    clear: both;
+	line-height:0px; /* for konq */
+    font-size: 1px; /* for konq */
+}
+
+/* Note: internal frame, dialog and option pane are identical
+/* ----------- SINTERNALFRAME */
+
 div.SInternalFrame {
     border: 1px solid #ccc;
     margin: .2em;
@@ -671,26 +694,66 @@ div.SInternalFrame > div.WindowContent {
     padding: .2em;
 }
 
-/* clears the windows */
-div.SDesktopPane div.spacer,
-.SFlowLayout div.spacer {
-    height:0px;
-    clear: both;
-    line-height:0px; /* for konq */
-    font-size: 1px; /* for konq */
+/* ----------- SDIALOG */
+
+div.SDialog {
+    border: 1px solid #ccc;
+    margin: .2em;
+/*	clear:right;*/
+	display:table;
 }
 
-/* ----------- SOPTIONPANE / SDIALOG */
+div.SDialog > div.WindowBar {
+	padding:.2em;
+	background-color: #aaf;
+}
 
-/*  Note: SOptionPane extends SDialog. */
-div.SDialog_Box,
-div.SOptionPane_Box {
-    display: table;
+div.SDialog > div.WindowBar > div.WindowBar_title {
+	padding-right:4em;
+	white-space:pre;
 }
-div.SDialog,
-div.SOptionPane {
-    border: 1px solid #cccccc;
+
+div.SDialog > div.WindowBar  a.WindowButton,
+div.SDialog > div.WindowBar  button.WindowButton {
+	float: right;
 }
+
+div.SDialog > div.WindowBar > a.DeiconifyButton {
+	display: inline;
+}
+
+div.SDialog > div.WindowContent {
+	padding: .2em;
+}
+
+/* ----------- SOPTIONPANE */
+
 div.SOptionPane {
-    display: table-cell;
+    border: 1px solid #ccc;
+    margin: .2em;
+/*	clear:right;*/
+	display:table;
+}
+
+div.SOptionPane > div.WindowBar {
+	padding:.2em;
+	background-color: #aaf;
+}
+
+div.SOptionPane > div.WindowBar > div.WindowBar_title {
+	padding-right:4em;
+	white-space:pre;
+}
+
+div.SOptionPane > div.WindowBar  a.WindowButton,
+div.SOptionPane > div.WindowBar  button.WindowButton {
+	float: right;
+}
+
+div.SOptionPane > div.WindowBar > a.DeiconifyButton {
+	display: inline;
+}
+
+div.SOptionPane > div.WindowContent {
+	padding: .2em;
 }

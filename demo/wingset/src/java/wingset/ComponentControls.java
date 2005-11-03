@@ -34,7 +34,7 @@ public class ComponentControls
     protected final SButton applyButton;
 
     public ComponentControls() {
-        setAttribute(CSSProperty.BORDER_BOTTOM,"1px solid #cccccc");
+        setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
         applyButton = new SButton("apply");
         applyButton.setActionCommand("apply");
         widthTextField = new STextField();

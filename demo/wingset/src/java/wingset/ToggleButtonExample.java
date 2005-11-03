@@ -24,13 +24,23 @@ import java.util.Iterator;
  * @version $Revision$
  */
 public class ToggleButtonExample
-        extends WingSetPane {
-    static final ClassLoader cl = WingSet.class.getClassLoader();
+        extends WingSetPane
+{
+    final static int[] textHPos = new int[] {SConstants.LEFT, SConstants.CENTER, SConstants.RIGHT};
+    final static int[] textVPos = new int[] {SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
+
     static final SIcon icon = new SURLIcon("../icons/ButtonIcon.gif");
     static final SIcon disabledIcon = new SURLIcon("../icons/ButtonDisabledIcon.gif");
     static final SIcon pressedIcon = new SURLIcon("../icons/ButtonPressedIcon.gif");
     static final SIcon rolloverIcon = new SURLIcon("../icons/ButtonRolloverIcon.gif");
     private ButtonControls controls;
+
+    private final SLabel reportLabel = new SLabel("No button pressed");
+    protected ActionListener action = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
+        }
+    };
 
     public SComponent createExample() {
         controls = new ButtonControls();
@@ -56,66 +66,31 @@ public class ToggleButtonExample
                 buttons[i].setPressedIcon(pressedIcon);
                 buttons[i].setSelectedIcon(pressedIcon);
             }
-            buttons[i].setToolTipText("Button " + (i+1));
+            buttons[i].setToolTipText("ToggleButton " + (i+1));
             buttons[i].setName("button" + (i+1));
             buttons[i].setShowAsFormComponent(false);
+            buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
+            buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
             group.add(buttons[i]);
             controls.addSizable(buttons[i]);
         }
 
-        buttons[0].setVerticalTextPosition(SConstants.TOP);
-        buttons[0].setHorizontalTextPosition(SConstants.LEFT);
-
-        buttons[1].setVerticalTextPosition(SConstants.TOP);
-        buttons[1].setHorizontalTextPosition(SConstants.CENTER);
-
-        buttons[2].setVerticalTextPosition(SConstants.TOP);
-        buttons[2].setHorizontalTextPosition(SConstants.RIGHT);
-
-        buttons[3].setVerticalTextPosition(SConstants.CENTER);
-        buttons[3].setHorizontalTextPosition(SConstants.LEFT);
-
-        buttons[4].setVerticalTextPosition(SConstants.CENTER);
-        buttons[4].setHorizontalTextPosition(SConstants.CENTER);
-
-        buttons[5].setVerticalTextPosition(SConstants.CENTER);
-        buttons[5].setHorizontalTextPosition(SConstants.RIGHT);
-
-        buttons[6].setVerticalTextPosition(SConstants.BOTTOM);
-        buttons[6].setHorizontalTextPosition(SConstants.LEFT);
-
-        buttons[7].setVerticalTextPosition(SConstants.BOTTOM);
-        buttons[7].setHorizontalTextPosition(SConstants.CENTER);
-
-        buttons[8].setVerticalTextPosition(SConstants.BOTTOM);
-        buttons[8].setHorizontalTextPosition(SConstants.RIGHT);
-
-        SPanel erg = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        
-
-        SGridLayout grid = new SGridLayout(3, 3);
+        final SGridLayout grid = new SGridLayout(3);
+        final SPanel buttonGrid = new SPanel(grid);
         grid.setBorder(1);
-        SPanel b = new SPanel(grid);
+        grid.setHgap(10);
+        grid.setVgap(10);
 
-        final SLabel pressed = new SLabel("No button pressed");
-
-        ActionListener action = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                pressed.setText("Button \"" + e.getActionCommand() + "\" pressed");
-            }
-        };
-
-        for (int i = 0; i < buttons.length; i++)
+        for (int i = 0; i < buttons.length; i++) {
             buttons[i].addActionListener(action);
+            buttonGrid.add(buttons[i]);
+        }
 
-        for (int i = 0; i < buttons.length; i++)
-            b.add(buttons[i]);
+        SPanel panel = new SPanel(new SGridLayout(1));
+        panel.add(buttonGrid);
+        panel.add(reportLabel);
 
-        erg.add(b);
-        erg.add(new SLabel("<html><br />"));
-        erg.add(pressed);
-
-        return erg;
+        return panel;
     }
 
     class ButtonControls extends ComponentControls {
@@ -139,10 +114,13 @@ public class ToggleButtonExample
 
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                         SAbstractButton component = (SAbstractButton) iterator.next();
-                        component.setIcon(use ? icon : null);
-                        component.setDisabledIcon(use ? disabledIcon : null);
-                        component.setRolloverIcon(use ? rolloverIcon : null);
-                        component.setPressedIcon(use ? pressedIcon : null);
+                        if (!"button5".equals(component.getName())) {
+                            component.setIcon(use ? icon : null);
+                            component.setDisabledIcon(use ? disabledIcon : null);
+                            component.setRolloverIcon(use ? rolloverIcon : null);
+                            component.setPressedIcon(use ? pressedIcon : null);
+                            component.setSelectedIcon(use ? pressedIcon : null);
+                        }
                     }
                 }
             });

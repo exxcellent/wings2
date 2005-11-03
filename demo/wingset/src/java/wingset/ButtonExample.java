@@ -13,20 +13,7 @@
  */
 package wingset;
 
-import org.wings.SAbstractButton;
-import org.wings.SButton;
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SDimension;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SURLIcon;
-import org.wings.border.SEmptyBorder;
+import org.wings.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,6 +24,9 @@ import java.util.Iterator;
  * @version $Revision$
  */
 public class ButtonExample extends WingSetPane {
+    final static int[] textHPos = new int[] {SConstants.LEFT, SConstants.CENTER, SConstants.RIGHT};
+    final static int[] textVPos = new int[] {SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
+
     // icons
     private static final SIcon icon = new SURLIcon("../icons/ButtonIcon.gif");
     private static final SIcon disabledIcon = new SURLIcon("../icons/ButtonDisabledIcon.gif");
@@ -44,10 +34,10 @@ public class ButtonExample extends WingSetPane {
     private static final SIcon rolloverIcon = new SURLIcon("../icons/ButtonRolloverIcon.gif");
 
     // pressed label & handler
-    private final SLabel buttonPressedLabel = new SLabel("No button pressed");
-    private final ActionListener reportButtonPressedAction = new ActionListener() {
+    private final SLabel reportLabel = new SLabel("No button pressed");
+    private final ActionListener action = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-            buttonPressedLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
+            reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
         }
     };
 
@@ -56,21 +46,23 @@ public class ButtonExample extends WingSetPane {
 
     public SComponent createExample() {
         controls = new ButtonControls();
-        controls.getApplyButton().addActionListener(reportButtonPressedAction);
+        SContainer p = createButtonExample();
 
-        final SForm form = new SForm(new SGridLayout(1));
-        final SContainer buttonExamplePanel = createButtonExample(form);
+        SForm form = new SForm(new SBorderLayout());
+        form.add(controls, SBorderLayout.NORTH);
+        form.add(p, SBorderLayout.CENTER);
 
-        form.add(controls);
-        form.add(buttonExamplePanel);
-        form.setPreferredSize(SDimension.FULLWIDTH);
+        controls.getApplyButton().addActionListener(action);
+        final SButton defaultButton = new SButton();
+        defaultButton.addActionListener(action);
+        defaultButton.setActionCommand("Default Button (Enter key)");
+        form.setDefaultButton(defaultButton);
+
         return form;
     }
 
-    private SContainer createButtonExample(SForm containingForm) {
+    private SContainer createButtonExample() {
         final SButton[] buttons = new SButton[9];
-        final int[] textHPos = new int[] {SConstants.LEFT, SConstants.CENTER, SConstants.RIGHT};
-        final int[] textVPos = new int[] {SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
 
         for (int i = 0; i < buttons.length; i++) {
             final String buttonName = "Text " + (i + 1);
@@ -97,27 +89,15 @@ public class ButtonExample extends WingSetPane {
         grid.setBorder(1);
         grid.setHgap(10);
         grid.setVgap(10);
-        buttonGrid.setHorizontalAlignment(CENTER);
-        buttonGrid.setBorder(new SEmptyBorder(10, 0, 10, 0));
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i].addActionListener(reportButtonPressedAction);
+            buttons[i].addActionListener(action);
             buttonGrid.add(buttons[i]);
         }
 
-        // default button handling ==> if enter is pressed
-        final SButton defaultButton = new SButton();
-        defaultButton.addActionListener(reportButtonPressedAction);
-        defaultButton.setActionCommand("Default Button (Enter key)");
-        containingForm.setDefaultButton(defaultButton);
-
         final SPanel panel = new SPanel(new SGridLayout(1));
-        final SLabel description = new SLabel("Click on the buttons and see how The label changes\n" +
-                "Click into a input box and press apply or enter to see the effect of the enter button capturing.");
-        panel.setBorder(new SEmptyBorder(10, 10, 10, 10));
-        panel.add(description);
         panel.add(buttonGrid);
-        panel.add(buttonPressedLabel);
+        panel.add(reportLabel);
 
         return panel;
     }
@@ -143,10 +123,12 @@ public class ButtonExample extends WingSetPane {
 
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                         SAbstractButton component = (SAbstractButton) iterator.next();
-                        component.setIcon(use ? icon : null);
-                        component.setDisabledIcon(use ? disabledIcon : null);
-                        component.setRolloverIcon(use ? rolloverIcon : null);
-                        component.setPressedIcon(use ? pressedIcon : null);
+                        if (!"button5".equals(component.getName())) {
+                            component.setIcon(use ? icon : null);
+                            component.setDisabledIcon(use ? disabledIcon : null);
+                            component.setRolloverIcon(use ? rolloverIcon : null);
+                            component.setPressedIcon(use ? pressedIcon : null);
+                        }
                     }
                 }
             });

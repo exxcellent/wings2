@@ -14,6 +14,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.style.CSSProperty;
 import org.wings.template.StringTemplateSource;
 
 import java.awt.event.ActionEvent;
@@ -29,51 +30,39 @@ public class InteractiveTemplateExample
         extends WingSetPane
         implements SConstants {
 
-    final static String TEMPLATE = "/templates/InteractiveTemplateExample.thtml";
-    final static String FALLBACK_TEMPLATE = "/templates/FallbackInteractiveTemplateExample.thtml";
+    final static String TEMPLATE = "/templates/FallbackInteractiveTemplateExample.thtml";
 
-    private String fallbackTemplateString;
+    private String templateString;
+    protected StringTemplateSource templateSource;
+    protected STextArea templateInput;
+    protected Controls controls;
 
 
     protected SComponent createExample() {
-        SPanel examplePanel = new SPanel();
+        controls = new Controls();
 
         try {
             java.net.URL templateURL = getSession().getServletContext().getResource(TEMPLATE);
-            examplePanel.setLayout(new STemplateLayout(templateURL));
-        } catch (Exception e) {
-            // template not found ?
-        }
-
-        try {
-            java.net.URL fallbackTemplateURL = getSession().getServletContext().getResource(FALLBACK_TEMPLATE);
             StringBuffer buffer = new StringBuffer();
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(fallbackTemplateURL.openStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(templateURL.openStream()));
 
             String line = reader.readLine();
             while (line != null) {
                 buffer.append(line).append('\n');
                 line = reader.readLine();
-            } // end of while ()
-
-            fallbackTemplateString = buffer.toString();
-        } catch (Exception ex) {
-            fallbackTemplateString =
+            }
+            templateString = buffer.toString();
+        }
+        catch (Exception ex) {
+            templateString =
                     "A simple interactive example how to use template layouts:<br/>\n" +
-                    "<input type=textarea column=\"80\" rows=\"20\" name=\"TemplateInput\"/> <br/>\n" +
+                    "<input type=textarea column=\"100\" rows=\"20\" name=\"TemplateInput\"/> <br/>\n" +
                     "<input type=submit text=\"Apply\" name=\"Apply\"/>";
             ex.printStackTrace();
-            // template not found ?
         }
 
-        SForm form = new SForm();
-
-        final StringTemplateSource templateSource =
-                new StringTemplateSource(fallbackTemplateString);
-
-        final STextArea templateInput = new STextArea();
-        templateInput.setText(fallbackTemplateString);
+        templateSource = new StringTemplateSource(templateString);
+        templateInput = new STextArea(templateString);
 
         SButton applyButton = new SButton("Apply");
         applyButton.addActionListener(new ActionListener() {
@@ -82,26 +71,32 @@ public class InteractiveTemplateExample
             }
         });
 
-        SButton resetButton = new SButton("Reset");
-        resetButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                templateSource.setTemplate(fallbackTemplateString);
-                templateInput.setText(fallbackTemplateString);
-            }
-        });
-
         SLabel label = new SLabel("Simple Label");
 
+        SForm form = new SForm();
         form.setLayout(new STemplateLayout(templateSource));
-
         form.add(templateInput, "TemplateInput");
         form.add(applyButton, "Apply");
         form.add(label, "Label");
 
-        examplePanel.add(form, "DynamicTemplate");
-        examplePanel.add(resetButton, "Reset");
-        return examplePanel;
+        SForm panel = new SForm(new SBorderLayout());
+        panel.add(controls, SBorderLayout.NORTH);
+        panel.add(form, SBorderLayout.CENTER);
+        return panel;
+    }
+
+    class Controls extends SToolBar {
+        public Controls() {
+            setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
+            SButton resetButton = new SButton("Reset");
+            resetButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    templateSource.setTemplate(templateString);
+                    templateInput.setText(templateString);
+                }
+            });
+
+            add(resetButton, SBorderLayout.NORTH);
+        }
     }
 }
-
-

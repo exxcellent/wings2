@@ -13,146 +13,128 @@
  */
 package wingset;
 
-import org.wings.SBoxLayout;
-import org.wings.SButton;
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SFlowDownLayout;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SURLIcon;
+import org.wings.*;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class CheckBoxExample
-        extends WingSetPane {
-    static final ClassLoader cl = WingSet.class.getClassLoader();
-    static final SIcon sel =
-            new SURLIcon("../icons/ComboBoxSelectedIcon.gif");
-    static final SIcon nsel =
-            new SURLIcon("../icons/ComboBoxIcon.gif");
-    static final SIcon dissel =
-            new SURLIcon("../icons/ComboBoxDisabledSelectedIcon.gif");
-    static final SIcon disnsel =
-            new SURLIcon("../icons/ComboBoxDisabledIcon.gif");
-    static final SIcon rollsel =
-            new SURLIcon("../icons/ComboBoxRolloverSelectedIcon.gif");
-    static final SIcon rollnsel =
-            new SURLIcon("../icons/ComboBoxRolloverIcon.gif");
+        extends WingSetPane
+{
+    final static int[] textHPos = new int[] {SConstants.LEFT, SConstants.CENTER, SConstants.RIGHT};
+    final static int[] textVPos = new int[] {SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
+
+    static final SIcon sel = new SURLIcon("../icons/ComboBoxSelectedIcon.gif");
+    static final SIcon nsel = new SURLIcon("../icons/ComboBoxIcon.gif");
+    static final SIcon dissel = new SURLIcon("../icons/ComboBoxDisabledSelectedIcon.gif");
+    static final SIcon disnsel = new SURLIcon("../icons/ComboBoxDisabledIcon.gif");
+    static final SIcon rollsel = new SURLIcon("../icons/ComboBoxRolloverSelectedIcon.gif");
+    static final SIcon rollnsel = new SURLIcon("../icons/ComboBoxRolloverIcon.gif");
+    private ButtonControls controls;
+
+    private final SLabel reportLabel = new SLabel("No button pressed");
+    protected ActionListener action = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
+        }
+    };
 
     public SComponent createExample() {
-        SPanel p = new SPanel(new SGridLayout(2));
-        p.add(new SLabel("<html><h4>CheckBoxes outside forms</h4>"));
-        p.add(new SLabel("<html><h4>Image CheckBoxes outside forms</h4>"));
+        controls = new ButtonControls();
+        SContainer p = createCheckBoxExample();
 
-        p.add(createCheckBoxExample());
-        p.add(createImageCheckBoxExample());
-
-        SForm form = new SForm(new SBoxLayout(SBoxLayout.VERTICAL));
-        form.add(new SLabel("<html><h4>CheckBoxes in a form</h4>"));
-        form.add(createCheckBoxExample());
-        form.add(new SLabel("<html>&nbsp;"));
-        form.add(new SButton("submit"));
-        p.add(form);
-
-        form = new SForm(new SBoxLayout(SBoxLayout.VERTICAL));
-        form.add(new SLabel("<html><h4>Image CheckBoxes in a form</h4>"));
-        form.add(createImageCheckBoxExample());
-        form.add(new SLabel("<html>&nbsp;"));
-        form.add(new SButton("submit"));
-        p.add(form);
-        return p;
+        SForm form = new SForm(new SBorderLayout());
+        form.add(controls, SBorderLayout.NORTH);
+        form.add(p, SBorderLayout.CENTER);
+        return form;
     }
-
 
     SContainer createCheckBoxExample() {
-        SPanel text = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        
+        SCheckBox[] buttons = new SCheckBox[9];
 
-        for (int i = 0; i < 3; i++) {
-            SCheckBox b = new SCheckBox("text " + (i + 1));
-            // b.setBorder(new SLineBorder(1));
-            text.add(b);
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = new SCheckBox("Text " + (i + 1));
+            buttons[i].setActionCommand(buttons[i].getText());
+            if (i != 4) {
+                buttons[i].setIcon(nsel);
+                buttons[i].setSelectedIcon(sel);
+                buttons[i].setDisabledIcon(disnsel);
+                buttons[i].setDisabledSelectedIcon(dissel);
+                buttons[i].setRolloverIcon(rollnsel);
+                buttons[i].setRolloverSelectedIcon(rollsel);
+            }
+            else {
+                buttons[i].setIcon(null);
+                buttons[i].setSelectedIcon(null);
+                buttons[i].setDisabledIcon(null);
+                buttons[i].setDisabledSelectedIcon(null);
+                buttons[i].setRolloverIcon(null);
+                buttons[i].setRolloverSelectedIcon(null);
+            }
+            buttons[i].setToolTipText("CheckBox " + (i+1));
+            buttons[i].setName("button" + (i+1));
+            buttons[i].setShowAsFormComponent(false);
+            buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
+            buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
+            controls.addSizable(buttons[i]);
         }
 
-        return text;
+        final SGridLayout grid = new SGridLayout(3);
+        final SPanel buttonGrid = new SPanel(grid);
+        grid.setBorder(1);
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].addActionListener(action);
+            buttonGrid.add(buttons[i]);
+        }
+
+        SPanel panel = new SPanel(new SGridLayout(1));
+        panel.add(buttonGrid);
+        panel.add(reportLabel);
+
+        return panel;
     }
 
-    SContainer createImageCheckBoxExample() {
+    class ButtonControls extends ComponentControls {
+        public ButtonControls() {
+            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
+            showAsFormComponent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+                        SComponent component = (SComponent) iterator.next();
+                        component.setShowAsFormComponent(showAsFormComponent.isSelected());
+                    }
+                }
+            });
+            add(showAsFormComponent);
 
-        SCheckBox[] boxes = new SCheckBox[9];
-        boxes[0] = new SCheckBox("testTL");
-        boxes[1] = new SCheckBox("testTC");
-        boxes[2] = new SCheckBox("testTR");
-        boxes[3] = new SCheckBox("testCL");
-        boxes[4] = new SCheckBox();
-        boxes[5] = new SCheckBox("testCR");
-        boxes[6] = new SCheckBox("testBL");
-        boxes[7] = new SCheckBox("testBC");
-        boxes[8] = new SCheckBox("testBR");
+            final SCheckBox useImages = new SCheckBox("Use Icons");
+            useImages.setSelected(true);
+            useImages.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boolean use = useImages.isSelected();
 
-        for (int i = 0; i < boxes.length; i++) {
-            boxes[i].setIcon(nsel);
-            boxes[i].setSelectedIcon(sel);
-            boxes[i].setDisabledIcon(disnsel);
-            boxes[i].setDisabledSelectedIcon(dissel);
-            boxes[i].setRolloverIcon(rollnsel);
-            boxes[i].setRolloverSelectedIcon(rollsel);
-            boxes[i].setPressedIcon(sel);
-            boxes[i].setToolTipText("CheckBox " + i);
+                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+                        SAbstractButton component = (SAbstractButton) iterator.next();
+                        if (!"button5".equals(component.getName())) {
+                            component.setIcon(use ? nsel : null);
+                            component.setSelectedIcon(use ? sel : null);
+                            component.setDisabledIcon(use ? disnsel : null);
+                            component.setDisabledSelectedIcon(use ? dissel : null);
+                            component.setRolloverIcon(use ? rollnsel : null);
+                            component.setRolloverSelectedIcon(use ? rollsel : null);
+                        }
+                    }
+                }
+            });
+            add(useImages);
         }
-
-        boxes[0].setVerticalTextPosition(SConstants.TOP);
-        boxes[0].setHorizontalTextPosition(SConstants.LEFT);
-
-        boxes[1].setVerticalTextPosition(SConstants.TOP);
-        boxes[1].setHorizontalTextPosition(SConstants.CENTER);
-
-        boxes[2].setVerticalTextPosition(SConstants.TOP);
-        boxes[2].setHorizontalTextPosition(SConstants.RIGHT);
-
-        boxes[3].setVerticalTextPosition(SConstants.CENTER);
-        boxes[3].setHorizontalTextPosition(SConstants.LEFT);
-
-        boxes[4].setVerticalAlignment(SConstants.CENTER);
-        boxes[4].setHorizontalAlignment(SConstants.CENTER);
-
-        boxes[5].setVerticalTextPosition(SConstants.CENTER);
-        boxes[5].setHorizontalTextPosition(SConstants.RIGHT);
-
-        boxes[6].setVerticalTextPosition(SConstants.BOTTOM);
-        boxes[6].setHorizontalTextPosition(SConstants.LEFT);
-
-        boxes[7].setSelected(true);
-        boxes[7].setEnabled(false);
-        boxes[7].setVerticalTextPosition(SConstants.BOTTOM);
-        boxes[7].setHorizontalTextPosition(SConstants.CENTER);
-
-        boxes[8].setSelected(false);
-        boxes[8].setEnabled(false);
-        boxes[8].setVerticalTextPosition(SConstants.BOTTOM);
-        boxes[8].setHorizontalTextPosition(SConstants.RIGHT);
-
-        SPanel erg = new SPanel(new SFlowDownLayout());
-
-        SGridLayout grid = new SGridLayout(3, 3);
-        grid.setBorder(1);
-        SPanel b = new SPanel(grid);
-
-        for (int i = 0; i < boxes.length; i++)
-            b.add(boxes[i]);
-
-        erg.add(b);
-
-        return erg;
     }
 }
-
-

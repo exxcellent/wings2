@@ -48,9 +48,13 @@ public class SLineBorder
         setBorderStyle(SOLID);
     }
 
-    public SLineBorder(Color c, String borderStyle) {
-        super(c);
-        setBorderStyle(borderStyle);
+    public SLineBorder(Color c, int thickness) {
+        super(c, thickness, null);
+        setBorderStyle(SOLID);
+    }
+
+    public SLineBorder(Color c, int thickness, Insets insets) {
+        super(c, thickness, insets);
         setBorderStyle(SOLID);
     }
 

@@ -500,7 +500,7 @@ public class SContainer extends SComponent {
 
     /**
      * Collects all {@link SComponent#getComponentPopupMenu()} of all contained and visible components.
-     * @return
+     * @return all menus of all sub components (recursively)
      */
     public ArrayList getMenus() {
         ArrayList menus = new ArrayList();
@@ -512,6 +512,10 @@ public class SContainer extends SComponent {
                     final SPopupMenu componentMenu = comp.getComponentPopupMenu();
                     if (componentMenu != null && menus.contains(componentMenu) == false)
                         menus.add(componentMenu);
+                    if (comp instanceof SContainer) {
+                        SContainer container = (SContainer)comp;
+                        menus.addAll(container.getMenus());
+                    }
                 }
             }
             SPopupMenu pmenu = getComponentPopupMenu();

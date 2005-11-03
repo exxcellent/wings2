@@ -48,10 +48,6 @@ public class InternalFrameCG extends AbstractComponentCG implements
         setUnmaximizeIcon((SIcon) manager.getObject("InternalFrameCG.unmaximizeIcon", SIcon.class));
     }
 
-    public void installCG(SComponent component) {
-        super.installCG(component);
-    }
-
     protected void writeIcon(Device device, SIcon icon, String cssClass) throws IOException {
         device.print("<img");
         if (cssClass != null) {
@@ -74,17 +70,16 @@ public class InternalFrameCG extends AbstractComponentCG implements
         // RequestURL addr = frame.getRequestURL();
         // addr.addParameter(Utils.event(frame), event);
 
-        // we don't need this to be buttons
-//        if (showAsFormComponent) {
-//            device.print("<button");
-//            if (cssClass != null) {
-//                device.print(" class=\"");
-//                device.print(cssClass);
-//                device.print("\"");
-//            }
-//            device.print(" name=\"").print(Utils.event(frame)).print(
-//                    "\" value=\"").print(event).print("\">");
-//        } else {
+        if (showAsFormComponent) {
+            device.print("<button");
+            if (cssClass != null) {
+                device.print(" class=\"");
+                device.print(cssClass);
+                device.print("\"");
+            }
+            device.print(" name=\"").print(Utils.event(frame)).print(
+                    "\" value=\"").print(event).print("\">");
+        } else {
             device.print("<a");
             if (cssClass != null) {
                 device.print(" class=\"");
@@ -95,14 +90,14 @@ public class InternalFrameCG extends AbstractComponentCG implements
                     frame.getRequestURL().addParameter(
                             Utils.event(frame) + "=" + event).toString())
                     .print("\">");
-//        }
+        }
         writeIcon(device, icon, null);
 
-//        if (showAsFormComponent) {
-//            device.print("</button>");
-//        } else {
+        if (showAsFormComponent) {
+            device.print("</button>");
+        } else {
             device.print("</a>");
-//        }
+        }
     }
 
 
@@ -176,14 +171,6 @@ public class InternalFrameCG extends AbstractComponentCG implements
         }
         device.print("</div>");
     }
-
-    private String getIconWidth(SIcon icon) {
-        if (icon.getIconWidth() == -1)
-            return "0%";
-        else
-            return "" + icon.getIconWidth();
-    }
-
 
     public SIcon getCloseIcon() {
         return closeIcon;

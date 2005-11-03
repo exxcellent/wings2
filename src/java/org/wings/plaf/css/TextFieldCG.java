@@ -51,16 +51,16 @@ public class TextFieldCG extends AbstractComponentCG implements
                 }
 
                 textField.addScriptListener(new DWRScriptListener("onblur",
-                        "document.getElementById('{0}').getElementsByTagName('input')[0].style.color = 'inherit';" +
+                        "document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = 'inherit';" +
                         name +
-                        ".validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('input')[0].value)",
+                        ".validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('INPUT')[0].value)",
                         "function callback_{0}(data) {\n" +
                         "   if (!data && data != '') {\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('input')[0].focus();\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('input')[0].style.color = 'red';\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].focus();\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = 'red';\n" +
                         "   }\n" +
                         "   else\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('input')[0].value = data;\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].value = data;\n" +
                         "}\n", new SComponent[] { textField }));
             }
         }

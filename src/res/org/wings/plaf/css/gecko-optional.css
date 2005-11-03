@@ -19,7 +19,8 @@ BODY {
 }
 
 /* Input text fields, dropdown lists, buttons: Orange background, orange outline. */
-TEXTAREA, INPUT[type="text"], INPUT[type="password"], select, button {
+.STextArea textarea, .STextField input[type="text"], .SFormattedTextField input[type="text"], .SPasswordField input[type="password"],
+.SComboBox select, .SList select, .SButton button, .SToggleButton button, .SCheckBox input[type="checkbox"], .SRadioButton input[type="radio"] {
     background-color: #f6decc;
     border: 1px solid #e66e32;
 }

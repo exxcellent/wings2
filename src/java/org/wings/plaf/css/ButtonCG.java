@@ -28,92 +28,13 @@ public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
      */
     // TODO: Implement handling of formless submits
     // TODO: Avoid triggering of enter key catchers
-    // TODO: Use Utils.loadScript("org/wings/plaf/css/xxx.js")
-    public final static String JS_FORM_SUBMIT_SCRIPT = "javascript:this.form.submit();";
+    public final static String JS_FORM_SUBMIT_SCRIPT = "this.form.submit();";
 
     /**
      * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.
      */
     public final static JavaScriptListener JS_ON_CHANGE_SUBMIT = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, JS_FORM_SUBMIT_SCRIPT);
 
-    private void writeDynamicIcons(final Device device, SAbstractButton abstractButton, SIcon origIcon,
-                                   String iconName, boolean renderNameAttribute)
-            throws IOException {
-        if (abstractButton.isEnabled() &&
-                (abstractButton.getGroup() == null || !abstractButton.isSelected())) {
-            // render rollover
-            SIcon rolloverIcon = abstractButton.getRolloverIcon();
-            SIcon pressedIcon = abstractButton.getPressedIcon();
-            SIcon rolloverSelectedIcon = abstractButton.getRolloverSelectedIcon();
-
-            if (rolloverIcon != null || pressedIcon != null) {
-                if (renderNameAttribute) {
-
-                    device.print(" name=\"");
-                    Utils.write(device, iconName);
-
-                    device.print("\"");
-                } // end of if ()
-
-
-                if (rolloverIcon != null) {
-
-                    device.print(" onMouseOver=\"if(document.images){this.src='");
-                    if(abstractButton.isSelected())
-                    	Utils.write(device, rolloverSelectedIcon.getURL());
-                    else
-                    	Utils.write(device, rolloverIcon.getURL());
-
-                    device.print("';}\" onMouseOut=\"if(document.images){this.src='");
-                    Utils.write(device, origIcon.getURL());
-
-                    device.print("';}\"");
-                }
-
-                if (pressedIcon != null) {
-
-                    device.print(" onMouseDown=\"if(document.images){this.src='");
-                    Utils.write(device, pressedIcon.getURL());
-
-                    device.print("';}\"");
-                }
-            }
-        }
-
-    }
-
-    public void writeRollOverIcon(Device device, SIcon icon, SAbstractButton button, String str, boolean renderNameAttribute) throws IOException {
-        device.print("<img");
-        Utils.optAttribute(device, "src", icon.getURL());
-        Utils.optAttribute(device, "width", icon.getIconWidth());
-        Utils.optAttribute(device, "height", icon.getIconHeight());
-        Utils.optAttribute(device, "alt", icon.getIconTitle());
-
-        writeDynamicIcons(device, button, icon, str, renderNameAttribute);
-        
-        device.print("/>");
-    }
-    
-    public void inputRollOverCheckbox(Device device, SIcon icon, SAbstractButton button, String str, boolean renderNameAttribute) throws IOException {
-        device.print("<input type=\"image\"");
-        Utils.optAttribute(device, "src", icon.getURL());
-        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
-        Utils.optAttribute(device, "width", icon.getIconWidth());
-        Utils.optAttribute(device, "height", icon.getIconHeight());
-        Utils.optAttribute(device, "id", button.getName());
-        Utils.optAttribute(device, "alt", icon.getIconTitle());
-        
-        writeDynamicIcons(device, button, icon, str, renderNameAttribute);
-        
-        if (!button.isEnabled())
-            device.print(" disabled=\"true\"");
-        if (button.isSelected())
-            device.print(" checked=\"true\"");
-
-        Utils.writeEvents(device, button);
-        device.print("/>");
-    }
-    
     public void writeContent(final Device device, final SComponent component)
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;

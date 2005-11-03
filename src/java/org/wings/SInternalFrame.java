@@ -41,6 +41,7 @@ public class SInternalFrame
     }
 
     public void setIconifyable(boolean v) {
+        iconifyable = v;
         reloadIfChange(iconifyable, v);
     }
 

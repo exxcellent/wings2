@@ -21,7 +21,8 @@ import org.wings.SIcon;
 import org.wings.io.Device;
 
 public class RadioButtonCG extends CheckBoxCG implements
-        org.wings.plaf.RadioButtonCG {
+        org.wings.plaf.RadioButtonCG
+{
     protected void installIcons(final SAbstractButton button) {
         org.wings.plaf.CGManager manager = button.getSession().getCGManager();
         button.setIcon((SIcon) manager.getObject("SRadioButton.icon", SIcon.class));
@@ -33,7 +34,7 @@ public class RadioButtonCG extends CheckBoxCG implements
         button.setDisabledSelectedIcon((SIcon) manager.getObject("SRadioButton.disabledSelectedIcon", SIcon.class));
     }
 
-    protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
+    protected void writeInput(Device device, SAbstractButton button) throws IOException {
         device.print("<input type=\"hidden\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"");

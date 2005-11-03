@@ -156,7 +156,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
                         "(See Stylesheet.xxx entries in default.properties)");
                 cssUrls.add(cssUrl);
             } else {
-                log.warn("Did not CSS Stylesheet "+cssClassPath+" for browser "+browserName+" to frame. " +
+                log.warn("Did not attach CSS Stylesheet "+cssClassPath+" for browser "+browserName+" to frame. " +
                         "(See Stylesheet.xxx entries in default.properties)");
             }
         }

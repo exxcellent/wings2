@@ -13,14 +13,7 @@
  */
 package wingset;
 
-import org.wings.SBoxLayout;
-import org.wings.SComponent;
-import org.wings.SLabel;
-import org.wings.SMenu;
-import org.wings.SMenuItem;
-import org.wings.SPanel;
-import org.wings.SPopupMenu;
-import org.wings.SFont;
+import org.wings.*;
 import org.wings.border.SEmptyBorder;
 
 import java.awt.event.ActionEvent;
@@ -59,9 +52,10 @@ public class PopupExample extends WingSetPane {
 
         SLabel testLabel = new SLabel("This label has a context menu.");
         testLabel.setComponentPopupMenu(menu);
-        SLabel testLabel2 = new SLabel("This label has the same context menu.");
+        STextField testLabel2 = new STextField("This textfield has the same context menu.");
+        testLabel2.setColumns(testLabel2.getText().length());
         testLabel2.setComponentPopupMenu(menu);
-        SLabel testLabel3 = new SLabel("This label has another context menu.");
+        SLabel testLabel3 = new SLabel("<html>&nbsp;This label has another context menu.", new SURLIcon("../icons/cowSmall.gif"));
         testLabel3.setComponentPopupMenu(menu2);
         SLabel selectionLabel = new SLabel("Selected Menu: ");
         selectionLabel.setBorder(new SEmptyBorder(20,0,0,0));
@@ -69,7 +63,6 @@ public class PopupExample extends WingSetPane {
         selection.setFont(new SFont(SFont.BOLD));
 
         SPanel all = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        all.setHorizontalAlignment(CENTER);
         all.add(testLabel);
         all.add(testLabel2);
         all.add(testLabel3);

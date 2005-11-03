@@ -33,34 +33,35 @@ public class TabbedPaneExample extends WingSetPane {
     private final static int INITIAL_TAB_COUNT = 10;
     private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
-    private final static Object[] COLORS = new Object[]{
-        "Transparent", null,
-        "Yellow", Color.yellow,
-        "Green", Color.green,
-        "Light blue", new Color(200, 200, 255),
-        "Light gray", Color.lightGray,
-        "Orange", Color.orange};
-    private final static Object[] TAB_ALIGNMENTS = new Object[]{
-        "Top", new Integer(SConstants.TOP),
-        "Left", new Integer(SConstants.LEFT),
-        "Right", new Integer(SConstants.RIGHT),
-        "Bottom", new Integer(SConstants.BOTTOM)
+    private final static Object[] COLORS = new Object[] {
+        new Object[] { "Translucent", null },
+        new Object[] { "Yellow", new Color(255, 255, 200) },
+        new Object[] { "Green", new Color(200, 255, 200) },
+        new Object[] { "Blue", new Color(200, 200, 255) },
+        new Object[] { "Red", new Color(255, 200, 200) },
+    };
+    private final static Object[] TAB_PLACEMENTS = new Object[] {
+        new Object[] { "Top", new Integer(SConstants.TOP) },
+        new Object[] { "Left", new Integer(SConstants.LEFT) },
+        new Object[] { "Right", new Integer(SConstants.RIGHT) },
+        new Object[] { "Bottom", new Integer(SConstants.BOTTOM) }
     };
     private TabbedPaneControls controls;
     private STabbedPane tabbedPane;
     private STextArea textArea;
 
     protected SComponent createExample() {
+        controls = new TabbedPaneControls();
+
         textArea = new STextArea(6, 60);
+        textArea.setPreferredSize(SDimension.FULLWIDTH);
 
         // Create tabbed pane and tabulators
         tabbedPane = new STabbedPane();
         for (int i = 0; i < INITIAL_TAB_COUNT; ++i) {
-            SPanel panel = new SPanel(new SGridLayout(1));
-            panel.add(new SLabel("Tab # " + i));
-            panel.add(textArea);
-            panel.setVerticalAlignment(SConstants.TOP);
-            panel.setHorizontalAlignment(SConstants.CENTER);
+            SPanel panel = new SPanel(new SBorderLayout());
+            panel.add(new SLabel("Tab # " + i), SBorderLayout.NORTH);
+            panel.add(textArea, SBorderLayout.CENTER);
             tabbedPane.add("Tab " + i, panel);
         }
         tabbedPane.setShowAsFormComponent(false);
@@ -72,88 +73,13 @@ public class TabbedPaneExample extends WingSetPane {
                 textArea.setText(textArea.getText() + "Changed to tab: " + tabbedPane.getSelectedIndex() + "\n");
             }
         });
-
-
-        // Create left-sided legend panel
-        final SPanel legend = new SPanel(new SFlowDownLayout());
-
-        // Tab placement
-        final SButtonGroup alignmentGroup = new SButtonGroup();
-        final PlacementActionListener placementActionListener = new PlacementActionListener(tabbedPane);
-        final SLabel placementLabel = new SLabel("Tab Placement:");
-        placementLabel.setFont(new SFont(SFont.BOLD));
-        legend.add(placementLabel);
-        for (int i = 0; i < TAB_ALIGNMENTS.length; i += 2) {
-            final SRadioButton button = new SRadioButton(TAB_ALIGNMENTS[i].toString());
-            button.putClientProperty("placement", TAB_ALIGNMENTS[i + 1]);
-            button.addActionListener(placementActionListener);
-            button.setShowAsFormComponent(false);
-            legend.add(button);
-            alignmentGroup.add(button);
-        }
-
-        // Tab colouring
-        final SButtonGroup colorGroup = new SButtonGroup();
-        final SLabel colorLabel = new SLabel("\nContent area background:");
-        colorLabel.setFont(new SFont(SFont.BOLD));
-        legend.add(colorLabel);
-        for (int i = 0; i < COLORS.length; i += 2) {
-            SRadioButton button = new SRadioButton(COLORS[i].toString());
-            button.putClientProperty("color", COLORS[i + 1]);
-            button.addActionListener(new ColorActionListener(tabbedPane));
-            button.setShowAsFormComponent(false);
-            colorGroup.add(button);
-            legend.add(button);
-        }
-        legend.setHorizontalAlignment(SConstants.CENTER);
-
-
-        controls = new TabbedPaneControls();
         controls.addSizable(tabbedPane);
 
         final SForm form = new SForm(new SBorderLayout());
         form.add(controls, SBorderLayout.NORTH);
-        form.add(legend, SBorderLayout.WEST);
         form.add(tabbedPane, SBorderLayout.CENTER);
-
         return form;
     }
-
-    /**
-     * Action listener on radio buttons for tab placement
-     */
-    private static class PlacementActionListener implements ActionListener {
-        private final STabbedPane tpane;
-
-        public PlacementActionListener(STabbedPane tpane) {
-            this.tpane = tpane;
-        }
-
-        public void actionPerformed(ActionEvent ae) {
-            SComponent source = (SComponent) ae.getSource();
-            Integer placement = (Integer) source.getClientProperty("placement");
-            tpane.setTabPlacement(placement.intValue());
-        }
-    }
-
-    /**
-     * Action listener on radio buttons for tab colouring
-     */
-    private static class ColorActionListener implements ActionListener {
-        private final STabbedPane tabs;
-
-        public ColorActionListener(STabbedPane tabs) {
-            this.tabs = tabs;
-        }
-
-        public void actionPerformed(ActionEvent ae) {
-            SComponent source = (SComponent) ae.getSource();
-            Color color = (Color) source.getClientProperty("color");
-            tabs.setAttribute(STabbedPane.SELECTOR_CONTENT,
-                    CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
-        }
-    }
-
 
     /**
      * Extended component control for this wingset demo.
@@ -169,6 +95,43 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             add(showAsFormComponent);
+
+            final SComboBox placement = new SComboBox(TAB_PLACEMENTS);
+            placement.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Object[] objects = (Object[]) placement.getSelectedItem();
+                    Integer integer = (Integer) objects[1];
+                    tabbedPane.setTabPlacement(integer.intValue());
+                }
+            });
+            placement.setRenderer(new ObjectPairCellRenderer());
+            add(new SLabel("<html>&nbsp;&nbsp;tab placement"));
+            add(placement);
+
+            final SComboBox tabColor = new SComboBox(COLORS);
+            tabColor.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Object[] objects = (Object[]) tabColor.getSelectedItem();
+                    Color color = (Color) objects[1];
+                    tabbedPane.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                }
+            });
+            tabColor.setRenderer(new ObjectPairCellRenderer());
+            add(new SLabel("tab color"));
+            add(tabColor);
+
+            final SComboBox contentColor = new SComboBox(COLORS);
+            contentColor.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Object[] objects = (Object[]) contentColor.getSelectedItem();
+                    Color color = (Color) objects[1];
+                    tabbedPane.setAttribute(STabbedPane.SELECTOR_CONTENT, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                }
+            });
+            contentColor.setRenderer(new ObjectPairCellRenderer());
+            add(new SLabel("content color"));
+            add(contentColor);
+
             final SButton addTab = new SButton("add a tab");
             addTab.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -176,29 +139,21 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             add(addTab);
-            final SCheckBox removeCurrent = new SCheckBox("remove current tab");
+
             final SButton removeTab = new SButton("remove a tab");
             removeTab.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    removeTab(removeCurrent.isSelected());
+                    removeTab();
                 }
             });
             add(removeTab);
-            add(removeCurrent);
         }
 
-        protected void removeTab(boolean removeCurrent) {
-            if (removeCurrent) {
-                int index = tabbedPane.getSelectedIndex();
-                if (index != -1) {
-                    tabCount--;
-                    tabbedPane.removeTabAt(index);
-                }
-            } else {
-                if (tabCount > 0) {
-                    tabCount--;
-                    tabbedPane.removeTabAt(tabCount);
-                }
+        protected void removeTab() {
+            int index = tabbedPane.getSelectedIndex();
+            if (index != -1) {
+                tabCount--;
+                tabbedPane.removeTabAt(index);
             }
         }
 
@@ -208,6 +163,14 @@ public class TabbedPaneExample extends WingSetPane {
             p.add(textArea);
             tabbedPane.add("Tab " + tabCount, p);
             tabCount++;
+        }
+
+        private class ObjectPairCellRenderer extends SDefaultListCellRenderer {
+            public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int row) {
+                Object[] objects = (Object[])value;
+                value = objects[0];
+                return super.getListCellRendererComponent(list, value, selected, row);
+            }
         }
     }
 }

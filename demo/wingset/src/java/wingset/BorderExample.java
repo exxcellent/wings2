@@ -25,12 +25,15 @@ import java.awt.event.ActionListener;
  * @version $Revision$
  */
 public class BorderExample
-        extends WingSetPane {
+        extends WingSetPane
+{
     private static final SIcon WAIT_ICON = new SResourceIcon("org/wings/icons/Wait.gif");
 
     final SBorder raised = new SBevelBorder(SBevelBorder.RAISED, new Insets(5, 5, 5, 5));
     final SBorder lowered = new SBevelBorder(SBevelBorder.LOWERED, new Insets(5, 5, 5, 5));
     final SBorder line = new SLineBorder(2, new Insets(5, 5, 5, 5));
+    final SBorder grooved = new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5));
+    final SBorder ridged = new SEtchedBorder(SEtchedBorder.RAISED, new Insets(5, 5, 5, 5));
     final SBorder titled = new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)), "This is a title");
 
     private SLabel borderLabel;
@@ -55,6 +58,12 @@ public class BorderExample
         final SRadioButton lineb = new SRadioButton("Line");
         group.add(lineb);
         buttons.add(lineb);
+        final SRadioButton groovedb = new SRadioButton("Grooved");
+        group.add(groovedb);
+        buttons.add(groovedb);
+        final SRadioButton ridgedb = new SRadioButton("Ridged");
+        group.add(ridgedb);
+        buttons.add(ridgedb);
         final SRadioButton eb = new SRadioButton("Title");
         group.add(eb);
         buttons.add(eb);
@@ -72,6 +81,12 @@ public class BorderExample
                 } else if (button == lineb) {
                     borderLabel.setText("Line Border");
                     borderLabel.setBorder(line);
+                } else if (button == groovedb) {
+                    borderLabel.setText("Grooved Border");
+                    borderLabel.setBorder(grooved);
+                } else if (button == ridgedb) {
+                    borderLabel.setText("Ridged Border");
+                    borderLabel.setBorder(ridged);
                 } else if (button == eb) {
                     borderLabel.setText("Titled Border");
                     borderLabel.setBorder(titled);

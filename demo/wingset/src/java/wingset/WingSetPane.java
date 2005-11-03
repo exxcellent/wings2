@@ -16,14 +16,8 @@ package wingset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.SAnchor;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SFlowDownLayout;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SResourceIcon;
-import org.wings.SDimension;
+import org.wings.*;
+import org.wings.style.CSSProperty;
 import org.wings.event.SComponentAdapter;
 import org.wings.event.SComponentEvent;
 
@@ -33,20 +27,23 @@ import org.wings.event.SComponentEvent;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-abstract public class WingSetPane extends SPanel implements SConstants {
+abstract public class WingSetPane
+        extends SPanel
+        implements SConstants
+{
     protected final static transient Log log = LogFactory.getLog(WingSetPane.class);
     private static final SResourceIcon SOURCE_LABEL_ICON = new SResourceIcon("org/wings/icons/File.gif");
     private boolean initialized = false;
 
     public WingSetPane() {
         setLayout(new SFlowDownLayout());
-        // Stretch panel/layout to full available width of the tabbed pane
         setPreferredSize(SDimension.FULLWIDTH);
 
         SAnchor anchor = new SAnchor("../" + getClass().getName().substring(getClass().getName().indexOf('.') + 1) + ".java");
         anchor.setTarget("sourceWindow");
         anchor.add(new SLabel("view java source code", SOURCE_LABEL_ICON));
-        add(anchor, "viewSource");
+        anchor.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
+        add(anchor);
 
         // lazily initialize components when first shown
         addComponentListener(new SComponentAdapter() {

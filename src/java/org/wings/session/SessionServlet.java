@@ -413,6 +413,7 @@ final class SessionServlet
 
                 try {
                     session.firePrepareExit();
+                    session.fireRequestEvent(SRequestEvent.REQUEST_END);
 
                     String redirectAddress;
                     if (session.getExitAddress().length() > 0) {
@@ -512,7 +513,7 @@ final class SessionServlet
             }
             
         } finally {
-            if (session != null && !isErrorHandling) {
+            if (session != null) {
                 session.fireRequestEvent(SRequestEvent.REQUEST_END);
             }
 

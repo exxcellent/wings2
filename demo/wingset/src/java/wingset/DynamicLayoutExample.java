@@ -13,20 +13,8 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SBoxLayout;
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SDimension;
-import org.wings.SFlowDownLayout;
-import org.wings.SFlowLayout;
-import org.wings.SFont;
-import org.wings.SForm;
-import org.wings.SGridBagLayout;
-import org.wings.SGridLayout;
-import org.wings.SLabel;
-import org.wings.SLayoutManager;
-import org.wings.SPanel;
+import org.wings.*;
+import org.wings.style.CSSProperty;
 import org.wings.border.SBorder;
 import org.wings.border.SLineBorder;
 import org.wings.script.JavaScriptListener;
@@ -41,7 +29,6 @@ import java.awt.event.ItemListener;
  * @author bschmid
  */
 public class DynamicLayoutExample extends WingSetPane {
-    private final SForm panel = new SForm(new SFlowDownLayout());
     private final SPanel[] demoPanels = {new BorderLayoutDemoPanel(),
                                          new FlowLayoutDemoPanel(),
                                          new GridBagDemoPanel(),
@@ -53,8 +40,12 @@ public class DynamicLayoutExample extends WingSetPane {
                                                       "SGridLayout",
                                                       "SBoxLayout"};
     private final SComboBox selectLayoutManager = new SComboBox(demoManagerNames);
+    protected SForm panel;
 
     protected SComponent createExample() {
+        SToolBar controls = new SToolBar();
+        controls.setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
+
         selectLayoutManager.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 panel.remove(1);
@@ -63,9 +54,11 @@ public class DynamicLayoutExample extends WingSetPane {
         });
         selectLayoutManager.addScriptListener(new JavaScriptListener("onChange", "this.form.submit()"));
 
-        panel.setPreferredSize(SDimension.FULLWIDTH); // Take all available space of wingsetpane
-        panel.add(selectLayoutManager);
-        panel.add(demoPanels[0]);
+        controls.add(selectLayoutManager);
+
+        panel = new SForm(new SBorderLayout());
+        panel.add(controls, SBorderLayout.NORTH);
+        panel.add(demoPanels[0], SBorderLayout.CENTER);
 
         return panel;
     }
@@ -532,8 +525,5 @@ public class DynamicLayoutExample extends WingSetPane {
             c.gridheight = 1;
             p.add(new SLabel("end #5"), c);
         }
-
     }
-
-
 }

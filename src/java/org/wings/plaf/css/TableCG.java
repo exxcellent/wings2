@@ -21,13 +21,16 @@ import org.wings.session.SessionManager;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.SDefaultTableCellRenderer;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class TableCG extends AbstractComponentCG implements
         org.wings.plaf.TableCG {
 
-    private String fixedTableBorderWidth;
+    protected String fixedTableBorderWidth;
 
     /**
      * Initialize properties from config
@@ -40,12 +43,12 @@ public class TableCG extends AbstractComponentCG implements
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        final STable component = (STable) comp;
-        final CGManager manager = component.getSession().getCGManager();
+        final STable table = (STable) comp;
+        final CGManager manager = table.getSession().getCGManager();
         Object value;
         value = manager.getObject("STable.defaultRenderer", STableCellRenderer.class);
         if (value != null) {
-            component.setDefaultRenderer((STableCellRenderer) value);
+            table.setDefaultRenderer((STableCellRenderer) value);
             if (value instanceof SDefaultTableCellRenderer) {
                 SDefaultTableCellRenderer cellRenderer = (SDefaultTableCellRenderer) value;
                 cellRenderer.setEditIcon(manager.getIcon("TableCG.editIcon"));
@@ -53,8 +56,37 @@ public class TableCG extends AbstractComponentCG implements
         }
         value = manager.getObject("STable.headerRenderer", STableCellRenderer.class);
         if (value != null) {
-            component.setHeaderRenderer((STableCellRenderer) value);
+            table.setHeaderRenderer((STableCellRenderer) value);
         }
+
+        InputMap inputMap = new InputMap();
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK, false), "left");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK, false), "right");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.ALT_DOWN_MASK, false), "up");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.ALT_DOWN_MASK, false), "down");
+        table.setInputMap(SComponent.WHEN_IN_FOCUSED_FRAME, inputMap);
+
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (!table.isEditing())
+                    return;
+                if (table.getEditingRow() > 0 && "up".equals(e.getActionCommand()))
+                    table.setEditingRow(table.getEditingRow() - 1);
+                if (table.getEditingRow() < table.getRowCount() -1 && "down".equals(e.getActionCommand()))
+                    table.setEditingRow(table.getEditingRow() + 1);
+                if (table.getEditingColumn() > 0 && "left".equals(e.getActionCommand()))
+                    table.setEditingColumn(table.getEditingColumn() - 1);
+                if (table.getEditingColumn() < table.getColumnCount() -1 && "right".equals(e.getActionCommand()))
+                    table.setEditingColumn(table.getEditingColumn() + 1);
+                table.requestFocus();
+            }
+        };
+        ActionMap actionMap = new ActionMap();
+        actionMap.put("up", action);
+        actionMap.put("down", action);
+        actionMap.put("left", action);
+        actionMap.put("right", action);
+        table.setActionMap(actionMap);
     }
 
     /**

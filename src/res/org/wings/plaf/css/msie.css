@@ -350,53 +350,6 @@ ul.STree li div.SSubTree {
 	border-width: 1px;
 }
 
-
-.framebutton {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-        background-color: #DEDEDE;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-}
-
-.frametitle {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-   	color: #ffffff;
-	background-color: #5555AA;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 8px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-}
-
-.frameborder {
-	border-color: #EEEEEE #999999 #999999 #eeeeee;
-	overflow: visible;
-	padding-right: 0px;
-	padding-left: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-style: solid;
-	border-top-width: 2px;
-	border-right-width: 2px;
-	border-bottom-width: 2px;
-	border-left-width: 2px;
-}
-
 .STitledBorderLegend {
     position: relative;
     top:-1em;
@@ -690,7 +643,21 @@ table.SPopupMenu ul li a,
 table.SMenu ul li a
 {height:1%;}
 
+/* show a different cursor on links and buttons which surround tables */
+.SButton {
+cursor:hand;
+}
+
+
 /* DesktopPane */
+/* clears the windows */
+table.SDesktopPane div.spacer {
+    height:0px;
+    clear: both;
+}
+
+/* Note: internal frame, dialog and option pane are identical
+/* ----------- SINTERNALFRAME */
 
 table.SInternalFrame {
     border: 1px solid #ccc;
@@ -699,10 +666,9 @@ table.SInternalFrame {
 	display:table;
 }
 
-table.SInternalFrame div.WindowBar {	
+table.SInternalFrame div.WindowBar {
 	padding:.2em;
 	background-color: #aaf;
-/*	white-space:pre; for konqueror */
 }
 
 table.SInternalFrame div.WindowBar  a.WindowButton,
@@ -718,13 +684,56 @@ table.SInternalFrame div.WindowContent {
 	padding: .2em;
 }
 
-/* clears the windows */
-table.SDesktopPane div.spacer {
-    height:0px;
-    clear: both;
+/* ----------- SDIALOG */
+
+table.SDialog {
+    border: 1px solid #ccc;
+    margin: .2em;
+    float:left;
+	display:table;
 }
 
-/* show a different cursor on links and buttons which surround tables */
-.SButton {
-cursor:hand;
+table.SDialog div.WindowBar {
+	padding:.2em;
+	background-color: #aaf;
+}
+
+table.SDialog div.WindowBar  a.WindowButton,
+table.SDialog div.WindowBar  button.WindowButton {
+	float: right;
+}
+
+table.SDialog div.WindowBar a.DeiconifyButton {
+	display: inline;
+}
+
+table.SDialog div.WindowContent {
+	padding: .2em;
+}
+
+/* ----------- SOPTIONPANE */
+
+table.SOptionPane {
+    border: 1px solid #ccc;
+    margin: .2em;
+    float:left;
+	display:table;
+}
+
+table.SOptionPane div.WindowBar {
+	padding:.2em;
+	background-color: #aaf;
+}
+
+table.SOptionPane div.WindowBar  a.WindowButton,
+table.SOptionPane div.WindowBar  button.WindowButton {
+	float: right;
+}
+
+table.SOptionPane div.WindowBar a.DeiconifyButton {
+	display: inline;
+}
+
+table.SOptionPane div.WindowContent {
+	padding: .2em;
 }

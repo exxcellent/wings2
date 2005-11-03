@@ -34,7 +34,7 @@ public class RadioButtonCG extends CheckBoxCG {
         button.setDisabledSelectedIcon((SIcon) manager.getObject("SRadioButton.disabledSelectedIcon", SIcon.class));
     }
 
-    protected void inputTypeCheckbox(Device device, SAbstractButton button) throws IOException {
+    protected void writeInput(Device device, SAbstractButton button) throws IOException {
         device.print("<input type=\"hidden\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"");

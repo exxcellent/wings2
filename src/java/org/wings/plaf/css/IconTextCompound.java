@@ -30,15 +30,15 @@ public abstract class IconTextCompound {
     private final static transient Log log = LogFactory.getLog(IconTextCompound.class);
 
     public void writeCompound(Device device, SComponent component, int horizontalTextPosition, int verticalTextPosition) throws IOException {
-        // by default: text right side of icon
         if (horizontalTextPosition == SConstants.NO_ALIGN)
             horizontalTextPosition = SConstants.RIGHT;
-        // by default: text center aligned in height with icon
         if (verticalTextPosition == SConstants.NO_ALIGN)
             verticalTextPosition = SConstants.CENTER;
+        if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.CENTER)
+            horizontalTextPosition = SConstants.RIGHT;
+
         boolean renderTextFirst = verticalTextPosition == SConstants.TOP ||
                 (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT);
-
 
         device.print("<table class=\"SLayout\"");
         SDimension prefSize = component.getPreferredSize();
