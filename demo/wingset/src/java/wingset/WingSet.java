@@ -129,6 +129,7 @@ public class WingSet implements Serializable {
         tab.add(new DragAndDropExample(), "Drag and Drop");
         tab.add(new RawTextComponentExample(), "Raw Text Component");
         tab.add(new ErrorPageExample(), "Error Page");
+        tab.add(new TableNestingExample(),"Limited table nesting (DEVEL)");
 
         // Add component to content pane using a layout constraint (
         frame.getContentPane().add(tab);
