@@ -51,13 +51,13 @@ public class TextFieldCG extends AbstractComponentCG implements
                 }
 
                 textField.addScriptListener(new DWRScriptListener("onblur",
-                        "document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = 'inherit';" +
+                        "document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = '';" +
                         name +
                         ".validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('INPUT')[0].value)",
                         "function callback_{0}(data) {\n" +
                         "   if (!data && data != '') {\n" +
                         "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].focus();\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = 'red';\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = '#ff0000';\n" +
                         "   }\n" +
                         "   else\n" +
                         "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].value = data;\n" +
