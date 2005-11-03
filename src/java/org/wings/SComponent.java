@@ -570,10 +570,15 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Sets the name property of a component. This property is an identifier,
-     * so setting the same name multiple times can lead to strange results.
+     * Sets the name property of a component. This property is an identifier used
+     * also on client side (inside generated HTML view).
+     * So setting the same name multiple times can lead to strange results.
      * If no name is set, it is generated when necessary.
-     * @param name The name to set.
+     * <b>Only valid java identifier characters as defined in {@link Character#isJavaIdentifierStart(char)} and
+     * {@link Character#isJavaIdentifierPart(char)}  are allowed!</b>.
+     *
+     * @param name The name to set. <b>Only valid java identifier characters are allowed!</b>
+     * @see Character
      */
     public void setName(String name) {
         if (name != null) {
@@ -588,8 +593,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Gets the name property of a component. This property is an identifier,
-     * so it is unique.
+     * Gets the name property of a component. This property is an identifier,so it should be always unique.
+     * For details refer to {@link #setName(String)} 
      * @return The name of the component.
      */
     public final String getName() {
