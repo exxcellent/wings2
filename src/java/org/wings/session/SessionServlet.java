@@ -627,6 +627,17 @@ final class SessionServlet
             errorFrame.write(new ServletDevice(out));
         } catch (Exception ex) {
             log.fatal("Exception handling failed.", ex);
+            try {
+                res.setContentType("text/html");
+                PrintWriter printWriter = res.getWriter();
+                printWriter.print("<html><body><h1>An internal application error occured</h1>If the problem " +
+                        "persists, please contact the administrator of this site." +
+                        "<p>Developers: Define wings.error.template in web.xml " +
+                        "to see stacktrace and/or change this screen</body></html>");
+                res.flushBuffer();
+            } catch (IOException e1) {
+                log.warn("Unable to send minimalistic error page to client" + e1);
+            }
         }
         
     }
