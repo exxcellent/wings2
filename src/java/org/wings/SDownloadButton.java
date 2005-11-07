@@ -17,7 +17,7 @@ package org.wings;
  * @author armin
  *         created at 24.02.2004 13:05:00
  */
-public class SDownloadButton extends SAbstractClickable {
+public class SDownloadButton extends SClickable {
 
     Resource resource;
 
