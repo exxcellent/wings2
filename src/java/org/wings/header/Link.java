@@ -21,6 +21,11 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 /**
+ * Include a <code>&lt;LINK&gt;</code>-element inside the HTML header of rendered page.
+ *
+ * <p>Example usage to include a customer stylesheet.<br/>
+ * <code>frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/appstyles.css")));</code>
+ *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
@@ -31,8 +36,16 @@ public class Link implements Renderable {
     protected String target = null;
     protected URLResource urlSource = null;
 
-    public Link(String rel, String rev, String type,
-                String target, URLResource urlSource) {
+    /**
+     *  Example usage to include a customer stylesheet.<br/>
+     * <code>frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/appstyles.css")));</code>
+     * @param rel
+     * @param rev
+     * @param type
+     * @param target
+     * @param urlSource
+     */
+    public Link(String rel, String rev, String type, String target, URLResource urlSource) {
         this.rel = rel;
         this.rev = rev;
         this.type = type;
@@ -66,8 +79,7 @@ public class Link implements Renderable {
 
     public String getTarget() { return target; }
 
-    public void write(Device d)
-            throws IOException {
+    public void write(Device d) throws IOException {
         d.print("<link");
         if (rel != null)
             d.print(" rel=\"" + rel + "\"");
