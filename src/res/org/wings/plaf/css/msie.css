@@ -465,6 +465,7 @@ table.SToggleButton button.SToggleButton_selected
 /* ---------- DOM ToolTips */
 div.domTT {
     border: 1px solid #333333;
+    filter:alpha(opacity=80);
 }
 div.domTTCaption {
     font-family: serif;
