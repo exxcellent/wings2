@@ -541,6 +541,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                 return;
             }
         }
+	reload();
         addEventListener(ScriptListener.class, listener);
     }
 
@@ -559,6 +560,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public final void removeScriptListener(ScriptListener listener) {
         removeEventListener(ScriptListener.class, listener);
+        reload();
     }
 
     /**
