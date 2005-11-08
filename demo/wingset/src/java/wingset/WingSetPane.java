@@ -43,6 +43,7 @@ abstract public class WingSetPane
         anchor.setTarget("sourceWindow");
         anchor.add(new SLabel("view java source code", SOURCE_LABEL_ICON));
         anchor.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
+        anchor.setPreferredSize(SDimension.FULLWIDTH);
         add(anchor);
 
         // lazily initialize components when first shown
