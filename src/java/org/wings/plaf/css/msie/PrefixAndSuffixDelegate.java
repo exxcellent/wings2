@@ -19,10 +19,7 @@ import org.wings.*;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
-import org.wings.plaf.css.AbstractLayoutCG;
-import org.wings.plaf.css.InputMapScriptListener;
-import org.wings.plaf.css.Utils;
-import org.wings.plaf.css.VersionedInputMap;
+import org.wings.plaf.css.*;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -30,8 +27,7 @@ import java.io.IOException;
 /**
  * @author ole
  */
-public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDelegate {
-    private final static transient Log log = LogFactory.getLog(PrefixAndSuffixDelegate.class);
+public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixDelegate {
 
     public PrefixAndSuffixDelegate() {
     }
@@ -69,41 +65,14 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
                     .print(lowLevelEventListener.getEncodedLowLevelEventId()).print("\"");
         }
 
-        String toolTip = component.getToolTipText();
-        if (toolTip != null)
-            device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
-                    .print(toolTip)
-                    .print("', 'predefined', 'default'));\"");
+        // Tooltip handling
+        writeTooltipMouseOver(device, component);
 
-        InputMap inputMap = component.getInputMap();
-        if (inputMap != null && !(inputMap instanceof VersionedInputMap)) {
-            log.debug("inputMap = " + inputMap);
-            inputMap = new VersionedInputMap(inputMap);
-            component.setInputMap(inputMap);
-        }
+        // Key bindings
+        handleKeyBindings(component);
 
-        if (inputMap != null) {
-            VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
-            Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
-            if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
-                log.debug("inputMapVersion = " + inputMapVersion);
-                InputMapScriptListener.install(component);
-                component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
-            }
-        }
-
-        SPopupMenu menu = component.getComponentPopupMenu();
-        if (menu != null) {
-            //ComponentCG menuCG = menu.getCG();
-            String componentId = menu.getName();
-            String popupId = componentId + "_pop";
-            //String hookId = component.getName();
-            device.print(" onContextMenu=\"javascript:return wpm_menuPopup(event, '");
-            device.print(popupId);
-            device.print("');\" onMouseDown=\"javascript:return wpm_menuPopup(event, '");
-            device.print(popupId);
-            device.print("');\"");
-        }
+        // Component popup menu
+        writeContextMenu(device, component);
 
         device.print("><tr>"); // table
         AbstractLayoutCG.openLayouterCell(device, false, 0, 0, 0, component);
