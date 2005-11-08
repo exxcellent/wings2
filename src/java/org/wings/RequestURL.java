@@ -216,7 +216,7 @@ public class RequestURL extends SimpleURL {
 
         if (resource != null && epoch != null) {
             erg.append(epoch);
-            erg.append("_");
+            erg.append(SConstants.UID_DIVIDER);
         }
 
         if (resource != null) {
