@@ -59,7 +59,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
 
         // if sizes are spec'd in percentages, we need the outer box to have full size...
         final boolean isHeightPercentage = prefSize != null && prefSize.getHeightUnit() != null && prefSize.getHeightUnit().indexOf("%") != -1;
-        final boolean isWidthPercentage = prefSize != null && prefSize.getWidthUnit()!= null && prefSize.getWidthUnit().indexOf("%") != -1;
+        final boolean isWidthPercentage = prefSize != null && prefSize.getWidthUnit() != null && prefSize.getWidthUnit().indexOf("%") != -1;
         // special case of special case: if the component with relative size is vertically aligned, we must avoid 100% heigth
         final boolean isVAligned = (component.getVerticalAlignment() == SConstants.CENTER
                 || component.getVerticalAlignment() == SConstants.BOTTOM);
@@ -79,7 +79,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         // This is the inner DIV around each component.
         // It is responsible for component size, and other styles.
         device.print("<div");
-        Utils.optAttribute(device, "id", component.getName()+"_i");
+        Utils.optAttribute(device, "id", component.getName() + "_i");
         //id=\"").print(component.getName()).print("\"");
         // Special handling: Mark Titled Borders for styling
         if (component.getBorder() instanceof STitledBorder) {
@@ -96,42 +96,13 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         }
 
         // Tooltip handling
-        final String toolTip = component.getToolTipText();
-        if (toolTip != null) {
-            device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '")
-                    .print(toolTip)
-                    .print("', 'predefined', 'default'));\"");
-        }
+        writeTooltipMouseOver(device, component);
 
         // Key bindings
-        InputMap inputMap = component.getInputMap();
-        if (inputMap != null  && inputMap.size() > 0) {
-            if (false == (inputMap instanceof VersionedInputMap)) {
-                log.debug("inputMap = " + inputMap);
-                inputMap = new VersionedInputMap(inputMap);
-                component.setInputMap(inputMap);
-            }
-
-            final VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
-            final Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
-            if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
-                log.debug("inputMapVersion = " + inputMapVersion);
-                InputMapScriptListener.install(component);
-                component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
-            }
-        }
+        handleKeyBindings(component);
 
         // Component popup menu
-        final SPopupMenu menu = component.getComponentPopupMenu();
-        if (menu != null) {
-            final String componentId = menu.getName();
-            final String popupId = componentId + "_pop";
-            device.print(" onContextMenu=\"javascript:return wpm_menuPopup(event, '");
-            device.print(popupId);
-            device.print("');\" onMouseDown=\"javascript:return wpm_menuPopup(event, '");
-            device.print(popupId);
-            device.print("');\"");
-        }
+        writeContextMenu(device, component);
 
         device.print(">"); // div
 
@@ -152,6 +123,56 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         device.print("</div></div>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
+    }
+
+    /**
+     * Write JS code for context menus. Common implementaton for MSIE and gecko.
+     */
+    protected static void writeContextMenu(Device device, SComponent component) throws IOException {
+        final SPopupMenu menu = component.getComponentPopupMenu();
+        if (menu != null) {
+            final String componentId = menu.getName();
+            final String popupId = componentId + "_pop";
+            device.print(" onContextMenu=\"javascript:return wpm_menuPopup(event, '");
+            device.print(popupId);
+            device.print("');\" onMouseDown=\"javascript:return wpm_menuPopup(event, '");
+            device.print(popupId);
+            device.print("');\"");
+        }
+    }
+
+    /**
+     * Handle key binding attached to component. Common handler for MSIE and Gecko PLAF.
+     */
+    protected static void handleKeyBindings(SComponent component) {
+        InputMap inputMap = component.getInputMap();
+        if (inputMap != null && inputMap.size() > 0) {
+            if (!(inputMap instanceof VersionedInputMap)) {
+                log.debug("inputMap = " + inputMap);
+                inputMap = new VersionedInputMap(inputMap);
+                component.setInputMap(inputMap);
+            }
+
+            final VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
+            final Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
+            if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
+                log.debug("inputMapVersion = " + inputMapVersion);
+                InputMapScriptListener.install(component);
+                component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
+            }
+        }
+    }
+
+    /**
+     * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
+     */
+    protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
+        final String toolTip = component.getToolTipText();
+        if (toolTip != null) {
+            device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
+            Utils.writeQuoted(device, toolTip, true);
+            device.print("', 'predefined', 'default'));\"");
+        }
     }
 
 }
