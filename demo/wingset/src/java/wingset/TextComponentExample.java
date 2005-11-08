@@ -62,30 +62,38 @@ public class TextComponentExample extends WingSetPane {
         p.add(new SLabel("STextField: "));
         STextField textField = new STextField();
         textField.setName("textfield");
+        textField.setToolTipText("Here you can enter any abritriary text.");
         textField.addDocumentListener(new MyDocumentListener(textField));
         p.add(textField);
 
         p.add(new SLabel("SFormattedTextField (NumberFormat): "));
         SFormattedTextField numberTextField = new SFormattedTextField(new NumberFormatter());
         numberTextField.setName("numberfield");
+        numberTextField.setToolTipText("Text entered here will be formatted as number when you leave focus.\n" +
+                "If you entered an invalid number the text should become red and the textfield refocused.\n" +
+                "This uses code executed on server side in Java!");
         numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
         p.add(numberTextField);
         
         p.add(new SLabel("SFormattedTextField (DateFormat): "));
         SFormattedTextField dateTextField = new SFormattedTextField(new DateFormatter());
         dateTextField.setName("datefield");
+        dateTextField.setToolTipText("Enter a valid/invalid date here.\n" +
+                "Dates will be parsed on server side and reformatted accordingly.");
         dateTextField.addDocumentListener(new MyDocumentListener(dateTextField));
         p.add(dateTextField);
 
         p.add(new SLabel("SPasswordField: "));
         SPasswordField passwordField = new SPasswordField();
         passwordField.setName("passwordfield");
+        passwordField.setToolTipText("Just a regular passsword input.");
         passwordField.addDocumentListener(new MyDocumentListener(passwordField));
         p.add(passwordField);
         
         p.add(new SLabel("STextArea: "));
         STextArea textArea = new STextArea("");
         textArea.setName("textarea");
+        textArea.setToolTipText("Okay - but don't start writing books now ;-)");
         textArea.addDocumentListener(new MyDocumentListener(textArea));
         p.add(textArea);
 
@@ -224,5 +232,4 @@ public class TextComponentExample extends WingSetPane {
         }
     }
 }
-
 
