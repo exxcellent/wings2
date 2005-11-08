@@ -276,7 +276,6 @@ public final class Utils {
      * <p><ul><li>Preffered Size</li><li>Font</li><li>Background- and Foregroud color.</li></ul>
      *
      * @param component Component to grab parameters from.
-     * @return
      */
     public static StringBuffer generateCSSComponentInlineStyle(SComponent component) {
         final StringBuffer styleString = generateCSSInlinePreferredSize(component != null ? component.getPreferredSize() : null);
@@ -365,20 +364,7 @@ public final class Utils {
     }
 
     /**
-     * writes an {X|HT}ML quoted string according to RFC 1866.
-     * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
-     * wrapper to same emthod with more parameters.
-     * @param d The device to print out on
-     * @param s the String to print
-     * @param quoteNewline should newlines be transformed into br tags
-     * @throws IOException
-     */
-    private static void quote(Device d, String s, boolean quoteNewline) throws IOException {
-        quote(d,s,quoteNewline, false);
-    }
-
-    /**
-      * writes an {X|HT}ML quoted string according to RFC 1866.
+      * Writes an {X|HT}ML quoted string according to RFC 1866.
       * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
       * @param d The device to print out on
       * @param s the String to print
@@ -386,7 +372,6 @@ public final class Utils {
       * @param quoteSpaces should spaces be transformed into nbsp chars
       * @throws IOException
       */
-     // not optimized yet
     private static void quote(Device d, String s, boolean quoteNewline, boolean quoteSpaces) throws IOException {
         if (s == null) {
             return;
@@ -473,24 +458,6 @@ public final class Utils {
     }
 
     /**
-     * writes the given String to the device. The string is quoted, i.e.
-     * for all special characters in *ML, their appropriate entity is
-     * returned.
-     * If the String starts with '<html>', the content is regarded being
-     * HTML-code and is written as is (without the <html> tag).
-     */
-    public static void write(Device d, String s) throws IOException {
-        if (s == null) {
-            return;
-        }
-        if ((s.length() > 5) && (s.startsWith("<html>"))) {
-            writeRaw(d, s.substring(6));
-        } else {
-            quote(d, s, false);
-        }
-    }
-    
-    /**
      * write content string depending on browser (IE needs nbsp's in labels for
      * example).
      * @param d
@@ -504,9 +471,21 @@ public final class Utils {
         } else if (isIE) {
             quote(d, s, true, true);
         } else {
-            quote(d, s, false);
+            quote(d,s,false, false);
         }
     }
+
+    /**
+     * writes the given String to the device. The string is quoted, i.e.
+     * for all special characters in *ML, their appropriate entity is
+     * returned.
+     * If the String starts with '<html>', the content is regarded being
+     * HTML-code and is written as is (without the <html> tag).
+     */
+    public static void write(Device d, String s) throws IOException {
+        writeQuoted(d, s, false);
+    }
+
 
      /**
      * writes the given String to the device. The string is quoted, i.e.
@@ -514,16 +493,16 @@ public final class Utils {
      * returned.
      * If the String starts with '<html>', the content is regarded being
      * HTML-code and is written as is (without the <html> tag).
-     * It is possible to define the newLine behavoiur
+     * It is possible to define the quoteNewline behavoiur
      */
-    public static void writeQuoted(Device d, String s, boolean newLine) throws IOException {
+    public static void writeQuoted(Device d, String s, boolean quoteNewline) throws IOException {
         if (s == null) {
             return;
         }
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
         } else {
-            quote(d, s, newLine);
+            quote(d,s,quoteNewline, false);
         }
     }
     
@@ -546,7 +525,7 @@ public final class Utils {
             throws IOException {
         if (value != null && value.trim().length() > 0) {
             d.print(" ").print(attr).print("=\"");
-            quote(d, value, true);
+            quote(d,value,true, false);
             d.print("\"");
         }
     }
@@ -644,7 +623,7 @@ public final class Utils {
         Color c = new Color(255, 254, 7);
         Device d = new org.wings.io.StringBufferDevice();
         write(d, c);
-        quote(d, "\nThis is a <abc> string \"; foo & sons\nmoin", true);
+        quote(d,"\nThis is a <abc> string \"; foo & sons\nmoin",true, false);
         d.print(String.valueOf(-42));
         d.print(String.valueOf(Integer.MIN_VALUE));
 
@@ -654,7 +633,7 @@ public final class Utils {
         d = new org.wings.io.NullDevice();
         long start = System.currentTimeMillis();
         for (int i = 0; i < 1000000; ++i) {
-            quote(d, "this is a little & foo", true);
+            quote(d,"this is a little & foo",true, false);
         }
         System.err.println("took: " + (System.currentTimeMillis() - start)
                 + "ms");
