@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Utils.java
@@ -726,4 +727,30 @@ public final class Utils {
         return text.replace(' ', '\u00A0');
     }
 
+
+    /**
+     * Takes a string, tokenizes it and appends the wordSuffix on each word.
+     * @param words A list of words, may be <code>null</code>.
+     * @param wordSuffix A suffix string to append to each word
+     * @return modified string (<code>i.e. "slayout myclass","_box"</code>  gets <code>"slayout_box myclass_box"</code>).
+     */
+    public static String appendSuffixesToWords(String words, String wordSuffix) {
+        if (words == null || words.length() == 0 || wordSuffix == null || wordSuffix.length() == 0)
+            return words;
+
+        // trivial case
+        if (words.indexOf(" ") < 0)
+            return words+wordSuffix;
+
+        // more than one word
+        StringTokenizer tokenizer = new StringTokenizer(words, " ");
+        StringBuffer returnValue = new StringBuffer();
+        while (tokenizer.hasMoreElements()) {
+            returnValue.append(tokenizer.nextToken()).append(wordSuffix);
+            if (tokenizer.hasMoreTokens())
+                returnValue.append(" ");
+        }
+
+        return returnValue.toString();
+    }
 }
