@@ -21,15 +21,18 @@ import org.wings.SIcon;
 import org.wings.SResourceIcon;
 import org.wings.resource.ClasspathResource;
 import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.StyleSheet;
-import org.wings.style.CSSProperty;
-
 import java.awt.*;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
 
 /**
  * A Look-and-Feel consists of a bunch of CGs and resource properties.
@@ -38,19 +41,21 @@ import java.util.*;
  *
  * @see org.wings.plaf.ComponentCG
  */
-public class LookAndFeel        implements Serializable {
+public class LookAndFeel implements Serializable {
     private final transient static Log log = LogFactory.getLog(LookAndFeel.class);
 
-    private static Map wrappers = new HashMap();
+    private static Map WRAPPERS;
     static {
-        wrappers.put(Boolean.TYPE, Boolean.class);
-        wrappers.put(Character.TYPE, Character.class);
-        wrappers.put(Byte.TYPE, Byte.class);
-        wrappers.put(Short.TYPE, Short.class);
-        wrappers.put(Integer.TYPE, Integer.class);
-        wrappers.put(Long.TYPE, Long.class);
-        wrappers.put(Float.TYPE, Float.class);
-        wrappers.put(Double.TYPE, Double.class);
+        WRAPPERS = new HashMap();
+        WRAPPERS.put(Boolean.TYPE, Boolean.class);
+        WRAPPERS.put(Character.TYPE, Character.class);
+        WRAPPERS.put(Byte.TYPE, Byte.class);
+        WRAPPERS.put(Short.TYPE, Short.class);
+        WRAPPERS.put(Integer.TYPE, Integer.class);
+        WRAPPERS.put(Long.TYPE, Long.class);
+        WRAPPERS.put(Float.TYPE, Float.class);
+        WRAPPERS.put(Double.TYPE, Double.class);
+        WRAPPERS = Collections.unmodifiableMap(WRAPPERS);
     }
 
     protected Properties properties;
@@ -113,19 +118,6 @@ public class LookAndFeel        implements Serializable {
           }
       }
       return result;
-        /* changed this method due to NoClassDefFoundError at Tomcat startup.
-         * see http://sourceforge.net/mailarchive/forum.php?thread_id=7551328&forum_id=13034
-         */
-//        Object result = null;
-//        try {
-//            Class cgClass = Class.forName(className, true, Thread
-//                    .currentThread().getContextClassLoader());
-//            result = cgClass.newInstance();
-//            finalResources.put(className, result);
-//        } catch (Exception ex) {
-//            log.fatal(null, ex);
-//        }
-//        return result;
     }
 
     /**
@@ -248,7 +240,7 @@ public class LookAndFeel        implements Serializable {
                 result = clazz.newInstance();
             } else {
                 if (clazz.isPrimitive())
-                    clazz = (Class) wrappers.get(clazz);
+                    clazz = (Class) WRAPPERS.get(clazz);
                 Constructor constructor = clazz.getConstructor(new Class[]{String.class});
                 result = constructor.newInstance(new Object[]{value});
             }

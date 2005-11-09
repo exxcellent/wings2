@@ -39,6 +39,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
     public void writePrefix(Device device, SComponent component) throws IOException {
         final SDimension prefSize = component.getPreferredSize();
         final StringBuffer cssInlineStyle = new StringBuffer();
+        final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
         Utils.printDebugNewline(device, component);
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
@@ -49,9 +50,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         // it is responsible for Postioning (i.e. it take up all free space around to i.e. center
         // the inner div inside this free space
         device.print("<div");
-        if (component.getStyle() != null && component.getStyle().length() > 0) {
-            Utils.optAttribute(device, "class", component.getStyle() + "_Box");
-        }
+        Utils.optAttribute(device, "class", Utils.appendSuffixesToWords(component.getStyle(), "_Box"));
         Utils.optAttribute(device, "id", component.getName());
         if (component instanceof DragSource) {
             cssInlineStyle.append("position:relative;");
@@ -80,19 +79,11 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         // It is responsible for component size, and other styles.
         device.print("<div");
         Utils.optAttribute(device, "id", component.getName() + "_i");
-        //id=\"").print(component.getName()).print("\"");
-        // Special handling: Mark Titled Borders for styling
-        if (component.getBorder() instanceof STitledBorder) {
-            Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder");
-        } else {
-            Utils.optAttribute(device, "class", component.getStyle());
-        }
+        Utils.optAttribute(device, "class", isTitleBorder ? component.getStyle() + " STitledBorder" : component.getStyle());         // Special handling: Mark Titled Borders for styling
         Utils.optAttribute(device, "style", Utils.generateCSSInlinePreferredSize(prefSize).toString());
 
         if (component instanceof LowLevelEventListener) {
-            LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
-            device.print(" eid=\"")
-                    .print(lowLevelEventListener.getEncodedLowLevelEventId()).print("\"");
+            Utils.optAttribute(device, "eid", ((LowLevelEventListener) component).getEncodedLowLevelEventId());
         }
 
         // Tooltip handling
@@ -107,7 +98,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         device.print(">"); // div
 
         // Special handling: Render title of STitledBorder
-        if (component.getBorder() instanceof STitledBorder) {
+        if (isTitleBorder) {
             STitledBorder titledBorder = (STitledBorder) component.getBorder();
             device.print("<div class=\"STitledBorderLegend\" style=\"");
             titledBorder.getTitleAttributes().write(device);

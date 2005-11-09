@@ -14,6 +14,8 @@
 package org.wings;
 
 /**
+ * A clickable download button to download the passed Resource implementation.
+ *
  * @author armin
  *         created at 24.02.2004 13:05:00
  */
@@ -23,16 +25,19 @@ public class SDownloadButton extends SClickable {
 
     public SDownloadButton(Resource pResource) {
         resource = pResource;
+        setShowAsFormComponent(false);
     }
 
     public SDownloadButton(String text, Resource pResource) {
         super(text);
         resource = pResource;
+        setShowAsFormComponent(false);
     }
 
     public SDownloadButton(SIcon icon, Resource pResource) {
         super(icon);
         resource = pResource;
+        setShowAsFormComponent(false);
     }
 
     public boolean isEpochCheckEnabled() {
