@@ -13,7 +13,7 @@
  */
 package org.wings;
 
-import java.io.RandomAccessFile;
+
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -69,7 +69,7 @@ public class SDefaultListCellRenderer extends SLabel implements SListCellRendere
 
 
     public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int row) {
-        setName(name(list, row));
+        setNameRaw(name(list, row));
         setText(null);
         setIcon(null);
 
@@ -94,7 +94,7 @@ public class SDefaultListCellRenderer extends SLabel implements SListCellRendere
 
     protected String name(SComponent component, int row) {
         nameBuffer.setLength(0);
-        nameBuffer.append(component.getName()).append("_").append(row);
+        nameBuffer.append(component.getName()).append(SConstants.UID_DIVIDER).append(row);
         return nameBuffer.toString();
     }
 }
