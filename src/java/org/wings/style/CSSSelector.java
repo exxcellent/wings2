@@ -30,7 +30,8 @@ import java.io.Serializable;
  * You use CSS selectors ({@link CSSSelector}) to define <b>which</b> elements you want to modify and define
  * with CSS properties {@link CSSProperty} <b>what</b> visual property you want to modify.
  * <p/>
- * {@see http://www.w3.org/TR/REC-CSS2/selector.html}
+ * Please refer to
+ * <a href="http://www.w3.org/TR/REC-CSS2/selector.html">http://www.w3.org/TR/REC-CSS2/selector.html</a> for details
  *
  * @author bschmid
  */

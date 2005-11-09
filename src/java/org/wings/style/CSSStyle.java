@@ -15,6 +15,8 @@
 package org.wings.style;
 
 /**
+ * A
+ *
  * @author bschmid
  */
 public class CSSStyle extends CSSAttributeSet implements Style {
@@ -34,8 +36,6 @@ public class CSSStyle extends CSSAttributeSet implements Style {
     public void setSelector(CSSSelector selector) {
         this.selector = selector;
     }
-
-    public CSSSelector getCssSelector() { return selector; }
 
     /**
      * The style sheet owning this style.
@@ -58,8 +58,8 @@ public class CSSStyle extends CSSAttributeSet implements Style {
     }
 
     /* @see Style */
-    public Object getSelector() {
-        return getCssSelector();
+    public CSSSelector getSelector() {
+        return selector;
     }
 
     /* @see Style */

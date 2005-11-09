@@ -20,7 +20,8 @@ import java.io.InputStream;
 import java.util.Set;
 
 /**
- * A StyleSheet is a set of {@link Style}s. Proably a instance of {@link CSSStyleSheet}.
+ * A StyleSheet is a collection of CSS {@link Style} definitions.
+ * Known instance are of type {@link CSSStyleSheet}.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
@@ -34,7 +35,7 @@ public interface StyleSheet extends Renderable {
 
     /**
      * The {@link Style}s contained in this style sheet.
-     * @return
+     * @return All {@link Style}s contained in this style sheet
      */
     Set styles();
 

@@ -38,8 +38,8 @@ public final class EditTranscriptGenerator {
      * Generates the shorted edit transcript needed to transform the source String into the target String.
      * The needed changes are noted down as {@link DocumentEvent}s.
      *
-     * @return A list of {@link DocumentEvent}s either of type {@link DocumentEvent.EventType.INSERT}
-     *         or {@link DocumentEvent.EventType.REMOVE} with correct sourceIndexes and lengths.
+     * @return A list of {@link DocumentEvent}s either of type {@link javax.swing.event.DocumentEvent.EventType#INSERT}
+     *         or {@link javax.swing.event.DocumentEvent.EventType#REMOVE} with correct sourceIndexes and lengths.
      */
     public static List generateEvents(String source, String target) {
         final List editScript = shortestEditScript(new StringDiffMatcher(source, target));

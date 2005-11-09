@@ -20,7 +20,8 @@ package org.wings.style;
  * You use CSS selectors ({@link CSSSelector}) to define <b>which</b> elements you want to modify and define
  * with CSS properties {@link CSSProperty} <b>what</b> visual property you want to modify.
  *
- * {@see http://www.w3.org/TR/REC-CSS2/selector.html}
+ * <p>Please refer to <a href="http://www.w3.org/TR/REC-CSS2/selector.html">http://www.w3.org/TR/REC-CSS2/selector.html</a> 
+ * for details
  *
  * @author bschmid
  */

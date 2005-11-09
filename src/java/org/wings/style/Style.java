@@ -18,7 +18,9 @@ import org.wings.Renderable;
 import java.io.Serializable;
 
 /**
- * A wings style. A
+ * A (CSS) Style definition.
+ * <p>A Style is typically a CSS property/value pair that is applied to a element specified by it's selector.
+ * <p>Hence this object is i.e. the OO equivalent of <br/><code>    A.myStyle { color: red; }</code>
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
@@ -27,9 +29,9 @@ public interface Style extends Renderable, Serializable, Cloneable {
 
     /**
      * A object defining on what this styles applies to.
-     * @return
+     * @return The CSS selector which defines to which elements this style applies to.
      */
-    Object getSelector();
+    CSSSelector getSelector();
 
     /**
      * The style sheet owning this style.

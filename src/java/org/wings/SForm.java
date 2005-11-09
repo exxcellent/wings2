@@ -400,10 +400,9 @@ public class SForm        extends SContainer        implements LowLevelEventList
     }
 
     /**
-     * detects if the Container contains a component that needs a certain
-     * encoding type
+     * Detects if the Container contains a component that needs a certain encoding type
      * @param pContainer
-     * @return
+     * @return <code>null</code> or {@link #ENC_TYPE_MULTIPART_FORM}   
      */
     protected String detectEncodingType(SContainer pContainer) {
         for (int i = 0; i < pContainer.getComponentCount(); i++) {

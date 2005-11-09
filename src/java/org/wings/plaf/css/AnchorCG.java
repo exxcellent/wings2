@@ -16,7 +16,6 @@ package org.wings.plaf.css;
 
 import java.io.IOException;
 
-import org.wings.RequestURL;
 import org.wings.SAnchor;
 import org.wings.SComponent;
 import org.wings.io.Device;
@@ -52,11 +51,10 @@ public class AnchorCG
      * Right now this is just for an IE workaround.
      * @param device the device to output to
      * @param component the component to be rendered
-     * @throws IOException 
      */
-    protected void writeLinkStart(final Device device, final SAnchor comp) throws IOException {
+    protected void writeLinkStart(final Device device, final SAnchor component) throws IOException {
         device.print("<a href=\"");
-        device.print(comp.getURL());
+        device.print(component.getURL());
         device.print("\"");
     }
 }
