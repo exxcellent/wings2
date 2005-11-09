@@ -572,26 +572,47 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Sets the name property of a component. This property is an identifier used
-     * also on client side (inside generated HTML view).
-     * So setting the same name multiple times can lead to strange results.
-     * If no name is set, it is generated when necessary.
-     * <b>Only valid java identifier characters as defined in {@link Character#isJavaIdentifierStart(char)} and
-     * {@link Character#isJavaIdentifierPart(char)}  are allowed!</b>.
+     * Sets the name property of a component which must be <b>unique</b>!
+     * <br/>Assigning the same name multiple times will have strange results!
      *
-     * @param name The name to set. <b>Only valid java identifier characters are allowed!</b>
+     * <p>Valid names must begin with a letter ([A-Za-z]) and may be followed by any number of
+     * letters, digits ([0-9]), hyphens ("-") and colons (":")
+     *
+     * <p>If no name is set, it is generated when necessary.
+     *
+     * <p><i>Explanation:</i> This property is an identifier which is also used inside the generated HTML as HTML element identifier. Hence it
+     * must conform to <code>http://www.w3.org/TR/REC-html40/types.html#type-name</code> and respect wingS reserved characters as '.'
+     * and '_' {@link SConstants#UID_DIVIDER}
+     *
+     * @param uniqueName A <b>unique</b> name to set. <b>Only valid identifier as described are allowed!</b>
      * @see Character
      */
-    public void setName(String name) {
-        if (name != null) {
-            if (!Character.isJavaIdentifierStart(name.charAt(0)) || name.charAt(0) == '_')
-                throw new IllegalArgumentException(name + " is not a valid identifier");
-            for (int i=1; i < name.length(); i++)
-                if (!Character.isJavaIdentifierPart(name.charAt(i)) || name.charAt(0) == '_')
-                    throw new IllegalArgumentException(name + " is not a valid identifier");
+    public void setName(String uniqueName) {
+        // W3C: ID and NAME tokens must begin with a letter ([A-Za-z]) and may be followed by any number of
+        // letters, digits ([0-9]), hyphens ("-"), underscores ("_"), colons (":"), and periods (".").
+        //
+        // wingS: Low level event dispatcher uses underscore (_) and point (.) so that's why these are forbidden.
+        if (uniqueName != null) {
+            if (uniqueName.indexOf(SConstants.UID_DIVIDER) >= 0)
+                throw new IllegalArgumentException(uniqueName + " is not a valid identifier (name may not contain SConstants.UID_DIVIDER)");
+            if (uniqueName.length() == 0 || !Character.isLetter(uniqueName.charAt(0)))
+                throw new IllegalArgumentException(uniqueName + " is not a valid identifier");
+            for (int i=1; i < uniqueName.length(); i++) {
+                final char ch = uniqueName.charAt(i);
+                if (!(Character.isLetter(ch) || Character.isDigit(ch) || ch == '-' || ch == ':'))
+                    throw new IllegalArgumentException(uniqueName + " is not a valid identifier");
+            }
         }
-        reloadIfChange(this.name, name);
-        this.name = name;
+        setNameRaw(uniqueName);
+    }
+
+    /**
+     * Package protected raw setter for component name to avoid sanity check.
+     * @param uncheckedName
+     */
+    protected void setNameRaw(String uncheckedName) {
+        reloadIfChange(this.name, uncheckedName);
+        this.name = uncheckedName;
     }
 
     /**
@@ -650,15 +671,34 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Set an CSS class name provided by the laf-provided Cascading Style Sheet (CSS), which should
      * be applied to this component.
-     * <p>Typically the PLAFs render this as an <code>class="<i>cssClassName</i>"</code> attribite
+     * <p>By <b>default</b> this is set to the wingS component class name (i.e. "SLabel").
+     *
+     * <p>The PLAFs render the value of this String to an <code>class="<i>cssClassName</i>"</code> attribute
      * inside the generated HTML code of this component.
      *
      * @param cssClassName The new CSS name value for this component
      */
+    // <p>Please consider using {@link #addStyle(String)} to avoid disabling of default wingS stylesheet set.
     public void setStyle(String cssClassName) {
         reloadIfChange(style, cssClassName);
         this.style = cssClassName;
     }
+
+    /* *
+     * Appends the passed style to the current style string. Refer to {@link #setStyle(String)} for details.
+     *
+     * @param cssClassName Additional CSS class name to apply to this component.
+     * /
+    public void addStyle(String cssClassName) {
+        if (cssClassName != null) {
+            if (style != null && !style.contains(cssClassName)) {
+                setStyle(style + " " + cssClassName); // works for all current browsers.
+            } else {
+                setStyle(cssClassName);
+            }
+        }
+    }  */
+
 
     /**
      * @return The current CSS style class name. Defaults to <code>null</code>
