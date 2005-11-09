@@ -140,7 +140,7 @@ public class SDefaultTreeCellRenderer
                                                    boolean leaf,
                                                    int row,
                                                    boolean hasFocus) {
-        setName(name(tree, row));
+        setNameRaw(name(tree, row));
 
         if (value == null || value.toString() == null ||
                 value.toString().length() == 0) {
