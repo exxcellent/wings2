@@ -163,6 +163,7 @@ ul.STree > li {
 ul.STree > li * {
     white-space: nowrap;
     padding-right: 2px;
+    padding-bottom: 1px;
 }
 
 ul.STree > li[selected="true"] > table > tbody > tr > td > a > div,
@@ -242,13 +243,13 @@ div.SList > * > li.SList_selected {
 }
 
 .SSeparator {
-    color: #CCCCCC;
     height: 0px;
     white-space: nowrap;
     margin: 0px;
     padding: 0px;
-    border-style: inset;
-    border-width: 1px;
+    border-style: solid;
+    border-width: 0px;
+    border-top-width: 1px;
 }
 
 .STextArea {
