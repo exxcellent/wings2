@@ -67,18 +67,17 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
     public void writeContent(final Device device, final SComponent component)
             throws java.io.IOException {
-        STabbedPane tabbedPane = (STabbedPane) component;
+        final STabbedPane tabbedPane = (STabbedPane) component;
         if (tabbedPane.getTabCount() > 0) {
-            String style = component.getStyle();
-            boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
-            int placement = tabbedPane.getTabPlacement();
+            final boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
+            final int placement = tabbedPane.getTabPlacement();
     
-            device.print("<table class=\"SLayout\"");
+            device.print("<table");
+            Utils.optAttribute(device, "class", "SLayout");
             if (childSelectorWorkaround)
-                Utils.optAttribute(device, "class", style);
+                Utils.optAttribute(device, "class", component.getStyle());
 
             Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-    
             Utils.writeEvents(device, component);
             device.print(">");
     
@@ -135,7 +134,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("</th></tr></table>");
             }
         } else {
-            Utils.printDebug(device, "<!-- tabbedPane has no tabs -->");
+            Utils.printDebug(device, "<!-- tabbed pane has no tabs -->");
         }
     }
 

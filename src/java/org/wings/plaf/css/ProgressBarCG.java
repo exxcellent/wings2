@@ -52,9 +52,8 @@ public class ProgressBarCG extends AbstractComponentCG implements        org.win
         }
     }
 
-    public void writeContent(final Device device, final SComponent _c) throws IOException {
-        final SProgressBar component = (SProgressBar) _c;
-        final String style = component.getStyle();
+    public void writeContent(final Device device, final SComponent pComp) throws IOException {
+        final SProgressBar component = (SProgressBar) pComp;
 
         /* FIXME: The problem here is that the component size is used as the
          * size for the progressbar. If text is rendered below
@@ -106,11 +105,7 @@ public class ProgressBarCG extends AbstractComponentCG implements        org.win
 
         if (component.isStringPainted()) {
             device.print("<div style=\"width: 100%; text-align: center;\"");
-            if (style != null) {
-                device.print(" class=\"");
-                Utils.write(device, style);
-                device.print("_string\"");
-            }
+            Utils.optAttribute(device, "class", Utils.appendSuffixesToWords(component.getStyle(), "_string"));
             device.print(">");
             Utils.write(device, component.getString());
             device.print("</div>");
