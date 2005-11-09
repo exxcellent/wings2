@@ -158,10 +158,10 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
      * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
      */
     protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
-        final String toolTip = component.getToolTipText();
-        if (toolTip != null) {
+        final String toolTipText = component.getToolTipText();
+        if (toolTipText != null) {
             device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
-            Utils.writeQuoted(device, toolTip, true);
+            Utils.quote(device, toolTipText, true, false, true);
             device.print("', 'predefined', 'default'));\"");
         }
     }
