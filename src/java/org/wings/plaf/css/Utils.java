@@ -49,7 +49,6 @@ import java.util.StringTokenizer;
  * @version $Revision$
  */
 public final class Utils {
-    private final static transient Log log = LogFactory.getLog(Utils.class);
     /**
      * Print debug information in generated HTML
      */
@@ -369,11 +368,14 @@ public final class Utils {
       * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
       * @param d The device to print out on
       * @param s the String to print
-      * @param quoteNewline should newlines be transformed into br tags
-      * @param quoteSpaces should spaces be transformed into nbsp chars
+      * @param quoteNewline should newlines be transformed into <code>&lt;br&gt;</code> tags
+      * @param quoteSpaces should spaces be transformed into <code>&amp;nbsp</code>  chars
+      * @param quoteApostroph Quote apostroph <code>'</code> by <code>\'</code>
       * @throws IOException
       */
-    private static void quote(Device d, String s, boolean quoteNewline, boolean quoteSpaces) throws IOException {
+    public static void quote(final Device d, final String s, final boolean quoteNewline,
+                              final boolean quoteSpaces, final boolean quoteApostroph)
+            throws IOException {
         if (s == null) {
             return;
         }
@@ -439,6 +441,15 @@ public final class Utils {
                             last = pos + 1;
                         }
                         break;
+                    /* Needed for i.e. js-code. */
+                    case '\'':
+                        if (quoteApostroph) {
+                            d.print(chars, last, (pos - last));
+                            d.print("\\'");
+                            last = pos + 1;
+                        }
+                        break;
+
                 }
             }
         }
@@ -470,9 +481,9 @@ public final class Utils {
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
         } else if (isIE) {
-            quote(d, s, true, true);
+            quote(d, s, true, true, false);
         } else {
-            quote(d,s,false, false);
+            quote(d,s,false, false, false);
         }
     }
 
@@ -488,7 +499,7 @@ public final class Utils {
     }
 
 
-     /**
+    /**
      * writes the given String to the device. The string is quoted, i.e.
      * for all special characters in *ML, their appropriate entity is
      * returned.
@@ -503,7 +514,7 @@ public final class Utils {
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
         } else {
-            quote(d,s,quoteNewline, false);
+            quote(d,s,quoteNewline, false, false);
         }
     }
     
@@ -526,7 +537,7 @@ public final class Utils {
             throws IOException {
         if (value != null && value.trim().length() > 0) {
             d.print(" ").print(attr).print("=\"");
-            quote(d,value,true, false);
+            quote(d,value,true, false, false);
             d.print("\"");
         }
     }
@@ -624,7 +635,7 @@ public final class Utils {
         Color c = new Color(255, 254, 7);
         Device d = new org.wings.io.StringBufferDevice();
         write(d, c);
-        quote(d,"\nThis is a <abc> string \"; foo & sons\nmoin",true, false);
+        quote(d,"\nThis is a <abc> string \"; foo & sons\nmoin",true, false, false);
         d.print(String.valueOf(-42));
         d.print(String.valueOf(Integer.MIN_VALUE));
 
@@ -634,7 +645,7 @@ public final class Utils {
         d = new org.wings.io.NullDevice();
         long start = System.currentTimeMillis();
         for (int i = 0; i < 1000000; ++i) {
-            quote(d,"this is a little & foo",true, false);
+            quote(d,"this is a little & foo",true, false, false);
         }
         System.err.println("took: " + (System.currentTimeMillis() - start)
                 + "ms");
