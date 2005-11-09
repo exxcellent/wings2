@@ -276,8 +276,12 @@ public class TableCG extends AbstractComponentCG implements
         device.print("<tbody>\n");
         for (int r = startRow; r < endRow; r++) {
             device.print("<tr");
-            if (selectionModel.isSelectedIndex(r))
-                device.print(" selected=\"true\"");
+            if (selectionModel.isSelectedIndex(r)){
+            	if(childSelectorWorkaround)
+            		device.print("  class=\"selected\"");
+            	else
+            		device.print(" selected=\"true\"");
+            }
             if (r % 2 != 0)
                 device.print(" odd=\"true\" class=\"odd\">");
             else
