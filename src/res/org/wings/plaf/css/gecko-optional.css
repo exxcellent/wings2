@@ -8,7 +8,7 @@
    Please avoid generic/global css selectors and use the wings css classes in your selection path
 */
 
-/* ----------- SOME GLOBALS */
+/* ----------- GLOBAL FRAME */
 
 BODY {
     background: #ffffff;
@@ -18,19 +18,36 @@ BODY {
     font-size: 0.8em;
 }
 
-/* Input text fields, dropdown lists, buttons: Orange background, orange outline. */
-.STextArea textarea, .STextField input[type="text"], .SFormattedTextField input[type="text"], .SPasswordField input[type="password"],
-.SComboBox select, .SList select, .SButton button, .SToggleButton button, .SCheckBox input[type="checkbox"], .SRadioButton input[type="radio"] {
-    background-color: #f6decc;
-    border: 1px solid #e66e32;
-}
-
 /* Links: No visited colour, no underline  */
 A:link, A:visited, A:active {
     color: #000066;
     text-decoration: none;
 }
 
+/* ----------- INPUT ELEMENTS  */
+
+/* Input text fields, dropdown lists, buttons:
+   Light gray background, gray outline. */
+.STextArea textarea, .STextField input[type="text"], .SFormattedTextField input[type="text"],
+.SPasswordField input[type="password"], .SComboBox select, .SList select, .SButton button,
+.SToggleButton button, .SCheckBox input[type="checkbox"], .SRadioButton input[type="radio"] {
+    background-color: #eee;
+    border: 1px solid #aaa;
+}
+
+/* ----------- STable even/odd and selected line coloring */
+
+div.STable > table > tbody > tr[even="true"] {
+    background-color: #efefef;
+}
+
+div.STable > table > tbody > tr[odd="true"] {
+    background-color: #e5e5e5;
+}
+
+div.STable > table > tbody > tr[selected="true"] {
+    background-color: #ffbbbb !important;
+}
 
 /* ----------- DISABLED COMPONENTS OPACITY = 0.7*/
 
@@ -47,42 +64,10 @@ div.SFormattedTextField > input[disabled="true"] {
 }
 
 /* ----------- READONLY TEXTFIELDS: Grey background */
-div.STextField > input[readonly="true"] {
-    background-color: #eeeeff;
+
+div.STextField > input[readonly="true"], div.SFormattedTextField > input[readonly="true"]  {
+    background-color: #eeeeee;
 }
-div.SFormattedTextField > input[readonly="true"] {
-    background-color: #eeeeff;
-}
-
-
-/* ----------- FANCY BUTTONS */
-
-/* Fancy buttons. */
-div.SButton > button {
-    border-width: 2px;
-}
-/* Hover button on mouse-over. */
-/*div.SButton > button:hover {
-    border: 1px outset #cccccc;
-}*/
-/* Don't hover if disabled button. */
-/*div.SButton > button:hover[disabled="true"] {
-    border: 1px solid #cccccc;
-}*/
-
-
-/* ----------- ???????????? */
-
-/* I have no clue ?! This seems to have no effect.                                               CHECKME!
-div.SClickable > button {
-    background-color: inherit;
-    border: 1px none;
-}
-
-div.SClickable > button:hover {
-    border: 1px solid gray;
-}
-*/
 
 /* ----------- DESKTOP PANE */
 
@@ -120,14 +105,4 @@ div.SOptionPane > table > tbody > tr > th[col="title"] {
 div.SDialog > table > tbody > tr > *,
 div.SOptionPane > table > tbody > tr > * {
     border: 1px solid #cccccc;
-}
-
-/* STable even / odd coloring */
-
-div.STable > table > tbody > tr[odd="true"] {
-    background-color: #eeeeee;
-}
-
-div.STable > table > tbody > tr[selected="true"] {
-    background-color: #f6decc !important;
 }

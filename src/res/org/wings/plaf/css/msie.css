@@ -203,6 +203,7 @@ table.STree {
 	text-align: left;
 }
 
+/* ---- Selection color of STrees ----------------------------------------------------------------------*/
 /* we need cascading styles here since else children get selected.
    if you need to select across more than 4 levels, you need to expand these rules.
    and I don't take the blame, it's all IE's fault ;) (ol) */
@@ -214,10 +215,9 @@ ul.STree li.selected li.selected li.selected table tr td a table,
 ul.STree li.selected li.selected li.selected table tr td button table,
 ul.STree li.selected li.selected li.selected li.selected table tr td a table,
 ul.STree li.selected li.selected li.selected li.selected table tr td button table {
-    background-color: #f6decc;
+    background-color: #ffbbbb;
     border: 1px dotted black;
 }
-
 /* lift former style for children */
 ul.STree li.selected li table tr td a table,
 ul.STree li.selected li table tr td button table,
@@ -232,6 +232,7 @@ ul.STree li.selected li.selected li.selected li.selected li.selected li table tr
     background-color: transparent;
     border: none;
 }
+/* ---------------------------------------------------------------------------------------------------- */
 
 /* bugfix: IE renders some margin into buttons by default, we hate that.
    maybe extend this onto all buttons... ole 15.07.2005
@@ -258,7 +259,6 @@ ul.STree li * {
 
 ul.STree li button {
     border: none;
-    background-color: inherit; /* ILLEGAL FOR MSIE6 according to TopStyle */
     padding: 0px;
     text-decoration: none;
     font-family: sans-serif;
@@ -446,8 +446,9 @@ td.STabbedPane_pane {
     width: 100%;
 }
 
+/* Background color of selected STabbedPane tabs */
 .STabbedPane_Tab_selected {
-    background-color: #f6decc;
+    background-color: #ffbbbb;
 }
 
 .STabbedPane_Tab_disabled {

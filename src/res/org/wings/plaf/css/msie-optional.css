@@ -16,26 +16,38 @@ body {
     margin: 0px;
 }
 
-/* 
-general font styles have no effect on table cells 
-see: http://www.clagnut.com/blog/348/
-*/
+/* Smaller fonts for IE to be comparable with Mozilla rendering. Refer also: http://www.clagnut.com/blog/348/ */
 body, td {
     font-family: sans-serif;
     font-style: normal;
     font-size: 0.8em;
 }
 
-/* Input text fields, dropdown lists, buttons: Orange background, orange outline. */
-TEXTAREA, select, button {
-    background-color: #f6decc;
-    border: 1px solid #e66e32;
+/* ----------- STable even/odd and selected line coloring */
+
+.STable table tbody tr.odd {
+    background-color: #e5e5e5;
+}
+
+.STable table tbody tr.even {
+    background-color: #efefef;
+}
+
+.STable table tbody tr.selected {
+    background-color: #ffbbbb !important;
+}
+
+
+/* ----------- Input text fields, dropdown lists, buttons: Orange background, orange outline. */
+textarea, select, button {
+    background-color: #eee;
+    border: 1px solid #aaa;
 }
 
 /* text input same as above */
 input {
-    background-color: expression((this.type=="text" || this.type=="password") ? '#f6decc' : 'inherit');
-    border: expression((this.type=="text" || this.type=="password") ? '1px solid #e66e32' : 'inherit');
+    background-color: expression((this.type=="text" || this.type=="password") ? '#eee' : 'inherit');
+    border: expression((this.type=="text" || this.type=="password") ? '1px solid #aaa' : 'inherit');
 }
 
 /* Links: No visited colour, no underline  */
@@ -44,14 +56,4 @@ A:link, A:visited, A:active {
     text-decoration: none;
 }
 
-
-/* STable even / odd coloring */
-
-.STable table tbody tr.odd {
-    background-color: #eeeeee;
-}
-
-.STable table tbody tr.selected {
-    background-color: #f6decc !important;
-}
 

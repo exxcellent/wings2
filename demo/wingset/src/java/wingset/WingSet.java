@@ -14,6 +14,8 @@
 package wingset;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.SIcon;
@@ -21,9 +23,11 @@ import org.wings.SResourceIcon;
 import org.wings.SRootLayout;
 import org.wings.STabbedPane;
 import org.wings.SURLIcon;
+import org.wings.resource.DefaultURLResource;
+import org.wings.header.Link;
+import org.wings.session.SessionManager;
+import org.wings.session.BrowserType;
 import org.wings.style.CSSProperty;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import java.io.Serializable;
 import java.net.URL;
 
@@ -51,6 +55,7 @@ public class WingSet implements Serializable {
      * (Typically a file named wings-statisticsxxxlog placed in jakarta-tomcat/temp directory)
      */
     private static final boolean LOG_STATISTICS_TO_FILE = true;
+
     static {
         if (LOG_STATISTICS_TO_FILE) {
             StatisticsTimerTask.startStatisticsLogging(60);
@@ -60,42 +65,26 @@ public class WingSet implements Serializable {
     /**
      * The root frame of the WingSet application.
      */
-    private SFrame frame;
+    private final SFrame frame;
+
+    private final STabbedPane tab;
 
     /**
      * Constructor of the wingS application.
-     * This class is referenced in the <code>web.xml</code> as root entry point for the wingS application.
-     * For every new client an new session is created an instance of this class is constructed.
+     *
+     * <p>This class is referenced in the <code>web.xml</code> as root entry point for the wingS application.
+     * For every new client an new {@link org.wings.session.Session} is created which constructs a new instance of this class.
      */
     public WingSet() {
         // Create root frame
         frame = new SFrame("WingSet Demo");
 
-        // Apply custom layout template as template for the root frame
-        try {
-            URL templateURL = frame.getSession().getServletContext().getResource("/templates/ExampleFrame.thtml");
-            if (templateURL != null) {
-                SRootLayout layout = new SRootLayout(templateURL);
-                frame.setLayout(layout);
-            }
-        } catch (java.io.IOException except) {
-            log.warn("Exception",except);
-        }
-
-        // Set/Overwrite programatically a CSS style. But it's cleaner to define global styles in an external css file.
-        frame.setAttribute(CSSProperty.MARGIN, "8px !important");
-
         // Create the tabbed pane containing all the wingset example tabs
-        final STabbedPane tab = new STabbedPane(SConstants.TOP);
+        tab = new STabbedPane(SConstants.TOP);
         tab.setName("examples");
 
-        // Here we demonstrate how you can style a component by setting CSS properties on the component.
-        // As we want to set styles on specific areas of the componentn and not the component itself, we use
-        // "CSS selectors" provided by the componentn to address these areas. They are dynamically resolved
-        // to the according CSS statements during the rednering process.
-        // Set a background image on selected and unselected tabs (gradient grey or orange)
-        tab.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, STANDARD_TAB_BACKGROUND);
-        tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, SELECTED_TAB_BACKGROUND);
+        // do some global styling of the wingSet application
+        //styleWingsetApp();
 
         // Assemble wingSet
         tab.add(new WingsImage(), "wingS!");
@@ -129,11 +118,51 @@ public class WingSet implements Serializable {
         tab.add(new DragAndDropExample(), "Drag and Drop");
         tab.add(new RawTextComponentExample(), "Raw Text Component");
         tab.add(new ErrorPageExample(), "Error Page");
-        tab.add(new TableNestingExample(),"Limited table nesting (DEVEL)");
+        tab.add(new TableNestingExample(), "Limited table nesting (DEVEL)");
 
         // Add component to content pane using a layout constraint (
         frame.getContentPane().add(tab);
         frame.show();
+    }
+
+    /**
+     * This method demonstrates some mehtods to influence the style of an wingS application
+     */
+    private void styleWingsetApp() {
+        // 1) Apply custom HTML layout template as template for the root frame of the application
+        try {
+            URL templateURL = frame.getSession().getServletContext().getResource("/templates/ExampleFrame.thtml");
+            if (templateURL != null) {
+                SRootLayout layout = new SRootLayout(templateURL);
+                frame.setLayout(layout);
+            }
+        } catch (java.io.IOException except) {
+            log.warn("Exception", except);
+        }
+
+        // 2) Include an application specific CSS stylesheet to extend/overwrite the default wingS style set.
+        if (SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE)) {
+            // Yeah - some 'browsers' always require special attention
+            frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset-ie.css")));
+        } else {
+            frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset-default.css")));
+        }
+
+        // 3) Programatically set/Overwrite CSS properties on specific components (here global frame).
+        //    Remember: It's cleaner to do such global definitions in your external css file vs. in th java code.
+        frame.setAttribute(CSSProperty.MARGIN, "8px !important");
+
+        // 4) More advanced version of 3)
+        //    Here we demonstrate how you can style single component by applying a CSS properties on a
+        //    part of a component using component specific "css selectors" or "pseudo css selectors".
+        //
+        //    As we want to set styles on specific areas of the componentn and not the component itself, we use
+        //    "CSS selectors" provided by the componentn to address these areas. They are dynamically resolved
+        //     to the according CSS statements during the rednering process.
+        //
+        //  Set a background image on selected and unselected tabs (gradient grey image or orange image):
+        tab.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, STANDARD_TAB_BACKGROUND);
+        tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, SELECTED_TAB_BACKGROUND);
     }
 
 

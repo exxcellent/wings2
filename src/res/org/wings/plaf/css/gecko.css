@@ -166,10 +166,11 @@ ul.STree > li * {
     padding-bottom: 1px;
 }
 
+/* Selection color of STrees */
 ul.STree > li[selected="true"] > table > tbody > tr > td > a > div,
 ul.STree > li[selected="true"] > table > tbody > tr > td > button > div
  {
-    background-color: #f6decc;
+    background-color: #ffbbbb;
     border: 1px dotted black;
 }
 
@@ -374,8 +375,9 @@ div.STabbedPane > table > tbody > tr > th > * {
     line-height: 1.6em;
 }
 
+/* Background color of selected STabbedPane tabs */
 div.STabbedPane > table > tbody > tr > th > *[selected="true"] {
-    background-color: #f6decc;
+    background-color: #ffbbbb;
 }
 
 div.STabbedPane > table > tbody > tr > th > *[disabled="true"] {
