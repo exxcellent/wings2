@@ -94,7 +94,7 @@ public class TableExample
             }
             else if (value instanceof Boolean && row != -1) {
                 Boolean b = (Boolean)value;
-                checkBox.setName(name(table, row, col));
+                checkBox.setNameRaw(name(table, row, col));
                 checkBox.setSelected(b.booleanValue());
                 return checkBox;
             }

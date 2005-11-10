@@ -43,7 +43,7 @@ public class SDefaultTableCellRenderer
                                                     boolean selected,
                                                     int row,
                                                     int col) {
-        setName(name(table, row, col));
+        setNameRaw(name(table, row, col));
         setText(null);
         setIcon(null);
 
