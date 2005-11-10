@@ -13,29 +13,29 @@
  */
 package wingset;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SDimension;
+import org.wings.SForm;
 import org.wings.SGridLayout;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
-import org.wings.STextComponent;
-import org.wings.STextField;
 import org.wings.SURLIcon;
+import org.wings.border.SEmptyBorder;
 import org.wings.dnd.DragSource;
 import org.wings.dnd.DropTarget;
 import org.wings.event.SComponentDropListener;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * example for showing the drag and drop capabilities of wingS.
@@ -80,14 +80,19 @@ public class DragAndDropExample extends WingSetPane {
     private final SDragLabel[] dragIcons = new SDragLabel[] {dragIconOne, dragIconTwo, dragIconThree, dragIconFour, dragIconFive, dragIconSix, dragIconSeven, dragIconEight, dragIconNine};
     private final SDropLabel[] dropIcons = new SDropLabel[] {dropIconOne, dropIconTwo, dropIconThree, dropIconFour, dropIconFive, dropIconSix, dropIconSeven, dropIconEight, dropIconNine};
 
+    private int[] shuffleTable = new int[] {0,1,2,3,4,5,6,7,8};
+
     private int piecesRight;
     private final SLabel statusLabel = new SLabel();
 
     protected SComponent createExample() {
-        final SPanel container = new SPanel();
+        final SForm container = new SForm();
         final SPanel puzzleContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
         final SPanel controlContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
         container.setLayout(new SBoxLayout(SBoxLayout.HORIZONTAL));
+        controlContainer.setPreferredSize(new SDimension("150", null));
+        controlContainer.setBorder(new SEmptyBorder(0, 20,0,0));
+
         // control components
         final SButton resetButton = new SButton("Reset");
         resetButton.addActionListener(new ActionListener() {
@@ -95,11 +100,22 @@ public class DragAndDropExample extends WingSetPane {
                 resetPuzzle();
             }
         });
+
         // initialize the drag components
         for (int i = 0; i < dragIcons.length; i++) {
             dragIcons[i].setDragEnabled(true);
             dragIcons[i].setPreferredSize(new SDimension(30,30));
         }
+
+        // init the shuffle transformation table
+        Random random = new Random();
+        for (int i = 0; i < shuffleTable.length; i++) {
+            int swapWith = random.nextInt(shuffleTable.length);
+            int oldVal = shuffleTable[i];
+            shuffleTable[i] = shuffleTable[swapWith];
+            shuffleTable[swapWith] = oldVal;
+        }
+
         // initialize the drop components
         for (int i = 0; i < dropIcons.length; i++) {
             final int position = i;
@@ -109,8 +125,8 @@ public class DragAndDropExample extends WingSetPane {
 
                 // the drag and drop magic
                 public boolean handleDrop(SComponent dragSource) {
-                    if (dragIcons[position].equals(dragSource)) {
-                        dragIcons[position].setIcon(null);
+                    if (dragIcons[shuffleTable[position]].equals(dragSource)) {
+                        dragIcons[shuffleTable[position]].setIcon(null);
                         beeIcons[position].setIconHeight(100);
                         beeIcons[position].setIconWidth(100);
                         dropIcon.setIcon(beeIcons[position]);
@@ -120,11 +136,11 @@ public class DragAndDropExample extends WingSetPane {
                             statusLabel.setAttribute(CSSProperty.FONT_WEIGHT, "600");
                             statusLabel.setAttribute(CSSProperty.COLOR, "red");
                         } else {
-                            statusLabel.setText("You have " + piecesRight + " pieces right! Can you guess what it is?");
+                            statusLabel.setText("You have " + piecesRight + " pieces right!\nCan you guess what it is?");
                         }
                         return true;
                     }
-                    statusLabel.setText("That piece doesn't belong there! What are you thinking?");
+                    statusLabel.setText("That piece doesn't belong there!\nWhat are you thinking?");
                     return false;
                 }
                 
@@ -167,6 +183,7 @@ public class DragAndDropExample extends WingSetPane {
         statusLabel.setText("Try to solve the puzzle.");
         statusLabel.setAttribute(CSSProperty.FONT_WEIGHT, "normal");
         statusLabel.setAttribute(CSSProperty.COLOR, "black");
+
         // init the icons
         for (int i = 0; i < beeIcons.length; i++) {
             beeIcons[i].setIconHeight(30);
@@ -174,7 +191,7 @@ public class DragAndDropExample extends WingSetPane {
         }
         // initialize the drag components
         for (int i = 0; i < dragIcons.length; i++) {
-            SDragLabel dragIcon = dragIcons[i];
+            SDragLabel dragIcon = dragIcons[shuffleTable[i]];
             dragIcon.setIcon(beeIcons[i]);
         }
         // initialize the drop components
