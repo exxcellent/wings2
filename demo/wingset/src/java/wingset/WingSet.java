@@ -84,7 +84,7 @@ public class WingSet implements Serializable {
         tab.setName("examples");
 
         // do some global styling of the wingSet application
-        //styleWingsetApp();
+        styleWingsetApp();
 
         // Assemble wingSet
         tab.add(new WingsImage(), "wingS!");
