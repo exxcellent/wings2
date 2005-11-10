@@ -607,10 +607,12 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Package protected raw setter for component name to avoid sanity check.
-     * @param uncheckedName
+     * <b>Direct setter for name. Do not use unless you explicitly know what you're doing!</b>
+     * (Former package) protected raw setter for component name to avoid sanity check.
+     * 
+     * @param uncheckedName String to use as componentn name/identifier.
      */
-    protected void setNameRaw(String uncheckedName) {
+    public void setNameRaw(String uncheckedName) {
         reloadIfChange(this.name, uncheckedName);
         this.name = uncheckedName;
     }
