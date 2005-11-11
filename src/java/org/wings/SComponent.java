@@ -609,7 +609,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * <b>Direct setter for name. Do not use unless you explicitly know what you're doing!</b>
      * (Former package) protected raw setter for component name to avoid sanity check.
-     * 
+     *
      * @param uncheckedName String to use as componentn name/identifier.
      */
     public void setNameRaw(String uncheckedName) {
@@ -619,7 +619,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Gets the name property of a component. This property is an identifier,so it should be always unique.
-     * For details refer to {@link #setName(String)} 
+     * For details refer to {@link #setName(String)}
      * @return The name of the component.
      */
     public final String getName() {
@@ -664,7 +664,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * If a subclass implements the {@link LowLevelEventListener} interface,
      * it will be registered at the associated dispatcher.
      */
-    private final void register() {
+    private void register() {
         if (getDispatcher() != null && this instanceof LowLevelEventListener) {
             getDispatcher().register((LowLevelEventListener) this);
         }
@@ -673,10 +673,17 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Set an CSS class name provided by the laf-provided Cascading Style Sheet (CSS), which should
      * be applied to this component.
+     *
      * <p>By <b>default</b> this is set to the wingS component class name (i.e. "SLabel").
      *
      * <p>The PLAFs render the value of this String to an <code>class="<i>cssClassName</i>"</code> attribute
      * inside the generated HTML code of this component.
+     *
+     * <p>The default wingS plaf initializes this by default to the wingS component class name
+     * (i.e. <code>SButton</code> for button instances). <br/>Please be aware if you <b>replace</b> this
+     * default value, the default wingS style will no longer take effect, as they operate on these
+     * default styles. To avoid this you should append your CSS styles via spaces i.e.<br>
+     * <code>c.setStyle(c.getStyle + "myStyle");</code>
      *
      * @param cssClassName The new CSS name value for this component
      */
@@ -758,7 +765,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
    }
 
     public void setAttribute(CSSSelector selector, CSSProperty property, SIcon icon) {
-        setAttribute(selector, property, icon != null ? "url('"+icon.getURL().toString()+"')" : "none");        
+        setAttribute(selector, property, icon != null ? "url('"+icon.getURL().toString()+"')" : "none");
     }
 
     public void setAttribute(CSSSelector selector, CSSProperty property, String propertyValue) {
@@ -1569,7 +1576,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * Returns <code>true</code> if this <code>SComponent</code> is owning the edit focus.
      *
      * @return <code>true</code> if this <code>SComponent</code> is owning the edit focus otherwise <code>false</code>
-     * @see #requestFocus() 
+     * @see #requestFocus()
      */
     public boolean isFocusOwner() {
         if (getParentFrame() != null)
