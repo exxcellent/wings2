@@ -365,11 +365,13 @@
   </section>
 
   <section>
-    <title>Standard Compiance</title>
+    <title>Standard Compliance</title>
 
     <para>wingS is based on and compiled with Sun's Servlet API version 2.2.
-    It uses Jakarta Commons Logging, Regexp, and HTTPClient for record/replay
-    of session, as well as bsh-core. There are no other dependecies.</para>
+    It uses Jakarta Commons Logging and Regexp. Optional features require
+    Direct Web Remoting (DWR), HTTPClient for session recording and playback
+    and bsh-core for scripting support inside template files.
+    There are no other dependecies.</para>
 
     <para>Due to this non-invasive nature wingS is relatively light-weight and
     can easily be used in combination with other Servlet-based
@@ -393,7 +395,7 @@
       </listitem>
 
       <listitem>
-        <para>Support old JRE versions (currently JDK1.2), do not make latest
+        <para>Support old JRE versions (currently JDK1.3), do not make latest
         JRE a requirement</para>
       </listitem>
 
