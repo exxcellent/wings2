@@ -12,7 +12,7 @@
 
     <path id="build.classpath">
         <fileset dir="../../lib" includes="*.jar"/>
-        <fileset dir="../../dist/web/WEB-INF/lib" includes="*.jar"/>
+        <fileset dir="../../build/web/WEB-INF/lib" includes="*.jar"/>
     </path>
 
     <target name="dependencies" if="build.deps">
@@ -40,7 +40,7 @@
     <target name="build" depends="compile">
         <copy todir="build/web">
             <fileset dir="src/web"/>
-            <fileset dir="../../dist/web"/>
+            <fileset dir="../../build/web"/>
             <fileset dir="src/java/desktop" includes="*Example.java"/>
         </copy>
         <copy todir="build/web/WEB-INF/classes">
