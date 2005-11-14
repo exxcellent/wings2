@@ -15,3 +15,34 @@ function wu_checkUserAgent(string) {
 	return navigator.userAgent.toLowerCase().indexOf(string) + 1;
 }
 
+/*
+the following two functions are a workaround for IE to open a link in the right target/new window
+used in AnchorCG
+*/
+
+/*
+check if a target exists
+*/
+function wu_checkTarget(target){
+    for (var i=0;i<parent.frames.length;i++) {
+        if (parent.frames[i].name == target)
+            return true;
+    }
+    return false;
+}
+/*
+if the target exists => change URL, else => open URL in new window
+*/
+function wu_openlink(target, url){
+    if(target==null){
+        return false;
+    }
+    else{
+        if(wu_checkTarget(target)){
+            parent.frames[target].location.href = url;
+        }
+        else{
+            window.open(url, target);
+        }
+    }
+}
