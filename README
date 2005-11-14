@@ -1,1 +1,94 @@
-TODO: please fill me
+                              _           ____    ________
+                      _    __(_)__  ___ _/ __/   /  _/  _/
+                     | |/|/ / / _ \/ _ `/\ \    _/ /_/ /
+                     |__,__/_/_//_/\_, /___/   /___/___/
+                                  /___/
+
+  What is wingS?
+  -------------
+
+  In a nutshell, wingS is a web application framework based on Java Servlets,
+  resembling the Swing API with its MVC paradigm and event oriented design
+  principles.
+
+
+  Why wingS?
+  ----------
+
+  Though MVC and Swing are well established and well known, most web application
+  frameworks on the market still are stuck in the paradigm of page-flow oriented
+  design principles and require a heavy mixture of different technologies like
+  XML, Java, etc.
+  This has heavy backdrafts on the development process as it disables full reusage
+  but requires to generate, write and maintain many different artfacts during the
+  whole development process. Think of JSP template files, XML based page flow
+  description, required form beans, and so on: All stuff you are required to
+  write, maintain and keep in sync for every new dialog added to your project.
+
+  In contrast wingS offers a very efficient and sophisticated way to implement
+  and design complex real-world applications in pure Java, enabling to fully
+  leverage modern software design principles like inheritance, component-
+  oriented design, refactoring and other modern design principle without
+  making a stop on the web tier.
+
+  Therefore wingS provides an API for designing web applications which is
+  nearly identically with the well proven Java Swing API for classical
+  desktop-based applications.
+
+  This commonnes with the well known Java Swing API as well a the modern event-
+  and component-oriented design principles of the wingS framework enables you
+  and your development team to quickly focus fully on the implementation of your
+  business-critical logic by simply (re)using well known (customized) components
+  instead of being bothered with web tier details throughout the whole development
+  process during the software development lifecycle.
+
+  Refer to the doc/tutorial/hellowings example for a very simple example of efficient
+  and pure Java-based web application design with wingS!
+
+  Beneath the very powerful approach of a pure Java API for web applications,
+  wingS 2 has also some outstanding features to offer, like:
+    o Powerful set of wigdets including Trees, Tables, Menus, etc.
+    o Highly flexible dynamic layout managers
+    o Drag & Drop support (see WingSet)
+    o Server-side code execution (AJAX / DWR)
+    o Component context menus
+    o Handling of browser back navigation
+    o and more
+
+  For a quick overview of these feature you may take a look on the WingSet
+  demo which is contained in this distribution or can be accessed online
+  on the wingS website.
+
+
+
+  The Latest Version
+  ------------------
+
+  Details of the latest official releases can be found on the wingS
+  project web site <http://www.j-wings.org/>.
+
+  If you want to be in touch with the latest development we recommend
+  to retrieve the latest version directly out of the CVS. The wingS
+  sources are hosted on sourceforge.net. Details on how to access
+  the public CVS repository on sourceforge can be found either on the
+  wingS website as well as on sf.net.
+
+
+  Documentation
+  -------------
+
+  Documentation is available in PDF, single-page and multi-page HTML format.
+  You'll find them in the doc/ directory.
+  Suplementary wingS ships with several demo applications. You'll find
+  them under demo/ as well as doc/tutorial
+
+
+  Licensing
+  ---------
+
+  This software is licensed under the terms of the Gnu Lesser Public
+  Licence (LGPL) which you will find in the file named "COPYING" in
+  this directory.
+
+
+  Thanks for choosing wingS!
