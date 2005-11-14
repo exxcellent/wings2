@@ -54,6 +54,7 @@ input {
 A:link, A:visited, A:active {
     color: #000066;
     text-decoration: none;
+    cursor: hand;
 }
 
 
