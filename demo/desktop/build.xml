@@ -48,6 +48,14 @@
         </copy>
     </target>
 
+    <target name="war" depends="build" description="Create a deployable WAR file">
+        <war destfile="build/desktop.war" webxml="src/web/WEB-INF/web.xml">
+            <fileset dir="build/web">
+                <exclude name="**/web.xml"/>
+            </fileset>
+        </war>
+    </target>
+
     <target name="deploy" depends="build">
         <mkdir dir="${deploy.desktop}"/>
         <copy todir="${deploy.desktop}">

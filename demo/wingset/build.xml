@@ -8,8 +8,6 @@
     <property file="../../etc/custom-build.properties"/>
     <property file="../../etc/build.properties"/>
 
-    <property name="deploy.wingset" value="dist/deploy/wingset.war"/>
-    
     <property name="log4j.version" value="log4j-1.2.9.jar" />
     
     <path id="build.classpath">
@@ -62,6 +60,14 @@
                 <include name="${log4j.version}"/>
             </fileset>
         </copy>
+    </target>
+
+    <target name="war" depends="build" description="Create a deployable WAR file">
+        <war destfile="build/wingset.war" webxml="src/web/WEB-INF/web.xml">
+            <fileset dir="build/web">
+                <exclude name="**/web.xml"/> 
+            </fileset>
+        </war>
     </target>
 
     <target name="deploy" depends="build">
