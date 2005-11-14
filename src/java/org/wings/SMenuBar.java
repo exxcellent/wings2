@@ -66,12 +66,10 @@ public class SMenuBar extends SContainer {
      * Set the model object to handle single selections.
      *
      * @param model the SingleSelectionModel to use
-     * @beaninfo bound: true
      * description: The selection model, recording which child is selected.
      * @see SingleSelectionModel
      */
     public void setSelectionModel(SingleSelectionModel model) {
-        SingleSelectionModel oldValue = selectionModel;
         this.selectionModel = model;
     }
 
@@ -160,13 +158,11 @@ public class SMenuBar extends SContainer {
      * Sets whether the border should be painted.
      *
      * @param b if true and border property is not null, the border is painted.
-     * @beaninfo bound: true
      * attribute: visualUpdate true
      * description: Whether the border should be painted.
      * @see #isBorderPainted
      */
     public void setBorderPainted(boolean b) {
-        boolean oldValue = paintBorder;
         paintBorder = b;
     }
 
@@ -191,13 +187,11 @@ public class SMenuBar extends SContainer {
      * use the default margins.
      *
      * @param m an Insets object containing the margin values
-     * @beaninfo bound: true
      * attribute: visualUpdate true
      * description: The space between the menubar's border and its contents
      * @see Insets
      */
     public void setMargin(Insets m) {
-        Insets old = margin;
         this.margin = m;
         /*
           if (old == null || !m.equals(old)) {
