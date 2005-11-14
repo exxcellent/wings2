@@ -176,6 +176,7 @@
                 <exclude name="**/*.u"/>
                 <include name="**/src/**"/>
                 <include name="**/build.xml"/>
+                <include name="**/*.txt"/>
             </fileset>
         </copy>
 
