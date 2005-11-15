@@ -16,6 +16,8 @@ package org.wings;
 import java.awt.*;
 
 /**
+ * Interface for scrollable components, meaning components that may show only parts of it contents at once.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

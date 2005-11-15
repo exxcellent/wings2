@@ -30,6 +30,9 @@ import java.util.Map;
  */
 
 /**
+ * This class is a wrapper to decorate various resource (i.e. images, files, scripts) with
+ * a MIME type and make it accessible to the client via HTTP and the {@link org.wings.externalizer.ExternalizeManager}.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$
@@ -95,6 +98,9 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
         return SessionManager.getSession();
     }
 
+    /**
+     * Internal structure to manage HTTP headers which should be delivered with a resource to the client.
+     */
     public static final class HeaderEntry implements Map.Entry {
         final Object key;
         Object value;

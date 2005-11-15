@@ -27,6 +27,8 @@ import java.awt.event.ItemListener;
 import java.util.Vector;
 
 /**
+ * Implementation of a visal combobox widget to be used inside {@link SForm} elements.
+ *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  * @see javax.swing.ComboBoxModel

@@ -16,6 +16,9 @@ package org.wings;
 
 import javax.swing.event.ChangeListener;
 
+/**
+ * Model class for handling the state and change listeners of a {@link SAbstractIconTextCompound}  
+ */
 public interface SButtonModel {
     void setSelected(boolean selected);
 

@@ -16,6 +16,8 @@ package org.wings;
 import java.io.Serializable;
 
 /**
+ * Defines and represents a customized font (font name, style and size).
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * A static resource is a {@link Resource} which is immutable during runtime and therefore may be cached.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$

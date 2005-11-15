@@ -16,6 +16,8 @@ package org.wings;
 import javax.swing.*;
 
 /**
+ * Defines a range model used in slider based components like {@link SScrollBar} and {@link SPageScroller}  
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
