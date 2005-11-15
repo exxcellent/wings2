@@ -40,7 +40,7 @@ public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameLis
      * @see org.wings.plaf.css.ListCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
      */
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a onclick=\"javascript:location.href='");
+        device.print("<a onclick=\"location.href='");
         Utils.write(device, selectionAddr.toString());
         device.print("';\"");
     }

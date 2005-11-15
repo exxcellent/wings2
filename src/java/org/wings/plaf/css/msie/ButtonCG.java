@@ -51,7 +51,7 @@ public class ButtonCG extends org.wings.plaf.css.ButtonCG implements SParentFram
     }
 
     protected void writeLinkStart(Device device, RequestURL addr) throws IOException {
-        device.print("<a onclick=\"javascript:location.href='");
+        device.print("<a onclick=\"location.href='");
         Utils.write(device, addr.toString());
         device.print("';\"");
     }

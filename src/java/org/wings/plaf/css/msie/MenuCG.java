@@ -27,9 +27,9 @@ public class MenuCG extends org.wings.plaf.css.MenuCG {
      * @see org.wings.plaf.css.MenuCG#printScriptHandlers(org.wings.io.Device, org.wings.SComponent)
      */
     protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
-        device.print(" onmouseover=\"javascript:wpm_openMenu('");
+        device.print(" onmouseover=\"wpm_openMenu('");
         device.print(((SMenu)menuItem).getName());
-        device.print("_pop');\" onmouseout=\"javascript:wpm_closeMenu('");
+        device.print("_pop');\" onmouseout=\"wpm_closeMenu('");
         device.print(((SMenu)menuItem).getName());
         device.print("_pop');\"");
     }

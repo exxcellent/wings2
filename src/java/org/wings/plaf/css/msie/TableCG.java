@@ -65,7 +65,7 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
     }
 
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a onclick=\"javascript:location.href='");
+        device.print("<a onclick=\"location.href='");
         Utils.write(device, selectionAddr.toString());
         device.print("';\"");
     }

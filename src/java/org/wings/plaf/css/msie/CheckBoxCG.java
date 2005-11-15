@@ -52,7 +52,7 @@ public class CheckBoxCG extends org.wings.plaf.css.CheckBoxCG implements SParent
      * @see org.wings.plaf.css.CheckBoxCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
      */
     protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
-        device.print("<a onclick=\"javascript:location.href='");
+        device.print("<a onclick=\"location.href='");
         Utils.write(device, addr.toString());
         device.print("';\"");
     }
