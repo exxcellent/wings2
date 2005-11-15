@@ -19,8 +19,7 @@ import java.util.Map;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public interface PropertyService
-        extends Service {
+public interface PropertyService {
     /**
      * Gets the session property indicated by the specified key.
      *

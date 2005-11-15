@@ -110,7 +110,7 @@ public class Session
 
     private transient ServletContext servletContext;
 
-    private transient Browser userAgent;
+    private transient Browser browser;
 
     protected transient HttpServletResponse servletResponse;
 
@@ -286,49 +286,113 @@ public class Session
         return servletRequest;
     }
 
+    /**
+     * Sets the current servlet response in progress. Used by wingS framework
+     */
     void setServletResponse(HttpServletResponse servletResponse) {
         this.servletResponse = servletResponse;
     }
 
+    /**
+     * The current HTTP servlet response which the framework will deliver
+     * after processing the current request. This is a part of the Servlet
+     * architecture.
+     *
+     * @return The current servlet response about to send to the client
+     */
     public HttpServletResponse getServletResponse() {
         return servletResponse;
     }
 
+    /**
+     * The current servlet context provided by the underlying
+     * servlet container.
+     * This value is retrieved from the initial servlet request
+     * for this session.
+     *
+     * @return The current servlet context provided by the underlying
+     * servlet container.
+     */
     public ServletContext getServletContext() {
         return servletContext;
     }
 
+    /**
+     * Override the current reload manager.
+     *
+     * @param reloadManager You customized reload manager implementation.
+     */
     public void setReloadManager(ReloadManager reloadManager) {
         this.reloadManager = reloadManager;
     }
 
+    /**
+     * The reload manager responsible for the component invalidation
+     * of the components contained in this wingS session. (Epoch counter)
+     *
+     * @return Lazily constructs {@link DefaultReloadManager} if no other reload
+     * manager has been set
+     */
     public ReloadManager getReloadManager() {
         if (reloadManager == null)
             reloadManager = new DefaultReloadManager();
         return reloadManager;
     }
 
+
+    /**
+     * The Externalize manager is response to provide all {@link org.wings.Resource}
+     * via HTTP to the client.
+     *
+     * @return The externalize manager responsible to externalize all sort
+     * of resources contained in this session.
+     */
     public ExternalizeManager getExternalizeManager() {
         return externalizeManager;
     }
 
+    /**
+     * The CG manager is responsible to provide the renderer implementation (aka. PLAF)
+     * for a given component class.
+     *
+     * @return The current CG manager
+     */
     public CGManager getCGManager() {
         return CGManager;
     }
 
+    /**
+     * @return The tooltip manager object containing configuration values on the components
+     * tooltip behaviour
+     */
     public SToolTipManager getToolTipManager() {
         return toolTipManager;
     }
 
     /**
-     * Get the user agent (userAgent) used for
-     * this session by the user.
+     * Returns the current browser of the client detected by the
+     * <code>User-Agent</code> parameter of the initial HTTP request
+     * for this user session.
      *
-     * @return a <code>Browser</code> value
+     * @return A {@link Browser} object providing browser type, os type and
+     *         other informations from the HTTP <code>User-Agent</code> string.
      */
     public Browser getUserAgent() {
-        return userAgent;
+        return browser;
     }
+
+    /* *  This would be a better naming!
+     * Returns the current browser of the client detected by the
+     * <code>User-Agent</code> parameter of the initial HTTP request
+     * for this user session.
+     *
+     * @return A {@link Browser} object providing browser type, os type and
+     *         other informations from the HTTP <code>User-Agent</code> string.
+     * /
+    public Browser getBrowser() {
+        return browser;
+    } */
+
 
     /**
      * Describe <code>setUserAgentFromRequest</code> method here.
@@ -337,14 +401,20 @@ public class Session
      */
     public void setUserAgentFromRequest(HttpServletRequest request) {
         try {
-            userAgent = new Browser(request.getHeader("User-Agent"));
-            log.debug("User-Agent is " + userAgent);
+            browser = new Browser(request.getHeader("User-Agent"));
+            log.debug("Browser is detected as " + browser);
         } catch (Exception ex) {
             log.warn("Cannot get User-Agent from request", ex);
         }
     }
 
-
+    /**
+     * The low level event dispatcher is responsible for taking an HTTP request,
+     * parse it contents and delegate the so called low level events to the
+     * registered {@link org.wings.LowLevelEventListener}s (i.e. Buttons, etc.)
+     *
+     * @return The low level event dispatcher responsible for this session.
+     */
     public LowLevelEventDispatcher getDispatcher() {
         return dispatcher;
     }
@@ -440,18 +510,18 @@ public class Session
      * @see org.wings.session.PropertyService#getProperty(java.lang.String, java.lang.Object)
      */
     public Object setProperty(String key, Object value) {
-        //System.err.print("DefaultSession.setProperty");
         Object old = props.put(key, value);
         propertyChangeSupport.firePropertyChange(key, old, value);
         return old;
     }
 
+    /* @see PropertyService */
     public boolean containsProperty(String key) {
         return props.containsKey(key);
     }
 
+    /* @see PropertyService */
     public Object removeProperty(String key) {
-        //System.err.print("DefaultSession.setProperty");
         Object old = props.remove(key);
         propertyChangeSupport.firePropertyChange(key, old, null);
         return old;
@@ -621,9 +691,6 @@ public class Session
         maxContentLength = l;
     }
 
-    /**
-     * Describe <code>destroy</code> method here.
-     */
     protected void destroy() {
 
         try {
@@ -716,11 +783,6 @@ public class Session
         return redirectAddress;
     }
 
-    /**
-     * Describe <code>setRedirectAddress</code> method here.
-     *
-     * @param redirectAddress a <code>String</code> value
-     */
     public void setRedirectAddress(String redirectAddress) {
         this.redirectAddress = redirectAddress;
     }
@@ -737,11 +799,6 @@ public class Session
                 listener);
     }
 
-    /**
-     * Describe <code>getExitListeners</code> method here.
-     *
-     * @return a <code>SExitListener[]</code> value
-     */
     public SExitListener[] getExitListeners() {
         return (SExitListener[]) listenerList.getListeners(SExitListener.class);
     }
