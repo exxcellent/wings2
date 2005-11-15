@@ -46,7 +46,7 @@
 
     </target>
 
-    <target name="doc.all">
+    <target name="doc.all" depends="assert-docname-param">
         <!-- Compile the documentation for a single language in all formats. -->
         <antcall target="doc.pdf"/>
         <antcall target="doc.html"/>
@@ -55,7 +55,7 @@
     </target>
 
 
-    <target name="doc.pdf.prepare">
+    <target name="doc.pdf.prepare" depends="assert-docname-param">
 
         <!-- Copy all the images to the output location, will be removed later. -->
         <copy todir="${build.dir}/${documentname}/pdf/images">
@@ -114,7 +114,7 @@
         <delete  dir="${build.dir}/${documentname}/pdf/images"/>
     </target>
 
-    <target name="doc.html"
+    <target name="doc.html" depends="assert-docname-param"
             description="Generates the HTML documentation only for a language (set lang)">
 
         <mkdir dir="${build.dir}/${documentname}/html/"/>
@@ -126,7 +126,7 @@
         </java>
     </target>
 
-    <target name="doc.htmlsingle"
+    <target name="doc.htmlsingle" depends="assert-docname-param"
         description="Generates the single-page HTML documentation only for a language (set lang)">
 
         <mkdir dir="${build.dir}/${documentname}/html_single/"/>
@@ -140,8 +140,7 @@
         </java>
     </target>
 
-    <target name="doc.htmlmisc">
-
+    <target name="doc.htmlmisc" depends="assert-docname-param">
         <!-- Copy images and CSS for HTML documentation, language specific. -->
         <copy todir="${build.dir}/${documentname}/shared/images">
             <fileset dir="${basedir}/${documentname}/images">
@@ -165,6 +164,13 @@
             <arg value="${basedir}/${documentname}/master.xml"/>
             <arg value="${support.dir}/section-check.xsl"/>
         </java>
+    </target>
+
+    <target name="assert-docname-param" unless="documentname">
+        <fail>This target requires the documentname as parameter!
+  Try to call this target like 'ant (targetname) -Ddocumentname=(documentname)'.
+  Currently known document names are 'whitepaper' and 'userguide'.
+        </fail>
     </target>
 
 </project>
