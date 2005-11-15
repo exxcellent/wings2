@@ -1,15 +1,16 @@
 This directory contains several simple demos on how to use wingS:
 
- - wingset: A demo similar to SwingSet demonstrating the wingS
-            components and capibilities.
- - desktop: Another eye-candy demo which simulates a desktop
-            with inner windows that can be opened/closed/minimized
-            maximized.
- - jsp:     Conceptual demo to demonstrate integration of wingS
-            into JSP technology.
- - dwr:     Conceptual demo to show the frame of DWR integration.
-            Note that this demo has been already integrated into the
-            wingset demo, too.
+ - wingset:  A demo similar to SwingSet demonstrating the wingS
+             components and capibilities.
+ - desktop:  Another eye-candy demo which simulates a desktop
+             with inner windows that can be opened/closed/minimized
+             maximized.
+ - jsp:      Conceptual demo to demonstrate integration of wingS
+             into JSP technology.
+ - dwr:      Conceptual demo to show the frame of DWR integration.
+             Note that this demo has been already integrated into the
+             wingset demo, too.
+ - frameset: An experimental frameset support demo.
 
 To build & deploy these demos you'll need a properly configured
 JDK and Apache ant environment.
