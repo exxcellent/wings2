@@ -32,10 +32,10 @@
   web tier.
 
   Therefore wingS provides an API for designing web applications which is
-  nearly identically with the well proven Java Swing API for classical
+  nearly identical with the well proven Java Swing API for classical
   desktop-based applications.
 
-  This commonality with the well known Java Swing API as well as the modern event-
+  This similarity to the well known Java Swing API as well as the modern event-
   and component-oriented design principles of the wingS framework enables you
   and your development team to quickly focus fully on the implementation of your
   business-critical logic by simply (re)using well known (customized) components
