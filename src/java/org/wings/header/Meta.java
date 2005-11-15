@@ -19,6 +19,8 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 /**
+ * Include a <code>&lt;META&gt;</code>-element inside the HTML header of rendered page.
+ *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */

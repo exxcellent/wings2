@@ -16,29 +16,22 @@ package org.wings.session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
-import org.wings.SButton;
-import org.wings.SCheckBox;
-import org.wings.SClickable;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
-import org.wings.SPageScroller;
-import org.wings.SRadioButton;
-import org.wings.SScrollBar;
-import org.wings.STabbedPane;
-import org.wings.STable;
-import org.wings.SToggleButton;
-import org.wings.STree;
 import org.wings.plaf.css.MSIEButtonFix;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Registers session component instants which want to receive low level events.
+ * The dispatcher holds a list of all known low level event dispatchers and is responsible
+ * to dispatch the according part of an original HTTP request to the
+ * {@link LowLevelEventListener#processLowLevelEvent(String, String[])} method of the registered
+ * {@link LowLevelEventListener}s.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

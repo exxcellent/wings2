@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * Externalizer Interface
- * <p/>
  * The {@link ExternalizeManager} uses a Externalizer to deliver an
  * external representation of a java object to the output device (usually
  * an HTTP connection).
