@@ -31,7 +31,7 @@ public class SRenderEvent extends EventObject {
      * Constructs a new render event by noting down the source component.
      * @param source
      */
-    SRenderEvent(SComponent source) {
+    public SRenderEvent(SComponent source) {
         super(source);
     }
 
