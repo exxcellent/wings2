@@ -1,7 +1,7 @@
 The documentation is build upon the exxcellent DocBook standard.
 The DocBook customizations were adopted from Hibernate 3.
 
-Run "ant doc.all" to generate the project documentation
+Run "ant all.doc" to generate the project documentation
 
 To edit DocBook XML documents I strongly recommend getting a XML and DTD aware editor
 such as XMLMind XML Editor  (http://www.xmlmind.com/xmleditor/).
