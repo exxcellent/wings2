@@ -219,6 +219,16 @@ public class STemplateLayout extends SAbstractLayoutManager {
     }
 
     /**
+     * Deregisters a property manager for a given component class to be able to replace it.
+     * @param supportedComponentClass Target class as in {@link org.wings.template.PropertyManager#getSupportedClasses()} 
+     */
+    public static final PropertyManager removePropertyManager(Class supportedComponentClass) {
+        if (supportedComponentClass == null)
+            return null;
+        return (PropertyManager) propertyManager.remove(supportedComponentClass);
+    }
+
+    /**
      * Set the template to the template given as file name.
      *
      * @throws java.io.IOException
