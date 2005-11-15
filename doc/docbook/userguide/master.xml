@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
-	  "../support/docbook-dtd/docbookx.dtd">
+	"../support/docbook-dtd/docbookx.dtd">
 <book lang="en">
   <title>wingS User Guide</title>
 
@@ -38,7 +38,7 @@
       Free Documentation License</link>" .</para>
     </legalnotice>
 
-    <releaseinfo>1.0RC1    $Date$</releaseinfo>
+    <releaseinfo>1.0RC1 $Date$</releaseinfo>
   </bookinfo>
 
   <preface>
@@ -120,10 +120,10 @@
       <section>
         <title>MVC - Events and Listeners</title>
 
-        <para>Futhermore, suppose you want to react on mouse clicks (selection
-        events) in your table. Again, doing it the Swing way, you'd provide a
-        <code>ListSelectionModel</code> implementaiton and register a
-        <code>ListSelectionListener</code>. The exact same code will work in
+        <para>Furthermore, suppose you want to react on mouse clicks
+        (selection events) in your table. Again, doing it the Swing way, you'd
+        provide a <code>ListSelectionModel</code> implementation and register
+        a <code>ListSelectionListener</code>. The exact same code will work in
         wingS, no difference to Swing.</para>
 
         <para>So wingS relies on the model, listener and event infrastructure
@@ -136,8 +136,8 @@
 
       <para>With the Swing feel of wingS, you sometimes forget you develop for
       a web application context. But there are concepts intrinsic to the web
-      that wingS neither hide, nor intend to hide. Understanding these simple
-      concepts help you in creating successful projects.</para>
+      that wingS neither hides, nor intends to hide. Understanding these
+      simple concepts helps you in creating successful projects.</para>
 
       <section>
         <title>Servlet API</title>
@@ -150,8 +150,8 @@
         Jetty, or JRun to execute wingS applications.</para>
 
         <para>During application development you typically don't notice the
-        servlet environment your application wil run in. In fact, it is only
-        in the web.xml where you need to do anything servlet-related. It
+        servlet environment your application will run in. In fact, it is only
+        in the web.xml where you need to do anything servlet-related. Still it
         certainly helps to be aware of it's underlying servlet foundation, as
         you will see in succeeding chapters.</para>
       </section>
@@ -159,9 +159,9 @@
       <section>
         <title>Separating View and Logic</title>
 
-        <para>When developing web applications it proves very useful—if not
-        necessary—to keep business logic separate from graphical
-        representation. Frankly, you shoud avoid to set any visual attributes
+        <para>When developing web applications it proves very useful —if not
+        necessary— to keep business logic separate from graphical
+        representation. Frankly, you should avoid to set any visual attributes
         in business logic as far as possible. It will get you into trouble
         sooner or later.</para>
 
@@ -171,28 +171,28 @@
         <section>
           <title>Templates and Layout managers</title>
 
-          <para>First, you can create a XHTML template, structurally and
-          visually defining a component or the complete screen layout of your
-          application. Then, put in <code>object</code> elements, give them a
-          name. These elements will be replaced with the real components at
+          <para>First, you can create a XHTML template, which structurally and
+          visually defines a component or the complete screen layout of your
+          application. Then, put in <code>object</code> elements and give them
+          a name. These elements will be replaced with the real components at
           runtime. See <xref linkend="STemplateLayout" /> for how this is
           done.</para>
 
-          <para>Besides this a static approach with a layout template you can
-          also utilize dynamic layout managers to arrange the components
-          inside you applications by a pattern. They are quite similar to the
+          <para>Besides this static approach with a layout template you can
+          also utilize layout managers to dynamically arrange the components
+          inside your application by a pattern. These are quite similar to the
           layout managers known in Swing and they allow to dynamically arrange
-          the components i.e. gridwise, floating or as a list. Refer <xref
-          linkend="SwingLayoutManager" /> for more details</para>
+          the components i.e. gridwise, floating or as a list. Refer to <xref
+          linkend="SwingLayoutManager" /> for more details.</para>
         </section>
 
         <section>
           <title>Styling</title>
 
           <para>Besides knowing how to define the general application's layout
-          you are proably even more interested in the topic how you can
-          influence its look. Generally the overall as well as the style of a
-          single component is the outcome of the following aspects:</para>
+          you are probably even more interested in how you can influence its
+          look. Generally the overall style as well as that of a single
+          component is the outcome of the following aspects:</para>
 
           <itemizedlist>
             <listitem>
@@ -207,7 +207,7 @@
             </listitem>
 
             <listitem>
-              <para>The dynamic styles defined and applied during runtime my
+              <para>The dynamic styles defined and applied during runtime by
               modifying visual component properties via Java</para>
             </listitem>
           </itemizedlist>
@@ -216,6 +216,10 @@
           to take much care of these details, as wingS comes already with a
           quite decent default style which will provide a good start for your
           new eye-candy web application.</para>
+
+          <remark>i think the technical descriptions above should be moved to
+          3.5 and the last sentence extended to be the main content
+          here.</remark>
         </section>
       </section>
     </section>
@@ -226,56 +230,57 @@
 
     <para>In real-life applications the process of starting a new wingS
     application will begin as simple as designing the main application layout.
-    You will probably prefer to use a template to arrange and embbed the main
-    application components inside your desired screen design. Think as an
-    example of an application with a dynamic menu bar on the left side and a
+    You will probably prefer to use a template to arrange and embed the main
+    application components inside your desired screen design. As an example
+    think of an application with a dynamic menu bar on the left side and a
     center work area placed inside your typical corporate identity
     design.</para>
 
-    <para>As next step you'll be already able to start designing and
+    <para>As the next step you'll already be able to start designing and
     implementing the first functionalities of your application. The default
     PLAF and CSS stylesheets provided with the wingS distribution will already
-    give you descent a start for an eye-candy and working web application
-    fullfilling most of the typical design needs.</para>
+    give you a descent start for a nice-looking and working web application
+    fulfilling most of the typical design needs.</para>
 
     <para>By designing the main application layout you already passed the
-    point where a typical developer will no longer need to know any in-depth
+    point where a typical developer will no longer need to have any in-depth
     knowledge of web-related technologies or concepts to implement and design
-    the further application logic. He can soley use and rely on the Swing-like
-    Java API to create, use and arrange the finer granulated appplication
-    components. Also dynamically styles component like i.e. emphasising a
-    label with red color to indicate an error is just as simple as a
-    <code>label.setForeground(Color.RED);</code> call in you application
+    the further application logic. He can solely use and rely on the
+    Swing-like Java API to create, use and arrange the finer granulated
+    application components. Also dynamically styling components like i.e.
+    emphasising a label with red color to indicate an error is just as simple
+    as a <code>label.setForeground(Color.RED);</code> call in your application
     code.</para>
 
     <para>Only if you need to style the look and feel of your application in
     detail you'll start to extend or overwrite the default wingS CSS
-    stylesheets to adopt your individual styling needs. <xref
+    stylesheets to adopt it to your individual styling needs. <xref
     linkend="css-styles" /> will give you a deeper view into leveraging CSS to
     style your application.</para>
 
-    <para>The following sections will demonstrate all the tasks to set up a
-    simple "Hello Word" example from scratch using the wingS framework.<note>
+    <para>The following sections will demonstrate all the tasks needed to set
+    up a simple "Hello Word" example from scratch using the wingS
+    framework.<note>
         <para>Please refer to the <filename>doc/tutorial/hellowings</filename>
-        folder in the wingS distribution for the sources of this quicktart
+        folder in the wingS distribution for the sources of this quickstart
         How-To.</para>
       </note></para>
 
     <section>
       <title>Get ready - Writing a wingS Frame</title>
 
-      <para>First we need to set up you development environment. Just create a
-      new directory <filename>helloworld</filename> and
+      <para>First we need to set up your development environment. Just create
+      a new directory <filename>helloworld</filename> and
       <filename>helloword/src</filename> and copy the contents of the two
       directories <filename>web</filename> and <filename>lib</filename> of the
       wingS distribution. Start your preferred IDE and create a new project
-      using your newly generated directory. Include all the <filename>*.jar
+      using the directory you just generated . Include all the <filename>*.jar
       </filename>files in the copied <filename>lib</filename> and
-      <filename>web/WEB-INF/lib </filename>directories in your classpath of
+      <filename>web/WEB-INF/lib </filename>directories in the classpath of
       your newly created project.</para>
 
       <para>Let's start writing our first wingS application. In general the
-      starting point of a wingS application session is the constructor a
+      starting point of a wingS application session is the constructor of a
       specific application root class. So all we need to do is to write a
       class which creates a wingS <code>SFrame</code> inside its constructor
       and adds some components to show before it calls
@@ -346,8 +351,8 @@ public class HelloWingS {
       file. This step is only needed once per application and it's only
       intention is to register the wingS servlet inside the servlet container
       and point wingS to our newly created application root class
-      <code>HelloWingS</code>. A very minimalistic
-      <filename>web.xml</filename> file would look like this:</para>
+      <code>HelloWingS</code>. A very minimalist <filename>web.xml</filename>
+      file would look like this:</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;!DOCTYPE web-app
@@ -378,14 +383,14 @@ public class HelloWingS {
       application files into an Servlet compatible Web Archive
       <abbrev>(WAR)</abbrev> file. You could do this either by manually
       compiling and zipping your application sources, but as this is a
-      reoccuring task it's better to let a tool do this task. Apache
-      ant<footnote>
-          <para>You can download the latest version of Apache ant at <ulink
+      reoccurring task it's better to let a tool do this task. Apache
+      Ant<footnote>
+          <para>You can download the latest version of Apache Ant at <ulink
           url="http://ant.apache.org/">http://ant.apache.org/</ulink></para>
-        </footnote> is a very popular java based build tool. We'll create a
-      very simple ant build file which will instruct Apache ant to package our
+        </footnote> is a very popular Java based build tool. We'll create a
+      very simple Ant build file which will instruct Apache Ant to package our
       files as needed into our application <filename>WAR</filename> file. So
-      just create a new <filename>build.xml</filename> file in you project
+      just create a new <filename>build.xml</filename> file in your project
       directory with the following contents:</para>
 
       <programlisting>&lt;project name="HelloWingS" default="war"&gt;
@@ -419,22 +424,22 @@ public class HelloWingS {
     &lt;/target&gt;
 &lt;/project&gt;</programlisting>
 
-      <para>After you've created the ant build file we can execute it by
-      calling ant to parse and execute it. Use ant to execute the war build
-      target in your build file by executing an in your project home directory
-      via</para>
+      <para>After you've created the Ant build file we can execute it by
+      calling Ant to parse and execute it. Use Ant to execute the war build
+      target in your build file by executing Ant in your project home
+      directory via</para>
 
       <para><userinput>&lt;path to your ant installation&gt;\bin\ant
       war</userinput></para>
 
-      <para>Apache ant will automatically look for a
-      <filename>build.xml</filename> file in the current directory an try to
-      execute the named target. Please remember that you may need to specifiy
+      <para>Apache Ant will automatically look for a
+      <filename>build.xml</filename> file in the current directory and try to
+      execute the named target. If Ant fails to compile and complains that it
+      does not know where to find the Java compiler you may need to specify
       the path to your JDK installation in the <envar>JAVA_HOME</envar>
-      environment variable if ant fails to compile as it does not know where
-      to find the Java compiler.</para>
+      environment variable.</para>
 
-      <para>If everything went well you should find a file
+      <para>If everything went well you should find a file named
       <filename>hellowings.war</filename> in the <filename>build</filename>
       directory of your project. So we're almost done. The only thing we need
       to do is to deploy this <code>WAR</code> file in your servlet container.
@@ -443,7 +448,7 @@ public class HelloWingS {
           url="http://tomcat.apache.org/">http://tomcat.apache.org/</ulink></para>
         </footnote>the only thing you need to do is to copy your
       <filename>hellowings.war</filename> file into the
-      <filename>webapp</filename> directory, start Tomcat by calling
+      <filename>webapps</filename> directory, start Tomcat by calling
       <filename>bin/startup.bat</filename> and point your browser to <ulink
       url="http://localhost:8080/hellowings/HelloWingS">http://localhost:8080/hellowings/HelloWingS</ulink></para>
 
@@ -507,9 +512,8 @@ public class HelloWingS {
         static layout manager. Like any other layout manager it allows to
         place arbitrary elements, but you can write a simple HTML-page being
         the template for your container component. Though we encourage the use
-        of the dynamic layout managers, this layout manager can be very
-        usedful in realising the main page layout of your web
-        application.</para>
+        of the dynamic layout managers, this layout manager can be very useful
+        in realising the main page layout of your web application.</para>
 
         <para>To use this layout manager you have to define a template file
         required by the STemplateLayout instance. Inside this template file
@@ -526,21 +530,22 @@ public class HelloWingS {
         <para>Besides this simple inlining mechanism the STemplateLayout
         manager has also another very powerful feature: Specific components
         bean attributes can be overwritten by specific optional inline
-        attributes attached to your <code>object</code> html tags i.e. like
+        attributes attached to your <code>object</code> HTML tags i.e. like
         <code>&lt;object name="compname" background="#ff0000" text="new
         text"&gt;&lt;/object&gt;</code></para>
 
-        <para>This feature can be very useful if i.e. a web developer is soley
-        responsible for the whole application Look &amp; Feel. Depending on
-        the type of the arranged component he can modify different visual
-        properties (i.e. background color, display text, etc.) just by
-        modifying the template file. I.e. let's assume you are placing the
-        mentioned label oject in you template file. The the web designer can
-        overwrite the components background, display text, etc. by modifying
-        his object inclusion tag to <code>&lt;object name="aConstraintName"
-        background="#ff0000" text="new text"&gt;&lt;/object&gt;</code></para>
+        <para>This feature can be very useful if i.e. a web developer is
+        solely responsible for the whole application Look &amp; Feel.
+        Depending on the type of the arranged component he can modify
+        different visual properties (i.e. background color, display text,
+        etc.) just by modifying the template file. I.e. let's assume you are
+        placing the mentioned label object in your template file. The the web
+        designer can overwrite the components background, display text, etc.
+        by modifying his object inclusion tag to <code>&lt;object
+        name="aConstraintName" background="#ff0000" text="new
+        text"&gt;&lt;/object&gt;</code></para>
 
-        <para>Please refer to the javadoc of the PropertyManager interface and
+        <para>Please refer to the JavaDoc of the PropertyManager interface and
         its implementors to find out which properties are supported for which
         classes.</para>
 
@@ -550,7 +555,7 @@ public class HelloWingS {
   Vorname der Person: &lt;COMPONENT NAME=VORNAME ICON="vorname.gif"&gt;&lt;BR&gt;
   Wohnort der Person: &lt;COMPONENT NAME=WOHNORT&gt;&lt;BR&gt;
   &lt;/BODY&gt;&lt;/HTML&gt;
- </programlisting> According java sample code: <programlisting>
+ </programlisting> According Java sample code: <programlisting>
   templateContainer.setLayout(new STemplateLayout("templatefile"));
   templateContainer.addComponent(new SLabel("Haaf"), "NAME");
   templateContainer.addComponent(new SButton("Armin"), "VORNAME");
@@ -642,7 +647,7 @@ submit.addActionListener(al);</programlisting></para>
 
         <para>As well as modifying the default styles, you can customise
         component's styles programmatically. An example of this is in the
-        wingset demo. In this case the new styles are held in a global, static
+        WingSet demo. In this case the new styles are held in a global, static
         stylesheet file. Hence the stylesheet is added to the main frame to
         ensure it can apply to all components.<programlisting>frame = new SFrame("WingSet");
 frame.addHeader(new Link("stylesheet", 
@@ -659,12 +664,14 @@ frame.addHeader(new Link("stylesheet",
 
         <para>By using a call to
         <code>STable.setHeaderStyle("table_hdr")</code> the default table
-        style is overriden. Note that all components have a
+        style is overridden. Note that all components have a
         <code>SComponent.setStyle()</code> method to override their CSS style
         class (i.e. the name for the CSS class which bundles together their
         display attributes). The individual display attributes are stored in a
         <code>AttributeSet</code> member. See for example
         <code>SComponent.setAttribute</code>().</para>
+
+        <remark>Move every below to an "Advanced Techniques" Chapter?</remark>
       </sect2>
     </sect1>
 
@@ -685,10 +692,10 @@ context.setAttribute("app.resource", new SharedResource());</programlisting></pa
 SharedResource resource = context.getAttribute("app.resource");</programlisting></para>
 
       <para>Attention has to be paid to the attribute's namespace, as it might
-      interfer with other servlets. Prefixing the package name is an advisable
-      convention.</para>
+      interfere with other servlets. Prefixing the package name is an
+      advisable convention.</para>
 
-      <para>The approach presented above particularily makes sense if you have
+      <para>The approach presented above particularly makes sense if you have
       decided to use a mixed approach of wingS and other Servlet API based
       components as <code>ServletContext</code> is a Servlet API
       interface.</para>
@@ -703,11 +710,11 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
       ActionListener. From a user's point of view this creates the brief
       annoying pause between request and response, an effect intrinsic to web
       applications in general. Interestingly though, users have silently
-      accepted this shift in UI behaviour from client apps to web
+      accepted this shift in UI behaviour from client to web
       applications.</para>
 
       <para>Is that acceptance by the user an excuse for not trying to improve
-      this? No. In fact, there are several fascinating initialives<footnote>
+      this? No. In fact, there are several fascinating initiatives<footnote>
           <para>Currently the wingS team is integrating the <ulink
           url="http://www.getahead.ltd.uk/dwr/">DWR</ulink> framework into
           wingS. Have a look at the WingSet demo.</para>
@@ -1003,7 +1010,7 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
       </itemizedlist>
 
       <para>For an in-use example of this, look at the web.xml and
-      ErrorTemplate.thtml files of the wingSet demo.</para>
+      ErrorTemplate.thtml files of the WingSet demo.</para>
     </sect1>
 
     <sect1>
@@ -1014,7 +1021,7 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
 
         <para>Session recording allows you to record a sequence of events by
         simply clicking through your web application. The recorded data is
-        dumped into a java source file which - after compilation - can be used
+        dumped into a Java source file which - after compilation - can be used
         to replay the recorded events at a selected pace.</para>
       </sect2>
 
@@ -1042,10 +1049,10 @@ button.setName("UniqueName1");</programlisting></para>
       <sect2>
         <title>Generation of the session playback java source file</title>
 
-        <para>For session recording, you can use any available test tool
-        (jmeter, whatever ...). Alternatively, there is a servlet filter
+        <para>For session recording, you can use any available test tool (for
+        example JMeter). Alternatively, there is a servlet filter
         (org.wings.recorder.Recorder), that can be used to generate java
-        sources for a client, that performes the recorded
+        sources for a client, that performs the recorded
         requests:<programlisting>&lt;filter&gt;
   &lt;filter-name&gt;Recorder&lt;/filter-name&gt;
   &lt;filter-class&gt;org.wings.recorder.Recorder&lt;/filter-class&gt;
@@ -1069,7 +1076,7 @@ button.setName("UniqueName1");</programlisting></para>
         -button starts the recording. The "stop"-button stops the recording
         and the sources will be generated. The java source file will be placed
         in the current directory of the servlet engine / application server
-        jvm. Copy it to the wings main directory.</para>
+        JVM. Copy it to the wings main directory.</para>
       </sect2>
 
       <sect2>
@@ -1088,9 +1095,9 @@ button.setName("UniqueName1");</programlisting></para>
       <title>Internationalization and Character encoding</title>
 
       <para>In contrast to earlier version of wingS, the character encoding
-      used to communicate between the the browser and the wingS framework no
+      used to communicate between the browser and the wingS framework no
       longer defaults to local dependent character encodings, but UTF-8. This
-      enables wingS to display and proceess input containing all characters
+      enables wingS to display and process input containing all characters
       represented in UTF-8.</para>
 
       <para>Currently all wingS supported browser are capable of handling
@@ -1212,7 +1219,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
     <title id="chapInsidewingS">Behind the scenes - wingS internals</title>
 
     <para>Developers interested in the architecture of wingS will find this
-    chapter useful as it helps unterstanding the source code.</para>
+    chapter useful as it helps understanding the source code.</para>
 
     <section>
       <title>Session Management</title>
@@ -1243,7 +1250,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
       <para>The main servlet class, <code>session.WingServlet</code>, handles
       requests directly for resources that do not change (e.g. static images),
       otherwise it creates a session.SessionServlet instance appropriately for
-      each new session and and delegates to this. The sessions's
+      each new session and delegates to it. The session's
       session.SessionServlet is thus the main coordinator and router of events
       to your wingS application code. Each instance will be associated with an
       instance of your main application class (which you configured using the
@@ -1479,7 +1486,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       <para>The wingS framework needs to understand user actions in the web
       browser, and then map these to user interface events in the code
       executing in the servlet container. Most of these events are derived
-      from standard java SDK classes such as java.awt.AWTEvent. Recalling the
+      from standard Java SDK classes such as java.awt.AWTEvent. Recalling the
       limitations of HTTP, these events must be encoded in the HTTP request,
       either in the URL or in posted form data. Hence the first task for
       session.SessionServlet is to extract any parameters from the HTTP
@@ -1491,7 +1498,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
 
       <para>The dispatcher does some initial decoding of the HTTP request
       parameters, for example, an additional value may be encoded into the
-      HTTP request parameter name using a "_" seperator. It then passes the
+      HTTP request parameter name using a "_" separator. It then passes the
       events on to the listeners using
       <code>LowLevelEventListener.processLowLevelEvent()</code>. The specific
       widget will then turn this "low level" event into something semantically
@@ -1515,7 +1522,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
 
       <para>Conceptually this should be fairly clear, you will see lots of
       logic related to this if you dig around the code, but this is unlikely
-      to conern you unless you are implementing your own widgets. The main
+      to concern you unless you are implementing your own widgets. The main
       challenge is that an HTTP request will deliver multiple changes all in
       one go, unlike a classical application where all events would be nicely
       serialised. Hence the dispatcher has to try and work out a sensible set
@@ -1549,7 +1556,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       example images must be appropriately encoded in GIF or PNG format,
       whereas static and dynamic resources delegate to the interface
       <code>Renderable</code>. This is probably the simplest interface, but
-      can have a very complicated implementation ! The majority of objects you
+      can have a very complicated implementation! The majority of objects you
       are likely to be interested in externalise themselves via the
       <code>Renderable</code> interface.</para>
     </section>
