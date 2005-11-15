@@ -16,14 +16,14 @@
   ----------
 
   Though MVC and Swing are well established and well known, most web application
-  frameworks on the market are stuck still in the paradigm of page-flow oriented
+  frameworks on the market are still stuck in the paradigm of page-flow oriented
   design principles and require a heavy mixture of different technologies like
   XML, Java, etc.
-  This has heavy backdrafts on the development process as it disables full reuse
-  but requires to generate, write and maintain many different artifacts during the
-  whole development process. Think of JSP template files, XML based page flow
-  descriptions, required form beans, and so on: All of these you are required to
-  write, maintain and keep in sync for every new dialog added to your project.
+  This has heavy implications on the development process as it disables full
+  reuse but requires to generate, write and maintain many different artifacts
+  during the whole process. Think of JSP template files, XML based page flow
+  descriptions, required form beans, and so on: All of these must be written,
+  maintained and kept in sync for every dialog of your project.
 
   In contrast wingS offers a very efficient and sophisticated way to implement
   and design complex real-world applications in pure Java, enabling to fully
@@ -31,22 +31,22 @@
   oriented design, refactoring and all the others without making a stop on the
   web tier.
 
-  Therefore wingS provides an API for designing web applications which is
-  nearly identical with the well proven Java Swing API for classical
-  desktop-based applications.
+  Therefore wingS provides an API for designing web applications which is nearly
+  identical with the well proven Java Swing API for classical desktop-
+  based applications.
 
   This similarity to the well known Java Swing API as well as the modern event-
-  and component-oriented design principles of the wingS framework enables you
-  and your development team to quickly focus fully on the implementation of your
+  and component-oriented design principles of the wingS framework enable you and
+  your development team to quickly focus fully on the implementation of your
   business-critical logic by simply (re)using well known (customized) components
-  instead of being bothered with web tier details throughout the whole development
-  process during the software development lifecycle.
+  instead of being bothered with web tier details throughout the whole
+  development process and during the maintenance lifecycle.
 
-  Refer to the doc/tutorial/hellowings example for a very simple example of efficient
-  and pure Java-based web application design with wingS!
+  Refer to the doc/tutorial/hellowings example for a very simple example of
+  efficient and pure Java-based web application design with wingS!
 
   Beneath the very powerful approach of a pure Java API for web applications,
-  wingS 2 has also some outstanding features to offer, like:
+  wingS 2 also has some additional, outstanding features to offer, like:
     o Powerful set of widgets including Trees, Tables, Menus, etc.
     o Highly flexible dynamic layout managers
     o Drag & Drop support (see WingSet)
@@ -55,9 +55,9 @@
     o Handling of browser back navigation
     o and more
 
-  For a quick overview of these feature you may take a look on the WingSet
-  demo which is contained in this distribution or can be accessed online
-  on the wingS website.
+  For a quick overview of these feature you may want totake a look at the
+  WingSet demo which is contained in this distribution or can be accessed
+  online at the wingS website.
 
 
 
