@@ -13,11 +13,12 @@
  */
 package org.wings.dnd;
 
+import org.wings.event.SComponentDropListener;
 import java.util.List;
 
-import org.wings.event.SComponentDropListener;
-
 /**
+ * The Interface for the taget of drag and drop events. A component must implement this interface to able to drop components on it..
+ *
  * @author ole
  *
  */

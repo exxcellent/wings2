@@ -18,30 +18,53 @@ import org.wings.externalizer.ExternalizedResource;
 import java.awt.*;
 
 /**
+ * A request event meaning aspecific phase that has been reached during the request processing.
+ * Possible states are defined as constants in this class (i.e. {@link #DELIVER_START}).
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SRequestEvent extends AWTEvent {
 
-
+    /**
+     * Delivery of the HTML response started.
+     */
     public static final int DELIVER_START = 50000;
 
 
+    /**
+     * Delivery of the HTML response finished.
+     */
     public static final int DELIVER_DONE = DELIVER_START + 1;
 
+    /**
+     * Dispathcing of the low level events contained in the originating servlet request starts.
+     * This will trigger i.e. button events later on.
+     */
 
     public static final int DISPATCH_START = DELIVER_START + 2;
 
-
+    /**
+     * All low level events have been dispatches and hence the immediate event should
+     * have been fired. Intermediate events will be fired soon.
+     */
     public static final int DISPATCH_DONE = DELIVER_START + 3;
 
 
+    /**
+     * The initial request paramters have been processed.
+     */
     public static final int PROCESS_REQUEST = DELIVER_START + 4;
 
-
+    /**
+     * The http request started.
+     */
     public static final int REQUEST_START = DELIVER_START + 5;
 
 
+    /**
+     * The http request ist finished.
+     */
     public static final int REQUEST_END = DELIVER_START + 6;
 
     /**

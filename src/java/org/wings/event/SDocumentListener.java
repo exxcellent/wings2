@@ -17,6 +17,8 @@ package org.wings.event;
 import java.util.EventListener;
 
 /**
+ * Listener on {@link org.wings.STextComponent}s to be notified on updates on the components text (document).
+ *
  * @author hengels
  * @version $Revision$
  */

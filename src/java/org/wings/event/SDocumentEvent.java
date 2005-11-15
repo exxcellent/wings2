@@ -19,12 +19,23 @@ import org.wings.text.SDocument;
 import java.awt.*;
 
 /**
+ * A document event fire on any document change (i.e. change of a text in a {@link org.wings.STextField}).
+ *
  * @author hengels
  * @version $Revision$
  */
 public class SDocumentEvent extends AWTEvent {
+    /**
+     * An style attribute changed. <b>DO NOT EXPECT CHARACTER CHANGES HERE!</b> This event type will not occur inside wings!
+     */
     public final static int CHANGE = 1;
+    /**
+     * A string has been inserted.
+      */
     public final static int INSERT = 2;
+    /**
+     * A string has been removed.
+     */
     public final static int REMOVE = 3;
 
     private int offset;
@@ -40,14 +51,23 @@ public class SDocumentEvent extends AWTEvent {
         return (SDocument) getSource();
     }
 
+    /**
+     * @return Offset where remove/insert occured (0 = first letter)
+     */
     public int getOffset() {
         return offset;
     }
 
+    /**
+     * @return The length of the insert/remove
+     */
     public int getLength() {
         return length;
     }
 
+    /**
+     * @return {@link #INSERT} or {@link #REMOVE}
+     */
     public int getType() {
         return getID();
     }

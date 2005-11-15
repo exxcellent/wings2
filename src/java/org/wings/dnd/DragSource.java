@@ -14,9 +14,8 @@
 package org.wings.dnd;
 
 /**
- * The Interface for a source of drag and drop events. 
+ * The Interface for a source of drag and drop events. A component must implement this interface to be dragable.
  * @author ole
- *
  */
 public interface DragSource {
 

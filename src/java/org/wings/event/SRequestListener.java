@@ -16,12 +16,22 @@ package org.wings.event;
 import java.util.EventListener;
 
 /**
+ * Request listeners can be registered in the current {@link org.wings.session.Session}
+ * and will receive different events during the various request phases on processing an
+ * HTTP request for this session.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public interface SRequestListener
-        extends EventListener {
+public interface SRequestListener extends EventListener {
 
+    /**
+     * The session is currently processing an HTTP request in the passed state.
+     * <p><b>NOTE:</b> This method will be called several times caused by the differen request phases / events
+     * during one HTTP request!
+     *
+     * @param e The current request event type.
+     */
     public void processRequest(SRequestEvent e);
 
 }

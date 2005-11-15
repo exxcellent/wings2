@@ -16,6 +16,8 @@ package org.wings.border;
 import java.awt.*;
 
 /**
+ * An invisible border around a component used for spacing.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

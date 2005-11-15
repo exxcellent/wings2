@@ -21,6 +21,8 @@ import org.wings.style.CSSStyleSheet;
 import java.awt.*;
 
 /**
+ * Adds a border with a title to a component.
+ *
  * @version $Revision$
  */
 public class STitledBorder extends SAbstractBorder {
