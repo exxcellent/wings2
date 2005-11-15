@@ -16,12 +16,14 @@ package org.wings;
 import org.wings.plaf.ScrollBarCG;
 
 /**
+ * A graphical scroller component (in contrast to {@link SPageScroller}) representing
+ * a scroll bar. Used in {@link SScrollPane}.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
+ * @see SScrollPane
  */
-public class SScrollBar
-        extends SAbstractAdjustable
-{
+public class SScrollBar extends SAbstractAdjustable {
     boolean marginVisisble;
     boolean stepVisisble;
     boolean blockVisisble;

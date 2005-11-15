@@ -22,6 +22,10 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 /**
+ * Provides FilterOutputStream, that filters incoming files in {@link SFileChooser} components.
+ *
+ *  You can use UploadFilters to inspect the stream or rewrite it to some own format.
+ *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */

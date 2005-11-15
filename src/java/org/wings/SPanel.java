@@ -16,9 +16,7 @@ package org.wings;
 import org.wings.plaf.PanelCG;
 
 /**
- * An SPanel is basically a container that can be displayed with
- * its own CG. The components in the container are placed with a
- * Layout Manager.
+ * An SPanel is a container that display and arranges the contained using the assigned {@link SLayoutManager}.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
@@ -30,8 +28,6 @@ public class SPanel
      * Creates a panel with the default layout manager.
      */
     public SPanel() {
-        //setPreferredSize(new SDimension(SDimension.FULL_SIZE, SDimension.AUTO));
-        // Nope -- Panels should expand to 100% where possible, but block only the minimum dimension!
     }
 
     /**
@@ -40,7 +36,6 @@ public class SPanel
      */
     public SPanel(SLayoutManager l) {
         super(l);
-        //setPreferredSize(new SDimension(SDimension.FULL_SIZE, SDimension.AUTO));
     }
 
     public void setCG(PanelCG cg) {

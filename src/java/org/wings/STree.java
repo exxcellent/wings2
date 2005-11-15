@@ -26,6 +26,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
+ * A tree widget similar to the Swing tree implementation. 
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

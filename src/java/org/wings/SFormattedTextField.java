@@ -21,18 +21,16 @@ package org.wings;
 
 import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDefaultFormatter;
-import org.wings.script.JavaScriptListener;
-
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 
-/*
- * @author  theresia
+/**
+ * A text field that formats it content interactivly on the server side via DWR/AJAX.
+ *
+ * @author theresia
  */
-public class SFormattedTextField
-    extends STextField
-{
+public class SFormattedTextField extends STextField {
     private SAbstractFormatter formatter = null;
     private static final SAbstractFormatter NO_FORMATTER = new SAbstractFormatter() {
         public Object stringToValue(String text) throws ParseException {
@@ -57,8 +55,7 @@ public class SFormattedTextField
         if (formatter != null)
             try {
                 string = this.formatter.valueToString(object);
-            }
-            catch (ParseException e) {
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         super.setText(string);
@@ -68,8 +65,7 @@ public class SFormattedTextField
         Object returnValue = null;
         try {
             returnValue = this.formatter.stringToValue(this.getText());
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return returnValue;

@@ -16,6 +16,8 @@ package org.wings;
 
 
 /**
+ * Default implementation of a {@link SListCellRenderer}.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

@@ -13,14 +13,12 @@
  */
 package org.wings;
 
-import java.awt.event.KeyEvent;
-
 import org.wings.plaf.MenuBarCG;
-import org.wings.util.KeystrokeUtil;
-
 import javax.swing.*;
 
 /**
+ * A chooseable item in a {@link SMenuBar} arranged inside a main {@link SMenu} topic. 
+ *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

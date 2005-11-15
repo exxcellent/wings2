@@ -16,14 +16,14 @@ package org.wings;
 import org.wings.io.Device;
 import org.wings.plaf.MenuBarCG;
 import org.wings.plaf.MenuCG;
-
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.KeyStroke;
-
 /**
+ * A SMenu instances aggregates various {@link SMenuItem} under a mean header entry. 
+ *
  * @author <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

@@ -20,7 +20,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * An implementation of a MenuBar. You add SMenu objects to the
+ * An implementation of a menu bar. You add SMenu objects to the
  * menu bar to construct a menu. When the user selects a SMenu
  * object, its associated {@link org.wings.SMenu} is displayed, allowing the
  * user to select one of the {@link org.wings.SMenuItem}s on it.

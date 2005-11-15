@@ -18,6 +18,9 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 /**
+ * A wingS internal component (re)used during the rendering process of cell based components
+ * like {@link STree} and {@link STable}s.
+ *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */

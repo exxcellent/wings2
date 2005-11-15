@@ -18,6 +18,8 @@ import org.wings.event.SInternalFrameListener;
 import org.wings.plaf.InternalFrameCG;
 
 /**
+ * A root container repesenting an iconifyable and minimizable internal window. 
+ *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */

@@ -16,6 +16,8 @@ package org.wings;
 import org.wings.plaf.ClickableCG;
 
 /**
+ * Abstract base implementation of a clickable icon/text compound.
+ *
  * @author armin
  *         created at 24.02.2004 13:07:02
  */

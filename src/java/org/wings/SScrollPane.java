@@ -20,6 +20,10 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
 /**
+ * A pane which allows to add {@link Scrollable} components on this pane
+ * and display only a viewport of it. Can be used to scroll graphically (default)
+ * or pages (using {@link SPageScroller} components.). 
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

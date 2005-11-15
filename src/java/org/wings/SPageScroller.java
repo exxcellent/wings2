@@ -15,12 +15,17 @@ package org.wings;
 
 
 /**
+ * A scroller component offering several pages for selection.
+ * Apply i.e. to {@link SScrollPane} like <br/>
+ * <code>
+ *    scrollbar = new SPageScroller(Adjustable.VERTICAL);
+ *    scrollPane.setHorizontalScrollBar(scrollbar, SScrollPaneLayout.NORTH);
+ * </code>
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SPageScroller
-        extends SAbstractAdjustable
-{
+public class SPageScroller extends SAbstractAdjustable {
     private static final int DEFAULT_DIRECT_PAGES = 10;
 
     private boolean marginVisible;

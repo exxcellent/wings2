@@ -21,6 +21,8 @@ import java.util.Iterator;
 
 
 /**
+ * Default implementation of a list selection model.
+ *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  * @see javax.swing.ListSelectionModel

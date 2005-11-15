@@ -23,6 +23,9 @@ import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
 
 /**
+ * Abstract base class of input text components like {@link STextArea} and {@link STextField}.
+ * Requires a surrounding {@link SForm} element!
+ *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

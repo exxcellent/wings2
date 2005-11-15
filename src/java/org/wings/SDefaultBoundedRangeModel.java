@@ -17,6 +17,8 @@ import javax.swing.*;
 
 
 /**
+ * Default implementation of {@link SBoundedRangeModel}
+ *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  * @see javax.swing.BoundedRangeModel

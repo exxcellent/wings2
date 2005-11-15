@@ -17,6 +17,8 @@ import javax.swing.*;
 import java.util.List;
 
 /**
+ * Default implementation of a model for {@link SComboBox} components.
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

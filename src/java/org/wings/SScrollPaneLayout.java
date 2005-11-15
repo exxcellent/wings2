@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * Internal layout manager used by {@link SScrollPane}
+ *
  * @author hengels
  * @version $Revision$
  */
@@ -27,6 +29,9 @@ public class SScrollPaneLayout
 
     Map components = new HashMap(5);
     private boolean paging = true;
+
+    public SScrollPaneLayout() {
+    }
 
     public boolean isPaging() {
         return paging;
