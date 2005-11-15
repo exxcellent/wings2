@@ -14,6 +14,8 @@
 package org.wings.event;
 
 /**
+ * Empty default implementation of {@link SInternalFrameListener}.
+ *
  * @author Holger Engels
  * @version $Revision$
  * @see SInternalFrameEvent

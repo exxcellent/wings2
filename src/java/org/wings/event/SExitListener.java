@@ -17,16 +17,20 @@ import java.util.EventListener;
 
 
 /**
- * SExitListener.java
- * <p/>
- * <p/>
- * Created: Fri Dec  6 11:08:26 2002
+ * Exit listeners can be attached to the current session and will get notified when the session is closed.
+ * They may throw an {@link ExitVetoException} to indicate that they do not want to allow the session
+ * destroying. This veto exception has only effect if the session end was triggered by
+ * {@link org.wings.session.Session#exit(String)}.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  */
 
 public interface SExitListener extends EventListener {
+    /**
+     * The current user session is about to be closed.
+     * @throws ExitVetoException Thrown if client wants to abort an existing
+     *  {@link org.wings.session.Session#exit(String)} session exit trigger.
+     */
+    void prepareExit(SExitEvent e) throws ExitVetoException;
 
-    public void prepareExit(SExitEvent e) throws ExitVetoException;
-
-}// SExitListener
+}

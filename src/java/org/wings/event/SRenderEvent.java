@@ -19,20 +19,28 @@ import java.util.EventObject;
 
 
 /**
- * SRenderEvent.java
- * <p/>
- * <p/>
- * Created: Wed Nov  6 10:06:57 2002
+ * Event fired on render events in {@link SRenderListener}.
+ * This event contains the event source (the component actually rendered).
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SRenderEvent extends EventObject {
 
-
-    public SRenderEvent(SComponent source) {
+    /**
+     * Constructs a new render event by noting down the source component.
+     * @param source
+     */
+    SRenderEvent(SComponent source) {
         super(source);
     }
 
-}// SRenderEvent
+    /**
+     * @return Convenience getter for {@link #getSource()} 
+     */
+    public SComponent getSourceComponent() {
+        return (SComponent) super.getSource();
+    }
+
+}
 
