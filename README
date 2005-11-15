@@ -18,7 +18,7 @@
   Though MVC and Swing are well established and well known, most web application
   frameworks on the market are still stuck in the paradigm of page-flow oriented
   design principles and require a heavy mixture of different technologies like
-  XML, Java, etc.
+  XML, Java, JSP, Tag libraries, etc.
   This has heavy implications on the development process as it disables full
   reuse but requires to generate, write and maintain many different artifacts
   during the whole process. Think of JSP template files, XML based page flow
