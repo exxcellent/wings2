@@ -15,10 +15,7 @@ package org.wings.plaf.css.msie;
 
 import java.io.IOException;
 
-import org.wings.SClickable;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SFrame;
+import org.wings.*;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
@@ -50,6 +47,12 @@ public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SPare
         device.print(SConstants.UID_DIVIDER);
         Utils.write(device, button.getEvent());
         device.print("')\"");
+    }
+
+    protected void writeLinkStart(Device device, SClickable clickable) throws IOException {
+        device.print("<a onclick=\"location.href='");
+        Utils.write(device, clickable.getURL());
+        device.print("';\"");
     }
 
     public void installCG(SComponent component) {

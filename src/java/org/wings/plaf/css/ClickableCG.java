@@ -37,9 +37,7 @@ public class ClickableCG extends LabelCG implements org.wings.plaf.ButtonCG {
             device.print("\"");
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         } else {
-            device.print("<a href=\"");
-            Utils.write(device, button.getURL());
-            device.print("\"");
+            writeLinkStart(device, button);
         }
 
         if (!button.isEnabled())
@@ -71,6 +69,12 @@ public class ClickableCG extends LabelCG implements org.wings.plaf.ButtonCG {
             device.print("</button>");
         else
             device.print("</a>");
+    }
+
+    protected void writeLinkStart(Device device, SClickable button) throws IOException {
+        device.print("<a href=\"");
+        Utils.write(device, button.getURL());
+        device.print("\"");
     }
 
     protected void writeButtonStart(Device device, SClickable button) throws IOException {
