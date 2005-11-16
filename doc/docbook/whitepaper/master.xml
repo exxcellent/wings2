@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
-	  "../support/docbook-dtd/docbookx.dtd">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
+"../support/docbook-dtd/docbookx.dtd">
 <article>
   <title>wingS Whitepaper</title>
 
@@ -121,13 +121,13 @@
     that are more efficient to download (requiring fewer round trips to the
     server) than pages produced by many HTML editors. wingS applications
     function well over a low bandwidth connection. The toolkit itself is
-    moderately sized and has a modest memory footprint bt the standards of
+    moderately sized and has a modest memory footprint by the standards of
     typical Java applications.</para>
 
     <para><emphasis role="bold">Scalable</emphasis></para>
 
-    <para>Nothing in the wingS toolkit prevents you writing applications that
-    can "scale out" to many concurrent users. The scalability limits are
+    <para>Nothing in the wingS toolkit prevents you from writing applications
+    that can "scale out" to many concurrent users. The scalability limits are
     likely to depend on the other technologies you use in your
     application.</para>
 
@@ -219,7 +219,7 @@
     <title>Technology Comparison</title>
 
     <section>
-      <title>Comparision with JSF</title>
+      <title>Comparison with JSF</title>
 
       <para>Comparison of wingS with Java Server Faces (JSF), and to a lesser
       extent Java Server Pages (JSP).</para>
@@ -289,7 +289,7 @@
       <para>JSF was conceived to address the severe shortcomings of JSP.
       However by taking this as a starting point it inherits most of the
       negative aspects of programming with JSP. Most of the disadvantages
-      quoted above apply equally to JSP. The currently author once spent two
+      quoted above apply equally to JSP. The current author once spent two
       months trying to create a simple JSP based application, using
       tag-libraries and XSLT processing to format the output. The end result
       was entirely unsatisfactory, and was replaced by a wingS application in
@@ -370,8 +370,8 @@
     <para>wingS is based on and compiled with Sun's Servlet API version 2.2.
     It uses Jakarta Commons Logging and Regexp. Optional features require
     Direct Web Remoting (DWR), HTTPClient for session recording and playback
-    and bsh-core for scripting support inside template files.
-    There are no other dependecies.</para>
+    and bsh-core for scripting support inside template files. There are no
+    other dependencies.</para>
 
     <para>Due to this non-invasive nature wingS is relatively light-weight and
     can easily be used in combination with other Servlet-based
@@ -400,8 +400,8 @@
       </listitem>
 
       <listitem>
-        <para>Monitor and embrace new developements in the web application
-        arena </para>
+        <para>Monitor and embrace new developments in the web application
+        arena</para>
       </listitem>
     </itemizedlist>
   </section>
