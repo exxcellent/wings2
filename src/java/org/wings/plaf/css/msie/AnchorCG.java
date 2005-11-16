@@ -29,11 +29,8 @@ public class AnchorCG extends org.wings.plaf.css.AnchorCG {
      * @see org.wings.plaf.css.CheckBoxCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
      */
     protected void writeLinkStart(final Device device, SAnchor comp) throws IOException {
-        if (comp.getTarget() == null) {
-            device.print("<a onclick=\"location.href='");
-            Utils.write(device, comp.getURL());
-            device.print("';\"");
-        }
+        if (comp.getTarget() == null) 
+        	device.print("<a href=\"#\" onClick=\"wu_openlink(null,'"+comp.getURL()+"');return false;\"");
         else
             device.print("<a href=\"#\" onClick=\"wu_openlink('" + comp.getTarget() + "','"+comp.getURL()+"');return false;\"");
     }
