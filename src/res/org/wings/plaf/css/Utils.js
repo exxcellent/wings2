@@ -35,7 +35,7 @@ if the target exists => change URL, else => open URL in new window
 */
 function wu_openlink(target, url){
     if(target==null){
-        return false;
+        location.href = url;
     }
     else{
         if(wu_checkTarget(target)){

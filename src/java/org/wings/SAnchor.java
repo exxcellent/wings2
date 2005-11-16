@@ -135,5 +135,3 @@ public class SAnchor extends SContainer {
         super.setCG(cg);
     }
 }
-
-

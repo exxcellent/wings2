@@ -250,7 +250,7 @@ wpm_Bounds.prototype.intersect = function(other) {
 
 function wpm_buildBoundsArray(menuarray) {
 	var bounds = new Array(menuarray.length);
-	for (i = 0; i < menuarray.length; i++) {
+	for (var i = 0; i < menuarray.length; i++) {
 		bounds[i] = new wpm_Bounds(document.getElementById(menuarray[i]));
 	}
 	return bounds;
