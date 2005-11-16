@@ -29,6 +29,7 @@ public class ClickableCG extends LabelCG implements org.wings.plaf.ButtonCG {
 
         if (button.getShowAsFormComponent()) {
             writeButtonStart(device, button);
+            device.print(" type=\"submit\"");
             device.print(" name=\"");
             Utils.write(device, button.getEventTarget().getEncodedLowLevelEventId());
             device.print("\" value=\"");

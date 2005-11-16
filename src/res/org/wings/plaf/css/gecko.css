@@ -63,6 +63,19 @@ ul {
     margin: 0px;
 }
 
+
+div.SCheckBox button,
+div.SClickable button,
+div.SScrollBar button,
+div.STable button,
+div.STree button
+{
+    border: none;
+    background: inherit;
+    padding: 0px;
+    margin: 0px;
+}
+
 /* By Ole:
      Simplified we use this declaration to make a's and buttons block elements
    BUT

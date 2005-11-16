@@ -41,12 +41,12 @@ public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SPare
 
 
     protected void writeButtonStart(Device device, SClickable button) throws IOException {
-        device.print("<button  onclick=\"addHiddenField(this.form,'");
+        device.print("<button onclick=\"addHiddenField(this.form,'");
         device.print(button.getParentFrame().getEventEpoch());
         device.print(SConstants.UID_DIVIDER);
         device.print(SConstants.IEFIX_BUTTONACTION);
         device.print("','");
-        device.print(button.getEventTarget().getEncodedLowLevelEventId());
+        device.print(button.getEventTarget().getName());
         device.print(SConstants.UID_DIVIDER);
         Utils.write(device, button.getEvent());
         device.print("')\"");

@@ -103,7 +103,7 @@ table.STree button
     border: none;
     background: none; /* IE doesnt understand inherit */
     padding: 0px;
-    margin:0px;
+    margin: 0px;
 }
 
 table.SScrollPane{
