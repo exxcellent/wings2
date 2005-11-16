@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
-	"../support/docbook-dtd/docbookx.dtd">
+"../support/docbook-dtd/docbookx.dtd">
 <book lang="en">
   <title>wingS User Guide</title>
 
@@ -239,7 +239,7 @@
     <para>As the next step you'll already be able to start designing and
     implementing the first functionalities of your application. The default
     PLAF and CSS stylesheets provided with the wingS distribution will already
-    give you a descent start for a nice-looking and working web application
+    give you a decent start for a nice-looking and working web application
     fulfilling most of the typical design needs.</para>
 
     <para>By designing the main application layout you already passed the
@@ -284,7 +284,7 @@
       specific application root class. So all we need to do is to write a
       class which creates a wingS <code>SFrame</code> inside its constructor
       and adds some components to show before it calls
-      <code>SFrame.show()</code> to display the application.</para>
+      <code>SFrame.setVisible(true)</code> to display the application.</para>
 
       <tip>
         <para>Most IDEs support quick JavaDoc and parameter name lookup if you
@@ -331,7 +331,7 @@ public class HelloWingS {
 
         // arrange components using a grid layout
         panel.add(titel);
-        panel.add(new SLabel("We want fun, so let's play us a game!\n" +
+        panel.add(new SLabel("We want fun, so let's play a game!\n" +
                 "Try to guess a number between 1 and 10."));
         panel.add(textField);
         panel.add(okButton);
@@ -348,11 +348,11 @@ public class HelloWingS {
       <title id="web_xml_file">Set - Preparing the web.xml File</title>
 
       <para>In the next step we need to set up a <filename>web.xml</filename>
-      file. This step is only needed once per application and it's only
-      intention is to register the wingS servlet inside the servlet container
-      and point wingS to our newly created application root class
-      <code>HelloWingS</code>. A very minimalist <filename>web.xml</filename>
-      file would look like this:</para>
+      file in the web/WEB-INF directory. This step is only needed once per
+      application and it's only intention is to register the wingS servlet
+      inside the servlet container and point wingS to our newly created
+      application root class <code>HelloWingS</code>. A very minimalist
+      <filename>web.xml</filename> file would look like this:</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;!DOCTYPE web-app
@@ -1100,7 +1100,7 @@ button.setName("UniqueName1");</programlisting></para>
       enables wingS to display and process input containing all characters
       represented in UTF-8.</para>
 
-      <para>Currently all wingS supported browser are capable of handling
+      <para>Currently all wingS supported browsers are capable of handling
       UTF-8 correctly, so this should be no issue. Please be aware that you
       might need additional fonts installed on your system (i.e. Arial Unicode
       in Microsoft Windows environments) to be able to display i.e. chinese
@@ -1112,7 +1112,7 @@ button.setName("UniqueName1");</programlisting></para>
       <code>org.wings.util.charset.properties</code> inside your
       <code>WEB-INF</code> directory with a map of Locale names to character
       encoding names. Refer to the example file in the WingSet demo or look at
-      the <code>charset.properties</code> in the wingS distribution for an
+      the <code>charset.properties</code> in the wingS distribution for
       details.</para>
 
       <para>Please be aware of one open pitfall in wingS: Currently the
@@ -1141,7 +1141,7 @@ button.setName("UniqueName1");</programlisting></para>
   Thread.currentThread().getContextClassLoader().getResource("layout.thtml");
 frame.setLayout(new SRootLayout(url));</programlisting></para>
 
-          <para>Insure that the template contains the element
+          <para>Ensure that the template contains the element
           <code>object</code> with attribute <code>content</code>. This
           element will be replaced with the frame's content. <programlisting>&lt;div id="title"&gt;Application Title&lt;/div&gt;
 &lt;hr /&gt;
@@ -1466,9 +1466,9 @@ public MyFoo getSessionHelper(HttpServletRequest request)
         <para>The final stage of externalisation (called from SessionServlet)
         will call on the appropriate externalizer.ExternalizeManager to write
         an externalised representation of the
-        <code>externalizer.ExternalizedResource</code>. This is delegated to a
-        externalizer.Externalizer implementation specific to the MIME type of
-        the resource (since this is how HTTP identifies different resource
+        <code>externalizer.ExternalizedResource</code>. This is delegated to
+        an externalizer.Externalizer implementation specific to the MIME type
+        of the resource (since this is how HTTP identifies different resource
         data types).</para>
 
         <para>There is also a system-wide manager,
