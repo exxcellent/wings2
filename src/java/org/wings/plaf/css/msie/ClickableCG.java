@@ -50,7 +50,7 @@ public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SPare
     }
 
     protected void writeLinkStart(Device device, SClickable clickable) throws IOException {
-        device.print("<a onclick=\"location.href='");
+        device.print("<a href=\"#\" onclick=\"location.href='");
         Utils.write(device, clickable.getURL());
         device.print("';\"");
     }

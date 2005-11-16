@@ -69,7 +69,7 @@ public class TreeCG extends org.wings.plaf.css.TreeCG implements SParentFrameLis
     }
 
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a onclick=\"location.href='");
+        device.print("<a href=\"#\" onclick=\"location.href='");
         Utils.write(device, selectionAddr.toString());
         device.print("';\"");
     }
