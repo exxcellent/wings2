@@ -626,7 +626,9 @@ final class SessionServlet
             errorMessageLabel.setText(e.getMessage()!=null?e.getMessage():"none");
             errorFrame.write(new ServletDevice(out));
         } catch (Exception ex) {
-            log.fatal("Exception handling failed.", ex);
+            log.info("Exception handling failed. Unable to display custom error page. " +
+                    "Define wings.error.template in web.xml to see stacktrace online " +
+                    "and/or change this screen. Reason: " + ex);
             try {
                 res.setContentType("text/html");
                 PrintWriter printWriter = res.getWriter();
