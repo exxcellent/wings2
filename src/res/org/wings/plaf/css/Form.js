@@ -1,11 +1,20 @@
 /* BUGFIX: adds a hidden form field for identification of button events in IE */
-function addHiddenField(form, name, value) {
-	var doc = window.document;
-	var input = doc.createElement("input");
-	input.setAttribute("type", "hidden");
-	input.setAttribute("name", name);
-	input.setAttribute("value", value);
-	form.appendChild(input);
+function addHiddenField(form, elementname, value) {
+    var doc = window.document;
+    // ID-value has to be unique
+    var unique_id = form.name+"_"+elementname;
+    var existingInput = doc.getElementById(unique_id);
+    
+    if(existingInput){
+      form.removeChild(existingInput);    
+    }
+
+    var input = doc.createElement("input");
+    input.setAttribute("type", "hidden");
+    input.setAttribute("name", elementname);
+    input.setAttribute("id", unique_id);
+    input.setAttribute("value", value);
+    form.appendChild(input);
 }
 
 function getEvent(event) {
