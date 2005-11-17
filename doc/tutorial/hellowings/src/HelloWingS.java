@@ -28,7 +28,7 @@ public class HelloWingS {
 
         // arrange components using a grid layout
         panel.add(titel);
-        panel.add(new SLabel("We want fun, so let's play us a game!\n" +
+        panel.add(new SLabel("We want fun, so let's play a game!\n" +
                 "Try to guess a number between 1 and 10."));
         panel.add(textField);
         panel.add(okButton);
