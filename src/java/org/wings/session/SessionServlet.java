@@ -589,16 +589,15 @@ final class SessionServlet
     protected void handleException(HttpServletResponse res, Throwable e) {
         try {
             if (errorFrame == null) {
-                errorFrame = new SFrame();
                 /*
                  * if we don't have an errorTemplateFile defined, then this
                  * will throw an Exception, so the StackTrace is NOT exposed
                  * to the user (may be security relevant)
                  */
-                errorFrame.getContentPane().setLayout(
-                        new STemplateLayout(SessionManager.getSession()
-                                .getServletContext().getRealPath(
-                                        errorTemplateFile)));
+                STemplateLayout layout = new STemplateLayout(SessionManager.getSession()
+                                         .getServletContext().getRealPath(errorTemplateFile));
+                errorFrame = new SFrame();
+                errorFrame.getContentPane().setLayout(layout);
 
                 errorStackTraceLabel = new SLabel();
                 errorFrame.getContentPane().add(errorStackTraceLabel,
@@ -626,9 +625,9 @@ final class SessionServlet
             errorMessageLabel.setText(e.getMessage()!=null?e.getMessage():"none");
             errorFrame.write(new ServletDevice(out));
         } catch (Exception ex) {
-            log.info("Exception handling failed. Unable to display custom error page. " +
+            log.warn("Exception handling failed. Unable to display custom error page. " +
                     "Define wings.error.template in web.xml to see stacktrace online " +
-                    "and/or change this screen. Reason: " + ex);
+                    "and/or change this screen.");
             try {
                 res.setContentType("text/html");
                 PrintWriter printWriter = res.getWriter();
