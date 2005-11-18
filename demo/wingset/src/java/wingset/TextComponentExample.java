@@ -18,6 +18,7 @@ import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
+import org.wings.SFont;
 import org.wings.SForm;
 import org.wings.SFormattedTextField;
 import org.wings.SGridLayout;
@@ -93,6 +94,7 @@ public class TextComponentExample extends WingSetPane {
         p.add(new SLabel("STextArea: "));
         STextArea textArea = new STextArea("");
         textArea.setName("textarea");
+        textArea.setPreferredSize(new SDimension(250, 50));
         textArea.setToolTipText("Okay - but don't start writing books now ;-)");
         textArea.addDocumentListener(new MyDocumentListener(textArea));
         p.add(textArea);
@@ -135,7 +137,7 @@ public class TextComponentExample extends WingSetPane {
         for (int i = 0; i < p.getComponents().length; i++) {
             SComponent component = p.getComponents()[i];
             component.setVerticalAlignment(SConstants.TOP);
-            if ((component instanceof STextComponent) && (component != disabledTextArea))
+            if ((component instanceof STextComponent) && (component != disabledTextArea) && (component != textArea))
                 component.setPreferredSize(new SDimension("250px", null));
         }
 
