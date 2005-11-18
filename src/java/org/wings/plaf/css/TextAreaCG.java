@@ -19,6 +19,7 @@ import java.io.IOException;
 import org.wings.SComponent;
 import org.wings.STextArea;
 import org.wings.io.Device;
+import org.wings.SDimension;
 
 public class TextAreaCG extends AbstractComponentCG implements
         org.wings.plaf.TextAreaCG {
@@ -54,8 +55,8 @@ public class TextAreaCG extends AbstractComponentCG implements
                     break;
             }
 
-            Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-
+            Utils.optAttribute(device, "style", Utils.generateCSSInlinePreferredSize(component.getPreferredSize()));
+                 
             if (!component.isEditable() || !component.isEnabled()) {
                 device.print(" readonly=\"true\"");
             }
