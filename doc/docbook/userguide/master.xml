@@ -452,7 +452,11 @@ public class HelloWingS {
       <filename>bin/startup.bat</filename> and point your browser to <ulink
       url="http://localhost:8080/hellowings/HelloWingS">http://localhost:8080/hellowings/HelloWingS</ulink></para>
 
-      <para>TODO -- SCREENSHOT!</para>
+      <para><inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/screen_hellowings.png" />
+          </imageobject>
+        </inlinemediaobject></para>
     </section>
   </chapter>
 
