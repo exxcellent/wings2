@@ -45,7 +45,7 @@
                     <fo:table-row>
                         <fo:table-cell text-align="center">
                             <fo:block>
-                                <fo:external-graphic src="file:images/wings-logo.png"/>
+                                <fo:external-graphic src="file:images/wings-logo-hires.png"/>
                             </fo:block>
                             <fo:block font-family="Helvetica" font-size="18pt" padding-before="10mm">
                                 <xsl:value-of select="bookinfo/subtitle"/>
