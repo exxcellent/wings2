@@ -17,6 +17,10 @@ package org.wings;
 import org.wings.plaf.RadioButtonCG;
 
 /**
+ * HTML Radiobuttons.
+ * 
+ * <p/>
+ * Example:
  * <form>
  * <b>Radiobuttons:</b>
  * <p><input type="radio" name="1" value="1" checked>One</p>

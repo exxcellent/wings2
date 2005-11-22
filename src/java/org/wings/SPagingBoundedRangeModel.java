@@ -20,10 +20,7 @@ import java.util.EventListener;
 
 
 /**
- * SPagingBoundedRangeModel.java
- * <p/>
- * <p/>
- * Created: Tue Nov 19 12:39:33 2002
+ * Paging implementation of SBoundedRangeModel
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

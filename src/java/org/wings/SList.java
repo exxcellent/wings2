@@ -30,6 +30,7 @@ import java.util.List;
 import java.awt.*;
 
 /**
+ * A HTML List element.
  * <em>CAVEAT</em>
  * A list in a form has special implications to take care of:
  * Problem with a form request

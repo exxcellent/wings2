@@ -14,10 +14,7 @@
 package org.wings;
 
 /**
- * SAbstractIcon.java
- * <p/>
- * <p/>
- * Created: Tue Nov 19 09:17:25 2002
+ * An abstract Implementation of the SIcon Interface.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
