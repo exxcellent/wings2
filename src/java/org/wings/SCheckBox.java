@@ -42,10 +42,18 @@ public class SCheckBox extends SAbstractButton {
     }
 
     /**
-     * create a checkbox with a text-label.
+     * create an initially unselected checkbox with a text-label.
      */
     public SCheckBox(String text) {
         this(false);
+        setText(text);
+    }
+
+    /**
+     * create a checkbox with a text-label and a state.
+     */
+    public SCheckBox(String text, boolean selected) {
+        this(selected);
         setText(text);
     }
 
