@@ -16,7 +16,7 @@ package org.wings;
 import java.util.Set;
 
 /**
- * The reload manager is responsible to register and invalidate modified components.
+ * Responsible for registering and invalidating modified components.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$

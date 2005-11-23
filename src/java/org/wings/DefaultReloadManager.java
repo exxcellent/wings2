@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * This is the default implementation of the reload manager.
+ * Default implementation of the reload manager that uses HashSets.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$

@@ -16,6 +16,7 @@ package org.wings;
 
 /**
  * A scroller component offering several pages for selection.
+ * <p/>
  * Apply i.e. to {@link SScrollPane} like <br/>
  * <code>
  *    scrollbar = new SPageScroller(Adjustable.VERTICAL);

@@ -14,8 +14,7 @@
 package org.wings;
 
 /**
- * Special wingS internal model for components/models that should not fire events immediately
- * when they occur, but on request. 
+ * For components/models that should not fire events immediately when they occur, but on request (internal). 
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

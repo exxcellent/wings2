@@ -28,7 +28,7 @@ import java.awt.event.ActionListener;
 import java.util.StringTokenizer;
 
 /**
- * A immodal dialog component offering several options for selection (like Yes/No, etc.)
+ * An immodal dialog component offering several options for selection (like Yes/No, etc.)
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

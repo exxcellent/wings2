@@ -27,7 +27,7 @@ import java.util.Iterator;
 
 
 /**
- * This is a container which can hold several other <code>SComponents</code>.
+ * Can hold several other <code>SComponents</code>.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

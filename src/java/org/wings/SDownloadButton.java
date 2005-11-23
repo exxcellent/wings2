@@ -14,7 +14,7 @@
 package org.wings;
 
 /**
- * A clickable download button to download the passed Resource implementation.
+ * Allows downloading of the passed Resource implementation.
  *
  * @author armin
  *         created at 24.02.2004 13:05:00

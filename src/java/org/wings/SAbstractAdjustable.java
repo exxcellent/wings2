@@ -22,7 +22,7 @@ import java.awt.event.AdjustmentListener;
 import java.io.Serializable;
 
 /**
- * Abstract base class for {@link SScrollBar} and {@link SPageScroller} 
+ * Base class for adjustable elements like {@link SScrollBar} and {@link SPageScroller} 
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

@@ -14,7 +14,9 @@
 package org.wings;
 
 /**
- * A invisible component you may use as spacer in dynamic layout managers. (Typically an invisible pixel.)
+ * Invisible component which may be used as a spacer in dynamic layout managers. 
+ * Typically it is rendered as an invisible pixel.
+ * 
  * @author bschmid
  */
 public class SSpacer extends SComponent {

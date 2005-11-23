@@ -17,7 +17,7 @@ package org.wings;
 import org.wings.plaf.RadioButtonCG;
 
 /**
- * HTML Radiobuttons.
+ * Can be selected or deselected, and displays that state to the user.
  * 
  * <p/>
  * Example:

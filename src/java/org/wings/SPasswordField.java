@@ -16,7 +16,7 @@ package org.wings;
 import org.wings.plaf.PasswordFieldCG;
 
 /**
- * A text input field widget which hides it input and therefore is typically used for password input. 
+ * A text input field widget which hides it's input. 
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

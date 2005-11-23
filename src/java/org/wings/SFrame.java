@@ -34,7 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * The frame is the root component in every component hierarchie.
+ * The root component of every component hierarchy.
+ * <p/>
  * A SessionServlet requires an instance of SFrame to render the page.
  * SFrame consists of some header informaton (meta, link, script)
  * and a stack of components. The bottommost component of the stack is always

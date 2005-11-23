@@ -16,9 +16,9 @@ package org.wings;
 import org.wings.plaf.ScrollBarCG;
 
 /**
- * A graphical scroller component (in contrast to {@link SPageScroller}) representing
- * a scroll bar. Used in {@link SScrollPane}.
- *
+ * Represents a scroll bar as used in a {@link SScrollPane}.
+ * In contrast to {@link SPageScroller} this class is a graphical scroller component.
+ * 
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  * @see SScrollPane

@@ -31,11 +31,12 @@ import java.io.IOException;
  */
 
 /**
+ * SIcon that gets it's content from an image found in the classpath.
+ * i.e. an image that is deployed in the classes/jar/war file.
+ * <p/>
  * An SIcon of this type is externalized globally. It is not bound
- * to a session. This SIcon gets the content of the image from an image
- * found in the classpath, i.e. an image that is deployed in the
- * classes/jar/war file.
- *
+ * to a session.
+ * 
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

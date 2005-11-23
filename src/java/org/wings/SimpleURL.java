@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * A simple URL.
+ * Simple URL representation.
  *
  * @version $Revision$
  */

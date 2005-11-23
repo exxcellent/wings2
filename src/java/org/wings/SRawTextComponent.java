@@ -18,8 +18,11 @@ import java.io.IOException;
 import org.wings.io.Device;
 
 /**
- * A display area for a short text string. This text is not interpreted.
+ * Display area for a short text string.
+ * 
+ * This text is not interpreted.
  * Use for inserting raw text or even html snipplets.
+ * 
  * @author <a href="mailto:ole@freiheit.com">Ole Langbehn</a>
  * @version $Revision$
  */

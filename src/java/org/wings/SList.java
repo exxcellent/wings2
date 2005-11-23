@@ -30,7 +30,7 @@ import java.util.List;
 import java.awt.*;
 
 /**
- * A HTML List element.
+ * Allows the user to select one or more objects from a list.
  * <em>CAVEAT</em>
  * A list in a form has special implications to take care of:
  * Problem with a form request

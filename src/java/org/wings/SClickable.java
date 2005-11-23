@@ -15,9 +15,9 @@ package org.wings;
 
 
 /**
- * An basic icon-text compound
+ * A basic icon-text compound
  * where you can set an event by hand or which could be
- * used as a base class to extend from
+ * used as a base class to extend from.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is a box layout - a layout manager that allows multiple components
- * to be laid out either vertically {@link <code>SConstants#VERTICAL</code>}
- * or horizontally {@link <code>SConstants#HORIZONTAL</code>}.
+ * Allows multiple components to be laid out either vertically or horizontally.
  * <p/>
  * Nesting multiple panels with different combinations of horizontal
  * and vertical gives an effect similar to GridBagLayout, without the complexity.
@@ -56,8 +54,8 @@ public class SBoxLayout
 
     /**
      * creates a new box layout with the given orientation
-     *
-     * @param orientation orientation
+     * 
+     * @param orientation either {@link <code>SConstants#VERTICAL</code>} or {@link <code>SConstants#HORIZONTAL</code>}
      */
     public SBoxLayout(int orientation) {
         setOrientation(orientation);

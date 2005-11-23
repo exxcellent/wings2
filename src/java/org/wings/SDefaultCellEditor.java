@@ -24,8 +24,10 @@ import java.awt.event.ActionListener;
 import java.util.EventObject;
 
 /**
- * A default Table cell Editor. In order to see the graphics, you need the
- * Java look and feel graphics (jlfgr*.jar)
+ * Default table cell editor.
+ * <p/> 
+ * In order to see the graphics,
+ * you need the Java look and feel graphics (jlfgr*.jar)
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$

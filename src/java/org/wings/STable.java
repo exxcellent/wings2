@@ -35,7 +35,7 @@ import java.awt.*;
 
 
 /**
- * A table widget which displays information containe in a {@link TableModel} object.
+ * Displays information contained in a {@link TableModel} object.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>

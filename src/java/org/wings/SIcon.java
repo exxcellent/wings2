@@ -15,7 +15,7 @@ package org.wings;
 
 
 /**
- * A small fixed size picture, typically used to decorate components.
+ * For small fixed size pictures, typically used to decorate components.
  * This icon can be accessed via an URL; this URL is passed to a browser
  * that fetches it from there.
  *

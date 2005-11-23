@@ -16,7 +16,7 @@ package org.wings;
 import java.io.Serializable;
 
 /**
- * Some Resource, that can be accessed through an URL.
+ * For Resources that can be accessed through an URL.
  *
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  */

@@ -16,7 +16,9 @@ package org.wings;
 import org.wings.plaf.SeparatorCG;
 
 /**
- * This is a separator. Example: <hr>
+ * Displays a divider line.
+ * <p/>
+ * Example: <hr>
  *
  * @version $Revision$
  */

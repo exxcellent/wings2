@@ -16,7 +16,7 @@ package org.wings;
 import org.wings.plaf.PanelCG;
 
 /**
- * An SPanel is a container that display and arranges the contained using the assigned {@link SLayoutManager}.
+ * Container that display and arranges the contained using the assigned {@link SLayoutManager}.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

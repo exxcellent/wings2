@@ -25,7 +25,7 @@ import java.awt.*;
 
 
 /**
- * A graphical progress bar component which can be used to draw the progress of an operation.
+ * Graphical bar which can be used to visualize the progress of an operation.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

@@ -19,7 +19,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
 /**
- * Default implementation of a {@link SButtonModel}
+ * Default implementation of {@link SButtonModel}
  */
 public class SDefaultButtonModel
         implements SButtonModel {

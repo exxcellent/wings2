@@ -23,7 +23,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * actual this is a static resource, but buffering is not neccessary, so to save resources implement it as resource
+ * An icon implementation that uses a bytearray for data storage.
+ * <p/> 
+ * Actually this is a static resource, but buffering is not neccessary,
+ * so to save resources it's implement as a resource.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

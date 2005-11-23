@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * The interface for the layout managers.
+ * For layout managers.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

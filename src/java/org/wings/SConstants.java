@@ -14,14 +14,14 @@
 package org.wings;
 
 /**
- * This interface contains several constants use at several places in wingS.
+ * Contains several constants used at various places in wingS.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public interface SConstants {
     /**
-     * Character to separate epoch id from component id in lowleve event requests.
+     * Character to separate epoch id from component id in lowlevel event requests.
      */
     String UID_DIVIDER = "_";
 

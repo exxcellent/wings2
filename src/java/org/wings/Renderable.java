@@ -18,7 +18,7 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 /**
- * Something, that can be rendered, i.e. can write itself to a Device.
+ * For classes that can be rendered, i.e. can write itself to a Device.
  *
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$

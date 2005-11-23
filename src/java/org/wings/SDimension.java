@@ -21,11 +21,12 @@ import java.text.DecimalFormat;
 import java.text.ParsePosition;
 
 /**
- * This class hold preferred component sizes (dimensions).
+ * Holds preferred component sizes (dimensions).
  * <p/>
- * Web browsers support different notations for sizes. Absolute pixel values, realtive percentages (of the available
- * viewport) and special CSS values as 'inherit' and 'auto' (Default).
- * <p/>This class if capable of handling all these cases.
+ * Web browsers support different notations for sizes. Absolute pixel values,
+ * realtive percentages (of the available viewport) and
+ * special CSS values as 'inherit' and 'auto' (Default).
+ * This class if capable of handling all these cases.
  */
 public class SDimension implements Serializable {
 

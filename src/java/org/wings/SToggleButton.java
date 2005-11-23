@@ -18,7 +18,7 @@ import org.wings.plaf.ToggleButtonCG;
 import javax.swing.*;
 
 /**
- * An implementation of a button widget that knows and displays two different states.
+ * Knows and displays two different states.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

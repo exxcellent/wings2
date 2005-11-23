@@ -16,7 +16,8 @@ package org.wings;
 import org.wings.plaf.ToolBarCG;
 
 /**
- * The basic SToolBar is just an SPanel without an SLayoutManager.
+ * Displays commonly used Actions or controls.
+ * The basic SToolBar is just an SPanel with a SFlowLayout manager.
  * However, the Plaf might choose to set a different layout manager.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>

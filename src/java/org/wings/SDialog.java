@@ -19,6 +19,9 @@ import org.wings.plaf.DialogCG;
 import org.wings.session.SessionManager;
 
 /**
+ * Top-level window with a title and a border that is typically
+ * used to take some form of input from the user.
+ * <p/> 
  * As opposed to Swing, wingS dialogs are non modal. However, the dismission of
  * the dialog is propagated by means of ActionEvents. The action command of the
  * event tells, what kind of user activity caused the dialog to dismiss.

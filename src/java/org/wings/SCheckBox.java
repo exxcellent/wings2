@@ -29,7 +29,9 @@ import java.util.Arrays;
  */
 
 /**
- * Implementation of a checkable checkbox widget. May display itself as a HTML form element or a clickable icon.
+ * Checkbox widget.
+ * <p/>
+ * May be displayed as a HTML form element or as a clickable icon.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

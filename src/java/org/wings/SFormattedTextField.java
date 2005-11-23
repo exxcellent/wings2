@@ -26,7 +26,7 @@ import java.text.ParseException;
 
 
 /**
- * A text field that formats it content interactivly on the server side via DWR/AJAX.
+ * Formats it content interactivly on the server side via DWR/AJAX.
  *
  * @author theresia
  */

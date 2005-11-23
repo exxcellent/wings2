@@ -18,7 +18,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 /**
- * A button implementation.
+ * Simple Button widget.
+ * <p/>
  * This is also a button for usage in a renderer (e.g {@link org.wings.table.STableCellRenderer}).
  * This button implementation encodes its action command into the low level
  * event and fires the encoded action command and not the actual action command,

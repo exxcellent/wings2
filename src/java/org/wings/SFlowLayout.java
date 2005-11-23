@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The flow layout arranges components in a left-to-right or top-to-bottom order.
+ * Arranges components in a left-to-right or top-to-bottom order.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

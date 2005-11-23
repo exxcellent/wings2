@@ -18,8 +18,7 @@ import org.wings.io.Device;
 import java.io.IOException;
 
 /**
- * This class handles a HTTP GET Address that can be updated
- * with additional GET parameters.
+ * Handles a HTTP GET Address that can be updated with additional parameters.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

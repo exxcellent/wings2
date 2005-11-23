@@ -30,8 +30,7 @@ import java.util.ArrayList;
 // FIXME refactorize.
 
 /**
- * A tabbed pane shows one tab (usually a panel) at a moment.
- * The user can switch between the panels.
+ * Shows one tab, usually a panel, at a time and allows switching between them.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>,
  *         <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>

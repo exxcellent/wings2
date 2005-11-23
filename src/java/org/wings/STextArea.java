@@ -16,8 +16,8 @@ package org.wings;
 import org.wings.plaf.TextAreaCG;
 
 /**
- * Multilined input text area that can be also used in disabled form as linebreaking label.
- * Requires a surrounding {@link SForm} element!
+ * Multilined input text area which requires a surrounding {@link SForm} element.
+ * Can be also used as linebreaking label in disabled forms.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

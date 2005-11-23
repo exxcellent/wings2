@@ -16,7 +16,8 @@ package org.wings;
 import org.wings.plaf.LabelCG;
 
 /**
- * A display area for a short text string or an image, or both.
+ * Display area for a short text string or an image, or both.
+ * <p/>
  * You can specify where in the label's display area  the label's contents
  * are aligned by setting the vertical and horizontal alignment.
  * You can also specify the position of the text relative to the image.

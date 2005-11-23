@@ -20,7 +20,7 @@ import org.wings.session.SessionManager;
 import java.io.IOException;
 
 /**
- * This is an abstract implementation of an layout manager.
+ * Base class for layout managers.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$

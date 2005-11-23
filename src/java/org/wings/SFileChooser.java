@@ -26,7 +26,7 @@ import java.net.URLDecoder;
 import java.util.Hashtable;
 
 /**
- * A filechooser shows a textfield with a browse-button to enter a file.
+ * Shows a textfield with a browse-button to enter a filename.
  * The file is uploaded via HTTP and made accessible to the WingS application.
  * <p/>
  * <p>The uploaded file is stored temporarily in the filesystem of the

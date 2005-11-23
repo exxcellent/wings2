@@ -18,9 +18,11 @@ import org.wings.plaf.AnchorCG;
 import java.net.URL;
 
 /**
- * Basic HTML Link
+ * Container used to force a HTML Link.
+ * <p/>
  * Creates a 'normal'
- * &lt;a href=&quot;http://whatever/&quot;&gt;...&lt;/a&gt; HTML link around some components that are stored in the container.
+ * &lt;a href=&quot;http://whatever/&quot;&gt;...&lt;/a&gt;
+ * HTML link around some components that are stored in the container.
  *
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$

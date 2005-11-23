@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * This is a gridbag layout.
+ * Tries to simulate swing GridBag behaviour as close as possible.
  * <p/>
  * This layout is similar to Swing's GridBagLayout, though it can't
  * implement all functionalities because of the limitations of

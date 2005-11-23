@@ -17,7 +17,7 @@ package org.wings;
 import org.wings.plaf.DesktopPaneCG;
 
 /**
- * A DesktopPane holds SInternalFrames.
+ * Container that holds SInternalFrames.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$

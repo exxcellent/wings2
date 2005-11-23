@@ -27,9 +27,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 /**
- * An abstract class, which compounds icon and text. It is the base class for
- * {@link SAbstractButton} and {@link SClickable}. It supports 7 different icon
- * states.
+ * Base class for elements with icon and text like {@link SAbstractButton} and {@link SClickable}.
+ * 
+ * It supports 7 different icon states.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

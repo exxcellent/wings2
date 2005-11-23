@@ -14,7 +14,7 @@
 package org.wings;
 
 /**
- * An abstract Implementation of the SIcon Interface.
+ * Base class for icons.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

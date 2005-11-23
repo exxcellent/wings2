@@ -16,7 +16,7 @@ package org.wings;
 import java.net.URL;
 
 /**
- * SURLIcon - Some icon whose only thing we know is its URL.
+ * SIcon which is backed by an URL to get the image.
  *
  * @author <a href="mailto:armin@hyperion.intranet.mercatis.de">Armin Haaf</a>
  * @version $Revision

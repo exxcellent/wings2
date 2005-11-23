@@ -24,8 +24,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * This is the base class for all components which have a button
- * functionality. This class handles ActionListener notification.
+ * Base class for components with button functionality, ie. the need to handle ActionListener notification.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

@@ -32,11 +32,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Contrary to the other layout managers the STemplateLayout is a static layout manager.
+ * Static layout manager that uses template files to arrange components.
+ * <p/>
  * Like any other layout manager it allows to place arbitrary elements, but you can
  * write a simple HTML-page being the template for your container component.
  * Though we encourage the use of the dynamic layout managers, this layout manager can be
- * very usedful in realising the main page layout of your web application.
+ * very useful in realising the main page layout of your web application.
  * <p/>
  * To use this layout manager you have to define a template file required by the STemplateLayout
  * instance. Inside this template file you can insert inside your custom HTML code desired

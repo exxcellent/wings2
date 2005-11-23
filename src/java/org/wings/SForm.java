@@ -28,13 +28,14 @@ import java.util.List;
 
 
 /**
- * A Form Container. In HTML you need to wrap input fields (i.e. <code>STextField</code>)
- * in a SForm object to work correctly. The browser uses this object/tag to identify
- * how (POST or GET) and where to send an request originating from any input
- * inside this form.
- *
- * <p><b>Note:</b>Please be aware, that some components render differently if
- * places inside a <code>SForm</code> or not. 
+ * Container in which you need to wrap HTML input fields (ie&#x2e; <code>STextField</code>)
+ * to work correctly.
+ * <p/>
+ * The browser uses this object/tag to identify how (POST or GET) and where
+ * to send an request originating from any input inside this form.
+ * <p/>
+ * <b>Note:</b>Please be aware, that some components render differently if
+ * placed inside a <code>SForm</code>.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

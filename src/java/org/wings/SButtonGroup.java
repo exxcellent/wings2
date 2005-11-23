@@ -26,8 +26,9 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
- * This class is used to create a multiple-exclusion scope for a set of
- * buttons. Creating a set of buttons with the same ButtonGroup object means
+ * Used to create a multiple-exclusion scope for a set of buttons.
+ * <p/>
+ * Creating a set of buttons with the same ButtonGroup object means
  * that turning "on" one of those buttons turns off all other buttons in the
  * group.
  * <p/>

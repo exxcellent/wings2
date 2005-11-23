@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A SMenu instances aggregates various {@link SMenuItem} under a mean header entry. 
+ * Aggregates various {@link SMenuItem}s under a main header entry. 
  *
  * @author <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>

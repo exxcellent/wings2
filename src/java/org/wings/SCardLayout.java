@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * This is a card layout
+ * Swing-like card layout.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

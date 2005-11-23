@@ -22,8 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * An SIcon of this type is externalized globally. It is not bound
- * to a session.
+ * SIcon implementation that is externalized globally
+ * and is not bound to a session.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

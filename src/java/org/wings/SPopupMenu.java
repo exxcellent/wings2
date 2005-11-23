@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A popup or context menu that can be attached to abritritrary components.
+ * A popup or context menu that can be attached to abitrary components.
  *
  * @author hengels
  * @version $Revision$

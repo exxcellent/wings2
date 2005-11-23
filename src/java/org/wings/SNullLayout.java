@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides a LayoutManager which just writes the components after one another.
+ * Provides a LayoutManager which just writes the components one after another.
  * 
  * @author ole
  *

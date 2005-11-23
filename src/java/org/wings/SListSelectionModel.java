@@ -16,8 +16,7 @@ package org.wings;
 import javax.swing.*;
 
 /**
- * This interface represents the current selection state of any
- * component that display a list of values. 
+ * For the current selection state of any component that display a list of values. 
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

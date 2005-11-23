@@ -14,8 +14,8 @@
 package org.wings;
 
 /**
- * The LowLevelEventListener interface is implemented by all components
- * that take part at the event dispatching process.
+ * For components that take part in the event dispatching process.
+ * <p/>
  * WingS event dispatching is complex. This is because we have to process many
  * requests at once (asynchronous user interaction). There are three levels of
  * dispatching:

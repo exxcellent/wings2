@@ -14,7 +14,7 @@
 package org.wings;
 
 /**
- * Cell Renderer for {@link SList}. This is similar (almost the same) to the renderer
+ * For {@link SList} Cell Renderers, similar to the renderer
  * approach in swing.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>

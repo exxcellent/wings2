@@ -16,7 +16,7 @@ package org.wings;
 import org.wings.plaf.ClickableCG;
 
 /**
- * Abstract base implementation of a clickable icon/text compound.
+ * Base class for clickable icon/text compounds.
  *
  * @author armin
  *         created at 24.02.2004 13:07:02

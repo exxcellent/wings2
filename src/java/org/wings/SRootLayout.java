@@ -21,13 +21,13 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * This template layout is the default layout for all {@link SRootContainer} derivates.
+ * Default layout for all {@link SRootContainer} derivates.
  * 
  * There might be situations when you want to use a custom SRootLayout. Why?
- * Because by setting an SFrame's layout you can change the looks of an
+ * Because by setting an SFrame's layout you can change the look of a whole
  * application. Since only the object called "content" will be replaced with
  * the content element, you can statically define XHTML elements such as a 
- * border, a title or a footer line with defining your own template.
+ * border, a title or a footer line by defining your own template with a STemplateLayout.
  */
 public class SRootLayout extends STemplateLayout {
     private final static transient Log log = LogFactory.getLog(SRootLayout.class);

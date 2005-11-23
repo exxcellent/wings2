@@ -30,7 +30,7 @@ import java.util.Map;
  */
 
 /**
- * This class is a wrapper to decorate various resource (i.e. images, files, scripts) with
+ * Wrapper to decorate various resource (i.e. images, files, scripts) with
  * a MIME type and make it accessible to the client via HTTP and the {@link org.wings.externalizer.ExternalizeManager}.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>

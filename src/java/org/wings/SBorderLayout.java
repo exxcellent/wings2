@@ -18,7 +18,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * This is a border layout. You can add up to 5 components to a
+ * Swing-like border layout.
+ * <p/>
+ * You can add up to 5 components to a
  * container with this layout at the following positions:
  * <code>NORTH</code>, <code>SOUTH</code>, <code>EAST</code>,
  * <code>WEST</code> and <code>CENTER</code>.

@@ -24,7 +24,7 @@ import java.awt.image.IndexColorModel;
 import java.awt.image.PixelGrabber;
 
 /**
- * An {@link ImageIcon} based icon implementation.
+ * SIcon implementation that is based on {@link ImageIcon}.
  */
 public class SImageIcon extends SAbstractIcon {
     private final static transient Log log = LogFactory.getLog(SImageIcon.class);

@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
  * <p>The RootContainer has a stack of components. Ususally, the stack
  * contains only <em>one</em> element, the content pane; this is the bottom-most
  * component. When dialogs are added to the RootContainer, then these dialogs
- * are stacked on top of this content pane, and only <em>this</em> dialog is
+ * are stacked on top of this content pane and only <em>that</em> dialog is
  * visible then. This emulates the behaviour of modal dialogs in a windowing
  * system.
  *

@@ -56,7 +56,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * The basic component implementation for all components in this package.
+ * Object having a graphical representation that can be displayed on the
+ * screen and that can interact with the user.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
