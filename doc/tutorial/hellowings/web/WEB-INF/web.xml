@@ -13,8 +13,30 @@
         </init-param>
     </servlet>
 
+    <!-- the DWR stuff is for the AJAX based features of wingS  -->
+    <!-- like SFormattedTextField                               -->
+    <servlet>
+        <servlet-name>dwr-invoker</servlet-name>
+        <display-name>DWR Servlet</display-name>
+        <description>Direct Web Remoter Servlet</description>
+        <servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
+        <init-param>
+            <param-name>uk.ltd.getahead.dwr.CreatorManager</param-name>
+            <param-value>org.wings.plaf.css.dwr.SessionCreatorManager</param-value>
+            <description>Install a session local CreatorManager</description>
+        </init-param>
+        <load-on-startup>-1</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>HelloWingS</servlet-name>
         <url-pattern>/HelloWingS/*</url-pattern>
     </servlet-mapping>
+
+    <!-- DWR / AJAX service mapping                            -->
+    <servlet-mapping>
+        <servlet-name>dwr-invoker</servlet-name>
+        <url-pattern>/dwr/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
