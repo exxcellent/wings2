@@ -1,20 +1,24 @@
-<!-- Example Application Template
-     $Id$ -->
+<!--Example Application Template                                        -->
+<!--$Id$  -->
 <table align="center">
-<tr>
-  <td>
-    <h2>wingS Example</h2>
-    <div>An example demonstrating some wingS <br />
-	   properties, similar to the Java SwingSet example.</div><p />
-    <br />
-  </td>
-  <td valign="top" align="right">
-  <a href="http://www.j-wings.org/"><img src="../icons/wings-logo.png" alt="wingS logo"/></a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2">
-    <object name="content">Here is the example Application</object>
-  </td>
-</tr>
+    <tr>
+        <td>
+            <h2 style="margin-top:0;">wingS Example</h2>
+            <div>An example demonstrating some wingS properties,<br/>
+                 similar to the Java SwingSet example.</div>
+        </td>
+        <td valign="middle" align="right">
+            <a href="http://www.j-wings.org/"><img src="../icons/wings-logo.png" alt="wingS logo"/></a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <!-- spacer row --> &nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <object name="content">Here is the example Application</object>
+        </td>
+    </tr>
 </table>
