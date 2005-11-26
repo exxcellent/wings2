@@ -46,9 +46,6 @@
         <copy todir="build/web/WEB-INF/classes">
             <fileset dir="build/class"/>
         </copy>
-        <copy todir="build/web/WEB-INF/lib">
-            <fileset dir="lib" includes="*.jar"/>
-        </copy>
     </target>
 
     <target name="war" depends="build" description="Create a deployable WAR file">
