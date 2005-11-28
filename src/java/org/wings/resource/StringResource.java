@@ -24,13 +24,14 @@ import org.wings.session.SessionManager;
 import java.io.IOException;
 
 /**
+ * For externalizing a string as a resource.
+ *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class StringResource
-        extends Resource {
+public class StringResource extends Resource {
     private final String string;
-
+    private PropertyService propertyService;
     private String id;
 
     /**
@@ -38,6 +39,10 @@ public class StringResource
      */
     protected int externalizerFlags;
 
+    /**
+     * Default c'tor externalizing this resource as <code>text/plain</code> MIME document.
+     * @param string
+     */
     public StringResource(String string) {
         this(string, "txt", "text/plain");
     }
@@ -95,11 +100,9 @@ public class StringResource
         return externalizerFlags;
     }
 
-    private PropertyService propertyService;
-
     protected PropertyService getPropertyService() {
         if (propertyService == null)
-            propertyService = (PropertyService) SessionManager.getSession();
+            propertyService = SessionManager.getSession();
         return propertyService;
     }
 

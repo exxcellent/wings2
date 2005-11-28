@@ -14,7 +14,7 @@
 package org.wings.event;
 
 /**
- * ExitVetoException.java
+ * For vetoing an application triggered session exit. 
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$

@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * For externalizing a file as resource.
+ *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */

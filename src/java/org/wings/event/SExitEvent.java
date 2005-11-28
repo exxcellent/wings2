@@ -18,17 +18,23 @@ import org.wings.session.Session;
 import java.util.EventObject;
 
 /**
- * SExitEvent.java
- * Created: Fri Dec  6 11:07:21 2002
+ * Event object fired to  {@link SExitListener}.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class SExitEvent extends EventObject {
 
-
+    /**
+     * Constructs a exit event.
+     * @param source Session is the source.
+     */
     public SExitEvent(Session source) {
         super(source);
+    }
+
+    public Session getSourceSession() {
+        return (Session) getSource();
     }
 
 }

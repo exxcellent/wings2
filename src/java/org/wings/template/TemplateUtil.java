@@ -18,12 +18,8 @@ import org.wings.SFont;
 import java.util.StringTokenizer;
 
 /**
- * TemplateUtil.java
- * <p/>
- * <p/>
- * Created: Tue Aug  6 16:41:22 2002
+ * Provides util methods for {@link org.wings.STemplateLayout} related implementation. 
  *
- * @author (c) mercatis information systems gmbh, 1999-2002
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
@@ -31,10 +27,9 @@ public class TemplateUtil {
 
 
     public TemplateUtil() {
-
     }
 
-    public static final SFont parseFont(String value) {
+    public static SFont parseFont(String value) {
         StringTokenizer s = new StringTokenizer(value, ",");
         String fontName = s.nextToken();
         String tmpFontType = s.nextToken().toUpperCase().trim();
@@ -52,5 +47,5 @@ public class TemplateUtil {
         return new SFont(fontName, fontType, fontSize);
     }
 
-}// TemplateUtil
+}
 
