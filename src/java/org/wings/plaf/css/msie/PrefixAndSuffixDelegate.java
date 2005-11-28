@@ -13,15 +13,17 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wings.*;
+import org.wings.LowLevelEventListener;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SLayoutManager;
+import org.wings.SFlowLayout;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
-import org.wings.plaf.css.*;
-
-import javax.swing.*;
+import org.wings.plaf.css.AbstractLayoutCG;
+import org.wings.plaf.css.Utils;
 import java.io.IOException;
 
 /**
@@ -32,13 +34,13 @@ public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixD
     public PrefixAndSuffixDelegate() {
     }
 
+    /* non-javadoc: wraps every component into a TABLE element for MSIE. */
     public void writePrefix(Device device, SComponent component) throws IOException {
         SDimension prefSize = component.getPreferredSize();
-        final int align = component.getHorizontalAlignment();
 
-        // For centering or right-alignment we need we surrounding helper table to be stretched to full width.
-        if (prefSize == null && (align == SConstants.CENTER || align == SConstants.RIGHT))
-            prefSize = new SDimension("100%", null);
+        // For centering or right-alignment we need we surrounding helper table to be stretched to full width in some cases.
+        if (componentAlignmentRequiresStretchedWrapper(component))
+            prefSize = SDimension.FULLWIDTH;
 
         StringBuffer inlineStyles = Utils.generateCSSInlinePreferredSize(prefSize);
         Utils.appendCSSComponentInlineColorStyle(inlineStyles, component);
@@ -53,9 +55,8 @@ public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixD
         } else {
             Utils.optAttribute(device, "class", component.getStyle() + " SContainer");
         }
-        // TODO these two are clashing...
         if (component instanceof DragSource) {
-            device.print(" style=\"position:relative;\"");
+            inlineStyles.append("position:relative;");
         }
         Utils.optAttribute(device, "style", inlineStyles.toString());
 
@@ -98,6 +99,22 @@ public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixD
         AbstractLayoutCG.closeLayouterCell(device, false);
         device.print("</tr></table>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
+    }
+
+
+    /**
+     * If a component should be centered/right-aligned we need its surrounding cell to be stretched
+     * to full width, so that we can render this alignment within the wrapper of the component itself.
+     *
+     * But for some surrounding layouts we can't to this not to break the functionality.
+     */
+    private boolean componentAlignmentRequiresStretchedWrapper(SComponent component) {
+        final SDimension prefSize = component.getPreferredSize();
+        final boolean isNotLeftAligned = (component.getHorizontalAlignment() == SConstants.CENTER ||
+                    component.getHorizontalAlignment() == SConstants.RIGHT);
+        final SLayoutManager containingManager = component.getParent() != null ? component.getParent().getLayout() : null;
+
+        return prefSize == null && isNotLeftAligned && !(containingManager instanceof SFlowLayout);
     }
 
 }
