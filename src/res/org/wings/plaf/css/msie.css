@@ -12,13 +12,15 @@
    - Please avoid generic/global css selectors and use the wings css classes in your selection path
 */
 
-HTML,BODY,TEXTAREA {
+/* bs: This lead to scrollers around documents, not window: HTML,*/
+BODY,TEXTAREA {
     overflow:auto;     /* get rid of default scrollbars */
 }
 
 HTML {
     height: 100%;
 }
+
 /* either use this or cellpadding/cellspacing/border in table element.
    css overwrites all attributes! */
 
