@@ -89,10 +89,11 @@ div.STree button
 /* SFlowLayout can't flow if the immediate inner children has defined 100% width.
    Some wingS component inheritly define 100% width i.e. like SForm.
    We overwrite their width in this case to 1%. This leads to many rules, but is easily implementable. */
-div.SFlowLayout > div > div.SForm_Box  > div.SForm
-{
+/* BS: Commented out - this had bad side effects as width 1% sequeezed componentes overdue.
+   In IE this rule was disabled already by Ole. */
+/*div.SFlowLayout > div > div.SForm_Box  > div.SForm {
     width: 1%;
-} 
+   }*/
 
 IMG {
     /* keeps images inside tabs */
@@ -106,7 +107,7 @@ div.SLabel_Box {
     display: table;
 }
 
-/* Do not break SLabels */
+/* By default: Do not break SLabels/Checkbox labels */
 div.SLabel,
 div.SCheckBox {
     white-space: pre;
