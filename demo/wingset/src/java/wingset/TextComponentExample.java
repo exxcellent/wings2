@@ -99,6 +99,7 @@ public class TextComponentExample extends WingSetPane {
         textArea.addDocumentListener(new MyDocumentListener(textArea));
         p.add(textArea);
 
+        /* No longer necessary. SLabel now has a wordwrap property.
         p.add(new SLabel("Multiline label: "));
         STextArea disabledTextArea = new STextArea(
                 "A very simple multiline text only separated by \\n.\n" +
@@ -108,8 +109,7 @@ public class TextComponentExample extends WingSetPane {
         disabledTextArea.setName("multilineArea");
         disabledTextArea.setEditable(false);
         disabledTextArea.setBorder(new SLineBorder());
-        p.add(disabledTextArea);
-
+        p.add(disabledTextArea);*/
 
         p.add(new SLabel("SDocumentEvents: "));
         p.add(eventLog);
