@@ -13,8 +13,6 @@
  */
 package org.wings.plaf.css;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.Renderable;
 import org.wings.SComponent;
@@ -27,9 +25,6 @@ import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.script.ScriptListener;
-import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -467,24 +462,6 @@ public final class Utils {
             return;
         }
         d.print(s);
-    }
-
-    /**
-     * write content string depending on browser (IE needs nbsp's in labels for
-     * example).
-     * @param d
-     * @param s
-     * @throws IOException
-     */
-    public static void writeContent(Device d, String s) throws IOException {
-        boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
-        if ((s.length() > 5) && (s.startsWith("<html>"))) {
-            writeRaw(d, s.substring(6));
-        } else if (isIE) {
-            quote(d, s, true, true, false);
-        } else {
-            quote(d,s,false, false, false);
-        }
     }
 
     /**

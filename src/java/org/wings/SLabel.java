@@ -27,22 +27,14 @@ import org.wings.plaf.LabelCG;
  */
 public class SLabel extends SComponent {
     
-    /**
-     * The text to be displayed
-     */
     protected String text;
-
-    /**
-     * The icon to be displayed
-     */
     protected SIcon icon = null;
-
     protected SIcon disabledIcon = null;
-
-    private int verticalTextPosition = SConstants.CENTER;
-    private int horizontalTextPosition = SConstants.RIGHT;
-    private int iconTextGap = 1;
-    private boolean imageAbsBottom = false;
+    protected int verticalTextPosition = SConstants.CENTER;
+    protected int horizontalTextPosition = SConstants.RIGHT;
+    protected int iconTextGap = 1;
+    protected boolean imageAbsBottom = false;
+    protected boolean wordWrap = false;
 
     /**
      * Creates a new <code>SLabel</code> instance with the specified text
@@ -227,6 +219,22 @@ public class SLabel extends SComponent {
     public void setText(String t) {
         reloadIfChange(text, t);
         text = t;
+    }
+
+    /**
+     * Determiens if the label text word wrap inside the browser. Defaults to <code>false</code> (Swing).
+     * @return <code>false</code> if the label should not word wrap an be in line as in Swing.
+     */
+    public boolean isWordWrap() {
+        return wordWrap;
+    }
+
+    /**
+     * Defines if the label is allowed to wrap.
+     * @param wordWrap Set to <code>true</code> if you want labels to allow to break into more lines than passed.
+     */
+    public void setWordWrap(boolean wordWrap) {
+        this.wordWrap = wordWrap;
     }
 
     public void setCG(LabelCG cg) {

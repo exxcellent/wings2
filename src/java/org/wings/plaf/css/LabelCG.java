@@ -14,12 +14,13 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.io.Device;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
+import java.io.IOException;
 
 public class LabelCG extends AbstractComponentCG implements
         org.wings.plaf.LabelCG {
@@ -33,15 +34,16 @@ public class LabelCG extends AbstractComponentCG implements
         final SIcon icon = label.isEnabled() ? label.getIcon() : label.getDisabledIcon();
         final int horizontalTextPosition = label.getHorizontalTextPosition();
         final int verticalTextPosition = label.getVerticalTextPosition();
+        final boolean wordWrap = label.isWordWrap();
         if (icon == null && text != null) {
-            writeText(device, text);
+            writeText(device, text, wordWrap);
         }
         else if (icon != null && text == null)
             writeIcon(device, icon);
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
-                    writeText(d, text);
+                    writeText(d, text, wordWrap);
                 }
                 protected void icon(Device d) throws IOException {
                     writeIcon(d, icon);
@@ -50,8 +52,32 @@ public class LabelCG extends AbstractComponentCG implements
         }
     }
 
+    /** Prefer other writeText method! */
     protected void writeText(Device device, String text) throws IOException {
-        Utils.writeContent(device, text);
+        writeText(device, text, false);
+    }
+
+    protected void writeText(Device device, String text, boolean wordWrap) throws IOException {
+        boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE);
+
+        if ((text.length() > 5) && (text.startsWith("<html>"))) {
+            Utils.writeRaw(device, text.substring(6));
+        } else if (isIE) {
+            // IE doesn't handle whitespace:pre correctly, so we do it hardcore by quoting spaces
+            // or not (depending on wordwrap)
+            Utils.quote(device, text, true, !wordWrap, false);
+        } else {
+            // Other browser handle the CSS property 'white-space' correctly.
+            // The default is set as in swing: don't wrap:
+            if (!wordWrap)
+                Utils.quote(device,text,false, false, false);
+            else {
+                // non-default case: overwrite css property, set back to wrap
+                device.print("<span style=\"white-space: normal;\">");
+                Utils.quote(device, text, true, false, false);
+                device.print("</span>");
+            }
+        }
     }
 
     protected void writeIcon(Device device, SIcon icon) throws IOException {
