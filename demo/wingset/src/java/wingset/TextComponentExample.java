@@ -18,12 +18,12 @@ import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
-import org.wings.SFont;
 import org.wings.SForm;
 import org.wings.SFormattedTextField;
 import org.wings.SGridLayout;
 import org.wings.SLabel;
 import org.wings.SPanel;
+import org.wings.SPasswordField;
 import org.wings.STextArea;
 import org.wings.STextComponent;
 import org.wings.STextField;
@@ -34,7 +34,6 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.session.SessionManager;
 import org.wings.text.SAbstractFormatter;
-import org.wings.SPasswordField;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -137,7 +136,7 @@ public class TextComponentExample extends WingSetPane {
         for (int i = 0; i < p.getComponents().length; i++) {
             SComponent component = p.getComponents()[i];
             component.setVerticalAlignment(SConstants.TOP);
-            if ((component instanceof STextComponent) && (component != disabledTextArea) && (component != textArea))
+            if ((component instanceof STextComponent) /*&& (component != disabledTextArea)*/ && (component != textArea))
                 component.setPreferredSize(new SDimension("250px", null));
         }
 
