@@ -619,12 +619,12 @@ public class HelloWingS {
             <term>wingS</term>
 
             <listitem>
-              <para>The latest version of the wingS framework can be obtained
-              for free on the its website at <ulink
+              <para>The latest version of the wingS framework can be always
+              obtained from its website at <ulink
               url="http://www.j-wings.org/">http://www.j-wings.org/</ulink>.
-              If you want to to be in touch with the lastest development
-              status you can also retrieve a current development snapshot by
-              anonymous CVS access.</para>
+              If you want to to be in touch with the lastest development you
+              can also retrieve a development snapshot by anonymous CVS
+              access.</para>
             </listitem>
           </varlistentry>
 
@@ -635,11 +635,11 @@ public class HelloWingS {
               <para>As a build tool to build and deploy your wingS application
               as demonstrated i.e. in <xref
               linkend="hellowings-deployment" />. Some powerful IDEs like
-              IntelliJ IDEA offer powerful alternative for quick
+              IntelliJ IDEA offer powerful alternatives for quick
               (re-)deployments during the development phase. But this requires
-              some in-depth knowledge of the required configuration so that
-              for beginners the widely used approach of using ant as
-              deployment tool might be a better choice at first.</para>
+              some in-depth knowledge of the required configuration so at
+              first for beginners the common used approach with ant as
+              deployment tool might be the better choice.</para>
             </listitem>
           </varlistentry>
 
@@ -651,7 +651,7 @@ public class HelloWingS {
               taste and preferences, we heavily encourage to try out the
               Mozilla FireFox browser available via <ulink
               url="http://www.getfirefox.com/">http://www.getfirefox.com/</ulink>.
-              Beneath being a great browser there are also some great plugins
+              Beneath being a great browser, there are also some great plugins
               freely available which can be a great help during developing web
               applications.</para>
             </listitem>
@@ -662,9 +662,9 @@ public class HelloWingS {
             plugin</term>
 
             <listitem>
-              <para>Chris Pederick donated two really great plugins for the
-              FireFox which will be a valueable tool when you are about to
-              style your webapplication in detail. It can be installed via
+              <para>Chris Pederick donated these really two great plugins for
+              the FireFox. They will be valueable tools when you are about to
+              style your webapplication in detail. You can install them via
               <ulink
               url="http://chrispederick.com/work/">http://chrispederick.com/work/</ulink>.</para>
 
@@ -683,154 +683,272 @@ public class HelloWingS {
     </sect1>
 
     <sect1>
-      <title>Basic components</title>
+      <title>Designing the application architecture</title>
 
-      <para></para>
+      <para><remark>Building own component set</remark></para>
+
+      <para><remark>Structurizing layout with outer layout template, inner
+      dynamic layout managers</remark></para>
+
+      <para><remark>separating view and logic (mvc)</remark></para>
+
+      <para><remark>Static styling in css, etc. </remark></para>
+    </sect1>
+
+    <sect1>
+      <title>The basic components</title>
+
+      <sect2>
+        <title>Frames and Top-Level Components</title>
+
+        <sect3>
+          <title>Frames</title>
+
+          <para>If you took a look at <xref linkend="hellowings" /> you
+          probably realized that the main thing the entry class does, is
+          simply constructing a new <code>SFrame</code> container component
+          (see also <xref linkend="containers" />), adding further wingS
+          components to it and finally calling <code>setVisible(true)</code>
+          on this frame. So you probably already guessed that the root of all
+          wingS applications is a frame, constructed in the root class of your
+          application:</para>
+
+          <programlisting>public class MyWingSApp {
+        public MyWingSApp() {
+            SFrame rootFrame = new SFrame("Window title");
+            rootFrame.getContentPane().add(...);
+            // ...
+            rootFrame.setVisible(true);
+        }
+    }</programlisting>
+
+          <para>Hence you can think of SFrame as an equivalent to a window in
+          common desktop environments like Microsoft Windows or KDE.</para>
+
+          <para>In a more technical meaning <code>SFrame</code> represents in
+          the context of wingS the dynamical created HTML document exposed to
+          the browser as current view on his web application session. During
+          the lifecycle of a typical wingS application session most of the
+          time there will exist exactly one <firstterm>root frame</firstterm>.
+          This root frame contains all the widgets currently visible and can
+          be retrieved at any time via the session manager:</para>
+
+          <programlisting>SFrame rootFrame = SessionManager.getSession().getRootFrame();</programlisting>
+
+          <para>Though in most cases every session has only exactly one
+          instance of <code>SFrame</code>, there are situations where a
+          session may consists of more than one frame. This is especially the
+          case for frameset based applications<footnote>
+              <para>browser window internally divided into different
+              documents</para>
+            </footnote> or wingS applications opening new browser windows for
+          sub dialogs.</para>
+        </sect3>
+
+        <sect3>
+          <title>Internal Frames</title>
+
+          <para>Besides regular, single-framed single-windowed webapplications
+          wingS offers a great feature: It can simulate <firstterm>Multiple
+          Document Interface</firstterm> (<abbrev>MDI</abbrev>) applications.
+          MDI applications are applications hosting multiple documents or
+          windows inside one parent application.</para>
+
+          <para>In wingS this can be achieved easily using
+          <code>SInternalFrame</code> inside a <code>SDesktopPane</code>. The
+          desktop demo shipped with wingS demonstrates in a very impressive
+          way how internal frames can be used to build a multi-document Editor
+          with RSS reader and Drag &amp; Drop support.</para>
+
+          <para><remark>TODO: Screenshot with Title " Desktop Demo: Simple MDI
+          application with RSS and Drag &amp; Drop support"</remark></para>
+
+          <para>Please refer to the source code of the desktop demo for an
+          example of how to use internal frames. It can be found in the
+          <filename>demo/desktop</filename> directory of the wingS
+          distribution.</para>
+        </sect3>
+
+        <sect3>
+          <title>Frameset</title>
+
+          <para><emphasis>Please note that the frameset support in wingS is
+          currently experimental!</emphasis></para>
+
+          <para>Using framesets is a way to separate the content displayed by
+          the browser in two or more different and independent documents.
+          Using framesets you can split the available space of the browser
+          window in different segments each called a
+          <firstterm>Frame</firstterm>. In each Frame the browser displays an
+          independent document.</para>
+
+          <note>
+            <para>Please don't mix the meaning of the term
+            <emphasis>Frame</emphasis> as used in the context of browser
+            framesets with its meaning in this chapter as instances of
+            <code>SFrame</code></para>
+          </note>
+
+          <para>The following code sniplet shows how to construct a new
+          frameset splitted horizontally into two inner frames:</para>
+
+          <programlisting>SFrameSet frameset = new SFrameSet(new SFrameSetLayout("50%,50%", null));
+    SFrame leftFrame = new SFrame("left frame");
+    SFrame rightFrame = new SFrame("right frame");
+    horizontal.add(leftFrame);
+    horizontal.add(rightFrame);
+    frameset.setVisible(true);</programlisting>
+
+          <para>This example created two new inner frames. Each of this frame
+          will probably contain further displayed components. As a an action
+          in one frame may influence the presentation of a component in the
+          other frame, this would lead that on every request the whole
+          frameset will get reloaded.</para>
+
+          <bridgehead>Avoiding unnecessary reloads with the Reload
+          Manager</bridgehead>
+
+          <para>The reload manager offers a way to avoid this. To use the
+          reload manager you will need to add an additional, invisible frame
+          to your frameset. In contrast to the default case only this
+          invisible frame will be used to fire the initial request on any user
+          action. On the server side the reload manager determines the inner
+          frames containing modified components and returns a list of inner
+          frame to be updated to this invisible inner frame. Hence after
+          receiving the response the hidden reload manager frame will triggers
+          only explicit reloads of those frames containing
+          modifications.</para>
+
+          <para>For a detailed example of how to use framesets and the reload
+          manager please refer to the frameset demo available in the
+          <filename>demo/frameset</filename> directory of the wingS
+          distribution.</para>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>SComponent</title>
+
+        <para><remark>Describe whats common for all scomponent based
+        elements</remark></para>
+
+        <para><remark>Describe common properties preferred size,
+        foreground/backgroumd colours, css attibuts, </remark></para>
+
+        <para><remark>Describe common functionalities: tooltips, script
+        listeners? MENTION: Component context menus. Refer to full
+        section</remark></para>
+      </sect2>
+
+      <sect2 id="containers">
+        <title>SContainer</title>
+
+        <para><remark>Whats different to SComponent. Role of layout managers.
+        Special role of SForm</remark></para>
+
+        <para><remark>SAnchor, SCellRendererPane, SDesktopPane, SForm,
+        SMenuBar, SPanel, SRootContainer, SScrollPane,
+        STabbedPane</remark></para>
+      </sect2>
 
       <sect2>
         <title>Labels</title>
 
-        <para></para>
+        <para><remark>Using SLabel, SIcons, setting Font style,
+        colour</remark></para>
+
+        <para><remark>Mention: SSeparator, SSpacer, SIcon,
+        SProgressBar</remark></para>
+
+        <para><remark>Mention Correct usage of SIcon, SResourceIcon,
+        SFileIcon!!!</remark></para>
+      </sect2>
+
+      <sect2>
+        <title>Buttons and more</title>
+
+        <para><remark>SButton (form based, non form based)</remark></para>
+
+        <para><remark>Using images </remark></para>
+
+        <para><remark>Attaching action listeners (see existing
+        text)</remark></para>
+
+        <para>SDownloadButton</para>
       </sect2>
 
       <sect2>
         <title>Input components</title>
 
-        <para></para>
-      </sect2>
+        <para><remark>textfield, textarea, SRadioButton, SCheckBox,
+        SButtonGroup</remark></para>
 
-      <sect2 id="containers">
-        <title>Container</title>
+        <para><remark>SFormattedTextField, SPasswordField</remark></para>
 
         <para></para>
       </sect2>
     </sect1>
 
     <sect1>
-      <title>Frames and Top-Level Components</title>
-
-      <para></para>
+      <title>Sophisticated components</title>
 
       <sect2>
-        <title>Frames</title>
+        <title>Tables</title>
 
-        <para>If you took a look at <xref linkend="hellowings" /> you probably
-        realized that the main thing the entry class does, is simply
-        constructing a new <code>SFrame</code> container component (see also
-        <xref linkend="containers" />), adding further wingS components to it
-        and finally calling <code>setVisible(true)</code> on this frame. So
-        you probably already guessed that the root of all wingS applications
-        is a frame, constructed in the root class of your application:</para>
+        <para>sample code</para>
 
-        <programlisting>public class MyWingSApp {
-    public MyWingSApp() {
-        SFrame rootFrame = new SFrame("Window title");        
-        rootFrame.getContentPane().add(...);
-        // ...
-        rootFrame.setVisible(true);
-    }
-}</programlisting>
+        <para>listener / events</para>
 
-        <para>Hence you can think of SFrame as an equivalent to a window in
-        common desktop environments like Microsoft Windows or KDE. </para>
-
-        <para>In a more technical meaning <code>SFrame</code> represents in
-        the context of wingS the dynamical created HTML document exposed to
-        the browser as current view on his web application session. During the
-        lifecycle of a typical wingS application session most of the time
-        there will exist exactly one <firstterm>root frame</firstterm>. This
-        root frame contains all the widgets currently visible and can be
-        retrieved at any time via the session manager:</para>
-
-        <programlisting>SFrame rootFrame = SessionManager.getSession().getRootFrame();</programlisting>
-
-        <para>Though in most cases every session has only exactly one instance
-        of <code>SFrame</code>, there are situations where a session may
-        consists of more than one frame. This is especially the case for
-        frameset based applications<footnote>
-            <para>browser window internally divided into different
-            documents</para>
-          </footnote> or wingS applications opening new browser windows for
-        sub dialogs.</para>
+        <para>cell renderer / editor</para>
       </sect2>
 
       <sect2>
-        <title>Internal Frames</title>
+        <title>Trees</title>
 
-        <para>Besides regular, single-framed single-windowed webapplications
-        wingS offers a great feature: It can simulate <firstterm>Multiple
-        Document Interface</firstterm> (<abbrev>MDI</abbrev>) applications.
-        MDI applications are applications hosting multiple documents or
-        windows inside one parent application. </para>
+        <para>sample code</para>
 
-        <para>In wingS this can be achieved easily using
-        <code>SInternalFrame</code> inside a <code>SDesktopPane</code>. The
-        desktop demo shipped with wingS demonstrates in a very impressive way
-        how internal frames can be used to build a multi-document Editor with
-        RSS reader and Drag &amp; Drop support.</para>
+        <para>listener / events</para>
 
-        <para><remark>TODO: Screenshot with Title " Desktop Demo: Simple MDI
-        application with RSS and Drag &amp; Drop support"</remark></para>
-
-        <para>Please refer to the source code of the desktop demo for an
-        example of how to use internal frames. It can be found in the
-        <filename>demo/desktop</filename> directory of the wingS
-        distribution.</para>
+        <para>cell renderer / editor</para>
       </sect2>
 
       <sect2>
-        <title>Frameset</title>
+        <title>SScrollPane</title>
 
-        <para><emphasis>Please note that the frameset support in wingS is
-        currently experimental!</emphasis></para>
+        <para>which components are scrollable. How can Adjustable be used.
+        Paged/Scroller</para>
 
-        <para>Using framesets is a way to separate the content displayed by
-        the browser in two or more different and independent documents. Using
-        framesets you can split the available space of the browser window in
-        different segments each called a <firstterm>Frame</firstterm>. In each
-        Frame the browser displays an independent document. </para>
-
-        <note>
-          <para>Please don't mix the meaning of the term
-          <emphasis>Frame</emphasis> as used in the context of browser
-          framesets with its meaning in this chapter as instances of
-          <code>SFrame</code></para>
-        </note>
-
-        <para>The following code sniplet shows how to construct a new frameset
-        splitted horizontally into two inner frames:</para>
-
-        <programlisting>SFrameSet frameset = new SFrameSet(new SFrameSetLayout("50%,50%", null));
-SFrame leftFrame = new SFrame("left frame");
-SFrame rightFrame = new SFrame("right frame");
-horizontal.add(leftFrame);
-horizontal.add(rightFrame);
-frameset.setVisible(true);</programlisting>
-
-        <para>This example created two new inner frames. Each of this frame
-        will probably contain further displayed components. As a an action in
-        one frame may influence the presentation of a component in the other
-        frame, this would lead that on every request the whole frameset will
-        get reloaded.</para>
-
-        <bridgehead>Avoiding unnecessary reloads with the Reload
-        Manager</bridgehead>
-
-        <para>The reload manager offers a way to avoid this. To use the reload
-        manager you will need to add an additional, invisible frame to your
-        frameset. In contrast to the default case only this invisible frame
-        will be used to fire the initial request on any user action. On the
-        server side the reload manager determines the inner frames containing
-        modified components and returns a list of inner frame to be updated to
-        this invisible inner frame. Hence after receiving the response the
-        hidden reload manager frame will triggers only explicit reloads of
-        those frames containing modifications.</para>
-
-        <para>For a detailed example of how to use framesets and the reload
-        manager please refer to the frameset demo available in the
-        <filename>demo/frameset</filename> directory of the wingS
-        distribution.</para>
+        <para></para>
       </sect2>
+
+      <sect2>
+        <title>SMenu and SMenuBar</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Component context menu</title>
+
+        <para><remark>HOLGER: Is this SPopupMenu?</remark></para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Event handling</title>
+
+      <para><remark>How to use events to attach business logic to wingS
+      gui.</remark></para>
+
+      <para><remark>Example with: Button action, selection listener, ... no
+      clue</remark></para>
+
+      <para><remark>Draft range of available events: </remark></para>
+
+      <para><remark>SComponentDropListener SComponentListener
+      SContainerListener SDocumentListener SExitListener
+      SInternalFrameListener SInvalidLowLevelEventListener
+      SParentFrameListener SRenderListener SRequestListener</remark></para>
     </sect1>
 
     <sect1>
@@ -840,12 +958,18 @@ frameset.setVisible(true);</programlisting>
       linkend="view-logic-separation" /> the layout managers are the
       components responsible for arranging and layouting your wingS widgets
       component on the screen. This is done by instanciating and assigning a
-      layout manager to an </para>
+      layout manager to an</para>
 
       <sect2 id="SwingLayoutManager">
         <title>Swing-like Layout Managers</title>
 
-        <para>TODO</para>
+        <para><remark>TODO: SBorderLayout, SBoxLayout, SCardLayout,
+        SFlowDownLayout, SFlowLayout, SFrameSetLayout, SGridBagLayout,
+        SGridLayout, SNullLayout, SRootLayout, SScrollPaneLayout,
+        STemplateLayout</remark></para>
+
+        <para><remark>Section better name "dynamic layout
+        managers"?</remark></para>
       </sect2>
 
       <sect2 id="STemplateLayout">
@@ -906,7 +1030,7 @@ frameset.setVisible(true);</programlisting>
  </programlisting></para>
 
         <sect3>
-          <title>BeanShell support</title>
+          <title>BeanScript support</title>
 
           <para>TODO</para>
         </sect3>
@@ -989,7 +1113,7 @@ frame.addHeader(new Link("stylesheet",
     </sect1>
 
     <sect1>
-      <title>User Input</title>
+      <title>TODO: Move this User Input</title>
 
       <para>Input to your wingS application comes in the form of state changes
       to the various widgets you have created, and in application events that
@@ -1055,79 +1179,24 @@ submit.addActionListener(al);</programlisting></para>
     </sect1>
 
     <sect1>
-      <title id="client-side-scripting">Client Side Script Listeners</title>
+      <title>Various Topics</title>
 
-      <para>wingS applications typically work with server side events. That
-      is, whenever you press a button in a wingS application, a form is
-      submitted or a link is pressed that calls the server side's registered
-      ActionListener. From a user's point of view this creates the brief
-      annoying pause between request and response, an effect intrinsic to web
-      applications in general. Interestingly though, users have silently
-      accepted this shift in UI behaviour from client to web
-      applications.</para>
+      <sect2>
+        <title>wingS Session</title>
 
-      <para>Is that acceptance by the user an excuse for not trying to improve
-      this? No. In fact, there are several fascinating initiatives<footnote>
-          <para>Currently the wingS team is integrating the <ulink
-          url="http://www.getahead.ltd.uk/dwr/">DWR</ulink> framework into
-          wingS. Have a look at the WingSet demo.</para>
-        </footnote> determined to improve the latency of web
-      applications.</para>
+        <para><remark>FROM USER PERSPECTIVE: wingS session, http session,
+        session exit/Start, session statistics, root frames, browser and other
+        infos . REFER TO Advanced topic.</remark></para>
+      </sect2>
 
-      <para>Back to wingS. This is how you can integrate JavaScript in a wingS
-      application:</para>
+      <sect2>
+        <title>Dialogs and Option Panes</title>
 
-      <para>TODO: Explain general concept in wingS.</para>
+        <para><remark>Usage of SDialog an SOptionPane</remark></para>
 
-      <itemizedlist>
-        <listitem>
-          <para>explain JavaScriptEvents, JavaScriptListener and how they can
-          be added to components</para>
-        </listitem>
-
-        <listitem>
-          <para>explain a simple application with a JavaScript Listener doing
-          just a submit().</para>
-        </listitem>
-
-        <listitem>
-          <para>explain JavaScript listeners, that reference other components
-          like in this example from wingset/JavaScriptListenerExample</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>TODO: Explain demo.</para>
-
-      <programlisting>STextField firstField  = new STextField();
-STextField secondField  = new STextField();
-STextField sumField  = new STextField();
-
-  /*
-   * Add the client side script listener. The variables
-   * in curly braces are replaced by the actual IDs of the components.
-   */
-  private final static String JS_ADD_SCRIPT =
-            "document.getElementById('{2}').
-              getElementsByTagName('input')[0].value" +
-            " = ((1.0 * document.getElementById('{0}').
-              getElementsByTagName('input')[0].value)" +
-            " + (1.0 * document.getElementById('{1}').
-              getElementsByTagName('input')[0].value));"; 
-  SComponent[] jsParams = new SComponent[]{firstField, secondField,
-                                           sumField};
-  
-  JavaScriptListener jsListener;
-  jsListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE,
-                                      JS_ADD_SCRIPT,
-                                      jsParams);
-
-  firstField.addScriptListener(jsListener);
-  secondField.addScriptListener(jsListener);
-  sumField.addScriptListener(jsListener);</programlisting>
-    </sect1>
-
-    <sect1>
-      <title>File Upload and Download</title>
+        <para><remark>HOLGER: How modal/nonmdal. Dialog push works
+        how?</remark></para>
+      </sect2>
 
       <sect2>
         <title>File Upload</title>
@@ -1181,6 +1250,168 @@ STextField sumField  = new STextField();
 headers.put("Content-Disposition", "attachment; filename=" + getFilename() );
 String url = SessionManager.getSession().getExternalizeManager().externalize(pdfDownload, headers);  </programlisting></para>
       </sect2>
+
+      <sect2>
+        <title>Overwritable config files</title>
+
+        <para>The default config files reside inside the jar file. Take a look
+        at the jar container to learn what you can do with them. They should
+        be documented. If you want to overwrite any of the settings in the
+        config files, you can do that by providing a file in the WEB-INF
+        directory of your web application. The naming scheme is the following:
+        If you want to overwrite some properties from the file at classpath
+        <code>org/wings/plaf/css/default.properties</code>, you need to put a
+        file named <code>org.wings.plaf.css.default.properties</code> into the
+        WEB-INF directory. That file will then be read on top of the default
+        file, so you just need to overwrite the settings you want to
+        change.</para>
+
+        <para>The files that I know of you can change via this method are:
+        <code>org/wings/plaf/css/default.properties</code> and
+        <code>org/wings/util/charset.properties.</code></para>
+      </sect2>
+
+      <sect2>
+        <title>Error Page Display</title>
+
+        <para>By default, if an exception occurs inside a wingS application,
+        this error is logged via the logging mechanism. No other action is
+        triggered. However, you can provide the user with an error page. For
+        this, you need to provide a parameter in your application's web.xml
+        file, like this:<programlisting>&lt;init-param&gt;
+  &lt;param-name&gt;<emphasis role="bold">wings.error.template</emphasis>&lt;/param-name&gt;
+  &lt;param-value&gt;<emphasis role="bold">/templates/ErrorTemplate.thtml</emphasis>&lt;/param-value&gt;
+&lt;/init-param&gt;</programlisting></para>
+
+        <para>The value of the parameter is a path to a wingS template
+        relative to the directory the web application resides in. In this
+        template you can provide the following constraints:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis role="bold">EXCEPTION_MESSAGE</emphasis> -
+            replaced with the message of the exception</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">EXCEPTION_STACK_TRACE</emphasis> -
+            replaced with the stack trace of the exception</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">WINGS_VERSION</emphasis> - replaced
+            with the wingS version and compile time</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For an in-use example of this, look at the web.xml and
+        ErrorTemplate.thtml files of the WingSet demo.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Best Practices</title>
+
+      <para>Cherish the following principles and wingS projects will be a
+      smooth and enjoyable ride.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>STemplateLayout - Understand how this layout manager works.
+          The minimal overhead of using it pays off quickly. Your web designer
+          will be able to style your application without touching your Java
+          code. Read <xref linkend="STemplateLayout" /> for details.</para>
+        </listitem>
+
+        <listitem>
+          <para>SRootLayout - Set a <code>SFrame</code>'s layout to a custom
+          <code>SRootLayout</code> referencing a template file. The source
+          code looks like this. <programlisting>URL url = 
+  Thread.currentThread().getContextClassLoader().getResource("layout.thtml");
+frame.setLayout(new SRootLayout(url));</programlisting></para>
+
+          <para>Ensure that the template contains the element
+          <code>object</code> with attribute <code>content</code>. This
+          element will be replaced with the frame's content. <programlisting>&lt;div id="title"&gt;Application Title&lt;/div&gt;
+&lt;hr /&gt;
+<emphasis role="bold">&lt;object name="content"&gt;&lt;/object&gt;</emphasis>
+&lt;hr /&gt;
+&lt;div id="footer"&gt;company, copyright, license notice&lt;/div&gt;</programlisting>This
+          is a convenient way to define XHTML like a border or title appearing
+          on every page, no matter what the content will be like.</para>
+        </listitem>
+
+        <listitem>
+          <para>The total sum of testing cycles quickly justifies the
+          investment of learning how to efficiently deploy a web application
+          into the servlet container.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>If Jakarta Tomcat is your choice, learn how to use the
+              so-called "manager". With its predefined ant tasks you can
+              install and remove web applications in the wink of an eye
+              without the expensive stop and start of the complete Tomcat and
+              without writing it into the webapps folder first.</para>
+            </listitem>
+
+            <listitem>
+              <para>Alternatively, think about just deploying the context.xml
+              to webapps folder and pointing its base to your project's build
+              folder which then, of course, has to obey the webapps folder
+              rules.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Beginning with Tomcat version 5.0 a new default session
+          manager was introduced, called SimpleTcpReplicationManager (a
+          subclass of StandardManager). It attempts to load the persistence
+          storage on application startup and produces a warning-level
+          exception looking like this:<programlisting>SEVERE: Exception loading sessions from persistent storage
+java.io.WriteAbortedException: writing aborted;
+java.io.NotSerializableException:
+org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
+          non-clustered session manager use the following section in your web
+          application's context definition in /META-INF/context.xml.</para>
+
+          <programlisting>&lt;context&gt;
+   &lt;manager    
+       className="org.apache.catalina.session.StandardManager"
+        pathname=""&gt;
+   &lt;/manager&gt;
+&lt;/context&gt;</programlisting>
+        </listitem>
+
+        <listitem>
+          <para>Beware of the consequences of using a servlet container.
+          Multiple requests can traverse static methods in parallel!</para>
+        </listitem>
+
+        <listitem>
+          <para>Avoid setting visual features in Java code, instead define CSS
+          classes with <code>SComponent.setStyle("xyz")</code>and reference a
+          CSS where you determine the rendering with <code>.xyz { &lt;your
+          style definitions&gt; }</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>TODO: Explain loading as resource and benefit of changing the
+          file at runtime.</para>
+        </listitem>
+      </orderedlist>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Advanced Topics</title>
+
+    <sect1>
+      <title>Reload manager and epochs</title>
+
+      <para><remark>How resources / components get dirty. How epochs
+      work.</remark></para>
     </sect1>
 
     <sect1>
@@ -1330,66 +1561,75 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
     </sect1>
 
     <sect1>
-      <title>Application Startup and Configuration</title>
+      <title id="client-side-scripting">Client Side Script Listeners</title>
 
-      <para>still some TODO</para>
+      <para>wingS applications typically work with server side events. That
+      is, whenever you press a button in a wingS application, a form is
+      submitted or a link is pressed that calls the server side's registered
+      ActionListener. From a user's point of view this creates the brief
+      annoying pause between request and response, an effect intrinsic to web
+      applications in general. Interestingly though, users have silently
+      accepted this shift in UI behaviour from client to web
+      applications.</para>
 
-      <sect2>
-        <title>Overwritable config files</title>
+      <para>Is that acceptance by the user an excuse for not trying to improve
+      this? No. In fact, there are several fascinating initiatives<footnote>
+          <para>Currently the wingS team is integrating the <ulink
+          url="http://www.getahead.ltd.uk/dwr/">DWR</ulink> framework into
+          wingS. Have a look at the WingSet demo.</para>
+        </footnote> determined to improve the latency of web
+      applications.</para>
 
-        <para>The default config files reside inside the jar file. Take a look
-        at the jar container to learn what you can do with them. They should
-        be documented. If you want to overwrite any of the settings in the
-        config files, you can do that by providing a file in the WEB-INF
-        directory of your web application. The naming scheme is the following:
-        If you want to overwrite some properties from the file at classpath
-        <code>org/wings/plaf/css/default.properties</code>, you need to put a
-        file named <code>org.wings.plaf.css.default.properties</code> into the
-        WEB-INF directory. That file will then be read on top of the default
-        file, so you just need to overwrite the settings you want to
-        change.</para>
+      <para>Back to wingS. This is how you can integrate JavaScript in a wingS
+      application:</para>
 
-        <para>The files that I know of you can change via this method are:
-        <code>org/wings/plaf/css/default.properties</code> and
-        <code>org/wings/util/charset.properties.</code></para>
-      </sect2>
+      <para>TODO: Explain general concept in wingS.</para>
 
-      <sect2>
-        <title>Error Page Display</title>
+      <itemizedlist>
+        <listitem>
+          <para>explain JavaScriptEvents, JavaScriptListener and how they can
+          be added to components</para>
+        </listitem>
 
-        <para>By default, if an exception occurs inside a wingS application,
-        this error is logged via the logging mechanism. No other action is
-        triggered. However, you can provide the user with an error page. For
-        this, you need to provide a parameter in your application's web.xml
-        file, like this:<programlisting>&lt;init-param&gt;
-  &lt;param-name&gt;<emphasis role="bold">wings.error.template</emphasis>&lt;/param-name&gt;
-  &lt;param-value&gt;<emphasis role="bold">/templates/ErrorTemplate.thtml</emphasis>&lt;/param-value&gt;
-&lt;/init-param&gt;</programlisting></para>
+        <listitem>
+          <para>explain a simple application with a JavaScript Listener doing
+          just a submit().</para>
+        </listitem>
 
-        <para>The value of the parameter is a path to a wingS template
-        relative to the directory the web application resides in. In this
-        template you can provide the following constraints:</para>
+        <listitem>
+          <para>explain JavaScript listeners, that reference other components
+          like in this example from wingset/JavaScriptListenerExample</para>
+        </listitem>
+      </itemizedlist>
 
-        <itemizedlist>
-          <listitem>
-            <para><emphasis role="bold">EXCEPTION_MESSAGE</emphasis> -
-            replaced with the message of the exception</para>
-          </listitem>
+      <para>TODO: Explain demo.</para>
 
-          <listitem>
-            <para><emphasis role="bold">EXCEPTION_STACK_TRACE</emphasis> -
-            replaced with the stack trace of the exception</para>
-          </listitem>
+      <programlisting>STextField firstField  = new STextField();
+STextField secondField  = new STextField();
+STextField sumField  = new STextField();
 
-          <listitem>
-            <para><emphasis role="bold">WINGS_VERSION</emphasis> - replaced
-            with the wingS version and compile time</para>
-          </listitem>
-        </itemizedlist>
+  /*
+   * Add the client side script listener. The variables
+   * in curly braces are replaced by the actual IDs of the components.
+   */
+  private final static String JS_ADD_SCRIPT =
+            "document.getElementById('{2}').
+              getElementsByTagName('input')[0].value" +
+            " = ((1.0 * document.getElementById('{0}').
+              getElementsByTagName('input')[0].value)" +
+            " + (1.0 * document.getElementById('{1}').
+              getElementsByTagName('input')[0].value));"; 
+  SComponent[] jsParams = new SComponent[]{firstField, secondField,
+                                           sumField};
+  
+  JavaScriptListener jsListener;
+  jsListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE,
+                                      JS_ADD_SCRIPT,
+                                      jsParams);
 
-        <para>For an in-use example of this, look at the web.xml and
-        ErrorTemplate.thtml files of the WingSet demo.</para>
-      </sect2>
+  firstField.addScriptListener(jsListener);
+  secondField.addScriptListener(jsListener);
+  sumField.addScriptListener(jsListener);</programlisting>
     </sect1>
 
     <sect1>
@@ -1530,100 +1770,6 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
         template files for the layout managers are all expected to be in the
         ISO-8859-1 encoding. So your need to escape special characters.</para>
       </sect2>
-    </sect1>
-
-    <sect1>
-      <title>Best Practices</title>
-
-      <para>Cherish the following principles and wingS projects will be a
-      smooth and enjoyable ride.</para>
-
-      <orderedlist>
-        <listitem>
-          <para>STemplateLayout - Understand how this layout manager works.
-          The minimal overhead of using it pays off quickly. Your web designer
-          will be able to style your application without touching your Java
-          code. Read <xref linkend="STemplateLayout" /> for details.</para>
-        </listitem>
-
-        <listitem>
-          <para>SRootLayout - Set a <code>SFrame</code>'s layout to a custom
-          <code>SRootLayout</code> referencing a template file. The source
-          code looks like this. <programlisting>URL url = 
-  Thread.currentThread().getContextClassLoader().getResource("layout.thtml");
-frame.setLayout(new SRootLayout(url));</programlisting></para>
-
-          <para>Ensure that the template contains the element
-          <code>object</code> with attribute <code>content</code>. This
-          element will be replaced with the frame's content. <programlisting>&lt;div id="title"&gt;Application Title&lt;/div&gt;
-&lt;hr /&gt;
-<emphasis role="bold">&lt;object name="content"&gt;&lt;/object&gt;</emphasis>
-&lt;hr /&gt;
-&lt;div id="footer"&gt;company, copyright, license notice&lt;/div&gt;</programlisting>This
-          is a convenient way to define XHTML like a border or title appearing
-          on every page, no matter what the content will be like.</para>
-        </listitem>
-
-        <listitem>
-          <para>The total sum of testing cycles quickly justifies the
-          investment of learning how to efficiently deploy a web application
-          into the servlet container.</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>If Jakarta Tomcat is your choice, learn how to use the
-              so-called "manager". With its predefined ant tasks you can
-              install and remove web applications in the wink of an eye
-              without the expensive stop and start of the complete Tomcat and
-              without writing it into the webapps folder first.</para>
-            </listitem>
-
-            <listitem>
-              <para>Alternatively, think about just deploying the context.xml
-              to webapps folder and pointing its base to your project's build
-              folder which then, of course, has to obey the webapps folder
-              rules.</para>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-
-        <listitem>
-          <para>Beginning with Tomcat version 5.0 a new default session
-          manager was introduced, called SimpleTcpReplicationManager (a
-          subclass of StandardManager). It attempts to load the persistence
-          storage on application startup and produces a warning-level
-          exception looking like this:<programlisting>SEVERE: Exception loading sessions from persistent storage
-java.io.WriteAbortedException: writing aborted;
-java.io.NotSerializableException:
-org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
-          non-clustered session manager use the following section in your web
-          application's context definition in /META-INF/context.xml.</para>
-
-          <programlisting>&lt;context&gt;
-   &lt;manager    
-       className="org.apache.catalina.session.StandardManager"
-        pathname=""&gt;
-   &lt;/manager&gt;
-&lt;/context&gt;</programlisting>
-        </listitem>
-
-        <listitem>
-          <para>Beware of the consequences of using a servlet container.
-          Multiple requests can traverse static methods in parallel!</para>
-        </listitem>
-
-        <listitem>
-          <para>Avoid setting visual features in Java code, instead define CSS
-          classes with <code>SComponent.setStyle("xyz")</code>and reference a
-          CSS where you determine the rendering with <code>.xyz { &lt;your
-          style definitions&gt; }</code>.</para>
-        </listitem>
-
-        <listitem>
-          <para>TODO: Explain loading as resource and benefit of changing the
-          file at runtime.</para>
-        </listitem>
-      </orderedlist>
     </sect1>
   </chapter>
 
