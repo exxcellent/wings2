@@ -168,21 +168,6 @@ public class SMenuBar extends SContainer {
     }
 
     /**
-     * Paint the menubar's border if BorderPainted property is true.
-     * 
-     * @param g the Graphics context to use for painting
-     * @see SComponent#paint
-     * @see SComponent#setBorder
-     */
-    /*
-    protected void paintBorder(Graphics g) {
-        if (isBorderPainted()) {
-            super.paintBorder(g);
-        }
-    }
-    */
-
-    /**
      * Sets the margin between the menubar's border and
      * its menus. Setting to null will cause the menubar to
      * use the default margins.
@@ -194,12 +179,6 @@ public class SMenuBar extends SContainer {
      */
     public void setMargin(Insets m) {
         this.margin = m;
-        /*
-          if (old == null || !m.equals(old)) {
-                revalidate();
-                repaint();
-          }
-        */
     }
 
     /**
@@ -215,13 +194,6 @@ public class SMenuBar extends SContainer {
         } else {
             return margin;
         }
-    }
-
-
-    /**
-     * Implemented to be a MenuElement -- does nothing.
-     */
-    public void menuSelectionChanged(boolean isIncluded) {
     }
 
     /**
@@ -244,21 +216,12 @@ public class SMenuBar extends SContainer {
                 ",paintBorder=" + paintBorderString;
     }
 
+    /* doc see SComponent */
     public void setCG(MenuBarCG cg) {
         super.setCG(cg);
     }
-    
-    /**
-     * Close all currently open menus.
-     */
-    public void closeAllMenus() {
-        /*        for ( int i = 0; i < fComponents.size(); i++ ) {
-            if ( fComponents.get(i) instanceof SMenu ) {
-                ((SMenu) fComponents.get(i)).setActive( false );
-            }
-            }*/
-    }
 
+    /* doc see SComponent */
     public ArrayList getMenus() {
         ArrayList menus = new ArrayList();
         if (isVisible()) {
