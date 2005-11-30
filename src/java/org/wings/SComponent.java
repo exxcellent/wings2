@@ -1419,7 +1419,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             return false;
 
         if (oldObject == null)
-            return true;
+            return newObject != null;
 
         return !oldObject.equals(newObject);
     }
