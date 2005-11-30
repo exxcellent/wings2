@@ -760,8 +760,16 @@ public class HelloWingS {
           way how internal frames can be used to build a multi-document Editor
           with RSS reader and Drag &amp; Drop support.</para>
 
-          <para><remark>TODO: Screenshot with Title " Desktop Demo: Simple MDI
-          application with RSS and Drag &amp; Drop support"</remark></para>
+          <screenshot>
+            <screeninfo>Screenshot from the wingS Desktop demo with internal
+            frames and Drag &amp; Drop support</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/desktop_screenshot.png" scale="" />
+              </imageobject>
+            </mediaobject>
+          </screenshot>
 
           <para>Please refer to the source code of the desktop demo for an
           example of how to use internal frames. It can be found in the
@@ -829,15 +837,223 @@ public class HelloWingS {
       <sect2>
         <title>SComponent</title>
 
-        <para><remark>Describe whats common for all scomponent based
-        elements</remark></para>
+        <para>In the previous section you already got in contact with your
+        first wingS component: <code>SFrame</code> and its variants. Now we
+        are about to introduce the root class of all wingS components
+        <code>SComponent</code>. This class is the counterpiece of the
+        <code>JComponent</code> class in Swing. As in Swing all wingS widgets
+        are subclasses and hence instances of <code>SComponent</code>. </para>
 
-        <para><remark>Describe common properties preferred size,
-        foreground/backgroumd colours, css attibuts, </remark></para>
+        <para>The following sections we'll describe more in detail about the
+        usage and different between the different <code>SComponent</code>
+        variant. But first we'll explain the commons between all wingS
+        components. Below you'll find a table which points out hand-selected
+        methods with a short explanation of their meaning as declared in
+        <code>SComponent</code>. </para>
 
-        <para><remark>Describe common functionalities: tooltips, script
-        listeners? MENTION: Component context menus. Refer to full
-        section</remark></para>
+        <table>
+          <title>Selected methods and properties of
+          <code>SComponent</code></title>
+
+          <tgroup cols="2">
+            <colspec colwidth="*" />
+
+            <colspec colwidth="2*" />
+
+            <thead>
+              <row>
+                <entry>Method</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><code>get/setName()</code></entry>
+
+                <entry>The current name or <emphasis role="bold">id</emphasis>
+                of this component. It is initially set on demand but can be
+                overwritten with custom values. This name will also appear
+                inside the generated HTML code, hence it must contain only a
+                restricted set of characters.</entry>
+              </row>
+
+              <row>
+                <entry><code>getParent()</code></entry>
+
+                <entry>The <emphasis role="bold">parent container</emphasis>
+                owning this component. This is set by the wingS framework at
+                the timepoint when this component is added to another
+                container liek a panel or the root frame of the
+                application.</entry>
+              </row>
+
+              <row>
+                <entry><code>getParentFrame()</code></entry>
+
+                <entry>The <emphasis role="bold">root frame</emphasis> in
+                which this component is placed as beeing recursively
+                accessible via <code>getParent()</code>.</entry>
+              </row>
+
+              <row>
+                <entry><code>get/setBackground()</code></entry>
+
+                <entry>Defines an optional <emphasis role="bold">background
+                colour</emphasis> for this component.</entry>
+              </row>
+
+              <row>
+                <entry><code>get/setForeground()</code></entry>
+
+                <entry>Defines an optional <emphasis role="bold">foreground
+                colour</emphasis> for this component. On <code>SLabel</code>
+                instances i.e. this will become the colour of the
+                text.</entry>
+              </row>
+
+              <row>
+                <entry><code>get/setBorder()</code></entry>
+
+                <entry>Apply a border. Besides <emphasis role="bold">outlining
+                components</emphasis> using <code>SLineBorder</code> this
+                method is mostly helpful to <emphasis role="bold">apply
+                spacings</emphasis> on a component by applying a
+                <code>SEmptyBorder</code> with the desired padding
+                values.</entry>
+              </row>
+
+              <row>
+                <entry><code>get/setHorizontalAlignment()</code></entry>
+
+                <entry>Sets the <emphasis role="bold">horizontal
+                alignment</emphasis> of this component inside the parent
+                container (<code>LEFT</code>, <code>RIGHT </code>or
+                <code>CENTER</code>). The effect of this value depends on the
+                layout manager assigned the parent container.</entry>
+              </row>
+
+              <row>
+                <entry><code>get/setVerticalAlignment()</code></entry>
+
+                <entry>As previous method the <emphasis role="bold">vertical
+                alignment</emphasis> accepting <code>TOP</code>,
+                <code>CENTER</code> and <code>BOTTOM</code> as valid
+                values.</entry>
+              </row>
+
+              <row>
+                <entry><code>get/setPreferredSize()</code> </entry>
+
+                <entry>Apply a <emphasis role="bold">preferred size</emphasis>
+                to a component. You may choose relative percentage values
+                (<code>new SDimension("50%", null)</code>) as well as absolute
+                pixel value as parameters (<code>new SDimension(150,
+                SDimension.AUTO_INT)</code>). Another typical usage is to
+                assign the global SDimension.FULL_WIDTH instance i.e. to a
+                panel or similar component: This achieves that the component
+                is stretched by the browser as far as possible to take up the
+                full available width. Please be aware that the rendering
+                result may vary depending on the clients browser. This is
+                especially an issue on using relative dimensions.</entry>
+              </row>
+
+              <row>
+                <entry><code>get/setStyle()</code></entry>
+
+                <entry>The current <emphasis role="bold">CSS style
+                class</emphasis>. By default the wingS PLAF assigns every
+                component its unqualified java class name as CSS style name.
+                So for <code>SButton</code> instances this will have
+                <code>"SButton"</code> as default value. Please be aware that
+                the default wingS style definitions are defined using these
+                default CSS class names. If you want to keep the wingS default
+                styles but additonally apply your own styles defined in a
+                separate CSS file, you should append your custom CSS style
+                class names to a component separated by a space (i.e.
+                <code>"SButton myClass"</code>). </entry>
+              </row>
+
+              <row>
+                <entry><code>get/setToolTipText()</code> </entry>
+
+                <entry>Apply a <emphasis role="bold">tooltip text
+                </emphasis>which will pop up after a short delay when the
+                mouse pointer is over the component. The behaviour of
+                toolstips can be defined more in detail via the
+                <code>SToolTipManager</code>.</entry>
+              </row>
+
+              <row>
+                <entry><code>get/setShowAsFormComponent()</code> </entry>
+
+                <entry>The value of this property influences the <emphasis
+                role="bold">appearance of special input components</emphasis>
+                which may be used inside HTML forms or not. Think i.e. of
+                checkboxes. Checkboxes are only rendered in browsers if you
+                nest them inside a HTML <code>&lt;FORM&gt;</code> element.
+                Therefore wingS will render them as clickable images if you
+                don't wrap a <code>SCheckBox</code> with a <code>SForm</code>
+                element. You can achieve the same behaviour inside forms on
+                setting this value to <code>false</code>. A very common usage
+                of this property is to force <code>SButton</code> to appear as
+                text links and not browser submit buttons inside
+                forms.</entry>
+              </row>
+
+              <row>
+                <entry><code>setAttribute()</code></entry>
+
+                <entry>Dynamically set a <emphasis role="bold">CSS property
+                value</emphasis> for a component. You can use this method to
+                define any abritriary CSS property/value pair on the current
+                component. </entry>
+              </row>
+
+              <row>
+                <entry><code>is/setVisible()</code> </entry>
+
+                <entry>By default being <code>true</code> you can use this
+                property to <emphasis role="bold">hide any component
+                </emphasis>from the current view.</entry>
+              </row>
+
+              <row>
+                <entry><code>is/setEnabled()</code></entry>
+
+                <entry>This property has a different meaning on different
+                components. Mainly it is used to define<emphasis role="bold">
+                input elements as inactive</emphasis> respectively
+                readonly.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Besides the explained methods <code>SComponent</code> declares
+        further methods i.e. for <itemizedlist>
+            <listitem>
+              <para>Adding and removing various <emphasis role="bold">event
+              listeners</emphasis></para>
+            </listitem>
+
+            <listitem>
+              <para>Applying <emphasis role="bold">key bindings</emphasis> and
+              <emphasis role="bold">component context menus</emphasis> on a
+              component</para>
+            </listitem>
+
+            <listitem>
+              <para>Modifying the used <emphasis role="bold">component
+              renderer</emphasis> (PLAF)</para>
+            </listitem>
+
+            <listitem>
+              <para>Request the <emphasis role="bold">input focus</emphasis>
+              for the next page refresh</para>
+            </listitem>
+          </itemizedlist></para>
       </sect2>
 
       <sect2 id="containers">
@@ -2144,9 +2360,21 @@ public MyFoo getSessionHelper(HttpServletRequest request)
     wingS-developers provide fast and thorough answers to your
     questions.</para>
 
-    <para>Professional support for wingS can be obtained by <ulink
-    url="http://www.mercatis.com">mercatis information technologies</ulink> or
-    <ulink url="http://www.exxcellent.de">eXXcellent solutions</ulink>.</para>
+    <para>Professional support for wingS can be obtained by <itemizedlist>
+        <listitem>
+          <para><ulink url="http://www.mercatis.com">mercatis information
+          technologies</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://www.exxcellent.de">eXXcellent
+          solutions</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://www.wilken.de/">Wilken</ulink></para>
+        </listitem>
+      </itemizedlist> </para>
   </appendix>
 
   <appendix id="gfdl">
