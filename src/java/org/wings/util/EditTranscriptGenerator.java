@@ -33,6 +33,12 @@ import java.util.Vector;
  * @author <a href="mailto:jesse@odel.on.ca">Jesse Wilson</a>
  */
 public final class EditTranscriptGenerator {
+    /**
+     * The exact calculation of document events is very memory and cpu intesive.
+     * For texts beeing longer than this limit we use a dumb approximation.
+     */
+    private static final int MAX_LENGTH_FOR_TRANSCRIPT_GENERATION = 500;
+
 
     /**
      * Generates the shorted edit transcript needed to transform the source String into the target String.
@@ -42,10 +48,23 @@ public final class EditTranscriptGenerator {
      *         or {@link javax.swing.event.DocumentEvent.EventType#REMOVE} with correct sourceIndexes and lengths.
      */
     public static List generateEvents(String source, String target) {
+        if (((source == null) || source.length() < MAX_LENGTH_FOR_TRANSCRIPT_GENERATION) &&
+                ((target == null) || target.length() < MAX_LENGTH_FOR_TRANSCRIPT_GENERATION))
+            return calculateEventsByStringDistance(source, target);
+        else
+            return calculateEventsByDumbApproximation(source, target);
+    }
+
+    /**
+     * Generate the document events by using the algorithm.
+     * @return A list of {@link DocumentEvent}s either of type {@link javax.swing.event.DocumentEvent.EventType#INSERT}
+     *         or {@link javax.swing.event.DocumentEvent.EventType#REMOVE} with correct sourceIndexes and lengths.
+     */
+    private static List calculateEventsByStringDistance(String source, String target) {
         final List editScript = shortestEditScript(new StringDiffMatcher(source, target));
 
         final Vector actions = new Vector();
-        
+
         // target is x axis. Changes in X mean advance target index
         // source is y axis. Changes to y mean advance source index
         int targetIndex = 0;
@@ -55,13 +74,13 @@ public final class EditTranscriptGenerator {
         Point previousPoint = null;
         for (Iterator i = editScript.iterator(); i.hasNext();) {
             Point currentPoint = (Point) i.next();
-            
+
             // skip the first point
             if (previousPoint == null) {
                 previousPoint = currentPoint;
                 continue;
             }
-            
+
             // figure out what the relationship in the values is
             int deltaX = currentPoint.getX() - previousPoint.getX();
             int deltaY = currentPoint.getY() - previousPoint.getY();
@@ -83,7 +102,7 @@ public final class EditTranscriptGenerator {
                 // should never be reached
                 throw new IllegalStateException();
             }
-            
+
             // the next previous point is this current point
             previousPoint = currentPoint;
         }
@@ -256,6 +275,22 @@ public final class EditTranscriptGenerator {
         }
         // no solution was found
         throw new IllegalStateException();
+    }
+
+    /**
+     * Generate a very simple list of document events to avoid cost intensive distance calculation:
+     * Remove all existing characters, add all new characters.
+     * @return A list of {@link DocumentEvent}s either of type {@link javax.swing.event.DocumentEvent.EventType#INSERT}
+     *         or {@link javax.swing.event.DocumentEvent.EventType#REMOVE} with correct sourceIndexes and lengths.
+     */
+    private static List calculateEventsByDumbApproximation(String source, String target) {
+        List events = new ArrayList(2);
+        if (source != null)
+            events.add(new SimpleDocumentEvent(0, source.length(), null, DocumentEvent.EventType.REMOVE));
+        if (target != null)
+            events.add(new SimpleDocumentEvent(0, target.length(), null, DocumentEvent.EventType.INSERT));
+
+        return events;
     }
 
     /**
