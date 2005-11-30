@@ -115,7 +115,7 @@
         <delete  dir="${build.dir}/${documentname}/pdf/images"/>
     </target>
 
-    <target name="doc.html" depends="assert-docname-param"
+    <target name="doc.html" depends="assert-docname-param, doc.htmlmisc"
             description="Generates the HTML documentation only for a language (set lang)">
 
         <mkdir dir="${build.dir}/${documentname}/html/"/>
@@ -134,7 +134,7 @@
 		
     </target>
 
-    <target name="doc.htmlsingle" depends="assert-docname-param"
+    <target name="doc.htmlsingle" depends="assert-docname-param, doc.htmlmisc"
         description="Generates the single-page HTML documentation only for a language (set lang)">
 
         <mkdir dir="${build.dir}/${documentname}/html_single/"/>
