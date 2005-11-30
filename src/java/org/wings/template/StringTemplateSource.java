@@ -13,6 +13,7 @@
  */
 package org.wings.template;
 
+import org.wings.session.SessionManager;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,7 +63,7 @@ public class StringTemplateSource implements TemplateSource {
     }
 
     public InputStream getInputStream() throws IOException {
-        return new ByteArrayInputStream(template.getBytes());
+        return new ByteArrayInputStream(template.getBytes(SessionManager.getSession().getCharacterEncoding()));
     }
 
     public final String getCanonicalName() {
