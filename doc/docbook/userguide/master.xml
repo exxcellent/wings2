@@ -702,7 +702,7 @@ public class HelloWingS {
         <title>Frames and Top-Level Components</title>
 
         <sect3>
-          <title>Frames</title>
+          <title id="Frame">Frames</title>
 
           <para>If you took a look at <xref linkend="hellowings" /> you
           probably realized that the main thing the entry class does, is
@@ -746,7 +746,7 @@ public class HelloWingS {
         </sect3>
 
         <sect3>
-          <title>Internal Frames</title>
+          <title id="InternalFrame">Internal Frames</title>
 
           <para>Besides regular, single-framed single-windowed webapplications
           wingS offers a great feature: It can simulate <firstterm>Multiple
@@ -778,7 +778,7 @@ public class HelloWingS {
         </sect3>
 
         <sect3>
-          <title>Frameset</title>
+          <title id="Frameset">Frameset</title>
 
           <para><emphasis>Please note that the frameset support in wingS is
           currently experimental!</emphasis></para>
@@ -1059,12 +1059,209 @@ public class HelloWingS {
       <sect2 id="containers">
         <title>SContainer</title>
 
-        <para><remark>Whats different to SComponent. Role of layout managers.
-        Special role of SForm</remark></para>
+        <para>You propably guessed it already: <code>SContainer</code> is a
+        derived variant of <code>SComponent</code> that can container further
+        <code>SComponent</code>s. Therefore it declares various methods to add
+        other <code>SComponents</code> to it. Furthermore a container offers
+        methods to access and modify the responsible <firstterm>layout
+        manager</firstterm>. But let's start from the beginning.</para>
 
-        <para><remark>SAnchor, SCellRendererPane, SDesktopPane, SForm,
-        SMenuBar, SPanel, SRootContainer, SScrollPane,
-        STabbedPane</remark></para>
+        <sect3>
+          <title>Hierachical nesting of containers</title>
+
+          <para>Contrary to other web applications framework, wingS is trying
+          to be as component oriented as possible. One main concept of
+          component-oriented application design is, that you take simple
+          component and arrange them to more complex compount components until
+          you built up your complete application. Hence containers are the key
+          feature for a hierarchical component-oriented design approach. The
+          figure below shows how you can used and nest components to a
+          complete screen.</para>
+
+          <figure>
+            <title>Example of how to build complex application via nesting
+            components</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/hierarchical_screenlayout.png" />
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <para>Similar to Swing the containers are only responsible for
+          embracing and managing the list of contained inner components. The
+          layouting of the contained components inside the space taken up by
+          the container component will be delegated to the layout
+          manager.</para>
+        </sect3>
+
+        <sect3>
+          <title>The basic SPanel container</title>
+
+          <para>The most popular container you'll encounter during you
+          every-day work writing of wingS application will probably be
+          <code>SPanel</code>. This is the simplest form a container and like
+          every <code>SContainer</code> it will be initialized with a default
+          layout manager (<code>SFlowLayout</code>, can be overridden via
+          <filename>default.properties</filename>). Refer to <xref
+          linkend="LayoutManager" /> for more information about details
+          regarding the different layout managers.</para>
+
+          <programlisting>        SPanel panel = new SPanel();
+        SGridLayout gridLayout = new SGridLayout(2);
+
+        panel.setLayout(gridLayout);
+        panel.add(new SLabel("First name:"));
+        panel.add(new STextField());
+        panel.add(new SLabel("Last name:"));
+        panel.add(new STextField());
+        panel.add(new SButton("Submit"));
+        
+        SForm inputForm = new SForm();
+        inputForm.add(panel);</programlisting>
+
+          <para>In this example we created a <code>SPanel</code> container,
+          assigned a two-columed gridlayout as layout manager and added
+          several components to this container. In the last step we wrapped
+          this container inside another container: <code>SForm</code>.</para>
+        </sect3>
+
+        <sect3>
+          <title id="SForm">The SForm container</title>
+
+          <para>What's the reason behind the <code>SForm</code> instance in
+          the previois example? If you are aware of HTML and already designed
+          some web pages by coding HTML code directly, you'll probably know
+          that input elements like text fields, submit buttons, radio buttons
+          and so on require to be surrounded by a <code>&lt;FORM&gt;</code>
+          HTML tag. </para>
+
+          <para>The <code>SForm</code> container is the object-oriented
+          equivalent for this HTML tag. So if you want to place input elements
+          on your screen you must ensure that the container or one of its
+          parent container is a SForm. Please be aware that contrary to the
+          other containers available in wingS you are <emphasis>not allowed to
+          nest SForm</emphasis> containers into each others! </para>
+
+          <para>Typically it's sufficient if you use one SForm container on
+          the very top of your component hierachy. The <code>SForm</code>
+          container has also a property which advises the browser to send the
+          input via <firstterm>HTTP POST</firstterm> or <firstterm>HTTP
+          GET</firstterm> calls.</para>
+        </sect3>
+
+        <sect3>
+          <title>Overview of all available container components</title>
+
+          <para>Reference of all container components in wingS:</para>
+
+          <table>
+            <title>Overview of all public <code>SContainer</code>
+            implementations</title>
+
+            <tgroup cols="2">
+              <colspec colwidth="*" />
+
+              <colspec colwidth="2*" />
+
+              <thead>
+                <row>
+                  <entry>Container class</entry>
+
+                  <entry>Description</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><code>SAnchor</code></entry>
+
+                  <entry>A very simple container to wrap a link around the
+                  inner components. Typically you use this to wrap
+                  <code>SLabel</code> for creating links on external
+                  URLs.</entry>
+                </row>
+
+                <row>
+                  <entry><code>SDesktopPane</code></entry>
+
+                  <entry>A special container to manager internal frames as
+                  demonstrated in the wingS desktop demo. Only needed for MDI
+                  applications.</entry>
+                </row>
+
+                <row>
+                  <entry><code>SForm</code></entry>
+
+                  <entry>Refer to <xref linkend="SForm" />. Wrap contained
+                  components with a HTML <code>&lt;FORM&gt;</code> tag. May
+                  not contain other <code>SForm</code> containers. </entry>
+                </row>
+
+                <row>
+                  <entry><code>SMenuBar</code></entry>
+
+                  <entry>A special container accepting
+                  <code>SMenutItems</code>. Used to build a desktop-like menu
+                  bar. Refer to the desktop demo.</entry>
+                </row>
+
+                <row>
+                  <entry><code>SPanel</code></entry>
+
+                  <entry>The most common and basic container.</entry>
+                </row>
+
+                <row>
+                  <entry><code>SRootContainer</code></entry>
+
+                  <entry>Abstract superclass for root containers. Root
+                  containers are the topmost containers which are not
+                  contained in other containers</entry>
+                </row>
+
+                <row>
+                  <entry><code>SFrame</code></entry>
+
+                  <entry>Refer to <xref linkend="Frame" />. Typically the root
+                  container of every wingS session is a <code>SFrame</code>
+                  instance.</entry>
+                </row>
+
+                <row>
+                  <entry><code>SInternalFrame</code></entry>
+
+                  <entry>Refer to <xref linkend="InternalFrame" />. A root
+                  container for MDI web applications. </entry>
+                </row>
+
+                <row>
+                  <entry><code>SFrameSet</code></entry>
+
+                  <entry>Refer to <xref linkend="Frameset" />. A root
+                  container to create frameset based web applications. Will
+                  container further <code>SFrame</code> instances for each
+                  frameset segment.</entry>
+                </row>
+
+                <row>
+                  <entry><code>SScrollPane</code></entry>
+
+                  <entry>A special pane to create paged or graphical scroll
+                  panes.</entry>
+                </row>
+
+                <row>
+                  <entry><code>STabbedPane</code></entry>
+
+                  <entry>Neat container to create a tabbed stack of various
+                  components as demonstrated in the WingSet demo.</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </sect3>
       </sect2>
 
       <sect2>
@@ -1984,7 +2181,8 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
 
         <para>Please be aware of one open pitfall in wingS: Currently the
         template files for the layout managers are all expected to be in the
-        ISO-8859-1 encoding. So your need to escape special characters.</para>
+        ISO-8859-1 encoding. So your need to escape special characters. This
+        issue might have been resolved meanwhile.</para>
       </sect2>
     </sect1>
   </chapter>
