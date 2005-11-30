@@ -329,6 +329,14 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         return popupMenu != null;
     }
 
+    /**
+     * The URL under which this component is accessible for the browser.
+     * This is equivalent to the URL of the component's root frame, as this is the
+     * node externalized to the browser via the {@link org.wings.resource.DynamicCodeResource}
+     * externalizer.
+     *
+     * @return The HTTP URL where this component can be accessed.
+     */
     public RequestURL getRequestURL() {
         SFrame p = getParentFrame();
         if (p == null)
