@@ -23,10 +23,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
-public class CSSStyleSheet
-        implements StyleSheet {
+public class CSSStyleSheet implements StyleSheet {
     private static final Map lengthMapping = new HashMap();
-
     static {
         lengthMapping.put("pt", new Float(1f));
         lengthMapping.put("px", new Float(1.3f));
@@ -38,10 +36,17 @@ public class CSSStyleSheet
 
     private final Map map;
 
+    /**
+     * Constructs an empty style sheet.
+      */
     public CSSStyleSheet() {
         map = new HashMap();
     }
 
+    /**
+     * Constructs a new style sheet instance by parsing the passed input stream into {@link #read(java.io.InputStream)}.
+     * @param in Input stream containing a valid CSS style sheet file.
+     */
     public CSSStyleSheet(InputStream in) throws IOException {
         this();
         read(in);
@@ -49,7 +54,7 @@ public class CSSStyleSheet
 
     public void putStyle(Style style) {
         map.put(style.getSelector(), style);
-        style.setSheet(this);
+        //style.setSheet(this);
     }
 
     public Set styles() {
@@ -63,24 +68,26 @@ public class CSSStyleSheet
         Iterator iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
-            /*
-            out.print((String)entry.getKey());
-            out.print(" { ");
-            out.print(entry.getValue().toString());
-            out.print(" }\n");
-            */
             ((Style) entry.getValue()).write(out);
         }
         out.flush();
     }
 
-    public void read(InputStream is)
+    /**
+     * Creates styles by parsing an input stream.
+     * @param inStream Stream containing style sheet source
+     */
+    public void read(InputStream inStream)
             throws IOException {
-        Reader r = new BufferedReader(new InputStreamReader(is));
+        Reader r = new BufferedReader(new InputStreamReader(inStream));
         CssParser parser = new CssParser();
         parser.parse(null, r, false, false);
     }
 
+    /**
+     * Reads and imports a style sheet file accessible via the passed URL.
+     * @param url The url of the style sheet file.
+     */
     public void importStyleSheet(URL url) {
         try {
             InputStream is = url.openStream();
@@ -96,10 +103,6 @@ public class CSSStyleSheet
         }
     }
 
-    public InputStream getInputStream() throws IOException {
-        return null;
-    };
-    
     public boolean isFinal() {
         return false;
     }

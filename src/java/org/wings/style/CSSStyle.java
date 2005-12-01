@@ -20,7 +20,7 @@ package org.wings.style;
  * @author bschmid
  */
 public class CSSStyle extends CSSAttributeSet implements Style {
-    private StyleSheet sheet;
+    /*private StyleSheet sheet; */
     private CSSSelector selector;
 
     public CSSStyle(CSSSelector selector, CSSAttributeSet attributes) {
@@ -33,22 +33,20 @@ public class CSSStyle extends CSSAttributeSet implements Style {
         this.selector = selector;
     }
 
-    public void setSelector(CSSSelector selector) {
-        this.selector = selector;
-    }
-
-    /**
+    // BSC: We don't need the backling to the style.
+    /* *
      * The style sheet owning this style.
      * @param sheet The style sheet owning this style.
-     */
+     * /
     public void setSheet(StyleSheet sheet) {
         this.sheet = sheet;
-    }
+    }*/
 
-    /**
+    /* *
      * @return  The style sheet owning this style.
-     */
+     * /
     public StyleSheet getSheet() { return sheet; }
+    */
 
     /**
      * @return Rendered Style: css selector { attribute/values }
@@ -63,8 +61,7 @@ public class CSSStyle extends CSSAttributeSet implements Style {
     }
 
     /* @see Style */
-    /*public Object put(Object styleProperty, Object styleValue) {
-        return super.put((CSSProperty) styleProperty, (String) styleValue);
-    }*/
-
+    public void setSelector(CSSSelector selector) {
+        this.selector = selector;
+    }
 }

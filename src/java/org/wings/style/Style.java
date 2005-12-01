@@ -16,13 +16,19 @@ package org.wings.style;
 import org.wings.Renderable;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
- * A (CSS) Style definition.
- * <p>A Style is typically a CSS property/value pair that is applied to a element specified by it's selector.
- * <p>Hence this object is i.e. the OO equivalent of <br/><code>    A.myStyle { color: red; }</code>
+ * A CSS Style definition.
+ *
+ * <p>A Style is collection of CSS property/value pairs that are applied to a specified component or component
+ * element. This target is defined by the CSS selector.
+ * <p>So this object can be understood as the OO equivalent of a CSS style definition likw i.e.<br/>
+ * <code>     A.myStyle { color: red; background: #fff; }</code><br/>
+ * which consists of a CSS selector before the braces and the CSS property/value list inside the braces.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
+ * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
  * @version $Revision$
  */
 public interface Style extends Renderable, Serializable, Cloneable {
@@ -34,30 +40,45 @@ public interface Style extends Renderable, Serializable, Cloneable {
     CSSSelector getSelector();
 
     /**
-     * The style sheet owning this style.
-     * @param sheet The style sheet owning this style.
-     */
-    void setSheet(StyleSheet sheet);
-
-     /**
-     * @return  The style sheet owning this style.
-     */
-    StyleSheet getSheet();
-
-    /**
-     * Defines a value for the given style propery.
+     * Defines a CSS property/value pair in this style.
      * @return The previous style property value.
      */
     String put(CSSProperty styleProperty, String styleValue);
 
     /**
-     * Adds a set of attributes to the style.
+     * Adds a set of CSS property/value pairs to this style definition.
      *
-     * @param attributes the set of attributes to add
-     * @return <code>true</code> if the style was changed
+     * @param attributes Set of CSS property/value pairs to add to this style definition
+     * @return <code>true</code> if the style was changed, <code>false</code> if no modification was necessary
      */
     boolean putAll(CSSAttributeSet attributes);
 
+    /**
+     * Removes an attribute from the list.
+     *
+     * @param name the attribute name
+     * @return The previous value for this CSS property
+     */
+    String remove(CSSProperty name);
+
+    /**
+     * Gets the Set of defined CSS property names.
+     *
+     * @return A set of {@link CSSProperty} for which this <code>CSSAttributeSet</code> contains a value.
+     */
+    Set properties();     
+
 }
 
+// We don't need the backlink.
+/* *
+ * The style sheet owning this style.
+ * @param sheet The style sheet owning this style.
+ * /
+void setSheet(StyleSheet sheet);
 
+ /* *
+ * @return  The style sheet owning this style.
+ * /
+StyleSheet getSheet();
+*/

@@ -14,9 +14,6 @@
 package org.wings.style;
 
 import org.wings.Renderable;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Set;
 
 /**
@@ -29,26 +26,21 @@ import java.util.Set;
 public interface StyleSheet extends Renderable {
     /**
      * Register a {@link Style} in the style sheet.
-     * @param style
      */
     void putStyle(Style style);
 
     /**
-     * The {@link Style}s contained in this style sheet.
-     * @return All {@link Style}s contained in this style sheet
+     * The {@link Style}s definitions contained in this style sheet.
+     *
+     * @return All set of {@link Style}s contained in this style sheet
      */
     Set styles();
 
     /**
-     * May this style sheet change during runtime?
+     * Declares if this style sheet is final or may change during runtime.
+     * @return <code>true</code> if the content of this style sheet will never change, <code>false</code> otherwise.
      */
     boolean isFinal();
-
-    /**
-     * Creates styles by parsing an input stream.
-     * @param inStream Stream containing style sheet source
-     */
-    void read(InputStream inStream) throws IOException;
 }
 
 

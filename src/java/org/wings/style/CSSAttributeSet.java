@@ -106,9 +106,9 @@ public class CSSAttributeSet
     }
 
     /**
-     * Gets the defned CSS properties in the set.
+     * Gets the Set of defined CSS property names.
      *
-     * @return A set of {@link CSSProperty}
+     * @return A set of {@link CSSProperty} for which this <code>CSSAttributeSet</code> contains a value.
      */
     public final Set properties() {
         return map == null ? Collections.EMPTY_SET : map.keySet();
@@ -164,6 +164,7 @@ public class CSSAttributeSet
      * Removes an attribute from the list.
      *
      * @param name the attribute name
+     * @return The previous value for this CSS property
      */
     public String remove(CSSProperty name) {
         return map == null ? null : (String) map.remove(name);
