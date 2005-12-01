@@ -42,7 +42,7 @@ public class SComponentPropertyManager
             comp.setFocusTraversalIndex(Integer.parseInt(value));
         else if ("STYLE".equals(name)) {
             PropertyValueConverter valueConverter = getValueConverter(CSSAttributeSet.class);
-            comp.setAttributes((CSSAttributeSet) valueConverter.convertPropertyValue(value, CSSAttributeSet.class));
+            comp.setAttributes(comp.getComponentCssSelector(), (CSSAttributeSet) valueConverter.convertPropertyValue(value, CSSAttributeSet.class));
         } else if ("CLASS".equals(name)) {
             comp.setStyle(value);
         } else {

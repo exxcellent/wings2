@@ -490,13 +490,13 @@ public class SContainer extends SComponent {
         }
     }
 
-    public void removeNotify() {
+    /*public void removeNotify() {
         Iterator iterator = getComponentList().iterator();
         while (iterator.hasNext()) {
             ((SComponent)iterator.next()).removeNotify();
         }
         super.removeNotify();
-    }
+    } */
 
     /**
      * Collects all {@link SComponent#getComponentPopupMenu()} of all contained and visible components.
