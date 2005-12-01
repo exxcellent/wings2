@@ -14,16 +14,15 @@
 
 package org.wings.frames;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-
 import org.wings.Renderable;
 import org.wings.SComponent;
 import org.wings.SContainer;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A special root container forming up an frameset.
@@ -137,7 +136,7 @@ public class SFrameSet extends SFrame {
         if (!(p instanceof SFrameSet))
             throw new IllegalArgumentException("SFrameSets can only be added to SFrameSets.");
 
-        parent = p;
+        super.setParent(p);
     }
 
     /**

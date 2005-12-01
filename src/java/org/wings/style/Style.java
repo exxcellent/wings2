@@ -42,12 +42,21 @@ public interface Style extends Renderable, Serializable, Cloneable {
      /**
      * @return  The style sheet owning this style.
      */
-    public StyleSheet getSheet();
+    StyleSheet getSheet();
 
     /**
      * Defines a value for the given style propery.
+     * @return The previous style property value.
      */
     String put(CSSProperty styleProperty, String styleValue);
+
+    /**
+     * Adds a set of attributes to the style.
+     *
+     * @param attributes the set of attributes to add
+     * @return <code>true</code> if the style was changed
+     */
+    boolean putAll(CSSAttributeSet attributes);
 
 }
 

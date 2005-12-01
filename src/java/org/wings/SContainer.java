@@ -429,7 +429,7 @@ public class SContainer extends SComponent {
      * @param f parent frame
      */
     protected void setParentFrame(SFrame f) {
-        if (f != parentFrame) {
+        if (f != super.getParentFrame()) {
             super.setParentFrame(f);
             for (int i = 0; i < getComponentCount(); i++) {
                 getComponent(i).setParentFrame(getParentFrame());

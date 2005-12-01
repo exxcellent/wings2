@@ -14,19 +14,18 @@
 
 package org.wings.frames;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SFrame;
+import org.wings.SLayoutManager;
+import org.wings.io.Device;
+import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.DynamicResource;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wings.io.Device;
-import org.wings.SFrame;
-import org.wings.SContainer;
-import org.wings.SComponent;
-import org.wings.SLayoutManager;
-import org.wings.resource.DynamicResource;
-import org.wings.resource.DynamicCodeResource;
 
 
 /**
@@ -72,7 +71,7 @@ public class SReloadFrame extends SFrame {
         if (!(p == null || p instanceof SFrameSet))
             throw new IllegalArgumentException("The SReloadFrame can only be added to SFrameSets.");
 
-        parent = p;
+        super.setParent(p);
     }
 
     /**

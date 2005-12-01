@@ -81,67 +81,67 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * The code generation delegate, which is responsible for
      * the visual representation of this component.
      */
-    protected transient ComponentCG cg;
+    private transient ComponentCG cg;
 
     /**
      * Vertical alignment
      */
-    protected int verticalAlignment = SConstants.NO_ALIGN;
+    private int verticalAlignment = SConstants.NO_ALIGN;
 
     /**
      * Horizontal alignment
      */
-    protected int horizontalAlignment = SConstants.NO_ALIGN;
+    private int horizontalAlignment = SConstants.NO_ALIGN;
 
     /**
      * The name of the style class
      */
-    protected String style;
+    private String style;
 
     /**
-     * List of dynamic styles
+     * List of dynamic styles (typically {@link CSSAttributeSet}s).
      */
     protected Map dynamicStyles;
 
     /**
-     * Visibility.
+     * Visibility of the component.
      */
     protected boolean visible = true;
 
     /**
      * Enabled / disabled.
      */
-    protected boolean enabled = true;
+    private boolean enabled = true;
 
     /**
      * The container, this component resides in.
      */
-    protected SContainer parent;
+    private SContainer parent;
 
     /**
      * The frame in which this component resides.
      */
-    protected SFrame parentFrame;
+    private SFrame parentFrame;
 
     /**
      * The border for the component.
      */
-    protected SBorder border;
+    private SBorder border;
 
     /**
      * The tooltip for this component.
      */
-    protected String tooltip;
+    private String tooltip;
 
     /**
      * The focus traversal Index
      */
-    protected int focusTraversalIndex = -1;
+    private int focusTraversalIndex = -1;
 
     /**
      * Preferred size of component in pixel.
      */
-    protected SDimension preferredSize;
+    private SDimension preferredSize;
 
     /**
      * This is for performance optimizations. With this flag is set, property change
@@ -705,24 +705,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         this.style = cssClassName;
     }
 
-    /* *
-     * Appends the passed style to the current style string. Refer to {@link #setStyle(String)} for details.
-     *
-     * @param cssClassName Additional CSS class name to apply to this component.
-     * /
-    public void addStyle(String cssClassName) {
-        if (cssClassName != null) {
-            if (style != null && !style.contains(cssClassName)) {
-                setStyle(style + " " + cssClassName); // works for all current browsers.
-            } else {
-                setStyle(cssClassName);
-            }
-        }
-    }  */
-
-
     /**
-     * @return The current CSS style class name. Defaults to <code>null</code>
+     * @return The current CSS style class name. Defaults to the unqualified wingS component class name.
      * @see #setStyle(String)
      */
     public String getStyle() {
@@ -736,14 +720,14 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         reload();
     }
 
-    public void removeDynamicStyle(String selector) {
+    public void removeDynamicStyle(CSSSelector selector) {
         if (dynamicStyles == null)
             return;
         dynamicStyles.remove(selector);
         reload();
     }
 
-    public Style getDynamicStyle(Object selector) {
+    public Style getDynamicStyle(CSSSelector selector) {
         if (dynamicStyles == null)
             return null;
         return (Style) dynamicStyles.get(selector);
@@ -781,7 +765,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     public void setAttribute(CSSSelector selector, CSSProperty property, String propertyValue) {
-        CSSStyle style = (CSSStyle) getDynamicStyle(selector);
+        Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new CSSStyle(selector, property, propertyValue));
             reload();
@@ -797,7 +781,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     public void setAttributes(CSSSelector selector, CSSAttributeSet attributes) {
-        CSSStyle style = (CSSStyle) getDynamicStyle(selector);
+        Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new CSSStyle(selector, attributes));
             reload();
@@ -1532,8 +1516,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Called by the CGs to indicate different states of the rendering process.
-     * @param type
+     * <b>Internal method</b> called by the CGs to indicate different states of the rendering process.
+     * @param type Either {@link #DONE_RENDERING} or {@link #START_RENDERING}.
      */
     public final void fireRenderEvent(int type) {
         if (fireRenderEvents) {

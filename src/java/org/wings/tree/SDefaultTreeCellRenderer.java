@@ -171,9 +171,9 @@ public class SDefaultTreeCellRenderer
             }
         }
 
-        if (style == null)
+        if (getStyle() == null)
             setStyle(tree.getStyle());
-        if (dynamicStyles == null)
+        if (getDynamicStyles() == null)
             setDynamicStyles(tree.getDynamicStyles());
 
         return this;

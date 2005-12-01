@@ -102,10 +102,10 @@ public class SFormattedTextField extends STextField {
     }
 
     protected void setParentFrame(SFrame parentFrame) {
-        if (this.parentFrame != null)
+        if (super.getParentFrame() != null)
             formatter.uninstall(this);
         super.setParentFrame(parentFrame);
-        if (this.parentFrame != null)
+        if (super.getParentFrame() != null)
             formatter.install(this);
     }
 }

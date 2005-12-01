@@ -144,6 +144,7 @@ public class CSSAttributeSet
      * Adds a set of attributes to the list.
      *
      * @param attributes the set of attributes to add
+     * @return <code>true</code> if the attribute set changed
      */
     public boolean putAll(CSSAttributeSet attributes) {
         if (map == null) {
