@@ -84,6 +84,11 @@ public class SButton extends SAbstractButton {
         } // end of if ()
     }
 
+    /**
+     * Returns the state of the button. This can be true if the button is selected, otherwise false.
+     * 
+     * @return true if the button is selected, false if not
+     */
     public boolean isSelected() {
         return false;
     }

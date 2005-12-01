@@ -109,6 +109,11 @@ public class SButtonGroup implements SDelayedEventModel {
      * Konzeptionell richtiger waere hier SAbstractButton. Macht aber keinen
      * Sinn. Macht nur Sinn abstract Checkboxes(eventuell nur RadioButtons ???).
      */
+    /**
+     * adds a button to the group.
+     * 
+     * @param button the button that is to be added
+     */
     public void add(SAbstractButton button) {
         if (buttons != null && !buttons.contains(button)) {
             buttons.add(button);
@@ -119,6 +124,11 @@ public class SButtonGroup implements SDelayedEventModel {
         }
     }
 
+    /**
+     * removes a button from the group.
+     * 
+     * @param button the button that is to be removed
+     */
     public void remove(SAbstractButton button) {
         if (button == null || button.getGroup() != this)
             return;
@@ -131,6 +141,9 @@ public class SButtonGroup implements SDelayedEventModel {
         }
     }
 
+    /**
+     * removes all buttons from the group.
+     */
     public void removeAll() {
         while (buttons.size() > 0)
             remove((SAbstractButton) buttons.get(0));
@@ -140,6 +153,12 @@ public class SButtonGroup implements SDelayedEventModel {
         return selection;
     }
 
+    /**
+     * Sets a button in the selected state. There can be only one button selected at a time.
+     * 
+     * @param b the button.
+     * @param selected true if this button is to be selected, otherwise false.
+     */
     public void setSelected(SAbstractButton b, boolean selected) {
         if (selected && b != selection && b != null) {
             setSelection(b);
@@ -150,7 +169,13 @@ public class SButtonGroup implements SDelayedEventModel {
             
         }
     }
-
+    
+    /**
+     * Returns the state of the button. True if the button is selected, false if not.
+     * 
+     * @param button the button.
+     * @return true if the button is selected, otherwise false.
+     */
     public boolean isSelected(SAbstractButton button) {
         return button == getSelection();
     }

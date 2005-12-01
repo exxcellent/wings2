@@ -52,7 +52,11 @@ public class STextField
     public STextField(String text) {
         super(text);
     }
-
+    
+    /**
+     * Sets the number of columns of the TextField.
+     * @param c the number of columns 
+     */
     public void setColumns(int c) {
         int oldColumns = columns;
         columns = c;
@@ -60,6 +64,10 @@ public class STextField
             reload();
     }
 
+    /**
+     * Returns the number of columns of the TextField.
+     * @return the number of columns
+     */
     public int getColumns() {
         return columns;
     }

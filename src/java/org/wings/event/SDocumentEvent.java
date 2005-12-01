@@ -47,11 +47,16 @@ public class SDocumentEvent extends AWTEvent {
         this.length = length;
     }
 
+    /**
+     * Gets the source document of the change event.
+     * @return the document
+     */
     public SDocument getDocument() {
         return (SDocument) getSource();
     }
 
     /**
+     * Returns the offset where the change in the document starts.
      * @return Offset where remove/insert occured (0 = first letter)
      */
     public int getOffset() {
@@ -59,6 +64,7 @@ public class SDocumentEvent extends AWTEvent {
     }
 
     /**
+     * Returns the length of the change.
      * @return The length of the insert/remove
      */
     public int getLength() {
@@ -66,6 +72,7 @@ public class SDocumentEvent extends AWTEvent {
     }
 
     /**
+     * Gets the type of the Event.
      * @return {@link #INSERT} or {@link #REMOVE}
      */
     public int getType() {

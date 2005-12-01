@@ -185,34 +185,50 @@ public class SLabel extends SComponent {
         return iconTextGap;
     }
 
+    /**
+     * Defines the icon the component will display.
+     * @param i
+     */
     public void setIcon(SIcon i) {
         reloadIfChange(icon, i);
         icon = i;
     }
 
+    /**
+     * Returns the icon the label displays.
+     * @return the icon
+     */
     public SIcon getIcon() {
         return icon;
     }
 
+    /**
+     * Set the icon that will be displayed if the label is disabled.
+     * @param i
+     */
     public void setDisabledIcon(SIcon i) {
         reloadIfChange(disabledIcon, i);
         disabledIcon = i;
     }
 
+    /**
+     * Returns the icon that is displayed when the label is disabled.
+     * @return the diabledIcon
+     */
     public SIcon getDisabledIcon() {
         return disabledIcon;
     }
 
     /**
      * Returns the text of the label
+     * @return the text
      */
     public String getText() {
         return text;
     }
 
     /**
-     * Sets the text of the label. If the value of text is null or an empty
-     * string, nothing is displayed.
+     * Sets the text of the label. Nothing will be displayed if the text is an empty string or null.
      *
      * @param t The new text
      */

@@ -86,6 +86,10 @@ public class SDialog extends SForm {
         this.title = title;
     }
 
+    /**
+     * Sets the title of the dialog.
+     * @param t the title displayed in the dialog's border; a null value results in an empty title
+     */
     public void setTitle(String t) {
         String oldTitle = title;
         title = t;
@@ -94,6 +98,11 @@ public class SDialog extends SForm {
             reload();
     }
 
+    /**
+     * Gets the title of the dialog. The title is displayed in the dialog's border.
+     * 
+     * @return the title of this dialog window. The title may be null.
+     */
     public String getTitle() {
         return title;
     }

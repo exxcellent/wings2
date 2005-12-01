@@ -129,6 +129,9 @@ public class SAnchor extends SContainer {
         return target;
     }
 
+    /**
+     * get the url the anchor points to.
+     */
     public SimpleURL getURL() {
         return url;
     }

@@ -223,10 +223,21 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         updateCG();
     }
 
+    /**
+     * Returns the border of this component or null if no border has been set.
+     * 
+     * @return the border object
+     * @see #setBorder(SBorder)
+     */
     public SBorder getBorder() {
         return border;
     }
 
+    /**
+     * Sets the border for this component.
+     * 
+     * @param border the border to be set for the component
+     */
     public void setBorder(SBorder border) {
         reloadIfChange(this.border, border);
         this.border = border;

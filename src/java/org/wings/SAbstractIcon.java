@@ -48,14 +48,26 @@ public abstract class SAbstractIcon implements SIcon {
         setIconHeight(height);
     }
 
+    /**
+     * Returns the width of the icon.
+     * @return the width or -1 if unknown
+     */
     public int getIconWidth() {
         return width;
     }
 
+    /**
+     * Returns the height of the icon. 
+     * @return the height or -1 if unknown
+     */
     public int getIconHeight() {
         return height;
     }
 
+    /**
+     * Sets the width of the icon.
+     * @param w the width of the icon
+     */
     public void setIconWidth(int w) {
         width = w;
     }
