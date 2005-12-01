@@ -16,6 +16,7 @@ package org.wings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.ButtonCG;
+import org.wings.session.LowLevelEventDispatcher;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -117,14 +118,14 @@ public abstract class SAbstractButton
     }
 
     protected void setParentFrame(SFrame f) {
-        if (buttonGroup != null && getDispatcher() != null) {
-            getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
+        if (buttonGroup != null && getSession().getDispatcher() != null) {
+            getSession().getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
         } // end of if ()
 
         super.setParentFrame(f);
 
-        if (buttonGroup != null && getDispatcher() != null) {
-            getDispatcher().addLowLevelEventListener(this, buttonGroup.getComponentId());
+        if (buttonGroup != null && getSession().getDispatcher() != null) {
+            getSession().getDispatcher().addLowLevelEventListener(this, buttonGroup.getComponentId());
         } // end of if ()
     }
 
@@ -135,12 +136,12 @@ public abstract class SAbstractButton
      */
     protected void setGroup(SButtonGroup g) {
         if (isDifferent(buttonGroup, g)) {
-            if (buttonGroup != null && getDispatcher() != null) {
-                getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
+            if (buttonGroup != null && getSession().getDispatcher() != null) {
+                getSession().getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
             buttonGroup = g;
-            if (buttonGroup != null && getDispatcher() != null) {
-                getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
+            if (buttonGroup != null && getSession().getDispatcher() != null) {
+                getSession().getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
             reload();
         }

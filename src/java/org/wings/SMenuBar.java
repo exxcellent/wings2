@@ -205,11 +205,9 @@ public class SMenuBar extends SContainer {
      *
      * @return a string representation of this SMenuBar.
      */
-    public String paramString() {
-        String paintBorderString = (paintBorder ?
-                "true" : "false");
-        String marginString = (margin != null ?
-                margin.toString() : "");
+    protected String paramString() {
+        String paintBorderString = (paintBorder ? "true" : "false");
+        String marginString = (margin != null ?  margin.toString() : "");
 
         return super.paramString() +
                 ",margin=" + marginString +

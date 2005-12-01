@@ -26,7 +26,6 @@ import org.wings.event.SRenderListener;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 import org.wings.script.ScriptListener;
-import org.wings.session.LowLevelEventDispatcher;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSAttributeSet;
@@ -173,7 +172,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     private SPopupMenu popupMenu;
 
-    private boolean inheritsPopupMenu;
+    /*private boolean inheritsPopupMenu;*/
 
     private InputMap[] inputMaps;
 
@@ -296,14 +295,14 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         reload();
     }
 
-    public void setInheritsPopupMenu(boolean inheritsPopupMenu) {
+    /*public void setInheritsPopupMenu(boolean inheritsPopupMenu) {
         reloadIfChange(this.inheritsPopupMenu, inheritsPopupMenu);
         this.inheritsPopupMenu = inheritsPopupMenu;
     }
 
     public boolean getInheritsPopupMenu() {
         return inheritsPopupMenu;
-    }
+    }*/
 
     public void setComponentPopupMenu(SPopupMenu popupMenu) {
         reloadIfChange(this.popupMenu, popupMenu);
@@ -336,9 +335,11 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         return popupMenu;
     }
 
+    /*  No reason -- even JComponent does not define such a method.
+        Undo change also in DynamicScriptResource.visit().
     public boolean hasComponentPopupMenu() {
         return popupMenu != null;
-    }
+    } */
 
     /**
      * The URL under which this component is accessible for the browser.
@@ -661,22 +662,13 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         return session;
     }
 
-    /**
-     * Return the dispatcher.
-     *
-     * @return the dispatcher
-     */
-    public final LowLevelEventDispatcher getDispatcher() {
-        return getSession().getDispatcher();
-    }
-
     /*
      * If a subclass implements the {@link LowLevelEventListener} interface,
      * it will be unregistered at the associated dispatcher.
      */
     private final void unregister() {
-        if (getDispatcher() != null && this instanceof LowLevelEventListener) {
-            getDispatcher().unregister((LowLevelEventListener) this);
+        if (getSession().getDispatcher() != null && this instanceof LowLevelEventListener) {
+            getSession().getDispatcher().unregister((LowLevelEventListener) this);
         }
     }
 
@@ -685,8 +677,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * it will be registered at the associated dispatcher.
      */
     private void register() {
-        if (getDispatcher() != null && this instanceof LowLevelEventListener) {
-            getDispatcher().register((LowLevelEventListener) this);
+        if (getSession().getDispatcher() != null && this instanceof LowLevelEventListener) {
+            getSession().getDispatcher().register((LowLevelEventListener) this);
         }
     }
 
@@ -1081,21 +1073,22 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * a string representation of this component. Just
-     * renders the component into a string.
+     * A string representation of this component. Uses the {@link #paramString()} methods
+     *
+     * @return string representation of this component with all properties.
      */
     public String toString() {
-        return paramString();
+        return getClass().getName() + "[" + paramString() + "]";
     }
 
 
     /**
-     * Generic implementation for generating a string that represents
-     * the components configuration.
+     * Generates a string describing this <code>SComponent</code>.
+     * This method is mainly for debugging purposes.
      *
      * @return a string containing all properties
      */
-    public String paramString() {
+    protected String paramString() {
         StringBuffer buffer = new StringBuffer(getClass().getName());
         buffer.append("[");
 

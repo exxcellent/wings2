@@ -83,7 +83,7 @@ public class DynamicScriptResource extends DynamicResource {
         public void visit(SComponent component) throws IOException {
             writeListenersFrom(component);
             // Popup Menu needs Javascript, but is not in the component tree
-            if (component.hasComponentPopupMenu()) {
+            if (component.getComponentPopupMenu() != null) {
                 writeListenersFrom(component.getComponentPopupMenu());
             }
         }
