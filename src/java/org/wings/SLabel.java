@@ -32,8 +32,6 @@ public class SLabel extends SComponent {
     protected SIcon disabledIcon = null;
     protected int verticalTextPosition = SConstants.CENTER;
     protected int horizontalTextPosition = SConstants.RIGHT;
-    protected int iconTextGap = 1;
-    protected boolean imageAbsBottom = false;
     protected boolean wordWrap = false;
 
     /**
@@ -119,16 +117,6 @@ public class SLabel extends SComponent {
         this(text, null, horizontalAlignment);
     }
 
-
-    public void setImageAbsBottom(boolean t) {
-        imageAbsBottom = t;
-    }
-
-
-    public boolean isImageAbsBottom() {
-        return imageAbsBottom;
-    }
-
     /**
      * Returns the horizontal position of the lable's text
      *
@@ -175,14 +163,6 @@ public class SLabel extends SComponent {
      */
     public int getVerticalTextPosition() {
         return verticalTextPosition;
-    }
-
-    public void setIconTextGap(int gap) {
-        iconTextGap = gap;
-    }
-
-    public int getIconTextGap() {
-        return iconTextGap;
     }
 
     /**

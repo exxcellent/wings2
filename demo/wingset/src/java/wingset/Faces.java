@@ -73,11 +73,8 @@ public class Faces
         facePanel = new SPanel(layout);
 
         final SLabel hair = new SLabel();
-        hair.setImageAbsBottom(true);
         final SLabel eye = new SLabel();
-        eye.setImageAbsBottom(true);
         final SLabel mouth = new SLabel();
-        mouth.setImageAbsBottom(true);
 
         SForm shuffleForm = new SForm();
         SButton shuffleButton = new SButton("Shuffle");
