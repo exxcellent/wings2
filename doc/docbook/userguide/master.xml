@@ -842,14 +842,14 @@ public class HelloWingS {
         are about to introduce the root class of all wingS components
         <code>SComponent</code>. This class is the counterpiece of the
         <code>JComponent</code> class in Swing. As in Swing all wingS widgets
-        are subclasses and hence instances of <code>SComponent</code>. </para>
+        are subclasses and hence instances of <code>SComponent</code>.</para>
 
         <para>The following sections we'll describe more in detail about the
         usage and different between the different <code>SComponent</code>
         variant. But first we'll explain the commons between all wingS
         components. Below you'll find a table which points out hand-selected
         methods with a short explanation of their meaning as declared in
-        <code>SComponent</code>. </para>
+        <code>SComponent</code>.</para>
 
         <table>
           <title>Selected methods and properties of
@@ -944,7 +944,7 @@ public class HelloWingS {
               </row>
 
               <row>
-                <entry><code>get/setPreferredSize()</code> </entry>
+                <entry><code>get/setPreferredSize()</code></entry>
 
                 <entry>Apply a <emphasis role="bold">preferred size</emphasis>
                 to a component. You may choose relative percentage values
@@ -972,11 +972,11 @@ public class HelloWingS {
                 styles but additonally apply your own styles defined in a
                 separate CSS file, you should append your custom CSS style
                 class names to a component separated by a space (i.e.
-                <code>"SButton myClass"</code>). </entry>
+                <code>"SButton myClass"</code>).</entry>
               </row>
 
               <row>
-                <entry><code>get/setToolTipText()</code> </entry>
+                <entry><code>get/setToolTipText()</code></entry>
 
                 <entry>Apply a <emphasis role="bold">tooltip text
                 </emphasis>which will pop up after a short delay when the
@@ -986,7 +986,7 @@ public class HelloWingS {
               </row>
 
               <row>
-                <entry><code>get/setShowAsFormComponent()</code> </entry>
+                <entry><code>get/setShowAsFormComponent()</code></entry>
 
                 <entry>The value of this property influences the <emphasis
                 role="bold">appearance of special input components</emphasis>
@@ -1008,11 +1008,11 @@ public class HelloWingS {
                 <entry>Dynamically set a <emphasis role="bold">CSS property
                 value</emphasis> for a component. You can use this method to
                 define any abritriary CSS property/value pair on the current
-                component. </entry>
+                component.</entry>
               </row>
 
               <row>
-                <entry><code>is/setVisible()</code> </entry>
+                <entry><code>is/setVisible()</code></entry>
 
                 <entry>By default being <code>true</code> you can use this
                 property to <emphasis role="bold">hide any component
@@ -1076,7 +1076,7 @@ public class HelloWingS {
           you built up your complete application. Hence containers are the key
           feature for a hierarchical component-oriented design approach. The
           figure below shows how you can used and nest components to a
-          complete screen.</para>
+          complete screen dialog.</para>
 
           <figure>
             <title>Example of how to build complex application via nesting
@@ -1092,21 +1092,36 @@ public class HelloWingS {
           <para>Similar to Swing the containers are only responsible for
           embracing and managing the list of contained inner components. The
           layouting of the contained components inside the space taken up by
-          the container component will be delegated to the layout
-          manager.</para>
+          the container component will be delegated to the layout manager.
+          Refer to <xref linkend="LayoutManager" /> for more information about
+          details regarding the different layout managers.</para>
+
+          <para>After construction you can simply add the components which
+          should be contained inside via one of the <code>add(SComponent
+          component)</code> methods. Please note the variants of the
+          <code>add</code> method allowing to pass a <firstterm>Layout
+          constraint</firstterm> as additional paramter. Some layout managers
+          as the <code>SBorderLayout</code> or the
+          <code>STemplateLayout</code> need additional information about where
+          exactly you want to place the passed component inside their provided
+          layout style while simpler ones like the <code>SGridLayout</code>
+          will just choose the next available place.</para>
+
+          <para>Finally you just need to attach your newly created container
+          to the root container as shown in <xref linkend="hellowings" /> to
+          make it visible to the user. </para>
         </sect3>
 
         <sect3>
           <title>The basic SPanel container</title>
 
-          <para>The most popular container you'll encounter during you
-          every-day work writing of wingS application will probably be
-          <code>SPanel</code>. This is the simplest form a container and like
-          every <code>SContainer</code> it will be initialized with a default
-          layout manager (<code>SFlowLayout</code>, can be overridden via
-          <filename>default.properties</filename>). Refer to <xref
-          linkend="LayoutManager" /> for more information about details
-          regarding the different layout managers.</para>
+          <para>The type of container you'll probably encounter most of the
+          times during you every-day writing of wingS application i<code>s
+          SPanel</code>. This is the simplest form a container and like every
+          <code>SContainer</code> it will be initialized with a default layout
+          manager (<code>SFlowLayout</code>, can be overridden via
+          <filename>default.properties</filename>) but you probably will
+          prefer to define your own layout manager. </para>
 
           <programlisting>        SPanel panel = new SPanel();
         SGridLayout gridLayout = new SGridLayout(2);
@@ -1128,21 +1143,22 @@ public class HelloWingS {
         </sect3>
 
         <sect3>
-          <title id="SForm">The SForm container</title>
+          <title id="SForm">The SForm container for input elements</title>
 
           <para>What's the reason behind the <code>SForm</code> instance in
-          the previois example? If you are aware of HTML and already designed
+          the previous example? If you are aware of HTML and already designed
           some web pages by coding HTML code directly, you'll probably know
           that input elements like text fields, submit buttons, radio buttons
           and so on require to be surrounded by a <code>&lt;FORM&gt;</code>
-          HTML tag. </para>
+          HTML tag.</para>
 
           <para>The <code>SForm</code> container is the object-oriented
           equivalent for this HTML tag. So if you want to place input elements
           on your screen you must ensure that the container or one of its
           parent container is a SForm. Please be aware that contrary to the
-          other containers available in wingS you are <emphasis>not allowed to
-          nest SForm</emphasis> containers into each others! </para>
+          other containers available in wingS you are <emphasis
+          role="bold">not allowed to nest SForm</emphasis> containers into
+          each others!</para>
 
           <para>Typically it's sufficient if you use one SForm container on
           the very top of your component hierachy. The <code>SForm</code>
@@ -1154,7 +1170,9 @@ public class HelloWingS {
         <sect3>
           <title>Overview of all available container components</title>
 
-          <para>Reference of all container components in wingS:</para>
+          <para>There are some more containers available in wingS. Below you
+          find a short summary of them including a short description of their
+          characteristics.</para>
 
           <table>
             <title>Overview of all public <code>SContainer</code>
@@ -1196,7 +1214,7 @@ public class HelloWingS {
 
                   <entry>Refer to <xref linkend="SForm" />. Wrap contained
                   components with a HTML <code>&lt;FORM&gt;</code> tag. May
-                  not contain other <code>SForm</code> containers. </entry>
+                  not contain other <code>SForm</code> containers.</entry>
                 </row>
 
                 <row>
@@ -1233,7 +1251,7 @@ public class HelloWingS {
                   <entry><code>SInternalFrame</code></entry>
 
                   <entry>Refer to <xref linkend="InternalFrame" />. A root
-                  container for MDI web applications. </entry>
+                  container for MDI web applications.</entry>
                 </row>
 
                 <row>
@@ -1265,16 +1283,211 @@ public class HelloWingS {
       </sect2>
 
       <sect2>
-        <title>Labels</title>
+        <title>Labels and other display components</title>
 
-        <para><remark>Using SLabel, SIcons, setting Font style,
-        colour</remark></para>
+        <para>We already showed how to combine and arrange
+        <code>SComponents</code> using containers and simple layout managers.
+        So it's time to know how you can place content on it. </para>
 
-        <para><remark>Mention: SSeparator, SSpacer, SIcon,
-        SProgressBar</remark></para>
+        <sect3>
+          <title>Simple labels</title>
 
-        <para><remark>Mention Correct usage of SIcon, SResourceIcon,
-        SFileIcon!!!</remark></para>
+          <para>The simplest form to present information to the users are
+          labels. You already encountered instances of <code>SLabel</code> in
+          the preceeding examples so we'll explain a bit more in depth the
+          usage and capabilities of this widget component. Here are some usage
+          examples</para>
+
+          <programlisting>        // You can just pass the text to display as parameter of the constructor
+        SLabel simpleLabel = new SLabel("A simple label");
+
+        // ...but it can be changed at any time
+        SLabel emptyLabel = new SLabel();
+        // ... i.e. when something happened:
+        emptyLabel.setText("The trigger event occured! \n"+
+                           "Second line of label");
+
+        // Extensive formatting can be done done during runtime
+        SLabel fancyLabel = new SLabel("A green, bold italic label");
+        fancyLabel.setForeground(Color.green);
+        fancyLabel.setFont(new SFont(SFont.BOLD + SFont.ITALIC));
+        fancyLabel.setWordWrap(true); // allow word wrapping</programlisting>
+
+          <para>As you can see, the text inside a label can be changed at any
+          time using the <code>setText()</code> bean property setter. Using
+          the properties declared in <code>SComponent</code> the font size,
+          style, face as well as the text and background color can be easily
+          controled using pure Java code. </para>
+
+          <para>Please note that starting with version 2.0 the labels word
+          wrapping behaviour changed to be in sync with Swing. To allow the
+          browser to line-break a label call <code>setWordWrap(true)</code> on
+          it. </para>
+
+          <bridgehead>Advanced usages</bridgehead>
+
+          <para>As in Swing the <code>JLabel</code> the <code>SLabel</code>
+          component in wingS also accepts HTML formatting directives like
+          <code>&lt;b&gt;...&lt;/b&gt; or <code>&lt;i&gt;...&lt;/i&gt;</code>
+          </code>inside the text if you prefix the text with an
+          <code>&lt;html&gt;</code> tag. You should use this carefully to
+          avoid mixing of view and logic. </para>
+
+          <para>If you assign specific styles on a regular basis to a
+          component like a label, you should consider to declare a static new
+          CSS style class and assign this to the label. This allows you one
+          the one hand to modify this style globally at the style declaration
+          and avoids on the other hand the generation of many dynamically
+          generated CSS styles generated by the wingS framework. Think for
+          example of error labels you might want to have in a specific style.
+          In your programming code you would additional assign a new CSS class
+          to a label:</para>
+
+          <programlisting>        SLabel errorLabel = new SLabel();
+        <emphasis role="bold">errorLabel.setStyle(errorLabel.getStyle() + " errorLabel");</emphasis>
+        errorLabel.setVisible(false); // hide by default
+        
+        //.. an error occured
+        errorLabel.setText("An error occured during the last operation");
+        errorLabel.setVisible(true);</programlisting>
+
+          <para>This will allow the web designer in your project to declare a
+          new static CSS style an optional application-specific CSS
+          stylesheet. </para>
+
+          <programlisting>.errorLabel {
+    color: #f00;
+    font-weight: bold; 
+    border: 1px solid #ddd;
+}</programlisting>
+
+          <para>Please refer to <xref linkend="css-styles" /> for more
+          information about using CSS to style your application in
+          detail.</para>
+        </sect3>
+
+        <sect3>
+          <title>Images</title>
+
+          <para>The <code>SIcon</code> interface is your pal if you want to
+          include images in your wingS application. A <code>SIcon</code> can
+          be an image retrieved from an abritrirary source and used with
+          conjunction with various wingS widgets. By default wingS comes with
+          five different implementation of icon providers, each capable of
+          handling a a different source as source for the image data to be
+          displayed. Possible sources are</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>static iamge files deployed with your application
+              (<code>SFileIcon</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>static image files reachable via an absolute or relative
+              URL in your application (<code>SURLIcon</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>static image files contained in your classpath
+              (<code>SResourceIcon</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>static image data contained in a byte arrray
+              (<code>SByteArrayIcon</code>)</para>
+            </listitem>
+
+            <listitem>
+              <para>and dynamical generated Swing <code>ImageIcon</code>
+              images (<code>SImageIcon</code>)</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Please note an important difference between the
+          <code>SImageIcon</code> and the other mentioned <code>SIcon</code>
+          implementations: While the content of the others images cannot
+          change during runtime, an <code>ImageIcon</code> can have an updated
+          image content during every request. Allowing you to display any
+          dynamically generated image this has the backdrafts that wingS needs
+          to create and send new graphic data to the browser. So for including
+          just image files in you application ensure that you use one of the
+          other implementations like demonstrated in the example below:
+          </para>
+
+          <programlisting>        // image contained in the class path
+        SResourceIcon javaCupIcon = new SResourceIcon("org/wings/icons/JavaCup.gif");
+        // image deployed in a icons directory of you application
+        SURLIcon okButtonIcon = new SURLIcon("../icons/ok-button.png");
+        // a file in the file system
+        SFileIcon background = new SFileIcon(new File("/home/blueshift/background.jpg"));
+
+        // Use i.e. just for display
+        SLabel javaCup = new SLabel(javaCupIcon);
+        // ..or as clickable button
+        SButton okButton = new SButton(okButtonIcon);
+        // or i.e. as container background
+        panel.setBackgroundImage(background);</programlisting>
+
+          <para><code>SIcon</code> images can be used in conjunction with many
+          wingS widgets. But the most commons usage are in combination with
+          <code>SLabel</code> for just displaying a graphic or with
+          <code>SButton</code> to create graphical buttons in your
+          application. </para>
+        </sect3>
+
+        <sect3>
+          <title>Further display widgets</title>
+
+          <para>Below you'll just find a list of further pure display-only
+          widgets to point you over them</para>
+
+          <para><table>
+              <title>Further non-input wingS components</title>
+
+              <tgroup cols="2">
+                <colspec colwidth="1*" />
+
+                <colspec colwidth="2*" />
+
+                <thead>
+                  <row>
+                    <entry>Component</entry>
+
+                    <entry>Description</entry>
+                  </row>
+                </thead>
+
+                <tbody>
+                  <row>
+                    <entry>SSeparator</entry>
+
+                    <entry>Simple implementation of the HTML
+                    <code>&lt;HR&gt;</code> horizontal ruler element.
+                    Alternatively you can i.e. set single border lines on a
+                    component like
+                    <code>setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid
+                    #ccc");</code> </entry>
+                  </row>
+
+                  <row>
+                    <entry>SSpacer</entry>
+
+                    <entry>An invisible component component that can be used
+                    as spacer component. Typically renders as invisible pixel
+                    stretched to the desired size.</entry>
+                  </row>
+
+                  <row>
+                    <entry>SProgressBar</entry>
+
+                    <entry>A progress bar indicator as demonstrated in the
+                    WingSet demo.</entry>
+                  </row>
+                </tbody>
+              </tgroup>
+            </table></para>
+        </sect3>
       </sect2>
 
       <sect2>
@@ -1288,6 +1501,43 @@ public class HelloWingS {
         text)</remark></para>
 
         <para>SDownloadButton</para>
+
+        <sect3>
+          <title>Listening to Events</title>
+
+          <para>Most widgets provide various "listener" interfaces so that you
+          can supply your own callbacks in order to handle these. Here we
+          create a push button and register a callback to receive notification
+          when the button is pushed. Note that the button is declared final so
+          that we can access it within the anyonmous callback class.
+          Alternatively we could have declared it a field or declare the
+          action listener i.e. as inner class<programlisting>final SButton submit = new SButton("Search");
+form.add(submit);
+ActionListener al = new ActionListener() {
+  public void actionPerformed(ActionEvent e) { ... }
+};
+
+submit.addActionListener(al);</programlisting></para>
+
+          <para>In the above example the callback only receives events when
+          the button is pushed. An alternative is to make the form the
+          listener, since if the form is to have a "default" button (when the
+          user hits the enter key) then it is the form which will be notified.
+          In this case you would add the listener callback to the form instead
+          of the button:<programlisting>form.addActionListener(al);</programlisting></para>
+
+          <para>The ActionEvent.getSource() will determine whether the event
+          comes from the button or the form so you can use the following tests
+          in your callback:<programlisting>public void actionPerformed(ActionEvent e) {
+  if(submit == e.getSource())
+  // submit button pushed
+  if(form == e.getSource())
+  // user hit enter key
+}</programlisting></para>
+
+          <para>You can extract data from the text field as shown above with a
+          call to STextField.getText().</para>
+        </sect3>
       </sect2>
 
       <sect2>
@@ -1297,6 +1547,37 @@ public class HelloWingS {
         SButtonGroup</remark></para>
 
         <para><remark>SFormattedTextField, SPasswordField</remark></para>
+
+        <para>Input to your wingS application comes in the form of state
+        changes to the various widgets you have created, and in application
+        events that you can listen to. To illustrate this we use the simplest
+        case of a form which contains an entry field and a button.</para>
+      </sect2>
+
+      <sect2>
+        <title>Entry Field</title>
+
+        <para>Recall that user input for entry fields must be contained in a
+        <code>SForm</code>. The first task is to create the form and entry
+        field (layout details omitted):<programlisting>SForm form = new SForm();
+// ... add to top pane, add layout
+// The following assumes a template layout, the names "W1", "W2" 
+// identify layout components
+SLabel label = new SLabel("Enter stuff:");
+form.add(label, "W1");
+STextField text = new STextField("initial value");
+form.add(text, "W2");</programlisting></para>
+
+        <para>The text field variable might be made a class member variable so
+        that you can access it later to retrieve its contents:<programlisting>String dataValue = text.getText();</programlisting></para>
+
+        <para>Alternatively you might declare it as a local final variable,
+        and access it from within a local closure callback, reacting to user
+        input as shown in the next section.</para>
+      </sect2>
+
+      <sect2>
+        <title></title>
 
         <para></para>
       </sect2>
@@ -1522,72 +1803,6 @@ frame.addHeader(new Link("stylesheet",
         Sheets</title>
 
         <para></para>
-      </sect2>
-    </sect1>
-
-    <sect1>
-      <title>TODO: Move this User Input</title>
-
-      <para>Input to your wingS application comes in the form of state changes
-      to the various widgets you have created, and in application events that
-      you can listen to. To illustrate this we use the simplest case of a form
-      which contains an entry field and a button.</para>
-
-      <sect2>
-        <title>Entry Field</title>
-
-        <para>Recall that user input for entry fields must be contained in a
-        <code>SForm</code>. The first task is to create the form and entry
-        field (layout details omitted):<programlisting>SForm form = new SForm();
-// ... add to top pane, add layout
-// The following assumes a template layout, the names "W1", "W2" 
-// identify layout components
-SLabel label = new SLabel("Enter stuff:");
-form.add(label, "W1");
-STextField text = new STextField("initial value");
-form.add(text, "W2");</programlisting></para>
-
-        <para>The text field variable might be made a class member variable so
-        that you can access it later to retrieve its contents:<programlisting>String dataValue = text.getText();</programlisting></para>
-
-        <para>Alternatively you might declare it as a local final variable,
-        and access it from within a local closure callback, reacting to user
-        input as shown in the next section.</para>
-      </sect2>
-
-      <sect2>
-        <title>Listening to Events</title>
-
-        <para>Most widgets provide various "listener" interfaces so that you
-        can supply your own callbacks in order to handle these. Here we create
-        a push button and register a callback to receive notification when the
-        button is pushed. Note that the button is declared final so that we
-        can access it within the callback, alternatively we could have made it
-        a member variable<programlisting>final SButton submit = new SButton("Search");
-form.add(submit, "W3");
-ActionListener al = new ActionListener() {
-  public void actionPerformed(ActionEvent e) { ... }
-};
-submit.addActionListener(al);</programlisting></para>
-
-        <para>In the above example the callback only receives events when the
-        button is pushed. An alternative is to make the form the listener,
-        since if the form is to have a "default" button (when the user hits
-        the enter key) then it is the form which will be notified. In this
-        case you would add the listener callback to the form instead of the
-        button:<programlisting>form.addActionListener(al);</programlisting></para>
-
-        <para>The ActionEvent.getSource() will determine whether the event
-        comes from the button or the form so you can use the following tests
-        in your callback:<programlisting>public void actionPerformed(ActionEvent e) {
-  if(submit == e.getSource())
-  // submit button pushed
-  if(form == e.getSource())
-  // user hit enter key
-}</programlisting></para>
-
-        <para>You can extract data from the text field as shown above with a
-        call to STextField.getText().</para>
       </sect2>
     </sect1>
 
@@ -2572,7 +2787,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
         <listitem>
           <para><ulink url="http://www.wilken.de/">Wilken</ulink></para>
         </listitem>
-      </itemizedlist> </para>
+      </itemizedlist></para>
   </appendix>
 
   <appendix id="gfdl">
