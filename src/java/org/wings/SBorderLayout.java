@@ -76,6 +76,10 @@ public class SBorderLayout
         components.put(constraint, c);
     }
 
+    /**
+     * Removes the component from the layout manager
+     * @param c the component to be removed
+     */
     public void removeComponent(SComponent c) {
         if (c == null)
             return;
@@ -90,6 +94,10 @@ public class SBorderLayout
         }
     }
 
+    /**
+     * Returns a map of all components.
+     * @return the components contained by the layout
+     */
     public Map getComponents() {
         return components;
     }

@@ -74,7 +74,11 @@ public class SScrollPaneLayout
         addSingletonComponent(component, constraint);
         components.put(constraint, component);
     }
-
+    
+    /**
+     * Removes the component from the layout manager
+     * @param c the component to be removed
+     */
     public void removeComponent(SComponent c) {
         if (c == null) {
             return;
@@ -110,6 +114,10 @@ public class SScrollPaneLayout
         }
     }
 
+    /**
+     * Returns a map of all components.
+     * @return the components contained by the layout
+     */
     public Map getComponents() {
         return components;
     }

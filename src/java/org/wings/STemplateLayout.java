@@ -308,6 +308,11 @@ public class STemplateLayout extends SAbstractLayoutManager {
         return (SComponent) components.get(name);
     }
 
+    /**
+     * Returns the source of the template layout.
+     * @see #setTemplate(TemplateSource)
+     * @return the template source
+     */
     public TemplateSource getTemplateSource() {
         return templateSource;
     }
