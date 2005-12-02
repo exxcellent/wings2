@@ -112,9 +112,9 @@
         it! Apart from this prefix character of widget names the code is
         identical.</para>
 
-        <para>For nearly every J&lt;xxx&gt; component of Swing you find a
-        S&lt;xxx&gt; counterpart in wingS with similar or identical
-        behavior.</para>
+        <para>For nearly every <code>J&lt;xxx&gt;</code> component of Swing
+        you find a <code>S&lt;xxx&gt;</code> counterpart in wingS with similar
+        or identical behavior.</para>
       </section>
 
       <section>
@@ -801,11 +801,11 @@ public class HelloWingS {
           frameset splitted horizontally into two inner frames:</para>
 
           <programlisting>SFrameSet frameset = new SFrameSet(new SFrameSetLayout("50%,50%", null));
-    SFrame leftFrame = new SFrame("left frame");
-    SFrame rightFrame = new SFrame("right frame");
-    horizontal.add(leftFrame);
-    horizontal.add(rightFrame);
-    frameset.setVisible(true);</programlisting>
+SFrame leftFrame = new SFrame("left frame");
+SFrame rightFrame = new SFrame("right frame");
+horizontal.add(leftFrame);
+horizontal.add(rightFrame);
+frameset.setVisible(true);</programlisting>
 
           <para>This example created two new inner frames. Each of this frame
           will probably contain further displayed components. As a an action
@@ -1123,18 +1123,18 @@ public class HelloWingS {
           <filename>default.properties</filename>) but you probably will
           prefer to define your own layout manager. </para>
 
-          <programlisting>        SPanel panel = new SPanel();
-        SGridLayout gridLayout = new SGridLayout(2);
+          <programlisting>SPanel panel = new SPanel();
+SGridLayout gridLayout = new SGridLayout(2);
 
-        panel.setLayout(gridLayout);
-        panel.add(new SLabel("First name:"));
-        panel.add(new STextField());
-        panel.add(new SLabel("Last name:"));
-        panel.add(new STextField());
-        panel.add(new SButton("Submit"));
+panel.setLayout(gridLayout);
+panel.add(new SLabel("First name:"));
+panel.add(new STextField());
+panel.add(new SLabel("Last name:"));
+panel.add(new STextField());
+panel.add(new SButton("Submit"));
         
-        SForm inputForm = new SForm();
-        inputForm.add(panel);</programlisting>
+SForm inputForm = new SForm();
+inputForm.add(panel);</programlisting>
 
           <para>In this example we created a <code>SPanel</code> container,
           assigned a two-columed gridlayout as layout manager and added
@@ -1298,20 +1298,20 @@ public class HelloWingS {
           usage and capabilities of this widget component. Here are some usage
           examples</para>
 
-          <programlisting>        // You can just pass the text to display as parameter of the constructor
-        SLabel simpleLabel = new SLabel("A simple label");
+          <programlisting>// You can just pass the text to display as parameter of the constructor
+SLabel simpleLabel = new SLabel("A simple label");
 
-        // ...but it can be changed at any time
-        SLabel emptyLabel = new SLabel();
-        // ... i.e. when something happened:
-        emptyLabel.setText("The trigger event occured! \n"+
-                           "Second line of label");
+// ...but it can be changed at any time
+SLabel emptyLabel = new SLabel();
+// ... i.e. when something happened:
+emptyLabel.setText("The trigger event occured! \n"+
+                   "Second line of label");
 
-        // Extensive formatting can be done done during runtime
-        SLabel fancyLabel = new SLabel("A green, bold italic label");
-        fancyLabel.setForeground(Color.green);
-        fancyLabel.setFont(new SFont(SFont.BOLD + SFont.ITALIC));
-        fancyLabel.setWordWrap(true); // allow word wrapping</programlisting>
+// Extensive formatting can be done done during runtime
+SLabel fancyLabel = new SLabel("A green, bold italic label");
+fancyLabel.setForeground(Color.green);
+fancyLabel.setFont(new SFont(SFont.BOLD + SFont.ITALIC));
+fancyLabel.setWordWrap(true); // allow word wrapping</programlisting>
 
           <para>As you can see, the text inside a label can be changed at any
           time using the <code>setText()</code> bean property setter. Using
@@ -1343,13 +1343,13 @@ public class HelloWingS {
           In your programming code you would additional assign a new CSS class
           to a label:</para>
 
-          <programlisting>        SLabel errorLabel = new SLabel();
-        <emphasis role="bold">errorLabel.setStyle(errorLabel.getStyle() + " errorLabel");</emphasis>
-        errorLabel.setVisible(false); // hide by default
+          <programlisting>SLabel errorLabel = new SLabel();
+<emphasis role="bold">errorLabel.setStyle(errorLabel.getStyle() + " errorLabel");</emphasis>
+errorLabel.setVisible(false); // hide by default
         
-        //.. an error occured
-        errorLabel.setText("An error occured during the last operation");
-        errorLabel.setVisible(true);</programlisting>
+//.. an error occured
+errorLabel.setText("An error occured during the last operation");
+errorLabel.setVisible(true);</programlisting>
 
           <para>This will allow the web designer in your project to declare a
           new static CSS style an optional application-specific CSS
@@ -1415,19 +1415,19 @@ public class HelloWingS {
           other implementations like demonstrated in the example below:
           </para>
 
-          <programlisting>        // image contained in the class path
-        SResourceIcon javaCupIcon = new SResourceIcon("org/wings/icons/JavaCup.gif");
-        // image deployed in a icons directory of you application
-        SURLIcon okButtonIcon = new SURLIcon("../icons/ok-button.png");
-        // a file in the file system
-        SFileIcon background = new SFileIcon(new File("/home/blueshift/background.jpg"));
+          <programlisting>// image contained in the class path
+SResourceIcon javaCupIcon = new SResourceIcon("org/wings/icons/JavaCup.gif");
+// image deployed in a icons directory of you application
+SURLIcon okButtonIcon = new SURLIcon("../icons/ok-button.png");
+// a file in the file system
+SFileIcon background = new SFileIcon(new File("/home/blueshift/background.jpg"));
 
-        // Use i.e. just for display
-        SLabel javaCup = new SLabel(javaCupIcon);
-        // ..or as clickable button
-        SButton okButton = new SButton(okButtonIcon);
-        // or i.e. as container background
-        panel.setBackgroundImage(background);</programlisting>
+// Use i.e. just for display
+SLabel javaCup = new SLabel(javaCupIcon);
+// ..or as clickable button
+SButton okButton = new SButton(okButtonIcon);
+// or i.e. as container background
+panel.setBackgroundImage(background);</programlisting>
 
           <para><code>SIcon</code> images can be used in conjunction with many
           wingS widgets. But the most commons usage are in combination with
@@ -1491,16 +1491,46 @@ public class HelloWingS {
       </sect2>
 
       <sect2>
-        <title>Buttons and more</title>
+        <title>Buttons and Events</title>
 
-        <para><remark>SButton (form based, non form based)</remark></para>
+        <para>Buttons are simple, clickable input components. Instances of a
+        button can present themselves as regular GUI buttons (HTML submit
+        buttons), clickable text links or clickable images. To react on
+        activiations of a button, action listeners can be registered on
+        buttons and will receive events notifying them about the click.</para>
 
-        <para><remark>Using images </remark></para>
+        <sect3>
+          <title>Creating buttons</title>
 
-        <para><remark>Attaching action listeners (see existing
-        text)</remark></para>
+          <para>To create and display a button just create a new
+          <code>SButton</code> instance and add it to a visible container. By
+          default buttons will appear as regular buttons if they are nested
+          inside a <code>SForm</code> container, otherwise they will appear as
+          simple text links due to constraints of the browser. Please refer to
+          <xref linkend="SForm" /> to learn more about the role of the
+          <code>SForm</code> container. You can force <code>SButtons</code> to
+          render as text links even if contained inside a form using a
+          <code>setShowAsFormComponent(false)</code> method call. Alternativly
+          you can use (i.e. dynamically generated) images as clickable
+          buttons. Below you'll find a few example of how to create
+          buttons</para>
 
-        <para>SDownloadButton</para>
+          <programlisting>// a simple default button
+SButton simpleButton = new SButton("ok");
+
+// text link button
+SButton textLinkButton = new SButton("Request support");
+textLinkButton.setShowAsFormComponent(false);
+
+// a graphical button
+SButton graphicalButton = new SButton(
+        new SResourceIcon("org/wings/icons/JavaCup.gif"));</programlisting>
+
+          <para>The default style of form buttons are modified in the default
+          CSS files delivered with the wingS default PLAF. You might want to
+          attach a new custom CSS file and modify their appearance
+          there.</para>
+        </sect3>
 
         <sect3>
           <title>Listening to Events</title>
@@ -1509,12 +1539,13 @@ public class HelloWingS {
           can supply your own callbacks in order to handle these. Here we
           create a push button and register a callback to receive notification
           when the button is pushed. Note that the button is declared final so
-          that we can access it within the anyonmous callback class.
-          Alternatively we could have declared it a field or declare the
-          action listener i.e. as inner class<programlisting>final SButton submit = new SButton("Search");
+          that we can access it within the anyonmous callback
+          class<programlisting>final SButton submit = new SButton("Search");
 form.add(submit);
 ActionListener al = new ActionListener() {
-  public void actionPerformed(ActionEvent e) { ... }
+  public void actionPerformed(ActionEvent e) { 
+     // ... trigger search
+  }
 };
 
 submit.addActionListener(al);</programlisting></para>
@@ -1543,29 +1574,20 @@ submit.addActionListener(al);</programlisting></para>
       <sect2>
         <title>Input components</title>
 
-        <para><remark>textfield, textarea, SRadioButton, SCheckBox,
-        SButtonGroup</remark></para>
-
-        <para><remark>SFormattedTextField, SPasswordField</remark></para>
-
         <para>Input to your wingS application comes in the form of state
         changes to the various widgets you have created, and in application
         events that you can listen to. To illustrate this we use the simplest
         case of a form which contains an entry field and a button.</para>
-      </sect2>
-
-      <sect2>
-        <title>Entry Field</title>
 
         <para>Recall that user input for entry fields must be contained in a
         <code>SForm</code>. The first task is to create the form and entry
-        field (layout details omitted):<programlisting>SForm form = new SForm();
+        field (layout details omitted):<programlisting>SForm form = new SForm(new STemplateLayout(...));
 // ... add to top pane, add layout
 // The following assumes a template layout, the names "W1", "W2" 
 // identify layout components
 SLabel label = new SLabel("Enter stuff:");
-form.add(label, "W1");
 STextField text = new STextField("initial value");
+form.add(label, "W1");
 form.add(text, "W2");</programlisting></para>
 
         <para>The text field variable might be made a class member variable so
@@ -1574,12 +1596,146 @@ form.add(text, "W2");</programlisting></para>
         <para>Alternatively you might declare it as a local final variable,
         and access it from within a local closure callback, reacting to user
         input as shown in the next section.</para>
-      </sect2>
 
-      <sect2>
-        <title></title>
+        <sect3>
+          <title>Text input fields and areas</title>
 
-        <para></para>
+          <para>The example below demonstrates that you can restrict the
+          amount of columns indenpendenly from the physcial size a text input
+          field. Furthermore text areas can be advised to line-wrap the
+          entered text at their physical, virtual size or not to wrap the text
+          themselves at all (default).</para>
+
+          <programlisting>// A text field restricted to 40 character and 
+// a fixed width of 400px
+STextField simpleField = new STextField("default text");
+simpleField.setMaxColumns(40);            
+simpleField.setPreferredSize(new SDimension(400, SDimension.AUTO_INT));
+
+// An multilines input field with 6 lines and 40 colmns
+// Line will wrap after 40 colums
+STextArea textArea = new STextArea(6,40);
+textArea.setLineWrap(STextArea.VIRTUAL_WRAP);
+
+// A read only textfield
+STextField readonlyField = new STextField("read only");
+readonlyField.setEditable(false);</programlisting>
+
+          <para>You can retrieve the entered text via the
+          <code>getText()</code> method i.e. as an reaction of an "O.K." or
+          "Save" button click as already drafted in the previous examples.
+          </para>
+
+          <para>But we don't want to miss to point you to another source of
+          event triggers: The text fields/areas themselves: you can attach
+          Swing-linke document change listeners which will notify about every
+          value update of a text component.</para>
+
+          <programlisting>textArea.addDocumentListener(new SDocumentListener() {              
+    public void insertUpdate(SDocumentEvent e) {                    
+        STextComponent source = (STextComponent) e.getSource();     
+        System.out.println("Text after insertion of " +             
+                e.getLength()+" characters: "+source.getText());    
+    }                                                               
+                                                                    
+    public void removeUpdate(SDocumentEvent e) {                    
+        STextComponent source = (STextComponent) e.getSource();     
+        System.out.println("Text after removal of " +               
+                e.getLength()+" characters: "+source.getText());    
+    }                                                               
+                                                                    
+    public void changedUpdate(SDocumentEvent e) {                   
+        // won't happen - refers to style changes, not text changes 
+    }                                                               
+});                                                                 </programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Checkboxes and Radioboxes</title>
+
+          <para>Checkboxes and radio boxes are widgets that can be either
+          selected or unselected. While checkboxes can be checked and
+          unchecked independendly, radioboxes always allow only one instance
+          to be selected inside a embraced button group.</para>
+
+          <para>Similar to the behaviour of <code>SButton</code> their
+          appeareance differ depending if they are contained inside a form or
+          not. If those input elements are not contained inside a <xref
+          linkend="SForm" /> element, they'll be rendered as graphical
+          widgets. You can force the graphical version as well as exchange the
+          used graphics for this case.</para>
+
+          <programlisting>// You gotta' decide yourself for exact one gender ;-)              
+SButtonGroup buttonGroup = new SButtonGroup();                      
+SRadioButton optionF = new SRadioButton("Female");                  
+SRadioButton optionM = new SRadioButton("Male");                    
+buttonGroup.add(optionF);                                           
+buttonGroup.add(optionM);                                           
+                                                                    
+// a checked checkbox                                               
+SCheckBox agreedBox = new SCheckBox("accept disclaimer");           
+agreedBox.setSelected(true);                                        
+                                                                    
+// an unmodifyable checkbox rendered as graphic                     
+SCheckBox disabledCheckBox = new SCheckBox("Umodifyable checkbox"); 
+disabledCheckBox.setEnabled(false);                                 
+disabledCheckBox.setShowAsFormComponent(false);
+disabledCheckBox.setDisabledIcon(new SResourceIcon(...));</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Special Input fields</title>
+
+          <para>Last but not least we have to mention two more special input
+          component <code>SFormattedTextField</code> and
+          <code>SPasswordField</code>. The latter one is simply the password
+          entry variant of a <code>STextField</code> meaning that typed
+          characters will appear obfuscated i.e. as asterix instead of beeing
+          displayed plain-text.</para>
+
+          <para>The <code>SFormattedTextField</code> is a conceptual very
+          interesting example of an <firstterm>AJAX</firstterm> based
+          components. To work correctly you must deploy and registere the DWR
+          jar and servelet correctly as shown in WingSet example. Below you'll
+          find a usage example</para>
+
+          <programlisting>SFormattedTextField numberFormattedField = 
+           new SFormattedTextField(new NumberFormatter());
+
+private static class NumberFormatter extends SAbstractFormatter {
+    NumberFormat format = NumberFormat.getNumberInstance(
+            SessionManager.getSession().getLocale());
+
+    public Object stringToValue(String text) throws ParseException {
+        return text == null || text.trim().length() == 0
+                ? null : format.parse(text.trim());
+    }
+
+    public String valueToString(Object value) throws ParseException {
+        return value == null ? "" : format.format(value);
+    }
+}</programlisting>
+
+          <para>This component does the following: If you enter the
+          <code>SFormattedTextField</code> you can enter or modify the current
+          value of the text field. If you entered a parseable value, the value
+          of the textfield will be updated to the parsed value. Otherwise the
+          input field will regain the input focus and be marked red to
+          indicate an input error.</para>
+
+          <bridgehead>Technical background</bridgehead>
+
+          <para>This is realized in the following way: When you try to leave
+          the textbox i.e. by pressing the <keysym>Tab</keysym> key to jump to
+          the next input field, the textbox will trigger a XML encoded reqest
+          to the server in the background. There the DWR servlet takes the
+          request and delegates it to the java listener (here:
+          <code>NumberFormatter</code>). If it succeeds the value of the text
+          field will be updated with the formatted value returned by this. If
+          it fails and indicates this by throwing a
+          <code>ParseException</code> the cursor will be set back to the input
+          field and it will be marked red to grab the user's attention.</para>
+        </sect3>
       </sect2>
     </sect1>
 
@@ -1657,13 +1813,52 @@ form.add(text, "W2");</programlisting></para>
       <sect2 id="SwingLayoutManager">
         <title>Swing-like Layout Managers</title>
 
-        <para><remark>TODO: SBorderLayout, SBoxLayout, SCardLayout,
-        SFlowDownLayout, SFlowLayout, SFrameSetLayout, SGridBagLayout,
-        SGridLayout, SNullLayout, SRootLayout, SScrollPaneLayout,
-        STemplateLayout</remark></para>
+        <para><remark></remark></para>
 
         <para><remark>Section better name "dynamic layout
         managers"?</remark></para>
+
+        <sect3>
+          <title>SBorderLayout</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>SBoxLayout</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>SGridLayout</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>SFlowLayout and SFlowDownLayout</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>SGridBagLayout</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>SCardLayout</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>SRootLayout</title>
+
+          <para></para>
+        </sect3>
       </sect2>
 
       <sect2 id="STemplateLayout">
@@ -1733,6 +1928,9 @@ form.add(text, "W2");</programlisting></para>
 
     <sect1 id="css-styles">
       <title>Styling your application using CSS</title>
+
+      <remark>Creating global Style instances and applying them to
+      components</remark>
 
       <para>Besides knowing how to define the general application's layout you
       are probably even more interested in how you can influence its look.
@@ -2258,6 +2456,12 @@ STextField sumField  = new STextField();
   firstField.addScriptListener(jsListener);
   secondField.addScriptListener(jsListener);
   sumField.addScriptListener(jsListener);</programlisting>
+    </sect1>
+
+    <sect1>
+      <title>Drag &amp; Drop support</title>
+
+      <para>TODO</para>
     </sect1>
 
     <sect1>
