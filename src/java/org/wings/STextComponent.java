@@ -73,7 +73,11 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         reloadIfChange(oldDocument, document);
     }
 
-
+    /**
+     * Defines if the textcomponent is editable or not.
+     * @see #isEditable()
+     * @param ed true if the text component is to be editable false if not.
+     */
     public void setEditable(boolean ed) {
         boolean oldEditable = editable;
         editable = ed;
@@ -86,7 +90,11 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         return editable;
     }
 
-
+    /**
+     * Sets the text of the component to the specified text.
+     * @see #getText()
+     * @param text the new text for the component.
+     */
     public void setText(String text) {
         document.setText(text);
     }

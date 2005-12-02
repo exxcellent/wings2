@@ -59,6 +59,7 @@ public class Browser {
     }
 
     /**
+     * Gets the classification of the browser, this can be either GECKO, IE, KONQUEROR, MOZILLA, OPERA or UNKNOWN.
      * @return A classification of the browser {@link BrowserType}
      */
     public BrowserType getBrowserType() {

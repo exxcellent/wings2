@@ -245,6 +245,12 @@ public class SFrameSet extends SFrame {
     public void setFrameborderVisible ( boolean bool ) {
         this.frameborderVisible = bool;
     }
+    
+    /**
+     * 
+     * @see #setFrameborderVisible(boolean)
+     * @return true if the FrameBorder is visible otherwise false
+     */
     public boolean isFrameBorderVisible () {
         return frameborderVisible;
     }

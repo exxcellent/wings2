@@ -15,6 +15,9 @@ package org.wings.session;
 
 /**
  * Typesafe enumeration class of operating systems on browsers client side.
+ * 
+ * <p>Example usage of how to get the browser type</p>
+ * <code>SessionManager.getSession().getUserAgent().getBrowserType()</code>
  */
 public class BrowserType {
     public class BrowserID {
