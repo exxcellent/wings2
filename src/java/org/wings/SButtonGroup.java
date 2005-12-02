@@ -149,6 +149,11 @@ public class SButtonGroup implements SDelayedEventModel {
             remove((SAbstractButton) buttons.get(0));
     }
 
+    /**
+     * Gets the button of the group that is selected.
+     * @see #setSelection(SAbstractButton)
+     * @return the selected button
+     */
     public final SAbstractButton getSelection() {
         return selection;
     }
@@ -184,10 +189,18 @@ public class SButtonGroup implements SDelayedEventModel {
         return buttons.iterator();
     }
 
+    /**
+     * Gets all the buttons the group consists of.
+     * @return an enumeration of the buttons of the group
+     */
     public Enumeration getElements() {
         return Collections.enumeration(buttons);
     }
 
+    /**
+     * Gets the id of the component.
+     * @return the component id
+     */
     public String getLowLevelEventId() {
         return getComponentId();
     }
