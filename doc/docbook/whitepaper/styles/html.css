@@ -28,6 +28,7 @@ H1, H2, H3, H4, H5, H6    {
     font-weight:500;
     margin-top:10px;
     padding-top:15px;
+    font-family: Arial, Geneva, Helvetica, sans-serif;
 }
 
 TABLE  {
@@ -45,7 +46,12 @@ H1 { font-size: 150%; }
 H2 { font-size: 140%; }
 H3 { font-size: 110%; font-weight: bold; }
 H4 { font-size: 110%; font-weight: bold;}
-H5 { font-size: 100%; font-style: italic; }
+/* H5 is used for bridgeheads: */
+H5 {
+   font-size: 100%;
+   font-weight: bold;
+   margin-bottom: 0px;
+}
 H6 { font-size: 100%; font-style: italic; }
 
 TT {
