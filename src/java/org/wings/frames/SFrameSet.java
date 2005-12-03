@@ -213,13 +213,17 @@ public class SFrameSet extends SFrame {
          return "frame" + forInnerFrame.getName();
     }
 
-    public static String GetBaseTarget(SFrame frame) {
+    /**
+     * Retrieve attached <code>BaseTarget</code> of a frame.
+     * @return The found base target header element or <code>null</code>  
+     */
+    public static BaseTarget retrieveBaseTarget(SFrame frame) {
         List headers = frame.headers();
         Iterator it = headers.iterator();
         while (it.hasNext()) {
             Object next = it.next();
             if (next instanceof BaseTarget) {
-                return(((BaseTarget)next).getTarget());
+                return (BaseTarget) next;
             }
         }
         return(null);
