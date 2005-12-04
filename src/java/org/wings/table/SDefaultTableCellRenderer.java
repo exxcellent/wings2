@@ -69,6 +69,16 @@ public class SDefaultTableCellRenderer
         return this;
     }
 
+    /**
+     * Generates the name (= id) of the editing component so that
+     * the STable implementation knows to associate the input
+     * value with the correct data row/columns
+     *
+     * @param component The edit component to rename
+     * @param row Data row of this edit component
+     * @param col Data column of this edit component
+     * @return The unqique id/name for a component of the rows/column
+     */
     protected String name(SComponent component, int row, int col) {
         nameBuffer.setLength(0);
         nameBuffer.append(component.getName()).append("_");
