@@ -168,6 +168,24 @@ public class STable extends SComponent
     public static final CSSSelector.Pseudo SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
 
     /**
+     * A Pseudo CSS selector addressing the regular odd row elements.
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_ODD_ROWS = new CSSSelector.Pseudo("ODD_ROWS");
+
+    /**
+     * A Pseudo CSS selector addressing the regular even row elements.
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_EVEN_ROWS = new CSSSelector.Pseudo("EVEN_ROWS");
+
+    /**
+     * A Pseudo CSS selector addressing the regular even row elements.
+     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     */
+    public static final CSSSelector.Pseudo SELECTOR_NUMBERING_COLUMN = new CSSSelector.Pseudo("NUMBERING_COLUMN");
+
+    /**
      * <p>Creates a new <code>STable</code>.</p>
      */
     public STable() {
