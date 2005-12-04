@@ -30,10 +30,18 @@ public class SDefaultTableCellRenderer
 
     SIcon editIcon;
 
+    /**
+     * The icon to display if the cell value is <code>null</code> .
+     */
     public SIcon getEditIcon() {
         return editIcon;
     }
 
+    /**
+     * The icon to display if the cell value is <code>null</code> .
+     * Can be any abritriary icon. <p/>Example:<br/>
+     * <code>setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));</code>
+     */
     public void setEditIcon(SIcon editIcon) {
         this.editIcon = editIcon;
     }
