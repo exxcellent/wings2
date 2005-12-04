@@ -1910,31 +1910,175 @@ form.add(deleteButton);</programlisting>
         </sect3>
 
         <sect3>
-          <title>Allow editing of table content</title>
+          <title>Allow editing of table data</title>
 
-          <para></para>
+          <para>But now we want allow the user to be able to edit the table
+          content. This is quite easy in our simple demo. We have to modify
+          the implementation of the table model so that it tells the table
+          wich cells are editable. In our case we just allow all cells to be
+          editable. Furthermore we must overwrite the empty default
+          implementation of the <code>setValueAt()</code> method in
+          <code>AbstractTableModel</code> to accept and store the changed
+          data. Last but not least the <code>getColumnClass()</code> returns
+          the class type of the column values so that the framework knows to
+          choose the right cell editor for the value type. Adding the few
+          lines below to <code>MyTableModel</code> do this job</para>
 
           <programlisting>public boolean isCellEditable(int row, int column) {
-    return true;
+    return true; // allow for all cells
 }
 
 public void setValueAt(Object object, int row, int column) {
-    DATA[row][column] = object;
+    DATA[row][column] = object; // just take the canged value
+}
+
+public Class getColumnClass(int column) {
+    return column == 2 ? Boolean.class : String.class;
 }</programlisting>
+
+          <para>And below you see the final outcome of our efforts</para>
+
+          <screenshot>
+            <screeninfo>Editable table</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/table3.png" />
+              </imageobject>
+            </mediaobject>
+          </screenshot>
+        </sect3>
+
+        <sect3>
+          <title>Customizing STable</title>
+
+          <para>Until now the creation of out table was really painless. As we
+          did not override them the table uses the default cell renderer and
+          editors for rendering the cell contents and providing the according
+          components for editing a cell value. In our simple case this is
+          absolutely fine as we have very simple data types.</para>
+
+          <sect4>
+            <title>Custom table cell renderer</title>
+
+            <para>But look at the last column. Would'nt it be better to
+            display this boolean value as checkable checkbox instead of the
+            <code>toString()</code> representation of the boolean values? This
+            can be easily achieved by overwriting the default cell renderer to
+            return a accordingly checked <code>SCheckBox</code> instead of the
+            default creating cell renderer implementation which just renders a
+            <code>SLabel</code> with the cell content <code>toString()</code>
+            value.</para>
+
+            <programlisting>private static class MyCellRenderer extends SDefaultTableCellRenderer {
+    private final SCheckBox checkBox = new SCheckBox();
+
+    public MyCellRenderer() {
+        // set icon to indicate editable, empty cells
+        setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));
+        // render always as graphic icon
+        checkBox.setShowAsFormComponent(false);
+    }
+
+    public SComponent getTableCellRendererComponent(
+            STable table, Object value, boolean selected, int row, int col) {
+        if (value instanceof Boolean &amp;&amp; row != -1) {
+            checkBox.setNameRaw(name(table, row, col));
+            checkBox.setSelected(((Boolean)value).booleanValue());
+            return checkBox;
+        }
+        else
+            return super.getTableCellRendererComponent(table, value, selected, row, col);
+    }
+}</programlisting>
+
+            <para>After implementing our own, extended table cell renderer we
+            just have to assign it to our table and we're done.</para>
+
+            <programlisting>table.setDefaultRenderer(new MyCellRenderer());</programlisting>
+
+            <para>See the result</para>
+
+            <screenshot>
+              <screeninfo>Enhanced cell render for boolean values</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="images/table4.png" />
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </sect4>
+
+          <sect4>
+            <title>Customizing the table</title>
+
+            <para>Further customization can be applied to tables. Many tables
+            contain a large count of data rows which result in large table
+            size. In this case it's a good idea to make the table <emphasis
+            role="bold">scrollable</emphasis>. Please refer to <xref
+            linkend="scrollpane" /> for details how this can be done.</para>
+
+            <para>As already demonstrated the cell renderers can be exchanged
+            at whole or for specific column classes. If necessary you can
+            <emphasis role="bold">exchange the cell editors</emphasis> in the
+            same way as demonstrated for the cell renderers. </para>
+
+            <para>STable also allows to exchange the renderer component for
+            the <emphasis role="bold">header cells</emphasis> as well to turn
+            the display of the header cell. </para>
+
+            <para>The <emphasis role="bold">visibility</emphasis> of the
+            <emphasis role="bold">horizontal and vertical separator
+            lines</emphasis> can be easily modified using the
+            <code>setShowHorizontalLines()</code> and
+            <code>setShowVerticalLines()</code> methods of
+            <code>STable</code>. </para>
+
+            <para>The <emphasis role="bold">spacing</emphasis> and <emphasis
+            role="bold">padding</emphasis> between the table cells can be
+            modified with the <code>setIntercellPadding()</code> and
+            <code>setIntercellSpacing()</code> methods.</para>
+
+            <bridgehead>Colouring</bridgehead>
+
+            <para>Extensive adjusting of the table colours is possible. The
+            recommended way is to add a custom static CSS style overwriting
+            the wingS default styles for tables. Look at <xref
+            linkend="css-styles" /> for details. As alternative there exists
+            also the convenient possibilty to to all the styling via the Java
+            API and the CSS Pseudo selector objects provided by
+            <code>STable</code>. Just look at the example below</para>
+
+            <programlisting>// Really fancy and colourful table
+table.setAttribute(STable.SELECTOR_HEADER, CSSProperty.BACKGROUND, Color.blue);
+table.setAttribute(STable.SELECTOR_NUMBERING_COLUMN, CSSProperty.BACKGROUND, Color.gray);
+table.setAttribute(STable.SELECTOR_ODD_ROWS, CSSProperty.BACKGROUND, Color.orange);
+table.setAttribute(STable.SELECTOR_EVEN_ROWS, CSSProperty.BACKGROUND, Color.magenta);
+// Special marking as !important necessary due to existing !imporant declaration
+// in wingS default styles. Might be obsolete sometimes
+table.setAttribute(STable.SELECTOR_SELECTION, CSSProperty.BACKGROUND,
+        CSSStyleSheet.getAttribute(Color.yellow)+ " !important");</programlisting>
+
+            <para>... and here is the result</para>
+
+            <screenshot>
+              <screeninfo>Fancy styled table using CSS pseudo
+              selector</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="images/table5.png" />
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </sect4>
         </sect3>
 
         <sect3>
           <title>Overview of properties</title>
 
           <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Customize STable</title>
-
-          <para>Paged table views</para>
-
-          <para>Colouring</para>
         </sect3>
       </sect2>
 
@@ -1949,7 +2093,7 @@ public void setValueAt(Object object, int row, int column) {
       </sect2>
 
       <sect2>
-        <title>SScrollPane</title>
+        <title id="scrollpane">SScrollPane</title>
 
         <para>which components are scrollable. How can Adjustable be used.
         Paged/Scroller</para>
