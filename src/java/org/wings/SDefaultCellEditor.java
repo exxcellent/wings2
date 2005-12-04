@@ -112,7 +112,7 @@ public class SDefaultCellEditor
     protected SDefaultCellEditor(SComponent editorComponent,
                                  boolean initializeButtons) {
         this.messageLabel = new SLabel();
-        this.editorPanel = new SPanel(new SFlowLayout());
+        this.editorPanel = new SPanel(new SBoxLayout(SBoxLayout.HORIZONTAL));
         this.ok = new SButton();
         this.cancel = new SButton();
         this.listenerList = new EventListenerList();
