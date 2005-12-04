@@ -678,7 +678,7 @@ public class HelloWingS {
       <sect2>
         <title>Example project and <code>WAR</code> directory layout</title>
 
-        <para>TODO</para>
+        <para><remark>TODO</remark></para>
       </sect2>
     </sect1>
 
@@ -1741,7 +1741,7 @@ private static class NumberFormatter extends SAbstractFormatter {
     <sect1>
       <title>Sophisticated components</title>
 
-      <sect2>
+      <sect2 id="stable">
         <title>STable</title>
 
         <para>With the <code>STable</code> widgets you can</para>
@@ -1752,7 +1752,7 @@ private static class NumberFormatter extends SAbstractFormatter {
           </listitem>
 
           <listitem>
-            <para>allow the user to make row selections </para>
+            <para>allow the user to make row selections</para>
           </listitem>
 
           <listitem>
@@ -1765,7 +1765,7 @@ private static class NumberFormatter extends SAbstractFormatter {
         <code>STable</code> contains two model objects holding the data: The
         Swing compatible <code>TableModel</code> is the provider of the
         presented table data while a <code>SListSelectionModel</code> object
-        holds the current selection status. </para>
+        holds the current selection status.</para>
 
         <mediaobject>
           <imageobject>
@@ -1782,7 +1782,7 @@ private static class NumberFormatter extends SAbstractFormatter {
           create a data provider for the table data. The used
           <code>TableModel</code> data model is acutally the one declared by
           Swing, so the Swing tutorial might give you additional hints about
-          implementing and using a table model. </para>
+          implementing and using a table model.</para>
 
           <para>In the example below we just create a very simple table model
           showing just a list of names hardcoded in a static array. In typical
@@ -1847,7 +1847,7 @@ private static class MyTableModel extends AbstractTableModel {
           allow the user to do some operations on the data show. In the first
           step we'll allow the user to select single rows and offer him
           operations on them like i.e deletion. Modifying the table to accept
-          row selections is just as simple as </para>
+          row selections is just as simple as</para>
 
           <programlisting>// allow single-line selection in table
 table.setSelectionMode(STable.SINGLE_SELECTION);</programlisting>
@@ -2022,18 +2022,18 @@ public Class getColumnClass(int column) {
             <para>As already demonstrated the cell renderers can be exchanged
             at whole or for specific column classes. If necessary you can
             <emphasis role="bold">exchange the cell editors</emphasis> in the
-            same way as demonstrated for the cell renderers. </para>
+            same way as demonstrated for the cell renderers.</para>
 
             <para>STable also allows to exchange the renderer component for
             the <emphasis role="bold">header cells</emphasis> as well to turn
-            the display of the header cell. </para>
+            the display of the header cell.</para>
 
             <para>The <emphasis role="bold">visibility</emphasis> of the
             <emphasis role="bold">horizontal and vertical separator
             lines</emphasis> can be easily modified using the
             <code>setShowHorizontalLines()</code> and
             <code>setShowVerticalLines()</code> methods of
-            <code>STable</code>. </para>
+            <code>STable</code>.</para>
 
             <para>The <emphasis role="bold">spacing</emphasis> and <emphasis
             role="bold">padding</emphasis> between the table cells can be
@@ -2056,7 +2056,7 @@ table.setAttribute(STable.SELECTOR_NUMBERING_COLUMN, CSSProperty.BACKGROUND, Col
 table.setAttribute(STable.SELECTOR_ODD_ROWS, CSSProperty.BACKGROUND, Color.orange);
 table.setAttribute(STable.SELECTOR_EVEN_ROWS, CSSProperty.BACKGROUND, Color.magenta);
 // Special marking as !important necessary due to existing !imporant declaration
-// in wingS default styles. Might be obsolete sometimes
+// in wingS default styles. Might be obsolete already
 table.setAttribute(STable.SELECTOR_SELECTION, CSSProperty.BACKGROUND,
         CSSStyleSheet.getAttribute(Color.yellow)+ " !important");</programlisting>
 
@@ -2074,31 +2074,184 @@ table.setAttribute(STable.SELECTOR_SELECTION, CSSProperty.BACKGROUND,
             </screenshot>
           </sect4>
         </sect3>
-
-        <sect3>
-          <title>Overview of properties</title>
-
-          <para></para>
-        </sect3>
       </sect2>
 
       <sect2>
         <title>STree</title>
 
-        <para>sample code</para>
-
-        <para>listener / events</para>
-
-        <para>cell renderer / editor</para>
+        <para><remark>sample code, listener / events, cell renderer /
+        editor</remark></para>
       </sect2>
 
       <sect2>
         <title id="scrollpane">SScrollPane</title>
 
-        <para>which components are scrollable. How can Adjustable be used.
-        Paged/Scroller</para>
+        <para>The <code>SScrollPane</code> is special container which allow to
+        display viewports of <code>Scrollable</code> components. Namely
+        <code>Scrollable</code> is implemented by</para>
 
-        <para></para>
+        <itemizedlist>
+          <listitem>
+            <para><code>STable</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>STree</code></para>
+          </listitem>
+
+          <listitem>
+            <para>and <code>SList</code></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>A <code>SScrollPane</code> accepts instances of these
+        <code>Scrollable</code> and provides default horizontal and vertical
+        adjustables. By default the scrollpane will use a viewport of 10x10
+        units. In the case of a table this would mean that you will see
+        maximum 10 rows and 10 columns of the table at once. If the table has
+        more rows or columns the according adjustables will provide the
+        possibilty to move the viewport inside the overall range of the
+        table's columns and rows.</para>
+
+        <para>In the following example we'll take the demo table as described
+        in <xref linkend="stable" />. So - in the simplest case you can make a
+        <code>Scrollable</code> scrollable if you wrap it inside a
+        <code>SScrollPane</code> instead of directly adding it to a container.
+        The modified code from the table example look like this</para>
+
+        <programlisting>// create new table instance and add to visible container
+final STable table = new STable(new MyTableModel());
+//  form.add(table);
+form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
+
+        <para>This results in a presentation of the table as shown in the
+        following screenshot</para>
+
+        <screenshot>
+          <screeninfo>A <code>STable</code> wrapped in a default
+          <code>SScrollPane</code></screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/scrollpane1.png" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>That's all!</para>
+
+        <para>Extensive customization can be done on the
+        <code>SScrollPane</code> and its according <code>SAdjustable</code>.
+        Below we present a short summary of the according properties and their
+        semantical meaning</para>
+
+        <table>
+          <title>Overview of customizable properties for scrolling
+          feature</title>
+
+          <tgroup cols="2">
+            <colspec colname="col1" colwidth="1*" />
+
+            <colspec colname="col2" colwidth="2*" />
+
+            <thead>
+              <row>
+                <entry>Property</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry nameend="col2" namest="col1"><code>SScrollPane</code>
+                properties</entry>
+              </row>
+
+              <row>
+                <entry><code>verticalScrollBar</code> /
+                <code>horizontalScrollBar</code></entry>
+
+                <entry>The instance horizontal / vertical scrollbar. By
+                default semi-graphical <code>SScrollBar</code> but can be also
+                the available <code>SPageScroller</code> or
+                <code>null</code>.</entry>
+              </row>
+
+              <row>
+                <entry><code>horizontalExtent</code> /
+                <code>verticalExtent</code></entry>
+
+                <entry>The horizontal / vertical extent describes the size of
+                the viewport in number of 'units' (table cells, list elements)
+                which can be seen at once.</entry>
+              </row>
+
+              <row>
+                <entry><code>horizontalScrollBarPolicy</code> /
+                <code>verticalScrollBarPolicy</code></entry>
+
+                <entry>Allows to modify the visibility of the scrollbars. Can
+                be defined to be always visibile, only if necessary or
+                never.</entry>
+              </row>
+
+              <row>
+                <entry nameend="col2" namest="col1"><code>SAdjustable</code>
+                properties</entry>
+              </row>
+
+              <row>
+                <entry><code>layoutMode</code></entry>
+
+                <entry>Defines if this adjustable is layouted as a horizontal
+                or vertical adjustable</entry>
+              </row>
+
+              <row>
+                <entry><code>directPageClickables</code></entry>
+
+                <entry>Property for pagescroller defining</entry>
+              </row>
+
+              <row>
+                <entry><code>unitIncrement</code></entry>
+
+                <entry>Returns the amount to change the scrollbar's value by,
+                given a unit up/down request</entry>
+              </row>
+
+              <row>
+                <entry><code>blockIncrement</code></entry>
+
+                <entry>Returns the amount to change the scrollbar's value by,
+                given a block (usually "page") up/down request</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Using these properties we know how to modify our scroller in the
+        previous example to achieve a paged view as i.e. known from popular
+        search engines or other websites.</para>
+
+        <programlisting>SScrollPane scrollPane = new SScrollPane(table);
+SPageScroller pageScroller = new SPageScroller(SPageScroller.VERTICAL);
+pageScroller.setLayoutMode(SPageScroller.HORIZONTAL);
+scrollPane.setHorizontalScrollBar(pageScroller);
+scrollPane.setVerticalScrollBar(null);
+pageScroller.setExtent(5);
+form.add(scrollPane);</programlisting>
+
+        <screenshot>
+          <screeninfo>Paged example of a scrolling table</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/scrollpane2.png" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
       </sect2>
 
       <sect2>
@@ -2165,9 +2318,6 @@ table.setAttribute(STable.SELECTOR_SELECTION, CSSProperty.BACKGROUND,
       <sect2 id="SwingLayoutManager">
         <title>Swing-like Layout Managers</title>
 
-        <para><remark>Section better name "dynamic layout
-        managers"?</remark></para>
-
         <sect3>
           <title>SBorderLayout</title>
 
@@ -2177,7 +2327,7 @@ table.setAttribute(STable.SELECTOR_SELECTION, CSSProperty.BACKGROUND,
           can be used to place exactly one components in each. These positions
           are named <firstterm>North, South, East, West</firstterm> and
           <firstterm>Center</firstterm> and must be referred as layout
-          constraint on adding components to a border layout. </para>
+          constraint on adding components to a border layout.</para>
 
           <mediaobject>
             <imageobject>
@@ -2189,13 +2339,13 @@ table.setAttribute(STable.SELECTOR_SELECTION, CSSProperty.BACKGROUND,
           surrounding container component if the owning container has no
           preferred size defined. As in Swing the Center position is preferred
           in taking up remaining space, while East and West try to be as
-          narrow, North and South as flat as possible. </para>
+          narrow, North and South as flat as possible.</para>
 
           <para>The implementation of the border layout tries to achieve the
           desired layout using an invisible HTML table. Optionally you can
           define horizontal or vertical spacings between the different
-          sections. Find a commented example usage in the code snippet below
-          </para>
+          sections. Find a commented example usage in the code snippet
+          below</para>
 
           <programlisting>// Example usage of a border layout
 SBorderLayout borderLayout = new SBorderLayout();
@@ -2256,7 +2406,7 @@ panel2.add(new SLabel("Component 2"));</programlisting>
           <para>The grid layout is some sort of a combined vertical and
           horizontal box layout. It takes a column count as argument in the
           constructor and will line break when the maximum column count has
-          been reached. </para>
+          been reached.</para>
 
           <mediaobject>
             <imageobject>
@@ -2266,7 +2416,7 @@ panel2.add(new SLabel("Component 2"));</programlisting>
 
           <para>Similar to the preceeding layout it is implemented using an
           invisible layout table. Border and spacing can be defined in the
-          same manner as demonstrated before. </para>
+          same manner as demonstrated before.</para>
 
           <programlisting>// A 3-columned grid layout
 SPanel gridPanel = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
@@ -2302,7 +2452,7 @@ gridPanel.add(new SLabel("Component 4"));
           new row if a component does'nt fit into the previous row anymore.
           Just look at the WingSet demo section Dynamic Layouts. Choose
           SFlowLayout in the dropdown box and look how the layouted components
-          behave on resizing your browser window. </para>
+          behave on resizing your browser window.</para>
 
           <para>The usage is as simple as it could be</para>
 
@@ -2327,18 +2477,18 @@ flowPanel.add(new SLabel("Component 3"));
 
           <para>Please be aware that this layout might be somehow sensible
           regarding preferred sized of contained or surrounded components as
-          well regarding combination with table based layouts. </para>
+          well regarding combination with table based layouts.</para>
 
           <para>Suppose you put a component with a preferred size of 100%
           inside a flow layout you'll notice that your components won't flow
           anymore. This is just because in this case the sized component will
           adapt the available width rather than the flow layout beeing able to
-          know that it should use the available space. </para>
+          know that it should use the available space.</para>
 
           <para>A similar effect can happen on put a flow layout managed
           container together with other components inside a parent container.
           Some components will take up a minimum width though it may visibily
-          not be apparent. </para>
+          not be apparent.</para>
 
           <para>So just in case you encounter problems with non-flowing flow
           layouts try to play with the preferred sizes of the surrounding or
@@ -2440,7 +2590,7 @@ gridBagPanel.add(new SLabel("10"), c);</programlisting>
           various components to components to a card layout and from the start
           it will just show the first added one. Using special
           <code>show()</code>, <code>next()</code> and <code>previous()</code>
-          methods you can 'flip' to another card during runtime. </para>
+          methods you can 'flip' to another card during runtime.</para>
 
           <para>So actually the naming this manager a layout manager is
           somehow exaggerated as the only thing it does is to ensure that only
@@ -2543,7 +2693,7 @@ cardLayout.last(stackedPanel);
           provided in the default libraries with wingS. Use this layout for a
           quickstart of the layout of the root frame of your application if
           you mind to replace it later on with a more complex STemplateLayout
-          based layout. </para>
+          based layout.</para>
         </sect3>
 
         <sect3>
@@ -2556,9 +2706,6 @@ cardLayout.last(stackedPanel);
 
     <sect1 id="css-styles">
       <title>Styling your application using CSS</title>
-
-      <remark>Creating global Style instances and applying them to
-      components</remark>
 
       <para>Besides knowing how to define the general application's layout you
       are probably even more interested in how you can influence its look.
@@ -2586,10 +2733,12 @@ cardLayout.last(stackedPanel);
       <sect2>
         <title>Default Styles</title>
 
-        <para>wingS makes heavy use of CSS styles. The default wingS
-        distribution contains stylesheets on a per browser basis at
-        org/wings/plaf/css/browsername.css. These stylesheets contain the
-        necessary styles for wingS to function and the basic styling.</para>
+        <para>wingS makes heavy use of CSS styling. The default wingS
+        distribution contains different stylesheets per browser. You can find
+        those files in the wingS library at
+        <filename>org/wings/plaf/css/browsername.css</filename>. These
+        stylesheets contain the necessary styles for wingS to function and the
+        basic styling.</para>
       </sect2>
 
       <sect2>
@@ -2600,16 +2749,16 @@ cardLayout.last(stackedPanel);
         WingSet demo. In this case the new styles are held in a global, static
         stylesheet file. Hence the stylesheet is added to the main frame to
         ensure it can apply to all components.<programlisting>frame = new SFrame("WingSet");
-frame.addHeader(new Link("stylesheet", 
+frame.addHeader(new Link("stylesheet",
                          null,
                          "text/css",
-                         null, 
+                         null,
                          new ClasspathResource("/wingset/css/myapp.css",
                                                "text/css")));</programlisting></para>
 
         <para>The stylesheet contains various customised styles, in this case
-        a custom table header:<programlisting>.table_hdr  { 
-  background-color: #FFCC99 
+        a custom table header:<programlisting>.table_hdr  {
+  background-color: #FFCC99
 }</programlisting></para>
 
         <para>By using a call to
@@ -2620,8 +2769,6 @@ frame.addHeader(new Link("stylesheet",
         display attributes). The individual display attributes are stored in a
         <code>AttributeSet</code> member. See for example
         <code>SComponent.setAttribute</code>().</para>
-
-        <remark>Move every below to an "Advanced Techniques" Chapter?</remark>
       </sect2>
 
       <sect2>
@@ -2656,11 +2803,11 @@ frame.addHeader(new Link("stylesheet",
         <title>File Upload</title>
 
         <para>The problematics of mime parsing and multipart decomposition is
-            completely hidden from the wingS developer. Including a file upload
-        facility in a form is just a matter of adding an SFileChooser component
-        to the form. </para>
-          <para>
-          <programlisting>  SForm form = new SForm();
+        completely hidden from the wingS developer. Including a file upload
+        facility in a form is just a matter of adding an SFileChooser
+        component to the form.</para>
+
+        <para><programlisting>  SForm form = new SForm();
   final SFileChooser chooser = new SFileChooser();
   SButton button = new SButton("upload");
   form.add(chooser);
@@ -2672,15 +2819,14 @@ frame.addHeader(new Link("stylesheet",
       String fileType = chooser.getFileType();
       // ...
     }
-  });
-          </programlisting>Of course there can be multiple file choosers per form.
-              You can limit the size of files to be uploaded in order to avoid
-              denial-of-service (harddisk, bandwidth) attacks You can modify the
-              maximum content length to be posted with the maxContentLength property
-              of the Session. This is 64 kByte by default, so you might want to
-              change this in your application. Please refer to the javadoc of the
-              component to learn more about upload related error handling.
-          </para>
+  });          </programlisting>Of course there can be multiple file choosers
+        per form. You can limit the size of files to be uploaded in order to
+        avoid denial-of-service (harddisk, bandwidth) attacks You can modify
+        the maximum content length to be posted with the maxContentLength
+        property of the Session. This is 64 kByte by default, so you might
+        want to change this in your application. Please refer to the javadoc
+        of the component to learn more about upload related error
+        handling.</para>
       </sect2>
 
       <sect2>
@@ -2691,14 +2837,14 @@ frame.addHeader(new Link("stylesheet",
 
         <para><programlisting>public class XLSServlet extends HttpServlet {
 
-  protected void doGet(HttpServletRequest request, 
+  protected void doGet(HttpServletRequest request,
                        HttpServletResponse response)
       throws ServletException, IOException {
 
     doPost(request, response);
   }
 
-  protected void doPost(HttpServletRequest request, 
+  protected void doPost(HttpServletRequest request,
                         HttpServletResponse response)
       throws ServletException, IOException {
 
@@ -2805,7 +2951,7 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
         <listitem>
           <para>SRootLayout - Set a <code>SFrame</code>'s layout to a custom
           <code>SRootLayout</code> referencing a template file. The source
-          code looks like this. <programlisting>URL url = 
+          code looks like this. <programlisting>URL url =
   Thread.currentThread().getContextClassLoader().getResource("layout.thtml");
 frame.setLayout(new SRootLayout(url));</programlisting></para>
 
@@ -2856,7 +3002,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
           application's context definition in /META-INF/context.xml.</para>
 
           <programlisting>&lt;context&gt;
-   &lt;manager    
+   &lt;manager
        className="org.apache.catalina.session.StandardManager"
         pathname=""&gt;
    &lt;/manager&gt;
@@ -2885,13 +3031,6 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
 
   <chapter>
     <title>Advanced Topics</title>
-
-    <sect1>
-      <title>Reload manager and epochs</title>
-
-      <para><remark>How resources / components get dirty. How epochs
-      work.</remark></para>
-    </sect1>
 
     <sect1>
       <title>Back Button Navigation</title>
@@ -3062,7 +3201,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
       <para>Back to wingS. This is how you can integrate JavaScript in a wingS
       application:</para>
 
-      <para>TODO: Explain general concept in wingS.</para>
+      <para><remark>TODO: Explain general concept in wingS.</remark></para>
 
       <itemizedlist>
         <listitem>
@@ -3081,7 +3220,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
         </listitem>
       </itemizedlist>
 
-      <para>TODO: Explain demo.</para>
+      <para><remark>TODO: Explain demo.</remark></para>
 
       <programlisting>STextField firstField  = new STextField();
 STextField secondField  = new STextField();
@@ -3097,10 +3236,10 @@ STextField sumField  = new STextField();
             " = ((1.0 * document.getElementById('{0}').
               getElementsByTagName('input')[0].value)" +
             " + (1.0 * document.getElementById('{1}').
-              getElementsByTagName('input')[0].value));"; 
+              getElementsByTagName('input')[0].value));";
   SComponent[] jsParams = new SComponent[]{firstField, secondField,
                                            sumField};
-  
+
   JavaScriptListener jsListener;
   jsListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE,
                                       JS_ADD_SCRIPT,
@@ -3114,13 +3253,13 @@ STextField sumField  = new STextField();
     <sect1>
       <title>Drag &amp; Drop support</title>
 
-      <para>wingS supports Drag &amp; Drop in a very simple but powerful manner.
-          A component that implements the DragSource interface is transparently
-          made draggable by means of a javascript library on the client. A
-          component that implements DropTarget will accept those draggables. When
-          a drag and drop gesture has been performed on the client, a request is sent
-          to the server and component drop listeners are notified.
-          <programlisting>private class SDragLabel extends SLabel implements DragSource {
+      <para>wingS supports Drag &amp; Drop in a very simple but powerful
+      manner. A component that implements the DragSource interface is
+      transparently made draggable by means of a javascript library on the
+      client. A component that implements DropTarget will accept those
+      draggables. When a drag and drop gesture has been performed on the
+      client, a request is sent to the server and component drop listeners are
+      notified. <programlisting>private class SDragLabel extends SLabel implements DragSource {
   private boolean dragEnabled;
 
   public boolean isDragEnabled() {
@@ -3130,9 +3269,11 @@ STextField sumField  = new STextField();
   public void setDragEnabled(boolean dragEnabled) {
     this.dragEnabled = dragEnabled;
     if (dragEnabled) {
-      SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+      SessionManager.getSession().getDragAndDropManager()
+                 .registerDragSource((DragSource)this);
     } else {
-      SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+      SessionManager.getSession().getDragAndDropManager()
+                 .deregisterDragSource((DragSource)this);
     }
   }
 }
@@ -3142,15 +3283,15 @@ private class SDropLabel extends SLabel implements DropTarget {
 
   public void addComponentDropListener(SComponentDropListener listener) {
     componentDropListeners.add(listener);
-    SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
+    SessionManager.getSession().getDragAndDropManager()
+                 .registerDropTarget(this);
   }
 
   public List getComponentDropListeners() {
     return componentDropListeners;
   }
-}</programlisting>The wingSet demo contains a comlete example exploring the drag and drop
-          feature.
-      </para>
+}</programlisting>The wingSet demo contains a comlete example exploring the
+      drag and drop feature.</para>
     </sect1>
 
     <sect1>
@@ -3391,16 +3532,16 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
       communicate any common data required by different modules by using named
       session attributes. This keeps the code decoupled. For example:</para>
 
-      <programlisting>public void setSessionFoo(HttpServletRequest request, MyFoo foo) 
+      <programlisting>public void setSessionFoo(HttpServletRequest request, MyFoo foo)
     throws ServletException {
-  
+
   HttpSession session = request.getSession();
   session.setAttribute("MySharedFoo", foo);
 }
 
-public MyFoo getSessionHelper(HttpServletRequest request) 
+public MyFoo getSessionHelper(HttpServletRequest request)
     throws ServletException {
-  
+
   HttpSession session = request.getSession();
   Object x = session.getAttribute("MySharedFoo");
   if (x == null)
@@ -3643,25 +3784,27 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       <section>
         <title>Writing own renderers</title>
 
-        <para>The rendering task is delegate to separate classes called CGs (Code
-            Generators). Different CGs for a single component can handle browser specifics
-            in a clean way. If you require special rendering for a certain component or if
-            have developed your own custom components, you will have to supply renderers for
-            them. For example you could implement an accordian style CG for an STree with
-            a model of depth 2. A complete set of CGs for all components can be bundled in
-            a PLAF (Pluggable Look And Feel). Every CG should derive from AbstractComponentCG.
-            The latter will render borders, apply the prefererred size, provide a tooltip and
-            a component popup menu, make it draggable / a drop target, etc. The concrete
-            CG needs to care only about the characteristics of the respective component.
-        </para>
+        <para>The rendering task is delegate to separate classes called CGs
+        (Code Generators). Different CGs for a single component can handle
+        browser specifics in a clean way. If you require special rendering for
+        a certain component or if have developed your own custom components,
+        you will have to supply renderers for them. For example you could
+        implement an accordian style CG for an STree with a model of depth 2.
+        A complete set of CGs for all components can be bundled in a PLAF
+        (Pluggable Look And Feel). Every CG should derive from
+        AbstractComponentCG. The latter will render borders, apply the
+        prefererred size, provide a tooltip and a component popup menu, make
+        it draggable / a drop target, etc. The concrete CG needs to care only
+        about the characteristics of the respective component.</para>
       </section>
 
       <section>
         <title id="css-concepts">Teamplay between CSS and PLAFs</title>
 
-        <para>The code generators provide the HTML structure. The CSS makes the HTML code
-            look like proper components. For example the TreeCG renderes a bunch of nested
-            &lt;li&gt; elements. The vertical lines are created by CSS.</para>
+        <para>The code generators provide the HTML structure. The CSS makes
+        the HTML code look like proper components. For example the TreeCG
+        renderes a bunch of nested &lt;li&gt; elements. The vertical lines are
+        created by CSS.</para>
       </section>
     </section>
   </chapter>
