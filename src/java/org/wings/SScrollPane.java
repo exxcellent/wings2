@@ -144,7 +144,7 @@ public class SScrollPane
 
     protected void adjustViewport(Rectangle viewport, Adjustable adjustable) {
         if (adjustable.getOrientation() == Adjustable.HORIZONTAL) {
-            int extent = getHorizontalExtent();
+            int extent = adjustable.getVisibleAmount();
 
             viewport.x = Math.min(adjustable.getMaximum(),
                     adjustable.getValue());
@@ -154,7 +154,7 @@ public class SScrollPane
                     extent);
             viewport.width = Math.max(0, viewport.width);
         } else {
-            int extent = getVerticalExtent();
+            int extent = adjustable.getVisibleAmount();
 
             viewport.y = Math.min(adjustable.getMaximum(),
                     adjustable.getValue());

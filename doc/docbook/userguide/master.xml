@@ -420,17 +420,17 @@ public class HelloWingS {
             &lt;classpath refid="build.classpath"/&gt;
         &lt;/javac&gt;
     &lt;/target&gt;
-    
+
     &lt;target name="war" depends="compile"&gt;
-       &lt;war destfile="build/hellowings.war" 
+       &lt;war destfile="build/hellowings.war"
             webxml="web/WEB-INF/web.xml"&gt;
          &lt;classes dir="build/class"/&gt;
          &lt;fileset dir="web"&gt;
-            &lt;exclude name="**/web.xml" /&gt; 
+            &lt;exclude name="**/web.xml" /&gt;
          &lt;/fileset&gt;
        &lt;/war&gt;
     &lt;/target&gt;
-    
+
     &lt;target name="clean"&gt;
        &lt;delete dir="build"/&gt;
     &lt;/target&gt;
@@ -1132,7 +1132,7 @@ panel.add(new STextField());
 panel.add(new SLabel("Last name:"));
 panel.add(new STextField());
 panel.add(new SButton("Submit"));
-        
+
 SForm inputForm = new SForm();
 inputForm.add(panel);</programlisting>
 
@@ -1346,7 +1346,7 @@ fancyLabel.setWordWrap(true); // allow word wrapping</programlisting>
           <programlisting>SLabel errorLabel = new SLabel();
 <emphasis role="bold">errorLabel.setStyle(errorLabel.getStyle() + " errorLabel");</emphasis>
 errorLabel.setVisible(false); // hide by default
-        
+
 //.. an error occured
 errorLabel.setText("An error occured during the last operation");
 errorLabel.setVisible(true);</programlisting>
@@ -1357,7 +1357,7 @@ errorLabel.setVisible(true);</programlisting>
 
           <programlisting>.errorLabel {
     color: #f00;
-    font-weight: bold; 
+    font-weight: bold;
     border: 1px solid #ddd;
 }</programlisting>
 
@@ -1542,7 +1542,7 @@ SButton graphicalButton = new SButton(
           class<programlisting>final SButton submit = new SButton("Search");
 form.add(submit);
 ActionListener al = new ActionListener() {
-  public void actionPerformed(ActionEvent e) { 
+  public void actionPerformed(ActionEvent e) {
      // ... trigger search
   }
 };
@@ -1582,7 +1582,7 @@ submit.addActionListener(al);</programlisting></para>
         <code>SForm</code>. The first task is to create the form and entry
         field (layout details omitted):<programlisting>SForm form = new SForm(new STemplateLayout(...));
 // ... add to top pane, add layout
-// The following assumes a template layout, the names "W1", "W2" 
+// The following assumes a template layout, the names "W1", "W2"
 // identify layout components
 SLabel label = new SLabel("Enter stuff:");
 STextField text = new STextField("initial value");
@@ -1605,10 +1605,10 @@ form.add(text, "W2");</programlisting></para>
           entered text at their physical, virtual size or not to wrap the text
           themselves at all (default).</para>
 
-          <programlisting>// A text field restricted to 40 character and 
+          <programlisting>// A text field restricted to 40 character and
 // a fixed width of 400px
 STextField simpleField = new STextField("default text");
-simpleField.setMaxColumns(40);            
+simpleField.setMaxColumns(40);
 simpleField.setPreferredSize(new SDimension(400, SDimension.AUTO_INT));
 
 // An multilines input field with 6 lines and 40 colmns
@@ -1630,22 +1630,22 @@ readonlyField.setEditable(false);</programlisting>
           Swing-linke document change listeners which will notify about every
           value update of a text component.</para>
 
-          <programlisting>textArea.addDocumentListener(new SDocumentListener() {              
-    public void insertUpdate(SDocumentEvent e) {                    
-        STextComponent source = (STextComponent) e.getSource();     
-        System.out.println("Text after insertion of " +             
-                e.getLength()+" characters: "+source.getText());    
-    }                                                               
-                                                                    
-    public void removeUpdate(SDocumentEvent e) {                    
-        STextComponent source = (STextComponent) e.getSource();     
-        System.out.println("Text after removal of " +               
-                e.getLength()+" characters: "+source.getText());    
-    }                                                               
-                                                                    
-    public void changedUpdate(SDocumentEvent e) {                   
-        // won't happen - refers to style changes, not text changes 
-    }                                                               
+          <programlisting>textArea.addDocumentListener(new SDocumentListener() {
+    public void insertUpdate(SDocumentEvent e) {
+        STextComponent source = (STextComponent) e.getSource();
+        System.out.println("Text after insertion of " +
+                e.getLength()+" characters: "+source.getText());
+    }
+
+    public void removeUpdate(SDocumentEvent e) {
+        STextComponent source = (STextComponent) e.getSource();
+        System.out.println("Text after removal of " +
+                e.getLength()+" characters: "+source.getText());
+    }
+
+    public void changedUpdate(SDocumentEvent e) {
+        // won't happen - refers to style changes, not text changes
+    }
 });                                                                 </programlisting>
         </sect3>
 
@@ -1664,20 +1664,20 @@ readonlyField.setEditable(false);</programlisting>
           widgets. You can force the graphical version as well as exchange the
           used graphics for this case.</para>
 
-          <programlisting>// You gotta' decide yourself for exact one gender ;-)              
-SButtonGroup buttonGroup = new SButtonGroup();                      
-SRadioButton optionF = new SRadioButton("Female");                  
-SRadioButton optionM = new SRadioButton("Male");                    
-buttonGroup.add(optionF);                                           
-buttonGroup.add(optionM);                                           
-                                                                    
-// a checked checkbox                                               
-SCheckBox agreedBox = new SCheckBox("accept disclaimer");           
-agreedBox.setSelected(true);                                        
-                                                                    
-// an unmodifyable checkbox rendered as graphic                     
-SCheckBox disabledCheckBox = new SCheckBox("Umodifyable checkbox"); 
-disabledCheckBox.setEnabled(false);                                 
+          <programlisting>// You gotta' decide yourself for exact one gender ;-)
+SButtonGroup buttonGroup = new SButtonGroup();
+SRadioButton optionF = new SRadioButton("Female");
+SRadioButton optionM = new SRadioButton("Male");
+buttonGroup.add(optionF);
+buttonGroup.add(optionM);
+
+// a checked checkbox
+SCheckBox agreedBox = new SCheckBox("accept disclaimer");
+agreedBox.setSelected(true);
+
+// an unmodifyable checkbox rendered as graphic
+SCheckBox disabledCheckBox = new SCheckBox("Umodifyable checkbox");
+disabledCheckBox.setEnabled(false);
 disabledCheckBox.setShowAsFormComponent(false);
 disabledCheckBox.setDisabledIcon(new SResourceIcon(...));</programlisting>
         </sect3>
@@ -1698,7 +1698,7 @@ disabledCheckBox.setDisabledIcon(new SResourceIcon(...));</programlisting>
           jar and servelet correctly as shown in WingSet example. Below you'll
           find a usage example</para>
 
-          <programlisting>SFormattedTextField numberFormattedField = 
+          <programlisting>SFormattedTextField numberFormattedField =
            new SFormattedTextField(new NumberFormatter());
 
 private static class NumberFormatter extends SAbstractFormatter {
@@ -1794,7 +1794,7 @@ private static class NumberFormatter extends SAbstractFormatter {
 
           <programlisting>// a very simple table model implementation
 private static class MyTableModel extends AbstractTableModel {
-    private final String[] COLUMN_NAMES = new String[] 
+    private final String[] COLUMN_NAMES = new String[]
             {"First name", "Last name", "Male"};
     private final Object[][] DATA = new Object[][] {
             new Object[] {"Michael","Bolton",Boolean.TRUE},
@@ -2655,7 +2655,32 @@ frame.addHeader(new Link("stylesheet",
       <sect2>
         <title>File Upload</title>
 
-        <para>TODO</para>
+        <para>The problematics of mime parsing and multipart decomposition is
+            completely hidden from the wingS developer. Including a file upload
+        facility in a form is just a matter of adding an SFileChooser component
+        to the form. </para>
+          <para>
+          <programlisting>  SForm form = new SForm();
+  final SFileChooser chooser = new SFileChooser();
+  SButton button = new SButton("upload");
+  form.add(chooser);
+  form.add(button);
+
+  button.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent event) {
+      File file = chooser.getFile();
+      String fileType = chooser.getFileType();
+      // ...
+    }
+  });
+          </programlisting>Of course there can be multiple file choosers per form.
+              You can limit the size of files to be uploaded in order to avoid
+              denial-of-service (harddisk, bandwidth) attacks You can modify the
+              maximum content length to be posted with the maxContentLength property
+              of the Session. This is 64 kByte by default, so you might want to
+              change this in your application. Please refer to the javadoc of the
+              component to learn more about upload related error handling.
+          </para>
       </sect2>
 
       <sect2>
@@ -3089,7 +3114,43 @@ STextField sumField  = new STextField();
     <sect1>
       <title>Drag &amp; Drop support</title>
 
-      <para>TODO</para>
+      <para>wingS supports Drag &amp; Drop in a very simple but powerful manner.
+          A component that implements the DragSource interface is transparently
+          made draggable by means of a javascript library on the client. A
+          component that implements DropTarget will accept those draggables. When
+          a drag and drop gesture has been performed on the client, a request is sent
+          to the server and component drop listeners are notified.
+          <programlisting>private class SDragLabel extends SLabel implements DragSource {
+  private boolean dragEnabled;
+
+  public boolean isDragEnabled() {
+    return dragEnabled;
+  }
+
+  public void setDragEnabled(boolean dragEnabled) {
+    this.dragEnabled = dragEnabled;
+    if (dragEnabled) {
+      SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+    } else {
+      SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+    }
+  }
+}
+
+private class SDropLabel extends SLabel implements DropTarget {
+  private ArrayList componentDropListeners = new ArrayList();
+
+  public void addComponentDropListener(SComponentDropListener listener) {
+    componentDropListeners.add(listener);
+    SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
+  }
+
+  public List getComponentDropListeners() {
+    return componentDropListeners;
+  }
+}</programlisting>The wingSet demo contains a comlete example exploring the drag and drop
+          feature.
+      </para>
     </sect1>
 
     <sect1>
@@ -3582,13 +3643,25 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       <section>
         <title>Writing own renderers</title>
 
-        <para>TODO</para>
+        <para>The rendering task is delegate to separate classes called CGs (Code
+            Generators). Different CGs for a single component can handle browser specifics
+            in a clean way. If you require special rendering for a certain component or if
+            have developed your own custom components, you will have to supply renderers for
+            them. For example you could implement an accordian style CG for an STree with
+            a model of depth 2. A complete set of CGs for all components can be bundled in
+            a PLAF (Pluggable Look And Feel). Every CG should derive from AbstractComponentCG.
+            The latter will render borders, apply the prefererred size, provide a tooltip and
+            a component popup menu, make it draggable / a drop target, etc. The concrete
+            CG needs to care only about the characteristics of the respective component.
+        </para>
       </section>
 
       <section>
         <title id="css-concepts">Teamplay between CSS and PLAFs</title>
 
-        <para></para>
+        <para>The code generators provide the HTML structure. The CSS makes the HTML code
+            look like proper components. For example the TreeCG renderes a bunch of nested
+            &lt;li&gt; elements. The vertical lines are created by CSS.</para>
       </section>
     </section>
   </chapter>
