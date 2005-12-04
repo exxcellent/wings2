@@ -31,10 +31,12 @@ public class FlowDownLayoutCG extends AbstractLayoutCG {
      */
     public void write(Device d, SLayoutManager l) throws IOException {
         final SFlowDownLayout layout = (SFlowDownLayout) l;
+        final int hgap = layout.getHgap();
+        final int vgap = layout.getVgap();
 
-        printLayouterTableHeader(d, "SFlowDownLayout", 0, 0, 0, layout);
+        printLayouterTableHeader(d, "SFlowDownLayout", hgap, vgap, 0, layout);
 
-        printLayouterTableBody(d, 1, false, 0, 0, 0, layout.getComponents());
+        printLayouterTableBody(d, 1, false, hgap, vgap, 0, layout.getComponents());
 
         printLayouterTableFooter(d, "SFlowDownLayout", layout);
     }
