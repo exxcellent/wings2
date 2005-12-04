@@ -20,6 +20,7 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.STable;
+import org.wings.style.CSSSelector;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
@@ -34,7 +35,7 @@ import org.wings.session.SessionManager;
 public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameListener, MSIEButtonFix {
 
     private static final String FORMS_JS = (String) SessionManager
-    .getSession().getCGManager().getObject("JScripts.form",
+            .getSession().getCGManager().getObject("JScripts.form",
             String.class);
 
     protected void writeButtonStart(Device device, STable table, String parameter) throws IOException {
@@ -68,5 +69,14 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
         device.print("<a href=\"#\" onclick=\"location.href='");
         Utils.write(device, selectionAddr.toString());
         device.print("';\"");
+    }
+
+    protected String getResolvedPseudoSelectorMapping(CSSSelector selector) {
+        if (selector != null && selector.equals(STable.SELECTOR_SELECTION))
+            // Special case for this one
+            return "#compid TR.selected";
+        else
+            // rest: defualt
+            return super.getResolvedPseudoSelectorMapping(selector);
     }
 }

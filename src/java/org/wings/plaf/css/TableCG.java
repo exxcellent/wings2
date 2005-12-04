@@ -15,6 +15,7 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
+import org.wings.style.CSSSelector;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
@@ -26,6 +27,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
 
 public class TableCG extends AbstractComponentCG implements
         org.wings.plaf.TableCG {
@@ -277,10 +280,10 @@ public class TableCG extends AbstractComponentCG implements
         for (int r = startRow; r < endRow; r++) {
             device.print("<tr");
             if (selectionModel.isSelectedIndex(r)){
-            	if(childSelectorWorkaround)
-            		device.print("  class=\"selected\"");
-            	else
-            		device.print(" selected=\"true\"");
+                if(childSelectorWorkaround)
+                    device.print("  class=\"selected\"");
+                else
+                    device.print(" selected=\"true\"");
             }
             if (r % 2 != 0)
                 device.print(" odd=\"true\" class=\"odd\">");
@@ -288,9 +291,9 @@ public class TableCG extends AbstractComponentCG implements
                 device.print(" even=\"true\" class=\"even\">");
 
             if (numbering) {
-                device.print("<td col=\"numbering\" class=\"numbering\"");
-                if (childSelectorWorkaround)
-                    Utils.optAttribute(device, "class", "numbering");
+                device.print("<td");
+                Utils.optAttribute(device, "col", "numbering");
+                Utils.optAttribute(device, "class", "numbering");
                 device.print(">");
 
                 if (showAsFormComponent) {
@@ -332,4 +335,28 @@ public class TableCG extends AbstractComponentCG implements
     public void setFixedTableBorderWidth(String fixedTableBorderWidth) {
         this.fixedTableBorderWidth = fixedTableBorderWidth;
     }
+
+    public CSSSelector  mapSelector(SComponent addressedComponent, CSSSelector selector) {
+        final String mappedSelector = getResolvedPseudoSelectorMapping(selector);
+        if (mappedSelector != null) {
+            String cssSelector = mappedSelector.replaceAll("#compid", CSSSelector.getSelectorString(addressedComponent));
+            return new CSSSelector(cssSelector);
+        } else {
+            return selector;
+        }
+    }
+
+    protected String getResolvedPseudoSelectorMapping(CSSSelector selector) {
+        return (String) PSEUDO_SELECTOR_MAPPING.get(selector);
+    }
+
+    private static final Map PSEUDO_SELECTOR_MAPPING = new HashMap();
+    static {
+        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_HEADER, "#compid THEAD");
+        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_NUMBERING_COLUMN, "#compid .numbering");
+        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_EVEN_ROWS, "#compid .even");
+        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_ODD_ROWS, "#compid .odd");
+        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_SELECTION, "#compid TR[selected=\"true\"]"); //#compid TR.selected 
+    }
+
 }
