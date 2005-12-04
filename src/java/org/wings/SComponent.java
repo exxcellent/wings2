@@ -852,6 +852,23 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         setAttribute(selector, property, icon != null ? "url('"+icon.getURL().toString()+"')" : "none");
     }
 
+    /**
+     * Convenience variant of {@link #setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}.
+     * Converts the passed color into according color string.
+     *
+     * @param selector A valid CSS selector. Typically values are i.e. the {@link #getComponentCssSelector()}
+     * or other <code>SELECTOR_xxx</code> value instances declared in the component.
+     * (look ie. at {@link STabbedPane#SELECTOR_CONTENT}) or manually constructed instances of
+     * <code>CSSSelector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
+     * choice.
+     * @param property The css property you want to define a value for (in this case
+     * mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
+     * @param color The color value you want to assign.
+     */
+    public void setAttribute(CSSSelector selector, CSSProperty property, Color color) {
+        setAttribute(selector, property, CSSStyleSheet.getAttribute(color));
+    }
+
     public void setAttributes(CSSSelector selector, CSSAttributeSet attributes) {
         Style style = getDynamicStyle(selector);
         if (style == null) {
