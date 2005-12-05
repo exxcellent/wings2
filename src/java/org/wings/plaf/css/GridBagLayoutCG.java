@@ -23,6 +23,8 @@ import java.io.IOException;
 
 public class GridBagLayoutCG extends AbstractLayoutCG {
     /**
+     * Renders a gridbag layout using invisible layouter tables.
+     *
      * @param d the device to write the code to
      * @param l the layout manager
      * @throws IOException
@@ -41,9 +43,11 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
             Utils.printNewline(d, layout.getContainer());
-            d.print("<tr>");
+            d.print("<tr height=\"");
+            d.print(determineRowHeight(layout, row));
+            d.print("%\">");
             for (int col = grid.firstCol; col < grid.cols; col++) {
-                SComponent comp = grid.grid[col][row];
+                final SComponent comp = grid.grid[col][row];
                 Utils.printNewline(d, layout.getContainer());
                 final boolean headerCell = row == grid.firstRow && header;
                 if (comp == null) {
@@ -81,11 +85,14 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                                     (int) (100 * c.weightx / grid.colweight[row]) +
                                     "%\"");
                         }
+                        /* Height needs be written on the tr element.
+                           Replaced by new determineRowHeight() method as rendering bug occured
+                           in FireFox. Refer to http://jira.j-wings.org/browse/WGS-120
                         if (c.weighty > 0 && grid.rowweight[col] > 0) {
                             d.print(" height=\"" +
                                     (int) (100 * c.weighty / grid.rowweight[col]) +
                                     "%\"");
-                        }
+                        }*/
 
                         d.print(">");
 
@@ -100,6 +107,35 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
             d.print("</tr>");
         }
         printLayouterTableFooter(d, "SGridBagLayout", layout);
+    }
+
+    /**
+     * Copy and paste extracted method to determine an optional row height of the passed row.
+     * Was necessary to avoid a rendering bug with Gecko engines leading to a messed up layout.
+     * Refer to http://jira.j-wings.org/browse/WGS-120
+     * @param layout The gridbaglayout
+     * @param row The row
+     * @return Row height percentage as int or 0
+     */
+    private int determineRowHeight(SGridBagLayout layout, int row) {
+        final SGridBagLayout.Grid grid = layout.getGrid();
+        int rowHeight = 0;
+
+        for (int col = grid.firstCol; col < grid.cols; col++) {
+            SComponent comp = grid.grid[col][row];
+            if (comp != null) {
+                GridBagConstraints c = layout.getConstraints(comp);
+                if ((c.gridx == SGridBagLayout.LAST_CELL || c.gridx == col)
+                     && (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
+                    if (c.weighty > 0 && grid.rowweight[col] > 0) {
+                        int cellHeight = (int) (100 * c.weighty / grid.rowweight[col]);
+                        if (cellHeight  > rowHeight)
+                            rowHeight = cellHeight;
+                    }
+                }
+            }
+        }
+        return rowHeight;
     }
 
 
