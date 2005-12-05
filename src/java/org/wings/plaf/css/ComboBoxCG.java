@@ -49,7 +49,7 @@ public class ComboBoxCG extends AbstractComponentCG implements
 
         Utils.writeEvents(device, component);
 
-        device.print(">\n");
+        device.print(">");
         javax.swing.ComboBoxModel model = component.getModel();
         int size = model.getSize();
         int selected = component.getSelectedIndex();
@@ -65,6 +65,7 @@ public class ComboBoxCG extends AbstractComponentCG implements
             }
 
 
+            Utils.printNewline(device, component);
             device.print("<option");
             Utils.optAttribute(device, "value", component.getSelectionParameter(i));
             if (selected == i) {
@@ -77,13 +78,13 @@ public class ComboBoxCG extends AbstractComponentCG implements
                 Utils.optAttribute(device, "style", buffer.toString());
             }
 
-            device.print(">\n"); //option
+            device.print(">"); //option
 
             if (cellRenderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
                 org.wings.io.StringBufferDevice string = getStringBufferDevice();
                 cellRenderer.write(string);
-                char[] chars = string.toString().toCharArray();
+                char[] chars = string.toString().replace('\n',' ').trim().toCharArray();
                 int pos = 0;
                 for (int c = 0; c < chars.length; c++) {
                     switch (chars[c]) {
@@ -103,14 +104,13 @@ public class ComboBoxCG extends AbstractComponentCG implements
             device.print("</option>");
         }
 
-
+        Utils.printNewline(device, component);
         device.print("</select>");
         // util method
 
         device.print("<input type=\"hidden\"");
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "value", -1);
-
         device.print("/>");
     }
 
@@ -126,24 +126,16 @@ public class ComboBoxCG extends AbstractComponentCG implements
     }
 
 
-//--- end code from common area in template.
 
-
-    public void writeContent(final Device device,
-                             final SComponent _c)
-            throws IOException {
+    public void writeContent(final Device device, final SComponent _c) throws IOException {
         final SComboBox component = (SComboBox) _c;
 
-//--- code from write-template.
-        SComboBox comboBox = (SComboBox) component;
+        final SComboBox comboBox = (SComboBox) component;
         // TODO: implement anchor combobox
         //if (comboBox.getShowAsFormComponent()) {
         writeFormComboBox(device, comboBox);
         //} else {
         //    writeAnchorComboBox(device, comboBox);
         // }
-        device.print("\n");
-
-//--- end code from write-template.
     }
 }
