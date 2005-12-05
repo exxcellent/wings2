@@ -14,6 +14,8 @@
 package org.wings.session;
 
 import org.apache.regexp.RE;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.FileReader;
 import java.io.LineNumberReader;
@@ -28,6 +30,11 @@ import java.util.StringTokenizer;
  * @version $Revision$
  */
 public class Browser {
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(Browser.class);
+
     protected String agent;
     private int majorVersion;
     private double minorVersion;
@@ -49,6 +56,7 @@ public class Browser {
             throws org.apache.regexp.RESyntaxException {
         this.agent = agent;
         detect();
+        log.debug("'" + browserType + "' browser detected for user-agent string: "+agent);       
     }
 
     /**
