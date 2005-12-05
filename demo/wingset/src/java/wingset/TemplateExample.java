@@ -14,6 +14,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.template.propertymanagers.DefaultPropertyManager;
 
 import javax.swing.tree.DefaultTreeModel;
 
@@ -43,7 +44,9 @@ public class TemplateExample
         }
         
         //c.add(new STextArea(), "DemoArea");
-        c.add(new SLabel((new java.util.Date()).toString()), "theLabel");
+        c.add(new SLabel("BeanScript support not enabled. Define value 'true' for " +
+                "property "+ DefaultPropertyManager.BEANSCRIPT_ENABLE+" in web.xml " +
+                "to enable BeanScript support!"), "theLabel");
         c.add(new SButton("Press Me"), "TESTBUTTON");
         c.add(new STextField(), "NAME");
         c.add(new STextField(), "FIRSTNAME");

@@ -26,18 +26,18 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**
- * DefaultPropertyManager.java
- * <p/>
- * <p/>
- * Created: Tue Aug  6 16:43:03 2002
+ * The default property handler for the <code>OBJECT</code> tags in STemplateLayout.
  *
  * @author (c) mercatis information systems gmbh, 1999-2002
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
 public class DefaultPropertyManager implements PropertyManager {
+    /**
+     * Apache commons logger
+     */
+    private static final transient Log log = LogFactory.getLog(DefaultPropertyManager.class);
 
-    private final transient static Log log = LogFactory.getLog(DefaultPropertyManager.class);
     static final Class[] classes = {SComponent.class};
 
     public final HashMap propertyValueConverters = new HashMap();
@@ -45,11 +45,12 @@ public class DefaultPropertyManager implements PropertyManager {
     public static final DefaultPropertyValueConverter
             DEFAULT_PROPERTY_VALUE_CONVERTER = DefaultPropertyValueConverter.INSTANCE;
 
-    private boolean scriptEnabled = false;
-
+    /**
+     * Declare a value "true" for this string in web.xml to enable BeanScript support.
+     */
+    public final static String BEANSCRIPT_ENABLE = "wings.template.beanscript";
 
     public DefaultPropertyManager() {
-
     }
 
     protected Interpreter createInterpreter() {
@@ -57,18 +58,26 @@ public class DefaultPropertyManager implements PropertyManager {
     }
 
     public void setProperty(SComponent comp, String name, String value) {
-        if (scriptEnabled && "SCRIPT".equals(name)) {
-            final Interpreter interpreter = createInterpreter();
+        if ("SCRIPT".equals(name)) {
+            final Boolean scriptEnabled = Boolean.valueOf((String) SessionManager.getSession().getProperty(BEANSCRIPT_ENABLE));
 
-            try {
-                log.debug("eval script " + value);
+            if (scriptEnabled.booleanValue()) {
+                final Interpreter interpreter = createInterpreter();
 
-                interpreter.set("component", comp);
-                interpreter.set("session", SessionManager.getSession());
+                try {
+                    log.debug("eval script " + value);
 
-                interpreter.eval(value);
-            } catch (Exception ex) {
-                log.warn("Error on evaluating script "+value, ex);
+                    interpreter.set("component", comp);
+                    interpreter.set("session", SessionManager.getSession());
+
+                    interpreter.eval(value);
+                } catch (Exception ex) {
+                    log.warn("Error on evaluating script "+value, ex);
+                }
+            } else {
+                log.warn("BeanScript support not enabled. Define value 'true' for " +
+                "property "+ DefaultPropertyManager.BEANSCRIPT_ENABLE+" in web.xml " +
+                "to enable BeanScript support!");
             }
         }
 
@@ -88,17 +97,15 @@ public class DefaultPropertyManager implements PropertyManager {
 
                 if (valueConverter != null) {
                     try {
-                        //System.out.println("invoke " + method);
                         method.setAccessible(true);
                         method.invoke(comp,
                                 new Object[]{valueConverter.convertPropertyValue(value, paramType)});
                         return;
                     } catch (Exception ex) {
-                        // ignore it, maybe log it...
-                    } // end of try-catch
-
-                } // end of if ()
-            } // end of if ()
+                        log.debug("Unable to invoke method "+method.getName()+" due to ",ex);
+                    }
+                }
+            }
         } // end of for (int i=0; i<; i++)
     }
 
@@ -111,11 +118,11 @@ public class DefaultPropertyManager implements PropertyManager {
     protected PropertyValueConverter getValueConverter(Class clazz) {
         if (clazz == null) {
             return DEFAULT_PROPERTY_VALUE_CONVERTER;
-        } // end of if ()
+        }
 
         if (propertyValueConverters.containsKey(clazz)) {
             return (PropertyValueConverter) propertyValueConverters.get(clazz);
-        } // end of if ()
+        }
 
         return getValueConverter(clazz.getSuperclass());
     }

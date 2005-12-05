@@ -30,6 +30,12 @@
             <param-value>alt LEFT, alt RIGHT, F1</param-value>
     	    <description>See KeyStroke.getKeyStroke(String s).</description>
         </init-param>
+        <init-param>
+            <param-name>wings.template.beanscript</param-name>
+            <param-value>TRUE</param-value>
+    	    <description>Allows bean scripting in STemplate layout templates.</description>
+        </init-param>
+
     </servlet>
 
     <servlet>

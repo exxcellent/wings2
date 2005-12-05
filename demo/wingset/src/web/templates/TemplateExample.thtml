@@ -45,7 +45,9 @@ of the according <code>STextField</code> object.
 <tr valign="top"><td>..or just place any other component; like this tree &nbsp;</td>
 <td><object name="TREE"></object></td>
 </table>
-or consider labels (styled via template): <b><object name="theLabel" foreground="#990000"></object></b>.
+or consider labels (styled via template):
+    <b><object name="theLabel" foreground="#990000"
+               script='component.setText("Value set via BeanScripting: "+new java.util.Date().toString());'></object></b>.
 <p>
 This template layout manager caches the intermediate result of the internal
 parse stage, thus it is very fast generating pages. Templates can be read
