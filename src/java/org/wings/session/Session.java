@@ -401,8 +401,9 @@ public class Session
      */
     public void setUserAgentFromRequest(HttpServletRequest request) {
         try {
-            browser = new Browser(request.getHeader("User-Agent"));
-            log.debug("Browser is detected as " + browser);
+            final String userAgentString = request.getHeader("User-Agent");
+            browser = new Browser(userAgentString);
+            log.debug("Browser is detected as " + browser+". User-Agent was: "+userAgentString);
         } catch (Exception ex) {
             log.warn("Cannot get User-Agent from request", ex);
         }
