@@ -21,6 +21,8 @@ package org.wings;
 
 import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDefaultFormatter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 
@@ -31,6 +33,7 @@ import java.text.ParseException;
  * @author theresia
  */
 public class SFormattedTextField extends STextField {
+    private final static Log log = LogFactory.getLog(SFormattedTextField.class);
     private SAbstractFormatter formatter = null;
     private static final SAbstractFormatter NO_FORMATTER = new SAbstractFormatter() {
         public Object stringToValue(String text) throws ParseException {
@@ -56,7 +59,7 @@ public class SFormattedTextField extends STextField {
             try {
                 string = this.formatter.valueToString(object);
             } catch (ParseException e) {
-                e.printStackTrace();
+                log.info("Unable to parse object" + e);
             }
         super.setText(string);
     }
@@ -66,7 +69,7 @@ public class SFormattedTextField extends STextField {
         try {
             returnValue = this.formatter.stringToValue(this.getText());
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.debug("Unable to parse string" + e);
         }
         return returnValue;
     }

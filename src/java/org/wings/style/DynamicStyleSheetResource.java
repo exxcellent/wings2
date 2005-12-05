@@ -23,6 +23,8 @@ import org.wings.resource.DynamicResource;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 import org.wings.util.ComponentVisitor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,6 +43,10 @@ import java.util.ArrayList;
  */
 public class DynamicStyleSheetResource
         extends DynamicResource {
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(DynamicStyleSheetResource.class);
 
     /**
      * These CSS properties will not be inherited over tables in IE.
@@ -64,7 +70,7 @@ public class DynamicStyleSheetResource
         } catch (IOException e) {
             throw e;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn("Unexpected exception", e);
             throw new IOException(e.getMessage()); // UndeclaredThrowable
         }
     }

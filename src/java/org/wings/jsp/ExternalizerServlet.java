@@ -16,6 +16,8 @@ package org.wings.jsp;
 import org.wings.externalizer.ExternalizedResource;
 import org.wings.io.Device;
 import org.wings.io.DeviceFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,6 +31,11 @@ import java.io.IOException;
  * @version $Revision$
  */
 public class ExternalizerServlet extends HttpServlet {
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(ExternalizerServlet.class);
+
     private ServletConfig servletConfig;
 
     /* (non-Javadoc)
@@ -58,7 +65,7 @@ public class ExternalizerServlet extends HttpServlet {
                 wingsSession.getExternalizeManager().deliver(extInfo, response, outputDevice);
             }
             else
-                System.out.println("no resource with id " + path);
+                log.info("no resource with id " + path);
         }
     }
 }

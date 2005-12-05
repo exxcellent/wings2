@@ -15,6 +15,8 @@ package org.wings.style;
 
 import org.wings.SFont;
 import org.wings.io.Device;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.awt.*;
 import java.io.*;
@@ -24,6 +26,11 @@ import java.util.*;
 import java.util.List;
 
 public class CSSStyleSheet implements StyleSheet {
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(CSSStyleSheet.class);
+    
     private static final Map lengthMapping = new HashMap();
     static {
         lengthMapping.put("pt", new Float(1f));
@@ -97,7 +104,7 @@ public class CSSStyleSheet implements StyleSheet {
             r.close();
             is.close();
         } catch (Throwable e) {
-            e.printStackTrace();
+            log.warn("Unable to import CSS defintions from "+url, e);
             // on error we simply have no styles... the html
             // will look mighty wrong but still function.
         }

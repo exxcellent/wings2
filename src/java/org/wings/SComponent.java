@@ -1331,7 +1331,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         try {
             return super.clone();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to clone component", e);
             return null;
         }
     }

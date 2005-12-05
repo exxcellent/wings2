@@ -58,7 +58,7 @@ public class DefaultPropertyManager implements PropertyManager {
 
     public void setProperty(SComponent comp, String name, String value) {
         if (scriptEnabled && "SCRIPT".equals(name)) {
-            Interpreter interpreter = createInterpreter();
+            final Interpreter interpreter = createInterpreter();
 
             try {
                 log.debug("eval script " + value);
@@ -68,13 +68,9 @@ public class DefaultPropertyManager implements PropertyManager {
 
                 interpreter.eval(value);
             } catch (Exception ex) {
-                ex.printStackTrace();
-                // ignore it, maybe log it
-            } // end of try-catch
-
-// reset interpreter
-
-        } // end of if ()
+                log.warn("Error on evaluating script "+value, ex);
+            }
+        }
 
 
         Method[] methods = comp.getClass().getMethods();

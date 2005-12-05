@@ -30,6 +30,8 @@ import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
 import org.wings.script.JavaScriptListener;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -45,6 +47,10 @@ import java.text.NumberFormat;
  * @author theresia & erik
  */
 public class SNumberFormatter extends SAbstractFormatter implements SParentFrameListener {
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(SNumberFormatter.class);
 
     private NumberFormat numberFormat;
     private double maxVal = Double.MAX_VALUE;
@@ -104,7 +110,7 @@ public class SNumberFormatter extends SAbstractFormatter implements SParentFrame
         try {
             obj = numberFormat.parseObject(text);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("Unable to parse number string", e);
         }
         return obj;
     }

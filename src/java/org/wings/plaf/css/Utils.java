@@ -25,6 +25,8 @@ import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.script.ScriptListener;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -44,6 +46,11 @@ import java.util.StringTokenizer;
  * @version $Revision$
  */
 public final class Utils {
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(Utils.class);
+
     /**
      * Print debug information in generated HTML
      */
@@ -694,7 +701,7 @@ public final class Utils {
 
             return buffer.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn("Unable to load script '"+path+"'", e);
             return "";
         } finally {
             try {

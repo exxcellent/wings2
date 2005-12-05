@@ -21,6 +21,8 @@ import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.util.ComponentVisitor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +37,10 @@ import java.util.Iterator;
  * @see SComponent
  */
 public class SContainer extends SComponent {
+    /**
+     * Commons Logger
+     */
+    private final static Log log = LogFactory.getLog(SContainer.class);
     /**
      * The layout for the component.
      */
@@ -455,7 +461,7 @@ public class SContainer extends SComponent {
             }
             return erg;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to clone container", e);
             return null;
         }
     }

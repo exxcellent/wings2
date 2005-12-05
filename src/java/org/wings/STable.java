@@ -20,6 +20,8 @@ import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.table.STableCellEditor;
 import org.wings.table.STableCellRenderer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -43,6 +45,11 @@ import java.awt.*;
  */
 public class STable extends SComponent
         implements TableModelListener, Scrollable, CellEditorListener, LowLevelEventListener {
+
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(STable.class);
 
     /**
      * Table selection model. See {@link STable#setSelectionMode(int)}
@@ -320,8 +327,7 @@ public class STable extends SComponent
                             break;
                     }
                 } catch (NumberFormatException ex) {
-                    // hier loggen...
-                    ex.printStackTrace();
+                    log.warn("Number formatting exception due parsing of component name", ex);
                 }
             }
         }

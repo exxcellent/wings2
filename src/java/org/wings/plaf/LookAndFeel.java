@@ -130,7 +130,7 @@ public class LookAndFeel implements Serializable {
             try {
                 return Color.decode(colorString.trim());
             } catch (Exception ex) {
-                ex.printStackTrace();
+                log.info("Unable to decode color string "+colorString, ex);
                 return null;
             }
         }
