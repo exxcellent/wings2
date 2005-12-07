@@ -65,7 +65,7 @@
       whitepaper<footnote>
           <para><ulink
           url="http://www.j-wings.org/tiki-index.php?page=Documentation">wingS
-          project homepage</ulink></para>
+          project website</ulink></para>
         </footnote>.</para>
     </section>
 
@@ -186,10 +186,10 @@
         <section>
           <title>Layout managers</title>
 
-          <para>Layout managers are responsible for arraning the widgets
+          <para>Layout managers are responsible for arranging the widgets
           inside a container widget to a visual compound. These container
           widgets can be nested into each other, every using its own layout
-          manager, hence hierachically forming the whole application. There
+          manager, hence hierarchically forming the whole application. There
           are two classes of layout managers available: A static template
           layout manager and various dynamical layout managers.</para>
 
@@ -218,7 +218,7 @@
           heavily relies on the web technique of Cascading Style Sheets
           (<abbrev>CSS</abbrev>). It uses CSS to assign specific visual
           properties statically to a whole class of a widgets or dynamically
-          to specific wigdet instances during runtime by transparently
+          to specific widget instances during runtime by transparently
           generating new CSS styles on-the-fly.</para>
 
           <para>But don't be afraid! In most cases you will not need to get in
@@ -226,7 +226,7 @@
           default style which will provide a good start new eye-candy web
           applications while all the styling needed during runtime (i.e.
           colouring, specifying other fonts or assign spaces between widgets)
-          can be achieved completley transparent using the Swing-like wingS
+          can be achieved completely transparent using the Swing-like wingS
           API.</para>
 
           <para>The chapters <xref linkend="css-styles" /> and <xref
@@ -250,9 +250,9 @@
 
     <para>As the next step you'll already be able to start designing and
     implementing the first functionalities of your application. The default
-    PLAF and CSS stylesheets provided with the wingS distribution will already
-    give you a decent start for a nice-looking and working web application
-    fulfilling most of the typical design needs.</para>
+    PLAF and CSS style sheets provided with the wingS distribution will
+    already give you a decent start for a nice-looking and working web
+    application fulfilling most of the typical design needs.</para>
 
     <para>By designing the main application layout you already passed the
     point where a typical developer will no longer need to have any in-depth
@@ -260,13 +260,13 @@
     the further application logic. He can solely use and rely on the
     Swing-like Java API to create, use and arrange the finer granulated
     application components. Also dynamically styling components like i.e.
-    emphasising a label with red color to indicate an error is just as simple
-    as a <code>label.setForeground(Color.RED);</code> call in your application
+    emphasise a label with red color to indicate an error is just as simple as
+    a <code>label.setForeground(Color.RED);</code> call in your application
     code.</para>
 
     <para>Only if you need to style the look and feel of your application in
-    detail you'll start to extend or overwrite the default wingS CSS
-    stylesheets to adopt it to your individual styling needs. <xref
+    detail you'll start to extend or overwrite the default wingS CSS style
+    sheets to adopt it to your individual styling needs. <xref
     linkend="css-styles" /> will give you a deeper view into leveraging CSS to
     style your application.</para>
 
@@ -580,9 +580,9 @@ public class HelloWingS {
 
                 <entry>optional</entry>
 
-                <entry>Deploy and configure Log4J with you applicaton if
+                <entry>Deploy and configure Log4J with you application if
                 you're using JDK 1.3 or you prefer Log4J in advance to the JDK
-                logging facilty</entry>
+                logging facility</entry>
               </row>
 
               <row>
@@ -622,8 +622,8 @@ public class HelloWingS {
               <para>The latest version of the wingS framework can be always
               obtained from its website at <ulink
               url="http://www.j-wings.org/">http://www.j-wings.org/</ulink>.
-              If you want to to be in touch with the lastest development you
-              can also retrieve a development snapshot by anonymous CVS
+              If you want to be in touch with the latest development you can
+              also retrieve a development snapshot by anonymous CVS
               access.</para>
             </listitem>
           </varlistentry>
@@ -644,7 +644,7 @@ public class HelloWingS {
           </varlistentry>
 
           <varlistentry>
-            <term>Mozilla Firefox</term>
+            <term>Mozilla FireFox</term>
 
             <listitem>
               <para>Though choosing a browser is somehow a matter of personal
@@ -663,8 +663,8 @@ public class HelloWingS {
 
             <listitem>
               <para>Chris Pederick donated these really two great plugins for
-              the FireFox. They will be valueable tools when you are about to
-              style your webapplication in detail. You can install them via
+              the FireFox. They will be valuable tools when you are about to
+              style your web application in detail. You can install them via
               <ulink
               url="http://chrispederick.com/work/">http://chrispederick.com/work/</ulink>.</para>
 
@@ -679,7 +679,7 @@ public class HelloWingS {
     <sect1>
       <title>Designing the application architecture</title>
 
-      <para>Making some thoughts about the intentioned archictecture of your
+      <para>Making some thoughts about the intentioned architecture of your
       application before starting with the implementation of the code is
       always a good idea. Here are some headwords to think about:</para>
 
@@ -687,21 +687,21 @@ public class HelloWingS {
         <listitem>
           <para>First of all try to determine the basic layout and the logical
           groups in your web application. <xref linkend="container-nesting" />
-          shows an example of an application screen splitted into various
-          logical areas. For the root panel a <code>STemplateLayout</code>
-          based layout template file might be a good choice. </para>
+          shows an example of an application screen split into various logical
+          areas. For the root panel a <code>STemplateLayout</code> based
+          layout template file might be a good choice. </para>
         </listitem>
 
         <listitem>
-          <para>Introduce new, own components for reoccuring visual blocks
+          <para>Introduce new, own components for reoccurring visual blocks
           that might reoccur often in your application. Examples might be
-          specially styled components or reoccuring component
+          specially styled components or reoccurring component
           compounds.</para>
         </listitem>
 
         <listitem>
-          <para>Try to keep the applicatin styling at one place. Beneath using
-          only a few if not only one template file as global layout and
+          <para>Try to keep the application styling at one place. Beneath
+          using only a few if not only one template file as global layout and
           creating custom components its also a good idea to avoid spreading
           styling instructions all over your code. Instead of i.e. manually
           setting the foreground color to red for error notification labels
@@ -714,9 +714,9 @@ public class HelloWingS {
         <listitem>
           <para>For larger projects introduce new, own subclasses for all
           major wingS components. This allows you to modify or extend the
-          default behaviour of speficic UI components easily in one place
+          default behaviour of specific UI components easily in one place
           during later phases of the project runtime. I.e. think of enhancing
-          text based SButtons with dynamical rendered graphical
+          text based <code>SButton</code> with dynamical rendered graphical
           buttons.</para>
         </listitem>
 
@@ -737,8 +737,8 @@ public class HelloWingS {
         </listitem>
       </itemizedlist>
 
-      <para>Most of archictecture and design patterns being a good choice for
-      designing Swing-based applicatons are a good choice for designing you
+      <para>Most of architecture and design patterns being a good choice for
+      designing Swing-based applications are a good choice for designing you
       wingS based web applications. So if you're already familiar with
       designing Swing applications choosing the right application design for
       your web application will be an easy task with wingS.</para>
@@ -797,11 +797,12 @@ public class HelloWingS {
         <sect3>
           <title id="InternalFrame">Internal Frames</title>
 
-          <para>Besides regular, single-framed single-windowed webapplications
-          wingS offers a great feature: It can simulate <firstterm>Multiple
-          Document Interface</firstterm> (<abbrev>MDI</abbrev>) applications.
-          MDI applications are applications hosting multiple documents or
-          windows inside one parent application.</para>
+          <para>Besides regular, single-framed single-windowed web
+          applications wingS offers a great feature: It can simulate
+          <firstterm>Multiple Document Interface</firstterm>
+          (<abbrev>MDI</abbrev>) applications. MDI applications are
+          applications hosting multiple documents or windows inside one parent
+          application.</para>
 
           <para>In wingS this can be achieved easily using
           <code>SInternalFrame</code> inside a <code>SDesktopPane</code>. The
@@ -810,7 +811,7 @@ public class HelloWingS {
           with RSS reader and Drag &amp; Drop support.</para>
 
           <screenshot>
-            <screeninfo>Screenshot from the wingS Desktop demo with internal
+            <screeninfo>Screen shot from the wingS Desktop demo with internal
             frames and Drag &amp; Drop support</screeninfo>
 
             <mediaobject>
@@ -846,8 +847,8 @@ public class HelloWingS {
             <code>SFrame</code></para>
           </note>
 
-          <para>The following code sniplet shows how to construct a new
-          frameset splitted horizontally into two inner frames:</para>
+          <para>The following code snippet shows how to construct a new
+          frameset split horizontally into two inner frames:</para>
 
           <programlisting>SFrameSet frameset = new SFrameSet(new SFrameSetLayout("50%,50%", null));
 SFrame leftFrame = new SFrame("left frame");
@@ -889,7 +890,7 @@ frameset.setVisible(true);</programlisting>
         <para>In the previous section you already got in contact with your
         first wingS component: <code>SFrame</code> and its variants. Now we
         are about to introduce the root class of all wingS components
-        <code>SComponent</code>. This class is the counterpiece of the
+        <code>SComponent</code>. This class is the counter piece of the
         <code>JComponent</code> class in Swing. As in Swing all wingS widgets
         are subclasses and hence instances of <code>SComponent</code>.</para>
 
@@ -933,8 +934,8 @@ frameset.setVisible(true);</programlisting>
 
                 <entry>The <emphasis role="bold">parent container</emphasis>
                 owning this component. This is set by the wingS framework at
-                the timepoint when this component is added to another
-                container liek a panel or the root frame of the
+                the time point when this component is added to another
+                container like a panel or the root frame of the
                 application.</entry>
               </row>
 
@@ -942,8 +943,8 @@ frameset.setVisible(true);</programlisting>
                 <entry><code>getParentFrame()</code></entry>
 
                 <entry>The <emphasis role="bold">root frame</emphasis> in
-                which this component is placed as beeing recursively
-                accessible via <code>getParent()</code>.</entry>
+                which this component is placed as being recursively accessible
+                via <code>getParent()</code>.</entry>
               </row>
 
               <row>
@@ -1013,12 +1014,12 @@ frameset.setVisible(true);</programlisting>
 
                 <entry>The current <emphasis role="bold">CSS style
                 class</emphasis>. By default the wingS PLAF assigns every
-                component its unqualified java class name as CSS style name.
+                component its unqualified Java class name as CSS style name.
                 So for <code>SButton</code> instances this will have
                 <code>"SButton"</code> as default value. Please be aware that
                 the default wingS style definitions are defined using these
                 default CSS class names. If you want to keep the wingS default
-                styles but additonally apply your own styles defined in a
+                styles but additionally apply your own styles defined in a
                 separate CSS file, you should append your custom CSS style
                 class names to a component separated by a space (i.e.
                 <code>"SButton myClass"</code>).</entry>
@@ -1027,10 +1028,10 @@ frameset.setVisible(true);</programlisting>
               <row>
                 <entry><code>get/setToolTipText()</code></entry>
 
-                <entry>Apply a <emphasis role="bold">tooltip text
+                <entry>Apply a <emphasis role="bold">tool tip text
                 </emphasis>which will pop up after a short delay when the
-                mouse pointer is over the component. The behaviour of
-                toolstips can be defined more in detail via the
+                mouse pointer is over the component. The behaviour of tools
+                tips can be defined more in detail via the
                 <code>SToolTipManager</code>.</entry>
               </row>
 
@@ -1040,7 +1041,7 @@ frameset.setVisible(true);</programlisting>
                 <entry>The value of this property influences the <emphasis
                 role="bold">appearance of special input components</emphasis>
                 which may be used inside HTML forms or not. Think i.e. of
-                checkboxes. Checkboxes are only rendered in browsers if you
+                check boxes. Check boxes are only rendered in browsers if you
                 nest them inside a HTML <code>&lt;FORM&gt;</code> element.
                 Therefore wingS will render them as clickable images if you
                 don't wrap a <code>SCheckBox</code> with a <code>SForm</code>
@@ -1056,7 +1057,7 @@ frameset.setVisible(true);</programlisting>
 
                 <entry>Dynamically set a <emphasis role="bold">CSS property
                 value</emphasis> for a component. You can use this method to
-                define any abritriary CSS property/value pair on the current
+                define any arbitrary CSS property/value pair on the current
                 component.</entry>
               </row>
 
@@ -1073,8 +1074,8 @@ frameset.setVisible(true);</programlisting>
 
                 <entry>This property has a different meaning on different
                 components. Mainly it is used to define<emphasis role="bold">
-                input elements as inactive</emphasis> respectively
-                readonly.</entry>
+                input elements as inactive</emphasis> respectively read
+                only.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -1108,21 +1109,21 @@ frameset.setVisible(true);</programlisting>
       <sect2 id="containers">
         <title>SContainer</title>
 
-        <para>You propably guessed it already: <code>SContainer</code> is a
+        <para>You probably guessed it already: <code>SContainer</code> is a
         derived variant of <code>SComponent</code> that can container further
         <code>SComponent</code>s. Therefore it declares various methods to add
-        other <code>SComponents</code> to it. Furthermore a container offers
+        other <code>SComponent</code> to it. Furthermore a container offers
         methods to access and modify the responsible <firstterm>layout
         manager</firstterm>. But let's start from the beginning.</para>
 
         <sect3>
-          <title id="container-nesting">Hierachical nesting of
+          <title id="container-nesting">Hierarchical nesting of
           containers</title>
 
           <para>Contrary to other web applications framework, wingS is trying
           to be as component oriented as possible. One main concept of
           component-oriented application design is, that you take simple
-          component and arrange them to more complex compount components until
+          component and arrange them to more complex compound components until
           you built up your complete application. Hence containers are the key
           feature for a hierarchical component-oriented design approach. The
           figure below shows how you can used and nest components to a
@@ -1150,7 +1151,7 @@ frameset.setVisible(true);</programlisting>
           should be contained inside via one of the <code>add(SComponent
           component)</code> methods. Please note the variants of the
           <code>add</code> method allowing to pass a <firstterm>Layout
-          constraint</firstterm> as additional paramter. Some layout managers
+          constraint</firstterm> as additional parameter. Some layout managers
           as the <code>SBorderLayout</code> or the
           <code>STemplateLayout</code> need additional information about where
           exactly you want to place the passed component inside their provided
@@ -1187,7 +1188,7 @@ SForm inputForm = new SForm();
 inputForm.add(panel);</programlisting>
 
           <para>In this example we created a <code>SPanel</code> container,
-          assigned a two-columed gridlayout as layout manager and added
+          assigned a two-columed grid layout as layout manager and added
           several components to this container. In the last step we wrapped
           this container inside another container: <code>SForm</code>.</para>
         </sect3>
@@ -1211,7 +1212,7 @@ inputForm.add(panel);</programlisting>
           each others!</para>
 
           <para>Typically it's sufficient if you use one SForm container on
-          the very top of your component hierachy. The <code>SForm</code>
+          the very top of your component hierarchy. The <code>SForm</code>
           container has also a property which advises the browser to send the
           input via <firstterm>HTTP POST</firstterm> or <firstterm>HTTP
           GET</firstterm> calls.</para>
@@ -1270,9 +1271,9 @@ inputForm.add(panel);</programlisting>
                 <row>
                   <entry><code>SMenuBar</code></entry>
 
-                  <entry>A special container accepting
-                  <code>SMenutItems</code>. Used to build a desktop-like menu
-                  bar. Refer to the desktop demo.</entry>
+                  <entry>A special container accepting <code>SMenuItem</code>
+                  object. Used to build a desktop-like menu bar. Refer to the
+                  desktop demo.</entry>
                 </row>
 
                 <row>
@@ -1336,7 +1337,7 @@ inputForm.add(panel);</programlisting>
         <title>Labels and other display components</title>
 
         <para>We already showed how to combine and arrange
-        <code>SComponents</code> using containers and simple layout managers.
+        <code>SComponent</code>s using containers and simple layout managers.
         So it's time to know how you can place content on it.</para>
 
         <sect3>
@@ -1344,7 +1345,7 @@ inputForm.add(panel);</programlisting>
 
           <para>The simplest form to present information to the users are
           labels. You already encountered instances of <code>SLabel</code> in
-          the preceeding examples so we'll explain a bit more in depth the
+          the preceding examples so we'll explain a bit more in depth the
           usage and capabilities of this widget component. Here are some usage
           examples</para>
 
@@ -1367,7 +1368,7 @@ fancyLabel.setWordWrap(true); // allow word wrapping</programlisting>
           time using the <code>setText()</code> bean property setter. Using
           the properties declared in <code>SComponent</code> the font size,
           style, face as well as the text and background color can be easily
-          controled using pure Java code.</para>
+          controlled using pure Java code.</para>
 
           <para>Please note that starting with version 2.0 the labels word
           wrapping behaviour changed to be in sync with Swing. To allow the
@@ -1380,7 +1381,7 @@ fancyLabel.setWordWrap(true); // allow word wrapping</programlisting>
           component in wingS also accepts HTML formatting directives like
           <code>&lt;b&gt;...&lt;/b&gt; or <code>&lt;i&gt;...&lt;/i&gt;</code>
           </code>inside the text if you prefix the text with an
-          <code>&lt;html&gt;</code> tag. You should use this carefully to
+          <code>&lt;HTML&gt;</code> tag. You should use this carefully to
           avoid mixing of view and logic.</para>
 
           <para>If you assign specific styles on a regular basis to a
@@ -1402,8 +1403,8 @@ errorLabel.setText("An error occured during the last operation");
 errorLabel.setVisible(true);</programlisting>
 
           <para>This will allow the web designer in your project to declare a
-          new static CSS style an optional application-specific CSS
-          stylesheet.</para>
+          new static CSS style an optional application-specific CSS style
+          sheet.</para>
 
           <programlisting>.errorLabel {
     color: #f00;
@@ -1421,15 +1422,15 @@ errorLabel.setVisible(true);</programlisting>
 
           <para>The <code>SIcon</code> interface is your pal if you want to
           include images in your wingS application. A <code>SIcon</code> can
-          be an image retrieved from an abritrirary source and used with
+          be an image retrieved from an arbitrary source and used with
           conjunction with various wingS widgets. By default wingS comes with
           five different implementation of icon providers, each capable of
-          handling a a different source as source for the image data to be
+          handling a different source as source for the image data to be
           displayed. Possible sources are</para>
 
           <itemizedlist>
             <listitem>
-              <para>static iamge files deployed with your application
+              <para>static image files deployed with your application
               (<code>SFileIcon</code>)</para>
             </listitem>
 
@@ -1444,7 +1445,7 @@ errorLabel.setVisible(true);</programlisting>
             </listitem>
 
             <listitem>
-              <para>static image data contained in a byte arrray
+              <para>static image data contained in a byte array
               (<code>SByteArrayIcon</code>)</para>
             </listitem>
 
@@ -1459,7 +1460,7 @@ errorLabel.setVisible(true);</programlisting>
           implementations: While the content of the others images cannot
           change during runtime, an <code>ImageIcon</code> can have an updated
           image content during every request. Allowing you to display any
-          dynamically generated image this has the backdrafts that wingS needs
+          dynamically generated image this has the backdraft that wingS needs
           to create and send new graphic data to the browser. So for including
           just image files in you application ensure that you use one of the
           other implementations like demonstrated in the example below:</para>
@@ -1509,7 +1510,7 @@ panel.setBackgroundImage(background);</programlisting>
 
                 <tbody>
                   <row>
-                    <entry>SSeparator</entry>
+                    <entry><code>SSeparator</code></entry>
 
                     <entry>Simple implementation of the HTML
                     <code>&lt;HR&gt;</code> horizontal ruler element.
@@ -1520,15 +1521,15 @@ panel.setBackgroundImage(background);</programlisting>
                   </row>
 
                   <row>
-                    <entry>SSpacer</entry>
+                    <entry><code>SSpacer</code></entry>
 
-                    <entry>An invisible component component that can be used
-                    as spacer component. Typically renders as invisible pixel
-                    stretched to the desired size.</entry>
+                    <entry>An invisible component that can be used as spacer
+                    component. Typically renders as invisible pixel stretched
+                    to the desired size.</entry>
                   </row>
 
                   <row>
-                    <entry>SProgressBar</entry>
+                    <entry><code>SProgressBar</code></entry>
 
                     <entry>A progress bar indicator as demonstrated in the
                     WingSet demo.</entry>
@@ -1545,8 +1546,8 @@ panel.setBackgroundImage(background);</programlisting>
         <para>Buttons are simple, clickable input components. Instances of a
         button can present themselves as regular GUI buttons (HTML submit
         buttons), clickable text links or clickable images. To react on
-        activiations of a button, action listeners can be registered on
-        buttons and will receive events notifying them about the click.</para>
+        activations of a button, action listeners can be registered on buttons
+        and will receive events notifying them about the click.</para>
 
         <sect3>
           <title>Creating buttons</title>
@@ -1557,11 +1558,11 @@ panel.setBackgroundImage(background);</programlisting>
           inside a <code>SForm</code> container, otherwise they will appear as
           simple text links due to constraints of the browser. Please refer to
           <xref linkend="SForm" /> to learn more about the role of the
-          <code>SForm</code> container. You can force <code>SButtons</code> to
+          <code>SForm</code> container. You can force <code>SButton </code>to
           render as text links even if contained inside a form using a
-          <code>setShowAsFormComponent(false)</code> method call. Alternativly
-          you can use (i.e. dynamically generated) images as clickable
-          buttons. Below you'll find a few example of how to create
+          <code>setShowAsFormComponent(false)</code> method call.
+          Alternatively you can use (i.e. dynamical generated) images as
+          clickable buttons. Below you'll find a few example of how to create
           buttons</para>
 
           <programlisting>// a simple default button
@@ -1588,7 +1589,7 @@ SButton graphicalButton = new SButton(
           can supply your own callbacks in order to handle these. Here we
           create a push button and register a callback to receive notification
           when the button is pushed. Note that the button is declared final so
-          that we can access it within the anyonmous callback
+          that we can access it within the anonymous callback
           class<programlisting>final SButton submit = new SButton("Search");
 form.add(submit);
 ActionListener al = new ActionListener() {
@@ -1650,7 +1651,7 @@ form.add(text, "W2");</programlisting></para>
           <title>Text input fields and areas</title>
 
           <para>The example below demonstrates that you can restrict the
-          amount of columns indenpendenly from the physcial size a text input
+          amount of columns independently from the physical size a text input
           field. Furthermore text areas can be advised to line-wrap the
           entered text at their physical, virtual size or not to wrap the text
           themselves at all (default).</para>
@@ -1677,7 +1678,7 @@ readonlyField.setEditable(false);</programlisting>
 
           <para>But we don't want to miss to point you to another source of
           event triggers: The text fields/areas themselves: you can attach
-          Swing-linke document change listeners which will notify about every
+          Swing-like document change listeners which will notify about every
           value update of a text component.</para>
 
           <programlisting>textArea.addDocumentListener(new SDocumentListener() {
@@ -1700,15 +1701,15 @@ readonlyField.setEditable(false);</programlisting>
         </sect3>
 
         <sect3>
-          <title>Checkboxes and Radioboxes</title>
+          <title>Check boxes and Radio boxes</title>
 
-          <para>Checkboxes and radio boxes are widgets that can be either
-          selected or unselected. While checkboxes can be checked and
-          unchecked independendly, radioboxes always allow only one instance
+          <para>Check boxes and radio boxes are widgets that can be either
+          selected or unselected. While check boxes can be checked and
+          unchecked independently, radio boxes always allow only one instance
           to be selected inside a embraced button group.</para>
 
           <para>Similar to the behaviour of <code>SButton</code> their
-          appeareance differ depending if they are contained inside a form or
+          appearance differ depending if they are contained inside a form or
           not. If those input elements are not contained inside a <xref
           linkend="SForm" /> element, they'll be rendered as graphical
           widgets. You can force the graphical version as well as exchange the
@@ -1739,13 +1740,13 @@ disabledCheckBox.setDisabledIcon(new SResourceIcon(...));</programlisting>
           component <code>SFormattedTextField</code> and
           <code>SPasswordField</code>. The latter one is simply the password
           entry variant of a <code>STextField</code> meaning that typed
-          characters will appear obfuscated i.e. as asterix instead of beeing
+          characters will appear obfuscated i.e. as asterix instead of being
           displayed plain-text.</para>
 
           <para>The <code>SFormattedTextField</code> is a conceptual very
           interesting example of an <firstterm>AJAX</firstterm> based
-          components. To work correctly you must deploy and registere the DWR
-          jar and servelet correctly as shown in WingSet example. Below you'll
+          components. To work correctly you must deploy and register the DWR
+          jar and servlet correctly as shown in WingSet example. Below you'll
           find a usage example</para>
 
           <programlisting>SFormattedTextField numberFormattedField =
@@ -1768,17 +1769,17 @@ private static class NumberFormatter extends SAbstractFormatter {
           <para>This component does the following: If you enter the
           <code>SFormattedTextField</code> you can enter or modify the current
           value of the text field. If you entered a parseable value, the value
-          of the textfield will be updated to the parsed value. Otherwise the
+          of the text field will be updated to the parsed value. Otherwise the
           input field will regain the input focus and be marked red to
           indicate an input error.</para>
 
           <bridgehead>Technical background</bridgehead>
 
           <para>This is realized in the following way: When you try to leave
-          the textbox i.e. by pressing the <keysym>Tab</keysym> key to jump to
-          the next input field, the textbox will trigger a XML encoded reqest
-          to the server in the background. There the DWR servlet takes the
-          request and delegates it to the java listener (here:
+          the text field i.e. by pressing the <keysym>Tab</keysym> key to jump
+          to the next input field, the text field will trigger a XML encoded
+          request to the server in the background. There the DWR servlet takes
+          the request and delegates it to the Java listener (here:
           <code>NumberFormatter</code>). If it succeeds the value of the text
           field will be updated with the formatted value returned by this. If
           it fails and indicates this by throwing a
@@ -1811,7 +1812,7 @@ private static class NumberFormatter extends SAbstractFormatter {
         </itemizedlist>
 
         <para>According to the paradigms of the MVC pattern this component
-        explitly separates the contained data from the controlling logic.
+        explicitly separates the contained data from the controlling logic.
         <code>STable</code> contains two model objects holding the data: The
         Swing compatible <code>TableModel</code> is the provider of the
         presented table data while a <code>SListSelectionModel</code> object
@@ -1830,14 +1831,14 @@ private static class NumberFormatter extends SAbstractFormatter {
 
           <para>Before you can present a table of data you first have to
           create a data provider for the table data. The used
-          <code>TableModel</code> data model is acutally the one declared by
+          <code>TableModel</code> data model is actually the one declared by
           Swing, so the Swing tutorial might give you additional hints about
           implementing and using a table model.</para>
 
           <para>In the example below we just create a very simple table model
-          showing just a list of names hardcoded in a static array. In typical
-          real-life table models you would probably implement table models
-          which operate on a list of objects and implement the
+          showing just a list of names hard coded in a static array. In
+          typical real-life table models you would probably implement table
+          models which operate on a list of objects and implement the
           <code>getValueAt()</code> in that way that it retrieves the
           according object from this list and returns an according object
           property value depending on the column.</para>
@@ -1903,7 +1904,7 @@ private static class MyTableModel extends AbstractTableModel {
 table.setSelectionMode(STable.SINGLE_SELECTION);</programlisting>
 
           <para>After this statement you can select rows just by clicking the
-          numbers in the first colum. Now we also add a delete button and a
+          numbers in the first column. Now we also add a delete button and a
           status label telling us about the this event</para>
 
           <programlisting>// create a status label and a delete button
@@ -1923,12 +1924,12 @@ form.add(deleteButton);</programlisting>
           status label will be updated telling us the index of the currently
           selected row. If no row has been selected then we will receive -1 as
           value. Beneath single row selections table can also allow selection
-          of continuos intervals
+          of continuous intervals
           (<code>STable.SINGLE_INTERVAL_SELECTION</code>) or discontinued
           intervals (<code>STable.MULTIPLE_INTERVAL_SELECTION</code>).
           According to Swing the <code>SListSelectionModel</code> allows to
           retrieve the necessary information about the selected rows via
-          <code>getMin/MaxSelectionIndex()</code> methods for the continious
+          <code>getMin/MaxSelectionIndex()</code> methods for the continuous
           case and an <code>isSelectedIndex(int rownum)</code> for the
           discontinued case.</para>
 
@@ -1943,7 +1944,7 @@ form.add(deleteButton);</programlisting>
             </mediaobject>
           </screenshot>
 
-          <bridgehead>The comfortable way: Gett notified about
+          <bridgehead>The comfortable way: Get notified about
           selections</bridgehead>
 
           <para>Beneath explicitly asking the table's selection model about
@@ -1965,7 +1966,7 @@ form.add(deleteButton);</programlisting>
           <para>But now we want allow the user to be able to edit the table
           content. This is quite easy in our simple demo. We have to modify
           the implementation of the table model so that it tells the table
-          wich cells are editable. In our case we just allow all cells to be
+          which cells are editable. In our case we just allow all cells to be
           editable. Furthermore we must overwrite the empty default
           implementation of the <code>setValueAt()</code> method in
           <code>AbstractTableModel</code> to accept and store the changed
@@ -2011,8 +2012,8 @@ public Class getColumnClass(int column) {
           <sect4>
             <title>Custom table cell renderer</title>
 
-            <para>But look at the last column. Would'nt it be better to
-            display this boolean value as checkable checkbox instead of the
+            <para>But look at the last column. Wouldn't it be better to
+            display this boolean value as checkable check box instead of the
             <code>toString()</code> representation of the boolean values? This
             can be easily achieved by overwriting the default cell renderer to
             return a accordingly checked <code>SCheckBox</code> instead of the
@@ -2096,7 +2097,7 @@ public Class getColumnClass(int column) {
             recommended way is to add a custom static CSS style overwriting
             the wingS default styles for tables. Look at <xref
             linkend="css-styles" /> for details. As alternative there exists
-            also the convenient possibilty to to all the styling via the Java
+            also the convenient possibility to all the styling via the Java
             API and the CSS Pseudo selector objects provided by
             <code>STable</code>. Just look at the example below</para>
 
@@ -2135,8 +2136,8 @@ table.setAttribute(STable.SELECTOR_SELECTION, CSSProperty.BACKGROUND,
         quick and short presentation of the <code>STree</code> component.
         Beginners might first read <xref linkend="stable" /> to read a more
         verbose introduction of an advanced wingS components. Furthermore the
-        Swing documentation and turorials of <code>JTree</code> might also be
-        a good suplementary starting point for newbies.</para>
+        Swing documentation and tutorials of <code>JTree</code> might also be
+        a good supplementary starting point for newbies.</para>
 
         <sect3>
           <title>TreeModel</title>
@@ -2188,15 +2189,15 @@ parent.add(new DefaultMutableTreeNode("pizza"));
 parent.add(new DefaultMutableTreeNode("ravioli"));
 parent.add(new DefaultMutableTreeNode("bananas"));</programlisting>
 
-          <para>Note that in this example we used sinple <code>String</code>
+          <para>Note that in this example we used simple <code>String</code>
           object as data payload objects for each node. But you can use any
           custom object type as payload objects but you should ensure that the
           used <code>STreeCellRenderer</code> is capable of rendering them
           nicely.</para>
 
-          <para>With creation of our tree model much is alread done. Just wrap
-          this tree model in a new instance of a <code>STree</code> component,
-          and you receive an expandable visual tree with selectable
+          <para>With creation of our tree model much is already done. Just
+          wrap this tree model in a new instance of a <code>STree</code>
+          component, and you receive an expandable visual tree with selectable
           nodes.</para>
 
           <programlisting>STree tree = new STree(treeModel);
@@ -2215,12 +2216,12 @@ form.add(tree);</programlisting>
           <sect4>
             <title>React on interaction with the tree</title>
 
-            <para>Equival to table the <code>STree</code> component also
+            <para>Equivalent to table the <code>STree</code> component also
             allows to register listeners to get notified about selecting items
             (<code>TreeSelectionListener</code>), nodes that are requested to
             expand (<code>TreeWillExpandListener</code>) and rows that are
             expanding (<code>TreeExpansionListener</code>). The expansion
-            notification event could i.e. be used to lazily load the childrens
+            notification event could i.e. be used to lazily load the children
             from the backend system. The code example belows demonstrates a
             very simple selection listener which will update a label every
             time the selection changed</para>
@@ -2256,8 +2257,8 @@ tree.addTreeSelectionListener(new TreeSelectionListener() {
             <code>SScrollPane</code> as described in <xref
             linkend="scrollpane" />.</para>
 
-            <para>The identation width of the tree nodes, the graphics used to
-            indicate the node state (open. closed, etc.) and the selection
+            <para>The indentation width of the tree nodes, the graphics used
+            to indicate the node state (open, closed, etc.) and the selection
             mode are configurable via the API, too. Please refer to the
             JavaDoc and the WingSet demo for more details.</para>
           </sect4>
@@ -2287,11 +2288,11 @@ tree.addTreeSelectionListener(new TreeSelectionListener() {
 
         <para>A <code>SScrollPane</code> accepts instances of these
         <code>Scrollable</code> and provides default horizontal and vertical
-        adjustables. By default the scrollpane will use a viewport of 10x10
+        adjustables. By default the scroll pane will use a view port of 10x10
         units. In the case of a table this would mean that you will see
         maximum 10 rows and 10 columns of the table at once. If the table has
         more rows or columns the according adjustables will provide the
-        possibilty to move the viewport inside the overall range of the
+        possibility to move the view port inside the overall range of the
         table's columns and rows.</para>
 
         <para>In the following example we'll take the demo table as described
@@ -2364,8 +2365,8 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
                 <code>verticalExtent</code></entry>
 
                 <entry>The horizontal / vertical extent describes the size of
-                the viewport in number of 'units' (table cells, list elements)
-                which can be seen at once.</entry>
+                the view port in number of 'units' (table cells, list
+                elements) which can be seen at once.</entry>
               </row>
 
               <row>
@@ -2373,7 +2374,7 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
                 <code>verticalScrollBarPolicy</code></entry>
 
                 <entry>Allows to modify the visibility of the scrollbars. Can
-                be defined to be always visibile, only if necessary or
+                be defined to be always visible, only if necessary or
                 never.</entry>
               </row>
 
@@ -2392,7 +2393,7 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
               <row>
                 <entry><code>directPageClickables</code></entry>
 
-                <entry>Property for pagescroller defining</entry>
+                <entry>Property for page scroller</entry>
               </row>
 
               <row>
@@ -2438,7 +2439,10 @@ form.add(scrollPane);</programlisting>
       <sect2>
         <title>SMenu and SMenuBar</title>
 
-        <para></para>
+        <para><remark>TODO</remark></para>
+
+        <para>Please refer to the WingSet demo an the following section for
+        hints about using desktop like menus.</para>
       </sect2>
 
       <sect2>
@@ -2517,7 +2521,7 @@ form.add(testLabel);</programlisting>
 
               <entry>Provider</entry>
 
-              <entry>Desciption</entry>
+              <entry>Description</entry>
             </row>
           </thead>
 
@@ -2567,8 +2571,8 @@ form.add(testLabel);</programlisting>
 
               <entry><code>SComponent</code></entry>
 
-              <entry>To be notified about changed visibily of a component via
-              <code>setVisible()</code> method calls</entry>
+              <entry>To be notified about changed visibility of a component
+              via <code>setVisible()</code> method calls</entry>
             </row>
 
             <row>
@@ -2587,7 +2591,7 @@ form.add(testLabel);</programlisting>
               <entry><code>Session</code></entry>
 
               <entry>Listener to get notified on programatically destroying of
-              the wingS user session. If this sessin exit is initiated by
+              the wingS user session. If this session exit is initiated by
               calling the <code>Session.setExitAddress()</code> method you can
               throw a veto exception to abort the session destroy (i.e. to
               prompt for unsaved values).</entry>
@@ -2629,7 +2633,7 @@ form.add(testLabel);</programlisting>
     <sect1>
       <title id="LayoutManager">Layout Managers</title>
 
-      <para>As mentionend already in section <xref
+      <para>As mentioned already in section <xref
       linkend="view-logic-separation" /> the layout managers are the
       components responsible for arranging and layouting your wingS widgets
       components on the screen. Therefore the container components like
@@ -2647,7 +2651,7 @@ form.add(testLabel);</programlisting>
       your components to arrange. So this layout is the best choice if you
       have exact notions how the resulting HTML for this container should look
       like. Hence this layout manager is typically used to implement the main
-      screen layout of your webapplication arranging the main components like
+      screen layout of your web application arranging the main components like
       i.e. the menu bar, working area or notification elements in an template
       reflecting your corporate website design.</para>
 
@@ -2710,9 +2714,9 @@ borderLayout.setBorder(1); // pixels</programlisting>
           <title>SBoxLayout</title>
 
           <para>The box layout it a very simple layout allowing to take an
-          abritriary number of components. It simply arranges the contained
+          arbitrary number of components. It simply arranges the contained
           components either in a row or in a column. Similar to the border
-          layout this is achieved using an insivible HTML table, so a
+          layout this is achieved using an invisible HTML table, so a
           horizontal/vertical spacing can be optionally defined as well as the
           option to draw a border around the different boxes.</para>
 
@@ -2724,7 +2728,7 @@ borderLayout.setBorder(1); // pixels</programlisting>
 
           <para>The box layout does not wrap in neither horizontal or vertical
           direction. If you want your components to wrap to the next line if
-          the space is not sufficient you might take take a look at <xref
+          the space is not sufficient you might take a look at <xref
           linkend="flowlayouts" />. Though its simpleness a short code snippet
           to demonstrate the usage of the box layout in wingS</para>
 
@@ -2756,7 +2760,7 @@ panel2.add(new SLabel("Component 2"));</programlisting>
             </imageobject>
           </mediaobject>
 
-          <para>Similar to the preceeding layout it is implemented using an
+          <para>Similar to the preceding layout it is implemented using an
           invisible layout table. Border and spacing can be defined in the
           same manner as demonstrated before.</para>
 
@@ -2771,8 +2775,9 @@ gridPanel.add(new SLabel("Component 4"));
           <para>A special property <code>renderFirstLineAsHeader</code> allows
           to render the first line of the invisible HTML table with
           <code>&lt;TH&gt;</code> elements versus the default
-          <code>&lt;TD&gt;</code> elements. This mght be useful if you want to
-          apply special CSS styles to the first row in these layouts.</para>
+          <code>&lt;TD&gt;</code> elements. This might be useful if you want
+          to apply special CSS styles to the first row in these
+          layouts.</para>
         </sect3>
 
         <sect3>
@@ -2791,10 +2796,10 @@ gridPanel.add(new SLabel("Component 4"));
 
           <para>Actually the flow layout advises the browser to flow every of
           its contained components. This means that the browser should start a
-          new row if a component does'nt fit into the previous row anymore.
+          new row if a component doesn't fit into the previous row anymore.
           Just look at the WingSet demo section Dynamic Layouts. Choose
-          SFlowLayout in the dropdown box and look how the layouted components
-          behave on resizing your browser window.</para>
+          SFlowLayout in the drop down box and look how the layouted
+          components behave on resizing your browser window.</para>
 
           <para>The usage is as simple as it could be</para>
 
@@ -2824,13 +2829,13 @@ flowPanel.add(new SLabel("Component 3"));
           <para>Suppose you put a component with a preferred size of 100%
           inside a flow layout you'll notice that your components won't flow
           anymore. This is just because in this case the sized component will
-          adapt the available width rather than the flow layout beeing able to
+          adapt the available width rather than the flow layout being able to
           know that it should use the available space.</para>
 
           <para>A similar effect can happen on put a flow layout managed
           container together with other components inside a parent container.
-          Some components will take up a minimum width though it may visibily
-          not be apparent.</para>
+          Some components will take up a minimum width though it may
+          visibility not be apparent.</para>
 
           <para>So just in case you encounter problems with non-flowing flow
           layouts try to play with the preferred sizes of the surrounding or
@@ -2838,7 +2843,7 @@ flowPanel.add(new SLabel("Component 3"));
           Advanced users may use the techniques described in <xref
           linkend="live-css-editing" /> joined with a peek into the generated
           HTML sources to debug the responsible components or size disabling
-          the flowing more effectivly.</para>
+          the flowing more effectively.</para>
         </sect3>
 
         <sect3>
@@ -2875,8 +2880,9 @@ flowPanel.add(new SLabel("Component 3"));
           </itemizedlist>
 
           <para>Actually this layout managers can be used in so many different
-          ways that we won't describe them in detail but present some commeted
-          usage examples. Please refer to the WingSet demo or the <ulink
+          ways that we won't describe them in detail but present some
+          commented usage examples. Please refer to the WingSet demo or the
+          <ulink
           url="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/GridBagLayout.html">documentation
           of the Swing</ulink> variant for an in-depth explanation of it
           usage.</para>
@@ -2887,8 +2893,8 @@ flowPanel.add(new SLabel("Component 3"));
             </imageobject>
           </mediaobject>
 
-          <para>The code below is the the code for the first grid in the
-          screenshot above</para>
+          <para>The code below is the code for the first grid in the screen
+          shot above</para>
 
           <programlisting>// Vertical adding using pre-defined gridx
 SGridBagLayout layout = new SGridBagLayout();
@@ -3020,15 +3026,15 @@ cardLayout.last(stackedPanel);
           name="aConstraintName" background="#ff0000" text="new
           text"&gt;&lt;/object&gt;</code></para>
 
-          <para>Please refer to the JavaDoc of the PropertyManager interface
-          and its implementors to find out which properties are supported for
-          which classes.</para>
+          <para>Please refer to the JavaDoc of the
+          <code>PropertyManager</code> interface and its implementors to find
+          out which properties are supported for which classes.</para>
         </sect3>
 
         <sect3>
           <title>SRootLayout</title>
 
-          <para>Just for the sake of completness we need to mention
+          <para>Just for the sake of completeness we need to mention
           <code>SRootLayout</code> here. Actually it is a derived variant of
           STemplateLayout which actually expects only one component named
           <code>content</code>. By default it uses a very simple default
@@ -3045,9 +3051,9 @@ cardLayout.last(stackedPanel);
           <para><xref linkend="template-properties" /> showed you already how
           you can set specific component properties via special attributes on
           the <code>&lt;OBJECT&gt;</code> tag in you template files.
-          Additionally you can define java code fragments in your template
+          Additionally you can define Java code fragments in your template
           file. Just add an attribute <code>SCRIPT</code> on the
-          <code>OBJECT</code> tag with the desired, abritrary java code
+          <code>OBJECT</code> tag with the desired, arbitrary Java code
           parseable by bean shell<footnote>
               <para>Refer to <ulink
               url="http://www.beanshell.org/">http://www.beanshell.org/</ulink></para>
@@ -3081,7 +3087,7 @@ cardLayout.last(stackedPanel);
       <para>Besides curious about how to build the presentation logic of your
       application's layout you are probably even also very interested in how
       you can influence the look &amp; feel of . Generally the overall style
-      of an wingS appliation as a whole as well as the one of a single
+      of an wingS application as a whole as well as the one of a single
       component is the outcome of the following aspects:</para>
 
       <itemizedlist>
@@ -3092,8 +3098,8 @@ cardLayout.last(stackedPanel);
 
         <listitem>
           <para>Static CSS styles applied to this generated HTML code (wingS
-          default stylesheets extended with your optional application specific
-          style sheets)</para>
+          default style sheets extended with your optional application
+          specific style sheets)</para>
         </listitem>
 
         <listitem>
@@ -3132,30 +3138,31 @@ cardLayout.last(stackedPanel);
         </listitem>
       </itemizedlist>
 
-      <para>The web offers many valueable resources on this topics so it
-      should be easy to learn the required knowledge or better ask a web
-      developer you trust for support on creating the required CSS definitions
-      to style your application.</para>
+      <para>The web offers many valuable resources on this topics so it should
+      be easy to learn the required knowledge or better ask a web developer
+      you trust for support on creating the required CSS definitions to style
+      your application.</para>
 
       <sect2>
         <title>CSS selector scheme inside wingS</title>
 
-        <para>In short Cascading Stylesheets (CSS) allow you to set visual
-        property values on adressed elements of a HTML document. The cascading
-        effect here is, that if there exists different, contradictorily
-        property values for the same document element, then the CSS definition
-        which adresses this element in the most specific way 'wins'. If this
-        is does not judge, then the value wich was assigned as last one will
-        be the 'winner'. This is important, because it explains the way how
-        you can override the default styles in wingS with your own static
-        style sheet as well as it explains why CSS properties defined during
-        runtime in wingS are outruling the static declared ones.</para>
+        <para>In short Cascading Style Sheets (CSS) allow you to set visual
+        property values on addressed elements of a HTML document. The
+        cascading effect here is, that if there exists different,
+        contradictorily property values for the same document element, then
+        the CSS definition which addresses this element in the most specific
+        way 'wins'. If this is does not judge, then the value which was
+        assigned as last one will be the 'winner'. This is important, because
+        it explains the way how you can override the default styles in wingS
+        with your own static style sheet as well as it explains why CSS
+        properties defined during runtime in wingS are overwriting the static
+        declared ones.</para>
 
         <para>Okay - the next thing you need to know about are the different
         possibilities to address a specific element in a web page using CSS
-        selectors and how these possibilites are uitlized inside wingS. In CSS
-        you can assign property values to document elements by adressing them
-        via CSS selectors referring to</para>
+        selectors and how these possibilities are utilized inside wingS. In
+        CSS you can assign property values to document elements by addressing
+        them via CSS selectors referring to</para>
 
         <itemizedlist>
           <listitem>
@@ -3177,7 +3184,7 @@ cardLayout.last(stackedPanel);
           </listitem>
         </itemizedlist>
 
-        <bridgehead>wingS component CSS adressing</bridgehead>
+        <bridgehead>wingS component CSS addressing</bridgehead>
 
         <para>If you take a look in the HTML code wingS generates and sends to
         the browser you will notice the following.</para>
@@ -3185,10 +3192,9 @@ cardLayout.last(stackedPanel);
         <itemizedlist>
           <listitem>
             <para>Every wingS component is rendered as an independent block of
-            HTML code. Containers rendere themselves using the the layout
-            manager, which goes throught the list of contained components and
-            generates the required HTML code to reflect the desired
-            layout</para>
+            HTML code. Containers render themselves using the layout manager,
+            which goes through the list of contained components and generates
+            the required HTML code to reflect the desired layout</para>
           </listitem>
 
           <listitem>
@@ -3200,7 +3206,7 @@ cardLayout.last(stackedPanel);
             <code>ID</code>, the inner one having the components named
             suffixed with "<code>_i</code>" as ID.</para>
 
-            <para>In the case of internet explorer the two <code>DIV</code>
+            <para>In the case of Internet Explorer the two <code>DIV</code>
             elements are replaced by a single <code>TABLE</code> element
             wearing the component's name as ID.</para>
           </listitem>
@@ -3208,7 +3214,7 @@ cardLayout.last(stackedPanel);
           <listitem>
             <para>Additionally this <code>DIV</code>/<code>TABLE</code>
             element has specific CSS classes assigned. By default every wingS
-            SComponent becomes initalized with the unqualified class name of
+            SComponent becomes initialized with the unqualified class name of
             the wingS base component as CSS class name. So by default every
             <code>SButton</code> instance has the CSS class
             <code>SButton</code>.</para>
@@ -3218,7 +3224,7 @@ cardLayout.last(stackedPanel);
             be aware that most of the wingS default styles operate on these
             CSS class names, so this will probably have the effect that this
             component loses most of its wingS default styling. If you want to
-            keep the default style and just assign additonal CSS class, the
+            keep the default style and just assign additional CSS class, the
             just append your CSS class name to the existing ones separated by
             a space character.</para>
           </listitem>
@@ -3265,12 +3271,12 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
       <sect2>
         <title>Default style sheets</title>
 
-        <para>The default wingS distribution contains different stylesheets
+        <para>The default wingS distribution contains different style sheets
         mainly for two browsers: One for the Microsoft Internet explorer and
-        one specially optimizied for the Gecko-based browsers (FireFox,
-        Mozilla, Konqueror). Actually the last stylesheet is the default
-        browser and most standard-conformant browsers will work well with this
-        default style. The special stylesheet for the Microsoft stuff is only
+        one specially optimized for the Gecko-based browsers (FireFox,
+        Mozilla, Konqueror). Actually the last style sheet is the default
+        browser and most standard conform browsers will work well with this
+        default style. The special style sheet for the Microsoft stuff is only
         necessary as IE 6 still lacks on standard functionalities like CSS
         child selectors but on the other side requires really a quite huge
         workaround for all the curious effects it 'features'.</para>
@@ -3278,7 +3284,7 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
         <para>You can find those default CSS style sheets in the wingS
         <filename>css.jar</filename> library as
         <filename>org/wings/plaf/css/browsername.css</filename>. These default
-        stylesheets declare the CSS declarations needed for correct operation
+        style sheets declare the CSS declarations needed for correct operation
         of wingS as well as the values for the wingS default application
         style.</para>
 
@@ -3292,14 +3298,14 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
 
         <para>Below you'll find an example of how to register a custom CSS
         style sheet file in your wingS application. In the case shown, the new
-        styles are held in a global, static stylesheet file. Hence the
-        stylesheet is added to the main frame to ensure it can apply to all
+        styles are held in a global, static style sheet file. Hence the style
+        sheet is added to the main frame to ensure it can apply to all
         components.<programlisting>frame = new SFrame();
 frame.addHeader(new Link("stylesheet",
       null, "text/css", null,
       new ClasspathResource("../css/myapp.css", "text/css")));</programlisting></para>
 
-        <para>The stylesheet contains various customised styles, in this case
+        <para>The style sheet contains various customised styles, in this case
         a custom table header:<programlisting>.STable TH  {
   background-color: #FFCC99
 }</programlisting></para>
@@ -3315,7 +3321,7 @@ frame.addHeader(new Link("stylesheet",
       <sect2>
         <title id="live-css-editing">CSS live editing</title>
 
-        <para>This section want's to draft in short words a very effective way
+        <para>This section wants to draft in short words a very effective way
         to incrementally create custom style sheet files for your
         applications. In <xref linkend="tools" /> we already mentioned the
         value of the FireFox browser and the freely available Web Developer
@@ -3347,7 +3353,7 @@ frame.addHeader(new Link("stylesheet",
 
         <para>Sometimes it may be hard for you to figure out how to achieve
         your desired style. The a look into the generated HTML page sources
-        might help. Again FireFox is a valueable tool here for you. Just mark
+        might help. Again FireFox is a valuable tool here for you. Just mark
         the according section in your browser and right-click the mouse. After
         choosing "View source for selection" FireFox extracts and displays you
         only the source of your selected area. This can help vastly to avoid
@@ -3379,8 +3385,8 @@ frame.addHeader(new Link("stylesheet",
         be bound to it. Refer to <xref linkend="session-management" /> for
         full details about the teamplay between a wingS session and the
         servlet container session. The current wingS session can be always
-        retrieved using the session manager. Furthermore all SComponents offer
-        a conenience method either</para>
+        retrieved using the session manager. Furthermore all
+        <code>SComponent</code> offer a convenience method either</para>
 
         <programlisting>Session session = SessionManager.getSession();
 // or
@@ -3401,7 +3407,7 @@ Session sameSession = aComponent.getSession();</programlisting>
         store application specific data inside a global session context. Think
         i.e. that your application might want to now the current logged in
         user at various time during application runtime. So you would use the
-        session to store the user after successfull login and use getters to
+        session to store the user after successful login and use getters to
         retrieve it from the session again. A wrapper class might implement do
         the object casting and provide typesafe method calls vs. errourness
         property retrievals using string keys and class casts</para>
@@ -3426,7 +3432,7 @@ if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
    // ...
 }</programlisting>
 
-        <bridgehead>Further featuress of the session</bridgehead>
+        <bridgehead>Further features of the session</bridgehead>
 
         <para>The session objects also holds various informations like the
         current used <emphasis role="bold">character encoding</emphasis> for
@@ -3450,7 +3456,7 @@ if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
       <sect2>
         <title>File Upload</title>
 
-        <para>The problematics of mime parsing and multipart decomposition is
+        <para>The problem of mime parsing and multipart decomposition is
         completely hidden from the wingS developer. Including a file upload
         facility in a form is just a matter of adding an SFileChooser
         component to the form.</para>
@@ -3472,7 +3478,7 @@ if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
         avoid denial-of-service (harddisk, bandwidth) attacks You can modify
         the maximum content length to be posted with the maxContentLength
         property of the Session. This is 64 kByte by default, so you might
-        want to change this in your application. Please refer to the javadoc
+        want to change this in your application. Please refer to the JavaDoc
         of the component to learn more about upload related error
         handling.</para>
       </sect2>
@@ -3504,9 +3510,8 @@ if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
   }
 } </programlisting></para>
 
-        <para>Another way is to extend a DynamicResource and overwrite its
-        write() method. (TODO: Code example not tested, can anyone
-        confirm/rework?)</para>
+        <para>Another way is to extend a <code>DynamicResource</code> and
+        overwrite its write() method. </para>
 
         <para><programlisting>public final class DynamicPDFDownload extends DynamicResource {
 
@@ -3525,7 +3530,7 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
       </sect2>
 
       <sect2>
-        <title>Overwritable config files</title>
+        <title>Overwriteable config files</title>
 
         <para>The default config files reside inside the jar file. Take a look
         at the jar container to learn what you can do with them. They should
@@ -3639,8 +3644,9 @@ frame.setLayout(new SRootLayout(url));</programlisting></para>
 
         <listitem>
           <para>Beginning with Tomcat version 5.0 a new default session
-          manager was introduced, called SimpleTcpReplicationManager (a
-          subclass of StandardManager). It attempts to load the persistence
+          manager was introduced, called
+          <code>SimpleTcpReplicationManager</code> (a subclass of
+          <code>StandardManager</code>). It attempts to load the persistence
           storage on application startup and produces a warning-level
           exception looking like this:<programlisting>SEVERE: Exception loading sessions from persistent storage
 java.io.WriteAbortedException: writing aborted;
@@ -3670,8 +3676,8 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
         </listitem>
 
         <listitem>
-          <para>TODO: Explain loading as resource and benefit of changing the
-          file at runtime.</para>
+          <para><remark>TODO</remark>: Explain loading as resource and benefit
+          of changing the file at runtime.</para>
         </listitem>
       </orderedlist>
     </sect1>
@@ -4107,7 +4113,7 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
       <para>The session is managed by the servlet container, usually by
       associating a cookie with the name "JSESSIONID" with the HTTP requests.
       The particular value of the cookie then identifies to which session the
-      request belongs. This mapping is all part of the standard java servlet
+      request belongs. This mapping is all part of the standard Java servlet
       framework. This in turn delegates handling of each request to
       <code>session.WingServlet</code> - you will set up the mapping between
       your web application name and this class as part of your servlet
@@ -4116,19 +4122,20 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
 
       <para>The main servlet class, <code>session.WingServlet</code>, handles
       requests directly for resources that do not change (e.g. static images),
-      otherwise it creates a session.SessionServlet instance appropriately for
-      each new session and delegates to it. The session's
-      session.SessionServlet is thus the main coordinator and router of events
-      to your wingS application code. Each instance will be associated with an
-      instance of your main application class (which you configured using the
-      "init-param" named "wings.mainclass" in your servlet container
-      configuration). It also creates a session.Session instance which holds
-      some useful instance data as well as sharing the implementation burden
-      with <code>session.SessionServlet</code>. This instance is also
-      transiently associated with the thread which is processing the HTTP
-      request (since this will not change for the duration of the request)
-      using session.SessionManager so that you can conveniently retrieve the
-      session from your own application code using:
+      otherwise it creates a <code>session.SessionServlet</code> instance
+      appropriately for each new session and delegates to it. The session's
+      <code>session.SessionServlet</code> is thus the main coordinator and
+      router of events to your wingS application code. Each instance will be
+      associated with an instance of your main application class (which you
+      configured using the "init-param" named "wings.mainclass" in your
+      servlet container configuration). It also creates a
+      <code>session.Session</code> instance which holds some useful instance
+      data as well as sharing the implementation burden with
+      <code>session.SessionServlet</code>. This instance is also transiently
+      associated with the thread which is processing the HTTP request (since
+      this will not change for the duration of the request) using
+      <code>session.SessionManager</code> so that you can conveniently
+      retrieve the session from your own application code using:
       <code>SessionManager.getSession()</code></para>
 
       <para>The first task for <code>session.SessionServlet</code> is to
@@ -4173,7 +4180,7 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
       encompasses all sessions.</para>
 
       <para>If you need to integrate some other piece of web technology you
-      can use the functionality of the standard java servlet
+      can use the functionality of the standard Java servlet
       <code>HttpServletRequest</code> and <code>HttpSession</code> classes to
       communicate any common data required by different modules by using named
       session attributes. This keeps the code decoupled. For example:</para>
@@ -4438,10 +4445,11 @@ public MyFoo getSessionHelper(HttpServletRequest request)
         implement an accordian style CG for an STree with a model of depth 2.
         A complete set of CGs for all components can be bundled in a PLAF
         (Pluggable Look And Feel). Every CG should derive from
-        AbstractComponentCG. The latter will render borders, apply the
-        prefererred size, provide a tooltip and a component popup menu, make
-        it draggable / a drop target, etc. The concrete CG needs to care only
-        about the characteristics of the respective component.</para>
+        <code>AbstractComponentCG</code>. The latter will render borders,
+        apply the preferred size, provide a tool tip and a component pop up
+        menu, make it draggable / a drop target, etc. The concrete CG needs to
+        care only about the characteristics of the respective
+        component.</para>
       </section>
 
       <section>
