@@ -674,25 +674,74 @@ public class HelloWingS {
           </varlistentry>
         </variablelist>
       </sect2>
-
-      <sect2>
-        <title>Example project and <code>WAR</code> directory layout</title>
-
-        <para><remark>TODO</remark></para>
-      </sect2>
     </sect1>
 
     <sect1>
       <title>Designing the application architecture</title>
 
-      <para><remark>Building own component set</remark></para>
+      <para>Making some thoughts about the intentioned archictecture of your
+      application before starting with the implementation of the code is
+      always a good idea. Here are some headwords to think about:</para>
 
-      <para><remark>Structurizing layout with outer layout template, inner
-      dynamic layout managers</remark></para>
+      <itemizedlist>
+        <listitem>
+          <para>First of all try to determine the basic layout and the logical
+          groups in your web application. <xref linkend="container-nesting" />
+          shows an example of an application screen splitted into various
+          logical areas. For the root panel a <code>STemplateLayout</code>
+          based layout template file might be a good choice. </para>
+        </listitem>
 
-      <para><remark>separating view and logic (mvc)</remark></para>
+        <listitem>
+          <para>Introduce new, own components for reoccuring visual blocks
+          that might reoccur often in your application. Examples might be
+          specially styled components or reoccuring component
+          compounds.</para>
+        </listitem>
 
-      <para><remark>Static styling in css, etc. </remark></para>
+        <listitem>
+          <para>Try to keep the applicatin styling at one place. Beneath using
+          only a few if not only one template file as global layout and
+          creating custom components its also a good idea to avoid spreading
+          styling instructions all over your code. Instead of i.e. manually
+          setting the foreground color to red for error notification labels
+          try either to introduce a new, global CSS style inside you custom
+          CSS file and apply this to the according <code>SLabel</code> or
+          create a special derived <code>ErrorLabel</code> subclass which
+          gathers the styling specific code instructions. </para>
+        </listitem>
+
+        <listitem>
+          <para>For larger projects introduce new, own subclasses for all
+          major wingS components. This allows you to modify or extend the
+          default behaviour of speficic UI components easily in one place
+          during later phases of the project runtime. I.e. think of enhancing
+          text based SButtons with dynamical rendered graphical
+          buttons.</para>
+        </listitem>
+
+        <listitem>
+          <para>Try to continue the MVC concept in wingS inside your
+          application code. This i.e. means not to implement the business
+          logic directly inside the UI components but to delegate i.e. the
+          click of a delete button to a <code>delete(selectedObject)</code>
+          method call in a Controller class collecting all the business logic.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>Leverage the event concept by learning how to efficiently use
+          the listeners interfaces provided by the wingS components and
+          introducing own event based implementations inside your application
+          logic.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Most of archictecture and design patterns being a good choice for
+      designing Swing-based applicatons are a good choice for designing you
+      wingS based web applications. So if you're already familiar with
+      designing Swing applications choosing the right application design for
+      your web application will be an easy task with wingS.</para>
     </sect1>
 
     <sect1>
@@ -1067,7 +1116,8 @@ frameset.setVisible(true);</programlisting>
         manager</firstterm>. But let's start from the beginning.</para>
 
         <sect3>
-          <title>Hierachical nesting of containers</title>
+          <title id="container-nesting">Hierachical nesting of
+          containers</title>
 
           <para>Contrary to other web applications framework, wingS is trying
           to be as component oriented as possible. One main concept of
@@ -2088,9 +2138,6 @@ table.setAttribute(STable.SELECTOR_SELECTION, CSSProperty.BACKGROUND,
         Swing documentation and turorials of <code>JTree</code> might also be
         a good suplementary starting point for newbies.</para>
 
-        <para><remark>sample code, listener / events, cell renderer /
-        editor</remark></para>
-
         <sect3>
           <title>TreeModel</title>
 
@@ -2164,6 +2211,56 @@ form.add(tree);</programlisting>
               </imageobject>
             </mediaobject>
           </screenshot>
+
+          <sect4>
+            <title>React on interaction with the tree</title>
+
+            <para>Equival to table the <code>STree</code> component also
+            allows to register listeners to get notified about selecting items
+            (<code>TreeSelectionListener</code>), nodes that are requested to
+            expand (<code>TreeWillExpandListener</code>) and rows that are
+            expanding (<code>TreeExpansionListener</code>). The expansion
+            notification event could i.e. be used to lazily load the childrens
+            from the backend system. The code example belows demonstrates a
+            very simple selection listener which will update a label every
+            time the selection changed</para>
+
+            <programlisting>final SLabel treeEvent = new SLabel();
+form.add(treeEvent);
+tree.addTreeSelectionListener(new TreeSelectionListener() {
+    public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
+        TreePath path = treeSelectionEvent.getPath();
+        String action = treeSelectionEvent.isAddedPath() ? "Added " : "Removed ";
+        treeEvent.setText(action + path.getLastPathComponent().toString());
+    }
+});</programlisting>
+
+            <para>By the way: You can also change the selection and expansion
+            state of the tree programatically via calling the
+            <code>addSelectionPath()</code>, <code>removeSelectionPath(),
+            expandRow</code>() and <code>collapseRow()</code> methods. These
+            methods expect <code>TreePath</code> objects which describe the
+            full node path to the node to select.</para>
+          </sect4>
+
+          <sect4>
+            <title>Customization of trees</title>
+
+            <para>A <code>STreeCellRenderer</code> is used to render the
+            values of the tree nodes into the displayed representation. If you
+            decide to choose other payload data object this is the place where
+            customization is needed. </para>
+
+            <para>Furthermore trees implement the <code>Scrollable</code>
+            interface and therefore can be wrapped into
+            <code>SScrollPane</code> as described in <xref
+            linkend="scrollpane" />.</para>
+
+            <para>The identation width of the tree nodes, the graphics used to
+            indicate the node state (open. closed, etc.) and the selection
+            mode are configurable via the API, too. Please refer to the
+            JavaDoc and the WingSet demo for more details.</para>
+          </sect4>
         </sect3>
       </sect2>
 
@@ -2347,25 +2444,186 @@ form.add(scrollPane);</programlisting>
       <sect2>
         <title>Component context menu</title>
 
-        <para><remark>HOLGER: Is this SPopupMenu?</remark></para>
+        <para>A component context can be attached to any component. It will
+        appear on right-clicking a component inside a browser. To react on the
+        presented menu items a event listener can be attached to each menu
+        item. See example code below</para>
+
+        <programlisting>final SLabel testLabel = new SLabel("This label has a context menu.");
+ActionListener menuItemListener = new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        String selecteMenu = ((SMenuItem) e.getSource()).getText();
+        testLabel.setText("This label has a context menu. You selected " + selecteMenu);
+    }
+};
+SPopupMenu menu = new SPopupMenu();
+SMenuItem cutMenu = new SMenuItem("Cut");
+cutMenu.addActionListener(menuItemListener);
+menu.add(cutMenu);
+SMenuItem copyMenu = new SMenuItem("Copy");
+copyMenu.addActionListener(menuItemListener);
+menu.add(copyMenu);
+SMenuItem pasteMenu = new SMenuItem("Paste");
+pasteMenu.addActionListener(menuItemListener);
+menu.add(pasteMenu);
+
+SMenu subMenu = new SMenu("Help");
+SMenuItem about = new SMenuItem("About");
+about.addActionListener(menuItemListener);
+subMenu.add(about);
+SMenuItem topics = new SMenuItem("Topics");
+topics.addActionListener(menuItemListener);
+subMenu.add(topics);
+menu.add(subMenu);
+
+testLabel.setComponentPopupMenu(menu);
+
+form.add(testLabel);</programlisting>
+
+        <screenshot>
+          <screeninfo>Component context menu in action</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/context_menu.png" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
       </sect2>
     </sect1>
 
     <sect1>
-      <title>Event handling</title>
+      <title>Further events</title>
 
-      <para><remark>How to use events to attach business logic to wingS
-      gui.</remark></para>
+      <para>The previous sections already demonstrated in depth some sample
+      events fired by the presented wingS components and how you can use
+      custom implemented event listeners to react on these events. The table
+      below just wants to point out a few more listener interfaces provided by
+      wingS</para>
 
-      <para><remark>Example with: Button action, selection listener, ... no
-      clue</remark></para>
+      <table>
+        <title>Selection of listener interfaces provided by wingS</title>
 
-      <para><remark>Draft range of available events: </remark></para>
+        <tgroup cols="3">
+          <colspec colwidth="1*" />
 
-      <para><remark>SComponentDropListener SComponentListener
-      SContainerListener SDocumentListener SExitListener
-      SInternalFrameListener SInvalidLowLevelEventListener
-      SParentFrameListener SRenderListener SRequestListener</remark></para>
+          <colspec colwidth="1*" />
+
+          <colspec colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Listener</entry>
+
+              <entry>Provider</entry>
+
+              <entry>Desciption</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>SRenderListener</code></entry>
+
+              <entry><code>SComponent</code></entry>
+
+              <entry>This listener will receive events before starting and
+              after finishing the rendering of a component</entry>
+            </row>
+
+            <row>
+              <entry><code>SRequestListener</code></entry>
+
+              <entry><code>Session</code></entry>
+
+              <entry>Receives notifications about the different phases during
+              the HTTP request processing of wingS. Refer to
+              <code>SRequestEvent</code> for a documented list of these
+              different phases.</entry>
+            </row>
+
+            <row>
+              <entry><code>SParentFrameListener</code></entry>
+
+              <entry><code>SComponent</code></entry>
+
+              <entry>Receives events on adding and removing a component from a
+              parent container. Use this if you need to modify or initialize
+              things depending on the owning container, as the container is
+              not set during construction time of a component.</entry>
+            </row>
+
+            <row>
+              <entry><code>SContainerListener</code></entry>
+
+              <entry><code>SContainer</code></entry>
+
+              <entry>Receive events on every component added or removed from a
+              container</entry>
+            </row>
+
+            <row>
+              <entry><code>SComponentListener</code></entry>
+
+              <entry><code>SComponent</code></entry>
+
+              <entry>To be notified about changed visibily of a component via
+              <code>setVisible()</code> method calls</entry>
+            </row>
+
+            <row>
+              <entry><code>SDocumentListener</code></entry>
+
+              <entry><code>STextComponent</code></entry>
+
+              <entry>Listener provided by text areas and input fields
+              notifying about changes in the underlying 'document' which can
+              be retrieved via the <code>getText()</code> method.</entry>
+            </row>
+
+            <row>
+              <entry><code>SExitListener</code></entry>
+
+              <entry><code>Session</code></entry>
+
+              <entry>Listener to get notified on programatically destroying of
+              the wingS user session. If this sessin exit is initiated by
+              calling the <code>Session.setExitAddress()</code> method you can
+              throw a veto exception to abort the session destroy (i.e. to
+              prompt for unsaved values).</entry>
+            </row>
+
+            <row>
+              <entry><code>SInternalFrameListener</code></entry>
+
+              <entry><code>SInternalFrame</code></entry>
+
+              <entry>Listener for receiving events on opening, closing,
+              iconinfying, deiconifying, minimizing and maximizing of internal
+              frames (windows)</entry>
+            </row>
+
+            <row>
+              <entry><code>SComponentDropListener</code></entry>
+
+              <entry><code>DragAndDropManager</code></entry>
+
+              <entry>Listener to get notified about <code>DragSource</code>
+              objects dropped to a <code>DragTarget</code></entry>
+            </row>
+
+            <row>
+              <entry><code>SInvalidLowLevelEventListener</code></entry>
+
+              <entry><code>SFrame</code></entry>
+
+              <entry>Events listener that gets notified about outdated request
+              (mainly due to browser back navigation or double clicks). Used
+              for back button detection and handling logic.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </sect1>
 
     <sect1>
@@ -3114,18 +3372,79 @@ frame.addHeader(new Link("stylesheet",
       <sect2>
         <title>wingS Session</title>
 
-        <para><remark>FROM USER PERSPECTIVE: wingS session, http session,
-        session exit/Start, session statistics, root frames, browser and other
-        infos . REFER TO Advanced topic.</remark></para>
-      </sect2>
+        <para>The wingS session is the root instance of a user application
+        session. Every time you start a new browser or a new client contact
+        the wingS servlet by calling the entry URL of your application, a new
+        HTTP session will created and an according wingS session object will
+        be bound to it. Refer to <xref linkend="session-management" /> for
+        full details about the teamplay between a wingS session and the
+        servlet container session. The current wingS session can be always
+        retrieved using the session manager. Furthermore all SComponents offer
+        a conenience method either</para>
 
-      <sect2>
-        <title>Dialogs and Option Panes</title>
+        <programlisting>Session session = SessionManager.getSession();
+// or
+Session sameSession = aComponent.getSession();</programlisting>
 
-        <para><remark>Usage of SDialog an SOptionPane</remark></para>
+        <para>Again - this session is the root of an user application session.
+        It means it is holding the root objects for all session specific data.
+        Mainly it hold references to the root UI component in the UI object
+        hierarchy tree you construct during runtime by constructing new
+        components and adding them to containers. This root UI object can be
+        retrieved using the <code>getRootFrame()</code> method offered by the
+        session object.</para>
 
-        <para><remark>HOLGER: How modal/nonmdal. Dialog push works
-        how?</remark></para>
+        <bridgehead>Storing application data inside the wingS
+        session</bridgehead>
+
+        <para>One very important usage of the session object is to hold and
+        store application specific data inside a global session context. Think
+        i.e. that your application might want to now the current logged in
+        user at various time during application runtime. So you would use the
+        session to store the user after successfull login and use getters to
+        retrieve it from the session again. A wrapper class might implement do
+        the object casting and provide typesafe method calls vs. errourness
+        property retrievals using string keys and class casts</para>
+
+        <programlisting>public class MyAppSession {
+    public static User getLoggedInUser() {
+        return (User) SessionManager.getSession().getProperty("currentuser");
+    }
+
+    public static void setLoggedInUser(User user) {
+        SessionManager.getSession().setProperty("currentuser",user);
+    }
+}
+
+// After successfull login
+MyAppSession.setLoggedInUser(user);
+
+// ....
+
+// ... later on somewhere in you application logic
+if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
+   // ...
+}</programlisting>
+
+        <bridgehead>Further featuress of the session</bridgehead>
+
+        <para>The session objects also holds various informations like the
+        current used <emphasis role="bold">character encoding</emphasis> for
+        the communication with the browser (Default: UTF-8), the current
+        session <emphasis role="bold">Locale</emphasis>, informations about
+        the <emphasis role="bold">client browser</emphasis>, an object
+        describing some<emphasis role="bold"> session statistics</emphasis>
+        like request count and average response time and the current <emphasis
+        role="bold">servlet context, HTTP request</emphasis> and <emphasis
+        role="bold">HTTP response</emphasis> objects.</para>
+
+        <para>Additionally you can use the session to declare a new URL to
+        <emphasis role="bold">redirect the request</emphasis> to or an exit
+        URL do <emphasis role="bold">request a vetoable session
+        exit</emphasis> with subsequent redirect to a salutation page.</para>
+
+        <para>Please refer to the API docs for details about these
+        features.</para>
       </sect2>
 
       <sect2>
@@ -3549,8 +3868,6 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
         </listitem>
       </itemizedlist>
 
-      <para><remark>TODO: Explain demo.</remark></para>
-
       <programlisting>STextField firstField  = new STextField();
 STextField secondField  = new STextField();
 STextField sumField  = new STextField();
@@ -3772,7 +4089,7 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
     chapter useful as it helps understanding the source code.</para>
 
     <section>
-      <title>Session Management</title>
+      <title id="session-management">Session Management</title>
 
       <para>A "session" is a logical conversation between one particular web
       browser and the server. Recall that HTTP involves request-response
