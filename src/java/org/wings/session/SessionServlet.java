@@ -496,19 +496,22 @@ final class SessionServlet
             }
 
         } catch (Throwable e) {
+            // TODO better error handling, this is pretty flexible, yet dirty
             /*
              * custom error handling...implement it in SFrame
              */
+            
             SFrame defaultFrame = (SFrame) session.getFrames().iterator().next();
             while (defaultFrame.getParent() != null)
                 defaultFrame = (SFrame) defaultFrame.getParent();
             if (defaultFrame != null && defaultFrame.handleError(e)) {
+                log.warn("exception, trying to handle it via SFrame.handleError(): ", e);
                 // maybe just call defaultFrame.write(new ServletDevice(out)); instead of doGet()
                 doGet(req, response);
                 isErrorHandling = true;
                 return;
             } else {
-                log.fatal("exception: ", e);
+                log.fatal("exception handling failed: ", e);
                 handleException(response, e);
             }
             
