@@ -143,6 +143,7 @@ public class Browser {
     protected final RE RE_NS6_LANG_OS = new RE("\\(([a-zA-Z0-9]+); [a-zA-Z]+; ([a-zA-Z0-9_]+)( ([a-zA-Z0-9]+))?; ([_a-zA-Z-]+);");
     protected final RE RE_LANG = new RE("\\[([_a-zA-Z-]+)\\]");
     protected final RE RE_OPERA = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)(; U)?\\) Opera ([0-9]+)\\.([0-9]+)[ ]+\\[([_a-zA-Z-]+)\\]");
+    protected final RE RE_OPERA8X_CLOAKED = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)[; ]+([_a-zA-Z-]+)\\) Opera ([0-9]+)\\.([0-9]+)");
     protected final RE RE_OPERA_LANG_OS = new RE("\\(([a-zA-Z0-9\\-]+) ([0-9\\.]+)[^)]+\\)[ \t]*\\[([a-z_]+)\\]");
     protected final RE RE_KONQUEROR_OS = new RE("Konqueror/([0-9\\.]+); ([a-zA-Z0-9\\-]+)");
     protected final RE RE_GALEON_OS = new RE("\\(([a-zA-Z0-9]+); U; Galeon; ([0-9]+)\\.([0-9]+);");
@@ -287,6 +288,17 @@ public class Browser {
                 mav = RE_OPERA.getParen(7);
                 miv = RE_OPERA.getParen(8);
                 lang = RE_OPERA.getParen(10);
+            }
+            
+            /* Opera 8.xx identified as something else (Mozilla, IE ...) */
+            if (RE_OPERA8X_CLOAKED.match(agent)){
+                browserName = "Opera";
+                browserType = BrowserType.OPERA;   
+                os = RE_OPERA8X_CLOAKED.getParen(3);
+                osVersion = RE_OPERA8X_CLOAKED.getParen(4);
+                mav = RE_OPERA8X_CLOAKED.getParen(7);
+                miv = RE_OPERA8X_CLOAKED.getParen(8);
+                lang = RE_OPERA8X_CLOAKED.getParen(6);
             }
 
             /* detect gecko */
