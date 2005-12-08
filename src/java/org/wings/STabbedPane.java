@@ -583,7 +583,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
      * @see #setComponentAt
      */
     public SComponent getComponentAt(int index) {
-        return getComponent(index);
+        return ((Page) pages.get(index)).component;
     }
 
     /**
