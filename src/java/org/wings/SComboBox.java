@@ -337,6 +337,11 @@ public class SComboBox
     /**
      * Adds an ItemListener. <code>listener</code> will receive an event when
      * the selected item changes.
+     * <p>
+     * If you want to receive immedate an event when the user clicks a new item 
+     * on the client side you have to register additionally a Java script listener
+     * which triggers a form submit. <br>
+     * <code>combobox.addScriptListener(ComboBoxCG.JS_ON_CHANGE_SUBMIT)</code>
      *
      * @param listener the ItemListener that is to be notified
      */

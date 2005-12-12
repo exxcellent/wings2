@@ -31,6 +31,8 @@ public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
     public final static String JS_FORM_SUBMIT_SCRIPT = "this.form.submit();";
 
     /**
+     * This Java script listener will request a form submit on a change (item selection).
+     *
      * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.
      */
     public final static JavaScriptListener JS_ON_CHANGE_SUBMIT = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, JS_FORM_SUBMIT_SCRIPT);

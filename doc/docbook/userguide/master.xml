@@ -1612,8 +1612,7 @@ submit.addActionListener(al);</programlisting></para>
           listener, since if the form is to have a "default" button (when the
           user hits the enter key) then it is the form which will be notified.
           In this case you would add the listener callback to the form instead
-          of the
-          button:<programlisting>form.addActionListener(al);</programlisting></para>
+          of the button:<programlisting>form.addActionListener(al);</programlisting></para>
 
           <para>The ActionEvent.getSource() will determine whether the event
           comes from the button or the form so you can use the following tests
@@ -1740,6 +1739,41 @@ SCheckBox disabledCheckBox = new SCheckBox("Umodifyable checkbox");
 disabledCheckBox.setEnabled(false);
 disabledCheckBox.setShowAsFormComponent(false);
 disabledCheckBox.setDisabledIcon(new SResourceIcon(...));</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Comboboxes and selection lists</title>
+
+          <para>Comboboxes are one-lined item selection widgets with further
+          options to choose via a drop-down menu. SLists have two and more
+          lines and support multiple item selection modes<footnote>
+              <para>Typically triggered using the Shift-key and Strg-key in
+              the browser when clicking on items.</para>
+            </footnote> additionally to the single selection mode offered also
+          by the combobox. </para>
+
+          <programlisting>// A combo box containing a coloured label and two string values
+SLabel color = new SLabel(Color.green.toString());
+color.setForeground(Color.green);
+
+SComboBox comboBox = new SComboBox();
+comboBox.setModel(new DefaultComboBoxModel(new Object[]{ "element1", color, "element3" }));
+
+// A simple selection list
+SList multiSelectionList = new SList();
+multiSelectionList.setName("multiple");
+multiSelectionList.setSelectionMode(SList.MULTIPLE_SELECTION);
+multiSelectionList.setListData(new String[] {"Item 1", "Item 2", "Item 3"});</programlisting>
+
+          <para>You can attach <code>ListSelectionListener</code> to
+          <code>SList</code> instances and <code>ItemListener</code> to
+          <code>SComboBox</code> instances to receive events on selection
+          changes. To receive these events immediately when the user clicks
+          and modifies the selection you can optionally add a Javascript
+          listener which triggers a form submit to the server on any
+          change</para>
+
+          <programlisting>comboBox.addScriptListener(ComboBoxCG.JS_ON_CHANGE_SUBMIT);</programlisting>
         </sect3>
 
         <sect3>
@@ -3658,10 +3692,9 @@ frame.setLayout(new SRootLayout(url));</programlisting></para>
           exception looking like this:<programlisting>SEVERE: Exception loading sessions from persistent storage
 java.io.WriteAbortedException: writing aborted;
 java.io.NotSerializableException:
-org.apache.catalina.loader.WebappClassLoader</programlisting>To use the
-          the non-clustered session manager use the following section in your
-          web application's context definition in
-          /META-INF/context.xml.</para>
+org.apache.catalina.loader.WebappClassLoader</programlisting>To use the the
+          non-clustered session manager use the following section in your web
+          application's context definition in /META-INF/context.xml.</para>
 
           <programlisting>&lt;context&gt;
    &lt;manager

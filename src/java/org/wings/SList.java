@@ -502,6 +502,12 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
      * Add a listener to the list that's notified each time a change
      * to the selection occurs.
      *
+     * <p>
+     * If you want to receive immedate an event when the user clicks a new item
+     * on the client side you have to register additionally a Java script listener
+     * which triggers a form submit. <br>
+     * <code>combobox.addScriptListener(ListCG.JS_ON_CHANGE_SUBMIT)</code>
+     *
      * @param listener A ListSelectionListener to be added
      * @see #getSelectionModel
      */

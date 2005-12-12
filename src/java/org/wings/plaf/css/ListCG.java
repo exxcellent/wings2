@@ -14,12 +14,16 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
+import org.wings.RequestURL;
+import org.wings.SButton;
+import org.wings.SCellRendererPane;
+import org.wings.SComponent;
+import org.wings.SDefaultListCellRenderer;
+import org.wings.SList;
+import org.wings.SListCellRenderer;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
-import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
-
 import java.io.IOException;
 
 public class ListCG extends AbstractComponentCG implements
@@ -36,7 +40,12 @@ public class ListCG extends AbstractComponentCG implements
         }
     }
 
-    private static final JavaScriptListener selectListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submit()");
+    /**
+     * This Java script listener will request a form submit on a change (item selection).
+     *
+     * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.
+     */
+    public final static JavaScriptListener JS_ON_CHANGE_SUBMIT = ButtonCG.JS_ON_CHANGE_SUBMIT;
 
     protected void writeFormList(Device device, SList list) throws IOException {
 
@@ -50,11 +59,6 @@ public class ListCG extends AbstractComponentCG implements
             device.print(" disabled=\"true\"");
         if (list.isFocusOwner())
             Utils.optAttribute(device, "focus", list.getName());
-
-        list.removeScriptListener(selectListener);
-        if (list.getListSelectionListeners().length > 0) {
-            list.addScriptListener(selectListener);
-        }
 
         Utils.printCSSInlineFullSize(device, list.getPreferredSize());
         Utils.writeEvents(device, list);
