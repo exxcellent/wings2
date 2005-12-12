@@ -253,7 +253,7 @@ public class SDimension implements Serializable {
      * @return extracted integer. f.e.: "120px" becomes 120 or {@link #AUTO_INT} if <code>null</code>
      */
     protected int extractNumericValue(String value) {
-        if (value == null) {
+        if (value == null || value.equalsIgnoreCase(AUTO)) {
             return AUTO_INT;
         } else {
             try {
