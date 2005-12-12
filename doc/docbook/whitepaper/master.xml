@@ -13,7 +13,7 @@
     interface. Where possible interfaces and concepts are reused from the Java
     Swing API to minimise the learning curve. A programmer with basic Java
     knowledge should be able to write their own applications in wingS after a
-    few hours familiarisation.</para>
+    few hours' familiarisation.</para>
 
     <para>The wingS framework takes care of the low level infrastructure
     needed to manage a Java servlet session, relieving the need to do any
@@ -230,6 +230,11 @@
         <listitem>
           <para>It is backed by Sun.</para>
         </listitem>
+
+        <listitem>
+          <para>Your application can be structured as a simple pre-determined
+          sequence of pages</para>
+        </listitem>
       </itemizedlist>
 
       <para><emphasis role="bold">Reason to Choose
@@ -386,8 +391,8 @@
 
     <itemizedlist>
       <listitem>
-        <para>Swing API and behaviour - adhere to as close as possible &amp;
-        sensible</para>
+        <para>Swing API and behaviour - adhere to them as closely as possible
+        and where appropriate</para>
       </listitem>
 
       <listitem>
