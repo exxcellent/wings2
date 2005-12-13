@@ -108,7 +108,7 @@
 
         <para>Suppose you want to display a table. Having Swing in mind, you'd
         implement an <code>AbstractTableModel</code> and associate it with a
-        <code>JTree</code> instance which you placed in a JFrame. Now with
+        <code>JTable</code> instance which you placed in a JFrame. Now with
         wingS you do just the same, except you replace J's with S's. That's
         it! Apart from this prefix character of widget names the code is
         identical.</para>
@@ -1750,7 +1750,7 @@ disabledCheckBox.setDisabledIcon(new SResourceIcon(...));</programlisting>
               <para>Typically triggered using the Shift-key and Strg-key in
               the browser when clicking on items.</para>
             </footnote> additionally to the single selection mode offered also
-          by the combobox. </para>
+          by the combobox.</para>
 
           <programlisting>// A combo box containing a coloured label and two string values
 SLabel color = new SLabel(Color.green.toString());
