@@ -885,7 +885,8 @@ public class Session
         }
         return dndManager;
     }
-    
+
+    public void setDndManager(DragAndDropManager dndManager) {
+        this.dndManager = dndManager;
+    }
 }
-
-

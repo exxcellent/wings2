@@ -101,7 +101,11 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         dropTargets.remove(dropTarget);
         namesToComponentsMap.remove(((SComponent)dropTarget).getName());
     }
-    
+
+    public SComponent getComponentByName(String name) {
+        return (SComponent)namesToComponentsMap.get(name);
+    }
+
     /**
      * getter for the list of drag sources. Used for initializing them in the
      * client code. 
