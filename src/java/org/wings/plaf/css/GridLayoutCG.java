@@ -19,6 +19,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 import java.util.List;
+import java.awt.*;
 
 public class GridLayoutCG extends AbstractLayoutCG
         {
@@ -32,15 +33,16 @@ public class GridLayoutCG extends AbstractLayoutCG
         final SGridLayout layout = (SGridLayout) l;
         final List components = layout.getComponents();
         final int rows = layout.getRows();
+        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
         int cols = layout.getColumns();
         if (cols <= 0)
             cols = components.size() / rows;
         final int border = layout.getBorder();
 
-        printLayouterTableHeader(d, "SGridLayout", layout.getHgap(), layout.getVgap(), border, layout);
+        printLayouterTableHeader(d, "SGridLayout", insets, border, layout);
 
-        printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), layout.getHgap(), layout.getVgap(),border, components);
+        printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), insets, border, components);
 
         printLayouterTableFooter(d, "SGridLayout", layout);
     }

@@ -21,6 +21,7 @@ import org.wings.plaf.LayoutCG;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.awt.*;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.
@@ -32,7 +33,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     /**
      * Print HTML table element declaration of a typical invisible layouter table.
      */
-    protected void printLayouterTableHeader(Device d, String styleClass, int hgap, int vgap,
+    protected void printLayouterTableHeader(Device d, String styleClass, Insets insets,
                                             int border, SLayoutManager layout)
             throws IOException {
         Utils.printDebugNewline(d, layout.getContainer());
@@ -43,7 +44,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         // to 100% width/height
         StringBuffer styleString = Utils.generateCSSInlinePreferredSize(layout.getContainer().getPreferredSize());
         styleString.append(Utils.generateCSSInlineBorder(border));
-        styleString.append(createInlineStylesForGaps(hgap, vgap));
+        styleString.append(createInlineStylesForInsets(insets));
 
         Utils.printNewline(d, layout.getContainer());
         d.print("<table ");
@@ -76,12 +77,11 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      * @param cols                    Wrap after this amount of columns
      * @param renderFirstLineAsHeader Render cells in first line as TH-Element or regular TD.
      * @param components              The components to layout
-     * @param hgap                    Horizontal gap between components in px
-     * @param vgap                    Vertical gap between components in px
+     * @param insets                  Layouter cell insets in px
      * @param border                  Border width to draw.
      */
     protected void printLayouterTableBody(Device d, int cols, final boolean renderFirstLineAsHeader,
-                                          int hgap, int vgap, int border, final List components)
+                                          Insets insets, int border, final List components)
             throws IOException {
         boolean firstRow = true;
         int col = 0;
@@ -97,7 +97,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
                 firstRow = false;
             }
 
-            openLayouterCell(d, firstRow && renderFirstLineAsHeader, hgap, vgap, border, c);
+            openLayouterCell(d, firstRow && renderFirstLineAsHeader, insets, border, c);
             d.print(">");
 
             //Utils.printNewline(d, c);
@@ -117,25 +117,43 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     /**
      * Converts a hgap/vgap in according inline css padding style.
      *
-     * @param hgap Horizontal gap between components in px
-     * @param vgap Vertical gap between components in px
+     * @param insets The insets to generate CSS padding declaration
+     * @return Empty or fille stringbuffer with padding declaration
      */
-    protected static StringBuffer createInlineStylesForGaps(int hgap, int vgap) {
+    protected static StringBuffer createInlineStylesForInsets(Insets insets) {
         StringBuffer inlineStyle = new StringBuffer();
-        if (hgap > 0 || vgap > 0) {
-            int hPaddingTop = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0);
-            int hPaddingBottom = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0 + 0.1); // round up
-            int vPaddingLeft = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0);
-            int vPaddingRight = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0 + 0.1); // round up
-            if (hPaddingBottom == hPaddingTop && hPaddingTop == vPaddingRight && vPaddingRight == vPaddingLeft) {
-                inlineStyle.append("padding:").append(hPaddingTop).append("px;");
+        if (insets != null && (insets.top > 0 || insets.left > 0 || insets.right > 0 || insets.bottom > 0)) {
+            if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
+                // Trivial style: all the same
+                inlineStyle.append("padding:").append(insets.top).append("px;");
             } else {
-                inlineStyle.append("padding:").append(hPaddingTop).append("px ").append(vPaddingRight).append("px ")
-                        .append(hPaddingBottom).append("px ").append(vPaddingLeft).append("px;");
+                inlineStyle.append("padding:").append(insets.top).append("px ").append(insets.right).append("px ")
+                        .append(insets.bottom).append("px ").append(insets.left).append("px;");
             }
         }
         return inlineStyle;
     }
+
+    /**
+     * Converts a hgap/vgap in according inset declaration.
+     * If a gapp is odd, the overlapping additonal pixel is added to the right/bottom inset.
+     *
+     * @param hgap Horizontal gap between components in px
+     * @param vgap Vertical gap between components in px
+     * @return An inset equal to the gap declarations
+     */
+    protected static Insets convertGapsToInset(int hgap, int vgap) {
+        Insets insets = null;
+        if (hgap > 0 || vgap > 0) {
+            final int hPaddingTop = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0);
+            final int hPaddingBottom = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0 + 0.1); // round up
+            final int vPaddingLeft = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0);
+            final int vPaddingRight = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0 + 0.1); // round up
+            insets = new Insets(hPaddingTop, vPaddingLeft, hPaddingBottom, vPaddingRight);
+        }
+        return insets;
+    }
+
 
     /**
      * Opens a TD or TH cell of an invisible layouter table. This method also does component alignment.
@@ -143,7 +161,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      *
      * @param renderAsHeader Print TH instead of TD
      */
-    public static void openLayouterCell(Device d, boolean renderAsHeader, int hgap, int vgap, int border,
+    public static void openLayouterCell(Device d, boolean renderAsHeader, Insets insets, int border,
                                         SComponent containedComponent) throws IOException {
         if (renderAsHeader) {
             d.print("<th");
@@ -156,7 +174,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
         // CSS inline attributes
         StringBuffer inlineAttributes = Utils.generateCSSInlineBorder(border);
-        inlineAttributes.append(createInlineStylesForGaps(hgap, vgap));
+        inlineAttributes.append(createInlineStylesForInsets(insets));
         Utils.optAttribute(d, "style", inlineAttributes.toString());
     }
 

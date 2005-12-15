@@ -76,7 +76,7 @@ public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixD
         writeContextMenu(device, component);
 
         device.print("><tr>"); // table
-        AbstractLayoutCG.openLayouterCell(device, false, 0, 0, 0, component);
+        AbstractLayoutCG.openLayouterCell(device, false, null, 0, component);
         device.print(">");
 
         // Special handling: Render title of STitledBorder

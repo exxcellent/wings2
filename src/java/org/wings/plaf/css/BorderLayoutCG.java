@@ -19,6 +19,7 @@ import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
 import java.io.IOException;
+import java.awt.*;
 
 public class BorderLayoutCG extends AbstractLayoutCG {
 
@@ -30,13 +31,14 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         final SComponent center = (SComponent) layout.getComponents().get(SBorderLayout.CENTER);
         final SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
+        final Insets layoutInsets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
         int cols = 0;
         if (west != null) cols++;
         if (center != null) cols++;
         if (east != null) cols++;
 
-        printLayouterTableHeader(d, "SBorderLayout",layout.getHgap(), layout.getVgap(), layout.getBorder(),layout);
+        printLayouterTableHeader(d, "SBorderLayout", layoutInsets, layout.getBorder(),layout);
 
         if (north != null) {
             d.print("<tr style=\"height: 0%\">");

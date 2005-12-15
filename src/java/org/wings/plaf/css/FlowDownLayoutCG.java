@@ -19,6 +19,7 @@ import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
 import java.io.IOException;
+import java.awt.*;
 
 /**
  * @author bschmid
@@ -31,12 +32,11 @@ public class FlowDownLayoutCG extends AbstractLayoutCG {
      */
     public void write(Device d, SLayoutManager l) throws IOException {
         final SFlowDownLayout layout = (SFlowDownLayout) l;
-        final int hgap = layout.getHgap();
-        final int vgap = layout.getVgap();
+        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
-        printLayouterTableHeader(d, "SFlowDownLayout", hgap, vgap, 0, layout);
+        printLayouterTableHeader(d, "SFlowDownLayout", insets, 0, layout);
 
-        printLayouterTableBody(d, 1, false, hgap, vgap, 0, layout.getComponents());
+        printLayouterTableBody(d, 1, false, insets, 0, layout.getComponents());
 
         printLayouterTableFooter(d, "SFlowDownLayout", layout);
     }

@@ -19,6 +19,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 import java.util.List;
+import java.awt.*;
 
 public class BoxLayoutCG extends AbstractLayoutCG {
     /**
@@ -33,10 +34,11 @@ public class BoxLayoutCG extends AbstractLayoutCG {
         final List components = layout.getComponents();
         final int cols = layout.getOrientation() == SBoxLayout.HORIZONTAL ? components.size() : 1;
         final int border = layout.getBorder();
+        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
-        printLayouterTableHeader(d, "SBoxLayout", layout.getHgap(), layout.getVgap(), border, layout);
+        printLayouterTableHeader(d, "SBoxLayout", insets, border, layout);
 
-        printLayouterTableBody(d, cols, false, layout.getHgap(), layout.getVgap(), border, components);
+        printLayouterTableBody(d, cols, false, insets, border, components);
 
         printLayouterTableFooter(d, "SBoxLayout", layout);
 

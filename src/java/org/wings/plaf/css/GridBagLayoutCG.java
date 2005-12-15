@@ -17,7 +17,6 @@ import org.wings.SComponent;
 import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-
 import java.awt.*;
 import java.io.IOException;
 
@@ -27,7 +26,6 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
      *
      * @param d the device to write the code to
      * @param l the layout manager
-     * @throws IOException
      */
     public void write(Device d, SLayoutManager l)
             throws IOException {
@@ -35,11 +33,12 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         final boolean header = layout.getHeader();
         final int border = layout.getBorder() >= 0 ? layout.getBorder() : 0;
         final SGridBagLayout.Grid grid = layout.getGrid();
+        final Insets layoutInsets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
         if (grid.cols == 0)
             return;
 
-        printLayouterTableHeader(d, "SGridBagLayout", layout.getHgap(), layout.getVgap(), border, layout);
+        printLayouterTableHeader(d, "SGridBagLayout", layoutInsets, border, layout);
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
             Utils.printNewline(d, layout.getContainer());
@@ -51,15 +50,17 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                 Utils.printNewline(d, layout.getContainer());
                 final boolean headerCell = row == grid.firstRow && header;
                 if (comp == null) {
-                    openLayouterCell(d, headerCell, layout.getHgap(), layout.getVgap(),border, comp);
+                    openLayouterCell(d, headerCell, layoutInsets, border, comp);
                     d.print(">");
                     closeLayouterCell(d, headerCell);
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
+
                     if ((c.gridx == SGridBagLayout.LAST_CELL || c.gridx == col) &&
                             (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
 
-                        openLayouterCell(d, headerCell, layout.getHgap(), layout.getVgap(),border, comp);
+                        final Insets cellInsets = addInsets(layoutInsets, c.insets);
+                        openLayouterCell(d, headerCell, cellInsets, border, comp);
 
                         int gridwidth = c.gridwidth;
                         if (gridwidth == GridBagConstraints.RELATIVE) {
@@ -113,6 +114,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
      * Copy and paste extracted method to determine an optional row height of the passed row.
      * Was necessary to avoid a rendering bug with Gecko engines leading to a messed up layout.
      * Refer to http://jira.j-wings.org/browse/WGS-120
+     *
      * @param layout The gridbaglayout
      * @param row The row
      * @return Row height percentage as int or 0
@@ -126,10 +128,10 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
             if (comp != null) {
                 GridBagConstraints c = layout.getConstraints(comp);
                 if ((c.gridx == SGridBagLayout.LAST_CELL || c.gridx == col)
-                     && (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
+                        && (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
                     if (c.weighty > 0 && grid.rowweight[col] > 0) {
                         int cellHeight = (int) (100 * c.weighty / grid.rowweight[col]);
-                        if (cellHeight  > rowHeight)
+                        if (cellHeight > rowHeight)
                             rowHeight = cellHeight;
                     }
                 }
@@ -138,6 +140,24 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         return rowHeight;
     }
 
+    /**
+     * Adds both passed insets and accepts / ignores null and 0 values.
+     *
+     * @param inset1 Inset or <code>null</code>
+     * @param inset2 Inset or <code>null</code>
+     * @return The same inset if only one inset was != <code>null</code>, otherwise sum of both insets.
+     */
+    private Insets addInsets(final Insets inset1, final Insets inset2) {
+        // If gridbag constraint defines additinal insets, add them to existing
+        if (inset2 != null && (inset2.top > 0 || inset2.left > 0 || inset2.right > 0 || inset2.bottom > 0)) {
+            if (inset1 == null || (inset1.top == 0 && inset1.left == 0 && inset1.right == 0 && inset1.bottom == 0))
+                return inset2;
+            else
+                return new Insets(inset1.top + inset2.top, inset1.left + inset2.left,
+                        inset1.bottom + inset2.bottom, inset1.right + inset2.right);
+        } else
+            return inset1;
+    }
 
 
 }

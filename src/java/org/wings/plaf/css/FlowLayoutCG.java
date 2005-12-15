@@ -23,6 +23,7 @@ import org.wings.io.Device;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.awt.*;
 
 public class FlowLayoutCG extends AbstractLayoutCG {
     /**
@@ -32,6 +33,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
      */
     public void write(Device d, SLayoutManager l) throws IOException {
         final SFlowLayout layout = (SFlowLayout) l;
+        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());        
         final List components = layout.getComponents();
         final int alignment = layout.getAlignment();
         final SContainer container = layout.getContainer();
@@ -70,7 +72,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
                     Utils.printNewline(d, component);
                     d.print("<div style=\"");
                     d.print(alignmentStyle);
-                    d.print( createInlineStylesForGaps(layout.getHgap(), layout.getVgap() ).toString() );
+                    d.print( createInlineStylesForInsets(insets).toString() );
                     d.print("\">");
                     component.write(d); // Render contained component
                     Utils.printNewline(d, component);
