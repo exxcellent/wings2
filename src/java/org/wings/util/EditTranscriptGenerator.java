@@ -37,7 +37,7 @@ public final class EditTranscriptGenerator {
      * The exact calculation of document events is very memory and cpu intesive.
      * For texts beeing longer than this limit we use a dumb approximation.
      */
-    private static final int MAX_LENGTH_FOR_TRANSCRIPT_GENERATION = 500;
+    private static final int MAX_LENGTH_FOR_TRANSCRIPT_GENERATION = 200;
 
 
     /**
