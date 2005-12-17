@@ -127,7 +127,7 @@ function getCookie(name)
          var key = v.substring(0, v.indexOf("=", 0));
          var val = v.substring(v.indexOf("=") + 1);
          c[key] = val;
-         i = endstr + 2; // Leerzeichen nach ; überspringen
+         i = endstr + 2; // Leerzeichen nach ; ï¿½berspringen
     }
     if(name) return c[name];
     return c;
@@ -145,14 +145,41 @@ function setCookie(name, value, days, path)
 }
 
 function storeScrollPosition(event) {
-/*
     event = getEvent(event);
 
-    var div = getParentByTagName(getTarget(event), "DIV");
-    var body = getParentByTagName(getTarget(event), "BODY");
-    if (div && body)
-        setCookie(body.getAttribute("id"), "scroll_" + div.getAttribute("id"), 1);
-        */
+    var target = getTarget(event);
+    var scrollableElement = getScrollableElement(target);
+    if (scrollableElement && target) {
+        var pos = target.scrollTop;
+        if (scrollableElement.nodeName == 'DIV' || scrollableElement.nodeName == 'TBODY') {
+            var targetId = scrollableElement.getAttribute("id");
+            setCookie("scroll_pos", "" + pos, 1);
+            setCookie("scroll_target", "" + targetId, 1);
+        }
+    }
+}
+
+function restoreScrollPosition() {
+    var pos = getCookie("scroll_pos");
+    var target = getCookie("scroll_target");
+    var el = document.getElementById(target);
+    if (el) {
+        el.scrollTop = pos;
+    }
+}
+
+function getScrollableElement(el) {
+    if (!el) return;
+    if (el.scrollTop > 0)
+        return el;
+
+	var parent = el.parentNode;
+	if (null == parent) return null;
+	if (parent.scrollTop != 0) {
+		return parent;
+	} else {
+		return arguments.callee(parent);
+	}
 }
 
 function storeFocus(event) {
