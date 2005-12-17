@@ -18,8 +18,7 @@ import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
-import org.wings.table.STableCellEditor;
-import org.wings.table.STableCellRenderer;
+import org.wings.table.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -162,6 +161,8 @@ public class STable extends SComponent
      */
     protected boolean epochCheckEnabled = true;
 
+    protected STableColumnModel columnModel;
+
     /**
      * A Pseudo CSS selector addressing the header row elements.
      * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
@@ -226,6 +227,7 @@ public class STable extends SComponent
             model = new DefaultTableModel();
 
         model.addTableModelListener(this);
+        createDefaultColumnModel(model);
     }
 
     /**
@@ -379,8 +381,16 @@ public class STable extends SComponent
         return headerRenderer;
     }
 
-    public STableCellRenderer getCellRenderer(int row, int column) {
-        return getDefaultRenderer(getColumnClass(column));
+    public STableCellRenderer getCellRenderer( int row, int column ) {
+        if ( getColumnModel() == null )
+            return getDefaultRenderer(getColumnClass(column));
+
+        STableColumn tableColumn = getColumnModel().getColumn( column );
+        STableCellRenderer renderer = tableColumn.getCellRenderer();
+        if ( renderer == null )
+            renderer = getDefaultRenderer( getColumnClass( tableColumn.getModelIndex() ) );
+
+        return renderer;
     }
 
     public SComponent prepareRenderer(STableCellRenderer r, int row, int col) {
@@ -390,11 +400,15 @@ public class STable extends SComponent
                 row, col);
     }
 
-    public SComponent prepareHeaderRenderer(int col) {
-        return headerRenderer.getTableCellRendererComponent(this,
+    public SComponent prepareHeaderRenderer( int col ) {
+        if ( getColumnModel() == null )
+            return headerRenderer.getTableCellRendererComponent(this,
                 col >= 0 ? model.getColumnName(col) : null,
                 false,
                 -1, col);
+
+        Object value = getColumnModel().getColumn( col ).getHeaderValue();
+        return headerRenderer.getTableCellRendererComponent( this, value, false, -1, col );
     }
 
     public boolean isEditable() {
@@ -629,15 +643,16 @@ public class STable extends SComponent
      * @param row    the row of the cell to edit, where 0 is the first
      * @param column the column of the cell to edit, where 0 is the first
      */
-    public STableCellEditor getCellEditor(int row, int column) {
-        // TableColumn tableColumn = getColumnModel().getColumn(column);
-        // STableCellEditor editor = tableColumn.getCellEditor();
-        // if (editor == null) {
-        STableCellEditor editor = getDefaultEditor(getColumnClass(column));
-        // }
+    public STableCellEditor getCellEditor( int row, int column ) {
+        if ( getColumnModel() == null )
+            return getDefaultEditor(getColumnClass(column));
+
+        STableColumn tableColumn = getColumnModel().getColumn( column );
+        STableCellEditor editor = tableColumn.getCellEditor();
+        if ( editor == null )
+            editor = getDefaultEditor( getColumnClass( tableColumn.getModelIndex() ) );
         return editor;
     }
-
 
     /**
      * Prepares the specified editor using the value at the specified cell.
@@ -1128,6 +1143,24 @@ public class STable extends SComponent
 
     public void setSelectedRow(int selectedIndex) {
         getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
+    }
+
+    public STableColumnModel getColumnModel() {
+        return columnModel;
+    }
+
+    public void setColumnModel( STableColumnModel columnModel ) {
+        this.columnModel = columnModel;
+    }
+
+    private void createDefaultColumnModel(TableModel tm) {
+        this.columnModel = new SDefaultTableColumnModel();
+        for ( int i = 0; i < tm.getColumnCount(); i++ ) {
+            String columnName = tm.getColumnName( i );
+            STableColumn column = new STableColumn( i );
+            column.setHeaderValue( columnName );
+            this.columnModel.addColumn( column );
+        }
     }
 }
 

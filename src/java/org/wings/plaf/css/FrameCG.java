@@ -127,6 +127,8 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
             new JavaScriptListener("onscroll", "storeScrollPosition(event)");
 
+    public static final JavaScriptListener RESTORE_SCROLL_POSITION_SCRIPT =
+            new JavaScriptListener("onload", "restoreScrollPosition()");
 
     /**
      * Externalizes the style sheet(s) for this session.
@@ -224,6 +226,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         addExternalizedHeader(component, FORM_SCRIPT, "text/javascript");
         component.addScriptListener(FOCUS_SCRIPT);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
+        component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);
     }
 
