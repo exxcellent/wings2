@@ -331,7 +331,7 @@ public class HelloWingS {
 
         final SLabel message = new SLabel();
         final STextField textField = new STextField();
-        final int randomNr = new Random().nextInt(11);
+        final int randomNr = new Random().nextInt(10) + 1;
 
         // check our guesses and respond with according message
         okButton.addActionListener(new ActionListener() {
