@@ -14,28 +14,20 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.script.JavaScriptListener;
-import org.wings.script.JavaScriptEvent;
-import org.wings.io.Device;
-
 import java.io.IOException;
+
+import org.wings.RequestURL;
+import org.wings.SAbstractButton;
+import org.wings.SComponent;
+import org.wings.SIcon;
+import org.wings.io.Device;
 
 public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
 
     /**
-     * Use this java script implementation to submit forms on button click
+     * a serializable class is supposed to have this ID. 
      */
-    // TODO: Implement handling of formless submits
-    // TODO: Avoid triggering of enter key catchers
-    public final static String JS_FORM_SUBMIT_SCRIPT = "this.form.submit();";
-
-    /**
-     * This Java script listener will request a form submit on a change (item selection).
-     *
-     * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.
-     */
-    public final static JavaScriptListener JS_ON_CHANGE_SUBMIT = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, JS_FORM_SUBMIT_SCRIPT);
+    private static final long serialVersionUID = -1794530181411426283L;
 
     public void writeContent(final Device device, final SComponent component)
             throws IOException {

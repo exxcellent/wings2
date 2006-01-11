@@ -13,6 +13,7 @@
  */
 package org.wings.script;
 
+import org.wings.SButton;
 import org.wings.SComponent;
 
 public class JavaScriptListener
@@ -21,6 +22,18 @@ public class JavaScriptListener
     private String code;
     private String script;
     private SComponent[] components;
+
+    /**
+     * Use this java script implementation to submit forms on button click
+     */
+    // TODO: Implement handling of formless submits
+    // TODO: Avoid triggering of enter key catchers
+    public final static String JS_FORM_SUBMIT_SCRIPT = "this.form.submit();";
+
+    /**
+     * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.
+     */
+    public final static JavaScriptListener JS_ON_CHANGE_SUBMIT_FORM = new JavaScriptListener(JavaScriptEvent.ON_CHANGE, JS_FORM_SUBMIT_SCRIPT);
 
     /**
      * @param event one of 'onclick', 'onmouseover', ..
