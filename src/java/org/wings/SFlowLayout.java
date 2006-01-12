@@ -66,6 +66,19 @@ public class SFlowLayout
         this();
         setAlignment(alignment);
     }
+    
+    /**
+     * Creates a new <code>SFlowLayout</code> with horizontal orientation and the given alignment
+     * and gaps
+     * @param alignment the alignment
+     * @param hgap the horizontal gap
+     * @param vgap the vertical gap
+     */
+    public SFlowLayout(int alignment, int hgap, int vgap) {
+        this(alignment);
+        setHgap(hgap);
+        setVgap(vgap);
+    }    
 
     /**
      * Adds the given component at given index.

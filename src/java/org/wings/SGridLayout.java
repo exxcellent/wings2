@@ -70,6 +70,20 @@ public class SGridLayout extends SAbstractLayoutManager {
         this(cols);
         setRows(rows);
     }
+    
+    /**
+     * creats a new grid layout with the given number of columns and rows and the given gaps
+     *
+     * @param rows number of rows
+     * @param cols number of columns
+     * @param hgap horizontal gap
+     * @param vgap vertical gap
+     */
+    public SGridLayout(int rows, int cols, int hgap, int vgap ) {
+        this( rows, cols );
+        setHgap( hgap );
+        setVgap( vgap );
+    }
 
     /**
      * sets the number of columns
