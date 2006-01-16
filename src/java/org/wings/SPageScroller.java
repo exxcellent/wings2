@@ -237,6 +237,6 @@ public class SPageScroller extends SAbstractAdjustable {
      * @param value the new value
      */
     public void setValue(int value) {
-        super.setValue(value - (value % getExtent()));
+        super.setValue(getExtent() > 0 ? value - (value % getExtent()) : value);
     }
 }

@@ -1,4 +1,4 @@
-/*
+ /*
  * $Id$
  * Copyright 2000,2005 wingS development team.
  *
@@ -13,26 +13,29 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.TableCG;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
-import org.wings.table.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import org.wings.table.SDefaultTableColumnModel;
+import org.wings.table.STableCellEditor;
+import org.wings.table.STableCellRenderer;
+import org.wings.table.STableColumn;
+import org.wings.table.STableColumnModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.EventObject;
 import java.util.HashMap;
-import java.awt.*;
 
 
 /**
@@ -161,7 +164,16 @@ public class STable extends SComponent
      */
     protected boolean epochCheckEnabled = true;
 
+    /**
+     * The column model holds state information about the columns of the table.
+     */
     protected STableColumnModel columnModel;
+
+    /**
+     * If true, the column model is autorebuild from the table model.
+     */
+    private boolean autoCreateColumnsFromModel;
+
 
     /**
      * A Pseudo CSS selector addressing the header row elements.
@@ -206,9 +218,22 @@ public class STable extends SComponent
      * @param tm the <code>TableModel</code> for the table's contents.
      */
     public STable(TableModel tm) {
+        this(tm, null);
+    }
+
+    public STable(TableModel model, STableColumnModel columnModel) {
         setSelectionModel(new SDefaultListSelectionModel());
         createDefaultEditors();
-        setModel(tm);
+
+        if (columnModel == null) {
+            columnModel = createDefaultColumnModel();
+            autoCreateColumnsFromModel = true;
+        }
+        setColumnModel(columnModel);
+
+        if (model == null)
+            model = createDefaultDataModel();
+        setModel(model);
     }
 
     /**
@@ -217,17 +242,18 @@ public class STable extends SComponent
      * @param tm the <code>TableModel</code> to set.
      */
     public void setModel(TableModel tm) {
-        if (model != null)
-            model.removeTableModelListener(this);
+        if (tm == null)
+            throw new IllegalArgumentException("Cannot set a null TableModel");
 
-        reloadIfChange(model, tm);
+        if (this.model != tm) {
+            if (model != null)
+                model.removeTableModelListener(this);
 
-        model = tm;
-        if (model == null)
-            model = new DefaultTableModel();
+            reload();
 
-        model.addTableModelListener(this);
-        createDefaultColumnModel(model);
+            model = tm;
+            model.addTableModelListener(this);
+        }
     }
 
     /**
@@ -885,6 +911,8 @@ public class STable extends SComponent
         if (e == null || e.getFirstRow() == TableModelEvent.HEADER_ROW) {
             // The whole thing changed
             clearSelection();
+            if (getAutoCreateColumnsFromModel())
+                createDefaultColumnsFromModel();
         } else {
             switch (e.getType()) {
                 case TableModelEvent.INSERT:
@@ -1088,18 +1116,30 @@ public class STable extends SComponent
         super.setCG(cg);
     }
 
+    /**
+     * wingS internal method used to create specific HTTP request parameter names.
+     */
     public String getEditParameter(int row, int col) {
         return "e" + row + ":" + col;
     }
 
+    /**
+     * wingS internal method used to create specific HTTP request parameter names.
+     */
     public String getToggleSelectionParameter(int row, int col) {
         return "t" + row + ":" + col;
     }
 
+    /**
+     * wingS internal method used to create specific HTTP request parameter names.
+     */
     public String getSelectionParameter(int row, int col) {
         return "s" + row + ":" + col;
     }
 
+    /**
+     * wingS internal method used to create specific HTTP request parameter names.
+     */
     public String getDeselectionParameter(int row, int col) {
         return "d" + row + ":" + col;
     }
@@ -1145,23 +1185,109 @@ public class STable extends SComponent
         getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
     }
 
+
+    /**
+     * Sets this table's <code>autoCreateColumnsFromModel</code> flag.
+     * This method calls <code>createDefaultColumnsFromModel</code> if
+     * <code>autoCreateColumnsFromModel</code> changes from false to true.
+     *
+     * @param   autoCreateColumnsFromModel   true if <code>JTable</code> should automatically create columns
+     * @see     #getAutoCreateColumnsFromModel
+     * @see     #createDefaultColumnsFromModel
+     */
+    public void setAutoCreateColumnsFromModel(boolean autoCreateColumnsFromModel) {
+        if (this.autoCreateColumnsFromModel != autoCreateColumnsFromModel) {
+            this.autoCreateColumnsFromModel = autoCreateColumnsFromModel;
+            if (autoCreateColumnsFromModel) {
+                createDefaultColumnsFromModel();
+            }
+        }
+    }
+
+    /**
+     * Determines whether the table will create default columns from the model.
+     * If true, <code>setModel</code> will clear any existing columns and
+     * create new columns from the new model.  Also, if the event in
+     * the <code>tableChanged</code> notification specifies that the
+     * entire table changed, then the columns will be rebuilt.
+     * The default is true.
+     *
+     * @return  the autoCreateColumnsFromModel of the table
+     * @see     #setAutoCreateColumnsFromModel
+     * @see     #createDefaultColumnsFromModel
+     */
+    public boolean getAutoCreateColumnsFromModel() {
+        return autoCreateColumnsFromModel;
+    }
+
+    /**
+     * Returns a <code>STableColumnModel</code> that contains information
+     * about all columns  of this table.
+     *
+     * @return  the object that provides the column state of the table
+     * @see     #setColumnModel
+     */
     public STableColumnModel getColumnModel() {
         return columnModel;
     }
 
-    public void setColumnModel( STableColumnModel columnModel ) {
-        this.columnModel = columnModel;
-    }
 
-    private void createDefaultColumnModel(TableModel tm) {
-        this.columnModel = new SDefaultTableColumnModel();
-        for ( int i = 0; i < tm.getColumnCount(); i++ ) {
-            String columnName = tm.getColumnName( i );
-            STableColumn column = new STableColumn( i );
-            column.setHeaderValue( columnName );
-            this.columnModel.addColumn( column );
+    /**
+     * Sets the model holding information about the columns for this table.
+     *
+     * @param   newColumnModel        the new data source for this table
+     * @see     #getColumnModel
+     */
+    public void setColumnModel(STableColumnModel newColumnModel) {
+        if (newColumnModel == null)
+            throw new IllegalArgumentException("Column model must not be null");
+
+        if (columnModel != newColumnModel) {
+            this.columnModel = newColumnModel;
+            reload();
         }
     }
+
+    /**
+     * Creates the default columns of the table from the table model.
+     */
+    public void createDefaultColumnsFromModel() {
+        TableModel tm = getModel();
+
+        if (tm != null) {
+            STableColumnModel columnModel = getColumnModel();
+            while (columnModel.getColumnCount() > 0)
+                columnModel.removeColumn(columnModel.getColumn(0));
+
+            for ( int i = 0; i < tm.getColumnCount(); i++ ) {
+                STableColumn column = new STableColumn( i );
+                String columnName = tm.getColumnName( i );
+                column.setHeaderValue( columnName );
+                this.columnModel.addColumn( column );
+            }
+        }
+    }
+
+    /**
+     * Returns the default column model object, which is
+     * a <code>SDefaultTableColumnModel</code>.
+     * A subclass can override this method to return a different column model object.
+     *
+     * @return the default column model object
+     */
+    protected STableColumnModel createDefaultColumnModel() {
+        return new SDefaultTableColumnModel();
+    }
+
+    /**
+     * Returns a default table model object.
+     * Subclasses can override this method to return a different table model objects
+     *
+     * @return the default table model object
+     * @see javax.swing.table.DefaultTableModel
+     */
+    protected TableModel createDefaultDataModel() {
+        return new DefaultTableModel();
+    }
+
 }
-
-

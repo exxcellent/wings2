@@ -18,7 +18,6 @@ import java.io.Serializable;
 
 /**
  * STableColumn
- * <p/>
  */
 public class STableColumn implements Serializable {
     protected int modelIndex;
@@ -110,21 +109,6 @@ public class STableColumn implements Serializable {
     }
 
     /**
-     * Sets the <code>Object</code> whose string representation will be
-     * used as the value for the <code>headerRenderer</code>.  When the
-     * <code>STableColumn</code> is created, the default <code>headerValue</code>
-     * is <code>null</code>.
-     *
-     * @param headerValue the new headerValue
-     * @see     #getHeaderValue
-     * bound: true
-     * description: The text to be used by the header renderer.
-     */
-    public void setHeaderValue( Object headerValue ) {
-        this.headerValue = headerValue;
-    }
-
-    /**
      * Returns the <code>Object</code> used as the value for the header
      * renderer.
      *
@@ -134,6 +118,15 @@ public class STableColumn implements Serializable {
     public Object getHeaderValue() {
         return headerValue;
     }
+
+    /**
+     * Sets the <code>Object</code> whose string representation will be
+     * used as the value for the header for this column.
+     */
+    public void setHeaderValue(Object headerValue) {
+	    this.headerValue = headerValue;
+    }
+
 
     //
     // Renderers and Editors

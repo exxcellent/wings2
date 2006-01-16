@@ -16,7 +16,7 @@ package org.wings.table;
 import java.util.Collection;
 
 /**
- * STableColumnModel
+ * @see  javax.swing.table.TableColumnModel
  */
 public interface STableColumnModel
 {

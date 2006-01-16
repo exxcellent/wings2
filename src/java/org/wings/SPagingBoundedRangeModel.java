@@ -123,7 +123,13 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * @see javax.swing.BoundedRangeModel#setValue
      */
     public void setValue(int n) {
-        setRangeProperties(n, extent, min, max, isAdjusting);
+        n = Math.min(n, Integer.MAX_VALUE - extent);
+
+        int newValue = Math.max(n, min);
+        if (newValue + extent > max) {
+            newValue = max - extent;
+        }
+        setRangeProperties(newValue, extent, min, max, isAdjusting);
     }
 
 
@@ -138,7 +144,11 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * @see javax.swing.BoundedRangeModel#setExtent
      */
     public void setExtent(int n) {
-        setRangeProperties(value, n, min, max, isAdjusting);
+        int newExtent = Math.max(0, n);
+        if(value + newExtent > max) {
+            newExtent = max - value;
+        }
+        setRangeProperties(value, newExtent, min, max, isAdjusting);
     }
 
 
@@ -153,7 +163,10 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * @see javax.swing.BoundedRangeModel#setMinimum
      */
     public void setMinimum(int n) {
-        setRangeProperties(Math.max(value, n), extent, n, max, isAdjusting);
+        int newMax = Math.max(n, max);
+        int newValue = Math.max(n, value);
+        int newExtent = Math.min(newMax - newValue, extent);
+        setRangeProperties(newValue, newExtent, n, newMax, isAdjusting);
     }
 
 
@@ -167,7 +180,10 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
      * @see javax.swing.BoundedRangeModel#setMaximum
      */
     public void setMaximum(int n) {
-        setRangeProperties(Math.min(value, n), extent, min, n, isAdjusting);
+        int newMin = Math.min(n, min);
+        int newExtent = Math.min(n - newMin, extent);
+        int newValue = Math.min(n - newExtent, value);
+        setRangeProperties(newValue, newExtent, newMin, n, isAdjusting);
     }
 
 
@@ -227,6 +243,9 @@ public class SPagingBoundedRangeModel implements SBoundedRangeModel {
         if (newExtent < 0) {
             newExtent = 0;
         }
+        if ((newExtent + newValue) > newMax) {
+            newExtent = newMax - newValue;
+    	}
 
         boolean isChange =
                 (newValue != value) ||
