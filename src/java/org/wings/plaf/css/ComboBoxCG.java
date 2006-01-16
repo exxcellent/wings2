@@ -14,21 +14,15 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.script.JavaScriptListener;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SDefaultListCellRenderer;
+import org.wings.SListCellRenderer;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
-
 import java.io.IOException;
 
 public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.ComboBoxCG {
-
-    /**
-     * This Java script listener will request a form submit on a change (item selection).
-     *
-     * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.
-     */
-    public final static JavaScriptListener JS_ON_CHANGE_SUBMIT = ButtonCG.JS_ON_CHANGE_SUBMIT;    
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -47,7 +41,7 @@ public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.Co
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
 
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());                    
 
         if (!component.isEnabled())
             device.print(" disabled=\"true\"");
