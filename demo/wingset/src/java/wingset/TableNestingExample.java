@@ -3,15 +3,15 @@ package wingset;
 
 import org.wings.SComboBox;
 import org.wings.SComponent;
-import org.wings.SGridLayout;
-import org.wings.SPanel;
-import org.wings.SLabel;
 import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SLabel;
+import org.wings.SPanel;
 import org.wings.border.SEmptyBorder;
-import org.wings.plaf.css.ButtonCG;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import org.wings.script.JavaScriptListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
@@ -23,7 +23,7 @@ public class TableNestingExample  extends WingSetPane{
     private Color[] colors = new Color[] { Color.red, Color.green, Color.yellow};
 
     protected SComponent createExample() {
-        selectComboBox.addScriptListener(ButtonCG.JS_ON_CHANGE_SUBMIT);
+        selectComboBox.addScriptListener(JavaScriptListener.JS_ON_CHANGE_SUBMIT_FORM);
         for(int i = 5; i< 30; i++) {
             selectComboBox.addItem(new Integer(i));
         }
