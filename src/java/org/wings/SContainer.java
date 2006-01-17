@@ -296,7 +296,7 @@ public class SContainer extends SComponent {
         int index = getComponentList().indexOf(c);
         if (getComponentList().remove(c)) {
             getConstraintList().remove(index);
-
+	    c.removeNotify();
             fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
@@ -496,13 +496,17 @@ public class SContainer extends SComponent {
         }
     }
 
-    /*public void removeNotify() {
+    /*******
+     * Will be called internally
+     * all components will be informed
+     ***/
+    public void removeNotify() {
         Iterator iterator = getComponentList().iterator();
         while (iterator.hasNext()) {
             ((SComponent)iterator.next()).removeNotify();
         }
         super.removeNotify();
-    } */
+    } 
 
     /**
      * Collects all {@link SComponent#getComponentPopupMenu()} of all contained and visible components.

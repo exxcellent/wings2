@@ -1861,9 +1861,10 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /* *
      * Makes this <code>SComponent</code> unavailable.
      * This Method is called internal and should not be called directly
-     * /
+     */
     public void removeNotify() {
-    } */
+	/* currently nothing to do, but great to overwrite for some dangling eventListener */
+    } 
 
     // Nice: undocumented and useless
     /*public ArrayList getMenus() {
