@@ -275,8 +275,23 @@ public class STable extends SComponent
         return model.getColumnClass(col);
     }
 
+    /**
+     * Convienece method / Swing compatiblity to <code>model.getRowCount()</code>
+     * @return
+     */
     public int getRowCount() {
         return model.getRowCount();
+    }
+
+    /**
+     * Define an optional CSS class which should be applied additionally to the passed row num.
+     * Override this method, if you want to give rows different attributes.
+     * E.g. for displaying an alternating background color for rows.
+     *
+     * @return the style of a specific row number.
+     */
+    public String getRowStyle(int row) {
+        return null;
     }
 
     public Object getValueAt(int row, int column) {
