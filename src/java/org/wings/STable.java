@@ -249,7 +249,7 @@ public class STable extends SComponent
             if (model != null)
                 model.removeTableModelListener(this);
 
-            reload();
+            reload(ReloadManager.STATE);
 
             model = tm;
             model.addTableModelListener(this);
@@ -660,7 +660,7 @@ public class STable extends SComponent
         int oldEditingColumn = editingColumn;
         editingColumn = aColumn;
         if (editingColumn != oldEditingColumn)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     /**
@@ -672,7 +672,7 @@ public class STable extends SComponent
         int oldEditingRow = editingRow;
         editingRow = aRow;
         if (editingRow != oldEditingRow)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     /**
@@ -746,7 +746,7 @@ public class STable extends SComponent
             Object value = editor.getCellEditorValue();
             setValueAt(value, editingRow, editingColumn);
             removeEditor();
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -758,7 +758,7 @@ public class STable extends SComponent
      */
     public void editingCanceled(ChangeEvent e) {
         removeEditor();
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     /**
@@ -845,7 +845,7 @@ public class STable extends SComponent
     public void clearSelection() {
         if (!getSelectionModel().isSelectionEmpty()) {
             getSelectionModel().clearSelection();
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -943,7 +943,7 @@ public class STable extends SComponent
                     break;
             }
         }
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     /**
@@ -1058,7 +1058,7 @@ public class STable extends SComponent
         boolean oldHeaderVisible = headerVisible;
         headerVisible = hv;
         if (oldHeaderVisible != headerVisible)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public boolean isHeaderVisible() {
@@ -1074,7 +1074,7 @@ public class STable extends SComponent
         boolean oldShowHorizontalLines = showHorizontalLines;
         showHorizontalLines = b;
         if (showHorizontalLines != oldShowHorizontalLines)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public boolean getShowHorizontalLines() {
@@ -1085,7 +1085,7 @@ public class STable extends SComponent
         boolean oldShowVerticalLines = showVerticalLines;
         showVerticalLines = b;
         if (showVerticalLines != oldShowVerticalLines)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public boolean getShowVerticalLines() {
@@ -1102,7 +1102,7 @@ public class STable extends SComponent
         intercellSpacing = d;
         if ((intercellSpacing == null && oldIntercellSpacing != null) ||
                 intercellSpacing != null && !intercellSpacing.equals(oldIntercellSpacing))
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public SDimension getIntercellSpacing() {
@@ -1120,7 +1120,7 @@ public class STable extends SComponent
         intercellPadding = d;
         if ((intercellPadding == null && oldIntercellPadding != null) ||
                 intercellPadding != null && !intercellPadding.equals(oldIntercellPadding))
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public SDimension getIntercellPadding() {
@@ -1174,7 +1174,7 @@ public class STable extends SComponent
     public void setViewportSize(Rectangle d) {
         if (isDifferent(viewport, d)) {
             viewport = d;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -1192,7 +1192,7 @@ public class STable extends SComponent
     protected final ListSelectionListener reloadOnSelectionChangeListener =
             new ListSelectionListener() {
                 public void valueChanged(ListSelectionEvent e) {
-                    reload();
+                    reload(ReloadManager.STATE);
                 }
             };
 
@@ -1259,7 +1259,7 @@ public class STable extends SComponent
 
         if (columnModel != newColumnModel) {
             this.columnModel = newColumnModel;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 

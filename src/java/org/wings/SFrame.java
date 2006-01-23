@@ -297,7 +297,7 @@ public class SFrame
 
     public void write(Device s) throws IOException {
         if (isNoCaching())
-            reload(); // invalidate frame on each rendering!
+            reload(ReloadManager.STATE); // invalidate frame on each rendering!
         super.write(s);
     }
 

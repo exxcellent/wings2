@@ -112,7 +112,7 @@ public abstract class SAbstractIconTextCompound
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
         this.model = model;
-        reloadIfChange(this.model, model);
+        reloadIfChange(this.model, model, ReloadManager.STATE);
     }
 
     /**
@@ -209,17 +209,17 @@ public abstract class SAbstractIconTextCompound
     public int getIconTextGap() {
         return iconTextGap;
     }
-    
+
     /**
      * Sets the icon for the compound.
      *
      * @param i the icon.
      */
     public void setIcon(SIcon i) {
-        reloadIfChange(icon, i);
+        reloadIfChange(icon, i, ReloadManager.STATE);
         icon = i;
     }
-    
+
     /**
      * Returns the icon of the Compound.
      *
@@ -235,7 +235,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown when mouse button is pressed.
      */
     public void setPressedIcon(SIcon icon) {
-        reloadIfChange(pressedIcon, icon);
+        reloadIfChange(pressedIcon, icon, ReloadManager.STATE);
         pressedIcon = icon;
     }
 
@@ -255,14 +255,14 @@ public abstract class SAbstractIconTextCompound
      * @param icon rollOver icon for unselected compound.
      */
     public void setRolloverIcon(SIcon icon) {
-        reloadIfChange(rolloverIcon, icon);
+        reloadIfChange(rolloverIcon, icon, ReloadManager.STATE);
         rolloverIcon = icon;
     }
 
     /**
      * Returns the icon that is displayed as rollOver effect (meaning the icon
      * shown when the mouse is just positioned over the compound).
-     * 
+     *
      * @see #setRolloverIcon(SIcon)
      */
     public SIcon getRolloverIcon() {
@@ -270,13 +270,13 @@ public abstract class SAbstractIconTextCompound
     }
 
     /**
-     * Sets the icon that is displayed as rollover effect of a selected compound 
+     * Sets the icon that is displayed as rollover effect of a selected compound
      * (meaning the icon shown when the mouse is just positioned over the selected compound).
      *
      * @param icon rollOver icon for selected compound.
      */
     public void setRolloverSelectedIcon(SIcon icon) {
-        reloadIfChange(rolloverSelectedIcon, icon);
+        reloadIfChange(rolloverSelectedIcon, icon, ReloadManager.STATE);
         rolloverSelectedIcon = icon;
     }
 
@@ -290,12 +290,12 @@ public abstract class SAbstractIconTextCompound
     }
 
     /**
-     * Sets the icon that is displayed when a compound is selected. 
+     * Sets the icon that is displayed when a compound is selected.
      *
      * @param icon to be shown for a selected compound.
      */
     public void setSelectedIcon(SIcon icon) {
-        reloadIfChange(selectedIcon, icon);
+        reloadIfChange(selectedIcon, icon, ReloadManager.STATE);
         selectedIcon = icon;
     }
 
@@ -314,7 +314,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown for a selected compound that is disabled.
      */
     public void setDisabledSelectedIcon(SIcon icon) {
-        reloadIfChange(disabledSelectedIcon, icon);
+        reloadIfChange(disabledSelectedIcon, icon, ReloadManager.STATE);
         disabledSelectedIcon = icon;
     }
 
@@ -328,12 +328,12 @@ public abstract class SAbstractIconTextCompound
     }
 
     /**
-     * Sets the icon that is displayed when a compound is disabled. 
+     * Sets the icon that is displayed when a compound is disabled.
      *
      * @param icon to be shown for a disabled compound.
      */
     public void setDisabledIcon(SIcon icon) {
-        reloadIfChange(disabledIcon, icon);
+        reloadIfChange(disabledIcon, icon, ReloadManager.STATE);
         disabledIcon = icon;
     }
 
@@ -411,7 +411,7 @@ public abstract class SAbstractIconTextCompound
      * Sets the label of the button.
      */
     public void setText(String t) {
-        reloadIfChange(text, t);
+        reloadIfChange(text, t, ReloadManager.STATE);
         text = t;
     }
 
@@ -437,7 +437,7 @@ public abstract class SAbstractIconTextCompound
         if (model.isSelected() != selected) {
             model.setSelected(selected);
             fireStateChanged();
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 

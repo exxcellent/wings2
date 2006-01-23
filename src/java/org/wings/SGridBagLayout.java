@@ -246,6 +246,10 @@ public class SGridBagLayout
 
     public void removeComponent(SComponent c) {
         // The grid has to be rebuilt
+        nextHorCol = 0;
+        nextHorRow = 0;
+        nextVertCol = 0;
+        nextVertRow = 0;
         currentGrid = null;
         components.remove(c);
         c.removeComponentListener(this);

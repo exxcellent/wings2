@@ -124,7 +124,7 @@ public abstract class SAbstractAdjustable extends SComponent implements Adjustab
      * @see #getModel
      */
     public void setModel(SBoundedRangeModel newModel) {
-        reloadIfChange(this.model, newModel);
+        reloadIfChange(this.model, newModel, ReloadManager.STATE);
         if (model != null) {
             model.removeChangeListener(fwdAdjustmentEvents);
         }
@@ -498,7 +498,7 @@ public abstract class SAbstractAdjustable extends SComponent implements Adjustab
             int id = AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED;
             int type = AdjustmentEvent.TRACK;
             fireAdjustmentValueChanged(id, type, getValue());
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 

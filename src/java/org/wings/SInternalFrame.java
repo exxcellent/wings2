@@ -68,7 +68,7 @@ public class SInternalFrame
         boolean old = iconified;
         iconified = v;
         if (old != iconified) {
-            reload();
+            reload(ReloadManager.STATE);
             if (iconified)
                 setMaximized(false);
         }
@@ -81,7 +81,7 @@ public class SInternalFrame
         boolean old = maximized;
         maximized = v;
         if (old != maximized) {
-            reload();
+            reload(ReloadManager.STATE);
             if (maximized)
                 setIconified(false);
         }
@@ -94,7 +94,7 @@ public class SInternalFrame
         boolean old = closed;
         closed = v;
         if (old != closed)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public boolean isClosed() { return closed; }
@@ -102,7 +102,7 @@ public class SInternalFrame
     public void setIcon(SIcon i) {
         if (i != icon || i != null && !i.equals(icon)) {
             icon = i;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -115,7 +115,7 @@ public class SInternalFrame
         title = t;
         if ((title == null && oldTitle != null) ||
                 (title != null && !title.equals(oldTitle)))
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public String getTitle() {

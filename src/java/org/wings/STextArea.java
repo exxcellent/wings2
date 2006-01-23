@@ -97,7 +97,7 @@ public class STextArea        extends STextComponent {
         int oldRows = rows;
         rows = r;
         if (oldRows != rows)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     /**
@@ -117,7 +117,7 @@ public class STextArea        extends STextComponent {
         int oldColumns = columns;
         columns = c;
         if (columns != oldColumns)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     

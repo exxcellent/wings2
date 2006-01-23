@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A <CODE>FileDataSource</CODE> implements a TemplateSource
+ * A <CODE>FileDataSource</STATE> implements a TemplateSource
  * for a file.
  *
  * @author <A href="mailto:H.Zeller@acm.org">Henner Zeller</A>

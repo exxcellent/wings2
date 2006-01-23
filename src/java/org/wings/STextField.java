@@ -61,7 +61,7 @@ public class STextField
         int oldColumns = columns;
         columns = c;
         if (columns != oldColumns)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     /**
@@ -76,7 +76,7 @@ public class STextField
         int oldMaxColumns = maxColumns;
         maxColumns = mc;
         if (maxColumns != oldMaxColumns)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public int getMaxColumns() {

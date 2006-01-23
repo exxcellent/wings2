@@ -375,7 +375,7 @@ public class SProgressBar extends SComponent {
     public void setString(String s) {
         String oldValue = progressString;
         progressString = s;
-        reloadIfChange(oldValue, progressString);
+        reloadIfChange(oldValue, progressString, ReloadManager.STATE);
     }
 
     /**
@@ -492,7 +492,7 @@ public class SProgressBar extends SComponent {
      */
     private class ModelListener implements ChangeListener, Serializable {
         public void stateChanged(ChangeEvent e) {
-            reload();
+            reload(ReloadManager.STATE);
             fireStateChanged();
         }
     }
@@ -600,7 +600,7 @@ public class SProgressBar extends SComponent {
             if (model != null) {
                 model.setExtent(0);
             }
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 

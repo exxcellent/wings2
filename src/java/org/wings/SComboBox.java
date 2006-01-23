@@ -129,7 +129,7 @@ public class SComboBox
             // set the current selected item.
             selectedItemReminder = dataModel.getSelectedItem();
 
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -152,7 +152,7 @@ public class SComboBox
         if (maximumRowCount != count) {
             maximumRowCount = count;
 
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -171,7 +171,7 @@ public class SComboBox
     public void setRenderer(SListCellRenderer newRenderer) {
         if (isDifferent(renderer, newRenderer)) {
             renderer = newRenderer;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -213,7 +213,7 @@ public class SComboBox
                 selectedItemReminder = object;
             }
 
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -375,7 +375,7 @@ public class SComboBox
      */
     public void addActionListener(ActionListener listener) {
         addEventListener(ActionListener.class, listener);
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     /**
@@ -385,7 +385,7 @@ public class SComboBox
      */
     public void removeActionListener(ActionListener listener) {
         removeEventListener(ActionListener.class, listener);
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     /**
@@ -494,7 +494,7 @@ public class SComboBox
             if (!selectingItem) {
                 fireActionEvent();
             }
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -505,7 +505,7 @@ public class SComboBox
      * @see javax.swing.event.ListDataListener
      */
     public void intervalAdded(ListDataEvent e) {
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     /**
@@ -515,7 +515,7 @@ public class SComboBox
      * @see javax.swing.event.ListDataListener
      */
     public void intervalRemoved(ListDataEvent e) {
-        reload();
+        reload(ReloadManager.STATE);
     }
 
 

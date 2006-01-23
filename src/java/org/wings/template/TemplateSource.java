@@ -22,7 +22,7 @@ import java.io.InputStream;
  * might change over time and thus has a modification time; an input stream
  * to access the contents.
  * <p/>
- * So <CODE>TemplateSource</CODE> is a general source where templates can come
+ * So <CODE>TemplateSource</STATE> is a general source where templates can come
  * from. You can think of Files, URLs, Database-BLOBS ..
  *
  * @author <A href="mailto:H.Zeller@acm.org">Henner Zeller</A>

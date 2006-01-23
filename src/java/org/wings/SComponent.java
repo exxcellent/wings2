@@ -238,7 +238,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param border the border to be set for the component
      */
     public void setBorder(SBorder border) {
-        reloadIfChange(this.border, border);
+        reloadIfChange(this.border, border, ReloadManager.STATE);
         this.border = border;
     }
 
@@ -257,7 +257,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param parent the container
      */
     public void setParent(SContainer parent) {
-        reloadIfChange(this.parent, parent);
+        reloadIfChange(this.parent, parent, ReloadManager.STATE);
         this.parent = parent;
         if (parent != null)
             setParentFrame(parent.getParentFrame());
@@ -292,7 +292,11 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             popupMenu.setParentFrame(parentFrame);
         }
 
-        reload();
+        //reload(ReloadManager.STATE);
+        if (getScriptListeners().length > 0)
+            reload(ReloadManager.SCRIPT);
+        if (dynamicStyles != null && dynamicStyles.size() > 0)
+            reload(ReloadManager.STYLE);
     }
 
     /*public void setInheritsPopupMenu(boolean inheritsPopupMenu) {
@@ -305,7 +309,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }*/
 
     public void setComponentPopupMenu(SPopupMenu popupMenu) {
-        reloadIfChange(this.popupMenu, popupMenu);
+        reloadIfChange(this.popupMenu, popupMenu, ReloadManager.STATE);
         if (this.popupMenu != null)
             this.popupMenu.setParentFrame(null);
         this.popupMenu = popupMenu;
@@ -367,7 +371,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see org.wings.SComponent#getPreferredSize
      */
     public void setPreferredSize(SDimension preferredSize) {
-        reloadIfChange(this.preferredSize, preferredSize);
+        reloadIfChange(this.preferredSize, preferredSize, ReloadManager.STATE);
         this.preferredSize = preferredSize;
     }
 
@@ -566,7 +570,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                 return;
             }
         }
-	reload();
+        reload(ReloadManager.STATE | ReloadManager.SCRIPT);
         addEventListener(ScriptListener.class, listener);
     }
 
@@ -585,7 +589,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public final void removeScriptListener(ScriptListener listener) {
         removeEventListener(ScriptListener.class, listener);
-        reload();
+        reload(ReloadManager.SCRIPT);
     }
 
     /**
@@ -638,7 +642,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param uncheckedName String to use as componentn name/identifier.
      */
     public void setNameRaw(String uncheckedName) {
-        reloadIfChange(this.name, uncheckedName);
+        reloadIfChange(this.name, uncheckedName, ReloadManager.STATE);
         this.name = uncheckedName;
     }
 
@@ -705,7 +709,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     // <p>Please consider using {@link #addStyle(String)} to avoid disabling of default wingS stylesheet set.
     public void setStyle(String cssClassName) {
-        reloadIfChange(style, cssClassName);
+        reloadIfChange(style, cssClassName, ReloadManager.STATE);
         this.style = cssClassName;
     }
 
@@ -729,7 +733,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         if (dynamicStyles == null)
             dynamicStyles = new HashMap(4);
         dynamicStyles.put(style.getSelector(), style);
-        reload();
+        reload(ReloadManager.STYLE);
     }
 
     /**
@@ -741,7 +745,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         if (dynamicStyles == null)
             return;
         dynamicStyles.remove(selector);
-        reload();
+        reload(ReloadManager.STYLE);
     }
 
     /**
@@ -771,7 +775,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             Style style = (Style) iterator.next();
             this.dynamicStyles.put(style.getSelector(), style);
         }
-        reload();
+        reload(ReloadManager.STYLE);
     }
 
     /**
@@ -832,10 +836,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new CSSStyle(selector, property, propertyValue));
-            reload();
         } else {
             String old = style.put(property, propertyValue);
-            reloadIfChange(old, propertyValue);
+            reloadIfChange(old, propertyValue, ReloadManager.STYLE);
         }
     }
 
@@ -877,11 +880,10 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new CSSStyle(selector, attributes));
-            reload();
         } else {
             boolean changed = style.putAll(attributes);
             if (changed)
-                reload();
+                reload(ReloadManager.STYLE);
         }
     }
 
@@ -1003,135 +1005,141 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Mark the component as subject to reload.
      * The component will be registered with the ReloadManager.
+     * @param aspect
      */
-    public final void reload() {
-        getSession().getReloadManager().reload(this);
+    public final void reload(int aspect) {
+        getSession().getReloadManager().reload(this, aspect);
+    }
+
+    protected final void reloadIfChange(Object oldVal, Object newVal) {
+        reloadIfChange(oldVal, newVal, ReloadManager.STATE);
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
+     * @param aspect
      */
-    protected final void reloadIfChange(Object oldVal, Object newVal) {
+    protected final void reloadIfChange(Object oldVal, Object newVal, int aspect) {
         if (!((oldVal == newVal) || (oldVal != null && oldVal.equals(newVal)))) {
             //System.err.println(getClass().getDescription() + ": reload. old:" + oldVal + "; new: "+ newVal);
-            reload();
+            reload(aspect);
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(int oldVal, int newVal) {
         if (oldVal != newVal) {
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(boolean oldVal, boolean newVal) {
         if (oldVal != newVal) {
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(byte oldVal, byte newVal) {
         if (oldVal != newVal) {
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(short oldVal, short newVal) {
         if (oldVal != newVal) {
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(long oldVal, long newVal) {
         if (oldVal != newVal) {
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(float oldVal, float newVal) {
         if (oldVal != newVal) {
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(double oldVal, double newVal) {
         if (oldVal != newVal) {
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
     /**
      * Mark this component as subject to reload for the given
      * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * fashion, changed. Convenience method for {@link #reload(int)}
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(char oldVal, char newVal) {
         if (oldVal != newVal) {
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -1470,7 +1478,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         if (cg != null) {
             cg.installCG(this);
         }
-        reloadIfChange(cg, oldCG);
+        reloadIfChange(cg, oldCG, ReloadManager.STATE);
     }
 
     /**
@@ -1698,7 +1706,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     public void setShowAsFormComponent(boolean showAsFormComponent) {
         if (this.showAsFormComponent != showAsFormComponent) {
             this.showAsFormComponent = showAsFormComponent;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 

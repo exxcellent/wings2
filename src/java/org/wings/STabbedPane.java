@@ -18,7 +18,6 @@ import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
 import org.wings.style.CSSStyleSheet;
-import org.wings.event.SContainerEvent;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -936,7 +935,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
         if (index >= pages.size() || index == -1) return;
         card.show(((Page) pages.get(index)).component);
 
-        reload();
+        reload(ReloadManager.STATE);
         fireStateChanged();
     }
 

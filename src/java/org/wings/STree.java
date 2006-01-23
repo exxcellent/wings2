@@ -163,7 +163,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
                 ((TreeSelectionListener) listeners[i + 1]).valueChanged(e);
             }
         }
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     /**
@@ -775,7 +775,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
           }
         */
         fireTreeExpanded(p);
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     public void expandRow(int row) {
@@ -785,7 +785,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
     public void collapseRow(TreePath p) {
         treeState.setExpandedState(p, false);
         fireTreeCollapsed(p);
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     public void collapseRow(int row) {
@@ -932,28 +932,28 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
             if (e == null)
                 return;
             treeState.treeNodesChanged(e);
-            reload();
+            reload(ReloadManager.STATE);
         }
 
         public void treeNodesInserted(TreeModelEvent e) {
             if (e == null)
                 return;
             treeState.treeNodesInserted(e);
-            reload();
+            reload(ReloadManager.STATE);
         }
 
         public void treeStructureChanged(TreeModelEvent e) {
             if (e == null)
                 return;
             treeState.treeStructureChanged(e);
-            reload();
+            reload(ReloadManager.STATE);
         }
 
         public void treeNodesRemoved(TreeModelEvent e) {
             if (e == null)
                 return;
             treeState.treeNodesRemoved(e);
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -995,7 +995,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
         viewport = d;
         if ((viewport == null && oldViewport != null) ||
                 (viewport != null && !viewport.equals(oldViewport)))
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     public Rectangle getViewportSize() {

@@ -16,7 +16,6 @@ package org.wings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.ButtonCG;
-import org.wings.session.LowLevelEventDispatcher;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -143,7 +142,7 @@ public abstract class SAbstractButton
             if (buttonGroup != null && getSession().getDispatcher() != null) {
                 getSession().getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -216,7 +215,7 @@ public abstract class SAbstractButton
     public void setType(String t) {
         if (isDifferent(type, t)) {
             type = t;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -352,7 +351,7 @@ public abstract class SAbstractButton
     public void setEventTarget(String target) {
         if (isDifferent(eventTarget, target)) {
             eventTarget = target;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -405,7 +404,7 @@ public abstract class SAbstractButton
                 actionPropertyChangeListener = createActionPropertyChangeListener(action);
                 action.addPropertyChangeListener(actionPropertyChangeListener);
             }
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -517,7 +516,7 @@ public abstract class SAbstractButton
     }
 
     public void setMnemonic(String mnemonic) {
-        reloadIfChange(this.mnemonic, mnemonic);
+        reloadIfChange(this.mnemonic, mnemonic, ReloadManager.STATE);
         this.mnemonic = mnemonic;
     }
 

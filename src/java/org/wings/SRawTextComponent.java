@@ -13,10 +13,6 @@
  */
 package org.wings;
 
-import java.io.IOException;
-
-import org.wings.io.Device;
-
 /**
  * Display area for a short text string.
  * 
@@ -63,7 +59,7 @@ public class SRawTextComponent extends SComponent {
      * @param t The new text
      */
     public void setText(String t) {
-        reloadIfChange(text, t);
+        reloadIfChange(text, t, ReloadManager.STATE);
         text = t;
     }
 }

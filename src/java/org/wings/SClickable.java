@@ -142,7 +142,7 @@ public class SClickable
     public void setEvent(String e) {
         if (isDifferent(event, e)) {
             event = e;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -160,7 +160,7 @@ public class SClickable
     public void setEventTarget(LowLevelEventListener t) {
         if (isDifferent(requestTarget, t)) {
             requestTarget = t;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 

@@ -152,7 +152,7 @@ public class BackButtonExample extends WingSetPane {
 
         newEpochButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mainPanel.reload(); // Force invalidaton of epoch for demonstration purposes
+                mainPanel.reload(ReloadManager.STATE); // Force invalidaton of epoch for demonstration purposes
             }
         });
         mainPanel.add(newEpochButton);

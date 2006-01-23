@@ -46,14 +46,17 @@ public class DefaultReloadManager
     public DefaultReloadManager() {
     }
 
-    public void reload(SComponent component) {
+    public void reload(SComponent component, int aspect) {
         dirtyComponents.add(component);
 
         SFrame parent = component.getParentFrame();
         if (parent != null) {
-            markDirty(parent.getDynamicResource(DynamicCodeResource.class));
-            markDirty(parent.getDynamicResource(DynamicStyleSheetResource.class));
-            markDirty(parent.getDynamicResource(DynamicScriptResource.class));
+            if ((aspect & STATE) != 0)
+                markDirty(parent.getDynamicResource(DynamicCodeResource.class));
+            if ((aspect & STYLE) != 0)
+                markDirty(parent.getDynamicResource(DynamicStyleSheetResource.class));
+            if ((aspect & SCRIPT) != 0)
+                markDirty(parent.getDynamicResource(DynamicScriptResource.class));
         }
     }
 

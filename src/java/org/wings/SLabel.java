@@ -170,7 +170,7 @@ public class SLabel extends SComponent {
      * @param i
      */
     public void setIcon(SIcon i) {
-        reloadIfChange(icon, i);
+        reloadIfChange(icon, i, ReloadManager.STATE);
         icon = i;
     }
 
@@ -187,7 +187,7 @@ public class SLabel extends SComponent {
      * @param i
      */
     public void setDisabledIcon(SIcon i) {
-        reloadIfChange(disabledIcon, i);
+        reloadIfChange(disabledIcon, i, ReloadManager.STATE);
         disabledIcon = i;
     }
 
@@ -213,7 +213,7 @@ public class SLabel extends SComponent {
      * @param t The new text
      */
     public void setText(String t) {
-        reloadIfChange(text, t);
+        reloadIfChange(text, t, ReloadManager.STATE);
         text = t;
     }
 

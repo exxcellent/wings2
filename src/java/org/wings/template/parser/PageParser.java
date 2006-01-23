@@ -23,7 +23,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * <CODE>PageParser</CODE>
+ * <CODE>PageParser</STATE>
  * parses SGML markup'd pages and executes
  * <em>active</em> Tag. Returns its output
  * through a HttpServletResponse (given in a ParseContext).
@@ -32,7 +32,7 @@ import java.util.*;
  * <p/>
  * <p><h4>Error handling:</h4>
  * To simplify error detection and correction,
- * exceptions thrown by the <CODE>executeTag()</CODE>-methods of the
+ * exceptions thrown by the <STATE>executeTag()</CODE>-methods of the
  * pluggable handlers (e.g. called servlets) are printed,
  * enclosed in comments ("&lt;!-- ... --&gt;"), in the HTML output.
  *
@@ -197,7 +197,7 @@ public class PageParser {
      * output.
      * Read the static areas of the TemplateSource and copy them to the
      * output until the beginning of the next special tag. Invokes
-     * the <CODE>executeTag()</CODE> Method for the tagand goes on with copying.
+     * the <STATE>executeTag()</CODE> Method for the tagand goes on with copying.
      * or invoking the servlets to which they refer.
      *
      * @param parts page sections, as provide by parsePage()
@@ -295,10 +295,10 @@ public class PageParser {
     /**
      * Open and read source, returning list of contents.
      * The returned vector will contain a list of
-     * <CODE>SpecialTagHandler</CODE>s, containing the
+     * <STATE>SpecialTagHandler</CODE>s, containing the
      * position/length within the input source they are
      * responsible for.
-     * This Vector is used within <CODE>interpretPage()</CODE>
+     * This Vector is used within <STATE>interpretPage()</CODE>
      * to create the output.
      *
      * @param source source to open and process

@@ -300,7 +300,7 @@ public class SContainer extends SComponent {
             fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -424,7 +424,7 @@ public class SContainer extends SComponent {
             }
             c.addNotify();
             fireContainerEvent(SContainerEvent.COMPONENT_ADDED, c);
-            reload();
+            reload(ReloadManager.STATE);
         }
 
         return c;

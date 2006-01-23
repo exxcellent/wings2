@@ -269,7 +269,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public void setCellRenderer(SListCellRenderer cellRenderer) {
         SListCellRenderer oldValue = this.cellRenderer;
         this.cellRenderer = cellRenderer;
-        reloadIfChange(oldValue, cellRenderer);
+        reloadIfChange(oldValue, cellRenderer, ReloadManager.STATE);
     }
 
 
@@ -351,7 +351,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public void setVisibleRowCount(int visibleRowCount) {
         if (this.visibleRowCount != visibleRowCount) {
             this.visibleRowCount = Math.max(0, visibleRowCount);
-            reload();
+            reload(ReloadManager.STATE);
             //firePropertyChange("visibleRowCount", oldValue, visibleRowCount);
         }
     }
@@ -387,7 +387,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
             clearSelection();
             dataModel = model;
             dataModel.addListDataListener(this);
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -493,7 +493,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
             fireSelectionValueChanged(e.getFirstIndex(),
                     e.getLastIndex(),
                     e.getValueIsAdjusting());
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -672,7 +672,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public void clearSelection() {
         if (!getSelectionModel().isSelectionEmpty()) {
             getSelectionModel().clearSelection();
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -1058,7 +1058,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public void setViewportSize(Rectangle d) {
         if (isDifferent(viewport, d)) {
             viewport = d;
-            reload();
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -1126,15 +1126,15 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
      */
 
     public void contentsChanged(javax.swing.event.ListDataEvent e) {
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     public void intervalAdded(javax.swing.event.ListDataEvent e) {
-        reload();
+        reload(ReloadManager.STATE);
     }
 
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
-        reload();
+        reload(ReloadManager.STATE);
     }
 
 }

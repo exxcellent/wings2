@@ -23,7 +23,11 @@ import java.util.Set;
  */
 public interface ReloadManager
 {
-    void reload(SComponent component);
+    public static final int STATE = 1;
+    public static final int STYLE = 2;
+    public static final int SCRIPT = 4;
+
+    void reload(SComponent component, int aspect);
 
     /**
      * Return a set of all components that are marked dirty.

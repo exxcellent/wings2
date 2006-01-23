@@ -153,7 +153,7 @@ public class SFileChooser
         int oldColumns = columns;
         columns = c;
         if (columns != oldColumns)
-            reload();
+            reload(ReloadManager.STATE);
     }
 
     /**

@@ -21,7 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * A <CODE>CachedFileDataSource</CODE> implements a DataSource
+ * A <CODE>CachedFileDataSource</STATE> implements a DataSource
  * for a file, but caches small ones.
  *
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
