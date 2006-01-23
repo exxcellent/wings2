@@ -119,7 +119,7 @@ public final class Utils {
             }
         }
     }
-    
+
     public static void writeFrameEvents(Device d, SFrame frame) throws IOException {
         // here it goes, global input maps
         ScriptListener[] scriptListeners = frame.getScriptListeners();
@@ -143,7 +143,7 @@ public final class Utils {
                 }
             }
         }
-        
+
         ScriptListener[] listeners = frame.getScriptListeners();
         Map eventScripts = new HashMap();
         if (listeners.length > 0) {
@@ -168,9 +168,9 @@ public final class Utils {
                 eventScripts.put(event, eventScriptCode);
             }
         }
-        
-        
-        
+
+
+
 
         Iterator it = eventScripts.keySet().iterator();
         while (it.hasNext()) {
@@ -501,7 +501,7 @@ public final class Utils {
             quote(d,s,quoteNewline, false, false);
         }
     }
-    
+
     /**
      * Prints an optional attribute. If the String value has a content
      * (value != null && value.length > 0), the attrib is added otherwise
@@ -614,8 +614,8 @@ public final class Utils {
      * testing purposes.
      */
     public static void main(String argv[]) throws Exception {
-        
-        
+
+
         Color c = new Color(255, 254, 7);
         Device d = new org.wings.io.StringBufferDevice();
         write(d, c);
@@ -747,5 +747,39 @@ public final class Utils {
         }
 
         return returnValue.toString();
+    }
+
+    /**
+     * Prepends the component style class set on the component to the existing style string.
+     * @param component Component may be <code>null</code> and may have a <code>null</code> style string.
+     * @param styleString The style string to append
+     */
+    public static StringBuffer joinStyles(final SComponent component, final StringBuffer styleString) {
+        if (component != null && component.getStyle() != null) {
+            if (styleString != null) {
+                styleString.insert(0," ");
+                styleString.insert(0,component.getStyle());
+                return styleString;
+            } else {
+                return new StringBuffer(component.getStyle());
+            }
+        } else {
+            return styleString;
+        }
+    }
+
+    /**
+     * Prepends the component style class set on the component to the existing style string.
+     * @param component Component may be <code>null</code> and may have a <code>null</code> style string.
+     * @param styleString The style string to append
+     */
+    public static String joinStyles(final SComponent component, final String styleString) {
+        if (component != null && component.getStyle() != null) {
+            if (styleString != null)
+                return component.getStyle()+" "+styleString;
+            else
+                return component.getStyle();
+        } else
+            return styleString != null ? styleString : "";
     }
 }

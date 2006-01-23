@@ -14,26 +14,34 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.style.CSSSelector;
+import org.wings.RequestURL;
+import org.wings.SAbstractIconTextCompound;
+import org.wings.SCellRendererPane;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SListSelectionModel;
+import org.wings.STable;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
-import org.wings.table.STableCellRenderer;
+import org.wings.style.CSSSelector;
 import org.wings.table.SDefaultTableCellRenderer;
-
+import org.wings.table.STableCellRenderer;
+import org.wings.table.STableColumnModel;
+import org.wings.table.STableColumn;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
-public class TableCG extends AbstractComponentCG implements
-        org.wings.plaf.TableCG {
+public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
 
     protected String fixedTableBorderWidth;
+    private final int SELECTION_COLUMN_WIDTH = 10;
 
     /**
      * Initialize properties from config
@@ -46,9 +54,11 @@ public class TableCG extends AbstractComponentCG implements
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
+
         final STable table = (STable) comp;
         final CGManager manager = table.getSession().getCGManager();
         Object value;
+
         value = manager.getObject("STable.defaultRenderer", STableCellRenderer.class);
         if (value != null) {
             table.setDefaultRenderer((STableCellRenderer) value);
@@ -57,9 +67,15 @@ public class TableCG extends AbstractComponentCG implements
                 cellRenderer.setEditIcon(manager.getIcon("TableCG.editIcon"));
             }
         }
+
         value = manager.getObject("STable.headerRenderer", STableCellRenderer.class);
         if (value != null) {
             table.setHeaderRenderer((STableCellRenderer) value);
+        }
+
+        value = manager.getObject("STable.rowSelectionRenderer", org.wings.table.STableCellRenderer.class);
+        if (value != null) {
+            table.setRowSelectionRenderer((org.wings.table.STableCellRenderer) value);
         }
 
         InputMap inputMap = new InputMap();
@@ -90,6 +106,16 @@ public class TableCG extends AbstractComponentCG implements
         actionMap.put("left", action);
         actionMap.put("right", action);
         table.setActionMap(actionMap);
+    }
+
+    public void uninstallCG(SComponent component) {
+        super.uninstallCG(component);
+        final STable table = (STable) component;
+        table.setHeaderRenderer(null);
+        table.setDefaultRenderer(null);
+        table.setRowSelectionRenderer(null);
+        table.setActionMap(null);
+        table.setInputMap(null);
     }
 
     /**
@@ -223,13 +249,20 @@ public class TableCG extends AbstractComponentCG implements
     public void writeContent(final Device device, final SComponent _c)
             throws IOException {
         final STable table = (STable) _c;
-        boolean childSelectorWorkaround = !table.getSession().getUserAgent().supportsCssChildSelector();
-
-        SDimension intercellPadding = table.getIntercellPadding();
-        SDimension intercellSpacing = table.getIntercellSpacing();
+        final SDimension intercellPadding = table.getIntercellPadding();
+        final SDimension intercellSpacing = table.getIntercellSpacing();
+        final SListSelectionModel selectionModel = table.getSelectionModel();
+        final SCellRendererPane rendererPane = table.getCellRendererPane();
+        final boolean childSelectorWorkaround = !table.getSession().getUserAgent().supportsCssChildSelector();
+        final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION && table.isEditable();
+        final boolean showAsFormComponent = table.getShowAsFormComponent();
+        final SDimension tableWidthByColumnModel = determineTableWidthByColumnModel(table, needsSelectionRow);
 
         device.print("<table");
-        Utils.printCSSInlineFullSize(device, table.getPreferredSize());
+        if (tableWidthByColumnModel != null)
+            Utils.optAttribute(device,"style",tableWidthByColumnModel.toString()); // apply table dimension if set
+        else
+            Utils.printCSSInlineFullSize(device, table.getPreferredSize()); // stretch if outer dimension has been set
 
         // TODO: border="" should be obsolete
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse
@@ -247,7 +280,7 @@ public class TableCG extends AbstractComponentCG implements
         int startCol = 0;
         int endRow = table.getRowCount();
         int endCol = table.getColumnCount();
-        Rectangle viewport = table.getViewportSize();
+        final Rectangle viewport = table.getViewportSize();
         if (viewport != null) {
             startRow = viewport.y;
             startCol = viewport.x;
@@ -255,19 +288,20 @@ public class TableCG extends AbstractComponentCG implements
             endCol = Math.min(startCol + viewport.width, endCol);
         }
 
-        SCellRendererPane rendererPane = table.getCellRendererPane();
+        /*
+         *  The column widths if set
+         */
+        if (table.getColumnModel() != null) {
+            renderColumnWidths(device, table, needsSelectionRow, startCol, endCol);
+        }
 
         /*
-        * render the header 
+        * render the header
         */
-        SListSelectionModel selectionModel = table.getSelectionModel();
-        boolean numbering = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION && table.isEditable();
-        boolean showAsFormComponent = table.getShowAsFormComponent();
-
         if (table.isHeaderVisible()) {
             device.print("<thead><tr>\n");
 
-            if (numbering)
+            if (needsSelectionRow)
                 device.print("<th></th>");
 
             for (int c = startCol; c < endCol; c++)
@@ -298,33 +332,8 @@ public class TableCG extends AbstractComponentCG implements
             }
             device.print(">");
 
-            if (numbering) {
-                device.print("<td");
-                Utils.optAttribute(device, "col", "numbering");
-                Utils.optAttribute(device, "class", "numbering");
-                device.print(">");
-
-                if (showAsFormComponent) {
-                    writeButtonStart(device, table, table.getToggleSelectionParameter(r, -1));
-                    device.print(" type=\"submit\" name=\"");
-                    Utils.write(device, Utils.event(table));
-                    device.print(SConstants.UID_DIVIDER);
-                    Utils.write(device, table.getToggleSelectionParameter(r, -1));
-                    device.print("\" value=\"\">");
-                    device.print(r);
-                    device.print("</button>");
-                } else {
-                    RequestURL selectionAddr = table.getRequestURL();
-                    selectionAddr.addParameter(Utils.event(table),
-                            table.getToggleSelectionParameter(r, -1));
-
-                    device.print("<a href=\"");
-                    Utils.write(device, selectionAddr.toString());
-                    device.print("\">");
-                    device.print(r);
-                    device.print("</a>");
-                }
-                device.print("</td>");
+            if (needsSelectionRow) {
+                renderSelectionRow(device, table, rendererPane, r, showAsFormComponent);
             }
 
             for (int c = startCol; c < endCol; c++)
@@ -336,10 +345,129 @@ public class TableCG extends AbstractComponentCG implements
         device.print("</table>\n");
     }
 
+    /**
+     * Renders a COLGROUP html element to format the column widths
+     */
+    protected void renderColumnWidths(final Device device, final STable table,
+                                      final boolean needsSelectionRow, final int startcol, final int endcol) throws IOException {
+        final STableColumnModel columnModel = table.getColumnModel();
+        final int totalWidth = columnModel.getTotalColumnWidth();
+        if (totalWidth > 0) {
+            int viewPortWidth = 0;
+            final String totalWidthUnit = columnModel.getTotalColumnWidthUnit();
+            for (int i = startcol; i <= endcol; i++) {
+                final STableColumn column = columnModel.getColumn(i);
+                if (column != null && !column.isHidden()) {
+                    viewPortWidth+=column.getWidth();
+                }
+            }
+
+            Utils.printNewline(device, table);
+            device.print("<colgroup>");
+            if (needsSelectionRow) {
+                Utils.printNewline(device, table);
+                device.print("\t<col width=\"").print(SELECTION_COLUMN_WIDTH).print("\"/>");
+            }
+            for (int i = startcol; i <= endcol; i++) {
+                final STableColumn column = columnModel.getColumn(i);
+                if (column != null && !column.isHidden()) {
+                    Utils.printNewline(device, table);
+                    device.print("\t<col width=\"");
+                    if (totalWidthUnit == null) // relative
+                        device.print(Math.round(100.0f/viewPortWidth*column.getWidth())).print("%");
+                    else
+                        device.print(column.getWidth()).print(column.getWidthUnit());
+                    device.print("\"/>");
+                }
+            }
+            Utils.printNewline(device, table);
+            device.print("</colgroup>");
+        }
+    }
+
+    /** Renders the row sometimes needed to allow row selection. */
+    protected void renderSelectionRow(final Device device, final STable table, final SCellRendererPane rendererPane,
+                                      final int row, final boolean showAsFormComponent)
+            throws IOException {
+        final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
+        final String columnStyle = Utils.joinStyles((SComponent) rowSelectionRenderer, "numbering");
+
+        device.print("<td");
+        Utils.optAttribute(device, "col", "numbering");
+        Utils.optAttribute(device, "class", columnStyle);
+        Utils.optAttribute(device, "width", SELECTION_COLUMN_WIDTH); // TODO fixme static selection column width
+        device.print(">");
+
+        if (showAsFormComponent) {
+            writeButtonStart(device, table, table.getToggleSelectionParameter(row, -1));
+            device.print(" type=\"submit\" name=\"");
+            Utils.write(device, Utils.event(table));
+            device.print(SConstants.UID_DIVIDER);
+            Utils.write(device, table.getToggleSelectionParameter(row, -1));
+            device.print("\" value=\"\">");
+            renderSelectionRowContent(device, row, table, rendererPane);
+            device.print("</button>");
+        } else {
+            RequestURL selectionAddr = table.getRequestURL();
+            selectionAddr.addParameter(Utils.event(table), table.getToggleSelectionParameter(row, -1));
+
+            writeLinkStart(device, selectionAddr);
+            renderSelectionRowContent(device, row, table, rendererPane);
+            device.print("</a>");
+        }
+        device.print("</td>");
+    }
+
+    /** Renders the <b>content</b> of the row selection row. */
+    private void renderSelectionRowContent(final Device device, int row, final STable table, final SCellRendererPane rendererPane)
+            throws IOException {
+        final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
+        if (rowSelectionRenderer == null) {
+            // simple case: just row number
+            device.print(row);
+        } else {
+            // default case: use row selection renderer component
+            final SComponent comp = rowSelectionRenderer.getTableCellRendererComponent(table,
+                    table.getToggleSelectionParameter(row, -1),
+                    table.isRowSelected(row),
+                    row, -1);
+            rendererPane.writeComponent(device, comp, table);
+        }
+    }
+
+    /**
+     * @return The total width for this table or <code>null</code> if none.
+     */
+    protected SDimension determineTableWidthByColumnModel(final STable table, final boolean needsSelectionRow) {
+        if (table.getColumnModel() == null) {
+            return null;
+        } else {
+            int totalWidth = table.getColumnModel().getTotalColumnWidth();
+            if (totalWidth < 0) {
+                return null;
+            } else {
+                String totalWidthUnit = table.getColumnModel().getTotalColumnWidthUnit();
+                if (totalWidthUnit == null) {// relative width
+                    return null;
+                } else {
+                    if (needsSelectionRow && "px".equalsIgnoreCase(totalWidthUnit))
+                        totalWidth += SELECTION_COLUMN_WIDTH;
+                    return new SDimension(totalWidth+totalWidthUnit, null);
+                }
+            }
+        }
+    }
+
+    /**
+     * Tweak property.
+     */
     public String getFixedTableBorderWidth() {
         return fixedTableBorderWidth;
     }
 
+    /**
+     * Tweak property.
+     */
     public void setFixedTableBorderWidth(String fixedTableBorderWidth) {
         this.fixedTableBorderWidth = fixedTableBorderWidth;
     }

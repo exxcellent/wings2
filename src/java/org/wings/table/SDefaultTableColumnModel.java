@@ -13,40 +13,48 @@
  */
 package org.wings.table;
 
-import java.util.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-/**
- * SDefaultTableColumnModel
- * <p/>
+/*
+ * @see STableColumnModel
  */
 public class SDefaultTableColumnModel implements STableColumnModel {
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(SDefaultTableColumnModel.class);
     private List columns = new LinkedList();
     private int columnMargin;
 
-    public void addColumn( STableColumn column ) {
-        if ( column == null )
-            throw new IllegalArgumentException( "Column is null" );
+    public void addColumn(STableColumn column) {
+        if (column == null)
+            throw new IllegalArgumentException("Column is null");
 
-        columns.add( column );
+        columns.add(column);
     }
 
-    public void removeColumn( STableColumn column ) {
-        if ( column == null )
-            throw new IllegalArgumentException( "Column is null" );
+    public void removeColumn(STableColumn column) {
+        if (column == null)
+            throw new IllegalArgumentException("Column is null");
 
-        columns.remove( column );
+        columns.remove(column);
     }
 
-    public void moveColumn( int columnIndex, int newIndex ) {
-        if ( ( columnIndex < 0 ) || ( columnIndex >= getColumnCount() ) ||
-                ( newIndex < 0 ) || ( newIndex >= getColumnCount() ) )
-            throw new IllegalArgumentException( "moveColumn() - Index out of range" );
+    public void moveColumn(int columnIndex, int newIndex) {
+        if ((columnIndex < 0) || (columnIndex >= getColumnCount()) ||
+                (newIndex < 0) || (newIndex >= getColumnCount()))
+            throw new IllegalArgumentException("moveColumn() - Index out of range");
 
-        STableColumn column = ( STableColumn ) columns.remove( columnIndex );
-        columns.add( newIndex, column );
+        STableColumn column = (STableColumn) columns.remove(columnIndex);
+        columns.add(newIndex, column);
     }
 
-    public void setColumnMargin( int newMargin ) {
+    public void setColumnMargin(int newMargin) {
         this.columnMargin = newMargin;
     }
 
@@ -58,11 +66,11 @@ public class SDefaultTableColumnModel implements STableColumnModel {
         return columns;
     }
 
-    public int getColumnIndex( Object columnIdentifier ) {
+    public int getColumnIndex(Object columnIdentifier) {
         int index = 0;
-        for ( Iterator iterator = columns.iterator(); iterator.hasNext(); ) {
-            STableColumn column = ( STableColumn ) iterator.next();
-            if ( columnIdentifier.equals( column.getIdentifier() ) )
+        for (Iterator iterator = columns.iterator(); iterator.hasNext();) {
+            STableColumn column = (STableColumn) iterator.next();
+            if (columnIdentifier.equals(column.getIdentifier()))
                 return index;
 
             index++;
@@ -71,8 +79,11 @@ public class SDefaultTableColumnModel implements STableColumnModel {
         return -1;
     }
 
-    public STableColumn getColumn( int columnIndex ) {
-        return ( STableColumn ) columns.get( columnIndex );
+    public STableColumn getColumn(int columnIndex) {
+        if (columns == null || columnIndex >= columns.size() || columnIndex < 0)
+            return null;
+        else
+            return (STableColumn) columns.get(columnIndex);
     }
 
     public int getColumnMargin() {
@@ -81,11 +92,38 @@ public class SDefaultTableColumnModel implements STableColumnModel {
 
     public int getTotalColumnWidth() {
         int width = 0;
-        for ( Iterator iterator = columns.iterator(); iterator.hasNext(); ) {
-            STableColumn column = ( STableColumn ) iterator.next();
-            width += column.getWidth();
+        String widthUnit = null;
+        boolean firstColumn = true;
+        boolean validWidth = true;
+        for (Iterator iterator = columns.iterator(); iterator.hasNext() && validWidth;) {
+            STableColumn column = (STableColumn) iterator.next();
+            if (column != null && !column.isHidden()) {
+                width += column.getWidth();
+                if (firstColumn) {
+                    widthUnit = column.getWidthUnit();
+                    firstColumn = false;
+                } else if (!(widthUnit == column.getWidthUnit() || (widthUnit != null && widthUnit.equalsIgnoreCase(column.getWidthUnit())))) {
+                    validWidth = false;
+                    log.warn("Mismatching column width units! Cannot add '"+widthUnit+"' to '"+column.getWidthUnit()+"'");
+                }
+
+            }
         }
 
-        return width;
+        if (validWidth) {
+            return width;
+        } else {
+            return -1;
+        }
+    }
+
+    public String getTotalColumnWidthUnit() {
+        for (Iterator iterator = columns.iterator(); iterator.hasNext();) {
+            STableColumn column = (STableColumn) iterator.next();
+            if (!column.isHidden()) {
+                return column.getWidthUnit();
+            }
+        }
+        return null;
     }
 }

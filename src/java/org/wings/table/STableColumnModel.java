@@ -20,23 +20,32 @@ import java.util.Collection;
  */
 public interface STableColumnModel
 {
-    public void addColumn( STableColumn aColumn );
+    void addColumn( STableColumn aColumn );
 
-    public void removeColumn( STableColumn column );
+    void removeColumn( STableColumn column );
 
-    public void moveColumn( int columnIndex, int newIndex );
+    void moveColumn( int columnIndex, int newIndex );
 
-    public void setColumnMargin( int newMargin );
+    void setColumnMargin( int newMargin );
 
-    public int getColumnCount();
+    int getColumnCount();
 
-    public Collection getColumns();
+    Collection getColumns();
 
-    public int getColumnIndex( Object columnIdentifier );
+    int getColumnIndex( Object columnIdentifier );
 
-    public STableColumn getColumn( int columnIndex );
+    STableColumn getColumn( int columnIndex );
 
-    public int getColumnMargin();
+    int getColumnMargin();
 
-    public int getTotalColumnWidth();
+    /**
+     * @return The total width of this table. <code>-1</code> indicates a problem (mismatching width untits).
+     */
+    int getTotalColumnWidth();
+
+    /**
+     * @return The unit of the total column width. Only valid if getTotalColumnWidth() returns >= 0!
+     */
+    public String getTotalColumnWidthUnit();
+
 }

@@ -15,7 +15,6 @@ package org.wings;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.plaf.TableCG;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSSelector;
@@ -31,8 +30,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -95,6 +94,13 @@ public class STable extends SComponent
      * <p>The <code>headerRenderer</code> is used to render the header line.</p>
      */
     protected STableCellRenderer headerRenderer;
+
+    /**
+     * <p>A special cell renderer, that displays the control used to select
+     * a table row.</p><p>Ususally, this would be some checkbox. The plaf is the
+     * last instance to decide this.</p>
+     */
+    protected STableCellRenderer rowSelectionRenderer;
 
     /**
      * <p>In this <code>Map</code>, the renderers for the different
@@ -253,6 +259,8 @@ public class STable extends SComponent
 
             model = tm;
             model.addTableModelListener(this);
+
+            tableChanged(new TableModelEvent(tm, TableModelEvent.HEADER_ROW));
         }
     }
 
@@ -414,22 +422,53 @@ public class STable extends SComponent
         }
     }
 
-    public void setHeaderRenderer(STableCellRenderer r) {
-        headerRenderer = r;
+    /**
+     * The renderer component responsible for rendering the table's header cell.
+     * @param headerCellRenderer
+     */
+    public void setHeaderRenderer(STableCellRenderer headerCellRenderer) {
+        headerRenderer = headerCellRenderer;
     }
 
+    /**
+     * The renderer component responsible for rendering the table's header cell.
+     * @return The renderer component for the header row
+     */
     public STableCellRenderer getHeaderRenderer() {
         return headerRenderer;
     }
 
+    /**
+     * The cell renderer used to render a special selection column needed in cases clicks on table
+     * cell cannot be distinguished as 'edit' or 'selection' click.
+     * @return The table cell renderer used to render the selection column
+     */
+    public STableCellRenderer getRowSelectionRenderer() {
+        return rowSelectionRenderer;
+    }
+
+    /**
+     * The cell renderer used to render a special selection column needed in cases clicks on table
+     * cell cannot be distinguished as 'edit' or 'selection' click.
+     * @param rowSelectionRenderer The table cell renderer used to render the selection column
+     */
+    public void setRowSelectionRenderer(STableCellRenderer rowSelectionRenderer) {
+        this.rowSelectionRenderer = rowSelectionRenderer;
+    }
+
+    /**
+     * Returns the cell renderer for the given table cell.
+     * @param row Table row
+     * @param column Table column
+     * @return The cell renderer for the given table cell.
+     */
     public STableCellRenderer getCellRenderer( int row, int column ) {
-        if ( getColumnModel() == null )
+        if ( getColumnModel() == null || getColumnModel().getColumn(column) == null)
             return getDefaultRenderer(getColumnClass(column));
 
-        STableColumn tableColumn = getColumnModel().getColumn( column );
-        STableCellRenderer renderer = tableColumn.getCellRenderer();
+        STableCellRenderer renderer = getColumnModel().getColumn( column ).getCellRenderer();
         if ( renderer == null )
-            renderer = getDefaultRenderer( getColumnClass( tableColumn.getModelIndex() ) );
+            renderer = getDefaultRenderer( getColumnClass( getColumnModel().getColumn( column ).getModelIndex() ) );
 
         return renderer;
     }
@@ -441,15 +480,16 @@ public class STable extends SComponent
                 row, col);
     }
 
+    /**
+     * Prepares and returns the renderer to render the column header
+     * @param col Column number to render. Starts with <code>0</code>. May be <code>-1</code> for row selection column.
+     * @return The renderer to render the column header
+     */
     public SComponent prepareHeaderRenderer( int col ) {
-        if ( getColumnModel() == null )
-            return headerRenderer.getTableCellRendererComponent(this,
-                col >= 0 ? model.getColumnName(col) : null,
-                false,
-                -1, col);
-
-        Object value = getColumnModel().getColumn( col ).getHeaderValue();
-        return headerRenderer.getTableCellRendererComponent( this, value, false, -1, col );
+        Object headerValue = col >= 0 ? model.getColumnName(col) : null;
+        if ( getColumnModel() != null && getColumnModel().getColumn( col ) != null)
+            headerValue = getColumnModel().getColumn( col ).getHeaderValue();
+        return headerRenderer.getTableCellRendererComponent( this, headerValue, false, -1, col );
     }
 
     public boolean isEditable() {
@@ -1125,10 +1165,6 @@ public class STable extends SComponent
 
     public SDimension getIntercellPadding() {
         return intercellPadding;
-    }
-
-    public void setCG(TableCG cg) {
-        super.setCG(cg);
     }
 
     /**

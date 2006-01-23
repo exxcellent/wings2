@@ -13,14 +13,11 @@
  */
 package org.wings.plaf.css.msie;
 
-import java.io.IOException;
-
 import org.wings.RequestURL;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.STable;
-import org.wings.style.CSSSelector;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
@@ -31,6 +28,8 @@ import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
+import org.wings.style.CSSSelector;
+import java.io.IOException;
 
 public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameListener, MSIEButtonFix {
 
@@ -55,6 +54,11 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
         component.addParentFrameListener(this);
     }
 
+    public void uninstallCG(SComponent component) {
+        super.uninstallCG(component);
+        component.removeParentFrameListener(this);
+    }
+
     public void parentFrameAdded(SParentFrameEvent e) {
         SFrame parentFrame = e.getParentFrame();
         ClasspathResource res = new ClasspathResource(FORMS_JS, "text/javascript");
@@ -68,7 +72,7 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
         device.print("<a href=\"#\" onclick=\"location.href='");
         Utils.write(device, selectionAddr.toString());
-        device.print("';\"");
+        device.print("';\">");
     }
 
     protected String getResolvedPseudoSelectorMapping(CSSSelector selector) {

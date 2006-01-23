@@ -24,34 +24,73 @@ public class STableColumn implements Serializable {
     protected Object identifier;
     protected Object headerValue;
     protected int width;
-    protected boolean hidden;
+    protected String widthUnit;
+    protected boolean hidden = false;
     protected STableCellRenderer headerRenderer;
     protected STableCellRenderer cellRenderer;
     protected STableCellEditor cellEditor;
 
+    /**
+     * Empty constructor of a table column. Assumes model index 0.
+     */
     public STableColumn() {
-        this( 0 );
+        this(0);
     }
 
-    public STableColumn( int modelIndex ) {
-        this( modelIndex, 75, null, null );
+
+    /**
+     * Constructs a new table column.
+     *
+     * @param modelIndex The index of this column inside the data model.
+     */
+    public STableColumn(int modelIndex) {
+        this(modelIndex, 1, null, null, null);
     }
 
-    public STableColumn( int modelIndex, int width ) {
-        this( modelIndex, width, null, null );
+    /**
+     * Constructs a new table column.
+     *
+     * @param modelIndex The index of this column inside the data model.
+     * @param width The desired width of this column as relative weight. (1 = default)
+     */
+    public STableColumn(int modelIndex, int width) {
+        this(modelIndex, width, null, null, null);
     }
 
-    public STableColumn( int modelIndex, int width,
-                         STableCellRenderer cellRenderer,
-                         STableCellEditor cellEditor ) {
+    /**
+     * Constructs a new table column.
+     *
+     * @param modelIndex The index of this column inside the data model.
+     * @param width The desired width of this column as relative weight.
+     * @param cellRenderer The renderer for cells in this column
+     * @param cellEditor The editor for cells in this column
+     */
+    public STableColumn(int modelIndex, int width, STableCellRenderer cellRenderer, STableCellEditor cellEditor) {
+        this(modelIndex, width, null, cellRenderer, cellEditor);
+    }
+
+    /**
+     * Constructs a new table column.
+     *
+     * @param modelIndex The index of this column inside the data model.
+     * @param width The desired width of this column in px.
+     * @param widthUnit The unit for the width dimension. Please refer to {@link #setWidthUnit(String)}
+     * @param cellRenderer The renderer for cells in this column
+     * @param cellEditor The editor for cells in this column
+     */
+    public STableColumn(int modelIndex, int width, String widthUnit,
+                        STableCellRenderer cellRenderer,
+                        STableCellEditor cellEditor) {
         super();
         this.modelIndex = modelIndex;
         this.width = width;
+        setWidthUnit(widthUnit);
 
         this.cellRenderer = cellRenderer;
         this.cellEditor = cellEditor;
         headerValue = null;
     }
+
 
     /**
      * Sets the cmp2 index for this column. The cmp2 index is the
@@ -60,10 +99,10 @@ public class STableColumn implements Serializable {
      * is moved around in the view the cmp2 index remains constant.
      *
      * @param modelIndex the new modelIndex
-     *                   bound: true
-     *                   description: The cmp2 index.
+     * bound: true
+     * description: The cmp2 index.
      */
-    public void setModelIndex( int modelIndex ) {
+    public void setModelIndex(int modelIndex) {
         this.modelIndex = modelIndex;
     }
 
@@ -83,12 +122,12 @@ public class STableColumn implements Serializable {
      * they are purely a
      * convenience for the external tagging and location of columns.
      *
-     * @param     identifier        an identifier for this column
-     * @see     #getIdentifier
-     * bound: true
-     * description: A unique identifier for this column.
+     * @param identifier an identifier for this column
+     * @see #getIdentifier
+     *      bound: true
+     *      description: A unique identifier for this column.
      */
-    public void setIdentifier( Object identifier ) {
+    public void setIdentifier(Object identifier) {
         this.identifier = identifier;
     }
 
@@ -102,10 +141,10 @@ public class STableColumn implements Serializable {
      * as a default.
      *
      * @return the <code>identifier</code> property
-     * @see    #setIdentifier
+     * @see #setIdentifier
      */
     public Object getIdentifier() {
-        return ( identifier != null ) ? identifier : getHeaderValue();
+        return (identifier != null) ? identifier : getHeaderValue();
     }
 
     /**
@@ -113,7 +152,7 @@ public class STableColumn implements Serializable {
      * renderer.
      *
      * @return the <code>headerValue</code> property
-     * @see    #setHeaderValue
+     * @see #setHeaderValue
      */
     public Object getHeaderValue() {
         return headerValue;
@@ -124,7 +163,7 @@ public class STableColumn implements Serializable {
      * used as the value for the header for this column.
      */
     public void setHeaderValue(Object headerValue) {
-	    this.headerValue = headerValue;
+        this.headerValue = headerValue;
     }
 
 
@@ -137,11 +176,11 @@ public class STableColumn implements Serializable {
      * <code>STableColumn</code>'s header to <code>headerRenderer</code>.
      *
      * @param headerRenderer the new headerRenderer
-     * @see     #getHeaderRenderer
-     * bound: true
-     * description: The header renderer.
+     * @see #getHeaderRenderer
+     *      bound: true
+     *      description: The header renderer.
      */
-    public void setHeaderRenderer( STableCellRenderer headerRenderer ) {
+    public void setHeaderRenderer(STableCellRenderer headerRenderer) {
         this.headerRenderer = headerRenderer;
     }
 
@@ -153,9 +192,9 @@ public class STableColumn implements Serializable {
      * <code>headerRenderer</code> is <code>null</code>.
      *
      * @return the <code>headerRenderer</code> property
-     * @see    #setHeaderRenderer
-     * @see    #setHeaderValue
-     * @see    javax.swing.table.JTableHeader#getDefaultRenderer()
+     * @see #setHeaderRenderer
+     * @see #setHeaderValue
+     * @see javax.swing.table.JTableHeader#getDefaultRenderer()
      */
     public STableCellRenderer getHeaderRenderer() {
         return headerRenderer;
@@ -166,10 +205,10 @@ public class STableColumn implements Serializable {
      * to draw individual values for this column.
      *
      * @param cellRenderer the new cellRenderer
-     * @see    #getCellRenderer bound: true
-     * description: The renderer to use for cell values.
+     * @see #getCellRenderer bound: true
+     *      description: The renderer to use for cell values.
      */
-    public void setCellRenderer( STableCellRenderer cellRenderer ) {
+    public void setCellRenderer(STableCellRenderer cellRenderer) {
         this.cellRenderer = cellRenderer;
     }
 
@@ -185,8 +224,8 @@ public class STableColumn implements Serializable {
      * <code>cellRenderer</code> is <code>null</code>.
      *
      * @return the <code>cellRenderer</code> property
-     * @see    #setCellRenderer
-     * @see    JTable#setDefaultRenderer
+     * @see #setCellRenderer
+     * @see JTable#setDefaultRenderer
      */
     public STableCellRenderer getCellRenderer() {
         return cellRenderer;
@@ -196,10 +235,10 @@ public class STableColumn implements Serializable {
      * Sets the editor to used by when a cell in this column is edited.
      *
      * @param cellEditor the new cellEditor
-     * @see    #getCellEditor bound: true
-     * description: The editor to use for cell values.
+     * @see #getCellEditor bound: true
+     *      description: The editor to use for cell values.
      */
-    public void setCellEditor( STableCellEditor cellEditor ) {
+    public void setCellEditor(STableCellEditor cellEditor) {
         this.cellEditor = cellEditor;
     }
 
@@ -212,26 +251,64 @@ public class STableColumn implements Serializable {
      * <code>cellEditor</code> is <code>null</code>.
      *
      * @return the <code>cellEditor</code> property
-     * @see    #setCellEditor
-     * @see    JTable#setDefaultEditor
+     * @see #setCellEditor
+     * @see JTable#setDefaultEditor
      */
     public STableCellEditor getCellEditor() {
         return cellEditor;
     }
 
-    public void setWidth( int width ) {
+    /**
+     * The widht for this column. <b>Note:</b> That the interpretation depends on the unit of this width!
+     *
+     * @param width The width <code>1</code> by default.
+     */
+    public void setWidth(int width) {
         this.width = width;
     }
 
+    /**
+     * @return The widht of this column. <code>1</code> by default. <code>-1</code> indicated unsed
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * The unit of this column width. May be <code>null</code> for relative weight, <code>px</code> for pixel widths
+     * or <code>%</code> for relative percentage
+     *
+     * @return The unit of this column width.
+     */
+    public String getWidthUnit() {
+        return widthUnit;
+    }
+
+    /**
+     * The unit of this column width.
+     *
+     * @param widthUnit The widht. May be <code>null</code> for relative weight, <code>px</code> for pixel widths
+     * or <code>%</code> for relative percentage
+     */
+    public void setWidthUnit(String widthUnit) {
+        this.widthUnit = widthUnit;
+    }
+
+    /**
+     * Indicates if this columns should be hidden
+     *
+     * @return <code>true</code> if this column should be invisible
+     */
     public boolean isHidden() {
         return hidden;
     }
 
-    public void setHidden( boolean hidden ) {
+    /**
+     * Indicates if this columns should be hidden
+     *
+     * @param hidden <code>true</code> if this column should be invisible
+     */
+    public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
 }
