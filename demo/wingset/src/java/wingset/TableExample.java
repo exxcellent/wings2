@@ -66,6 +66,8 @@ public class TableExample
         table.setEditable(false);
         controls.addSizable(table);
 
+        table.getColumnModel().getColumn(1).setWidth(2); // stretch 2nd column to 2 times of other cols (weighted width)
+
         SForm panel = new SForm(new SBorderLayout());
         panel.add(controls, SBorderLayout.NORTH);
         panel.add(table, SBorderLayout.CENTER);
@@ -118,7 +120,7 @@ public class TableExample
 
             for (int c = 0; c < cols; c++) {
                 for (int r = 0; r < rows; r++)
-                    data[r][c] = "cell " + r + ":" + c;
+                    data[r][c] = (c == 1 ? "stretched cell ":"cell ") + r + ":" + c;
             }
             for (int r = 0; r < rows; r++)
                 data[r][2] = createColor(r);
