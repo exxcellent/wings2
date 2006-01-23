@@ -421,6 +421,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see org.wings.event.SParentFrameEvent
      * @see org.wings.event.SParentFrameListener
      * @see org.wings.SComponent#removeParentFrameListener
+     * @see SComponent#removeNotify()
+     * @see SComponent#addNotify()
      */
     public final void addParentFrameListener(SParentFrameListener l) {
         addEventListener(SParentFrameListener.class, l);
@@ -438,6 +440,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see org.wings.event.SParentFrameEvent
      * @see org.wings.event.SParentFrameListener
      * @see org.wings.SComponent#addParentFrameListener
+     * @see SComponent#removeNotify()
+     * @see SComponent#addNotify()
      */
     public final void removeParentFrameListener(SParentFrameListener l) {
         removeEventListener(SParentFrameListener.class, l);
@@ -1857,14 +1861,24 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         actionEvents.clear();
     }
 
-    // Not used ad all. Swing also declares counterpiece: addNotify.
-    /* *
-     * Makes this <code>SComponent</code> unavailable.
-     * This Method is called internal and should not be called directly
+    /**
+     * Method called to notify this <code>SComponent</code> that it has no longer a parent component.
+     * This Method is called internal and should not be called directly, but can be overerloaded
+     * to react on this event.
      */
     public void removeNotify() {
-	/* currently nothing to do, but great to overwrite for some dangling eventListener */
-    } 
+	    /* currently nothing to do, but great to overwrite for some dangling eventListener */
+    }
+
+    /**
+     * Method called to notify this <code>SComponent</code> that it has a new parent component.
+     * This Method is called internal and should not be called directly, but can be overerloaded
+     * to react on this event.
+     */
+    public void addNotify() {
+        /* currently nothing to do */
+    }
+
 
     // Nice: undocumented and useless
     /*public ArrayList getMenus() {

@@ -296,7 +296,7 @@ public class SContainer extends SComponent {
         int index = getComponentList().indexOf(c);
         if (getComponentList().remove(c)) {
             getConstraintList().remove(index);
-	    c.removeNotify();
+	        c.removeNotify();
             fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
@@ -422,6 +422,7 @@ public class SContainer extends SComponent {
             if (layout != null) {
                 layout.addComponent(c, constraint, index);
             }
+            c.addNotify();
             fireContainerEvent(SContainerEvent.COMPONENT_ADDED, c);
             reload();
         }
@@ -496,17 +497,29 @@ public class SContainer extends SComponent {
         }
     }
 
-    /*******
-     * Will be called internally
-     * all components will be informed
-     ***/
+    /*
+     * @see SComponent#removeNotify()
+     * Notify all contained elements that this component has been removed from an container.
+     */
     public void removeNotify() {
         Iterator iterator = getComponentList().iterator();
         while (iterator.hasNext()) {
             ((SComponent)iterator.next()).removeNotify();
         }
         super.removeNotify();
-    } 
+    }
+
+    /*
+     * @see SComponent#addNotify()
+     * Notify all contained elements that this component has a new parent container.
+     */
+    public void addNotify() {
+        Iterator iterator = getComponentList().iterator();
+        while (iterator.hasNext()) {
+            ((SComponent)iterator.next()).addNotify();
+        }
+        super.addNotify();
+    }
 
     /**
      * Collects all {@link SComponent#getComponentPopupMenu()} of all contained and visible components.
