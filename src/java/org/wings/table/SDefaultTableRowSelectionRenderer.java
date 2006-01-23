@@ -20,6 +20,9 @@ import org.wings.STable;
 import javax.swing.*;
 
 /**
+ * Renderer responsible for the row selection column in cases where the table
+ * cannot distinguish clicks on cells as selection clicks or editing clicks.
+ *
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
  */
 public class SDefaultTableRowSelectionRenderer extends SLabel implements STableCellRenderer {
@@ -103,6 +106,62 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
      */
     public String getSelectionStyle() {
         return selectionStyle;
+    }
+
+    /**
+     * @return Icon used for selected rows in multi-selection mode for selected lines
+     */
+    public SResourceIcon getMultiSelectionIcon() {
+        return multiSelectionIcon;
+    }
+
+    /**
+     * @param multiSelectionIcon Icon used for selected rows in multi-selection mode for selected lines
+     */
+    public void setMultiSelectionIcon(SResourceIcon multiSelectionIcon) {
+        this.multiSelectionIcon = multiSelectionIcon;
+    }
+
+    /**
+     * @return Icon used for selected rows in multi-selection mode for unselected lines
+     */
+    public SResourceIcon getMultiNotSelectionIcon() {
+        return multiNotSelectionIcon;
+    }
+
+    /**
+     * @param multiNotSelectionIcon Icon used for selected rows in multi-selection mode for unselected lines
+     */
+    public void setMultiNotSelectionIcon(SResourceIcon multiNotSelectionIcon) {
+        this.multiNotSelectionIcon = multiNotSelectionIcon;
+    }
+
+    /**
+     * @return Icon used for selected rows in single-selection mode tables for selected lines
+     */
+    public SResourceIcon getSingleSelectionIcon() {
+        return singleSelectionIcon;
+    }
+
+    /**
+     * @param singleSelectionIcon Icon used for selected rows in single-selection mode tables for selected lines
+     */
+    public void setSingleSelectionIcon(SResourceIcon singleSelectionIcon) {
+        this.singleSelectionIcon = singleSelectionIcon;
+    }
+
+    /**
+     * @return Icon used for selected rows in single-selection mode tables for unselected lines
+     */
+    public SResourceIcon getSingleNotSelectionIcon() {
+        return singleNotSelectionIcon;
+    }
+
+    /**
+     * @param singleNotSelectionIcon Icon used for selected rows in single-selection mode tables for unselected lines
+     */
+    public void setSingleNotSelectionIcon(SResourceIcon singleNotSelectionIcon) {
+        this.singleNotSelectionIcon = singleNotSelectionIcon;
     }
 
 }
