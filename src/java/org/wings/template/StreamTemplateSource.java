@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A <STATE>StreamDataSource</CODE> implements a DataSource
+ * A <CODE>StreamDataSource</CODE> implements a DataSource
  * as a wrapper around a Stream.
  *
  * @author <A href="mailto:joachim.karrer@mercatis.de">Joachim Karrer</A>
