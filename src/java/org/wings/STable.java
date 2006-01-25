@@ -231,15 +231,18 @@ public class STable extends SComponent
         setSelectionModel(new SDefaultListSelectionModel());
         createDefaultEditors();
 
+        if (model == null)
+            this.model = createDefaultDataModel();
+        else
+            this.model = model;
+
         if (columnModel == null) {
-            columnModel = createDefaultColumnModel();
+            this.columnModel = createDefaultColumnModel();
+            createDefaultColumnsFromModel();
             autoCreateColumnsFromModel = true;
         }
-        setColumnModel(columnModel);
-
-        if (model == null)
-            model = createDefaultDataModel();
-        setModel(model);
+        else
+            this.columnModel = columnModel;
     }
 
     /**
@@ -254,8 +257,6 @@ public class STable extends SComponent
         if (this.model != tm) {
             if (model != null)
                 model.removeTableModelListener(this);
-
-            reload(ReloadManager.STATE);
 
             model = tm;
             model.addTableModelListener(this);
