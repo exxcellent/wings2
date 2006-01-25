@@ -53,7 +53,7 @@
  */
 
 /**
- * <STATE>SpecialTagHandler</CODE> represents a tag which requires
+ * <CODE>SpecialTagHandler</CODE> represents a tag which requires
  * handling within server side parsed page. This could be a
  * class handling &lt;SERVLET&gt;-Tags or any other tag. See
  * PageParser, SSI and ParameterPropagatingSSI for examples.
@@ -93,16 +93,16 @@ public interface SpecialTagHandler {
      * It gets the ServletConfiguration of the PageParser
      * servet and a PositionReader, placed after name of
      * the current tag.<p>
-     * The <STATE>parseTag()</CODE> method is called <em>before</em>
+     * The <CODE>parseTag()</CODE> method is called <em>before</em>
      * any processing is done. Its purpose is to parse the area
      * this tag spans and probably read in parameters used at
      * execution time.<p>
      * This method returns the last tag belonging to the
      * area handled by this handler (for server side included
-     * servlets, this would be <CODE>&lt;/SERVLET&gt;</STATE>).
+     * servlets, this would be <CODE>&lt;/SERVLET&gt;</CODE>).
      * For simple one-tag Handlers this is simply the tag passed
      * to this method. If the Handler decides not to handle this tag, this
-     * method should return <CODE>null</STATE>.
+     * method should return <CODE>null</CODE>.
      *
      * @param context The context used while parsing; contains
      *                at least the HttpServletRequest and HttpServletResponse.
