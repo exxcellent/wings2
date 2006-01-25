@@ -227,11 +227,18 @@ public class STable extends SComponent
         this(tm, null);
     }
 
+    /**
+     * <p>Creates a new <code>STable</code>.</p>
+     *
+     * @param model the <code>TableModel</code> for the table's contents. May be <code>null</code>.
+     * @param columnModel The column model. Implicitly created and maintained if <code>null</code>.
+     */
     public STable(TableModel model, STableColumnModel columnModel) {
         setSelectionModel(new SDefaultListSelectionModel());
         createDefaultEditors();
 
         if (columnModel == null) {
+            // no issue if model == null!
             columnModel = createDefaultColumnModel();
             autoCreateColumnsFromModel = true;
         }
@@ -239,7 +246,7 @@ public class STable extends SComponent
 
         if (model == null)
             model = createDefaultDataModel();
-        setModel(model);
+        setModel(model); // the resulting tableChanged event will update the default column mdoel
     }
 
     /**
