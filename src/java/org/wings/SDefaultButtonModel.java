@@ -17,12 +17,13 @@ package org.wings;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
+import java.io.Serializable;
 
 /**
  * Default implementation of {@link SButtonModel}
  */
 public class SDefaultButtonModel
-        implements SButtonModel {
+        implements SButtonModel, Serializable {
     public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
     private boolean selected;

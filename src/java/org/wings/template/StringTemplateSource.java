@@ -17,6 +17,7 @@ import org.wings.session.SessionManager;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 
 /**
@@ -25,7 +26,7 @@ import java.io.InputStream;
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class StringTemplateSource implements TemplateSource {
+public class StringTemplateSource implements TemplateSource, Serializable {
 
     private static long COUNTER = 0;
 

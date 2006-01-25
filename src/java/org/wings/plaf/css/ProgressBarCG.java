@@ -14,17 +14,14 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SDimension;
+import org.wings.SProgressBar;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
-import org.wings.session.SessionManager;
-
 import java.io.IOException;
 
-public class ProgressBarCG extends AbstractComponentCG implements        org.wings.plaf.ProgressBarCG {
-
-    // Invisible icon as spacer
-    private static final SIcon INVISIBLE_ICON = (SIcon) SessionManager.getSession().getCGManager().getObject("ProgressBarCG.blindIcon", SIcon.class);
+public class ProgressBarCG extends AbstractComponentCG implements  org.wings.plaf.ProgressBarCG {
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -114,11 +111,9 @@ public class ProgressBarCG extends AbstractComponentCG implements        org.win
 
     private void printSpacerIcon(final Device device, final int width, int height) throws IOException {
         device.print("<img");
-        Utils.optAttribute(device, "src", INVISIBLE_ICON.getURL());
+        Utils.optAttribute(device, "src", getBlindIcon().getURL());
         Utils.optAttribute(device, "width", width);
         Utils.optAttribute(device, "height", String.valueOf(height));
-        device.print(" alt=\"");
-        device.print(INVISIBLE_ICON.getIconTitle());
-        device.print("\"/>");
+        device.print("/>");
     }
 }

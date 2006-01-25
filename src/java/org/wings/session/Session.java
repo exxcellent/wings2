@@ -65,10 +65,9 @@ import java.util.Set;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class Session
-        implements PropertyService, Serializable {
+public class Session implements PropertyService, Serializable {
 
-    private final transient static Log log = LogFactory.getLog(Session.class);
+    private final static Log log = LogFactory.getLog(Session.class);
 
     /**
      * The property name of the locale
@@ -92,7 +91,7 @@ public class Session
 
     private ReloadManager reloadManager = null;
 
-    private ExternalizeManager externalizeManager = new ExternalizeManager();
+    private transient ExternalizeManager externalizeManager;
 
     private LowLevelEventDispatcher dispatcher = new LowLevelEventDispatcher();
 
@@ -110,7 +109,7 @@ public class Session
 
     private transient ServletContext servletContext;
 
-    private transient Browser browser;
+    private Browser browser;
 
     protected transient HttpServletResponse servletResponse;
 
@@ -145,6 +144,9 @@ public class Session
      * Store here only weak references.
      */
     protected final EventListenerList listenerList = new EventListenerList();
+
+    private final WeakPropertyChangeSupport propertyChangeSupport = new WeakPropertyChangeSupport(this);
+
 
     public final SessionStatistics getStatistics() {
         return statistics;
@@ -242,13 +244,13 @@ public class Session
             CGManager.setLookAndFeel(lookAndFeel);
         } catch (Exception ex) {
             log.fatal("could not load look and feel: " +
-                    servletContext.getInitParameter("wings.lookandfeel.factory"), ex);
+            servletContext.getInitParameter("wings.lookandfeel.factory"), ex);
             throw new ServletException(ex);
         }
     }
 
     protected void initMaxContentLength() {
-        String maxCL = servletContext.getInitParameter("content.maxlength");
+        String maxCL = getServletContext().getInitParameter("content.maxlength");
         if (maxCL != null) {
             try {
                 maxContentLength = Integer.parseInt(maxCL);
@@ -348,6 +350,8 @@ public class Session
      * of resources contained in this session.
      */
     public ExternalizeManager getExternalizeManager() {
+        if (externalizeManager == null)
+            externalizeManager = new ExternalizeManager();
         return externalizeManager;
     }
 
@@ -527,10 +531,6 @@ public class Session
         propertyChangeSupport.firePropertyChange(key, old, null);
         return old;
     }
-
-    private final WeakPropertyChangeSupport propertyChangeSupport =
-            new WeakPropertyChangeSupport(this);
-
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);

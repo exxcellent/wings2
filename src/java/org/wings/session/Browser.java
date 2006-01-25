@@ -14,8 +14,10 @@
 package org.wings.session;
 
 import org.apache.regexp.RE;
+import org.apache.regexp.RESyntaxException;
 import java.io.FileReader;
 import java.io.LineNumberReader;
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -26,8 +28,8 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @version $Revision$
  */
-public class Browser {
-    protected String agent;
+public class Browser implements Serializable {
+    private String agent;
     private int majorVersion;
     private double minorVersion;
     private String release;
@@ -44,8 +46,7 @@ public class Browser {
      *
      * @param agent the "User-Agent" string from the request.
      */
-    public Browser(String agent)
-            throws org.apache.regexp.RESyntaxException {
+    public Browser(String agent) {
         this.agent = agent;
         detect();
     }
@@ -134,29 +135,56 @@ public class Browser {
     }
 
     /* regexps are not threadsafe, we have to create them. */
-    protected final RE RE_START = new RE("^([a-zA-Z0-9_\\-]+)(/([0-9])\\.([0-9]+))?");
-    protected final RE RE_MSIE = new RE("MSIE ([0-9])\\.([0-9]+)([a-z])?");
-    protected final RE RE_MSIE_WIN_LANG_OS = new RE("[wW]in(dows)? ([A-Z0-9]+) ?([0-9]\\.[0-9])?");
-    protected final RE RE_MSIE_MAC_LANG_OS = new RE("Mac_PowerPC");
-    protected final RE RE_NS_LANG_OS = new RE("\\[([a-z-]+)\\][ a-zA-Z0-9-]*\\(([a-zA-Z\\-]+)/?([0-9]* ?[.a-zA-Z0-9 ]*);");
-    protected final RE RE_NS_X11_LANG_OS = new RE("\\(X11; U; ([a-zA-Z-]+) ([0-9\\.]+)[^\\);]+\\)");
-    protected final RE RE_NS6_LANG_OS = new RE("\\(([a-zA-Z0-9]+); [a-zA-Z]+; ([a-zA-Z0-9_]+)( ([a-zA-Z0-9]+))?; ([_a-zA-Z-]+);");
-    protected final RE RE_LANG = new RE("\\[([_a-zA-Z-]+)\\]");
-    protected final RE RE_OPERA = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)(; U)?\\) Opera ([0-9]+)\\.([0-9]+)[ ]+\\[([_a-zA-Z-]+)\\]");
-    protected final RE RE_OPERA8X_CLOAKED = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)[; ]+([_a-zA-Z-]+)\\) Opera ([0-9]+)\\.([0-9]+)");
-    protected final RE RE_OPERA_LANG_OS = new RE("\\(([a-zA-Z0-9\\-]+) ([0-9\\.]+)[^)]+\\)[ \t]*\\[([a-z_]+)\\]");
-    protected final RE RE_KONQUEROR_OS = new RE("Konqueror/([0-9\\.]+); ([a-zA-Z0-9\\-]+)");
-    protected final RE RE_GALEON_OS = new RE("\\(([a-zA-Z0-9]+); U; Galeon; ([0-9]+)\\.([0-9]+);");
-    protected final RE Gecko_Engine = new RE("Gecko/[0-9]*( ([a-zA-Z]+)+[0-9]*/([0-9]+)\\.([0-9]+)([a-zA-Z0-9]*))?");
+    private transient RE RE_START;
+    private transient RE RE_MSIE;
+    private transient RE RE_MSIE_WIN_LANG_OS;
+    private transient RE RE_MSIE_MAC_LANG_OS;
+    private transient RE RE_NS_LANG_OS;
+    private transient RE RE_NS_X11_LANG_OS;
+    private transient RE RE_NS6_LANG_OS;
+    private transient RE RE_LANG;
+    private transient RE RE_OPERA;
+    private transient RE RE_OPERA8X_CLOAKED;
+    private transient RE RE_OPERA_LANG_OS;
+    private transient RE RE_KONQUEROR_OS;
+    private transient RE RE_GALEON_OS;
+    private transient RE RE_GECKO_ENGINE;
+
+    /**
+     * Lazily create RE as they are not serializable. Will be null after session restore.
+     */
+    private void createREs() {
+        try {
+            if (RE_START == null) {
+                RE_START = new RE("^([a-zA-Z0-9_\\-]+)(/([0-9])\\.([0-9]+))?");
+                RE_MSIE = new RE("MSIE ([0-9])\\.([0-9]+)([a-z])?");
+                RE_MSIE_WIN_LANG_OS = new RE("[wW]in(dows)? ([A-Z0-9]+) ?([0-9]\\.[0-9])?");
+                RE_MSIE_MAC_LANG_OS = new RE("Mac_PowerPC");
+                RE_NS_LANG_OS = new RE("\\[([a-z-]+)\\][ a-zA-Z0-9-]*\\(([a-zA-Z\\-]+)/?([0-9]* ?[.a-zA-Z0-9 ]*);");
+                RE_NS_X11_LANG_OS = new RE("\\(X11; U; ([a-zA-Z-]+) ([0-9\\.]+)[^\\);]+\\)");
+                RE_NS6_LANG_OS = new RE("\\(([a-zA-Z0-9]+); [a-zA-Z]+; ([a-zA-Z0-9_]+)( ([a-zA-Z0-9]+))?; ([_a-zA-Z-]+);");
+                RE_LANG = new RE("\\[([_a-zA-Z-]+)\\]");
+                RE_OPERA = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)(; U)?\\) Opera ([0-9]+)\\.([0-9]+)[ ]+\\[([_a-zA-Z-]+)\\]");
+                RE_OPERA8X_CLOAKED = new RE("((; )|\\()([a-zA-Z0-9\\-]+)[ ]+([a-zA-Z0-9\\.]+)([^;\\)]*)[; ]+([_a-zA-Z-]+)\\) Opera ([0-9]+)\\.([0-9]+)");
+                RE_OPERA_LANG_OS = new RE("\\(([a-zA-Z0-9\\-]+) ([0-9\\.]+)[^)]+\\)[ \t]*\\[([a-z_]+)\\]");
+                RE_KONQUEROR_OS = new RE("Konqueror/([0-9\\.]+); ([a-zA-Z0-9\\-]+)");
+                RE_GALEON_OS = new RE("\\(([a-zA-Z0-9]+); U; Galeon; ([0-9]+)\\.([0-9]+);");
+                RE_GECKO_ENGINE = new RE("Gecko/[0-9]*( ([a-zA-Z]+)+[0-9]*/([0-9]+)\\.([0-9]+)([a-zA-Z0-9]*))?");
+            }
+        } catch (RESyntaxException e) {
+            throw new RuntimeException(e); // You broke one of th REs!
+        }
+    }
 
     /**
      * That does all the work.
      */
-    protected void detect()
-            throws org.apache.regexp.RESyntaxException {
+    protected void detect() {
         if (agent == null || agent.length() == 0)
             return;
         String mav, miv, lang = null;
+
+        createREs();
 
         if (RE_START.match(agent)) {
             browserName = RE_START.getParen(1);
@@ -302,16 +330,16 @@ public class Browser {
             }
 
             /* detect gecko */
-            if (Gecko_Engine.match(agent)) {
+            if (RE_GECKO_ENGINE.match(agent)) {
                 browserType = BrowserType.GECKO;
-                if (Gecko_Engine.getParen(2) != null)
-                    browserName = Gecko_Engine.getParen(2);
-                if (Gecko_Engine.getParen(3) != null)
-                    mav = Gecko_Engine.getParen(3);
-                if (Gecko_Engine.getParen(4) != null)
-                    miv = Gecko_Engine.getParen(4);
-                if (Gecko_Engine.getParen(5) != null)
-                    release = Gecko_Engine.getParen(5);
+                if (RE_GECKO_ENGINE.getParen(2) != null)
+                    browserName = RE_GECKO_ENGINE.getParen(2);
+                if (RE_GECKO_ENGINE.getParen(3) != null)
+                    mav = RE_GECKO_ENGINE.getParen(3);
+                if (RE_GECKO_ENGINE.getParen(4) != null)
+                    miv = RE_GECKO_ENGINE.getParen(4);
+                if (RE_GECKO_ENGINE.getParen(5) != null)
+                    release = RE_GECKO_ENGINE.getParen(5);
             }
             
             /* try to find language in uncommon places if not detected before */

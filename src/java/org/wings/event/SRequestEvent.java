@@ -72,7 +72,7 @@ public class SRequestEvent extends AWTEvent {
      * filled with info about the resource actually delivered, otherwise it is
      * null.
      */
-    protected ExternalizedResource requestedResource;
+    protected transient ExternalizedResource requestedResource;
 
     /**
      * Constructs a ComponentEvent object.

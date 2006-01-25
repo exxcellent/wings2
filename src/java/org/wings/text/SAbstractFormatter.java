@@ -20,16 +20,13 @@
 package org.wings.text;
 
 import org.wings.SFormattedTextField;
-import org.wings.script.JavaScriptListener;
-
-import java.util.Iterator;
-import java.util.Vector;
+import java.io.Serializable;
 import java.text.ParseException;
 
 /**
  * @author theresia
  */
-public abstract class SAbstractFormatter {
+public abstract class SAbstractFormatter implements Serializable {
 
     public SAbstractFormatter() {
     }

@@ -690,7 +690,7 @@ public final class Utils {
         BufferedReader reader = null;
 
         try {
-            in = Utils.class.getClassLoader().getResourceAsStream(path);
+            in = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
             reader = new BufferedReader(new InputStreamReader(in));
             StringBuffer buffer = new StringBuffer();
             String line;

@@ -17,13 +17,13 @@ import org.wings.SComponent;
 import org.wings.STable;
 
 import javax.swing.*;
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:holger.engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public interface STableCellEditor
-        extends CellEditor {
+public interface STableCellEditor extends CellEditor, Serializable {
     SComponent getTableCellEditorComponent(STable table,
                                            Object value,
                                            boolean isSelected,

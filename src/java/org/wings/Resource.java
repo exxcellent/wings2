@@ -40,7 +40,6 @@ import java.util.Map;
 public abstract class Resource implements Serializable, URLResource, Renderable {
     private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
 
-
     protected String id;
 
     protected String extension;
@@ -101,14 +100,14 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
     /**
      * Internal structure to manage HTTP headers which should be delivered with a resource to the client.
      */
-    public static final class HeaderEntry implements Map.Entry {
-        final Object key;
-        Object value;
+    public static final class HeaderEntry implements Map.Entry, Serializable {
+        final Serializable key;
+        Serializable value;
 
         /**
          * Create new entry.
          */
-        public HeaderEntry(Object k, Object v) {
+        public HeaderEntry(Serializable k, Serializable v) {
             key = k;
             value = v;
         }
@@ -123,7 +122,7 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
 
         public Object setValue(Object newValue) {
             Object oldValue = value;
-            value = newValue;
+            value = (Serializable) newValue;
             return oldValue;
         }
 

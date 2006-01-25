@@ -37,7 +37,7 @@ public class SRootLayout extends STemplateLayout {
      */
     public SRootLayout() {
         try {
-            setTemplate(Thread.currentThread().getContextClassLoader().getResource("template/default.thtml"));
+            setTemplate(Thread.currentThread().getContextClassLoader().getResource("org/wings/template/default.thtml"));
         } catch (IOException e) {
             log.error("Unable to get template/default.thtml",e);
         }

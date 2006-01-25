@@ -26,7 +26,7 @@ import java.io.Serializable;
  */
 public final class StringBufferDevice implements Device, Serializable {
     private StringBuffer buffer;
-    private ByteArrayOutputStream byteStream = null;
+    private transient ByteArrayOutputStream byteStream = null;
 
     public StringBufferDevice() {
         buffer = new StringBuffer();

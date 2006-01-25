@@ -13,14 +13,16 @@
  */
 package org.wings.session;
 
+import java.io.Serializable;
+
 /**
  * Typesafe enumeration class of operating systems on browsers client side.
  * 
  * <p>Example usage of how to get the browser type</p>
  * <code>SessionManager.getSession().getUserAgent().getBrowserType()</code>
  */
-public class BrowserType {
-    public class BrowserID {
+public class BrowserType implements Serializable {
+    public static class BrowserID implements Serializable {
         public static final int UNKNOWN = 0;
         public static final int GECKO = 1;
         public static final int MOZILLA = 2;

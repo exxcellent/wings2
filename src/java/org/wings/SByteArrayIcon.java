@@ -33,7 +33,7 @@ import java.io.InputStream;
  */
 public class SByteArrayIcon extends Resource implements SIcon {
 
-    protected ImageInfo imageInfo;
+    protected transient ImageInfo imageInfo;
 
     protected byte[] iconData;
 

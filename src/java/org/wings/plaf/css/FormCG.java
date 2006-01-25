@@ -14,17 +14,14 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SForm;
 import org.wings.io.Device;
-import org.wings.session.SessionManager;
-
 import java.io.IOException;
 
 public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG {
 
-    private static final SIcon BLIND_ICON = (SIcon) SessionManager.getSession()
-            .getCGManager().getObject("FormCG.blindIcon", SIcon.class);
-    
     protected void writeContent(final Device device, final SComponent c) throws IOException {
         final SForm component = (SForm) c;
 
@@ -64,7 +61,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         * no-margin, no-whatever (HZ).
         */
         device.print("><input type=\"image\" name=\"_capture_enter1\" border=\"0\" ");
-        Utils.optAttribute(device, "src", BLIND_ICON.getURL());
+        Utils.optAttribute(device, "src", getBlindIcon().getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
 
         // Not sure: Think this was for optionally expiring old GET views?!
@@ -80,7 +77,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
 
         // Enter capture at end of form
         device.print("<input type=\"image\" name=\"_capture_enter2\" border=\"0\" ");
-        Utils.optAttribute(device, "src", BLIND_ICON.getURL());
+        Utils.optAttribute(device, "src", getBlindIcon().getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
 
         device.print("</form>");

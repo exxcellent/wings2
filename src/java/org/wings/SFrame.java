@@ -103,6 +103,17 @@ public class SFrame
     private boolean fireInvalidLowLevelEvents = false;
 
     /**
+     * we need to overwrite the inherited input map from SComponent.
+     */
+    private InputMap myInputMap;
+
+    /**
+     * Global input maps
+     */
+    private ArrayList globalInputMapComponents;
+
+
+    /**
      * Creates a new SFrame
      */
     public SFrame() {
@@ -528,10 +539,6 @@ public class SFrame
         return false;
     }
 
-    /**
-     * we need to overwrite the inherited input map from SComponent.
-     */
-    InputMap myInputMap;
     public InputMap getInputMap(int condition) {
         // SFrame has only one inputMap
         if (myInputMap == null) {
@@ -544,7 +551,6 @@ public class SFrame
         this.myInputMap = inputMap;
     }
 
-    ArrayList globalInputMapComponents;
     public void registerGlobalInputMapComponent(SComponent comp) {
         if (globalInputMapComponents == null) {
             globalInputMapComponents = new ArrayList();
@@ -554,7 +560,14 @@ public class SFrame
             globalInputMapComponents.add(comp);
         }
     }
-    
+
+    public void deregisterGlobalInputMapComponent(SComponent comp) {
+        if (globalInputMapComponents != null) {
+            globalInputMapComponents.remove(comp);
+        }
+    }
+
+
     public List getGlobalInputMapComponents() {
         return globalInputMapComponents;
     }

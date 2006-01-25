@@ -46,9 +46,7 @@ public class TemplateLayoutCG implements LayoutCG {
         final TemplateSource source = layout.getTemplateSource();
 
         if (source == null) {
-            device.print("Unable to open template-file <em>'");
-            device.print(source);
-            device.print("'</em>");
+            device.print("Unable to open template-file <em>null</em> in '" + layout);
         } else {
             layout.getPageParser().process(source, new TemplateParseContext(device, layout));
         }

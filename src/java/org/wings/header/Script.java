@@ -13,14 +13,12 @@
  */
 package org.wings.header;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.Renderable;
 import org.wings.SimpleURL;
 import org.wings.URLResource;
 import org.wings.io.Device;
-
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Include a <code>&lt;SCRIPT&gt;</code>-element inside the HTML header of rendered page.
@@ -28,8 +26,7 @@ import java.io.IOException;
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class Script implements Renderable {
-    private final transient static Log log = LogFactory.getLog(Script.class);
+public class Script implements Renderable, Serializable {
     protected String language = null;
     protected String type = null;
     protected URLResource urlSource = null;
@@ -87,7 +84,7 @@ public class Script implements Renderable {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        if (obj.getClass() != Script.class) {
+        if (obj == null || obj.getClass() != Script.class) {
             return false;
         }
         Script testObj = (Script) obj;
@@ -123,7 +120,11 @@ public class Script implements Renderable {
         }
         return true;
     }
-    
+
+    public int hashCode() {
+        return language != null ? language.hashCode() : 0;
+    }
+
 }
 
 

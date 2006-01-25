@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.session.SessionManager;
+import java.io.Serializable;
 
 /**
  * Defines the behaviour of component tooltips.
@@ -21,7 +22,7 @@ import org.wings.session.SessionManager;
  * @author hengels
  * @version $Revision$
  */
-public class SToolTipManager {
+public class SToolTipManager implements Serializable {
     private int initialDelay = 1000;
     private int dismissDelay = 3000;
     private boolean followMouse = true;

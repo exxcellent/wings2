@@ -44,6 +44,8 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -1799,19 +1801,12 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
 
     private void registerGlobalInputMapWithFrame() {
-        final SComponent me = this;
         final SFrame parentFrame = getParentFrame();
         if (parentFrame != null) {
-            parentFrame.registerGlobalInputMapComponent(me);
+            parentFrame.registerGlobalInputMapComponent(this);
         } else {
             if (globalInputMapListener == null) {
-                globalInputMapListener = new SParentFrameListener() {
-                    public void parentFrameAdded(SParentFrameEvent e) {
-                        e.getParentFrame().registerGlobalInputMapComponent(me);
-                    }
-                    public void parentFrameRemoved(SParentFrameEvent e) {
-                    }
-                };
+                globalInputMapListener = new GlobalInputMapParentFrameListener(this);
                 addParentFrameListener(globalInputMapListener);
             }
         }
@@ -1899,4 +1894,41 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         }
         return menus;
     } */
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    // preprocessing, e. g. serialize static vars or transient variables as cipher text
+        in.defaultReadObject(); // default serialization
+    // do postprocessing here
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        try {
+            // preprocessing
+            out.defaultWriteObject(); // default
+            // postprocessing
+        } catch (IOException e) {
+            log.warn("Unexpected Exception", e);
+            throw e;
+        }
+    }
+
+    /**
+     * Listener registering/deregistering this component on the parent frame.
+     */
+    private final static class GlobalInputMapParentFrameListener implements SParentFrameListener, Serializable {
+        private final SComponent me;
+
+        public GlobalInputMapParentFrameListener(SComponent me) {
+            this.me = me;
+        }
+
+        public void parentFrameAdded(SParentFrameEvent e) {
+            if (e.getParentFrame() != null)
+                e.getParentFrame().registerGlobalInputMapComponent(me);
+        }
+        public void parentFrameRemoved(SParentFrameEvent e) {
+            if (e.getParentFrame() != null)
+                e.getParentFrame().deregisterGlobalInputMapComponent(me);
+        }
+    }
 }

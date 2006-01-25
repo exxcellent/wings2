@@ -113,7 +113,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      */
     protected final ArrayList requestedExpansionPaths = new ArrayList();
 
-    protected AbstractLayoutCache treeState = new VariableHeightLayoutCache();
+    protected transient AbstractLayoutCache treeState = new VariableHeightLayoutCache();
 
     /**
      * Implementation of the  {@link Scrollable} interface.

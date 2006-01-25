@@ -17,6 +17,7 @@ import org.wings.Renderable;
 import org.wings.io.Device;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Include a <code>&lt;META&gt;</code>-element inside the HTML header of rendered page.
@@ -24,7 +25,7 @@ import java.io.IOException;
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class Meta implements Renderable {
+public class Meta implements Renderable, Serializable {
     protected String httpEquiv;
     protected String name;
     protected String lang;

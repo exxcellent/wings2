@@ -16,8 +16,12 @@ package org.wings;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 import org.wings.session.SessionManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Base class for layout managers.
@@ -27,6 +31,11 @@ import java.io.IOException;
  */
 public abstract class SAbstractLayoutManager
         implements SLayoutManager {
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(SAbstractLayoutManager.class); 
+
     /**
      * The code generation delegate, which is responsible for
      * the visual representation of a layout.
@@ -105,6 +114,24 @@ public abstract class SAbstractLayoutManager
     public final SDimension getPreferredSize() {
         return this.preferredSize;
     }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    // preprocessing, e. g. serialize static vars or transient variables as cipher text
+        in.defaultReadObject(); // default serialization
+    // do postprocessing here
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        try {
+            // preprocessing
+            out.defaultWriteObject(); // default
+            // postprocessing
+        } catch (IOException e) {
+            log.warn("Unexpected Exception", e);
+            throw e;
+        }
+    }
+    
 }
 
 

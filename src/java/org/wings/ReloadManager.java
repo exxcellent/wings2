@@ -14,6 +14,7 @@
 package org.wings;
 
 import java.util.Set;
+import java.io.Serializable;
 
 /**
  * Responsible for registering and invalidating modified components.
@@ -21,7 +22,7 @@ import java.util.Set;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public interface ReloadManager
+public interface ReloadManager extends Serializable
 {
     public static final int STATE = 1;
     public static final int STYLE = 2;

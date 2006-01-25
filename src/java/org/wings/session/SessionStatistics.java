@@ -15,12 +15,13 @@ package org.wings.session;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:@mueller.de">armin</a>
  * @version $Revision$
  */
-public class SessionStatistics {
+public class SessionStatistics implements Serializable {
 
     private final long birthDay = System.currentTimeMillis();
 

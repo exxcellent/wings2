@@ -13,10 +13,8 @@
  */
 package org.wings.resource;
 
-import org.wings.Resource;
 import org.wings.StaticResource;
 import org.wings.externalizer.ExternalizeManager;
-
 import java.io.InputStream;
 
 /**
@@ -32,7 +30,7 @@ public class ClasspathResource
     /**
      * The class loader from which the resource is loaded
      */
-    protected final ClassLoader classLoader;
+    private final transient ClassLoader classLoader;
 
     /**
      * The name that identifies the resource in the classpath
@@ -43,14 +41,14 @@ public class ClasspathResource
      * A static resource that is obtained from the default classpath.
      */
     public ClasspathResource(String resourceFileName) {
-        this(Resource.class.getClassLoader(), resourceFileName, "unkonwn");
+        this(null, resourceFileName, "unkonwn");
     }
 
     /**
      * A static resource that is obtained from the default classpath.
      */
     public ClasspathResource(String resourceFileName, String mimeType) {
-        this(Resource.class.getClassLoader(), resourceFileName, mimeType);
+        this(null, resourceFileName, mimeType);
     }
 
     /**
@@ -86,7 +84,7 @@ public class ClasspathResource
     }
 
     protected InputStream getResourceStream() {
-        return classLoader.getResourceAsStream(resourceFileName);
+        return getClassLoader().getResourceAsStream(resourceFileName);
     }
 
     /*
@@ -103,7 +101,7 @@ public class ClasspathResource
      *         and from the file name of the resource.
      */
     public int hashCode() {
-        return classLoader.hashCode() ^ resourceFileName.hashCode();
+        return (classLoader != null ? classLoader.hashCode() : 0) ^ resourceFileName.hashCode();
     }
 
     /**
@@ -116,10 +114,17 @@ public class ClasspathResource
         if (o instanceof ClasspathResource) {
             ClasspathResource other = (ClasspathResource) o;
             return ((this == other)
-                    || (classLoader.equals(other.classLoader)
+                    || ((classLoader == other.classLoader || (classLoader != null && classLoader.equals(other.classLoader)))
                     && resourceFileName.equals(other.resourceFileName)));
         }
         return false;
+    }
+
+    /**
+     * @return The stored classloader or the current context classloader if none fixed passed (prefer this case due to session serialization!)
+     */
+    protected ClassLoader getClassLoader() {
+        return this.classLoader == null ? Thread.currentThread().getContextClassLoader() : this.classLoader;
     }
 }
 

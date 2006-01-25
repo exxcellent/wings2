@@ -50,7 +50,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                 Utils.printNewline(d, layout.getContainer());
                 final boolean headerCell = row == grid.firstRow && header;
                 if (comp == null) {
-                    openLayouterCell(d, headerCell, layoutInsets, border, comp);
+                    openLayouterCell(d, headerCell, layoutInsets, border, null);
                     d.print(">");
                     closeLayouterCell(d, headerCell);
                 } else {

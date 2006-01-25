@@ -15,6 +15,7 @@ package org.wings.style;
 
 import org.wings.Renderable;
 import java.util.Set;
+import java.io.Serializable;
 
 /**
  * A StyleSheet is a collection of CSS {@link Style} definitions.
@@ -23,7 +24,7 @@ import java.util.Set;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public interface StyleSheet extends Renderable {
+public interface StyleSheet extends Renderable, Serializable {
     /**
      * Register a {@link Style} in the style sheet.
      */

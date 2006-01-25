@@ -19,11 +19,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.io.Serializable;
 
 /*
  * @see STableColumnModel
  */
-public class SDefaultTableColumnModel implements STableColumnModel {
+public class SDefaultTableColumnModel implements STableColumnModel, Serializable {
     /**
      * Apache jakarta commons logger
      */

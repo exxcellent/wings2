@@ -15,30 +15,22 @@ package org.wings.plaf.css;
 
 
 import org.wings.SComponent;
-import org.wings.SIcon;
 import org.wings.SSpacer;
 import org.wings.io.Device;
-import org.wings.session.SessionManager;
-
 import java.io.IOException;
 
 public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.SpacerCG {
-    /**
-     * The default invisible icon.
-     */
-    private static final SIcon BLIND_ICON = (SIcon) SessionManager.getSession()
-    .getCGManager().getObject("SpacerCG.blindIcon", SIcon.class);
 
     public void writeContent(final Device device, final SComponent c) throws IOException {
         final SSpacer component = (SSpacer) c;
         int height = component.getPreferredSize().getHeightInt();
         int width = component.getPreferredSize().getWidthInt();
         device.print("<img");
-        Utils.optAttribute(device, "src", BLIND_ICON.getURL());
+        Utils.optAttribute(device, "src", getBlindIcon().getURL());
         Utils.optAttribute(device, "width", width);
         Utils.optAttribute(device, "height", height);
         device.print(" alt=\"");
-        device.print(BLIND_ICON.getIconTitle());
+        device.print(getBlindIcon().getIconTitle());
         device.print("\"/>");
     }
 }

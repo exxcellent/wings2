@@ -15,6 +15,8 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SConstants;
+import org.wings.SIcon;
+import org.wings.SResourceIcon;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 import org.wings.session.SessionManager;
@@ -30,6 +32,10 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public abstract class AbstractComponentCG implements ComponentCG, SConstants, Serializable {
+    /**
+     * An invisible icon / graphic (spacer graphic)
+     */
+    private static SIcon BLIND_ICON;
 
     protected AbstractComponentCG() {
     }
@@ -80,5 +86,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     protected void writeContent(Device device, SComponent component) throws IOException {
+    }
+
+    protected final SIcon getBlindIcon() {
+        if(BLIND_ICON == null)
+            BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
+        return BLIND_ICON;
     }
 }

@@ -14,6 +14,8 @@
 
 package org.wings.style;
 
+import java.io.Serializable;
+
 /**
  * A CSS attribute is a property on any abritriary HTML element which can be set via CSS.
  *
@@ -25,7 +27,7 @@ package org.wings.style;
  *
  * @author bschmid
  */
-public class CSSProperty {
+public class CSSProperty implements Serializable {
     
     /* These CSSProperty Constants are the complete CSS2 standard for visual
      * media as in the CSS2 spec at http://www.w3.org/TR/REC-CSS2/propidx.html

@@ -137,7 +137,7 @@ public class SGridBagLayout
     /**
      * Contains a pre-calculated grid (or null)
      */
-    protected Grid currentGrid;
+    protected transient Grid currentGrid;
 
     /**
      * Indicates that the corresponding SComponent should be at the

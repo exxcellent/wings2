@@ -13,13 +13,11 @@
  */
 package org.wings;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.session.SessionManager;
-
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -52,8 +50,7 @@ import java.util.Iterator;
  * @version $Revision$
  * @see javax.swing.ButtonGroup
  */
-public class SButtonGroup implements SDelayedEventModel {
-    private final transient static Log log = LogFactory.getLog(SButtonGroup.class);
+public class SButtonGroup implements SDelayedEventModel, Serializable {
     public static final String SELECTION_CHANGED = "SelectionChanged";
 
     protected final ArrayList buttons = new ArrayList(2);

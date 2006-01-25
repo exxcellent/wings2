@@ -212,7 +212,7 @@ public class LookAndFeel implements Serializable {
     public static StyleSheet makeStyleSheet(String resourceName) {
         try {
             CSSStyleSheet result = new CSSStyleSheet();
-            InputStream in = LookAndFeel.class.getClassLoader().getResourceAsStream(resourceName);
+            InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
             result.read(in);
             in.close();
             return result;

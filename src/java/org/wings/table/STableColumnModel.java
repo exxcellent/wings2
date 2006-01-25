@@ -18,8 +18,7 @@ import java.util.Collection;
 /**
  * @see  javax.swing.table.TableColumnModel
  */
-public interface STableColumnModel
-{
+public interface STableColumnModel {
     void addColumn( STableColumn aColumn );
 
     void removeColumn( STableColumn column );

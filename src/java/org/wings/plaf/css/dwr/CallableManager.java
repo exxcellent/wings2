@@ -9,14 +9,14 @@ import org.wings.session.Session;
 import uk.ltd.getahead.dwr.ExecutionContext;
 
 import java.util.Collection;
+import java.io.Serializable;
 
 /**
  * @author hengels
  * @version $Revision$
  */
-public class CallableManager
-{
-    SessionCreatorManager creatorManager = new SessionCreatorManager();
+public class CallableManager implements Serializable {
+    private SessionCreatorManager creatorManager = new SessionCreatorManager();
 
     public static CallableManager getInstance() {
         CallableManager callableManager = (CallableManager)SessionManager.getSession().getProperty("CallableManager");

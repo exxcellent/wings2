@@ -189,5 +189,9 @@ public class JavaScriptListener
 
         return true;
     }
-    
+
+    public int hashCode() {
+        return code != null ? code.hashCode() : super.hashCode();
+    }
+
 }

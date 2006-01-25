@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * A <CODE>FileDataSource</CODE> implements a TemplateSource
@@ -25,7 +26,7 @@ import java.io.InputStream;
  * @author <A href="mailto:H.Zeller@acm.org">Henner Zeller</A>
  * @version $Revision$ $Date$
  */
-public class FileTemplateSource implements TemplateSource {
+public class FileTemplateSource implements TemplateSource, Serializable {
     private File file;
     protected String canonicalName = null;
 

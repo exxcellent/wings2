@@ -19,6 +19,7 @@ import org.wings.URLResource;
 import org.wings.io.Device;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Include a <code>&lt;LINK&gt;</code>-element inside the HTML header of rendered page.
@@ -29,7 +30,7 @@ import java.io.IOException;
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class Link implements Renderable {
+public class Link implements Renderable, Serializable {
     protected String rel = null;
     protected String rev = null;
     protected String type = null;

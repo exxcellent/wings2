@@ -50,7 +50,7 @@ public class RequestURL extends SimpleURL {
         this.epoch = other.epoch;
         this.resource = other.resource;
         StringBuffer params = other.parameters;
-        parameters = (params == null) ? params : new StringBuffer(params.toString());
+        parameters = (params == null) ? null : new StringBuffer(params.toString());
     }
 
 

@@ -66,14 +66,14 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     /**
      * javascript needed for Drag and Drop support
      */
-    private static final String DND_JS = (String) SessionManager
+    private final String DND_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.dnd",
             String.class);
     
     /**
      * javascript needed for Drag and Drop support
      */
-    private static final String WZ_DND_JS = (String) SessionManager
+    private final String WZ_DND_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.wzdragdrop",
             String.class);
     
@@ -113,11 +113,11 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         javascriptResourceKeys.add("JScripts.domtt");
     }
 
-    public static final String UTILS_SCRIPT = (String) SessionManager
+    public final String UTILS_SCRIPT = (String) SessionManager
             .getSession().getCGManager().getObject("JScripts.utils",
                     String.class);
 
-    public static final String FORM_SCRIPT = (String) SessionManager
+    public final String FORM_SCRIPT = (String) SessionManager
             .getSession().getCGManager().getObject("JScripts.form",
                     String.class);
 

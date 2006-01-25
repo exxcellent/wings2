@@ -13,10 +13,12 @@
  */
 package org.wings.session;
 
+import java.io.Serializable;
+
 /**
  * Typesafe enumeration class of operating systems on browsers client side.
  */
-public class OSType {
+public class OSType implements Serializable {
     /**
      * Operating system information could not be found.
      */

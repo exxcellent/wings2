@@ -3,17 +3,15 @@
  */
 package org.wings.plaf.css.dwr;
 
-import uk.ltd.getahead.dwr.CreatorManager;
-import uk.ltd.getahead.dwr.Creator;
-import uk.ltd.getahead.dwr.ExecutionContext;
 import org.w3c.dom.Element;
-import org.wings.plaf.css.dwr.SessionCreator;
-
+import uk.ltd.getahead.dwr.Creator;
+import uk.ltd.getahead.dwr.CreatorManager;
+import uk.ltd.getahead.dwr.ExecutionContext;
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.WeakHashMap;
+import java.io.Serializable;
 
 /**
  * The callables are referenced weakly, only. Thus, most callables are destroyed as soon as there's
@@ -22,11 +20,8 @@ import java.util.WeakHashMap;
  * @author hengels
  * @version $Revision$
  */
-public class SessionCreatorManager
-    implements CreatorManager
-{
-    static ThreadLocal sessions = new ThreadLocal();
-    boolean debug;
+public class SessionCreatorManager implements CreatorManager, Serializable {
+    private boolean debug;
 
     public SessionCreatorManager() {
     }

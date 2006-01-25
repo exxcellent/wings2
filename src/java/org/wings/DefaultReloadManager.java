@@ -31,7 +31,7 @@ import java.util.Set;
 public class DefaultReloadManager
         implements ReloadManager
 {
-    private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
+    private final static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
     /**
      * a set of all components, manged by this ReloadManager, that are marked
      * dirty.

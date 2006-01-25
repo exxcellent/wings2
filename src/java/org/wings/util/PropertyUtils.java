@@ -14,14 +14,12 @@
 
 package org.wings.util;
 
-import org.wings.session.SessionManager;
-import org.wings.plaf.css.CSSLookAndFeel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import java.util.Properties;
+import org.wings.session.SessionManager;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * Some service methods related with handling {@link java.util.Properties} in wingS.
@@ -84,7 +82,7 @@ public class PropertyUtils {
         Properties properties = new Properties();
         InputStream in;
         try {
-            in = CSSLookAndFeel.class.getClassLoader().getResourceAsStream(classPath);
+            in = Thread.currentThread().getContextClassLoader().getResourceAsStream(classPath);
             properties.load(in);
             in.close();
         } catch (Exception e) {

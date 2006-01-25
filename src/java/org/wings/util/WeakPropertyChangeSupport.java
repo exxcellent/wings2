@@ -17,6 +17,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.io.Serializable;
 
 /**
  * This is a utility class that can be used by beans that support bound
@@ -30,7 +31,7 @@ import java.lang.ref.WeakReference;
  * @author <a href="mailto:haaf@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class WeakPropertyChangeSupport {
+public class WeakPropertyChangeSupport implements Serializable {
     /**
      * Constructs a <code>WeakPropertyChangeSupport</code> object.
      *
@@ -261,20 +262,16 @@ public class WeakPropertyChangeSupport {
     /**
      * Hashtable for managing listeners for specific properties.
      * Maps property names to WeakPropertyChangeSupport objects.
-     *
-     * @serial
      */
-    private java.util.WeakHashMap children;
+    private transient java.util.WeakHashMap children;
 
     /**
      * The object to be provided as the "source" for any generated events.
-     *
-     * @serial
      */
     private Object source;
 
 
-    private ReferenceQueue queue = new ReferenceQueue();
+    private transient ReferenceQueue queue = new ReferenceQueue();
 
     /**
      * Remove all invalidated entries from the map, that is, remove all entries

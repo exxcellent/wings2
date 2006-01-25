@@ -13,12 +13,15 @@
  */
 package org.wings.template;
 
-import java.io.*;
-import java.net.URL;
-import java.util.Hashtable;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Hashtable;
 
 /**
  * A <CODE>CachedFileDataSource</CODE> implements a DataSource
@@ -27,9 +30,9 @@ import org.apache.commons.logging.LogFactory;
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
  * @version $Revision$
  */
-public class CachedFileTemplateSource
-        extends FileTemplateSource {
-    private final transient static Log log = LogFactory.getLog(CachedFileTemplateSource.class);
+public class CachedFileTemplateSource extends FileTemplateSource {
+    private final  static Log log = LogFactory.getLog(CachedFileTemplateSource.class);
+
     private final static class CacheEntry {
         private byte[] filebuffer = null;
         private long lastModified;
@@ -123,10 +126,9 @@ public class CachedFileTemplateSource
     private static Hashtable cache = new Hashtable();
     private static final int CACHED_LIMIT = 1024;
 
-    private CacheEntry entry;
+    private transient CacheEntry entry;
 
-    public CachedFileTemplateSource(File f)
-            throws IOException {
+    public CachedFileTemplateSource(File f) throws IOException {
         super(f);
 
         entry = (CacheEntry) cache.get(f);

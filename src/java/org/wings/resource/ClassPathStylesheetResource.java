@@ -41,7 +41,7 @@ public class ClassPathStylesheetResource
      */
     private static final int MAX_BUFFER_SIZE = 24 * 1024; // 24kb
 
-    private ExternalizeManager extManager;
+    private transient ExternalizeManager extManager;
 
     /**
      * A static css resource that is obtained from the default classpath.
@@ -99,8 +99,8 @@ public class ClassPathStylesheetResource
      * @see org.wings.StaticResource#getResourceStream()
      */
     protected final InputStream getResourceStream() {
-        InputStream in = classLoader.getResourceAsStream(resourceFileName);
-        CssUrlFilterInputStream stream = new CssUrlFilterInputStream(in, extManager);
+        InputStream in = getClassLoader().getResourceAsStream(resourceFileName);
+        CssUrlFilterInputStream stream = new CssUrlFilterInputStream(in, getExtManager());
         return stream;
     }
 
@@ -125,6 +125,13 @@ public class ClassPathStylesheetResource
         return false;
     }
 
+    /**
+     * Simple hascode implementation
+     */
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     /* (non-Javadoc)
      * @see org.wings.StaticResource#bufferResource()
      */
@@ -135,6 +142,13 @@ public class ClassPathStylesheetResource
             log.error("Unable to retrieve css file from classpath: '"+resourceFileName); 
             throw e; 
         }
+    }
+
+    private ExternalizeManager getExtManager() {
+        if (extManager == null)
+            // need to set it here, because at this moment there is a session in the sessionManager
+            extManager = SessionManager.getSession().getExternalizeManager();
+        return extManager;
     }
 }
 

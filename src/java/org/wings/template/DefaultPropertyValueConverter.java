@@ -126,7 +126,7 @@ public class DefaultPropertyValueConverter implements PropertyValueConverter {
             StyleSheet result;
             try {
                 CSSStyleSheet styleSheet = new CSSStyleSheet();
-                InputStream in = getClass().getClassLoader().getResourceAsStream(value);
+                InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(value);
                 styleSheet.read(in);
                 in.close();
                 result = styleSheet;

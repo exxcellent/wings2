@@ -123,12 +123,13 @@ public class STemplateLayout extends SAbstractLayoutManager {
      * Abstraction of the template source (file, resource, ..)
      */
     protected HashMap components = new HashMap();
+
     private TemplateSource templateSource = null;
 
     /**
      * PageParser to use
      */
-    protected PageParser pageParser = PageParser.getInstance();
+    protected transient PageParser pageParser;
 
 
     public STemplateLayout() {}
@@ -323,7 +324,7 @@ public class STemplateLayout extends SAbstractLayoutManager {
      * @return the current PageParser
      */
     public PageParser getPageParser() {
-        return pageParser;
+        return pageParser != null ? pageParser :  PageParser.getInstance();
     }
 
     /**

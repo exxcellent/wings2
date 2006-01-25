@@ -19,13 +19,10 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 
 /**
- * @author
  * @version $Revision$
  */
-abstract class AbstractActionPropertyChangeListener
-        implements PropertyChangeListener {
+abstract class AbstractActionPropertyChangeListener implements PropertyChangeListener {
     private static ReferenceQueue queue;
-
     private WeakReference target;
     private Action action;
 

@@ -22,6 +22,7 @@ import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EventObject;
+import java.io.Serializable;
 
 /**
  * Default table cell editor.
@@ -78,15 +79,7 @@ public class SDefaultCellEditor
      * added to the three buttons {@link #ok}, {@link #cancel} and {@link #undo}
      * and the {@link #editorFrom form}
      */
-    private final ActionListener fireEventListener = new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == ok) {
-                stopCellEditing();
-            } else if (e.getSource() == cancel) {
-                cancelCellEditing();
-            }
-        }
-    };
+    private final ActionListener fireEventListener = new FireEventListener();
 
     /**
      * Fast edit support is editing with reduced interaction. E.g. a boolean
@@ -386,6 +379,16 @@ public class SDefaultCellEditor
 
         public boolean shouldSelectCell(EventObject anEvent) {
             return true;
+        }
+    }
+
+    private final class FireEventListener implements ActionListener, Serializable {
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == ok) {
+                stopCellEditing();
+            } else if (e.getSource() == cancel) {
+                cancelCellEditing();
+            }
         }
     }
 }
