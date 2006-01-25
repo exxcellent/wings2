@@ -712,9 +712,10 @@ public class Session implements PropertyService, Serializable {
                 container.removeAll();
         }
 
-        reloadManager.clear();
+       reloadManager.clear();
         reloadManager = null;
-        externalizeManager.clear();
+        if (externalizeManager != null) // eexternalizeManager is transient!
+            externalizeManager.clear();
         externalizeManager = null;
         dispatcher.clear();
         dispatcher = null;
