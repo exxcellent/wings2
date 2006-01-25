@@ -58,7 +58,7 @@ public class TreeExample
         public TreeControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
             showAsFormComponent.setAttribute(CSSProperty.MARGIN_RIGHT, "1.5em");
-            showAsFormComponent.addActionListener(new ActionListener() {
+            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     tree.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
@@ -103,7 +103,7 @@ public class TreeExample
             group.add(arrowButton);
             plusButton.setSelected(true);
 
-            group.addActionListener(new ActionListener() {
+            group.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (plusButton.isSelected()) {
                         PropertyAccessor.setProperty(tree.getCG(), "collapseControlIcon", MINUS);

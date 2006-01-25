@@ -35,7 +35,7 @@ public class ButtonExample extends WingSetPane {
 
     // pressed label & handler
     private final SLabel reportLabel = new SLabel("No button pressed");
-    private final ActionListener action = new ActionListener() {
+    private final ActionListener action = new wingset.SerializableActionListener() {
         public void actionPerformed(ActionEvent e) {
             reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
         }
@@ -105,7 +105,7 @@ public class ButtonExample extends WingSetPane {
     private class ButtonControls extends ComponentControls {
         public ButtonControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new ActionListener() {
+            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                         SComponent component = (SComponent) iterator.next();
@@ -117,7 +117,7 @@ public class ButtonExample extends WingSetPane {
 
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
-            useImages.addActionListener(new ActionListener() {
+            useImages.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean use = useImages.isSelected();
 

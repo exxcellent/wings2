@@ -29,7 +29,7 @@ public class OptionPaneExample
         SToolBar toolBar = new SToolBar();
 
         SButton msg = new SButton("show Message");
-        msg.addActionListener(new ActionListener() {
+        msg.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SOptionPane.showMessageDialog(null, "This is a simple message", "A Message");
             }
@@ -37,7 +37,7 @@ public class OptionPaneExample
         toolBar.add(msg);
 
         SButton question = new SButton("show Question");
-        final ActionListener comment = new ActionListener() {
+        final ActionListener comment = new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand() == SOptionPane.OK_ACTION)
                     SOptionPane.showMessageDialog(null, "Fine !");
@@ -46,7 +46,7 @@ public class OptionPaneExample
             }
         };
 
-        question.addActionListener(new ActionListener() {
+        question.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SOptionPane.showQuestionDialog(null, "Continue this example?",
                         "A Question", comment);
@@ -55,7 +55,7 @@ public class OptionPaneExample
         toolBar.add(question);
 
         SButton yesno = new SButton("show Yes No");
-        final ActionListener feedback = new ActionListener() {
+        final ActionListener feedback = new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand() == SOptionPane.NO_ACTION) {
                     SPanel p = new SPanel(new SFlowDownLayout());
@@ -69,7 +69,7 @@ public class OptionPaneExample
             }
         };
 
-        yesno.addActionListener(new ActionListener() {
+        yesno.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SOptionPane.showYesNoDialog(null,
                         "Do you like wingS",
@@ -80,7 +80,7 @@ public class OptionPaneExample
         toolBar.add(yesno);
 
         final SLabel label = new SLabel();
-        final ActionListener inputListener = new ActionListener() {
+        final ActionListener inputListener = new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SOptionPane optionPane = (SOptionPane) e.getSource();
                 STextField inputValue = (STextField) optionPane.getInputValue();
@@ -89,7 +89,7 @@ public class OptionPaneExample
         };
 
         SButton input = new SButton("show Input");
-        input.addActionListener(new ActionListener() {
+        input.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SOptionPane.showInputDialog(null, "What's your profession?", "A Message", new STextField(), inputListener);
             }

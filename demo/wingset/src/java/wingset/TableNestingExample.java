@@ -27,7 +27,7 @@ public class TableNestingExample  extends WingSetPane{
         for(int i = 5; i< 30; i++) {
             selectComboBox.addItem(new Integer(i));
         }
-        selectComboBox.addActionListener(new ActionListener() {
+        selectComboBox.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 update();
             }

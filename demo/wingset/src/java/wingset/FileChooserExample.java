@@ -199,7 +199,7 @@ public class FileChooserExample
         form.add(p);
 
 
-        submit.addActionListener(new ActionListener() {
+        submit.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (chooser.getFile() != null) {

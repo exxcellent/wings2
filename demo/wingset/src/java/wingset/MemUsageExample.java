@@ -43,7 +43,7 @@ public class MemUsageExample extends WingSetPane {
         final SForm panel = new SForm();
 
         // Action listener for GC button trigger
-        gc.addActionListener(new ActionListener() {
+        gc.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.gc();
             }

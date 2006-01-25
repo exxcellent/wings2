@@ -32,7 +32,7 @@ public class MenuExample extends WingSetPane {
     private SMenuBar menuBar;
     private int shortcutKey = java.awt.event.KeyEvent.VK_A;
 
-    private final ActionListener menuItemListener = new ActionListener() {
+    private final ActionListener menuItemListener = new wingset.SerializableActionListener() {
         public void actionPerformed(ActionEvent e) {
             selectionLabel.setText(((SMenuItem) e.getSource()).getText());
         }
@@ -150,14 +150,14 @@ public class MenuExample extends WingSetPane {
     class MenuControls extends ComponentControls {
         public MenuControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
-            showAsFormComponent.addActionListener(new ActionListener() {
+            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     //menu.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
             });
 
             final SCheckBox disableSomeMenus = new SCheckBox("<html>Disable some Menus&nbsp;&nbsp;&nbsp;");
-            disableSomeMenus.addActionListener(new ActionListener() {
+            disableSomeMenus.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     setMenuItemsEnabled(!disableSomeMenus.isSelected());
                 }

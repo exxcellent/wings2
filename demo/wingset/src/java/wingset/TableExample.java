@@ -264,14 +264,14 @@ public class TableExample
 
         public TableControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
-            showAsFormComponent.addActionListener(new ActionListener() {
+            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     table.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
             });
 
             final SCheckBox editable = new SCheckBox("<html>Editable&nbsp;&nbsp;&nbsp;");
-            editable.addActionListener(new ActionListener() {
+            editable.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     table.setEditable(editable.isSelected());
                 }

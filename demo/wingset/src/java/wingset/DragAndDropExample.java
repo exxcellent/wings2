@@ -95,7 +95,7 @@ public class DragAndDropExample extends WingSetPane {
 
         // control components
         final SButton resetButton = new SButton("Reset");
-        resetButton.addActionListener(new ActionListener() {
+        resetButton.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 resetPuzzle();
             }
@@ -205,7 +205,7 @@ public class DragAndDropExample extends WingSetPane {
      * @author ole
      *
      */
-    private class SDragLabel extends SLabel implements DragSource {
+    private static class SDragLabel extends SLabel implements DragSource {
 
         private boolean dragEnabled;
 
@@ -230,7 +230,7 @@ public class DragAndDropExample extends WingSetPane {
      * @author ole
      *
      */
-    private class SDropLabel extends SLabel implements DropTarget {
+    private static class SDropLabel extends SLabel implements DropTarget {
         private ArrayList componentDropListeners = new ArrayList();
 
         /* (non-Javadoc)

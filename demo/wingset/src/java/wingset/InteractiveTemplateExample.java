@@ -65,7 +65,7 @@ public class InteractiveTemplateExample
         templateInput = new STextArea(templateString);
 
         SButton applyButton = new SButton("Apply");
-        applyButton.addActionListener(new ActionListener() {
+        applyButton.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 templateSource.setTemplate(templateInput.getText());
             }
@@ -89,7 +89,7 @@ public class InteractiveTemplateExample
         public Controls() {
             setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
             SButton resetButton = new SButton("Reset");
-            resetButton.addActionListener(new ActionListener() {
+            resetButton.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     templateSource.setTemplate(templateString);
                     templateInput.setText(templateString);

@@ -11,13 +11,13 @@ import org.wings.session.SessionManager;
 
 public class DesktopPaneExample extends WingSetPane {
     
-    private static SIcon windowIcon = (SIcon)SessionManager.getSession().getCGManager()
-                                            .getObject("TableCG.editIcon", SIcon.class);
+    private SIcon windowIcon;
 
     private static final int FRAME_COUNT = 8;
 
     protected SComponent createExample() {
         SDesktopPane desktopPane = new SDesktopPane();
+        windowIcon = (SIcon)SessionManager.getSession().getCGManager().getObject("TableCG.editIcon", SIcon.class);
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
             iFrame.getContentPane().setLayout(new SBoxLayout(SBoxLayout.VERTICAL));

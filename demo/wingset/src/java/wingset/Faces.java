@@ -21,24 +21,18 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class Faces
-        extends WingSetPane {
-    static final ClassLoader cl = WingSet.class.getClassLoader();
-    static final SIcon sel =
-            new SURLIcon("../icons/RadioButtonSelectedIcon.gif");
-    static final SIcon nsel =
-            new SURLIcon("../icons/RadioButtonIcon.gif");
-    static final SIcon pressed =
-            new SURLIcon("../icons/RadioButtonPressedIcon.gif");
-    static final SIcon rollsel =
-            new SURLIcon("../icons/RadioButtonRolloverSelectedIcon.gif");
-    static final SIcon rollnsel =
-            new SURLIcon("../icons/RadioButtonRolloverIcon.gif");
+public class Faces extends WingSetPane {
+    static final SIcon sel = new SURLIcon("../icons/RadioButtonSelectedIcon.gif");
+    static final SIcon nsel = new SURLIcon("../icons/RadioButtonIcon.gif");
+    static final SIcon pressed = new SURLIcon("../icons/RadioButtonPressedIcon.gif");
+    static final SIcon rollsel = new SURLIcon("../icons/RadioButtonRolloverSelectedIcon.gif");
+    static final SIcon rollnsel = new SURLIcon("../icons/RadioButtonRolloverIcon.gif");
 
     static final Face henner = new Face("Henner");
     static final Face armin = new Face("Armin");
@@ -78,7 +72,7 @@ public class Faces
 
         SForm shuffleForm = new SForm();
         SButton shuffleButton = new SButton("Shuffle");
-        shuffleButton.addActionListener(new ActionListener() {
+        shuffleButton.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 shuffle();
             }
@@ -91,7 +85,7 @@ public class Faces
         facePanel.add(mouth);
 
         hairGroup = new SButtonGroup();
-        hairGroup.addActionListener(new ActionListener() {
+        hairGroup.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = Integer.parseInt(e.getActionCommand());
                 hair.setIcon(getFace(index).hair);
@@ -99,7 +93,7 @@ public class Faces
         });
 
         eyeGroup = new SButtonGroup();
-        eyeGroup.addActionListener(new ActionListener() {
+        eyeGroup.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = Integer.parseInt(e.getActionCommand());
                 eye.setIcon(getFace(index).eyes);
@@ -107,7 +101,7 @@ public class Faces
         });
 
         mouthGroup = new SButtonGroup();
-        mouthGroup.addActionListener(new ActionListener() {
+        mouthGroup.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = Integer.parseInt(e.getActionCommand());
                 mouth.setIcon(getFace(index).mouth);
@@ -183,7 +177,7 @@ public class Faces
          * click on the name selects all buttons belonging to
          * that Face.
          */
-        name.addActionListener(new ActionListener() {
+        name.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 hairGroup.setSelected(hair, true);
                 eyeGroup.setSelected(eye, true);
@@ -210,7 +204,7 @@ public class Faces
     }
 
 
-    static class Face {
+    static class Face implements Serializable {
         SIcon hair;
         SIcon eyes;
         SIcon mouth;

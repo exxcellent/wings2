@@ -112,7 +112,7 @@ public class LabelExample extends WingSetPane {
 
         b.add(sp2);
 
-        g.addActionListener(new ActionListener() {
+        g.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 Object button = ((SButtonGroup) ev.getSource())
                         .getSelection();

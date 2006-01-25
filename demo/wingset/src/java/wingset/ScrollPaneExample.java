@@ -68,7 +68,7 @@ public class ScrollPaneExample
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new ActionListener() {
+            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean selected = showAsFormComponent.isSelected();
                     table.setShowAsFormComponent(selected);
@@ -79,7 +79,7 @@ public class ScrollPaneExample
             add(showAsFormComponent);
 
             final SCheckBox paging = new SCheckBox("Paged Scrolling");
-            paging.addActionListener(new ActionListener() {
+            paging.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean selected = paging.isSelected();
                     ((SScrollPaneLayout)scrollPane.getLayout()).setPaging(selected);
@@ -95,7 +95,7 @@ public class ScrollPaneExample
             group.add(treeButton);
             tableButton.setSelected(true);
 
-            group.addActionListener(new ActionListener() {
+            group.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (tableButton.isSelected()) {
                         showInPane(table);

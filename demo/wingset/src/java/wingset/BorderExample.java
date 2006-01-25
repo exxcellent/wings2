@@ -68,7 +68,7 @@ public class BorderExample
         group.add(eb);
         buttons.add(eb);
 
-        group.addActionListener(new ActionListener() {
+        group.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SButtonGroup g = (SButtonGroup) e.getSource();
                 Object button = g.getSelection();
@@ -111,7 +111,7 @@ public class BorderExample
 
         public BorderControls() {
             final STextField thicknessTextField = new STextField();
-            addActionListener(new ActionListener() {
+            addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent event) {
                     try {
                         thickness = Integer.parseInt(thicknessTextField.getText());

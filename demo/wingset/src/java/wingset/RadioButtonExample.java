@@ -39,7 +39,7 @@ public class RadioButtonExample
     private ButtonControls controls;
 
     private final SLabel reportLabel = new SLabel("No button pressed");
-    protected ActionListener action = new ActionListener() {
+    protected ActionListener action = new wingset.SerializableActionListener() {
         public void actionPerformed(ActionEvent e) {
             reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
         }
@@ -111,7 +111,7 @@ public class RadioButtonExample
     class ButtonControls extends ComponentControls {
         public ButtonControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new ActionListener() {
+            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                         SComponent component = (SComponent) iterator.next();
@@ -123,7 +123,7 @@ public class RadioButtonExample
 
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
-            useImages.addActionListener(new ActionListener() {
+            useImages.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean use = useImages.isSelected();
 

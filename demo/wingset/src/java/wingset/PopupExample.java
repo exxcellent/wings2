@@ -27,7 +27,7 @@ public class PopupExample extends WingSetPane {
 
     private SLabel selection;
 
-    private final ActionListener menuItemListener = new ActionListener() {
+    private final ActionListener menuItemListener = new wingset.SerializableActionListener() {
         public void actionPerformed(ActionEvent e) {
             selection.setText(((SMenuItem) e.getSource()).getText());
         }

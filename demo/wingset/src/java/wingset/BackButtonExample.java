@@ -14,16 +14,24 @@
 
 package wingset;
 
-import org.wings.*;
+import org.wings.ReloadManager;
+import org.wings.SButton;
+import org.wings.SButtonGroup;
+import org.wings.SComponent;
+import org.wings.SFlowDownLayout;
+import org.wings.SFlowLayout;
+import org.wings.SFont;
+import org.wings.SForm;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.SRadioButton;
 import org.wings.border.SEmptyBorder;
+import org.wings.event.InvalidLowLevelEvent;
+import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
-import org.wings.event.SInvalidLowLevelEventListener;
-import org.wings.event.InvalidLowLevelEvent;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Example demonstrating the capabilities of wings regarding
@@ -74,7 +82,7 @@ public class BackButtonExample extends WingSetPane {
             }
         });
 
-        virtualBackButton.addActionListener(new ActionListener() {
+        virtualBackButton.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 virtualBackButtonSignal.setVisible(true);
             }
@@ -120,7 +128,7 @@ public class BackButtonExample extends WingSetPane {
         mainPanel.add(getMode);
         mainPanel.add(getMode2);
 
-        buttonGroup.addActionListener(new ActionListener() {
+        buttonGroup.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 regularButton.setVisible(false);
                 nonEpochedButton.setVisible(false);
@@ -150,7 +158,7 @@ public class BackButtonExample extends WingSetPane {
 
         mainPanel.add(epochLabel);
 
-        newEpochButton.addActionListener(new ActionListener() {
+        newEpochButton.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainPanel.reload(ReloadManager.STATE); // Force invalidaton of epoch for demonstration purposes
             }
@@ -158,14 +166,14 @@ public class BackButtonExample extends WingSetPane {
         mainPanel.add(newEpochButton);
 
 
-        regularButton.addActionListener(new ActionListener() {
+        regularButton.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 regularButtonSignal.setVisible(true);
             }
         });
         mainPanel.add(regularButton);
 
-        nonEpochedButton.addActionListener(new ActionListener() {
+        nonEpochedButton.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 nonEpochedButtonSignal.setVisible(true);
             }

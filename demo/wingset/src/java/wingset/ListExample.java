@@ -13,11 +13,22 @@
  */
 package wingset;
 
-import org.wings.*;
-
+import org.wings.SBorderLayout;
+import org.wings.SButton;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SFlowDownLayout;
+import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SLabel;
+import org.wings.SList;
+import org.wings.SPanel;
+import org.wings.SResourceIcon;
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -25,7 +36,8 @@ import java.awt.*;
  */
 public class ListExample
         extends WingSetPane {
-    static final SResourceIcon javaCup = new SResourceIcon("org/wings/icons/JavaCup.gif");
+    private final static SResourceIcon javaCup = new SResourceIcon("org/wings/icons/JavaCup.gif");
+    private final ListModel listModel = createListModel();
     private ComponentControls controls;
 
     public SComponent createExample() {
@@ -107,7 +119,6 @@ public class ListExample
         SLabel color = new SLabel("");
         color.setForeground(Color.green);
         color.setText(Color.green.toString());
-
         Object[] values = {
             "element1",
             color,
@@ -128,8 +139,21 @@ public class ListExample
         color.setForeground(Color.green);
         color.setText(Color.green.toString());
 
-        ListModel listModel = new ListModel() {
-            Object[] values = {
+        ListModel listModel = new MyListModel(color, img);
+
+        return listModel;
+    }
+
+    public void addAnchorElements(SList list) {
+        list.setModel(listModel);
+        list.setType(SList.ORDER_TYPE_NORMAL);
+    }
+
+    private final static class MyListModel implements ListModel, Serializable {
+        private final Object[] values;
+
+        public MyListModel(SLabel color, SLabel img) {
+            values = new Object[]{
                 "element1",
                 color,
                 img,
@@ -137,29 +161,20 @@ public class ListExample
                 "element5",
                 "element6"
             };
+        }
 
-            public int getSize() {
-                return values.length;
-            }
+        public int getSize() {
+            return values.length;
+        }
 
-            public Object getElementAt(int i) {
-                return values[i];
-            }
+        public Object getElementAt(int i) {
+            return values[i];
+        }
 
-            public void addListDataListener(ListDataListener l) {
-            }
+        public void addListDataListener(ListDataListener l) {
+        }
 
-            public void removeListDataListener(ListDataListener l) {
-            }
-        };
-
-        return listModel;
-    }
-
-    private final ListModel listModel = createListModel();
-
-    public void addAnchorElements(SList list) {
-        list.setModel(listModel);
-        list.setType(SList.ORDER_TYPE_NORMAL);
+        public void removeListDataListener(ListDataListener l) {
+        }
     }
 }

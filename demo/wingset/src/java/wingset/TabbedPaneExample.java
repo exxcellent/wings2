@@ -89,7 +89,7 @@ public class TabbedPaneExample extends WingSetPane {
 
         public TabbedPaneControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new ActionListener() {
+            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     tabbedPane.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
@@ -97,7 +97,7 @@ public class TabbedPaneExample extends WingSetPane {
             add(showAsFormComponent);
 
             final SComboBox placement = new SComboBox(TAB_PLACEMENTS);
-            placement.addActionListener(new ActionListener() {
+            placement.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Object[] objects = (Object[]) placement.getSelectedItem();
                     Integer integer = (Integer) objects[1];
@@ -109,7 +109,7 @@ public class TabbedPaneExample extends WingSetPane {
             add(placement);
 
             final SComboBox tabColor = new SComboBox(COLORS);
-            tabColor.addActionListener(new ActionListener() {
+            tabColor.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Object[] objects = (Object[]) tabColor.getSelectedItem();
                     Color color = (Color) objects[1];
@@ -121,7 +121,7 @@ public class TabbedPaneExample extends WingSetPane {
             add(tabColor);
 
             final SComboBox contentColor = new SComboBox(COLORS);
-            contentColor.addActionListener(new ActionListener() {
+            contentColor.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Object[] objects = (Object[]) contentColor.getSelectedItem();
                     Color color = (Color) objects[1];
@@ -133,7 +133,7 @@ public class TabbedPaneExample extends WingSetPane {
             add(contentColor);
 
             final SButton addTab = new SButton("add a tab");
-            addTab.addActionListener(new ActionListener() {
+            addTab.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     addTab();
                 }
@@ -141,7 +141,7 @@ public class TabbedPaneExample extends WingSetPane {
             add(addTab);
 
             final SButton removeTab = new SButton("remove a tab");
-            removeTab.addActionListener(new ActionListener() {
+            removeTab.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     removeTab();
                 }

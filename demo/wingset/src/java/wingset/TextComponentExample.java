@@ -118,7 +118,7 @@ public class TextComponentExample extends WingSetPane {
         p.add(actionEvent);
 
         SButton button = new SButton("Submit");
-        button.addActionListener(new ActionListener() {
+        button.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 actionEvent.setText("Button clicked + ");
             }
@@ -126,7 +126,7 @@ public class TextComponentExample extends WingSetPane {
         p.add(button);
 
         SForm frame = new SForm(new SBorderLayout());
-        frame.addActionListener(new ActionListener() {
+        frame.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 actionEvent.setText(actionEvent.getText() + " Form event");
             }

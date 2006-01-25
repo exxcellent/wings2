@@ -33,7 +33,7 @@ public class ProgressBarExample extends WingSetPane {
 
         final SProgressBar progressBar = new SProgressBar(0, 100);
 
-        final ActionListener al = new ActionListener() {
+        final ActionListener al = new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int valueChange = 0;
                 if (e.getSource() == forward1Percent) {

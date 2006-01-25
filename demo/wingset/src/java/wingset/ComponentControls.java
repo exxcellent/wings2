@@ -46,7 +46,7 @@ public class ComponentControls
         add(new SLabel("<html>&nbsp;&nbsp;&nbsp;height&nbsp;"));
         add(heightTextField);
 
-        addActionListener(new ActionListener() {
+        addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SDimension preferredSize = new SDimension();
                 String width = widthTextField.getText();

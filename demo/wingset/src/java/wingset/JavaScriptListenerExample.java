@@ -78,7 +78,7 @@ public class JavaScriptListenerExample
         /*
          * The server side listener
          */
-        serverCalcButton.addActionListener(new ActionListener() {
+        serverCalcButton.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 doCalculation(firstField, secondField, sumField);
             }
