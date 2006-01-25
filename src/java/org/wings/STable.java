@@ -231,18 +231,15 @@ public class STable extends SComponent
         setSelectionModel(new SDefaultListSelectionModel());
         createDefaultEditors();
 
-        if (model == null)
-            this.model = createDefaultDataModel();
-        else
-            this.model = model;
-
         if (columnModel == null) {
-            this.columnModel = createDefaultColumnModel();
-            createDefaultColumnsFromModel();
+            columnModel = createDefaultColumnModel();
             autoCreateColumnsFromModel = true;
         }
-        else
-            this.columnModel = columnModel;
+        setColumnModel(columnModel);
+
+        if (model == null)
+            model = createDefaultDataModel();
+        setModel(model);
     }
 
     /**
