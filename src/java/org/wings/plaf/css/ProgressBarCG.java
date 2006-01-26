@@ -60,22 +60,25 @@ public class ProgressBarCG extends AbstractComponentCG implements  org.wings.pla
          * completely.
          */
         final SDimension size = component.getProgressBarDimension();
-        int width = (size != null && size.getWidthInt() > 0) ? size.getWidthInt() : 200;
-        int height = (size != null && size.getHeightInt() > 0) ? size.getHeightInt() : 10;
+        final int minSize = component.isBorderPainted() ? 3 : 1;
+        int width = (size != null && size.getWidthInt() >= minSize) ? size.getWidthInt() : 200;
+        int height = (size != null && size.getHeightInt() >= minSize) ? size.getHeightInt() : 10;
 
         if (component.isBorderPainted()) {
-            device.print("<div style=\"width: 100%;height:100%;border: 1px solid ");
+            device.print("<div style=\"width:").print(width).print("px;height:");
+            device.print(height).print("px;border:1px solid ");
             Utils.write(device, component.getBorderColor());
             device.print(";\">");
             width -= 2; //compensate for border
             height -= 2;
         }
 
-        device.print("<table class=\"SLayout\"><tr>");
+        device.print("<table class=\"SLayout\"><tr style=\"height:").print(height).print("px\"\">");
 
         // Part with completed bar
         final int completedWidth = (int) Math.round(width * component.getPercentComplete());
-        device.print("<td class=\"SLayout\"");
+        device.print("<td");
+        Utils.optAttribute(device, "class", "SLayout"); // collapse borders
         if (component.getFilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getFilledColor());
@@ -87,7 +90,8 @@ public class ProgressBarCG extends AbstractComponentCG implements  org.wings.pla
 
         // Part with remaining, incompleted bar
         final int incompleteWidth = (int) Math.round(width * (1 - component.getPercentComplete()));
-        device.print("<td class=\"SLayout\"");
+        device.print("<td");
+        Utils.optAttribute(device, "class", "SLayout"); // collapse borders
         if (component.getUnfilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getUnfilledColor());
@@ -114,6 +118,8 @@ public class ProgressBarCG extends AbstractComponentCG implements  org.wings.pla
         Utils.optAttribute(device, "src", getBlindIcon().getURL());
         Utils.optAttribute(device, "width", width);
         Utils.optAttribute(device, "height", String.valueOf(height));
+        Utils.optAttribute(device, "class", "spacer");
+        Utils.emptyAttribute(device, "alt");
         device.print("/>");
     }
 }

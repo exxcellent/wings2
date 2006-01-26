@@ -8,10 +8,13 @@
 </table>
 <p/><object name="GC" text="Start garbage collection"></object>
 <p/><object name="refresh"></object>
+<p/><object name="exit"></object>
 <p/>
 </td>
 
-<td>
+<td width="30">&nbsp;</td>
+
+<td  valign="top">
 <h3>Session Info</h3>
 
 <p/>

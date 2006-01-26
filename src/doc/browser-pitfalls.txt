@@ -1,0 +1,18 @@
+$Id$
+
+ABSTRACT:
+The intention of this document is to keep a history on typical 'curious' browser effects and
+potential solutions / workarounds.
+
+
+MOZILLA:
+
+o Effect: Spaces around images. Table rows higher than they should with images contained
+o Solution: Ensure  <img style="display: block;" alt="">
+  Refer to: http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps
+
+o Effect: Disorted tables (columns appear in wrong rows).
+          Compare http://jira.j-wings.org/browse/WGS-120
+o Solution: Use heights only on TR, width only on TD elements!
+
+MSIE:

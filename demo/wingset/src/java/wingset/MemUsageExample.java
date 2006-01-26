@@ -13,13 +13,18 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SButton;
+import org.wings.SComponent;
+import org.wings.SDimension;
+import org.wings.SForm;
+import org.wings.SLabel;
+import org.wings.SProgressBar;
+import org.wings.STemplateLayout;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.session.WingsStatistics;
-
+import org.wings.session.SessionManager;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
 /**
@@ -32,6 +37,7 @@ public class MemUsageExample extends WingSetPane {
     public SComponent createExample() {
         final SButton gc = new SButton("gc"); // label overwritten via attribute in template
         final SButton refresh = new SButton("Refresh");
+        final SButton exit = new SButton("Exit session");
         final SProgressBar progressBar = new SProgressBar();
         final SLabel totalMemory = new SLabel();
         final SLabel freeMemory = new SLabel();
@@ -46,6 +52,12 @@ public class MemUsageExample extends WingSetPane {
         gc.addActionListener(new wingset.SerializableActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.gc();
+            }
+        });
+        // Action listener for exit button trigger
+        exit.addActionListener(new wingset.SerializableActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SessionManager.getSession().exit();
             }
         });
 
@@ -73,12 +85,12 @@ public class MemUsageExample extends WingSetPane {
         panel.addRenderListener(renderListener);
 
         // style progress bar
-        progressBar.setUnfilledColor(java.awt.Color.gray);
+        progressBar.setUnfilledColor(java.awt.Color.lightGray);
         progressBar.setFilledColor(java.awt.Color.red);
         progressBar.setForeground(java.awt.Color.red);
         progressBar.setBorderColor(java.awt.Color.black);
         progressBar.setStringPainted(true);
-        progressBar.setPreferredSize(new SDimension("200", null));
+        progressBar.setProgressBarDimension(new SDimension(200, 5));
 
         try {
             java.net.URL templateURL = getSession().getServletContext().getResource("/templates/MemUsageExample.thtml");
@@ -90,6 +102,7 @@ public class MemUsageExample extends WingSetPane {
 
         panel.add(gc, "GC");
         panel.add(refresh, "refresh");
+        panel.add(exit, "exit");
         panel.add(progressBar, "InfoBar");
         panel.add(totalMemory, "TotalMemory");
         panel.add(freeMemory, "FreeMemory");

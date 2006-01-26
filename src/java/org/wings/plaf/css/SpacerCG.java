@@ -29,8 +29,8 @@ public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.Spac
         Utils.optAttribute(device, "src", getBlindIcon().getURL());
         Utils.optAttribute(device, "width", width);
         Utils.optAttribute(device, "height", height);
-        device.print(" alt=\"");
-        device.print(getBlindIcon().getIconTitle());
-        device.print("\"/>");
+        Utils.optAttribute(device, "class", "spacer");
+        Utils.emptyAttribute(device, "alt");
+        device.print("/>");
     }
 }
