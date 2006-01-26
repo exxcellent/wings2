@@ -149,6 +149,8 @@ public class CSSProperty implements Serializable {
 
     public final static CSSProperty MARGIN = new CSSProperty("margin");
 
+    public final static CSSProperty MARGIN_TOP = new CSSProperty("margin-top");
+
     public final static CSSProperty MARGIN_BOTTOM = new CSSProperty("margin-bottom");
 
     public final static CSSProperty MARGIN_LEFT = new CSSProperty("margin-left");
