@@ -38,11 +38,14 @@ import java.util.Map;
  * @version $Revision$
  */
 public abstract class Resource implements Serializable, URLResource, Renderable {
-    private final transient static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("org.wings");
+    /**
+     * a serializable class is supposed to have this ID.
+     */
+    private static final long serialVersionUID = 001000L;
 
     protected String id;
 
-    protected String extension;
+    protected String extension;          
 
     protected String mimeType;
 
@@ -101,7 +104,12 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
      * Internal structure to manage HTTP headers which should be delivered with a resource to the client.
      */
     public static final class HeaderEntry implements Map.Entry, Serializable {
-        final Serializable key;
+        /**
+         * a serializable class is supposed to have this ID.
+         */
+        private static final long serialVersionUID = 001000L;
+
+        private final Serializable key;
         Serializable value;
 
         /**
