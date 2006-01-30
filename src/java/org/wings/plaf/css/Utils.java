@@ -280,7 +280,8 @@ public final class Utils {
      * @param component Component to grab parameters from.
      */
     public static StringBuffer generateCSSComponentInlineStyle(SComponent component) {
-        final StringBuffer styleString = generateCSSInlinePreferredSize(component != null ? component.getPreferredSize() : null);
+        final StringBuffer styleString = new StringBuffer();
+        appendCSSInlineSize(styleString, component);
         appendCSSComponentInlineColorStyle(styleString, component);
         appendCSSComponentInlineFontStyle(styleString, component);
         return styleString;
@@ -320,6 +321,27 @@ public final class Utils {
             styleString.append("font-family:").append(font.getFace()).append(";");
         }
         return styleString;
+    }
+
+    public static void appendCSSInlineSize(StringBuffer pBuffer, SComponent pComponent) {
+        SDimension preferredSize = pComponent.getPreferredSize();
+        if ( preferredSize!=null ) {
+            if (preferredSize.getWidth() != SDimension.AUTO) {
+                pBuffer.append("width:").append(preferredSize.getWidth()).append(";");
+            }
+            if (preferredSize.getHeight() != SDimension.AUTO) {
+                pBuffer.append("height:").append(preferredSize.getHeight()).append(";");
+            }
+        }
+//        SDimension maxSize = pComponent.getMaxSize();
+//        if ( maxSize!=null ) {
+//            if (maxSize.getWidth() != SDimension.AUTO) {
+//                pBuffer.append("max-width:").append(maxSize.getWidth()).append(";");
+//            }
+//            if (maxSize.getHeight() != SDimension.AUTO) {
+//                pBuffer.append("max-height:").append(maxSize.getHeight()).append(";");
+//            }
+//        }
     }
 
     /**
@@ -362,6 +384,20 @@ public final class Utils {
     public static void printCSSInlineFullSize(Device device, SDimension preferredSize) throws IOException {
         if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO)) {
             device.print(" style=\"width:100%;height:100%\"");
+        }
+    }
+
+    /**
+     * Prints a HTML style attribute with widht/height of 100% if the passed dimension defines a height or width..
+     * <p>Sample: <code> style="width:100%;"</code>
+     *
+     * @param device Device to print to
+     * @param preferredSize trigger dimension
+     */
+    public static void appendCSSInlineFullSize(StringBuffer pStringBuffer, SComponent pComponent) throws IOException {
+        SDimension preferredSize = pComponent.getPreferredSize();
+        if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO)) {
+            pStringBuffer.append("width:100%;height:100%;");
         }
     }
 

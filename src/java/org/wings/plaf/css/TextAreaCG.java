@@ -14,12 +14,11 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SComponent;
 import org.wings.STextArea;
 import org.wings.io.Device;
-import org.wings.SDimension;
+
+import java.io.IOException;
 
 public class TextAreaCG extends AbstractComponentCG implements
         org.wings.plaf.TextAreaCG {
@@ -55,7 +54,15 @@ public class TextAreaCG extends AbstractComponentCG implements
                     break;
             }
 
-            Utils.optAttribute(device, "style", Utils.generateCSSInlinePreferredSize(component.getPreferredSize()));
+            // build special style for input elememts
+            // background/foreground/font is specified in the default css (gecko-optional.css, msie-optional)
+            // So it is not possible to specify this css properties in the inner div.
+            // TODO This is fast fix hack. Check if there is a better solution
+            StringBuffer tStyle = new StringBuffer();
+            Utils.appendCSSComponentInlineColorStyle(tStyle, component);
+            Utils.appendCSSComponentInlineFontStyle(tStyle, component);
+            Utils.appendCSSInlineFullSize(tStyle, component);
+            Utils.optAttribute(device, "style", tStyle);
                  
             if (!component.isEditable() || !component.isEnabled()) {
                 device.print(" readonly=\"true\"");

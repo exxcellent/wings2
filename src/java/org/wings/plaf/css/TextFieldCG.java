@@ -14,18 +14,15 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import org.wings.SComponent;
-import org.wings.STextField;
 import org.wings.SFormattedTextField;
-import org.wings.header.Script;
-import org.wings.script.JavaScriptListener;
-import org.wings.script.ScriptListener;
-import org.wings.plaf.css.dwr.CallableManager;
-import org.wings.text.SAbstractFormatter;
+import org.wings.STextField;
 import org.wings.io.Device;
+import org.wings.plaf.css.dwr.CallableManager;
+import org.wings.script.ScriptListener;
+import org.wings.text.SAbstractFormatter;
+
+import java.io.IOException;
 
 public class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
@@ -75,7 +72,15 @@ public class TextFieldCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "size", textField.getColumns());
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
 
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
+        // build special style for input elememts
+        // background/foreground/font is specified in the default css (gecko-optional.css, msie-optional)
+        // So it is not possible to specify this css properties in the inner div.
+        // TODO This is fast fix hack. Check if there is a better solution 
+        StringBuffer tStyle = new StringBuffer();
+        Utils.appendCSSComponentInlineColorStyle(tStyle, component);
+        Utils.appendCSSComponentInlineFontStyle(tStyle, component);
+        Utils.appendCSSInlineFullSize(tStyle, component);
+        Utils.optAttribute(device, "style", tStyle);
 
         if (!textField.isEditable() || !textField.isEnabled()) {
             device.print(" readonly=\"true\"");
