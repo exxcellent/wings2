@@ -20,6 +20,18 @@ import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
+/**
+ * The factory creating the output devies for externalized resources.
+ * To declare and use your own device factory (i.e. to compress returned output streams or
+ * log the device output) declare an init property <code>wings.device.factory</code>
+ * in your web xml.
+ * <p>Example:<br/>
+ * <pre>        &lt;init-param&gt;
+            &lt;param-name&gt;wings.device.factory&lt;/param-name&gt;
+            &lt;param-value&gt;com.mycompany.MyDeviceFactory&lt;/param-value&gt;
+        &lt;/init-param&gt;
+</pre>
+ */
 public abstract class DeviceFactory {
     private final transient static Log log = LogFactory.getLog(DeviceFactory.class);
 
@@ -27,10 +39,18 @@ public abstract class DeviceFactory {
 
     private static DeviceFactory factory;
 
+    /**
+     * Overrides the current device factory.
+     */
     public static void setDeviceFactory(DeviceFactory factory) {
         DeviceFactory.factory = factory;
     }
 
+    /**
+     * Returns or lazily creates the current device factory. Use {@link #setDeviceFactory(DeviceFactory)} or
+     * an <code>web.xml</code> init property <code>wings.device.factory</code> to declare an alternative deivce factory.
+     * @return The current device factory.
+     */
     public static DeviceFactory getDeviceFactory() {
         if (factory == null) {
             synchronized (DeviceFactory.class) {
@@ -42,9 +62,7 @@ public abstract class DeviceFactory {
                     try {
                         Class factoryClass = null;
                         try {
-                            factoryClass = Class.forName(className, true,
-                                    Thread.currentThread()
-                                    .getContextClassLoader());
+                            factoryClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
                         } catch (ClassNotFoundException e) {
                             // fallback, in case the servlet container fails to set the
                             // context class loader.
@@ -52,8 +70,7 @@ public abstract class DeviceFactory {
                         }
                         factory = (DeviceFactory) factoryClass.newInstance();
                     } catch (Exception e) {
-                        log.fatal("could not load wings.device.factory: " +
-                                className, e);
+                        log.fatal("could not load wings.device.factory: " + className, e);
                         throw new RuntimeException("could not load wings.device.factory: " +
                                 className + "(" + e.getMessage() + ")");
                     }
@@ -63,17 +80,21 @@ public abstract class DeviceFactory {
         return factory;
     }
 
-    public static Device createDevice(ExternalizedResource externalizedResource)
-            throws IOException {
+    /**
+     * Creates a output device for the passed resource using the current device factory.
+     * @param externalizedResource The resource to ouput.
+     */
+    public static Device createDevice(ExternalizedResource externalizedResource)  throws IOException {
         return getDeviceFactory().create(externalizedResource);
     }
 
     protected abstract Device create(ExternalizedResource externalizedResource) throws IOException;
 
-    static class Default
-            extends DeviceFactory {
-        protected Device create(ExternalizedResource externalizedResource)
-                throws IOException {
+    /**
+     * Default device factory.
+     */
+    static class Default extends DeviceFactory {
+        protected Device create(ExternalizedResource externalizedResource) throws IOException {
             return new ServletDevice(SessionManager.getSession().getServletResponse().getOutputStream());
         }
     }
