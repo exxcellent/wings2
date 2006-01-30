@@ -424,7 +424,10 @@ public class SContainer extends SComponent {
             }
             c.addNotify();
             fireContainerEvent(SContainerEvent.COMPONENT_ADDED, c);
-            reload(ReloadManager.STATE);
+
+            reload(ReloadManager.STATE /* TODO: Meeeeeeeeeeeep: */ + ReloadManager.STYLE + ReloadManager.SCRIPT);
+            // we must invaldiaet css/script as the added components may be not dirty, but
+            // acompaign new css/script resources.
         }
 
         return c;
