@@ -36,6 +36,10 @@ public interface ComponentCG
      */
     void uninstallCG(SComponent c);
 
+    /**
+     * Notify the CG that the component was in some aspect marked as dirty.
+     * @param c The 'dirty' component.
+     */
     void componentChanged(SComponent c);
 
     /**
