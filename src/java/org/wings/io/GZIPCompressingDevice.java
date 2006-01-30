@@ -21,15 +21,11 @@ import java.util.zip.GZIPOutputStream;
  * A Device encapsulating an OutputStream, compressing its
  * output. You can use this, if the browser states, that it can handle
  * compressed data; don't forget to set the appropriate header, then
- * (Content-Encoding). Use this in a servlet derived from SessionServlet to
- * override the factory
- * {@link org.wings.session.SessionServlet#createOutputDevice(HttpServletRequest,HttpServletResponse,ExternalizedResource)}, for instance.
- * <p><b>Example</b><hr><pre>
- * protected Device createOutputDevice(HttpServletRequest req,
- * HttpServletResponse response,
- * ExternalizedResource extInfo)
- * throws IOException {
- * String mimeType = extInfo.getMimeType();
+ * (Content-Encoding).
+ *
+ * Override {@link DeviceFactory} and declare the updated factory in web.xml to use other devices.
+ * <p><b>Example Draft</b><hr>
+ * <pre>String mimeType = extInfo.getMimeType();
  * // some browsers can handle a gziped stream only for text-files.
  * if (mimeType != null && mimeType.startsWith("text/")) {
  * String acceptEncoding = req.getHeader("Accept-Encoding");
