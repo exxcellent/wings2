@@ -240,7 +240,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param border the border to be set for the component
      */
     public void setBorder(SBorder border) {
-        reloadIfChange(this.border, border, ReloadManager.STATE);
+        reloadIfChange(this.border, border, ReloadManager.STATE + ReloadManager.STYLE);
         this.border = border;
     }
 
