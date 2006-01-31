@@ -161,7 +161,9 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         final String toolTipText = component.getToolTipText();
         if (toolTipText != null) {
             device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
-            Utils.quote(device, toolTipText, true, false, true);
+            // javascript needs even more & special quoting
+            // FIXME: do this more efficiently
+            Utils.quote(device, toolTipText.replaceAll("\'","\\\\'").replaceAll("\n","<br/>"), true, false, true);
             device.print("', 'predefined', 'default'));\"");
         }
     }
