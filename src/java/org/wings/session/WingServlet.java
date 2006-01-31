@@ -378,9 +378,12 @@ public final class WingServlet
                 ExternalizedResource extInfo = extManager
                         .getExternalizedResource(identifier);
                 if (extInfo != null) {
-                    extManager.deliver(extInfo, response,
-                            createOutputDevice(req, response,
-                                    extInfo));
+                    final Device outputDevice = createOutputDevice(req, response, extInfo);
+                    try {
+                        extManager.deliver(extInfo, response, outputDevice);
+                    } finally {
+                        outputDevice.close();
+                    }
                 }
                 return;
             }

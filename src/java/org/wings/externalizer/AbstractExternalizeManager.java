@@ -434,6 +434,7 @@ public abstract class AbstractExternalizeManager {
         }
 
         extInfo.getExternalizer().write(extInfo.getObject(), out);
+        out.flush();
     }
 
     public void clear() {

@@ -61,8 +61,12 @@ public class ExternalizerServlet extends HttpServlet {
             path = path.substring(pos + 1);
             ExternalizedResource extInfo = wingsSession.getExternalizeManager().getExternalizedResource(path);
             if (extInfo != null) {
-                Device outputDevice = DeviceFactory.createDevice(extInfo);
-                wingsSession.getExternalizeManager().deliver(extInfo, response, outputDevice);
+                final Device outputDevice = DeviceFactory.createDevice(extInfo);
+                try {
+                    wingsSession.getExternalizeManager().deliver(extInfo, response, outputDevice);
+                } finally {
+                    outputDevice.close();
+                }
             }
             else
                 log.info("no resource with id " + path);
