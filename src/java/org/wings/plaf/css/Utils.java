@@ -386,6 +386,10 @@ public final class Utils {
      * Prints a HTML style attribute with widht/height of 100% if the passed dimension defines a height or width..
      * <p>Sample: <code> style="width:100%;"</code>
      *
+     * <p>This is typicall needed to stretch inner HTML element to expand to the full dimenstion defined
+     * on an outer, sized HTML element. Otherwise the component would appear to small (as size is applied only
+     * on the invisible outer limiting element)
+     *
      * @param device Device to print to
      * @param preferredSize trigger dimension
      */
@@ -399,10 +403,14 @@ public final class Utils {
      * Prints a HTML style attribute with widht/height of 100% if the passed dimension defines a height or width..
      * <p>Sample: <code> style="width:100%;"</code>
      *
-     * @param device Device to print to
-     * @param preferredSize trigger dimension
+     * <p>This is typicall needed to stretch inner HTML element to expand to the full dimenstion defined
+     * on an outer, sized HTML element. Otherwise the component would appear to small (as size is applied only
+     * on the invisible outer limiting element)
+     *
+     * @param pStringBuffer buffer to append to
+     * @param pComponent preferredSize trigger dimension
      */
-    public static void appendCSSInlineFullSize(StringBuffer pStringBuffer, SComponent pComponent) throws IOException {
+    public static void appendCSSInlineFullSize(StringBuffer pStringBuffer, SComponent pComponent) {
         SDimension preferredSize = pComponent.getPreferredSize();
         if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO)) {
             pStringBuffer.append("width:100%;height:100%;");
