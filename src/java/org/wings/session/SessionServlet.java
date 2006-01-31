@@ -74,7 +74,7 @@ final class SessionServlet
     /**
      * The session.
      */
-    private Session session;
+    private transient /* --- ATTENTION! This disable session serialization! */ Session session;
 
     private boolean firstRequest = true;
 
@@ -544,13 +544,6 @@ final class SessionServlet
         }
     }
 
-
-    // Exception Handling
-    private SFrame errorFrame;
-    private SLabel errorStackTraceLabel;
-    private SLabel errorMessageLabel;
-    private SLabel versionLabel;
-
     /** 
      * In case of an error, display an error page to the user. This is only
      * done when there is a property <code>wings.error.template</code> present
@@ -564,31 +557,26 @@ final class SessionServlet
      */
     protected void handleException(HttpServletResponse res, Throwable e) {
         try {
-            if (errorFrame == null) {
-                /*
-                 * if we don't have an errorTemplateFile defined, then this
-                 * will throw an Exception, so the StackTrace is NOT exposed
-                 * to the user (may be security relevant)
-                 */
-                STemplateLayout layout = new STemplateLayout(SessionManager.getSession()
-                                         .getServletContext().getRealPath(errorTemplateFile));
-                errorFrame = new SFrame();
-                errorFrame.getContentPane().setLayout(layout);
+            /*
+            * if we don't have an errorTemplateFile defined, then this
+            * will throw an Exception, so the StackTrace is NOT exposed
+            * to the user (may be security relevant)
+            */
+            STemplateLayout layout = new STemplateLayout(SessionManager.getSession()
+                    .getServletContext().getRealPath(errorTemplateFile));
+            final SFrame errorFrame = new SFrame();
+            errorFrame.getContentPane().setLayout(layout);
 
-                errorStackTraceLabel = new SLabel();
-                errorFrame.getContentPane().add(errorStackTraceLabel,
-                        "EXCEPTION_STACK_TRACE");
+            final SLabel errorStackTraceLabel = new SLabel();
+            errorFrame.getContentPane().add(errorStackTraceLabel, "EXCEPTION_STACK_TRACE");
 
-                errorMessageLabel = new SLabel();
-                errorFrame.getContentPane().add(errorMessageLabel,
-                        "EXCEPTION_MESSAGE");
+            final SLabel errorMessageLabel = new SLabel();
+            errorFrame.getContentPane().add(errorMessageLabel, "EXCEPTION_MESSAGE");
 
-                versionLabel = new SLabel();
-                errorFrame.getContentPane().add(versionLabel,
-                        "WINGS_VERSION");
-                
-                versionLabel.setText("wingS " + Version.getVersion() + " / " + Version.getCompileTime());
-            }
+            final SLabel versionLabel = new SLabel();
+            errorFrame.getContentPane().add(versionLabel, "WINGS_VERSION");
+
+            versionLabel.setText("wingS " + Version.getVersion() + " / " + Version.getCompileTime());
 
             res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
@@ -616,7 +604,6 @@ final class SessionServlet
                 log.warn("Unable to send minimalistic error page to client" + e1);
             }
         }
-        
     }
 
     /**
@@ -659,19 +646,21 @@ final class SessionServlet
         return enc;
     }
 
+    /**
+     * Destroy and cleanup the session servlet.
+     */
     public void destroy() {
         log.info("destroy called");
-
-        // Session is needed on destroying the session 
-        SessionManager.setSession(session);
         try {
+            if (session != null) {
+                // Session is needed on destroying the session
+                SessionManager.setSession(session);
+                session.destroy();
+            }
+
             // hint the gc.
-            setParent(null);
-            session.destroy();
+            parent = null;
             session = null;
-            errorFrame = null;
-            errorStackTraceLabel = null;
-            errorMessageLabel = null;
         } catch (Exception ex) {
             log.error("destroy", ex);
         } finally {
@@ -679,10 +668,20 @@ final class SessionServlet
         }
     }
 
+    /**
+     * A check if this session servlet seems to be alive or is i.e. invalid because it
+     * was deserialized.
+     *
+     * @return <code>true</code>, if this session servlet seems to be valid and alive.
+     */
+    public boolean isValid() {
+        return session != null && parent != null;
+    }
+
+
     private String getStackTraceString(Throwable e) {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stringWriter);
-        stringWriter.getBuffer().setLength(0);
+        final StringWriter stringWriter = new StringWriter();
+        final PrintWriter printWriter = new PrintWriter(stringWriter);
         e.printStackTrace(printWriter);
         return stringWriter.toString();
     }

@@ -212,7 +212,7 @@ public final class WingServlet
                                                   HttpServletResponse response,
                                                   boolean createSessionServlet)
             throws ServletException {
-        HttpSession httpSession = request.getSession(true);
+        final HttpSession httpSession = request.getSession(true);
 
         // it should be enough to synchronize on the http session object...
         synchronized (httpSession) {
@@ -222,15 +222,26 @@ public final class WingServlet
                 sessionServlet = (SessionServlet) httpSession.getAttribute(lookupName);
             }
 
+            // Sanity check - maybe this is a stored/deserialized session servlet?
+            if (sessionServlet != null && !sessionServlet.isValid()) {
+                sessionServlet.destroy();
+                sessionServlet = null;
+            }
+
             /*
              * we are only interested in a new session, if the response is
              * not null. If it is null, then we just called getSessionServlet()
              * for lookup purposes and are satisfied, if we don't get anything.
              */
-            if (sessionServlet == null && createSessionServlet) {
-                log.info("no session servlet, create new one");
-                sessionServlet = newSession(request, response);
-                httpSession.setAttribute(lookupName, sessionServlet);
+            if (sessionServlet == null) {
+                if (createSessionServlet) {
+                    log.info("no session servlet, create new one");
+                    sessionServlet = newSession(request, response);
+                    httpSession.setAttribute(lookupName, sessionServlet);
+                } else {
+                    log.info("no session servlet found, returning null");
+                    return null;
+                }
             }
 
 
