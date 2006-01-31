@@ -323,16 +323,12 @@ public final class Utils {
         return styleString;
     }
 
-    public static void appendCSSInlineSize(StringBuffer pBuffer, SComponent pComponent) {
-        SDimension preferredSize = pComponent.getPreferredSize();
-        if ( preferredSize!=null ) {
-            if (preferredSize.getWidth() != SDimension.AUTO) {
-                pBuffer.append("width:").append(preferredSize.getWidth()).append(";");
-            }
-            if (preferredSize.getHeight() != SDimension.AUTO) {
-                pBuffer.append("height:").append(preferredSize.getHeight()).append(";");
-            }
-        }
+    /**
+     * Appends a CSS inline style string for the preferred size of the passed component to the passed stringbuffer.
+     * <p>Sample: <code>width:100%;heigth=15px"</code>
+     */
+    public static StringBuffer appendCSSInlineSize(StringBuffer pBuffer, SComponent pComponent) {
+        return appendCSSInlineSize(pBuffer, pComponent.getPreferredSize());
 //        SDimension maxSize = pComponent.getMaxSize();
 //        if ( maxSize!=null ) {
 //            if (maxSize.getWidth() != SDimension.AUTO) {
@@ -345,14 +341,14 @@ public final class Utils {
     }
 
     /**
-     * Generates a CSS Inline Style string for the passed SDimension.
+     * Appends a new CSS Inline Style string for the passed SDimension to the passed stringbuffer.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      *
      * @param preferredSize Preferred sitze. May be null or contain null attributes
+     * @param styleString Stringbuffer to append to.
      * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
      */
-    public static StringBuffer generateCSSInlinePreferredSize(SDimension preferredSize) {
-        final StringBuffer styleString = new StringBuffer();
+    public static StringBuffer appendCSSInlineSize(final StringBuffer styleString, SDimension preferredSize) {
         if (preferredSize != null) {
             if (preferredSize.getWidth() != SDimension.AUTO) {
                 styleString.append("width:").append(preferredSize.getWidth()).append(";");
@@ -362,6 +358,18 @@ public final class Utils {
             }
         }
         return styleString;
+    }
+
+
+    /**
+     * Generates a new CSS Inline Style string for the passed SDimension.
+     * <p>Sample: <code>width:100%;heigth=15px"</code>
+     *
+     * @param preferredSize Preferred sitze. May be null or contain null attributes
+     * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
+     */
+    public static StringBuffer generateCSSInlinePreferredSize(SDimension preferredSize) {
+        return appendCSSInlineSize(new StringBuffer(), preferredSize);
     }
 
     public static StringBuffer generateCSSInlineBorder(int borderSize) {
