@@ -7,6 +7,10 @@ import org.w3c.dom.Element;
 import uk.ltd.getahead.dwr.Creator;
 import uk.ltd.getahead.dwr.CreatorManager;
 import uk.ltd.getahead.dwr.ExecutionContext;
+import org.w3c.dom.Element;
+import org.wings.plaf.css.dwr.SessionCreator;
+import org.wings.session.SessionManager;
+
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.Map;
@@ -20,7 +24,9 @@ import java.io.Serializable;
  * @author hengels
  * @version $Revision$
  */
-public class SessionCreatorManager implements CreatorManager, Serializable {
+public class SessionCreatorManager
+    implements CreatorManager
+{
     private boolean debug;
 
     public SessionCreatorManager() {
@@ -50,7 +56,10 @@ public class SessionCreatorManager implements CreatorManager, Serializable {
 
     public Creator getCreator(String name) {
         Map map = getCreatorMap();
-        return (Creator)map.get(name);
+        SessionCreator creator = (SessionCreator) map.get(name);
+        if (SessionManager.getSession() == null)
+            SessionManager.setSession(creator.getSession());
+        return creator;
     }
 
     public void setCreators(Map creators) {

@@ -22,8 +22,7 @@ import org.wings.externalizer.SystemExternalizeManager;
 import org.wings.io.Device;
 import org.wings.io.ServletDevice;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -314,6 +313,26 @@ public final class WingServlet
 
             return sessionServlet;
         }
+    }
+
+    public static void installSession(HttpServletRequest req, HttpServletResponse res) {
+        ServletContext context = req.getSession().getServletContext();
+        String lookupName = context.getInitParameter("wings.servlet.lookupname");
+
+        if (lookupName == null || lookupName.trim().length() == 0) {
+            lookupName = "SessionServlet:" + context.getInitParameter("wings.mainclass");
+        }
+        SessionServlet sessionServlet = (SessionServlet)req.getSession().getAttribute(lookupName);
+        if (sessionServlet != null) {
+            Session session = sessionServlet.getSession();
+            session.setServletRequest(req);
+            session.setServletResponse(res);
+            SessionManager.setSession(session);
+        }
+    }
+
+    public static void uninstallSession() {
+        SessionManager.removeSession();
     }
 
     /** -- externalization -- **/

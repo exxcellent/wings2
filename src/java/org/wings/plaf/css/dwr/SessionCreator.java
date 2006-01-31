@@ -6,6 +6,8 @@ package org.wings.plaf.css.dwr;
 import uk.ltd.getahead.dwr.Creator;
 
 import org.w3c.dom.Element;
+import org.wings.session.Session;
+import org.wings.session.SessionManager;
 
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import java.util.Map;
 public class SessionCreator implements Creator
 {
     private Object callable;
+    Session session = SessionManager.getSession();
 
     public SessionCreator(Object callable) {
         this.callable = callable;
@@ -37,5 +40,9 @@ public class SessionCreator implements Creator
 
     public String getScope() {
         return SESSION;
+    }
+
+    public Session getSession() {
+        return session;
     }
 }

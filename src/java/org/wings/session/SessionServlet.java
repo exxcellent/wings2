@@ -440,8 +440,8 @@ final class SessionServlet
             }
             
             // invalidate frames and resources
-            reloadManager.invalidateResources();
             reloadManager.notifyCGs();
+            reloadManager.invalidateResources();
 
             // deliver resource. The
             // externalizer is able to handle static and dynamic resources
