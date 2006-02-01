@@ -163,7 +163,7 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
             // javascript needs even more & special quoting
             // FIXME: do this more efficiently
-            Utils.quote(device, toolTipText.replaceAll("\'","\\\\'").replaceAll("\n","<br/>"), true, false, true);
+            Utils.quote(device, toolTipText.replaceAll("\'","\\\\'"), true, true, true);
             device.print("', 'predefined', 'default'));\"");
         }
     }
