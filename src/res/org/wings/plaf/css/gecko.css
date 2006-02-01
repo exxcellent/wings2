@@ -50,10 +50,8 @@ table tr {
 div {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-}
 
-/* This is necessary for konqueror. Otherwise component alignment does not work. */
-div {
+    /* This is necessary for konqueror. Otherwise component alignment does not work. */
     text-align:inherit;
 }
 
@@ -69,12 +67,9 @@ ul {
     margin: 0px;
 }
 
-
-div.SCheckBox button,
-div.SClickable button,
-div.SScrollBar button,
-div.STable button,
-div.STree button
+/* Make selected buttons appear as regular text:
+   BUTTON tag used ie. in Clickable, Scrollbar, Tree, Checkbox, ... */
+BUTTON.borderless
 {
     border: none;
     background: inherit;
@@ -239,18 +234,6 @@ div.STable > table > tbody > tr > td > a {
 
 div.STable > table > tbody > tr > td[col="numbering"] {
     text-align: right;
-}
-
-div.STable > table > tbody > tr > td button {
-    border: none;
-    background-color: inherit;
-    padding: 0px;
-}
-
-div.SCheckBox > button {
-    border: none;
-    background-color: inherit;
-    padding: 0px
 }
 
 div.SList > * > li.SList_selected {

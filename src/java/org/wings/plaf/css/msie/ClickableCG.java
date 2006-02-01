@@ -13,9 +13,10 @@
  */
 package org.wings.plaf.css.msie;
 
-import java.io.IOException;
-
-import org.wings.*;
+import org.wings.SClickable;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SFrame;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
@@ -26,6 +27,7 @@ import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
+import java.io.IOException;
 
 /**
  * @author ole
@@ -38,7 +40,7 @@ public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SPare
 
 
     protected void writeButtonStart(Device device, SClickable button) throws IOException {
-        device.print("<button onclick=\"addHiddenField(this.form,'");
+        device.print("<button  class=\"borderless\" onclick=\"addHiddenField(this.form,'");
         device.print(button.getParentFrame().getEventEpoch());
         device.print(SConstants.UID_DIVIDER);
         device.print(SConstants.IEFIX_BUTTONACTION);

@@ -13,8 +13,6 @@
  */
 package org.wings.plaf.css.msie;
 
-import java.io.IOException;
-
 import org.wings.RequestURL;
 import org.wings.SComponent;
 import org.wings.SConstants;
@@ -30,6 +28,7 @@ import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
+import java.io.IOException;
 
 /**
  * @author ole
@@ -42,7 +41,7 @@ public class TreeCG extends org.wings.plaf.css.TreeCG implements SParentFrameLis
 
 
     protected void writeButtonStart(STree component, Device device, String value) throws IOException {
-        device.print("<button onclick=\"addHiddenField(this.form,'");
+        device.print("<button class=\"borderless\" onclick=\"addHiddenField(this.form,'");
         device.print(component.getParentFrame().getEventEpoch());
         device.print(SConstants.UID_DIVIDER);
         device.print(SConstants.IEFIX_BUTTONACTION);

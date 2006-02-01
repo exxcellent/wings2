@@ -175,7 +175,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             throws IOException {
         SComponent component = null;
         final boolean isEditingCell = table.isEditing() && row == table.getEditingRow() && col == table.getEditingColumn();
-        final boolean selectable = table.getSelectionMode() != SListSelectionModel.NO_SELECTION /*&& !table.isEditable()*/;
+        final boolean editableCell = table.isCellEditable(row, col);
+        final boolean selectableCell = table.getSelectionMode() != SListSelectionModel.NO_SELECTION /*&& !table.isEditable()*/;
         final boolean showAsFormComponent = table.getShowAsFormComponent();
 
         if (isEditingCell) {
@@ -199,12 +200,12 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         device.print(">");
 
         String parameter = null;
-        if (/*table.isEditable() && */!isEditingCell && table.isCellEditable(row, col))
+        if (table.isEditable() && !isEditingCell && editableCell)
             parameter = table.getEditParameter(row, col);
-        else if (selectable)
+        else if (selectableCell)
             parameter = table.getToggleSelectionParameter(row, col);
 
-        if (parameter != null && !isEditingCell && selectable && !contentContainsClickables) {
+        if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
             if (showAsFormComponent) {
                 writeButtonStart(device, table, parameter);
                 device.print(" type=\"submit\" name=\"");
@@ -223,7 +224,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         rendererPane.writeComponent(device, component, table);
 
-        if (parameter != null && !isEditingCell && selectable && !contentContainsClickables) {
+        if (parameter != null && !isEditingCell && selectableCell && !contentContainsClickables) {
             if (showAsFormComponent)
                 device.print("</button>");
             else
@@ -244,7 +245,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
 
     protected void writeButtonStart(Device device, STable table, String parameter) throws IOException {
-        device.print("<button");
+        device.print("<button class=\"borderless\"");
     }
 
 
@@ -412,7 +413,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         device.print("<td");
         Utils.optAttribute(device, "col", "numbering");
         Utils.optAttribute(device, "class", columnStyle);
-        Utils.optAttribute(device, "width", selectionColumnWidth); // TODO fixme static selection column width
+        Utils.optAttribute(device, "width", selectionColumnWidth);
         device.print(">");
 
         if (showAsFormComponent) {

@@ -267,7 +267,7 @@ public class TreeCG extends AbstractComponentCG implements
 
 
     protected void writeButtonStart(STree component, Device device, String value) throws IOException {
-        device.print("<button");
+        device.print("<button class=\"borderless\"");
     }
 
 

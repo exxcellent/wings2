@@ -38,7 +38,7 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
             String.class);
 
     protected void writeButtonStart(Device device, STable table, String parameter) throws IOException {
-        device.print("<button  onclick=\"addHiddenField(this.form,'");
+        device.print("<button class=\"borderless\" onclick=\"addHiddenField(this.form,'");
         device.print(table.getParentFrame().getEventEpoch());
         device.print(SConstants.UID_DIVIDER);
         device.print(SConstants.IEFIX_BUTTONACTION);

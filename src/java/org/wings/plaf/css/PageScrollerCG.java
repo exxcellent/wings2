@@ -282,6 +282,6 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
      * @see org.wings.plaf.css.ScrollBarCG#writeButtonStart(org.wings.io.Device, org.wings.SScrollBar, java.lang.String)
      */
     protected void writeButtonStart(Device device, SPageScroller pageScroller, String event) throws IOException {
-        device.print("<button");
+        device.print("<button class=\"borderless\"");
     }
 }

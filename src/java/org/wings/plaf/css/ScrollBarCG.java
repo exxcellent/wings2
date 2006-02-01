@@ -264,6 +264,6 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
      * @throws IOException
      */
     protected void writeButtonStart(Device device, SScrollBar scrollBar, String event) throws IOException {
-        device.print("<button");
+        device.print("<button class=\"borderless\"") ;
     }
 }

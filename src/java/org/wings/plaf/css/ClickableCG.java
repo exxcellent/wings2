@@ -14,12 +14,11 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SClickable;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.io.Device;
+import java.io.IOException;
 
 public class ClickableCG extends LabelCG implements org.wings.plaf.ButtonCG {
 
@@ -78,7 +77,7 @@ public class ClickableCG extends LabelCG implements org.wings.plaf.ButtonCG {
     }
 
     protected void writeButtonStart(Device device, SClickable button) throws IOException {
-        device.print("<button");
+        device.print("<button class=\"borderless\"");
     }
 
     protected SIcon getIcon(SClickable abstractButton) {

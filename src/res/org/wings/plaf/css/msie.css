@@ -35,19 +35,10 @@ td.SContainer {
     border: none;
 }
 
-/*table.SLayout {
-	width:100%;
-}
-*/
 
 /* the layouts should all expand to 100% width & height of the surrounding SPanel */
 table.SBorderLayout,
-table.SGridBagLayout
-/*
-table.SBoxLayout,
-table.SGridLayout,
-table.SFlowLayout
-*/ {
+table.SGridBagLayout {
     width: 100%;
     height: 100%;
 }
@@ -95,12 +86,9 @@ IMG {
     border: none !important;     /* This is needed to avoid those ugly borders around linked imgs's */
 }
 
-/* destyle buttons so they are not visible */
-table.SCheckBox button,
-table.SClickable button,
-table.SScrollBar button,
-table.STable button,
-table.STree button
+/* Make selected buttons appear as regular text:
+   BUTTON tag used ie. in Clickable, Scrollbar, Tree, Checkbox, ... */
+BUTTON.borderless
 {
     border: none;
     background: none; /* IE doesnt understand inherit */
@@ -121,7 +109,7 @@ table.SScrollBar{
 /*
 PageScroller as form-component
 */
-table.SPageScroller button{
+table.SPageScroller button {
     border: none;
     background: none; /* IE doesnt understand inherit */
     padding-left: 3px;
@@ -322,12 +310,6 @@ ul.STree li div.SSubTree {
 
 .STable table tbody tr td.numbering {
     text-align: right;
-}
-
-.STable table tbody tr td button {
-    border: none;
-    background-color: inherit;
-    padding: 0px;
 }
 
 .tableheader {
