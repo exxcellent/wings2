@@ -21,10 +21,9 @@ import java.awt.*;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SEmptyBorder
-        extends SAbstractBorder {
+public class SEmptyBorder extends SAbstractBorder {
     public SEmptyBorder(Insets insets) {
-        super(Color.black, 2, insets);
+        super(insets);
     }
 
     public SEmptyBorder(int top, int left, int bottom, int right) {

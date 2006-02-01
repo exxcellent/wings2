@@ -46,7 +46,7 @@ public abstract class SAbstractBorder
     protected CSSAttributeSet attributes = new CSSAttributeSet();
 
     public SAbstractBorder() {
-        this(Color.black, 2, new Insets(0, 0, 0, 0));
+        this(null, -1, null);
     }
 
     public SAbstractBorder(Color c, int thickness, Insets insets) {
@@ -56,15 +56,15 @@ public abstract class SAbstractBorder
     }
 
     public SAbstractBorder(Insets insets) {
-        this(null, 0, insets);
+        this(null, -1, insets);
     }
 
     public SAbstractBorder(Color c) {
-        this(c, 2, new Insets(0, 0, 0, 0));
+        this(c, 1, null);
     }
 
     public SAbstractBorder(int thickness) {
-        this(Color.black, thickness, new Insets(0, 0, 0, 0));
+        this(null, thickness, null);
     }
 
     /**
@@ -114,7 +114,7 @@ public abstract class SAbstractBorder
      */
     public void setThickness(int thickness) {
         this.thickness = thickness;
-        attributes.put(CSSProperty.BORDER_WIDTH, thickness + "px");
+        attributes.put(CSSProperty.BORDER_WIDTH, thickness < 0 ? null : (thickness + "px"));
     }
 
     public CSSAttributeSet getAttributes() {
