@@ -108,7 +108,7 @@ public abstract class SAbstractButton
 
 
     /**
-     * TODO: Return the Button group where this button lies in
+     * Return the Button group where this button lies in
      *
      * @return Button Group or null if not in a group
      */

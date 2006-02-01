@@ -26,8 +26,6 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-// FIXME refactorize.
-
 /**
  * Shows one tab, usually a panel, at a time and allows switching between them.
  *

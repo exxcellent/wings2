@@ -77,7 +77,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public static final String MENU_LIST = "menu";
 
     /**
-     * The type for an TODO list. See {@link #setType(String)}
+     * The type for an TO-DO list. See {@link #setType(String)}
      */
     public static final String DIR_LIST = "dir";
 

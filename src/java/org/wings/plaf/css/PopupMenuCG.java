@@ -14,11 +14,15 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
+import org.wings.RequestURL;
+import org.wings.SAbstractButton;
+import org.wings.SComponent;
+import org.wings.SFrame;
+import org.wings.SMenu;
+import org.wings.SMenuItem;
+import org.wings.SPopupMenu;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
@@ -28,6 +32,7 @@ import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
+import java.io.IOException;
 
 public class PopupMenuCG extends AbstractComponentCG implements
         org.wings.plaf.MenuBarCG, SParentFrameListener {
@@ -174,7 +179,5 @@ public class PopupMenuCG extends AbstractComponentCG implements
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 }

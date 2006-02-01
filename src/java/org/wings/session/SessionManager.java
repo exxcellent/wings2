@@ -19,8 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * A global way to access the current session. FIXME: should this be
- * called SessionManager, then ?
+ * A global way to access the current session. 
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$

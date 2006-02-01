@@ -298,8 +298,6 @@ public final class WingServlet
              * This has to be done at very first, otherwise the servlet
              * container will ignore this setting.
              */
-             
-            // TODO: Actually the whole character encoding is depending 
             if ((request.getCharacterEncoding() == null)) { // was servlet container able to identify encoding? 
                 try {
                     String sessionCharacterEncoding = sessionServlet.getSession().getCharacterEncoding();                 

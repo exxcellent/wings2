@@ -143,7 +143,7 @@ public class STable extends SComponent
      * <p>Determines whether the header is visible or not.</p><p>By
      * default the header is visible.</p> <p><em>CAVEAT:</em>The
      * header is not (yet) implemented like in Swing. But maybe
-     * someday.  So you can disable it if you like. TODO.</p>
+     * someday.  So you can disable it if you like.</p>
      */
     protected boolean headerVisible = true;
 

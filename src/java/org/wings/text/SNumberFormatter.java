@@ -200,7 +200,5 @@ public class SNumberFormatter extends SAbstractFormatter implements SParentFrame
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 }

@@ -207,11 +207,6 @@ public class SForm        extends SContainer        implements LowLevelEventList
         }
     }
 
-    /*
-     * fixme: the following static function should go in some global
-     * class.
-     */
-
     public final static void addArmedComponent(LowLevelEventListener component) {
         List armedComponents = (List) threadArmedComponents.get();
         armedComponents.add(component);
