@@ -13,18 +13,20 @@
  */
 package org.wings.plaf.css;
 
-
-import org.wings.SComponent;
-import org.wings.SIcon;
-import org.wings.SLabel;
 import org.wings.plaf.CGManager;
-import org.wings.io.Device;
-import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
+import org.wings.SComponent;
+import org.wings.SLabel;
+import org.wings.SIcon;
+import org.wings.io.Device;
 import java.io.IOException;
 
-public class LabelCG extends AbstractComponentCG implements
-        org.wings.plaf.LabelCG {
+/**
+ * CG for SLabel instances.
+ *
+ * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
+ */
+public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
 
     private boolean wordWrapDefault;
 
@@ -62,44 +64,6 @@ public class LabelCG extends AbstractComponentCG implements
                 }
             }.writeCompound(device, component, horizontalTextPosition, verticalTextPosition);
         }
-    }
-
-    /** Prefer other writeText method! */
-    protected void writeText(Device device, String text) throws IOException {
-        writeText(device, text, false);
-    }
-
-    protected void writeText(Device device, String text, boolean wordWrap) throws IOException {
-        boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE);
-
-        if ((text.length() > 5) && (text.startsWith("<html>"))) {
-            Utils.writeRaw(device, text.substring(6));
-        } else if (isIE) {
-            // IE doesn't handle whitespace:pre correctly, so we do it hardcore by quoting spaces
-            // or not (depending on wordwrap)
-            Utils.quote(device, text, true, !wordWrap, false);
-        } else {
-            // Other browser handle the CSS property 'white-space' correctly.
-            // The default is set as in swing: don't wrap:
-            if (!wordWrap)
-                Utils.quote(device,text,false, false, false);
-            else {
-                // non-default case: overwrite css property, set back to wrap
-                device.print("<span style=\"white-space: normal;\">");
-                Utils.quote(device, text, true, false, false);
-                device.print("</span>");
-            }
-        }
-    }
-
-    protected void writeIcon(Device device, SIcon icon) throws IOException {
-        device.print("<img");
-        Utils.optAttribute(device, "src", icon.getURL());
-        Utils.optAttribute(device, "width", icon.getIconWidth());
-        Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.print(" alt=\"");
-        device.print(icon.getIconTitle());
-        device.print("\"/>");
     }
 
     /**

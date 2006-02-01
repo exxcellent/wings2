@@ -20,7 +20,7 @@ import org.wings.SIcon;
 import org.wings.io.Device;
 import java.io.IOException;
 
-public class ClickableCG extends LabelCG implements org.wings.plaf.ButtonCG {
+public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
 
     public void writeContent(final Device device, final SComponent component)
             throws IOException {

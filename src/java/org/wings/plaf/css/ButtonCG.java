@@ -14,15 +14,14 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.RequestURL;
 import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.io.Device;
+import java.io.IOException;
 
-public class ButtonCG extends LabelCG implements org.wings.plaf.ButtonCG {
+public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
 
     /**
      * a serializable class is supposed to have this ID. 

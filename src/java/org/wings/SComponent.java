@@ -793,7 +793,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Defines a free text css property / value pair to this component.
      * The CSS property definition whill appear in the dynamically generated CSS style sheet file
-     * externalized by the {@link org.wings.style.DynamicStyleSheetResource.StyleSheetWriter} to the browser as
+     * externalized by the {@link org.wings.style.CSSStyleSheetWriter} to the browser as
      * separate CSS file.
      *
      * @deprecated Use {@link #setAttribute(org.wings.style.CSSProperty, String)}
@@ -806,7 +806,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * Assign or overwrite a CSS property/value pair on this component. This CSS property definition will
      * use a CSS selector which adresses this component as whole as CSS selector (<code>new CSSProperty(this)</code>).
      * The CSS property definition whill appear in the dynamically generated CSS style sheet file
-     * externalized by the {@link org.wings.style.DynamicStyleSheetResource.StyleSheetWriter} to the browser as
+     * externalized by the {@link org.wings.style.CSSStyleSheetWriter} to the browser as
      * separate CSS file.
      *
      * @param property The CSS property (i.e. {@link CSSProperty#BACKGROUND}).
@@ -823,7 +823,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * pseudo CSS selectors {@link CSSSelector.Pseudo}. This are selector affecting only a part of a component
      * and not the component at all..
      * The CSS property definition whill appear in the dynamically generated CSS style sheet file
-     * externalized by the {@link org.wings.style.DynamicStyleSheetResource.StyleSheetWriter} to the browser as
+     * externalized by the {@link org.wings.style.CSSStyleSheetWriter} to the browser as
      * separate CSS file.
      *
      * @param selector A valid CSS selector. Typically values are i.e. the {@link #getComponentCssSelector()}
