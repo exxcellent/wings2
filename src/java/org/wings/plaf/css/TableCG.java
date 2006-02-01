@@ -15,21 +15,22 @@ package org.wings.plaf.css;
 
 
 import org.wings.RequestURL;
-import org.wings.SAbstractIconTextCompound;
 import org.wings.SCellRendererPane;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SListSelectionModel;
 import org.wings.STable;
+import org.wings.SLabel;
+import org.wings.SIcon;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
-import org.wings.table.STableColumnModel;
 import org.wings.table.STableColumn;
+import org.wings.table.STableColumnModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -41,7 +42,8 @@ import java.util.Map;
 public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
 
     protected String fixedTableBorderWidth;
-    private final int SELECTION_COLUMN_WIDTH = 10;
+    protected SIcon editIcon;
+    protected int selectionColumnWidth = 10;
 
     /**
      * Initialize properties from config
@@ -49,6 +51,54 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     public TableCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
         setFixedTableBorderWidth((String) manager.getObject("TableCG.fixedTableBorderWidth", String.class));
+        setEditIcon(manager.getIcon("TableCG.editIcon"));
+        String selectionRowWidthString = (String)manager.getObject("TableCG.selectionColumnWidth", String.class);
+        if (selectionRowWidthString != null)
+            selectionColumnWidth  = Integer.parseInt(selectionRowWidthString);
+    }
+
+    /**
+     * Tweak property. Declares a deprecated BORDER=xxx attribute on the HTML TABLE element.
+     */
+    public String getFixedTableBorderWidth() {
+        return fixedTableBorderWidth;
+    }
+
+    /**
+     * Tweak property. Declares a deprecated BORDER=xxx attribute on the HTML TABLE element.
+     */
+    public void setFixedTableBorderWidth(String fixedTableBorderWidth) {
+        this.fixedTableBorderWidth = fixedTableBorderWidth;
+    }
+
+
+    /**
+     * Sets the icon used to indicated an editable cell (if content is not direct clickable).
+     */
+    public void setEditIcon(SIcon editIcon) {
+        this.editIcon = editIcon;
+    }
+
+    /**
+     * @return Returns the icon used to indicated an editable cell (if content is not direct clickable).
+     */
+    public SIcon getEditIcon() {
+        return editIcon;
+    }
+
+    /**
+     * @return The width of the (optional) row selection column in px
+     */
+    public int getSelectionColumnWidth() {
+        return selectionColumnWidth;
+    }
+
+    /**
+     * The width of the (optional) row selection column in px
+     * @param selectionColumnWidth The width of the (optional) row selection column in px
+     */
+    public void setSelectionColumnWidth(int selectionColumnWidth) {
+        this.selectionColumnWidth = selectionColumnWidth;
     }
 
 
@@ -64,7 +114,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             table.setDefaultRenderer((STableCellRenderer) value);
             if (value instanceof SDefaultTableCellRenderer) {
                 SDefaultTableCellRenderer cellRenderer = (SDefaultTableCellRenderer) value;
-                cellRenderer.setEditIcon(manager.getIcon("TableCG.editIcon"));
+                cellRenderer.setEditIcon(editIcon);
             }
         }
 
@@ -121,14 +171,12 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     /**
      * write a specific cell to the device
      */
-    protected void writeCell(Device device, STable table, SCellRendererPane rendererPane, int row, int col)
+    protected void writeCell(final Device device, final STable table, final SCellRendererPane rendererPane, final int row, final int col)
             throws IOException {
         SComponent component = null;
-        boolean isEditingCell = table.isEditing()
-                && row == table.getEditingRow()
-                && col == table.getEditingColumn();
-        boolean selectable = table.getSelectionMode() != SListSelectionModel.NO_SELECTION && !table.isEditable();
-        boolean showAsFormComponent = table.getShowAsFormComponent();
+        final boolean isEditingCell = table.isEditing() && row == table.getEditingRow() && col == table.getEditingColumn();
+        final boolean selectable = table.getSelectionMode() != SListSelectionModel.NO_SELECTION /*&& !table.isEditable()*/;
+        final boolean showAsFormComponent = table.getShowAsFormComponent();
 
         if (isEditingCell) {
             component = table.getEditorComponent();
@@ -136,7 +184,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             component = table.prepareRenderer(table.getCellRenderer(row, col), row, col);
         }
 
-        boolean selectableButClickable = selectable && (component instanceof SAbstractIconTextCompound);
+        final boolean contentContainsClickables = !(component instanceof SLabel);
 
         device.print("<td col=\"");
         device.print(col);
@@ -147,38 +195,16 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             return;
         }
 
-        switch (component.getHorizontalAlignment()) {
-            case LEFT_ALIGN:
-                device.print(" align=\"left\"");
-                break;
-            case CENTER_ALIGN:
-                device.print(" align=\"center\"");
-                break;
-            case RIGHT_ALIGN:
-                device.print(" align=\"right\"");
-                break;
-        }
-
-        switch (component.getVerticalAlignment()) {
-            case TOP_ALIGN:
-                device.print(" valign=\"top\"");
-                break;
-            case CENTER_ALIGN:
-                device.print(" valign=\"center\"");
-                break;
-            case BOTTOM_ALIGN:
-                device.print(" align=\"bottom\"");
-                break;
-        }
+        Utils.printTableCellAlignment(device, component);
         device.print(">");
 
         String parameter = null;
-        if (table.isEditable() && !isEditingCell && table.isCellEditable(row, col))
+        if (/*table.isEditable() && */!isEditingCell && table.isCellEditable(row, col))
             parameter = table.getEditParameter(row, col);
         else if (selectable)
             parameter = table.getToggleSelectionParameter(row, col);
 
-        if (parameter != null && !isEditingCell && !selectableButClickable) {
+        if (parameter != null && !isEditingCell && selectable && !contentContainsClickables) {
             if (showAsFormComponent) {
                 writeButtonStart(device, table, parameter);
                 device.print(" type=\"submit\" name=\"");
@@ -197,7 +223,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         rendererPane.writeComponent(device, component, table);
 
-        if (parameter != null && !isEditingCell && !selectableButClickable) {
+        if (parameter != null && !isEditingCell && selectable && !contentContainsClickables) {
             if (showAsFormComponent)
                 device.print("</button>");
             else
@@ -210,11 +236,6 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     }
 
 
-    /**
-     * @param device
-     * @param selectionAddr
-     * @throws IOException
-     */
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
         device.print("<a href=\"");
         Utils.write(device, selectionAddr.toString());
@@ -222,12 +243,6 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     }
 
 
-    /**
-     * @param device
-     * @param table
-     * @param parameter
-     * @throws IOException
-     */
     protected void writeButtonStart(Device device, STable table, String parameter) throws IOException {
         device.print("<button");
     }
@@ -237,9 +252,11 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
                                    SCellRendererPane rendererPane,
                                    int c)
             throws IOException {
-        SComponent comp = table.prepareHeaderRenderer(c);
 
-        device.print("<th>");
+        final SComponent comp = table.prepareHeaderRenderer(c);
+
+        device.print("<th");
+        Utils.printTableCellAlignment(device, comp);
         rendererPane.writeComponent(device, comp, table);
         device.print("</th>");
         Utils.printNewline(device, comp);
@@ -254,7 +271,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         final SListSelectionModel selectionModel = table.getSelectionModel();
         final SCellRendererPane rendererPane = table.getCellRendererPane();
         final boolean childSelectorWorkaround = !table.getSession().getUserAgent().supportsCssChildSelector();
-        final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION && table.isEditable();
+        final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION /*&& table.isEditable()*/;
         final boolean showAsFormComponent = table.getShowAsFormComponent();
         final SDimension tableWidthByColumnModel = determineTableWidthByColumnModel(table, needsSelectionRow);
 
@@ -366,7 +383,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             device.print("<colgroup>");
             if (needsSelectionRow) {
                 Utils.printNewline(device, table);
-                device.print("\t<col width=\"").print(SELECTION_COLUMN_WIDTH).print("\"/>");
+                device.print("\t<col width=\"").print(selectionColumnWidth).print("\"/>");
             }
             for (int i = startcol; i <= endcol; i++) {
                 final STableColumn column = columnModel.getColumn(i);
@@ -395,7 +412,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         device.print("<td");
         Utils.optAttribute(device, "col", "numbering");
         Utils.optAttribute(device, "class", columnStyle);
-        Utils.optAttribute(device, "width", SELECTION_COLUMN_WIDTH); // TODO fixme static selection column width
+        Utils.optAttribute(device, "width", selectionColumnWidth); // TODO fixme static selection column width
         device.print(">");
 
         if (showAsFormComponent) {
@@ -451,25 +468,11 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
                     return null;
                 } else {
                     if (needsSelectionRow && "px".equalsIgnoreCase(totalWidthUnit))
-                        totalWidth += SELECTION_COLUMN_WIDTH;
+                        totalWidth += selectionColumnWidth;
                     return new SDimension(totalWidth+totalWidthUnit, null);
                 }
             }
         }
-    }
-
-    /**
-     * Tweak property.
-     */
-    public String getFixedTableBorderWidth() {
-        return fixedTableBorderWidth;
-    }
-
-    /**
-     * Tweak property.
-     */
-    public void setFixedTableBorderWidth(String fixedTableBorderWidth) {
-        this.fixedTableBorderWidth = fixedTableBorderWidth;
     }
 
     public CSSSelector  mapSelector(SComponent addressedComponent, CSSSelector selector) {
