@@ -21,7 +21,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -36,19 +35,19 @@ public class TableExample
     public final MyCellRenderer cellRenderer = new MyCellRenderer();
 
     final static Color[] colors = {
-        Color.black,
-        Color.cyan,
-        Color.yellow,
-        Color.magenta,
-        Color.orange,
-        Color.pink,
-        Color.red,
-        Color.darkGray,
-        Color.gray,
-        Color.green,
-        Color.lightGray,
-        Color.white,
-        Color.blue
+            Color.black,
+            Color.cyan,
+            Color.yellow,
+            Color.magenta,
+            Color.orange,
+            Color.pink,
+            Color.red,
+            Color.darkGray,
+            Color.gray,
+            Color.green,
+            Color.lightGray,
+            Color.white,
+            Color.blue
     };
 
     private STable table;
@@ -87,18 +86,24 @@ public class TableExample
                                                         boolean selected,
                                                         int row,
                                                         int col) {
+            setHorizontalAlignment(SConstants.LEFT);
             name(table, row, col);
             if (value instanceof Color) {
-                Color c = (Color)value;
+                Color c = (Color) value;
                 setText("<html><span style=\"color:" + colorToHex(c) + "\">" + colorToHex(c) + "</span>");
                 setIcon(null);
                 return this;
             }
             else if (value instanceof Boolean && row != -1) {
-                Boolean b = (Boolean)value;
+                setHorizontalAlignment(SConstants.CENTER);
+                Boolean b = (Boolean) value;
                 checkBox.setNameRaw(name(table, row, col));
                 checkBox.setSelected(b.booleanValue());
                 return checkBox;
+            }
+            else if (value instanceof Integer && row != -1) {
+                setHorizontalAlignment(SConstants.RIGHT);
+                return super.getTableCellRendererComponent(table, value, selected, row, col);
             }
             else
                 return super.getTableCellRendererComponent(table, value, selected, row, col);
@@ -120,7 +125,7 @@ public class TableExample
 
             for (int c = 0; c < cols; c++) {
                 for (int r = 0; r < rows; r++)
-                    data[r][c] = (c == 1 ? "stretched cell ":"cell ") + r + ":" + c;
+                    data[r][c] = (c == 1 ? "stretched cell " : "cell ") + r + ":" + c;
             }
             for (int r = 0; r < rows; r++)
                 data[r][2] = createColor(r);
@@ -128,6 +133,8 @@ public class TableExample
                 data[r][3] = createImage(r);
             for (int r = 0; r < rows; r++)
                 data[r][4] = createBoolean(r);
+            for (int r = 0; r < rows; r++)
+                data[r][5] = createInteger(r);
         }
 
         public int getColumnCount() {
@@ -163,6 +170,8 @@ public class TableExample
                     return SIcon.class;
                 case 4:
                     return Boolean.class;
+                case 5:
+                    return Integer.class;
             }
             return String.class;
         }
@@ -180,6 +189,10 @@ public class TableExample
                 return new Boolean(false);
             else
                 return new Boolean(true);
+        }
+
+        public Integer createInteger(int row) {
+            return new Integer(row);
         }
 
         public void sort(int col, boolean ascending) {
@@ -202,7 +215,9 @@ public class TableExample
             super(cols, rows);
         }
 
-        public boolean isCellEditable(int row, int col) { return false; }
+        public boolean isCellEditable(int row, int col) {
+            return false;
+        }
     }
 
     static String colorToHex(Color color) {
