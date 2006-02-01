@@ -17,7 +17,6 @@ import org.wings.*;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -50,14 +49,26 @@ public class MenuExample extends WingSetPane {
         formPanel.setPreferredSize(SDimension.FULLWIDTH);
         formPanel.add(new SLabel("<html>combobox:"));
         formPanel.add(new SComboBox(new DefaultComboBoxModel(ListExample.createElements())));
+
         formPanel.add(new SLabel("<html><br>list:"));
-        SList list = new SList(ListExample.createListModel());
-        list.setVisibleRowCount(3);
-        formPanel.add(list, "List");
+
+        int tColCount = 3;
+        SPanel tListsPanel = new SPanel(new SGridLayout(tColCount));
+        for (int i = 0; i < tColCount; i++) {
+            SList list = new SList(ListExample.createListModel());
+            list.setVisibleRowCount(3);
+            tListsPanel.add(list);
+        }
+
+        formPanel.add(tListsPanel, "List");
         formPanel.add(new SLabel("<html><br>textfield(stay visible):"));
         formPanel.add(new STextField("wingS is great"));
         formPanel.add(new SLabel("<html><br>textarea(stay visible):"));
         formPanel.add(new STextArea("wingS is a great framework for implementing complex web applications"));
+
+        SList list2 = new SList(ListExample.createListModel());
+        list2.setVisibleRowCount(7);
+        formPanel.add(list2, "List2");
 
         SPanel messagePanel = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
         messagePanel.add(new SLabel("<html><br>Form components are overlayed or hidden (in IE). Selected Menu: "));
@@ -73,29 +84,30 @@ public class MenuExample extends WingSetPane {
         panel.add(controls, SBorderLayout.NORTH);
         panel.add(menuBar, SBorderLayout.CENTER);
         panel.add(mainPanel, SBorderLayout.SOUTH);
+
         return panel;
     }
 
     protected void setMenuItemsEnabled(boolean enabled) {
         if (menuBar.getComponentCount() > 1) {
-            SMenuItem first = (SMenuItem)menuBar.getComponent(0);
-            SMenuItem last = (SMenuItem)menuBar.getComponent(menuBar.getComponentCount() - 1);
+            SMenuItem first = (SMenuItem) menuBar.getComponent(0);
+            SMenuItem last = (SMenuItem) menuBar.getComponent(menuBar.getComponentCount() - 1);
             recursiveMenuItemSwitch(first, last, enabled);
         } else if (menuBar.getComponentCount() == 1) {
-            ((SMenuItem)menuBar.getComponent(0)).setEnabled(enabled);
+            ((SMenuItem) menuBar.getComponent(0)).setEnabled(enabled);
         }
     }
 
     private void recursiveMenuItemSwitch(SMenuItem first, SMenuItem last, boolean enabled) {
         last.setEnabled(enabled);
         if (first instanceof SMenu) {
-            if (((SMenu)first).getChildrenCount() > 1) {
+            if (((SMenu) first).getChildrenCount() > 1) {
                 SMenu parent = (SMenu) first;
-                SMenuItem firstChild = (SMenuItem)parent.getChild(0);
-                SMenuItem lastChild = (SMenuItem)parent.getChild(parent.getChildrenCount() - 1);
+                SMenuItem firstChild = (SMenuItem) parent.getChild(0);
+                SMenuItem lastChild = (SMenuItem) parent.getChild(parent.getChildrenCount() - 1);
                 recursiveMenuItemSwitch(firstChild, lastChild, enabled);
-            } else if (((SMenu)first).getChildrenCount() == 1) {
-                ((SMenuItem)((SMenu)first).getChild(0)).setEnabled(enabled);
+            } else if (((SMenu) first).getChildrenCount() == 1) {
+                ((SMenuItem) ((SMenu) first).getChild(0)).setEnabled(enabled);
             }
         }
     }
