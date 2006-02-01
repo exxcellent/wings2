@@ -390,6 +390,7 @@ public class SOptionPane extends SDialog implements ActionListener {
     }
 
     private final void initPanel() {
+        setHorizontalAlignment(SConstants.CENTER);
         optionButtons.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
         optionButtons.setAttribute(CSSProperty.PADDING_TOP, "6px");
         ((SFlowLayout)optionButtons.getLayout()).setHgap(8);
