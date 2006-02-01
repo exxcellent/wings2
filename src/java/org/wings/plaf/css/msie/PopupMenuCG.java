@@ -14,8 +14,6 @@
 package org.wings.plaf.css.msie;
 
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
@@ -23,6 +21,8 @@ import org.wings.SMenu;
 import org.wings.SMenuItem;
 import org.wings.SPopupMenu;
 import org.wings.io.Device;
+
+import java.io.IOException;
 
 public class PopupMenuCG extends org.wings.plaf.css.PopupMenuCG {
     private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
@@ -53,8 +53,8 @@ public class PopupMenuCG extends org.wings.plaf.css.PopupMenuCG {
     protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
         device.print(" onmouseover=\"wpm_openMenu('");
         device.print(((SMenu)menuItem).getName());
-        device.print("_pop');\" onmouseout=\"wpm_closeMenu('");
-        device.print(((SMenu)menuItem).getName());
+        device.print("_pop','");
+        device.print(((SMenu)menuItem).getParentMenu().getName());
         device.print("_pop');\"");
     }
 }
