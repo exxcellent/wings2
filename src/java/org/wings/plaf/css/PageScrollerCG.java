@@ -223,7 +223,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                       .print(pageScroller.getRequestURL()
                       .addParameter(Utils.event(pageScroller) + "=" + page * pageScroller.getExtent()).toString());
                 device.print("\"");
-                device.print(" onClick=\"sendEvent(event, "+page * pageScroller.getExtent()+", 'scrollbar');\"");
+                device.print(" onClick=\"sendEvent(event, "+page * pageScroller.getExtent()+", 'scrollbar'); return false;\"");
             }
         }
         device.print(">");
@@ -258,7 +258,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
                       .print(pageScroller.getRequestURL()
                       .addParameter(Utils.event(pageScroller) + "=" + event).toString());
                 device.print("\"");
-                device.print(" onClick=\"sendEvent(event, "+event+", 'scrollbar');\"");
+                device.print(" onClick=\"sendEvent(event, "+event+", 'scrollbar'); return false;\"");
             }
         }
         device.print(">");
