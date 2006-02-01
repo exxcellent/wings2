@@ -17,6 +17,7 @@ package org.wings.plaf.css;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLabel;
+import org.wings.plaf.CGManager;
 import org.wings.io.Device;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
@@ -24,7 +25,18 @@ import java.io.IOException;
 
 public class LabelCG extends AbstractComponentCG implements
         org.wings.plaf.LabelCG {
+
+    private boolean wordWrapDefault;
+
     public LabelCG() {
+        final CGManager manager = SessionManager.getSession().getCGManager();
+        final String wordWrapDefaultString = (String) manager.getObject("LabelCG.wordWrapDefault", String.class);
+        setWordWrapDefault(Boolean.valueOf(wordWrapDefaultString).booleanValue());
+    }
+
+    public void installCG(SComponent component) {
+        super.installCG(component);
+        ((SLabel)component).setWordWrap(wordWrapDefault);
     }
 
     public void writeContent(final Device device, final SComponent component)
@@ -89,4 +101,23 @@ public class LabelCG extends AbstractComponentCG implements
         device.print(icon.getIconTitle());
         device.print("\"/>");
     }
+
+    /**
+     * Default word wrap behaviour.
+      * @return <code>true</code> if CG should advise all new SLabel
+     * instances to allow word wrapping. Default is <code>false</code>
+     */
+    public boolean isWordWrapDefault() {
+        return wordWrapDefault;
+    }
+
+    /**
+     * Default word wrap behaviour.
+     * @param wordWrapDefault <code>true</code> if CG should advise all new
+     * SLabel instances to allow word wrapping. Default is <code>false</code>
+     */
+    public void setWordWrapDefault(boolean wordWrapDefault) {
+        this.wordWrapDefault = wordWrapDefault;
+    }
+
 }

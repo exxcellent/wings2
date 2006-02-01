@@ -32,7 +32,7 @@ public class SLabel extends SComponent {
     protected SIcon disabledIcon = null;
     protected int verticalTextPosition = SConstants.CENTER;
     protected int horizontalTextPosition = SConstants.RIGHT;
-    protected boolean wordWrap = false;
+    protected boolean wordWrap;
 
     /**
      * Creates a new <code>SLabel</code> instance with the specified text
