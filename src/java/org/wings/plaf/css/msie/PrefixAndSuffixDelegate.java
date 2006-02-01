@@ -27,15 +27,18 @@ import org.wings.plaf.css.Utils;
 import java.io.IOException;
 
 /**
+ * This class surrounds every component in MSIE with a TABLE element
+ * wearing the components id. (for styling)
+ *
  * @author ole
  */
-public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixDelegate {
+public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixDelegate {
 
     public PrefixAndSuffixDelegate() {
     }
 
     /* non-javadoc: wraps every component into a TABLE element for MSIE. */
-    public void writePrefix(Device device, SComponent component) throws IOException {
+    public void writePrefix(final Device device, final SComponent component) throws IOException {
         SDimension prefSize = component.getPreferredSize();
 
         // For centering or right-alignment we need we surrounding helper table to be stretched to full width in some cases.
@@ -77,6 +80,8 @@ public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixD
 
         device.print("><tr>"); // table
         AbstractLayoutCG.openLayouterCell(device, false, null, 0, component);
+        // the following TD id is needed for the MSIE padding workaround! Refer to CSSStyleSheetWriter.
+        device.print(" id=\"").print(component.getName()).print("_td\"");
         device.print(">");
 
         // Special handling: Render title of STitledBorder
@@ -94,7 +99,7 @@ public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixD
         component.fireRenderEvent(SComponent.START_RENDERING);
     }
 
-    public void writeSuffix(Device device, SComponent component) throws IOException {
+    public void writeSuffix(final Device device, final SComponent component) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         AbstractLayoutCG.closeLayouterCell(device, false);
         device.print("</tr></table>");
@@ -108,7 +113,7 @@ public class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixD
      *
      * But for some surrounding layouts we can't to this not to break the functionality.
      */
-    private boolean componentAlignmentRequiresStretchedWrapper(SComponent component) {
+    private boolean componentAlignmentRequiresStretchedWrapper(final SComponent component) {
         final SDimension prefSize = component.getPreferredSize();
         final boolean isNotLeftAligned = (component.getHorizontalAlignment() == SConstants.CENTER ||
                     component.getHorizontalAlignment() == SConstants.RIGHT);

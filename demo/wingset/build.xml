@@ -32,7 +32,9 @@
         <javac srcdir="src/java"
             destdir="build/class"
             debug="${build.debug}"
-            deprecation="${build.deprecation}">
+            deprecation="${build.deprecation}"
+            source="1.4"
+            target="1.4">
             <classpath refid="build.classpath"/>
         </javac>
     </target>

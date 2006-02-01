@@ -39,10 +39,22 @@ public class CSSStyleSheetWriter implements ComponentVisitor {
         CSSProperty.TEXT_DECORATION, CSSProperty.TEXT_TRANSFORM, CSSProperty.LETTER_SPACING,
         CSSProperty.LINE_HEIGHT, CSSProperty.BACKGROUND_COLOR});
 
+    /**
+     * These CSS properties won't work on the TABLE element (wearing the #id).
+     * They must be mapped to the inner TD element. (#id_td)
+     */
+    private final static List MSIE_TD_REQUIRING_CSS_PROPS = Arrays.asList(new CSSProperty[] {
+        CSSProperty.PADDING, CSSProperty.PADDING_BOTTOM, CSSProperty.PADDING_LEFT,
+        CSSProperty.PADDING_RIGHT, CSSProperty.PADDING_TOP});
+
+
     private final Device out;
+    private final boolean isMSIE;
 
     public CSSStyleSheetWriter(Device out) {
         this.out = out;
+        final BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
+        isMSIE = BrowserType.IE.equals(currentBrowser);
     }
 
     private void writeAttributesFrom(final SComponent component)
@@ -59,14 +71,21 @@ public class CSSStyleSheetWriter implements ComponentVisitor {
                 dynamicStyles = new ArrayList(5);
             else
                 dynamicStyles = new ArrayList(dynamicStyles); // copy unmodifiable collection
-            dynamicStyles.add(new CSSStyle(new CSSSelector(component), border.getAttributes()));
+
+            final CSSAttributeSet borderAttributes = border.getAttributes();
+            dynamicStyles.add(new CSSStyle(component.getComponentCssSelector(), borderAttributes));
+            if (isMSIE) {
+                final CSSAttributeSet movedAttributes = copyAttributesToTDelementWorkaround(borderAttributes);
+                if (movedAttributes != null) {
+                    final CSSSelector innerTDselector = new CSSSelector("#"+component.getName()+"_td");
+                    dynamicStyles.add(new CSSStyle(innerTDselector, movedAttributes));
+                }
+            }
         }
 
         // Render dynamic styles to style sheet
         if (dynamicStyles != null) {
             final ComponentCG cg = component.getCG();
-            final BrowserType currentBrowser = SessionManager.getSession().getUserAgent().getBrowserType();
-            final boolean isMSIE = BrowserType.IE.equals(currentBrowser);
 
             for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
                 final CSSStyle style = (CSSStyle) iterator.next();
@@ -116,5 +135,25 @@ public class CSSStyleSheetWriter implements ComponentVisitor {
     public void visit(SContainer container) throws Exception {
         writeAttributesFrom(container);
         container.inviteEachComponent(this);
+    }
+
+    /**
+     * For this damn-crappy so 'called' browser the majestic queen of MSIE
+     * we need another damn workaround: MSIE ignores some CSS properties
+     * defined on the TABLE element. It expects those on the TD element.
+     * (Esp. padding).
+     * @return filtered subset of CSS attributes
+     */
+    private CSSAttributeSet copyAttributesToTDelementWorkaround(final CSSAttributeSet origAttributeSet) {
+        CSSAttributeSet filteredSet = null;
+        for (Iterator iterator = origAttributeSet.properties().iterator(); iterator.hasNext();) {
+            final CSSProperty cssProperty = (CSSProperty) iterator.next();
+            if (MSIE_TD_REQUIRING_CSS_PROPS.contains(cssProperty)) {
+                if (filteredSet == null)
+                    filteredSet = new CSSAttributeSet();
+                filteredSet.put(cssProperty, origAttributeSet.get(cssProperty));
+            }
+        }
+        return filteredSet;
     }
 }
