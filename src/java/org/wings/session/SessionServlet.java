@@ -266,7 +266,7 @@ final class SessionServlet
         if (req.getContentLength() > getSession().getMaxContentLength() * 1024) {
             res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
-            out.println("<html><head><title>Too big</title></head>");
+            out.println("<html><head><meta http-equiv=\"expires\" content=\"0\"><title>Too big</title></head>");
             out.println("<body><h1>Error - content length &gt; " +
                     getSession().getMaxContentLength() + "k");
             out.println("</h1></body></html>");
@@ -556,6 +556,9 @@ final class SessionServlet
      * @param e the Exception to report
      */
     protected void handleException(HttpServletResponse res, Throwable e) {
+        // Try to return HTTP status code 500.
+        // In many cases this will be too late (already stream output written)
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         try {
             /*
             * if we don't have an errorTemplateFile defined, then this
@@ -581,7 +584,7 @@ final class SessionServlet
             res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
             // build the stacktrace wrapped by pre's so line breaks are preserved
-            StringBuffer stackTrace = new StringBuffer("<html><pre>");
+            StringBuffer stackTrace = new StringBuffer("<pre>");
             stackTrace.append(getStackTraceString(e));
             stackTrace.append("</pre>");
             errorStackTraceLabel.setText(stackTrace.toString());
@@ -595,7 +598,9 @@ final class SessionServlet
             try {
                 res.setContentType("text/html");
                 PrintWriter printWriter = res.getWriter();
-                printWriter.print("<html><body><h1>An internal application error occured</h1>If the problem " +
+                printWriter.print("<html>" +
+                        "<head><meta http-equiv=\"expires\" content=\"0\"></head>" +
+                        "<body><h1>An internal application error occured</h1>If the problem " +
                         "persists, please contact the administrator of this site." +
                         "<p>Developers: Define wings.error.template in web.xml " +
                         "to see stacktrace and/or change this screen</body></html>");
