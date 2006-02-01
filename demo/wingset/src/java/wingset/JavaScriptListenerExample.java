@@ -13,14 +13,19 @@
  */
 package wingset;
 
-import org.wings.*;
-import org.wings.style.CSSProperty;
+import org.wings.SBoxLayout;
+import org.wings.SButton;
+import org.wings.SComponent;
+import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.STextField;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
-
+import org.wings.style.CSSProperty;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -137,7 +142,7 @@ public class JavaScriptListenerExample
      * number
      */
     private int fractionDecimals(double number) {
-        // FIXME: is there a simple and more efficient way ?
+        // is there a simple and more efficient way ?
         NumberFormat fmt = new DecimalFormat("#.########");
         String fractionStr = fmt.format(Math.IEEEremainder(number, 1.0));
         return fractionStr.length() - 2;

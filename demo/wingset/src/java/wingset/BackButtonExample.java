@@ -58,8 +58,6 @@ public class BackButtonExample extends WingSetPane {
 
     protected SComponent createExample() {
         mainPanel.setLayout(new SFlowDownLayout());
-        // TODO: As labels don't wrap this dissorts layout!
-        //mainPanel.setPreferredSize(new SDimension("500px", null));
         mainPanel.setHorizontalAlignment(CENTER);
         mainPanel.add(new SLabel("<html>wingS is able to handle browser back navigation in different ways<br><ul>" +
                 "<li><b>Default: </b>Drop requests from old views and just redisplay page</li>" +

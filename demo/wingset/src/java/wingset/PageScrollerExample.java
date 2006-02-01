@@ -13,12 +13,20 @@
  */
 package wingset;
 
-import org.wings.*;
-
+import org.wings.SBorderLayout;
+import org.wings.SCheckBox;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SDimension;
+import org.wings.SForm;
+import org.wings.SLabel;
+import org.wings.SList;
+import org.wings.SPageScroller;
+import org.wings.SScrollPane;
+import org.wings.SScrollPaneLayout;
 import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -42,9 +50,6 @@ public class PageScrollerExample
 
         scrollbar = new SPageScroller(Adjustable.VERTICAL);
         scrollbar.setName("scrollbar");
-        // TODO this should work, but doesn't, leaving it in for testing
-        scrollbar.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
-        scrollbar.setVerticalAlignment(SConstants.BOTTOM_ALIGN);
         
         // its a horizontal scrollbar, but scrolls vertical...
         scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
