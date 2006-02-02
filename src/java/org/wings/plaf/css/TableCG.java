@@ -14,19 +14,23 @@
 package org.wings.plaf.css;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.RequestURL;
 import org.wings.SCellRendererPane;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
+import org.wings.SIcon;
+import org.wings.SLabel;
 import org.wings.SListSelectionModel;
 import org.wings.STable;
-import org.wings.SLabel;
-import org.wings.SIcon;
 import org.wings.io.Device;
+import org.wings.io.StringBufferDevice;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
+import org.wings.style.CSSStyleSheetWriter;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
@@ -40,7 +44,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
-
+    /**
+     * Apache jakarta commons logger
+     */
+    private final static Log log = LogFactory.getLog(TableCG.class);
     protected String fixedTableBorderWidth;
     protected SIcon editIcon;
     protected int selectionColumnWidth = 10;
@@ -171,7 +178,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     /**
      * write a specific cell to the device
      */
-    protected void writeCell(final Device device, final STable table, final SCellRendererPane rendererPane, final int row, final int col)
+    protected void renderCellContent(final Device device, final STable table, final SCellRendererPane rendererPane, final int row, final int col)
             throws IOException {
         SComponent component = null;
         final boolean isEditingCell = table.isEditing() && row == table.getEditingRow() && col == table.getEditingColumn();
@@ -198,6 +205,25 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         Utils.printTableCellAlignment(device, component);
         device.print(">");
+
+        // Collect inline dynamic styles of cell renderer component:
+        // Cell renderer components are not visible to the DynamicStyleResource as they are not
+        // reachable via the component hierarchy. They'd also not be reachable for the event
+        // dispatcher if not added to the CellRendererPane. Adding to the cellrenderer pane
+        // does the job of registering those items as low level event listener.
+        // the following code does the job of rendering their styles inline.
+        // TODO: Maybe "compress" repeated styles here as well as in the stylesheet writer.
+        try {
+            final StringBufferDevice stringBufferDevice = new StringBufferDevice();
+            final CSSStyleSheetWriter styleCollector = new CSSStyleSheetWriter(stringBufferDevice);
+            component.invite(styleCollector);
+            final String styleString = stringBufferDevice.toString();
+            if (styleString.length() > 0) {
+                device.print("<style>").print(styleString).print("</style>");
+            }
+        } catch (Exception e) {
+            log.info("Unexpected Exception durign collection of cell renderer styles", e);
+        }
 
         String parameter = null;
         if (table.isEditable() && !isEditingCell && editableCell)
@@ -351,11 +377,11 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             device.print(">");
 
             if (needsSelectionRow) {
-                renderSelectionRow(device, table, rendererPane, r, showAsFormComponent);
+                renderSelectionColumn(device, table, rendererPane, r, showAsFormComponent);
             }
 
             for (int c = startCol; c < endCol; c++)
-                writeCell(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
+                renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
 
             device.print("</tr>\n");
         }
@@ -404,7 +430,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     }
 
     /** Renders the row sometimes needed to allow row selection. */
-    protected void renderSelectionRow(final Device device, final STable table, final SCellRendererPane rendererPane,
+    protected void renderSelectionColumn(final Device device, final STable table, final SCellRendererPane rendererPane,
                                       final int row, final boolean showAsFormComponent)
             throws IOException {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
@@ -423,21 +449,21 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             device.print(SConstants.UID_DIVIDER);
             Utils.write(device, table.getToggleSelectionParameter(row, -1));
             device.print("\" value=\"\">");
-            renderSelectionRowContent(device, row, table, rendererPane);
+            renderSelectionColumnContent(device, row, table, rendererPane);
             device.print("</button>");
         } else {
             RequestURL selectionAddr = table.getRequestURL();
             selectionAddr.addParameter(Utils.event(table), table.getToggleSelectionParameter(row, -1));
 
             writeLinkStart(device, selectionAddr);
-            renderSelectionRowContent(device, row, table, rendererPane);
+            renderSelectionColumnContent(device, row, table, rendererPane);
             device.print("</a>");
         }
         device.print("</td>");
     }
 
     /** Renders the <b>content</b> of the row selection row. */
-    private void renderSelectionRowContent(final Device device, int row, final STable table, final SCellRendererPane rendererPane)
+    private void renderSelectionColumnContent(final Device device, int row, final STable table, final SCellRendererPane rendererPane)
             throws IOException {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
         if (rowSelectionRenderer == null) {
