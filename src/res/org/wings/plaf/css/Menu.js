@@ -157,7 +157,7 @@ function wpm_menuPopup(e, menu) {
 function wpm_hideActiveMenu() {
     if (wpm_menuOpen == 1) {
         // close all open
-        for ( var i=wpm_openMenus.length-1; i>=0; i--) {
+        for (var i = wpm_openMenus.length - 1; i >= 0; i--) {
             document.getElementById(wpm_openMenus[i]).style.display = 'none';
         }
         document.getElementById(wpm_activeMenu).style.display = 'none';
@@ -211,16 +211,18 @@ function wpm_openMenu(id, parentId) {
 
     // search in the openMenus, close all decent menus of the parent
     // open the id
-    for ( var i=wpm_openMenus.length-1; i>=0; i--) {
-        if ( wpm_openMenus[i]==parentId ) {
+    for (var i = wpm_openMenus.length - 1; i >= 0; i--) {
+        if (wpm_openMenus[i] == parentId) {
             break;
         }
         document.getElementById(wpm_openMenus[i]).style.display = 'none';
         wpm_openMenus = wpm_openMenus.slice(0, wpm_openMenus.length - 1);
     }
     var node = document.getElementById(id);
-    node.style.display = 'block';
-    wpm_openMenus[wpm_openMenus.length] = id;
+    if (node) {
+        node.style.display = 'block';
+        wpm_openMenus[wpm_openMenus.length] = id;
+    }
     wpm_toggleFormElements(wpm_buildBoundsArray(wpm_openMenus));
 }
 

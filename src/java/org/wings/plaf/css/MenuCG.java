@@ -46,7 +46,6 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
                     if (menuItem instanceof SMenu) {
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenu\"");
-                            printScriptHandlers(device, menuItem);
                         } else {
                             device.print(" class=\"SMenu_Disabled\"");
                         }
@@ -57,6 +56,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
                             device.print(" class=\"SMenuItem_Disabled\"");
                         }
                     }
+                    printScriptHandlers(device, menuItem);
                     device.print(">");
                     if (menuItem instanceof SMenuItem) {
                             device.print("<a");
