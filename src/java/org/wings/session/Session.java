@@ -579,8 +579,9 @@ public class Session implements PropertyService, Serializable {
         if (supportedLocales == null ||
                 supportedLocales.length == 0 ||
                 Arrays.asList(supportedLocales).contains(l)) {
+            final Locale oldLocale = locale;
             locale = l;
-            propertyChangeSupport.firePropertyChange(LOCALE_PROPERTY, locale, l);
+            propertyChangeSupport.firePropertyChange(LOCALE_PROPERTY, oldLocale, locale);
             log.info("Setting session locale to: " + l);
         } else
             throw new IllegalArgumentException("Locale " + l + " not supported!");
