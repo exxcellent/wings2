@@ -21,10 +21,7 @@ import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -91,7 +88,7 @@ public class SForm        extends SContainer        implements LowLevelEventList
      */
     private static ThreadLocal threadArmedComponents = new ThreadLocal() {
         protected synchronized Object initialValue() {
-            return new ArrayList(2);
+            return new HashSet(2);
         }
     };
 
@@ -208,7 +205,7 @@ public class SForm        extends SContainer        implements LowLevelEventList
     }
 
     public final static void addArmedComponent(LowLevelEventListener component) {
-        List armedComponents = (List) threadArmedComponents.get();
+        Set armedComponents = (Set) threadArmedComponents.get();
         armedComponents.add(component);
     }
 
@@ -218,7 +215,7 @@ public class SForm        extends SContainer        implements LowLevelEventList
      * might well be, that this does not happen.
      */
     public static void clearArmedComponents() {
-        List armedComponents = (List) threadArmedComponents.get();
+        Set armedComponents = (Set) threadArmedComponents.get();
         armedComponents.clear();
     }
 
@@ -244,7 +241,7 @@ public class SForm        extends SContainer        implements LowLevelEventList
      * fired their events.
      */
     public static void fireEvents() {
-        List armedComponents = (List) threadArmedComponents.get();
+        Set armedComponents = (Set) threadArmedComponents.get();
         try {
             LowLevelEventListener component;
             // handle form special, form event should be fired last
