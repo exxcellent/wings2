@@ -415,6 +415,11 @@ public class SContainer extends SComponent {
      */
     public SComponent addComponent(SComponent c, Object constraint, int index) {
         if (c != null) {
+            // Sanity check: Component is only allowed to be inside one container
+            // equal to Swing (1:n tree, not n:m tree)
+            if (c.getParent() != null) {
+                c.getParent().remove(c);
+            }
             getComponentList().add(index, c);
             getConstraintList().add(index, constraint);
             c.setParent(this);
