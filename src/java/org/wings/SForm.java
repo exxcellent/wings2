@@ -241,7 +241,9 @@ public class SForm        extends SContainer        implements LowLevelEventList
      * fired their events.
      */
     public static void fireEvents() {
-        Set armedComponents = (Set) threadArmedComponents.get();
+        // use a copy to avoid concurrent modification exceptions if a
+        // LowLevelEventListener adds itself to the armedComponents again
+        List armedComponents = new ArrayList((Collection) threadArmedComponents.get());
         try {
             LowLevelEventListener component;
             // handle form special, form event should be fired last
