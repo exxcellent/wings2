@@ -144,11 +144,6 @@ table.SPageScroller a.disabled:hover{
 	border: 1px solid #cccccc !important;
 }
 
-.SLabel,
-.SCheckBox {
-   white-space: nowrap; /* not working */
-}
-
 /* No vertical distance on writing down many labels. */
 .SLabel p {
     margin-top:0px;
@@ -335,16 +330,23 @@ ul.STree li div.SSubTree {
 	border-width: 1px;
 }
 
+/* Style of the Legend label for STitledBorder */
 .STitledBorderLegend {
     position: relative;
-    top:-1em;
+    top:-1.7em;
 	margin-bottom:-1em;
+    margin-right: 1.0em;
     margin-left: 1.0em;
+    margin-right: 1.0em;
     padding-left: 0.4em;
     padding-right: 0.4em;
-    background-color: inherit;
+    /*background-color: inherit;*/     /* IE doesnt understand inherit */
+    border-left:  #c0c0c0 2px groove;  /* IE doesnt understand inherit, so need to guess :-( */
+    border-right: #c0c0c0 2px groove;  /* IE doesnt understand inherit, so need to guess :-( */
+    background: #ccc;                  /* IE doesnt understand inherit, so need to guess :-( */
 }
 
+/* Style of the surrounding border for a STitledBorder */
 .STitledBorder {
     margin-top: 1em;
     padding-top: 1em;

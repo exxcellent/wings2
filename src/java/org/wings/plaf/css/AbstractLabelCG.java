@@ -16,8 +16,6 @@ package org.wings.plaf.css;
 
 import org.wings.SIcon;
 import org.wings.io.Device;
-import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
 import java.io.IOException;
 
 public abstract class AbstractLabelCG extends AbstractComponentCG {
@@ -28,15 +26,17 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
     }
 
     protected void writeText(Device device, String text, boolean wordWrap) throws IOException {
-        boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE);
+        //boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE);
 
         if ((text.length() > 5) && (text.startsWith("<html>"))) {
             Utils.writeRaw(device, text.substring(6));
-        } else if (isIE) {
-            // IE doesn't handle whitespace:pre correctly, so we do it hardcore by quoting spaces
-            // or not (depending on wordwrap)
+        } else /*if (isIE) */{
+            //// IE doesn't handle whitespace:pre correctly, so we do it hardcore by quoting spaces
+            //// or not (depending on wordwrap)
             Utils.quote(device, text, true, !wordWrap, false);
-        } else {
+        }   // Handle IE and Gecko same: Gecko trimmed labels whitespaces with the white-space:pre
+            // approach
+        /*  else {
             // Other browser handle the CSS property 'white-space' correctly.
             // The default is set as in swing: don't wrap:
             if (!wordWrap)
@@ -47,7 +47,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
                 Utils.quote(device, text, true, false, false);
                 device.print("</span>");
             }
-        }
+        } */
     }
 
     protected void writeIcon(Device device, SIcon icon) throws IOException {
