@@ -418,7 +418,14 @@ public class SContainer extends SComponent {
             // Sanity check: Component is only allowed to be inside one container
             // equal to Swing (1:n tree, not n:m tree)
             if (c.getParent() != null) {
-                c.getParent().remove(c);
+                if (c.getParent() == this) {
+                    // Forstall confusing ArrayOutOfBoundsException which would occur in the remove.
+                    throw new IllegalArgumentException("Component must only added exactly " +
+                            "once to exactly one container!");
+                } else {
+                    // Try to silently fix the double-add by removing it from the old parent.
+                    c.getParent().remove(c);
+                }
             }
             getComponentList().add(index, c);
             getConstraintList().add(index, constraint);
