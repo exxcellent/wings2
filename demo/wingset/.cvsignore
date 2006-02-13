@@ -2,4 +2,4 @@ build
 *.iml
 *.ipr
 *.iws
-
+*.war
