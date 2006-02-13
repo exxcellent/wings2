@@ -264,14 +264,15 @@ public class SForm        extends SContainer        implements LowLevelEventList
                         formEvents = new LinkedList();
                     } // end of if ()
                     formEvents.add(component);
+                    iterator.remove();
                 } else if (component instanceof SAbstractIconTextCompound) {
                     if (buttonEvents == null) {
                         buttonEvents = new LinkedList();
                     }
                     buttonEvents.add(component);
+                    iterator.remove();
                 } else {
                     component.fireIntermediateEvents();
-                    iterator.remove();
                 }
             }
 
