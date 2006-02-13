@@ -16,22 +16,19 @@ package org.wings.plaf.css.msie;
 import java.io.IOException;
 
 import org.wings.RequestURL;
-import org.wings.SAbstractButton;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.MSIEButtonFix;
 import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
 
-public class ButtonCG extends org.wings.plaf.css.ButtonCG implements SParentFrameListener, MSIEButtonFix {
+public class ButtonCG extends org.wings.plaf.css.ButtonCG implements SParentFrameListener {
 
     private static final String FORMS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.form",
@@ -40,13 +37,11 @@ public class ButtonCG extends org.wings.plaf.css.ButtonCG implements SParentFram
     /* (non-Javadoc)
      * @see org.wings.plaf.css.ButtonCG#writeButtonStart(org.wings.io.Device, org.wings.SComponent)
      */
-    protected void writeButtonStart(final Device device, final SAbstractButton comp) throws IOException {
-        device.print("<button onclick=\"addHiddenField(this.form,'");
-        device.print(comp.getParentFrame().getEventEpoch());
-        device.print(SConstants.UID_DIVIDER);
-        device.print(SConstants.IEFIX_BUTTONACTION);
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button onclick=\"sendEvent(event,'");
+        device.print(value);
         device.print("','");
-        device.print(comp.getName());
+        device.print(Utils.event(component));
         device.print("')\"");
     }
 
@@ -70,5 +65,4 @@ public class ButtonCG extends org.wings.plaf.css.ButtonCG implements SParentFram
 
     public void parentFrameRemoved(SParentFrameEvent e) {
     }
-
 }

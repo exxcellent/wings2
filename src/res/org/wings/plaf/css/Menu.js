@@ -28,33 +28,33 @@ var wpm_timeOut = 1000;
 var wpm_clickDelta = 0;
 var wpm_openMenus = new Array();
 
-function wpm_getEvent(e) {
+function wpm_getEvent(event) {
     if (window.event) return window.event;
-    else return e;
+    else return event;
 }
 function wpm_point(x, y) {
     this.x = x;
     this.y = y;
 }
 
-function wpm_getCoordinates(e) {
+function wpm_getCoordinates(event) {
     var coord;
     if (wu_ie5) {
-        coord = new wpm_point(e.x, e.y);
+        coord = new wpm_point(event.x, event.y);
     }
     else {
-        coord = new wpm_point(e.pageX, e.pageY);
+        coord = new wpm_point(event.pageX, event.pageY);
     }
     return coord;
 }
 
-function wpm_getMenuPosition(e) {
-    var e;
+function wpm_getMenuPosition(event) {
+    var el;
     if (wu_ie5) {
-        el = e.srcElement;
+        el = event.srcElement;
     }
     else {
-        el = e.target;
+        el = event.target;
         if (el.nodeType == 3) // defeat KHTML bug
             el = el.parentNode;
     }
@@ -100,34 +100,34 @@ function wpm_isValidEvent(coord) {
     else return true;
 }
 
-function wpm_menu(e, menu) {
-    e = wpm_getEvent(e);
-    menuPos = wpm_getMenuPosition(e);
-    eventPos = wpm_getCoordinates(e);
+function wpm_menu(event, menu) {
+    event = wpm_getEvent(event);
+    menuPos = wpm_getMenuPosition(event);
+    eventPos = wpm_getCoordinates(event);
     if (!wpm_isValidEvent(eventPos)) return false;
-    if (e.button < 2) { // left click hopefully
+    if (event.button < 2) { // left click hopefully
         wpm_hideActiveMenu();
         wpm_showMenu(menu, menuPos, eventPos);
     }
 }
 
-function wpm_changeMenu(e, menu) {
-    e = wpm_getEvent(e);
+function wpm_changeMenu(event, menu) {
+    event = wpm_getEvent(event);
     if (wpm_menuOpen && (wpm_activeMenu != menu)) {
-        menuPos = wpm_getMenuPosition(e);
-        eventPos = wpm_getCoordinates(e);
+        menuPos = wpm_getMenuPosition(event);
+        eventPos = wpm_getCoordinates(event);
         wpm_hideActiveMenu();
         wpm_showMenu(menu, menuPos, eventPos);
     }
 }
 
-function wpm_menuPopup(e, menu) {
-    e = wpm_getEvent(e);
-    var coord = wpm_getCoordinates(e);
+function wpm_menuPopup(event, menu) {
+    event = wpm_getEvent(event);
+    var coord = wpm_getCoordinates(event);
     if (!wpm_isValidEvent(coord)) return false;
-    if (e.type == 'mousedown') {
+    if (event.type == 'mousedown') {
         if (wu_konqueror || wu_opera || wu_safari) {
-            if (e.ctrlKey && (e.button == 2)) {
+            if (event.ctrlKey && (event.button == 2)) {
                 // ctrl right click
                 wpm_hideActiveMenu();
                 wpm_showMenu(menu, coord);
@@ -142,9 +142,9 @@ function wpm_menuPopup(e, menu) {
             wpm_hideActiveMenu();
         }
     }
-    else if (e.type == 'contextmenu') {
+    else if (event.type == 'contextmenu') {
         // ie && firefox
-        if (e.ctrlKey || e.shiftKey) {
+        if (event.ctrlKey || event.shiftKey) {
             // only handle straight right clicks, let others pass
             return true;
         }
@@ -183,9 +183,9 @@ function wpm_showMenu(menuId, coord, eventCoord) {
     else wpm_lastCoord = eventCoord;
 }
 
-function wpm_handleBodyClicks(e) {
-    e = wpm_getEvent(e);
-    coords = wpm_getCoordinates(e);
+function wpm_handleBodyClicks(event) {
+    event = wpm_getEvent(event);
+    coords = wpm_getCoordinates(event);
     if (wpm_isValidEvent(coords)) {
         wpm_hideActiveMenu();
     }

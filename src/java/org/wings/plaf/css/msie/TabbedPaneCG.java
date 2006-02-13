@@ -14,7 +14,6 @@
 package org.wings.plaf.css.msie;
 
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.STabbedPane;
 import org.wings.event.SParentFrameEvent;
@@ -22,7 +21,7 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.MSIEButtonFix;
+import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
@@ -34,7 +33,7 @@ import java.util.Map;
  * @author ole
  *
  */
-public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SParentFrameListener, MSIEButtonFix {
+public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SParentFrameListener {
     private static final String FORMS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.form",
             String.class);
@@ -43,15 +42,11 @@ public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SPa
     /* (non-Javadoc)
      * @see org.wings.plaf.css.TabbedPaneCG#writeButtonStart(org.wings.io.Device, org.wings.STabbedPane, java.lang.String)
      */
-    protected void writeButtonStart(Device device, STabbedPane tabbedPane, String value) throws IOException {
-        device.print("<button onclick=\"addHiddenField(this.form,'");
-        device.print(tabbedPane.getParentFrame().getEventEpoch());
-        device.print(SConstants.UID_DIVIDER);
-        device.print(SConstants.IEFIX_BUTTONACTION);
-        device.print("','");
-        device.print(tabbedPane.getName());
-        device.print(SConstants.UID_DIVIDER);
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button onclick=\"sendEvent(event,'");
         device.print(value);
+        device.print("','");
+        device.print(Utils.event(component));
         device.print("')\"");
     }
 
@@ -89,6 +84,4 @@ public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SPa
         msieMappings.put(STabbedPane.SELECTOR_CONTENT, "#compid td.STabbedPane_pane");
         msieMappings.put(STabbedPane.SELECTOR_TAB_AREA, "#compid table.STabbedPane th");
     }
-
-
 }

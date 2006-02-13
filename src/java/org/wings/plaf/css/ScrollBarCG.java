@@ -228,11 +228,6 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
 
         if (showAsFormComponent) {
             writeButtonStart(device, scrollBar, event);
-            device.print(" type=\"submit\" name=\"")
-                    .print(Utils.event(scrollBar))
-                    .print("\" value=\"")
-                    .print(event)
-                    .print("\"");
         } else {
             device.print("<a href=\"")
                     .print(scrollBar.getRequestURL()
@@ -259,11 +254,15 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
 
     /**
      * @param device
-     * @param event
-     * @param scrollBar
+     * @param value
+     * @param component
      * @throws IOException
      */
-    protected void writeButtonStart(Device device, SScrollBar scrollBar, String event) throws IOException {
-        device.print("<button class=\"borderless\"") ;
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
+        device.print(Utils.event(component));
+        device.print("\" value=\"");
+        device.print(value);
+        device.print("\"");
     }
 }

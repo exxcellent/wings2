@@ -45,15 +45,11 @@ public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameLis
         device.print("';\"");
     }
 
-    protected void writeButtonStart(Device device, SList list, String value) throws IOException {
-        device.print("<button  onclick=\"addHiddenField(this.form,'");
-        device.print(list.getParentFrame().getEventEpoch());
-        device.print(SConstants.UID_DIVIDER);
-        device.print(SConstants.IEFIX_BUTTONACTION);
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");
+        device.print(value);
         device.print("','");
-        device.print(list.getName());
-        device.print(SConstants.UID_DIVIDER);
-        Utils.write(device, value);
+        device.print(Utils.event(component));
         device.print("')\"");
     }
 

@@ -33,10 +33,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         final SAbstractButton button = (SAbstractButton) component;
         
         if (button.getShowAsFormComponent()) {
-            writeButtonStart(device, button);
-            device.print(" type=\"submit\" name=\"");
-            Utils.write(device, Utils.event(button));
-            device.print("\"");
+            writeButtonStart(device, button, button.getToggleSelectionParameter());
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
             if (!button.isEnabled()) {
@@ -99,10 +96,15 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
 
     /**
      * @param device
+     * @param value
      * @throws IOException
      */
-    protected void writeButtonStart(final Device device, final SAbstractButton comp) throws IOException {
-        device.print("<button");
+    protected void writeButtonStart(final Device device, final SComponent button, String value) throws IOException {
+        device.print("<button type=\"submit\" name=\"");
+        device.print(Utils.event(button));
+        device.print("\" value=\"");
+        device.print(value);
+        device.print("\"");
     }
 
     /** 

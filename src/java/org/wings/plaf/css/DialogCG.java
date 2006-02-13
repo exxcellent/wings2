@@ -51,6 +51,7 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
         device.print("\"/>");
     }
 
+    // TODO: writeButtonStart
     protected void writeWindowIcon(Device device, SDialog frame,
             int event, SIcon icon, String cssClass) throws IOException {
         boolean showAsFormComponent = frame.getShowAsFormComponent();

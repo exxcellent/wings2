@@ -143,7 +143,7 @@ public class TreeCG extends AbstractComponentCG implements
             if (isLeaf) {
                 // render a disabled button around this. firefox position bugfix (ol)
                 if (component.getShowAsFormComponent()) {
-                    writeButtonStart(component, device, component.getExpansionParameter(row, false));
+                    writeButtonStart(device, component, component.getExpansionParameter(row, false));
                     device.print(" disabled=\"disabled\">");
                 }
                 writeIcon(device, leafControlIcon, false);
@@ -152,12 +152,7 @@ public class TreeCG extends AbstractComponentCG implements
                 }
             } else {
                 if (component.getShowAsFormComponent()) {
-                    writeButtonStart(component, device, component.getExpansionParameter(row, false));
-                    device.print(" type=\"submit\" name=\"");
-                    Utils.write(device, Utils.event(component));
-                    device.print("\" value=\"");
-                    Utils.write(device, component.getExpansionParameter(row, false));
-                    device.print("\"");
+                    writeButtonStart(device, component, component.getExpansionParameter(row, false));
                 } else {
                     RequestURL selectionAddr = component.getRequestURL();
                     selectionAddr.addParameter(Utils.event(component),
@@ -197,12 +192,7 @@ public class TreeCG extends AbstractComponentCG implements
         SCellRendererPane rendererPane = component.getCellRendererPane();
         if (isSelectable) {
             if (component.getShowAsFormComponent()) {
-                writeButtonStart(component, device, component.getSelectionParameter(row, false));
-                device.print(" type=\"submit\" name=\"");
-                Utils.write(device, Utils.event(component));
-                device.print("\" value=\"");
-                Utils.write(device, component.getSelectionParameter(row, false));
-                device.print("\"");
+                writeButtonStart(device, component, component.getSelectionParameter(row, false));
             } else {
                 RequestURL selectionAddr = component.getRequestURL();
                 selectionAddr.addParameter(Utils.event(component),
@@ -266,8 +256,12 @@ public class TreeCG extends AbstractComponentCG implements
     }
 
 
-    protected void writeButtonStart(STree component, Device device, String value) throws IOException {
-        device.print("<button class=\"borderless\"");
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
+        device.print(Utils.event(component));
+        device.print("\" value=\"");
+        device.print(value);
+        device.print("\"");
     }
 
 

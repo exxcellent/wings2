@@ -28,12 +28,6 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
 
         if (button.getShowAsFormComponent()) {
             writeButtonStart(device, button);
-            device.print(" type=\"submit\"");
-            device.print(" name=\"");
-            Utils.write(device, button.getEventTarget().getEncodedLowLevelEventId());
-            device.print("\" value=\"");
-            Utils.write(device, button.getEvent());
-            device.print("\"");
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         } else {
             writeLinkStart(device, button);
@@ -72,12 +66,16 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
 
     protected void writeLinkStart(Device device, SClickable button) throws IOException {
         device.print("<a href=\"");
-        Utils.write(device, button.getURL());
+        device.print(button.getURL());
         device.print("\"");
     }
 
     protected void writeButtonStart(Device device, SClickable button) throws IOException {
-        device.print("<button class=\"borderless\"");
+        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
+        device.print(button.getEventTarget().getEncodedLowLevelEventId());
+        device.print("\" value=\"");
+        device.print(button.getEvent());
+        device.print("\"");
     }
 
     protected SIcon getIcon(SClickable abstractButton) {

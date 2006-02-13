@@ -76,7 +76,7 @@ public class MenuExample extends WingSetPane {
         messagePanel.add(selectionLabel, "SelectionLabel");
         messagePanel.add(new SLabel("<html><br>Try the menu accelerator keys. Ctrl-A to Ctrl-Z call menuitem actions (doesn't work on Konqueror)"));
 
-        SForm mainPanel = new SForm(new SBoxLayout(SBoxLayout.HORIZONTAL));
+        SPanel mainPanel = new SPanel(new SBoxLayout(SBoxLayout.HORIZONTAL));
         mainPanel.add(formPanel);
         mainPanel.add(messagePanel);
 

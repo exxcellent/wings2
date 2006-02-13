@@ -15,7 +15,6 @@ package org.wings.plaf.css.msie;
 
 import org.wings.RequestURL;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.STable;
 import org.wings.event.SParentFrameEvent;
@@ -23,7 +22,6 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.MSIEButtonFix;
 import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
@@ -31,21 +29,17 @@ import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
 import java.io.IOException;
 
-public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameListener, MSIEButtonFix {
+public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameListener {
 
     private static final String FORMS_JS = (String) SessionManager
             .getSession().getCGManager().getObject("JScripts.form",
             String.class);
 
-    protected void writeButtonStart(Device device, STable table, String parameter) throws IOException {
-        device.print("<button class=\"borderless\" onclick=\"addHiddenField(this.form,'");
-        device.print(table.getParentFrame().getEventEpoch());
-        device.print(SConstants.UID_DIVIDER);
-        device.print(SConstants.IEFIX_BUTTONACTION);
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");
+        device.print(value);
         device.print("','");
-        device.print(table.getName());
-        device.print(SConstants.UID_DIVIDER);
-        Utils.write(device, parameter);
+        device.print(Utils.event(component));
         device.print("')\"");
     }
 
@@ -72,7 +66,7 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
         device.print("<a href=\"#\" onclick=\"location.href='");
         Utils.write(device, selectionAddr.toString());
-        device.print("';\">");
+        device.print("';\"");
     }
 
     protected String getResolvedPseudoSelectorMapping(CSSSelector selector) {

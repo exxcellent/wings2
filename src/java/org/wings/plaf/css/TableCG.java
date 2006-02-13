@@ -19,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.RequestURL;
 import org.wings.SCellRendererPane;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SLabel;
@@ -234,17 +233,12 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
             if (showAsFormComponent) {
                 writeButtonStart(device, table, parameter);
-                device.print(" type=\"submit\" name=\"");
-                Utils.write(device, Utils.event(table));
-                device.print(SConstants.UID_DIVIDER);
-                Utils.write(device, parameter);
-                device.print("\" value=\"\">");
             } else {
                 RequestURL selectionAddr = table.getRequestURL();
                 selectionAddr.addParameter(Utils.event(table), parameter);
-
                 writeLinkStart(device, selectionAddr);
             }
+            device.print(">");
         } else
             device.print("<span>");
 
@@ -266,12 +260,16 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
         device.print("<a href=\"");
         Utils.write(device, selectionAddr.toString());
-        device.print("\">");
+        device.print("\"");
     }
 
 
-    protected void writeButtonStart(Device device, STable table, String parameter) throws IOException {
-        device.print("<button class=\"borderless\"");
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
+        device.print(Utils.event(component));
+        device.print("\" value=\"");
+        device.print(value);
+        device.print("\"");
     }
 
 
@@ -444,18 +442,14 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         if (showAsFormComponent) {
             writeButtonStart(device, table, table.getToggleSelectionParameter(row, -1));
-            device.print(" type=\"submit\" name=\"");
-            Utils.write(device, Utils.event(table));
-            device.print(SConstants.UID_DIVIDER);
-            Utils.write(device, table.getToggleSelectionParameter(row, -1));
-            device.print("\" value=\"\">");
+            device.print(">");
             renderSelectionColumnContent(device, row, table, rendererPane);
             device.print("</button>");
         } else {
             RequestURL selectionAddr = table.getRequestURL();
             selectionAddr.addParameter(Utils.event(table), table.getToggleSelectionParameter(row, -1));
-
             writeLinkStart(device, selectionAddr);
+            device.print(">");
             renderSelectionColumnContent(device, row, table, rendererPane);
             device.print("</a>");
         }

@@ -13,7 +13,5 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.wings.plaf.css.MSIEButtonFix;
-
-public class ToggleButtonCG extends ButtonCG implements MSIEButtonFix {
+public class ToggleButtonCG extends ButtonCG {
 }

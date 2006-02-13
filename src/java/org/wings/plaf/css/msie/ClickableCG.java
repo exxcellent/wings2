@@ -15,14 +15,12 @@ package org.wings.plaf.css.msie;
 
 import org.wings.SClickable;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.MSIEButtonFix;
 import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
@@ -33,21 +31,17 @@ import java.io.IOException;
  * @author ole
  *
  */
-public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SParentFrameListener, MSIEButtonFix {
+public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SParentFrameListener {
     private static final String FORMS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.form",
             String.class);
 
 
     protected void writeButtonStart(Device device, SClickable button) throws IOException {
-        device.print("<button  class=\"borderless\" onclick=\"addHiddenField(this.form,'");
-        device.print(button.getParentFrame().getEventEpoch());
-        device.print(SConstants.UID_DIVIDER);
-        device.print(SConstants.IEFIX_BUTTONACTION);
+        device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");
+        device.print(button.getEvent());
         device.print("','");
         device.print(button.getEventTarget().getName());
-        device.print(SConstants.UID_DIVIDER);
-        Utils.write(device, button.getEvent());
         device.print("')\"");
     }
 
@@ -71,5 +65,4 @@ public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SPare
 
     public void parentFrameRemoved(SParentFrameEvent e) {
     }
-
 }

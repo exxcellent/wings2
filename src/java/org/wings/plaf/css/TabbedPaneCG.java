@@ -172,11 +172,6 @@ public class TabbedPaneCG extends AbstractComponentCG {
             
             if (showAsFormComponent) {
                 writeButtonStart(device, tabbedPane, String.valueOf(i));
-                device.print(" type=\"submit\" name=\"")
-                        .print(Utils.event(tabbedPane))
-                        .print("\" value=\"")
-                        .print(i)
-                        .print("\"");
             } else {
                 device.print("<a href=\"")
                         .print(tabbedPane.getRequestURL()
@@ -248,8 +243,12 @@ public class TabbedPaneCG extends AbstractComponentCG {
         device.print("</button>");
     }
 
-    protected void writeButtonStart(Device device, STabbedPane tabbedPane, String value) throws IOException {
-        device.print("<button");
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
+        device.print(Utils.event(component));
+        device.print("\" value=\"");
+        device.print(value);
+        device.print("\"");
     }
 
     public CSSSelector  mapSelector(SComponent addressedComponent, CSSSelector selector) {

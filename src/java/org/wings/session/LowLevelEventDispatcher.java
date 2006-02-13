@@ -19,7 +19,6 @@ import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
-import org.wings.plaf.css.MSIEButtonFix;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -162,56 +161,6 @@ public final class LowLevelEventDispatcher
             values = va;
         }
 
-        /*
-         * This is a workaround for IE's buggy button tag support.
-         * (Might change with IE7)
-         * 
-         * Normal behavior is to send only the pressed button's name value
-         * pair. IE sends all buttons in a form, no matter which one was
-         * pressed. Also, it doesn't send the values, but instead their
-         * innerHtml property.
-         * 
-         * So what we do is when a button is pressed in IE, we attach a hidden
-         * field to the form using javascript, containing info about the
-         * pressed button. This is read here and the event processing is
-         * triggered.
-         * 
-         * Below in the normal event dispatching, we discard all events
-         * originating from Components which are represented by buttons.
-         * These are right now:
-         *   - SButton
-         *   - SToggleButton
-         */
-        if (isIE && name.equals(SConstants.IEFIX_BUTTONACTION)) {
-            String buttonId = values[0];
-            String[] vals = new String[] {""};
-            int pos = buttonId.indexOf(SConstants.UID_DIVIDER);
-            if (pos > -1) {
-                String val = buttonId.substring(pos + 1);
-                buttonId = buttonId.substring(0, pos);
-                vals[0] = val;
-            }
-            List l = (List) listeners.get(buttonId);
-            if (l != null && l.size() > 0) {
-                if (log.isDebugEnabled()) {
-                    log.debug("process special IE workaround event '" + epoch + SConstants.UID_DIVIDER + name + "'");
-                }
-                for (int i = 0; i < l.size(); ++i) {
-                    LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
-                    if (gl.isEnabled()) {
-                        if (checkEpoch(epoch, buttonId, gl)) {
-                            if (log.isDebugEnabled()) {
-                                log.debug("process event '" + buttonId + "' by " +
-                                        gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                        ")");
-                            }
-                            gl.processLowLevelEvent(buttonId,vals);
-                            result = true;
-                        }
-                    }
-                }
-            }
-        }
         List l = (List) listeners.get(name);
         if (l != null && l.size() > 0) {
             log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
@@ -223,19 +172,11 @@ public final class LowLevelEventDispatcher
                             // see comment above, is this a form event?
                             boolean isFormEvent = (gl instanceof SComponent) &&((SComponent)gl).getResidesInForm() && ((SComponent)gl).getShowAsFormComponent(); 
                             if (isFormEvent) {
-                                // was the button represented by a button html tag?
-                                boolean isButton = ((SComponent)gl).getCG() instanceof MSIEButtonFix;
-                                if (isButton) {
-                                    log.debug("circumventing IE bug, not processing event '" + name + "' by " +
-                                            gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                            ")");
-                                } else {
-                                    log.debug("process form event not caused by a button tag'" + name + "' by " +
-                                            gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                            ")");
-                                    gl.processLowLevelEvent(name, values);
-                                    result = true;
-                                }
+                                log.debug("process form event '" + name + "' by " +
+                                        gl.getClass() + "(" + gl.getLowLevelEventId() +
+                                        ")");
+                                gl.processLowLevelEvent(name, values);
+                                result = true;
                             } else {
                                 log.debug("process event '" + name + "' by " +
                                         gl.getClass() + "(" + gl.getLowLevelEventId() +

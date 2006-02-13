@@ -14,7 +14,7 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.MSIEButtonFix;
+import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.SessionManager;
@@ -23,7 +23,7 @@ import org.wings.session.SessionManager;
  * @author ole
  *
  */
-public class PageScrollerCG extends org.wings.plaf.css.PageScrollerCG implements SParentFrameListener, MSIEButtonFix {
+public class PageScrollerCG extends org.wings.plaf.css.PageScrollerCG implements SParentFrameListener {
     private static final String FORMS_JS = (String) SessionManager
     .getSession().getCGManager().getObject("JScripts.form",
             String.class);
@@ -44,17 +44,11 @@ public class PageScrollerCG extends org.wings.plaf.css.PageScrollerCG implements
     public void parentFrameRemoved(SParentFrameEvent e) {
     }
 
-
-    protected void writeButtonStart(Device device, SPageScroller pageScroller, String event) throws IOException {
-        device.print("<button onclick=\"addHiddenField(this.form,'");
-        device.print(pageScroller.getParentFrame().getEventEpoch());
-        device.print(SConstants.UID_DIVIDER);
-        device.print(SConstants.IEFIX_BUTTONACTION);
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");
+        device.print(value);
         device.print("','");
-        device.print(pageScroller.getName());
-        device.print(SConstants.UID_DIVIDER);
-        device.print(event);
+        device.print(Utils.event(component));
         device.print("')\"");
      }
-
 }

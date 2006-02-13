@@ -157,11 +157,6 @@ public class ListCG extends AbstractComponentCG implements
             if (renderSelection) {
                 if (showAsFormComponent) {
                     writeButtonStart(device, list, list.getToggleSelectionParameter(i));
-                    device.print(" name=\"");
-                    Utils.write(device, Utils.event(list));
-                    device.print("\" value=\"");
-                    Utils.write(device, list.getToggleSelectionParameter(i));
-                    device.print("\"");
                 } else {
                     RequestURL selectionAddr = list.getRequestURL();
                     selectionAddr.addParameter(Utils.event(list), list.getToggleSelectionParameter(i));
@@ -195,8 +190,12 @@ public class ListCG extends AbstractComponentCG implements
      * @param device
      * @throws IOException
      */
-    protected void writeButtonStart(Device device, SList list, String value) throws IOException {
-        device.print("<button");
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
+        device.print(Utils.event(component));
+        device.print("\" value=\"");
+        device.print(value);
+        device.print("\"");
     }
 
     /** 

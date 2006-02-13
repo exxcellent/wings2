@@ -241,19 +241,19 @@ public class SForm        extends SContainer        implements LowLevelEventList
      * fired their events.
      */
     public static void fireEvents() {
+        Set armedComponents = (Set) threadArmedComponents.get();
         // use a copy to avoid concurrent modification exceptions if a
         // LowLevelEventListener adds itself to the armedComponents again
-        List armedComponents = new ArrayList((Collection) threadArmedComponents.get());
+        Set armedComponentsCopy = new HashSet(armedComponents);
         try {
-            LowLevelEventListener component;
             // handle form special, form event should be fired last
             // hopefully there is only one form ;-)
-            Iterator iterator = armedComponents.iterator();
+            Iterator iterator = armedComponentsCopy.iterator();
             LinkedList formEvents = null;
             LinkedList buttonEvents = null;
 
             while (iterator.hasNext()) {
-                component = (LowLevelEventListener) iterator.next();
+                LowLevelEventListener component = (LowLevelEventListener) iterator.next();
                 /* fire form events at last
                  * there could be more than one form event (e.g. mozilla posts a
                  * hidden element even if it is in a form outside the posted
@@ -271,6 +271,7 @@ public class SForm        extends SContainer        implements LowLevelEventList
                     buttonEvents.add(component);
                 } else {
                     component.fireIntermediateEvents();
+                    iterator.remove();
                 }
             }
 
@@ -305,13 +306,11 @@ public class SForm        extends SContainer        implements LowLevelEventList
                 }
             }
 
-            iterator = armedComponents.iterator();
+            iterator = armedComponentsCopy.iterator();
             while (iterator.hasNext()) {
-                component = (LowLevelEventListener) iterator.next();
+                LowLevelEventListener component = (LowLevelEventListener) iterator.next();
                 // fire form events at last
-                if (!(component instanceof SForm || component instanceof SAbstractIconTextCompound)) {
-                    component.fireFinalEvents();
-                }
+                component.fireFinalEvents();
             }
 
             if (buttonEvents != null) {

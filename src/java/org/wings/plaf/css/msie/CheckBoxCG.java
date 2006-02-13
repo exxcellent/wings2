@@ -14,9 +14,7 @@
 package org.wings.plaf.css.msie;
 
 import org.wings.RequestURL;
-import org.wings.SAbstractButton;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
@@ -37,13 +35,11 @@ public class CheckBoxCG extends org.wings.plaf.css.CheckBoxCG implements SParent
     /* (non-Javadoc)
      * @see org.wings.plaf.css.ButtonCG#writeButtonStart(org.wings.io.Device, org.wings.SAbstractButton)
      */
-    protected void writeButtonStart(Device device, SAbstractButton comp) throws IOException {
-        device.print("<button class=\"borderless\" onclick=\"addHiddenField(this.form,'");
-        device.print(comp.getParentFrame().getEventEpoch());
-        device.print(SConstants.UID_DIVIDER);
-        device.print(SConstants.IEFIX_BUTTONACTION);
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");
+        device.print(value);
         device.print("','");
-        device.print(comp.getName());
+        device.print(Utils.event(component));
         device.print("')\"");
     }
 
