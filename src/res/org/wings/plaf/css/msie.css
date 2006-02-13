@@ -636,7 +636,7 @@ table.SMenu ul li a
 
 /* show a different cursor on links and buttons which surround tables */
 .SButton {
-cursor:hand;
+    cursor: pointer;
 }
 
 
