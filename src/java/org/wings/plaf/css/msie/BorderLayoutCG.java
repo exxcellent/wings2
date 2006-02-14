@@ -28,6 +28,7 @@ import org.wings.plaf.css.Utils;
 public class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
     protected String decorateLayoutCell(SComponent containedComponent) {
 
+       
         // In CSS2 capable browsers a panel inside a border layout expands to full width
         // In MSIE we have to simulate this esp. the background colour aspect.
         

@@ -50,7 +50,7 @@ public class MenuCG extends org.wings.plaf.css.MenuCG {
             }
         }
 
-        device.print(" onmouseover=\"wpm_openMenu('");
+        device.print(" onmouseover=\"wpm_openMenu(event, '");
         device.print(tMenuItem.getName());
         device.print("_pop','");
         device.print(tMenuItem.getParentMenu().getName()

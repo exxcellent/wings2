@@ -67,7 +67,7 @@ function wpm_findPosX(obj)
     {
         while (obj.offsetParent)
         {
-            curleft += obj.offsetLeft
+            curleft += obj.offsetLeft;
             obj = obj.offsetParent;
         }
     }
@@ -83,7 +83,7 @@ function wpm_findPosY(obj)
     {
         while (obj.offsetParent)
         {
-            curtop += obj.offsetTop
+            curtop += obj.offsetTop;
             obj = obj.offsetParent;
         }
     }
@@ -201,8 +201,8 @@ function wpm_setVisible(element, visible) {
 }
 
 
-function wpm_openMenu(id, parentId) {
-    var event = window.event;
+function wpm_openMenu(event, id, parentId) {
+    var event = getEvent(event);
 
     if (parentULId(event) != parentId) {
         // don't bubble
@@ -227,7 +227,7 @@ function wpm_openMenu(id, parentId) {
 }
 
 function parentULId(event) {
-    var node = event.srcElement;
+    var node = getTarget(event);
     while (node) {
         if (node.tagName == "UL") {
             return node.id;
@@ -237,7 +237,7 @@ function parentULId(event) {
     return "";
 }
 
-function wpm_closeMenu(id, parentId) {
+function wpm_closeMenu(event, id, parentId) {
     var event = window.event;
     if (parentULId(event) != parentId) {
         return;

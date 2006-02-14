@@ -620,6 +620,7 @@ div.SPopupMenu li:hover{
 cursor:pointer;
 }
 
+/*
 div.SMenu li:hover ul ul,
 div.SMenu li li:hover ul ul,
 div.SMenu li li li:hover ul ul,
@@ -639,6 +640,7 @@ div.SPopupMenu li li:hover ul,
 div.SPopupMenu li li li:hover ul,
 div.SPopupMenu li li li li:hover ul
 {display:block;}
+*/
 
 /* End of non-anchor hover selectors */
 

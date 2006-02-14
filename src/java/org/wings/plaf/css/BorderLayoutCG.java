@@ -58,7 +58,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
 
         if (west != null) {
             Utils.printNewline(d, west);
-            d.print("<td");
+            d.print("<td width=\"0%\"");
             Utils.printTableCellAlignment(d, west);
             Utils.optAttribute(d, "style", decorateLayoutCell(west));
             d.print(">");
@@ -68,7 +68,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
 
         if (center != null) {
             Utils.printNewline(d, center);
-            d.print("<td");
+            d.print("<td width=\"100%\"");
             Utils.printTableCellAlignment(d, center);
             Utils.optAttribute(d, "style", decorateLayoutCell(center));
             d.print(">");
@@ -78,7 +78,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
 
         if (east != null) {
             Utils.printNewline(d, east);
-            d.print("<td");
+            d.print("<td width=\"0%\"");
             Utils.printTableCellAlignment(d, east);
             Utils.optAttribute(d, "style", decorateLayoutCell(east));
             d.print(">");

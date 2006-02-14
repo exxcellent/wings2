@@ -51,7 +51,7 @@ public class PopupMenuCG extends org.wings.plaf.css.PopupMenuCG {
     }
 
     protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
-        device.print(" onmouseover=\"wpm_openMenu('");
+        device.print(" onmouseover=\"wpm_openMenu(event, '");
         device.print(((SMenu)menuItem).getName());
         device.print("_pop','");
         device.print(((SMenu)menuItem).getParentMenu().getName());
