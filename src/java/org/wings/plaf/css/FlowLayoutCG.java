@@ -60,14 +60,14 @@ public class FlowLayoutCG extends AbstractLayoutCG {
             alignmentStyle = "";
         }
 
-        if (components.size() > 0) {
+        if (components.size() > 1) {
             /* We need two spacer divs (end/beginning) so that the sourrounding flow layout takes up
                the whole space instead of 0px heigth. See http://www.alistapart.com/articles/practicalcss/. 
                The nbsp's are only needed for firefox... */
             d.print("<div class=\"spacer\"></div>");
 
             for (Iterator componentIterator = components.iterator(); componentIterator.hasNext();) {
-                SComponent component = (SComponent) componentIterator.next();
+                final SComponent component = (SComponent) componentIterator.next();
                 if (component.isVisible()) {
                     Utils.printNewline(d, component);
                     d.print("<div style=\"");
@@ -82,6 +82,31 @@ public class FlowLayoutCG extends AbstractLayoutCG {
 
             /* Second spacer. See upper. */
             d.print("<div class=\"spacer\"></div>");
+        } else if (components.size() == 1) {
+            // Special handling of trivial case
+            //
+            // Why: FlowLayout may be default for many containers.
+            // BUT: The effect is that in MSIE oversized, floating componentns DO NOT lead to a scrollbar
+            //
+            // Try this:
+            //    <TABLE><TR style="background-color:yellow; border:5px solid red" ><TD>
+            //        <DIV style="WIDTH: 100%" align=left >
+            //          <DIV class=spacer></DIV>
+            //      <DIV style="FLOAT: left; border:2px solid blue;">
+            //     <table width="1000" heigth=10 bgcolor="#ff000"><tr>
+            //     <td align=center>1000px widht</td></tr></table>
+            //      </div>
+            //      <DIV class=spacer></DIV>
+            //     </div>
+            //    </td></tr></table>
+            final SComponent component = (SComponent) components.get(0);
+            if (component.isVisible()) {
+                Utils.printNewline(d, component);
+                d.print("<div style=\"").print(createInlineStylesForInsets(insets).toString()).print("\">");
+                component.write(d); // Render contained component
+                Utils.printNewline(d, component);
+                d.print("</div>");
+            }
         }
         Utils.printNewline(d, container);
         d.print("</div>");
