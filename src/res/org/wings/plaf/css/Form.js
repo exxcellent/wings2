@@ -172,4 +172,3 @@ function storeFocus(event) {
     if (div && body)
         setCookie(body.getAttribute("id") + "_focus", "focus_" + div.getAttribute("id"), 1);
 }
-

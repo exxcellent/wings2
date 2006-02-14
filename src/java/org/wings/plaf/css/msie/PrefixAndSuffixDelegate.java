@@ -72,9 +72,6 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
         // Tooltip handling
         writeTooltipMouseOver(device, component);
 
-        // Key bindings
-        handleKeyBindings(component);
-
         // Component popup menu
         writeContextMenu(device, component);
 

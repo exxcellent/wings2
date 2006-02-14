@@ -121,29 +121,6 @@ public final class Utils {
     }
 
     public static void writeFrameEvents(Device d, SFrame frame) throws IOException {
-        // here it goes, global input maps
-        ScriptListener[] scriptListeners = frame.getScriptListeners();
-        // first, delete all of them, they are from the last request...
-        for (int i = 0; i < scriptListeners.length; i++) {
-            ScriptListener scriptListener = scriptListeners[i];
-            if (scriptListener instanceof InputMapScriptListener)
-                frame.removeScriptListener(scriptListener);
-        }
-        // then install the ones we need for the request going on...
-        List inputMapComponents = frame.getGlobalInputMapComponents();
-        if (inputMapComponents != null) {
-            Iterator iter = inputMapComponents.iterator();
-            while (iter.hasNext()) {
-                SComponent comp = (SComponent)iter.next();
-                if (comp.isRecursivelyVisible()) {
-                    InputMap inputMap = comp.getInputMap(SComponent.WHEN_IN_FOCUSED_FRAME);
-                    if (inputMap != null) {
-                        InputMapScriptListener.installToFrame(frame, comp);
-                    }
-                }
-            }
-        }
-
         ScriptListener[] listeners = frame.getScriptListeners();
         Map eventScripts = new HashMap();
         if (listeners.length > 0) {
@@ -168,9 +145,6 @@ public final class Utils {
                 eventScripts.put(event, eventScriptCode);
             }
         }
-
-
-
 
         Iterator it = eventScripts.keySet().iterator();
         while (it.hasNext()) {

@@ -89,9 +89,6 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
         // Tooltip handling
         writeTooltipMouseOver(device, component);
 
-        // Key bindings
-        handleKeyBindings(component);
-
         // Component popup menu
         writeContextMenu(device, component);
 
@@ -129,28 +126,6 @@ public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDe
             device.print("');\" onMouseDown=\"return wpm_menuPopup(event, '");
             device.print(popupId);
             device.print("');\"");
-        }
-    }
-
-    /**
-     * Handle key binding attached to component. Common handler for MSIE and Gecko PLAF.
-     */
-    protected static void handleKeyBindings(SComponent component) {
-        InputMap inputMap = component.getInputMap();
-        if (inputMap != null && inputMap.size() > 0) {
-            if (!(inputMap instanceof VersionedInputMap)) {
-                log.debug("inputMap = " + inputMap);
-                inputMap = new VersionedInputMap(inputMap);
-                component.setInputMap(inputMap);
-            }
-
-            final VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
-            final Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
-            if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
-                log.debug("inputMapVersion = " + inputMapVersion);
-                InputMapScriptListener.install(component);
-                component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
-            }
         }
     }
 

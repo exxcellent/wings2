@@ -37,6 +37,7 @@ import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
 import org.wings.style.DynamicStyleSheetResource;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -255,6 +256,30 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     public void componentChanged(SComponent c) {
+        SFrame frame = (SFrame)c;
+
+        // here it goes, global input maps
+        ScriptListener[] scriptListeners = frame.getScriptListeners();
+        // first, delete all of them, they are from the last request...
+        for (int i = 0; i < scriptListeners.length; i++) {
+            ScriptListener scriptListener = scriptListeners[i];
+            if (scriptListener instanceof InputMapScriptListener)
+                frame.removeScriptListener(scriptListener);
+        }
+        // then install the ones we need for the request going on...
+        List inputMapComponents = frame.getGlobalInputMapComponents();
+        if (inputMapComponents != null) {
+            Iterator iter = inputMapComponents.iterator();
+            while (iter.hasNext()) {
+                SComponent comp = (SComponent)iter.next();
+                if (comp.isRecursivelyVisible()) {
+                    InputMap inputMap = comp.getInputMap(SComponent.WHEN_IN_FOCUSED_FRAME);
+                    if (inputMap != null) {
+                        InputMapScriptListener.installToFrame(frame, comp);
+                    }
+                }
+            }
+        }
     }
 
     public void write(final Device device, final SComponent pComp)

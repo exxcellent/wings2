@@ -22,6 +22,7 @@ import org.wings.plaf.ComponentCG;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -62,7 +63,21 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     public void uninstallCG(SComponent component) {
     }
 
-    public void componentChanged(SComponent c) {
+    public void componentChanged(SComponent component) {
+        InputMap inputMap = component.getInputMap();
+        if (inputMap != null && inputMap.size() > 0) {
+            if (!(inputMap instanceof VersionedInputMap)) {
+                inputMap = new VersionedInputMap(inputMap);
+                component.setInputMap(inputMap);
+            }
+
+            final VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
+            final Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
+            if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
+                InputMapScriptListener.install(component);
+                component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
+            }
+        }
     }
 
     public void write(Device device, SComponent component) throws IOException {
