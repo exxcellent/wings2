@@ -813,9 +813,8 @@ public class STable extends SComponent
         editors.clear();
 
         // Objects
-        STextField textField = new STextField();
-        setDefaultEditor(Object.class, new SDefaultCellEditor(textField));
-        setDefaultEditor(Number.class, new SDefaultCellEditor(textField));
+        setDefaultEditor(Object.class, new SDefaultCellEditor(new STextField()));
+        setDefaultEditor(Number.class, new SDefaultCellEditor(new STextField()));
 
         // Numbers
         //STextField rightAlignedTextField = new STextField();
