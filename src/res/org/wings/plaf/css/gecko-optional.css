@@ -45,8 +45,8 @@ div.STable > table > tbody > tr[odd="true"] {
     background-color: #e5e5e5;
 }
 
-div.STable > table > tbody > tr[selected="true"] {
-    background-color: #ffbbbb !important;
+div.STable > table > tbody > tr[selected="true"] td {
+    background-color: #ffbbbb;
 }
 
 /* ----------- DISABLED COMPONENTS OPACITY = 0.7*/
