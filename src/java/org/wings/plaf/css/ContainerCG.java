@@ -16,12 +16,22 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SContainer;
+import org.wings.style.CSSSelector;
 import org.wings.io.Device;
 
-public class ContainerCG extends AbstractComponentCG implements
+public final class ContainerCG extends AbstractComponentCG implements
         org.wings.plaf.PanelCG {
+
     public void writeContent(final Device device, final SComponent component)
             throws java.io.IOException {
         Utils.renderContainer(device, (SContainer) component);
+    }
+
+    public CSSSelector mapSelector(SComponent addressedComponent, CSSSelector selector) {
+        if (SContainer.SELECTOR_CONTENT.equals(selector)) {
+            return addressedComponent.getComponentCssSelector();
+        } else {
+            return super.mapSelector(addressedComponent, selector);
+        }
     }
 }
