@@ -216,10 +216,12 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print(icon.getIconTitle());
                 device.print("\" style=\"margin-left:0.2em;\"/>");
             }
-            device.print("&nbsp;");
 
-            Utils.write(device, title);
-            device.print("&nbsp;");
+            if (title != null && title.length() > 0) {
+                device.print("&nbsp;");
+                Utils.write(device, title);
+                device.print("&nbsp;");
+            }
 
             if (icon != null && tabbedPane.getTabPlacement() == SConstants.RIGHT) {
                 device.print("<img");
