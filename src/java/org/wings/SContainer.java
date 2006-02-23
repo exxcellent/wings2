@@ -139,25 +139,6 @@ public class SContainer extends SComponent {
     }
 
     /**
-     * Set the background image.
-     *
-     * @param icon the SIcon representing the background image.
-     */
-    public void setBackgroundImage(SIcon icon) {
-        backgroundImage = icon;
-        setAttribute(SELECTOR_CONTENT, CSSProperty.BACKGROUND_IMAGE, icon);
-    }
-
-    /**
-     * return the background image for this frame.
-     *
-     * @return the background image as SIcon.
-     */
-    public SIcon getBackgroundImage() {
-        return backgroundImage;
-    }
-
-    /**
      * Returns the current layout
      *
      * @return current layout
