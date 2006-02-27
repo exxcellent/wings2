@@ -40,7 +40,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
 
         Utils.printNewline(d, container);
         d.print("<div");
-        Utils.printDivHorizontalAlignment(d, alignment);
+        Utils.printDivHorizontalAlignment(d, alignment != SConstants.NO_ALIGN ? alignment : SConstants.LEFT_ALIGN);
         if (alignment == SConstants.CENTER) {
             // Cheat -- margin left/right to simulate center float. Will not wrap
             d.print(" style=\"display:table; margin-left:auto; margin-right:auto;\"");

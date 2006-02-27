@@ -13,6 +13,8 @@
  */
 package org.wings.plaf.css;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.Renderable;
 import org.wings.SComponent;
@@ -25,9 +27,6 @@ import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.script.ScriptListener;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +34,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -196,9 +194,11 @@ public final class Utils {
     /**
      * Horizontal alignment for TABLE cells. i.e. <code>align="center"</code>
      */
-    private static void printTableHorizontalAlignment(Device d, int align)
+    public static void printTableHorizontalAlignment(final Device d, final int align)
             throws IOException {
-        if (align == SConstants.NO_ALIGN || align == SConstants.LEFT) {
+        if (align == SConstants.NO_ALIGN) {
+            // d.print(" align=\"left\"");
+        } else if (align == SConstants.LEFT) {
             d.print(" align=\"left\"");
         } else if (align == SConstants.CENTER) {
             d.print(" align=\"center\"");
@@ -212,7 +212,7 @@ public final class Utils {
     /**
      * Vertical alignment for TABLE cells. i.e. <code>valign="top"</code>
      */
-    private static void printTableVerticalAlignment(Device d, int align)
+    public static void printTableVerticalAlignment(Device d, int align)
             throws IOException {
         if (align == SConstants.NO_ALIGN || align == SConstants.CENTER) {
         } else if (align == SConstants.TOP) {

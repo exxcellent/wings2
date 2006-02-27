@@ -14,11 +14,12 @@
 package org.wings.plaf.css.msie;
 
 import org.wings.LowLevelEventListener;
+import org.wings.SCardLayout;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SLayoutManager;
-import org.wings.SFlowLayout;
+import org.wings.SNullLayout;
+import org.wings.STemplateLayout;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
@@ -41,9 +42,11 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
     public void writePrefix(final Device device, final SComponent component) throws IOException {
         SDimension prefSize = component.getPreferredSize();
 
+        // --- This is a BAD idea: It streches compoennts which shouldnt be streched.
+        // --- Positioning should be always a task of the surrounding layout manager
         // For centering or right-alignment we need we surrounding helper table to be stretched to full width in some cases.
-        if (componentAlignmentRequiresStretchedWrapper(component))
-            prefSize = SDimension.FULLWIDTH;
+        //if (componentAlignmentRequiresStretchedWrapper(component))
+        //    prefSize = SDimension.FULLWIDTH;
 
         StringBuffer inlineStyles = Utils.generateCSSInlinePreferredSize(prefSize);
         Utils.appendCSSComponentInlineColorStyle(inlineStyles, component);
@@ -67,6 +70,11 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
             device.print(" eid=\"")
                     .print(lowLevelEventListener.getEncodedLowLevelEventId()).print("\"");
+        }
+
+        // Workaround for components i.e. inside root container
+        if (handlingLayoutManagerDoesNotSupportAlignment(component)) {
+            Utils.printTableHorizontalAlignment(device, component.getHorizontalAlignment());
         }
 
         // Tooltip handling
@@ -104,12 +112,12 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
     }
 
 
-    /**
+    /* *
      * If a component should be centered/right-aligned we need its surrounding cell to be stretched
      * to full width, so that we can render this alignment within the wrapper of the component itself.
      *
      * But for some surrounding layouts we can't to this not to break the functionality.
-     */
+     * /
     private boolean componentAlignmentRequiresStretchedWrapper(final SComponent component) {
         final SDimension prefSize = component.getPreferredSize();
         final boolean isNotLeftAligned = (component.getHorizontalAlignment() == SConstants.CENTER ||
@@ -117,6 +125,21 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
         final SLayoutManager containingManager = component.getParent() != null ? component.getParent().getLayout() : null;
 
         return prefSize == null && isNotLeftAligned && !(containingManager instanceof SFlowLayout);
+    } */
+
+    /* Componentns should be (horizontally) aligned by the surrounding layout manager.
+       Some layout managers will not be able to do this. */
+    private boolean handlingLayoutManagerDoesNotSupportAlignment(final SComponent component) {
+        if (component == null || component.getParent() == null)
+            return true;
+
+        boolean alignmentIncapable = false;
+        final SLayoutManager layoutManager = component.getParent().getLayout();
+        alignmentIncapable |= layoutManager == null;
+        alignmentIncapable |= layoutManager instanceof STemplateLayout;
+        alignmentIncapable |= layoutManager instanceof SNullLayout;
+        alignmentIncapable |= layoutManager instanceof SCardLayout;
+        return alignmentIncapable;
     }
 
 }
