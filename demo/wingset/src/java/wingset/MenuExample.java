@@ -14,11 +14,13 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.border.SEmptyBorder;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 
 
 /**
@@ -47,12 +49,12 @@ public class MenuExample extends WingSetPane {
         SPanel formPanel = new SPanel();
         formPanel.setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
         formPanel.setPreferredSize(SDimension.FULLWIDTH);
-        formPanel.add(new SLabel("<html>combobox:"));
+        formPanel.add(new SLabel("Combobox:"));
         formPanel.add(new SComboBox(new DefaultComboBoxModel(ListExample.createElements())));
 
-        formPanel.add(new SLabel("<html><br>list:"));
+        formPanel.add(new SLabel(" \nList:"));
 
-        int tColCount = 3;
+        int tColCount = 2;
         SPanel tListsPanel = new SPanel(new SGridLayout(tColCount));
         for (int i = 0; i < tColCount; i++) {
             SList list = new SList(ListExample.createListModel());
@@ -61,20 +63,24 @@ public class MenuExample extends WingSetPane {
         }
 
         formPanel.add(tListsPanel, "List");
-        formPanel.add(new SLabel("<html><br>textfield(stay visible):"));
+        formPanel.add(new SLabel(" \ntextfield(stay visible):"));
         formPanel.add(new STextField("wingS is great"));
-        formPanel.add(new SLabel("<html><br>textarea(stay visible):"));
+        formPanel.add(new SLabel(" \ntextarea(stay visible):"));
         formPanel.add(new STextArea("wingS is a great framework for implementing complex web applications"));
 
         SList list2 = new SList(ListExample.createListModel());
         list2.setVisibleRowCount(7);
         formPanel.add(list2, "List2");
 
-        SPanel messagePanel = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        messagePanel.add(new SLabel("<html><br>Form components are overlayed or hidden (in IE). Selected Menu: "));
-        selectionLabel = new SLabel("nothing selected");
+        SPanel messagePanel = new SPanel(new SGridLayout(1));
+        messagePanel.add(new SLabel("Form components are overlayed or hidden (IE bug).\n\nSelected Menu: "));
+        selectionLabel = new SLabel("<No menue selected yet>");
+        selectionLabel.setFont(new SFont(SFont.BOLD));
+        selectionLabel.setForeground(Color.RED);
         messagePanel.add(selectionLabel, "SelectionLabel");
-        messagePanel.add(new SLabel("<html><br>Try the menu accelerator keys. Ctrl-A to Ctrl-Z call menuitem actions (doesn't work on Konqueror)"));
+        messagePanel.add(new SLabel("\nTry the menu accelerator keys." +
+                "\nCtrl-A to Ctrl-Z call menuitem actions (doesn't work on Konqueror)"));
+        messagePanel.setBorder(new SEmptyBorder(0,20,0,0));
 
         SPanel mainPanel = new SPanel(new SBoxLayout(SBoxLayout.HORIZONTAL));
         mainPanel.add(formPanel);
@@ -156,19 +162,34 @@ public class MenuExample extends WingSetPane {
             }
         }
 
+        // Test right aligned menu
+        SMenu helpMenu = new SMenu("Help");
+        helpMenu.setHorizontalAlignment(RIGHT_ALIGN);
+        SMenuItem helpMenuItem = new SMenuItem("Help on using WingSet");
+        helpMenuItem.addActionListener(menuItemListener);
+        helpMenu.add(helpMenuItem);
+        menuBar.add(helpMenu);
+
+        SMenu aboutMenu = new SMenu("About");
+        aboutMenu.setHorizontalAlignment(RIGHT_ALIGN);
+        SMenuItem aboutMenuItem = new SMenuItem("About WingSet");
+        aboutMenuItem.addActionListener(menuItemListener);
+        aboutMenu.add(aboutMenuItem);
+        menuBar.add(aboutMenu);
+
         return menuBar;
     }
 
     class MenuControls extends ComponentControls {
         public MenuControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
+            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component ");
             showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     //menu.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
             });
 
-            final SCheckBox disableSomeMenus = new SCheckBox("<html>Disable some Menus&nbsp;&nbsp;&nbsp;");
+            final SCheckBox disableSomeMenus = new SCheckBox("Disable some Menus ");
             disableSomeMenus.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     setMenuItemsEnabled(!disableSomeMenus.isSelected());
