@@ -22,8 +22,8 @@ import java.util.ArrayList;
 /**
  * Contains SMenu objects to construct a menu.
  * <p/>
- * When the user selects a SMenu
- * object, its associated {@link org.wings.SMenu} is displayed, allowing the
+ * When the user selects a SMenu object, its
+ * associated {@link org.wings.SMenu} is displayed, allowing the
  * user to select one of the {@link org.wings.SMenuItem}s on it.
  * <p/>
  * Component are rendered in the order of the container. If a component is right
@@ -34,7 +34,6 @@ import java.util.ArrayList;
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @see SMenu
- * @see SMenuItem
  */
 public class SMenuBar extends SContainer {
     /*
@@ -80,7 +79,7 @@ public class SMenuBar extends SContainer {
      *
      * @param c the SMenu component to add
      */
-    public SMenuItem add(SMenuItem c) {
+    public SMenuItem add(SMenu c) {
         super.add(c);
         return c;
     }
@@ -92,10 +91,10 @@ public class SMenuBar extends SContainer {
      *              0 is the first position
      * @return the SMenu at that position
      */
-    public SMenuItem getMenuItem(int index) {
+    public SMenu getMenu(int index) {
         SComponent c = (SComponent) super.getComponent(index);
-        if (c instanceof SMenuItem)
-            return (SMenuItem) c;
+        if (c instanceof SMenu)
+            return (SMenu) c;
         return null;
     }
 
