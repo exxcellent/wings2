@@ -54,7 +54,7 @@ public class SFlowLayout
      */
     public SFlowLayout() {
         components = new ArrayList(2);
-        setAlignment(SConstants.LEFT_ALIGN);
+        setAlignment(SConstants.CENTER_ALIGN);
     }
 
     /**
