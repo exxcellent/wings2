@@ -16,6 +16,7 @@ BODY {
     font-family: sans-serif;
     font-style: normal;
     font-size: 0.8em;
+    height: 100%;
 }
 
 /* Links: No visited colour, no underline  */

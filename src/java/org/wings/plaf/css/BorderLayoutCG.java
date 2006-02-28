@@ -33,9 +33,8 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
         final Insets layoutInsets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
-        int cols = 0;
+        int cols = 1;
         if (west != null) cols++;
-        if (center != null) cols++;
         if (east != null) cols++;
 
         printLayouterTableHeader(d, "SBorderLayout", layoutInsets, layout.getBorder(),layout);
@@ -74,6 +73,8 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             d.print(">");
             center.write(d);
             d.print("</td>");
+        } else {
+            d.print("<td width=\"100%\"></td>");
         }
 
         if (east != null) {
