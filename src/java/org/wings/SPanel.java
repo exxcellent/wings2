@@ -28,6 +28,7 @@ public class SPanel
      * Creates a panel with the default layout manager.
      */
     public SPanel() {
+        super(new org.wings.SFlowLayout());
     }
 
     /**
