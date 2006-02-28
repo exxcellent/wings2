@@ -236,7 +236,8 @@ public class SDialog extends SForm {
         SForm.addArmedComponent(this); // trigger later invocation of fire*()
     }
 
-    public void fireFinalEvents() {
+    // refer to http://jira.j-wings.org/browse/WGS-138
+    protected void fireKeyEvents() {
     }
 
     public void setCG(DialogCG cg) {
