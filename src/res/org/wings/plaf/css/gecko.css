@@ -23,15 +23,6 @@ td.SLayout {
     border: none;
 }
 
-HTML {
-    height: 100%;
-}
-
-div.SPanel_Box {
-    height: 100%;
-    width:  100%;
-}
-
 /* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
    Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
 img.spacer {
@@ -524,7 +515,6 @@ div.SMenuBar div.spacer {
 div.SMenuBar div.SMenu,
 div.SMenuBar div.SMenu_Disabled {
     float:left;
-    clear:right;
     border-style: solid;
     border-width: 1px;
     border-color: #eee #999 #999 #eee;

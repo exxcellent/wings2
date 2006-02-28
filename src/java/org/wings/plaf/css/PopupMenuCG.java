@@ -34,7 +34,7 @@ import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 import java.io.IOException;
 
-public class PopupMenuCG extends AbstractComponentCG implements
+public final class PopupMenuCG extends AbstractComponentCG implements
         org.wings.plaf.MenuBarCG, SParentFrameListener {
     private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 
@@ -120,20 +120,37 @@ public class PopupMenuCG extends AbstractComponentCG implements
         device.print("\n");
     }
 
-    protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
-        //default: do nothing
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.PopupMenuCG#writeListAttributes(org.wings.io.Device, org.wings.SPopupMenu)
+     */
+    protected void writeListAttributes(final Device device, SPopupMenu menu) throws IOException {
+        // calculate max length of children texts for sizing of layer
+        int maxLength = 0;
+        for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+            if (!(menu.getMenuComponent(i) instanceof SMenuItem))
+                continue;
+            String text = ((SMenuItem)menu.getMenuComponent(i)).getText();
+            if (text != null && text.length() > maxLength) {
+                maxLength = text.length();
+                if (menu.getMenuComponent(i) instanceof SMenu) {
+                        maxLength = maxLength + 2; //graphics
+                }
+            }
+        }
+        device.print(" style=\"width:");
+        String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
+        device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
+        device.print("em;\"");
     }
 
-    /** 
-     * Convenience method to keep differences between default and msie
-     * implementations small
-     * @param device
-     * @param menu
-     * @throws IOException
-     */
-    protected void writeListAttributes(Device device, SPopupMenu menu) throws IOException {
-        // do nothing...
+    protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
+        device.print(" onmouseover=\"wpm_openMenu(event, '");
+        device.print(((SMenu)menuItem).getName());
+        device.print("_pop','");
+        device.print(((SMenu)menuItem).getParentMenu().getName());
+        device.print("_pop');\"");
     }
+
 
     protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
             throws IOException {
@@ -180,4 +197,5 @@ public class PopupMenuCG extends AbstractComponentCG implements
 
     public void parentFrameRemoved(SParentFrameEvent e) {
     }
+
 }

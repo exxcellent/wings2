@@ -63,6 +63,7 @@ function wpm_getMenuPosition(event) {
 function wpm_findPosX(obj)
 {
     var curleft = 0;
+    var origobj = obj;
     if (obj.offsetParent)
     {
         while (obj.offsetParent)
@@ -73,6 +74,13 @@ function wpm_findPosX(obj)
     }
     else if (obj.x)
         curleft += obj.x;
+
+    /* Workaround for right aligned menues:
+       Return the RIGHT X of the Menu as a negative number, not the left X */
+    if (wu_framewidth() < curleft + 200) {
+        curleft = - (curleft + origobj.offsetWidth);
+    }
+
     return curleft;
 }
 
@@ -173,6 +181,12 @@ function wpm_showMenu(menuId, coord, eventCoord) {
     elStyle.left = coord.x + 'px';
     elStyle.display = 'block';
     elStyle.zIndex = 100000;
+
+    /* Workaround for right aligned menues: Refer to wpm_findPosX(obj) */
+    if (coord.x < 0) {
+    	elStyle.left = (-coord.x - document.getElementById(menuId).offsetWidth) + 'px';
+    }
+
     wpm_openMenus[wpm_openMenus.length] = menuId;
     wpm_toggleFormElements(wpm_buildBoundsArray(wpm_openMenus));
     wpm_menuCalled = 1;

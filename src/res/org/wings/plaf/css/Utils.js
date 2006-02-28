@@ -46,3 +46,20 @@ function wu_openlink(target, url){
         }
     }
 }
+
+/* Utility method to determine available inner space of the show window on
+   all browsers. Returns a numeric value of available pixel width */  
+function wu_framewidth() {
+    if (self.innerHeight) // all except Explorer
+    {
+    	return self.innerWidth;
+    } else if (document.documentElement && document.documentElement.clientHeight)
+	    // Explorer 6 Strict Mode
+    {
+	    return document.documentElement.clientWidth;
+    } else if (document.body) // other Explorers
+    {
+	    return document.body.clientWidth;
+    } else
+        return -1;
+}

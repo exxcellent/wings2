@@ -482,7 +482,6 @@ table.SMenuBar{
 table.SMenuBar div.SMenu,
 table.SMenuBar div.SMenu_Disabled {
     float:left;
-    clear:right;
     border-style: solid;
     border-width: 1px;
     border-color: #eee #999 #999 #eee;
@@ -492,8 +491,14 @@ table.SMenuBar div.SMenu_Disabled {
     margin:0;
 }
 
-table.SMenuBar div.SMenu{
+/* Avoid right-align of text for right-aligned menues. */
+li.SMenuItem, li.SMenu {
+   text-align: left;
+}
+
+table.SMenuBar div.SMenu {
     color: #004;
+    cursor: pointer;
 }
 
 table.SMenuBar div.SMenu_Disabled {

@@ -14,11 +14,13 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
+import org.wings.RequestURL;
+import org.wings.SAbstractButton;
+import org.wings.SComponent;
+import org.wings.SMenu;
+import org.wings.SMenuItem;
 import org.wings.io.Device;
 import org.wings.session.SessionManager;
-import org.wings.util.KeystrokeUtil;
-
 import java.io.IOException;
 
 public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
@@ -89,52 +91,66 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         device.print("\n");
     }
 
-    /**
-     * prints Javascript event handlers if necessary. atm only necessary for ie
-     * @param device the device to print on
-     * @param menuItem the menuItem to print the handlers for
-     * @throws IOException
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.MenuCG#printScriptHandlers(org.wings.io.Device, org.wings.SComponent)
      */
-    protected void printScriptHandlers(final Device device, SComponent menuItem) throws IOException {
-    }
-
-    /** 
-     * Convenience method to keep differences between default and msie
-     * implementations small
-     * @param device
-     * @param menu
-     * @throws IOException
-     */
-    protected void writeListAttributes(final Device device, SMenu menu) throws IOException {
-        if (menu.getParentMenu() != null) {
-            // calculate max length of children texts for sizing of layer
-            int maxLength = 0;
-            for (int i = 0; i < menu.getMenuComponentCount(); i++) {
-                if (!(menu.getMenuComponent(i) instanceof SMenuItem))
-                    continue;
-                SMenuItem item = (SMenuItem)menu.getMenuComponent(i);
-                StringBuffer text = new StringBuffer(item.getText());
-                if (item.getAccelerator() != null) {
-                    text.append(" ");
-                    text.append(KeystrokeUtil.keyStroke2String(item.getAccelerator()));
-                }
-                
-                if (text != null && text.length() > maxLength) {
-                    maxLength = text.length();
-                    if (menu.getMenuComponent(i) instanceof SMenu) {
-                            maxLength = maxLength + 2; //graphics
+    protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
+        // print the script handlers, if it is a SMenu or if the parent has items and menus as childs
+        SMenuItem tMenuItem = (SMenuItem) menuItem;
+        if (!(tMenuItem instanceof SMenu)) {
+            if (tMenuItem.getParentMenu() != null && tMenuItem.getParentMenu() instanceof SMenu) {
+                SMenu tParentMenu = (SMenu) tMenuItem.getParentMenu();
+                boolean tHasMenuChild = false;
+                boolean tHasMenuItemChild = false;
+                for (int tChildIndex = 0; tChildIndex < tParentMenu.getMenuComponentCount(); tChildIndex++) {
+                    SComponent tChild = tParentMenu.getChild(tChildIndex);
+                    if (tChild instanceof SMenu) {
+                        tHasMenuChild = true;
+                    } else {
+                        tHasMenuItemChild = true;
                     }
                 }
+
+                // only print, if has both types
+                if (!(tHasMenuChild && tHasMenuItemChild)) {
+                    return;
+                }
             }
-            device.print(" style=\"width:");
-            String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
-            device.print(stringLength.substring(0,stringLength.lastIndexOf('.')+2));
-            device.print("em;\"");
-        } else {
-            device.print(" id=\"");
-            device.print(menu.getName());
-            device.print("_pop\"");
         }
+
+        device.print(" onmouseover=\"wpm_openMenu(event, '");
+        device.print(tMenuItem.getName());
+        device.print("_pop','");
+        device.print(tMenuItem.getParentMenu().getName()
+
+        );
+        device.print("_pop');\"");
+    }
+
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.MenuCG#writeListAttributes(org.wings.io.Device, org.wings.SMenu)
+     */
+    protected void writeListAttributes(Device device, SMenu menu) throws IOException {
+        // calculate max length of children texts for sizing of layer
+        int maxLength = 0;
+        for (int i = 0; i < menu.getMenuComponentCount(); i++) {
+            if (!(menu.getMenuComponent(i) instanceof SMenuItem))
+                continue;
+            String text = ((SMenuItem) menu.getMenuComponent(i)).getText();
+            if (text != null && text.length() > maxLength) {
+                maxLength = text.length();
+                if (menu.getMenuComponent(i) instanceof SMenu) {
+                    maxLength = maxLength + 2; //graphics
+                }
+            }
+        }
+        device.print(" style=\"width:");
+        String stringLength = String.valueOf(maxLength * menu.getWidthScaleFactor());
+        device.print(stringLength.substring(0, stringLength.lastIndexOf('.') + 2));
+        device.print("em;\"");
+        device.print(" id=\"");
+        device.print(menu.getName());
+        device.print("_pop\"");
     }
 
     protected void writeItem(final Device device, SMenuItem menu)
