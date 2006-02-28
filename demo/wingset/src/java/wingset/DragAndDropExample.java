@@ -25,6 +25,7 @@ import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SURLIcon;
+import org.wings.SConstants;
 import org.wings.border.SEmptyBorder;
 import org.wings.dnd.DragSource;
 import org.wings.dnd.DropTarget;
@@ -32,7 +33,6 @@ import org.wings.event.SComponentDropListener;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -90,8 +90,9 @@ public class DragAndDropExample extends WingSetPane {
         final SPanel puzzleContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
         final SPanel controlContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
         container.setLayout(new SBoxLayout(SBoxLayout.HORIZONTAL));
-        controlContainer.setPreferredSize(new SDimension("150", null));
+        controlContainer.setPreferredSize(new SDimension(150, SDimension.AUTO_INT));
         controlContainer.setBorder(new SEmptyBorder(0, 20,0,0));
+        controlContainer.setVerticalAlignment(SConstants.CENTER);
 
         // control components
         final SButton resetButton = new SButton("Reset");
