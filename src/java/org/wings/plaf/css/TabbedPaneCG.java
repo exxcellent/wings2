@@ -87,7 +87,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("<tr><th placement=\"left\"");
             else if (placement == SConstants.RIGHT || placement == SConstants.BOTTOM) {
                 device.print("<tr><td");
-                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent());
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
             }
     
             if (childSelectorWorkaround) {
@@ -107,10 +107,10 @@ public class TabbedPaneCG extends AbstractComponentCG {
     
             if (placement == SConstants.TOP) {
                 device.print("</th></tr><tr><td");
-                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent());
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
             } else if (placement == SConstants.LEFT) {
                 device.print("</th><td");
-                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent());
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
             } else if (placement == SConstants.RIGHT)
                 device.print("</td><th placement=\"right\"");
             else if (placement == SConstants.BOTTOM)

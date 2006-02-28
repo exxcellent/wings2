@@ -194,7 +194,7 @@ public final class Utils {
     /**
      * Horizontal alignment for TABLE cells. i.e. <code>align="center"</code>
      */
-    public static void printTableHorizontalAlignment(final Device d, final int align)
+    private static void printTableHorizontalAlignment(final Device d, final int align)
             throws IOException {
         if (align == SConstants.NO_ALIGN) {
             // d.print(" align=\"left\"");
@@ -212,9 +212,12 @@ public final class Utils {
     /**
      * Vertical alignment for TABLE cells. i.e. <code>valign="top"</code>
      */
-    public static void printTableVerticalAlignment(Device d, int align)
+    private static void printTableVerticalAlignment(Device d, int align)
             throws IOException {
-        if (align == SConstants.NO_ALIGN || align == SConstants.CENTER) {
+        if (align == SConstants.NO_ALIGN) {
+            //d.print(" valign=\"center\"");
+        } else if (align == SConstants.CENTER) {
+            d.print(" valign=\"center\"");
         } else if (align == SConstants.TOP) {
             d.print(" valign=\"top\"");
         } else if (align == SConstants.BOTTOM) {
@@ -224,11 +227,20 @@ public final class Utils {
         }
     }
 
-    public static void printTableCellAlignment(Device d, SComponent c)
+    /**
+     * Renders the alignment commands for a table cell (horzontal and vertical).
+     * To ensure a consistent behaviour you have to pass the default alignment applied for <code>SConstants.NO_ALIGN</code>.
+     * @param defaultHorizontal default horizontal alignment to use is not aligned
+     * @param defaultVertical default vertical alignment to use if component is not aligned
+     */
+    public static void printTableCellAlignment(final Device d, final SComponent c,
+                                               final int defaultVertical, final int defaultHorizontal)
             throws IOException {
         if (c != null) {
-            printTableHorizontalAlignment(d, c.getHorizontalAlignment());
-            printTableVerticalAlignment(d, c.getVerticalAlignment());
+            final int horizontalAlignment = c.getHorizontalAlignment();
+            final int verticalAlignment = c.getVerticalAlignment();
+            printTableHorizontalAlignment(d, horizontalAlignment != SConstants.NO_ALIGN ? horizontalAlignment : defaultHorizontal);
+            printTableVerticalAlignment(d, verticalAlignment != SConstants.NO_ALIGN ? verticalAlignment : defaultVertical);
         }
     }
 

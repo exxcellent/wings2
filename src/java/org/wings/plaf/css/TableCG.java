@@ -24,6 +24,7 @@ import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SListSelectionModel;
 import org.wings.STable;
+import org.wings.SConstants;
 import org.wings.io.Device;
 import org.wings.io.StringBufferDevice;
 import org.wings.plaf.CGManager;
@@ -202,7 +203,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             return;
         }
 
-        Utils.printTableCellAlignment(device, component);
+        Utils.printTableCellAlignment(device, component, SConstants.TOP, SConstants.LEFT);
         device.print(">");
 
         // Collect inline dynamic styles of cell renderer component:
@@ -281,7 +282,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         final SComponent comp = table.prepareHeaderRenderer(c);
 
         device.print("<th");
-        Utils.printTableCellAlignment(device, comp);
+        Utils.printTableCellAlignment(device, comp, SConstants.CENTER, SConstants.CENTER);
         rendererPane.writeComponent(device, comp, table);
         device.print("</th>");
         Utils.printNewline(device, comp);

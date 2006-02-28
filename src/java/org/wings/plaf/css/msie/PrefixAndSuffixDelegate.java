@@ -20,6 +20,7 @@ import org.wings.SDimension;
 import org.wings.SLayoutManager;
 import org.wings.SNullLayout;
 import org.wings.STemplateLayout;
+import org.wings.SConstants;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
@@ -74,7 +75,7 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
 
         // Workaround for components i.e. inside root container
         if (handlingLayoutManagerDoesNotSupportAlignment(component)) {
-            Utils.printTableHorizontalAlignment(device, component.getHorizontalAlignment());
+            Utils.printTableCellAlignment(device, component, SConstants.TOP, SConstants.LEFT);
         }
 
         // Tooltip handling

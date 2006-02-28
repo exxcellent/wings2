@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 import org.wings.SBorderLayout;
 import org.wings.SComponent;
 import org.wings.SLayoutManager;
+import org.wings.SConstants;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             d.print("<tr style=\"height: 0%\">");
             Utils.printNewline(d, north);
             d.print("<td colspan=\"").print(cols).print("\"");
-            Utils.printTableCellAlignment(d, north);
+            Utils.printTableCellAlignment(d, north, SConstants.CENTER, SConstants.CENTER);
             Utils.optAttribute(d, "style", decorateLayoutCell(north));
             d.print(">");
             north.write(d);
@@ -58,7 +59,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         if (west != null) {
             Utils.printNewline(d, west);
             d.print("<td width=\"0%\"");
-            Utils.printTableCellAlignment(d, west);
+            Utils.printTableCellAlignment(d, west, SConstants.CENTER, SConstants.CENTER);
             Utils.optAttribute(d, "style", decorateLayoutCell(west));
             d.print(">");
             west.write(d);
@@ -68,7 +69,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         if (center != null) {
             Utils.printNewline(d, center);
             d.print("<td width=\"100%\"");
-            Utils.printTableCellAlignment(d, center);
+            Utils.printTableCellAlignment(d, center, SConstants.CENTER, SConstants.CENTER);
             Utils.optAttribute(d, "style", decorateLayoutCell(center));
             d.print(">");
             center.write(d);
@@ -80,7 +81,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         if (east != null) {
             Utils.printNewline(d, east);
             d.print("<td width=\"0%\"");
-            Utils.printTableCellAlignment(d, east);
+            Utils.printTableCellAlignment(d, east, SConstants.CENTER, SConstants.CENTER);
             Utils.optAttribute(d, "style", decorateLayoutCell(east));
             d.print(">");
             east.write(d);
@@ -95,7 +96,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             d.print("<tr style=\"height: 0%\">");
             Utils.printNewline(d, south);
             d.print("<td colspan=\"").print(cols).print("\"");
-            Utils.printTableCellAlignment(d, south);
+            Utils.printTableCellAlignment(d, south, SConstants.CENTER, SConstants.CENTER);
             Utils.optAttribute(d, "style", decorateLayoutCell(south));
             d.print(">");
             south.write(d);

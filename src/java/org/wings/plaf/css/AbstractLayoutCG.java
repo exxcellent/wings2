@@ -15,6 +15,7 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SLayoutManager;
+import org.wings.SConstants;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
@@ -170,7 +171,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         }
 
         d.print(" class=\"SLayout\"");
-        Utils.printTableCellAlignment(d, containedComponent);
+        Utils.printTableCellAlignment(d, containedComponent, SConstants.TOP, SConstants.LEFT);
 
         // CSS inline attributes
         StringBuffer inlineAttributes = Utils.generateCSSInlineBorder(border);
