@@ -14,13 +14,8 @@
 package org.wings.plaf.css.msie;
 
 import org.wings.LowLevelEventListener;
-import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SDimension;
-import org.wings.SLayoutManager;
-import org.wings.SNullLayout;
-import org.wings.STemplateLayout;
-import org.wings.SConstants;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
@@ -74,9 +69,10 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
         }
 
         // Workaround for components i.e. inside root container
-        if (handlingLayoutManagerDoesNotSupportAlignment(component)) {
-            Utils.printTableCellAlignment(device, component, SConstants.TOP, SConstants.LEFT);
-        }
+        //if (handlingLayoutManagerDoesNotSupportAlignment(component)) {
+            // Bad idea: Table align=left/right converts the table into a floating element!
+            //Utils.printTableCellAlignment(device, component, SConstants.TOP, SConstants.LEFT);
+        //}
 
         // Tooltip handling
         writeTooltipMouseOver(device, component);
@@ -130,7 +126,7 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
 
     /* Componentns should be (horizontally) aligned by the surrounding layout manager.
        Some layout managers will not be able to do this. */
-    private boolean handlingLayoutManagerDoesNotSupportAlignment(final SComponent component) {
+    /*private boolean handlingLayoutManagerDoesNotSupportAlignment(final SComponent component) {
         if (component == null || component.getParent() == null)
             return true;
 
@@ -141,6 +137,6 @@ public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndS
         alignmentIncapable |= layoutManager instanceof SNullLayout;
         alignmentIncapable |= layoutManager instanceof SCardLayout;
         return alignmentIncapable;
-    }
+    } */
 
 }
