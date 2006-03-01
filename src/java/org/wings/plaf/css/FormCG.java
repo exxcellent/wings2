@@ -27,9 +27,9 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
 
         device.print("<form method=\"");
         if (component.isPostMethod()) {
-            device.print("POST");
+            device.print("post");
         } else {
-            device.print("GET");
+            device.print("get");
         }
         device.print("\"");
 
