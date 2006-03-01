@@ -35,13 +35,19 @@ import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
 import org.wings.table.STableColumnModel;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.InputMap;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
     /**
@@ -178,7 +184,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     /**
      * write a specific cell to the device
      */
-    protected void renderCellContent(final Device device, final STable table, final SCellRendererPane rendererPane, final int row, final int col)
+    protected void renderCellContent(final Device device, final STable table, final SCellRendererPane rendererPane,
+                                     final int row, final int col, final String columnWidth)
             throws IOException {
         SComponent component = null;
         final boolean isEditingCell = table.isEditing() && row == table.getEditingRow() && col == table.getEditingColumn();
@@ -194,9 +201,9 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         final boolean contentContainsClickables = !(component instanceof SLabel);
 
-        device.print("<td col=\"");
-        device.print(col);
-        device.print("\"");
+        device.print("<td");
+        Utils.optAttribute(device, "col", col);
+        Utils.optAttribute(device, "width", columnWidth);
 
         if (component == null) {
             device.print("></td>");
@@ -274,15 +281,16 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     }
 
 
-    protected void writeHeaderCell(Device device, STable table,
-                                   SCellRendererPane rendererPane,
-                                   int c)
+    protected void writeHeaderCell(final Device device, final STable table,
+                                   final SCellRendererPane rendererPane,
+                                   final int c, final String widthString)
             throws IOException {
 
         final SComponent comp = table.prepareHeaderRenderer(c);
 
         device.print("<th");
         Utils.printTableCellAlignment(device, comp, SConstants.CENTER, SConstants.CENTER);
+        Utils.optAttribute(device, "width", widthString);
         device.print(">");
         rendererPane.writeComponent(device, comp, table);
         device.print("</th>");
@@ -335,8 +343,9 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         /*
          *  The column widths if set
          */
+        List widthStrings = null;
         if (table.getColumnModel() != null) {
-            renderColumnWidths(device, table, needsSelectionRow, startCol, endCol);
+            widthStrings = determineColumnWidths(table, needsSelectionRow, startCol, endCol);
         }
 
         /*
@@ -345,11 +354,14 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         if (table.isHeaderVisible()) {
             device.print("<thead><tr>\n");
 
-            if (needsSelectionRow)
-                device.print("<th></th>");
+            if (needsSelectionRow) {
+                device.print("<th width=\"").print(selectionColumnWidth).print("\"></th>");
+            }
 
-            for (int c = startCol; c < endCol; c++)
-                writeHeaderCell(device, table, rendererPane, table.convertColumnIndexToModel(c));
+            for (int c = startCol; c < endCol; c++) {
+                final String width = widthStrings != null ? (String) widthStrings.get(c-startCol): null;
+                writeHeaderCell(device, table, rendererPane, table.convertColumnIndexToModel(c), width);
+            }
 
             device.print("</tr></thead>\n");
         }
@@ -380,8 +392,10 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
                 renderSelectionColumn(device, table, rendererPane, r, showAsFormComponent);
             }
 
-            for (int c = startCol; c < endCol; c++)
-                renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
+            for (int c = startCol; c < endCol; c++) {
+                final String width = widthStrings != null ? (String) widthStrings.get(c-startCol): null;
+                renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c), width);
+            }
 
             device.print("</tr>\n");
         }
@@ -392,41 +406,36 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     /**
      * Renders a COLGROUP html element to format the column widths
      */
-    protected void renderColumnWidths(final Device device, final STable table,
-                                      final boolean needsSelectionRow, final int startcol, final int endcol) throws IOException {
+    protected List determineColumnWidths(final STable table,
+                                         final boolean needsSelectionRow, final int startcol, final int endcol) throws IOException {
         final STableColumnModel columnModel = table.getColumnModel();
         final int totalWidth = columnModel.getTotalColumnWidth();
+        ArrayList widthStrings = null;
+
         if (totalWidth > 0) {
-            int viewPortWidth = 0;
+            widthStrings = new ArrayList();
             final String totalWidthUnit = columnModel.getTotalColumnWidthUnit();
-            for (int i = startcol; i <= endcol; i++) {
+
+            int viewPortWidth = 0;
+            for (int i = startcol; i < endcol; i++) {
                 final STableColumn column = columnModel.getColumn(i);
                 if (column != null && !column.isHidden()) {
                     viewPortWidth+=column.getWidth();
                 }
             }
 
-            Utils.printNewline(device, table);
-            device.print("<colgroup>");
-            if (needsSelectionRow) {
-                Utils.printNewline(device, table);
-                device.print("\t<col width=\"").print(selectionColumnWidth).print("\"/>");
-            }
-            for (int i = startcol; i <= endcol; i++) {
+            for (int i = startcol; i < endcol; i++) {
                 final STableColumn column = columnModel.getColumn(i);
                 if (column != null && !column.isHidden()) {
-                    Utils.printNewline(device, table);
-                    device.print("\t<col width=\"");
                     if (totalWidthUnit == null) // relative
-                        device.print(Math.round(100.0f/viewPortWidth*column.getWidth())).print("%");
+                        widthStrings.add((Math.round(100.0f/viewPortWidth*column.getWidth())) + "%");
                     else
-                        device.print(column.getWidth()).print(column.getWidthUnit());
-                    device.print("\"/>");
+                        widthStrings.add(column.getWidth() + column.getWidthUnit());
                 }
             }
-            Utils.printNewline(device, table);
-            device.print("</colgroup>");
         }
+
+        return widthStrings;
     }
 
     /** Renders the row sometimes needed to allow row selection. */
