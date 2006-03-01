@@ -14,6 +14,7 @@
 package org.wings.template;
 
 import org.wings.SFont;
+import org.wings.SConstants;
 
 import java.util.StringTokenizer;
 
@@ -25,10 +26,14 @@ import java.util.StringTokenizer;
  */
 public class TemplateUtil {
 
-
-    public TemplateUtil() {
+    private TemplateUtil() {
     }
 
+    /**
+     * Parses a font description in the format of <code>Arial,B,14</code>.
+     * @param value A free text representation of a font in the format of <code>Arial,B,14</code>.
+     * @return according SFont instance. Defaults to plain 12.
+     */
     public static SFont parseFont(String value) {
         StringTokenizer s = new StringTokenizer(value, ",");
         String fontName = s.nextToken();
@@ -45,6 +50,28 @@ public class TemplateUtil {
         } catch (Exception e) {}
 
         return new SFont(fontName, fontType, fontSize);
+    }
+
+    /**
+     * Parses a free text string representation for alignments and returns
+     * the according value.
+     * @param alignmentValue A String like "Top" or "Center"
+     * @return Alignment constant value or {@link SConstants#NO_ALIGN}
+     */
+    public static int parseAlignment(String alignmentValue) {
+        if ("TOP".equalsIgnoreCase(alignmentValue))
+            return SConstants.TOP_ALIGN;
+        else if ("CENTER".equalsIgnoreCase(alignmentValue) ||
+                "MIDDLE".equalsIgnoreCase(alignmentValue))
+            return SConstants.CENTER_ALIGN;
+        else if ("BOTTOM".equalsIgnoreCase(alignmentValue))
+            return SConstants.BOTTOM_ALIGN;
+        else if ("LEFT".equalsIgnoreCase(alignmentValue))
+            return SConstants.LEFT_ALIGN;
+        else if ("RIGHT".equalsIgnoreCase(alignmentValue))
+            return SConstants.RIGHT_ALIGN;
+        else
+            return SConstants.NO_ALIGN;
     }
 
 }

@@ -24,8 +24,7 @@ import java.awt.*;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SComponentPropertyManager
-        extends DefaultPropertyManager {
+public class SComponentPropertyManager extends DefaultPropertyManager {
     static final Class[] classes = {SComponent.class};
 
     public SComponentPropertyManager() {
@@ -45,6 +44,10 @@ public class SComponentPropertyManager
             comp.setAttributes(comp.getComponentCssSelector(), (CSSAttributeSet) valueConverter.convertPropertyValue(value, CSSAttributeSet.class));
         } else if ("CLASS".equals(name)) {
             comp.setStyle(value);
+        } else if ("ALIGN".equals(name)) {
+            comp.setHorizontalAlignment(TemplateUtil.parseAlignment(value));
+        } else if ("VALIGN".equals(name)) {
+            comp.setVerticalAlignment(TemplateUtil.parseAlignment(value));
         } else {
             super.setProperty(comp, name, value);
         } // end of else
