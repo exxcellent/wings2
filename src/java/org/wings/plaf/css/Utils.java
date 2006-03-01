@@ -217,7 +217,7 @@ public final class Utils {
         if (align == SConstants.NO_ALIGN) {
             //d.print(" valign=\"center\"");
         } else if (align == SConstants.CENTER) {
-            d.print(" valign=\"center\"");
+            d.print(" valign=\"middle\"");
         } else if (align == SConstants.TOP) {
             d.print(" valign=\"top\"");
         } else if (align == SConstants.BOTTOM) {
