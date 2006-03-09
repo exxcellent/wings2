@@ -23,8 +23,7 @@ public class STableColumn implements Serializable {
     protected int modelIndex;
     protected Object identifier;
     protected Object headerValue;
-    protected int width;
-    protected String widthUnit;
+    protected String width;
     protected boolean hidden = false;
     protected STableCellRenderer headerRenderer;
     protected STableCellRenderer cellRenderer;
@@ -44,7 +43,7 @@ public class STableColumn implements Serializable {
      * @param modelIndex The index of this column inside the data model.
      */
     public STableColumn(int modelIndex) {
-        this(modelIndex, 1, null, null, null);
+        this(modelIndex, null, null, null);
     }
 
     /**
@@ -53,20 +52,8 @@ public class STableColumn implements Serializable {
      * @param modelIndex The index of this column inside the data model.
      * @param width The desired width of this column as relative weight. (1 = default)
      */
-    public STableColumn(int modelIndex, int width) {
-        this(modelIndex, width, null, null, null);
-    }
-
-    /**
-     * Constructs a new table column.
-     *
-     * @param modelIndex The index of this column inside the data model.
-     * @param width The desired width of this column as relative weight.
-     * @param cellRenderer The renderer for cells in this column
-     * @param cellEditor The editor for cells in this column
-     */
-    public STableColumn(int modelIndex, int width, STableCellRenderer cellRenderer, STableCellEditor cellEditor) {
-        this(modelIndex, width, null, cellRenderer, cellEditor);
+    public STableColumn(int modelIndex, String width) {
+        this(modelIndex, width, null, null);
     }
 
     /**
@@ -74,17 +61,15 @@ public class STableColumn implements Serializable {
      *
      * @param modelIndex The index of this column inside the data model.
      * @param width The desired width of this column in px.
-     * @param widthUnit The unit for the width dimension. Please refer to {@link #setWidthUnit(String)}
      * @param cellRenderer The renderer for cells in this column
      * @param cellEditor The editor for cells in this column
      */
-    public STableColumn(int modelIndex, int width, String widthUnit,
+    public STableColumn(int modelIndex, String width,
                         STableCellRenderer cellRenderer,
                         STableCellEditor cellEditor) {
         super();
         this.modelIndex = modelIndex;
         this.width = width;
-        setWidthUnit(widthUnit);
 
         this.cellRenderer = cellRenderer;
         this.cellEditor = cellEditor;
@@ -259,39 +244,19 @@ public class STableColumn implements Serializable {
     }
 
     /**
-     * The widht for this column. <b>Note:</b> That the interpretation depends on the unit of this width!
+     * The widht for this column including the unit
      *
-     * @param width The width <code>1</code> by default.
+     * @param width The width
      */
-    public void setWidth(int width) {
+    public void setWidth(String width) {
         this.width = width;
     }
 
     /**
-     * @return The widht of this column. <code>1</code> by default. <code>-1</code> indicated unsed
+     * @return The widht of this column including the unit.
      */
-    public int getWidth() {
+    public String getWidth() {
         return width;
-    }
-
-    /**
-     * The unit of this column width. May be <code>null</code> for relative weight, <code>px</code> for pixel widths
-     * or <code>%</code> for relative percentage
-     *
-     * @return The unit of this column width.
-     */
-    public String getWidthUnit() {
-        return widthUnit;
-    }
-
-    /**
-     * The unit of this column width.
-     *
-     * @param widthUnit The widht. May be <code>null</code> for relative weight, <code>px</code> for pixel widths
-     * or <code>%</code> for relative percentage
-     */
-    public void setWidthUnit(String widthUnit) {
-        this.widthUnit = widthUnit;
     }
 
     /**

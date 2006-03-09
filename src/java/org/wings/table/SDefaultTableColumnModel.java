@@ -31,6 +31,7 @@ public class SDefaultTableColumnModel implements STableColumnModel, Serializable
     private final static Log log = LogFactory.getLog(SDefaultTableColumnModel.class);
     private List columns = new LinkedList();
     private int columnMargin;
+    private String totalColumnWidth;
 
     public void addColumn(STableColumn column) {
         if (column == null)
@@ -91,40 +92,11 @@ public class SDefaultTableColumnModel implements STableColumnModel, Serializable
         return columnMargin;
     }
 
-    public int getTotalColumnWidth() {
-        int width = 0;
-        String widthUnit = null;
-        boolean firstColumn = true;
-        boolean validWidth = true;
-        for (Iterator iterator = columns.iterator(); iterator.hasNext() && validWidth;) {
-            STableColumn column = (STableColumn) iterator.next();
-            if (column != null && !column.isHidden()) {
-                width += column.getWidth();
-                if (firstColumn) {
-                    widthUnit = column.getWidthUnit();
-                    firstColumn = false;
-                } else if (!(widthUnit == column.getWidthUnit() || (widthUnit != null && widthUnit.equalsIgnoreCase(column.getWidthUnit())))) {
-                    validWidth = false;
-                    log.warn("Mismatching column width units! Cannot add '"+widthUnit+"' to '"+column.getWidthUnit()+"'");
-                }
-
-            }
-        }
-
-        if (validWidth) {
-            return width;
-        } else {
-            return -1;
-        }
+    public String getTotalColumnWidth() {
+        return totalColumnWidth;
     }
 
-    public String getTotalColumnWidthUnit() {
-        for (Iterator iterator = columns.iterator(); iterator.hasNext();) {
-            STableColumn column = (STableColumn) iterator.next();
-            if (!column.isHidden()) {
-                return column.getWidthUnit();
-            }
-        }
-        return null;
+    public void setTotalColumnWidth(String totalColumnWidth) {
+        this.totalColumnWidth = totalColumnWidth;
     }
 }

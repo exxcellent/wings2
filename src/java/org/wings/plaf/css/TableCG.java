@@ -53,10 +53,10 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     /**
      * Apache jakarta commons logger
      */
-    private static final Log log = LogFactory.getLog(TableCG.class);
+    private final static Log log = LogFactory.getLog(TableCG.class);
     protected String fixedTableBorderWidth;
     protected SIcon editIcon;
-    protected int selectionColumnWidth = 10;
+    protected String selectionColumnWidth = "22px";
 
     /**
      * Initialize properties from config
@@ -65,9 +65,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         final CGManager manager = SessionManager.getSession().getCGManager();
         setFixedTableBorderWidth((String) manager.getObject("TableCG.fixedTableBorderWidth", String.class));
         setEditIcon(manager.getIcon("TableCG.editIcon"));
-        String selectionRowWidthString = (String)manager.getObject("TableCG.selectionColumnWidth", String.class);
-        if (selectionRowWidthString != null)
-            selectionColumnWidth  = Integer.parseInt(selectionRowWidthString);
+        selectionColumnWidth = (String)manager.getObject("TableCG.selectionColumnWidth", String.class);
     }
 
     /**
@@ -102,15 +100,15 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     /**
      * @return The width of the (optional) row selection column in px
      */
-    public int getSelectionColumnWidth() {
+    public String getSelectionColumnWidth() {
         return selectionColumnWidth;
     }
 
     /**
      * The width of the (optional) row selection column in px
-     * @param selectionColumnWidth The width of the (optional) row selection column in px
+     * @param selectionColumnWidth The width of the (optional) row selection column with unit
      */
-    public void setSelectionColumnWidth(int selectionColumnWidth) {
+    public void setSelectionColumnWidth(String selectionColumnWidth) {
         this.selectionColumnWidth = selectionColumnWidth;
     }
 
@@ -185,12 +183,12 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
      * write a specific cell to the device
      */
     protected void renderCellContent(final Device device, final STable table, final SCellRendererPane rendererPane,
-                                     final int row, final int col, final String columnWidth)
+                                     final int row, final int col)
             throws IOException {
         SComponent component = null;
         final boolean isEditingCell = table.isEditing() && row == table.getEditingRow() && col == table.getEditingColumn();
         final boolean editableCell = table.isCellEditable(row, col);
-        final boolean selectableCell = table.getSelectionMode() != SListSelectionModel.NO_SELECTION /*&& !table.isEditable()*/;
+        final boolean selectableCell = table.getSelectionMode() != SListSelectionModel.NO_SELECTION && !table.isEditable();
         final boolean showAsFormComponent = table.getShowAsFormComponent();
 
         if (isEditingCell) {
@@ -203,7 +201,6 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         device.print("<td");
         Utils.optAttribute(device, "col", col);
-        Utils.optAttribute(device, "width", columnWidth);
 
         if (component == null) {
             device.print("></td>");
@@ -283,14 +280,13 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
     protected void writeHeaderCell(final Device device, final STable table,
                                    final SCellRendererPane rendererPane,
-                                   final int c, final String widthString)
+                                   final int c)
             throws IOException {
 
         final SComponent comp = table.prepareHeaderRenderer(c);
 
         device.print("<th");
         Utils.printTableCellAlignment(device, comp, SConstants.CENTER, SConstants.CENTER);
-        Utils.optAttribute(device, "width", widthString);
         device.print(">");
         rendererPane.writeComponent(device, comp, table);
         device.print("</th>");
@@ -306,7 +302,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         final SListSelectionModel selectionModel = table.getSelectionModel();
         final SCellRendererPane rendererPane = table.getCellRendererPane();
         final boolean childSelectorWorkaround = !table.getSession().getUserAgent().supportsCssChildSelector();
-        final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION /*&& table.isEditable()*/;
+        final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION && table.isEditable();
         final boolean showAsFormComponent = table.getShowAsFormComponent();
         final SDimension tableWidthByColumnModel = determineTableWidthByColumnModel(table, needsSelectionRow);
 
@@ -325,6 +321,16 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         device.print(">");
         Utils.printNewline(device, table);
 
+        STableColumnModel columnModel = table.getColumnModel();
+        if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
+            if (needsSelectionRow)
+                writeCol(device, selectionColumnWidth);
+
+            int columnCount = columnModel.getColumnCount();
+            for (int i=0; i < columnCount; i++)
+                writeCol(device, columnModel.getColumn(i).getWidth());
+        }
+
         /*
         * get viewable area
         */
@@ -341,26 +347,16 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         }
 
         /*
-         *  The column widths if set
-         */
-        List widthStrings = null;
-        if (table.getColumnModel() != null) {
-            widthStrings = determineColumnWidths(table, needsSelectionRow, startCol, endCol);
-        }
-
-        /*
         * render the header
         */
         if (table.isHeaderVisible()) {
             device.print("<thead><tr>\n");
 
-            if (needsSelectionRow) {
+            if (needsSelectionRow)
                 device.print("<th width=\"").print(selectionColumnWidth).print("\"></th>");
-            }
 
             for (int c = startCol; c < endCol; c++) {
-                final String width = widthStrings != null ? (String) widthStrings.get(c-startCol): null;
-                writeHeaderCell(device, table, rendererPane, table.convertColumnIndexToModel(c), width);
+                writeHeaderCell(device, table, rendererPane, table.convertColumnIndexToModel(c));
             }
 
             device.print("</tr></thead>\n");
@@ -388,19 +384,30 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             }
             device.print(">");
 
-            if (needsSelectionRow) {
+            if (needsSelectionRow)
                 renderSelectionColumn(device, table, rendererPane, r, showAsFormComponent);
-            }
 
-            for (int c = startCol; c < endCol; c++) {
-                final String width = widthStrings != null ? (String) widthStrings.get(c-startCol): null;
-                renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c), width);
-            }
+            for (int c = startCol; c < endCol; c++)
+                renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
 
             device.print("</tr>\n");
         }
         device.print("</tbody>\n");
         device.print("</table>\n");
+    }
+
+    private boolean atLeastOneColumnWidthIsNotNull(STableColumnModel columnModel) {
+        int columnCount = columnModel.getColumnCount();
+        for (int i=0; i < columnCount; i++)
+            if (columnModel.getColumn(i).getWidth() != null)
+                return true;
+        return false;
+    }
+
+    private void writeCol(Device device, String width) throws IOException {
+        device.print("<col");
+        Utils.optAttribute(device, "width", width);
+        device.print(">");
     }
 
     /**
@@ -409,34 +416,16 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     protected List determineColumnWidths(final STable table,
                                          final boolean needsSelectionRow, final int startcol, final int endcol) throws IOException {
         final STableColumnModel columnModel = table.getColumnModel();
-        final int totalWidth = columnModel.getTotalColumnWidth();
+        final String totalWidth = columnModel.getTotalColumnWidth();
         ArrayList widthStrings = null;
 
-        if (totalWidth > 0) {
+        if (totalWidth != null) {
             widthStrings = new ArrayList();
-            final String totalWidthUnit = columnModel.getTotalColumnWidthUnit();
-
-            int viewPortWidth = 0;
-            for (int i = startcol; i < endcol; i++) {
-                final STableColumn column = columnModel.getColumn(i);
-                if (column != null && !column.isHidden()) {
-                    viewPortWidth+=column.getWidth();
-                }
-            }
 
             for (int i = startcol; i < endcol; i++) {
                 final STableColumn column = columnModel.getColumn(i);
-                if (column != null && !column.isHidden()) {
-                    if (totalWidthUnit == null) // relative
-                        widthStrings.add((Math.round(100.0f/viewPortWidth*column.getWidth())) + "%");
-                    else {
-                        // the strings are uses as width params, so ommit "px" and keep "%"
-                        if ("px".equalsIgnoreCase(totalWidthUnit))
-                            widthStrings.add(Integer.toString(column.getWidth()));
-                        else
-                            widthStrings.add(Integer.toString(column.getWidth()) + column.getWidthUnit());
-                    }
-                }
+                if (column != null && !column.isHidden())
+                    widthStrings.add(column.getWidth());
             }
         }
 
@@ -496,19 +485,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         if (table.getColumnModel() == null) {
             return null;
         } else {
-            int totalWidth = table.getColumnModel().getTotalColumnWidth();
-            if (totalWidth < 0) {
-                return null;
-            } else {
-                String totalWidthUnit = table.getColumnModel().getTotalColumnWidthUnit();
-                if (totalWidthUnit == null) {// relative width
-                    return null;
-                } else {
-                    if (needsSelectionRow && "px".equalsIgnoreCase(totalWidthUnit))
-                        totalWidth += selectionColumnWidth;
-                    return new SDimension(totalWidth+totalWidthUnit, null);
-                }
-            }
+            String totalWidth = table.getColumnModel().getTotalColumnWidth();
+            return totalWidth != null ? new SDimension(totalWidth, null) : null;
         }
     }
 

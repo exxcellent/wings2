@@ -57,19 +57,24 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
 
     protected SResourceIcon singleNotSelectionIcon = DEFAULT_SINGLE_NOT_SELECTION_ICON;
 
+    protected boolean useIcons = false;
+
     public SDefaultTableRowSelectionRenderer() {
     }
 
     public SComponent getTableCellRendererComponent(STable table, Object value, boolean selected, int row, int col) {
-        switch (table.getSelectionMode()) {
-            case ListSelectionModel.SINGLE_SELECTION:
-                setIcon(selected ? singleSelectionIcon : singleNotSelectionIcon);
-                break;
-            default:
-                setIcon(selected ? multiSelectionIcon : multiNotSelectionIcon);
-                break;
+        if (useIcons) {
+            switch (table.getSelectionMode()) {
+                case ListSelectionModel.SINGLE_SELECTION:
+                    setIcon(selected ? singleSelectionIcon : singleNotSelectionIcon);
+                    break;
+                default:
+                    setIcon(selected ? multiSelectionIcon : multiNotSelectionIcon);
+                    break;
+            }
         }
-
+        else
+            setText("" + (row + 1));
         // style
         if (selected) {
             setStyle(selectionStyle);

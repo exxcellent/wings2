@@ -14,6 +14,8 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.event.SMouseListener;
+import org.wings.event.SMouseEvent;
 import org.wings.plaf.css.TableCG;
 import org.wings.table.SDefaultTableCellRenderer;
 
@@ -51,7 +53,9 @@ public class TableExample
     };
 
     private STable table;
+    private SLabel clicks = new SLabel();
     private TableControls controls;
+    private boolean consume = false;
 
     public SComponent createExample() {
         controls = new TableControls();
@@ -65,11 +69,26 @@ public class TableExample
         table.setEditable(false);
         controls.addSizable(table);
 
-        table.getColumnModel().getColumn(1).setWidth(2); // stretch 2nd column to 2 times of other cols (weighted width)
+        table.getColumnModel().getColumn(0).setWidth("200px");
+        table.getColumnModel().getColumn(1).setWidth("*");
+        table.getColumnModel().getColumn(2).setWidth("100px");
+        table.getColumnModel().getColumn(3).setWidth("50px");
+        table.getColumnModel().getColumn(4).setWidth("50px");
+        table.getColumnModel().getColumn(5).setWidth("50px");
+        table.getColumnModel().getColumn(6).setWidth("100px");
+
+        table.addMouseListener(new SMouseListener() {
+            public void mouseClicked(SMouseEvent e) {
+                if (consume && table.getColumnForLocation(e.getPoint()) == 1)
+                    e.consume();
+                clicks.setText("clicked " + e.getPoint().getCoordinates());
+            }
+        });
 
         SForm panel = new SForm(new SBorderLayout());
         panel.add(controls, SBorderLayout.NORTH);
         panel.add(table, SBorderLayout.CENTER);
+        panel.add(clicks, SBorderLayout.SOUTH);
         return panel;
     }
 
@@ -292,6 +311,13 @@ public class TableExample
                 }
             });
 
+            final SCheckBox consume = new SCheckBox("<html>Consume events on 2nd col&nbsp;&nbsp;&nbsp;");
+            consume.addActionListener(new wingset.SerializableActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    TableExample.this.consume = consume.isSelected();
+                }
+            });
+
             final SComboBox selectionMode = new SComboBox(SELECTION_MODES);
             selectionMode.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
@@ -306,6 +332,7 @@ public class TableExample
 
             add(showAsFormComponent);
             add(editable);
+            add(consume);
             add(new SLabel(" selection mode "));
             add(selectionMode);
         }

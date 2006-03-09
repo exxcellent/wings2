@@ -38,13 +38,7 @@ public interface STableColumnModel {
     int getColumnMargin();
 
     /**
-     * @return The total width of this table. <code>-1</code> indicates a problem (mismatching width untits).
+     * @return The total width of this table including the unit
      */
-    int getTotalColumnWidth();
-
-    /**
-     * @return The unit of the total column width. Only valid if getTotalColumnWidth() returns >= 0!
-     */
-    public String getTotalColumnWidthUnit();
-
+    String getTotalColumnWidth();
 }
