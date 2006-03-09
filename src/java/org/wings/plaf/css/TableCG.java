@@ -53,7 +53,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     /**
      * Apache jakarta commons logger
      */
-    private final static Log log = LogFactory.getLog(TableCG.class);
+    private static final Log log = LogFactory.getLog(TableCG.class);
     protected String fixedTableBorderWidth;
     protected SIcon editIcon;
     protected int selectionColumnWidth = 10;
@@ -429,8 +429,13 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
                 if (column != null && !column.isHidden()) {
                     if (totalWidthUnit == null) // relative
                         widthStrings.add((Math.round(100.0f/viewPortWidth*column.getWidth())) + "%");
-                    else
-                        widthStrings.add(column.getWidth() + column.getWidthUnit());
+                    else {
+                        // the strings are uses as width params, so ommit "px" and keep "%"
+                        if ("px".equalsIgnoreCase(totalWidthUnit))
+                            widthStrings.add(Integer.toString(column.getWidth()));
+                        else
+                            widthStrings.add(Integer.toString(column.getWidth()) + column.getWidthUnit());
+                    }
                 }
             }
         }
