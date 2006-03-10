@@ -312,6 +312,8 @@ public class TableExample
             });
 
             final SCheckBox consume = new SCheckBox("<html>Consume events on 2nd col&nbsp;&nbsp;&nbsp;");
+            consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
+                    "Consumed events will not be processed by the table anymore");
             consume.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     TableExample.this.consume = consume.isSelected();

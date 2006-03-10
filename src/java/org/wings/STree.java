@@ -19,6 +19,8 @@ import org.wings.plaf.TreeCG;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.tree.STreeCellRenderer;
 import org.wings.tree.STreeSelectionModel;
+import org.wings.event.SMouseEvent;
+import org.wings.event.SMouseListener;
 
 import javax.swing.event.*;
 import javax.swing.tree.*;
@@ -60,6 +62,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      * Indent depth in pixels
      */
     private int nodeIndentDepth = 20;
+    private String[] lowLevelEvents;
 
     /**
      * Creates and returns a sample TreeModel. Used primarily for beanbuilders.
@@ -309,6 +312,51 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
         fireTreeExpansionEvent(new TreeExpansionEvent(this, path), false);
     }
 
+    /**
+     * Adds the specified mouse listener to receive mouse events from
+     * this component.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param l the component listener.
+     * @see org.wings.event.SMouseEvent
+     * @see org.wings.event.SMouseListener
+     * @see org.wings.STable#removeMouseListener
+     */
+    public final void addMouseListener(SMouseListener l) {
+        addEventListener(SMouseListener.class, l);
+    }
+
+    /**
+     * Removes the specified mouse listener so that it no longer
+     * receives mouse events from this component. This method performs
+     * no function, nor does it throw an exception, if the listener
+     * specified by the argument was not previously added to this component.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param l the component listener.
+     * @see org.wings.event.SMouseEvent
+     * @see org.wings.event.SMouseListener
+     * @see org.wings.STable#addMouseListener
+     */
+    public final void removeMouseListener(SMouseListener l) {
+        removeEventListener(SMouseListener.class, l);
+    }
+
+    /**
+     * Reports a mouse click event.
+     *
+     * @param event report this event to all listeners
+     * @see org.wings.event.SMouseListener
+     */
+    protected void fireMouseClickedEvent(SMouseEvent event) {
+        Object[] listeners = getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == SMouseListener.class) {
+                ((SMouseListener)listeners[i + 1]).mouseClicked(event);
+            }
+        }
+    }
+
     protected void processRequestedExpansionPaths() {
         getSelectionModel().setDelayEvents(true);
 
@@ -325,9 +373,55 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
     }
 
     public void fireIntermediateEvents() {
-        processRequestedExpansionPaths();
+        getSelectionModel().setDelayEvents(true);
+        for (int i = 0; i < lowLevelEvents.length; i++) {
+            String value = lowLevelEvents[i];
+            if (value.length() < 2) continue; // incorrect format
 
+            SPoint point = new SPoint(value.substring(1));
+            int row = getRowForLocation(point);
+
+            SMouseEvent event = new SMouseEvent(this, 0, point);
+            fireMouseClickedEvent(event);
+            if (event.isConsumed())
+                continue;
+
+            if (row < 0) continue; // row not found...
+
+            if (value.charAt(0) == 'b') {
+                TreePath path = getPathForRow(row);
+                //selection
+                if (path != null) {
+                    togglePathSelection(path);
+                }
+            } else if (value.charAt(0) == 'h') {
+                TreePath path = getPathForRow(row);
+                //selection
+                if (path != null) {
+                    requestedExpansionPaths.add(path);
+                }
+            } else if (value.charAt(0) == 'a') {
+                TreePath path = getPathForAbsoluteRow(row);
+                //selection
+                if (path != null) {
+                    togglePathSelection(path);
+                }
+            } else if (value.charAt(0) == 'j') {
+                TreePath path = getPathForAbsoluteRow(row);
+                //selection
+                if (path != null) {
+                    requestedExpansionPaths.add(path);
+                }
+            }
+        }
+        getSelectionModel().setDelayEvents(false);
+
+        processRequestedExpansionPaths();
         getSelectionModel().fireDelayedIntermediateEvents();
+    }
+
+    public int getRowForLocation(SPoint point) {
+        return Integer.parseInt(point.getCoordinates());
     }
 
     public void fireFinalEvents() {
@@ -852,43 +946,10 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
-
-        getSelectionModel().setDelayEvents(true);
-        for (int i = 0; i < values.length; i++) {
-            if (values[i].length() < 2) continue; // incorrect format
-
-            int row = Integer.parseInt(values[i].substring(1));
-
-            if (row < 0) continue; // row not found...
-
-            if (values[i].charAt(0) == 'b') {
-                TreePath path = getPathForRow(row);
-                //selection
-                if (path != null) {
-                    togglePathSelection(path);
-                }
-            } else if (values[i].charAt(0) == 'h') {
-                TreePath path = getPathForRow(row);
-                //selection
-                if (path != null) {
-                    requestedExpansionPaths.add(path);
-                }
-            } else if (values[i].charAt(0) == 'a') {
-                TreePath path = getPathForAbsoluteRow(row);
-                //selection
-                if (path != null) {
-                    togglePathSelection(path);
-                }
-            } else if (values[i].charAt(0) == 'j') {
-                TreePath path = getPathForAbsoluteRow(row);
-                //selection
-                if (path != null) {
-                    requestedExpansionPaths.add(path);
-                }
-            }
-        }
+        this.lowLevelEvents = values;
         SForm.addArmedComponent(this);
-        getSelectionModel().setDelayEvents(false);
+
+        processKeyEvents(values);
     }
 
     /**

@@ -930,7 +930,7 @@ import java.io.StringReader;
      /**
       * Reports a mouse click event.
       *
-      * @param point report this event to all listeners
+      * @param event report this event to all listeners
       * @see org.wings.event.SMouseListener
       */
      protected void fireMouseClickedEvent(SMouseEvent event) {

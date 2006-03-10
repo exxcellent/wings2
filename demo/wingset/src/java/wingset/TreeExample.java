@@ -14,11 +14,14 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.event.SMouseListener;
+import org.wings.event.SMouseEvent;
 import org.wings.style.CSSProperty;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.util.PropertyAccessor;
 
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -37,17 +40,31 @@ public class TreeExample
     private static SIcon PLUS = new SResourceIcon("org/wings/icons/plus.gif");
     private static SIcon MINUS = new SResourceIcon("org/wings/icons/minus.gif");
     private TreeControls controls;
+    private SLabel clicks = new SLabel();
+    private boolean consume;
 
     public SComponent createExample() {
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
         controls = new TreeControls();
         tree.setName("tree");
         tree.setShowAsFormComponent(false);
+
+        tree.addMouseListener(new SMouseListener() {
+            public void mouseClicked(SMouseEvent e) {
+                Object object = tree.getPathForRow(tree.getRowForLocation(e.getPoint())).getLastPathComponent();
+                TreeNode node = (TreeNode)object;
+                if (consume && node.isLeaf())
+                    e.consume();
+                clicks.setText("clicked " + e.getPoint().getCoordinates());
+            }
+        });
+
         controls.addSizable(tree);
 
         SForm panel = new SForm(new SBorderLayout());
         panel.add(controls, SBorderLayout.NORTH);
         panel.add(tree, SBorderLayout.CENTER);
+        panel.add(clicks, SBorderLayout.SOUTH);
         return panel;
     }
 
@@ -61,6 +78,15 @@ public class TreeExample
             showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     tree.setShowAsFormComponent(showAsFormComponent.isSelected());
+                }
+            });
+
+            final SCheckBox consume = new SCheckBox("<html>Consume events on leaves&nbsp;&nbsp;&nbsp;");
+            consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
+                    "Consumed events will not be processed by the tree anymore");
+            consume.addActionListener(new wingset.SerializableActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    TreeExample.this.consume = consume.isSelected();
                 }
             });
 
@@ -116,6 +142,7 @@ public class TreeExample
             });
 
             add(showAsFormComponent);
+            add(consume);
             add(new SLabel(" selection mode "));
             add(selectionMode);
             add(new SLabel(" indentation width "));
