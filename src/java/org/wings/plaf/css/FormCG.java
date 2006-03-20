@@ -60,7 +60,8 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         * so it fell back to the old behaviour. So changed that style to no-padding,
         * no-margin, no-whatever (HZ).
         */
-        device.print("><input type=\"image\" name=\"_capture_enter1\" border=\"0\" ");
+        final String defaultButtonName = component.getDefaultButton() != null ? Utils.event(component.getDefaultButton()) : "capture_enter";
+        device.print("><input type=\"image\" name=\"").print(defaultButtonName).print("\" border=\"0\" ");
         Utils.optAttribute(device, "src", getBlindIcon().getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
 
@@ -76,7 +77,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         Utils.renderContainer(device, component);
 
         // Enter capture at end of form
-        device.print("<input type=\"image\" name=\"_capture_enter2\" border=\"0\" ");
+        device.print("<input type=\"image\" name=\"").print(defaultButtonName).print("\" border=\"0\" ");
         Utils.optAttribute(device, "src", getBlindIcon().getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
 

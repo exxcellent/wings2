@@ -37,7 +37,7 @@ import java.util.*;
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class SForm        extends SContainer        implements LowLevelEventListener {
+public class SForm  extends SContainer implements LowLevelEventListener {
     private final transient static Log log = LogFactory.getLog(SForm.class);
 
     /**
@@ -279,7 +279,8 @@ public class SForm        extends SContainer        implements LowLevelEventList
             /*
              * no buttons in forms pressed ? Then consider the default-Button.
              */
-            if (buttonEvents == null && formEvents != null) {
+            // Wrong - this fires default button for page scrollers!
+            /*if (buttonEvents == null && formEvents != null) {
                 Iterator fit = formEvents.iterator();
                 while (fit.hasNext()) {
                     SForm form = (SForm) fit.next();
@@ -291,7 +292,7 @@ public class SForm        extends SContainer        implements LowLevelEventList
                         buttonEvents.add(defaultButton);
                     }
                 }
-            }
+            } */
 
             if (buttonEvents != null) {
                 iterator = buttonEvents.iterator();
