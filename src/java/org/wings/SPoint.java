@@ -11,11 +11,11 @@ public class SPoint {
         this.coordinates = coordinates;
     }
 
-    public String getCoordinates() {
+    protected String getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(String coordinates) {
+    protected void setCoordinates(String coordinates) {
         this.coordinates = coordinates;
     }
 
