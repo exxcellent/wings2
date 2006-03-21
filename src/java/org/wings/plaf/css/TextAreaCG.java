@@ -80,7 +80,7 @@ public class TextAreaCG extends AbstractComponentCG implements
 
             Utils.writeEvents(device, component);
             device.print(">");
-            Utils.writeRaw(device, component.getText());
+            Utils.quote(device, component.getText(), false, false, false);
             device.print("</textarea>\n");
         }
     }
