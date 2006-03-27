@@ -23,6 +23,11 @@ import org.wings.io.Device;
 public class AnchorCG
         extends AbstractComponentCG
         implements org.wings.plaf.AnchorCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /* (non-Javadoc)
      * @see org.wings.plaf.css.AbstractComponentCG#writeContent(org.wings.io.Device, org.wings.SComponent)
      */

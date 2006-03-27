@@ -14,15 +14,20 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.event.SInternalFrameEvent;
-import org.wings.io.Device;
-import org.wings.plaf.CGManager;
-import org.wings.session.SessionManager;
-
 import java.io.IOException;
 
+import org.wings.SComponent;
+import org.wings.SDialog;
+import org.wings.SIcon;
+import org.wings.event.SInternalFrameEvent;
+import org.wings.io.Device;
+import org.wings.resource.ResourceManager;
+
 public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     protected static final String WINDOWICON_CLASSNAME = "WindowIcon";
     protected static final String BUTTONICON_CLASSNAME = "WindowButton";
 
@@ -32,8 +37,7 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
      * Initialize properties from config
      */
     public DialogCG() {
-        final CGManager manager = SessionManager.getSession().getCGManager();
-        setCloseIcon((SIcon) manager.getObject("DialogCG.closeIcon", SIcon.class));
+        setCloseIcon((SIcon) ResourceManager.getObject("DialogCG.closeIcon", SIcon.class));
     }
 
     protected void writeIcon(Device device, SIcon icon, String cssClass) throws IOException {

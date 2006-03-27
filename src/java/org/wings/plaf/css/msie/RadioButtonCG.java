@@ -19,19 +19,23 @@ import org.wings.SAbstractButton;
 import org.wings.SIcon;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
-
+import org.wings.resource.ResourceManager;
 
 
 public class RadioButtonCG extends CheckBoxCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     protected void installIcons(final SAbstractButton button) {
-        org.wings.plaf.CGManager manager = button.getSession().getCGManager();
-        button.setIcon((SIcon) manager.getObject("SRadioButton.icon", SIcon.class));
-        button.setSelectedIcon((SIcon) manager.getObject("SRadioButton.selectedIcon", SIcon.class));
-        button.setRolloverIcon((SIcon) manager.getObject("SRadioButton.rolloverIcon", SIcon.class));
-        button.setRolloverSelectedIcon((SIcon) manager.getObject("SRadioButton.rolloverSelectedIcon", SIcon.class));
-        button.setPressedIcon((SIcon) manager.getObject("SRadioButton.pressedIcon", SIcon.class));
-        button.setDisabledIcon((SIcon) manager.getObject("SRadioButton.disabledIcon", SIcon.class));
-        button.setDisabledSelectedIcon((SIcon) manager.getObject("SRadioButton.disabledSelectedIcon", SIcon.class));
+        button.setIcon((SIcon) ResourceManager.getObject("SRadioButton.icon", SIcon.class));
+        button.setSelectedIcon((SIcon) ResourceManager.getObject("SRadioButton.selectedIcon", SIcon.class));
+        button.setRolloverIcon((SIcon) ResourceManager.getObject("SRadioButton.rolloverIcon", SIcon.class));
+        button.setRolloverSelectedIcon((SIcon) ResourceManager.getObject("SRadioButton.rolloverSelectedIcon", SIcon.class));
+        button.setPressedIcon((SIcon) ResourceManager.getObject("SRadioButton.pressedIcon", SIcon.class));
+        button.setDisabledIcon((SIcon) ResourceManager.getObject("SRadioButton.disabledIcon", SIcon.class));
+        button.setDisabledSelectedIcon((SIcon) ResourceManager.getObject("SRadioButton.disabledSelectedIcon", SIcon.class));
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {

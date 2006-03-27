@@ -13,6 +13,9 @@
  */
 package org.wings.template;
 
+import java.awt.Color;
+import java.io.InputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.Resource;
@@ -20,14 +23,11 @@ import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SIcon;
 import org.wings.plaf.ComponentCG;
-import org.wings.plaf.LookAndFeel;
+import org.wings.plaf.ResourceFactory;
 import org.wings.resource.ClasspathResource;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.StyleSheet;
-
-import java.awt.*;
-import java.io.InputStream;
 
 
 /**
@@ -99,15 +99,15 @@ public class DefaultPropertyValueConverter implements PropertyValueConverter {
         } // end of if ()
 
         if (SIcon.class.isAssignableFrom(targetClass)) {
-            return LookAndFeel.makeIcon(value);
+            return ResourceFactory.makeIcon(value);
         }
 
         if (targetClass == Color.class) {
-            return LookAndFeel.makeColor(value);
+            return ResourceFactory.makeColor(value);
         }
 
         if (targetClass == SDimension.class) {
-            return LookAndFeel.makeDimension(value);
+            return ResourceFactory.makeDimension(value);
         }
 
         if (targetClass == SFont.class) {
@@ -119,7 +119,7 @@ public class DefaultPropertyValueConverter implements PropertyValueConverter {
         }
 
         if (CSSAttributeSet.class.isAssignableFrom(targetClass)) {
-            return LookAndFeel.makeAttributeSet(value);
+            return ResourceFactory.makeAttributeSet(value);
         }
 
         if (StyleSheet.class.isAssignableFrom(targetClass)) {
@@ -138,7 +138,7 @@ public class DefaultPropertyValueConverter implements PropertyValueConverter {
         }
 
         if (ComponentCG.class.isAssignableFrom(targetClass)) {
-            return LookAndFeel.makeCG(value);
+            return ResourceFactory.makeCG(value);
         }
 
         throw new UnsupportedOperationException("cannot create object of type " +

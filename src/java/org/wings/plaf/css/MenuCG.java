@@ -26,6 +26,11 @@ import java.io.IOException;
 public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         org.wings.plaf.MenuCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void installCG(final SComponent comp) {
         super.installCG(comp);
     }

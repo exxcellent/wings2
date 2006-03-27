@@ -24,6 +24,10 @@ import java.util.Properties;
 public class CSSLookAndFeel
         extends org.wings.plaf.LookAndFeel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private final transient static Log log = LogFactory.getLog(CSSLookAndFeel.class);
     private static final String PROPERTIES_FILENAME_DEFAULT = "default";
     private static final String PROPERTIES_FILENAME_END = ".properties";

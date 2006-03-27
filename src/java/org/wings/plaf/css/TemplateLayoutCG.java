@@ -13,20 +13,29 @@
  */
 package org.wings.plaf.css;
 
+import java.io.IOException;
+
 import org.wings.SLayoutManager;
 import org.wings.STemplateLayout;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
-import org.wings.template.*;
+import org.wings.template.LabelTagHandler;
+import org.wings.template.RangeTagHandler;
+import org.wings.template.SimpleTagHandler;
+import org.wings.template.TemplateParseContext;
+import org.wings.template.TemplateSource;
 import org.wings.template.parser.PageParser;
-
-import java.io.IOException;
 
 /**
  * @author Achim Derigs
  * @version $Revision$
  */
 public class TemplateLayoutCG implements LayoutCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * The parser looks for the '<OBJECT></OBJECT>' - tags.
      */

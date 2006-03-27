@@ -26,6 +26,11 @@ import org.wings.util.KeystrokeUtil;
 
 public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     protected void writeItemContent(final Device device, SMenuItem menuItem)
             throws IOException {
         SIcon icon = getIcon(menuItem);

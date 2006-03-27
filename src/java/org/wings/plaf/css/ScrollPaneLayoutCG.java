@@ -3,6 +3,10 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.Rectangle;
+import java.io.IOException;
+import java.util.Map;
+
 import org.wings.SComponent;
 import org.wings.SContainer;
 import org.wings.SLayoutManager;
@@ -10,11 +14,12 @@ import org.wings.SScrollPaneLayout;
 import org.wings.Scrollable;
 import org.wings.io.Device;
 
-import java.awt.*;
-import java.io.IOException;
-import java.util.Map;
-
 public class ScrollPaneLayoutCG extends AbstractLayoutCG {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     public void write(Device d, SLayoutManager l)
             throws IOException {

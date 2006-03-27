@@ -13,16 +13,17 @@
  */
 package org.wings;
 
-import org.wings.session.SessionManager;
-import org.wings.table.STableCellEditor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serializable;
+import java.util.EventObject;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.EventObject;
-import java.io.Serializable;
+
+import org.wings.resource.ResourceManager;
+import org.wings.table.STableCellEditor;
 
 /**
  * Default table cell editor.
@@ -36,16 +37,19 @@ import java.io.Serializable;
 public class SDefaultCellEditor
         implements STableCellEditor {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * The default ok button icon.
      */
-    private static final SIcon OK_BUTTON_ICON = (SIcon) SessionManager.getSession()
-    .getCGManager().getObject("SDefaultCellEditor.okIcon", SIcon.class);
+    private static final SIcon OK_BUTTON_ICON = (SIcon) ResourceManager.getObject("SDefaultCellEditor.okIcon", SIcon.class);
 
     /**
      * The default cancel button icon.
      */
-    private static final SIcon CANCEL_BUTTON_ICON = (SIcon) SessionManager.getSession()
-    .getCGManager().getObject("SDefaultCellEditor.cancelIcon", SIcon.class);
+    private static final SIcon CANCEL_BUTTON_ICON = (SIcon) ResourceManager.getObject("SDefaultCellEditor.cancelIcon", SIcon.class);
 
     /**
      * Label for displaying (error)-messages. It is unvisible, until a message
@@ -383,6 +387,11 @@ public class SDefaultCellEditor
     }
 
     private final class FireEventListener implements ActionListener, Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == ok) {
                 stopCellEditing();

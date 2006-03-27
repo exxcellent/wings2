@@ -13,13 +13,18 @@
  */
 package org.wings.plaf.css;
 
-import javax.swing.*;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
 
 /**
  * @author hengels
  * @version $Revision$
  */
 public class VersionedInputMap extends InputMap {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     InputMap inputMap;
     int version = 0;
 

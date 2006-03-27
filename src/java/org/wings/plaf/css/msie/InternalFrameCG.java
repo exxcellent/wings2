@@ -22,6 +22,11 @@ import org.wings.plaf.css.Utils;
 
 public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /* (non-Javadoc)
      * @see org.wings.plaf.css.InternalFrameCG#writeWindowBar(org.wings.io.Device, org.wings.SInternalFrame)
      */

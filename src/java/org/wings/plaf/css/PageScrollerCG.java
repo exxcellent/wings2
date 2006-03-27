@@ -3,13 +3,17 @@
  */
 package org.wings.plaf.css;
 
+import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SIcon;
+import org.wings.SPageScroller;
+import org.wings.SResourceIcon;
 import org.wings.io.Device;
 import org.wings.session.SessionManager;
-
-import java.io.IOException;
 
 /**
  * CG for a pagescroller.
@@ -17,6 +21,11 @@ import java.io.IOException;
  * @author holger
  */
 public class PageScrollerCG extends AbstractComponentCG implements org.wings.plaf.PageScrollerCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private final static transient Log log = LogFactory.getLog(PageScrollerCG.class);
     
     public static final int FORWARD = 0;

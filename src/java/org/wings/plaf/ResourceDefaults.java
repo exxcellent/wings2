@@ -21,15 +21,15 @@ import java.util.HashMap;
  * A Property table that stores default. This table overrides the
  * mappings of its <code>parent</code> table.
  */
-public class CGDefaults
+public class ResourceDefaults
         extends HashMap {
     private PropertyChangeSupport changeSupport;
-    private CGDefaults parent;
+    private ResourceDefaults parent;
 
     /**
      * @param parent the parent defaults table that backs this defaults table
      */
-    public CGDefaults(CGDefaults parent) {
+    public ResourceDefaults(ResourceDefaults parent) {
         this.parent = parent;
     }
 

@@ -13,6 +13,11 @@
  */
 package org.wings.plaf.css;
 
+import java.io.IOException;
+import java.io.Serializable;
+
+import javax.swing.InputMap;
+
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
@@ -21,10 +26,6 @@ import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.io.Serializable;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.

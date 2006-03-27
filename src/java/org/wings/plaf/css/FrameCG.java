@@ -14,9 +14,24 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import javax.swing.InputMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
+import org.wings.Renderable;
+import org.wings.SComponent;
+import org.wings.SFrame;
+import org.wings.SToolTipManager;
+import org.wings.Version;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Link;
@@ -28,6 +43,7 @@ import org.wings.resource.ClassPathStylesheetResource;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.ResourceManager;
 import org.wings.script.DynamicScriptResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
@@ -37,15 +53,16 @@ import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
 import org.wings.style.DynamicStyleSheetResource;
 
-import javax.swing.*;
-import java.io.IOException;
-import java.util.*;
-
 /**
  * PLAF renderer for SFrames.
  * Does quite many abritriray things i.e. registering diverse service scripts, etc.
  */
 public class FrameCG implements org.wings.plaf.FrameCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private final transient static Log log = LogFactory.getLog(FrameCG.class);
 
     /**
@@ -67,16 +84,12 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     /**
      * javascript needed for Drag and Drop support
      */
-    private final String DND_JS = (String) SessionManager
-    .getSession().getCGManager().getObject("JScripts.dnd",
-            String.class);
+    private final String DND_JS = (String) ResourceManager.getObject("JScripts.dnd", String.class);
     
     /**
      * javascript needed for Drag and Drop support
      */
-    private final String WZ_DND_JS = (String) SessionManager
-    .getSession().getCGManager().getObject("JScripts.wzdragdrop",
-            String.class);
+    private final String WZ_DND_JS = (String) ResourceManager.getObject("JScripts.wzdragdrop", String.class);
     
     private String documentType = STRICT_DOCTYPE;
 
@@ -114,13 +127,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         javascriptResourceKeys.add("JScripts.domtt");
     }
 
-    public final String UTILS_SCRIPT = (String) SessionManager
-            .getSession().getCGManager().getObject("JScripts.utils",
-                    String.class);
+    public final String UTILS_SCRIPT = (String) ResourceManager.getObject("JScripts.utils", String.class);
 
-    public final String FORM_SCRIPT = (String) SessionManager
-            .getSession().getCGManager().getObject("JScripts.form",
-                    String.class);
+    public final String FORM_SCRIPT = (String) ResourceManager.getObject("JScripts.form", String.class);
 
     public static final JavaScriptListener FOCUS_SCRIPT =
             new JavaScriptListener("onfocus", "storeFocus(event)");

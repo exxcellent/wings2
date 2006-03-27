@@ -14,4 +14,9 @@
 package org.wings.plaf.css.msie;
 
 public class ToggleButtonCG extends ButtonCG {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 }

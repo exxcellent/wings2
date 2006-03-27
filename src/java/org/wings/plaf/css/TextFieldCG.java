@@ -27,6 +27,11 @@ import java.io.IOException;
 public class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void componentChanged(SComponent component) {
         final STextField textField = (STextField) component;
 

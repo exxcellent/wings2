@@ -16,6 +16,10 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public class CallableManager implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private SessionCreatorManager creatorManager = new SessionCreatorManager();
 
     public static CallableManager getInstance() {

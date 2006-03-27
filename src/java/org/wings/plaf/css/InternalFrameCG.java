@@ -14,18 +14,23 @@
 package org.wings.plaf.css;
 
 
+import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SIcon;
+import org.wings.SInternalFrame;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
-import org.wings.plaf.CGManager;
-import org.wings.session.SessionManager;
-
-import java.io.IOException;
+import org.wings.resource.ResourceManager;
 
 public class InternalFrameCG extends AbstractComponentCG implements
         org.wings.plaf.InternalFrameCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private final static transient Log log = LogFactory.getLog(InternalFrameCG.class);
     protected static final String WINDOWICON_CLASSNAME = "WindowIcon";
     protected static final String BUTTONICON_CLASSNAME = "WindowButton";
@@ -39,13 +44,11 @@ public class InternalFrameCG extends AbstractComponentCG implements
      * Initialize properties from config
      */
     public InternalFrameCG() {
-        final CGManager manager = SessionManager.getSession().getCGManager();
-
-        setCloseIcon((SIcon) manager.getObject("InternalFrameCG.closeIcon", SIcon.class));
-        setDeiconifyIcon((SIcon) manager.getObject("InternalFrameCG.deiconifyIcon", SIcon.class));
-        setIconifyIcon((SIcon) manager.getObject("InternalFrameCG.iconifyIcon", SIcon.class));
-        setMaximizeIcon((SIcon) manager.getObject("InternalFrameCG.maximizeIcon", SIcon.class));
-        setUnmaximizeIcon((SIcon) manager.getObject("InternalFrameCG.unmaximizeIcon", SIcon.class));
+        setCloseIcon((SIcon) ResourceManager.getObject("InternalFrameCG.closeIcon", SIcon.class));
+        setDeiconifyIcon((SIcon) ResourceManager.getObject("InternalFrameCG.deiconifyIcon", SIcon.class));
+        setIconifyIcon((SIcon) ResourceManager.getObject("InternalFrameCG.iconifyIcon", SIcon.class));
+        setMaximizeIcon((SIcon) ResourceManager.getObject("InternalFrameCG.maximizeIcon", SIcon.class));
+        setUnmaximizeIcon((SIcon) ResourceManager.getObject("InternalFrameCG.unmaximizeIcon", SIcon.class));
     }
 
     protected void writeIcon(Device device, SIcon icon, String cssClass) throws IOException {

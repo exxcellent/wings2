@@ -3,19 +3,18 @@
  */
 package org.wings.plaf.css.dwr;
 
-import org.w3c.dom.Element;
-import uk.ltd.getahead.dwr.Creator;
-import uk.ltd.getahead.dwr.CreatorManager;
-import uk.ltd.getahead.dwr.ExecutionContext;
-import org.w3c.dom.Element;
-import org.wings.plaf.css.dwr.SessionCreator;
-import org.wings.session.SessionManager;
-
-import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.io.Serializable;
+
+import javax.servlet.http.HttpSession;
+
+import org.w3c.dom.Element;
+import org.wings.session.SessionManager;
+
+import uk.ltd.getahead.dwr.Creator;
+import uk.ltd.getahead.dwr.CreatorManager;
+import uk.ltd.getahead.dwr.ExecutionContext;
 
 /**
  * The callables are referenced weakly, only. Thus, most callables are destroyed as soon as there's

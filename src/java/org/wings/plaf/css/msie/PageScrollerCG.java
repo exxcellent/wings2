@@ -6,9 +6,7 @@ package org.wings.plaf.css.msie;
 import java.io.IOException;
 
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
-import org.wings.SPageScroller;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
@@ -17,6 +15,7 @@ import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
+import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
 
 /**
@@ -24,9 +23,11 @@ import org.wings.session.SessionManager;
  *
  */
 public class PageScrollerCG extends org.wings.plaf.css.PageScrollerCG implements SParentFrameListener {
-    private static final String FORMS_JS = (String) SessionManager
-    .getSession().getCGManager().getObject("JScripts.form",
-            String.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
 
     public void installCG(SComponent component) {

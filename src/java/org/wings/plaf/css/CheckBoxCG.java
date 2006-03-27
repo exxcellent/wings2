@@ -14,15 +14,21 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.plaf.CGManager;
-import org.wings.io.Device;
-import org.wings.session.SessionManager;
-
 import java.io.IOException;
+
+import org.wings.RequestURL;
+import org.wings.SAbstractButton;
+import org.wings.SComponent;
+import org.wings.SIcon;
+import org.wings.io.Device;
+import org.wings.resource.ResourceManager;
 
 public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     protected boolean useIconsInForms = false;
 
     public boolean isUseIconsInForm() {
@@ -40,14 +46,13 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
     }
 
     protected void installIcons(final SAbstractButton button) {
-        CGManager manager = SessionManager.getSession().getCGManager();
-        button.setIcon((SIcon) manager.getObject("SCheckBox.icon", SIcon.class));
-        button.setSelectedIcon((SIcon) manager.getObject("SCheckBox.selectedIcon", SIcon.class));
-        button.setRolloverIcon((SIcon) manager.getObject("SCheckBox.rolloverIcon", SIcon.class));
-        button.setRolloverSelectedIcon((SIcon) manager.getObject("SCheckBox.rolloverSelectedIcon", SIcon.class));
-        button.setPressedIcon((SIcon) manager.getObject("SCheckBox.pressedIcon", SIcon.class));
-        button.setDisabledIcon((SIcon) manager.getObject("SCheckBox.disabledIcon", SIcon.class));
-        button.setDisabledSelectedIcon((SIcon) manager.getObject("SCheckBox.disabledSelectedIcon", SIcon.class));
+        button.setIcon((SIcon) ResourceManager.getObject("SCheckBox.icon", SIcon.class));
+        button.setSelectedIcon((SIcon) ResourceManager.getObject("SCheckBox.selectedIcon", SIcon.class));
+        button.setRolloverIcon((SIcon) ResourceManager.getObject("SCheckBox.rolloverIcon", SIcon.class));
+        button.setRolloverSelectedIcon((SIcon) ResourceManager.getObject("SCheckBox.rolloverSelectedIcon", SIcon.class));
+        button.setPressedIcon((SIcon) ResourceManager.getObject("SCheckBox.pressedIcon", SIcon.class));
+        button.setDisabledIcon((SIcon) ResourceManager.getObject("SCheckBox.disabledIcon", SIcon.class));
+        button.setDisabledSelectedIcon((SIcon) ResourceManager.getObject("SCheckBox.disabledSelectedIcon", SIcon.class));
     }
 
     public void writeContent(final Device device, final SComponent component)

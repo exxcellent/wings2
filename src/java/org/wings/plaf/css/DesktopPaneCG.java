@@ -24,6 +24,11 @@ import org.wings.io.Device;
 
 public class DesktopPaneCG extends AbstractComponentCG implements
         org.wings.plaf.DesktopPaneCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void installCG(SComponent component) {
         super.installCG(component);
         component.setPreferredSize(SDimension.FULLWIDTH);

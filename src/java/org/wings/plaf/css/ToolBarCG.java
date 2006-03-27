@@ -22,6 +22,11 @@ import java.io.IOException;
 
 public class ToolBarCG extends AbstractComponentCG implements
         org.wings.plaf.ToolBarCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void writeContent(final Device device, final SComponent _c)
             throws IOException {
         final SToolBar toolBar = (SToolBar) _c;

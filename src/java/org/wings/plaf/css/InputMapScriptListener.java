@@ -13,16 +13,18 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.swing.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 
 /**
  * @author hengels

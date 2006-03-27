@@ -14,19 +14,28 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.io.Device;
-import org.wings.plaf.CGManager;
-import org.wings.session.SessionManager;
-import org.wings.tree.SDefaultTreeSelectionModel;
-import org.wings.tree.STreeCellRenderer;
+import java.io.IOException;
 
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.io.IOException;
+
+import org.wings.RequestURL;
+import org.wings.SCellRendererPane;
+import org.wings.SComponent;
+import org.wings.SIcon;
+import org.wings.STree;
+import org.wings.io.Device;
+import org.wings.plaf.CGManager;
+import org.wings.resource.ResourceManager;
+import org.wings.tree.SDefaultTreeSelectionModel;
+import org.wings.tree.STreeCellRenderer;
 
 public class TreeCG extends AbstractComponentCG implements
         org.wings.plaf.TreeCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private SIcon collapseControlIcon;
     private SIcon emptyFillIcon;
     private SIcon expandControlIcon;
@@ -37,13 +46,11 @@ public class TreeCG extends AbstractComponentCG implements
      * Initialize properties from config
      */
     public TreeCG() {
-        final CGManager manager = SessionManager.getSession().getCGManager();
-
-        setCollapseControlIcon((SIcon) manager.getObject("TreeCG.collapseControlIcon", SIcon.class));
-        setEmptyFillIcon((SIcon) manager.getObject("TreeCG.emptyFillIcon", SIcon.class));
-        setExpandControlIcon((SIcon) manager.getObject("TreeCG.expandControlIcon", SIcon.class));
-        setHashMark((SIcon) manager.getObject("TreeCG.hashMark", SIcon.class));
-        setLeafControlIcon((SIcon) manager.getObject("TreeCG.leafControlIcon", SIcon.class));
+        setCollapseControlIcon((SIcon) ResourceManager.getObject("TreeCG.collapseControlIcon", SIcon.class));
+        setEmptyFillIcon((SIcon) ResourceManager.getObject("TreeCG.emptyFillIcon", SIcon.class));
+        setExpandControlIcon((SIcon) ResourceManager.getObject("TreeCG.expandControlIcon", SIcon.class));
+        setHashMark((SIcon) ResourceManager.getObject("TreeCG.hashMark", SIcon.class));
+        setLeafControlIcon((SIcon) ResourceManager.getObject("TreeCG.leafControlIcon", SIcon.class));
     }
 
 

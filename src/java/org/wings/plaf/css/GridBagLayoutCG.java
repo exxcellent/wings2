@@ -13,14 +13,21 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.io.IOException;
+
 import org.wings.SComponent;
 import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import java.awt.*;
-import java.io.IOException;
 
 public class GridBagLayoutCG extends AbstractLayoutCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Renders a gridbag layout using invisible layouter tables.
      *

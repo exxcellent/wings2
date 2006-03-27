@@ -28,9 +28,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
     }
 
     protected final void writeText(Device device, String text, boolean wordWrap) throws IOException {
-        //boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE);
-
-        // white-space:nowrap seems to work in all majaor browser.
+        // white-space:nowrap seems to work in all major browser.
         // Except leading and trailing spaces!
         device.print("<span").print(wordWrap ? "" : " style=\"white-space:nowrap\"").print(">");
 

@@ -13,6 +13,11 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.Insets;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
@@ -20,12 +25,12 @@ import org.wings.SFlowLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.awt.*;
-
 public class FlowLayoutCG extends AbstractLayoutCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * @param d the device to write the code to
      * @param l the layout manager

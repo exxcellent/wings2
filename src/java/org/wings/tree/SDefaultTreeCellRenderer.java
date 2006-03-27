@@ -18,6 +18,7 @@ import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.STree;
+import org.wings.resource.ResourceManager;
 
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
@@ -61,7 +62,7 @@ public class SDefaultTreeCellRenderer
      * represent non-leaf nodes that are expanded.
      */
     public SIcon getDefaultOpenIcon() {
-        return getSession().getCGManager().getIcon("TreeCG.openIcon");
+        return (SIcon) ResourceManager.getObject("TreeCG.openIcon", SIcon.class);
     }
 
     /**
@@ -69,7 +70,7 @@ public class SDefaultTreeCellRenderer
      * represent non-leaf nodes that are not expanded.
      */
     public SIcon getDefaultClosedIcon() {
-        return getSession().getCGManager().getIcon("TreeCG.closedIcon");
+        return (SIcon) ResourceManager.getObject("TreeCG.closedIcon", SIcon.class);
     }
 
     /**
@@ -77,7 +78,7 @@ public class SDefaultTreeCellRenderer
      * represent leaf nodes.
      */
     public SIcon getDefaultLeafIcon() {
-        return getSession().getCGManager().getIcon("TreeCG.leafIcon");
+        return (SIcon) ResourceManager.getObject("TreeCG.leafIcon", SIcon.class);
     }
 
     /**

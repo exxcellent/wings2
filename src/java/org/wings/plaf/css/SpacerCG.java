@@ -21,6 +21,11 @@ import java.io.IOException;
 
 public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.SpacerCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void writeContent(final Device device, final SComponent c) throws IOException {
         final SSpacer component = (SSpacer) c;
         int height = component.getPreferredSize().getHeightInt();

@@ -27,6 +27,10 @@ import org.wings.io.Device;
 public class MenuBarCG
         extends org.wings.plaf.css.MenuBarCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private final transient static Log log = LogFactory.getLog(MenuBarCG.class);
 
     /* (non-Javadoc)

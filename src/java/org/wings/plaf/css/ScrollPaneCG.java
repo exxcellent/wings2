@@ -13,13 +13,22 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
-import org.wings.io.Device;
-
-import java.awt.*;
+import java.awt.Rectangle;
 import java.io.IOException;
 
+import org.wings.SComponent;
+import org.wings.SDimension;
+import org.wings.SScrollPane;
+import org.wings.SScrollPaneLayout;
+import org.wings.Scrollable;
+import org.wings.io.Device;
+
 public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void write(Device device, SComponent component) throws IOException {
         SScrollPane scrollPane = (SScrollPane) component;
         Scrollable scrollable = scrollPane.getScrollable();

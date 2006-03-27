@@ -51,6 +51,10 @@ import java.util.List;
 
 public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * Apache jakarta commons logger
      */
     private final static Log log = LogFactory.getLog(TableCG.class);

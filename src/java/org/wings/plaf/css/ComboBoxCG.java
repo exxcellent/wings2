@@ -24,6 +24,11 @@ import java.io.IOException;
 
 public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.ComboBoxCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         final SComboBox component = (SComboBox) comp;

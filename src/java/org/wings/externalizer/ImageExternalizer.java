@@ -14,6 +14,8 @@
 package org.wings.externalizer;
 
 import Acme.JPM.Encoders.GifEncoder;
+import Acme.JPM.Encoders.JpegEncoder;
+
 import com.keypoint.PngEncoder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,12 +36,14 @@ public class ImageExternalizer implements Externalizer {
 
     public static final String FORMAT_PNG = "png";
     public static final String FORMAT_GIF = "gif";
+    public static final String FORMAT_JPG = "jpeg";
 
-    private static final String[] SUPPORTED_FORMATS = {FORMAT_PNG, FORMAT_GIF};
+    public static final String[] SUPPORTED_FORMATS = {FORMAT_PNG, FORMAT_GIF, FORMAT_JPG};
     private static final Class[] SUPPORTED_CLASSES = {Image.class};
 
     public static final ImageExternalizer SHARED_GIF_INSTANCE = new ImageExternalizer(FORMAT_GIF);
     public static final ImageExternalizer SHARED_PNG_INSTANCE = new ImageExternalizer(FORMAT_PNG);
+    public static final ImageExternalizer SHARED_JPG_INSTANCE = new ImageExternalizer(FORMAT_JPG);
 
     protected String format;
 
@@ -93,6 +97,8 @@ public class ImageExternalizer implements Externalizer {
         Image img = (Image) obj;
         if (FORMAT_PNG.equals(format))
             writePNG(img, out);
+        else if (FORMAT_JPG.equals(format))
+            writeJPG(img, out);
         else
             writeGIF(img, out);
     }
@@ -104,6 +110,15 @@ public class ImageExternalizer implements Externalizer {
             throws java.io.IOException {
         GifEncoder encoder = new GifEncoder(img, new DeviceOutputStream(out),
                 true);
+        encoder.encode();
+    }
+
+    /**
+     * writes a image as jpeg to the OutputStream
+     */
+    public void writeJPG(Image img, Device out)
+            throws java.io.IOException {
+        JpegEncoder encoder = new JpegEncoder(img, new DeviceOutputStream(out));
         encoder.encode();
     }
 

@@ -13,6 +13,8 @@
  */
 package org.wings.plaf.css;
 
+import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
@@ -24,13 +26,14 @@ import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 
-import javax.swing.*;
-import java.io.IOException;
-
 /**
  * @author ole
  */
 public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDelegate {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private final static transient Log log = LogFactory.getLog(PrefixAndSuffixDelegate.class);
 
     public PrefixAndSuffixDelegate() {

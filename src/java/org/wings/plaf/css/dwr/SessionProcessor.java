@@ -1,17 +1,14 @@
 package org.wings.plaf.css.dwr;
 
-import uk.ltd.getahead.dwr.impl.DefaultProcessor;
-import uk.ltd.getahead.dwr.impl.ExecuteQuery;
-import uk.ltd.getahead.dwr.Call;
-import uk.ltd.getahead.dwr.util.Logger;
-import uk.ltd.getahead.dwr.lang.StringEscapeUtils;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import org.wings.session.*;
+import org.wings.session.SessionManager;
+
+import uk.ltd.getahead.dwr.impl.DefaultProcessor;
+import uk.ltd.getahead.dwr.util.Logger;
 
 public class SessionProcessor
     extends DefaultProcessor

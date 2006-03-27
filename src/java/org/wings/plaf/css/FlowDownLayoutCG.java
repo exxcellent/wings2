@@ -14,17 +14,22 @@
 
 package org.wings.plaf.css;
 
+import java.awt.Insets;
+import java.io.IOException;
+
 import org.wings.SFlowDownLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-
-import java.io.IOException;
-import java.awt.*;
 
 /**
  * @author bschmid
  */
 public class FlowDownLayoutCG extends AbstractLayoutCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Render FlowDownLayout as table based layout
      * @param d the device to write the code to

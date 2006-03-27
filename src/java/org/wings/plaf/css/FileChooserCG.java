@@ -23,6 +23,11 @@ import org.wings.io.Device;
 public class FileChooserCG extends AbstractComponentCG implements
         org.wings.plaf.FileChooserCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {

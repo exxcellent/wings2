@@ -23,6 +23,11 @@ import java.io.IOException;
 public class TextAreaCG extends AbstractComponentCG implements
         org.wings.plaf.TextAreaCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {

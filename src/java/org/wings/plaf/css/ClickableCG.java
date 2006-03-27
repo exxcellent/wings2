@@ -22,6 +22,11 @@ import java.io.IOException;
 
 public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void writeContent(final Device device, final SComponent component)
             throws IOException {
         final SClickable button = (SClickable) component;

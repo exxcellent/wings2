@@ -14,23 +14,32 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SIcon;
-import org.wings.STabbedPane;
-import org.wings.session.Browser;
-import org.wings.session.BrowserType;
-import org.wings.io.Device;
-import org.wings.style.CSSSelector;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
+
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SIcon;
+import org.wings.STabbedPane;
+import org.wings.io.Device;
+import org.wings.session.Browser;
+import org.wings.session.BrowserType;
+import org.wings.style.CSSSelector;
+
 public class TabbedPaneCG extends AbstractComponentCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private static final Map placements = new HashMap();
     
     static {

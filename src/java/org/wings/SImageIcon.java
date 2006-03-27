@@ -33,13 +33,30 @@ public class SImageIcon extends SAbstractIcon {
     private final SimpleURL url;
 
     public SImageIcon(ImageIcon image) {
+        if (image == null) {
+            throw new IllegalArgumentException("SImageIcon needs an Argument that's not null");
+        }
         this.img = image;
+        String mimeType = extractMimeTypeFromPath(image.getDescription());
+        
+        
+        
         url = new SimpleURL(SessionManager.getSession()
                 .getExternalizeManager()
-                .externalize(image, determineMimeType(image.getImage())));
+                .externalize(image, mimeType!=null?mimeType:determineMimeType(image.getImage())));
 
         setIconWidth(img.getIconWidth());
         setIconHeight(img.getIconHeight());
+    }
+
+    private String extractMimeTypeFromPath(String description) {
+        String[] supported = ImageExternalizer.SUPPORTED_FORMATS;
+        for (int i = 0; i < supported.length; i++) {
+            if (description.endsWith(supported[i])) return "image/" + supported[i]; 
+        }
+        // special case jpg for jpeg
+        if (description.endsWith("jpg")) return "image/jpeg";
+        else return null;
     }
 
     public SImageIcon(java.awt.Image image) {

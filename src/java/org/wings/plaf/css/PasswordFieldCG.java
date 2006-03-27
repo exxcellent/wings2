@@ -23,6 +23,11 @@ import org.wings.io.Device;
 public class PasswordFieldCG extends AbstractComponentCG implements
         org.wings.plaf.PasswordFieldCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void writeContent(final Device device,
                              final SComponent _c)
             throws IOException {

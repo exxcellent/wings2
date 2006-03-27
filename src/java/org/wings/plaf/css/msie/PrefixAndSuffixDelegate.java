@@ -31,6 +31,11 @@ import java.io.IOException;
  */
 public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixDelegate {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public PrefixAndSuffixDelegate() {
     }
 

@@ -266,15 +266,32 @@ public class SFileChooser
     }
 
     /**
-     * pseudonym for {@link #getFile()} (see there).
+     * returns the file, that has been uploaded. Use this, to open and
+     * read from the file uploaded by the user. Don't use this method
+     * to query the actual filename given by the user, since this file
+     * wraps a system generated file with a different (unique) name.
+     * Use {@link #getFileName()} instead.
+     * <p/>
+     * <p>The file returned here
+     * will delete itself if you loose the reference to it and it is
+     * garbage collected to avoid filling up the filesystem (This doesn't
+     * mean, that you shouldn't be a good programmer and delete the
+     * file yourself, if you don't need it anymore :-).
+     * If you rename() the file to use it somewhere else,
+     * it is regarded not temporary anymore and thus will <em>not</em>
+     * be removed from the filesystem.
      *
      * @return a File to access the content of the uploaded file.
      * @throws IOException if something went wrong with the upload (most
      *                     likely, the maximum allowed filesize is exceeded, see
      *                     {@link org.wings.session.Session#setMaxContentLength(int)})
+     *                     
      */
     public File getSelectedFile() throws IOException {
-        return getFile();
+        if (exception != null)
+            throw exception;
+
+        return currentFile;
     }
 
     /**
@@ -315,12 +332,10 @@ public class SFileChooser
      * @throws IOException if something went wrong with the upload (most
      *                     likely, the maximum allowed filesize is exceeded, see
      *                     {@link org.wings.session.Session#setMaxContentLength(int)})
+     * @deprecated use {@link org.wings.SFileChooser#getSelectedFile()} instead.                    
      */
     public File getFile() throws IOException {
-        if (exception != null)
-            throw exception;
-
-        return currentFile;
+        return getSelectedFile();
     }
 
     /**
@@ -365,6 +380,11 @@ public class SFileChooser
 
         try {
             value = URLDecoder.decode(values[0], "UTF-8");
+            /*
+             * FIXME: shouldn't this use the session encoding like below?
+             */
+            //value = URLDecoder.decode(values[0], SessionManager.getSession().getCharacterEncoding());
+
         } catch (final UnsupportedEncodingException e) {
             if (log.isWarnEnabled()) {
                 log.warn("Failed to url-decode '" + values[0] + "'.");

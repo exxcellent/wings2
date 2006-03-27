@@ -13,6 +13,7 @@ import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
+import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
 import java.io.IOException;
 
@@ -21,9 +22,11 @@ import java.io.IOException;
  *
  */
 public class ScrollBarCG extends org.wings.plaf.css.ScrollBarCG implements SParentFrameListener {
-    private static final String FORMS_JS = (String) SessionManager
-    .getSession().getCGManager().getObject("JScripts.form",
-            String.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
 
     public void installCG(SComponent component) {

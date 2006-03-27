@@ -30,12 +30,17 @@ import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
+import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 import java.io.IOException;
 
 public final class PopupMenuCG extends AbstractComponentCG implements
         org.wings.plaf.MenuBarCG, SParentFrameListener {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 
     public void installCG(final SComponent comp) {
@@ -50,12 +55,8 @@ public final class PopupMenuCG extends AbstractComponentCG implements
     public void uninstallCG(final SComponent comp) {
     }
 
-    public static final String UTILS_JS = (String) SessionManager
-    .getSession().getCGManager().getObject("JScripts.utils",
-            String.class);
-    private static final String MENU_JS = (String) SessionManager
-    .getSession().getCGManager().getObject("JScripts.menu",
-            String.class);
+    public static final String UTILS_JS = (String) ResourceManager.getObject("JScripts.utils", String.class);
+    private static final String MENU_JS = (String) ResourceManager.getObject("JScripts.menu", String.class);
     private static final JavaScriptListener BODY_ONCLICK_SCRIPT =
         new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
 

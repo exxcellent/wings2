@@ -26,13 +26,16 @@ import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
+import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
 
 public class ButtonCG extends org.wings.plaf.css.ButtonCG implements SParentFrameListener {
 
-    private static final String FORMS_JS = (String) SessionManager
-    .getSession().getCGManager().getObject("JScripts.form",
-            String.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
     /* (non-Javadoc)
      * @see org.wings.plaf.css.ButtonCG#writeButtonStart(org.wings.io.Device, org.wings.SComponent)

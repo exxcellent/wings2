@@ -32,6 +32,10 @@ import java.io.IOException;
  * @author holger
  */
 public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollBarCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private final static transient Log log = LogFactory.getLog(ScrollBarCG.class);
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;

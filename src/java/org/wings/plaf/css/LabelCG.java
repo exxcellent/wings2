@@ -28,6 +28,10 @@ import java.io.IOException;
  */
 public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private boolean wordWrapDefault;
 
     public LabelCG() {

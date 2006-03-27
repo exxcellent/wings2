@@ -15,16 +15,19 @@ package org.wings.plaf.css.msie;
 
 import java.io.IOException;
 
-import org.wings.RequestURL;
 import org.wings.SAnchor;
 import org.wings.io.Device;
-import org.wings.plaf.css.Utils;
 
 /**
  * @author ole
  *
  */
 public class AnchorCG extends org.wings.plaf.css.AnchorCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /* (non-Javadoc)
      * @see org.wings.plaf.css.CheckBoxCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
      */

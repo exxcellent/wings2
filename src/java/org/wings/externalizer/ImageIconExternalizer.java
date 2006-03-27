@@ -27,6 +27,7 @@ public class ImageIconExternalizer extends ImageExternalizer {
 
     public static final ImageIconExternalizer SHARED_GIF_INSTANCE = new ImageIconExternalizer(FORMAT_GIF);
     public static final ImageIconExternalizer SHARED_PNG_INSTANCE = new ImageIconExternalizer(FORMAT_PNG);
+    public static final ImageIconExternalizer SHARED_JPG_INSTANCE = new ImageIconExternalizer(FORMAT_JPG);
 
 
     public ImageIconExternalizer() {

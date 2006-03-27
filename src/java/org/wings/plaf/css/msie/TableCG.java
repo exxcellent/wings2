@@ -25,15 +25,18 @@ import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
+import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSSelector;
 import java.io.IOException;
 
 public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameListener {
 
-    private static final String FORMS_JS = (String) SessionManager
-            .getSession().getCGManager().getObject("JScripts.form",
-            String.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
     protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
         device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");

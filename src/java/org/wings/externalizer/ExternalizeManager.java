@@ -27,8 +27,10 @@ public class ExternalizeManager extends AbstractExternalizeManager {
     private static final Externalizer[] DEFAULT_EXTERNALIZERS = {
         ImageExternalizer.SHARED_PNG_INSTANCE,
         ImageExternalizer.SHARED_GIF_INSTANCE,
+        ImageExternalizer.SHARED_JPG_INSTANCE,
         ImageIconExternalizer.SHARED_PNG_INSTANCE,
         ImageIconExternalizer.SHARED_GIF_INSTANCE,
+        ImageIconExternalizer.SHARED_JPG_INSTANCE,
         StaticResourceExternalizer.SHARED_INSTANCE,
         StringResourceExternalizer.SHARED_INSTANCE,
         DynamicResourceExternalizer.SHARED_INSTANCE,

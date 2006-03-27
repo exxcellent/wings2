@@ -11,7 +11,7 @@ public class SPoint {
         this.coordinates = coordinates;
     }
 
-    protected String getCoordinates() {
+    public String getCoordinates() {
         return coordinates;
     }
 

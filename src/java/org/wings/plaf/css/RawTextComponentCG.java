@@ -3,13 +3,15 @@ package org.wings.plaf.css;
 import java.io.IOException;
 
 import org.wings.SComponent;
-import org.wings.SIcon;
-import org.wings.SLabel;
 import org.wings.SRawTextComponent;
 import org.wings.io.Device;
-import org.wings.style.CSSSelector;
 
 public class RawTextComponentCG extends AbstractComponentCG {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void writeContent(final Device device, final SComponent component)
             throws IOException {
         SRawTextComponent _c = (SRawTextComponent) component;

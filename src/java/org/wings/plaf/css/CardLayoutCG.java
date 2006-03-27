@@ -23,6 +23,11 @@ import org.wings.plaf.LayoutCG;
 
 public class CardLayoutCG implements LayoutCG {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * @param d the device to write the code to
      * @param l the layout manager
      * @throws IOException

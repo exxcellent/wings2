@@ -13,16 +13,21 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.Insets;
+import java.io.IOException;
+
 import org.wings.SBorderLayout;
 import org.wings.SComponent;
-import org.wings.SLayoutManager;
 import org.wings.SConstants;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
-import java.io.IOException;
-import java.awt.*;
-
 public final class BorderLayoutCG extends AbstractLayoutCG {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     public void write(Device d, SLayoutManager l)
             throws IOException {

@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.plaf.OptionPaneCG;
+import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 
@@ -189,26 +190,22 @@ public class SOptionPane extends SDialog implements ActionListener {
     /**
      * Icon for Inform Dialog
      */
-    private static final SIcon messageImage = (SIcon) SessionManager.getSession()
-    .getCGManager().getObject("SOptionPane.messageIcon", SIcon.class);
+    private static final SIcon messageImage = (SIcon) ResourceManager.getObject("SOptionPane.messageIcon", SIcon.class);
 
     /**
      * Icon for Input Dialog
      */
-    private static final SIcon questionImage = (SIcon) SessionManager.getSession()
-    .getCGManager().getObject("SOptionPane.questionIcon", SIcon.class);
+    private static final SIcon questionImage = (SIcon) ResourceManager.getObject("SOptionPane.questionIcon", SIcon.class);
 
     /**
      * Icon for Show Confirm Dialog
      */
-    private static final SIcon yesnoImage = (SIcon) SessionManager.getSession()
-    .getCGManager().getObject("SOptionPane.yesnoIcon", SIcon.class);
+    private static final SIcon yesnoImage = (SIcon) ResourceManager.getObject("SOptionPane.yesnoIcon", SIcon.class);
 
     /**
      * Icon for Error Dialog
      */
-    private static final SIcon errorImage = (SIcon) SessionManager.getSession()
-    .getCGManager().getObject("SOptionPane.errorIcon", SIcon.class);
+    private static final SIcon errorImage = (SIcon) ResourceManager.getObject("SOptionPane.errorIcon", SIcon.class);
 
     //  protected final SLabel messageLabel  = new SLabel(messageImage);
     //  protected final SLabel questionLabel = new SLabel(questionImage);

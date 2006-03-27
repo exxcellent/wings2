@@ -35,7 +35,7 @@ public class CGManager implements Serializable {
     private final transient static Log log = LogFactory.getLog(CGManager.class);
 
     private LookAndFeel lookAndFeel;
-    private CGDefaults defaults = null;
+    private ResourceDefaults defaults = null;
 
     /**
      * Get an Object from the defaults table.
@@ -131,7 +131,7 @@ public class CGManager implements Serializable {
      *
      * @param defaults the defaults table
      */
-    public void setDefaults(CGDefaults defaults) {
+    public void setDefaults(ResourceDefaults defaults) {
         this.defaults = defaults;
     }
 
@@ -140,7 +140,7 @@ public class CGManager implements Serializable {
      *
      * @return the defaults table
      */
-    public CGDefaults getDefaults() {
+    public ResourceDefaults getDefaults() {
         if (defaults == null) {
             log.warn("defaults == null");
         }
