@@ -444,37 +444,6 @@ public abstract class SAbstractButton
         setEnabled((a != null ? a.isEnabled() : true));
         setToolTipText((a != null ? (String) a.getValue(Action.SHORT_DESCRIPTION) : null));
     }
-
-    /*
-     * if the action changes its name, enabledstatus etc. internally,
-     * we have to react on this. So delegate this in case we have an
-     * action.
-     */
-
-    /**
-     * Returns, whether this Button or its action is enabled.
-     */
-    public boolean isEnabled() {
-        return (action == null ? super.isEnabled() : action.isEnabled());
-    }
-    
-    public String getText() {
-        if (action == null) return super.getText();
-        final String actionText = (String)action.getValue(Action.NAME);
-        return (actionText != null ? actionText : super.getText());
-    }
-
-    public SIcon getIcon() {
-        if (action == null) return super.getIcon();
-        final SIcon actionIcon = (SIcon)action.getValue(Action.SMALL_ICON);
-        return (actionIcon != null) ? actionIcon : super.getIcon();
-    }
-    
-    public String getToolTipText() {
-        if (action == null) return super.getToolTipText();
-        final String actionTool = (String)action.getValue(Action.SHORT_DESCRIPTION);
-        return (actionTool != null) ? actionTool : super.getToolTipText();
-    }
     
     protected PropertyChangeListener createActionPropertyChangeListener(Action a) {
         return new ButtonActionPropertyChangeListener(this, a);

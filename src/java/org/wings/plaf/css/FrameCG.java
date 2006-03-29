@@ -119,17 +119,11 @@ public class FrameCG implements org.wings.plaf.FrameCG {
      */
     private static final String PROPERTY_STYLESHEET = "Stylesheet.";
     private static final String BROWSER_DEFAULT = "default";
-    
-    private final static Set javascriptResourceKeys;
-    static {
-        javascriptResourceKeys = new HashSet();
-        javascriptResourceKeys.add("JScripts.domlib");
-        javascriptResourceKeys.add("JScripts.domtt");
-    }
 
     public final String UTILS_SCRIPT = (String) ResourceManager.getObject("JScripts.utils", String.class);
-
     public final String FORM_SCRIPT = (String) ResourceManager.getObject("JScripts.form", String.class);
+    public final String DOMLIB_SCRIPT = (String) ResourceManager.getObject("JScripts.domlib", String.class);
+    public final String DOMTT_SCRIPT = (String) ResourceManager.getObject("JScripts.domtt", String.class);
 
     public static final JavaScriptListener FOCUS_SCRIPT =
             new JavaScriptListener("onfocus", "storeFocus(event)");
@@ -217,15 +211,6 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         // By default: Register DWR scripts (see SFormattetTextField in wingSet)
         component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
 
-        Iterator iter = javascriptResourceKeys.iterator();
-        while (iter.hasNext()) {
-            String jsResKey = (String) iter.next();
-            String jScriptUrl = externalizeJavaScript(jsResKey);
-            if (jScriptUrl != null) {
-                component.addHeader(new Script("text/javascript", new DefaultURLResource(jScriptUrl)));
-            }
-        }
-
         // Retrieve list of static CSS files to be attached to this frame for this browser.
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component);
         for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
@@ -234,6 +219,8 @@ public class FrameCG implements org.wings.plaf.FrameCG {
 
         addExternalizedHeader(component, UTILS_SCRIPT, "text/javascript");
         addExternalizedHeader(component, FORM_SCRIPT, "text/javascript");
+        addExternalizedHeader(component, DOMLIB_SCRIPT, "text/javascript");
+        addExternalizedHeader(component, DOMTT_SCRIPT, "text/javascript");
         component.addScriptListener(FOCUS_SCRIPT);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
         component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);

@@ -331,8 +331,11 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
                 writeCol(device, selectionColumnWidth);
 
             int columnCount = columnModel.getColumnCount();
-            for (int i=0; i < columnCount; i++)
-                writeCol(device, columnModel.getColumn(i).getWidth());
+            for (int i=0; i < columnCount; i++) {
+                STableColumn column = columnModel.getColumn(i);
+                if (!column.isHidden())
+                    writeCol(device, column.getWidth());
+            }
         }
 
         /*
@@ -354,7 +357,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         * render the header
         */
         if (table.isHeaderVisible()) {
-            device.print("<thead><tr>\n");
+            device.print("<thead><tr class=\"header\">\n");
 
             if (needsSelectionRow)
                 device.print("<th width=\"").print(selectionColumnWidth).print("\"></th>");

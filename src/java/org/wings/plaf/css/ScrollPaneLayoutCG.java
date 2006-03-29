@@ -3,16 +3,12 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Rectangle;
-import java.io.IOException;
-import java.util.Map;
-
-import org.wings.SComponent;
-import org.wings.SContainer;
-import org.wings.SLayoutManager;
-import org.wings.SScrollPaneLayout;
-import org.wings.Scrollable;
+import org.wings.*;
 import org.wings.io.Device;
+
+import java.io.IOException;
+import java.awt.Rectangle;
+import java.util.*;
 
 public class ScrollPaneLayoutCG extends AbstractLayoutCG {
 
@@ -80,7 +76,9 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
             d.print("</td>");
         }
         if (center != null) {
-            d.print("<td width=\"100%\">");
+            d.print("<td width=\"100%\"");
+            Utils.printTableCellAlignment(d, center, SConstants.TOP_ALIGN, SConstants.LEFT_ALIGN);
+            d.print(">");
             writeComponent(d, center);
             d.print("</td>");
         }

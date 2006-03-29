@@ -33,23 +33,22 @@ public class SImageIcon extends SAbstractIcon {
     private final SimpleURL url;
 
     public SImageIcon(ImageIcon image) {
-        if (image == null) {
-            throw new IllegalArgumentException("SImageIcon needs an Argument that's not null");
-        }
-        this.img = image;
-        String mimeType = extractMimeTypeFromPath(image.getDescription());
-        
-        
-        
-        url = new SimpleURL(SessionManager.getSession()
-                .getExternalizeManager()
-                .externalize(image, mimeType!=null?mimeType:determineMimeType(image.getImage())));
-
-        setIconWidth(img.getIconWidth());
-        setIconHeight(img.getIconHeight());
+        this (image, determineMimeType(image));
     }
 
-    private String extractMimeTypeFromPath(String description) {
+    public SImageIcon(ImageIcon image, String mimeType) {
+        if (image == null)
+            throw new IllegalArgumentException("SImageIcon needs an Argument that's not null");
+
+        img = image;
+        url = new SimpleURL(SessionManager.getSession().getExternalizeManager().externalize(image, mimeType));
+        setIconWidth(image.getIconWidth());
+        setIconHeight(image.getIconHeight());
+    }
+
+    private static String extractMimeTypeFromPath(String description) {
+        if (description == null)
+            return null;
         String[] supported = ImageExternalizer.SUPPORTED_FORMATS;
         for (int i = 0; i < supported.length; i++) {
             if (description.endsWith(supported[i])) return "image/" + supported[i]; 
@@ -63,8 +62,16 @@ public class SImageIcon extends SAbstractIcon {
         this(new ImageIcon(image));
     }
 
+    public SImageIcon(java.awt.Image image, String mimeType) {
+        this(new ImageIcon(image), mimeType);
+    }
+
     public SImageIcon(String name) {
         this(new ImageIcon(name));
+    }
+
+    public SImageIcon(String name, String mimeType) {
+        this(new ImageIcon(name), mimeType);
     }
 
     /**
@@ -80,15 +87,18 @@ public class SImageIcon extends SAbstractIcon {
         return img.getImage();
     }
 
-    protected String determineMimeType(Image image) {
-        PixelGrabber pg = new PixelGrabber(image, 0, 0, 1, 1, false);
+    protected static String determineMimeType(ImageIcon imageIcon) {
+        String mimeType = extractMimeTypeFromPath(imageIcon.getDescription());
+        if (mimeType != null)
+            return mimeType;
+        PixelGrabber pg = new PixelGrabber(imageIcon.getImage(), 0, 0, 1, 1, false);
         try {
             pg.grabPixels();
         } catch (InterruptedException e) {
             log.warn("interrupted waiting for pixels!");
         }
 
-        String mimeType = "image/";
+        mimeType = "image/";
         if (!(pg.getColorModel() instanceof IndexColorModel))
             mimeType += ImageExternalizer.FORMAT_PNG;
         else
@@ -97,5 +107,3 @@ public class SImageIcon extends SAbstractIcon {
         return mimeType;
     }
 }
-
-
