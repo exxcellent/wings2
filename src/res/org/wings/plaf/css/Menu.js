@@ -116,6 +116,8 @@ function wpm_menu(event, menu) {
     if (event.button < 2) { // left click hopefully
         wpm_hideActiveMenu();
         wpm_showMenu(menu, menuPos, eventPos);
+        wpm_menuCalled = 1;
+        setTimeout('wpm_menuCalled = 0;', wpm_timeOut / 2);
     }
 }
 
@@ -200,7 +202,7 @@ function wpm_showMenu(menuId, coord, eventCoord) {
 function wpm_handleBodyClicks(event) {
     event = wpm_getEvent(event);
     coords = wpm_getCoordinates(event);
-    if (wpm_isValidEvent(coords)) {
+    if (wpm_menuCalled == 0 && wpm_isValidEvent(coords)) {
         wpm_hideActiveMenu();
     }
 }
