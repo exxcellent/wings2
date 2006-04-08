@@ -15,10 +15,15 @@ package org.wings.plaf.css;
 
 
 import org.wings.SIcon;
+import org.wings.SResourceIcon;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
 import org.wings.io.Device;
 import java.io.IOException;
 
 public abstract class AbstractLabelCG extends AbstractComponentCG {
+
+    public static SIcon TRANSPARENT_ICON = new SResourceIcon("org/wings/icons/transdot.gif");
 
     /**
      * Prefer other writeText method!
@@ -45,7 +50,13 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
 
     protected final void writeIcon(Device device, SIcon icon) throws IOException {
         device.print("<img");
-        Utils.optAttribute(device, "src", icon.getURL());
+        if (isIE() && icon.getURL().toString().endsWith(".png") && icon.getIconWidth() > 0 && icon.getIconHeight() > 0) {
+            Utils.optAttribute(device, "style", "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + icon.getURL() + "', sizingMethod='scale')");
+            Utils.optAttribute(device, "src", TRANSPARENT_ICON.getURL());
+        }
+        else
+            Utils.optAttribute(device, "src", icon.getURL());
+
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
         device.print(" alt=\"");
@@ -53,4 +64,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
         device.print("\"/>");
     }
 
+    protected boolean isIE() {
+        return BrowserType.IE.equals(SessionManager.getSession().getUserAgent().getBrowserType());
+    }
 }

@@ -23,7 +23,7 @@ public class SSpacer extends SComponent {
 
     /** C'tor of an invisible element. */
     public SSpacer(int width, int height) {
-        setPreferredSize(new SDimension(Integer.toString(width), Integer.toString(height)));
+        setPreferredSize(new SDimension(Integer.toString(width) + "px", Integer.toString(height) + "px"));
     }
 
     /** C'tor of an invisible element. */
