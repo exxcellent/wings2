@@ -336,7 +336,8 @@ public abstract class SAbstractButton
     }
 
     public void fireFinalEvents() {
-        requestFocus();
+        // The user wouldn't be able to request focus anymore as this overrides it all the time
+        //requestFocus();
         super.fireFinalEvents();
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
         if (buttonGroup != null)

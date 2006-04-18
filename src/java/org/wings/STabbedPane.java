@@ -902,7 +902,8 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
      * tab selection.
      */
     public void fireFinalEvents() {
-        requestFocus();
+        // The user wouldn't be able to request focus anymore as this overrides it all the time
+        // requestFocus();
         super.fireFinalEvents();
         if (lleChangedIndex > -1)
             setSelectedIndex(lleChangedIndex);
