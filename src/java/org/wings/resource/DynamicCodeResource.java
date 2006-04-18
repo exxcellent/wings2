@@ -38,6 +38,8 @@ public class DynamicCodeResource extends DynamicResource {
     private final transient static Log log = LogFactory.getLog(DynamicCodeResource.class);
 
     private static final ArrayList DEFAULT_CODE_HEADER = new ArrayList();
+    private final PropertyChangeListener changeListener;
+
     static {
         DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Expires", new Date(1000)));
         DEFAULT_CODE_HEADER.add(new Resource.HeaderEntry("Cache-Control", "no-store, no-cache, must-revalidate"));
@@ -53,11 +55,12 @@ public class DynamicCodeResource extends DynamicResource {
     public DynamicCodeResource(final SFrame f) {
         super(f, null, provideMimeType(f));
         // update session encoding if manually updated in the session.
-        f.getSession().addPropertyChangeListener(new PropertyChangeListener() {
+        changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 mimeType = provideMimeType(f);
             }
-        });
+        };
+        f.getSession().addPropertyChangeListener(changeListener);
     }
 
     /**
