@@ -75,6 +75,11 @@ public class Session implements PropertyService, Serializable {
     public final static String LOCALE_PROPERTY = "locale";
 
     /**
+     * The property name of the sessions character encoding
+     */
+    public final static String CHARACTER_ENCODING_PROPERTY = "characterEncoding";
+    
+    /**
      * The property name of the look&feel
      */
     public final static String LOOK_AND_FEEL_PROPERTY = "lookAndFeel";
@@ -639,7 +644,9 @@ public class Session implements PropertyService, Serializable {
      *                          or <code>null</code> if it should be determined by the clients userAgent Locale.
      */
     public void setCharacterEncoding(String characterEncoding) {
+        String oldEncoding = this.characterEncoding;
         this.characterEncoding = characterEncoding;
+        propertyChangeSupport.firePropertyChange(CHARACTER_ENCODING_PROPERTY, oldEncoding, characterEncoding);
     }
 
     /**

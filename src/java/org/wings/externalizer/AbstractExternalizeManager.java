@@ -217,8 +217,7 @@ public abstract class AbstractExternalizeManager {
         if (obj == null || externalizer == null)
             throw new IllegalStateException("no externalizer");
 
-        return externalize(obj, externalizer, externalizer.getMimeType(obj),
-                null, flags);
+        return externalize(obj, externalizer, null, null, flags);
     }
 
     /**
@@ -241,8 +240,7 @@ public abstract class AbstractExternalizeManager {
         if (obj == null || externalizer == null)
             throw new IllegalStateException("no externalizer");
 
-        return externalize(obj, externalizer, externalizer.getMimeType(obj),
-                headers, flags);
+        return externalize(obj, externalizer, null, headers, flags);
     }
 
     /**

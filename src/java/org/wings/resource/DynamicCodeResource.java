@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 /**
  * Traverses the component hierarchy of a frame and lets the CGs compose
@@ -48,14 +50,18 @@ public class DynamicCodeResource extends DynamicResource {
      * Create a code resource for the specified frame.
      * <p>The MIME-type for this frame will be <code>text/html; charset=<i>current encoding</i></code>
      */
-    public DynamicCodeResource(SFrame f) {
+    public DynamicCodeResource(final SFrame f) {
         super(f, null, provideMimeType(f));
+        // update session encoding if manually updated in the session.
+        f.getSession().addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                mimeType = provideMimeType(f);
+            }
+        });
     }
 
     /**
      * The MIME-type for this {@link Resource}.
-     *
-     * @return
      */
     private static String provideMimeType(SFrame frame) {
         return "text/html; charset=" + frame.getSession().getCharacterEncoding();
