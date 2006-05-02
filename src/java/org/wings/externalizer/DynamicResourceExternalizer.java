@@ -49,7 +49,7 @@ public class DynamicResourceExternalizer implements Externalizer {
     }
 
     public boolean isFinal(Object obj) {
-        return true;
+        return false;
     }
 
     public String getEpoch(Object obj) {

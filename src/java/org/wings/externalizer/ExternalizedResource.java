@@ -96,7 +96,7 @@ public class ExternalizedResource {
         if (isFinal())
             return lastModified;
         else
-            return -1;
+            return System.currentTimeMillis();
     }
 
 
