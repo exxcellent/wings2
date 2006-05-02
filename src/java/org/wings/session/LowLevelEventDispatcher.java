@@ -149,7 +149,8 @@ public final class LowLevelEventDispatcher
             log.debug("discard '.y' part of image event");
             return false;
         }
-        
+
+        /*
         // is value encoded in name ? Then append it to the values we have.
         int p = name.indexOf(SConstants.UID_DIVIDER);
         if (p > -1) {
@@ -160,6 +161,7 @@ public final class LowLevelEventDispatcher
             va[values.length] = v;
             values = va;
         }
+        */
 
         List l = (List) listeners.get(name);
         if (l != null && l.size() > 0) {

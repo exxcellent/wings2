@@ -24,9 +24,7 @@ import org.wings.Scrollable;
 import org.wings.io.Device;
 
 public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
 
     public void write(Device device, SComponent component) throws IOException {
@@ -42,14 +40,14 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
                 scrollable.setViewportSize(scrollable.getScrollableViewportSize());
                 center.setPreferredSize(component.getPreferredSize());
                 component.setPreferredSize(null);
-                super.write(device, component);
+                writeContent(device, component);
             } finally {
                 component.setPreferredSize(center.getPreferredSize());
                 scrollable.setViewportSize(viewportSize);
                 center.setPreferredSize(preferredSize);
             }
         } else
-            super.write(device, component);
+            writeContent(device, component);
     }
 
     public void writeContent(Device d, SComponent c)

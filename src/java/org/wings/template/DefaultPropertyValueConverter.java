@@ -138,7 +138,7 @@ public class DefaultPropertyValueConverter implements PropertyValueConverter {
         }
 
         if (ComponentCG.class.isAssignableFrom(targetClass)) {
-            return ResourceFactory.makeCG(value);
+            return ResourceFactory.makeComponentCG(value);
         }
 
         throw new UnsupportedOperationException("cannot create object of type " +

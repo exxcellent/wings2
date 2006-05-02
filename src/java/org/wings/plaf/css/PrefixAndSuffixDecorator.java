@@ -22,6 +22,9 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SPopupMenu;
+import org.wings.session.SessionManager;
+import org.wings.style.CSSSelector;
+import org.wings.plaf.ComponentCG;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
@@ -29,14 +32,57 @@ import org.wings.io.Device;
 /**
  * @author ole
  */
-public class PrefixAndSuffixDelegate implements org.wings.plaf.PrefixAndSuffixDelegate {
-    /**
-     * 
-     */
+public class PrefixAndSuffixDecorator
+    implements CGDecorator
+{
     private static final long serialVersionUID = 1L;
-    private final static transient Log log = LogFactory.getLog(PrefixAndSuffixDelegate.class);
+    protected static final transient Log log = LogFactory.getLog(PrefixAndSuffixDecorator.class);
+    protected ComponentCG delegate;
 
-    public PrefixAndSuffixDelegate() {
+    public PrefixAndSuffixDecorator() {
+    }
+
+    public PrefixAndSuffixDecorator(ComponentCG delegate) {
+        this.delegate = delegate;
+    }
+
+    public ComponentCG getDelegate() {
+        return delegate;
+    }
+
+    public void setDelegate(ComponentCG delegate) {
+        this.delegate = delegate;
+    }
+
+    public void installCG(SComponent c) {
+        delegate.installCG(c);
+    }
+
+    public void uninstallCG(SComponent c) {
+        delegate.uninstallCG(c);
+    }
+
+    public void componentChanged(SComponent c) {
+        delegate.componentChanged(c);
+    }
+
+    public void write(Device device, SComponent component) throws IOException {
+        boolean wantsPrefixAndSuffix = delegate.wantsPrefixAndSuffix(component);
+        if (wantsPrefixAndSuffix)
+            writePrefix(device, component);
+
+        delegate.write(device, component);
+
+        if (wantsPrefixAndSuffix)
+            writeSuffix(device, component);
+    }
+
+    public boolean wantsPrefixAndSuffix(SComponent component) {
+        return false;
+    }
+
+    public CSSSelector mapSelector(SComponent component, CSSSelector pseudoSelector) {
+        return delegate.mapSelector(component, pseudoSelector);
     }
 
     public void writePrefix(Device device, SComponent component) throws IOException {

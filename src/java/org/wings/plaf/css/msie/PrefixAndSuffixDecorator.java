@@ -29,14 +29,14 @@ import java.io.IOException;
  *
  * @author ole
  */
-public final class PrefixAndSuffixDelegate extends org.wings.plaf.css.PrefixAndSuffixDelegate {
+public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAndSuffixDecorator {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    public PrefixAndSuffixDelegate() {
+    public PrefixAndSuffixDecorator() {
     }
 
     /* non-javadoc: wraps every component into a TABLE element for MSIE. */

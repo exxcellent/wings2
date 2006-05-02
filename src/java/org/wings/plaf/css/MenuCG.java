@@ -20,7 +20,6 @@ import org.wings.SComponent;
 import org.wings.SMenu;
 import org.wings.SMenuItem;
 import org.wings.io.Device;
-import org.wings.session.SessionManager;
 import java.io.IOException;
 
 public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
@@ -40,7 +39,6 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
 
     public void writePopup(final Device device, SMenu menu)
             throws IOException {
-        String componentId = menu.getName();
         if (menu.isEnabled()) {
             device.print("<ul");
             writeListAttributes(device, menu);
@@ -86,7 +84,9 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
                         device.print("</a>");
                     }
                     if (menuItem.isEnabled() && menuItem instanceof SMenu) {
-                        ((SMenu)menuItem).writePopup(device);
+                        menuItem.putClientProperty("popup", Boolean.TRUE);
+                        menuItem.write(device);
+                        menuItem.putClientProperty("popup", null);
                     }
                     device.print("</li>\n");
                 }
@@ -158,11 +158,6 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         device.print("_pop\"");
     }
 
-    protected void writeItem(final Device device, SMenuItem menu)
-            throws IOException {
-            writeItemContent(device, menu);
-    }
-
     protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
             throws IOException {
         RequestURL addr = abstractButton.getRequestURL();
@@ -171,18 +166,17 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         addr.write(d);
     }
 
-    public void writeContent(final Device device,
-                             final SComponent _c)
-            throws IOException {
+    public boolean wantsPrefixAndSuffix(SComponent component) {
+        SMenu menu = (SMenu)component;
+        return menu.getParentMenu() == null;
+    }
+
+    public void write(final Device device, final SComponent _c)
+        throws IOException {
         SMenu menu = (SMenu) _c;
-        boolean hasParent = menu.getParentMenu() != null;
-        if (hasParent) {
-        writeItem(device, menu);
-        } else {
-            SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writePrefix(device, _c);
+        if (menu.getClientProperty("popup") == null)
+            writeItemContent(device, menu);
+        else
             writePopup(device, menu);
-            SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writeSuffix(device, _c);
-        }
-        
     }
 }

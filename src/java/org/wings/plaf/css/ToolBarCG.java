@@ -27,7 +27,7 @@ public class ToolBarCG extends AbstractComponentCG implements
      */
     private static final long serialVersionUID = 1L;
 
-    public void writeContent(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent _c)
             throws IOException {
         final SToolBar toolBar = (SToolBar) _c;
 

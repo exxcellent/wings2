@@ -17,6 +17,9 @@ import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.DynamicResource;
 import org.wings.script.DynamicScriptResource;
 import org.wings.style.DynamicStyleSheetResource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -30,6 +33,9 @@ import java.util.Set;
  */
 public class DefaultReloadManager
         implements ReloadManager {
+
+    private final transient static Log log = LogFactory.getLog(DefaultReloadManager.class);
+
     /**
      * a set of all components, manged by this ReloadManager, that are marked
      * dirty.
@@ -49,10 +55,15 @@ public class DefaultReloadManager
      */
     protected final Set dirtyScriptResourceComponents = new HashSet(1024);
 
+    private boolean deliveryPhase = false;
+
     public DefaultReloadManager() {
     }
 
     public synchronized void reload(SComponent component, int aspect) {
+        if (deliveryPhase && log.isDebugEnabled())
+            log.debug("Component " + component.getName() + " changed during delivery phase");
+
         if (component != null) {
             dirtyComponents.add(component);
 
@@ -101,6 +112,7 @@ public class DefaultReloadManager
     }
 
     public synchronized void clear() {
+        deliveryPhase = false;
         dirtyComponents.clear();
         dirtyCodeResourceComponents.clear();
         dirtyScriptResourceComponents.clear();
@@ -115,6 +127,7 @@ public class DefaultReloadManager
             resource.invalidate();
             it.remove();
         }
+        deliveryPhase = true;
     }
 
     public void notifyCGs() {

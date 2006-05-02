@@ -104,7 +104,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
     }
 
 
-    public void writeContent(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent _c)
             throws IOException {
         final SInternalFrame component = (SInternalFrame) _c;
 

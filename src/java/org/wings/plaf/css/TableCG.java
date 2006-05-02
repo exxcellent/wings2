@@ -298,7 +298,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     }
 
 
-    public void writeContent(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent _c)
             throws IOException {
         final STable table = (STable) _c;
         final SDimension intercellPadding = table.getIntercellPadding();

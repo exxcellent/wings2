@@ -28,7 +28,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
      */
     private static final long serialVersionUID = -1794530181411426283L;
 
-    public void writeContent(final Device device, final SComponent component)
+    public void write(final Device device, final SComponent component)
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
         

@@ -68,8 +68,8 @@ public class TextFieldCG extends AbstractComponentCG implements
         }
     }
 
-    public void writeContent(final Device device,
-                             final SComponent component)
+    public void write(final Device device,
+                      final SComponent component)
             throws IOException {
         final STextField textField = (STextField) component;
 

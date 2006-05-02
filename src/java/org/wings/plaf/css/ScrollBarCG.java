@@ -86,7 +86,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         }
     }
 
-    public void writeContent(Device d, SComponent c)
+    public void write(Device d, SComponent c)
             throws IOException {
         log.debug("write = " + c);
         SScrollBar sb = (SScrollBar) c;

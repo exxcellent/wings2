@@ -272,7 +272,7 @@ public class TreeCG extends AbstractComponentCG implements
     }
 
 
-    public void writeContent(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent _c)
             throws IOException {
         final STree component = (STree) _c;
 

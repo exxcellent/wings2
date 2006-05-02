@@ -31,8 +31,8 @@ public class AnchorCG
     /* (non-Javadoc)
      * @see org.wings.plaf.css.AbstractComponentCG#writeContent(org.wings.io.Device, org.wings.SComponent)
      */
-    public void writeContent(final Device device,
-                             final SComponent _c)
+    public void write(final Device device,
+                      final SComponent _c)
             throws IOException {
         final SAnchor component = (SAnchor) _c;
 

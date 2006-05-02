@@ -55,7 +55,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         button.setDisabledSelectedIcon((SIcon) ResourceManager.getObject("SCheckBox.disabledSelectedIcon", SIcon.class));
     }
 
-    public void writeContent(final Device device, final SComponent component)
+    public void write(final Device device, final SComponent component)
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 

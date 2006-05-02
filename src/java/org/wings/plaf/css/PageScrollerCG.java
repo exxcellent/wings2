@@ -77,7 +77,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         }
     }
 
-    public void writeContent(Device d, SComponent c)
+    public void write(Device d, SComponent c)
             throws IOException {
         log.debug("write = " + c);
         SPageScroller sb = (SPageScroller) c;

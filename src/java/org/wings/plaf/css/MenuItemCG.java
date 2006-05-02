@@ -55,13 +55,11 @@ public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
         }
     }
 
-    protected void writePrefix(Device device, SComponent component) throws IOException {
+    public boolean wantsPrefixAndSuffix(SComponent component) {
+        return false;
     }
-
-    protected void writeSuffix(Device device, SComponent component) throws IOException {
-    }
-
-    public void writeContent(final Device device, final SComponent component)
+    
+    public void write(final Device device, final SComponent component)
             throws IOException {
         final SMenuItem menuItem = (SMenuItem) component;
         writeItemContent(device, menuItem);

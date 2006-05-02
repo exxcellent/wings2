@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLayoutManager;
-import org.wings.plaf.PrefixAndSuffixDelegate;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 import org.wings.style.Style;
@@ -184,10 +183,7 @@ public class CGManager implements Serializable {
     /**
      * @return the delegate responsible for the Prefix and Suffix of the target
      */
-    public PrefixAndSuffixDelegate getPrefixSuffixDelegate() {
-        PrefixAndSuffixDelegate del = (PrefixAndSuffixDelegate) getDefaults().get("AbstractComponentCG.PrefixAndSuffixDelegate", PrefixAndSuffixDelegate.class);
-        return del;
+    public Class getPrefixSuffixDecorator() {
+        return (Class)getDefaults().get("AbstractComponentCG.PrefixAndSuffixDecorator", Class.class);
     }
 }
-
-

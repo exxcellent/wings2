@@ -81,27 +81,13 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
-    public void write(Device device, SComponent component) throws IOException {
-        writePrefix(device, component);
-        writeContent(device, component);
-        writeSuffix(device, component);
-    }
-    
-    
-    protected void writePrefix(Device device, SComponent component) throws IOException {
-        SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writePrefix(device, component);
-    }
-    
-    protected void writeSuffix(Device device, SComponent component) throws IOException {
-        SessionManager.getSession().getCGManager().getPrefixSuffixDelegate().writeSuffix(device, component);
+    public boolean wantsPrefixAndSuffix(SComponent component) {
+        return true;
     }
 
     public CSSSelector mapSelector(SComponent addressedComponent, CSSSelector selector) {
         // Default: Do not map/modify the passed CSS selector.
         return selector;
-    }
-
-    protected void writeContent(Device device, SComponent component) throws IOException {
     }
 
     protected final SIcon getBlindIcon() {

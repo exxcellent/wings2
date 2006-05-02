@@ -29,6 +29,7 @@ import org.wings.Resource;
 import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
+import org.wings.plaf.css.CGDecorator;
 import org.wings.resource.ClasspathResource;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
@@ -38,7 +39,7 @@ import org.wings.style.StyleSheet;
 public class ResourceFactory extends ResourceDefaults {
     private final transient static Log log = LogFactory.getLog(ResourceFactory.class);
 
-    private static Map WRAPPERS;
+    private static final Map WRAPPERS;
     static {
         WRAPPERS = new HashMap();
         WRAPPERS.put(Boolean.TYPE, Boolean.class);
@@ -49,7 +50,6 @@ public class ResourceFactory extends ResourceDefaults {
         WRAPPERS.put(Long.TYPE, Long.class);
         WRAPPERS.put(Float.TYPE, Float.class);
         WRAPPERS.put(Double.TYPE, Double.class);
-        WRAPPERS = Collections.unmodifiableMap(WRAPPERS);
     }
 
     private static final Map finalResources = Collections.synchronizedMap(new HashMap());
@@ -86,8 +86,10 @@ public class ResourceFactory extends ResourceDefaults {
             return null;
         }
 
-        if (ComponentCG.class.isAssignableFrom(type) || LayoutCG.class.isAssignableFrom(type) || PrefixAndSuffixDelegate.class.isAssignableFrom(type))
-            value = makeCG(property);
+        if (ComponentCG.class.isAssignableFrom(type))
+            value = makeComponentCG(property, _properties.getProperty("AbstractComponentCG.PrefixAndSuffixDecorator"));
+        else if (LayoutCG.class.isAssignableFrom(type))
+            value = makeLayoutCG(property);
         else if (type.isAssignableFrom(SIcon.class))
             value = makeIcon(property);
         else if (type.isAssignableFrom(Resource.class))
@@ -100,19 +102,49 @@ public class ResourceFactory extends ResourceDefaults {
             value = makeColor(property);
         else if (type.isAssignableFrom(SDimension.class))
             value = makeDimension(property);
+        else if (type.isAssignableFrom(Class.class))
+            value = makeClass(property);
         else
             value = makeObject(property, type);
 
         put(key, value);
         return value;
     }
+
     /**
      * Create a CG instance.
      *
      * @param className the full qualified class name of the CG
      * @return a new CG instance
      */
-    public static Object makeCG(String className) {
+    public static Object makeComponentCG(String className, String decoratorClassName) {
+      ComponentCG result = (ComponentCG)finalResources.get(className);
+      if (result == null) {
+          try {
+              Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+              result = (ComponentCG)cgClass.newInstance();
+
+              Class decoratorClass = makeClass(decoratorClassName);
+              if (decoratorClass != null) {
+                  CGDecorator decorator = (CGDecorator)decoratorClass.newInstance();
+                  decorator.setDelegate(result);
+                  result = decorator;
+              }
+              finalResources.put(className, result);
+          } catch (Exception ex) {
+              log.fatal(null, ex);
+          }
+      }
+      return result;
+    }
+
+    /**
+     * Create a CG instance.
+     *
+     * @param className the full qualified class name of the CG
+     * @return a new CG instance
+     */
+    public static Object makeLayoutCG(String className) {
       Object result = finalResources.get(className);
       if (result == null) {
           try {
@@ -229,6 +261,28 @@ public class ResourceFactory extends ResourceDefaults {
     }
 
     /**
+     * Utility method that creates a Class from a resource
+     * located realtive to the given base class. Uses the ClassLoader
+     * of the LookAndFeel
+     *
+     * @param className name of the class
+     * @return a class instance
+     */
+    public static Class makeClass(String className) {
+        Class result = (Class)finalResources.get(className);
+        if (result == null) {
+            try {
+                result = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+                finalResources.put(className, result);
+            }
+            catch (ClassNotFoundException e) {
+                log.warn("Exception", e);
+            }
+        }
+        return result;
+    }
+
+    /**
      * Utility method that creates an Object of class <code>clazz</code>
      * using the single String arg constructor.
      *
@@ -260,5 +314,4 @@ public class ResourceFactory extends ResourceDefaults {
         }
         return result;
     }
-
 }

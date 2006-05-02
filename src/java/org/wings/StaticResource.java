@@ -221,7 +221,7 @@ public abstract class StaticResource extends Resource {
      * @param out the sink, the content of the resource should
      *            be written to.
      */
-    public final void write(Device out) throws IOException {
+    public void write(Device out) throws IOException {
         /*
          * if the buffer is null, then we are called the first time.
          */

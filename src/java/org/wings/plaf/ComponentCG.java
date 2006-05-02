@@ -57,6 +57,8 @@ public interface ComponentCG
      */
     void write(Device device, SComponent component) throws IOException;
 
+    boolean wantsPrefixAndSuffix(SComponent component);
+
     /**
      * A component may have multiple stylable areas. A tabbed pane for example has a content, the tabs,
      * the selected tab, etc. These areas are addressed by so called pseudo selectors. There are constants

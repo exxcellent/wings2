@@ -111,7 +111,9 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                         device.print("</a>");
                     }
                     if (menuItem.isEnabled() && menuItem instanceof SMenu) {
-                        ((SMenu)menuItem).writePopup(device);
+                        menuItem.putClientProperty("popup", Boolean.TRUE);
+                        menuItem.write(device);
+                        menuItem.putClientProperty("popup", null);
                     }
                     device.print("</li>\n");
                 }
@@ -161,7 +163,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
         addr.write(d);
     }
 
-    public void writeContent(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent _c)
             throws IOException {
         SPopupMenu menu = (SPopupMenu) _c;
         writePopup(device, menu);

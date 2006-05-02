@@ -27,7 +27,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
      */
     private static final long serialVersionUID = 1L;
 
-    protected void writeContent(final Device device, final SComponent c) throws IOException {
+    public void write(final Device device, final SComponent c) throws IOException {
         final SForm component = (SForm) c;
 
         device.print("<form method=\"");

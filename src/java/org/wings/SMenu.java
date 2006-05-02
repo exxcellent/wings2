@@ -188,8 +188,4 @@ public class SMenu extends SMenuItem {
     public void setAccelerator(KeyStroke keyStroke) {
         throw new UnsupportedOperationException("Only invoke this on SMenuItem.");
     }
-    
-    
 }
-
-

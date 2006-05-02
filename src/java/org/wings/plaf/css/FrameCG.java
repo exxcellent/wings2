@@ -436,6 +436,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             Iterator iter = frame.getMenus().iterator();
             while (iter.hasNext()) {
                 SComponent menu = (SComponent)iter.next();
+                menu.putClientProperty("popup", Boolean.TRUE);
                 menu.write(device);
             }
             // now add final JS for DnD if neccessary.
@@ -483,6 +484,10 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         }
         device.print("\n</body></html>\n");
         pComp.fireRenderEvent(SComponent.DONE_RENDERING);
+    }
+
+    public boolean wantsPrefixAndSuffix(SComponent component) {
+        return false;
     }
 
     public String getDocumentType() {
