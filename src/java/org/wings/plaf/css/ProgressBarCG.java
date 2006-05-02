@@ -78,12 +78,11 @@ public class ProgressBarCG extends AbstractComponentCG implements  org.wings.pla
             height -= 2;
         }
 
-        device.print("<table class=\"SLayout\"><tr style=\"height:").print(height).print("px\"\">");
+        device.print("<table><tr style=\"height:").print(height).print("px\"\">");
 
         // Part with completed bar
         final int completedWidth = (int) Math.round(width * component.getPercentComplete());
         device.print("<td");
-        Utils.optAttribute(device, "class", "SLayout"); // collapse borders
         if (component.getFilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getFilledColor());
@@ -96,7 +95,6 @@ public class ProgressBarCG extends AbstractComponentCG implements  org.wings.pla
         // Part with remaining, incompleted bar
         final int incompleteWidth = (int) Math.round(width * (1 - component.getPercentComplete()));
         device.print("<td");
-        Utils.optAttribute(device, "class", "SLayout"); // collapse borders
         if (component.getUnfilledColor() != null) {
             device.print(" style=\"background-color: ");
             Utils.write(device, component.getUnfilledColor());

@@ -82,7 +82,6 @@ public class TabbedPaneCG extends AbstractComponentCG {
             final int placement = tabbedPane.getTabPlacement();
     
             device.print("<table");
-            Utils.optAttribute(device, "class", "SLayout");
             if (childSelectorWorkaround)
                 Utils.optAttribute(device, "class", component.getStyle());
 

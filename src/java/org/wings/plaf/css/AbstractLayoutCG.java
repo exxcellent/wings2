@@ -52,7 +52,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         /* This won't work any longer as we override padding/spacing with default SLayout styles class
         d.print(" cellspacing=\"").print(cellSpacing < 0 ? 0 : cellSpacing).print("\"");
         d.print(" cellpadding=\"").print(cellPadding < 0 ? 0 : cellPadding).print("\""); */
-        Utils.optAttribute(d, "class", styleClass != null ? styleClass + " SLayout" : "SLayout");
+        Utils.optAttribute(d, "class", styleClass);
         Utils.optAttribute(d, "style", styleString.toString());
         d.print("><tbody>");
         Utils.printNewline(d, layout.getContainer());
@@ -170,7 +170,6 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             d.print("<td");
         }
 
-        d.print(" class=\"SLayout\"");
         Utils.printTableCellAlignment(d, containedComponent, SConstants.TOP, SConstants.LEFT);
 
         // CSS inline attributes

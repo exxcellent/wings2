@@ -145,7 +145,7 @@ public class TreeCG extends AbstractComponentCG implements
              * This table has to be here so that block level elements can be
              * nodes. I just can't think around it. So it won...
              */
-            device.print("<table border=\"0\" class=\"SLayout\"><tr><td class=\"SLayout\">");
+            device.print("<table border=\"0\"><tr><td>");
 
             if (isLeaf) {
                 // render a disabled button around this. firefox position bugfix (ol)
@@ -192,7 +192,7 @@ public class TreeCG extends AbstractComponentCG implements
             /*
              * closing layout td
              */
-            device.print("</td><td class=\"SLayout\">");
+            device.print("</td><td>");
 
         }
 

@@ -35,19 +35,19 @@ public class DialogCG extends org.wings.plaf.css.DialogCG {
         if (text == null)
             text = "wingS";
         device.print("<div class=\"WindowBar\">");
-        device.print("<table class=\"SLayout\" width=\"100%\"><tr><td width=\"100%\" class=\"SLayout\"><div class=\"WindowBar_title\">");
+        device.print("<table width=\"100%\"><tr><td width=\"100%\"><div class=\"WindowBar_title\">");
         if (frame.getIcon() != null) {
             writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
         }
         device.print(Utils.nonBreakingSpaces(text));
         device.print("</div></td>");
         if (frame.isClosable() && getCloseIcon() != null) {
-            device.print("<td class=\"SLayout\">");
+            device.print("<td>");
             writeWindowIcon(device, frame,
                     SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon(), BUTTONICON_CLASSNAME);
             device.print("</td>");
         }
-        device.print("<td class=\"SLayout\">&nbsp;&nbsp;</td></tr></table>");
+        device.print("<td>&nbsp;&nbsp;</td></tr></table>");
         device.print("</div>");
     }
 

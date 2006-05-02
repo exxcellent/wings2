@@ -115,24 +115,24 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         // Regarding table height it is totally inveser. I love 'em.
         final String tableHeight = isMsIEBrowser ? " height=\"100%\"" : "";
 
-        d.print("<table orientation=\"vertical\" class=\"SLayout\"").print(tableHeight).print("><tbody>\n")
+        d.print("<table orientation=\"vertical\"").print(tableHeight).print("><tbody>\n")
                 .print("<tr").print(rowHeightFlattened).print(">\n")
-                .print("<td height=\"1%\" class=\"SLayout\"><table class=\"SLayout\" area=\"buttons\"><tbody>\n");
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
 
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum);
         d.print("</td></tr>\n");
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD_BLOCK][0], "" + (Math.max(minimum, value - blockIncrement)));
         d.print("</td></tr>\n");
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - 1));
         d.print("</td></tr>\n");
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
                 .print("<tr").print(rowHeightExpanded).print(">\n")
-                .print("<td class=\"SLayout\"><table area=\"slider\" height=\"100%\" class=\"SLayout\"><tbody>\n");
+                .print("<td><table area=\"slider\" height=\"100%\"><tbody>\n");
 
         int range = maximum - minimum;
         int iconWidth = DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0].getIconWidth();
@@ -143,15 +143,15 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
                 .print("<tr").print(rowHeightFlattened).print(">\n")
-                .print("<td height=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody>\n");
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
 
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + 1));
         d.print("</td></tr>\n");
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD_BLOCK][0], "" + (Math.min(last, value + blockIncrement)));
         d.print("</td></tr>\n");
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + last);
         d.print("</td></tr>\n");
 
@@ -161,7 +161,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
     }
 
     private void verticalArea(Device d, String s, int v, int iconWidth) throws IOException {
-        d.print("<tr><td class=\"SLayout\" style=\"background-color: ");
+        d.print("<tr><td style=\"background-color: ");
         d.print(s);
         d.print("\" height=\"");
         d.print(v + "%");
@@ -178,21 +178,21 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         final int maximum = sb.getMaximum();
         final int last = maximum - extent;
 
-        d.print("<table orientation=\"horizontal\" class=\"SLayout\"><tbody><tr>\n")
-                .print("<td width=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody><tr>\n");
+        d.print("<table orientation=\"horizontal\"><tbody><tr>\n")
+                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
 
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum);
         d.print("</td>\n");
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD_BLOCK][0], "" + (Math.max(minimum, value - blockIncrement)));
         d.print("</td>\n");
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - 1));
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td width=\"100%\" class=\"SLayout\"><table area=\"slider\" width=\"100%\" class=\"SLayout\"><tbody><tr>\n");
+                .print("<td width=\"100%\"><table area=\"slider\" width=\"100%\"><tbody><tr>\n");
 
         int range = maximum - minimum;
         int iconHeight = DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0].getIconHeight();
@@ -201,15 +201,15 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         horizontalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconHeight);
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td width=\"1%\" class=\"SLayout\"><table area=\"buttons\"><tbody><tr>\n");
+                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
 
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + 1));
         d.print("</td>\n");
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD_BLOCK][0], "" + (Math.min(last, value + blockIncrement)));
         d.print("</td>\n");
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + last);
         d.print("</td>\n");
 
@@ -218,7 +218,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
     }
 
     private void horizontalArea(Device d, String s, int v, int iconHeight) throws IOException {
-        d.print("<td class=\"SLayout\" style=\"background-color: ");
+        d.print("<td style=\"background-color: ");
         d.print(s);
         d.print("\" width=\"");
         d.print(v + "%");

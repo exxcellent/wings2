@@ -31,15 +31,15 @@ public class ToolBarCG extends AbstractComponentCG implements
             throws IOException {
         final SToolBar toolBar = (SToolBar) _c;
 
-        device.print("<table class=\"SLayout\"><tr>");
+        device.print("<table><tr>");
         SComponent[] components = toolBar.getComponents();
         for (int i = 0; i < components.length; i++) {
             SComponent component = components[i];
 
             if (component.getHorizontalAlignment() == SConstants.RIGHT_ALIGN)
-                device.print("<td width=\"100%\" class=\"SLayout\"></td>");
+                device.print("<td width=\"100%\"></td>");
 
-            device.print("<td class=\"SLayout\">");
+            device.print("<td>");
             component.write(device);
             device.print("</td>");
         }

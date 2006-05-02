@@ -98,21 +98,21 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean firstPage = (value == minimum);
         boolean lastPage = (value == (maximum - extent));
 
-        d.print("<table orientation=\"vertical\" class=\"SLayout\"><tbody>\n")
+        d.print("<table orientation=\"vertical\"><tbody>\n")
                 .print("<tr height=\"1%\">\n")
-                .print("<td height=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody>\n");
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
 
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum, !firstPage);
         d.print("</td></tr>\n");
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - extent), backEnabled);
         d.print("</td></tr>\n");
 
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
                 .print("<tr>\n")
-                .print("<td class=\"SLayout\"><table area=\"pages\" class=\"SLayout\"><tbody>\n");
+                .print("<td><table area=\"pages\"><tbody>\n");
 
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
@@ -120,11 +120,9 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
 
         for (int i = 0; i < Math.min(sb.getDirectPages(), sb.getPageCount() - firstDirectPage); i++) {
             int page = firstDirectPage + i;
-            d.print("<tr><td class=\"SLayout");
+            d.print("<tr><td");
             boolean isCurrentPage = (sb.getCurrentPage() == page);
-            if (isCurrentPage) {
-                d.print(" page_selected");
-            }
+            Utils.optAttribute(d, "class", isCurrentPage ? "page_selected" : null);
             d.print("\">");
             writePage(d, sb, page, !isCurrentPage, firstDirectPage);
             d.print("</td></tr>\n");
@@ -133,12 +131,12 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         d.print("</tbody></table></td>\n")
                 .print("</tr>\n")
                 .print("<tr height=\"1%\">\n")
-                .print("<td height=\"1%\" class=\"SLayout\"><table area=\"buttons\" class=\"SLayout\"><tbody>\n");
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
 
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + extent), forwardEnabled);
         d.print("</td></tr>\n");
-        d.print("<tr><td class=\"SLayout\">");
+        d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + (maximum + 1 - extent), !lastPage);
         d.print("</td></tr>\n");
 
@@ -148,7 +146,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
     }
 
     private void verticalArea(Device d, String s, int v) throws IOException {
-        d.print("<tr><td class=\"SLayout\" style=\"background-color: ");
+        d.print("<tr><td style=\"background-color: ");
         d.print(s);
         d.print("\" height=\"");
         d.print(v + "%");
@@ -165,41 +163,39 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean firstPage = (value == minimum);
         boolean lastPage = (value >= (maximum - extent));
 
-        d.print("<table class=\"SLayout\" orientation=\"horizontal\"><tbody><tr>\n")
-                .print("<td class=\"SLayout\"><table area=\"buttons\"><tbody><tr>\n");
+        d.print("<table orientation=\"horizontal\"><tbody><tr>\n")
+                .print("<td><table area=\"buttons\"><tbody><tr>\n");
 
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum, !firstPage);
         d.print("</td>\n");
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - extent), backEnabled);
         d.print("</td>\n");
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td class=\"SLayout\"><table area=\"pages\"><tbody><tr>\n");
+                .print("<td><table area=\"pages\"><tbody><tr>\n");
 
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
         firstDirectPage = Math.max(firstDirectPage, 0);
         for (int i = 0; i < Math.min(sb.getDirectPages(), sb.getPageCount() - firstDirectPage); i++) {
             int page = firstDirectPage + i;
-            d.print("<td class=\"SLayout");
+            d.print("<td");
             boolean isCurrentPage = (sb.getCurrentPage() == page);
-            if (isCurrentPage) {
-                d.print(" page_selected");
-            }
+            Utils.optAttribute(d, "class", isCurrentPage ? "page_selected": null);
             d.print("\">");
             writePage(d, sb, page, !isCurrentPage, firstDirectPage);
             d.print("</td>\n");
         }
 
         d.print("</tr></tbody></table></td>\n")
-                .print("<td class=\"SLayout\"><table area=\"buttons\"><tbody><tr>\n");
+                .print("<td><table area=\"buttons\"><tbody><tr>\n");
 
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + extent), forwardEnabled);
         d.print("</td>\n");
-        d.print("<td class=\"SLayout\">");
+        d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + (sb.getPageCount() - 1) * extent, !lastPage);
         d.print("</td>\n");
 

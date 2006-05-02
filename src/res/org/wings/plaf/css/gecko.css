@@ -14,27 +14,23 @@
 /* either use this or cellpadding/cellspacing/border in table element.
    css overwrites all attributes! */
 
+body {
+    padding: 0px;
+}
 /* Class for all invisible HTML tables used for layouting purposes. */
-table.SLayout,
-td.SLayout {
+table, td, th {
     border-collapse: collapse;
     padding: 0px;
     margin: 0px;
     border: none;
+    text-align: inherit;
 }
-
-/* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
-   Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
-img.spacer {
-  display: block;
-}
-
 
 /* tables inherit certain properties from their parents. These need to be
    defined here. This works with konq, moz, opera. */
-table tr {
-    text-align:inherit;
-    vertical-align:inherit;
+tr {
+    text-align: inherit;
+    vertical-align: inherit;
 /*  these already work without specifying them
     background-color:inherit;
     font-family:inherit;
@@ -45,6 +41,12 @@ table tr {
 }
 
 
+/* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
+   Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
+img.spacer {
+  display: block;
+}
+
 /* this stays in here! 
    it switches the gecko-compatible browsers into border-box mode */
 div {
@@ -52,7 +54,7 @@ div {
     -moz-box-sizing: border-box;
 
     /* This is necessary for konqueror. Otherwise component alignment does not work. */
-    text-align:inherit;
+    text-align: inherit;
 }
 
 form {
@@ -65,6 +67,10 @@ button {
 
 ul {
     margin: 0px;
+}
+
+a {
+    text-decoration: inherit;
 }
 
 /* Make selected buttons appear as regular text:

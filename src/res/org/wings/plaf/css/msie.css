@@ -15,6 +15,7 @@
 /* bs: This lead to scrollers around documents, not window: HTML,*/
 BODY,TEXTAREA {
     overflow:auto;     /* get rid of default scrollbars */
+    padding: 0px;
 }
 
 HTML {
@@ -25,14 +26,12 @@ HTML {
    css overwrites all attributes! */
 
 /** Class for all invisible HTML tables used for layouting purposes. */
-table.SLayout,
-td.SLayout,
-table.SContainer,
-td.SContainer {
+table, td, th {
     border-collapse: collapse;
     padding: 0px;
     margin: 0px;
     border: none;
+    text-align: inherit;
 }
 
 
@@ -84,6 +83,10 @@ table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SF
 
 IMG {
     border: none !important;     /* This is needed to avoid those ugly borders around linked imgs's */
+}
+
+a {
+    text-decoration: inherit;
 }
 
 /* Make selected buttons appear as regular text:

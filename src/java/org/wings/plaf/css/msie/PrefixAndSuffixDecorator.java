@@ -58,9 +58,9 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         device.print("<table id=\"").print(component.getName()).print("\"");
         // Special handling: Mark Titled Borders for styling
         if (component.getBorder() instanceof STitledBorder) {
-            Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder SContainer");
+            Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder");
         } else {
-            Utils.optAttribute(device, "class", component.getStyle() + " SContainer");
+            Utils.optAttribute(device, "class", component.getStyle());
         }
         if (component instanceof DragSource) {
             inlineStyles.append("position:relative;");
