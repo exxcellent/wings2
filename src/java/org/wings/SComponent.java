@@ -604,33 +604,27 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Sets the name property of a component which must be <b>unique</b>!
-     * <br/>Assigning the same name multiple times will have strange results!
+     * <br/>Assigning the same name multiple times will cause strange results!
      *
-     * <p>Valid names must begin with a letter ([A-Za-z]) and may be followed by any number of
-     * letters, digits ([0-9]), hyphens ("-") and colons (":")
+     * <p>Valid names must begin with a letter ([A-Za-z]), underscores ("_") or dollars ("$") and may be followed by any number of
+     * letters, digits ([0-9]), underscores ("_") and dollars ("$")
      *
      * <p>If no name is set, it is generated when necessary.
      *
-     * <p><i>Explanation:</i> This property is an identifier which is also used inside the generated HTML as HTML element identifier. Hence it
-     * must conform to <code>http://www.w3.org/TR/REC-html40/types.html#type-name</code> and respect wingS reserved characters as '.'
-     * and '_' {@link SConstants#UID_DIVIDER}
+     * <p><i>Explanation:</i> This property is an identifier which is used inside the generated HTML as an element identifier (id="")
+     * and sometimes as a javascript function name.
      *
      * @param uniqueName A <b>unique</b> name to set. <b>Only valid identifier as described are allowed!</b>
      * @see Character
      */
     public void setName(String uniqueName) {
-        // W3C: ID and NAME tokens must begin with a letter ([A-Za-z]) and may be followed by any number of
-        // letters, digits ([0-9]), hyphens ("-"), underscores ("_"), colons (":"), and periods (".").
-        //
-        // wingS: Low level event dispatcher uses underscore (_) and point (.) so that's why these are forbidden.
         if (uniqueName != null) {
-            if (uniqueName.indexOf(SConstants.UID_DIVIDER) >= 0)
-                throw new IllegalArgumentException(uniqueName + " is not a valid identifier (name may not contain SConstants.UID_DIVIDER)");
-            if (uniqueName.length() == 0 || !Character.isLetter(uniqueName.charAt(0)))
+            char ch = uniqueName.charAt(0);
+            if (uniqueName.length() == 0 || !(Character.isLetter(ch) || ch == '_' || ch == '$'))
                 throw new IllegalArgumentException(uniqueName + " is not a valid identifier");
             for (int i=1; i < uniqueName.length(); i++) {
-                final char ch = uniqueName.charAt(i);
-                if (!(Character.isLetter(ch) || Character.isDigit(ch) || ch == '-' || ch == ':'))
+                ch = uniqueName.charAt(i);
+                if (!(Character.isLetter(ch) || Character.isDigit(ch) || ch == '_' || ch == '$'))
                     throw new IllegalArgumentException(uniqueName + " is not a valid identifier");
             }
         }

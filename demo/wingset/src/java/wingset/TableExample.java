@@ -25,6 +25,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.*;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -60,7 +61,15 @@ public class TableExample
     public SComponent createExample() {
         controls = new TableControls();
 
-        table = new STable(new MyTableModel(7, 5));
+        table = new STable(new MyTableModel(7, 5)) {
+            public void processLowLevelEvent(String action, String[] values) {
+                int pos = action.indexOf('_');
+                if (pos == -1)
+                    super.processLowLevelEvent(action, values);
+                else
+                    System.out.println("delegate " + Arrays.asList(values) + " to renderer at " + action.substring(pos + 1));
+            }
+        };
         table.setName("table");
         table.setShowGrid(true);
         table.setSelectionMode(STable.NO_SELECTION);
@@ -116,7 +125,7 @@ public class TableExample
             else if (value instanceof Boolean && row != -1) {
                 setHorizontalAlignment(SConstants.CENTER);
                 Boolean b = (Boolean) value;
-                checkBox.setNameRaw(name(table, row, col));
+                checkBox.setName(name(table, row, col));
                 checkBox.setSelected(b.booleanValue());
                 return checkBox;
             }

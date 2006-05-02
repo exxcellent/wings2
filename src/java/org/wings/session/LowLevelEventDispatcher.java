@@ -150,20 +150,19 @@ public final class LowLevelEventDispatcher
             return false;
         }
 
-        /*
-        // is value encoded in name ? Then append it to the values we have.
+        // does name contain underscores? Then use the part before the underscore for
+        // identification of the low level event listener
+        String id;
         int p = name.indexOf(SConstants.UID_DIVIDER);
         if (p > -1) {
             String v = name.substring(p + 1);
-            name = name.substring(0, p);
-            String[] va = new String[values.length + 1];
-            System.arraycopy(values, 0, va, 0, values.length);
-            va[values.length] = v;
-            values = va;
+            id = name.substring(0, p);
         }
-        */
+        else
+            id = name;
 
-        List l = (List) listeners.get(name);
+
+        List l = (List) listeners.get(id);
         if (l != null && l.size() > 0) {
             log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
             for (int i = 0; i < l.size(); ++i) {

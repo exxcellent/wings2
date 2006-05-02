@@ -124,7 +124,7 @@ public class ResourceFactory extends ResourceDefaults {
               Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
               result = (ComponentCG)cgClass.newInstance();
 
-              Class decoratorClass = makeClass(decoratorClassName);
+              Class decoratorClass = decoratorClassName != null ? makeClass(decoratorClassName) : null;
               if (decoratorClass != null) {
                   CGDecorator decorator = (CGDecorator)decoratorClass.newInstance();
                   decorator.setDelegate(result);
