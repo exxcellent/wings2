@@ -26,7 +26,7 @@ public class BirdCG
         component.setStyle("Bird");
     }
 
-    public void writeContent(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent _c)
             throws IOException {
         Bird frame = (Bird) _c;
         SComponent titleBar = frame.getTitleBar();

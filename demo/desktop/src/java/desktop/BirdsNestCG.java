@@ -22,7 +22,7 @@ public class BirdsNestCG
         component.setStyle("BirdsNest");
     }
 
-    public void writeContent(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent _c)
             throws IOException
     {
         final BirdsNest component = (BirdsNest) _c;

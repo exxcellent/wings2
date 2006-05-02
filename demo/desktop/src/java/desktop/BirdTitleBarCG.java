@@ -102,7 +102,7 @@ public class BirdTitleBarCG
     }
 
 
-    public void writeContent(final Device device, final SComponent _c)
+    public void write(final Device device, final SComponent _c)
             throws IOException {
         Bird.TitleBar titleBar = (Bird.TitleBar) _c;
         Bird frame = titleBar.getBird();
