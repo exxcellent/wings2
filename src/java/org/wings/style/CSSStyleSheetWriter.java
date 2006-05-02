@@ -116,7 +116,7 @@ public class CSSStyleSheetWriter implements ComponentVisitor {
                         while (pos < selectorString.length() && Character.isLetterOrDigit(selectorString.charAt(pos)))
                             pos++;
                         // make id to id_i
-                        selectorString = selectorString.substring(0, pos) + "_i" + selectorString.substring(pos);
+                        selectorString = selectorString.substring(0, pos) + selectorString.substring(pos);
                     }
                 }
 

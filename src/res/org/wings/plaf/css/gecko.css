@@ -110,7 +110,7 @@ IMG {
 }
 
 /* Handle Labels as inline */
-div.SLabel_Box {
+div.SLabel {
     display: table;
 }
 
@@ -126,11 +126,8 @@ pre.label {
     padding: 0px;
 }
 
-div.SButton_Box {
-    display: table;
-}
-
 div.SButton {
+    display: table;
     color: #004;
 }
 
@@ -141,7 +138,7 @@ div.SToggleButton > button.SToggleButton_selected
     border-style: inset;
 }
 
-div.SRadioButton_Box {
+div.SRadioButton {
     display: table;
 }
 
@@ -260,11 +257,6 @@ div.SList > * > li.SList_selected {
     width: 100%;
 }
 
-div.SScrollBar_Box {
-    height: 100%;
-    width: 100%;
-}
-
 div.SScrollBar, div.SPageScroller {
     height: 100%;
     width: 100%;
@@ -360,7 +352,7 @@ div.SPageScroller table[area="pages"] a.disabled {
 }
 
 
-div.SScrollPane > div.SList_Box, div.SScrollPane > div.STree_Box, div.SScrollPane > div.STable_Box {
+div.SScrollPane > div.SList, div.SScrollPane > div.STree, div.SScrollPane > div.STable {
     width: 100%;
     height: 100%;
     overflow: scroll;

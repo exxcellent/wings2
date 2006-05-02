@@ -99,37 +99,37 @@ public class PrefixAndSuffixDecorator
         // it is responsible for Postioning (i.e. it take up all free space around to i.e. center
         // the inner div inside this free space
         device.print("<div");
-        Utils.optAttribute(device, "class", Utils.appendSuffixesToWords(component.getStyle(), "_Box"));
+        final String classname = component.getStyle();
+        Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
         Utils.optAttribute(device, "id", component.getName());
         if (component instanceof DragSource) {
             cssInlineStyle.append("position:relative;");
         }
 
-        // if sizes are spec'd in percentages, we need the outer box to have full size...
-        final boolean isHeightPercentage = prefSize != null && prefSize.getHeightUnit() != null && prefSize.getHeightUnit().indexOf("%") != -1;
-        final boolean isWidthPercentage = prefSize != null && prefSize.getWidthUnit() != null && prefSize.getWidthUnit().indexOf("%") != -1;
-        // special case of special case: if the component with relative size is vertically aligned, we must avoid 100% heigth
-        final boolean isVAligned = (component.getVerticalAlignment() == SConstants.CENTER
-                || component.getVerticalAlignment() == SConstants.BOTTOM);
-        if (isHeightPercentage && isVAligned == false) {
-            cssInlineStyle.append("height:100%;");
-        }
-        if (isWidthPercentage) {
-            cssInlineStyle.append("width:100%;");
-        }
+        // if sizes are spec'd in percentages, we need the outer box to have full size...skipped for now
+//        final boolean isHeightPercentage = prefSize != null && prefSize.getHeightUnit() != null && prefSize.getHeightUnit().indexOf("%") != -1;
+//        final boolean isWidthPercentage = prefSize != null && prefSize.getWidthUnit() != null && prefSize.getWidthUnit().indexOf("%") != -1;
+//        // special case of special case: if the component with relative size is vertically aligned, we must avoid 100% heigth
+//        final boolean isVAligned = (component.getVerticalAlignment() == SConstants.CENTER
+//                || component.getVerticalAlignment() == SConstants.BOTTOM);
+//        if (isHeightPercentage && isVAligned == false) {
+//            cssInlineStyle.append("height:100%;");
+//        }
+//        if (isWidthPercentage) {
+//            cssInlineStyle.append("width:100%;");
+//        }
 
         // Output collected inline CSS style
-        Utils.optAttribute(device, "style", cssInlineStyle);
-        device.print(">"); // div
+//        Utils.optAttribute(device, "style", cssInlineStyle);
+//        device.print(">"); // div
 
         //------------------------ INNER DIV
 
         // This is the inner DIV around each component.
         // It is responsible for component size, and other styles.
-        device.print("<div");
-        Utils.optAttribute(device, "id", component.getName() + "_i");
-        Utils.optAttribute(device, "class", isTitleBorder ? component.getStyle() + " STitledBorder" : component.getStyle());         // Special handling: Mark Titled Borders for styling
-        Utils.optAttribute(device, "style", Utils.generateCSSInlinePreferredSize(prefSize).toString());
+//        device.print("<div");
+//        Utils.optAttribute(device, "class", isTitleBorder ? component.getStyle() + " STitledBorder" : component.getStyle());         // Special handling: Mark Titled Borders for styling
+        Utils.optAttribute(device, "style", cssInlineStyle.append(" ").append(Utils.generateCSSInlinePreferredSize(prefSize).toString()));
 
         if (component instanceof LowLevelEventListener) {
             Utils.optAttribute(device, "eid", ((LowLevelEventListener) component).getEncodedLowLevelEventId());
