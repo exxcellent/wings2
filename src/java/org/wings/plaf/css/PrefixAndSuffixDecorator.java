@@ -158,7 +158,7 @@ public class PrefixAndSuffixDecorator
 
     public void writeSuffix(Device device, SComponent component) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
-        device.print("</div></div>");
+        device.print("</div>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 
