@@ -51,9 +51,11 @@ public class CSSStyle extends CSSAttributeSet implements Style {
     /**
      * @return Rendered Style: css selector { attribute/values }
      */
+    /*
     public String toString() {
         return selector.getSelector() + " { " + super.toString() + "}";
     }
+    */
 
     /* @see Style */
     public Selector getSelector() {
