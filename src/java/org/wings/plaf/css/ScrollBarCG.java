@@ -225,16 +225,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
     }
 
     private void writeButton(Device device, SScrollBar scrollBar, SIcon icon, String event) throws IOException {
-        boolean showAsFormComponent = scrollBar.getShowAsFormComponent();
-
-        if (showAsFormComponent) {
-            writeButtonStart(device, scrollBar, event);
-        } else {
-            device.print("<a href=\"")
-                    .print(scrollBar.getRequestURL()
-                    .addParameter(Utils.event(scrollBar) + "=" + event).toString())
-                    .print("\"");
-        }
+        Utils.printButtonStart(device, scrollBar, event);
         device.print(">");
 
         device.print("<img");
@@ -246,20 +237,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         device.print(icon.getIconTitle());
         device.print("\"/>");
 
-        if (showAsFormComponent) {
-            writeButtonEnd(device);
-        } else {
-            device.print("</a>");
-        }
-    }
-
-
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        Utils.printButtonStart(device, component, value);
-    }
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        device.print("</button>");
+        Utils.printButtonEnd(device);
     }
 
 }

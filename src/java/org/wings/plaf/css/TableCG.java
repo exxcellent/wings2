@@ -16,15 +16,7 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.RequestURL;
-import org.wings.SCellRendererPane;
-import org.wings.SComponent;
-import org.wings.SDimension;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SListSelectionModel;
-import org.wings.STable;
-import org.wings.SConstants;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.io.StringBufferDevice;
 import org.wings.plaf.CGManager;
@@ -33,21 +25,18 @@ import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
 import org.wings.table.STableColumnModel;
-import javax.swing.InputMap;
-import javax.swing.Action;
-import javax.swing.KeyStroke;
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     /**
@@ -234,13 +223,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             parameter = table.getToggleSelectionParameter(row, col);
 
         if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
-            if (showAsFormComponent) {
-                writeButtonStart(device, table, parameter);
-            } else {
-                RequestURL selectionAddr = table.getRequestURL();
-                selectionAddr.addParameter(Utils.event(table), parameter);
-                writeLinkStart(device, selectionAddr);
-            }
+            Utils.printButtonStart(device, table, parameter);
             device.print(">");
         } else
             device.print("<span>");
@@ -248,33 +231,13 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         rendererPane.writeComponent(device, component, table);
 
         if (parameter != null && !isEditingCell && selectableCell && !contentContainsClickables) {
-            if (showAsFormComponent)
-                writeButtonEnd(device);
-            else
-                device.print("</a>");
+            Utils.printButtonEnd(device);
         } else
             device.print("</span>");
 
         device.print("</td>");
         Utils.printNewline(device, component);
     }
-
-    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a href=\"");
-        Utils.write(device, selectionAddr.toString());
-        device.print("\"");
-    }
-
-
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        Utils.printButtonStart(device, component, value);
-    }
-
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        device.print("</button>");
-    }
-
 
     protected void writeHeaderCell(final Device device, final STable table,
                                    final SCellRendererPane rendererPane,
@@ -446,19 +409,10 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         Utils.optAttribute(device, "width", selectionColumnWidth);
         device.print(">");
 
-        if (showAsFormComponent) {
-            writeButtonStart(device, table, table.getToggleSelectionParameter(row, -1));
-            device.print(">");
-            renderSelectionColumnContent(device, row, table, rendererPane);
-            writeButtonEnd(device);
-        } else {
-            RequestURL selectionAddr = table.getRequestURL();
-            selectionAddr.addParameter(Utils.event(table), table.getToggleSelectionParameter(row, -1));
-            writeLinkStart(device, selectionAddr);
-            device.print(">");
-            renderSelectionColumnContent(device, row, table, rendererPane);
-            device.print("</a>");
-        }
+        Utils.printButtonStart(device, table, table.getToggleSelectionParameter(row, -1));
+        device.print(">");
+        renderSelectionColumnContent(device, row, table, rendererPane);
+        Utils.printButtonEnd(device);
         device.print("</td>");
     }
 

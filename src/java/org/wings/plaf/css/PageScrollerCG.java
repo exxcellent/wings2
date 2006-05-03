@@ -200,62 +200,20 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
     }
 
     private void writePage(Device device, SPageScroller pageScroller, int page, boolean enabled, int firstDirectPage) throws IOException {
-        boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
     	Object separator = SessionManager.getSession().getCGManager().getObject("PageScrollerCG.pageSeparator", String.class);
     	if(page != firstDirectPage)
     	    device.print(separator.toString());
 
-        if (showAsFormComponent) {
-            writeButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()));
-            device.print(" type=\"submit\" name=\"")
-                    .print(Utils.event(pageScroller))
-                    .print("\" value=\"")
-                    .print(String.valueOf(page * pageScroller.getExtent()))
-                    .print("\"");
-            if (!enabled) {
-                device.print(" disabled=\"disabled\"");
-            }
-        } else {
-            if (!enabled) {
-                device.print("<a href=\"#\" class=\"disabled\"");
-            } else {
-                device.print("<a href=\"")
-                      .print(pageScroller.getRequestURL()
-                      .addParameter(Utils.event(pageScroller) + "=" + page * pageScroller.getExtent()).toString());
-                device.print("\"");
-                device.print(" onClick=\"sendEvent(event, "+page * pageScroller.getExtent()+", '" + Utils.event(pageScroller) + "'); return false;\"");
-            }
-        }
+        Utils.printButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()), enabled);
         device.print(">");
 
         device.print(Integer.toString(page + 1));
 
-        if (showAsFormComponent)
-            writeButtonEnd(device);
-        else
-            device.print("</a>");
+        Utils.printButtonEnd(device);
     }
 
     private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event, boolean enabled) throws IOException {
-        //boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
-        boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
-
-        if (showAsFormComponent) {
-            writeButtonStart(device, pageScroller, event);
-            if (!enabled) {
-                device.print(" disabled=\"disabled\"");
-            }
-        } else {
-            if (!enabled) {
-                device.print("<a href=\"#\" class=\"disabled\"");
-            } else {
-                device.print("<a href=\"")
-                      .print(pageScroller.getRequestURL()
-                      .addParameter(Utils.event(pageScroller) + "=" + event).toString());
-                device.print("\"");
-                device.print(" onClick=\"sendEvent(event, "+event+", '" + Utils.event(pageScroller) + "'); return false;\"");
-            }
-        }
+        Utils.printButtonStart(device, pageScroller, event, enabled);
         device.print(">");
 
         device.print("<img");
@@ -267,20 +225,6 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         device.print(icon.getIconTitle());
         device.print("\"/>");
 
-        if (showAsFormComponent)
-            writeButtonEnd(device);
-        else
-            device.print("</a>");
-    }
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        device.print("</button>");
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.plaf.css.ScrollBarCG#writeButtonStart(org.wings.io.Device, org.wings.SScrollBar, java.lang.String)
-     */
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        Utils.printButtonStart(device, component, value);
+        Utils.printButtonEnd(device);
     }
 }

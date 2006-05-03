@@ -13,11 +13,6 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.wings.SAnchor;
-import org.wings.io.Device;
-
-import java.io.IOException;
-
 /**
  * @author ole
  *
@@ -30,11 +25,12 @@ public final class AnchorCG extends org.wings.plaf.css.AnchorCG {
 
     /* (non-Javadoc)
      * @see org.wings.plaf.css.CheckBoxCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
-     */
+     *
     protected void writeLinkStart(final Device device, SAnchor comp) throws IOException {
         if (comp.getTarget() == null) 
         	device.print("<a href=\"#\" onClick=\"wu_openlink(null,'"+comp.getURL()+"');return false;\"");
         else
             device.print("<a href=\"#\" onClick=\"wu_openlink('" + comp.getTarget() + "','"+comp.getURL()+"');return false;\"");
     }
+    */
 }

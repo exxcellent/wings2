@@ -14,11 +14,9 @@
 package org.wings.plaf.css;
 
 
-import org.wings.RequestURL;
 import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SIcon;
-import org.wings.script.JavaScriptEvent;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -35,14 +33,11 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         final SAbstractButton button = (SAbstractButton) component;
 
         if (button.getShowAsFormComponent()) {
-            writeButtonStart(device, button, button.getToggleSelectionParameter());
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         } else {
-            RequestURL addr = button.getRequestURL();
-            addr.addParameter(button, button.getToggleSelectionParameter());
-            writeLinkStart(device, addr);
-
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
@@ -61,12 +56,6 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
 
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
-
-        if (button.getShowAsFormComponent()) {
-            Utils.writeEvents(device, button, new String[] { JavaScriptEvent.ON_CLICK } );
-        } else {
-            Utils.writeEvents(device, button);
-        }
 
         device.print(">");
 
@@ -89,33 +78,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
-        if (button.getShowAsFormComponent())
-            writeButtonEnd(device);
-        else
-            device.print("</a>");
-    }
-
-    /**
-     * @param device
-     * @param value
-     * @throws IOException
-     */
-    protected void writeButtonStart(final Device device, final SComponent button, String value) throws IOException {
-        Utils.printButtonStart(device, button, value);
-    }
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        device.print("</button>");
-    }
-
-    /**
-     * Convenience method to keep differences between default and msie
-     * implementations small
-     */
-    protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
-        device.print("<a href=\"");
-        addr.write(device);
-        device.print("\"");
+        Utils.printButtonEnd(device);
     }
 
     /* Retrieve according icon for a button. */

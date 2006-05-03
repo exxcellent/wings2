@@ -14,7 +14,6 @@
 package org.wings.plaf.css;
 
 
-import org.wings.RequestURL;
 import org.wings.SCellRendererPane;
 import org.wings.SComponent;
 import org.wings.SIcon;
@@ -137,26 +136,12 @@ public class TreeCG extends AbstractComponentCG implements
 
             if (isLeaf) {
                 // render a disabled button around this. firefox position bugfix (ol)
-                if (component.getShowAsFormComponent()) {
-                    writeButtonStart(device, component, component.getExpansionParameter(row, false));
-                    device.print(" disabled=\"disabled\">");
-                }
+                Utils.printButtonStart(device, component, component.getExpansionParameter(row, false));
+                device.print(">");
                 writeIcon(device, leafControlIcon, false);
-                if (component.getShowAsFormComponent()) {
-                    writeButtonEnd(device);
-                }
+                Utils.printButtonEnd(device);
             } else {
-                if (component.getShowAsFormComponent()) {
-                    writeButtonStart(device, component, component.getExpansionParameter(row, false));
-                } else {
-                    RequestURL selectionAddr = component.getRequestURL();
-                    selectionAddr.addParameter(Utils.event(component),
-                            component.getExpansionParameter(row, false));
-
-                    device.print("<a href=\"");
-                    Utils.write(device, selectionAddr.toString());
-                    device.print("\"");
-                }
+                Utils.printButtonStart(device, component, component.getExpansionParameter(row, false));
                 device.print(">");
 
                 if (isExpanded) {
@@ -172,11 +157,7 @@ public class TreeCG extends AbstractComponentCG implements
                         writeIcon(device, expandControlIcon, true);
                     }
                 }
-                if (component.getShowAsFormComponent()) {
-                    writeButtonEnd(device);
-                } else {
-                    device.print("</a>");
-                }
+                Utils.printButtonEnd(device);
             }
             /*
              * closing layout td
@@ -187,27 +168,14 @@ public class TreeCG extends AbstractComponentCG implements
 
         SCellRendererPane rendererPane = component.getCellRendererPane();
         if (isSelectable) {
-            if (component.getShowAsFormComponent()) {
-                writeButtonStart(device, component, component.getSelectionParameter(row, false));
-            } else {
-                RequestURL selectionAddr = component.getRequestURL();
-                selectionAddr.addParameter(Utils.event(component),
-                        component.getSelectionParameter(row, false));
-
-                writeLinkStart(device, selectionAddr);
-            }
+            Utils.printButtonStart(device, component, component.getSelectionParameter(row, false));
 
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-            Utils.writeEvents(device, component);
             device.print(">");
 
             rendererPane.writeComponent(device, cellComp, component);
 
-            if (component.getShowAsFormComponent()) {
-                writeButtonEnd(device);
-            } else {
-                device.print("</a>");
-            }
+            Utils.printButtonEnd(device);
         } else {
             rendererPane.writeComponent(device, cellComp, component);
         }
@@ -238,22 +206,6 @@ public class TreeCG extends AbstractComponentCG implements
             device.print("</li>");
         }
     }
-
-    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a href=\"");
-        Utils.write(device, selectionAddr.toString());
-        device.print("\"");
-    }
-
-
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        Utils.printButtonStart(device, component, value);
-    }
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        device.print("</button>");
-    }
-
 
     public void write(final Device device, final SComponent _c)
             throws IOException {

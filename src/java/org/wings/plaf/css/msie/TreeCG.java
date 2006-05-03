@@ -13,21 +13,16 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.wings.RequestURL;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
-import org.wings.io.Device;
-import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
-
-import java.io.IOException;
 
 /**
  * @author ole
@@ -36,15 +31,6 @@ import java.io.IOException;
 public final class TreeCG extends org.wings.plaf.css.TreeCG implements SParentFrameListener {
     private static final long serialVersionUID = 1L;
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
-
-
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        MSIEUtils.writeSubmitAnchorStart(device, component, value);
-    }
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        MSIEUtils.writeSubmitAnchorEnd(device);
-    }
 
     public void installCG(SComponent component) {
         super.installCG(component);
@@ -59,11 +45,5 @@ public final class TreeCG extends org.wings.plaf.css.TreeCG implements SParentFr
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
-    }
-
-    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a href=\"#\" onclick=\"location.href='");
-        Utils.write(device, selectionAddr.toString());
-        device.print("';\"");
     }
 }

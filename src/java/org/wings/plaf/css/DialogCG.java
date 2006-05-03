@@ -25,7 +25,7 @@ import java.io.IOException;
 
 public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     protected static final String WINDOWICON_CLASSNAME = "WindowIcon";
@@ -55,35 +55,13 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
         device.print("\"/>");
     }
 
-    // TODO: writeButtonStart
     protected void writeWindowIcon(Device device, SDialog frame,
             int event, SIcon icon, String cssClass) throws IOException {
-        boolean showAsFormComponent = frame.getShowAsFormComponent();
-
-        // RequestURL addr = frame.getRequestURL();
-        // addr.addParameter(MSIEUtils.event(frame), event);
-
-        if (showAsFormComponent) {
-            Utils.printButtonStart(device, frame, ""+event);
-        } else {
-            device.print("<a");
-            if (cssClass != null) {
-                device.print(" class=\"");
-                device.print(cssClass);
-                device.print("\"");
-            }
-            device.print(" href=\"").print(
-                    frame.getRequestURL().addParameter(
-                            Utils.event(frame) + "=" + event).toString())
-                    .print("\">");
-        }
+        Utils.printButtonStart(device, frame, ""+event);
+        device.print(">");
         writeIcon(device, icon, null);
 
-        if (showAsFormComponent) {
-            device.print("</button>");
-        } else {
-            device.print("</a>");
-        }
+        Utils.printButtonEnd(device);
     }
 
     public void write(final Device device, final SComponent _c)

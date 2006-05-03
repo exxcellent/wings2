@@ -13,47 +13,20 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.wings.RequestURL;
-import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
-import org.wings.io.Device;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
 
-import java.io.IOException;
-
 public class CheckBoxCG extends org.wings.plaf.css.CheckBoxCG implements SParentFrameListener {
     private static final long serialVersionUID = 1L;
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
-
-    /* (non-Javadoc)
-     * @see org.wings.plaf.css.ButtonCG#writeButtonStart(org.wings.io.Device, org.wings.SAbstractButton)
-     */
-    protected void writeButtonStart(Device device, SAbstractButton button, String eventValue) throws IOException {
-        MSIEUtils.writeSubmitAnchorStart(device, button, eventValue);
-    }
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        MSIEUtils.writeSubmitAnchorEnd(device);
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.plaf.css.CheckBoxCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
-     */
-    protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
-        MSIEUtils.writeSubmitAnchorStart(device, addr);
-        /*device.print("<a href=\"");
-        //  "#\" onclick=\"location.href='");
-        Utils.write(device, addr.toString());
-        device.print("';\"");*/
-    }
 
     public void installCG(SComponent component) {
         super.installCG(component);

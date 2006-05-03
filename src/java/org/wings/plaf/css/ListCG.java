@@ -14,14 +14,10 @@
 package org.wings.plaf.css;
 
 
-import org.wings.RequestURL;
-import org.wings.SCellRendererPane;
-import org.wings.SComponent;
-import org.wings.SDefaultListCellRenderer;
-import org.wings.SList;
-import org.wings.SListCellRenderer;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+
 import java.io.IOException;
 
 public class ListCG extends AbstractComponentCG implements
@@ -160,14 +156,7 @@ public class ListCG extends AbstractComponentCG implements
             SComponent renderer = cellRenderer.getListCellRendererComponent(list, model.getElementAt(i), selected, i);
 
             if (renderSelection) {
-                if (showAsFormComponent) {
-                    writeButtonStart(device, list, list.getToggleSelectionParameter(i));
-                } else {
-                    RequestURL selectionAddr = list.getRequestURL();
-                    selectionAddr.addParameter(Utils.event(list), list.getToggleSelectionParameter(i));
-
-                    writeLinkStart(device, selectionAddr);
-                }
+                Utils.printButtonStart(device, list, list.getToggleSelectionParameter(i));
                 Utils.optAttribute(device, "focus", renderer.getName());
                 device.print(">");
             } else
@@ -176,10 +165,7 @@ public class ListCG extends AbstractComponentCG implements
             rendererPane.writeComponent(device, renderer, list);
 
             if (renderSelection) {
-                if (showAsFormComponent)
-                    writeButtonEnd(device);
-                else
-                    device.print("</a>");
+                Utils.printButtonEnd(device);
             } else
                 device.print("</span>");
 
@@ -190,28 +176,6 @@ public class ListCG extends AbstractComponentCG implements
         Utils.write(device, list.getType());
         device.print(">");
     }
-
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        Utils.printButtonStart(device, component, value);
-    }
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        device.print("</button>");
-    }
-
-    /**
-     * Convenience method to keep differences between default and msie
-     * implementations small
-     * @param device
-     * @param selectionAddr
-     * @throws IOException
-     */
-    protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
-        device.print("<a href=\"");
-        Utils.write(device, selectionAddr.toString());
-        device.print("\"");
-    }
-
 
     public void write(final Device device,
                       final SComponent _c)

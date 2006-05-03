@@ -13,25 +13,19 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.wings.RequestURL;
-import org.wings.SComponent;
-import org.wings.SFrame;
-import org.wings.SAbstractButton;
-import org.wings.SIcon;
+import org.wings.*;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.Utils;
 import org.wings.plaf.css.AbstractLabelCG;
 import org.wings.plaf.css.IconTextCompound;
+import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
-
-import java.io.IOException;
 
 import java.io.IOException;
 
@@ -48,17 +42,11 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
         final SAbstractButton button = (SAbstractButton) component;
 
         if (button.getShowAsFormComponent()) {
-            MSIEUtils.writeSubmitAnchorStart(device, button, button.getToggleSelectionParameter());
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled());
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
-            if (!button.isEnabled()) {
-                device.print(" disabled=\"disabled\"");
-            }
         } else {
-            RequestURL addr = button.getRequestURL();
-            addr.addParameter(button, button.getToggleSelectionParameter());
-            writeLinkStart(device, addr);
-
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
@@ -78,20 +66,13 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.writeEvents(device, button);
         device.print(">");
 
         final String text = button.getText();
         final SIcon icon = org.wings.plaf.css.ButtonCG.getIcon(button);
 
         if (icon == null && text != null) {
-            if (button.getShowAsFormComponent()) {
-                MSIEUtils.writeSubmitInputStart(device, button, text);
-                device.print(">");
-                MSIEUtils.writeSubmitInputEnd(device);
-            } else {
-                writeText(device, text, false);
-            }
+            writeText(device, text, false);
         } else if (icon != null && text == null)
             writeIcon(device, icon);
         else if (icon != null && text != null) {
@@ -106,17 +87,7 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
-        if (button.getShowAsFormComponent())
-            MSIEUtils.writeSubmitAnchorEnd(device);
-        else
-            device.print("</a>");
-    }
-
-    protected void writeLinkStart(final Device device, final RequestURL addr) throws IOException {
-        MSIEUtils.writeSubmitAnchorStart(device, addr);
-        /*device.print("<a ");
-        device.print("href=\"").print(addr.toString()).print("\" ");
-        //device.print("onclick=\"location.href='").print(addr.toString()).print("';\"");*/
+        Utils.printButtonEnd(device);
     }
 
     public void installCG(final SComponent component) {

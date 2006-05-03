@@ -20,13 +20,11 @@ import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
-import org.wings.io.Device;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,22 +35,6 @@ import java.util.Map;
 public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SParentFrameListener {
     private static final long serialVersionUID = 1L;
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
-
-
-    /* (non-Javadoc)
-     * @see org.wings.plaf.css.TabbedPaneCG#writeButtonStart(org.wings.io.Device, org.wings.STabbedPane, java.lang.String)
-     */
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        MSIEUtils.writeSubmitAnchorStart(device, component, value);
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.plaf.css.TabbedPaneCG#writeButtonEnd(org.wings.io.Device)
-     */
-    protected void writeButtonEnd(Device device) throws IOException {
-        MSIEUtils.writeSubmitAnchorEnd(device);
-        device.print("<span> </span>"); // Aha?! Guess to enable word wrap?
-    }
 
     public void installCG(SComponent component) {
         super.installCG(component);

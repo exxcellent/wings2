@@ -863,16 +863,34 @@ public final class Utils {
     }
 
     public static void printButtonStart(final Device device, final SComponent button, String value, boolean enabled) throws IOException {
-        if (enabled) {
-            device.print("<a href=\"#\" class=\"disabled\"");
+        if (button.getShowAsFormComponent()) {
+            if (!enabled) {
+                device.print("<a href=\"#\" class=\"disabled\" ");
+            } else {
+                device.print("<a href=\"#\" onClick=\"sendEvent(event,'");
+                device.print(value);
+                device.print("','");
+                device.print(Utils.event(button));
+                device.print("'");
+                device.print(applyOnClickListeners(button));
+                device.print(")\" ");
+                writeEvents(device, button, new String[] { JavaScriptEvent.ON_CLICK } );
+            }
         } else {
-            device.print("<a href=\"#\" onClick=\"sendEvent(event,'");
-            device.print(value);
-            device.print("','");
-            device.print(Utils.event(button));
-            device.print("'");
-            device.print(applyOnClickListeners(button));
-            device.print(")\"");
+            if (!enabled) {
+                device.print("<a href=\"#\" ");
+            } else {
+                String url;
+                if (value != null) {
+                    url = button.getRequestURL().addParameter(Utils.event(button) + "=" + value).toString();
+                } else {
+                    url = button.getRequestURL().toString();
+                }
+                device.print("<a href=\"");
+                device.print(url);
+                device.print("\" ");
+                writeEvents(device, button);
+            }
         }
     }
 
@@ -912,5 +930,4 @@ public final class Utils {
         }
         return (JavaScriptListener[]) result.toArray(new JavaScriptListener[result.size()]);
     }
-
 }

@@ -172,14 +172,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
              */
             Utils.printNewline(device, tabbedPane);
 
-            if (showAsFormComponent) {
-                writeButtonStart(device, tabbedPane, String.valueOf(i));
-            } else {
-                device.print("<a href=\"")
-                        .print(tabbedPane.getRequestURL()
-                        .addParameter(Utils.event(tabbedPane) + "=" + i).toString())
-                        .print("\"");
-            }
+            Utils.printButtonStart(device, tabbedPane, String.valueOf(i), tabbedPane.isEnabledAt(i));
 
             if (tooltip != null) {
                 device.print(" title=\"");
@@ -190,9 +183,6 @@ public class TabbedPaneCG extends AbstractComponentCG {
             device.print(" selected=\"").print(Boolean.toString(i == tabbedPane.getSelectedIndex())).print("\"");
             if (i == tabbedPane.getSelectedIndex() && tabbedPane.isFocusOwner())
                 Utils.optAttribute(device, "focus", tabbedPane.getName());
-
-            if (!tabbedPane.isEnabledAt(i))
-                device.print(" disabled=\"true\"");
 
             if (browserSupportCssChildSelector) {
                 StringBuffer cssClassName = new StringBuffer("STabbedPane_Tab_");
@@ -235,15 +225,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("\" style=\"margin-right:0.2em;\"/>");
             }
 
-            writeButtonEnd(device);
+            Utils.printButtonEnd(device);
         }
-    }
-
-    protected void writeButtonEnd(Device device) throws IOException {
-        Utils.printButtonEnd(device);
-    }
-
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        Utils.printButtonStart(device, component, value);
     }
 }

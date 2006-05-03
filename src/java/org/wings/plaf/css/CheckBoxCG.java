@@ -14,19 +14,18 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
-import org.wings.RequestURL;
 import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
 
+import java.io.IOException;
+
 public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     protected boolean useIconsInForms = false;
@@ -67,34 +66,27 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
          * needs to always or never use buttons when rendered as form component.
          * Therefore best would be to drop button support on this component, since
          * one probably wants to change CheckBox state without submitting.
-         * Therefore replace button with table... 
+         * Therefore replace button with table...
          * At this time it probably never uses buttons, since useIconsInForms is false
          * by default (and probably never set). useIconsInForms should be dropped!
          * Try #setShowAsFormComponent(false) if you want icon checkboxes in your
          * application.
          * (OL)
          */
-        
+
         if (showAsFormComponent && useIconsInForms) {
-            writeButtonStart(device, button, button.getToggleSelectionParameter());
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.optAttribute(device, "class", "borderless"); // no borders around button
-            Utils.writeEvents(device, button);
         } else if (showAsFormComponent && !useIconsInForms) {
             device.print("<span");
         } else {
-            RequestURL addr = button.getRequestURL();
-            addr.addParameter(button, button.getToggleSelectionParameter());
-            writeLinkStart(device, addr);
-
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
-            Utils.writeEvents(device, button);
         }
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
-        if (!button.isEnabled())
-            device.print(" disabled=\"true\"");
         if (button.isSelected())
             device.print(" checked=\"true\"");
         if (component.isFocusOwner())
@@ -136,7 +128,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         }
 
         if (showAsFormComponent && useIconsInForms)
-            device.print("</button>");
+            Utils.printButtonEnd(device);
         else if (showAsFormComponent && !useIconsInForms)
             device.print("</span>");
         else
