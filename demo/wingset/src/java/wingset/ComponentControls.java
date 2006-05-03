@@ -115,6 +115,12 @@ public class ComponentControls
                 preferredSize.setWidth(widthTextField.getText());
                 preferredSize.setHeight(heightTextField.getText());
 
+                int insets = 0;
+                try {
+                    insets = Integer.parseInt(insetsTextField.getText());
+                }
+                catch (NumberFormatException e) {}
+
                 int borderThickness = 1;
                 try {
                     borderThickness = Integer.parseInt(borderThicknessTextField.getText());
@@ -122,8 +128,10 @@ public class ComponentControls
                 catch (NumberFormatException e) {}
 
                 SBorder border = (SBorder)getSelectedObject(borderComboBox);
-                if (border != null)
+                if (border != null) {
+                    border.setInsets(new Insets(insets, insets, insets, insets));
                     border.setThickness(borderThickness);
+                }
 
                 Color background = (Color)getSelectedObject(backgroundComboBox);
 
