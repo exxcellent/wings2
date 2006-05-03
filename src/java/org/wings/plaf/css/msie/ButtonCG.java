@@ -19,6 +19,7 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.plaf.css.AbstractLabelCG;
 import org.wings.plaf.css.IconTextCompound;
 import org.wings.plaf.css.Utils;
@@ -52,7 +53,7 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         // use class attribute instead of single attributes for IE compatibility
-        final StringBuffer className = new StringBuffer();
+        final SStringBuilder className = new SStringBuilder();
         if (!button.isEnabled()) {
             className.append(component.getStyle());
             className.append("_disabled ");
