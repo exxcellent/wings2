@@ -22,6 +22,7 @@ import javax.swing.text.BadLocationException;
 
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
+import org.wings.io.SStringBuilder;
 import org.wings.util.EditTranscriptGenerator;
 
 /**
@@ -29,7 +30,7 @@ import org.wings.util.EditTranscriptGenerator;
  * @version $Revision$
  */
 public class DefaultDocument implements SDocument {
-    private final StringBuffer buffer = new StringBuffer();
+    private final SStringBuilder buffer = new SStringBuilder();
     private EventListenerList listeners = null;
 
     public DefaultDocument() {

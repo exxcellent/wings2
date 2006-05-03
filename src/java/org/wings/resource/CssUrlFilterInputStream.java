@@ -116,7 +116,7 @@ public class CssUrlFilterInputStream extends BufferedInputStream {
             log.debug("Could not find resource at classpath: " + classPath);
             return "";
         }
-        StringBuffer imageUrl = new StringBuffer("'");
+        SStringBuilder imageUrl = new SStringBuilder("'");
         imageUrl.append(extManager.externalize(res, ExternalizeManager.GLOBAL));
         imageUrl.append("'");
         return imageUrl.toString();
