@@ -16,6 +16,7 @@ package org.wings.session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.io.SStringBuilder;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -86,7 +87,7 @@ public class SmartURLsFilter
 
     public static final String replace(String s,
                                        String toFind, String replace) {
-        StringBuffer erg = new StringBuffer();
+        SStringBuilder erg = new SStringBuilder();
 
         int lastindex = 0;
         int indexOf = s.indexOf(toFind);

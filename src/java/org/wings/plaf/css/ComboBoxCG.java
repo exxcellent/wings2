@@ -19,6 +19,7 @@ import org.wings.SComponent;
 import org.wings.SDefaultListCellRenderer;
 import org.wings.SListCellRenderer;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.plaf.CGManager;
 import java.io.IOException;
 
@@ -80,7 +81,7 @@ public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.Co
 
             if (cellRenderer != null) {
                 Utils.optAttribute(device, "title", cellRenderer.getToolTipText());
-                StringBuffer buffer = Utils.generateCSSComponentInlineStyle(cellRenderer);
+                SStringBuilder buffer = Utils.generateCSSComponentInlineStyle(cellRenderer);
                 Utils.optAttribute(device, "style", buffer.toString());
             }
 
@@ -88,7 +89,7 @@ public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.Co
 
             if (cellRenderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
-                org.wings.io.StringBufferDevice string = getStringBufferDevice();
+                org.wings.io.StringBuilderDevice string = getStringBuilderDevice();
                 cellRenderer.write(string);
                 char[] chars = string.toString().replace('\n',' ').trim().toCharArray();
                 int pos = 0;
@@ -120,15 +121,15 @@ public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.Co
         device.print("/>");
     }
 
-    private org.wings.io.StringBufferDevice
-            stringBufferDevice = null;
+    private org.wings.io.StringBuilderDevice
+            stringBuilderDevice = null;
 
-    protected org.wings.io.StringBufferDevice getStringBufferDevice() {
-        if (stringBufferDevice == null) {
-            stringBufferDevice = new org.wings.io.StringBufferDevice();
+    protected org.wings.io.StringBuilderDevice getStringBuilderDevice() {
+        if (stringBuilderDevice == null) {
+            stringBuilderDevice = new org.wings.io.StringBuilderDevice();
         }
-        stringBufferDevice.reset();
-        return stringBufferDevice;
+        stringBuilderDevice.reset();
+        return stringBuilderDevice;
     }
 
 

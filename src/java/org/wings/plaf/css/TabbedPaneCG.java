@@ -19,6 +19,7 @@ import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.STabbedPane;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
 
@@ -185,7 +186,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 Utils.optAttribute(device, "focus", tabbedPane.getName());
 
             if (browserSupportCssChildSelector) {
-                StringBuffer cssClassName = new StringBuffer("STabbedPane_Tab_");
+                SStringBuilder cssClassName = new SStringBuilder("STabbedPane_Tab_");
                 if (tabbedPane.getShowAsFormComponent())
                     cssClassName.append("button_");
                 cssClassName.append(placements.get(new Integer(tabbedPane.getTabPlacement())));

@@ -14,13 +14,15 @@
  */
 package org.wings.text;
 
-import org.wings.event.SDocumentEvent;
-import org.wings.event.SDocumentListener;
-import org.wings.util.EditTranscriptGenerator;
+import java.util.List;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.EventListenerList;
 import javax.swing.text.BadLocationException;
-import java.util.List;
+
+import org.wings.event.SDocumentEvent;
+import org.wings.event.SDocumentListener;
+import org.wings.util.EditTranscriptGenerator;
 
 /**
  * @author hengels

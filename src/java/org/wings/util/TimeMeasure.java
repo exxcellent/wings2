@@ -17,6 +17,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.wings.io.SStringBuilder;
+
 /*
  * Ein Klasse, die Zeitmessungen aufnimmt und diese in Relation zueineander
  * setzt. Zum Start der Zeitmessung Methode start kurzer Beschreibung was
@@ -166,7 +168,7 @@ public class TimeMeasure {
      *                            longest is the reference.
      */
     public String print(boolean shortestIsReference) {
-        StringBuffer result = new StringBuffer();
+        SStringBuilder result = new SStringBuilder();
         long reference = findReferenceValue(shortestIsReference);
         Iterator it = measures.iterator();
         while (it.hasNext()) {

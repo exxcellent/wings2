@@ -7,6 +7,7 @@ import org.wings.SIcon;
 import org.wings.SInternalFrame;
 import org.wings.SLabel;
 import org.wings.STextField;
+import org.wings.io.SStringBuilder;
 import org.wings.session.SessionManager;
 
 public class DesktopPaneExample extends WingSetPane {
@@ -27,7 +28,7 @@ public class DesktopPaneExample extends WingSetPane {
             // set some special contents & icons
             if ((i % 2) == 0) {
                 iFrame.setIcon(windowIcon);
-                StringBuffer labelText = new StringBuffer("some extra label...");
+                SStringBuilder labelText = new SStringBuilder("some extra label...");
                 for (int j = 0; j <= i; j++) {
                     labelText.append("extra-");
                     iFrame.getContentPane().add(new SLabel(labelText.toString()));

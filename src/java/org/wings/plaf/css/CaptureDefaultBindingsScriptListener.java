@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import javax.swing.KeyStroke;
 
 import org.wings.SComponent;
+import org.wings.io.SStringBuilder;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 
@@ -34,7 +35,7 @@ class CaptureDefaultBindingsScriptListener
 
         String string = (String)component.getSession().getProperty("wings.capture.default.bindings", "");
 
-        StringBuffer typed = new StringBuffer();
+        SStringBuilder typed = new SStringBuilder();
         for (StringTokenizer tokenizer = new StringTokenizer(string, ","); tokenizer.hasMoreTokens();) {
             String token = tokenizer.nextToken();
             KeyStroke keyStroke = KeyStroke.getKeyStroke(token);
@@ -50,7 +51,7 @@ class CaptureDefaultBindingsScriptListener
                     typed.toString() + "  return true;\n}\n"));
     }
 
-    private static void writeMatch(StringBuffer buffer, KeyStroke keyStroke) {
+    private static void writeMatch(SStringBuilder buffer, KeyStroke keyStroke) {
         buffer.append("if (event.keyCode == " + keyStroke.getKeyCode());
         if ((keyStroke.getModifiers() & InputEvent.SHIFT_DOWN_MASK) != 0)
             buffer.append(" && event.shiftKey");
@@ -67,7 +68,7 @@ class CaptureDefaultBindingsScriptListener
         buffer.append(")");
     }
 
-    private static void writeCapture(StringBuffer buffer) {
+    private static void writeCapture(SStringBuilder buffer) {
         buffer.append(" { event.preventDefault(); return true; }\n");
     }
 }

@@ -23,10 +23,10 @@ import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.plaf.ComponentCG;
 import org.wings.script.ScriptListener;
 import org.wings.style.Style;
-
 import java.io.IOException;
 
 /**
@@ -82,8 +82,6 @@ public class PrefixAndSuffixDecorator
     }
 
     public void writePrefix(Device device, SComponent component) throws IOException {
-        final SDimension prefSize = component.getPreferredSize();
-        final StringBuffer cssInlineStyle = new StringBuffer();
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
         Utils.printDebugNewline(device, component);
@@ -91,39 +89,14 @@ public class PrefixAndSuffixDecorator
 
         //------------------------ OUTER DIV
 
-        // This is the outer DIV element of a component
-        // it is responsible for Postioning (i.e. it take up all free space around to i.e. center
-        // the inner div inside this free space
+        // This is the containing DIV element of a component
+        // it is responsible for styles, sizing...
         device.print("<div");
         final String classname = component.getStyle();
         Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
         Utils.optAttribute(device, "id", component.getName());
 
-        // if sizes are spec'd in percentages, we need the outer box to have full size...skipped for now
-//        final boolean isHeightPercentage = prefSize != null && prefSize.getHeightUnit() != null && prefSize.getHeightUnit().indexOf("%") != -1;
-//        final boolean isWidthPercentage = prefSize != null && prefSize.getWidthUnit() != null && prefSize.getWidthUnit().indexOf("%") != -1;
-//        // special case of special case: if the component with relative size is vertically aligned, we must avoid 100% heigth
-//        final boolean isVAligned = (component.getVerticalAlignment() == SConstants.CENTER
-//                || component.getVerticalAlignment() == SConstants.BOTTOM);
-//        if (isHeightPercentage && isVAligned == false) {
-//            cssInlineStyle.append("height:100%;");
-//        }
-//        if (isWidthPercentage) {
-//            cssInlineStyle.append("width:100%;");
-//        }
-
-        // Output collected inline CSS style
-//        Utils.optAttribute(device, "style", cssInlineStyle);
-//        device.print(">"); // div
-
-        //------------------------ INNER DIV
-
-        // This is the inner DIV around each component.
-        // It is responsible for component size, and other styles.
-//        device.print("<div");
-//        Utils.optAttribute(device, "class", isTitleBorder ? component.getStyle() + " STitledBorder" : component.getStyle());         // Special handling: Mark Titled Borders for styling
-
-        writeInlineStyles(device, component);
+        Utils.optAttribute(device, "style", getInlineStyles(component));
 
         if (component instanceof LowLevelEventListener) {
             Utils.optAttribute(device, "eid", ((LowLevelEventListener) component).getEncodedLowLevelEventId());
@@ -157,19 +130,19 @@ public class PrefixAndSuffixDecorator
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 
-    protected void writeInlineStyles(Device device, SComponent component) throws IOException {
+    protected String getInlineStyles(SComponent component) {
         // write inline styles
-        device.print("style=\"");
+        SStringBuilder builder = new SStringBuilder();
         if (component instanceof DragSource)
-            device.print("position:relative;");
-        Utils.appendCSSInlineSize(device, component.getPreferredSize());
+            builder.append("position:relative;");
+        Utils.appendCSSInlineSize(builder, component.getPreferredSize());
         Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
         if (allStyle != null)
-            allStyle.write(device);
+            builder.append(allStyle.toString());
         SBorder border = component.getBorder();
         if (border != null && border.getAttributes() != null)
-            border.getAttributes().write(device);
-        device.print("\"");
+            builder.append(border.getAttributes().toString());
+        return builder.toString();
     }
 
     protected void writeInlineScripts(Device device, SComponent component) throws IOException {

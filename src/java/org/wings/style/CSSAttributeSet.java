@@ -15,6 +15,7 @@ package org.wings.style;
 
 import org.wings.Renderable;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -267,7 +268,7 @@ public class CSSAttributeSet
      * @return the string
      */
     public String toString() {
-        StringBuffer b = new StringBuffer();
+        SStringBuilder b = new SStringBuilder();
 
         if (map != null) {
             Iterator names = map.entrySet().iterator();

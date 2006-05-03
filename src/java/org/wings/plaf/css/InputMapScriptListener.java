@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SFrame;
+import org.wings.io.SStringBuilder;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 
@@ -50,9 +51,9 @@ public class InputMapScriptListener
         InputMap inputMap = component.getInputMap();
         if (inputMap.size() == 0) return; // we're done
 
-        StringBuffer pressed = new StringBuffer();
-        StringBuffer typed = new StringBuffer();
-        StringBuffer released = new StringBuffer();
+        SStringBuilder pressed = new SStringBuilder();
+        SStringBuilder typed = new SStringBuilder();
+        SStringBuilder released = new SStringBuilder();
         KeyStroke[] keyStrokes = inputMap.keys();
 
         for (int i = 0; i < keyStrokes.length; i++) {
@@ -103,9 +104,9 @@ public class InputMapScriptListener
 
         InputMap inputMap = component.getInputMap(SComponent.WHEN_IN_FOCUSED_FRAME);
 
-        StringBuffer pressed = new StringBuffer();
-        StringBuffer typed = new StringBuffer();
-        StringBuffer released = new StringBuffer();
+        SStringBuilder pressed = new SStringBuilder();
+        SStringBuilder typed = new SStringBuilder();
+        SStringBuilder released = new SStringBuilder();
         KeyStroke[] keyStrokes = inputMap.keys();
 
         for (int i = 0; i < keyStrokes.length; i++) {
@@ -152,7 +153,7 @@ public class InputMapScriptListener
                     released.toString() + "  return true;\n}\n"));
     }
 
-    private static void writeMatch(StringBuffer buffer, KeyStroke keyStroke) {
+    private static void writeMatch(SStringBuilder buffer, KeyStroke keyStroke) {
         buffer.append("if (event.keyCode == " + keyStroke.getKeyCode());
         if ((keyStroke.getModifiers() & InputEvent.SHIFT_DOWN_MASK) != 0)
             buffer.append(" && event.shiftKey");
@@ -169,10 +170,10 @@ public class InputMapScriptListener
         buffer.append(")");
     }
 
-    private static void writeRequest(StringBuffer buffer, Object binding) {
+    private static void writeRequest(SStringBuilder buffer, Object binding) {
         buffer.append(" { sendEvent(event, \"").append(binding).append("\"); return false; }\n");
     }
-    private static void writeRequestForFrame(StringBuffer buffer, Object binding, String eventId) {
+    private static void writeRequestForFrame(SStringBuilder buffer, Object binding, String eventId) {
         buffer.append(" { sendEvent(event, \"").append(binding).append("\", \"").append(eventId).append("\"); return false; }\n");
     }
 }

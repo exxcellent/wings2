@@ -15,6 +15,8 @@ package org.wings.util;
 
 import java.util.StringTokenizer;
 
+import org.wings.io.SStringBuilder;
+
 /**
  * Some string manipulation utilities.
  *
@@ -33,7 +35,7 @@ public class StringUtil {
      */
     public static final String replace(String s,
                                        String toFind, String replace) {
-        StringBuffer erg = new StringBuffer();
+        SStringBuilder erg = new SStringBuilder();
 
         int lastindex = 0;
         int indexOf = s.indexOf(toFind);
@@ -52,7 +54,7 @@ public class StringUtil {
     /* slower ..
       ist langsamer, mit jit 1/3, weniger als halb so schnell
      public static String replaceNew(String s, String toFind, String replace) {
-     StringBuffer erg = new StringBuffer();
+     SStringBuilder erg = new SStringBuilder();
 
      StringTokenizer t = new StringTokenizer(s, toFind);
      while ( t.hasMoreTokens() ) {
@@ -72,7 +74,7 @@ public class StringUtil {
      * @return the resulting string.
      */
     public static final String replaceNewLines(String s, String r) {
-        StringBuffer result = new StringBuffer();
+        SStringBuilder result = new SStringBuilder();
 
         StringTokenizer t = new StringTokenizer(s, "\n");
         while (t.hasMoreTokens()) {
@@ -219,7 +221,7 @@ public class StringUtil {
         if (array.length == 0)
             return "";
 
-        StringBuffer buffer = new StringBuffer("" + array[0]);
+        SStringBuilder buffer = new SStringBuilder("" + array[0]);
         for (int i = 1; i < array.length; i++) {
             if (array[i] == null)
                 buffer.append(", null");

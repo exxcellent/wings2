@@ -10,6 +10,7 @@ package Acme;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
+import org.wings.io.SStringBuilder;
 
 /// A Hashtable that uses ints as the keys.
 // <P>
@@ -286,7 +287,7 @@ public class IntHashtable extends Dictionary implements Cloneable {
     /// Converts to a rather lengthy String.
     public synchronized String toString() {
         int max = size() - 1;
-        StringBuffer buf = new StringBuffer();
+        SStringBuilder buf = new SStringBuilder();
         Enumeration k = keys();
         Enumeration e = elements();
         buf.append("{");

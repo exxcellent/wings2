@@ -17,6 +17,7 @@ import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.STable;
+import org.wings.io.SStringBuilder;
 
 /**
  * @author <a href="mailto:holger.engels@mercatis.de">Holger Engels</a>
@@ -26,7 +27,7 @@ public class SDefaultTableCellRenderer
         extends SLabel
         implements STableCellRenderer
 {
-    StringBuffer nameBuffer = new StringBuffer();
+    SStringBuilder nameBuffer = new SStringBuilder();
 
     SIcon editIcon;
 

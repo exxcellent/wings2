@@ -80,9 +80,9 @@ public class SessionProcessor
             }
         }
 
-        // We build the answer up in a StringBuffer because that makes is easier
+        // We build the answer up in a SStringBuilder because that makes is easier
         // to debug, and because that's only what the compiler does anyway.
-        StringBuffer buffer = new StringBuffer();
+        SStringBuilder buffer = new SStringBuilder();
 
         // if we are in html (iframe mode) we need to direct script to the parent
         String prefix = eq.isXmlMode() ? "" : "window.parent."; //$NON-NLS-1$ //$NON-NLS-2$

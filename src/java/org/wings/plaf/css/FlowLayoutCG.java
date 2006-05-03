@@ -24,6 +24,7 @@ import org.wings.SContainer;
 import org.wings.SFlowLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 
 public class FlowLayoutCG extends AbstractLayoutCG {
     /**
@@ -77,7 +78,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
                     Utils.printNewline(d, component);
                     d.print("<div style=\"");
                     d.print(alignmentStyle);
-                    d.print( createInlineStylesForInsets(insets).toString() );
+                    d.print( createInlineStylesForInsets(new SStringBuilder(),insets).toString() );
                     d.print("\">");
                     component.write(d); // Render contained component
                     Utils.printNewline(d, component);
@@ -107,7 +108,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
             final SComponent component = (SComponent) components.get(0);
             if (component.isVisible()) {
                 Utils.printNewline(d, component);
-                d.print("<div style=\"").print(createInlineStylesForInsets(insets).toString()).print("\">");
+                d.print("<div style=\"").print(createInlineStylesForInsets(new SStringBuilder(), insets).toString()).print("\">");
                 component.write(d); // Render contained component
                 Utils.printNewline(d, component);
                 d.print("</div>");

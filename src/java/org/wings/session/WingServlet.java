@@ -20,6 +20,7 @@ import org.wings.externalizer.AbstractExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
 import org.wings.externalizer.SystemExternalizeManager;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.io.ServletDevice;
 
 import javax.servlet.*;

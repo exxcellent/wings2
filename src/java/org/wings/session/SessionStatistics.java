@@ -17,6 +17,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.io.Serializable;
 
+import org.wings.io.SStringBuilder;
+
 /**
  * @author <a href="mailto:@mueller.de">armin</a>
  * @version $Revision$
@@ -119,7 +121,7 @@ public class SessionStatistics implements Serializable {
     }
 
     public String toString() {
-        StringBuffer tResult = new StringBuffer();
+        SStringBuilder tResult = new SStringBuilder();
 
         tResult.append("birthday: ").append(DateFormat.getDateTimeInstance().format(new Date(birthDay))).append("\n")
                 .append("requests: ").append(requestCounter).append(" / ").append(requestCounter == 0 ? 0 : requestDuration / requestCounter).append(" ms\n")

@@ -23,6 +23,7 @@ import org.wings.externalizer.ExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
 import org.wings.io.Device;
 import org.wings.io.DeviceFactory;
+import org.wings.io.SStringBuilder;
 import org.wings.io.ServletDevice;
 import org.wings.resource.DynamicCodeResource;
 
@@ -584,7 +585,7 @@ final class SessionServlet
             res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
             // build the stacktrace wrapped by pre's so line breaks are preserved
-            StringBuffer stackTrace = new StringBuffer("<pre>");
+            SStringBuilder stackTrace = new SStringBuilder("<pre>");
             stackTrace.append(getStackTraceString(e));
             stackTrace.append("</pre>");
             errorStackTraceLabel.setText(stackTrace.toString());

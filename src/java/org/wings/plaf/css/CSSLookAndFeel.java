@@ -15,6 +15,7 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.io.SStringBuilder;
 import org.wings.session.SessionManager;
 import org.wings.util.PropertyUtils;
 
@@ -39,13 +40,13 @@ public class CSSLookAndFeel
 
     private static Properties loadProperties() throws IOException {
         // default properties
-        StringBuffer propertiesFilename = new StringBuffer(PROPERTIES_CLASSPATH);
+        SStringBuilder propertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH);
         propertiesFilename.append(PROPERTIES_FILENAME_DEFAULT);
         propertiesFilename.append(PROPERTIES_FILENAME_END);
         // browser dependent properties
         String browserType = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
 
-        StringBuffer browserPropertiesFilename = new StringBuffer(PROPERTIES_CLASSPATH);
+        SStringBuilder browserPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH);
         browserPropertiesFilename.append(browserType);
         browserPropertiesFilename.append(PROPERTIES_FILENAME_END);
 

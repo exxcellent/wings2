@@ -14,6 +14,33 @@
 package org.wings;
 
 
+import java.awt.Color;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EventListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.event.EventListenerList;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
@@ -24,6 +51,7 @@ import org.wings.event.SParentFrameListener;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.plaf.ComponentCG;
 import org.wings.script.ScriptListener;
 import org.wings.session.Session;
@@ -35,26 +63,6 @@ import org.wings.style.CSSStyle;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
 import org.wings.util.ComponentVisitor;
-import javax.swing.*;
-import javax.swing.event.EventListenerList;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Object having a graphical representation that can be displayed on the
@@ -1181,7 +1189,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return a string containing all properties
      */
     protected String paramString() {
-        StringBuffer buffer = new StringBuffer(getClass().getName());
+        SStringBuilder buffer = new SStringBuilder(getClass().getName());
         buffer.append("[");
 
         try {
@@ -1926,5 +1934,22 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             if (e.getParentFrame() != null)
                 e.getParentFrame().deregisterGlobalInputMapComponent(me);
         }
+    }
+    
+    public final int getOversize(boolean horizontal) {
+        int oversize = 0;
+        Insets insets = getInsets();
+        SBorder border = getBorder();
+        if (border != null) {
+            oversize += border.getThickness() * 2; 
+        }
+        if (insets != null) {
+            if (horizontal) {
+                oversize += insets.right + insets.left;
+            } else {
+                oversize += insets.top + insets.bottom;
+            }
+        }
+        return oversize;
     }
 }

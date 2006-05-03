@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.plaf.CGManager;
 
 import java.io.IOException;
@@ -73,15 +74,15 @@ public class ListCG extends AbstractComponentCG implements
                 device.print(" selected=\"selected\"");
             }
 
-            org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
+            org.wings.io.StringBuilderDevice stringBufferDevice = getStringBuilderDevice();
 
-            StringBuffer buffer = Utils.generateCSSComponentInlineStyle(renderer);
+            SStringBuilder buffer = Utils.generateCSSComponentInlineStyle(renderer);
             Utils.optAttribute(device, "style", buffer.toString());
             device.print(">");
 
             if (renderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
-                org.wings.io.StringBufferDevice string = getStringBufferDevice();
+                org.wings.io.StringBuilderDevice string = getStringBuilderDevice();
                 renderer.write(string);
                 char[] chars = string.toString().toCharArray();
                 int pos = 0;
@@ -109,11 +110,11 @@ public class ListCG extends AbstractComponentCG implements
         device.print("/>");
     }
 
-    private org.wings.io.StringBufferDevice stringBufferDevice = null;
+    private org.wings.io.StringBuilderDevice stringBufferDevice = null;
 
-    protected org.wings.io.StringBufferDevice getStringBufferDevice() {
+    protected org.wings.io.StringBuilderDevice getStringBuilderDevice() {
         if (stringBufferDevice == null) {
-            stringBufferDevice = new org.wings.io.StringBufferDevice();
+            stringBufferDevice = new org.wings.io.StringBuilderDevice();
         }
         stringBufferDevice.reset();
         return stringBufferDevice;

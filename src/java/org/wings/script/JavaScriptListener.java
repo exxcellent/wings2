@@ -15,6 +15,7 @@ package org.wings.script;
 
 import org.wings.SButton;
 import org.wings.SComponent;
+import org.wings.io.SStringBuilder;
 
 public class JavaScriptListener
         implements ScriptListener {
@@ -114,7 +115,7 @@ public class JavaScriptListener
     public SComponent[] getComponents() { return components; }
 
     private String substituteIds(String code, SComponent[] components) {
-        StringBuffer buffer = new StringBuffer();
+        SStringBuilder buffer = new SStringBuilder();
 
         int startPos = 0;
         int endPos = 0;

@@ -26,6 +26,7 @@ import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.frames.SFrameSet;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.session.SessionManager;
 
@@ -53,7 +54,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     }
 
     public void setColumns(String[] c) {
-        StringBuffer buffer = new StringBuffer(c[0]);
+        SStringBuilder buffer = new SStringBuilder(c[0]);
         for (int i = 1; i < c.length; i++) {
             buffer.append(",");
             buffer.append(c[i]);
@@ -72,7 +73,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     }
 
     public void setRows(String[] r) {
-        StringBuffer buffer = new StringBuffer(r[0]);
+        SStringBuilder buffer = new SStringBuilder(r[0]);
         for (int i = 1; i < r.length; i++) {
             buffer.append(",");
             buffer.append(r[i]);

@@ -24,6 +24,8 @@ import org.wings.SList;
 import org.wings.SPageScroller;
 import org.wings.SScrollPane;
 import org.wings.SScrollPaneLayout;
+import org.wings.io.SStringBuilder;
+
 import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -73,7 +75,7 @@ public class PageScrollerExample
 
     static void addChildNodes(TreeNode node, ArrayList list, int indent) {
         if (node != null) {
-            StringBuffer name = new StringBuffer();
+            SStringBuilder name = new SStringBuilder();
             for (int i = 0; i < indent; i++) {
                 name.append(".");
             }

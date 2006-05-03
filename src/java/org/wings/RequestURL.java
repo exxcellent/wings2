@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 
 import java.io.IOException;
 
@@ -34,7 +35,7 @@ public class RequestURL extends SimpleURL {
 
     private String resource;
 
-    private StringBuffer parameters = null;
+    private SStringBuilder parameters = null;
 
 
     public RequestURL() {
@@ -49,8 +50,8 @@ public class RequestURL extends SimpleURL {
         this.hasQuestMark = other.hasQuestMark;
         this.epoch = other.epoch;
         this.resource = other.resource;
-        StringBuffer params = other.parameters;
-        parameters = (params == null) ? null : new StringBuffer(params.toString());
+        SStringBuilder params = other.parameters;
+        parameters = (params == null) ? null : new SStringBuilder(params.toString());
     }
 
 
@@ -103,7 +104,7 @@ public class RequestURL extends SimpleURL {
     public RequestURL addParameter(String parameter) {
         if (parameter != null) {
             if (parameters == null)
-                parameters = new StringBuffer();
+                parameters = new SStringBuilder();
             else
                 parameters.append("&amp;");
             parameters.append(parameter);
@@ -207,7 +208,7 @@ public class RequestURL extends SimpleURL {
      * all paramters given.
      */
     public String toString() {
-        StringBuffer erg = new StringBuffer();
+        SStringBuilder erg = new SStringBuilder();
 
         if (baseURL != null) {
             erg.append(baseURL);

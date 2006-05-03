@@ -21,6 +21,7 @@ import org.wings.border.STitledBorder;
 import org.wings.border.SBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.plaf.css.AbstractLayoutCG;
 import org.wings.plaf.css.Utils;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
 
     /* non-javadoc: wraps every component into a TABLE element for MSIE. */
     public void writePrefix(final Device device, final SComponent component) throws IOException {
+        final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
         SDimension prefSize = component.getPreferredSize();
 
         // --- This is a BAD idea: It streches compoennts which shouldnt be streched.
@@ -52,15 +54,13 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         Utils.printDebugNewline(device, component);
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
 
-        device.print("<table id=\"").print(component.getName()).print("\"");
+        device.print("<div");
+        final String classname = component.getStyle();
+        Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
+        Utils.optAttribute(device, "id", component.getName());
         // Special handling: Mark Titled Borders for styling
-        if (component.getBorder() instanceof STitledBorder) {
-            Utils.optAttribute(device, "class", component.getStyle() + " STitledBorder");
-        } else {
-            Utils.optAttribute(device, "class", component.getStyle());
-        }
 
-        writeInlineStyles(device, component);
+        Utils.optAttribute(device, "style", getInlineStyles(device, component));
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
@@ -80,11 +80,7 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         // Component popup menu
         writeContextMenu(device, component);
 
-        device.print("><tr>"); // table
-        AbstractLayoutCG.openLayouterCell(device, false, null, 0, component);
-        // the following TD id is needed for the MSIE padding workaround! Refer to CSSStyleSheetWriter.
-        device.print(" id=\"").print(component.getName()).print("_td\"");
-        device.print(">");
+        device.print(">"); // div
 
         // Special handling: Render title of STitledBorder
         // TODO Attention - This may break CSS selectors as a new element is introduced inbetween.
@@ -103,12 +99,17 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
 
     public void writeSuffix(final Device device, final SComponent component) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
-        AbstractLayoutCG.closeLayouterCell(device, false);
         writeInlineScripts(device, component);
-        device.print("</tr></table>");
+        device.print("</div>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 
+    protected String getInlineStyles(Device device, SComponent component) {
+        SDimension prefSize = component.getPreferredSize();
+        SStringBuilder inlineStyles = Utils.generateCSSInlinePreferredSize(new SStringBuilder(), prefSize, component.getOversize(true), component.getOversize(false));
+        Utils.appendCSSComponentInlineColorStyle(inlineStyles, component);
+        return inlineStyles.toString();
+    }
 
     /* *
      * If a component should be centered/right-aligned we need its surrounding cell to be stretched

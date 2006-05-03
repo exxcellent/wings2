@@ -20,6 +20,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
+import org.wings.io.SStringBuilder;
+
 /**
  * This source code was taken from a code example at http://javaalmanac.com/
  * and slightly altered to fit our purpose.
@@ -30,7 +32,7 @@ public class KeystrokeUtil {
 
     public static String keyStroke2String(KeyStroke key) {
         if (key == null) return "";
-        StringBuffer s = new StringBuffer(50);
+        SStringBuilder s = new SStringBuilder(50);
         int m = key.getModifiers();
     
         if ((m & (InputEvent.CTRL_DOWN_MASK|InputEvent.CTRL_MASK)) != 0) {

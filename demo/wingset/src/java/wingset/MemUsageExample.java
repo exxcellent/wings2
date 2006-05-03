@@ -22,6 +22,7 @@ import org.wings.SProgressBar;
 import org.wings.STemplateLayout;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
+import org.wings.io.SStringBuilder;
 import org.wings.session.WingsStatistics;
 import org.wings.session.SessionManager;
 import java.awt.event.ActionEvent;
@@ -131,7 +132,7 @@ public class MemUsageExample extends WingSetPane {
         final long MINUTE = 60 * SECOND;
         final long HOUR = 60 * MINUTE;
         final long DAY = 24 * HOUR;
-        final StringBuffer result = new StringBuffer();
+        final SStringBuilder result = new SStringBuilder();
         boolean doAppend = false;
 
         if (uptime / DAY > 0) {

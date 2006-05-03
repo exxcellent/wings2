@@ -75,6 +75,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
+import org.wings.io.SStringBuilder;
+
 /**
  * Convenient class for parsing SGML tokens from a page.
  * <p/>
@@ -513,7 +515,7 @@ public class SGMLTag {
      */
     public String nextToken(Reader input, boolean skipWhitespaces)
             throws IOException {
-        StringBuffer token = new StringBuffer();
+        SStringBuilder token = new SStringBuilder();
 
         if (skipWhitespaces)
             skipWhiteSpace(input);
@@ -650,7 +652,7 @@ public class SGMLTag {
      * @return SGML tag as string, showing range and values
      */
     public String toString() {
-        StringBuffer str = new StringBuffer();
+        SStringBuilder str = new SStringBuilder();
         str.append("[SGMLTag ").append(name).append(": (").append(getOffset()).append(",---)");
         if (attrs != null && wellFormed) {
             Iterator iter = attributes(true);

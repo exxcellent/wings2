@@ -13,6 +13,8 @@
  */
 package org.wings;
 
+import org.wings.io.SStringBuilder;
+
 
 
 /**
@@ -23,7 +25,7 @@ package org.wings;
  */
 public class SDefaultListCellRenderer extends SLabel implements SListCellRenderer {
 
-    private StringBuffer nameBuffer = new StringBuffer();
+    private SStringBuilder nameBuffer = new SStringBuilder();
     /**
      * Style class to use for the foreground for selected nodes.
      */

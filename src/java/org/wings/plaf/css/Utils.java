@@ -26,9 +26,12 @@ import org.wings.SFrame;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
+import org.wings.io.SStringBuilder;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -277,13 +280,13 @@ public final class Utils {
     }
 
     /**
-     * Generates a StringBuffer containing inlined CSS styles for the following properties of a SComponent:
+     * Generates a SStringBuilder containing inlined CSS styles for the following properties of a SComponent:
      * <p><ul><li>Preffered Size</li><li>Font</li><li>Background- and Foregroud color.</li></ul>
      *
      * @param component Component to grab parameters from.
      */
-    public static StringBuffer generateCSSComponentInlineStyle(SComponent component) {
-        final StringBuffer styleString = new StringBuffer();
+    public static SStringBuilder generateCSSComponentInlineStyle(SComponent component) {
+        final SStringBuilder styleString = new SStringBuilder();
         appendCSSInlineSize(styleString, component);
         appendCSSComponentInlineColorStyle(styleString, component);
         appendCSSComponentInlineFontStyle(styleString, component);
@@ -292,11 +295,11 @@ public final class Utils {
 
     /**
      * Append a inline CSS style definition for the passed component of the aspect foreground- and background color.
-     * @param styleString StringBuffer to append to
+     * @param inlineStyles SStringBuilder to append to
      * @param component Component to use as style source
      * @return The passed styleString
      */
-    public static StringBuffer appendCSSComponentInlineColorStyle(final StringBuffer styleString, final SComponent component) {
+    public static SStringBuilder appendCSSComponentInlineColorStyle(SStringBuilder styleString, final SComponent component) {
         if (component != null) {
             if (component.getBackground() != null) {
                 styleString.append("background-color:#").append(toColorString(component.getBackground())).append(";");
@@ -311,11 +314,11 @@ public final class Utils {
 
         /**
      * Append a inline CSS style definition for the passed component of the aspect font properties.
-     * @param styleString StringBuffer to append to
+     * @param styleString SStringBuilder to append to
      * @param component Component to use as style source
      * @return The passed styleString
      */
-    public static StringBuffer appendCSSComponentInlineFontStyle(final StringBuffer styleString, final SComponent component) {
+    public static SStringBuilder appendCSSComponentInlineFontStyle(final SStringBuilder styleString, final SComponent component) {
         if (component != null && component.getFont() != null) {
             final SFont font = component.getFont();
             styleString.append("font-size:").append(font.getSize()).append("pt;");
@@ -329,18 +332,10 @@ public final class Utils {
     /**
      * Appends a CSS inline style string for the preferred size of the passed component to the passed stringbuffer.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
+     * @throws IOException 
      */
-    public static StringBuffer appendCSSInlineSize(StringBuffer pBuffer, SComponent pComponent) {
-        return appendCSSInlineSize(pBuffer, pComponent.getPreferredSize());
-//        SDimension maxSize = pComponent.getMaxSize();
-//        if ( maxSize!=null ) {
-//            if (maxSize.getWidth() != SDimension.AUTO) {
-//                pBuffer.append("max-width:").append(maxSize.getWidth()).append(";");
-//            }
-//            if (maxSize.getHeight() != SDimension.AUTO) {
-//                pBuffer.append("max-height:").append(maxSize.getHeight()).append(";");
-//            }
-//        }
+    public static void appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
+        appendCSSInlineSize(styleString, pComponent.getPreferredSize(), pComponent.getOversize(true), pComponent.getOversize(false));
     }
 
     /**
@@ -348,51 +343,100 @@ public final class Utils {
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      *
      * @param preferredSize Preferred sitze. May be null or contain null attributes
-     * @param styleString Stringbuffer to append to.
-     * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
+     * @param device Device to append to.
+     * @param oversize the size of border and padding that might need to be subtracted
+     * @param oversizeVertical 
      */
-    public static StringBuffer appendCSSInlineSize(final StringBuffer styleString, SDimension preferredSize) {
+    public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
         if (preferredSize != null) {
             if (preferredSize.getWidth() != SDimension.AUTO) {
-                styleString.append("width:").append(preferredSize.getWidth()).append(";");
+                if (oversizeHorizontal != 0 && 
+                        preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
+                    // size berechnen anhand des Parents - auf Clientseite
+                    styleString.append("width:expression(this.parentNode.offsetWidth-").append(oversizeHorizontal).append("+'px');");
+                } else {
+                    styleString.append("width:").append(preferredSize.getWidth()).append(";");
+                }
             }
             if (preferredSize.getHeight() != SDimension.AUTO) {
-                styleString.append("height:").append(preferredSize.getHeight()).append(";");
+                if (oversizeVertical != 0 &&
+                        preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1) {
+                    // size berechnen anhand des Parents - auf Clientseite
+                    styleString.append("height:expression(this.parentNode.offsetHeight-").append(oversizeVertical).append("+'px');");
+                } else {
+                    styleString.append("height:").append(preferredSize.getHeight()).append(";");
+                }
             }
         }
         return styleString;
     }
 
-    public static void appendCSSInlineSize(final Device device, SDimension preferredSize) throws IOException {
+    /**
+     * Appends a new CSS Inline Style string for the passed SDimension to the passed stringbuffer.
+     * <p>Sample: <code>width:100%;heigth=15px"</code>
+     *
+     * @param preferredSize Preferred sitze. May be null or contain null attributes
+     * @param device Device to append to.
+     * @return the appended StringBuilder
+     */
+    public static SStringBuilder appendCSSInlineSize(final SStringBuilder buffer, SDimension preferredSize) {
         if (preferredSize != null) {
             if (preferredSize.getWidth() != SDimension.AUTO) {
-                device.print("width:").print(preferredSize.getWidth()).print(';');
+                buffer.append("width:").append(preferredSize.getWidth()).append(';');
             }
             if (preferredSize.getHeight() != SDimension.AUTO) {
-                device.print("height:").print(preferredSize.getHeight()).print(';');
+                buffer.append("height:").append(preferredSize.getHeight()).append(';');
             }
         }
+        return buffer;
+    }
+
+//    /**
+//     * Generates a new CSS Inline Style string for the passed SDimension.
+//     * <p>Sample: <code>width:100%;heigth=15px"</code>
+//     *
+//     * @param preferredSize Preferred sitze. May be null or contain null attributes
+//     * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
+//     */
+//    public static SStringBuilder generateCSSInlinePreferredSize(SDimension preferredSize) {
+//        return appendCSSInlineSize(new SStringBuilder(), preferredSize, 0, 0);
+//    }
+//
+    /**
+     * Generates a new CSS Inline Style string for the passed SDimension.
+     * <p>Sample: <code>width:100%;heigth=15px"</code>
+     *
+     * @param device
+     * @param preferredSize Preferred size. May be null or contain null attributes
+     * @param oversizeHorizontal  the size of the borders and paddings that might need to be subtracted
+     * @param oversizeVertical  the size of the borders and paddings that might need to be subtracted
+�    * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
+     * @throws IOException 
+     */
+    public static SStringBuilder generateCSSInlinePreferredSize(SStringBuilder buffer, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
+        return appendCSSInlineSize(buffer, preferredSize, oversizeHorizontal, oversizeVertical);
     }
 
     /**
      * Generates a new CSS Inline Style string for the passed SDimension.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      *
-     * @param preferredSize Preferred sitze. May be null or contain null attributes
+     * @param preferredSize Preferred size. May be null or contain null attributes
+     * @param oversize the size of the borders and paddings that might need to be subtracted 
      * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
+     * @throws IOException 
      */
-    public static StringBuffer generateCSSInlinePreferredSize(SDimension preferredSize) {
-        return appendCSSInlineSize(new StringBuffer(), preferredSize);
+    public static SStringBuilder generateCSSInlinePreferredSize(SStringBuilder buffer, SDimension preferredSize) {
+        return appendCSSInlineSize(buffer, preferredSize);
     }
 
-    public static StringBuffer generateCSSInlineBorder(int borderSize) {
-        final StringBuffer styleString = new StringBuffer();
+    public static SStringBuilder generateCSSInlineBorder(SStringBuilder styles, int borderSize) {
         if (borderSize > 0) {
-            styleString.append("border:").append(borderSize).append("px solid black;");
+            styles.append("border:").append(borderSize).append("px solid black;");
         } else {
             ; //styleString.append("border:none;"); Not necessary. Default
         }
-        return styleString;
+        return styles;
     }
 
     /**
@@ -420,13 +464,13 @@ public final class Utils {
      * on an outer, sized HTML element. Otherwise the component would appear to small (as size is applied only
      * on the invisible outer limiting element)
      *
-     * @param pStringBuffer buffer to append to
+     * @param pSStringBuilder buffer to append to
      * @param pComponent preferredSize trigger dimension
      */
-    public static void appendCSSInlineFullSize(StringBuffer pStringBuffer, SComponent pComponent) {
+    public static void appendCSSInlineFullSize(SStringBuilder pSStringBuilder, SComponent pComponent) {
         SDimension preferredSize = pComponent.getPreferredSize();
         if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO)) {
-            pStringBuffer.append("width:100%;height:100%;");
+            pSStringBuilder.append("width:100%;height:100%;");
         }
     }
 
@@ -572,7 +616,7 @@ public final class Utils {
      * (value != null && value.length > 0), the attrib is added otherwise
      * it is left out
      */
-    public static void optAttribute(Device d, String attr, StringBuffer value)
+    public static void optAttribute(Device d, String attr, SStringBuilder value)
             throws IOException {
         optAttribute(d, attr, value != null ? value.toString() : null);
     }
@@ -692,7 +736,7 @@ public final class Utils {
 
 
         Color c = new Color(255, 254, 7);
-        Device d = new org.wings.io.StringBufferDevice();
+        Device d = new org.wings.io.StringBuilderDevice();
         write(d, c);
         quote(d,"\nThis is a <abc> string \"; foo & sons\nmoin",true, false, false);
         d.print(String.valueOf(-42));
@@ -767,7 +811,7 @@ public final class Utils {
         try {
             in = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
             reader = new BufferedReader(new InputStreamReader(in));
-            StringBuffer buffer = new StringBuffer();
+            SStringBuilder buffer = new SStringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line).append("\n");
@@ -814,7 +858,7 @@ public final class Utils {
 
         // more than one word
         StringTokenizer tokenizer = new StringTokenizer(words, " ");
-        StringBuffer returnValue = new StringBuffer();
+        SStringBuilder returnValue = new SStringBuilder();
         while (tokenizer.hasMoreElements()) {
             returnValue.append(tokenizer.nextToken()).append(wordSuffix);
             if (tokenizer.hasMoreTokens())
@@ -829,14 +873,14 @@ public final class Utils {
      * @param component Component may be <code>null</code> and may have a <code>null</code> style string.
      * @param styleString The style string to append
      */
-    public static StringBuffer joinStyles(final SComponent component, final StringBuffer styleString) {
+    public static SStringBuilder joinStyles(final SComponent component, final SStringBuilder styleString) {
         if (component != null && component.getStyle() != null) {
             if (styleString != null) {
                 styleString.insert(0," ");
                 styleString.insert(0,component.getStyle());
                 return styleString;
             } else {
-                return new StringBuffer(component.getStyle());
+                return new SStringBuilder(component.getStyle());
             }
         } else {
             return styleString;

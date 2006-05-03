@@ -14,6 +14,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.io.SStringBuilder;
 import org.wings.style.CSSProperty;
 import org.wings.template.StringTemplateSource;
 
@@ -43,7 +44,7 @@ public class InteractiveTemplateExample
 
         try {
             java.net.URL templateURL = getSession().getServletContext().getResource(TEMPLATE);
-            StringBuffer buffer = new StringBuffer();
+            SStringBuilder buffer = new SStringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(templateURL.openStream()));
 
             String line = reader.readLine();

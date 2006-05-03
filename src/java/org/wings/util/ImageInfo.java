@@ -37,6 +37,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wings.io.SStringBuilder;
+
 /**
  * Get file format, image resolution, number of bits per pixel and optionally
  * number of images, comments and physical resolution from
@@ -402,7 +404,7 @@ public class ImageInfo {
                     {
                         int extensionType = read();
                         if (collectComments && extensionType == 0xfe) {
-                            StringBuffer sb = new StringBuffer();
+                            SStringBuilder sb = new SStringBuilder();
                             int n;
                             do {
                                 n = read();
@@ -1104,10 +1106,10 @@ public class ImageInfo {
     }
 
     private String readLine() throws IOException {
-        return readLine(new StringBuffer());
+        return readLine(new SStringBuilder());
     }
 
-    private String readLine(StringBuffer sb) throws IOException {
+    private String readLine(SStringBuilder sb) throws IOException {
         boolean finished;
         do {
             int value = read();
@@ -1181,7 +1183,7 @@ public class ImageInfo {
     }
 
     private String readLine(int firstChar) throws IOException {
-        StringBuffer result = new StringBuffer();
+        SStringBuilder result = new SStringBuilder();
         result.append((char) firstChar);
         return readLine(result);
     }

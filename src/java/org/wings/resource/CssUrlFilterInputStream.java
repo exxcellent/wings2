@@ -3,6 +3,7 @@ package org.wings.resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.externalizer.ExternalizeManager;
+import org.wings.io.SStringBuilder;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class CssUrlFilterInputStream extends BufferedInputStream {
      * @throws IOException
      */
     private void substitute() throws IOException {
-        StringBuffer classPathBuffer = new StringBuffer();
+        SStringBuilder classPathBuffer = new SStringBuilder();
         int tempBuffer = super.read();
         while (tempBuffer != -1 && tempBuffer != ')') {
             classPathBuffer.append((char)tempBuffer);

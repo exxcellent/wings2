@@ -14,25 +14,39 @@
 package org.wings.plaf.css;
 
 
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
+import org.wings.RequestURL;
+import org.wings.SCellRendererPane;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SListSelectionModel;
+import org.wings.STable;
 import org.wings.io.Device;
-import org.wings.io.StringBufferDevice;
+import org.wings.io.SStringBuilder;
+import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
 import org.wings.table.STableColumnModel;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
     /**
@@ -207,8 +221,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         // the following code does the job of rendering their styles inline.
         // TODO: Maybe "compress" repeated styles here as well as in the stylesheet writer.
         try {
-            final StringBufferDevice stringBufferDevice = new StringBufferDevice();
-            final String styleString = stringBufferDevice.toString();
+            final StringBuilderDevice stringBuilderDevice = new StringBuilderDevice();
+            final String styleString = stringBuilderDevice.toString();
             if (styleString.length() > 0) {
                 device.print("<style>").print(styleString).print("</style>");
             }
@@ -328,7 +342,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         device.print("<tbody>\n");
         for (int r = startRow; r < endRow; r++) {
-            StringBuffer rowClass = new StringBuffer(table.getRowStyle(r) != null ? table.getRowStyle(r)+" " : "");
+            SStringBuilder rowClass = new SStringBuilder(table.getRowStyle(r) != null ? table.getRowStyle(r)+" " : "");
             device.print("<tr");
             if (selectionModel.isSelectedIndex(r)){
                 if(childSelectorWorkaround)

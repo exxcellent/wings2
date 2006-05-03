@@ -21,8 +21,12 @@ import java.util.List;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SLayoutManager;
+import org.wings.border.SBorder;
+import org.wings.dnd.DragSource;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.plaf.LayoutCG;
+import org.wings.style.Style;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.
@@ -43,19 +47,29 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         // Generate CSS Inline Style
         // we don't need to do that here once we have set all layoutmanagers
         // to 100% width/height
-        StringBuffer styleString = Utils.generateCSSInlinePreferredSize(layout.getContainer().getPreferredSize());
-        styleString.append(Utils.generateCSSInlineBorder(border));
-        styleString.append(createInlineStylesForInsets(insets));
-
+        
         Utils.printNewline(d, layout.getContainer());
         d.print("<table ");
         /* This won't work any longer as we override padding/spacing with default SLayout styles class
         d.print(" cellspacing=\"").print(cellSpacing < 0 ? 0 : cellSpacing).print("\"");
         d.print(" cellpadding=\"").print(cellPadding < 0 ? 0 : cellPadding).print("\""); */
         Utils.optAttribute(d, "class", styleClass);
-        Utils.optAttribute(d, "style", styleString.toString());
+        Utils.optAttribute(d, "style", getInlineStyles(layout, border, insets));
         d.print("><tbody>");
         Utils.printNewline(d, layout.getContainer());
+    }
+
+    /** write the inline style attribute
+     * @param device
+     * @param component
+     * @throws IOException
+     */
+    protected String getInlineStyles(SLayoutManager layout, int border, Insets insets) throws IOException {
+        SStringBuilder styles = new SStringBuilder();
+        // write inline styles
+        Utils.generateCSSInlinePreferredSize(styles,layout.getContainer().getPreferredSize());
+        Utils.generateCSSInlineBorder(styles, border);
+        return styles.toString();
     }
 
     /**
@@ -117,22 +131,22 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
     /**
      * Converts a hgap/vgap in according inline css padding style.
+     * @param styles 
      *
      * @param insets The insets to generate CSS padding declaration
      * @return Empty or fille stringbuffer with padding declaration
      */
-    protected static StringBuffer createInlineStylesForInsets(Insets insets) {
-        StringBuffer inlineStyle = new StringBuffer();
+    protected static SStringBuilder createInlineStylesForInsets(SStringBuilder styles, Insets insets) {
         if (insets != null && (insets.top > 0 || insets.left > 0 || insets.right > 0 || insets.bottom > 0)) {
             if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
                 // Trivial style: all the same
-                inlineStyle.append("padding:").append(insets.top).append("px;");
+                styles.append("padding:").append(insets.top).append("px;");
             } else {
-                inlineStyle.append("padding:").append(insets.top).append("px ").append(insets.right).append("px ")
+                styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px ")
                         .append(insets.bottom).append("px ").append(insets.left).append("px;");
             }
         }
-        return inlineStyle;
+        return styles;
     }
 
     /**
@@ -173,8 +187,9 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         Utils.printTableCellAlignment(d, containedComponent, SConstants.TOP, SConstants.LEFT);
 
         // CSS inline attributes
-        StringBuffer inlineAttributes = Utils.generateCSSInlineBorder(border);
-        inlineAttributes.append(createInlineStylesForInsets(insets));
+        SStringBuilder inlineAttributes = new SStringBuilder(); 
+            Utils.generateCSSInlineBorder(inlineAttributes, border);
+        inlineAttributes.append(createInlineStylesForInsets(inlineAttributes, insets));
         Utils.optAttribute(d, "style", inlineAttributes.toString());
     }
 

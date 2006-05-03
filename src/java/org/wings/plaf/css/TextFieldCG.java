@@ -18,6 +18,7 @@ import org.wings.SComponent;
 import org.wings.SFormattedTextField;
 import org.wings.STextField;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
 import org.wings.text.SAbstractFormatter;
@@ -81,7 +82,7 @@ public class TextFieldCG extends AbstractComponentCG implements
         // background/foreground/font is specified in the default css (gecko-optional.css, msie-optional)
         // So it is not possible to specify this css properties in the inner div.
         // TODO This is fast fix hack. Check if there is a better solution 
-        StringBuffer tStyle = new StringBuffer();
+        SStringBuilder tStyle = new SStringBuilder();
         Utils.appendCSSComponentInlineColorStyle(tStyle, component);
         Utils.appendCSSComponentInlineFontStyle(tStyle, component);
         Utils.appendCSSInlineFullSize(tStyle, component);

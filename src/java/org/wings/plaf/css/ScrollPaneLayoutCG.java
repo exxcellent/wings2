@@ -5,6 +5,7 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 
 import java.io.IOException;
 import java.awt.Rectangle;
@@ -50,7 +51,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         SComponent south = (SComponent) components.get(SScrollPaneLayout.SOUTH);
 
         d.print("\n<table class=\"SScrollPaneLayout\"");
-        Utils.optAttribute(d, "style", Utils.generateCSSInlinePreferredSize(container.getPreferredSize()).toString());
+        Utils.optAttribute(d, "style", Utils.generateCSSInlinePreferredSize(new SStringBuilder(), container.getPreferredSize()).toString());
         d.print("><tbody>");
 
         if (north != null) {

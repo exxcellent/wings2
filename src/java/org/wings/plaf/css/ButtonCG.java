@@ -18,6 +18,7 @@ import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 
 import java.io.IOException;
 
@@ -43,7 +44,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         // use class attribute instead of single attributes for IE compatibility
-        final StringBuffer className = new StringBuffer();
+        final SStringBuilder className = new SStringBuilder();
         if (!button.isEnabled()) {
             className.append(component.getStyle());
             className.append("_disabled ");

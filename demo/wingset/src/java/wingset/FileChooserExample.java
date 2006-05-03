@@ -15,6 +15,7 @@ package wingset;
 
 import org.wings.*;
 import org.wings.border.SEmptyBorder;
+import org.wings.io.SStringBuilder;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -86,7 +87,7 @@ public class FileChooserExample
 
     protected String getText(File f) {
         try {
-            StringBuffer buffer = new StringBuffer();
+            SStringBuilder buffer = new SStringBuilder();
             BufferedReader reader = new BufferedReader(new FileReader(f));
 
             String line = reader.readLine();

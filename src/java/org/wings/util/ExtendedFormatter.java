@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.LogRecord;
 
+import org.wings.io.SStringBuilder;
+
 public class ExtendedFormatter
         extends java.util.logging.Formatter {
     private DateFormat dateFormatter;
@@ -29,7 +31,7 @@ public class ExtendedFormatter
     }
 
     public String format(LogRecord record) {
-        StringBuffer msg = new StringBuffer();
+        SStringBuilder msg = new SStringBuilder();
         msg.append(dateFormatter.format(new Date()));
         msg.append(" ");
         msg.append(record.getLevel());

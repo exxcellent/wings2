@@ -18,6 +18,7 @@ import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.STree;
+import org.wings.io.SStringBuilder;
 import org.wings.resource.ResourceManager;
 
 /**
@@ -29,7 +30,7 @@ public class SDefaultTreeCellRenderer
         extends SLabel
         implements STreeCellRenderer
 {
-    private StringBuffer nameBuffer = new StringBuffer();
+    private SStringBuilder nameBuffer = new SStringBuilder();
 
     // Icons
     /**

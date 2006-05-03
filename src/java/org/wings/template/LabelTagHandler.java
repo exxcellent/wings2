@@ -14,6 +14,7 @@
 package org.wings.template;
 
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.wings.template.parser.ParseContext;
 import org.wings.template.parser.PositionReader;
 import org.wings.template.parser.SGMLTag;
@@ -31,7 +32,7 @@ import java.io.Reader;
 public class LabelTagHandler
         extends TemplateTagHandler {
     boolean close_is_missing = false;
-    StringBuffer content = new StringBuffer();
+    SStringBuilder content = new SStringBuilder();
 
     /**
      * @param context  the parsing context
@@ -85,7 +86,7 @@ public class LabelTagHandler
         return endTag;
     }
 
-    public int readContent(Reader r, StringBuffer content)
+    public int readContent(Reader r, SStringBuilder content)
             throws IOException {
         int c, len = 0;
         do {
