@@ -107,9 +107,9 @@ public class PageScrollerExample
                     scrollbar.setShowAsFormComponent(selected);
                 }
             });
-            add(showAsFormComponent);
+            addControl(showAsFormComponent);
         	
-            add(new SLabel("Visible Rows: "));
+            addControl(new SLabel("Visible Rows: "));
             Object[] visRowsValues = {new Integer(4), new Integer(8), new Integer(12),
                                       new Integer(16), new Integer(20), new Integer(50)};
             final SComboBox visRows = new SComboBox(visRowsValues);
@@ -119,9 +119,9 @@ public class PageScrollerExample
                 }
             });
             visRows.setSelectedItem(new Integer(list.getVisibleRowCount()));
-            add(visRows);
+            addControl(visRows);
 
-            add(new SLabel("Direct Pages: "));
+            addControl(new SLabel("Direct Pages: "));
             Object[] values = {new Integer(5), new Integer(10), new Integer(15),
                                new Integer(20), new Integer(50)};
             final SComboBox comboBox = new SComboBox(values);
@@ -131,7 +131,7 @@ public class PageScrollerExample
                 }
             });
             comboBox.setSelectedItem(new Integer(scrollbar.getDirectPages()));
-            add(comboBox);
+            addControl(comboBox);
 
 
             add(new SLabel("Layout: "));

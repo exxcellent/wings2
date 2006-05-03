@@ -89,7 +89,6 @@ public class WingSet implements Serializable {
         // Assemble wingSet
         tab.add(new WingsImage(), "wingS!");
         tab.add(new LabelExample(), "Label");
-        tab.add(new BorderExample(), "Border");
         tab.add(new TextComponentExample(), "Text Component");
         tab.addTab("Tree", JAVA_CUP_ICON, new TreeExample(), "Tree Tool Tip");
         tab.add(new OptionPaneExample(), "OptionPane");

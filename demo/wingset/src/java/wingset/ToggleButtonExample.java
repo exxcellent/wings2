@@ -104,7 +104,7 @@ public class ToggleButtonExample
                     }
                 }
             });
-            add(showAsFormComponent);
+            addControl(showAsFormComponent);
 
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
@@ -124,7 +124,7 @@ public class ToggleButtonExample
                     }
                 }
             });
-            add(useImages);
+            addControl(useImages);
         }
     }
 }

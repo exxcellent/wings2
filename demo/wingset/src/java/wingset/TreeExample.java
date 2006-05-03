@@ -17,13 +17,11 @@ import org.wings.*;
 import org.wings.event.SMouseListener;
 import org.wings.event.SMouseEvent;
 import org.wings.style.CSSProperty;
-import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.util.PropertyAccessor;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -141,15 +139,15 @@ public class TreeExample
                 }
             });
 
-            add(showAsFormComponent);
-            add(consume);
-            add(new SLabel(" selection mode "));
-            add(selectionMode);
-            add(new SLabel(" indentation width "));
-            add(indentationWidth);
-            add(new SLabel(" folding icons "));
-            add(plusButton);
-            add(arrowButton);
+            addControl(showAsFormComponent);
+            addControl(consume);
+            addControl(new SLabel(" selection mode "));
+            addControl(selectionMode);
+            addControl(new SLabel(" indentation width "));
+            addControl(indentationWidth);
+            addControl(new SLabel(" folding icons "));
+            addControl(plusButton);
+            addControl(arrowButton);
         }
     }
 }

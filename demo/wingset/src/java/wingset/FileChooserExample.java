@@ -18,7 +18,6 @@ import org.wings.border.SEmptyBorder;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedReader;
@@ -246,8 +245,8 @@ public class FileChooserExample
             });
             comboBox.setSelectedItem(new Integer(getSession().getMaxContentLength()));
 
-            add(new SLabel("Maximum Content Length [kB]: "));
-            add(comboBox);
+            addControl(new SLabel("Maximum Content Length [kB]: "));
+            addControl(comboBox);
         }
     }
 }

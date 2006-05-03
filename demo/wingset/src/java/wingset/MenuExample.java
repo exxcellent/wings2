@@ -196,8 +196,8 @@ public class MenuExample extends WingSetPane {
                 }
             });
 
-            add(showAsFormComponent);
-            add(disableSomeMenus);
+            addControl(showAsFormComponent);
+            addControl(disableSomeMenus);
         }
     }
 }

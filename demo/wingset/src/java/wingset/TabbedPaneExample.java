@@ -21,7 +21,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Example for STabbedPane.
@@ -94,7 +93,7 @@ public class TabbedPaneExample extends WingSetPane {
                     tabbedPane.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
             });
-            add(showAsFormComponent);
+            addControl(showAsFormComponent);
 
             final SComboBox placement = new SComboBox(TAB_PLACEMENTS);
             placement.addActionListener(new wingset.SerializableActionListener() {
@@ -105,8 +104,8 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             placement.setRenderer(new ObjectPairCellRenderer());
-            add(new SLabel("<html>&nbsp;&nbsp;tab placement"));
-            add(placement);
+            addControl(new SLabel("<html>&nbsp;&nbsp;tab placement"));
+            addControl(placement);
 
             final SComboBox tabColor = new SComboBox(COLORS);
             tabColor.addActionListener(new wingset.SerializableActionListener() {
@@ -117,8 +116,8 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             tabColor.setRenderer(new ObjectPairCellRenderer());
-            add(new SLabel("tab color"));
-            add(tabColor);
+            addControl(new SLabel("tab color"));
+            addControl(tabColor);
 
             final SComboBox contentColor = new SComboBox(COLORS);
             contentColor.addActionListener(new wingset.SerializableActionListener() {
@@ -129,8 +128,8 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             contentColor.setRenderer(new ObjectPairCellRenderer());
-            add(new SLabel("content color"));
-            add(contentColor);
+            addControl(new SLabel("content color"));
+            addControl(contentColor);
 
             final SButton addTab = new SButton("add a tab");
             addTab.addActionListener(new wingset.SerializableActionListener() {
@@ -138,7 +137,7 @@ public class TabbedPaneExample extends WingSetPane {
                     addTab();
                 }
             });
-            add(addTab);
+            addControl(addTab);
 
             final SButton removeTab = new SButton("remove a tab");
             removeTab.addActionListener(new wingset.SerializableActionListener() {
@@ -146,7 +145,7 @@ public class TabbedPaneExample extends WingSetPane {
                     removeTab();
                 }
             });
-            add(removeTab);
+            addControl(removeTab);
         }
 
         protected void removeTab() {

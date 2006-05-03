@@ -254,9 +254,9 @@ public class CSSAttributeSet
             Iterator names = map.entrySet().iterator();
             while (names.hasNext()) {
                 Map.Entry next = (Map.Entry) names.next();
-                d.print(next.getKey()).print(":")
+                d.print(next.getKey()).print(':')
                         .print(next.getValue())
-                        .print("; ");
+                        .print(';');
             }
         }
     }
@@ -274,9 +274,9 @@ public class CSSAttributeSet
             while (names.hasNext()) {
                 Map.Entry next = (Map.Entry) names.next();
                 b.append(next.getKey());
-                b.append(":");
+                b.append(':');
                 b.append(next.getValue());
-                b.append("; ");
+                b.append(';');
             }
         }
         return b.toString();

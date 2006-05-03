@@ -14,10 +14,12 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.border.*;
 import org.wings.style.CSSProperty;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,62 +29,131 @@ import java.util.List;
  * @version $Revision$
  */
 public class ComponentControls
-        extends SToolBar {
+    extends SPanel
+{
     protected final List components = new LinkedList();
-    protected final STextField widthTextField;
-    protected final STextField heightTextField;
+
+    protected SToolBar globalControls = new SToolBar();
+    protected SToolBar localControls = new SToolBar();
+    protected final STextField widthTextField = new STextField();
+    protected final STextField heightTextField = new STextField();
+    protected final STextField insetsTextField = new STextField();
+    protected final SComboBox borderComboBox = new SComboBox(new String[] {
+        "none",
+        "raised",
+        "lowered",
+        "line",
+        "grooved",
+        "ridged",
+        "titled",
+    });
+    protected final STextField borderThicknessTextField = new STextField();
+    protected final SComboBox backgroundComboBox = new SComboBox(new String[] {
+        "translucent",
+        "yellow",
+        "red",
+        "green",
+        "blue",
+    });
     protected final SButton applyButton;
 
+    SBorder[] borders = new SBorder[] {
+        null,
+        new SBevelBorder(SBevelBorder.RAISED, new Insets(5, 5, 5, 5)),
+        new SBevelBorder(SBevelBorder.LOWERED, new Insets(5, 5, 5, 5)),
+        new SLineBorder(2, new Insets(5, 5, 5, 5)),
+        new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)),
+        new SEtchedBorder(SEtchedBorder.RAISED, new Insets(5, 5, 5, 5)),
+        new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)), "Border Title"),
+    };
+
+    Color[] backgrounds = new Color[] {
+        null,
+        Color.YELLOW,
+        Color.RED,
+        Color.GREEN,
+        Color.BLUE,
+    };
+
     public ComponentControls() {
+        super(new SGridBagLayout());
         setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
+
         applyButton = new SButton("apply");
         applyButton.setActionCommand("apply");
-        widthTextField = new STextField();
-        heightTextField = new STextField();
+        globalControls.setAttribute(CSSProperty.BORDER_LEFT, "1px solid #cccccc");
+        localControls.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
+        localControls.setAttribute(CSSProperty.BORDER_LEFT, "1px solid #cccccc");
+        localControls.setVisible(false);
 
-        add(applyButton);
-        add(new SLabel("<html>&nbsp;&nbsp;&nbsp;width&nbsp;"));
-        add(widthTextField);
-        add(new SLabel("<html>&nbsp;&nbsp;&nbsp;height&nbsp;"));
-        add(heightTextField);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridwidth = GridBagConstraints.RELATIVE;
+        c.gridheight = 2;
+        add(applyButton, c);
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.gridheight = 1;
+        add(globalControls, c);
+        add(localControls, c);
+
+        widthTextField.setColumns(5);
+        widthTextField.setToolTipText("length with unit (200px)");
+        heightTextField.setColumns(5);
+        heightTextField.setToolTipText("length with unit (200px)");
+        insetsTextField.setColumns(2);
+        insetsTextField.setToolTipText("length only");
+        borderThicknessTextField.setColumns(2);
+        borderThicknessTextField.setToolTipText("length only");
+
+        globalControls.add(new SLabel("<html>width&nbsp;"));
+        globalControls.add(widthTextField);
+        globalControls.add(new SLabel("<html>&nbsp;&nbsp;&nbsp;height&nbsp;"));
+        globalControls.add(heightTextField);
+        globalControls.add(new SLabel("<html>&nbsp;&nbsp;&nbsp;insets&nbsp;"));
+        globalControls.add(insetsTextField);
+        globalControls.add(new SLabel("<html>&nbsp;&nbsp;&nbsp;border&nbsp;"));
+        globalControls.add(borderComboBox);
+        globalControls.add(borderThicknessTextField);
+        globalControls.add(new SLabel("<html>&nbsp;&nbsp;&nbsp;background&nbsp;"));
+        globalControls.add(backgroundComboBox);
 
         addActionListener(new wingset.SerializableActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent event) {
                 SDimension preferredSize = new SDimension();
-                String width = widthTextField.getText();
-                if (width != null && width.length() > 0) {
-                    int widthInt;
-                    try {
-                        widthInt = Integer.parseInt(width);
-                    } catch (NumberFormatException nfe) {
-                        widthInt = Integer.MIN_VALUE;
-                    }
-                    if (widthInt == Integer.MIN_VALUE) {
-                        preferredSize.setWidth(width);
-                    } else {
-                        preferredSize.setWidth(widthInt);
-                    }
+                preferredSize.setWidth(widthTextField.getText());
+                preferredSize.setHeight(heightTextField.getText());
+
+                int insets = 0;
+                try {
+                    insets = Integer.parseInt(borderThicknessTextField.getText());
                 }
-                String height = heightTextField.getText();
-                if (height != null && height.length() > 0) {
-                    int heightInt;
-                    try {
-                        heightInt = Integer.parseInt(height);
-                    } catch (NumberFormatException nfe) {
-                        heightInt = Integer.MIN_VALUE;
-                    }
-                    if (heightInt == Integer.MIN_VALUE) {
-                        preferredSize.setHeight(height);
-                    } else {
-                        preferredSize.setHeight(heightInt);
-                    }
+                catch (NumberFormatException e) {}
+
+                int borderThickness = 1;
+                try {
+                    borderThickness = Integer.parseInt(borderThicknessTextField.getText());
                 }
+                catch (NumberFormatException e) {}
+
+                SBorder border = borders[borderComboBox.getSelectedIndex()];
+                if (border != null)
+                    border.setThickness(borderThickness);
+
+                Color background = backgrounds[backgroundComboBox.getSelectedIndex()];
+
                 for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                     SComponent component = (SComponent) iterator.next();
                     component.setPreferredSize(preferredSize);
+                    component.setInsets(new Insets(insets, insets, insets, insets));
+                    component.setBorder(border);
+                    component.setBackground(background);
                 }
             }
         });
+    }
+
+    public void addControl(SComponent component) {
+        localControls.add(component);
+        localControls.setVisible(true);
     }
 
     public void addSizable(SComponent component) {

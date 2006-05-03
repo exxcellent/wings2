@@ -341,11 +341,11 @@ public class TableExample
                 }
             });
 
-            add(showAsFormComponent);
-            add(editable);
-            add(consume);
-            add(new SLabel(" selection mode "));
-            add(selectionMode);
+            addControl(showAsFormComponent);
+            addControl(editable);
+            addControl(consume);
+            addControl(new SLabel(" selection mode "));
+            addControl(selectionMode);
         }
     }
 }

@@ -113,7 +113,7 @@ public class ButtonExample extends WingSetPane {
                     }
                 }
             });
-            add(showAsFormComponent);
+            addControl(showAsFormComponent);
 
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
@@ -132,7 +132,7 @@ public class ButtonExample extends WingSetPane {
                     }
                 }
             });
-            add(useImages);
+            addControl(useImages);
         }
 
         public SButton getApplyButton() {

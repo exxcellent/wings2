@@ -113,7 +113,7 @@ public class CheckBoxExample
                     }
                 }
             });
-            add(showAsFormComponent);
+            addControl(showAsFormComponent);
 
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
@@ -134,7 +134,7 @@ public class CheckBoxExample
                     }
                 }
             });
-            add(useImages);
+            addControl(useImages);
         }
     }
 }

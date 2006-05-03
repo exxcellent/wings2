@@ -119,7 +119,7 @@ public class RadioButtonExample
                     }
                 }
             });
-            add(showAsFormComponent);
+            addControl(showAsFormComponent);
 
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
@@ -141,7 +141,7 @@ public class RadioButtonExample
                     }
                 }
             });
-            add(useImages);
+            addControl(useImages);
         }
     }
 }

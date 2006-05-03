@@ -16,7 +16,6 @@ package wingset;
 import org.wings.*;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.tree.DefaultTreeModel;
 
@@ -76,7 +75,7 @@ public class ScrollPaneExample
                     ((SScrollBar)scrollPane.getVerticalScrollBar()).setShowAsFormComponent(selected);
                 }
             });
-            add(showAsFormComponent);
+            addControl(showAsFormComponent);
 
             final SCheckBox paging = new SCheckBox("Paged Scrolling");
             paging.addActionListener(new wingset.SerializableActionListener() {
@@ -86,7 +85,7 @@ public class ScrollPaneExample
                 }
             });
             paging.setSelected(true);
-            add(paging);
+            addControl(paging);
 
             final SRadioButton tableButton = new SRadioButton("table");
             final SRadioButton treeButton = new SRadioButton("tree");
@@ -105,8 +104,8 @@ public class ScrollPaneExample
                 }
                 
             });
-            add(tableButton);
-            add(treeButton);
+            addControl(tableButton);
+            addControl(treeButton);
         }
     }
 }
