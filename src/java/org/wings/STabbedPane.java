@@ -16,7 +16,7 @@ package org.wings;
 import org.wings.plaf.TabbedPaneCG;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 import org.wings.style.CSSStyleSheet;
 
 import javax.swing.*;
@@ -36,21 +36,21 @@ import java.util.ArrayList;
 public class STabbedPane extends SContainer implements LowLevelEventListener, ChangeListener {
     /**
      * A Pseudo CSS selector addressing the area which contains the tab buttons.
-     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
      */
-    public static final CSSSelector.Pseudo SELECTOR_TAB_AREA = new CSSSelector.Pseudo("area containing the tab buttons");
+    public static final Selector SELECTOR_TAB_AREA = new Selector("area containing the tab buttons");
 
     /**
      * A Pseudo CSS selector addressing the selected tab
-     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
      */
-    public static final CSSSelector.Pseudo SELECTOR_SELECTED_TAB = new CSSSelector.Pseudo("the elements of the selected tab");
+    public static final Selector SELECTOR_SELECTED_TAB = new Selector("the elements of the selected tab");
 
     /**
      * A Pseudo CSS selector addressing the unselected tab
-     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
      */
-    public static final CSSSelector.Pseudo SELECTOR_UNSELECTED_TAB = new CSSSelector.Pseudo("the elements of the unselected tab");
+    public static final Selector SELECTOR_UNSELECTED_TAB = new Selector("the elements of the unselected tab");
 
 
     /**

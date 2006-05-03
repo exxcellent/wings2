@@ -30,7 +30,7 @@ import org.wings.session.Session;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 import org.wings.style.CSSStyle;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Style;
@@ -101,7 +101,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     private String style;
 
     /**
-     * Map of {@link CSSSelector} to CSS {@link Style}s currently assigned to this component.
+     * Map of {@link Selector} to CSS {@link Style}s currently assigned to this component.
      */
     protected Map dynamicStyles;
 
@@ -182,8 +182,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     private final Map actionEvents = new HashMap();
 
-    private final CSSSelector thisComponentCssSelector = new CSSSelector(this);
-
     private transient SRenderEvent renderEvent;
 
     private SParentFrameListener globalInputMapListener;
@@ -214,6 +212,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see #setInputMap(int, javax.swing.InputMap)
      */
     public static final int WHEN_IN_FOCUSED_FRAME = 1;
+    public static final Selector SELECTOR_ALL = new Selector("everything");
 
 
     /**
@@ -735,9 +734,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Remove all CSS style definitions defined for the passed CSS selector.
      *
-     * @param selector The selector. The default selector for most CSS attributes is {@link #getComponentCssSelector()}.
+     * @param selector The selector. The default selector for most CSS attributes is {@link #SELECTOR_ALL}.
      */
-    public void removeDynamicStyle(CSSSelector selector) {
+    public void removeDynamicStyle(Selector selector) {
         if (dynamicStyles == null)
             return;
         dynamicStyles.remove(selector);
@@ -747,10 +746,10 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Returns the style defined for the passed CSS selector.
      * @param selector The CSS selector the style to retrieve. See {@link org.wings.style.Style#getSelector()}.
-     *         The default selector for most CSS styles is {@link #getComponentCssSelector()}.
+     *         The default selector for most CSS styles is {@link #SELECTOR_ALL}.
      * @return A style (collection of css property/value pairs) or <code>null</code>
      */
-    public Style getDynamicStyle(CSSSelector selector) {
+    public Style getDynamicStyle(Selector selector) {
         if (dynamicStyles == null)
             return null;
         return (Style) dynamicStyles.get(selector);
@@ -786,49 +785,43 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Defines a free text css property / value pair to this component.
-     * The CSS property definition whill appear in the dynamically generated CSS style sheet file
-     * externalized by the {@link org.wings.style.CSSStyleSheetWriter} to the browser as
-     * separate CSS file.
+     * The CSS property will appear as an inline style in the generated HTML code.
      *
      * @deprecated Use {@link #setAttribute(org.wings.style.CSSProperty, String)}
      */
     public void setAttribute(String cssPropertyName, String value) {
-        setAttribute(thisComponentCssSelector, new CSSProperty(cssPropertyName), value);
+        setAttribute(SELECTOR_ALL, new CSSProperty(cssPropertyName), value);
     }
 
     /**
      * Assign or overwrite a CSS property/value pair on this component. This CSS property definition will
      * use a CSS selector which adresses this component as whole as CSS selector (<code>new CSSProperty(this)</code>).
-     * The CSS property definition whill appear in the dynamically generated CSS style sheet file
-     * externalized by the {@link org.wings.style.CSSStyleSheetWriter} to the browser as
-     * separate CSS file.
+     * The CSS property will appear as an inline style in the generated HTML code.
      *
      * @param property The CSS property (i.e. {@link CSSProperty#BACKGROUND}).
      * @param propertyValue A valid string value for this CSS property (i.e. <code>red</code> or <code>#fff</code> in our example).
      */
     public void setAttribute(CSSProperty property, String propertyValue) {
-        setAttribute(thisComponentCssSelector, property, propertyValue);
+        setAttribute(SELECTOR_ALL, property, propertyValue);
    }
 
     /**
      * Assign or overwrite a CSS property/value pair at this component. This CSS property definition will
      * use the CSS selector you passed, so in the most exotic case it could affect a totally different
      * component or component area. Typically you use this method to assign CSS property values to
-     * pseudo CSS selectors {@link CSSSelector.Pseudo}. This are selector affecting only a part of a component
+     * pseudo CSS selectors {@link Selector}. This are selector affecting only a part of a component
      * and not the component at all..
-     * The CSS property definition whill appear in the dynamically generated CSS style sheet file
-     * externalized by the {@link org.wings.style.CSSStyleSheetWriter} to the browser as
-     * separate CSS file.
+     * The CSS property will appear as an inline style in the generated HTML code.
      *
-     * @param selector A valid CSS selector. Typically values are i.e. the {@link #getComponentCssSelector()}
+     * @param selector A valid CSS selector. Typically values are i.e. the {@link #SELECTOR_ALL}
      * or other <code>SELECTOR_xxx</code> value instances declared in the component.
      * (look ie. at {@link STabbedPane#SELECTOR_CONTENT}) or manually constructed instances of
-     * <code>CSSSelector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
+     * <code>Selector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
      * choice.
      * @param property The css property you want to define a value for
      * @param propertyValue A valid string value for this property.
      */
-    public void setAttribute(CSSSelector selector, CSSProperty property, String propertyValue) {
+    public void setAttribute(Selector selector, CSSProperty property, String propertyValue) {
         Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new CSSStyle(selector, property, propertyValue));
@@ -839,40 +832,40 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Convenience variant of {@link #setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}.
+     * Convenience variant of {@link #setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}.
      * Converts the passed icon into a URL and applies the according CSS style.
      *
-     * @param selector A valid CSS selector. Typically values are i.e. the {@link #getComponentCssSelector()}
+     * @param selector A valid CSS selector. Typically values are i.e. the {@link #SELECTOR_ALL}
      * or other <code>SELECTOR_xxx</code> value instances declared in the component.
      * (look ie. at {@link STabbedPane#SELECTOR_CONTENT}) or manually constructed instances of
-     * <code>CSSSelector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
+     * <code>Selector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
      * choice.
      * @param property The css property you want to define a value for (in this case
      * mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
      * @param icon The icon you want to assign.
      */
-    public void setAttribute(CSSSelector selector, CSSProperty property, SIcon icon) {
+    public void setAttribute(Selector selector, CSSProperty property, SIcon icon) {
         setAttribute(selector, property, icon != null ? "url('"+icon.getURL().toString()+"')" : "none");
     }
 
     /**
-     * Convenience variant of {@link #setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}.
+     * Convenience variant of {@link #setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}.
      * Converts the passed color into according color string.
      *
-     * @param selector A valid CSS selector. Typically values are i.e. the {@link #getComponentCssSelector()}
+     * @param selector A valid CSS selector. Typically values are i.e. the {@link #SELECTOR_ALL}
      * or other <code>SELECTOR_xxx</code> value instances declared in the component.
      * (look ie. at {@link STabbedPane#SELECTOR_CONTENT}) or manually constructed instances of
-     * <code>CSSSelector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
+     * <code>Selector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
      * choice.
      * @param property The css property you want to define a value for (in this case
      * mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
      * @param color The color value you want to assign.
      */
-    public void setAttribute(CSSSelector selector, CSSProperty property, Color color) {
+    public void setAttribute(Selector selector, CSSProperty property, Color color) {
         setAttribute(selector, property, CSSStyleSheet.getAttribute(color));
     }
 
-    public void setAttributes(CSSSelector selector, CSSAttributeSet attributes) {
+    public void setAttributes(Selector selector, CSSAttributeSet attributes) {
         Style style = getDynamicStyle(selector);
         if (style == null) {
             addDynamicStyle(new CSSStyle(selector, attributes));
@@ -884,22 +877,12 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Returns A CSS selector instagnces addressing this component as a whole. Typical usage is i.e. as parameter of
-     * {@link #setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, SIcon)} or other variants.
-     *
-     * @return The CSS selector selecting this component as a whole. This is the equivalent of <code>new CSSelector(component)</code>
-     */
-    public CSSSelector getComponentCssSelector() {
-        return thisComponentCssSelector;
-    }
-
-    /**
      * Returns the current background color of this component.
      *
      * @return The current background color or <code>null</code>
      */
     public Color getBackground() {
-        return dynamicStyles == null || dynamicStyles.get(thisComponentCssSelector) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(thisComponentCssSelector));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_ALL) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_ALL));
     }
 
     /**
@@ -908,7 +891,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param color the new foreground color or <code>null</code>
      */
     public void setBackground(Color color) {
-        setAttribute(thisComponentCssSelector, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_ALL, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -917,7 +900,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return the foreground color or <code>null</code>
      */
     public Color getForeground() {
-        return dynamicStyles == null || dynamicStyles.get(thisComponentCssSelector) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(thisComponentCssSelector));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_ALL) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_ALL));
     }
 
     /**
@@ -926,7 +909,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param color the new foreground color or <code>null</code>
      */
     public void setForeground(Color color) {
-        setAttribute(thisComponentCssSelector, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_ALL, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -935,7 +918,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param font the new font
      */
     public void setFont(SFont font) {
-        setAttributes(thisComponentCssSelector, CSSStyleSheet.getAttributes(font));
+        setAttributes(SELECTOR_ALL, CSSStyleSheet.getAttributes(font));
     }
 
     /**
@@ -944,7 +927,25 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return The current font declaration or <code>null</code>
      */
     public SFont getFont() {
-        return dynamicStyles == null || dynamicStyles.get(thisComponentCssSelector) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(thisComponentCssSelector));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_ALL) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_ALL));
+    }
+
+    /**
+     * Return the components insets color.
+     *
+     * @return the insets or <code>null</code>
+     */
+    public Insets getInsets() {
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_ALL) == null ? null : CSSStyleSheet.getInsets((CSSAttributeSet) dynamicStyles.get(SELECTOR_ALL));
+    }
+
+    /**
+     * Set the insets color.
+     *
+     * @param insets the new insets or <code>null</code>
+     */
+    public void setInsets(Insets insets) {
+        setAttributes(SELECTOR_ALL, CSSStyleSheet.getAttributes(insets));
     }
 
     /**

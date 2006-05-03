@@ -19,10 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,9 +32,12 @@ import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
+import org.wings.style.*;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.script.ScriptListener;
+
+import javax.swing.text.AttributeSet;
 
 /**
  * Utils.java
@@ -63,6 +63,8 @@ public final class Utils {
 
     protected Utils() {
     }
+
+    private static final Set ieNonInheritedStyles = new HashSet();
 
     /**
      * Renders a container using its Layout manager or fallback just one after another.
@@ -311,6 +313,11 @@ public final class Utils {
         return styleString;
     }
 
+    public static void appendIENonInheritedStyles(final Device device, final Style style) throws IOException {
+        CSSAttributeSet.writeIncluding(device, style.properties(), ieNonInheritedStyles);
+    }
+
+
     /**
      * Appends a CSS inline style string for the preferred size of the passed component to the passed stringbuffer.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
@@ -346,6 +353,17 @@ public final class Utils {
             }
         }
         return styleString;
+    }
+
+    public static void appendCSSInlineSize(final Device device, SDimension preferredSize) throws IOException {
+        if (preferredSize != null) {
+            if (preferredSize.getWidth() != SDimension.AUTO) {
+                device.print("width:").print(preferredSize.getWidth()).print(';');
+            }
+            if (preferredSize.getHeight() != SDimension.AUTO) {
+                device.print("height:").print(preferredSize.getHeight()).print(';');
+            }
+        }
     }
 
 
@@ -416,7 +434,7 @@ public final class Utils {
       * @throws IOException
       */
     public static void quote(final Device d, final String s, final boolean quoteNewline,
-                              final boolean quoteSpaces, final boolean quoteApostroph)
+                             final boolean quoteSpaces, final boolean quoteApostroph)
             throws IOException {
         if (s == null) {
             return;

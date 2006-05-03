@@ -27,7 +27,7 @@ import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 import java.io.IOException;
 
 public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameListener {
@@ -70,14 +70,5 @@ public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameL
         device.print("<a href=\"#\" onclick=\"location.href='");
         Utils.write(device, selectionAddr.toString());
         device.print("';\"");
-    }
-
-    protected String getResolvedPseudoSelectorMapping(CSSSelector selector) {
-        if (selector != null && selector.equals(STable.SELECTOR_SELECTION))
-            // Special case for this one
-            return "#compid TR.selected";
-        else
-            // rest: defualt
-            return super.getResolvedPseudoSelectorMapping(selector);
     }
 }

@@ -16,7 +16,7 @@ package org.wings.style;
 import org.wings.Renderable;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A CSS Style definition.
@@ -37,7 +37,7 @@ public interface Style extends Renderable, Serializable, Cloneable {
      * A object defining on what this styles applies to.
      * @return The CSS selector which defines to which elements this style applies to.
      */
-    CSSSelector getSelector();
+    Selector getSelector();
 
     /**
      * Defines a CSS property/value pair in this style.
@@ -62,11 +62,11 @@ public interface Style extends Renderable, Serializable, Cloneable {
     String remove(CSSProperty name);
 
     /**
-     * Gets the Set of defined CSS property names.
+     * Gets the Map of defined CSS properties.
      *
-     * @return A set of {@link CSSProperty} for which this <code>CSSAttributeSet</code> contains a value.
+     * @return the map of CSS properties
      */
-    Set properties();     
+    Map properties();
 
 }
 

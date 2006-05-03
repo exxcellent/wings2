@@ -33,7 +33,7 @@ import org.wings.STabbedPane;
 import org.wings.io.Device;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 
 public class TabbedPaneCG extends AbstractComponentCG {
     /**
@@ -259,27 +259,5 @@ public class TabbedPaneCG extends AbstractComponentCG {
         device.print("\" value=\"");
         device.print(value);
         device.print("\"");
-    }
-
-    public CSSSelector  mapSelector(SComponent addressedComponent, CSSSelector selector) {
-        final String mappedSelector = (String) getSelectorMapping().get(selector);
-        if (mappedSelector != null) {
-            String cssSelector = mappedSelector.replaceAll("#compid", CSSSelector.getSelectorString(addressedComponent));
-            return new CSSSelector(cssSelector);
-        } else {
-            return selector;
-        }
-    }
-
-    protected Map getSelectorMapping() {
-        return geckoMappings;
-    }
-
-    private static final Map geckoMappings = new HashMap();
-    static {
-        geckoMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, "#compid > table > tbody > tr > th > *[selected=\"true\"]");
-        geckoMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, "#compid > table > tbody > tr > th > *[selected=\"false\"]");
-        geckoMappings.put(STabbedPane.SELECTOR_CONTENT, "#compid > table > tbody > tr > td");
-        geckoMappings.put(STabbedPane.SELECTOR_TAB_AREA, "#compid > table > tbody > tr > th");
     }
 }

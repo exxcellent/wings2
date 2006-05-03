@@ -97,7 +97,8 @@ public class JavaScriptListenerExample
                                                  sumField};
         JavaScriptListener jsListener;
         jsListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE,
-                JS_ADD_SCRIPT,
+                "add()",
+                "function add() { " + JS_ADD_SCRIPT + " }",
                 jsParams);
 
         firstField.addScriptListener(jsListener);

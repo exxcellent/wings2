@@ -41,7 +41,7 @@ public class SComponentPropertyManager extends DefaultPropertyManager {
             comp.setFocusTraversalIndex(Integer.parseInt(value));
         else if ("STYLE".equals(name)) {
             PropertyValueConverter valueConverter = getValueConverter(CSSAttributeSet.class);
-            comp.setAttributes(comp.getComponentCssSelector(), (CSSAttributeSet) valueConverter.convertPropertyValue(value, CSSAttributeSet.class));
+            comp.setAttributes(SComponent.SELECTOR_ALL, (CSSAttributeSet) valueConverter.convertPropertyValue(value, CSSAttributeSet.class));
         } else if ("CLASS".equals(name)) {
             comp.setStyle(value);
         } else if ("ALIGN".equals(name)) {

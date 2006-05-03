@@ -17,10 +17,8 @@ package org.wings.plaf.css;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.swing.InputMap;
@@ -44,14 +42,11 @@ import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.ResourceManager;
-import org.wings.script.DynamicScriptResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
-import org.wings.style.CSSSelector;
-import org.wings.style.DynamicStyleSheetResource;
 
 /**
  * PLAF renderer for SFrames.
@@ -85,12 +80,12 @@ public class FrameCG implements org.wings.plaf.FrameCG {
      * javascript needed for Drag and Drop support
      */
     private final String DND_JS = (String) ResourceManager.getObject("JScripts.dnd", String.class);
-    
+
     /**
      * javascript needed for Drag and Drop support
      */
     private final String WZ_DND_JS = (String) ResourceManager.getObject("JScripts.wzdragdrop", String.class);
-    
+
     private String documentType = STRICT_DOCTYPE;
 
     /**
@@ -187,8 +182,6 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         final SFrame component = (SFrame) comp;
 
         DynamicCodeResource dynamicCodeRessource;
-        DynamicStyleSheetResource styleSheetResource;
-        DynamicScriptResource scriptResource;
         Link stylesheetLink;
 
         // dynamic code resource.
@@ -198,18 +191,12 @@ public class FrameCG implements org.wings.plaf.FrameCG {
 
         // dynamic stylesheet resource.
         // This resource externalise the dynamically generated CSS styles
+        /*
         styleSheetResource = new DynamicStyleSheetResource(component);
         stylesheetLink = new Link("stylesheet", null, "text/css", null, styleSheetResource);
         component.addDynamicResource(styleSheetResource);
         component.addHeader(stylesheetLink);
-
-        // dynamic java script resource.
-        // This resource externalizes dynamically attached jabascript listeners.
-        scriptResource = new DynamicScriptResource(component);
-        component.addDynamicResource(scriptResource);
-        component.addHeader(new Script("text/javascript", scriptResource));
-        // By default: Register DWR scripts (see SFormattetTextField in wingSet)
-        component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
+        */
 
         // Retrieve list of static CSS files to be attached to this frame for this browser.
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component);
@@ -227,7 +214,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         CaptureDefaultBindingsScriptListener.install(component);
     }
 
-    /** 
+    /**
      * adds the file found at the classPath to the parentFrame header with
      * the specified mimeType
      * @param classPath the classPath to look in for the file
@@ -246,8 +233,6 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         final SFrame component = (SFrame) comp;
 
         component.removeDynamicResource(DynamicCodeResource.class);
-        component.removeDynamicResource(DynamicStyleSheetResource.class);
-        component.removeDynamicResource(DynamicScriptResource.class);
         component.clearHeaders();
     }
 
@@ -331,7 +316,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         device.print(" (Build date: ");
         device.print(Version.getCompileTime());
         device.print(") -->\n");
-        
+
         device.print("<head>");
         if (title != null) {
             device.print("<title>");
@@ -400,7 +385,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         device
                 .print(");\n")
                 .print("</script>\n");
-        
+
         device.print("</head>\n");
         device.print("<body");
         Utils.optAttribute(device, "id", frame.getName());
@@ -426,10 +411,10 @@ public class FrameCG implements org.wings.plaf.FrameCG {
                     String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
                     device.print("<script type=\"text/javascript\" src=\"");
                     device.print(jScriptUrl);
-                    device.print("\"></script>\n"); 
+                    device.print("\"></script>\n");
                 }
             }
-            
+
             frame.getLayout().write(device);
             device.print("\n");
             // now add all menus
@@ -479,7 +464,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
                 String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
                 device.print("<script type=\"text/javascript\" src=\"");
                 device.print(jScriptUrl);
-                device.print("\"></script>\n"); 
+                device.print("\"></script>\n");
             }
         }
         device.print("\n</body></html>\n");
@@ -507,10 +492,5 @@ public class FrameCG implements org.wings.plaf.FrameCG {
 
     public void setRenderXmlDeclaration(Boolean renderXmlDeclaration) {
         this.renderXmlDeclaration = renderXmlDeclaration;
-    }
-
-    public CSSSelector mapSelector(SComponent addressedComponent, CSSSelector selector) {
-        // Default: Do not map/modify the passed CSS selector.
-        return selector;
     }
 }

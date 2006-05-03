@@ -160,10 +160,6 @@ public class SFrame
      * <br>See <code>Frame.plaf</code> for details, but in general you wil find attached
      * to every <code>SFrame</code> a
      * <ul><li>A {@link DynamicCodeResource} rendering the HTML-Code of all SComponents inside this frame.
-     * <li>A {@link org.wings.script.DynamicScriptResource} rendering the attached (Java-)Scripts of all SComponents
-     * into an external file and including them by a link tag into the rendered frame.
-     * <li>A {@link org.wings.style.DynamicStyleSheetResource} rendering the CSS attributes
-     * of all SComponents inside this frame into an external file with CSS classes.
      * </ul>
      */
     public DynamicResource getDynamicResource(Class c) {
@@ -241,8 +237,6 @@ public class SFrame
      *
      * @param m is typically a {@link org.wings.header.Link} or {@link DynamicResource}.
      * @see org.wings.header.Link
-     * @see org.wings.script.DynamicScriptResource
-     * @see DynamicCodeResource
      */
     public void addHeader(Object m) {
         if (!headers().contains(m))

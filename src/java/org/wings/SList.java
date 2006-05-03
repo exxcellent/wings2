@@ -14,7 +14,7 @@
 package org.wings;
 
 import org.wings.plaf.ListCG;
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSAttributeSet;
@@ -142,7 +142,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     /**
      * The Selector for this component.
      */
-    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
+    public static final Selector SELECTOR_SELECTION = new Selector("SELECTION");
 
     /**
      * The preferred extent of the list.

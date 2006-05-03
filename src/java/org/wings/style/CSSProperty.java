@@ -19,7 +19,7 @@ import java.io.Serializable;
 /**
  * A CSS attribute is a property on any abritriary HTML element which can be set via CSS.
  *
- * You use CSS selectors ({@link CSSSelector}) to define <b>which</b> elements you want to modify and define
+ * You use CSS selectors ({@link Selector}) to define <b>which</b> elements you want to modify and define
  * with CSS properties {@link CSSProperty} <b>what</b> visual property you want to modify.
  *
  * <p>Please refer to <a href="http://www.w3.org/TR/REC-CSS2/selector.html">http://www.w3.org/TR/REC-CSS2/selector.html</a> 

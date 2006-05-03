@@ -18,8 +18,7 @@ import org.wings.event.SContainerListener;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.ContainerCG;
 import org.wings.session.SessionManager;
-import org.wings.style.CSSProperty;
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 import org.wings.util.ComponentVisitor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,9 +64,9 @@ public class SContainer extends SComponent {
 
     /**
      * A Pseudo selector addressing the container area of this container.
-     * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+     * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
      */
-    public static final CSSSelector.Pseudo SELECTOR_CONTENT = new CSSSelector.Pseudo("area of container content");
+    public static final Selector SELECTOR_CONTENT = new Selector("area of container content");
 
 
     /**

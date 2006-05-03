@@ -19,13 +19,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SPopupMenu;
-import org.wings.session.SessionManager;
-import org.wings.style.CSSSelector;
+import org.wings.script.ScriptListener;
+import org.wings.style.Style;
 import org.wings.plaf.ComponentCG;
 import org.wings.border.STitledBorder;
+import org.wings.border.SBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 
@@ -81,10 +81,6 @@ public class PrefixAndSuffixDecorator
         return false;
     }
 
-    public CSSSelector mapSelector(SComponent component, CSSSelector pseudoSelector) {
-        return delegate.mapSelector(component, pseudoSelector);
-    }
-
     public void writePrefix(Device device, SComponent component) throws IOException {
         final SDimension prefSize = component.getPreferredSize();
         final StringBuffer cssInlineStyle = new StringBuffer();
@@ -102,9 +98,6 @@ public class PrefixAndSuffixDecorator
         final String classname = component.getStyle();
         Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
         Utils.optAttribute(device, "id", component.getName());
-        if (component instanceof DragSource) {
-            cssInlineStyle.append("position:relative;");
-        }
 
         // if sizes are spec'd in percentages, we need the outer box to have full size...skipped for now
 //        final boolean isHeightPercentage = prefSize != null && prefSize.getHeightUnit() != null && prefSize.getHeightUnit().indexOf("%") != -1;
@@ -129,7 +122,8 @@ public class PrefixAndSuffixDecorator
         // It is responsible for component size, and other styles.
 //        device.print("<div");
 //        Utils.optAttribute(device, "class", isTitleBorder ? component.getStyle() + " STitledBorder" : component.getStyle());         // Special handling: Mark Titled Borders for styling
-        Utils.optAttribute(device, "style", cssInlineStyle.append(" ").append(Utils.generateCSSInlinePreferredSize(prefSize).toString()));
+
+        writeInlineStyles(device, component);
 
         if (component instanceof LowLevelEventListener) {
             Utils.optAttribute(device, "eid", ((LowLevelEventListener) component).getEncodedLowLevelEventId());
@@ -158,8 +152,41 @@ public class PrefixAndSuffixDecorator
 
     public void writeSuffix(Device device, SComponent component) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
+        writeInlineScripts(device, component);
         device.print("</div>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
+    }
+
+    protected void writeInlineStyles(Device device, SComponent component) throws IOException {
+        // write inline styles
+        device.print("style=\"");
+        if (component instanceof DragSource)
+            device.print("position:relative;");
+        Utils.appendCSSInlineSize(device, component.getPreferredSize());
+        Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
+        if (allStyle != null)
+            allStyle.write(device);
+        SBorder border = component.getBorder();
+        if (border != null && border.getAttributes() != null)
+            border.getAttributes().write(device);
+        device.print("\"");
+    }
+
+    protected void writeInlineScripts(Device device, SComponent component) throws IOException {
+        boolean scriptTagOpen = false;
+        for (int i = 0; i < component.getScriptListeners().length; i++) {
+            ScriptListener scriptListener = component.getScriptListeners()[i];
+            String script = scriptListener.getScript();
+            if (script != null) {
+                if (!scriptTagOpen) {
+                    device.print("<script type=\"text/javascript\">");
+                    scriptTagOpen = true;
+                }
+                device.print(script);
+            }
+        }
+        if (scriptTagOpen)
+            device.print("</script>");
     }
 
     /**

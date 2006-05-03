@@ -17,7 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.table.SDefaultTableColumnModel;
 import org.wings.table.STableCellEditor;
@@ -38,7 +38,6 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.EventObject;
 import java.util.HashMap;
-import java.io.StringReader;
 
 
  /**
@@ -187,33 +186,33 @@ import java.io.StringReader;
 
      /**
       * A Pseudo CSS selector addressing the header row elements.
-      * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+      * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
       */
-     public static final CSSSelector.Pseudo SELECTOR_HEADER = new CSSSelector.Pseudo("HEADER");
+     public static final Selector SELECTOR_HEADER = new Selector("HEADER");
 
      /**
       * A Pseudo CSS selector addressing the selected row elements.
-      * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+      * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
       */
-     public static final CSSSelector.Pseudo SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
+     public static final Selector SELECTOR_SELECTION = new Selector("SELECTION");
 
      /**
       * A Pseudo CSS selector addressing the regular odd row elements.
-      * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+      * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
       */
-     public static final CSSSelector.Pseudo SELECTOR_ODD_ROWS = new CSSSelector.Pseudo("ODD_ROWS");
+     public static final Selector SELECTOR_ODD_ROWS = new Selector("ODD_ROWS");
 
      /**
       * A Pseudo CSS selector addressing the regular even row elements.
-      * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+      * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
       */
-     public static final CSSSelector.Pseudo SELECTOR_EVEN_ROWS = new CSSSelector.Pseudo("EVEN_ROWS");
+     public static final Selector SELECTOR_EVEN_ROWS = new Selector("EVEN_ROWS");
 
      /**
       * A Pseudo CSS selector addressing the regular even row elements.
-      * Refer to {@link SComponent#setAttribute(org.wings.style.CSSSelector, org.wings.style.CSSProperty, String)}
+      * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
       */
-     public static final CSSSelector.Pseudo SELECTOR_NUMBERING_COLUMN = new CSSSelector.Pseudo("NUMBERING_COLUMN");
+     public static final Selector SELECTOR_NUMBERING_COLUMN = new Selector("NUMBERING_COLUMN");
 
      private String[] lowLevelEvents;
 

@@ -16,6 +16,7 @@
 BODY,TEXTAREA {
     overflow:auto;     /* get rid of default scrollbars */
     padding: 0px;
+    margin: 0px;
 }
 
 HTML {
@@ -28,12 +29,31 @@ HTML {
 /** Class for all invisible HTML tables used for layouting purposes. */
 table, td, th {
     border-collapse: collapse;
+    border: none;
     padding: 0px;
     margin: 0px;
-    border: none;
     text-align: inherit;
+
+    color: inherit;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-variant: inherit;
+    font-weight: inherit;
+    text-decoration: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
 }
 
+li, ul {
+    margin: 0px;
+    padding: 0px;
+}
+ul {
+    padding-left: 24px;
+}
 
 /* the layouts should all expand to 100% width & height of the surrounding SPanel */
 table.SBorderLayout,

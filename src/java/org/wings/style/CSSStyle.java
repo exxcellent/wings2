@@ -21,14 +21,14 @@ package org.wings.style;
  */
 public class CSSStyle extends CSSAttributeSet implements Style {
     /*private StyleSheet sheet; */
-    private CSSSelector selector;
+    private Selector selector;
 
-    public CSSStyle(CSSSelector selector, CSSAttributeSet attributes) {
+    public CSSStyle(Selector selector, CSSAttributeSet attributes) {
         super(attributes);
         this.selector = selector;
     }
 
-    public CSSStyle(CSSSelector selector, CSSProperty property, String value) {
+    public CSSStyle(Selector selector, CSSProperty property, String value) {
         super(property, value);
         this.selector = selector;
     }
@@ -52,16 +52,16 @@ public class CSSStyle extends CSSAttributeSet implements Style {
      * @return Rendered Style: css selector { attribute/values }
      */
     public String toString() {
-        return selector.getSelectorString() + " { " + super.toString() + "}";
+        return selector.getSelector() + " { " + super.toString() + "}";
     }
 
     /* @see Style */
-    public CSSSelector getSelector() {
+    public Selector getSelector() {
         return selector;
     }
 
     /* @see Style */
-    public void setSelector(CSSSelector selector) {
+    public void setSelector(Selector selector) {
         this.selector = selector;
     }
 }

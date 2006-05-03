@@ -162,6 +162,37 @@ public class CSSStyleSheet implements StyleSheet {
         return anyFontAttribute ? new SFont(family, style, size) : null;
     }
 
+    public static Insets getInsets(CSSAttributeSet a) {
+        String top = a.get(CSSProperty.PADDING_TOP);
+        String left = a.get(CSSProperty.PADDING_LEFT);
+        String bottom = a.get(CSSProperty.PADDING_BOTTOM);
+        String right = a.get(CSSProperty.PADDING_RIGHT);
+        if (top != null || left != null || bottom != null || right != null)
+            return new Insets(
+                length(top),
+                length(left),
+                length(bottom),
+                length(right));
+        else
+            return null;
+    }
+
+    public static CSSAttributeSet getAttributes(Insets insets) {
+        CSSAttributeSet attributes = new CSSAttributeSet();
+        attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
+        attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
+        attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
+        attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
+        return attributes;
+    }
+
+    private static int length(String lengthString) {
+        if (lengthString == null || lengthString.length() == 0)
+            return 0;
+        else
+            return new Integer(lengthString).intValue();
+    }
+
     static int sizeMap[] = {8, 10, 12, 14, 18, 24, 36};
 
     /**
@@ -597,7 +628,7 @@ public class CSSStyleSheet implements StyleSheet {
             for (int i = 0; i < n; i++) {
                 String[] selector = (String[]) selectors.get(i);
                 for (int j = selector.length - 1; j >= 0; --j) {
-                    CSSStyleSheet.this.putStyle(new CSSStyle(new CSSSelector(selector[j]), declaration));
+                    CSSStyleSheet.this.putStyle(new CSSStyle(new Selector(selector[j]), declaration));
                 }
             }
             declaration.clear();

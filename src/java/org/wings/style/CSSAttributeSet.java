@@ -110,8 +110,8 @@ public class CSSAttributeSet
      *
      * @return A set of {@link CSSProperty} for which this <code>CSSAttributeSet</code> contains a value.
      */
-    public final Set properties() {
-        return map == null ? Collections.EMPTY_SET : map.keySet();
+    public final Map properties() {
+        return map != null ? map : Collections.EMPTY_MAP;
     }
 
     /**
@@ -144,18 +144,16 @@ public class CSSAttributeSet
      * Adds a set of attributes to the list.
      *
      * @param attributes the set of attributes to add
-     * @return <code>true</code> if the attribute set changed
      */
     public boolean putAll(CSSAttributeSet attributes) {
-        if (map == null) {
+        if (map == null)
             map = new HashMap(8);
-        }
 
         boolean changed = false;
-        Iterator names = attributes.properties().iterator();
-        while (names.hasNext()) {
-            CSSProperty property = (CSSProperty) names.next();
-            changed = changed || (put(property, attributes.get(property)) != null);
+        for (Iterator iterator = attributes.properties().entrySet().iterator(); iterator.hasNext();) {
+            Map.Entry entry = (Map.Entry)iterator.next();
+            CSSProperty property = (CSSProperty)entry.getKey();
+            changed = changed || (put(property, (String)entry.getValue()) != null);
         }
         return changed;
     }
@@ -194,36 +192,19 @@ public class CSSAttributeSet
         }
     }
 
-    /**
-     * Returns a hashcode for this set of attributes.
-     *
-     * @return a hashcode value for this set of attributes.
-     */
-    public int hashCode() {
-        return map == null ? 0 : map.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final CSSAttributeSet that = (CSSAttributeSet)o;
+
+        if (map != null ? !map.equals(that.map) : that.map != null) return false;
+
+        return true;
     }
 
-    /**
-     * Compares two attribute sets.
-     *
-     * @param object the second attribute set
-     * @return true if the sets are equal, false otherwise
-     */
-    public boolean equals(Object object) {
-        if (!(object instanceof CSSAttributeSet))
-            return false;
-        CSSAttributeSet other = (CSSAttributeSet) object;
-
-        if (size() != other.size())
-            return false;
-
-        Iterator names = other.properties().iterator();
-        while (names.hasNext()) {
-            CSSProperty property = (CSSProperty) names.next();
-            if (!other.get(property).equals(get(property)))
-                return false;
-        }
-        return true;
+    public int hashCode() {
+        return (map != null ? map.hashCode() : 0);
     }
 
     /**
@@ -233,16 +214,16 @@ public class CSSAttributeSet
      * Basically this is a filter on the styles, so we can separate styles for
      * one logical component onto multiple real html elements.  
      */
-    public void writeFiltered(Device d, List l, boolean include) throws IOException {
-        if (l == null) l = Collections.EMPTY_LIST;
+    private static void writeFiltered(Device d, Map map, Set l, boolean include) throws IOException {
+        if (l == null) l = Collections.EMPTY_SET;
         if (map != null) {
             Iterator names = map.entrySet().iterator();
             while (names.hasNext()) {
                 Map.Entry next = (Map.Entry) names.next();
                 if ( !(l.contains(next.getKey()) ^ include) ) {
-                    d.print(next.getKey()).print(":")
+                    d.print(next.getKey()).print(':')
                             .print(next.getValue())
-                            .print("; ");
+                            .print(';');
                 }
             }
         }
@@ -252,16 +233,16 @@ public class CSSAttributeSet
      * Write style definition to the device. Write only those not contained
      * in the set.
      */
-    public void writeExcluding(Device d, List l) throws IOException {
-        writeFiltered(d, l, false);
+    public static void writeExcluding(Device d, Map map, Set l) throws IOException {
+        writeFiltered(d, map, l, false);
     }
 
     /**
      * Write style definition to the device. Write only those  contained
      * in the set.
      */
-    public void writeIncluding(Device d, List l) throws IOException {
-        writeFiltered(d, l, true);
+    public static void writeIncluding(Device d, Map map, Set l) throws IOException {
+        writeFiltered(d, map, l, true);
     }
 
     /**

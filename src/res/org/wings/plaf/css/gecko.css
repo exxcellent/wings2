@@ -16,13 +16,15 @@
 
 body {
     padding: 0px;
+    margin: 0px;
 }
+
 /* Class for all invisible HTML tables used for layouting purposes. */
 table, td, th {
-    border-collapse: collapse;
     padding: 0px;
     margin: 0px;
     border: none;
+    border-spacing: 0px;
     text-align: inherit;
 }
 
@@ -40,6 +42,13 @@ tr {
     color:inherit;                              */
 }
 
+li, ul {
+    margin: 0px;
+    padding: 0px;
+}
+ul {
+    padding-left: 24px;
+}
 
 /* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
    Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
@@ -47,7 +56,7 @@ img.spacer {
   display: block;
 }
 
-/* this stays in here! 
+/* this stays in here!
    it switches the gecko-compatible browsers into border-box mode */
 div {
     box-sizing: border-box;
@@ -172,7 +181,7 @@ ul.STree > li {
     margin-left: 0px;
 }
 
-ul.STree > li * {
+ul.STree > li > * {
     white-space: nowrap;
     padding-right: 2px;
     padding-bottom: 1px;

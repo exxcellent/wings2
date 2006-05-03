@@ -14,7 +14,7 @@
 package org.wings.plaf;
 
 import org.wings.SComponent;
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -58,17 +58,4 @@ public interface ComponentCG
     void write(Device device, SComponent component) throws IOException;
 
     boolean wantsPrefixAndSuffix(SComponent component);
-
-    /**
-     * A component may have multiple stylable areas. A tabbed pane for example has a content, the tabs,
-     * the selected tab, etc. These areas are addressed by so called pseudo selectors. There are constants
-     * in SComponents and derivates (prefixed with SELECTOR_), that address commonly used areas. It's the
-     * responsibility of the CG to apply the styling to the respective areas. In case of HTML, one can use
-     * arbitrary CSS selectors in order to style what ever is addressable by means of CSS selector.
-     *
-     * @param  component The component addressed by the pseudo selector
-     * @param pseudoSelector A unqiue name naming a specific area of the passed component (i.e. content pane or button area).
-     * @return The real-life css selector for the current browser.
-     */
-    CSSSelector mapSelector(SComponent component, CSSSelector pseudoSelector);
 }

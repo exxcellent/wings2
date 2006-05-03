@@ -15,8 +15,6 @@ package org.wings;
 
 import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.DynamicResource;
-import org.wings.script.DynamicScriptResource;
-import org.wings.style.DynamicStyleSheetResource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -46,14 +44,6 @@ public class DefaultReloadManager
      * Set of SComponents with dirty HTML representation
      */
     protected final Set dirtyCodeResourceComponents = new HashSet(1024);
-    /**
-     * Set of SComponents with dirty CSS representation
-     */
-    protected final Set dirtyStyleResourceComponents = new HashSet(1024);
-    /**
-     * Set of SComponents with dirty JavaScript representation
-     */
-    protected final Set dirtyScriptResourceComponents = new HashSet(1024);
 
     private boolean deliveryPhase = false;
 
@@ -69,10 +59,6 @@ public class DefaultReloadManager
 
             if ((aspect & STATE) != 0)
                 dirtyCodeResourceComponents.add(component);
-            if ((aspect & STYLE) != 0)
-                dirtyStyleResourceComponents.add(component);
-            if ((aspect & SCRIPT) != 0)
-                dirtyScriptResourceComponents.add(component);
         }
     }
 
@@ -92,21 +78,6 @@ public class DefaultReloadManager
             if (parentFrame != null)
                 dirtyDynamicResources.add(parentFrame.getDynamicResource(DynamicCodeResource.class));
         }
-        // collect dirty CSS resources
-        for (Iterator iterator = dirtyStyleResourceComponents.iterator(); iterator.hasNext();) {
-            component = (SComponent) iterator.next();
-            parentFrame = component.getParentFrame();
-            if (parentFrame != null)
-                dirtyDynamicResources.add(parentFrame.getDynamicResource(DynamicStyleSheetResource.class));
-        }
-        // collect dirty Script resources
-        for (Iterator iterator = dirtyScriptResourceComponents.iterator(); iterator.hasNext();) {
-            component = (SComponent) iterator.next();
-            parentFrame = component.getParentFrame();
-            if (parentFrame != null)
-                dirtyDynamicResources.add(parentFrame.getDynamicResource(DynamicScriptResource.class));
-        }
-
 
         return dirtyDynamicResources;
     }
@@ -115,8 +86,6 @@ public class DefaultReloadManager
         deliveryPhase = false;
         dirtyComponents.clear();
         dirtyCodeResourceComponents.clear();
-        dirtyScriptResourceComponents.clear();
-        dirtyStyleResourceComponents.clear();
     }
 
     public synchronized void invalidateResources() {

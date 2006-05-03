@@ -16,12 +16,15 @@ package org.wings.plaf.css.msie;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
 import org.wings.SDimension;
+import org.wings.style.*;
 import org.wings.border.STitledBorder;
+import org.wings.border.SBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.plaf.css.AbstractLayoutCG;
 import org.wings.plaf.css.Utils;
 import java.io.IOException;
+import java.util.*;
 
 /**
  * This class surrounds every component in MSIE with a TABLE element
@@ -49,12 +52,9 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         //if (componentAlignmentRequiresStretchedWrapper(component))
         //    prefSize = SDimension.FULLWIDTH;
 
-        StringBuffer inlineStyles = Utils.generateCSSInlinePreferredSize(prefSize);
-        Utils.appendCSSComponentInlineColorStyle(inlineStyles, component);
-
         Utils.printDebugNewline(device, component);
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
-        
+
         device.print("<table id=\"").print(component.getName()).print("\"");
         // Special handling: Mark Titled Borders for styling
         if (component.getBorder() instanceof STitledBorder) {
@@ -62,10 +62,8 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         } else {
             Utils.optAttribute(device, "class", component.getStyle());
         }
-        if (component instanceof DragSource) {
-            inlineStyles.append("position:relative;");
-        }
-        Utils.optAttribute(device, "style", inlineStyles.toString());
+
+        writeInlineStyles(device, component);
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
@@ -109,6 +107,7 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
     public void writeSuffix(final Device device, final SComponent component) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         AbstractLayoutCG.closeLayouterCell(device, false);
+        writeInlineScripts(device, component);
         device.print("</tr></table>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }

@@ -29,8 +29,6 @@ import org.wings.io.Device;
 import org.wings.io.StringBufferDevice;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
-import org.wings.style.CSSSelector;
-import org.wings.style.CSSStyleSheetWriter;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
@@ -44,8 +42,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.Rectangle;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -223,8 +219,6 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         // TODO: Maybe "compress" repeated styles here as well as in the stylesheet writer.
         try {
             final StringBufferDevice stringBufferDevice = new StringBufferDevice();
-            final CSSStyleSheetWriter styleCollector = new CSSStyleSheetWriter(stringBufferDevice);
-            component.invite(styleCollector);
             final String styleString = stringBufferDevice.toString();
             if (styleString.length() > 0) {
                 device.print("<style>").print(styleString).print("</style>");
@@ -496,28 +490,4 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             return totalWidth != null ? new SDimension(totalWidth, null) : null;
         }
     }
-
-    public CSSSelector  mapSelector(SComponent addressedComponent, CSSSelector selector) {
-        final String mappedSelector = getResolvedPseudoSelectorMapping(selector);
-        if (mappedSelector != null) {
-            String cssSelector = mappedSelector.replaceAll("#compid", CSSSelector.getSelectorString(addressedComponent));
-            return new CSSSelector(cssSelector);
-        } else {
-            return selector;
-        }
-    }
-
-    protected String getResolvedPseudoSelectorMapping(CSSSelector selector) {
-        return (String) PSEUDO_SELECTOR_MAPPING.get(selector);
-    }
-
-    private static final Map PSEUDO_SELECTOR_MAPPING = new HashMap();
-    static {
-        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_HEADER, "#compid THEAD");
-        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_NUMBERING_COLUMN, "#compid .numbering");
-        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_EVEN_ROWS, "#compid .even");
-        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_ODD_ROWS, "#compid .odd");
-        PSEUDO_SELECTOR_MAPPING.put(STable.SELECTOR_SELECTION, "#compid TR[selected=\"true\"]"); //#compid TR.selected 
-    }
-
 }

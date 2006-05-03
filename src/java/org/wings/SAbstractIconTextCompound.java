@@ -14,7 +14,7 @@
 package org.wings;
 
 
-import org.wings.style.CSSSelector;
+import org.wings.style.Selector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
@@ -46,7 +46,7 @@ public abstract class SAbstractIconTextCompound
     public static final int ROLLOVER_SELECTED_ICON = 5;
     public static final int PRESSED_ICON = 6;
 
-    public static final CSSSelector SELECTOR_SELECTION = new CSSSelector.Pseudo("SELECTION");
+    public static final Selector SELECTOR_SELECTION = new Selector("SELECTION");
 
     private SButtonModel model;
 
