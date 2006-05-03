@@ -456,35 +456,24 @@ final class SessionServlet
              * deliver the toplevel Frame of this application.
              */
             String externalizeIdentifier = null;
-            if (pathInfo == null
-                    || pathInfo.length() == 0
-                    || "_".equals(pathInfo)
-                    || firstRequest) {
-                log.debug("delivering default frame");
-
-                if (session.getFrames().size() == 0)
-                    throw new ServletException("no frame visible");
-                
-                // get the first frame from the set and walk up the hierarchy.
-                // this should work in most cases. if there are more than one
-                // toplevel frames, the developer has to care about the resource
-                // ids anyway ..
-                SFrame defaultFrame = (SFrame) session.getFrames().iterator().next();
-                while (defaultFrame.getParent() != null)
-                    defaultFrame = (SFrame) defaultFrame.getParent();
- 
-                
-                Resource resource = defaultFrame.getDynamicResource(DynamicCodeResource.class);
-                externalizeIdentifier = resource.getId();
-
+            if (pathInfo == null || pathInfo.length() == 0 || "_".equals(pathInfo) || firstRequest) {
+                externalizeIdentifier = retrieveCurrentRootFrameResource().getId();
                 firstRequest = false;
             } else {
                 externalizeIdentifier = pathInfo;
             }
             
-            // externalized this resource.
-            ExternalizedResource extInfo = extManager
-                    .getExternalizedResource(externalizeIdentifier);
+            // Retrieve externalized resource.
+            ExternalizedResource extInfo = extManager.getExternalizedResource(externalizeIdentifier);
+
+            // Special case handling: We request a .html resource of a session which is not accessible.
+            // This happens some times and leads to a 404, though it should not be possible.
+            if (extInfo == null && pathInfo != null && pathInfo.length() > 0 && pathInfo.endsWith(".html")) {
+                log.info("Found a request to an invalid .html during a valid session. Redirecting to root frame.");
+                response.sendRedirect(retrieveCurrentRootFrameResource().getURL().toString());
+                return;
+            }
+
             if (extInfo != null) {
                 outputDevice = DeviceFactory.createDevice(extInfo);
 
@@ -545,7 +534,30 @@ final class SessionServlet
         }
     }
 
-    /** 
+    /**
+     * Searches the current session for the root HTML frame and returns the Resource
+     * representing this root HTML frame (i.e. for you to retrieve the externalizer id
+     * via <code>getId()</code>-method).
+     * @return Resource of the root HTML frame
+     */
+    private Resource retrieveCurrentRootFrameResource() throws ServletException {
+        log.debug("delivering default frame");
+
+        if (session.getFrames().size() == 0)
+            throw new ServletException("no frame visible");
+
+        // get the first frame from the set and walk up the hierarchy.
+        // this should work in most cases. if there are more than one
+        // toplevel frames, the developer has to care about the resource
+        // ids anyway ..
+        SFrame defaultFrame = (SFrame) session.getFrames().iterator().next();
+        while (defaultFrame.getParent() != null)
+            defaultFrame = (SFrame) defaultFrame.getParent();
+
+        return (Resource)defaultFrame.getDynamicResource(DynamicCodeResource.class);
+    }
+
+    /**
      * In case of an error, display an error page to the user. This is only
      * done when there is a property <code>wings.error.template</code> present
      * in the web.xml file. This property must contain a path relative to the

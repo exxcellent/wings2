@@ -53,7 +53,7 @@ public class DynamicCodeResource extends DynamicResource {
      * <p>The MIME-type for this frame will be <code>text/html; charset=<i>current encoding</i></code>
      */
     public DynamicCodeResource(final SFrame f) {
-        super(f, null, provideMimeType(f));
+        super(f, "html", provideMimeType(f));
         // update session encoding if manually updated in the session.
         changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {

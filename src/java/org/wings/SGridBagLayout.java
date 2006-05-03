@@ -27,7 +27,7 @@ import java.util.Iterator;
  * implement all functionalities because of the limitations of
  * HTML-table. It probably doesn't work exactly like its
  * Swing-counterpart - as a general hint: don't be too clever...
- * <P>
+ * <p/>
  * <p/>
  * SComponents are usually added using an instance of
  * java.awt.GridBagConstraints which is copied while adding it (so you
@@ -43,14 +43,14 @@ import java.util.Iterator;
  * SGridBagLayout that the <em>next</em> added SComponent will be the
  * last cell of the row/column which will always be placed at the end
  * (while the 'RELATIVE'-SComponent will be expanded to fill the gap).
- * <P>
+ * <p/>
  * <p/>
  * <em>Important:</em> When choosing a new row/column, the next
  * gridx/gridy-value that SGridLayout will choose will always be 0,
  * even if there is already a SComponent at that position. If you
  * really need to be clever, explicitly set gridx and gridy,
  * especially if you plan to dynamically add and remove SComponents.
- * <P>
+ * <p/>
  * <p/>
  * The size of a cell can be influenced in two ways: either set
  * gridwidth/gridheight to a value larger than 1 to say how many
@@ -63,7 +63,7 @@ import java.util.Iterator;
  * cells of a row/column should have the same weighty/weightx or 0, so
  * it might be easier to set these values only in the first
  * column/row.
- * <P>
+ * <p/>
  * <p/>
  * GridBagConstraints has many more options than those described
  * above, but the current implementation can't use them.
@@ -76,32 +76,7 @@ public class SGridBagLayout
     /**
      * Map of all managed components (key: component, value: constraint)
      */
-    protected HashMap components = new HashMap();
-
-    /**
-     * Row for the next horizontal add (gridx=RELATIVE). If gridy is
-     * not RELATIVE and does not match nextHorRow, the SComponent will
-     * be added at gridx=0.
-     */
-    protected int nextHorRow = 0;
-
-    /**
-     * Column for the next horizontal add (gridx=RELATIVE)
-     */
-    protected int nextHorCol = 0;
-
-    /**
-     * Row for the next vertical add (gridx != RELATIVE, gridy =
-     * RELATIVE).
-     */
-    protected int nextVertRow = 0;
-
-    /**
-     * Column for the next vertical add (gridx != RELATIVE, gridy =
-     * RELATIVE). If gridx does not match nextVertCol, the SComponent
-     * will be added at gridy=0.
-     */
-    protected int nextVertCol = 0;
+    private HashMap components = new HashMap();
 
     /**
      * @see #getBorder
@@ -169,87 +144,12 @@ public class SGridBagLayout
         }
         c = (GridBagConstraints) c.clone();
 
-        if (c.gridx >= 0) {
-            if (c.gridx != nextVertCol) {
-                nextVertRow = 0;
-            }
-
-            if (c.gridy < 0) {
-                c.gridy = nextVertRow;
-            }
-        } else {
-            if (c.gridy >= 0 && c.gridy != nextHorRow) {
-                nextHorCol = 0;
-            }
-
-            if (c.gridy < 0) {
-                c.gridy = nextHorRow;
-            } else if (c.gridy != nextHorRow) {
-                nextHorCol = 0;
-            }
-            c.gridx = nextHorCol;
-        }
-
         comp.addComponentListener(this);
         components.put(comp, c);
-
-        if (c.gridx == LAST_CELL) {
-            if (c.gridy == LAST_CELL) {
-                nextHorRow = 0;
-                nextVertRow = 0;
-            } else {
-                nextHorRow = c.gridy + 1;
-                nextVertRow = c.gridy + 1;
-            }
-            nextHorCol = 0;
-            nextVertCol = 0;
-        } else {
-            if (c.gridy == LAST_CELL) {
-                nextHorRow = 0;
-                nextVertRow = 0;
-                nextHorCol = c.gridx + 1;
-                nextVertCol = c.gridx + 1;
-            } else {
-                nextHorCol = c.gridx;
-                nextVertCol = c.gridx;
-                nextHorRow = c.gridy;
-                nextVertRow = c.gridy;
-
-                if (c.gridwidth == GridBagConstraints.RELATIVE) {
-                    nextHorCol = LAST_CELL;
-                } else if (c.gridwidth == GridBagConstraints.REMAINDER) {
-                    nextHorCol = 0;
-                    nextHorRow++;
-                } else {
-                    if (c.gridwidth > 0) {
-                        nextHorCol += c.gridwidth;
-                    } else {
-                        nextHorCol++;
-                    }
-                }
-
-                if (c.gridheight == GridBagConstraints.RELATIVE) {
-                    nextVertRow = LAST_CELL;
-                } else if (c.gridheight == GridBagConstraints.REMAINDER) {
-                    nextVertRow = 0;
-                    nextVertCol++;
-                } else {
-                    if (c.gridheight > 0) {
-                        nextVertRow += c.gridheight;
-                    } else {
-                        nextVertRow++;
-                    }
-                }
-            }
-        }
     }
 
     public void removeComponent(SComponent c) {
         // The grid has to be rebuilt
-        nextHorCol = 0;
-        nextHorRow = 0;
-        nextVertCol = 0;
-        nextVertRow = 0;
         currentGrid = null;
         components.remove(c);
         c.removeComponentListener(this);
@@ -327,7 +227,9 @@ public class SGridBagLayout
      *
      * @return the border width in pixels
      */
-    public int getBorder() { return border; }
+    public int getBorder() {
+        return border;
+    }
 
     /**
      * Specify if the first row should be printed as header
@@ -343,7 +245,9 @@ public class SGridBagLayout
      *
      * @return true=the first row is used as header
      */
-    public boolean getHeader() { return header; }
+    public boolean getHeader() {
+        return header;
+    }
 
     // Some helper functions for CGs
 
@@ -395,21 +299,120 @@ public class SGridBagLayout
         public int firstCol;
 
         /**
+         * Row for the next horizontal add (gridx=RELATIVE). If gridy is
+         * not RELATIVE and does not match nextHorRow, the SComponent will
+         * be added at gridx=0.
+         */
+        private int nextHorRow = 0;
+
+        /**
+         * Column for the next horizontal add (gridx=RELATIVE)
+         */
+        private int nextHorCol = 0;
+
+        /**
+         * Row for the next vertical add (gridx != RELATIVE, gridy =
+         * RELATIVE).
+         */
+        private int nextVertRow = 0;
+
+        /**
+         * Column for the next vertical add (gridx != RELATIVE, gridy =
+         * RELATIVE). If gridx does not match nextVertCol, the SComponent
+         * will be added at gridy=0.
+         */
+        private int nextVertCol = 0;
+
+        private final HashMap modifiedConstraints = new HashMap(components.size());
+
+        /**
          * Initialize all members
          */
         public Grid() {
             cols = 0;
             rows = 0;
 
-            for (Iterator i = components.keySet().iterator();
-                 i.hasNext();) {
+            for (Iterator i = getContainer().getComponentList().iterator(); i.hasNext();) {
                 SComponent comp = (SComponent) i.next();
                 if (!comp.isVisible()) {
                     continue;
                 }
 
-                GridBagConstraints c = (GridBagConstraints)
-                        components.get(comp);
+                GridBagConstraints c = (GridBagConstraints) components.get(comp);
+                c = (GridBagConstraints) c.clone();
+                modifiedConstraints.put(comp, c);
+
+                if (c.gridx >= 0) {
+                    if (c.gridx != nextVertCol) {
+                        nextVertRow = 0;
+                    }
+
+                    if (c.gridy < 0) {
+                        c.gridy = nextVertRow;
+                    }
+                } else {
+                    if (c.gridy >= 0 && c.gridy != nextHorRow) {
+                        nextHorCol = 0;
+                    }
+
+                    if (c.gridy < 0) {
+                        c.gridy = nextHorRow;
+                    } else if (c.gridy != nextHorRow) {
+                        nextHorCol = 0;
+                    }
+                    c.gridx = nextHorCol;
+                }
+                if (c.gridx == LAST_CELL) {
+                    if (c.gridy == LAST_CELL) {
+                        nextHorRow = 0;
+                        nextVertRow = 0;
+                    } else {
+                        nextHorRow = c.gridy + 1;
+                        nextVertRow = c.gridy + 1;
+                    }
+                    nextHorCol = 0;
+                    nextVertCol = 0;
+                } else {
+                    if (c.gridy == LAST_CELL) {
+                        nextHorRow = 0;
+                        nextVertRow = 0;
+                        nextHorCol = c.gridx + 1;
+                        nextVertCol = c.gridx + 1;
+                    } else {
+                        nextHorCol = c.gridx;
+                        nextVertCol = c.gridx;
+                        nextHorRow = c.gridy;
+                        nextVertRow = c.gridy;
+
+                        if (c.gridwidth == GridBagConstraints.RELATIVE) {
+                            nextHorCol = LAST_CELL;
+                        } else if (c.gridwidth == GridBagConstraints.REMAINDER) {
+                            nextHorCol = 0;
+                            nextHorRow++;
+                        } else {
+                            if (c.gridwidth > 0) {
+                                nextHorCol += c.gridwidth;
+                            } else {
+                                nextHorCol++;
+                            }
+                        }
+
+                        if (c.gridheight == GridBagConstraints.RELATIVE) {
+                            nextVertRow = LAST_CELL;
+                        } else if (c.gridheight == GridBagConstraints.REMAINDER) {
+                            nextVertRow = 0;
+                            nextVertCol++;
+                        } else {
+                            if (c.gridheight > 0) {
+                                nextVertRow += c.gridheight;
+                            } else {
+                                nextVertRow++;
+                            }
+                        }
+                    }
+                }
+
+
                 if (c.gridx != SGridBagLayout.LAST_CELL) {
                     int col = c.gridx;
                     if (c.gridwidth == GridBagConstraints.RELATIVE) {
@@ -438,14 +441,14 @@ public class SGridBagLayout
             rowweight = new double[cols];
             colweight = new double[rows];
 
-            for (Iterator i = components.keySet().iterator();
+            for (Iterator i = getContainer().getComponentList().iterator();
                  i.hasNext();) {
                 SComponent comp = (SComponent) i.next();
                 if (!comp.isVisible()) {
                     continue;
                 }
                 GridBagConstraints c = (GridBagConstraints)
-                        components.get(comp);
+                        modifiedConstraints.get(comp);
 
                 int maxcol = c.gridx + c.gridwidth;
                 int maxrow = c.gridy + c.gridheight;
@@ -527,7 +530,7 @@ public class SGridBagLayout
     final public GridBagConstraints getConstraints(SComponent comp) {
         // It might be better to return a copy of the constraint,
         // but that would hurt the performance
-        return (GridBagConstraints) components.get(comp);
+        return (GridBagConstraints) getGrid().modifiedConstraints.get(comp);
     }
 }
 

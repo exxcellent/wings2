@@ -17,7 +17,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
-import org.wings.SDimension;
 import org.wings.SPopupMenu;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
@@ -99,7 +98,7 @@ public class PrefixAndSuffixDecorator
         Utils.optAttribute(device, "style", getInlineStyles(component));
 
         if (component instanceof LowLevelEventListener) {
-            Utils.optAttribute(device, "eid", ((LowLevelEventListener) component).getEncodedLowLevelEventId());
+            Utils.optAttribute(device, "eid", component.getEncodedLowLevelEventId());
         }
 
         // Tooltip handling
@@ -132,16 +131,21 @@ public class PrefixAndSuffixDecorator
 
     protected String getInlineStyles(SComponent component) {
         // write inline styles
-        SStringBuilder builder = new SStringBuilder();
+        final SStringBuilder builder = new SStringBuilder();
+
         if (component instanceof DragSource)
             builder.append("position:relative;");
+
         Utils.appendCSSInlineSize(builder, component.getPreferredSize());
-        Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
+
+        final Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
         if (allStyle != null)
             builder.append(allStyle.toString());
-        SBorder border = component.getBorder();
+
+        final SBorder border = component.getBorder();
         if (border != null && border.getAttributes() != null)
             builder.append(border.getAttributes().toString());
+
         return builder.toString();
     }
 
