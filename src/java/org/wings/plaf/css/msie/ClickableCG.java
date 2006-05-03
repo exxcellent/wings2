@@ -21,28 +21,40 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.plaf.css.Utils;
 import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
+
 import java.io.IOException;
 
 /**
  * @author ole
  *
  */
-public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SParentFrameListener {
-    /**
-     * 
-     */
+public final class ClickableCG extends org.wings.plaf.css.ClickableCG implements SParentFrameListener {
     private static final long serialVersionUID = 1L;
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
+
+    protected void writeButtonStart(Device device, SClickable clickable) throws IOException {
+        device.print("<a href=\"").print(clickable.getURL()).print("\" ");
+        device.print("onclick=\"sendEvent(event,'");
+        device.print(clickable.getEvent());
+        device.print("','");
+        device.print(clickable.getEventTarget().getName());
+        device.print("')\"");
+    }
+
+    protected void writeButtonEnd(Device device) throws IOException {
+        MSIEUtils.writeSubmitAnchorEnd(device);
+    }
+
     protected void writeLinkStart(Device device, SClickable clickable) throws IOException {
-        device.print("<a href=\"#\" onclick=\"location.href='");
+        MSIEUtils.writeSubmitAnchorStart(device, clickable.getURL());
+        /*device.print("onclick=\"location.href='");
         Utils.write(device, clickable.getURL());
-        device.print("';\"");
+        device.print("';\"");*/
     }
 
     public void installCG(SComponent component) {

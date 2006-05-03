@@ -32,9 +32,6 @@ import java.io.IOException;
  * @author holger
  */
 public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollBarCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private final static transient Log log = LogFactory.getLog(ScrollBarCG.class);
     public static final int FORWARD = 0;
@@ -115,24 +112,24 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         // Regarding table height it is totally inveser. I love 'em.
         final String tableHeight = isMsIEBrowser ? " height=\"100%\"" : "";
 
-        d.print("<table orientation=\"vertical\"").print(tableHeight).print("><tbody>\n")
-                .print("<tr").print(rowHeightFlattened).print(">\n")
-                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
+        d.print("<table orientation=\"vertical\"").print(tableHeight).print("><tbody>")
+                .print("<tr").print(rowHeightFlattened).print(">")
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum);
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD_BLOCK][0], "" + (Math.max(minimum, value - blockIncrement)));
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - 1));
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
 
-        d.print("</tbody></table></td>\n")
-                .print("</tr>\n")
-                .print("<tr").print(rowHeightExpanded).print(">\n")
-                .print("<td><table area=\"slider\" height=\"100%\"><tbody>\n");
+        d.print("</tbody></table></td>")
+                .print("</tr>")
+                .print("<tr").print(rowHeightExpanded).print(">")
+                .print("<td><table area=\"slider\" height=\"100%\"><tbody>");
 
         int range = maximum - minimum;
         int iconWidth = DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0].getIconWidth();
@@ -140,23 +137,23 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         verticalArea(d, "#cccccc", extent * 100 / range, iconWidth);
         verticalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconWidth);
 
-        d.print("</tbody></table></td>\n")
-                .print("</tr>\n")
-                .print("<tr").print(rowHeightFlattened).print(">\n")
-                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
+        d.print("</tbody></table></td>")
+                .print("</tr>")
+                .print("<tr").print(rowHeightFlattened).print(">")
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + 1));
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD_BLOCK][0], "" + (Math.min(last, value + blockIncrement)));
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + last);
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
 
-        d.print("</tbody></table></td>\n")
-                .print("</tr>\n")
+        d.print("</tbody></table></td>")
+                .print("</tr>")
                 .print("</tbody></table>");
     }
 
@@ -167,7 +164,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         d.print(v + "%");
         d.print("\" width=\"");
         d.print(iconWidth);
-        d.print("\"></td></tr>\n");
+        d.print("\"></td></tr>");
     }
 
     private void writeHorizontalScrollbar(Device d, SScrollBar sb) throws IOException {
@@ -178,21 +175,21 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         final int maximum = sb.getMaximum();
         final int last = maximum - extent;
 
-        d.print("<table orientation=\"horizontal\"><tbody><tr>\n")
-                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
+        d.print("<table orientation=\"horizontal\"><tbody><tr>")
+                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum);
-        d.print("</td>\n");
+        d.print("</td>");
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD_BLOCK][0], "" + (Math.max(minimum, value - blockIncrement)));
-        d.print("</td>\n");
+        d.print("</td>");
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - 1));
-        d.print("</td>\n");
+        d.print("</td>");
 
-        d.print("</tr></tbody></table></td>\n")
-                .print("<td width=\"100%\"><table area=\"slider\" width=\"100%\"><tbody><tr>\n");
+        d.print("</tr></tbody></table></td>")
+                .print("<td width=\"100%\"><table area=\"slider\" width=\"100%\"><tbody><tr>");
 
         int range = maximum - minimum;
         int iconHeight = DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0].getIconHeight();
@@ -200,20 +197,20 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         horizontalArea(d, "#cccccc", extent * 100 / range, iconHeight);
         horizontalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconHeight);
 
-        d.print("</tr></tbody></table></td>\n")
-                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>\n");
+        d.print("</tr></tbody></table></td>")
+                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + 1));
-        d.print("</td>\n");
+        d.print("</td>");
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD_BLOCK][0], "" + (Math.min(last, value + blockIncrement)));
-        d.print("</td>\n");
+        d.print("</td>");
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + last);
-        d.print("</td>\n");
+        d.print("</td>");
 
-        d.print("</tr></tbody></table></td>\n")
+        d.print("</tr></tbody></table></td>")
                 .print("</tr></tbody></table>");
     }
 
@@ -224,7 +221,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         d.print(v + "%");
         d.print("\" height=\"");
         d.print(iconHeight);
-        d.print("\"></td>\n");
+        d.print("\"></td>");
     }
 
     private void writeButton(Device device, SScrollBar scrollBar, SIcon icon, String event) throws IOException {
@@ -250,19 +247,19 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         device.print("\"/>");
 
         if (showAsFormComponent) {
-            device.print("</button>\n");
+            writeButtonEnd(device);
         } else {
-            device.print("</a>\n");
+            device.print("</a>");
         }
     }
 
-    /**
-     * @param device
-     * @param value
-     * @param component
-     * @throws IOException
-     */
+
     protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
         Utils.printButtonStart(device, component, value);
     }
+
+    protected void writeButtonEnd(Device device) throws IOException {
+        device.print("</button>");
+    }
+
 }

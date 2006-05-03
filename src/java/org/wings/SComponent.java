@@ -1713,6 +1713,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return true, if displayed as link, false when displayed as html form component.
      * @see #setShowAsFormComponent(boolean)
      */
+    // TODO bsc:  rename to isShowas...
     public boolean getShowAsFormComponent() {
         return showAsFormComponent && getResidesInForm();
     }

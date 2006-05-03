@@ -14,7 +14,11 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
+import org.wings.RequestURL;
+import org.wings.SCellRendererPane;
+import org.wings.SComponent;
+import org.wings.SIcon;
+import org.wings.STree;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.resource.ResourceManager;
@@ -27,16 +31,13 @@ import java.io.IOException;
 
 public class TreeCG extends AbstractComponentCG implements
         org.wings.plaf.TreeCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private SIcon collapseControlIcon;
     private SIcon emptyFillIcon;
     private SIcon expandControlIcon;
     private SIcon hashMark;
     private SIcon leafControlIcon;
-    
+
     /**
      * Initialize properties from config
      */
@@ -64,28 +65,19 @@ public class TreeCG extends AbstractComponentCG implements
         }
     }
 
-//--- code from common area in template.
-    private final boolean isLastChild(TreeModel model, TreePath path, int i) {
-        if (i == 0)
+    private boolean isLastChild(TreeModel model, TreePath path, int i) {
+        if (i == 0) {
             return true;
+        }
         Object node = path.getPathComponent(i);
         Object parent = path.getPathComponent(i - 1);
         return node.equals(model.getChild(parent, model.getChildCount(parent) - 1));
     }
 
-    private void writeIcon(Device device, SIcon icon, int width, int height) throws IOException {
-
-        device.print("<img");
-        Utils.optAttribute(device, "src", icon.getURL());
-        Utils.optAttribute(device, "width", icon.getIconWidth());
-        Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.print(" alt=\"");
-        device.print(icon.getIconTitle());
-        device.print("\"/>");
-    }
-
     private void writeIcon(Device device, SIcon icon, boolean nullBorder) throws IOException {
-        if (icon == null) return;
+        if (icon == null) {
+            return;
+        }
 
         device.print("<img");
         Utils.optAttribute(device, "src", icon.getURL());
@@ -123,14 +115,15 @@ public class TreeCG extends AbstractComponentCG implements
 
         if (isSelected) {
             device.print(" selected=\"true\"");
-            if (childSelectorWorkaround)
+            if (childSelectorWorkaround) {
                 Utils.optAttribute(device, "class", "selected");
+            }
         }
         device.print(">");
 
         /*
         * in most applications, the is no need to render a control icon for a
-        * leaf. So in that case, we can avoid writing the sourrounding 
+        * leaf. So in that case, we can avoid writing the sourrounding
         * table, that will speed up things in browsers.
         */
         final boolean renderControlIcon = !(isLeaf && leafControlIcon == null);
@@ -150,7 +143,7 @@ public class TreeCG extends AbstractComponentCG implements
                 }
                 writeIcon(device, leafControlIcon, false);
                 if (component.getShowAsFormComponent()) {
-                    device.print("</button>");
+                    writeButtonEnd(device);
                 }
             } else {
                 if (component.getShowAsFormComponent()) {
@@ -179,10 +172,11 @@ public class TreeCG extends AbstractComponentCG implements
                         writeIcon(device, expandControlIcon, true);
                     }
                 }
-                if (component.getShowAsFormComponent())
-                    device.print("</button>");
-                else
+                if (component.getShowAsFormComponent()) {
+                    writeButtonEnd(device);
+                } else {
                     device.print("</a>");
+                }
             }
             /*
              * closing layout td
@@ -209,21 +203,21 @@ public class TreeCG extends AbstractComponentCG implements
 
             rendererPane.writeComponent(device, cellComp, component);
 
-            if (component.getShowAsFormComponent())
-                device.print("</button>");
-            else
+            if (component.getShowAsFormComponent()) {
+                writeButtonEnd(device);
+            } else {
                 device.print("</a>");
+            }
         } else {
             rendererPane.writeComponent(device, cellComp, component);
         }
-        
+
         if (renderControlIcon) {
             /*
              * we have to close the table
              */
             device.print("</td></tr></table>\n");
         }
-        
 
         //handle the depth level of the tree
         int nextPathCount = 1;
@@ -233,24 +227,18 @@ public class TreeCG extends AbstractComponentCG implements
         if (nextPath != null) {
             nextPathCount = nextPath.getPathCount();
         }
-        if ( pathCount < nextPathCount ) {
+        if (pathCount < nextPathCount) {
             indentOnce(device, component, path);
-        } else if ( pathCount > nextPathCount ) {
+        } else if (pathCount > nextPathCount) {
             device.print("</li>\n");
             for (int i = nextPathCount; i < pathCount; i++) {
                 device.print("</ul></div></li>\n");
             }
-        } else if ( path.getPathCount() == nextPathCount ) {
+        } else if (path.getPathCount() == nextPathCount) {
             device.print("</li>");
         }
     }
 
-
-    /**
-     * @param device
-     * @param selectionAddr
-     * @throws IOException
-     */
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
         device.print("<a href=\"");
         Utils.write(device, selectionAddr.toString());
@@ -260,6 +248,10 @@ public class TreeCG extends AbstractComponentCG implements
 
     protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
         Utils.printButtonStart(device, component, value);
+    }
+
+    protected void writeButtonEnd(Device device) throws IOException {
+        device.print("</button>");
     }
 
 
@@ -294,14 +286,17 @@ public class TreeCG extends AbstractComponentCG implements
 
     /**
      * Recursively indents the Tree in case it isn't displayed from the root
-     * node. reversely traverses the {@link TreePath} and renders afterwards. 
+     * node. reversely traverses the {@link TreePath} and renders afterwards.
+     *
      * @param device
      * @param component
      * @param path
      * @throws IOException
      */
     private void indentRecursive(Device device, STree component, TreePath path) throws IOException {
-        if (path == null) return;
+        if (path == null) {
+            return;
+        }
         indentRecursive(device, component, path.getParentPath());
         device.print("<li>");
         indentOnce(device, component, path);
@@ -313,7 +308,7 @@ public class TreeCG extends AbstractComponentCG implements
      */
     private void indentOnce(Device device, STree component, TreePath path) throws IOException {
         device.print("<div");
-        if (!isLastChild(component.getModel(), path, path.getPathCount()-1)) {
+        if (!isLastChild(component.getModel(), path, path.getPathCount() - 1)) {
             device.print(" class=\"SSubTree\"");
         }
         device.print("><ul class=\"STree\"");
@@ -321,7 +316,6 @@ public class TreeCG extends AbstractComponentCG implements
         device.print(component.getNodeIndentDepth());
         device.print("px;\">\n");
     }
-
 
     //--- setters and getters for the properties.
 

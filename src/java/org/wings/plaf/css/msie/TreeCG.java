@@ -33,12 +33,18 @@ import java.io.IOException;
  * @author ole
  *
  */
-public class TreeCG extends org.wings.plaf.css.TreeCG implements SParentFrameListener {
-    /**
-     * 
-     */
+public final class TreeCG extends org.wings.plaf.css.TreeCG implements SParentFrameListener {
     private static final long serialVersionUID = 1L;
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
+
+
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        MSIEUtils.writeSubmitAnchorStart(device, component, value);
+    }
+
+    protected void writeButtonEnd(Device device) throws IOException {
+        MSIEUtils.writeSubmitAnchorEnd(device);
+    }
 
     public void installCG(SComponent component) {
         super.installCG(component);

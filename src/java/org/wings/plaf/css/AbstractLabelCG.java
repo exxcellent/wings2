@@ -24,13 +24,6 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
 
     public static SIcon TRANSPARENT_ICON = new SResourceIcon("org/wings/icons/transdot.gif");
 
-    /**
-     * Prefer other writeText method!
-     */
-    protected final void writeText(Device device, String text) throws IOException {
-        writeText(device, text, false);
-    }
-
     protected final void writeText(Device device, String text, boolean wordWrap) throws IOException {
         // white-space:nowrap seems to work in all major browser.
         // Except leading and trailing spaces!
@@ -63,7 +56,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
         device.print("\"/>");
     }
 
-    protected boolean isIE() {
+    protected final boolean isIE() {
         return BrowserType.IE.equals(SessionManager.getSession().getUserAgent().getBrowserType());
     }
 }

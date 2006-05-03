@@ -18,15 +18,15 @@ import org.wings.RequestURL;
 import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SIcon;
-import org.wings.io.Device;
 import org.wings.script.JavaScriptEvent;
+import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG { 
+public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
 
     /**
-     * a serializable class is supposed to have this ID. 
+     * a serializable class is supposed to have this ID.
      */
     private static final long serialVersionUID = -1794530181411426283L;
 
@@ -48,7 +48,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         // use class attribute instead of single attributes for IE compatibility
-        StringBuffer className = new StringBuffer();
+        final StringBuffer className = new StringBuffer();
         if (!button.isEnabled()) {
             className.append(component.getStyle());
             className.append("_disabled ");
@@ -57,11 +57,8 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             className.append(component.getStyle());
             className.append("_selected ");
         }
-        if (className.length() > 0) {
-            device.print(" class=\"");
-            device.print(className.toString());
-            device.print("\"");
-        }
+        Utils.optAttribute(device, "class", className);
+
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 
@@ -77,13 +74,13 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         final SIcon icon = getIcon(button);
 
         if (icon == null && text != null)
-            writeText(device, text);
+            writeText(device, text, false);
         else if (icon != null && text == null)
             writeIcon(device, icon);
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
-                    writeText(d, text);
+                    writeText(d, text, false);
                 }
 
                 protected void icon(Device d) throws IOException {
@@ -92,7 +89,10 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
-        device.print("</a>");
+        if (button.getShowAsFormComponent())
+            writeButtonEnd(device);
+        else
+            device.print("</a>");
     }
 
     /**
@@ -104,12 +104,13 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         Utils.printButtonStart(device, button, value);
     }
 
+    protected void writeButtonEnd(Device device) throws IOException {
+        device.print("</button>");
+    }
+
     /**
      * Convenience method to keep differences between default and msie
      * implementations small
-     * @param device
-     * @param addr
-     * @throws IOException
      */
     protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {
         device.print("<a href=\"");
@@ -117,7 +118,8 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         device.print("\"");
     }
 
-    protected SIcon getIcon(SAbstractButton abstractButton) {
+    /* Retrieve according icon for a button. */
+    public static SIcon getIcon(SAbstractButton abstractButton) {
         if (abstractButton.isSelected()) {
             return abstractButton.isEnabled()
                     ? abstractButton.getSelectedIcon()

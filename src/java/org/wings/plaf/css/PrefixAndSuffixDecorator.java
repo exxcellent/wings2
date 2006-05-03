@@ -13,21 +13,21 @@
  */
 package org.wings.plaf.css;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
 import org.wings.SDimension;
 import org.wings.SPopupMenu;
-import org.wings.script.ScriptListener;
-import org.wings.style.Style;
-import org.wings.plaf.ComponentCG;
-import org.wings.border.STitledBorder;
 import org.wings.border.SBorder;
+import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
+import org.wings.plaf.ComponentCG;
+import org.wings.script.ScriptListener;
+import org.wings.style.Style;
+
+import java.io.IOException;
 
 /**
  * @author ole

@@ -108,7 +108,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             else {
                 new IconTextCompound() {
                     protected void text(Device device) throws IOException {
-                        writeText(device, text);
+                        writeText(device, text, false);
                     }
 
                     protected void icon(Device device) throws IOException {
@@ -121,11 +121,11 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             if (icon != null && text == null)
                 writeIcon(device, icon);
             else if (text != null && icon == null)
-                writeText(device, text);
+                writeText(device, text, false);
             else if (text != null) {
                 new IconTextCompound() {
                     protected void text(Device device) throws IOException {
-                        writeText(device, text);
+                        writeText(device, text, false);
                     }
 
                     protected void icon(Device device) throws IOException {

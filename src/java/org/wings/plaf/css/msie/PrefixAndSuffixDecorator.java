@@ -34,9 +34,6 @@ import java.util.*;
  */
 public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAndSuffixDecorator {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public PrefixAndSuffixDecorator() {
@@ -74,7 +71,7 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         // Workaround for components i.e. inside root container
         //if (handlingLayoutManagerDoesNotSupportAlignment(component)) {
             // Bad idea: Table align=left/right converts the table into a floating element!
-            //Utils.printTableCellAlignment(device, component, SConstants.TOP, SConstants.LEFT);
+            //MSIEUtils.printTableCellAlignment(device, component, SConstants.TOP, SConstants.LEFT);
         //}
 
         // Tooltip handling

@@ -61,7 +61,7 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
         boolean showAsFormComponent = frame.getShowAsFormComponent();
 
         // RequestURL addr = frame.getRequestURL();
-        // addr.addParameter(Utils.event(frame), event);
+        // addr.addParameter(MSIEUtils.event(frame), event);
 
         if (showAsFormComponent) {
             Utils.printButtonStart(device, frame, ""+event);

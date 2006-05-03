@@ -15,23 +15,34 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
+import org.wings.LowLevelEventListener;
+import org.wings.Renderable;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SDimension;
+import org.wings.SFont;
+import org.wings.SFrame;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
-import org.wings.script.ScriptListener;
-import org.wings.script.JavaScriptListener;
 import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
 
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
- * Utils.java
+ * MSIEUtils.java
  *
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  * @version $Revision$
@@ -40,7 +51,7 @@ public final class Utils {
     /**
      * Apache jakarta commons logger
      */
-    private final static Log log = LogFactory.getLog(Utils.class);
+    private static final Log log = LogFactory.getLog(Utils.class);
 
     /**
      * Print debug information in generated HTML
@@ -184,7 +195,6 @@ public final class Utils {
      */
     public static String event(SComponent component) {
         return component.getEncodedLowLevelEventId();
-        //return event(component, component.getLowLevelEventId());
     }
 
     /**
@@ -431,7 +441,7 @@ public final class Utils {
       * @throws IOException
       */
     public static void quote(final Device d, final String s, final boolean quoteNewline,
-                              final boolean quoteSpaces, final boolean quoteApostroph)
+                             final boolean quoteSpaces, final boolean quoteApostroph)
             throws IOException {
         if (s == null) {
             return;
@@ -890,7 +900,7 @@ public final class Utils {
     }
 
     private static JavaScriptListener[] getOnClickListeners(final SComponent button) {
-        List result = new ArrayList();
+        ArrayList result = new ArrayList();
         ScriptListener[] listeners = button.getScriptListeners();
         for (int i = 0; i < listeners.length; i++) {
             if (listeners[i] instanceof JavaScriptListener) {

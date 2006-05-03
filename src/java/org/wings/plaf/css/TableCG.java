@@ -249,7 +249,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         if (parameter != null && !isEditingCell && selectableCell && !contentContainsClickables) {
             if (showAsFormComponent)
-                device.print("</button>");
+                writeButtonEnd(device);
             else
                 device.print("</a>");
         } else
@@ -258,7 +258,6 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         device.print("</td>");
         Utils.printNewline(device, component);
     }
-
 
     protected void writeLinkStart(Device device, RequestURL selectionAddr) throws IOException {
         device.print("<a href=\"");
@@ -269,6 +268,11 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
     protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
         Utils.printButtonStart(device, component, value);
+    }
+
+
+    protected void writeButtonEnd(Device device) throws IOException {
+        device.print("</button>");
     }
 
 
@@ -446,7 +450,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             writeButtonStart(device, table, table.getToggleSelectionParameter(row, -1));
             device.print(">");
             renderSelectionColumnContent(device, row, table, rendererPane);
-            device.print("</button>");
+            writeButtonEnd(device);
         } else {
             RequestURL selectionAddr = table.getRequestURL();
             selectionAddr.addParameter(Utils.event(table), table.getToggleSelectionParameter(row, -1));

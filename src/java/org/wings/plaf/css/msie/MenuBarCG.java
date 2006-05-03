@@ -14,22 +14,19 @@
 package org.wings.plaf.css.msie;
 
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.io.Device;
+
+import java.io.IOException;
 
 /**
  * This is the MSIE XHTML CSS plaf for the SMenuBar Component.
  * @author ole
  */
-public class MenuBarCG
+public final class MenuBarCG
         extends org.wings.plaf.css.MenuBarCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private final transient static Log log = LogFactory.getLog(MenuBarCG.class);
 

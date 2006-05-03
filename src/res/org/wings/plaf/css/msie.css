@@ -308,7 +308,7 @@ ul.STree li div.SSubTree {
 }
 
 .STable table tbody tr td {
-    cursor: pointer;
+    /*cursor: pointer;*/
     padding-left: 8px;
     padding-right: 8px;
     border-left: 1px solid black;

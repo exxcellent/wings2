@@ -45,13 +45,13 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
         final SIcon icon = getIcon(button);
 
         if (icon == null && text != null)
-            writeText(device, text);
+            writeText(device, text, false);
         else if (icon != null && text == null)
             writeIcon(device, icon);
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
-                    writeText(d, text);
+                    writeText(d, text, false);
                 }
 
                 protected void icon(Device d) throws IOException {
@@ -61,7 +61,7 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
         }
 
         if (button.getShowAsFormComponent())
-            device.print("</button>");
+            writeButtonEnd(device);
         else
             device.print("</a>");
     }
@@ -74,6 +74,10 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
 
     protected void writeButtonStart(Device device, SClickable button) throws IOException {
         Utils.printButtonStart(device, button, button.getEvent());
+    }
+
+    protected void writeButtonEnd(Device device) throws IOException {
+        device.print("</button>");
     }
 
     protected SIcon getIcon(SClickable abstractButton) {

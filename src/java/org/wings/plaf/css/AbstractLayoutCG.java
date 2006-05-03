@@ -101,7 +101,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             openLayouterCell(d, firstRow && renderFirstLineAsHeader, insets, border, c);
             d.print(">");
 
-            //Utils.printNewline(d, c);
+            //MSIEUtils.printNewline(d, c);
             c.write(d); // Render component
 
             closeLayouterCell(d, firstRow && renderFirstLineAsHeader);

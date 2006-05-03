@@ -4,7 +4,6 @@
 package desktop;
 
 import org.wings.SComponent;
-import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SInternalFrame;
 import org.wings.event.SInternalFrameEvent;
@@ -68,7 +67,7 @@ public class BirdTitleBarCG
         boolean showAsFormComponent = frame.getShowAsFormComponent();
 
         // RequestURL addr = frame.getRequestURL();
-        // addr.addParameter(Utils.event(frame), event);
+        // addr.addParameter(MSIEUtils.event(frame), event);
 
         // we don't need this to be buttons
 //        if (showAsFormComponent) {
@@ -78,7 +77,7 @@ public class BirdTitleBarCG
 //                device.print(cssClass);
 //                device.print("\"");
 //            }
-//            device.print(" name=\"").print(Utils.event(frame)).print(
+//            device.print(" name=\"").print(MSIEUtils.event(frame)).print(
 //                    "\" value=\"").print(event).print("\">");
 //        } else {
             device.print("<a");

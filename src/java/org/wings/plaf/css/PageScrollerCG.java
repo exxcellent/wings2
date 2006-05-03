@@ -23,7 +23,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
     private static final long serialVersionUID = 1L;
 
     private final static transient Log log = LogFactory.getLog(PageScrollerCG.class);
-    
+
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
     public static final int FORWARD_BLOCK = 2;
@@ -94,21 +94,21 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean firstPage = (value == minimum);
         boolean lastPage = (value == (maximum - extent));
 
-        d.print("<table orientation=\"vertical\"><tbody>\n")
-                .print("<tr height=\"1%\">\n")
-                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
+        d.print("<table orientation=\"vertical\"><tbody>")
+                .print("<tr height=\"1%\">")
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum, !firstPage);
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - extent), backEnabled);
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
 
-        d.print("</tbody></table></td>\n")
-                .print("</tr>\n")
-                .print("<tr>\n")
-                .print("<td><table area=\"pages\"><tbody>\n");
+        d.print("</tbody></table></td>")
+                .print("</tr>")
+                .print("<tr>")
+                .print("<td><table area=\"pages\"><tbody>");
 
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
@@ -121,23 +121,23 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
             Utils.optAttribute(d, "class", isCurrentPage ? "page_selected" : null);
             d.print("\">");
             writePage(d, sb, page, !isCurrentPage, firstDirectPage);
-            d.print("</td></tr>\n");
+            d.print("</td></tr>");
         }
 
-        d.print("</tbody></table></td>\n")
-                .print("</tr>\n")
-                .print("<tr height=\"1%\">\n")
-                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>\n");
+        d.print("</tbody></table></td>")
+                .print("</tr>")
+                .print("<tr height=\"1%\">")
+                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + extent), forwardEnabled);
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + (maximum + 1 - extent), !lastPage);
-        d.print("</td></tr>\n");
+        d.print("</td></tr>");
 
-        d.print("</tbody></table></td>\n")
-                .print("</tr>\n")
+        d.print("</tbody></table></td>")
+                .print("</tr>")
                 .print("</tbody></table>");
     }
 
@@ -146,7 +146,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         d.print(s);
         d.print("\" height=\"");
         d.print(v + "%");
-        d.print("\"></td></tr>\n");
+        d.print("\"></td></tr>");
     }
 
     private void writeHorizontalPageScroller(Device d, SPageScroller sb) throws IOException {
@@ -159,18 +159,18 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean firstPage = (value == minimum);
         boolean lastPage = (value >= (maximum - extent));
 
-        d.print("<table orientation=\"horizontal\"><tbody><tr>\n")
-                .print("<td><table area=\"buttons\"><tbody><tr>\n");
+        d.print("<table orientation=\"horizontal\"><tbody><tr>")
+                .print("<td><table area=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum, !firstPage);
-        d.print("</td>\n");
+        d.print("</td>");
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - extent), backEnabled);
-        d.print("</td>\n");
+        d.print("</td>");
 
-        d.print("</tr></tbody></table></td>\n")
-                .print("<td><table area=\"pages\"><tbody><tr>\n");
+        d.print("</tr></tbody></table></td>")
+                .print("<td><table area=\"pages\"><tbody><tr>");
 
         int firstDirectPage = sb.getCurrentPage() - (sb.getDirectPages() - 1) / 2;
         firstDirectPage = Math.min(firstDirectPage, sb.getPageCount() - sb.getDirectPages());
@@ -182,30 +182,29 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
             Utils.optAttribute(d, "class", isCurrentPage ? "page_selected": null);
             d.print("\">");
             writePage(d, sb, page, !isCurrentPage, firstDirectPage);
-            d.print("</td>\n");
+            d.print("</td>");
         }
 
-        d.print("</tr></tbody></table></td>\n")
-                .print("<td><table area=\"buttons\"><tbody><tr>\n");
+        d.print("</tr></tbody></table></td>")
+                .print("<td><table area=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + extent), forwardEnabled);
-        d.print("</td>\n");
+        d.print("</td>");
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + (sb.getPageCount() - 1) * extent, !lastPage);
-        d.print("</td>\n");
+        d.print("</td>");
 
-        d.print("</tr></tbody></table></td>\n")
+        d.print("</tr></tbody></table></td>")
                 .print("</tr></tbody></table>");
     }
 
     private void writePage(Device device, SPageScroller pageScroller, int page, boolean enabled, int firstDirectPage) throws IOException {
-        boolean childSelectorWorkaround = !pageScroller.getSession().getUserAgent().supportsCssChildSelector();
         boolean showAsFormComponent = pageScroller.getShowAsFormComponent();
     	Object separator = SessionManager.getSession().getCGManager().getObject("PageScrollerCG.pageSeparator", String.class);
     	if(page != firstDirectPage)
     	    device.print(separator.toString());
-    	
+
         if (showAsFormComponent) {
             writeButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()));
             device.print(" type=\"submit\" name=\"")
@@ -232,9 +231,9 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         device.print(Integer.toString(page + 1));
 
         if (showAsFormComponent)
-            device.print("</button>\n");
+            writeButtonEnd(device);
         else
-            device.print("</a>\n");
+            device.print("</a>");
     }
 
     private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event, boolean enabled) throws IOException {
@@ -258,7 +257,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
             }
         }
         device.print(">");
-        
+
         device.print("<img");
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
@@ -269,9 +268,13 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         device.print("\"/>");
 
         if (showAsFormComponent)
-            device.print("</button>\n");
+            writeButtonEnd(device);
         else
-            device.print("</a>\n");
+            device.print("</a>");
+    }
+
+    protected void writeButtonEnd(Device device) throws IOException {
+        device.print("</button>");
     }
 
     /* (non-Javadoc)

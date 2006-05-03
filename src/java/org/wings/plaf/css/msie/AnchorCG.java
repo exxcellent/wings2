@@ -13,16 +13,16 @@
  */
 package org.wings.plaf.css.msie;
 
-import java.io.IOException;
-
 import org.wings.SAnchor;
 import org.wings.io.Device;
+
+import java.io.IOException;
 
 /**
  * @author ole
  *
  */
-public class AnchorCG extends org.wings.plaf.css.AnchorCG {
+public final class AnchorCG extends org.wings.plaf.css.AnchorCG {
     /**
      * 
      */

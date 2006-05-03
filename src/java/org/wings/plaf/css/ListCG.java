@@ -177,7 +177,7 @@ public class ListCG extends AbstractComponentCG implements
 
             if (renderSelection) {
                 if (showAsFormComponent)
-                    device.print("</button>");
+                    writeButtonEnd(device);
                 else
                     device.print("</a>");
             } else
@@ -191,15 +191,15 @@ public class ListCG extends AbstractComponentCG implements
         device.print(">");
     }
 
-    /**
-     * @param device
-     * @throws IOException
-     */
     protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
         Utils.printButtonStart(device, component, value);
     }
 
-    /** 
+    protected void writeButtonEnd(Device device) throws IOException {
+        device.print("</button>");
+    }
+
+    /**
      * Convenience method to keep differences between default and msie
      * implementations small
      * @param device

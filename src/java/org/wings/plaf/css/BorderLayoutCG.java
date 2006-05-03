@@ -50,7 +50,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, north);
             d.print("<td colspan=\"").print(cols).print("\"");
             Utils.printTableCellAlignment(d, north, SConstants.TOP, SConstants.LEFT);
-            //Utils.optAttribute(d, "style", decorateLayoutCell(north));
+            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(north));
             d.print(">");
             north.write(d);
             d.print("</td>");
@@ -65,7 +65,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, west);
             d.print("<td width=\"0%\"");
             Utils.printTableCellAlignment(d, west, SConstants.CENTER, SConstants.LEFT);
-            //Utils.optAttribute(d, "style", decorateLayoutCell(west));
+            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(west));
             d.print(">");
             west.write(d);
             d.print("</td>");
@@ -75,7 +75,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, center);
             d.print("<td width=\"100%\"");
             Utils.printTableCellAlignment(d, center, SConstants.CENTER, SConstants.LEFT);
-            //Utils.optAttribute(d, "style", decorateLayoutCell(center));
+            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(center));
             d.print(">");
             center.write(d);
             d.print("</td>");
@@ -87,7 +87,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, east);
             d.print("<td width=\"0%\"");
             Utils.printTableCellAlignment(d, east, SConstants.CENTER, SConstants.RIGHT);
-            //Utils.optAttribute(d, "style", decorateLayoutCell(east));
+            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(east));
             d.print(">");
             east.write(d);
             d.print("</td>");
@@ -102,7 +102,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, south);
             d.print("<td colspan=\"").print(cols).print("\"");
             Utils.printTableCellAlignment(d, south, SConstants.BOTTOM, SConstants.LEFT);
-            //Utils.optAttribute(d, "style", decorateLayoutCell(south));
+            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(south));
             d.print(">");
             south.write(d);
             d.print("</td>");
@@ -122,7 +122,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
         // look at border example to see the mess. (OL)
 
         //   if (containedComponent != null && containedComponent.getBackground() != null) {
-        //            return "background: " + Utils.toColorString(containedComponent.getBackground()) + ";";
+        //            return "background: " + MSIEUtils.toColorString(containedComponent.getBackground()) + ";";
         //        } else {
     //    return null;
     //}

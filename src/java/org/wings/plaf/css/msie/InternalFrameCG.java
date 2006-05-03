@@ -13,18 +13,15 @@
  */
 package org.wings.plaf.css.msie;
 
-import java.io.IOException;
-
 import org.wings.SInternalFrame;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 
-public class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
+import java.io.IOException;
 
-    /**
-     * 
-     */
+public final class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
+
     private static final long serialVersionUID = 1L;
 
     /* (non-Javadoc)

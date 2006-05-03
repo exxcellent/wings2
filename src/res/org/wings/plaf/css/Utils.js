@@ -1,4 +1,4 @@
-/* wingS2 Utils, commonly used javascript even useful
+/* wingS2 MSIEUtils, commonly used javascript even useful
    to a wings user. In order to avoid typical js namespace
    clutter, all functions and variables are prepended by the
    string "wu_".

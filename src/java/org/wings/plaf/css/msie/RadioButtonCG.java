@@ -13,19 +13,16 @@
  */
 package org.wings.plaf.css.msie;
 
-import java.io.IOException;
-
 import org.wings.SAbstractButton;
 import org.wings.SIcon;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 import org.wings.resource.ResourceManager;
 
+import java.io.IOException;
 
-public class RadioButtonCG extends CheckBoxCG {
-    /**
-     * 
-     */
+
+public final class RadioButtonCG extends CheckBoxCG {
     private static final long serialVersionUID = 1L;
 
     protected void installIcons(final SAbstractButton button) {

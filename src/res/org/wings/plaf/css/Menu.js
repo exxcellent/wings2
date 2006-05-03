@@ -218,9 +218,9 @@ function wpm_setVisible(element, visible) {
 
 
 function wpm_openMenu(event, id, parentId) {
-    var event = getEvent(event);
+    var realEvent = getEvent(realEvent);
 
-    if (parentULId(event) != parentId) {
+    if (parentULId(realEvent) != parentId) {
         // don't bubble
         return;
     }
@@ -254,8 +254,8 @@ function parentULId(event) {
 }
 
 function wpm_closeMenu(event, id, parentId) {
-    var event = window.event;
-    if (parentULId(event) != parentId) {
+    var realEvent = window.event;
+    if (parentULId(realEvent) != parentId) {
         return;
     }
     document.getElementById(id).style.display = 'none';

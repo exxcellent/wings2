@@ -71,7 +71,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
         boolean showAsFormComponent = frame.getShowAsFormComponent();
 
         // RequestURL addr = frame.getRequestURL();
-        // addr.addParameter(Utils.event(frame), event);
+        // addr.addParameter(MSIEUtils.event(frame), event);
 
         if (showAsFormComponent) {
             Utils.printButtonStart(device, frame, ""+event);

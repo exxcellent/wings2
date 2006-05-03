@@ -34,12 +34,25 @@ import java.util.Map;
  * @author ole
  *
  */
-public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SParentFrameListener {
-    /**
-     * 
-     */
+public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SParentFrameListener {
     private static final long serialVersionUID = 1L;
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
+
+
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.TabbedPaneCG#writeButtonStart(org.wings.io.Device, org.wings.STabbedPane, java.lang.String)
+     */
+    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
+        MSIEUtils.writeSubmitAnchorStart(device, component, value);
+    }
+
+    /* (non-Javadoc)
+     * @see org.wings.plaf.css.TabbedPaneCG#writeButtonEnd(org.wings.io.Device)
+     */
+    protected void writeButtonEnd(Device device) throws IOException {
+        MSIEUtils.writeSubmitAnchorEnd(device);
+        device.print("<span> </span>"); // Aha?! Guess to enable word wrap?
+    }
 
     public void installCG(SComponent component) {
         super.installCG(component);
@@ -53,16 +66,7 @@ public class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implements SPa
         parentFrame.addHeader(new Script("text/javascript", new DefaultURLResource(jScriptUrl)));
     }
 
-    public void parentFrameRemoved(SParentFrameEvent e) {
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.plaf.css.TabbedPaneCG#writeButtonEnd(org.wings.io.Device)
-     */
-    protected void writeButtonEnd(Device device) throws IOException {
-        super.writeButtonEnd(device);
-        device.print("<span> </span>");
-    }
+    public void parentFrameRemoved(SParentFrameEvent e) {}
 
     protected Map getSelectorMapping() {
         return msieMappings;
