@@ -9,43 +9,34 @@ import java.util.WeakHashMap;
 
 import javax.servlet.http.HttpSession;
 
-import org.w3c.dom.Element;
 import org.wings.session.SessionManager;
 
-import uk.ltd.getahead.dwr.Creator;
-import uk.ltd.getahead.dwr.CreatorManager;
-import uk.ltd.getahead.dwr.ExecutionContext;
+import org.directwebremoting.Creator;
+import org.directwebremoting.CreatorManager;
+import org.directwebremoting.WebContextFactory;
 
 /**
  * The callables are referenced weakly, only. Thus, most callables are destroyed as soon as there's
  * no component's client property referencing them anymore.
  *
  * @author hengels
+ * @author raedler
  * @version $Revision$
  */
-public class SessionCreatorManager
-    implements CreatorManager
-{
-    private boolean debug;
+public class SessionCreatorManager implements CreatorManager {
 
     public SessionCreatorManager() {
+        // empty
     }
 
     public boolean isDebug() {
-        return debug;
+        return false;
     }
 
-    public void setDebug(boolean debug) {
-        this.debug = debug;
-    }
-
-    public void addCreatorType(String typename, Class clazz) {
+    public void addCreatorType(String typename, String clazz) {
     }
 
     public void addCreator(String typename, String scriptName, Map params) throws InstantiationException, IllegalAccessException, IllegalArgumentException {
-    }
-
-    public void addCreator(String type, String javascript, Element allower) {
     }
 
     public Collection getCreatorNames() {
@@ -64,9 +55,9 @@ public class SessionCreatorManager
     public void setCreators(Map creators) {
     }
 
-    public void addCreator(String s, Object callable) {
+    public void addCreator(String s, Creator creator) {
         Map map = getCreatorMap();
-        map.put(s, new SessionCreator(callable));
+        map.put(s, creator);
     }
 
     public void removeCreator(String scriptName) {
@@ -75,7 +66,7 @@ public class SessionCreatorManager
     }
 
     private Map getCreatorMap() {
-        HttpSession session = ExecutionContext.get().getSession();
+        HttpSession session = WebContextFactory.get().getSession();
         Map map = (Map) session.getAttribute("CreatorMap");
         if (map == null) {
             map = new WeakHashMap();

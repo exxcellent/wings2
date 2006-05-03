@@ -10,9 +10,34 @@ import org.wings.SComponent;
  * @author hengels
  * @version $Revision$
  */
-class DWRScriptListener
-        extends JavaScriptListener {
+public class DWRScriptListener extends JavaScriptListener {
+
+    protected String callableName;
+    protected Object callable;
+
+    public DWRScriptListener(String event, String code, String callableName, Object callable) {
+        super(event, code);
+
+        this.callableName = callableName;
+        this.callable = callable;
+    }
+
+    public DWRScriptListener(String event, String code, String script, String callableName, Object callable) {
+        super(event, code, script);
+
+        this.callableName = callableName;
+        this.callable = callable;
+    }
+
     public DWRScriptListener(String event, String code, String script, SComponent[] components) {
         super(event, code, script, components);
+    }
+
+    public String getCallableName() {
+        return callableName;
+    }
+
+    public Object getCallable() {
+        return callable;
     }
 }

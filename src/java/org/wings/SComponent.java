@@ -27,13 +27,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -186,6 +180,11 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     private InputMap[] inputMaps;
 
+    /**
+     * Contains all script listeners of the component.
+     */
+    private List scriptListenerList = new LinkedList();
+
     private ActionMap actionMap;
 
     private final Map actionEvents = new HashMap();
@@ -209,6 +208,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * Constants for conditions on which actions are triggered. Mainly two
      * cases: the focus has either to be at the component (or at a child)
      * or somewhere in the parent frame.
+     *
      * @see #setInputMap(int, javax.swing.InputMap)
      */
     public static final int WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT = 0;
@@ -217,6 +217,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * Constants for conditions on which actions are triggered. Mainly two
      * cases: the focus has either to be at the component (or at a child)
      * or somewhere in the parent frame.
+     *
      * @see #setInputMap(int, javax.swing.InputMap)
      */
     public static final int WHEN_IN_FOCUSED_FRAME = 1;
@@ -233,7 +234,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Returns the border of this component or null if no border has been set.
-     * 
+     *
      * @return the border object
      * @see #setBorder(SBorder)
      */
@@ -243,7 +244,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Sets the border for this component.
-     * 
+     *
      * @param border the border to be set for the component
      */
     public void setBorder(SBorder border) {
@@ -510,7 +511,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * dispatching them to any registered
      * <code>SParentFrameListener</code> objects.
      * <p/>
-     *
      */
     private void processParentFrameEvent(SParentFrameListener listener, SParentFrameEvent event) {
         int id = event.getID();
@@ -573,14 +573,19 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see org.wings.SComponent#removeComponentListener
      */
     public final void addScriptListener(ScriptListener listener) {
-        ScriptListener[] listeners = getScriptListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            if (listeners[i].equals(listener)) {
-                return;
+        List scriptListeners = getScriptListenerList();
+        for (Iterator iter = scriptListeners.iterator(); iter.hasNext(); ) {
+            Object o = iter.next();
+
+            if (o instanceof ScriptListener) {
+                ScriptListener scriptListener = (ScriptListener) o;
+                if (scriptListener.equals(listener)) {
+                    return;
+                }
             }
         }
         reload(ReloadManager.STATE | ReloadManager.SCRIPT);
-        addEventListener(ScriptListener.class, listener);
+        scriptListeners.add(listener);
     }
 
 
@@ -597,27 +602,48 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see org.wings.SComponent#addComponentListener
      */
     public final void removeScriptListener(ScriptListener listener) {
-        removeEventListener(ScriptListener.class, listener);
+        scriptListenerList.remove(listener);
         reload(ReloadManager.SCRIPT);
     }
 
     /**
      * returns the script listeners of this component
+     *
      * @return the ScriptListener Array.
      */
     public ScriptListener[] getScriptListeners() {
-        return (ScriptListener[]) getListeners(ScriptListener.class);
+        return (ScriptListener[]) scriptListenerList.toArray(new ScriptListener[scriptListenerList.size()]);
+    }
+
+    /**
+     * Returns the script listeners of this component.
+     *
+     * @return The <code>ScriptListener</code>s in a <code>List</code>.
+     */
+    public List getScriptListenerList() {
+        return scriptListenerList;
+    }
+
+    /**
+     * Sets the script listeners that should be used by this
+     * component.
+     *
+     * @param scriptListeners The <code>ScriptListener</code>s of
+     * this component in a <code>List</code>.
+     */
+    public void setScriptListenerList(List scriptListeners) {
+        this.scriptListenerList = scriptListeners;
     }
 
     /**
      * Sets the name property of a component which must be <b>unique</b>!
      * <br/>Assigning the same name multiple times will cause strange results!
-     *
+     * <p/>
      * <p>Valid names must begin with a letter ([A-Za-z]), underscores ("_") or dollars ("$") and may be followed by any number of
      * letters, digits ([0-9]), underscores ("_") and dollars ("$")
-     *
+     * <p/>
      * <p>If no name is set, it is generated when necessary.
-     *
+     * <p/>
      * <p><i>Explanation:</i> This property is an identifier which is used inside the generated HTML as an element identifier (id="")
      * and sometimes as a javascript function name.
      *
@@ -629,7 +655,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             char ch = uniqueName.charAt(0);
             if (uniqueName.length() == 0 || !(Character.isLetter(ch) || ch == '_' || ch == '$'))
                 throw new IllegalArgumentException(uniqueName + " is not a valid identifier");
-            for (int i=1; i < uniqueName.length(); i++) {
+            for (int i = 1; i < uniqueName.length(); i++) {
                 ch = uniqueName.charAt(i);
                 if (!(Character.isLetter(ch) || Character.isDigit(ch) || ch == '_' || ch == '$'))
                     throw new IllegalArgumentException(uniqueName + " is not a valid identifier");
@@ -652,6 +678,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Gets the name property of a component. This property is an identifier,so it should be always unique.
      * For details refer to {@link #setName(String)}
+     *
      * @return The name of the component.
      */
     public final String getName() {
@@ -696,12 +723,12 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Set an CSS class name provided by the laf-provided Cascading Style Sheet (CSS), which should
      * be applied to this component.
-     *
+     * <p/>
      * <p>By <b>default</b> this is set to the wingS component class name (i.e. "SLabel").
-     *
+     * <p/>
      * <p>The PLAFs render the value of this String to an <code>class="<i>cssClassName</i>"</code> attribute
      * inside the generated HTML code of this component.
-     *
+     * <p/>
      * <p>The default wingS plaf initializes this by default to the wingS component class name
      * (i.e. <code>SButton</code> for button instances). <br/>Please be aware if you <b>replace</b> this
      * default value, the default wingS style will no longer take effect, as they operate on these
@@ -753,6 +780,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Returns the style defined for the passed CSS selector.
+     *
      * @param selector The CSS selector the style to retrieve. See {@link org.wings.style.Style#getSelector()}.
      *         The default selector for most CSS styles is {@link #SELECTOR_ALL}.
      * @return A style (collection of css property/value pairs) or <code>null</code>
@@ -783,6 +811,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Returns the collection of currently defined CSS styles on this component.
+     *
      * @return A unmodifyable collection of {@link Style} instances.
      */
     public Collection getDynamicStyles() {
@@ -806,12 +835,12 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * use a CSS selector which adresses this component as whole as CSS selector (<code>new CSSProperty(this)</code>).
      * The CSS property will appear as an inline style in the generated HTML code.
      *
-     * @param property The CSS property (i.e. {@link CSSProperty#BACKGROUND}).
+     * @param property      The CSS property (i.e. {@link CSSProperty#BACKGROUND}).
      * @param propertyValue A valid string value for this CSS property (i.e. <code>red</code> or <code>#fff</code> in our example).
      */
     public void setAttribute(CSSProperty property, String propertyValue) {
         setAttribute(SELECTOR_ALL, property, propertyValue);
-   }
+    }
 
     /**
      * Assign or overwrite a CSS property/value pair at this component. This CSS property definition will
@@ -849,11 +878,11 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * <code>Selector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
      * choice.
      * @param property The css property you want to define a value for (in this case
-     * mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
-     * @param icon The icon you want to assign.
+     *                 mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
+     * @param icon     The icon you want to assign.
      */
     public void setAttribute(Selector selector, CSSProperty property, SIcon icon) {
-        setAttribute(selector, property, icon != null ? "url('"+icon.getURL().toString()+"')" : "none");
+        setAttribute(selector, property, icon != null ? "url('" + icon.getURL().toString() + "')" : "none");
     }
 
     /**
@@ -866,8 +895,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * <code>Selector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
      * choice.
      * @param property The css property you want to define a value for (in this case
-     * mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
-     * @param color The color value you want to assign.
+     *                 mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
+     * @param color    The color value you want to assign.
      */
     public void setAttribute(Selector selector, CSSProperty property, Color color) {
         setAttribute(selector, property, CSSStyleSheet.getAttribute(color));
@@ -956,6 +985,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Return the visibility. If the Component has a parent which is invisible,
      * this method returns an invisible status.
+     *
      * @return wether the component will show
      */
     public boolean isVisible() {
@@ -965,6 +995,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Return the visibility. If the Component has a parent which is invisible,
      * this method returns an invisible status.
+     *
      * @return wether the component will show
      */
     public boolean isRecursivelyVisible() {
@@ -992,6 +1023,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Mark the component as subject to reload.
      * The component will be registered with the ReloadManager.
+     *
      * @param aspect
      */
     public final void reload(int aspect) {
@@ -1144,13 +1176,13 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                 cg.write(s, this);
         } catch (IOException se) {
             // Typical double-clicks. Not severe
-            log.debug( "Not Severe: Socket exception during code generation for " + getClass().getName() + se);
+            log.debug("Not Severe: Socket exception during code generation for " + getClass().getName() + se);
         } catch (NoClassDefFoundError e) {
             // Mostly happens when DWR jar is not in classpath
-            log.fatal( "Error during code generation for " + getClass().getName(), e);
+            log.fatal("Error during code generation for " + getClass().getName(), e);
         } catch (Throwable t) {
             // should we warn here? or maybe throw an error...
-            log.error( "Exception during code generation for " + getClass().getName(), t);
+            log.error("Exception during code generation for " + getClass().getName(), t);
         }
     }
 
@@ -1253,9 +1285,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * component creation time, as the parent frame is set when you add it to a visible {@link SContainer}.
      * Use {@link #addParentFrameListener(org.wings.event.SParentFrameListener)} in this case.
      *
-     * @see #addParentFrameListener(org.wings.event.SParentFrameListener)
-     *
      * @return the parent frame
+     * @see #addParentFrameListener(org.wings.event.SParentFrameListener)
      */
     public SFrame getParentFrame() {
         return parentFrame;
@@ -1508,7 +1539,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * from the old value set the new one and notify e.g. the reloadmanager...
      */
     protected static boolean isDifferent(Object oldObject,
-                                               Object newObject) {
+                                         Object newObject) {
         if (oldObject == newObject)
             return false;
 
@@ -1520,7 +1551,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Adds an event listener for the given event class
-     * @param type The class/type of events to listen to.
+     *
+     * @param type     The class/type of events to listen to.
      * @param listener The listener itself.
      */
     protected final void addEventListener(Class type, EventListener listener) {
@@ -1532,7 +1564,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Removed named event listener.
-     * @param type The class/type of events to listen to.
+     *
+     * @param type     The class/type of events to listen to.
      * @param listener The listener itself.
      */
     protected final void removeEventListener(Class type, EventListener listener) {
@@ -1615,6 +1648,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * <b>Internal method</b> called by the CGs to indicate different states of the rendering process.
+     *
      * @param type Either {@link #DONE_RENDERING} or {@link #START_RENDERING}.
      */
     public final void fireRenderEvent(int type) {
@@ -1722,6 +1756,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Action map for key binding feature
+     *
      * @return The current action map
      * @see #setActionMap(javax.swing.ActionMap)
      */
@@ -1734,6 +1769,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Map for key binding feature. (?) Binds input keystrokes to action names (?).
+     *
      * @param inputMap The current input map.
      * @see InputMap
      * @see ActionMap
@@ -1746,7 +1782,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     /**
      * Sets The current input map.
-     * @param inputMap The new input map
+     *
+     * @param inputMap  The new input map
      * @param condition Either {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT} or {@link #WHEN_IN_FOCUSED_FRAME}
      * @see JComponent#setInputMap(int, javax.swing.InputMap)
      */
@@ -1767,9 +1804,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
+     * @param condition Either {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT} or {@link #WHEN_IN_FOCUSED_FRAME}
      * @return The input map for the given condition.
      * @see #setInputMap(int, javax.swing.InputMap)
-     * @param condition Either {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT} or {@link #WHEN_IN_FOCUSED_FRAME}
      */
     public InputMap getInputMap(int condition) {
         initInputMaps();
@@ -1856,7 +1893,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * to react on this event.
      */
     public void removeNotify() {
-	    /* currently nothing to do, but great to overwrite for some dangling eventListener */
+        /* currently nothing to do, but great to overwrite for some dangling eventListener */
     }
 
     /**
@@ -1867,7 +1904,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     public void addNotify() {
         /* currently nothing to do */
     }
-
 
     // Nice: undocumented and useless
     /*public ArrayList getMenus() {
@@ -1882,9 +1918,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     } */
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-    // preprocessing, e. g. serialize static vars or transient variables as cipher text
+        // preprocessing, e. g. serialize static vars or transient variables as cipher text
         in.defaultReadObject(); // default serialization
-    // do postprocessing here
+        // do postprocessing here
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {
@@ -1912,17 +1948,18 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             if (e.getParentFrame() != null)
                 e.getParentFrame().registerGlobalInputMapComponent(me);
         }
+
         public void parentFrameRemoved(SParentFrameEvent e) {
             if (e.getParentFrame() != null)
                 e.getParentFrame().deregisterGlobalInputMapComponent(me);
         }
     }
-    
+
     public final int getOversize(boolean horizontal) {
         int oversize = 0;
         SBorder border = getBorder();
         if (border != null) {
-            oversize += border.getThickness() * 2; 
+            oversize += border.getThickness() * 2;
             Insets insets = border.getInsets();
             if (insets != null) {
                 if (horizontal) {

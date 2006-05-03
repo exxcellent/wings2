@@ -5,8 +5,10 @@ package org.wings.plaf.css.dwr;
 
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
-
-import uk.ltd.getahead.dwr.ExecutionContext;
+import org.directwebremoting.WebContextFactory;
+import org.directwebremoting.WebContextBuilder;
+import org.directwebremoting.impl.DefaultWebContextBuilder;
+import org.directwebremoting.impl.DefaultContainer;
 
 import java.util.Collection;
 import java.io.Serializable;
@@ -16,6 +18,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public class CallableManager implements Serializable {
+
     /**
      * 
      */
@@ -23,7 +26,7 @@ public class CallableManager implements Serializable {
     private SessionCreatorManager creatorManager = new SessionCreatorManager();
 
     public static CallableManager getInstance() {
-        CallableManager callableManager = (CallableManager)SessionManager.getSession().getProperty("CallableManager");
+        CallableManager callableManager = (CallableManager) SessionManager.getSession().getProperty("CallableManager");
         if (callableManager == null) {
             callableManager = new CallableManager();
             SessionManager.getSession().setProperty("CallableManager", callableManager);
@@ -33,32 +36,49 @@ public class CallableManager implements Serializable {
 
     public void registerCallable(String scriptName, Object callable) {
         Session session = SessionManager.getSession();
-        ExecutionContext.setExecutionContext(session.getServletRequest(), session.getServletResponse(), null, null);
-        creatorManager.addCreator(scriptName, callable);
-        ExecutionContext.unset();
+
+        WebContextBuilder builder = new DefaultWebContextBuilder();
+        builder.set(session.getServletRequest(), session.getServletResponse(), null, session.getServletContext(), new DefaultContainer());
+
+        WebContextFactory.setWebContextBuilder(builder);
+        creatorManager.addCreator(scriptName, new SessionCreator(callable));
+        builder.unset();
     }
 
     public void unregisterCallable(String scriptName) {
         Session session = SessionManager.getSession();
-        ExecutionContext.setExecutionContext(session.getServletRequest(), session.getServletResponse(), null, null);
+
+        WebContextBuilder builder = new DefaultWebContextBuilder();
+        builder.set(session.getServletRequest(), session.getServletResponse(), null, session.getServletContext(), new DefaultContainer());
+
+        WebContextFactory.setWebContextBuilder(builder);
         creatorManager.removeCreator(scriptName);
-        ExecutionContext.unset();
+        builder.unset();
     }
 
     public boolean containsCallable(String scriptName) {
         Session session = SessionManager.getSession();
-        ExecutionContext.setExecutionContext(session.getServletRequest(), session.getServletResponse(), null, null);
+
+        WebContextBuilder builder = new DefaultWebContextBuilder();
+        builder.set(session.getServletRequest(), session.getServletResponse(), null, session.getServletContext(), new DefaultContainer());
+
+        WebContextFactory.setWebContextBuilder(builder);
         boolean b = creatorManager.getCreatorNames().contains(scriptName);
-        ExecutionContext.unset();
+        builder.unset();
+
         return b;
     }
 
     public Collection callableNames() {
         Session session = SessionManager.getSession();
-        ExecutionContext.setExecutionContext(session.getServletRequest(), session.getServletResponse(), null, null);
+
+        WebContextBuilder builder = new DefaultWebContextBuilder();
+        builder.set(session.getServletRequest(), session.getServletResponse(), null, session.getServletContext(), new DefaultContainer());
+
+        WebContextFactory.setWebContextBuilder(builder);
         Collection c = creatorManager.getCreatorNames();
-        ExecutionContext.unset();
+        builder.unset();
+
         return c;
     }
-
 }

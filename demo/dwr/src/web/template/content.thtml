@@ -5,6 +5,12 @@ date: <object name="dateTextField"></object>
 number: <object name="numberTextField"></object>
 </p>
 <p>
+country: <object name="countryInput"></object>
+</p>
+<p>
+<object name="countryBox"></object>
+</p>
+<p>
 <object name="submit"></object>
 </p>
 <p>

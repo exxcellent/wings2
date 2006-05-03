@@ -9,9 +9,11 @@ import org.wings.externalizer.ExternalizedResource;
 import org.wings.event.SRequestEvent;
 import org.wings.event.SRequestListener;
 import org.wings.*;
+import org.wings.plaf.css.DWRScriptListener;
 import org.wings.resource.DefaultURLResource;
 import org.wings.header.Script;
 import org.wings.script.JavaScriptListener;
+import org.wings.script.JavaScriptEvent;
 import org.wings.text.SAbstractFormatter;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,8 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.io.IOException;
 
+import dwr.domain.AutoCompletionDummy;
+
 /**
  * @author hengels
  * @version $Revision$
@@ -29,6 +33,8 @@ public class DWRExample
 {
     private SFormattedTextField dateTextField;
     private SFormattedTextField numberTextField;
+    private STextField countryInput;
+    private SComboBox countryBox;
     private SButton button;
     private SFrame frame;
 
@@ -39,18 +45,40 @@ public class DWRExample
         numberTextField = new SFormattedTextField(new NumberFormatter());
         numberTextField.setName("numberTextField");
 
+        countryInput = new STextField();
+        countryInput.setName("countryInput");
+
+        countryBox = new SComboBox();
+        countryBox.setName("countryBox");
+
+        String name = "countrySelection_" + System.identityHashCode(countryInput);
+        countryInput.addScriptListener(new DWRScriptListener(
+                JavaScriptEvent.ON_KEY_UP,
+                name + ".getData(DWRUtil.getValue('" + countryInput.getName() + "_input'),          \n" +
+                        "                                                                           \n" +
+                        "function(countries) {                                                      \n" +
+                        "    DWRUtil.removeAllOptions('" + countryBox.getName() + "_select');       \n" +
+                        "    DWRUtil.addOptions('" + countryBox.getName() + "_select', countries);  \n" +
+                        "});                                                                        \n",
+                name,
+                new AutoCompletionDummy()
+        ));
+
         button = new SButton("submit");
 
         SForm form = new SForm();
         form.setLayout(new STemplateLayout(SessionManager.getSession().getServletContext().getRealPath("/template/content.thtml")));
         form.add(dateTextField, "dateTextField");
         form.add(numberTextField, "numberTextField");
+        form.add(countryInput, "countryInput");
+        form.add(countryBox, "countryBox");
         form.add(button, "submit");
 
         frame = new SFrame("DWRExample example");
         frame.getContentPane().add(form);
         frame.show();
         frame.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
+        frame.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
     }
 
     public static class DateFormatter extends SAbstractFormatter {

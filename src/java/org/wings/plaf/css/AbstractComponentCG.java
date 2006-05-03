@@ -14,6 +14,9 @@
 package org.wings.plaf.css;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 import javax.swing.InputMap;
 
@@ -21,8 +24,9 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
+import org.wings.script.ScriptListener;
 import org.wings.plaf.ComponentCG;
-import org.wings.style.Selector;
+import org.wings.plaf.css.dwr.CallableManager;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.
@@ -46,7 +50,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      */
     public void installCG(SComponent component) {
         Class clazz = component.getClass();
-        while (clazz.getPackage() == null || "org.wings".equals(clazz.getPackage().getName()) == false)
+        while (clazz.getPackage() == null || !"org.wings".equals(clazz.getPackage().getName()))
             clazz = clazz.getSuperclass();
         String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);
@@ -76,6 +80,51 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                 component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
             }
         }
+
+        // Add script listener support.
+        List scriptListenerList = component.getScriptListenerList();
+        if (scriptListenerList != null && scriptListenerList.size() > 0) {
+            if (!(scriptListenerList instanceof VersionedList)) {
+                scriptListenerList = new VersionedList(scriptListenerList);
+                component.setScriptListenerList(scriptListenerList);
+            }
+
+            final VersionedList versionedList = (VersionedList) scriptListenerList;
+            final Integer scriptListenerListVersion = (Integer) component.getClientProperty("scriptListenerListVersion");
+            if (scriptListenerListVersion == null || versionedList.getVersion() != scriptListenerListVersion.intValue())
+            {
+
+                List removeCallables = new ArrayList();
+                // Remove all existing - and maybe unusable - DWR script listeners.
+                for (Iterator iter = CallableManager.getInstance().callableNames().iterator(); iter.hasNext();) {
+                    Object o = iter.next();
+                    if (o instanceof String) {
+                        removeCallables.add(o);
+                    }
+                }
+
+                for (Iterator iter = removeCallables.iterator(); iter.hasNext(); ) {
+                    Object o = iter.next();
+                    if (o instanceof String) {
+                        CallableManager.getInstance().unregisterCallable((String) o);
+                    }
+                }
+
+                // Add DWR script listener support.
+                ScriptListener[] scriptListeners = component.getScriptListeners();
+                for (int i = 0; i < scriptListeners.length; i++) {
+                    if (scriptListeners[i] instanceof DWRScriptListener) {
+                        DWRScriptListener scriptListener = (DWRScriptListener) scriptListeners[i];
+                        CallableManager.getInstance().registerCallable(scriptListener.getCallableName(), scriptListener.getCallable());
+
+                        // TODO: maybe unnecessary. check for former or later usage.
+                        //component.putClientProperty("callable", scriptListener.getCallableName());
+                    }
+                }
+
+                component.putClientProperty("scriptListenerListVersion", new Integer(versionedList.getVersion()));
+            }
+        }
     }
 
     public boolean wantsPrefixAndSuffix(SComponent component) {
@@ -83,7 +132,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     protected final SIcon getBlindIcon() {
-        if(BLIND_ICON == null)
+        if (BLIND_ICON == null)
             BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
         return BLIND_ICON;
     }

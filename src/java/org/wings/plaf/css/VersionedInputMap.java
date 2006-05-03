@@ -40,6 +40,7 @@ public class VersionedInputMap extends InputMap {
     }
 
     public void clear() {
+        version++;
         inputMap.clear();
     }
 
@@ -61,6 +62,7 @@ public class VersionedInputMap extends InputMap {
     }
 
     public void remove(KeyStroke key) {
+        version++;
         inputMap.remove(key);
     }
 

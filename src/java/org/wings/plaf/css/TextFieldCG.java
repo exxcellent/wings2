@@ -21,6 +21,8 @@ import org.wings.io.Device;
 import org.wings.io.SStringBuilder;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.JavaScriptEvent;
 import org.wings.text.SAbstractFormatter;
 
 import java.io.IOException;
@@ -53,7 +55,7 @@ public class TextFieldCG extends AbstractComponentCG implements
                         textField.removeScriptListener(scriptListener);
                 }
 
-                textField.addScriptListener(new DWRScriptListener("onblur",
+                textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
                         "document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = '';" +
                         name +
                         ".validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('INPUT')[0].value)",
@@ -67,6 +69,9 @@ public class TextFieldCG extends AbstractComponentCG implements
                         "}\n", new SComponent[] { textField }));
             }
         }
+        else {
+            super.componentChanged(component);
+        }
     }
 
     public void write(final Device device,
@@ -75,6 +80,7 @@ public class TextFieldCG extends AbstractComponentCG implements
         final STextField textField = (STextField) component;
 
         device.print("<input type=\"text\"");
+        Utils.optAttribute(device, "id", textField.getName() + "_input");
         Utils.optAttribute(device, "size", textField.getColumns());
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
 

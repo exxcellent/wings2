@@ -3,9 +3,7 @@
  */
 package org.wings.plaf.css.dwr;
 
-import uk.ltd.getahead.dwr.Creator;
-
-import org.w3c.dom.Element;
+import org.directwebremoting.Creator;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
 
@@ -13,6 +11,7 @@ import java.util.Map;
 
 /**
  * @author hengels
+ * @author raedler
  * @version $Revision$
  */
 public class SessionCreator implements Creator
@@ -22,9 +21,6 @@ public class SessionCreator implements Creator
 
     public SessionCreator(Object callable) {
         this.callable = callable;
-    }
-
-    public void init(Element config) {
     }
 
     public void setProperties(Map params) throws IllegalArgumentException {
@@ -40,6 +36,14 @@ public class SessionCreator implements Creator
 
     public String getScope() {
         return SESSION;
+    }
+
+    public boolean isCacheable() {
+        return false;
+    }
+
+    public String getJavascript() {
+        return null;
     }
 
     public Session getSession() {
