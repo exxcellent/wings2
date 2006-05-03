@@ -19,9 +19,11 @@ import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.io.Device;
+import org.wings.script.JavaScriptEvent;
+
 import java.io.IOException;
 
-public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
+public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG { 
 
     /**
      * a serializable class is supposed to have this ID. 
@@ -31,14 +33,11 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
     public void write(final Device device, final SComponent component)
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
-        
+
         if (button.getShowAsFormComponent()) {
             writeButtonStart(device, button, button.getToggleSelectionParameter());
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
-            if (!button.isEnabled()) {
-                device.print(" disabled=\"disabled\"");
-            }
         } else {
             RequestURL addr = button.getRequestURL();
             addr.addParameter(button, button.getToggleSelectionParameter());
@@ -66,7 +65,12 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.writeEvents(device, button);
+        if (button.getShowAsFormComponent()) {
+            Utils.writeEvents(device, button, new String[] { JavaScriptEvent.ON_CLICK } );
+        } else {
+            Utils.writeEvents(device, button);
+        }
+
         device.print(">");
 
         final String text = button.getText();
@@ -88,10 +92,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
-        if (button.getShowAsFormComponent())
-            device.print("</button>");
-        else
-            device.print("</a>");
+        device.print("</a>");
     }
 
     /**
@@ -100,14 +101,10 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
      * @throws IOException
      */
     protected void writeButtonStart(final Device device, final SComponent button, String value) throws IOException {
-        device.print("<button type=\"submit\" name=\"");
-        device.print(Utils.event(button));
-        device.print("\" value=\"");
-        device.print(value);
-        device.print("\"");
+        Utils.printButtonStart(device, button, value);
     }
 
-    /** 
+    /**
      * Convenience method to keep differences between default and msie
      * implementations small
      * @param device

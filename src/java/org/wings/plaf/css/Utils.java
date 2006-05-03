@@ -13,31 +13,22 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Color;
-import java.awt.Font;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.*;
+import org.wings.io.Device;
+import org.wings.io.NullDevice;
+import org.wings.script.ScriptListener;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.JavaScriptEvent;
+
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wings.LowLevelEventListener;
-import org.wings.Renderable;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SDimension;
-import org.wings.SFont;
-import org.wings.SFrame;
-import org.wings.SLayoutManager;
-import org.wings.style.*;
-import org.wings.io.Device;
-import org.wings.io.NullDevice;
-import org.wings.script.ScriptListener;
-
-import javax.swing.text.AttributeSet;
+import java.util.List;
 
 /**
  * Utils.java
@@ -64,8 +55,6 @@ public final class Utils {
     protected Utils() {
     }
 
-    private static final Set ieNonInheritedStyles = new HashSet();
-
     /**
      * Renders a container using its Layout manager or fallback just one after another.
      */
@@ -85,11 +74,25 @@ public final class Utils {
 
     public static void writeEvents(Device d, SComponent c)
             throws IOException {
+        writeEvents(d, c, new String[] {});
+    }
+
+    public static void writeEvents(Device d, SComponent c, String[] suppressScriptListenerTypes)
+            throws IOException {
+        java.util.List types = new ArrayList();
+        if (suppressScriptListenerTypes != null && suppressScriptListenerTypes.length > 0) {
+            for (int i = 0; i < suppressScriptListenerTypes.length; i++) {
+                types.add(suppressScriptListenerTypes[i].toLowerCase());
+            }
+        }
         ScriptListener[] listeners = c.getScriptListeners();
         if (listeners.length > 0) {
             Map eventScripts = new HashMap();
             for (int i = 0; i < listeners.length; i++) {
                 final ScriptListener script = listeners[i];
+                if (types.contains(script.getEvent().toLowerCase()))
+                    continue;
+
                 final String event = script.getEvent();
                 String eventScriptCode = script.getCode();
 
@@ -313,11 +316,6 @@ public final class Utils {
         return styleString;
     }
 
-    public static void appendIENonInheritedStyles(final Device device, final Style style) throws IOException {
-        CSSAttributeSet.writeIncluding(device, style.properties(), ieNonInheritedStyles);
-    }
-
-
     /**
      * Appends a CSS inline style string for the preferred size of the passed component to the passed stringbuffer.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
@@ -365,7 +363,6 @@ public final class Utils {
             }
         }
     }
-
 
     /**
      * Generates a new CSS Inline Style string for the passed SDimension.
@@ -434,7 +431,7 @@ public final class Utils {
       * @throws IOException
       */
     public static void quote(final Device d, final String s, final boolean quoteNewline,
-                             final boolean quoteSpaces, final boolean quoteApostroph)
+                              final boolean quoteSpaces, final boolean quoteApostroph)
             throws IOException {
         if (s == null) {
             return;
@@ -489,7 +486,7 @@ public final class Utils {
                          *     isolatin-char 160, _not_ space.
                          * (at least Konqueror behaves this correct; mozilla does not)
                          *                                                       Henner
-                         *                                                       
+                         *
                          * But we must do this for IE, since it doesn't accept the
                          * white-space: pre; property...so conditionalize it.
                          *                                                       Ole
@@ -850,4 +847,60 @@ public final class Utils {
         } else
             return styleString != null ? styleString : "";
     }
+
+    public static void printButtonStart(final Device device, final SComponent button, String value) throws IOException {
+        printButtonStart(device, button, value, true);
+    }
+
+    public static void printButtonStart(final Device device, final SComponent button, String value, boolean enabled) throws IOException {
+        if (enabled) {
+            device.print("<a href=\"#\" class=\"disabled\"");
+        } else {
+            device.print("<a href=\"#\" onClick=\"sendEvent(event,'");
+            device.print(value);
+            device.print("','");
+            device.print(Utils.event(button));
+            device.print("'");
+            device.print(applyOnClickListeners(button));
+            device.print(")\"");
+        }
+    }
+
+    public static void printButtonEnd(final Device device) throws IOException {
+        device.print("</a>");
+    }
+
+    public static String applyOnClickListeners(final SComponent button) throws IOException {
+        String script = "";
+        JavaScriptListener[] onClickListeners = getOnClickListeners(button);
+        if (onClickListeners != null && onClickListeners.length > 0) {
+            script = "new Array(";
+            for (int i = 0; i < onClickListeners.length; i++) {
+                if (onClickListeners[i].getScript() != null) {
+                    script += "function(){" + onClickListeners[i].getScript() + "},";
+                } else {
+                    script += "function(){" + onClickListeners[i].getCode() + "},";
+                }
+            }
+            script = script.substring(0, script.length()-1);
+            script += ")";
+            script = "," + script;
+        }
+        return script;
+    }
+
+    private static JavaScriptListener[] getOnClickListeners(final SComponent button) {
+        List result = new ArrayList();
+        ScriptListener[] listeners = button.getScriptListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            if (listeners[i] instanceof JavaScriptListener) {
+                JavaScriptListener jsListener = (JavaScriptListener) listeners[i];
+                if (JavaScriptEvent.ON_CLICK.equals(jsListener.getEvent().toLowerCase())) {
+                    result.add(jsListener);
+                }
+            }
+        }
+        return (JavaScriptListener[]) result.toArray(new JavaScriptListener[result.size()]);
+    }
+
 }

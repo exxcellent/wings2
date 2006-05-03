@@ -3,17 +3,13 @@
  */
 package org.wings.plaf.css;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SIcon;
-import org.wings.SPageScroller;
-import org.wings.SResourceIcon;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.session.SessionManager;
+
+import java.io.IOException;
 
 /**
  * CG for a pagescroller.
@@ -282,10 +278,6 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
      * @see org.wings.plaf.css.ScrollBarCG#writeButtonStart(org.wings.io.Device, org.wings.SScrollBar, java.lang.String)
      */
     protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
-        device.print(Utils.event(component));
-        device.print("\" value=\"");
-        device.print(value);
-        device.print("\"");
+        Utils.printButtonStart(device, component, value);
     }
 }

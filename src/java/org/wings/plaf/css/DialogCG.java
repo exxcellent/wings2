@@ -14,14 +14,14 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SComponent;
 import org.wings.SDialog;
 import org.wings.SIcon;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
+
+import java.io.IOException;
 
 public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
     /**
@@ -64,14 +64,7 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
         // addr.addParameter(Utils.event(frame), event);
 
         if (showAsFormComponent) {
-            device.print("<button");
-            if (cssClass != null) {
-                device.print(" class=\"");
-                device.print(cssClass);
-                device.print("\"");
-            }
-            device.print(" name=\"").print(Utils.event(frame)).print(
-                    "\" value=\"").print(event).print("\">");
+            Utils.printButtonStart(device, frame, ""+event);
         } else {
             device.print("<a");
             if (cssClass != null) {

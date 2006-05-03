@@ -38,9 +38,6 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
             writeLinkStart(device, button);
         }
 
-        if (!button.isEnabled())
-            device.print(" disabled=\"true\"");
-
         Utils.writeEvents(device, button);
         device.print(">");
 
@@ -76,11 +73,7 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
     }
 
     protected void writeButtonStart(Device device, SClickable button) throws IOException {
-        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
-        device.print(button.getEventTarget().getEncodedLowLevelEventId());
-        device.print("\" value=\"");
-        device.print(button.getEvent());
-        device.print("\"");
+        Utils.printButtonStart(device, button, button.getEvent());
     }
 
     protected SIcon getIcon(SClickable abstractButton) {

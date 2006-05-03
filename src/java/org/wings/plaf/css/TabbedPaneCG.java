@@ -14,18 +14,6 @@
 package org.wings.plaf.css;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.KeyStroke;
-
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
@@ -33,15 +21,21 @@ import org.wings.STabbedPane;
 import org.wings.io.Device;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
-import org.wings.style.Selector;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TabbedPaneCG extends AbstractComponentCG {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     private static final Map placements = new HashMap();
-    
+
     static {
         placements.put(new Integer(SConstants.TOP), "top");
         placements.put(new Integer(SConstants.BOTTOM), "bottom");
@@ -57,8 +51,8 @@ public class TabbedPaneCG extends AbstractComponentCG {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK, false), "previous");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK, false), "next");
         tab.setInputMap(SComponent.WHEN_IN_FOCUSED_FRAME, inputMap);
-        
-        
+
+
         Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand()))
@@ -80,7 +74,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
         if (tabbedPane.getTabCount() > 0) {
             final boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
             final int placement = tabbedPane.getTabPlacement();
-    
+
             device.print("<table");
             if (childSelectorWorkaround)
                 Utils.optAttribute(device, "class", component.getStyle());
@@ -88,7 +82,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
             Utils.printCSSInlineFullSize(device, component.getPreferredSize());
             Utils.writeEvents(device, component);
             device.print(">");
-    
+
             if (placement == SConstants.TOP)
                 device.print("<tr><th placement=\"top\"");
             else if (placement == SConstants.LEFT)
@@ -97,7 +91,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("<tr><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
             }
-    
+
             if (childSelectorWorkaround) {
                 if (placement == SConstants.TOP)
                     Utils.optAttribute(device, "class", "STabbedPane_top");
@@ -107,12 +101,12 @@ public class TabbedPaneCG extends AbstractComponentCG {
                     Utils.optAttribute(device, "class", "STabbedPane_pane");
             }
             device.print(">");
-    
+
             if (placement == SConstants.TOP || placement == SConstants.LEFT)
                 writeTabs(device, tabbedPane);
             else
                 writeSelectedPaneContent(device, tabbedPane);
-    
+
             if (placement == SConstants.TOP) {
                 device.print("</th></tr><tr><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
@@ -123,7 +117,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("</td><th placement=\"right\"");
             else if (placement == SConstants.BOTTOM)
                 device.print("</td></tr><tr><th placement=\"bottom\"");
-    
+
             if (childSelectorWorkaround) {
                 if (placement == SConstants.RIGHT)
                     Utils.optAttribute(device, "class", "STabbedPane_right");
@@ -133,7 +127,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                     Utils.optAttribute(device, "class", "STabbedPane_pane");
             }
             device.print(">");
-    
+
             if (placement == SConstants.TOP || placement == SConstants.LEFT) {
                 writeSelectedPaneContent(device, tabbedPane);
                 device.print("</td></tr></table>");
@@ -171,13 +165,13 @@ public class TabbedPaneCG extends AbstractComponentCG {
             String tooltip = tabbedPane.getToolTipText();
             if (nbspWorkaround)
                 title = Utils.nonBreakingSpaces(title);
-            
+
             /*
              * needed here so that the tabs can be wrapped. else they are in
              * one long line. noticed in firefox and konqueror.
              */
             Utils.printNewline(device, tabbedPane);
-            
+
             if (showAsFormComponent) {
                 writeButtonStart(device, tabbedPane, String.valueOf(i));
             } else {
@@ -241,23 +235,15 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("\" style=\"margin-right:0.2em;\"/>");
             }
 
-            if (showAsFormComponent) {
-                writeButtonEnd(device);
-            } else {
-                device.print("</a>");
-            }
+            writeButtonEnd(device);
         }
     }
 
     protected void writeButtonEnd(Device device) throws IOException {
-        device.print("</button>");
+        Utils.printButtonEnd(device);
     }
 
     protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
-        device.print(Utils.event(component));
-        device.print("\" value=\"");
-        device.print(value);
-        device.print("\"");
+        Utils.printButtonStart(device, component, value);
     }
 }

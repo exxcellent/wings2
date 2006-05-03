@@ -14,8 +14,6 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
@@ -24,6 +22,8 @@ import org.wings.SInternalFrame;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
+
+import java.io.IOException;
 
 public class InternalFrameCG extends AbstractComponentCG implements
         org.wings.plaf.InternalFrameCG {
@@ -74,14 +74,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
         // addr.addParameter(Utils.event(frame), event);
 
         if (showAsFormComponent) {
-            device.print("<button");
-            if (cssClass != null) {
-                device.print(" class=\"");
-                device.print(cssClass);
-                device.print("\"");
-            }
-            device.print(" name=\"").print(Utils.event(frame)).print(
-                    "\" value=\"").print(event).print("\">");
+            Utils.printButtonStart(device, frame, ""+event);
         } else {
             device.print("<a");
             if (cssClass != null) {
@@ -96,11 +89,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
         }
         writeIcon(device, icon, null);
 
-        if (showAsFormComponent) {
-            device.print("</button>");
-        } else {
-            device.print("</a>");
-        }
+        device.print("</a>");
     }
 
 

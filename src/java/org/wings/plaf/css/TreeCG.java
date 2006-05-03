@@ -14,21 +14,16 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
-
-import org.wings.RequestURL;
-import org.wings.SCellRendererPane;
-import org.wings.SComponent;
-import org.wings.SIcon;
-import org.wings.STree;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.resource.ResourceManager;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.tree.STreeCellRenderer;
+
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import java.io.IOException;
 
 public class TreeCG extends AbstractComponentCG implements
         org.wings.plaf.TreeCG {
@@ -264,11 +259,7 @@ public class TreeCG extends AbstractComponentCG implements
 
 
     protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        device.print("<button class=\"borderless\" type=\"submit\" name=\"");
-        device.print(Utils.event(component));
-        device.print("\" value=\"");
-        device.print(value);
-        device.print("\"");
+        Utils.printButtonStart(device, component, value);
     }
 
 

@@ -36,17 +36,6 @@ public class CheckBoxCG extends org.wings.plaf.css.CheckBoxCG implements SParent
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
     /* (non-Javadoc)
-     * @see org.wings.plaf.css.ButtonCG#writeButtonStart(org.wings.io.Device, org.wings.SAbstractButton)
-     */
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");
-        device.print(value);
-        device.print("','");
-        device.print(Utils.event(component));
-        device.print("')\"");
-    }
-
-    /* (non-Javadoc)
      * @see org.wings.plaf.css.CheckBoxCG#writeLinkStart(org.wings.io.Device, org.wings.RequestURL)
      */
     protected void writeLinkStart(final Device device, RequestURL addr) throws IOException {

@@ -13,8 +13,6 @@
  */
 package org.wings.plaf.css.msie;
 
-import java.io.IOException;
-
 import org.wings.RequestURL;
 import org.wings.SComponent;
 import org.wings.SFrame;
@@ -28,6 +26,8 @@ import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
+
+import java.io.IOException;
 
 public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameListener {
     /**
@@ -44,14 +44,6 @@ public class ListCG extends org.wings.plaf.css.ListCG implements SParentFrameLis
         device.print("<a href=\"#\" onclick=\"location.href='");
         Utils.write(device, selectionAddr.toString());
         device.print("';\"");
-    }
-
-    protected void writeButtonStart(Device device, SComponent component, String value) throws IOException {
-        device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");
-        device.print(value);
-        device.print("','");
-        device.print(Utils.event(component));
-        device.print("')\"");
     }
 
     public void installCG(SComponent component) {

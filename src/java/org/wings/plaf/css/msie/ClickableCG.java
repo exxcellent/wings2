@@ -39,15 +39,6 @@ public class ClickableCG extends org.wings.plaf.css.ClickableCG implements SPare
     private static final long serialVersionUID = 1L;
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
-
-    protected void writeButtonStart(Device device, SClickable button) throws IOException {
-        device.print("<button class=\"borderless\" onclick=\"sendEvent(event,'");
-        device.print(button.getEvent());
-        device.print("','");
-        device.print(button.getEventTarget().getName());
-        device.print("')\"");
-    }
-
     protected void writeLinkStart(Device device, SClickable clickable) throws IOException {
         device.print("<a href=\"#\" onclick=\"location.href='");
         Utils.write(device, clickable.getURL());
