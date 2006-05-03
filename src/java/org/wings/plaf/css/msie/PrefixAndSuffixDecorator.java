@@ -60,7 +60,7 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         Utils.optAttribute(device, "id", component.getName());
         // Special handling: Mark Titled Borders for styling
 
-        Utils.optAttribute(device, "style", getInlineStyles(device, component));
+        Utils.optAttribute(device, "style", getInlineStyles(component));
 
         if (component instanceof LowLevelEventListener) {
             LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) component;
@@ -104,10 +104,18 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 
-    protected String getInlineStyles(Device device, SComponent component) {
+    protected String getInlineStyles(SComponent component) {
         SDimension prefSize = component.getPreferredSize();
         SStringBuilder inlineStyles = Utils.generateCSSInlinePreferredSize(new SStringBuilder(), prefSize, component.getOversize(true), component.getOversize(false));
-        Utils.appendCSSComponentInlineColorStyle(inlineStyles, component);
+        if (component instanceof DragSource)
+            inlineStyles.append("position:relative;");
+        //Utils.appendCSSComponentInlineColorStyle(inlineStyles, component);
+        Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
+        if (allStyle != null)
+            inlineStyles.append(allStyle.toString());
+        SBorder border = component.getBorder();
+        if (border != null && border.getAttributes() != null)
+            inlineStyles.append(border.getAttributes().toString());
         return inlineStyles.toString();
     }
 
