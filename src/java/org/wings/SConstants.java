@@ -23,14 +23,7 @@ public interface SConstants {
     /**
      * Character to separate epoch id from component id in lowlevel event requests.
      */
-    String UID_DIVIDER = "_";
-
-    /**
-     * String that identifies the button pressed in workaround of the buggy IE
-     * button tag support. (IE sends all buttons in a form, and as value it sends
-     * the innerHtml property.) 
-     */
-    String IEFIX_BUTTONACTION = "buttonAction";
+    char UID_DIVIDER = '-';
 
     /**
      * Component alignment constant: Do not explicitly align.

@@ -75,7 +75,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         Utils.write(device, Utils.event(component));
         device.print("\" value=\"");
         Utils.write(device, component.getName());
-        Utils.write(device, SConstants.UID_DIVIDER);
+        device.print(SConstants.UID_DIVIDER);
         device.print("\" />");
 
         // Render the container itself

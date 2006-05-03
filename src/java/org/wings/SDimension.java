@@ -259,7 +259,6 @@ public class SDimension implements Serializable {
             try {
                 return new DecimalFormat().parse(value, new ParsePosition(0)).intValue();
             } catch (Exception e) {
-                log.warn("Can not parse [" + value + "]", e);
                 return AUTO_INT;
             }
         }

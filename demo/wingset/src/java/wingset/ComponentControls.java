@@ -31,6 +31,24 @@ import java.util.List;
 public class ComponentControls
     extends SPanel
 {
+    protected static final Object[] BORDERS = new Object[] {
+        new Object[] { "none",    null },
+        new Object[] { "raised",  new SBevelBorder(SBevelBorder.RAISED, new Insets(5, 5, 5, 5)) },
+        new Object[] { "lowered", new SBevelBorder(SBevelBorder.LOWERED, new Insets(5, 5, 5, 5)) },
+        new Object[] { "line",    new SLineBorder(2, new Insets(5, 5, 5, 5)) },
+        new Object[] { "grooved", new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)) },
+        new Object[] { "ridged",  new SEtchedBorder(SEtchedBorder.RAISED, new Insets(5, 5, 5, 5)) },
+        new Object[] { "titled",  new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)), "Border Title") },
+    };
+
+    protected static final Object[] COLORS = new Object[] {
+        new Object[] { "translucent", null },
+        new Object[] { "yellow",      Color.YELLOW },
+        new Object[] { "red",         Color.RED },
+        new Object[] { "green",       Color.GREEN },
+        new Object[] { "blue",        Color.BLUE },
+    };
+
     protected final List components = new LinkedList();
 
     protected SToolBar globalControls = new SToolBar();
@@ -38,53 +56,26 @@ public class ComponentControls
     protected final STextField widthTextField = new STextField();
     protected final STextField heightTextField = new STextField();
     protected final STextField insetsTextField = new STextField();
-    protected final SComboBox borderComboBox = new SComboBox(new String[] {
-        "none",
-        "raised",
-        "lowered",
-        "line",
-        "grooved",
-        "ridged",
-        "titled",
-    });
+
+    protected final SComboBox borderComboBox = new SComboBox(BORDERS);
     protected final STextField borderThicknessTextField = new STextField();
-    protected final SComboBox backgroundComboBox = new SComboBox(new String[] {
-        "translucent",
-        "yellow",
-        "red",
-        "green",
-        "blue",
-    });
+
+    protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
     protected final SButton applyButton;
-
-    SBorder[] borders = new SBorder[] {
-        null,
-        new SBevelBorder(SBevelBorder.RAISED, new Insets(5, 5, 5, 5)),
-        new SBevelBorder(SBevelBorder.LOWERED, new Insets(5, 5, 5, 5)),
-        new SLineBorder(2, new Insets(5, 5, 5, 5)),
-        new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)),
-        new SEtchedBorder(SEtchedBorder.RAISED, new Insets(5, 5, 5, 5)),
-        new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)), "Border Title"),
-    };
-
-    Color[] backgrounds = new Color[] {
-        null,
-        Color.YELLOW,
-        Color.RED,
-        Color.GREEN,
-        Color.BLUE,
-    };
 
     public ComponentControls() {
         super(new SGridBagLayout());
         setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
 
-        applyButton = new SButton("apply");
+        applyButton = new SButton("Apply");
+        applyButton.setName("apply");
         applyButton.setActionCommand("apply");
+        applyButton.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+        applyButton.setVerticalAlignment(SConstants.CENTER_ALIGN);
         globalControls.setAttribute(CSSProperty.BORDER_LEFT, "1px solid #cccccc");
         localControls.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
         localControls.setAttribute(CSSProperty.BORDER_LEFT, "1px solid #cccccc");
-        localControls.setVisible(false);
+        //localControls.setVisible(false);
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;
@@ -103,6 +94,8 @@ public class ComponentControls
         insetsTextField.setToolTipText("length only");
         borderThicknessTextField.setColumns(2);
         borderThicknessTextField.setToolTipText("length only");
+        borderComboBox.setRenderer(new ObjectPairCellRenderer());
+        backgroundComboBox.setRenderer(new ObjectPairCellRenderer());
 
         globalControls.add(new SLabel("<html>width&nbsp;"));
         globalControls.add(widthTextField);
@@ -124,7 +117,7 @@ public class ComponentControls
 
                 int insets = 0;
                 try {
-                    insets = Integer.parseInt(borderThicknessTextField.getText());
+                    insets = Integer.parseInt(insetsTextField.getText());
                 }
                 catch (NumberFormatException e) {}
 
@@ -134,11 +127,11 @@ public class ComponentControls
                 }
                 catch (NumberFormatException e) {}
 
-                SBorder border = borders[borderComboBox.getSelectedIndex()];
+                SBorder border = (SBorder)getSelectedObject(borderComboBox);
                 if (border != null)
                     border.setThickness(borderThickness);
 
-                Color background = backgrounds[backgroundComboBox.getSelectedIndex()];
+                Color background = (Color)getSelectedObject(backgroundComboBox);
 
                 for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                     SComponent component = (SComponent) iterator.next();
@@ -151,9 +144,13 @@ public class ComponentControls
         });
     }
 
+    protected Object getSelectedObject(SComboBox combo) {
+        return combo.getSelectedIndex() != -1 ? ((Object[])combo.getSelectedItem())[1] : null;
+    }
+
     public void addControl(SComponent component) {
         localControls.add(component);
-        localControls.setVisible(true);
+        //localControls.setVisible(true);
     }
 
     public void addSizable(SComponent component) {
@@ -162,5 +159,13 @@ public class ComponentControls
 
     protected void addActionListener(ActionListener actionListener) {
         applyButton.addActionListener(actionListener);
+    }
+
+    protected static class ObjectPairCellRenderer extends SDefaultListCellRenderer {
+        public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int row) {
+            Object[] objects = (Object[])value;
+            value = objects[0];
+            return super.getListCellRendererComponent(list, value, selected, row);
+        }
     }
 }

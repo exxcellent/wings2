@@ -32,19 +32,14 @@ public class TabbedPaneExample extends WingSetPane {
     private final static int INITIAL_TAB_COUNT = 10;
     private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
-    private final static Object[] COLORS = new Object[] {
-        new Object[] { "Translucent", null },
-        new Object[] { "Yellow", new Color(255, 255, 200) },
-        new Object[] { "Green", new Color(200, 255, 200) },
-        new Object[] { "Blue", new Color(200, 200, 255) },
-        new Object[] { "Red", new Color(255, 200, 200) },
-    };
+
     private final static Object[] TAB_PLACEMENTS = new Object[] {
         new Object[] { "Top", new Integer(SConstants.TOP) },
         new Object[] { "Left", new Integer(SConstants.LEFT) },
         new Object[] { "Right", new Integer(SConstants.RIGHT) },
         new Object[] { "Bottom", new Integer(SConstants.BOTTOM) }
     };
+
     private TabbedPaneControls controls;
     private STabbedPane tabbedPane;
     private STextArea textArea;
@@ -162,14 +157,6 @@ public class TabbedPaneExample extends WingSetPane {
             p.add(textArea);
             tabbedPane.add("Tab " + tabCount, p);
             tabCount++;
-        }
-
-        private class ObjectPairCellRenderer extends SDefaultListCellRenderer {
-            public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int row) {
-                Object[] objects = (Object[])value;
-                value = objects[0];
-                return super.getListCellRendererComponent(list, value, selected, row);
-            }
         }
     }
 }
