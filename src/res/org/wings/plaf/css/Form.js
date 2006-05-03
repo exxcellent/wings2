@@ -29,7 +29,7 @@ function preventDefault(event) {
     event.cancelBubble = true;
 }
 
-function sendEvent(event, eventValue, eventName) {
+function sendEvent(event, eventValue, eventName, clientHandlers) {
     event = getEvent(event);
     var target = getTarget(event)
     var form = getParentByTagName(target, "FORM");
@@ -38,16 +38,26 @@ function sendEvent(event, eventValue, eventName) {
         eventName = div.getAttribute("eid");
     }
 
-    if ( form != null ) {
-        var eventNode = document.createElement("input");
-        eventNode.setAttribute('type', 'hidden');
-        eventNode.setAttribute('name', eventName);
-        eventNode.setAttribute('value', eventValue);
-        form.appendChild(eventNode);
-        form.submit();
+    var doSubmit = true;
+    if (clientHandlers) {
+        for (var i = 0; i < clientHandlers.length; i++) {
+            doSubmit = clientHandlers[i]();
+            if (doSubmit == false) break;
+        }
     }
-    else {
-        document.location = "?" + eventName + "=" + eventValue;
+
+    if (doSubmit) {
+        if ( form != null ) {
+            var eventNode = document.createElement("input");
+            eventNode.setAttribute('type', 'hidden');
+            eventNode.setAttribute('name', eventName);
+            eventNode.setAttribute('value', eventValue);
+            form.appendChild(eventNode);
+            form.submit();
+        }
+        else {
+            document.location = "?" + eventName + "=" + eventValue;
+        }
     }
 }
 
