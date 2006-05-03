@@ -115,12 +115,6 @@ public class ComponentControls
                 preferredSize.setWidth(widthTextField.getText());
                 preferredSize.setHeight(heightTextField.getText());
 
-                int insets = 0;
-                try {
-                    insets = Integer.parseInt(insetsTextField.getText());
-                }
-                catch (NumberFormatException e) {}
-
                 int borderThickness = 1;
                 try {
                     borderThickness = Integer.parseInt(borderThicknessTextField.getText());
@@ -136,7 +130,6 @@ public class ComponentControls
                 for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                     SComponent component = (SComponent) iterator.next();
                     component.setPreferredSize(preferredSize);
-                    component.setInsets(new Insets(insets, insets, insets, insets));
                     component.setBorder(border);
                     component.setBackground(background);
                 }

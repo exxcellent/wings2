@@ -939,24 +939,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Return the components insets color.
-     *
-     * @return the insets or <code>null</code>
-     */
-    public Insets getInsets() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_ALL) == null ? null : CSSStyleSheet.getInsets((CSSAttributeSet) dynamicStyles.get(SELECTOR_ALL));
-    }
-
-    /**
-     * Set the insets color.
-     *
-     * @param insets the new insets or <code>null</code>
-     */
-    public void setInsets(Insets insets) {
-        setAttributes(SELECTOR_ALL, CSSStyleSheet.getAttributes(insets));
-    }
-
-    /**
      * Set the visibility.
      *
      * @param visible wether this component will show or not
@@ -1938,16 +1920,16 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     
     public final int getOversize(boolean horizontal) {
         int oversize = 0;
-        Insets insets = getInsets();
         SBorder border = getBorder();
         if (border != null) {
             oversize += border.getThickness() * 2; 
-        }
-        if (insets != null) {
-            if (horizontal) {
-                oversize += insets.right + insets.left;
-            } else {
-                oversize += insets.top + insets.bottom;
+            Insets insets = border.getInsets();
+            if (insets != null) {
+                if (horizontal) {
+                    oversize += insets.right + insets.left;
+                } else {
+                    oversize += insets.top + insets.bottom;
+                }
             }
         }
         return oversize;

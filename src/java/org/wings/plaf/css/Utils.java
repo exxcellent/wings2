@@ -24,6 +24,7 @@ import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
+import org.wings.border.SBorder;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.io.SStringBuilder;
@@ -433,6 +434,15 @@ public final class Utils {
     public static SStringBuilder generateCSSInlineBorder(SStringBuilder styles, int borderSize) {
         if (borderSize > 0) {
             styles.append("border:").append(borderSize).append("px solid black;");
+        } else {
+            ; //styleString.append("border:none;"); Not necessary. Default
+        }
+        return styles;
+    }
+
+    public static SStringBuilder generateCSSInlineBorder(SStringBuilder styles, SBorder  border) {
+        if (border != null) {
+            styles.append("border:").append(border).append("px solid black;");
         } else {
             ; //styleString.append("border:none;"); Not necessary. Default
         }
