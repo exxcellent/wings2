@@ -15,8 +15,14 @@ package org.wings;
 
 import org.wings.io.Device;
 import org.wings.io.SStringBuilder;
+import org.wings.session.Session;
+import org.wings.session.SessionManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Handles a HTTP GET Address that can be updated with additional parameters.
@@ -25,6 +31,8 @@ import java.io.IOException;
  * @version $Revision$
  */
 public class RequestURL extends SimpleURL {
+    private static final Log log = LogFactory.getLog(RequestURL.class);
+
     private static final String DEFAULT_RESOURCE_NAME = "_";
 
     private String baseParameters;
@@ -37,14 +45,20 @@ public class RequestURL extends SimpleURL {
 
     private SStringBuilder parameters = null;
 
+    /**
+     * Current session encoding used for URLEncoder.
+     */
+    private final String characterEncoding;
 
     public RequestURL() {
+        this.characterEncoding = determineCharacterEncoding();
     }
 
     /**
      * copy constructor.
      */
     private RequestURL(RequestURL other) {
+        this.characterEncoding = determineCharacterEncoding();
         this.baseURL = other.baseURL;
         this.baseParameters = other.baseParameters;
         this.hasQuestMark = other.hasQuestMark;
@@ -56,6 +70,7 @@ public class RequestURL extends SimpleURL {
 
 
     public RequestURL(String baseURL, String encodedBaseURL) {
+        this.characterEncoding = determineCharacterEncoding();
         setBaseURL(baseURL, encodedBaseURL);
     }
 
@@ -107,7 +122,7 @@ public class RequestURL extends SimpleURL {
                 parameters = new SStringBuilder();
             else
                 parameters.append("&amp;");
-            parameters.append(parameter);
+            parameters.append(recode(parameter));
         }
         return this;
     }
@@ -122,7 +137,7 @@ public class RequestURL extends SimpleURL {
      */
     public RequestURL addParameter(String name, String value) {
         addParameter(name);
-        parameters.append("=").append(value);
+        parameters.append("=").append(recode(value));
         return this;
     }
 
@@ -135,8 +150,7 @@ public class RequestURL extends SimpleURL {
      * @return a reference to <code>this</code> to simplify 'call chaining'
      */
     public RequestURL addParameter(LowLevelEventListener comp, String value) {
-        addParameter(comp.getEncodedLowLevelEventId(), value);
-
+        addParameter(comp.getEncodedLowLevelEventId(), recode(value));
         return this;
     }
 
@@ -237,10 +251,6 @@ public class RequestURL extends SimpleURL {
         return erg.toString();
     }
 
-    private final boolean eq(Object a, Object b) {
-        return (a == b) || (a != null && a.equals(b));
-    }
-
     public boolean equals(Object o) {
         if (o == null) return false;
         if (!super.equals(o)) return false;
@@ -267,6 +277,38 @@ public class RequestURL extends SimpleURL {
     public Object clone() {
         return new RequestURL(this);
     }
+
+    private final boolean eq(Object a, Object b) {
+        return (a == b) || (a != null && a.equals(b));
+    }
+
+    /**
+     * Determine the current character encoding.
+     * @return Character encoding string or <code>null</code>
+     */
+    private String determineCharacterEncoding() {
+        String characterEncoding = null;
+        final Session session = SessionManager.getSession();
+        if (session != null) {
+            characterEncoding = session.getCharacterEncoding();
+        }
+        return characterEncoding;
+    }
+
+    /**
+     * Recoded passes string to URL with current encoding.
+     * @param parameter String to recode
+     * @return Encoded parameter or same if an error occured
+     */
+    private String recode(String parameter) {
+        try {
+            return URLEncoder.encode(parameter, characterEncoding);
+        } catch (UnsupportedEncodingException e) {
+            log.warn("Unknown character encoding?! "+characterEncoding, e);
+            return parameter;
+        }
+    }
+
 }
 
 

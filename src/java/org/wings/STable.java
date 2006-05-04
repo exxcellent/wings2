@@ -1513,7 +1513,7 @@ import java.util.HashMap;
      */
     protected void nameCellComponent(final SComponent component, final int row, final int col) {
         nameBuffer.setLength(0);
-        nameBuffer.append(component.getName()).append("_");
+        nameBuffer.append(this.getName()).append("_");
         if (row == -1)
             nameBuffer.append('h');
         else

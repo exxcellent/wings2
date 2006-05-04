@@ -80,7 +80,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.optAttribute(device, "class", "borderless"); // no borders around button
         } else if (showAsFormComponent && !useIconsInForms) {
-            device.print("<span");
+            device.print("<div");
         } else {
             Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
@@ -130,7 +130,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         if (showAsFormComponent && useIconsInForms)
             Utils.printButtonEnd(device);
         else if (showAsFormComponent && !useIconsInForms)
-            device.print("</span>");
+            device.print("</div>");
         else
             device.print("</a>");
     }
@@ -153,4 +153,5 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         Utils.writeEvents(device, button);
         device.print("/>");
     }
+
 }

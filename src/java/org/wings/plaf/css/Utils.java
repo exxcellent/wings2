@@ -15,7 +15,16 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
+import org.wings.LowLevelEventListener;
+import org.wings.Renderable;
+import org.wings.RequestURL;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SDimension;
+import org.wings.SFont;
+import org.wings.SFrame;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.io.SStringBuilder;
@@ -28,7 +37,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * MSIEUtils.java
@@ -281,7 +294,7 @@ public final class Utils {
 
     /**
      * Append a inline CSS style definition for the passed component of the aspect foreground- and background color.
-     * @param inlineStyles SStringBuilder to append to
+     * @param styleString SStringBuilder to append to
      * @param component Component to use as style source
      * @return The passed styleString
      */
@@ -318,7 +331,6 @@ public final class Utils {
     /**
      * Appends a CSS inline style string for the preferred size of the passed component to the passed stringbuffer.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
-     * @throws IOException
      */
     public static void appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
         appendCSSInlineSize(styleString, pComponent.getPreferredSize());
@@ -360,9 +372,7 @@ public final class Utils {
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      *
      * @param preferredSize Preferred size. May be null or contain null attributes
-     * @param oversize the size of the borders and paddings that might need to be subtracted
      * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
-     * @throws IOException
      */
     public static SStringBuilder generateCSSInlinePreferredSize(SStringBuilder buffer, SDimension preferredSize) {
         return appendCSSInlineSize(buffer, preferredSize);
@@ -671,8 +681,6 @@ public final class Utils {
      * testing purposes.
      */
     public static void main(String argv[]) throws Exception {
-
-
         Color c = new Color(255, 254, 7);
         Device d = new org.wings.io.StringBuilderDevice();
         write(d, c);
@@ -688,8 +696,7 @@ public final class Utils {
         for (int i = 0; i < 1000000; ++i) {
             quote(d,"this is a little & foo",true, false, false);
         }
-        System.err.println("took: " + (System.currentTimeMillis() - start)
-                + "ms");
+        System.out.println("took: " + (System.currentTimeMillis() - start) + "ms");
     }
 
     /**
@@ -862,14 +869,12 @@ public final class Utils {
             if (!enabled) {
                 device.print("<a href=\"#\" ");
             } else {
-                String url;
+                final RequestURL requestURL = button.getRequestURL();
                 if (value != null) {
-                    url = button.getRequestURL().addParameter(Utils.event(button) + "=" + value).toString();
-                } else {
-                    url = button.getRequestURL().toString();
+                    requestURL.addParameter(Utils.event(button), value);
                 }
                 device.print("<a href=\"");
-                device.print(url);
+                device.print(requestURL.toString());
                 device.print("\" ");
                 writeEvents(device, button);
             }
