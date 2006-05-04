@@ -162,6 +162,7 @@ public abstract class SAbstractBorder
 
     public CSSAttributeSet getAttributes() {
         if (attributes == null) {
+            attributes = new CSSAttributeSet();
             if (insets != null) {
                 attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
                 attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
