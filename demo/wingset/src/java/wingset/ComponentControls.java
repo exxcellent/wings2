@@ -57,7 +57,8 @@ public class ComponentControls
     protected final STextField heightTextField = new STextField();
     protected final STextField insetsTextField = new STextField();
 
-    protected final SComboBox borderComboBox = new SComboBox(BORDERS);
+    protected final SComboBox borderStyleComboBox = new SComboBox(BORDERS);
+    protected final SComboBox borderColorComboBox = new SComboBox(COLORS);
     protected final STextField borderThicknessTextField = new STextField();
 
     protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
@@ -101,7 +102,8 @@ public class ComponentControls
         insetsTextField.setToolTipText("length only");
         borderThicknessTextField.setColumns(2);
         borderThicknessTextField.setToolTipText("length only");
-        borderComboBox.setRenderer(new ObjectPairCellRenderer());
+        borderStyleComboBox.setRenderer(new ObjectPairCellRenderer());
+        borderColorComboBox.setRenderer(new ObjectPairCellRenderer());
         backgroundComboBox.setRenderer(new ObjectPairCellRenderer());
 
         globalControls.add(new SLabel("width "));
@@ -111,7 +113,8 @@ public class ComponentControls
         globalControls.add(new SLabel("    insets "));
         globalControls.add(insetsTextField);
         globalControls.add(new SLabel("   border "));
-        globalControls.add(borderComboBox);
+        globalControls.add(borderStyleComboBox);
+        globalControls.add(borderColorComboBox);
         globalControls.add(borderThicknessTextField);
         globalControls.add(new SLabel("   background "));
         globalControls.add(backgroundComboBox);
@@ -134,10 +137,12 @@ public class ComponentControls
                 }
                 catch (NumberFormatException e) {}
 
-                SBorder border = (SBorder)getSelectedObject(borderComboBox);
+                SBorder border = (SBorder)getSelectedObject(borderStyleComboBox);
                 if (border != null) {
+                    border.setColor((Color)getSelectedObject(borderColorComboBox));
                     border.setInsets(new Insets(insets, insets, insets, insets));
                     border.setThickness(borderThickness);
+                    
                 }
 
                 Color background = (Color)getSelectedObject(backgroundComboBox);

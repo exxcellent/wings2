@@ -31,8 +31,8 @@ import java.util.*;
 public class CSSProperty implements Serializable {
 
     /* These CSSProperty Constants are the complete CSS2 standard for visual
-    * media as in the CSS2 spec at http://www.w3.org/TR/REC-CSS2/propidx.html
-    */
+     * media as in the CSS2 spec at http://www.w3.org/TR/REC-CSS2/propidx.html
+     */
 
     public final static CSSProperty BACKGROUND = new CSSProperty("background");
 
@@ -46,48 +46,108 @@ public class CSSProperty implements Serializable {
 
     public final static CSSProperty BACKGROUND_REPEAT = new CSSProperty("background-repeat");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER = new CSSProperty("border");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_BOTTOM = new CSSProperty("border-bottom");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_BOTTOM_COLOR = new CSSProperty("border-bottom-color");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_BOTTOM_STYLE = new CSSProperty("border-bottom-style");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_BOTTOM_WIDTH = new CSSProperty("border-bottom-width");
 
     public final static CSSProperty BORDER_COLLAPSE = new CSSProperty("border-collapse");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_COLOR = new CSSProperty("border-color");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_LEFT = new CSSProperty("border-left");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_LEFT_COLOR = new CSSProperty("border-left-color");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_LEFT_STYLE = new CSSProperty("border-left-style");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_LEFT_WIDTH = new CSSProperty("border-left-width");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_RIGHT = new CSSProperty("border-right");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_RIGHT_COLOR = new CSSProperty("border-right-color");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_RIGHT_STYLE = new CSSProperty("border-right-style");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_RIGHT_WIDTH = new CSSProperty("border-right-width");
 
     public final static CSSProperty BORDER_SPACING = new CSSProperty("border-spacing");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_STYLE = new CSSProperty("border-style");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_TOP = new CSSProperty("border-top");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_TOP_COLOR = new CSSProperty("border-top-color");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_TOP_STYLE = new CSSProperty("border-top-style");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_TOP_WIDTH = new CSSProperty("border-top-width");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty BORDER_WIDTH = new CSSProperty("border-width");
 
     public final static CSSProperty BOTTOM = new CSSProperty("bottom");
@@ -194,14 +254,14 @@ public class CSSProperty implements Serializable {
 
     // only for paged output mediums, we don't need it at the moment
     /*
-    public final static CSSProperty PAGE = new CSSProperty("page");
+     public final static CSSProperty PAGE = new CSSProperty("page");
 
-    public final static CSSProperty PAGE_BREAK_AFTER = new CSSProperty("page-break-after");
+     public final static CSSProperty PAGE_BREAK_AFTER = new CSSProperty("page-break-after");
 
-    public final static CSSProperty PAGE_BREAK_BEFORE = new CSSProperty("page-break-before");
+     public final static CSSProperty PAGE_BREAK_BEFORE = new CSSProperty("page-break-before");
 
-    public final static CSSProperty PAGE_BREAK_INSIDE = new CSSProperty("page-break-inside");
-    */
+     public final static CSSProperty PAGE_BREAK_INSIDE = new CSSProperty("page-break-inside");
+     */
 
     public final static CSSProperty POSITION = new CSSProperty("position");
 
@@ -244,29 +304,16 @@ public class CSSProperty implements Serializable {
     public final static CSSProperty Z_INDEX = new CSSProperty("z-index");
 
     public static final Set borderProperties = Collections.unmodifiableSet(new HashSet(Arrays.asList(new CSSProperty[] {
-        CSSProperty.BORDER,
-        //CSSProperty.BORDER_COLLAPSE,
-        CSSProperty.BORDER_COLOR,
-        //CSSProperty.BORDER_SPACING,
-        CSSProperty.BORDER_STYLE,
-        CSSProperty.BORDER_WIDTH,
-        CSSProperty.BORDER_BOTTOM,
-        CSSProperty.BORDER_BOTTOM_COLOR,
-        CSSProperty.BORDER_BOTTOM_STYLE,
-        CSSProperty.BORDER_BOTTOM_WIDTH,
-        CSSProperty.BORDER_LEFT,
-        CSSProperty.BORDER_LEFT_COLOR,
-        CSSProperty.BORDER_LEFT_STYLE,
-        CSSProperty.BORDER_LEFT_WIDTH,
-        CSSProperty.BORDER_RIGHT,
-        CSSProperty.BORDER_RIGHT_COLOR,
-        CSSProperty.BORDER_RIGHT_STYLE,
-        CSSProperty.BORDER_RIGHT_WIDTH,
-        CSSProperty.BORDER_TOP,
-        CSSProperty.BORDER_TOP_COLOR,
-        CSSProperty.BORDER_TOP_STYLE,
-        CSSProperty.BORDER_TOP_WIDTH,
-    })));
+            CSSProperty.BORDER,
+            //CSSProperty.BORDER_COLLAPSE,
+            CSSProperty.BORDER_COLOR,
+            //CSSProperty.BORDER_SPACING,
+            CSSProperty.BORDER_STYLE, CSSProperty.BORDER_WIDTH, CSSProperty.BORDER_BOTTOM,
+            CSSProperty.BORDER_BOTTOM_COLOR, CSSProperty.BORDER_BOTTOM_STYLE, CSSProperty.BORDER_BOTTOM_WIDTH,
+            CSSProperty.BORDER_LEFT, CSSProperty.BORDER_LEFT_COLOR, CSSProperty.BORDER_LEFT_STYLE,
+            CSSProperty.BORDER_LEFT_WIDTH, CSSProperty.BORDER_RIGHT, CSSProperty.BORDER_RIGHT_COLOR,
+            CSSProperty.BORDER_RIGHT_STYLE, CSSProperty.BORDER_RIGHT_WIDTH, CSSProperty.BORDER_TOP,
+            CSSProperty.BORDER_TOP_COLOR, CSSProperty.BORDER_TOP_STYLE, CSSProperty.BORDER_TOP_WIDTH, })));
 
     private final String name;
 
@@ -279,8 +326,10 @@ public class CSSProperty implements Serializable {
     }
 
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CSSProperty)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof CSSProperty))
+            return false;
         final CSSProperty cssProperty = (CSSProperty) o;
 
         // CSS properties are CASE INSENSITIVE!

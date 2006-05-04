@@ -185,7 +185,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         // CSS inline attributes
         SStringBuilder inlineAttributes = new SStringBuilder();
             Utils.generateCSSInlineBorder(inlineAttributes, border);
-        inlineAttributes.append(createInlineStylesForInsets(inlineAttributes, insets));
+        createInlineStylesForInsets(inlineAttributes, insets);
         Utils.optAttribute(d, "style", inlineAttributes.toString());
     }
 
