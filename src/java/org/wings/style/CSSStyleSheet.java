@@ -15,6 +15,7 @@ package org.wings.style;
 
 import org.wings.SFont;
 import org.wings.io.Device;
+import org.wings.io.SStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -496,15 +497,40 @@ public class CSSStyleSheet implements StyleSheet {
         CSSAttributeSet attributes = new CSSAttributeSet();
         if (font == null)
             return attributes;
-        attributes.put(CSSProperty.FONT_FAMILY, font.getFace());
+        String face = font.getFace();
+        boolean italic = (font.getStyle() & Font.ITALIC) > 0;
+        boolean bold = (font.getStyle() & Font.BOLD) > 0;
+        int size = font.getSize();
 
-        if ((font.getStyle() & Font.ITALIC) > 0)
-            attributes.put(CSSProperty.FONT_STYLE, "italic");
-
-        if ((font.getStyle() & Font.BOLD) > 0)
-            attributes.put(CSSProperty.FONT_WEIGHT, "bold");
-
-        attributes.put(CSSProperty.FONT_SIZE, font.getSize() + "pt");
+        if (face != null && face.length() > 0) {
+            // use font property
+            SStringBuilder builder = new SStringBuilder();
+            if (italic) {
+                builder.append("italic ");
+            }
+            if (bold) {
+                builder.append("bold ");
+            }
+            if (size > 0) {
+                builder.append(size);
+                builder.append("pt ");
+            }
+            if (face != null && face.length() > 0) {
+                builder.append(face);
+            }
+            attributes.put(CSSProperty.FONT, builder.toString());
+        } else {
+            // use special properties
+            if (italic) {
+                attributes.put(CSSProperty.FONT_STYLE, "italic");
+            }
+            if (bold) {
+                attributes.put(CSSProperty.FONT_WEIGHT, "bold");
+            }
+            if (size > 0) {
+                attributes.put(CSSProperty.FONT_SIZE, size + "pt");
+            }
+        }
         return attributes;
     }
 

@@ -171,21 +171,29 @@ public abstract class SAbstractBorder
             }
 
             BorderSpec top = specs[SConstants.TOP];
-            attributes.put(CSSProperty.BORDER_TOP_WIDTH, top.thickness + "px");
-            attributes.put(CSSProperty.BORDER_TOP_STYLE, top.style);
-            attributes.put(CSSProperty.BORDER_TOP_COLOR, CSSStyleSheet.getAttribute(top.color));
+            if (top.thickness > 0) {
+                attributes.put(CSSProperty.BORDER_TOP_WIDTH, top.thickness + "px");
+                attributes.put(CSSProperty.BORDER_TOP_STYLE, top.style);
+                attributes.put(CSSProperty.BORDER_TOP_COLOR, CSSStyleSheet.getAttribute(top.color));
+            }
             BorderSpec left = specs[SConstants.LEFT];
-            attributes.put(CSSProperty.BORDER_LEFT_WIDTH, left.thickness + "px");
-            attributes.put(CSSProperty.BORDER_LEFT_STYLE, left.style);
-            attributes.put(CSSProperty.BORDER_LEFT_COLOR, CSSStyleSheet.getAttribute(left.color));
+            if (left.thickness > 0) {
+                attributes.put(CSSProperty.BORDER_LEFT_WIDTH, left.thickness + "px");
+                attributes.put(CSSProperty.BORDER_LEFT_STYLE, left.style);
+                attributes.put(CSSProperty.BORDER_LEFT_COLOR, CSSStyleSheet.getAttribute(left.color));
+            }
             BorderSpec right = specs[SConstants.RIGHT];
-            attributes.put(CSSProperty.BORDER_RIGHT_WIDTH, right.thickness + "px");
-            attributes.put(CSSProperty.BORDER_RIGHT_STYLE, right.style);
-            attributes.put(CSSProperty.BORDER_RIGHT_COLOR, CSSStyleSheet.getAttribute(right.color));
+            if (right.thickness > 0) {
+                attributes.put(CSSProperty.BORDER_RIGHT_WIDTH, right.thickness + "px");
+                attributes.put(CSSProperty.BORDER_RIGHT_STYLE, right.style);
+                attributes.put(CSSProperty.BORDER_RIGHT_COLOR, CSSStyleSheet.getAttribute(right.color));
+            }
             BorderSpec bottom = specs[SConstants.BOTTOM];
-            attributes.put(CSSProperty.BORDER_BOTTOM_WIDTH, bottom.thickness + "px");
-            attributes.put(CSSProperty.BORDER_BOTTOM_STYLE, bottom.style);
-            attributes.put(CSSProperty.BORDER_BOTTOM_COLOR, CSSStyleSheet.getAttribute(bottom.color));
+            if (bottom.thickness > 0) {
+                attributes.put(CSSProperty.BORDER_BOTTOM_WIDTH, bottom.thickness + "px");
+                attributes.put(CSSProperty.BORDER_BOTTOM_STYLE, bottom.style);
+                attributes.put(CSSProperty.BORDER_BOTTOM_COLOR, CSSStyleSheet.getAttribute(bottom.color));
+            }
         }
         return attributes;
     }

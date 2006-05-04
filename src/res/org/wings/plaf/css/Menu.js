@@ -218,7 +218,7 @@ function wpm_setVisible(element, visible) {
 
 
 function wpm_openMenu(event, id, parentId) {
-    var realEvent = getEvent(realEvent);
+    var realEvent = getEvent(event);
 
     if (parentULId(realEvent) != parentId) {
         // don't bubble
@@ -254,7 +254,7 @@ function parentULId(event) {
 }
 
 function wpm_closeMenu(event, id, parentId) {
-    var realEvent = window.event;
+    var realEvent = wpm_getEvent(event);
     if (parentULId(realEvent) != parentId) {
         return;
     }

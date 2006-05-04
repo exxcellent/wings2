@@ -14,7 +14,7 @@
 
 /* bs: This lead to scrollers around documents, not window: HTML,*/
 BODY,TEXTAREA {
-    overflow:auto;     /* get rid of default scrollbars */
+/*    overflow:auto;     /* get rid of default scrollbars */
     padding: 0px;
     margin: 0px;
 }
@@ -397,9 +397,14 @@ ul.STree li div.SSubTree {
     text-align: right;
 }
 
-.STabbedPane_top,
+.STabbedPane_top {
+    text-align: left;
+    padding-top:.1em;
+}
+
 .STabbedPane_bottom {
     text-align: left;
+    padding-bottom:.1em;
 }
 
 .STabbedPane_Tab_top,

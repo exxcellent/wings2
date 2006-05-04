@@ -162,7 +162,8 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         if (border != null) {
             int[] sides = horizontal ? new int[] {SConstants.LEFT, SConstants.RIGHT} : new int[] {SConstants.TOP, SConstants.BOTTOM};
             for (int i = 0; i < sides.length; i++) {
-                oversize += border.getThickness(sides[i]);
+                int thickness = border.getThickness(sides[i]);
+                if (thickness > 0) oversize += thickness;
             }
             Insets insets = border.getInsets();
             if (insets != null) {
