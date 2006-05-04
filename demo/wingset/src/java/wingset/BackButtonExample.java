@@ -30,6 +30,7 @@ import org.wings.event.InvalidLowLevelEvent;
 import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -80,7 +81,7 @@ public class BackButtonExample extends WingSetPane {
             }
         });
 
-        virtualBackButton.addActionListener(new wingset.SerializableActionListener() {
+        virtualBackButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 virtualBackButtonSignal.setVisible(true);
             }
@@ -126,7 +127,7 @@ public class BackButtonExample extends WingSetPane {
         mainPanel.add(getMode);
         mainPanel.add(getMode2);
 
-        buttonGroup.addActionListener(new wingset.SerializableActionListener() {
+        buttonGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 regularButton.setVisible(false);
                 nonEpochedButton.setVisible(false);
@@ -156,7 +157,7 @@ public class BackButtonExample extends WingSetPane {
 
         mainPanel.add(epochLabel);
 
-        newEpochButton.addActionListener(new wingset.SerializableActionListener() {
+        newEpochButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainPanel.reload(ReloadManager.STATE); // Force invalidaton of epoch for demonstration purposes
             }
@@ -164,14 +165,14 @@ public class BackButtonExample extends WingSetPane {
         mainPanel.add(newEpochButton);
 
 
-        regularButton.addActionListener(new wingset.SerializableActionListener() {
+        regularButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 regularButtonSignal.setVisible(true);
             }
         });
         mainPanel.add(regularButton);
 
-        nonEpochedButton.addActionListener(new wingset.SerializableActionListener() {
+        nonEpochedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 nonEpochedButtonSignal.setVisible(true);
             }

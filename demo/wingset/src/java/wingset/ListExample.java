@@ -25,6 +25,7 @@ import org.wings.SLabel;
 import org.wings.SList;
 import org.wings.SPanel;
 import org.wings.SResourceIcon;
+
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.*;

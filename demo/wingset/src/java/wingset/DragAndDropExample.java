@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SComponent;
+import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SGridLayout;
@@ -25,13 +26,13 @@ import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SURLIcon;
-import org.wings.SConstants;
 import org.wings.border.SEmptyBorder;
 import org.wings.dnd.DragSource;
 import org.wings.dnd.DropTarget;
 import org.wings.event.SComponentDropListener;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
+
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +97,7 @@ public class DragAndDropExample extends WingSetPane {
 
         // control components
         final SButton resetButton = new SButton("Reset");
-        resetButton.addActionListener(new wingset.SerializableActionListener() {
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 resetPuzzle();
             }

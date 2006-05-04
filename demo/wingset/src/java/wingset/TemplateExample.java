@@ -13,7 +13,16 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SButton;
+import org.wings.SButtonGroup;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SForm;
+import org.wings.SLabel;
+import org.wings.SRadioButton;
+import org.wings.STemplateLayout;
+import org.wings.STextField;
+import org.wings.STree;
 import org.wings.template.propertymanagers.DefaultPropertyManager;
 
 import javax.swing.tree.DefaultTreeModel;

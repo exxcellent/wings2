@@ -22,9 +22,10 @@ import org.wings.SProgressBar;
 import org.wings.STemplateLayout;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
-import org.wings.util.SStringBuilder;
-import org.wings.session.WingsStatistics;
 import org.wings.session.SessionManager;
+import org.wings.session.WingsStatistics;
+import org.wings.util.SStringBuilder;
+
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 
@@ -50,13 +51,13 @@ public class MemUsageExample extends WingSetPane {
         final SForm panel = new SForm();
 
         // Action listener for GC button trigger
-        gc.addActionListener(new wingset.SerializableActionListener() {
+        gc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.gc();
             }
         });
         // Action listener for exit button trigger
-        exit.addActionListener(new wingset.SerializableActionListener() {
+        exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SessionManager.getSession().exit();
             }

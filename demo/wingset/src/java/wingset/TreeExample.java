@@ -13,9 +13,19 @@
  */
 package wingset;
 
-import org.wings.*;
-import org.wings.event.SMouseListener;
+import org.wings.SBorderLayout;
+import org.wings.SButtonGroup;
+import org.wings.SCheckBox;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SForm;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SRadioButton;
+import org.wings.SResourceIcon;
+import org.wings.STree;
 import org.wings.event.SMouseEvent;
+import org.wings.event.SMouseListener;
 import org.wings.style.CSSProperty;
 import org.wings.util.PropertyAccessor;
 
@@ -73,7 +83,7 @@ public class TreeExample
         public TreeControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
             showAsFormComponent.setAttribute(CSSProperty.MARGIN_RIGHT, "1.5em");
-            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
+            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     tree.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
@@ -82,7 +92,7 @@ public class TreeExample
             final SCheckBox consume = new SCheckBox("<html>Consume events on leaves&nbsp;&nbsp;&nbsp;");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the tree anymore");
-            consume.addActionListener(new wingset.SerializableActionListener() {
+            consume.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     TreeExample.this.consume = consume.isSelected();
                 }
@@ -127,7 +137,7 @@ public class TreeExample
             group.add(arrowButton);
             plusButton.setSelected(true);
 
-            group.addActionListener(new wingset.SerializableActionListener() {
+            group.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (plusButton.isSelected()) {
                         PropertyAccessor.setProperty(tree.getCG(), "collapseControlIcon", MINUS);

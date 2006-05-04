@@ -13,14 +13,30 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SCheckBox;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SDimension;
+import org.wings.SFont;
+import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SLabel;
+import org.wings.SList;
+import org.wings.SMenu;
+import org.wings.SMenuBar;
+import org.wings.SMenuItem;
+import org.wings.SPanel;
+import org.wings.STextArea;
+import org.wings.STextField;
 import org.wings.border.SEmptyBorder;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
 
 
 /**
@@ -33,7 +49,7 @@ public class MenuExample extends WingSetPane {
     private SMenuBar menuBar;
     private int shortcutKey = java.awt.event.KeyEvent.VK_A;
 
-    private final ActionListener menuItemListener = new wingset.SerializableActionListener() {
+    private final ActionListener menuItemListener = new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
             selectionLabel.setText(((SMenuItem) e.getSource()).getText());
         }
@@ -183,14 +199,14 @@ public class MenuExample extends WingSetPane {
     class MenuControls extends ComponentControls {
         public MenuControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component ");
-            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
+            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     //menu.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
             });
 
             final SCheckBox disableSomeMenus = new SCheckBox("Disable some Menus ");
-            disableSomeMenus.addActionListener(new wingset.SerializableActionListener() {
+            disableSomeMenus.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     setMenuItemsEnabled(!disableSomeMenus.isSelected());
                 }

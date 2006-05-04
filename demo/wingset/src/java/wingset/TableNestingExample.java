@@ -9,9 +9,9 @@ import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.border.SEmptyBorder;
 import org.wings.script.JavaScriptListener;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
@@ -27,7 +27,7 @@ public class TableNestingExample  extends WingSetPane{
         for(int i = 5; i< 30; i++) {
             selectComboBox.addItem(new Integer(i));
         }
-        selectComboBox.addActionListener(new wingset.SerializableActionListener() {
+        selectComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 update();
             }

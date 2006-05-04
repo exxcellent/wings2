@@ -13,11 +13,17 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SButton;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SDimension;
+import org.wings.SGridBagLayout;
+import org.wings.SPanel;
+import org.wings.SProgressBar;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -33,7 +39,7 @@ public class ProgressBarExample extends WingSetPane {
 
         final SProgressBar progressBar = new SProgressBar(0, 100);
 
-        final ActionListener al = new wingset.SerializableActionListener() {
+        final ActionListener al = new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int valueChange = 0;
                 if (e.getSource() == forward1Percent) {

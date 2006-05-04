@@ -7,8 +7,8 @@ import org.wings.SIcon;
 import org.wings.SInternalFrame;
 import org.wings.SLabel;
 import org.wings.STextField;
-import org.wings.util.SStringBuilder;
 import org.wings.session.SessionManager;
+import org.wings.util.SStringBuilder;
 
 public class DesktopPaneExample extends WingSetPane {
     

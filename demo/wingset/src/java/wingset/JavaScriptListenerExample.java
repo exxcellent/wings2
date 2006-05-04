@@ -24,6 +24,7 @@ import org.wings.STextField;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.style.CSSProperty;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
@@ -83,7 +84,7 @@ public class JavaScriptListenerExample
         /*
          * The server side listener
          */
-        serverCalcButton.addActionListener(new wingset.SerializableActionListener() {
+        serverCalcButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 doCalculation(firstField, secondField, sumField);
             }

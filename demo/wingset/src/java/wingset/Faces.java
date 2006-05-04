@@ -82,7 +82,7 @@ public class Faces extends WingSetPane {
 
         SForm shuffleForm = new SForm();
         SButton shuffleButton = new SButton("Shuffle");
-        shuffleButton.addActionListener(new wingset.SerializableActionListener() {
+        shuffleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 shuffle();
             }
@@ -95,7 +95,7 @@ public class Faces extends WingSetPane {
         facePanel.add(mouth);
 
         hairGroup = new SButtonGroup();
-        hairGroup.addActionListener(new wingset.SerializableActionListener() {
+        hairGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = Integer.parseInt(e.getActionCommand());
                 hair.setIcon(getFace(index).hair);
@@ -103,7 +103,7 @@ public class Faces extends WingSetPane {
         });
 
         eyeGroup = new SButtonGroup();
-        eyeGroup.addActionListener(new wingset.SerializableActionListener() {
+        eyeGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = Integer.parseInt(e.getActionCommand());
                 eye.setIcon(getFace(index).eyes);
@@ -111,7 +111,7 @@ public class Faces extends WingSetPane {
         });
 
         mouthGroup = new SButtonGroup();
-        mouthGroup.addActionListener(new wingset.SerializableActionListener() {
+        mouthGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = Integer.parseInt(e.getActionCommand());
                 mouth.setIcon(getFace(index).mouth);
@@ -188,7 +188,7 @@ public class Faces extends WingSetPane {
          * click on the name selects all buttons belonging to
          * that Face.
          */
-        name.addActionListener(new wingset.SerializableActionListener() {
+        name.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 hairGroup.setSelected(hair, true);
                 eyeGroup.setSelected(eye, true);

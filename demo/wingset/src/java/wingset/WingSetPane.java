@@ -16,13 +16,20 @@ package wingset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
-import org.wings.border.*;
-import org.wings.style.CSSProperty;
+import org.wings.SAnchor;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SFlowDownLayout;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.SResourceIcon;
+import org.wings.border.SBorder;
+import org.wings.border.SLineBorder;
 import org.wings.event.SComponentAdapter;
 import org.wings.event.SComponentEvent;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * A basic WingSet Pane, which implements some often needed functions.

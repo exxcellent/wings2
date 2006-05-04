@@ -13,11 +13,25 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SButtonGroup;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SDimension;
+import org.wings.SFont;
+import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.SRadioButton;
+import org.wings.SResourceIcon;
+import org.wings.SSpacer;
+import org.wings.SURLIcon;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -113,7 +127,7 @@ public class LabelExample extends WingSetPane {
 
         b.add(sp2);
 
-        g.addActionListener(new wingset.SerializableActionListener() {
+        g.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 Object button = ((SButtonGroup) ev.getSource())
                         .getSelection();

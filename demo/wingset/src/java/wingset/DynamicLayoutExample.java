@@ -13,11 +13,25 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SFlowDownLayout;
+import org.wings.SFlowLayout;
+import org.wings.SForm;
+import org.wings.SGridBagLayout;
+import org.wings.SGridLayout;
+import org.wings.SLabel;
+import org.wings.SLayoutManager;
+import org.wings.SPanel;
+import org.wings.SToolBar;
 import org.wings.border.SBorder;
 import org.wings.border.SLineBorder;
 import org.wings.script.JavaScriptListener;
-import org.wings.style.CSSProperty;
+
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;

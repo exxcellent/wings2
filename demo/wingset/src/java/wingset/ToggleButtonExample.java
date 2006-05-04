@@ -13,7 +13,20 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SAbstractButton;
+import org.wings.SBorderLayout;
+import org.wings.SButtonGroup;
+import org.wings.SCheckBox;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.SToggleButton;
+import org.wings.SURLIcon;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,7 +49,7 @@ public class ToggleButtonExample
     private ButtonControls controls;
 
     private final SLabel reportLabel = new SLabel("No button pressed");
-    protected ActionListener action = new wingset.SerializableActionListener() {
+    protected ActionListener action = new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
             reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
         }
@@ -96,7 +109,7 @@ public class ToggleButtonExample
     class ButtonControls extends ComponentControls {
         public ButtonControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
+            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                         SComponent component = (SComponent) iterator.next();
@@ -108,7 +121,7 @@ public class ToggleButtonExample
 
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
-            useImages.addActionListener(new wingset.SerializableActionListener() {
+            useImages.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean use = useImages.isSelected();
 

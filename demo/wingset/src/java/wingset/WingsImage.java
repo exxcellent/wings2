@@ -13,7 +13,15 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.SURLIcon;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>

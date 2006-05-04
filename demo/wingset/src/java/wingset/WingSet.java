@@ -23,11 +23,12 @@ import org.wings.SResourceIcon;
 import org.wings.SRootLayout;
 import org.wings.STabbedPane;
 import org.wings.SURLIcon;
-import org.wings.resource.DefaultURLResource;
 import org.wings.header.Link;
-import org.wings.session.SessionManager;
+import org.wings.resource.DefaultURLResource;
 import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
+
 import java.io.Serializable;
 import java.net.URL;
 

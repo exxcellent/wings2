@@ -13,7 +13,19 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBorderLayout;
+import org.wings.SButton;
+import org.wings.SCardLayout;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SFileChooser;
+import org.wings.SFileIcon;
+import org.wings.SFlowDownLayout;
+import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.STextArea;
 import org.wings.border.SEmptyBorder;
 import org.wings.util.SStringBuilder;
 
@@ -199,7 +211,7 @@ public class FileChooserExample
         form.add(p);
 
 
-        submit.addActionListener(new wingset.SerializableActionListener() {
+        submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (chooser.getFile() != null) {

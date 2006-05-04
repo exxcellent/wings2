@@ -103,7 +103,7 @@ public class PageScrollerExample
         public PageScrollerControls() {
         	final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
         	
-            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
+            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean selected = showAsFormComponent.isSelected();
                     scrollbar.setShowAsFormComponent(selected);
@@ -165,7 +165,7 @@ public class PageScrollerExample
 
             /*
             final SCheckBox margin = new SCheckBox("Margin");
-            margin.addActionListener(new wingset.SerializableActionListener() {
+            margin.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     scrollbar.setMarginVisible(margin.isSelected());
                 }
@@ -174,7 +174,7 @@ public class PageScrollerExample
             add(margin);
 
             final SCheckBox step = new SCheckBox("Step");
-            step.addActionListener(new wingset.SerializableActionListener() {
+            step.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     scrollbar.setStepVisible(step.isSelected());
                 }

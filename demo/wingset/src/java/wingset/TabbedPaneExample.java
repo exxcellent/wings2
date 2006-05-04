@@ -14,11 +14,25 @@
 package wingset;
 
 
-import org.wings.*;
-import org.wings.text.SDocument;
-import org.wings.text.DefaultDocument;
+import org.wings.SBorderLayout;
+import org.wings.SButton;
+import org.wings.SCheckBox;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SForm;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.SResourceIcon;
+import org.wings.STabbedPane;
+import org.wings.STextArea;
+import org.wings.SURLIcon;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
+import org.wings.text.DefaultDocument;
+import org.wings.text.SDocument;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -89,7 +103,7 @@ public class TabbedPaneExample extends WingSetPane {
 
         public TabbedPaneControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
+            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     tabbedPane.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
@@ -97,7 +111,7 @@ public class TabbedPaneExample extends WingSetPane {
             addControl(showAsFormComponent);
 
             final SComboBox placement = new SComboBox(TAB_PLACEMENTS);
-            placement.addActionListener(new wingset.SerializableActionListener() {
+            placement.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Object[] objects = (Object[]) placement.getSelectedItem();
                     Integer integer = (Integer) objects[1];
@@ -109,7 +123,7 @@ public class TabbedPaneExample extends WingSetPane {
             addControl(placement);
 
             final SComboBox tabColor = new SComboBox(COLORS);
-            tabColor.addActionListener(new wingset.SerializableActionListener() {
+            tabColor.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Object[] objects = (Object[]) tabColor.getSelectedItem();
                     Color color = (Color) objects[1];
@@ -121,7 +135,7 @@ public class TabbedPaneExample extends WingSetPane {
             addControl(tabColor);
 
             final SComboBox contentColor = new SComboBox(COLORS);
-            contentColor.addActionListener(new wingset.SerializableActionListener() {
+            contentColor.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Object[] objects = (Object[]) contentColor.getSelectedItem();
                     Color color = (Color) objects[1];
@@ -133,7 +147,7 @@ public class TabbedPaneExample extends WingSetPane {
             addControl(contentColor);
 
             final SButton addTab = new SButton("add new tab");
-            addTab.addActionListener(new wingset.SerializableActionListener() {
+            addTab.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     addTab();
                 }
@@ -141,7 +155,7 @@ public class TabbedPaneExample extends WingSetPane {
             addControl(addTab);
 
             final SButton removeTab = new SButton("remove selected tab");
-            removeTab.addActionListener(new wingset.SerializableActionListener() {
+            removeTab.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     removeTab();
                 }

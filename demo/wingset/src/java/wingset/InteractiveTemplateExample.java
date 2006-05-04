@@ -13,10 +13,18 @@
  */
 package wingset;
 
-import org.wings.*;
-import org.wings.util.SStringBuilder;
+import org.wings.SBorderLayout;
+import org.wings.SButton;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SForm;
+import org.wings.SLabel;
+import org.wings.STemplateLayout;
+import org.wings.STextArea;
+import org.wings.SToolBar;
 import org.wings.style.CSSProperty;
 import org.wings.template.StringTemplateSource;
+import org.wings.util.SStringBuilder;
 
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
@@ -65,7 +73,7 @@ public class InteractiveTemplateExample
         templateInput = new STextArea(templateString);
 
         SButton applyButton = new SButton("Apply");
-        applyButton.addActionListener(new wingset.SerializableActionListener() {
+        applyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 templateSource.setTemplate(templateInput.getText());
             }
@@ -89,7 +97,7 @@ public class InteractiveTemplateExample
         public Controls() {
             setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
             SButton resetButton = new SButton("Reset");
-            resetButton.addActionListener(new wingset.SerializableActionListener() {
+            resetButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     templateSource.setTemplate(templateString);
                     templateInput.setText(templateString);

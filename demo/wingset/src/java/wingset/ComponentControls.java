@@ -13,13 +13,26 @@
  */
 package wingset;
 
-import org.wings.*;
-import org.wings.border.*;
-import org.wings.style.CSSProperty;
+import org.wings.SButton;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDefaultListCellRenderer;
+import org.wings.SDimension;
+import org.wings.SGridBagLayout;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.STextField;
+import org.wings.SToolBar;
+import org.wings.border.SBevelBorder;
+import org.wings.border.SBorder;
+import org.wings.border.SEtchedBorder;
+import org.wings.border.SLineBorder;
+import org.wings.border.STitledBorder;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -119,7 +132,7 @@ public class ComponentControls
         globalControls.add(new SLabel("   background "));
         globalControls.add(backgroundComboBox);
 
-        addActionListener(new wingset.SerializableActionListener() {
+        addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 SDimension preferredSize = new SDimension();
                 preferredSize.setWidth(widthTextField.getText());

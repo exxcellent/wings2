@@ -13,9 +13,18 @@
  */
 package wingset;
 
-import org.wings.*;
-import org.wings.event.SMouseListener;
+import org.wings.SBorderLayout;
+import org.wings.SCheckBox;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SForm;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SResourceIcon;
+import org.wings.STable;
 import org.wings.event.SMouseEvent;
+import org.wings.event.SMouseListener;
 import org.wings.plaf.css.TableCG;
 import org.wings.table.SDefaultTableCellRenderer;
 
@@ -25,7 +34,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -305,14 +314,14 @@ public class TableExample
 
         public TableControls() {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component   ");
-            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
+            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     table.setShowAsFormComponent(showAsFormComponent.isSelected());
                 }
             });
 
             final SCheckBox editable = new SCheckBox("<html>Editable&nbsp;&nbsp;&nbsp;");
-            editable.addActionListener(new wingset.SerializableActionListener() {
+            editable.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     table.setEditable(editable.isSelected());
                 }
@@ -321,7 +330,7 @@ public class TableExample
             final SCheckBox consume = new SCheckBox("Consume events on 2nd col   ");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the table anymore");
-            consume.addActionListener(new wingset.SerializableActionListener() {
+            consume.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     TableExample.this.consume = consume.isSelected();
                 }

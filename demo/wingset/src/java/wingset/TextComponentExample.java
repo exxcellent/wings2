@@ -34,9 +34,9 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.session.SessionManager;
 import org.wings.text.SAbstractFormatter;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -118,7 +118,7 @@ public class TextComponentExample extends WingSetPane {
         p.add(actionEvent);
 
         SButton button = new SButton("Submit");
-        button.addActionListener(new wingset.SerializableActionListener() {
+        button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 actionEvent.setText("Button clicked + ");
             }
@@ -126,7 +126,7 @@ public class TextComponentExample extends WingSetPane {
         p.add(button);
 
         SForm frame = new SForm(new SBorderLayout());
-        frame.addActionListener(new wingset.SerializableActionListener() {
+        frame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 actionEvent.setText(actionEvent.getText() + " Form event");
             }

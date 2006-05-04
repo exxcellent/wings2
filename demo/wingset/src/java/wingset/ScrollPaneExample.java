@@ -13,11 +13,20 @@
  */
 package wingset;
 
-import org.wings.*;
-
-import java.awt.event.ActionEvent;
+import org.wings.SBorderLayout;
+import org.wings.SButtonGroup;
+import org.wings.SCheckBox;
+import org.wings.SComponent;
+import org.wings.SForm;
+import org.wings.SRadioButton;
+import org.wings.SScrollBar;
+import org.wings.SScrollPane;
+import org.wings.SScrollPaneLayout;
+import org.wings.STable;
+import org.wings.STree;
 
 import javax.swing.tree.DefaultTreeModel;
+import java.awt.event.ActionEvent;
 
 
 /**
@@ -67,7 +76,7 @@ public class ScrollPaneExample
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
             final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
+            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean selected = showAsFormComponent.isSelected();
                     table.setShowAsFormComponent(selected);
@@ -78,7 +87,7 @@ public class ScrollPaneExample
             addControl(showAsFormComponent);
 
             final SCheckBox paging = new SCheckBox("Paged Scrolling");
-            paging.addActionListener(new wingset.SerializableActionListener() {
+            paging.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boolean selected = paging.isSelected();
                     ((SScrollPaneLayout)scrollPane.getLayout()).setPaging(selected);
@@ -94,7 +103,7 @@ public class ScrollPaneExample
             group.add(treeButton);
             tableButton.setSelected(true);
 
-            group.addActionListener(new wingset.SerializableActionListener() {
+            group.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (tableButton.isSelected()) {
                         showInPane(table);

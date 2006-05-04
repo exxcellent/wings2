@@ -13,7 +13,16 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBoxLayout;
+import org.wings.SComponent;
+import org.wings.SFont;
+import org.wings.SLabel;
+import org.wings.SMenu;
+import org.wings.SMenuItem;
+import org.wings.SPanel;
+import org.wings.SPopupMenu;
+import org.wings.STextField;
+import org.wings.SURLIcon;
 import org.wings.border.SEmptyBorder;
 
 import java.awt.event.ActionEvent;
@@ -27,7 +36,7 @@ public class PopupExample extends WingSetPane {
 
     private SLabel selection;
 
-    private final ActionListener menuItemListener = new wingset.SerializableActionListener() {
+    private final ActionListener menuItemListener = new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
             selection.setText(((SMenuItem) e.getSource()).getText());
         }
