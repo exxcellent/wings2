@@ -374,9 +374,12 @@ div.STabbedPane, div.STabbedPane > table {
 
 div.STabbedPane > table > tbody > tr > th > * {
     display: inline;
-    border: 1px solid black;
     white-space: nowrap;
     line-height: 1.6em;
+}
+
+div.STabbedPane > table > tbody > tr > th a {
+    border: 1px solid black;
 }
 
 /* Background color of selected STabbedPane tabs */
@@ -398,8 +401,7 @@ div.STabbedPane > table > tbody > tr > th[placement="top"] {
     text-align: left;
 }
 
-div.STabbedPane > table > tbody > tr > th[placement="top"] > a,
-div.STabbedPane > table > tbody > tr > th[placement="top"] > button {
+div.STabbedPane > table > tbody > tr > th[placement="top"]  a {
     border-bottom: none !important;
     -moz-border-radius-topright: 4px;
     -moz-border-radius-topleft: 4px;
@@ -410,8 +412,7 @@ div.STabbedPane > table > tbody > tr > th[placement="left"] {
     text-align: right;
 }
 
-div.STabbedPane > table > tbody > tr > th[placement="left"] > a,
-div.STabbedPane > table > tbody > tr > th[placement="left"] > button {
+div.STabbedPane > table > tbody > tr > th[placement="left"] a {
     display: block;
     border-right: none !important;
     margin-top: 2px;
@@ -425,8 +426,7 @@ div.STabbedPane > table > tbody > tr > th[placement="right"] {
     text-align: left;
 }
 
-div.STabbedPane > table > tbody > tr > th[placement="right"] > a,
-div.STabbedPane > table > tbody > tr > th[placement="right"] > button {
+div.STabbedPane > table > tbody > tr > th[placement="right"] a {
     display: block;
     border-left: none !important;
     margin-top: 2px;
@@ -439,8 +439,7 @@ div.STabbedPane > table > tbody > tr > th[placement="bottom"] {
     text-align: left;
 }
 
-div.STabbedPane > table > tbody > tr > th[placement="bottom"] > a,
-div.STabbedPane > table > tbody > tr > th[placement="bottom"] > button {
+div.STabbedPane > table > tbody > tr > th[placement="bottom"] a {
     border-top: none !important;
     -moz-border-radius-bottomright: 4px;
     -moz-border-radius-bottomleft: 4px;

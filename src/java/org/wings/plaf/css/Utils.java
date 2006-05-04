@@ -845,7 +845,6 @@ public final class Utils {
     }
 
     public static void printButtonStart(final Device device, final SComponent button, String value, boolean enabled) throws IOException {
-        device.print(getButtonStyling(button));
         if (button.getShowAsFormComponent()) {
             if (!enabled) {
                 device.print("<a href=\"#\" class=\"disabled\" ");
@@ -878,11 +877,7 @@ public final class Utils {
     }
 
     public static void printButtonEnd(final Device device) throws IOException {
-        device.print("</a></div>");
-    }
-
-    private static String getButtonStyling(final SComponent button) {
-        return "<div class=\"" + button.getStyle() + "\">";
+        device.print("</a>");
     }
 
     public static String applyOnClickListeners(final SComponent button) throws IOException {
