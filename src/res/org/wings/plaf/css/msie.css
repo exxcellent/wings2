@@ -32,7 +32,7 @@ table, td, th {
     border: none;
     padding: 0px;
     margin: 0px;
-    text-align: inherit;
+/*    text-align: inherit;
 
     color: inherit;
     background-color: transparent;
@@ -44,7 +44,7 @@ table, td, th {
     text-decoration: inherit;
     text-transform: inherit;
     letter-spacing: inherit;
-    line-height: inherit;
+    line-height: inherit;*/
 }
 
 li, ul {
@@ -312,7 +312,6 @@ ul.STree li div.SSubTree {
 }
 
 .STable table tbody tr td {
-    /*cursor: pointer;*/
     padding-left: 8px;
     padding-right: 8px;
     border-left: 1px solid black;

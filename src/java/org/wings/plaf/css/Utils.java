@@ -351,19 +351,37 @@ public final class Utils {
     public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
         if (preferredSize != null) {
             if (preferredSize.getWidth() != SDimension.AUTO) {
-                if (oversizeHorizontal != 0 && 
-                        preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
-                    // size berechnen anhand des Parents - auf Clientseite
-                    styleString.append("width:expression(this.parentNode.offsetWidth-").append(oversizeHorizontal).append("+'px');");
+                if (oversizeHorizontal > 0) {
+                    if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
+                        // size berechnen anhand des Parents - auf Clientseite
+                        styleString.append("width:expression(((this.parentNode.clientWidth-").append(oversizeHorizontal).append(")");
+                        // not more than 10 percent
+                        int widthPercentage = Math.min(preferredSize.getWidthInt(),100);
+                        if (widthPercentage != 100) {
+                            styleString.append("*").append(widthPercentage/100.0);
+                        }
+                        styleString.append(")+'px');");
+                    } else {
+                        styleString.append("width:").append(preferredSize.getWidthInt()-oversizeHorizontal).append(";");
+                    }
                 } else {
                     styleString.append("width:").append(preferredSize.getWidth()).append(";");
                 }
             }
             if (preferredSize.getHeight() != SDimension.AUTO) {
-                if (oversizeVertical != 0 &&
-                        preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1) {
-                    // size berechnen anhand des Parents - auf Clientseite
-                    styleString.append("height:expression(this.parentNode.offsetHeight-").append(oversizeVertical).append("+'px');");
+                if (oversizeVertical > 0) {
+                    if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
+                        // size berechnen anhand des Parents - auf Clientseite
+                        styleString.append("height:expression(((this.parentNode.clientHeight-").append(oversizeVertical).append(")");
+                        // not more than 10 percent
+                        int heightPercentage = Math.min(preferredSize.getHeightInt(),100);
+                        if (heightPercentage != 100) {
+                            styleString.append("*").append(heightPercentage/100.0);
+                        }
+                        styleString.append(")+'px');");
+                    } else {
+                        styleString.append("height:").append(preferredSize.getHeightInt()-oversizeVertical).append(";");
+                    }
                 } else {
                     styleString.append("height:").append(preferredSize.getHeight()).append(";");
                 }

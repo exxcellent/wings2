@@ -106,16 +106,16 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
 
     protected String getInlineStyles(SComponent component) {
         SDimension prefSize = component.getPreferredSize();
-        SStringBuilder inlineStyles = Utils.generateCSSInlinePreferredSize(new SStringBuilder(), prefSize, component.getOversize(true), component.getOversize(false));
+        SStringBuilder inlineStyles = new SStringBuilder();
         if (component instanceof DragSource)
             inlineStyles.append("position:relative;");
-        //Utils.appendCSSComponentInlineColorStyle(inlineStyles, component);
         Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
         if (allStyle != null)
             inlineStyles.append(allStyle.toString());
         SBorder border = component.getBorder();
         if (border != null && border.getAttributes() != null)
             inlineStyles.append(border.getAttributes().toString());
+        Utils.generateCSSInlinePreferredSize(inlineStyles, prefSize, component.getOversize(true), component.getOversize(false));
         return inlineStyles.toString();
     }
 

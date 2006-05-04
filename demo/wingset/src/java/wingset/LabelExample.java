@@ -51,6 +51,7 @@ public class LabelExample extends WingSetPane {
         controls.addSizable(testLabel);
 
         SPanel p = new SPanel(new SGridLayout(3));
+        p.setPreferredSize(SDimension.FULLAREA);
         p.add(new SLabel("Control the label's text position"));
         p.add(new SSpacer(100,1));
         p.add(new SLabel("Result"));

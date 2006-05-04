@@ -277,18 +277,6 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         final List headers = frame.headers();
         final String encoding = SessionManager.getSession().getCharacterEncoding();
 
-        /**
-         *  We need to put IE6 into quirks mode
-         *  for box model compatibility. (border-box).
-         *  For that we make use of a comment in the first line.
-         *  This is a known bug in IE6
-         */
-        if (BrowserType.IE.equals(browser.getBrowserType())) {
-            if (browser.getMajorVersion() == 6) {
-                device.print("<!-- IE6 quirks mode switch -->\n");
-            }
-        }
-
         // <?xml version="1.0" encoding="...">
         if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
             device.print("<?xml version=\"1.0\" encoding=\"");
