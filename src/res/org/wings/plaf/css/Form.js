@@ -46,7 +46,7 @@ function sendEvent(event, eventValue, eventName, clientHandlers) {
         }
     }
 
-    if (doSubmit) {
+    if (doSubmit == undefined || doSubmit) {
         if ( form != null ) {
             var eventNode = document.createElement("input");
             eventNode.setAttribute('type', 'hidden');
