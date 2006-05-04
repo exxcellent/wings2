@@ -33,7 +33,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
-        Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
+        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true);
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         Utils.optAttribute(device, "accesskey", button.getMnemonic());
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
@@ -74,7 +74,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
-        Utils.printButtonEnd(device);
+        Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), true);
     }
 
     /* Retrieve according icon for a button. */

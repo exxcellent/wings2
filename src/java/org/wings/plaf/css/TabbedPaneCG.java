@@ -56,10 +56,11 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
         Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand()))
+                if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand())) {
                     tab.setSelectedIndex(tab.getSelectedIndex() - 1);
-                else if (tab.getSelectedIndex() < tab.getTabCount() - 1 && "next".equals(e.getActionCommand()))
+                } else if (tab.getSelectedIndex() < tab.getTabCount() - 1 && "next".equals(e.getActionCommand())) {
                     tab.setSelectedIndex(tab.getSelectedIndex() + 1);
+                }
                 tab.requestFocus();
             }
         };
@@ -73,40 +74,39 @@ public class TabbedPaneCG extends AbstractComponentCG {
             throws java.io.IOException {
         final STabbedPane tabbedPane = (STabbedPane) component;
         if (tabbedPane.getTabCount() > 0) {
-            final boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
             final int placement = tabbedPane.getTabPlacement();
 
             device.print("<table");
-            if (childSelectorWorkaround)
-                Utils.optAttribute(device, "class", component.getStyle());
+
+            Utils.optAttribute(device, "class", component.getStyle());
 
             Utils.printCSSInlineFullSize(device, component.getPreferredSize());
             Utils.writeEvents(device, component);
             device.print(">");
 
-            if (placement == SConstants.TOP)
-                device.print("<tr><th placement=\"top\"");
-            else if (placement == SConstants.LEFT)
-                device.print("<tr><th placement=\"left\"");
-            else if (placement == SConstants.RIGHT || placement == SConstants.BOTTOM) {
+            if (placement == SConstants.TOP) {
+                device.print("<tr><th");
+            } else if (placement == SConstants.LEFT) {
+                device.print("<tr><th");
+            } else if (placement == SConstants.RIGHT || placement == SConstants.BOTTOM) {
                 device.print("<tr><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
             }
 
-            if (childSelectorWorkaround) {
-                if (placement == SConstants.TOP)
-                    Utils.optAttribute(device, "class", "STabbedPane_top");
-                else if (placement == SConstants.LEFT)
-                    Utils.optAttribute(device, "class", "STabbedPane_left");
-                else
-                    Utils.optAttribute(device, "class", "STabbedPane_pane");
+            if (placement == SConstants.TOP) {
+                Utils.optAttribute(device, "class", "STabbedPane_top");
+            } else if (placement == SConstants.LEFT) {
+                Utils.optAttribute(device, "class", "STabbedPane_left");
+            } else {
+                Utils.optAttribute(device, "class", "STabbedPane_pane");
             }
             device.print(">");
 
-            if (placement == SConstants.TOP || placement == SConstants.LEFT)
+            if (placement == SConstants.TOP || placement == SConstants.LEFT) {
                 writeTabs(device, tabbedPane);
-            else
+            } else {
                 writeSelectedPaneContent(device, tabbedPane);
+            }
 
             if (placement == SConstants.TOP) {
                 device.print("</th></tr><tr><td");
@@ -114,18 +114,18 @@ public class TabbedPaneCG extends AbstractComponentCG {
             } else if (placement == SConstants.LEFT) {
                 device.print("</th><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
-            } else if (placement == SConstants.RIGHT)
+            } else if (placement == SConstants.RIGHT) {
                 device.print("</td><th placement=\"right\"");
-            else if (placement == SConstants.BOTTOM)
-                device.print("</td></tr><tr><th placement=\"bottom\"");
+            } else if (placement == SConstants.BOTTOM) {
+                device.print("</td></tr><tr><th");
+            }
 
-            if (childSelectorWorkaround) {
-                if (placement == SConstants.RIGHT)
-                    Utils.optAttribute(device, "class", "STabbedPane_right");
-                else if (placement == SConstants.BOTTOM)
-                    Utils.optAttribute(device, "class", "STabbedPane_bottom");
-                else
-                    Utils.optAttribute(device, "class", "STabbedPane_pane");
+            if (placement == SConstants.RIGHT) {
+                Utils.optAttribute(device, "class", "STabbedPane_right");
+            } else if (placement == SConstants.BOTTOM) {
+                Utils.optAttribute(device, "class", "STabbedPane_bottom");
+            } else {
+                Utils.optAttribute(device, "class", "STabbedPane_pane");
             }
             device.print(">");
 
@@ -141,7 +141,9 @@ public class TabbedPaneCG extends AbstractComponentCG {
         }
     }
 
-    /** Renders the currently selected pane of the tabbed Pane. */
+    /**
+     * Renders the currently selected pane of the tabbed Pane.
+     */
     private void writeSelectedPaneContent(Device device, STabbedPane tabbedPane) throws IOException {
         SComponent selected = tabbedPane.getSelectedComponent();
         if (selected != null) {
@@ -150,21 +152,16 @@ public class TabbedPaneCG extends AbstractComponentCG {
     }
 
     private void writeTabs(Device device, STabbedPane tabbedPane) throws IOException {
-        boolean browserSupportCssChildSelector = !tabbedPane.getSession().getUserAgent().supportsCssChildSelector();
         final Browser browser = tabbedPane.getSession().getUserAgent();
         // substitute whitespaces for konqueror and ie5.0x
-        boolean nbspWorkaround = browser.getBrowserType().equals(
-                BrowserType.KONQUEROR)
-                || (browser.getBrowserType().equals(BrowserType.IE)
-                        && browser.getMajorVersion() == 5 && browser
-                        .getMinorVersion() <= .1);
+        final boolean nbspWorkaround = browser.getBrowserType().equals(BrowserType.KONQUEROR);
 
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
-            SIcon icon = tabbedPane.getIconAt(i);
-            String title = tabbedPane.getTitleAt(i);
-            String tooltip = tabbedPane.getToolTipText();
-            if (nbspWorkaround)
-                title = Utils.nonBreakingSpaces(title);
+            final SIcon icon = tabbedPane.getIconAt(i);
+            final String tooltip = tabbedPane.getToolTipText();
+            final String title = nbspWorkaround ? Utils.nonBreakingSpaces(tabbedPane.getTitleAt(i)) : tabbedPane.getTitleAt(i);
+            final boolean enabledTab = tabbedPane.isEnabledAt(i);
+            final String eventValue = String.valueOf(i);
 
             /*
              * needed here so that the tabs can be wrapped. else they are in
@@ -172,31 +169,30 @@ public class TabbedPaneCG extends AbstractComponentCG {
              */
             Utils.printNewline(device, tabbedPane);
 
-            Utils.printButtonStart(device, tabbedPane, String.valueOf(i), tabbedPane.isEnabledAt(i));
+            Utils.printButtonStart(device, tabbedPane, eventValue, enabledTab);
 
             if (tooltip != null) {
-                device.print(" title=\"");
-                device.print(tooltip);
-                device.print("\"");
+                Utils.optAttribute(device, "title", tooltip);
             }
 
-            device.print(" selected=\"").print(Boolean.toString(i == tabbedPane.getSelectedIndex())).print("\"");
-            if (i == tabbedPane.getSelectedIndex() && tabbedPane.isFocusOwner())
+            if (i == tabbedPane.getSelectedIndex() && tabbedPane.isFocusOwner()) {
                 Utils.optAttribute(device, "focus", tabbedPane.getName());
-
-            if (browserSupportCssChildSelector) {
-                SStringBuilder cssClassName = new SStringBuilder("STabbedPane_Tab_");
-                if (tabbedPane.getShowAsFormComponent())
-                    cssClassName.append("button_");
-                cssClassName.append(placements.get(new Integer(tabbedPane.getTabPlacement())));
-                if (i == tabbedPane.getSelectedIndex()) {
-                    Utils.optAttribute(device, "class", cssClassName.append(" STabbedPane_Tab_selected").toString());
-                } else if (!tabbedPane.isEnabledAt(i)) {
-                    Utils.optAttribute(device, "class", cssClassName.append(" STabbedPane_Tab_disabled").toString());
-                } else {
-                    Utils.optAttribute(device, "class", cssClassName.append(" STabbedPane_Tab_unselected").toString());
-                }
             }
+
+            final SStringBuilder cssClassName = new SStringBuilder("STabbedPane_Tab_");
+            if (tabbedPane.getShowAsFormComponent()) {
+                cssClassName.append("button_");
+            }
+            cssClassName.append(placements.get(new Integer(tabbedPane.getTabPlacement())));
+            if (i == tabbedPane.getSelectedIndex()) {
+                cssClassName.append(" STabbedPane_Tab_selected");
+            } else if (!enabledTab) {
+                cssClassName.append(" STabbedPane_Tab_disabled");
+            } else {
+                cssClassName.append(" STabbedPane_Tab_unselected");
+            }
+            Utils.optAttribute(device, "class", cssClassName);
+            
             device.print(">");
 
             if (icon != null && tabbedPane.getTabPlacement() != SConstants.RIGHT) {
@@ -225,7 +221,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("\" style=\"margin-right:0.2em;\"/>");
             }
 
-            Utils.printButtonEnd(device);
+            Utils.printButtonEnd(device, tabbedPane, eventValue, enabledTab);
         }
     }
 }

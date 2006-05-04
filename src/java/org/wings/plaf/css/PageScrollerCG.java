@@ -209,7 +209,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
 
         device.print(Integer.toString(page + 1));
 
-        Utils.printButtonEnd(device);
+        Utils.printButtonEnd(device, pageScroller, String.valueOf(page * pageScroller.getExtent()), enabled);
     }
 
     private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event, boolean enabled) throws IOException {
@@ -225,6 +225,6 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         device.print(icon.getIconTitle());
         device.print("\"/>");
 
-        Utils.printButtonEnd(device);
+        Utils.printButtonEnd(device, pageScroller, event, enabled);
     }
 }

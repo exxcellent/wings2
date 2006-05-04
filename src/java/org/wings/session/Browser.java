@@ -440,13 +440,6 @@ public class Browser implements Serializable {
     }
 
     /**
-     * @return true if browser supports the following notation for CSS selectors: <code>DIV > P</code>
-     */
-    public boolean supportsCssChildSelector() {
-        return browserType != BrowserType.IE;
-    }
-
-    /**
      * just for testing ...
      */
     public static void main(String[] args) {

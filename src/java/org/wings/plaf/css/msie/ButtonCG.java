@@ -83,7 +83,7 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
-        Utils.printButtonEnd(device);
+        Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), button.isEnabled());
     }
 
     public void installCG(final SComponent component) {

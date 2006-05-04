@@ -122,7 +122,6 @@ public class ListCG extends AbstractComponentCG implements
 
     public void writeAnchorList(Device device, SList list)
             throws IOException {
-        boolean showAsFormComponent = list.getShowAsFormComponent();
         boolean renderSelection = list.getSelectionMode() != SList.NO_SELECTION;
 
         device.print("<");
@@ -157,7 +156,7 @@ public class ListCG extends AbstractComponentCG implements
             SComponent renderer = cellRenderer.getListCellRendererComponent(list, model.getElementAt(i), selected, i);
 
             if (renderSelection) {
-                Utils.printButtonStart(device, list, list.getToggleSelectionParameter(i));
+                Utils.printButtonStart(device, list, list.getToggleSelectionParameter(i), true);
                 Utils.optAttribute(device, "focus", renderer.getName());
                 device.print(">");
             } else
@@ -166,7 +165,7 @@ public class ListCG extends AbstractComponentCG implements
             rendererPane.writeComponent(device, renderer, list);
 
             if (renderSelection) {
-                Utils.printButtonEnd(device);
+                Utils.printButtonEnd(device, list, list.getToggleSelectionParameter(i), true);
             } else
                 device.print("</span>");
 

@@ -89,7 +89,6 @@ public class TreeCG extends AbstractComponentCG implements
 
     private void writeTreeNode(STree component, Device device, int row, int depth)
             throws IOException {
-        boolean childSelectorWorkaround = !component.getSession().getUserAgent().supportsCssChildSelector();
         final TreePath path = component.getPathForRow(row);
 
         final Object node = path.getLastPathComponent();
@@ -111,12 +110,8 @@ public class TreeCG extends AbstractComponentCG implements
          * now, write the component.
          */
         device.print("<li");
-
         if (isSelected) {
-            device.print(" selected=\"true\"");
-            if (childSelectorWorkaround) {
-                Utils.optAttribute(device, "class", "selected");
-            }
+            Utils.optAttribute(device, "class", "selected");
         }
         device.print(">");
 
@@ -134,14 +129,15 @@ public class TreeCG extends AbstractComponentCG implements
              */
             device.print("<table><tr><td>");
 
+            final String expansionParameter = component.getExpansionParameter(row, false);
             if (isLeaf) {
                 // render a disabled button around this. firefox position bugfix (ol)
-                Utils.printButtonStart(device, component, component.getExpansionParameter(row, false));
+                Utils.printButtonStart(device, component, expansionParameter, true);
                 device.print(">");
                 writeIcon(device, leafControlIcon, false);
-                Utils.printButtonEnd(device);
+                Utils.printButtonEnd(device, component, expansionParameter, true);
             } else {
-                Utils.printButtonStart(device, component, component.getExpansionParameter(row, false));
+                Utils.printButtonStart(device, component, expansionParameter, true);
                 device.print(">");
 
                 if (isExpanded) {
@@ -157,7 +153,7 @@ public class TreeCG extends AbstractComponentCG implements
                         writeIcon(device, expandControlIcon, true);
                     }
                 }
-                Utils.printButtonEnd(device);
+                Utils.printButtonEnd(device, component, expansionParameter, true);
             }
             /*
              * closing layout td
@@ -168,14 +164,15 @@ public class TreeCG extends AbstractComponentCG implements
 
         SCellRendererPane rendererPane = component.getCellRendererPane();
         if (isSelectable) {
-            Utils.printButtonStart(device, component, component.getSelectionParameter(row, false));
+            final String selectionParameter = component.getSelectionParameter(row, false);
+            Utils.printButtonStart(device, component, selectionParameter, true);
 
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             device.print(">");
 
             rendererPane.writeComponent(device, cellComp, component);
 
-            Utils.printButtonEnd(device);
+            Utils.printButtonEnd(device, component, selectionParameter, true);
         } else {
             rendererPane.writeComponent(device, cellComp, component);
         }
@@ -184,7 +181,7 @@ public class TreeCG extends AbstractComponentCG implements
             /*
              * we have to close the table
              */
-            device.print("</td></tr></table>\n");
+            device.print("</td></tr></table>");
         }
 
         //handle the depth level of the tree
@@ -198,13 +195,14 @@ public class TreeCG extends AbstractComponentCG implements
         if (pathCount < nextPathCount) {
             indentOnce(device, component, path);
         } else if (pathCount > nextPathCount) {
-            device.print("</li>\n");
+            device.print("</li>");
             for (int i = nextPathCount; i < pathCount; i++) {
-                device.print("</ul></div></li>\n");
+                device.print("</ul></div></li>");
             }
         } else if (path.getPathCount() == nextPathCount) {
             device.print("</li>");
         }
+        Utils.printNewline(device, component);
     }
 
     public void write(final Device device, final SComponent _c)
@@ -239,11 +237,6 @@ public class TreeCG extends AbstractComponentCG implements
     /**
      * Recursively indents the Tree in case it isn't displayed from the root
      * node. reversely traverses the {@link TreePath} and renders afterwards.
-     *
-     * @param device
-     * @param component
-     * @param path
-     * @throws IOException
      */
     private void indentRecursive(Device device, STree component, TreePath path) throws IOException {
         if (path == null) {
@@ -266,7 +259,7 @@ public class TreeCG extends AbstractComponentCG implements
         device.print("><ul class=\"STree\"");
         device.print(" style=\"margin-left:");
         device.print(component.getNodeIndentDepth());
-        device.print("px;\">\n");
+        device.print("px;\">");
     }
 
     //--- setters and getters for the properties.

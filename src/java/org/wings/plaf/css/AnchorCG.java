@@ -36,7 +36,7 @@ public class AnchorCG
             throws IOException {
         final SAnchor component = (SAnchor) _c;
 
-        Utils.printButtonStart(device, component, null);
+        Utils.printButtonStart(device, component, null, true);
 
         Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
         if (component.isFocusOwner())
@@ -47,6 +47,6 @@ public class AnchorCG
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         device.print(">");
         Utils.renderContainer(device, component);
-        Utils.printButtonEnd(device);
+        Utils.printButtonEnd(device, component, null, true);
     }
 }

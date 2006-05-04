@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.plaf.TextAreaCG;
+import org.wings.text.SDocument;
 
 /**
  * Multilined input text area which requires a surrounding {@link SForm} element.
@@ -47,8 +48,8 @@ public class STextArea        extends STextComponent {
      * default value is off
      */
     private int lineWrap = NO_WRAP;
-    
- 
+
+
     /**
      * Creates a TextArea with defaults
      */
@@ -73,7 +74,7 @@ public class STextArea        extends STextComponent {
     public STextArea(int rows, int columns) {
         this(null, rows, columns);
     }
-          
+
 
     /**
      * Creates a new TextArea with the specified text and number of rows and columns.
@@ -82,13 +83,41 @@ public class STextArea        extends STextComponent {
      * @param columns is the number of columns to display
      **/
     public STextArea(String text, int rows, int columns) {
+        this(null, text, rows, columns);
+    }
+
+    /**
+      * Constructs a new STextArea with the given document model, and defaults
+      * for all of the other arguments (null, 0, 0).
+      *
+      * @param doc  the model to use
+      */
+     public STextArea(SDocument doc) {
+         this(doc, null, 0, 0);
+     }
+
+    /**
+     * Constructs a new STextArea with the specified number of rows
+     * and columns, and the given model.  All of the constructors
+     * feed through this constructor.
+     *
+     * @param doc the model to use, or create a default one if null
+     * @param text the text to be displayed, null if none
+     * @param rows the number of rows >= 0
+     * @param columns the number of columns >= 0
+     * @exception IllegalArgumentException if the rows or columns
+     *  arguments are negative.
+     */
+    public STextArea(SDocument doc, String text, int rows, int columns) {
         super();
         this.setText(text);
         this.setRows(rows);
         this.setColumns(columns);
+        if (doc != null) {
+            setDocument(doc);
+        }
     }
-    
- 
+
     /**
      * Set the number of visble rows
      * @param r the number of visble rows
@@ -120,7 +149,7 @@ public class STextArea        extends STextComponent {
             reload(ReloadManager.STATE);
     }
 
-    
+
     /**
      * Current number of columns to display
      * @return the number of columns
@@ -146,7 +175,7 @@ public class STextArea        extends STextComponent {
         return lineWrap;
     }
 
-    
+
     public void setCG(TextAreaCG cg) {
         super.setCG(cg);
     }

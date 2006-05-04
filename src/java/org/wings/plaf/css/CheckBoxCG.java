@@ -75,14 +75,14 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
          */
 
         if (showAsFormComponent && useIconsInForms) {
-            Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true);
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
             Utils.optAttribute(device, "class", "borderless"); // no borders around button
         } else if (showAsFormComponent && !useIconsInForms) {
             device.print("<div");
         } else {
-            Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true);
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
@@ -128,11 +128,11 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         }
 
         if (showAsFormComponent && useIconsInForms)
-            Utils.printButtonEnd(device);
+            Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), true);
         else if (showAsFormComponent && !useIconsInForms)
             device.print("</div>");
         else
-            device.print("</a>");
+            Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), true);
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {

@@ -225,7 +225,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
     }
 
     private void writeButton(Device device, SScrollBar scrollBar, SIcon icon, String event) throws IOException {
-        Utils.printButtonStart(device, scrollBar, event);
+        Utils.printButtonStart(device, scrollBar, event, true);
         device.print(">");
 
         device.print("<img");
@@ -237,7 +237,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         device.print(icon.getIconTitle());
         device.print("\"/>");
 
-        Utils.printButtonEnd(device);
+        Utils.printButtonEnd(device, scrollBar, event, true);
     }
 
 }

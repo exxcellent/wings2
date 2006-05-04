@@ -29,6 +29,7 @@ import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
+import org.wings.session.BrowserType;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
@@ -230,7 +231,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             parameter = table.getToggleSelectionParameter(row, col);
 
         if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
-            Utils.printButtonStart(device, table, parameter);
+            Utils.printButtonStart(device, table, parameter, true);
             device.print(">");
         } else
             device.print("<span>");
@@ -238,7 +239,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         rendererPane.writeComponent(device, component, table);
 
         if (parameter != null && !isEditingCell && selectableCell && !contentContainsClickables) {
-            Utils.printButtonEnd(device);
+            Utils.printButtonEnd(device, table, parameter, true);
         } else
             device.print("</span>");
 
@@ -269,7 +270,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         final SDimension intercellSpacing = table.getIntercellSpacing();
         final SListSelectionModel selectionModel = table.getSelectionModel();
         final SCellRendererPane rendererPane = table.getCellRendererPane();
-        final boolean childSelectorWorkaround = !table.getSession().getUserAgent().supportsCssChildSelector();
+        final boolean childSelectorWorkaround = !(table.getSession().getUserAgent().getBrowserType() != BrowserType.IE);
         final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION && table.isEditable();
         final boolean showAsFormComponent = table.getShowAsFormComponent();
         final SDimension tableWidthByColumnModel = determineTableWidthByColumnModel(table, needsSelectionRow);
@@ -418,10 +419,11 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         Utils.optAttribute(device, "width", selectionColumnWidth);
         device.print(">");
 
-        Utils.printButtonStart(device, table, table.getToggleSelectionParameter(row, -1));
+        String value = table.getToggleSelectionParameter(row, -1);
+        Utils.printButtonStart(device, table, value, true);
         device.print(">");
         renderSelectionColumnContent(device, row, table, rendererPane);
-        Utils.printButtonEnd(device);
+        Utils.printButtonEnd(device, table, value, true);
         device.print("</td>");
     }
 

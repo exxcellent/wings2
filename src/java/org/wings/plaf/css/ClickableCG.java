@@ -31,7 +31,7 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
             throws IOException {
         final SClickable button = (SClickable) component;
 
-        Utils.printButtonStart(device, button, button.getEvent());
+        Utils.printButtonStart(device, button, button.getEvent(), true);
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         device.print(">");
 
@@ -54,7 +54,7 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
         }
 
-        Utils.printButtonEnd(device);
+        Utils.printButtonEnd(device, button, button.getEvent(), true);
     }
 
     protected SIcon getIcon(SClickable abstractButton) {

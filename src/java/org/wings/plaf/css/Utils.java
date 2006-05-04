@@ -847,14 +847,10 @@ public final class Utils {
             return styleString != null ? styleString : "";
     }
 
-    public static void printButtonStart(final Device device, final SComponent button, String value) throws IOException {
-        printButtonStart(device, button, value, true);
-    }
-
     public static void printButtonStart(final Device device, final SComponent button, String value, boolean enabled) throws IOException {
         if (button.getShowAsFormComponent()) {
             if (!enabled) {
-                device.print("<a href=\"#\" class=\"disabled\" ");
+                device.print("<span class=\"disabled\"");
             } else {
                 device.print("<a href=\"#\" onClick=\"sendEvent(event,'");
                 device.print(value == null ? "" : value);
@@ -867,7 +863,7 @@ public final class Utils {
             }
         } else {
             if (!enabled) {
-                device.print("<a href=\"#\" ");
+                device.print("<span");
             } else {
                 final RequestURL requestURL = button.getRequestURL();
                 if (value != null) {
@@ -881,11 +877,15 @@ public final class Utils {
         }
     }
 
-    public static void printButtonEnd(final Device device) throws IOException {
-        device.print("</a>");
+    public static void printButtonEnd(final Device device, final SComponent button,
+                                      final String value, final boolean enabled) throws IOException {
+        if (enabled)
+            device.print("</a>");
+        else
+            device.print("</span>");
     }
 
-    public static String applyOnClickListeners(final SComponent button) throws IOException {
+    public static String applyOnClickListeners(final SComponent button) {
         String script = "";
         JavaScriptListener[] onClickListeners = getOnClickListeners(button);
         if (onClickListeners != null && onClickListeners.length > 0) {
