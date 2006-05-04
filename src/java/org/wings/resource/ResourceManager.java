@@ -18,7 +18,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.plaf.ResourceFactory;
+import org.wings.plaf.ResourceDefaults;
 import org.wings.util.PropertyUtils;
 
 /**
@@ -33,7 +33,7 @@ public class ResourceManager {
     private static final String PROPERTIES_FILENAME = "org/wings/resource/resource.properties";
 
     public static Object getObject(String key, Class clazz) {
-        return resources.get(key, clazz);
+        return RESOURCES.get(key, clazz);
     }
     
     private static Properties properties;
@@ -48,5 +48,5 @@ public class ResourceManager {
         }
     }
     
-    private static ResourceFactory resources = new ResourceFactory(properties);
+    public static final ResourceDefaults RESOURCES = new ResourceDefaults(null, properties);
 }

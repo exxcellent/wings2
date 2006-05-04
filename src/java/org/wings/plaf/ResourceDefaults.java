@@ -16,21 +16,25 @@ package org.wings.plaf;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
+import java.util.Properties;
 
 /**
  * A Property table that stores default. This table overrides the
  * mappings of its <code>parent</code> table.
  */
 public class ResourceDefaults
-        extends HashMap {
+        extends HashMap
+{
     private PropertyChangeSupport changeSupport;
     private ResourceDefaults parent;
+    private ResourceFactory factory;
 
     /**
      * @param parent the parent defaults table that backs this defaults table
      */
-    public ResourceDefaults(ResourceDefaults parent) {
+    public ResourceDefaults(ResourceDefaults parent, Properties properties) {
         this.parent = parent;
+        this.factory = new ResourceFactory(properties);
     }
 
     /**
@@ -64,13 +68,22 @@ public class ResourceDefaults
      */
     public Object get(Object key, Class type) {
         Object value = super.get(key);
-        if (value != null)
-            return value;
+        if (value == null) {
+            // cached with a null value
+            if (super.containsKey(key))
+                return null;
 
-        if (parent != null) {
-            return parent.get(key, type);
+            // ask the parent
+            if (parent != null)
+                value = parent.get(key, type);
+
+            // ask the factory
+            if (value == null && factory != null)
+                value = factory.get(key, type);
         }
-        return null;
+
+        super.put(key, value);
+        return value;
     }
 
 
@@ -123,5 +136,3 @@ public class ResourceDefaults
         }
     }
 }
-
-

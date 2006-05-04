@@ -17,7 +17,6 @@ package org.wings.plaf;
 import java.awt.Color;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -36,12 +35,12 @@ import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.StyleSheet;
 
-public class ResourceFactory extends ResourceDefaults {
+public class ResourceFactory
+{
     private final transient static Log log = LogFactory.getLog(ResourceFactory.class);
 
-    private static final Map WRAPPERS;
+    private static final Map WRAPPERS = new HashMap();
     static {
-        WRAPPERS = new HashMap();
         WRAPPERS.put(Boolean.TYPE, Boolean.class);
         WRAPPERS.put(Character.TYPE, Character.class);
         WRAPPERS.put(Byte.TYPE, Byte.class);
@@ -52,61 +51,46 @@ public class ResourceFactory extends ResourceDefaults {
         WRAPPERS.put(Double.TYPE, Double.class);
     }
 
-    private static final Map finalResources = Collections.synchronizedMap(new HashMap());
-
-    /**
-     * 
-     */
-    private final Properties _properties;
+    private final Properties properties;
 
     public ResourceFactory(Properties properties) {
-        super(null);
-        _properties = properties;
+        this.properties = properties;
     }
 
     public Object get(Object key, Class type) {
-        Object value = get(key);
-        if (value != null)
-            return value;
-
         String property;
         if (key instanceof Class) {
             Class clazz = (Class) key;
             do {
-                property = _properties.getProperty(clazz.getName());
+                property = properties.getProperty(clazz.getName());
                 clazz = clazz.getSuperclass();
             } while (property == null && clazz != null);
-        } else
-            property = _properties.getProperty(key.toString());
-
-        if (property == null) {
-            put(key, null);
-            return null;
         }
-
-        if (ComponentCG.class.isAssignableFrom(type))
-            value = makeComponentCG(property, _properties.getProperty("AbstractComponentCG.PrefixAndSuffixDecorator"));
-        else if (LayoutCG.class.isAssignableFrom(type))
-            value = makeLayoutCG(property);
-        else if (type.isAssignableFrom(SIcon.class))
-            value = makeIcon(property);
-        else if (type.isAssignableFrom(Resource.class))
-            value = makeResource(property);
-        else if (type.isAssignableFrom(CSSAttributeSet.class))
-            value = makeAttributeSet(property);
-        else if (type.isAssignableFrom(StyleSheet.class))
-            value = makeStyleSheet(property);
-        else if (type.isAssignableFrom(Color.class))
-            value = makeColor(property);
-        else if (type.isAssignableFrom(SDimension.class))
-            value = makeDimension(property);
-        else if (type.isAssignableFrom(Class.class))
-            value = makeClass(property);
         else
-            value = makeObject(property, type);
+            property = properties.getProperty(key.toString());
 
-        put(key, value);
-        return value;
+        if (property == null)
+            return null;
+        if (ComponentCG.class.isAssignableFrom(type))
+            return makeComponentCG(property);
+        else if (LayoutCG.class.isAssignableFrom(type))
+            return makeLayoutCG(property);
+        else if (type.isAssignableFrom(SIcon.class))
+            return makeIcon(property);
+        else if (type.isAssignableFrom(Resource.class))
+            return makeResource(property);
+        else if (type.isAssignableFrom(CSSAttributeSet.class))
+            return makeAttributeSet(property);
+        else if (type.isAssignableFrom(StyleSheet.class))
+            return makeStyleSheet(property);
+        else if (type.isAssignableFrom(Color.class))
+            return makeColor(property);
+        else if (type.isAssignableFrom(SDimension.class))
+            return makeDimension(property);
+        else if (type.isAssignableFrom(Class.class))
+            return makeClass(property);
+        else
+            return makeObject(property, type);
     }
 
     /**
@@ -115,25 +99,14 @@ public class ResourceFactory extends ResourceDefaults {
      * @param className the full qualified class name of the CG
      * @return a new CG instance
      */
-    public static Object makeComponentCG(String className, String decoratorClassName) {
-      ComponentCG result = (ComponentCG)finalResources.get(className);
-      if (result == null) {
-          try {
-              Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
-              result = (ComponentCG)cgClass.newInstance();
-
-              Class decoratorClass = decoratorClassName != null ? makeClass(decoratorClassName) : null;
-              if (decoratorClass != null) {
-                  CGDecorator decorator = (CGDecorator)decoratorClass.newInstance();
-                  decorator.setDelegate(result);
-                  result = decorator;
-              }
-              finalResources.put(className, result);
-          } catch (Exception ex) {
-              log.fatal(null, ex);
-          }
-      }
-      return result;
+    public static Object makeComponentCG(String className) {
+        try {
+            Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+            return (ComponentCG)cgClass.newInstance();
+        }
+        catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -142,18 +115,14 @@ public class ResourceFactory extends ResourceDefaults {
      * @param className the full qualified class name of the CG
      * @return a new CG instance
      */
-    public static Object makeLayoutCG(String className) {
-      Object result = finalResources.get(className);
-      if (result == null) {
-          try {
-              Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
-              result = cgClass.newInstance();
-              finalResources.put(className, result);
-          } catch (Exception ex) {
-              log.fatal(null, ex);
-          }
-      }
-      return result;
+    public static LayoutCG makeLayoutCG(String className) {
+        try {
+            Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+            return (LayoutCG) cgClass.newInstance();
+        }
+        catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -165,9 +134,9 @@ public class ResourceFactory extends ResourceDefaults {
         if (colorString != null) {
             try {
                 return Color.decode(colorString.trim());
-            } catch (Exception ex) {
-                log.info("Unable to decode color string "+colorString, ex);
-                return null;
+            }
+            catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
         return null;
@@ -198,12 +167,7 @@ public class ResourceFactory extends ResourceDefaults {
      * @return a newly allocated Icon
      */
     public static SIcon makeIcon(String fileName) {
-        SIcon result = (SIcon) finalResources.get(fileName);
-        if (result == null) {
-            result = new SResourceIcon(fileName);
-            finalResources.put(fileName, result);
-        }
-        return result;
+        return new SResourceIcon(fileName);
     }
 
     /**
@@ -232,12 +196,7 @@ public class ResourceFactory extends ResourceDefaults {
      * @return the styleSheet
      */
     public static Resource makeResource(String resourceName) {
-        Resource result = (Resource) finalResources.get(resourceName);
-        if (result == null) {
-            result = new ClasspathResource(resourceName);
-            finalResources.put(resourceName, result);
-        }
-        return result;
+        return new ClasspathResource(resourceName);
     }
 
     /**
@@ -252,10 +211,10 @@ public class ResourceFactory extends ResourceDefaults {
             result.read(in);
             in.close();
             return result;
-        } catch (Exception e) {
-            log.warn("Exception", e);
         }
-        return null;
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -267,17 +226,12 @@ public class ResourceFactory extends ResourceDefaults {
      * @return a class instance
      */
     public static Class makeClass(String className) {
-        Class result = (Class)finalResources.get(className);
-        if (result == null) {
-            try {
-                result = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
-                finalResources.put(className, result);
-            }
-            catch (ClassNotFoundException e) {
-                log.warn("Exception", e);
-            }
+        try {
+            return Class.forName(className, true, Thread.currentThread().getContextClassLoader());
         }
-        return result;
+        catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -302,13 +256,9 @@ public class ResourceFactory extends ResourceDefaults {
                 Constructor constructor = clazz.getConstructor(new Class[]{String.class});
                 result = constructor.newInstance(new Object[]{value});
             }
-        } catch (NoSuchMethodException e) {
-            log.fatal(value + " : " + clazz.getName()
-                    + " doesn't have a single String arg constructor", e);
-            result = null;
-        } catch (Exception e) {
-            log.error(e.getClass().getName() + " : " + value, e);
-            result = null;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return result;
     }

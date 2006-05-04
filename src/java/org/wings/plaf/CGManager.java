@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLayoutManager;
+import org.wings.plaf.css.CGDecorator;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 import org.wings.style.Style;
@@ -67,7 +68,28 @@ public class CGManager implements Serializable {
      * @param target the SComponent
      */
     public ComponentCG getCG(SComponent target) {
-        return (ComponentCG) getDefaults().get(target.getClass(), ComponentCG.class);
+        ComponentCG componentCG = (ComponentCG) getDefaults().get(target.getClass(), ComponentCG.class);
+        if (componentCG == null)
+            return null;
+        CGDecorator cgDecorator = getCGDecorator();
+        if (cgDecorator != null) {
+            cgDecorator.setDelegate(componentCG);
+            return cgDecorator;
+        }
+        else
+            return componentCG;
+    }
+
+    private CGDecorator getCGDecorator() {
+        CGDecorator cgDecorator;
+        try {
+            Class cgDecoratorClass = (Class) getDefaults().get("AbstractComponentCG.PrefixAndSuffixDecorator", Class.class);
+            cgDecorator = (CGDecorator) cgDecoratorClass.newInstance();
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return cgDecorator;
     }
 
     /**

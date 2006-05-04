@@ -20,6 +20,7 @@ import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
 import org.wings.resource.ClasspathResource;
+import org.wings.resource.ResourceManager;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
@@ -81,7 +82,7 @@ public class LookAndFeel implements Serializable {
      * @return the laf's defaults
      */
     public ResourceDefaults createDefaults() {
-        return new ResourceFactory(properties);
+        return new ResourceDefaults(ResourceManager.RESOURCES, properties);
     }
 
     /**
@@ -94,5 +95,3 @@ public class LookAndFeel implements Serializable {
         return "[" + getDescription() + " - " + getClass().getName() + "]";
     }
 }
-
-

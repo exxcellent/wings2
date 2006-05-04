@@ -455,8 +455,27 @@ public class FrameCG implements org.wings.plaf.FrameCG {
                 device.print("\"></script>\n");
             }
         }
-        device.print("\n</body></html>\n");
+        device.print("\n</body>\n");
+        writeInlineScripts(device, frame);
+        device.print("</html>\n");
         pComp.fireRenderEvent(SComponent.DONE_RENDERING);
+    }
+
+    protected void writeInlineScripts(Device device, SComponent component) throws IOException {
+        boolean scriptTagOpen = false;
+        for (int i = 0; i < component.getScriptListeners().length; i++) {
+            ScriptListener scriptListener = component.getScriptListeners()[i];
+            String script = scriptListener.getScript();
+            if (script != null) {
+                if (!scriptTagOpen) {
+                    device.print("<script type=\"text/javascript\">");
+                    scriptTagOpen = true;
+                }
+                device.print(script);
+            }
+        }
+        if (scriptTagOpen)
+            device.print("</script>");
     }
 
     public boolean wantsPrefixAndSuffix(SComponent component) {
