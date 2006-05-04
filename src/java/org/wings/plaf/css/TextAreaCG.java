@@ -16,8 +16,8 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.STextArea;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 
 import java.io.IOException;
 

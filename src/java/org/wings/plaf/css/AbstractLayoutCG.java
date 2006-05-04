@@ -13,20 +13,17 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Insets;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SLayoutManager;
-import org.wings.border.SBorder;
-import org.wings.dnd.DragSource;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 import org.wings.plaf.LayoutCG;
-import org.wings.style.Style;
+import org.wings.util.SStringBuilder;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.
@@ -47,7 +44,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         // Generate CSS Inline Style
         // we don't need to do that here once we have set all layoutmanagers
         // to 100% width/height
-        
+
         Utils.printNewline(d, layout.getContainer());
         d.print("<table ");
         /* This won't work any longer as we override padding/spacing with default SLayout styles class
@@ -59,17 +56,16 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         Utils.printNewline(d, layout.getContainer());
     }
 
-    /** write the inline style attribute
-     * @param device
-     * @param component
+    /**
+     * Write the inline style attribute
      * @throws IOException
      */
-    protected String getInlineStyles(SLayoutManager layout, int border, Insets insets) throws IOException {
-        SStringBuilder styles = new SStringBuilder();
+    protected SStringBuilder getInlineStyles(SLayoutManager layout, int border, Insets insets) throws IOException {
+        final SStringBuilder styles = new SStringBuilder();
         // write inline styles
         Utils.generateCSSInlinePreferredSize(styles,layout.getContainer().getPreferredSize());
         Utils.generateCSSInlineBorder(styles, border);
-        return styles.toString();
+        return styles;
     }
 
     /**
@@ -85,7 +81,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
     /**
      * Render passed list of components to a table body.
-     * Use {@link #printLayouterTableHeader(org.wings.io.Device, String, int, int, int, org.wings.SLayoutManager)} in front
+     * Use {@link #printLayouterTableHeader(org.wings.io.Device, String, java.awt.Insets, int, org.wings.SLayoutManager)}  in front
      * and {@link #printLayouterTableFooter(org.wings.io.Device, String, org.wings.SLayoutManager)} afterwards!
      *
      * @param d                       The device to write to
@@ -131,7 +127,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
     /**
      * Converts a hgap/vgap in according inline css padding style.
-     * @param styles 
+     * @param styles
      *
      * @param insets The insets to generate CSS padding declaration
      * @return Empty or fille stringbuffer with padding declaration
@@ -176,8 +172,8 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      *
      * @param renderAsHeader Print TH instead of TD
      */
-    public static void openLayouterCell(Device d, boolean renderAsHeader, Insets insets, int border,
-                                        SComponent containedComponent) throws IOException {
+    public static void openLayouterCell(final Device d, final boolean renderAsHeader, final Insets insets,
+                                        final int border, final SComponent containedComponent) throws IOException {
         if (renderAsHeader) {
             d.print("<th");
         } else {
@@ -187,7 +183,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         Utils.printTableCellAlignment(d, containedComponent, SConstants.TOP, SConstants.LEFT);
 
         // CSS inline attributes
-        SStringBuilder inlineAttributes = new SStringBuilder(); 
+        SStringBuilder inlineAttributes = new SStringBuilder();
             Utils.generateCSSInlineBorder(inlineAttributes, border);
         inlineAttributes.append(createInlineStylesForInsets(inlineAttributes, insets));
         Utils.optAttribute(d, "style", inlineAttributes.toString());
@@ -198,7 +194,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      *
      * @param renderAsHeader Print TH instead of TD
      */
-    public static void closeLayouterCell(Device d, boolean renderAsHeader) throws IOException {
+    public static void closeLayouterCell(final Device d, final boolean renderAsHeader) throws IOException {
         d.print(renderAsHeader ? "</th>" : "</td>");
     }
 }

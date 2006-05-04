@@ -22,13 +22,11 @@ import org.wings.border.STitledBorder;
 import org.wings.border.SBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
-import org.wings.plaf.css.AbstractLayoutCG;
+import org.wings.util.SStringBuilder;
 import org.wings.plaf.css.Utils;
 
 import java.awt.Insets;
 import java.io.IOException;
-import java.util.*;
 
 /**
  * This class surrounds every component in MSIE with a TABLE element

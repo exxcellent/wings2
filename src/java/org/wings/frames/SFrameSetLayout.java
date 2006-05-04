@@ -13,22 +13,21 @@
  */
 package org.wings.frames;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.wings.Renderable;
 import org.wings.SAbstractLayoutManager;
 import org.wings.SComponent;
 import org.wings.SFrame;
-import org.wings.frames.SFrameSet;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.session.SessionManager;
+import org.wings.util.SStringBuilder;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * A special layout manager for the root frame of a frameset layout.

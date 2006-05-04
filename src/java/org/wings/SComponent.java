@@ -15,7 +15,6 @@ package org.wings;
 
 
 import java.awt.Color;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.beans.BeanInfo;
@@ -45,7 +44,7 @@ import org.wings.event.SParentFrameListener;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.wings.plaf.ComponentCG;
 import org.wings.script.ScriptListener;
 import org.wings.session.Session;

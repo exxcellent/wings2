@@ -17,11 +17,10 @@ package org.wings.plaf.css;
 import org.wings.SComponent;
 import org.wings.SFormattedTextField;
 import org.wings.STextField;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
-import org.wings.script.JavaScriptListener;
 import org.wings.script.JavaScriptEvent;
 import org.wings.text.SAbstractFormatter;
 

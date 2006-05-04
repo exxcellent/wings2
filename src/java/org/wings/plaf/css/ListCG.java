@@ -15,8 +15,8 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 import org.wings.plaf.CGManager;
 
 import java.io.IOException;

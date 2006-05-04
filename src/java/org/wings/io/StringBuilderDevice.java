@@ -13,6 +13,8 @@
  */
 package org.wings.io;
 
+import org.wings.util.SStringBuilder;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;

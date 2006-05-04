@@ -18,8 +18,8 @@ import org.wings.SComboBox;
 import org.wings.SComponent;
 import org.wings.SDefaultListCellRenderer;
 import org.wings.SListCellRenderer;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 import org.wings.plaf.CGManager;
 import java.io.IOException;
 

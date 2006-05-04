@@ -18,8 +18,8 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.STabbedPane;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
 

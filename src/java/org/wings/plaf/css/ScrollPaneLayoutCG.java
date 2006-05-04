@@ -5,7 +5,7 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 import java.io.IOException;
 import java.awt.Rectangle;

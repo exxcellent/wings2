@@ -7,10 +7,11 @@
 
 package Acme;
 
+import org.wings.util.SStringBuilder;
+
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import org.wings.io.SStringBuilder;
 
 /// A Hashtable that uses ints as the keys.
 // <P>

@@ -14,12 +14,12 @@
 package org.wings.plaf.css.msie;
 
 import org.wings.*;
+import org.wings.util.SStringBuilder;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 import org.wings.plaf.css.AbstractLabelCG;
 import org.wings.plaf.css.IconTextCompound;
 import org.wings.plaf.css.Utils;

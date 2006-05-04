@@ -14,7 +14,7 @@
 package org.wings;
 
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
 import org.apache.commons.logging.Log;

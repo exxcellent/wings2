@@ -13,18 +13,18 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Insets;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.SFlowLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 public class FlowLayoutCG extends AbstractLayoutCG {
     /**
@@ -39,7 +39,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
      */
     public void write(Device d, SLayoutManager l) throws IOException {
         final SFlowLayout layout = (SFlowLayout) l;
-        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());        
+        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
         final List components = layout.getComponents();
         final int alignment = layout.getAlignment();
         final SContainer container = layout.getContainer();

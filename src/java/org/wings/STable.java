@@ -26,7 +26,7 @@ import org.wings.table.STableColumn;
 import org.wings.table.STableColumnModel;
 import org.wings.event.SMouseListener;
 import org.wings.event.SMouseEvent;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;

@@ -13,7 +13,7 @@
  */
 package org.wings;
 
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 
 
