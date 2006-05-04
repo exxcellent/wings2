@@ -15,7 +15,7 @@ package org.wings.script;
 
 import org.wings.SButton;
 import org.wings.SComponent;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 public class JavaScriptListener
         implements ScriptListener {

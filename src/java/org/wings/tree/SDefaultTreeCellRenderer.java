@@ -18,7 +18,7 @@ import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.STree;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.wings.resource.ResourceManager;
 
 /**

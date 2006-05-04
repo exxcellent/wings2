@@ -3,7 +3,7 @@ package org.wings.resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.externalizer.ExternalizeManager;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

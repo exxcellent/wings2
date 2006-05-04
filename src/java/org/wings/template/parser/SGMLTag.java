@@ -75,7 +75,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 /**
  * Convenient class for parsing SGML tokens from a page.

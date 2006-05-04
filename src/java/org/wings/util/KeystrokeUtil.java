@@ -20,8 +20,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
-import org.wings.io.SStringBuilder;
-
 /**
  * This source code was taken from a code example at http://javaalmanac.com/
  * and slightly altered to fit our purpose.
@@ -34,7 +32,7 @@ public class KeystrokeUtil {
         if (key == null) return "";
         SStringBuilder s = new SStringBuilder(50);
         int m = key.getModifiers();
-    
+
         if ((m & (InputEvent.CTRL_DOWN_MASK|InputEvent.CTRL_MASK)) != 0) {
             s.append("Ctrl+");
         }
@@ -56,7 +54,7 @@ public class KeystrokeUtil {
         if ((m & (InputEvent.BUTTON3_DOWN_MASK|InputEvent.BUTTON3_MASK)) != 0) {
             s.append("Button3+");
         }
-    
+
         switch (key.getKeyEventType()) {
         case KeyEvent.KEY_TYPED:
             s.append(key.getKeyChar() + " ");
@@ -69,16 +67,16 @@ public class KeystrokeUtil {
             s.append("unknown-event-type ");
             break;
         }
-    
+
         return s.toString();
     }
-    
+
     public static String getKeyText(int keyCode) {
         if (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9 ||
             keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) {
             return String.valueOf((char)keyCode);
         }
-    
+
         switch(keyCode) {
           case KeyEvent.VK_COMMA: return "COMMA";
           case KeyEvent.VK_PERIOD: return "PERIOD";
@@ -88,7 +86,7 @@ public class KeystrokeUtil {
           case KeyEvent.VK_OPEN_BRACKET: return "OPEN_BRACKET";
           case KeyEvent.VK_BACK_SLASH: return "BACK_SLASH";
           case KeyEvent.VK_CLOSE_BRACKET: return "CLOSE_BRACKET";
-    
+
           case KeyEvent.VK_ENTER: return "ENTER";
           case KeyEvent.VK_BACK_SPACE: return "BACK_SPACE";
           case KeyEvent.VK_TAB: return "TAB";
@@ -109,7 +107,7 @@ public class KeystrokeUtil {
           case KeyEvent.VK_UP: return "UP";
           case KeyEvent.VK_RIGHT: return "RIGHT";
           case KeyEvent.VK_DOWN: return "DOWN";
-    
+
           // numpad numeric keys handled below
           case KeyEvent.VK_MULTIPLY: return "MULTIPLY";
           case KeyEvent.VK_ADD: return "ADD";
@@ -120,7 +118,7 @@ public class KeystrokeUtil {
           case KeyEvent.VK_DELETE: return "DELETE";
           case KeyEvent.VK_NUM_LOCK: return "NUM_LOCK";
           case KeyEvent.VK_SCROLL_LOCK: return "SCROLL_LOCK";
-    
+
           case KeyEvent.VK_F1: return "F1";
           case KeyEvent.VK_F2: return "F2";
           case KeyEvent.VK_F3: return "F3";
@@ -145,19 +143,19 @@ public class KeystrokeUtil {
           case KeyEvent.VK_F22: return "F22";
           case KeyEvent.VK_F23: return "F23";
           case KeyEvent.VK_F24: return "F24";
-    
+
           case KeyEvent.VK_PRINTSCREEN: return "PRINTSCREEN";
           case KeyEvent.VK_INSERT: return "INSERT";
           case KeyEvent.VK_HELP: return "HELP";
           case KeyEvent.VK_META: return "META";
           case KeyEvent.VK_BACK_QUOTE: return "BACK_QUOTE";
           case KeyEvent.VK_QUOTE: return "QUOTE";
-    
+
           case KeyEvent.VK_KP_UP: return "KP_UP";
           case KeyEvent.VK_KP_DOWN: return "KP_DOWN";
           case KeyEvent.VK_KP_LEFT: return "KP_LEFT";
           case KeyEvent.VK_KP_RIGHT: return "KP_RIGHT";
-    
+
           case KeyEvent.VK_DEAD_GRAVE: return "DEAD_GRAVE";
           case KeyEvent.VK_DEAD_ACUTE: return "DEAD_ACUTE";
           case KeyEvent.VK_DEAD_CIRCUMFLEX: return "DEAD_CIRCUMFLEX";
@@ -174,7 +172,7 @@ public class KeystrokeUtil {
           case KeyEvent.VK_DEAD_IOTA: return "DEAD_IOTA";
           case KeyEvent.VK_DEAD_VOICED_SOUND: return "DEAD_VOICED_SOUND";
           case KeyEvent.VK_DEAD_SEMIVOICED_SOUND: return "DEAD_SEMIVOICED_SOUND";
-    
+
           case KeyEvent.VK_AMPERSAND: return "AMPERSAND";
           case KeyEvent.VK_ASTERISK: return "ASTERISK";
           case KeyEvent.VK_QUOTEDBL: return "QUOTEDBL";
@@ -196,7 +194,7 @@ public class KeystrokeUtil {
           case KeyEvent.VK_PLUS: return "PLUS";
           case KeyEvent.VK_RIGHT_PARENTHESIS: return "RIGHT_PARENTHESIS";
           case KeyEvent.VK_UNDERSCORE: return "UNDERSCORE";
-    
+
           case KeyEvent.VK_FINAL: return "FINAL";
           case KeyEvent.VK_CONVERT: return "CONVERT";
           case KeyEvent.VK_NONCONVERT: return "NONCONVERT";
@@ -218,7 +216,7 @@ public class KeystrokeUtil {
           case KeyEvent.VK_JAPANESE_ROMAN: return "JAPANESE_ROMAN";
           case KeyEvent.VK_KANA_LOCK: return "KANA_LOCK";
           case KeyEvent.VK_INPUT_METHOD_ON_OFF: return "INPUT_METHOD_ON_OFF";
-    
+
           case KeyEvent.VK_AGAIN: return "AGAIN";
           case KeyEvent.VK_UNDO: return "UNDO";
           case KeyEvent.VK_COPY: return "COPY";
@@ -227,16 +225,16 @@ public class KeystrokeUtil {
           case KeyEvent.VK_FIND: return "FIND";
           case KeyEvent.VK_PROPS: return "PROPS";
           case KeyEvent.VK_STOP: return "STOP";
-    
+
           case KeyEvent.VK_COMPOSE: return "COMPOSE";
           case KeyEvent.VK_ALT_GRAPH: return "ALT_GRAPH";
         }
-    
+
         if (keyCode >= KeyEvent.VK_NUMPAD0 && keyCode <= KeyEvent.VK_NUMPAD9) {
             char c = (char)(keyCode - KeyEvent.VK_NUMPAD0 + '0');
             return "NUMPAD"+c;
         }
-    
+
         return "unknown(0x" + Integer.toString(keyCode, 16) + ")";
     }
 }

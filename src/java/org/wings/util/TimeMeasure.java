@@ -17,8 +17,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.wings.io.SStringBuilder;
-
 /*
  * Ein Klasse, die Zeitmessungen aufnimmt und diese in Relation zueineander
  * setzt. Zum Start der Zeitmessung Methode start kurzer Beschreibung was

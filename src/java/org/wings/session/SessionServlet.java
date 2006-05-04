@@ -17,13 +17,13 @@ package org.wings.session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.util.SStringBuilder;
 import org.wings.event.ExitVetoException;
 import org.wings.event.SRequestEvent;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
 import org.wings.io.Device;
 import org.wings.io.DeviceFactory;
-import org.wings.io.SStringBuilder;
 import org.wings.io.ServletDevice;
 import org.wings.resource.DynamicCodeResource;
 

@@ -16,7 +16,7 @@ package org.wings.style;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 /**
  * A CSS parser. This works by way of a delegate that implements the

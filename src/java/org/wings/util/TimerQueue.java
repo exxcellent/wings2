@@ -13,8 +13,6 @@
  */
 package org.wings.util;
 
-import org.wings.io.SStringBuilder;
-
 /*
  * Die Klasse ist praktisch von der Swing Implementierung
  * abgeleitet. Leider brauch ich einen Timer, der auch innerhalb des

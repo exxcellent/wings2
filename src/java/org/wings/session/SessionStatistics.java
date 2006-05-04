@@ -17,7 +17,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.io.Serializable;
 
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 /**
  * @author <a href="mailto:@mueller.de">armin</a>

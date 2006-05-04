@@ -22,7 +22,7 @@ import javax.swing.text.BadLocationException;
 
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.wings.util.EditTranscriptGenerator;
 
 /**

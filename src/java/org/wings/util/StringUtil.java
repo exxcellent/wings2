@@ -15,8 +15,6 @@ package org.wings.util;
 
 import java.util.StringTokenizer;
 
-import org.wings.io.SStringBuilder;
-
 /**
  * Some string manipulation utilities.
  *

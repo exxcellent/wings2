@@ -16,7 +16,7 @@ package org.wings.session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.UploadFilterManager;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.wings.util.LocaleCharSet;
 
 import javax.servlet.ServletInputStream;

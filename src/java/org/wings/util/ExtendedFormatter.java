@@ -20,8 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.LogRecord;
 
-import org.wings.io.SStringBuilder;
-
 public class ExtendedFormatter
         extends java.util.logging.Formatter {
     private DateFormat dateFormatter;

@@ -14,8 +14,8 @@
 package org.wings.style;
 
 import org.wings.Renderable;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;

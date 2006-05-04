@@ -14,7 +14,7 @@
 package org.wings.template;
 
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.wings.template.parser.ParseContext;
 import org.wings.template.parser.PositionReader;
 import org.wings.template.parser.SGMLTag;

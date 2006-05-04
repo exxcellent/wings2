@@ -37,8 +37,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.wings.io.SStringBuilder;
-
 /**
  * Get file format, image resolution, number of bits per pixel and optionally
  * number of images, comments and physical resolution from

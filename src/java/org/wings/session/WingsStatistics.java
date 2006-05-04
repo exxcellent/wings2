@@ -16,7 +16,7 @@ package org.wings.session;
 import java.text.DateFormat;
 import java.util.Date;
 
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 /**
  * @author <a href="mailto:@mueller.de">armin</a>
