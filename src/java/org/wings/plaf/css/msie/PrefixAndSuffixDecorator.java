@@ -15,6 +15,7 @@ package org.wings.plaf.css.msie;
 
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
+import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.style.*;
 import org.wings.border.STitledBorder;
@@ -24,6 +25,8 @@ import org.wings.io.Device;
 import org.wings.io.SStringBuilder;
 import org.wings.plaf.css.AbstractLayoutCG;
 import org.wings.plaf.css.Utils;
+
+import java.awt.Insets;
 import java.io.IOException;
 import java.util.*;
 
@@ -113,7 +116,7 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         SBorder border = component.getBorder();
         if (border != null && border.getAttributes() != null)
             inlineStyles.append(border.getAttributes().toString());
-        Utils.generateCSSInlinePreferredSize(inlineStyles, prefSize, component.getOversize(true), component.getOversize(false));
+        appendCSSInlineSize(inlineStyles, prefSize, getOversize(component, true), getOversize(component, false));
         return inlineStyles.toString();
     }
 
@@ -146,5 +149,90 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         alignmentIncapable |= layoutManager instanceof SCardLayout;
         return alignmentIncapable;
     } */
+
+    /** gets the difference in pixels between border-box model and content-box-model.
+     * IE uses content-box model and needs recalculation
+     * @param component
+     * @param horizontal
+     * @return
+     */
+    protected final int getOversize(SComponent component, boolean horizontal) {
+        int oversize = 0;
+        SBorder border = component.getBorder();
+        if (border != null) {
+            int[] sides = horizontal ? new int[] {SConstants.LEFT, SConstants.RIGHT} : new int[] {SConstants.TOP, SConstants.BOTTOM};
+            for (int i = 0; i < sides.length; i++) {
+                oversize += border.getThickness(sides[i]);
+            }
+            Insets insets = border.getInsets();
+            if (insets != null) {
+                if (horizontal) {
+                    oversize += insets.right + insets.left;
+                } else {
+                    oversize += insets.top + insets.bottom;
+                }
+            }
+        }
+        return oversize;
+    }
+
+    /**
+     * Appends a new CSS Inline Style string for the passed SDimension to the passed stringbuffer.
+     * <p>Sample: <code>width:100%;heigth=15px"</code>
+     *
+     * @param preferredSize Preferred sitze. May be null or contain null attributes
+     * @param device Device to append to.
+     * @param oversize the size of border and padding that might need to be subtracted
+     * @param oversizeVertical
+     */
+    protected static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
+        if (preferredSize != null) {
+            if (preferredSize.getWidth() != SDimension.AUTO) {
+                if (oversizeHorizontal > 0) {
+                    if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
+                        // size berechnen anhand des Parents - auf Clientseite
+                        styleString.append("width:expression(((this.parentNode.clientWidth-").append(oversizeHorizontal).append(")");
+                        // not more than 100 percent
+                        int widthPercentage = Math.min(preferredSize.getWidthInt(),100);
+                        if (widthPercentage != 100) {
+                            styleString.append("*").append(widthPercentage/100.0);
+                        }
+                        styleString.append(")+'px');");
+                    } else if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("px") != -1) {
+                        // subtract pixels
+                        styleString.append("width:").append(preferredSize.getWidthInt()-oversizeHorizontal).append("px;");
+                    } else {
+                        // em, pt...we cannot recalculate those
+                        styleString.append("width:").append(preferredSize.getWidth()).append(";");
+                    }
+                } else {
+                    styleString.append("width:").append(preferredSize.getWidth()).append(";");
+                }
+            }
+            if (preferredSize.getHeight() != SDimension.AUTO) {
+                if (oversizeVertical != 0) {
+                    if(preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1) {
+                        // size berechnen anhand des Parents - auf Clientseite
+                        styleString.append("height:expression(((this.parentNode.clientHeight-").append(oversizeVertical).append(")");
+                        // not more than 100 percent
+                        int heightPercentage = Math.min(preferredSize.getHeightInt(),100);
+                        if (heightPercentage != 100) {
+                            styleString.append("*").append(heightPercentage/100.0);
+                        }
+                        styleString.append(")+'px');");
+                    } else if (preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("px") != -1) {
+                        // subtract pixels
+                        styleString.append("height:").append(preferredSize.getHeightInt()-oversizeVertical).append("px;");
+                    } else {
+                        // em, pt...we cannot recalculate those
+                        styleString.append("height:").append(preferredSize.getHeight()).append(";");
+                    }
+                } else {
+                    styleString.append("height:").append(preferredSize.getHeight()).append(";");
+                }
+            }
+        }
+        return styleString;
+    }
 
 }

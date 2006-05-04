@@ -14,10 +14,7 @@ body {
     background: #ffffff;
     position: relative;
     margin: 0px;
-}
-
 /* Smaller fonts for IE to be comparable with Mozilla rendering. Refer also: http://www.clagnut.com/blog/348/ */
-body, td {
     font-family: sans-serif;
     font-style: normal;
     font-size: 0.8em;

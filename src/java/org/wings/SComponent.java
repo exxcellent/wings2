@@ -1959,21 +1959,4 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                 e.getParentFrame().deregisterGlobalInputMapComponent(me);
         }
     }
-
-    public final int getOversize(boolean horizontal) {
-        int oversize = 0;
-        SBorder border = getBorder();
-        if (border != null) {
-            oversize += border.getThickness() * 2;
-            Insets insets = border.getInsets();
-            if (insets != null) {
-                if (horizontal) {
-                    oversize += insets.right + insets.left;
-                } else {
-                    oversize += insets.top + insets.bottom;
-                }
-            }
-        }
-        return oversize;
-    }
 }

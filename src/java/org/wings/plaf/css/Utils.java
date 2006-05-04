@@ -273,7 +273,7 @@ public final class Utils {
      */
     public static SStringBuilder generateCSSComponentInlineStyle(SComponent component) {
         final SStringBuilder styleString = new SStringBuilder();
-        appendCSSInlineSize(styleString, component);
+        appendCSSInlineSize(styleString, component.getPreferredSize());
         appendCSSComponentInlineColorStyle(styleString, component);
         appendCSSComponentInlineFontStyle(styleString, component);
         return styleString;
@@ -321,40 +321,7 @@ public final class Utils {
      * @throws IOException
      */
     public static void appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
-        appendCSSInlineSize(styleString, pComponent.getPreferredSize(), pComponent.getOversize(true), pComponent.getOversize(false));
-    }
-
-    /**
-     * Appends a new CSS Inline Style string for the passed SDimension to the passed stringbuffer.
-     * <p>Sample: <code>width:100%;heigth=15px"</code>
-     *
-     * @param preferredSize Preferred sitze. May be null or contain null attributes
-     * @param device Device to append to.
-     * @param oversize the size of border and padding that might need to be subtracted
-     * @param oversizeVertical
-     */
-    public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
-        if (preferredSize != null) {
-            if (preferredSize.getWidth() != SDimension.AUTO) {
-                if (oversizeHorizontal != 0 &&
-                        preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
-                    // size berechnen anhand des Parents - auf Clientseite
-                    styleString.append("width:expression(this.parentNode.offsetWidth-").append(oversizeHorizontal).append("+'px');");
-                } else {
-                    styleString.append("width:").append(preferredSize.getWidth()).append(";");
-                }
-            }
-            if (preferredSize.getHeight() != SDimension.AUTO) {
-                if (oversizeVertical != 0 &&
-                        preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1) {
-                    // size berechnen anhand des Parents - auf Clientseite
-                    styleString.append("height:expression(this.parentNode.offsetHeight-").append(oversizeVertical).append("+'px');");
-                } else {
-                    styleString.append("height:").append(preferredSize.getHeight()).append(";");
-                }
-            }
-        }
-        return styleString;
+        appendCSSInlineSize(styleString, pComponent.getPreferredSize());
     }
 
     /**
@@ -388,21 +355,6 @@ public final class Utils {
 //        return appendCSSInlineSize(new SStringBuilder(), preferredSize, 0, 0);
 //    }
 //
-    /**
-     * Generates a new CSS Inline Style string for the passed SDimension.
-     * <p>Sample: <code>width:100%;heigth=15px"</code>
-     *
-     * @param device
-     * @param preferredSize Preferred size. May be null or contain null attributes
-     * @param oversizeHorizontal  the size of the borders and paddings that might need to be subtracted
-     * @param oversizeVertical  the size of the borders and paddings that might need to be subtracted
-�    * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
-     * @throws IOException
-     */
-    public static SStringBuilder generateCSSInlinePreferredSize(SStringBuilder buffer, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
-        return appendCSSInlineSize(buffer, preferredSize, oversizeHorizontal, oversizeVertical);
-    }
-
     /**
      * Generates a new CSS Inline Style string for the passed SDimension.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
