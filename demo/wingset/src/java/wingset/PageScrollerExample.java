@@ -24,7 +24,7 @@ import org.wings.SList;
 import org.wings.SPageScroller;
 import org.wings.SScrollPane;
 import org.wings.SScrollPaneLayout;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 
 import javax.swing.tree.TreeNode;
 import java.awt.*;

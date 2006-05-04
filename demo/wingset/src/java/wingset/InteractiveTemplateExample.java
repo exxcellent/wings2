@@ -14,12 +14,11 @@
 package wingset;
 
 import org.wings.*;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.wings.style.CSSProperty;
 import org.wings.template.StringTemplateSource;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 

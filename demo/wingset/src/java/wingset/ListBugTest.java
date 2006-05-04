@@ -39,7 +39,7 @@ public class ListBugTest extends WingSetPane {
 
         SGridLayout gridLayout = new SGridLayout(1);
         SForm panel = new SForm(gridLayout);
-        panel.setPreferredSize(new SDimension(200, 100));
+        panel.setPreferredSize(new SDimension(200, -1));
         gridLayout.setVgap(5);
 
         gridLayout = new SGridLayout(3);

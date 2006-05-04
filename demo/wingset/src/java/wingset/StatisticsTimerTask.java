@@ -1,7 +1,7 @@
 // $Id$
 package wingset;
 
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.wings.session.WingsStatistics;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
