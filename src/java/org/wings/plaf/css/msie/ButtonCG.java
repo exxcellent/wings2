@@ -42,14 +42,9 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
     public void write(final Device device, final SComponent component) throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
-        if (button.getShowAsFormComponent()) {
-            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled());
-            Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
-            Utils.optAttribute(device, "accesskey", button.getMnemonic());
-        } else {
-            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled());
-            Utils.optAttribute(device, "accesskey", button.getMnemonic());
-        }
+        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled());
+        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
+        Utils.optAttribute(device, "accesskey", button.getMnemonic());
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         // use class attribute instead of single attributes for IE compatibility

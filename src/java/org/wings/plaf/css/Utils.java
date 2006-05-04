@@ -15,35 +15,20 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.LowLevelEventListener;
-import org.wings.Renderable;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SDimension;
-import org.wings.SFont;
-import org.wings.SFrame;
-import org.wings.SLayoutManager;
-import org.wings.border.SBorder;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.io.SStringBuilder;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
-import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
 
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * MSIEUtils.java
@@ -351,37 +336,19 @@ public final class Utils {
     public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
         if (preferredSize != null) {
             if (preferredSize.getWidth() != SDimension.AUTO) {
-                if (oversizeHorizontal > 0) {
-                    if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
-                        // size berechnen anhand des Parents - auf Clientseite
-                        styleString.append("width:expression(((parentNode.clientWidth-").append(oversizeHorizontal).append(")");
-                        // not more than 10 percent
-                        int widthPercentage = Math.min(preferredSize.getWidthInt(),100);
-                        if (widthPercentage != 100) {
-                            styleString.append("*").append(widthPercentage/100.0);
-                        }
-                        styleString.append(")+'px');");
-                    } else {
-                        styleString.append("width:").append(preferredSize.getWidthInt()-oversizeHorizontal).append(";");
-                    }
+                if (oversizeHorizontal != 0 &&
+                        preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
+                    // size berechnen anhand des Parents - auf Clientseite
+                    styleString.append("width:expression(this.parentNode.offsetWidth-").append(oversizeHorizontal).append("+'px');");
                 } else {
                     styleString.append("width:").append(preferredSize.getWidth()).append(";");
                 }
             }
             if (preferredSize.getHeight() != SDimension.AUTO) {
-                if (oversizeVertical > 0) {
-                    if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
-                        // size berechnen anhand des Parents - auf Clientseite
-                        styleString.append("height:expression(((parentNode.clientHeight-").append(oversizeVertical).append(")");
-                        // not more than 10 percent
-                        int heightPercentage = Math.min(preferredSize.getHeightInt(),100);
-                        if (heightPercentage != 100) {
-                            styleString.append("*").append(heightPercentage/100.0);
-                        }
-                        styleString.append(")+'px');");
-                    } else {
-                        styleString.append("height:").append(preferredSize.getHeightInt()-oversizeVertical).append(";");
-                    }
+                if (oversizeVertical != 0 &&
+                        preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1) {
+                    // size berechnen anhand des Parents - auf Clientseite
+                    styleString.append("height:expression(this.parentNode.offsetHeight-").append(oversizeVertical).append("+'px');");
                 } else {
                     styleString.append("height:").append(preferredSize.getHeight()).append(";");
                 }
@@ -926,12 +893,13 @@ public final class Utils {
     }
 
     public static void printButtonStart(final Device device, final SComponent button, String value, boolean enabled) throws IOException {
+        device.print(getButtonStyling(button));
         if (button.getShowAsFormComponent()) {
             if (!enabled) {
                 device.print("<a href=\"#\" class=\"disabled\" ");
             } else {
                 device.print("<a href=\"#\" onClick=\"sendEvent(event,'");
-                device.print(value);
+                device.print(value == null ? "" : value);
                 device.print("','");
                 device.print(Utils.event(button));
                 device.print("'");
@@ -958,7 +926,11 @@ public final class Utils {
     }
 
     public static void printButtonEnd(final Device device) throws IOException {
-        device.print("</a>");
+        device.print("</a></div>");
+    }
+
+    private static String getButtonStyling(final SComponent button) {
+        return "<div class=\"" + button.getStyle() + "\">";
     }
 
     public static String applyOnClickListeners(final SComponent button) throws IOException {

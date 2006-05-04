@@ -151,7 +151,6 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
     private void writeTabs(Device device, STabbedPane tabbedPane) throws IOException {
         boolean browserSupportCssChildSelector = !tabbedPane.getSession().getUserAgent().supportsCssChildSelector();
-        boolean showAsFormComponent = tabbedPane.getShowAsFormComponent();
         final Browser browser = tabbedPane.getSession().getUserAgent();
         // substitute whitespaces for konqueror and ie5.0x
         boolean nbspWorkaround = browser.getBrowserType().equals(

@@ -25,7 +25,7 @@ public class ListCG extends AbstractComponentCG implements
         org.wings.plaf.ListCG {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -74,7 +74,7 @@ public class ListCG extends AbstractComponentCG implements
                 device.print(" selected=\"selected\"");
             }
 
-            org.wings.io.StringBuilderDevice stringBufferDevice = getStringBuilderDevice();
+            org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
 
             SStringBuilder buffer = Utils.generateCSSComponentInlineStyle(renderer);
             Utils.optAttribute(device, "style", buffer.toString());
@@ -82,7 +82,7 @@ public class ListCG extends AbstractComponentCG implements
 
             if (renderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
-                org.wings.io.StringBuilderDevice string = getStringBuilderDevice();
+                org.wings.io.StringBufferDevice string = getStringBufferDevice();
                 renderer.write(string);
                 char[] chars = string.toString().toCharArray();
                 int pos = 0;
@@ -110,11 +110,11 @@ public class ListCG extends AbstractComponentCG implements
         device.print("/>");
     }
 
-    private org.wings.io.StringBuilderDevice stringBufferDevice = null;
+    private org.wings.io.StringBufferDevice stringBufferDevice = null;
 
-    protected org.wings.io.StringBuilderDevice getStringBuilderDevice() {
+    protected org.wings.io.StringBufferDevice getStringBufferDevice() {
         if (stringBufferDevice == null) {
-            stringBufferDevice = new org.wings.io.StringBuilderDevice();
+            stringBufferDevice = new org.wings.io.StringBufferDevice();
         }
         stringBufferDevice.reset();
         return stringBufferDevice;
