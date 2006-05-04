@@ -65,7 +65,9 @@ public class ComponentControls
 
     public ComponentControls() {
         super(new SGridBagLayout());
-        setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
+        SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        border.setThickness(1, SConstants.BOTTOM);
+        setBorder(border);
 
         applyButton = new SButton("Apply");
         applyButton.setName("apply");
@@ -73,7 +75,7 @@ public class ComponentControls
         applyButton.setHorizontalAlignment(SConstants.CENTER_ALIGN);
         applyButton.setVerticalAlignment(SConstants.CENTER_ALIGN);
 
-        SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
         globalControls.setBorder(border);
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
