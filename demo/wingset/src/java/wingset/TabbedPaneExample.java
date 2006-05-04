@@ -15,8 +15,11 @@ package wingset;
 
 
 import org.wings.*;
+import org.wings.text.SDocument;
+import org.wings.text.DefaultDocument;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -32,31 +35,23 @@ public class TabbedPaneExample extends WingSetPane {
     private final static int INITIAL_TAB_COUNT = 10;
     private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
-
-    private final static Object[] TAB_PLACEMENTS = new Object[] {
-        new Object[] { "Top", new Integer(SConstants.TOP) },
-        new Object[] { "Left", new Integer(SConstants.LEFT) },
-        new Object[] { "Right", new Integer(SConstants.RIGHT) },
-        new Object[] { "Bottom", new Integer(SConstants.BOTTOM) }
+    private final static Object[] TAB_PLACEMENTS = new Object[]{
+            new Object[]{"Top", new Integer(SConstants.TOP)},
+            new Object[]{"Left", new Integer(SConstants.LEFT)},
+            new Object[]{"Right", new Integer(SConstants.RIGHT)},
+            new Object[]{"Bottom", new Integer(SConstants.BOTTOM)}
     };
-
     private TabbedPaneControls controls;
     private STabbedPane tabbedPane;
-    private STextArea textArea;
+    private SDocument logText = new DefaultDocument();
 
     protected SComponent createExample() {
         controls = new TabbedPaneControls();
 
-        textArea = new STextArea(6, 60);
-        textArea.setPreferredSize(SDimension.FULLWIDTH);
-
         // Create tabbed pane and tabulators
         tabbedPane = new STabbedPane();
         for (int i = 0; i < INITIAL_TAB_COUNT; ++i) {
-            SPanel panel = new SPanel(new SBorderLayout());
-            panel.add(new SLabel("Tab # " + i), SBorderLayout.NORTH);
-            panel.add(textArea, SBorderLayout.CENTER);
-            tabbedPane.add("Tab " + i, panel);
+            addTab();
         }
         tabbedPane.setShowAsFormComponent(false);
         tabbedPane.setIconAt(3, JAVA_CUP_ICON);      // decorate with icons
@@ -64,7 +59,7 @@ public class TabbedPaneExample extends WingSetPane {
         tabbedPane.setEnabledAt(1, false);          // disable a tab
         tabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
-                textArea.setText(textArea.getText() + "Changed to tab: " + tabbedPane.getSelectedIndex() + "\n");
+                logText.setText(logText.getText() + "Changed to tab: " + tabbedPane.getSelectedIndex() + "\n");
             }
         });
         controls.addSizable(tabbedPane);
@@ -73,6 +68,17 @@ public class TabbedPaneExample extends WingSetPane {
         form.add(controls, SBorderLayout.NORTH);
         form.add(tabbedPane, SBorderLayout.CENTER);
         return form;
+    }
+
+
+    protected void addTab() {
+        int i = tabbedPane.getTabCount();
+        SPanel panel = new SPanel(new SBorderLayout());
+        STextArea textArea = new STextArea(logText, null, 6, 60);
+        textArea.setPreferredSize(SDimension.FULLWIDTH);
+        panel.add(new SLabel("Tab # " + i), SBorderLayout.NORTH);
+        panel.add(textArea, SBorderLayout.CENTER);
+        tabbedPane.add("Tab " + i, panel);
     }
 
     /**
@@ -126,7 +132,7 @@ public class TabbedPaneExample extends WingSetPane {
             addControl(new SLabel("content color"));
             addControl(contentColor);
 
-            final SButton addTab = new SButton("add a tab");
+            final SButton addTab = new SButton("add new tab");
             addTab.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     addTab();
@@ -134,7 +140,7 @@ public class TabbedPaneExample extends WingSetPane {
             });
             addControl(addTab);
 
-            final SButton removeTab = new SButton("remove a tab");
+            final SButton removeTab = new SButton("remove selected tab");
             removeTab.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     removeTab();
@@ -151,12 +157,5 @@ public class TabbedPaneExample extends WingSetPane {
             }
         }
 
-        protected void addTab() {
-            SPanel p = new SPanel(new SBorderLayout());
-            p.add(new SLabel("Tab # " + tabCount), "North");
-            p.add(textArea);
-            tabbedPane.add("Tab " + tabCount, p);
-            tabCount++;
-        }
     }
 }
