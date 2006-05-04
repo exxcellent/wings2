@@ -613,39 +613,11 @@ div.SMenu a span.accelerator {
 
 /* Begin non-anchor hover selectors */
 
-/* Enter the more specific element (div) selector
-on non-anchor hovers for IE5.x to comply with the
-older version of csshover.htc - V1.21.041022. It
-improves IE's performance speed to use the older
-file and this method */
-
 div.SMenu li:hover,
 div.SMenuBar div.SMenu:hover,
 div.SPopupMenu li:hover{
 cursor:pointer;
 }
-
-/*
-div.SMenu li:hover ul ul,
-div.SMenu li li:hover ul ul,
-div.SMenu li li li:hover ul ul,
-div.SMenu li li li li:hover ul ul,
-div.SPopupMenu li:hover ul ul,
-div.SPopupMenu li li:hover ul ul,
-div.SPopupMenu li li li:hover ul ul,
-div.SPopupMenu li li li li:hover ul ul
-{display:none;}
-
-div.SMenu li:hover ul,
-div.SMenu li li:hover ul,
-div.SMenu li li li:hover ul,
-div.SMenu li li li li:hover ul,
-div.SPopupMenu li:hover ul,
-div.SPopupMenu li li:hover ul,
-div.SPopupMenu li li li:hover ul,
-div.SPopupMenu li li li li:hover ul
-{display:block;}
-*/
 
 /* End of non-anchor hover selectors */
 

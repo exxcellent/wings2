@@ -609,43 +609,6 @@ li.SMenuItem, li.SMenu {
 	margin-left: 1.5em;
 }
 
-/* Begin non-anchor hover selectors */
-
-/* Enter the more specific element (div) selector
-on non-anchor hovers for IE5.x to comply with the
-older version of csshover.htc - V1.21.041022. It
-improves IE's performance speed to use the older
-file and this method */
-
-/* we don't need these anymore
-table.SMenu li:hover,
-table.SPopupMenu li:hover{
-cursor:pointer;
-z-index:100;
-}
-
-table.SMenu li:hover ul ul,
-table.SMenu li li:hover ul ul,
-table.SMenu li li li:hover ul ul,
-table.SMenu li li li li:hover ul ul,
-table.SPopupMenu li:hover ul ul,
-table.SPopupMenu li li:hover ul ul,
-table.SPopupMenu li li li:hover ul ul,
-table.SPopupMenu li li li li:hover ul ul
-{display:none;}
-
-table.SMenu li:hover ul,
-table.SMenu li li:hover ul,
-table.SMenu li li li:hover ul,
-table.SMenu li li li li:hover ul,
-table.SPopupMenu li:hover ul,
-table.SPopupMenu li li:hover ul,
-table.SPopupMenu li li li:hover ul,
-table.SPopupMenu li li li li:hover ul
-{display:block;}
-*/
-/* End of non-anchor hover selectors */
-
 /* Styling for Expand */
 
 .SMenu a.x, .SMenu a.x:visited,
