@@ -68,6 +68,11 @@ public class StatisticsTimerTask extends TimerTask {
      * @param intervalSeconds Interval to do logging in.
      */
     public static void startStatisticsLogging(int intervalSeconds) {
+        initInfoWriter();
+        timer.scheduleAtFixedRate(infoTask, 0, intervalSeconds * 1000);
+    }
+
+    private static void initInfoWriter() {
         try {
             if (infoWriter == null) {
                 final File outputFile = File.createTempFile("wings-statistics", "log");
@@ -92,8 +97,6 @@ public class StatisticsTimerTask extends TimerTask {
         } catch (Exception ex) {
             log.error("Exception on logging session statistics.");
         }
-
-        timer.scheduleAtFixedRate(infoTask, 0, intervalSeconds * 1000);
     }
 
 }

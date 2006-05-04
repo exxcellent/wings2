@@ -97,16 +97,16 @@ public class ComponentControls
         borderComboBox.setRenderer(new ObjectPairCellRenderer());
         backgroundComboBox.setRenderer(new ObjectPairCellRenderer());
 
-        globalControls.add(new SLabel("<html>width&nbsp;"));
+        globalControls.add(new SLabel("width "));
         globalControls.add(widthTextField);
-        globalControls.add(new SLabel("<html>&nbsp;&nbsp;&nbsp;height&nbsp;"));
+        globalControls.add(new SLabel("   height "));
         globalControls.add(heightTextField);
-        globalControls.add(new SLabel("<html>&nbsp;&nbsp;&nbsp;insets&nbsp;"));
+        globalControls.add(new SLabel("    insets "));
         globalControls.add(insetsTextField);
-        globalControls.add(new SLabel("<html>&nbsp;&nbsp;&nbsp;border&nbsp;"));
+        globalControls.add(new SLabel("   border "));
         globalControls.add(borderComboBox);
         globalControls.add(borderThicknessTextField);
-        globalControls.add(new SLabel("<html>&nbsp;&nbsp;&nbsp;background&nbsp;"));
+        globalControls.add(new SLabel("   background "));
         globalControls.add(backgroundComboBox);
 
         addActionListener(new wingset.SerializableActionListener() {

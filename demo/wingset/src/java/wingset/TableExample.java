@@ -103,8 +103,6 @@ public class TableExample
 
 
     static class MyCellRenderer extends SDefaultTableCellRenderer {
-        SCheckBox checkBox = new SCheckBox();
-
         public MyCellRenderer() {
             setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));
         }
@@ -115,7 +113,6 @@ public class TableExample
                                                         int row,
                                                         int col) {
             setHorizontalAlignment(SConstants.LEFT);
-            name(table, row, col);
             if (value instanceof Color) {
                 Color c = (Color) value;
                 setText("<html><span style=\"color:" + colorToHex(c) + "\">" + colorToHex(c) + "</span>");
@@ -123,9 +120,10 @@ public class TableExample
                 return this;
             }
             else if (value instanceof Boolean && row != -1) {
+                SCheckBox checkBox = new SCheckBox();
                 setHorizontalAlignment(SConstants.CENTER);
                 Boolean b = (Boolean) value;
-                checkBox.setName(name(table, row, col));
+                //checkBox.setName(name(table, row, col));
                 checkBox.setSelected(b.booleanValue());
                 return checkBox;
             }
@@ -306,7 +304,7 @@ public class TableExample
         private final String[] SELECTION_MODES = new String[]{"no", "single", "multiple"};
 
         public TableControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("<html>Show as Form Component&nbsp;&nbsp;&nbsp;");
+            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component   ");
             showAsFormComponent.addActionListener(new wingset.SerializableActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     table.setShowAsFormComponent(showAsFormComponent.isSelected());
@@ -320,7 +318,7 @@ public class TableExample
                 }
             });
 
-            final SCheckBox consume = new SCheckBox("<html>Consume events on 2nd col&nbsp;&nbsp;&nbsp;");
+            final SCheckBox consume = new SCheckBox("Consume events on 2nd col   ");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the table anymore");
             consume.addActionListener(new wingset.SerializableActionListener() {
