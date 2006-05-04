@@ -169,7 +169,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
              */
             Utils.printNewline(device, tabbedPane);
 
-            Utils.printButtonStart(device, tabbedPane, eventValue, enabledTab);
+            Utils.printButtonStart(device, tabbedPane, eventValue, enabledTab, tabbedPane.getShowAsFormComponent());
 
             if (tooltip != null) {
                 Utils.optAttribute(device, "title", tooltip);
@@ -192,7 +192,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 cssClassName.append(" STabbedPane_Tab_unselected");
             }
             Utils.optAttribute(device, "class", cssClassName);
-            
+
             device.print(">");
 
             if (icon != null && tabbedPane.getTabPlacement() != SConstants.RIGHT) {

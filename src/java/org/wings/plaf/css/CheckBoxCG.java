@@ -75,14 +75,13 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
          */
 
         if (showAsFormComponent && useIconsInForms) {
-            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true);
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true, button.getShowAsFormComponent());
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
-            Utils.optAttribute(device, "class", "borderless"); // no borders around button
         } else if (showAsFormComponent && !useIconsInForms) {
             device.print("<div");
         } else {
-            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true);
+            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true, button.getShowAsFormComponent());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());

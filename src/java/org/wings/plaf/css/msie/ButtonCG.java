@@ -42,7 +42,7 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
     public void write(final Device device, final SComponent component) throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
-        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled());
+        Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         Utils.optAttribute(device, "accesskey", button.getMnemonic());
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());

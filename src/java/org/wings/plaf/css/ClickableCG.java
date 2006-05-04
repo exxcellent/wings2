@@ -31,7 +31,7 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
             throws IOException {
         final SClickable button = (SClickable) component;
 
-        Utils.printButtonStart(device, button, button.getEvent(), true);
+        Utils.printButtonStart(device, button, button.getEvent(), true, button.getShowAsFormComponent());
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         device.print(">");
 

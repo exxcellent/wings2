@@ -62,6 +62,33 @@ table.SGridBagLayout {
     height: 100%;
 }
 
+/* Simulate and style FORM buttons for A HREF*/
+DIV.SButton  A.formbutton,
+DIV.SButton  SPAN.disabled_formbutton {
+   padding: 0px 6px 0px 6px;
+   border: 2px outset #ddd;
+   background-color: #ddd;
+   color: #000;
+   line-height: normal !important;
+   cursor: default;
+   text-align: center;
+   white-space: normal;
+   text-indent: 0;
+   display: block;
+}
+DIV.SButton A.formbutton:active {
+   padding: px 5px 0px 7px;
+   border-style: inset;
+}
+DIV.SButton SPAN.disabled_formbutton {
+   color: gray !important;
+}
+DIV.SButton SPAN.disabled_formbutton:active {
+   padding: 1px 7px 1px 7px;
+   border: 1px outset #ddd;
+   cursor: default;
+}
+
 /* most of the containers should expand to 100% width of the surrounding component.
    we definitely need this if we want to keep the table based containers for IE */
 /*
@@ -111,16 +138,6 @@ IMG {
 
 a {
     text-decoration: inherit;
-}
-
-/* Make selected buttons appear as regular text:
-   BUTTON tag used ie. in Clickable, Scrollbar, Tree, Checkbox, ... */
-BUTTON.borderless
-{
-    border: none;
-    background: none; /* IE doesnt understand inherit */
-    padding: 0px;
-    margin: 0px;
 }
 
 .SScrollPane{

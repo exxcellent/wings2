@@ -71,7 +71,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
         // RequestURL addr = frame.getRequestURL();
         // addr.addParameter(MSIEUtils.event(frame), event);
 
-        Utils.printButtonStart(device, frame, Integer.toString(event), true);
+        Utils.printButtonStart(device, frame, Integer.toString(event), true, frame.getShowAsFormComponent());
         device.print(">");
         writeIcon(device, icon, null);
         Utils.printButtonEnd(device,frame,Integer.toString(event),true  );

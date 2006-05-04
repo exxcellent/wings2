@@ -32,7 +32,6 @@ import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +41,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.List;
+import java.awt.*;
 
 /**
  * MSIEUtils.java
@@ -87,12 +88,12 @@ public final class Utils {
 
     public static void writeEvents(Device d, SComponent c)
             throws IOException {
-        writeEvents(d, c, new String[] {});
+        writeEvents(d, c, null);
     }
 
     public static void writeEvents(Device d, SComponent c, String[] suppressScriptListenerTypes)
             throws IOException {
-        java.util.List types = new ArrayList();
+        List types = new ArrayList();
         if (suppressScriptListenerTypes != null && suppressScriptListenerTypes.length > 0) {
             for (int i = 0; i < suppressScriptListenerTypes.length; i++) {
                 types.add(suppressScriptListenerTypes[i].toLowerCase());
@@ -321,8 +322,8 @@ public final class Utils {
         if (component != null && component.getFont() != null) {
             final SFont font = component.getFont();
             styleString.append("font-size:").append(font.getSize()).append("pt;");
-            styleString.append("font-style:").append((font.getStyle() & Font.ITALIC) > 0 ? "italic;" : "normal;");
-            styleString.append("font-weight:").append((font.getStyle() & Font.BOLD) > 0 ? "bold;" : "normal;");
+            styleString.append("font-style:").append((font.getStyle() & SFont.ITALIC) > 0 ? "italic;" : "normal;");
+            styleString.append("font-weight:").append((font.getStyle() & SFont.BOLD) > 0 ? "bold;" : "normal;");
             styleString.append("font-family:").append(font.getFace()).append(";");
         }
         return styleString;
@@ -341,10 +342,9 @@ public final class Utils {
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      *
      * @param preferredSize Preferred sitze. May be null or contain null attributes
-     * @param device Device to append to.
      * @return the appended StringBuilder
      */
-    public static SStringBuilder appendCSSInlineSize(final SStringBuilder buffer, SDimension preferredSize) {
+    public static SStringBuilder appendCSSInlineSize(final SStringBuilder buffer, final SDimension preferredSize) {
         if (preferredSize != null) {
             if (preferredSize.getWidth() != SDimension.AUTO) {
                 buffer.append("width:").append(preferredSize.getWidth()).append(';');
@@ -847,32 +847,40 @@ public final class Utils {
             return styleString != null ? styleString : "";
     }
 
-    public static void printButtonStart(final Device device, final SComponent button, String value, boolean enabled) throws IOException {
-        if (button.getShowAsFormComponent()) {
+    public static void printButtonStart(final Device device, final SComponent eventTarget, String eventValue) throws IOException {
+        printButtonStart(device, eventTarget, eventValue, eventTarget.isEnabled(), eventTarget.getShowAsFormComponent());
+    }
+
+    public static void printButtonStart(final Device device, final SComponent eventTarget, final String eventValue,
+                                        final boolean enabled, final boolean formComponent) throws IOException {
+        if (formComponent) {
             if (!enabled) {
-                device.print("<span class=\"disabled\"");
+                device.print("<span");
+                Utils.optAttribute(device, "class", "disabled_formbutton");
             } else {
                 device.print("<a href=\"#\" onClick=\"sendEvent(event,'");
-                device.print(value == null ? "" : value);
+                device.print(eventValue == null ? "" : eventValue);
                 device.print("','");
-                device.print(Utils.event(button));
+                device.print(Utils.event(eventTarget));
                 device.print("'");
-                device.print(applyOnClickListeners(button));
+                device.print(applyOnClickListeners(eventTarget));
                 device.print(")\" ");
-                writeEvents(device, button, new String[] { JavaScriptEvent.ON_CLICK } );
+                Utils.writeEvents(device, eventTarget, new String[] { JavaScriptEvent.ON_CLICK } );
+                Utils.optAttribute(device, "class", "formbutton");
             }
         } else {
             if (!enabled) {
                 device.print("<span");
+                Utils.optAttribute(device, "class", "disabled_button");
             } else {
-                final RequestURL requestURL = button.getRequestURL();
-                if (value != null) {
-                    requestURL.addParameter(Utils.event(button), value);
+                final RequestURL requestURL = eventTarget.getRequestURL();
+                if (eventValue != null) {
+                    requestURL.addParameter(Utils.event(eventTarget), eventValue);
                 }
                 device.print("<a href=\"");
                 device.print(requestURL.toString());
                 device.print("\" ");
-                writeEvents(device, button);
+                writeEvents(device, eventTarget);
             }
         }
     }

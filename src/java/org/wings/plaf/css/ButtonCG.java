@@ -33,7 +33,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
-        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true);
+        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true, button.getShowAsFormComponent());
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         Utils.optAttribute(device, "accesskey", button.getMnemonic());
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());

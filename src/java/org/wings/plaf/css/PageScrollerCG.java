@@ -204,7 +204,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
     	if(page != firstDirectPage)
     	    device.print(separator.toString());
 
-        Utils.printButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()), enabled);
+        Utils.printButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()), enabled, pageScroller.getShowAsFormComponent());
         device.print(">");
 
         device.print(Integer.toString(page + 1));
@@ -213,7 +213,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
     }
 
     private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event, boolean enabled) throws IOException {
-        Utils.printButtonStart(device, pageScroller, event, enabled);
+        Utils.printButtonStart(device, pageScroller, event, enabled, pageScroller.getShowAsFormComponent());
         device.print(">");
 
         device.print("<img");

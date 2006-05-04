@@ -156,7 +156,7 @@ public class ListCG extends AbstractComponentCG implements
             SComponent renderer = cellRenderer.getListCellRendererComponent(list, model.getElementAt(i), selected, i);
 
             if (renderSelection) {
-                Utils.printButtonStart(device, list, list.getToggleSelectionParameter(i), true);
+                Utils.printButtonStart(device, list, list.getToggleSelectionParameter(i), true, list.getShowAsFormComponent());
                 Utils.optAttribute(device, "focus", renderer.getName());
                 device.print(">");
             } else

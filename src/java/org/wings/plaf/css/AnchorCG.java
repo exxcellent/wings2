@@ -36,7 +36,7 @@ public class AnchorCG
             throws IOException {
         final SAnchor component = (SAnchor) _c;
 
-        Utils.printButtonStart(device, component, null, true);
+        Utils.printButtonStart(device, component, null, true, component.getShowAsFormComponent());
 
         Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
         if (component.isFocusOwner())

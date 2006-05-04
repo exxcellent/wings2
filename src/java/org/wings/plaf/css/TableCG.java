@@ -231,7 +231,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             parameter = table.getToggleSelectionParameter(row, col);
 
         if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
-            Utils.printButtonStart(device, table, parameter, true);
+            Utils.printButtonStart(device, table, parameter, true, table.getShowAsFormComponent());
             device.print(">");
         } else
             device.print("<span>");
@@ -421,7 +421,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         device.print(">");
 
         String value = table.getToggleSelectionParameter(row, -1);
-        Utils.printButtonStart(device, table, value, true);
+        Utils.printButtonStart(device, table, value, true, table.getShowAsFormComponent());
         device.print(">");
         renderSelectionColumnContent(device, row, table, rendererPane);
         Utils.printButtonEnd(device, table, value, true);

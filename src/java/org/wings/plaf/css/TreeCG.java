@@ -132,12 +132,12 @@ public class TreeCG extends AbstractComponentCG implements
             final String expansionParameter = component.getExpansionParameter(row, false);
             if (isLeaf) {
                 // render a disabled button around this. firefox position bugfix (ol)
-                Utils.printButtonStart(device, component, expansionParameter, true);
+                Utils.printButtonStart(device, component, expansionParameter, true, component.getShowAsFormComponent());
                 device.print(">");
                 writeIcon(device, leafControlIcon, false);
                 Utils.printButtonEnd(device, component, expansionParameter, true);
             } else {
-                Utils.printButtonStart(device, component, expansionParameter, true);
+                Utils.printButtonStart(device, component, expansionParameter, true, component.getShowAsFormComponent());
                 device.print(">");
 
                 if (isExpanded) {
@@ -165,7 +165,7 @@ public class TreeCG extends AbstractComponentCG implements
         SCellRendererPane rendererPane = component.getCellRendererPane();
         if (isSelectable) {
             final String selectionParameter = component.getSelectionParameter(row, false);
-            Utils.printButtonStart(device, component, selectionParameter, true);
+            Utils.printButtonStart(device, component, selectionParameter, true, component.getShowAsFormComponent());
 
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             device.print(">");

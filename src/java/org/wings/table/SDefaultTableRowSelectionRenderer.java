@@ -57,6 +57,9 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
 
     protected SResourceIcon singleNotSelectionIcon = DEFAULT_SINGLE_NOT_SELECTION_ICON;
 
+    /**
+     * If set to true render the row selection colum with icons, otherwise simple text.
+     */
     protected boolean useIcons = false;
 
     public SDefaultTableRowSelectionRenderer() {
@@ -72,9 +75,9 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
                     setIcon(selected ? multiSelectionIcon : multiNotSelectionIcon);
                     break;
             }
-        }
-        else
+        } else {
             setText("" + (row + 1));
+        }
         // style
         if (selected) {
             setStyle(selectionStyle);
@@ -167,6 +170,24 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
      */
     public void setSingleNotSelectionIcon(SResourceIcon singleNotSelectionIcon) {
         this.singleNotSelectionIcon = singleNotSelectionIcon;
+    }
+
+    /**
+     * Returns if set to true render the row selection colum with icons, otherwise simple text.
+     *
+     * @return if set to true render the row selection colum with icons, otherwise simple text.
+     */
+    public boolean isUseIcons() {
+        return useIcons;
+    }
+
+    /**
+     * Sets if set to true render the row selection colum with icons, otherwise simple text.
+     *
+     * @param useIcons if set to true render the row selection colum with icons, otherwise simple text.
+     */
+    public void setUseIcons(boolean useIcons) {
+        this.useIcons = useIcons;
     }
 
 }
