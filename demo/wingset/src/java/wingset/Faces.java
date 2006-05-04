@@ -13,15 +13,24 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SButton;
+import org.wings.SButtonGroup;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SForm;
+import org.wings.SGridLayout;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.SRadioButton;
+import org.wings.SURLIcon;
 import org.wings.border.SEmptyBorder;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-import java.io.Serializable;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -37,6 +46,7 @@ public class Faces extends WingSetPane {
     static final Face henner = new Face("Henner");
     static final Face armin = new Face("Armin");
     static final Face holger = new Face("Holger");
+    static final Face ole = new Face("Ole");
 
     static final Random random = new Random();
 
@@ -111,6 +121,7 @@ public class Faces extends WingSetPane {
         addFace(henner);
         addFace(armin);
         addFace(holger);
+        addFace(ole);
 
         shuffle();
 
