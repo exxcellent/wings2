@@ -14,6 +14,7 @@
 package org.wings.border;
 
 import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -74,4 +75,20 @@ public interface SBorder extends Serializable {
      * @return The CSS Attributes which need to be applied to the component to build up the border.
      */
     CSSAttributeSet getAttributes();
+
+    Color getColor(int position);
+
+    void setColor(Color color, int position);
+
+    void setThickness(int thickness, int position);
+
+    int getThickness(int position);
+
+    void setStyle(String style);
+
+    void setStyle(String style, int position);
+
+    String getStyle();
+
+    String getStyle(int position);
 }

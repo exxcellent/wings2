@@ -16,6 +16,7 @@ package org.wings.border;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.CSSProperty;
+import org.wings.SConstants;
 
 import java.awt.*;
 
@@ -27,23 +28,20 @@ import java.awt.*;
  * @version $Revision$
  */
 public abstract class SAbstractBorder
-        implements SBorder {
-    /**
-     * the insets
-     */
-    private Insets insets;
+    implements SBorder
+{
+    protected BorderSpec[] specs = new BorderSpec[] {
+        new BorderSpec(),
+        new BorderSpec(),
+        null,
+        null,
+        new BorderSpec(),
+        new BorderSpec(),
+    };
 
-    /**
-     * border color
-     */
-    private Color color;
+    protected Insets insets;
 
-    /**
-     * border thickness
-     */
-    private int thickness;
-
-    protected CSSAttributeSet attributes = new CSSAttributeSet();
+    private CSSAttributeSet attributes = new CSSAttributeSet();
 
     public SAbstractBorder() {
         this(null, -1, null);
@@ -72,18 +70,7 @@ public abstract class SAbstractBorder
      */
     public void setInsets(Insets insets) {
         this.insets = insets;
-        if (insets != null) {
-            attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
-            attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
-            attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
-            attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
-        }
-        else {
-            attributes.remove(CSSProperty.PADDING_TOP);
-            attributes.remove(CSSProperty.PADDING_LEFT);
-            attributes.remove(CSSProperty.PADDING_RIGHT);
-            attributes.remove(CSSProperty.PADDING_BOTTOM);
-        }
+        attributes = null;
     }
 
     /**
@@ -97,15 +84,26 @@ public abstract class SAbstractBorder
      * sets the foreground color of the border
      */
     public Color getColor() {
-        return color;
+        return getColor(SConstants.TOP);
+    }
+
+    public Color getColor(int position) {
+        return specs[position].color;
     }
 
     /**
      * sets the foreground color of the border
      */
     public void setColor(Color color) {
-        this.color = color;
-        attributes.put(CSSProperty.BORDER_COLOR, CSSStyleSheet.getAttribute(color));
+        setColor(color, SConstants.TOP);
+        setColor(color, SConstants.LEFT);
+        setColor(color, SConstants.RIGHT);
+        setColor(color, SConstants.BOTTOM);
+    }
+
+    public void setColor(Color color, int position) {
+        specs[position].color = color;
+        attributes = null;
     }
 
     /**
@@ -113,19 +111,88 @@ public abstract class SAbstractBorder
      * thickness must be > 0
      */
     public void setThickness(int thickness) {
-        this.thickness = thickness;
-        attributes.put(CSSProperty.BORDER_WIDTH, thickness < 0 ? null : (thickness + "px"));
+        setThickness(thickness, SConstants.TOP);
+        setThickness(thickness, SConstants.LEFT);
+        setThickness(thickness, SConstants.RIGHT);
+        setThickness(thickness, SConstants.BOTTOM);
     }
 
-    public CSSAttributeSet getAttributes() {
-        return attributes;
+    public void setThickness(int thickness, int position) {
+        specs[position].thickness = thickness;
+        attributes = null;
     }
 
     /**
      * @return thickness in pixels
      */
     public final int getThickness() {
-        return thickness;
+        return getThickness(SConstants.TOP);
     }
 
+    public int getThickness(int position) {
+        return specs[position].thickness;
+    }
+
+    /**
+     * set the style of the border
+     * style must be > 0
+     */
+    public void setStyle(String style) {
+        setStyle(style, SConstants.TOP);
+        setStyle(style, SConstants.LEFT);
+        setStyle(style, SConstants.RIGHT);
+        setStyle(style, SConstants.BOTTOM);
+    }
+
+    public void setStyle(String style, int position) {
+        specs[position].style = style;
+        attributes = null;
+    }
+
+    /**
+     * @return style in pixels
+     */
+    public final String getStyle() {
+        return getStyle(SConstants.TOP);
+    }
+
+    public String getStyle(int position) {
+        return specs[position].style;
+    }
+
+    public CSSAttributeSet getAttributes() {
+        if (attributes == null) {
+            if (insets != null) {
+                attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
+                attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
+                attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
+                attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
+            }
+
+            BorderSpec top = specs[SConstants.TOP];
+            attributes.put(CSSProperty.BORDER_TOP_WIDTH, top.thickness + "px");
+            attributes.put(CSSProperty.BORDER_TOP_STYLE, top.style);
+            attributes.put(CSSProperty.BORDER_TOP_COLOR, CSSStyleSheet.getAttribute(top.color));
+            BorderSpec left = specs[SConstants.LEFT];
+            attributes.put(CSSProperty.BORDER_LEFT_WIDTH, left.thickness + "px");
+            attributes.put(CSSProperty.BORDER_LEFT_STYLE, left.style);
+            attributes.put(CSSProperty.BORDER_LEFT_COLOR, CSSStyleSheet.getAttribute(left.color));
+            BorderSpec right = specs[SConstants.RIGHT];
+            attributes.put(CSSProperty.BORDER_RIGHT_WIDTH, right.thickness + "px");
+            attributes.put(CSSProperty.BORDER_RIGHT_STYLE, right.style);
+            attributes.put(CSSProperty.BORDER_RIGHT_COLOR, CSSStyleSheet.getAttribute(right.color));
+            BorderSpec bottom = specs[SConstants.BOTTOM];
+            attributes.put(CSSProperty.BORDER_BOTTOM_WIDTH, bottom.thickness + "px");
+            attributes.put(CSSProperty.BORDER_BOTTOM_STYLE, bottom.style);
+            attributes.put(CSSProperty.BORDER_BOTTOM_COLOR, CSSStyleSheet.getAttribute(bottom.color));
+        }
+        return attributes;
+    }
+
+
+    static class BorderSpec {
+        public int thickness;
+        public String style;
+        public Color color;
+    }
 }

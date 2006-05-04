@@ -48,7 +48,7 @@ public class SEtchedBorder
 
     public void setEtchedType(int etchedType) {
         this.etchedType = etchedType;
-        attributes.put(CSSProperty.BORDER_STYLE, etchedType == RAISED ? "ridge" : "groove");
+        setStyle(etchedType == RAISED ? "ridge" : "groove");
     }
 
     public int getEtchedType() { return etchedType; }

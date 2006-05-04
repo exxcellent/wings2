@@ -827,7 +827,10 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @deprecated Use {@link #setAttribute(org.wings.style.CSSProperty, String)}
      */
     public void setAttribute(String cssPropertyName, String value) {
-        setAttribute(SELECTOR_ALL, new CSSProperty(cssPropertyName), value);
+        CSSProperty property = new CSSProperty(cssPropertyName);
+        if (CSSProperty.borderProperties.contains(property))
+            throw new IllegalArgumentException("Border properties have to be applied to the border!");
+        setAttribute(SELECTOR_ALL, property, value);
     }
 
     /**
@@ -839,6 +842,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param propertyValue A valid string value for this CSS property (i.e. <code>red</code> or <code>#fff</code> in our example).
      */
     public void setAttribute(CSSProperty property, String propertyValue) {
+        if (CSSProperty.borderProperties.contains(property))
+            throw new IllegalArgumentException("Border properties have to be applied to the border!");
         setAttribute(SELECTOR_ALL, property, propertyValue);
     }
 

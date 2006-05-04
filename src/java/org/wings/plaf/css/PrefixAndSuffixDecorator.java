@@ -112,9 +112,7 @@ public class PrefixAndSuffixDecorator
         // Special handling: Render title of STitledBorder
         if (isTitleBorder) {
             STitledBorder titledBorder = (STitledBorder) component.getBorder();
-            device.print("<div class=\"STitledBorderLegend\" style=\"");
-            titledBorder.getTitleAttributes().write(device);
-            device.print("\">");
+            device.print("<div class=\"STitledBorderLegend\">");
             device.print(titledBorder.getTitle());
             device.print("</div>");
         }

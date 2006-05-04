@@ -87,9 +87,7 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
         // Maybe move out of DIV with the componentn ID.
         if (component.getBorder() instanceof STitledBorder) {
             STitledBorder titledBorder = (STitledBorder) component.getBorder();
-            device.print("<div class=\"STitledBorderLegend\" style=\"");
-            titledBorder.getTitleAttributes().write(device);
-            device.print("\">");
+            device.print("<div class=\"STitledBorderLegend\">");
             device.print(titledBorder.getTitle());
             device.print("</div>");
         }

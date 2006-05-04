@@ -17,9 +17,12 @@ package wingset;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.border.*;
 import org.wings.style.CSSProperty;
 import org.wings.event.SComponentAdapter;
 import org.wings.event.SComponentEvent;
+
+import java.awt.Color;
 
 /**
  * A basic WingSet Pane, which implements some often needed functions.
@@ -42,8 +45,11 @@ abstract public class WingSetPane
         SAnchor anchor = new SAnchor("../" + getClass().getName().substring(getClass().getName().indexOf('.') + 1) + ".java");
         anchor.setTarget("sourceWindow");
         anchor.add(new SLabel("view java source code", SOURCE_LABEL_ICON));
-        anchor.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
         anchor.setPreferredSize(SDimension.FULLWIDTH);
+        SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        border.setThickness(1, SConstants.TOP);
+        anchor.setBorder(border);
+
         add(anchor);
 
         // lazily initialize components when first shown

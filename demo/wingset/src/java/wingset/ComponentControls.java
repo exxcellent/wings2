@@ -72,10 +72,15 @@ public class ComponentControls
         applyButton.setActionCommand("apply");
         applyButton.setHorizontalAlignment(SConstants.CENTER_ALIGN);
         applyButton.setVerticalAlignment(SConstants.CENTER_ALIGN);
-        globalControls.setAttribute(CSSProperty.BORDER_LEFT, "1px solid #cccccc");
-        localControls.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
-        localControls.setAttribute(CSSProperty.BORDER_LEFT, "1px solid #cccccc");
-        //localControls.setVisible(false);
+
+        SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        border.setThickness(1, SConstants.LEFT);
+        globalControls.setBorder(border);
+        border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        border.setThickness(1, SConstants.LEFT);
+        border.setThickness(1, SConstants.TOP);
+        localControls.setBorder(border);
+        localControls.setVisible(false);
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;
@@ -151,7 +156,7 @@ public class ComponentControls
 
     public void addControl(SComponent component) {
         localControls.add(component);
-        //localControls.setVisible(true);
+        localControls.setVisible(true);
     }
 
     public void addSizable(SComponent component) {

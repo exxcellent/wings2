@@ -29,14 +29,12 @@ public class STitledBorder extends SAbstractBorder {
     private SBorder border;
 
     private String title;
-    private CSSAttributeSet titleAttributes = new CSSAttributeSet();
 
     /**
      * Constructor for STitledBorder.
      */
     public STitledBorder(SBorder border) {
         setBorder(border);
-        attributes.put(CSSProperty.PADDING_TOP, "1em");
     }
 
     /**
@@ -76,7 +74,7 @@ public class STitledBorder extends SAbstractBorder {
      */
     public void setBorder(SBorder border) {
         this.border = border;
-        attributes = border.getAttributes();
+        specs = ((SAbstractBorder)border).specs;
     }
 
     /**
@@ -95,63 +93,5 @@ public class STitledBorder extends SAbstractBorder {
      */
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public CSSAttributeSet getTitleAttributes() {
-        return titleAttributes;
-    }
-
-    /**
-     * Gets the title color.
-     *
-     * @return Returns a Color
-     */
-    public Color getTitleColor() {
-        return CSSStyleSheet.getForeground(titleAttributes);
-    }
-
-    /**
-     * Sets the title color.
-     *
-     * @param color the title color to set
-     */
-    public void setTitleColor(Color color) {
-        titleAttributes.put(CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
-    }
-
-    /**
-     * Set the border color.
-     */
-    public void setTitleBackground(Color color) {
-        titleAttributes.put(CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
-    }
-
-    /**
-     * Get the border color.
-     *
-     * @return the color or <code>null</code>,
-     *         if border is <code>null</code>
-     * @see #setBorder(SBorder)
-     */
-    public Color getTitleBackground() {
-        return CSSStyleSheet.getBackground(titleAttributes);
-    }
-
-    /**
-     * Gets the title font.
-     *
-     * @return Returns a SFont
-     */
-    public SFont getTitleFont() {
-        return CSSStyleSheet.getFont(titleAttributes);
-    }
-
-    /**
-     * Sets the title font.
-     *
-     * @param titleFont The title font to set
-     */
-    public void setTitleFont(SFont titleFont) {
-        titleAttributes.putAll(CSSStyleSheet.getAttributes(titleFont));
     }
 }

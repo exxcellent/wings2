@@ -65,7 +65,7 @@ public class SLineBorder
 
     public void setBorderStyle(String style) {
         this.borderStyle = style;
-        attributes.put(CSSProperty.BORDER_STYLE, style);
+        setStyle(style);
     }
 
     public final String getBorderStyle() { return borderStyle; }

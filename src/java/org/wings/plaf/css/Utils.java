@@ -333,7 +333,7 @@ public final class Utils {
     /**
      * Appends a CSS inline style string for the preferred size of the passed component to the passed stringbuffer.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
-     * @throws IOException 
+     * @throws IOException
      */
     public static void appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
         appendCSSInlineSize(styleString, pComponent.getPreferredSize(), pComponent.getOversize(true), pComponent.getOversize(false));
@@ -346,7 +346,7 @@ public final class Utils {
      * @param preferredSize Preferred sitze. May be null or contain null attributes
      * @param device Device to append to.
      * @param oversize the size of border and padding that might need to be subtracted
-     * @param oversizeVertical 
+     * @param oversizeVertical
      */
     public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
         if (preferredSize != null) {
@@ -354,7 +354,7 @@ public final class Utils {
                 if (oversizeHorizontal > 0) {
                     if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
                         // size berechnen anhand des Parents - auf Clientseite
-                        styleString.append("width:expression(((this.parentNode.clientWidth-").append(oversizeHorizontal).append(")");
+                        styleString.append("width:expression(((parentNode.clientWidth-").append(oversizeHorizontal).append(")");
                         // not more than 10 percent
                         int widthPercentage = Math.min(preferredSize.getWidthInt(),100);
                         if (widthPercentage != 100) {
@@ -372,7 +372,7 @@ public final class Utils {
                 if (oversizeVertical > 0) {
                     if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1) {
                         // size berechnen anhand des Parents - auf Clientseite
-                        styleString.append("height:expression(((this.parentNode.clientHeight-").append(oversizeVertical).append(")");
+                        styleString.append("height:expression(((parentNode.clientHeight-").append(oversizeVertical).append(")");
                         // not more than 10 percent
                         int heightPercentage = Math.min(preferredSize.getHeightInt(),100);
                         if (heightPercentage != 100) {
@@ -430,7 +430,7 @@ public final class Utils {
      * @param oversizeHorizontal  the size of the borders and paddings that might need to be subtracted
      * @param oversizeVertical  the size of the borders and paddings that might need to be subtracted
 �    * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
-     * @throws IOException 
+     * @throws IOException
      */
     public static SStringBuilder generateCSSInlinePreferredSize(SStringBuilder buffer, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
         return appendCSSInlineSize(buffer, preferredSize, oversizeHorizontal, oversizeVertical);
@@ -441,9 +441,9 @@ public final class Utils {
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      *
      * @param preferredSize Preferred size. May be null or contain null attributes
-     * @param oversize the size of the borders and paddings that might need to be subtracted 
+     * @param oversize the size of the borders and paddings that might need to be subtracted
      * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
-     * @throws IOException 
+     * @throws IOException
      */
     public static SStringBuilder generateCSSInlinePreferredSize(SStringBuilder buffer, SDimension preferredSize) {
         return appendCSSInlineSize(buffer, preferredSize);

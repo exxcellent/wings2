@@ -27,7 +27,8 @@ import java.awt.*;
  * @version $Revision$
  */
 public class SBevelBorder
-        extends SAbstractBorder {
+        extends SAbstractBorder
+{
     public static final int RAISED = 0;
     public static final int LOWERED = 1;
 
@@ -84,7 +85,7 @@ public class SBevelBorder
      */
     public void setBevelType(int bevelType) {
         this.bevelType = bevelType;
-        attributes.put(CSSProperty.BORDER_STYLE, bevelType == RAISED ? "outset" : "inset");
+        setStyle(bevelType == RAISED ? "outset" : "inset");
     }
 
     /**

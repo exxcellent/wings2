@@ -54,8 +54,6 @@ public class ResourceFactory extends ResourceDefaults {
 
     private static final Map finalResources = Collections.synchronizedMap(new HashMap());
 
-    protected Properties properties;
-
     /**
      * 
      */

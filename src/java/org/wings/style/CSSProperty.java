@@ -15,6 +15,7 @@
 package org.wings.style;
 
 import java.io.Serializable;
+import java.util.*;
 
 /**
  * A CSS attribute is a property on any abritriary HTML element which can be set via CSS.
@@ -28,10 +29,10 @@ import java.io.Serializable;
  * @author bschmid
  */
 public class CSSProperty implements Serializable {
-    
+
     /* These CSSProperty Constants are the complete CSS2 standard for visual
-     * media as in the CSS2 spec at http://www.w3.org/TR/REC-CSS2/propidx.html
-     */
+    * media as in the CSS2 spec at http://www.w3.org/TR/REC-CSS2/propidx.html
+    */
 
     public final static CSSProperty BACKGROUND = new CSSProperty("background");
 
@@ -205,12 +206,12 @@ public class CSSProperty implements Serializable {
     public final static CSSProperty POSITION = new CSSProperty("position");
 
     public final static CSSProperty QUOTES = new CSSProperty("quotes");
-    
+
     public final static CSSProperty RIGHT = new CSSProperty("right");
-    
+
     // only for paged output mediums, we don't need it at the moment
     //public final static CSSProperty SIZE = new CSSProperty("size");
-    
+
     public final static CSSProperty TABLE_LAYOUT = new CSSProperty("table-layout");
 
     public final static CSSProperty TEXT_ALIGN = new CSSProperty("text-align");
@@ -241,6 +242,31 @@ public class CSSProperty implements Serializable {
     public final static CSSProperty WORD_SPACING = new CSSProperty("word-spacing");
 
     public final static CSSProperty Z_INDEX = new CSSProperty("z-index");
+
+    public static final Set borderProperties = Collections.unmodifiableSet(new HashSet(Arrays.asList(new CSSProperty[] {
+        CSSProperty.BORDER,
+        //CSSProperty.BORDER_COLLAPSE,
+        CSSProperty.BORDER_COLOR,
+        //CSSProperty.BORDER_SPACING,
+        CSSProperty.BORDER_STYLE,
+        CSSProperty.BORDER_WIDTH,
+        CSSProperty.BORDER_BOTTOM,
+        CSSProperty.BORDER_BOTTOM_COLOR,
+        CSSProperty.BORDER_BOTTOM_STYLE,
+        CSSProperty.BORDER_BOTTOM_WIDTH,
+        CSSProperty.BORDER_LEFT,
+        CSSProperty.BORDER_LEFT_COLOR,
+        CSSProperty.BORDER_LEFT_STYLE,
+        CSSProperty.BORDER_LEFT_WIDTH,
+        CSSProperty.BORDER_RIGHT,
+        CSSProperty.BORDER_RIGHT_COLOR,
+        CSSProperty.BORDER_RIGHT_STYLE,
+        CSSProperty.BORDER_RIGHT_WIDTH,
+        CSSProperty.BORDER_TOP,
+        CSSProperty.BORDER_TOP_COLOR,
+        CSSProperty.BORDER_TOP_STYLE,
+        CSSProperty.BORDER_TOP_WIDTH,
+    })));
 
     private final String name;
 
