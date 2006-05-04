@@ -15,7 +15,7 @@ package org.wings.style;
 
 import org.wings.SFont;
 import org.wings.io.Device;
-import org.wings.io.SStringBuilder;
+import org.wings.util.SStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -557,7 +557,7 @@ public class DynamicLayoutExample extends WingSetPane {
                                 "[%] A much longer, unbreakable label for wrapping demo (Default)",
                                 "[%] And again a short one (Right/Bottom)",
                                 "[%] A 2-line\nlabel (Center/Center)"};
-        final SBorder greenLineBorder = new SLineBorder();
+        final SBorder greenLineBorder = new SLineBorder(2);
         greenLineBorder.setColor(Color.red);
 
         final SLabel label = new SLabel(texts[i % 4].replace('%', Integer.toString((i + 1)).charAt(0)));

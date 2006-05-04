@@ -34,10 +34,6 @@ public class SLineBorder
 
     private String borderStyle = SOLID;
 
-    public SLineBorder() {
-        setBorderStyle(SOLID);
-    }
-
     public SLineBorder(int thickness) {
         super(thickness);
         setBorderStyle(SOLID);

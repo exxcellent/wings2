@@ -199,7 +199,11 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
                         styleString.append(")+'px');");
                     } else if (preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("px") != -1) {
                         // subtract pixels
-                        styleString.append("width:").append(preferredSize.getWidthInt()-oversizeHorizontal).append("px;");
+                        int width = preferredSize.getWidthInt()-oversizeHorizontal;
+                        /*
+                         * 
+                         */
+                        styleString.append("width:").append(width > 0 ? width : 0).append("px;");
                     } else {
                         // em, pt...we cannot recalculate those
                         styleString.append("width:").append(preferredSize.getWidth()).append(";");
@@ -221,7 +225,8 @@ public final class PrefixAndSuffixDecorator extends org.wings.plaf.css.PrefixAnd
                         styleString.append(")+'px');");
                     } else if (preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("px") != -1) {
                         // subtract pixels
-                        styleString.append("height:").append(preferredSize.getHeightInt()-oversizeVertical).append("px;");
+                        int height = preferredSize.getHeightInt()-oversizeVertical;
+                        styleString.append("height:").append(height > 0 ? height : 0).append("px;");
                     } else {
                         // em, pt...we cannot recalculate those
                         styleString.append("height:").append(preferredSize.getHeight()).append(";");
