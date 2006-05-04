@@ -17,7 +17,6 @@ import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.STable;
-import org.wings.io.SStringBuilder;
 
 /**
  * @author <a href="mailto:holger.engels@mercatis.de">Holger Engels</a>
@@ -27,8 +26,6 @@ public class SDefaultTableCellRenderer
         extends SLabel
         implements STableCellRenderer
 {
-    SStringBuilder nameBuffer = new SStringBuilder();
-
     SIcon editIcon;
 
     /**
@@ -52,7 +49,6 @@ public class SDefaultTableCellRenderer
                                                     boolean selected,
                                                     int row,
                                                     int col) {
-        setNameRaw(name(table, row, col));
         setText(null);
         setIcon(null);
 
@@ -68,26 +64,5 @@ public class SDefaultTableCellRenderer
             setText(value.toString());
 
         return this;
-    }
-
-    /**
-     * Generates the name (= id) of the editing component so that
-     * the STable implementation knows to associate the input
-     * value with the correct data row/columns
-     *
-     * @param component The edit component to rename
-     * @param row Data row of this edit component
-     * @param col Data column of this edit component
-     * @return The unqique id/name for a component of the rows/column
-     */
-    protected String name(SComponent component, int row, int col) {
-        nameBuffer.setLength(0);
-        nameBuffer.append(component.getName()).append("_");
-        if (row == -1)
-            nameBuffer.append('h');
-        else
-            nameBuffer.append(row);
-        nameBuffer.append("_").append(col);
-        return nameBuffer.toString();
     }
 }

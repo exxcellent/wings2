@@ -129,10 +129,11 @@ public final class LowLevelEventDispatcher
         if (log.isDebugEnabled())
             log.debug("dispatch " + name + " = " + Arrays.asList(values));
 
+        final boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
+
         boolean result = false;
         int dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
         String epoch = null;
-        boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
 
         // no Alias
         if (dividerIndex > 0) {
@@ -153,16 +154,15 @@ public final class LowLevelEventDispatcher
         // does name contain underscores? Then use the part before the underscore for
         // identification of the low level event listener
         String id;
-        int p = name.indexOf(SConstants.UID_DIVIDER);
-        if (p > -1) {
-            String v = name.substring(p + 1);
-            id = name.substring(0, p);
+        dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
+        if (dividerIndex > -1) {
+            id = name.substring(0, dividerIndex);
         }
         else
             id = name;
 
 
-        List l = (List) listeners.get(id);
+        final List l = (List) listeners.get(id);
         if (l != null && l.size() > 0) {
             log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
             for (int i = 0; i < l.size(); ++i) {

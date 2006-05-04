@@ -26,6 +26,7 @@ import org.wings.table.STableColumn;
 import org.wings.table.STableColumnModel;
 import org.wings.event.SMouseListener;
 import org.wings.event.SMouseEvent;
+import org.wings.io.SStringBuilder;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -214,7 +215,15 @@ import java.util.HashMap;
       */
      public static final Selector SELECTOR_NUMBERING_COLUMN = new Selector("NUMBERING_COLUMN");
 
-     private String[] lowLevelEvents;
+     /**
+      * The last low level event values this table received.
+      */
+     private String[] lastReceivedLowLevelEvents;
+
+     /**
+      * Helper variable for {@link #nameCellComponent(SComponent, int, int)}
+      */
+     private SStringBuilder nameBuffer = new SStringBuilder();
 
      /**
       * <p>Creates a new <code>STable</code>.</p>
@@ -295,7 +304,7 @@ import java.util.HashMap;
 
      /**
       * Convienece method / Swing compatiblity to <code>model.getRowCount()</code>
-      * @return
+      * @return numer of rows inside the table model
       */
      public int getRowCount() {
          return model.getRowCount();
@@ -331,25 +340,38 @@ import java.util.HashMap;
          selectionModel.addSelectionInterval(index0, index1);
      }
 
+     /**
+      * Sets the container, this component resides in.
+      *
+      * @param p the container, this component resides in.
+      */
      public void setParent(SContainer p) {
          super.setParent(p);
 
-         if (getCellRendererPane() != null)
+         if (getCellRendererPane() != null) {
              getCellRendererPane().setParent(p);
+         }
 
-         if (editorComp != null)
+         if (editorComp != null) {
              editorComp.setParent(p);
+         }
      }
 
+     /**
+      * Sets the frame in which this component resides.
+      *
+      * @param f the frame in which this component resides.
+      */
      protected void setParentFrame(SFrame f) {
          super.setParentFrame(f);
-         if (getCellRendererPane() != null)
+         if (getCellRendererPane() != null) {
              getCellRendererPane().setParentFrame(f);
+         }
      }
 
      public void processLowLevelEvent(String action, String[] values) {
          processKeyEvents(values);
-         this.lowLevelEvents = values;
+         this.lastReceivedLowLevelEvents = values;
          SForm.addArmedComponent(this);
      }
 
@@ -359,18 +381,31 @@ import java.util.HashMap;
          return cellRendererPane;
      }
 
+     /**
+      * Sets <p>The default renderer is used if no other renderer is set for the
+      * content of a cell.</p>
+      *
+      * @param r <p>The default renderer is used if no other renderer is set for the
+      */
      public void setDefaultRenderer(STableCellRenderer r) {
          defaultRenderer = r;
      }
 
+     /**
+      * Returns <p>The default renderer is used if no other renderer is set for the
+      * content of a cell.</p>
+      *
+      * @return <p>The default renderer is used if no other renderer is set for the
+      */
      public STableCellRenderer getDefaultRenderer() {
          return defaultRenderer;
      }
 
      public void setDefaultRenderer(Class columnClass, STableCellRenderer r) {
-         renderer.remove(columnClass);
-         if (renderer != null)
+         if (renderer != null) {
+             renderer.remove(columnClass);
              renderer.put(columnClass, r);
+         }
      }
 
      public STableCellRenderer getDefaultRenderer(Class columnClass) {
@@ -438,10 +473,12 @@ import java.util.HashMap;
      }
 
      public SComponent prepareRenderer(STableCellRenderer r, int row, int col) {
-         return r.getTableCellRendererComponent(this,
+         final SComponent tableCellRendererComponent = r.getTableCellRendererComponent(this,
                  model.getValueAt(row, col),
                  isRowSelected(row),
                  row, col);
+         nameCellComponent(tableCellRendererComponent, row, col);
+         return tableCellRendererComponent;
      }
 
      /**
@@ -478,9 +515,10 @@ import java.util.HashMap;
       * @see #setDefaultRenderer
       */
      public void setDefaultEditor(Class columnClass, STableCellEditor r) {
-         editors.remove(columnClass);
-         if (editors != null)
+         if (editors != null) {
+             editors.remove(columnClass);
              editors.put(columnClass, r);
+         }
      }
 
      /*
@@ -602,7 +640,7 @@ import java.util.HashMap;
       * @see #editingRow
       */
      public boolean isEditing() {
-         return (cellEditor == null) ? false : true;
+         return (cellEditor != null);
      }
 
      /**
@@ -787,6 +825,11 @@ import java.util.HashMap;
      }
 
 
+     /**
+      * Returns <p>the selection model.</p>
+      *
+      * @return <p>the selection model.</p>
+      */
      public SListSelectionModel getSelectionModel() {
          return selectionModel;
      }
@@ -946,8 +989,8 @@ import java.util.HashMap;
          getSelectionModel().setDelayEvents(true);
          getSelectionModel().setValueIsAdjusting(true);
 
-         for (int i = 0; i < lowLevelEvents.length; i++) {
-             String value = lowLevelEvents[i];
+         for (int i = 0; i < lastReceivedLowLevelEvents.length; i++) {
+             String value = lastReceivedLowLevelEvents[i];
              if (value.length() > 1) {
                  char modus = value.charAt(0);
                  value = value.substring(1);
@@ -987,7 +1030,7 @@ import java.util.HashMap;
                  }
              }
          }
-         lowLevelEvents = null;
+         lastReceivedLowLevelEvents = null;
 
          getSelectionModel().setValueIsAdjusting(false);
          getSelectionModel().setDelayEvents(false);
@@ -1166,13 +1209,30 @@ import java.util.HashMap;
          return dynamicStyles == null || dynamicStyles.get(SELECTOR_HEADER) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_HEADER));
      }
 
+     /**
+      * Sets <p>Determines whether the header is visible or not.</p><p>By
+      * default the header is visible.</p> <p><em>CAVEAT:</em>The
+      * header is not (yet) implemented like in Swing. But maybe
+      * someday.  So you can disable it if you like.</p>
+      *
+      * @param hv <p>Determines whether the header is visible or not.</p><p>By
+      */
      public void setHeaderVisible(boolean hv) {
          boolean oldHeaderVisible = headerVisible;
          headerVisible = hv;
-         if (oldHeaderVisible != headerVisible)
+         if (oldHeaderVisible != headerVisible) {
              reload(ReloadManager.STATE);
+         }
      }
 
+     /**
+      * Returns <p>Determines whether the header is visible or not.</p><p>By
+      * default the header is visible.</p> <p><em>CAVEAT:</em>The
+      * header is not (yet) implemented like in Swing. But maybe
+      * someday.  So you can disable it if you like.</p>
+      *
+      * @return <p>Determines whether the header is visible or not.</p><p>By
+      */
      public boolean isHeaderVisible() {
          return headerVisible;
      }
@@ -1182,24 +1242,50 @@ import java.util.HashMap;
          setShowVerticalLines(b);
      }
 
+     /**
+      * Sets <p>Determines if horizontal lines in the table should be
+      * painted.</p><p>This is off by default.</p>
+      *
+      * @param b <p>Determines if horizontal lines in the table should be
+      */
      public void setShowHorizontalLines(boolean b) {
          boolean oldShowHorizontalLines = showHorizontalLines;
          showHorizontalLines = b;
-         if (showHorizontalLines != oldShowHorizontalLines)
+         if (showHorizontalLines != oldShowHorizontalLines) {
              reload(ReloadManager.STATE);
+         }
      }
 
+     /**
+      * Returns <p>Determines if horizontal lines in the table should be
+      * painted.</p><p>This is off by default.</p>
+      *
+      * @return <p>Determines if horizontal lines in the table should be
+      */
      public boolean getShowHorizontalLines() {
          return showHorizontalLines;
      }
 
+     /**
+      * Sets <p>Determines if vertical lines in the table should be
+      * painted.</p><p>This is off by default.</p>
+      *
+      * @param b <p>Determines if vertical lines in the table should be
+      */
      public void setShowVerticalLines(boolean b) {
          boolean oldShowVerticalLines = showVerticalLines;
          showVerticalLines = b;
-         if (showVerticalLines != oldShowVerticalLines)
+         if (showVerticalLines != oldShowVerticalLines) {
              reload(ReloadManager.STATE);
+         }
      }
 
+     /**
+      * Returns <p>Determines if vertical lines in the table should be
+      * painted.</p><p>This is off by default.</p>
+      *
+      * @return <p>Determines if vertical lines in the table should be
+      */
      public boolean getShowVerticalLines() {
          return showVerticalLines;
      }
@@ -1412,5 +1498,28 @@ import java.util.HashMap;
      protected TableModel createDefaultDataModel() {
          return new DefaultTableModel();
      }
+
+    /**
+     * Generates the name (= id) of the editing component so that
+     * the STable implementation knows to associate the input
+     * value with the correct data row/columns
+     *
+     * Applies the unqique id/name for a component of the rows/column
+     * to the cell component.
+     *
+     * @param component The edit component to rename
+     * @param row Data row of this edit component
+     * @param col Data column of this edit component
+     */
+    protected void nameCellComponent(final SComponent component, final int row, final int col) {
+        nameBuffer.setLength(0);
+        nameBuffer.append(component.getName()).append("_");
+        if (row == -1)
+            nameBuffer.append('h');
+        else
+            nameBuffer.append(row);
+        nameBuffer.append("_").append(col);
+        component.setNameRaw(nameBuffer.toString());
+    }
 
  }

@@ -14,22 +14,8 @@
 package org.wings.plaf.css;
 
 
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.KeyStroke;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.RequestURL;
 import org.wings.SCellRendererPane;
 import org.wings.SComponent;
 import org.wings.SConstants;
@@ -47,6 +33,14 @@ import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
 import org.wings.table.STableColumnModel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
     /**
@@ -192,7 +186,6 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         final boolean isEditingCell = table.isEditing() && row == table.getEditingRow() && col == table.getEditingColumn();
         final boolean editableCell = table.isCellEditable(row, col);
         final boolean selectableCell = table.getSelectionMode() != SListSelectionModel.NO_SELECTION && !table.isEditable();
-        final boolean showAsFormComponent = table.getShowAsFormComponent();
 
         if (isEditingCell) {
             component = table.getEditorComponent();
@@ -328,7 +321,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         * render the header
         */
         if (table.isHeaderVisible()) {
-            device.print("<thead><tr class=\"header\">\n");
+            device.print("<thead><tr class=\"header\">");
+            Utils.printNewline(device, table);
 
             if (needsSelectionRow)
                 device.print("<th width=\"").print(selectionColumnWidth).print("\"></th>");
@@ -368,10 +362,11 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             for (int c = startCol; c < endCol; c++)
                 renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
 
-            device.print("</tr>\n");
+            device.print("</tr>");
+            Utils.printNewline(device, table);
         }
-        device.print("</tbody>\n");
-        device.print("</table>\n");
+        device.print("</tbody>");
+        device.print("</table>");
     }
 
     private boolean atLeastOneColumnWidthIsNotNull(STableColumnModel columnModel) {
