@@ -14,21 +14,17 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
-import javax.swing.KeyStroke;
-
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SMenuItem;
 import org.wings.io.Device;
 import org.wings.util.KeystrokeUtil;
 
+import javax.swing.*;
+import java.io.IOException;
+
 public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     protected void writeItemContent(final Device device, SMenuItem menuItem)

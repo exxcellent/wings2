@@ -16,7 +16,6 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SContainer;
-import org.wings.style.Selector;
 import org.wings.io.Device;
 
 public final class ContainerCG extends AbstractComponentCG implements

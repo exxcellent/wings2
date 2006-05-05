@@ -33,6 +33,9 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
+        // may be ommitted if no width, border and backgrouund table
+        writeTablePrefix(device, button);
+
         Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true, button.getShowAsFormComponent());
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         Utils.optAttribute(device, "accesskey", button.getMnemonic());
@@ -75,6 +78,8 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         }
 
         Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), true);
+
+        writeTableSuffix(device, component);
     }
 
     /* Retrieve according icon for a button. */

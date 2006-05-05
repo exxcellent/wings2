@@ -14,19 +14,15 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SAbstractButton;
 import org.wings.SIcon;
 import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
 
+import java.io.IOException;
+
 public class RadioButtonCG extends CheckBoxCG implements
-        org.wings.plaf.RadioButtonCG
-{
-    /**
-     * 
-     */
+        org.wings.plaf.RadioButtonCG {
     private static final long serialVersionUID = 1L;
 
     protected void installIcons(final SAbstractButton button) {

@@ -85,8 +85,9 @@ public final class Utils {
             }
             d.print("</td></tr></tbody>");
             return;
+        } else {
+            layout.write(d);
         }
-        layout.write(d);
     }
 
     public static void writeEvents(Device d, SComponent c)
@@ -866,7 +867,7 @@ public final class Utils {
                 device.print("<span");
                 Utils.optAttribute(device, "class", "disabled_formbutton");
             } else {
-                device.print("<a href=\"#\" onClick=\"sendEvent(event,'");
+                device.print("<a href=\"#\" onclick=\"sendEvent(event,'");
                 device.print(eventValue == null ? "" : eventValue);
                 device.print("','");
                 device.print(Utils.event(eventTarget));

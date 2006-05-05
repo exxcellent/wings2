@@ -22,9 +22,6 @@ import java.io.IOException;
 
 public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device, final SComponent c) throws IOException {
@@ -78,8 +75,12 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         device.print(SConstants.UID_DIVIDER);
         device.print("\" />");
 
+        device.print("<table>");
+
         // Render the container itself
         Utils.renderContainer(device, component);
+
+        device.print("</table>");
 
         // Enter capture at end of form
         device.print("<input type=\"image\" name=\"").print(defaultButtonName).print("\" border=\"0\" ");

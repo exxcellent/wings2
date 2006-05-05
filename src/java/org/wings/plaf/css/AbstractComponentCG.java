@@ -15,9 +15,9 @@ package org.wings.plaf.css;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 import javax.swing.InputMap;
 
@@ -28,15 +28,22 @@ import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SPopupMenu;
 import org.wings.SResourceIcon;
+import org.wings.script.ScriptListener;
+import org.wings.style.Style;
+import org.wings.util.SStringBuilder;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.css.dwr.CallableManager;
-import org.wings.script.ScriptListener;
-import org.wings.style.Style;
-import org.wings.util.SStringBuilder;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.
@@ -56,19 +63,19 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     protected void writeTablePrefix(Device device, SComponent component) throws IOException {
         writePrefix(device, component, true);
     }
-    
+
     protected void writeTableSuffix(Device device, SComponent component) throws IOException {
         writeSuffix(device, component, true);
     }
-    
+
     protected void writeDivPrefix(Device device, SComponent component) throws IOException {
         writePrefix(device, component, false);
     }
-    
+
     protected void writeDivSuffix(Device device, SComponent component) throws IOException {
         writeSuffix(device, component, false);
     }
-    
+
     private void writePrefix(Device device, SComponent component, boolean useTable) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
         // This is the containing element of a component
@@ -80,7 +87,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
 
         writeAllAttributes(device, component);
-        
+
         if (useTable) {
             device.print("><tr><td>"); // table
         } else {
@@ -103,9 +110,12 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print("</div>");
         }
     }
-    
+
     protected void writeAllAttributes(Device device, SComponent component) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
+
+        Utils.printDebugNewline(device, component);
+        Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
 
         final String classname = component.getStyle();
         Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
@@ -122,7 +132,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         // Component popup menu
         writeContextMenu(device, component);
-        
+
         // javascript event handlers
         Utils.writeEvents(device, component);
     }
@@ -219,7 +229,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     public boolean wantsPrefixAndSuffix(SComponent component) {
         return true;
     }
-    
+
     protected final SIcon getBlindIcon() {
         if (BLIND_ICON == null)
             BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
@@ -297,19 +307,19 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         if (dim == null) return false;
         return (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
     }
-    
+
     public void write(Device device, SComponent component) throws IOException {
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         component.fireRenderEvent(SComponent.START_RENDERING);
 
         writeInternal(device, component);
-        
+
         writeInlineScripts(device, component);
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
-        
+
     }
-    
+
     public abstract void writeInternal(Device device, SComponent component) throws IOException;
 
 }

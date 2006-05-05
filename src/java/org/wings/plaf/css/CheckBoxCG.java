@@ -24,9 +24,6 @@ import java.io.IOException;
 
 public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     protected boolean useIconsInForms = false;
 
@@ -73,6 +70,8 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
          * application.
          * (OL)
          */
+
+        writeTablePrefix(device, component);
 
         if (showAsFormComponent && useIconsInForms) {
             Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true, button.getShowAsFormComponent());
@@ -132,6 +131,8 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             device.print("</div>");
         else
             Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), true);
+
+        writeTableSuffix(device, component);
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {

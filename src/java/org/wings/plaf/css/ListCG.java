@@ -24,9 +24,6 @@ import java.io.IOException;
 public class ListCG extends AbstractComponentCG implements
         org.wings.plaf.ListCG {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     public void installCG(final SComponent comp) {

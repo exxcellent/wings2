@@ -21,6 +21,16 @@ function getParentByTagName(element, tag) {
   return null;
 }
 
+function getParentByAttributeName(element, attribute) {
+  while (element != null) {
+    if (element.attributes.contains(attribute))
+      return element;
+    element = element.parentNode;
+  }
+    alert("no parent for for attibute "+attribute);
+  return null;
+}
+
 function preventDefault(event) {
     if (event.preventDefault)
         event.preventDefault();
@@ -33,9 +43,10 @@ function sendEvent(event, eventValue, eventName, clientHandlers) {
     event = getEvent(event);
     var target = getTarget(event)
     var form = getParentByTagName(target, "FORM");
+    var eidprovider = target;
     if (!eventName) {
-        var div = getParentByTagName(target, "DIV");
-        eventName = div.getAttribute("eid");
+        var eidprovider = getParentByAttributeName()(target, "eid");
+        eventName = eidprovider.getAttribute("eid");
     }
 
     var doSubmit = true;

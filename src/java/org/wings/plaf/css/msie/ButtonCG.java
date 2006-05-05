@@ -42,6 +42,8 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
     public void writeInternal(final Device device, final SComponent component) throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
+        writeTablePrefix(device, component);
+
         Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         Utils.optAttribute(device, "accesskey", button.getMnemonic());
@@ -84,6 +86,8 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
         }
 
         Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), button.isEnabled());
+
+        writeTableSuffix(device, component);
     }
 
     public void installCG(final SComponent component) {
