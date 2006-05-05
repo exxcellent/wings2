@@ -25,7 +25,7 @@ import org.wings.text.SAbstractFormatter;
 
 import java.io.IOException;
 
-public class TextFieldCG extends AbstractComponentCG implements
+public final class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
 
     private static final long serialVersionUID = 1L;

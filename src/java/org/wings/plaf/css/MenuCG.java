@@ -22,7 +22,7 @@ import org.wings.SMenuItem;
 import org.wings.io.Device;
 import java.io.IOException;
 
-public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
+public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         org.wings.plaf.MenuCG {
 
     /**

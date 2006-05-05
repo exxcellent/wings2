@@ -20,12 +20,9 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class FileChooserCG extends AbstractComponentCG implements
+public final class FileChooserCG extends AbstractComponentCG implements
         org.wings.plaf.FileChooserCG {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device,

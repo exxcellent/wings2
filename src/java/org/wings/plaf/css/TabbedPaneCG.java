@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TabbedPaneCG extends AbstractComponentCG {
+public final class TabbedPaneCG extends AbstractComponentCG {
     private static final long serialVersionUID = 1L;
     private static final Map placements = new HashMap();
 

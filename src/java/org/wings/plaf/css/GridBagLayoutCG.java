@@ -52,7 +52,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                 final boolean headerCell = row == grid.firstRow && header;
                 if (comp == null) {
                     openLayouterCell(d, null, headerCell, -1, -1, null, SConstants.CENTER, SConstants.CENTER, styles);
-                    closeLayouterCell(d, headerCell);
+                    closeLayouterCell(d, null, headerCell);
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
 
@@ -86,7 +86,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         Utils.printNewline(d, comp);
                         comp.write(d); // Render component
 
-                        closeLayouterCell(d, headerCell);
+                        closeLayouterCell(d, comp, headerCell);
                     }
                 }
             }

@@ -291,7 +291,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         return (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
     }
 
-    public void write(Device device, SComponent component) throws IOException {
+    public void write(Device device, SComponent component) throws IOException {        
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         component.fireRenderEvent(SComponent.START_RENDERING);
 

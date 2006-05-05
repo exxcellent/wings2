@@ -76,6 +76,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             final SComponent c = (SComponent) iter.next();
 
             if (col == 0) {
+                Utils.printNewline(d, c.getParent());
                 d.print("<tr>");
             } else if (col % cols == 0) {
                 d.print("</tr>");
@@ -88,7 +89,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
             c.write(d); // Render component
 
-            closeLayouterCell(d, firstRow && renderFirstLineAsHeader);
+            closeLayouterCell(d, c, firstRow && renderFirstLineAsHeader);
 
             col++;
 
@@ -168,6 +169,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      * @param style
      */
     public static void openLayouterCell(final Device d, final SComponent component, final boolean renderAsHeader, int colspan, int rowspan, String width, int defaultHorizontalAlignment, int defaultVerticalAlignment, String style) throws IOException {
+        Utils.printNewline(d, component);
         if (renderAsHeader)
             d.print("<th");
         else
@@ -186,7 +188,8 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      *
      * @param renderAsHeader Print TH instead of TD
      */
-    public static void closeLayouterCell(final Device d, final boolean renderAsHeader) throws IOException {
+    public static void closeLayouterCell(final Device d, final SComponent component, final boolean renderAsHeader) throws IOException {
+        Utils.printNewline(d, component);
         d.print(renderAsHeader ? "</th>" : "</td>");
     }
 

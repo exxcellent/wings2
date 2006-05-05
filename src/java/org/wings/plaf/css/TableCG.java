@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
+public final class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
     private static final long serialVersionUID = 1L;
     /**
      * Apache jakarta commons logger

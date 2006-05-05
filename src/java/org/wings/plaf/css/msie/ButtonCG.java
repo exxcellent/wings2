@@ -13,26 +13,18 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.wings.*;
-import org.wings.util.SStringBuilder;
-import org.wings.event.SParentFrameEvent;
-import org.wings.event.SParentFrameListener;
-import org.wings.externalizer.ExternalizeManager;
-import org.wings.header.Script;
+import org.wings.SAbstractButton;
+import org.wings.SComponent;
+import org.wings.SIcon;
 import org.wings.io.Device;
 import org.wings.plaf.css.AbstractLabelCG;
 import org.wings.plaf.css.IconTextCompound;
 import org.wings.plaf.css.Utils;
-import org.wings.resource.ClasspathResource;
-import org.wings.resource.DefaultURLResource;
-import org.wings.resource.ResourceManager;
-import org.wings.session.SessionManager;
+import org.wings.util.SStringBuilder;
 
 import java.io.IOException;
 
-public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
-
-    private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
+public final class ButtonCG extends AbstractLabelCG {
 
     /**
      * a serializable class is supposed to have this ID.
@@ -88,20 +80,5 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
         Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), button.isEnabled());
 
         writeTableSuffix(device, component);
-    }
-
-    public void installCG(final SComponent component) {
-        super.installCG(component);
-        component.addParentFrameListener(this);
-    }
-
-    public void parentFrameAdded(final SParentFrameEvent e) {
-        SFrame parentFrame = e.getParentFrame();
-        ClasspathResource res = new ClasspathResource(FORMS_JS, "text/javascript");
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        parentFrame.addHeader(new Script("text/javascript", new DefaultURLResource(jScriptUrl)));
-    }
-
-    public void parentFrameRemoved(final SParentFrameEvent e) {
     }
 }

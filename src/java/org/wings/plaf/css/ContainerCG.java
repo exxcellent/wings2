@@ -18,15 +18,11 @@ import org.wings.SComponent;
 import org.wings.SContainer;
 import org.wings.io.Device;
 
-public final class ContainerCG extends AbstractComponentCG implements
-        org.wings.plaf.PanelCG
-{
+public final class ContainerCG extends AbstractComponentCG implements org.wings.plaf.PanelCG {
     private static final long serialVersionUID = 1L;
 
-    public void writeInternal(final Device device, final SComponent component)
-            throws java.io.IOException
-    {
-        SContainer container = (SContainer)component;
+    public void writeInternal(final Device device, final SComponent component) throws java.io.IOException {
+        SContainer container = (SContainer) component;
         device.print("<table");
         writeAllAttributes(device, component);
         Utils.writeEvents(device, component, null);

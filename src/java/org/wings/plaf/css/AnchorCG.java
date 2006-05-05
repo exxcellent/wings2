@@ -20,7 +20,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class AnchorCG extends AbstractComponentCG implements org.wings.plaf.AnchorCG {
+public final class AnchorCG extends AbstractComponentCG implements org.wings.plaf.AnchorCG {
     private static final long serialVersionUID = 1L;
 
     /* (non-Javadoc)

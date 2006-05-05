@@ -28,7 +28,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.io.IOException;
 
-public class TreeCG extends AbstractComponentCG implements
+public final class TreeCG extends AbstractComponentCG implements
         org.wings.plaf.TreeCG {
     private static final long serialVersionUID = 1L;
     private SIcon collapseControlIcon;

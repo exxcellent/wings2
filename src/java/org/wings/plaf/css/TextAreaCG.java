@@ -20,7 +20,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class TextAreaCG extends AbstractComponentCG implements
+public final class TextAreaCG extends AbstractComponentCG implements
         org.wings.plaf.TextAreaCG {
 
     private static final long serialVersionUID = 1L;

@@ -19,11 +19,8 @@ import org.wings.SSpacer;
 import org.wings.io.Device;
 import java.io.IOException;
 
-public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.SpacerCG {
+public final class SpacerCG extends AbstractComponentCG implements org.wings.plaf.SpacerCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device, final SComponent c) throws IOException {

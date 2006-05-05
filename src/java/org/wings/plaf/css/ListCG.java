@@ -21,8 +21,7 @@ import org.wings.plaf.CGManager;
 
 import java.io.IOException;
 
-public class ListCG extends AbstractComponentCG implements
-        org.wings.plaf.ListCG {
+public final class ListCG extends AbstractComponentCG implements  org.wings.plaf.ListCG {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,7 +63,8 @@ public class ListCG extends AbstractComponentCG implements
                 renderer = cellRenderer.getListCellRendererComponent(list, model.getElementAt(i), false, i);
             }
 
-            device.print("\n<option");
+            Utils.printNewline(device, list, 1);
+            device.print("<option");
             Utils.optAttribute(device, "value", list.getSelectionParameter(i));
             if (list.isSelectedIndex(i)) {
                 Utils.optAttribute(device, "class", "selected");
@@ -97,7 +97,9 @@ public class ListCG extends AbstractComponentCG implements
             device.print("</option>");
         }
 
+        Utils.printNewline(device, list);
         device.print("</select>");
+        Utils.printNewline(device, list);
         device.print("<input type=\"hidden\"");
         Utils.optAttribute(device, "name", Utils.event(list));
         Utils.optAttribute(device, "value", -1);

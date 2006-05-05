@@ -745,7 +745,7 @@ public final class Utils {
     /**
      * Prints a hierarchical idented newline. For each surrounding container of the passed component one ident level.
      */
-    public static Device printNewline(Device d, SComponent currentComponent) throws IOException {
+    public static Device printNewline(final Device d, SComponent currentComponent) throws IOException {
         if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
         {
             return d;
@@ -757,6 +757,27 @@ public final class Utils {
         }
         return d;
     }
+
+    /**
+     * Prints a hierarchical idented newline. For each surrounding container of the passed component one ident level.
+     */
+    public static Device printNewline(final Device d, SComponent currentComponent, int offset) throws IOException {
+        if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
+        {
+            return d;
+        }
+        d.print("\n");
+        while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
+            d.print("\t");
+            currentComponent = currentComponent.getParent();
+        }
+        while (offset > 0) {
+            d.print("\t");
+            offset--;
+        }
+        return d;
+    }
+
 
     /**
      * loads a script from disk through the classloader.

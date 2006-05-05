@@ -13,9 +13,6 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Rectangle;
-import java.io.IOException;
-
 import org.wings.SComponent;
 import org.wings.SDimension;
 import org.wings.SScrollPane;
@@ -23,7 +20,10 @@ import org.wings.SScrollPaneLayout;
 import org.wings.Scrollable;
 import org.wings.io.Device;
 
-public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
+import java.awt.*;
+import java.io.IOException;
+
+public final class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
 
     private static final long serialVersionUID = 1L;
 

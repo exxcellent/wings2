@@ -22,8 +22,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class DesktopPaneCG extends AbstractComponentCG implements
-        org.wings.plaf.DesktopPaneCG {
+public final class DesktopPaneCG extends AbstractComponentCG implements org.wings.plaf.DesktopPaneCG {
     private static final long serialVersionUID = 1L;
 
     public void installCG(SComponent component) {
@@ -32,14 +31,13 @@ public class DesktopPaneCG extends AbstractComponentCG implements
     }
 
     public void writeInternal(final Device device, final SComponent _c)
-            throws IOException
-    {
+            throws IOException {
         SDesktopPane desktop = (SDesktopPane) _c;
 
         writeDivPrefix(device, desktop);
         // is one window maximized? if yes, skip rendering of other windows
         boolean maximized = false;
-        
+
         device.print("<div class=\"spacer\"></div>");
         int componentCount = desktop.getComponentCount();
         for (int i = 0; i < componentCount; i++) {
@@ -49,7 +47,7 @@ public class DesktopPaneCG extends AbstractComponentCG implements
                 maximized = true;
             }
         }
-        
+
         if (!maximized) {
             for (int i = 0; i < componentCount; i++) {
                 SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);

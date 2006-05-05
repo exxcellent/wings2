@@ -21,7 +21,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
+public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
 
     private static final long serialVersionUID = 1L;
 

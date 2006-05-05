@@ -21,7 +21,7 @@ import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import java.io.IOException;
 
-public class ProgressBarCG extends AbstractComponentCG implements  org.wings.plaf.ProgressBarCG {
+public final class ProgressBarCG extends AbstractComponentCG implements  org.wings.plaf.ProgressBarCG {
 
     private static final long serialVersionUID = 1L;
 

@@ -6,7 +6,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class RawTextComponentCG extends AbstractComponentCG {
+public final class RawTextComponentCG extends AbstractComponentCG {
     private static final long serialVersionUID = 1L;
 
     public void write(Device device, SComponent component) throws IOException {

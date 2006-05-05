@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
  */
-public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
+public final class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
 
     private static final long serialVersionUID = 1L;
     private boolean wordWrapDefault;

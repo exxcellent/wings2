@@ -13,18 +13,15 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Insets;
-import java.io.IOException;
-import java.util.List;
-
 import org.wings.SBoxLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
+import java.awt.*;
+import java.io.IOException;
+import java.util.List;
+
 public class BoxLayoutCG extends AbstractLayoutCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /**

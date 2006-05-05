@@ -21,13 +21,9 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class SeparatorCG extends AbstractComponentCG implements
+public final class SeparatorCG extends AbstractComponentCG implements
         org.wings.plaf.SeparatorCG {
 
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device,

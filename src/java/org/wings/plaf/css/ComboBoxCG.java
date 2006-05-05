@@ -23,7 +23,7 @@ import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import java.io.IOException;
 
-public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.ComboBoxCG {
+public final class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.ComboBoxCG {
 
     private static final long serialVersionUID = 1L;
 

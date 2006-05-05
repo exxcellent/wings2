@@ -22,7 +22,7 @@ import org.wings.resource.ResourceManager;
 import java.io.IOException;
 
 
-public final class RadioButtonCG extends CheckBoxCG {
+public final class RadioButtonCG extends org.wings.plaf.css.CheckBoxCG {
     private static final long serialVersionUID = 1L;
 
     protected void installIcons(final SAbstractButton button) {

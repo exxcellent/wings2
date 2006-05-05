@@ -16,7 +16,7 @@ import java.io.IOException;
  *
  * @author holger
  */
-public class PageScrollerCG extends AbstractComponentCG implements org.wings.plaf.PageScrollerCG {
+public final class PageScrollerCG extends AbstractComponentCG implements org.wings.plaf.PageScrollerCG {
     private static final long serialVersionUID = 1L;
 
     private final static transient Log log = LogFactory.getLog(PageScrollerCG.class);

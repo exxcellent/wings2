@@ -21,7 +21,7 @@ import org.wings.resource.ResourceManager;
 
 import java.io.IOException;
 
-public class RadioButtonCG extends CheckBoxCG implements
+public final class RadioButtonCG extends CheckBoxCG implements
         org.wings.plaf.RadioButtonCG {
     private static final long serialVersionUID = 1L;
 

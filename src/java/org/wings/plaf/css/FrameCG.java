@@ -51,9 +51,6 @@ import java.util.StringTokenizer;
  * Does quite many abritriray things i.e. registering diverse service scripts, etc.
  */
 public class FrameCG implements org.wings.plaf.FrameCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     private final transient static Log log = LogFactory.getLog(FrameCG.class);
@@ -117,6 +114,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     public final String FORM_SCRIPT = (String) ResourceManager.getObject("JScripts.form", String.class);
     public final String DOMLIB_SCRIPT = (String) ResourceManager.getObject("JScripts.domlib", String.class);
     public final String DOMTT_SCRIPT = (String) ResourceManager.getObject("JScripts.domtt", String.class);
+    public final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
     public static final JavaScriptListener FOCUS_SCRIPT =
             new JavaScriptListener("onfocus", "storeFocus(event)");
@@ -180,7 +178,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         final SFrame component = (SFrame) comp;
 
         DynamicCodeResource dynamicCodeRessource;
-        Link stylesheetLink;
+        //Link stylesheetLink;
 
         // dynamic code resource.
         // This Resource externalized the HTML page
@@ -202,6 +200,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             component.headers().add(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));;
         }
 
+        // add Form.js to frame
+        addJavaScriptLibrary(component, FORMS_JS);
+
         addExternalizedHeader(component, UTILS_SCRIPT, "text/javascript");
         addExternalizedHeader(component, FORM_SCRIPT, "text/javascript");
         addExternalizedHeader(component, DOMLIB_SCRIPT, "text/javascript");
@@ -210,6 +211,12 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
         component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);
+    }
+
+    private void addJavaScriptLibrary(final SFrame frame, final String scriptFileName) {
+        ClasspathResource res = new ClasspathResource(scriptFileName, "text/javascript");
+        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        frame.addHeader(new Script("text/javascript", new DefaultURLResource(jScriptUrl)));
     }
 
     /**
