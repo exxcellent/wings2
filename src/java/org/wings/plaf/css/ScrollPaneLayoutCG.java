@@ -78,7 +78,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         }
         if (center != null) {
             d.print("<td width=\"100%\"");
-            Utils.printTableCellAlignment(d, center, SConstants.TOP_ALIGN, SConstants.LEFT_ALIGN);
+            Utils.printTableCellAlignment(d, center, SConstants.LEFT_ALIGN, SConstants.TOP_ALIGN);
             d.print(">");
             writeComponent(d, center);
             d.print("</td>");

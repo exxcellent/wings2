@@ -78,10 +78,12 @@ public final class Utils {
         SLayoutManager layout = c.getLayout();
 
         if (layout == null) {
+            d.print("<tbody><tr><td>");
             // just write out the components one after another
             for (int i = 0; i < c.getComponentCount(); i++) {
                 c.getComponent(i).write(d);
             }
+            d.print("</td></tr></tbody>");
             return;
         }
         layout.write(d);
@@ -255,7 +257,7 @@ public final class Utils {
      * @param defaultVertical default vertical alignment to use if component is not aligned
      */
     public static void printTableCellAlignment(final Device d, final SComponent c,
-                                               final int defaultVertical, final int defaultHorizontal)
+                                               final int defaultHorizontal, final int defaultVertical)
             throws IOException {
         if (c != null) {
             final int horizontalAlignment = c.getHorizontalAlignment();

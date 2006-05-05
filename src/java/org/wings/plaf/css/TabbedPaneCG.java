@@ -93,7 +93,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("<tr><th");
             } else {
                 device.print("<tr><td");
-                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
             }
 
             if (placement == SConstants.TOP) {
@@ -116,11 +116,11 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
             if (placement == SConstants.TOP) {
                 device.print("</th></tr><tr><td");
-                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
                 Utils.optAttribute(device, "style", contentArea);
             } else if (placement == SConstants.LEFT) {
                 device.print("</th><td");
-                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
                 Utils.optAttribute(device, "style", contentArea);
             } else if (placement == SConstants.RIGHT) {
                 device.print("</td><th");

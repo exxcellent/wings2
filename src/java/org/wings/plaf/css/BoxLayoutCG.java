@@ -41,11 +41,11 @@ public class BoxLayoutCG extends AbstractLayoutCG {
         final int border = layout.getBorder();
         final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
-        printLayouterTableHeader(d, "SBoxLayout", insets, border, layout);
+        openLayouterBody(d, layout);
 
         printLayouterTableBody(d, cols, false, insets, border, components);
 
-        printLayouterTableFooter(d, "SBoxLayout", layout);
+        closeLayouterBody(d, layout);
 
     }
 }

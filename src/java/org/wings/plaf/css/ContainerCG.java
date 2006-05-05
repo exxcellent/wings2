@@ -20,15 +20,23 @@ import org.wings.style.Selector;
 import org.wings.io.Device;
 
 public final class ContainerCG extends AbstractComponentCG implements
-        org.wings.plaf.PanelCG {
-
-    /**
-     * 
-     */
+        org.wings.plaf.PanelCG
+{
     private static final long serialVersionUID = 1L;
 
     public void write(final Device device, final SComponent component)
             throws java.io.IOException {
+
+        Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
+        writeAllAttributes(device, component, "table");
+        device.print(">");
+
+        component.fireRenderEvent(SComponent.START_RENDERING);
         Utils.renderContainer(device, (SContainer) component);
+        component.fireRenderEvent(SComponent.DONE_RENDERING);
+
+        device.print("</table>");
+        writeInlineScripts(device, component);
+        Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 }

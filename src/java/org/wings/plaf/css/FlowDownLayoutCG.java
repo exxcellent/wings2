@@ -39,10 +39,10 @@ public class FlowDownLayoutCG extends AbstractLayoutCG {
         final SFlowDownLayout layout = (SFlowDownLayout) l;
         final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
-        printLayouterTableHeader(d, "SFlowDownLayout", insets, 0, layout);
+        openLayouterBody(d, layout);
 
         printLayouterTableBody(d, 1, false, insets, 0, layout.getComponents());
 
-        printLayouterTableFooter(d, "SFlowDownLayout", layout);
+        closeLayouterBody(d, layout);
     }
 }

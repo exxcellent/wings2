@@ -13,13 +13,15 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.io.IOException;
+
 import org.wings.SComponent;
 import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
+import org.wings.SConstants;
 import org.wings.io.Device;
-
-import java.awt.*;
-import java.io.IOException;
 
 public class GridBagLayoutCG extends AbstractLayoutCG {
     /**
@@ -37,36 +39,28 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
             throws IOException {
         final SGridBagLayout layout = (SGridBagLayout) l;
         final boolean header = layout.getHeader();
-        final int border = layout.getBorder() >= 0 ? layout.getBorder() : 0;
         final SGridBagLayout.Grid grid = layout.getGrid();
-        final Insets layoutInsets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
         if (grid.cols == 0)
             return;
 
-        printLayouterTableHeader(d, "SGridBagLayout", layoutInsets, border, layout);
+        openLayouterBody(d, layout);
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
             Utils.printNewline(d, layout.getContainer());
-            d.print("<tr height=\"");
-            d.print(determineRowHeight(layout, row));
-            d.print("%\">");
+            openLayouterRow(d, determineRowHeight(layout, row) + "%");
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 final SComponent comp = grid.grid[col][row];
                 Utils.printNewline(d, layout.getContainer());
                 final boolean headerCell = row == grid.firstRow && header;
                 if (comp == null) {
-                    openLayouterCell(d, headerCell, layoutInsets, border, null);
-                    d.print(">");
-                    closeLayouterCell(d, layout.getContainer(), headerCell);
+                    openLayouterCell(d, null, headerCell, -1, -1, null, SConstants.CENTER, SConstants.CENTER);
+                    closeLayouterCell(d, headerCell);
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
 
                     if ((c.gridx == SGridBagLayout.LAST_CELL || c.gridx == col) &&
                             (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
-
-                        final Insets cellInsets = addInsets(layoutInsets, c.insets);
-                        openLayouterCell(d, headerCell, cellInsets, border, comp);
 
                         int gridwidth = c.gridwidth;
                         if (gridwidth == GridBagConstraints.RELATIVE) {
@@ -74,45 +68,35 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         } else if (gridwidth == GridBagConstraints.REMAINDER) {
                             gridwidth = grid.cols - col;
                         }
-                        if (gridwidth > 1) {
-                            d.print(" colspan=" + gridwidth);
-                        }
+                        if (gridwidth < 2)
+                            gridwidth = -1;
 
                         int gridheight = c.gridheight;
                         if (gridheight == GridBagConstraints.RELATIVE) {
-                            gridheight = grid.rows - row - 1;
+                            gridheight = grid.cols - col - 1;
                         } else if (gridheight == GridBagConstraints.REMAINDER) {
-                            gridheight = grid.rows - row;
+                            gridheight = grid.cols - col;
                         }
-                        if (gridheight > 1) {
-                            d.print(" rowspan=" + gridheight);
-                        }
-                        if (c.weightx > 0 && grid.colweight[row] > 0) {
-                            d.print(" width=\"" +
-                                    (int) (100 * c.weightx / grid.colweight[row]) +
-                                    "%\"");
-                        }
-                        /* Height needs be written on the tr element.
-                           Replaced by new determineRowHeight() method as rendering bug occured
-                           in FireFox. Refer to http://jira.j-wings.org/browse/WGS-120
-                        if (c.weighty > 0 && grid.rowweight[col] > 0) {
-                            d.print(" height=\"" +
-                                    (int) (100 * c.weighty / grid.rowweight[col]) +
-                                    "%\"");
-                        }*/
+                        if (gridheight < 2)
+                            gridheight = -1;
 
-                        d.print(">");
+                        String width = null;
+                        if (c.weightx > 0 && grid.colweight[row] > 0)
+                            width = (int) (100 * c.weightx / grid.colweight[row]) + "%\"";
 
+                        openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER);
+
+                        Utils.printNewline(d, comp);
                         comp.write(d); // Render component
 
-                        closeLayouterCell(d, comp, headerCell);
+                        closeLayouterCell(d, headerCell);
                     }
                 }
             }
             Utils.printNewline(d, layout.getContainer());
-            d.print("</tr>");
+            closeLayouterRow(d);
         }
-        printLayouterTableFooter(d, "SGridBagLayout", layout);
+        closeLayouterBody(d, layout);
     }
 
     /**
@@ -144,27 +128,4 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         }
         return rowHeight;
     }
-
-    /**
-     * Adds both passed insets and accepts / ignores null and 0 values.
-     *
-     * @param inset1 Inset or <code>null</code>
-     * @param inset2 Inset or <code>null</code>
-     * @return The same inset if only one inset was != <code>null</code>, otherwise sum of both insets.
-     */
-    private Insets addInsets(final Insets inset1, final Insets inset2) {
-        // If gridbag constraint defines additinal insets, add them to existing
-        if (inset2 != null && (inset2.top > 0 || inset2.left > 0 || inset2.right > 0 || inset2.bottom > 0)) {
-            if (inset1 == null || (inset1.top == 0 && inset1.left == 0 && inset1.right == 0 && inset1.bottom == 0))
-                return inset2;
-            else
-                return new Insets(inset1.top + inset2.top, inset1.left + inset2.left,
-                        inset1.bottom + inset2.bottom, inset1.right + inset2.right);
-        } else
-            return inset1;
-    }
-
-
 }
-
-

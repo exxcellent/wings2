@@ -13,15 +13,19 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.Insets;
+import java.io.IOException;
+import java.util.List;
+
 import org.wings.SGridLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
-import java.awt.*;
-import java.io.IOException;
-import java.util.List;
-
-public class GridLayoutCG extends AbstractLayoutCG        {
+public class GridLayoutCG extends AbstractLayoutCG
+{
+    /**
+     * 
+     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -41,11 +45,11 @@ public class GridLayoutCG extends AbstractLayoutCG        {
             cols = components.size() / rows;
         final int border = layout.getBorder();
 
-        printLayouterTableHeader(d, "SGridLayout", insets, border, layout);
+        openLayouterBody(d, layout);
 
         printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), insets, border, components);
 
-        printLayouterTableFooter(d, "SGridLayout", layout);
+        closeLayouterBody(d, layout);
     }
 
 }

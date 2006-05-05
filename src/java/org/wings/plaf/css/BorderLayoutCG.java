@@ -37,96 +37,64 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
         final SComponent center = (SComponent) layout.getComponents().get(SBorderLayout.CENTER);
         final SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
-        final Insets layoutInsets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
         int cols = 1;
         if (west != null) cols++;
         if (east != null) cols++;
 
-        printLayouterTableHeader(d, "SBorderLayout", layoutInsets, layout.getBorder(),layout);
+        openLayouterBody(d, layout);
 
         if (north != null) {
-            d.print("<tr style=\"height: 0%\">");
+            openLayouterRow(d, "0%");
             Utils.printNewline(d, north);
-            d.print("<td colspan=\"").print(cols).print("\"");
-            Utils.printTableCellAlignment(d, north, SConstants.TOP, SConstants.LEFT);
-            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(north));
-            d.print(">");
+            openLayouterCell(d, north, false, cols, -1, null, SConstants.CENTER, SConstants.TOP);
             north.write(d);
-            d.print("</td>");
+            closeLayouterCell(d, false);
             Utils.printNewline(d, layout.getContainer());
-            d.print("</tr>");
+            closeLayouterRow(d);
             Utils.printNewline(d, layout.getContainer());
         }
 
-        d.print("<tr style=\"height: 100%\">");
+        openLayouterRow(d, "100%");
 
         if (west != null) {
             Utils.printNewline(d, west);
-            d.print("<td width=\"0%\"");
-            Utils.printTableCellAlignment(d, west, SConstants.CENTER, SConstants.LEFT);
-            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(west));
-            d.print(">");
+            openLayouterCell(d, west, false, -1, -1, "0%", SConstants.LEFT, SConstants.CENTER);
             west.write(d);
-            d.print("</td>");
+            closeLayouterCell(d, false);
         }
 
         if (center != null) {
             Utils.printNewline(d, center);
-            d.print("<td width=\"100%\"");
-            Utils.printTableCellAlignment(d, center, SConstants.CENTER, SConstants.LEFT);
-            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(center));
-            d.print(">");
+            openLayouterCell(d, center, false, -1, -1, "100%", SConstants.CENTER, SConstants.CENTER);
             center.write(d);
-            d.print("</td>");
+            closeLayouterCell(d, false);
         } else {
             d.print("<td width=\"100%\"></td>");
         }
 
         if (east != null) {
             Utils.printNewline(d, east);
-            d.print("<td width=\"0%\"");
-            Utils.printTableCellAlignment(d, east, SConstants.CENTER, SConstants.RIGHT);
-            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(east));
-            d.print(">");
+            openLayouterCell(d, east, false, -1, -1, "0%", SConstants.RIGHT, SConstants.CENTER);
             east.write(d);
-            d.print("</td>");
+            closeLayouterCell(d, false);
         }
 
         Utils.printNewline(d, layout.getContainer());
-        d.print("</tr>");
+        closeLayouterRow(d);
 
         if (south != null) {
             Utils.printNewline(d, layout.getContainer());
-            d.print("<tr style=\"height: 0%\">");
+            openLayouterRow(d, "0%");
             Utils.printNewline(d, south);
-            d.print("<td colspan=\"").print(cols).print("\"");
-            Utils.printTableCellAlignment(d, south, SConstants.BOTTOM, SConstants.LEFT);
-            //MSIEUtils.optAttribute(d, "style", decorateLayoutCell(south));
-            d.print(">");
+            openLayouterCell(d, south, false, cols, -1, "0%", SConstants.CENTER, SConstants.BOTTOM);
             south.write(d);
-            d.print("</td>");
+            closeLayouterCell(d, false);
             Utils.printNewline(d, layout.getContainer());
-            d.print("</tr>");
+            closeLayouterRow(d);
+            Utils.printNewline(d, layout.getContainer());
         }
 
-        printLayouterTableFooter(d, "SBorderLayout", layout);
+        closeLayouterBody(d, layout);
     }
-
-    //protected String decorateLayoutCell(SComponent containedComponent) {
-        // In CSS2 capable browsers a panel inside a border layout expands to full width
-        // In MSIE we have to simulate this esp. the background colour aspect.
-
-        // Benjamin: It doesn't always...this totally borked some examples...I'm commenting this out.
-        // might be needed for some things, but we need to do this another way.
-        // look at border example to see the mess. (OL)
-
-        //   if (containedComponent != null && containedComponent.getBackground() != null) {
-        //            return "background: " + MSIEUtils.toColorString(containedComponent.getBackground()) + ";";
-        //        } else {
-    //    return null;
-    //}
-
 }
-
-
