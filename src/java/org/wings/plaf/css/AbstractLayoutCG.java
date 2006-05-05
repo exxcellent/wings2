@@ -213,6 +213,13 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             if (gridbagLayout.getBorder() > 0)
                 styles.append("border:").append(gridbagLayout.getBorder()).append("px solid black");
         }
+        else if (layout instanceof SBoxLayout) {
+            SBoxLayout boxLayout = (SBoxLayout)layout;
+            Insets insets = convertGapsToInset(boxLayout.getHgap(), boxLayout.getVgap());
+            createInlineStylesForInsets(styles, insets);
+            if (boxLayout.getBorder() > 0)
+                styles.append("border:").append(boxLayout.getBorder()).append("px solid black");
+        }
         return styles.length() > 0 ? styles.toString() : null;
     }
 }

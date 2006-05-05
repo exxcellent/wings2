@@ -17,8 +17,7 @@ import org.wings.plaf.ToolBarCG;
 
 /**
  * Displays commonly used Actions or controls.
- * The basic SToolBar is just an SPanel with a SFlowLayout manager.
- * However, the Plaf might choose to set a different layout manager.
+ * The basic SToolBar is just an SPanel with a SBoxLayout manager.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
@@ -28,12 +27,10 @@ public class SToolBar extends SPanel {
      * create a new SToolBar.
      */
     public SToolBar() {
-        super(new SFlowLayout());
+        super(new SBoxLayout(SBoxLayout.HORIZONTAL));
     }
 
     public void setCG(ToolBarCG cg) {
         super.setCG(cg);
     }
 }
-
-

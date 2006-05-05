@@ -34,14 +34,12 @@ public class GridLayoutCG extends AbstractLayoutCG {
         final SGridLayout layout = (SGridLayout) l;
         final List components = layout.getComponents();
         final int rows = layout.getRows();
-        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
         String styles = cellStyles(layout);
 
         int cols = layout.getColumns();
         if (cols <= 0)
             cols = components.size() / rows;
-        final int border = layout.getBorder();
 
         openLayouterBody(d, layout);
 

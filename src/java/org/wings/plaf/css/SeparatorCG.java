@@ -51,7 +51,7 @@ public class SeparatorCG extends AbstractComponentCG implements
                 device.print(" align=\"justify\"");
                 break;
         }
-        ;
+
         if (!component.getShade()) {
             device.print(" noshade=\"true\"");
         }

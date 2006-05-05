@@ -50,11 +50,15 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
             writeContent(device, component);
     }
 
-    public void writeContent(Device d, SComponent c)
+    public void writeContent(Device device, SComponent c)
             throws IOException {
         SScrollPane scrollPane = (SScrollPane) c;
         scrollPane.synchronizeAdjustables();
-        Utils.renderContainer(d, scrollPane);
+        device.print("<table");
+        writeAllAttributes(device, scrollPane);
+        device.print(">");
+        Utils.renderContainer(device, scrollPane);
+        device.print("</table>");
     }
 }
 

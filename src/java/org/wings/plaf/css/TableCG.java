@@ -260,7 +260,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     }
 
 
-    public final void writeInternal(final Device _device, final SComponent _c) throws IOException {
+    public final void writeInternal(final Device device, final SComponent _c) throws IOException {
         final STable table = (STable) _c;
         final SDimension intercellPadding = table.getIntercellPadding();
         final SDimension intercellSpacing = table.getIntercellSpacing();
@@ -277,8 +277,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
          *
          * THis workaround tries to deliver the HTML code of a table at once. This should resolve this issue to 99%.
          */
-        final boolean newCachingDevice = !(_device instanceof CachingDevice);
-        final CachingDevice device = newCachingDevice ? new CachingDevice(_device) : (CachingDevice) _device ;
+        //final boolean newCachingDevice = !(_device instanceof CachingDevice);
+        //final CachingDevice device = newCachingDevice ? new CachingDevice(_device) : (CachingDevice) _device ;
 
         try {
             device.print("<table");
@@ -378,8 +378,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             device.print("</table>");
         } finally {
             /* Refer to description above. */
-            if (newCachingDevice)
-                device.close();
+            //if (newCachingDevice)
+              //  device.close();
             //device = null;
         }
     }

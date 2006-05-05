@@ -59,7 +59,6 @@ public class PageScrollerExample
         scrollPane.setHorizontalScrollBar(null);
         scrollPane.setVerticalScrollBar(null);
         scrollPane.setVerticalExtent(50);
-        scrollPane.setPreferredSize(SDimension.FULLWIDTH);
         
         controls = new PageScrollerControls();
         controls.addControllable(scrollPane);

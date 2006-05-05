@@ -70,22 +70,6 @@ table.STextField > input[readonly="true"], table.SFormattedTextField > input[rea
     background-color: #eeeeee;
 }
 
-/* ----------- DESKTOP PANE */
-
-/* Thin grey border around buttons in SToolBar. See desktop demo. */
-table.SToolBar {
-    background-color: inherit !important;
-    border: 1px none !important;
-}
-table.SToolBar > tbody > tr > td {
-    background-color: inherit !important;
-    padding: 2px;
-}
-table.SToolBar table.SButton {
-    background-color: inherit !important;
-    border: 1px none !important;
-}
-
 /* ----------- SOPTIONPANE / SDIALOG */
 
 /*  Note: SOptionPane extends SDialog. */

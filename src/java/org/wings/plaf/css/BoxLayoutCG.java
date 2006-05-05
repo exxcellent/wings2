@@ -38,12 +38,11 @@ public class BoxLayoutCG extends AbstractLayoutCG {
         final SBoxLayout layout = (SBoxLayout) l;
         final List components = layout.getComponents();
         final int cols = layout.getOrientation() == SBoxLayout.HORIZONTAL ? components.size() : 1;
-        final int border = layout.getBorder();
-        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
+        String styles = cellStyles(layout);
 
         openLayouterBody(d, layout);
 
-        printLayouterTableBody(d, cols, false, components, null);
+        printLayouterTableBody(d, cols, false, components, styles);
 
         closeLayouterBody(d, layout);
 

@@ -84,11 +84,17 @@ public class ComponentControls
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
         globalControls.setBorder(border);
+        globalControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        ((SBoxLayout)globalControls.getLayout()).setHgap(2);
+        ((SBoxLayout)globalControls.getLayout()).setVgap(2);
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
         border.setThickness(1, SConstants.TOP);
         localControls.setBorder(border);
         localControls.setVisible(false);
+        localControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        ((SBoxLayout)localControls.getLayout()).setHgap(2);
+        ((SBoxLayout)localControls.getLayout()).setVgap(2);
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;

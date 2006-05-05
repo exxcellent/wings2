@@ -85,14 +85,17 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
 
     public void writeInternal(Device d, SComponent c)
             throws IOException {
-        log.debug("write = " + c);
         SScrollBar sb = (SScrollBar) c;
 
+        String style = sb.getStyle();
         if (sb.getOrientation() == SConstants.VERTICAL) {
+            sb.setStyle(style + " SScrollBar_vertical");
             writeVerticalScrollbar(d, sb);
         } else {
+            sb.setStyle(style + " SScrollBar_horizontal");
             writeHorizontalScrollbar(d, sb);
         }
+        sb.setStyle(style);
     }
 
     private void writeVerticalScrollbar(Device d, SScrollBar sb) throws IOException {
@@ -112,7 +115,9 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         // Regarding table height it is totally inveser. I love 'em.
         final String tableHeight = isMsIEBrowser ? " height=\"100%\"" : "";
 
-        d.print("<table class=\"vertical\"").print(tableHeight).print("><tbody>")
+        d.print("<table").print(tableHeight);
+        writeAllAttributes(d, sb);
+        d.print("><tbody>")
                 .print("<tr").print(rowHeightFlattened).print(">")
                 .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
 
@@ -175,7 +180,9 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         final int maximum = sb.getMaximum();
         final int last = maximum - extent;
 
-        d.print("<table class=\"horizontal\"><tbody><tr>")
+        d.print("<table");
+        writeAllAttributes(d, sb);
+        d.print("><tbody><tr>")
                 .print("<td width=\"1%\"><table class=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
@@ -239,5 +246,4 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
 
         Utils.printButtonEnd(device, scrollBar, event, true);
     }
-
 }

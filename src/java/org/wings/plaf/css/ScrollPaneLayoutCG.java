@@ -30,6 +30,8 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
     }
 
     private void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
+        openLayouterBody(d, layout);
+        d.print("<tr><td>");
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
         Scrollable scrollable = (Scrollable) center;
@@ -38,11 +40,12 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         scrollable.setViewportSize(scrollableViewportSize);
         writeComponent(d, center);
         scrollable.setViewportSize(viewportSize);
+
+        d.print("</td></tr>");
+        closeLayouterBody(d, layout);
     }
 
     private void writePaging(Device d, SScrollPaneLayout layout) throws IOException {
-        SContainer container = layout.getContainer();
-
         Map components = layout.getComponents();
         SComponent north = (SComponent) components.get(SScrollPaneLayout.NORTH);
         SComponent east = (SComponent) components.get(SScrollPaneLayout.EAST);
@@ -50,9 +53,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         SComponent west = (SComponent) components.get(SScrollPaneLayout.WEST);
         SComponent south = (SComponent) components.get(SScrollPaneLayout.SOUTH);
 
-        d.print("\n<table class=\"SScrollPaneLayout\"");
-        Utils.optAttribute(d, "style", Utils.generateCSSInlinePreferredSize(new SStringBuilder(), container.getPreferredSize()).toString());
-        d.print("><tbody>");
+        openLayouterBody(d, layout);
 
         if (north != null) {
             d.print("<tr height=\"0%\">");
@@ -106,7 +107,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
             d.print("</tr>\n");
         }
 
-        d.print("</tbody></table>\n");
+        closeLayouterBody(d, layout);
     }
 
     protected void writeComponent(Device d, SComponent c)

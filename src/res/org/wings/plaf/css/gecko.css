@@ -17,6 +17,12 @@
 body {
     padding: 0px;
     margin: 0px;
+    background: #ffffff;
+    font-family: sans-serif;
+    font-style: normal;
+    font-size: 0.8em;
+    height: 100%;
+
 }
 
 /* Class for all invisible HTML tables used for layouting purposes. */
@@ -105,6 +111,12 @@ ul {
 a {
     text-decoration: inherit;
 }
+
+a:link, a:visited, a:active {
+    color: #000066;
+    text-decoration: none;
+}
+
 
 /* By Ole:
      Simplified we use this declaration to make a's and buttons block elements
@@ -255,7 +267,19 @@ table.STable > tbody > tr > td.numbering {
     text-align: right;
 }
 
-table.SList > * > li.SList_selected {
+table.STable > tbody > tr.even {
+    background-color: #efefef;
+}
+
+table.STable > tbody > tr.odd {
+    background-color: #e5e5e5;
+}
+
+table.STable > tbody > tr.selected td {
+    background-color: #ffbbbb;
+}
+
+table.SList li.SList_selected {
     background-color: #f6decc !important;
     border: 1px dotted black;
     cursor: pointer
@@ -317,13 +341,13 @@ table.SPageScroller table.buttons A:hover {
 /*
 paging numbers of PageScroller as form-components
 */
-table.SPageScroller table.pages A, table.SPageScroller table.pages a {
+table.SPageScroller table.pages a {
     border: 1px solid transparent;
 	background-color: transparent;
     width: 20px;
 }
 
-table.SPageScroller table.pages A:hover {
+table.SPageScroller table.pages a:hover {
 	background-color: #ECECEC;
 }
 
@@ -346,7 +370,7 @@ table.SPageScroller table.buttons a:hover {
 /*
 links around paging numbers of PageScroller as non-form-components
 */
-table.SPageScroller table.pages A {
+table.SPageScroller table.pages a {
      text-decoration: underline;
      padding-left: 5px;
      padding-right: 5px;

@@ -75,10 +75,16 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         log.debug("write = " + c);
         SPageScroller sb = (SPageScroller) c;
 
-        if (sb.getLayoutMode() == SConstants.VERTICAL)
+        String style = sb.getStyle();
+        if (sb.getLayoutMode() == SConstants.VERTICAL) {
+            sb.setStyle(style + " SPageScroller_vertical");
             writeVerticalPageScroller(d, sb);
-        else
+        }
+        else {
+            sb.setStyle(style + " SPageScroller_horizontal");
             writeHorizontalPageScroller(d, sb);
+        }
+        sb.setStyle(style);
     }
 
     private void writeVerticalPageScroller(Device d, SPageScroller sb) throws IOException {
@@ -91,11 +97,11 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean firstPage = (value == minimum);
         boolean lastPage = (value == (maximum - extent));
 
-        d.print("<table orientation=\"vertical\"");
+        d.print("<table");
+        writeAllAttributes(d, sb);
         Utils.writeEvents(d, sb, null);
-        d.print("><tbody>");
-        d.print("<tr height=\"1%\">");
-        d.print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
+        d.print("><tbody><tr height=\"1%\">")
+            .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum, !firstPage);
@@ -158,10 +164,11 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
         boolean firstPage = (value == minimum);
         boolean lastPage = (value >= (maximum - extent));
 
-        d.print("<table orientation=\"horizontal\"");
+        d.print("<table");
+        writeAllAttributes(d, sb);
         Utils.writeEvents(d, sb, null);
-        d.print(        "><tbody><tr>");
-        d.print("<td><table area=\"buttons\"><tbody><tr>");
+        d.print("><tbody><tr>")
+            .print("<td><table area=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum, !firstPage);
