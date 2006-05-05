@@ -68,7 +68,9 @@ public final class PopupMenuCG extends AbstractComponentCG implements
             writeListAttributes(device, menu);
             device.print(" id=\"");
             device.print(componentId);
-            device.print("_pop\">");
+            device.print("_pop\" class=\"");
+            device.print(menu.getStyle());
+            device.print("\">");
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
                 SComponent menuItem = menu.getMenuComponent(i);
     

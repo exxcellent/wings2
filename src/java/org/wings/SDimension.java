@@ -31,19 +31,6 @@ import java.text.ParsePosition;
 public class SDimension implements Serializable {
 
     /**
-     * Immutable SDimension constants for a component taking up the full available width.
-     */
-    public static final SDimension FULLWIDTH = new ImmutableSDimension("100%", null);
-    /**
-     * Immutable SDimension constants for a component taking up the full available height.
-     */
-    public static final SDimension FULLHEIGHT = new ImmutableSDimension(null, "100%");
-    /**
-     * Immutable SDimension constants for a component taking up the full available area.
-     */
-    public static final SDimension FULLAREA = new ImmutableSDimension("100%", "100%");
-
-    /**
      * String constant for CSS dimension 'auto'.
      * This is the default width used by wings as well as by CSS capable browsers.
      */
@@ -67,6 +54,22 @@ public class SDimension implements Serializable {
      */
     public final static int INHERIT_INT = -2;
 
+    /**
+     * Immutable SDimension constants for a component taking up the full available width.
+     */
+    public static final SDimension FULLWIDTH = new ImmutableSDimension("100%", null);
+    /**
+     * Immutable SDimension constants for a component taking up the full available height.
+     */
+    public static final SDimension FULLHEIGHT = new ImmutableSDimension(null, "100%");
+    /**
+     * Immutable SDimension constants for a component taking up the full available area.
+     */
+    public static final SDimension FULLAREA = new ImmutableSDimension("100%", "100%");
+    /**
+     * Immutable SDimension constants for a component taking up normal space
+     */
+    public static final SDimension AUTOAREA = new ImmutableSDimension(AUTO, AUTO);
 
     private final transient static Log log = LogFactory.getLog(SDimension.class);
 

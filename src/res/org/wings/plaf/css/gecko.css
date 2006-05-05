@@ -541,47 +541,47 @@ table.SMenuBar div.SMenu_Disabled {
     color: #666;
 }
 
-div.SMenu A,
-div.SPopupMenu A {
+ul.SMenu A,
+ul.SPopupMenu A {
     padding:1px 3px 1px 3px;
     display:block;
     white-space:nowrap;
     margin:0;
 }
  
-div.SMenu a, .SMenu a:visited,
-div.SPopupMenu a, .SPopupMenu a:visited {
+ul.SMenu a, .SMenu a:visited,
+ul.SPopupMenu a, .SPopupMenu a:visited {
     color:#000;
 }
 
-div.SMenu a:hover,
-div.SPopupMenu a:hover {
+ul.SMenu a:hover,
+ul.SPopupMenu a:hover {
     color:#fff;
     background:#66b;
 }
 
-div.SMenu a:active,
-div.SPopupMenu a:active{
+ul.SMenu a:active,
+ul.SPopupMenu a:active{
     color:#aaa;
     background:#66b;
 }
 
-div.SMenu .SMenu_Disabled a,
-div.SMenu .SMenuItem_Disabled a,
-div.SPopupMenu .SMenu_Disabled a,
-div.SPopupMenu .SMenuItem_Disabled a {
+ul.SMenu .SMenu_Disabled a,
+ul.SMenu .SMenuItem_Disabled a,
+ul.SPopupMenu .SMenu_Disabled a,
+ul.SPopupMenu .SMenuItem_Disabled a {
     color:#666;
 }
 
-div.SMenu .SMenu_Disabled a:hover,
-div.SMenu .SMenuItem_Disabled a:hover,
-div.SPopupMenu .SMenu_Disabled a:hover,
-div.SPopupMenu .SMenuItem_Disabled a:hover{
+ul.SMenu .SMenu_Disabled a:hover,
+ul.SMenu .SMenuItem_Disabled a:hover,
+ul.SPopupMenu .SMenu_Disabled a:hover,
+ul.SPopupMenu .SMenuItem_Disabled a:hover{
     background:#eee;
 }
 
-div.SMenu li,
-div.SPopupMenu li {
+ul.SMenu li,
+ul.SPopupMenu li {
     position:relative;
     background: #eee;
     border-left: 1px solid #eee;
@@ -589,8 +589,8 @@ div.SPopupMenu li {
     width:auto;
 }
 
-div.SMenu ul,
-div.SPopupMenu ul{
+ul.SMenu,
+ul.SPopupMenu {
     list-style:none;
     margin:0px;
     padding:0px;
@@ -604,22 +604,22 @@ div.SPopupMenu ul{
 }
 
 /* Position the sub menus besides parent menus. */
-div.SMenu ul ul,
+ul.SMenu ul,
     div.SPopupMenu ul ul{
     top:-1px;
     left:100%;
 }
 
-div.SMenu a span.accelerator {
+ul.SMenu a span.accelerator {
 	font-size: .7em;
 	margin-left: 1.5em;
 }
 
 /* Begin non-anchor hover selectors */
 
-div.SMenu li:hover,
-div.SMenuBar div.SMenu:hover,
-div.SPopupMenu li:hover{
+ul.SMenu li:hover,
+ul.SMenuBar div.SMenu:hover,
+ul.SPopupMenu li:hover{
 cursor:pointer;
 }
 
@@ -627,16 +627,16 @@ cursor:pointer;
 
 /* Styling for Expand */
 
-div.SMenu a.x, div.SMenu a.x:visited,
-div.SMenu a.y, div.SMenu a.y:visited, div.SMenu a.y:hover,
-div.SPopupMenu a.x, div.SPopupMenu a.x:visited,
-div.SPopupMenu a.y, div.SPopupMenu a.y:visited, div.SPopupMenu a.y:hover{
+ul.SMenu a.x, ul.SMenu a.x:visited,
+ul.SMenu a.y, ul.SMenu a.y:visited, ul.SMenu a.y:hover,
+ul.SPopupMenu a.x, ul.SPopupMenu a.x:visited,
+ul.SPopupMenu a.y, ul.SPopupMenu a.y:visited, ul.SPopupMenu a.y:hover{
     background:#eee url( 'org/wings/icons/MenuArrowRight.gif' ) no-repeat center right;
     padding-right:10px;
 }
 
-div.SMenu a.x:hover,
-div.SPopupMenu a.x:hover{
+ul.SMenu a.x:hover,
+ul.SPopupMenu a.x:hover{
     background:#66b url("org/wings/icons/MenuArrowRight.gif") no-repeat center right;
     padding-right:10px;
 }

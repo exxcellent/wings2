@@ -70,6 +70,7 @@ public class ComponentControls
 
     public ComponentControls() {
         super(new SGridBagLayout());
+        setPreferredSize(SDimension.AUTOAREA);
         SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);
         setBorder(border);

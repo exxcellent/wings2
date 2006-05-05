@@ -87,6 +87,7 @@ public class MenuBarCG extends AbstractComponentCG implements
 
         final SMenuBar mbar = (SMenuBar) component;
         final int mcount = mbar.getComponentCount();
+        writeTablePrefix(device, component);
 
         printSpacer(device);         /* clear:both to ensuer menubar surrounds all SMenu entries */
 
@@ -107,6 +108,7 @@ public class MenuBarCG extends AbstractComponentCG implements
 
         printSpacer(device);      /* clear:both to ensuer menubar surrounds all SMenu entries */
 
+        writeTableSuffix(device, component);
     }
 
     /* Renders the DIV representing a top SMenu item inside the menu bar. */
