@@ -68,6 +68,6 @@ class CaptureDefaultBindingsScriptListener
     }
 
     private static void writeCapture(SStringBuilder buffer) {
-        buffer.append(" { event.preventDefault(); return true; }\n");
+        buffer.append(" { preventDefault(event); return true; }\n");
     }
 }

@@ -14,9 +14,13 @@
 
 /* bs: This lead to scrollers around documents, not window: HTML,*/
 BODY,TEXTAREA {
-/*    overflow:auto;     /* get rid of default scrollbars */
     padding: 0px;
     margin: 0px;
+    background: #ffffff;
+    font-family: sans-serif;
+    font-style: normal;
+    font-size: 0.8em;
+    height: 100%;
 }
 
 HTML {
@@ -45,6 +49,11 @@ table, td, th {
     text-transform: inherit;
     letter-spacing: inherit;
     line-height: inherit;*/
+}
+
+td, th {
+    padding: inherit;
+    margin: inherit;
 }
 
 li, ul {
@@ -139,6 +148,11 @@ IMG {
 
 a {
     text-decoration: inherit;
+}
+
+a:link, a:visited, a:active {
+    color: #000066;
+    text-decoration: none;
 }
 
 .SScrollPane{
