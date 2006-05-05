@@ -22,15 +22,15 @@ body {
 
 /* ----------- STable even/odd and selected line coloring */
 
-.STable table tbody tr.odd {
+table.STable tbody tr.odd {
     background-color: #e5e5e5;
 }
 
-.STable table tbody tr.even {
+table.STable tbody tr.even {
     background-color: #efefef;
 }
 
-.STable table tbody tr.selected {
+table.STable tbody tr.selected {
     background-color: #ffbbbb !important;
 }
 

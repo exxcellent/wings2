@@ -81,10 +81,10 @@ public class InternalFrameCG extends AbstractComponentCG implements
 
     public void writeInternal(final Device device, final SComponent _c)
             throws IOException {
-        final SInternalFrame component = (SInternalFrame) _c;
 
-        SInternalFrame frame = component;
+        SInternalFrame frame = (SInternalFrame)_c;
 
+        writeDivPrefix(device, frame);
         writeWindowBar(device, frame);
 
         // write the actual content
@@ -97,6 +97,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
             Utils.renderContainer(device, frame);
             device.print("</div>");
         }
+        writeDivSuffix(device, frame);
     }
 
     /** 

@@ -37,8 +37,9 @@ public class DesktopPaneCG extends AbstractComponentCG implements
     public void writeInternal(final Device device, final SComponent _c)
             throws IOException
     {
-        final SDesktopPane component = (SDesktopPane) _c;
-        SDesktopPane desktop = (SDesktopPane) component;
+        SDesktopPane desktop = (SDesktopPane) _c;
+
+        writeDivPrefix(device, desktop);
         // is one window maximized? if yes, skip rendering of other windows
         boolean maximized = false;
         
@@ -70,6 +71,7 @@ public class DesktopPaneCG extends AbstractComponentCG implements
             }
         }
         device.print("<div class=\"spacer\"></div>");
-        
+
+        writeDivSuffix(device, desktop);
     }
 }

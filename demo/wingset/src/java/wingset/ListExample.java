@@ -36,13 +36,14 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public class ListExample
-        extends WingSetPane {
+    extends WingSetPane
+{
     private final static SResourceIcon javaCup = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final ListModel listModel = createListModel();
     private ComponentControls controls;
 
     public SComponent createExample() {
-        controls = new ComponentControls();
+        controls = new ListControls();
 
         SPanel p = new SPanel(new SGridLayout(2, 2));
         p.add(createListSingleSelExample());
@@ -90,6 +91,7 @@ public class ListExample
         comboBox.setName("combo");
         addComboBoxElements(comboBox);
         cont.add(comboBox);
+        controls.addControllable(comboBox);
 
         return cont;
     }
@@ -176,6 +178,14 @@ public class ListExample
         }
 
         public void removeListDataListener(ListDataListener l) {
+        }
+    }
+
+    static class ListControls
+        extends ComponentControls
+    {
+        public ListControls() {
+            showAsFormComponentCheckBox.setVisible(false);
         }
     }
 }

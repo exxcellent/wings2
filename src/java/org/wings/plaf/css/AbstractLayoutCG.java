@@ -37,8 +37,16 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      */
     protected void openLayouterBody(Device d, SLayoutManager layout) throws IOException {
         Utils.printDebugNewline(d, layout.getContainer());
-        Utils.printDebug(d, "<!-- START LAYOUT -->");
+        Utils.printDebug(d, "<!-- START LAYOUT: " + name(layout) + " -->");
         d.print("<tbody>");
+    }
+
+    private String name(SLayoutManager layout) {
+        String name = layout.getClass().getName();
+        int pos = name.lastIndexOf('.');
+        if (pos != -1)
+            name = name.substring(pos + 1);
+        return name;
     }
 
     /**
@@ -47,7 +55,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     protected void closeLayouterBody(Device d, SLayoutManager layout) throws IOException {
         d.print("</tbody>");
         Utils.printDebugNewline(d, layout.getContainer());
-        Utils.printDebug(d, "<!-- END LAYOUT -->");
+        Utils.printDebug(d, "<!-- END LAYOUT: " + name(layout) + " -->");
     }
 
     /**

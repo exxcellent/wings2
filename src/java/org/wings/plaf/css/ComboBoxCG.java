@@ -44,20 +44,18 @@ public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.Co
 
     protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
         device.print("<select size=\"1\"");
-        Utils.optAttribute(device, "id", component.getName() + "_select");
+        writeAllAttributes(device, component);
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());                    
 
         if (!component.isEnabled())
             device.print(" disabled=\"true\"");
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.writeEvents(device, component);
-
+        //Utils.writeEvents(device, component);
         device.print(">");
+
         javax.swing.ComboBoxModel model = component.getModel();
         int size = model.getSize();
         int selected = component.getSelectedIndex();

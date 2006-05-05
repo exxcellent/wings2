@@ -642,7 +642,7 @@ div.SPopupMenu a.x:hover{
 }
 
 /* clears the windows */
-table.SDesktopPane div.spacer, .SFlowLayout div.spacer {
+div.SDesktopPane div.spacer, .SFlowLayout div.spacer {
     height:0px;
     clear: both;
 	line-height:0px; /* for konq */
@@ -652,7 +652,7 @@ table.SDesktopPane div.spacer, .SFlowLayout div.spacer {
 /* Note: internal frame, dialog and option pane are identical
 /* ----------- SINTERNALFRAME */
 
-table.SInternalFrame {
+div.SInternalFrame {
     border: 1px solid #ccc;
     margin: .2em;
     float:left;
@@ -660,26 +660,26 @@ table.SInternalFrame {
     display:table;
 }
 
-table.SInternalFrame > div.WindowBar {
+div.SInternalFrame > div.WindowBar {
     padding:.2em;
     background-color: #aaf;
 }
 
-table.SInternalFrame > div.WindowBar > div.WindowBar_title {
+div.SInternalFrame > div.WindowBar > div.WindowBar_title {
     padding-right:4em;
     white-space:pre;
 }
 
-table.SInternalFrame > div.WindowBar  a.WindowButton,
-table.SInternalFrame > div.WindowBar  button.WindowButton {
+div.SInternalFrame > div.WindowBar  a.WindowButton,
+div.SInternalFrame > div.WindowBar  button.WindowButton {
     float: right;
 }
 
-table.SInternalFrame > div.WindowBar > a.DeiconifyButton {
+div.SInternalFrame > div.WindowBar > a.DeiconifyButton {
     display: inline;
 }
 
-table.SInternalFrame > div.WindowContent {
+div.SInternalFrame > div.WindowContent {
     padding: .2em;
 }
 

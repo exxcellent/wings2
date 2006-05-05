@@ -63,8 +63,8 @@ table.SGridBagLayout {
 }
 
 /* Simulate and style FORM buttons for A HREF*/
-DIV.SButton  A.formbutton,
-DIV.SButton  SPAN.disabled_formbutton {
+table.SButton  A.formbutton,
+table.SButton  SPAN.disabled_formbutton {
    padding: 0px 6px 0px 6px;
    border: 2px outset #ddd;
    background-color: #ddd;
@@ -77,14 +77,14 @@ DIV.SButton  SPAN.disabled_formbutton {
    display: block;
    width: 0px; /* Rely on MSIE overflow bug/feature. */
 }
-DIV.SButton A.formbutton:active {
+table.SButton A.formbutton:active {
    padding: 0px 5px 0px 7px;
    border-style: inset;
 }
-DIV.SButton SPAN.disabled_formbutton {
+table.SButton SPAN.disabled_formbutton {
    color: gray !important;
 }
-DIV.SButton SPAN.disabled_formbutton:active {
+table.SButton SPAN.disabled_formbutton:active {
    padding: 1px 7px 1px 7px;
    border: 1px outset #ddd;
    cursor: default;
@@ -141,13 +141,6 @@ a {
     text-decoration: inherit;
 }
 
-div.SLabel,
-div.SButton,
-div.SOptionPane,
-div.SDialog,
-{
-    width: 0px; /* rely on IE6 overflow bug/feature. */
-}
 .SScrollPane{
     width: 100%;
     height: 100%;
@@ -161,7 +154,7 @@ div.SDialog,
 /*
 PageScroller as form-component
 */
-.SPageScroller button {
+.SPageScroller a {
     border: none;
     background: none; /* IE doesnt understand inherit */
     padding-left: 3px;
@@ -292,7 +285,7 @@ ul.STree li * {
     padding-right: 2px;
 }
 
-ul.STree li button {
+ul.STree li a {
     border: none;
     padding: 0px;
     text-decoration: none;
@@ -318,41 +311,37 @@ ul.STree li div.SSubTree {
    color: #000000;
 }
 
-.STable table.STable {
+table.STable {
     width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
 }
 
-.STable table table{
-    border: 0px solid black;
-}
-
-.STable table thead tr th {
+table.STable thead tr th {
     border: 1px solid black;
     padding-left: 8px;
     padding-right: 8px;
 }
 
-.STable table tbody tr td {
+table.STable tbody tr td {
     padding-left: 8px;
     padding-right: 8px;
     border-left: 1px solid black;
 }
 
-.STable table table tbody tr td {
+table.STable tbody tr td {
     padding-left: 0px;
     padding-right: 0px;
     border-left: 0px solid black;
 }
 
 /* let the link span the whole table */
-.STable table tbody tr td a {
+table.STable tbody tr td a {
 	display: block;
 	width: 100%;
 }
 
-.STable table tbody tr td.numbering {
+table.STable tbody tr td.numbering {
     text-align: right;
 }
 
@@ -664,7 +653,7 @@ li.SMenuItem, li.SMenu {
 
 /* DesktopPane */
 /* clears the windows */
-.SDesktopPane div.spacer {
+div.SDesktopPane div.spacer {
     height:0px;
     clear: both;
 }
@@ -672,29 +661,29 @@ li.SMenuItem, li.SMenu {
 /* Note: internal frame, dialog and option pane are identical
 /* ----------- SINTERNALFRAME */
 
-.SInternalFrame {
+div.SInternalFrame {
     border: 1px solid #ccc;
     margin: .2em;
     float:left;
 	display:table;
 }
 
-.SInternalFrame div.WindowBar {
+div.SInternalFrame div.WindowBar {
 	padding:.2em;
 	background-color: #aaf;
    
 }
 
-.SInternalFrame div.WindowBar  a.WindowButton,
-.SInternalFrame div.WindowBar  button.WindowButton {
+div.SInternalFrame div.WindowBar  a.WindowButton,
+div.SInternalFrame div.WindowBar  button.WindowButton {
 	float: right;
 }
 
-.SInternalFrame div.WindowBar a.DeiconifyButton {
+div.SInternalFrame div.WindowBar a.DeiconifyButton {
 	display: inline;
 }
 
-.SInternalFrame div.WindowContent {
+div.SInternalFrame div.WindowContent {
 	padding: .2em;
 }
 

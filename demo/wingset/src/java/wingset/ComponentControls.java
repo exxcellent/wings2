@@ -66,7 +66,7 @@ public class ComponentControls
 
     protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
     protected final SButton applyButton;
-    private SCheckBox showAsFormComponentCheckBox = new SCheckBox("Show as Form Component");
+    protected SCheckBox showAsFormComponentCheckBox = new SCheckBox("Show as Form Component");
 
     public ComponentControls() {
         super(new SGridBagLayout());
@@ -155,10 +155,14 @@ public class ComponentControls
 
                 for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                     SComponent component = (SComponent) iterator.next();
-                    component.setPreferredSize(preferredSize);
-                    component.setBorder(border);
-                    component.setBackground(background);
-                    component.setShowAsFormComponent(showAsFormComponent);
+                    if (widthTextField.isVisible())
+                        component.setPreferredSize(preferredSize);
+                    if (borderThicknessTextField.isVisible())
+                        component.setBorder(border);
+                    if (backgroundComboBox.isVisible())
+                        component.setBackground(background);
+                    if (showAsFormComponentCheckBox.isVisible())
+                        component.setShowAsFormComponent(showAsFormComponent);
                 }
             }
         });
