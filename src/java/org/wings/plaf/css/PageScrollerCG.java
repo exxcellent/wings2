@@ -119,7 +119,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
             d.print("<tr><td");
             boolean isCurrentPage = (sb.getCurrentPage() == page);
             Utils.optAttribute(d, "class", isCurrentPage ? "page_selected" : null);
-            d.print("\">");
+            d.print(">");
             writePage(d, sb, page, !isCurrentPage, firstDirectPage);
             d.print("</td></tr>");
         }
@@ -180,7 +180,7 @@ public class PageScrollerCG extends AbstractComponentCG implements org.wings.pla
             d.print("<td");
             boolean isCurrentPage = (sb.getCurrentPage() == page);
             Utils.optAttribute(d, "class", isCurrentPage ? "page_selected": null);
-            d.print("\">");
+            d.print(">");
             writePage(d, sb, page, !isCurrentPage, firstDirectPage);
             d.print("</td>");
         }

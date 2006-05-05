@@ -63,7 +63,7 @@ DIV.SButton > SPAN.disabled_formbutton {
    text-align: center;
    white-space: normal;
    text-indent: 0;
-   display: block;
+   display: table;
 }
 DIV.SButton > A.formbutton:active:hover {
    padding: 0px 5px 0px 7px;
