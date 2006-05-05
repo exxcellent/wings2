@@ -41,14 +41,14 @@ public class FlowLayoutCG extends AbstractLayoutCG {
         final int alignment = layout.getAlignment();
         final SContainer container = layout.getContainer();
 
-        Utils.printNewline(d, container);
-        d.print("<div");
+        openLayouterBody(d, layout);
+        d.print("<tr><td");
         Utils.printDivHorizontalAlignment(d, alignment != SConstants.NO_ALIGN ? alignment : SConstants.LEFT_ALIGN);
         if (alignment == SConstants.CENTER) {
             // Cheat -- margin left/right to simulate center float. Will not wrap
-            d.print(" style=\"display:table; margin-left:auto; margin-right:auto;\"");
+            d.print(" style=\"margin-left:auto; margin-right:auto\"");
         } else {
-            d.print(" style=\"display:table; width:100%;\""); // gecko bug workaround: inherit surrounding panel bg color.
+            d.print(" style=\"width:100%\""); // gecko bug workaround: inherit surrounding panel bg color.
         }
         d.print(" class=\"SFlowLayout\">");
 
@@ -75,6 +75,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
                     Utils.printNewline(d, component);
                     d.print("<div");
                     Utils.optAttribute(d, "style", createInlineStylesForInsets(new SStringBuilder(alignmentStyle),insets));
+                    d.print(">");
                     component.write(d); // Render contained component
                     d.print("</div>");
                 }
@@ -110,8 +111,8 @@ public class FlowLayoutCG extends AbstractLayoutCG {
                 d.print("</div>");
             }
         }
-        Utils.printNewline(d, container);
-        d.print("</div>");
+        d.print("</td></tr>");
+        closeLayouterBody(d, layout);
     }
 }
 

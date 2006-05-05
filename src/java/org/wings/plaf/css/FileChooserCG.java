@@ -44,29 +44,23 @@ public class FileChooserCG extends AbstractComponentCG implements
 
         // maxLength = maxContent removed, since it does not work.
         device.print("<input type=\"file\"");
-
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-
+        writeAllAttributes(device, component);
         Utils.optAttribute(device, "size", columns);
         Utils.optAttribute(device, "accept", component.getFileNameFilter());
+        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        if (component.isFocusOwner())
+            Utils.optAttribute(device, "focus", component.getName());
+
+        //Utils.writeEvents(device, component);
 
         if (component.isEnabled()) {
             device.print(" name=\"");
             Utils.write(device, Utils.event(component));
             device.print("\"");
-            device.print(" id=\"");
-            Utils.write(device, component.getName());
-            device.print("\"");
         }
         else
             device.print(" readonly=\"true\"");
 
-        if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
-
-        Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-
-        Utils.writeEvents(device, component);
         device.print("/>");
     }
 }

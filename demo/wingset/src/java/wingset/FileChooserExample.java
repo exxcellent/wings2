@@ -246,6 +246,8 @@ public class FileChooserExample
 
     class FileChooserControls extends ComponentControls {
         public FileChooserControls() {
+            showAsFormComponentCheckBox.setVisible(false);
+            
             Object[] values = {new Integer(1), new Integer(2), new Integer(4),
                                new Integer(8), new Integer(16), new Integer(32),
                                new Integer(64)};

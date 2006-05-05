@@ -66,13 +66,14 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
 
     public void writeInternal(final Device device, final SComponent _c)
             throws IOException {
-        final SDialog component = (SDialog) _c;
-        SDialog frame = component;
+        SDialog frame = (SDialog)_c;
+        writeDivPrefix(device, frame);
         writeWindowBar(device, frame);
 
         device.print("<div class=\"WindowContent\">");
         super.writeInternal(device, _c);
         device.print("</div>");
+        writeDivSuffix(device, frame);
     }
 
 

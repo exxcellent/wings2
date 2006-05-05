@@ -685,64 +685,64 @@ div.SInternalFrame > div.WindowContent {
 
 /* ----------- SDIALOG */
 
-table.SDialog {
+div.SDialog {
     border: 1px solid #ccc;
     margin: .2em;
 /*	clear:right;*/
 	display:table;
 }
 
-table.SDialog > div.WindowBar {
+div.SDialog > div.WindowBar {
 	padding:.2em;
 	background-color: #aaf;
 }
 
-table.SDialog > div.WindowBar > div.WindowBar_title {
+div.SDialog > div.WindowBar > div.WindowBar_title {
 	padding-right:4em;
 	white-space:pre;
 }
 
-table.SDialog > div.WindowBar  a.WindowButton,
-table.SDialog > div.WindowBar  button.WindowButton {
+div.SDialog > div.WindowBar  a.WindowButton,
+div.SDialog > div.WindowBar  button.WindowButton {
 	float: right;
 }
 
-table.SDialog > div.WindowBar > a.DeiconifyButton {
+div.SDialog > div.WindowBar > a.DeiconifyButton {
 	display: inline;
 }
 
-table.SDialog > div.WindowContent {
+div.SDialog > div.WindowContent {
 	padding: .2em;
 }
 
 /* ----------- SOPTIONPANE */
 
-table.SOptionPane {
+div.SOptionPane {
     border: 1px solid #ccc;
     margin: .2em;
 /*	clear:right;*/
 	display:table;
 }
 
-table.SOptionPane > div.WindowBar {
+div.SOptionPane > div.WindowBar {
 	padding:.2em;
 	background-color: #aaf;
 }
 
-table.SOptionPane > div.WindowBar > div.WindowBar_title {
+div.SOptionPane > div.WindowBar > div.WindowBar_title {
 	padding-right:4em;
 	white-space:pre;
 }
 
-table.SOptionPane > div.WindowBar  a.WindowButton,
-table.SOptionPane > div.WindowBar  button.WindowButton {
+div.SOptionPane > div.WindowBar  a.WindowButton,
+div.SOptionPane > div.WindowBar  button.WindowButton {
 	float: right;
 }
 
-table.SOptionPane > div.WindowBar > a.DeiconifyButton {
+div.SOptionPane > div.WindowBar > a.DeiconifyButton {
 	display: inline;
 }
 
-table.SOptionPane > div.WindowContent {
+div.SOptionPane > div.WindowContent {
 	padding: .2em;
 }
