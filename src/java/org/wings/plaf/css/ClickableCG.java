@@ -18,13 +18,11 @@ import org.wings.SClickable;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.io.Device;
+
 import java.io.IOException;
 
 public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device, final SComponent component)
@@ -33,6 +31,8 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
 
         Utils.printButtonStart(device, button, button.getEvent(), true, button.getShowAsFormComponent());
         writeAllAttributes(device, button);
+        // render javascript event handlers
+        Utils.writeEvents(device, component, Utils.EXCLUDE_ON_CLICK );
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         device.print(">");
 

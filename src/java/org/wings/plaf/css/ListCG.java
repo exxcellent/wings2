@@ -37,7 +37,7 @@ public class ListCG extends AbstractComponentCG implements
         }
     }
 
-    protected void writeFormList(Device device, SList list) throws IOException {
+    protected void writeFormList(final Device device, final SList list) throws IOException {
         device.print("<select");
         writeAllAttributes(device, list);
 
@@ -45,6 +45,7 @@ public class ListCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", list.getVisibleRowCount());
         Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SList.MULTIPLE_SELECTION) ? "multiple" : null);
+        Utils.writeEvents(device, list, null);
 
         if (!list.isEnabled())
             device.print(" disabled=\"true\"");
@@ -52,10 +53,10 @@ public class ListCG extends AbstractComponentCG implements
             Utils.optAttribute(device, "focus", list.getName());
 
         device.print(">");
-        javax.swing.ListModel model = list.getModel();
-        int size = model.getSize();
 
-        SListCellRenderer cellRenderer = list.getCellRenderer();
+        final javax.swing.ListModel model = list.getModel();
+        final int size = model.getSize();
+        final SListCellRenderer cellRenderer = list.getCellRenderer();
 
         for (int i = 0; i < size; i++) {
             SComponent renderer = null;
@@ -66,10 +67,8 @@ public class ListCG extends AbstractComponentCG implements
             device.print("\n<option");
             Utils.optAttribute(device, "value", list.getSelectionParameter(i));
             if (list.isSelectedIndex(i)) {
-                device.print(" selected=\"selected\"");
+                Utils.optAttribute(device, "class", "selected");
             }
-
-            org.wings.io.StringBufferDevice stringBufferDevice = getStringBufferDevice();
 
             SStringBuilder buffer = Utils.generateCSSComponentInlineStyle(renderer);
             Utils.optAttribute(device, "style", buffer.toString());

@@ -37,9 +37,6 @@ import java.io.IOException;
 
 public final class PopupMenuCG extends AbstractComponentCG implements
         org.wings.plaf.MenuBarCG, SParentFrameListener {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 

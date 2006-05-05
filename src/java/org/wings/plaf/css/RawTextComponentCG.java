@@ -9,9 +9,15 @@ import java.io.IOException;
 public class RawTextComponentCG extends AbstractComponentCG {
     private static final long serialVersionUID = 1L;
 
-    public void writeInternal(final Device device, final SComponent component)
-            throws IOException {
+    public void write(Device device, SComponent component) throws IOException {
+        component.fireRenderEvent(SComponent.START_RENDERING);
         SRawTextComponent _c = (SRawTextComponent) component;
         device.print(_c.getText());
+        component.fireRenderEvent(SComponent.DONE_RENDERING);
+
+    }
+
+    public void writeInternal(Device device, SComponent component) throws IOException {
+        // must overwrite write to ommit comment!!
     }
 }

@@ -14,17 +14,17 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SComponent;
 import org.wings.SPasswordField;
 import org.wings.io.Device;
+
+import java.io.IOException;
 
 public class PasswordFieldCG extends AbstractComponentCG implements
         org.wings.plaf.PasswordFieldCG {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -38,6 +38,7 @@ public class PasswordFieldCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "size", component.getColumns());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());
+        Utils.writeEvents(device, component, null);
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 

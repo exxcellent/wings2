@@ -23,9 +23,6 @@ import java.io.IOException;
 public class AnchorCG
         extends AbstractComponentCG
         implements org.wings.plaf.AnchorCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /* (non-Javadoc)
@@ -38,10 +35,14 @@ public class AnchorCG
         final boolean useTable = hasDimension(component);
         if (useTable) {
             writeTablePrefix(device, component);
+            // render javascript event handlers
+            Utils.writeEvents(device, component, null);
         }
         Utils.printButtonStart(device, component, null, true, component.getShowAsFormComponent());
         if (!useTable) {
             writeAllAttributes(device, component);
+            // render javascript event handlers
+            Utils.writeEvents(device, component, null);
         }
 
         // spezielle anchor attributes

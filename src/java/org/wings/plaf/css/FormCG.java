@@ -38,6 +38,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         Utils.optAttribute(device, "name", component.getName());
         Utils.optAttribute(device, "enctype", component.getEncodingType());
         Utils.optAttribute(device, "action", component.getRequestURL());
+        Utils.writeEvents(device, component, null);
 
         /*
         * we render two icons into the page that captures pressing simple 'return'

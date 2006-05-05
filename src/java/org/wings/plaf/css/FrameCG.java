@@ -475,10 +475,6 @@ public class FrameCG implements org.wings.plaf.FrameCG {
             device.print("</script>");
     }
 
-    public boolean wantsPrefixAndSuffix(SComponent component) {
-        return false;
-    }
-
     public String getDocumentType() {
         return documentType;
     }

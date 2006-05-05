@@ -55,6 +55,4 @@ public interface ComponentCG
      * @param component the component to be rendered.
      */
     void write(Device device, SComponent component) throws IOException;
-
-    boolean wantsPrefixAndSuffix(SComponent component);
 }

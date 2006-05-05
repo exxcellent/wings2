@@ -28,9 +28,6 @@ import java.io.IOException;
 
 public class InternalFrameCG extends AbstractComponentCG implements
         org.wings.plaf.InternalFrameCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private final static transient Log log = LogFactory.getLog(InternalFrameCG.class);
     protected static final String WINDOWICON_CLASSNAME = "WindowIcon";

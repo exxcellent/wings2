@@ -16,7 +16,6 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.STextArea;
-import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -24,9 +23,6 @@ import java.io.IOException;
 public class TextAreaCG extends AbstractComponentCG implements
         org.wings.plaf.TextAreaCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device,
@@ -35,9 +31,9 @@ public class TextAreaCG extends AbstractComponentCG implements
         final STextArea component = (STextArea) _c;
 
         if (!component.isEditable() && (component.getLineWrap() == STextArea.NO_WRAP) && (component.getColumns() == 0) && (component.getRows() == 0)) {
-               /* A second way could be to calculate rows and columns and generate a textarea, but this will be 
+               /* A second way could be to calculate rows and columns and generate a textarea, but this will be
                 * very time consuming at large texts. But if this way makes to much trouble, the other will be quite equal */
-            String text = component.getText();       
+            String text = component.getText();
             if (text != null) {
                 device.print("<nobr>");               /* Should we really ignore everything ? */
                 Utils.writeQuoted(device,text,true);    /* Write new text */
@@ -51,6 +47,7 @@ public class TextAreaCG extends AbstractComponentCG implements
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             Utils.optAttribute(device, "cols", component.getColumns());
             Utils.optAttribute(device, "rows", component.getRows());
+            Utils.writeEvents(device, component, null);
 
             switch (component.getLineWrap()) {
                 case STextArea.VIRTUAL_WRAP:

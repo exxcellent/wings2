@@ -14,17 +14,17 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SComponent;
 import org.wings.SFileChooser;
 import org.wings.io.Device;
+
+import java.io.IOException;
 
 public class FileChooserCG extends AbstractComponentCG implements
         org.wings.plaf.FileChooserCG {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -48,6 +48,7 @@ public class FileChooserCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "size", columns);
         Utils.optAttribute(device, "accept", component.getFileNameFilter());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.writeEvents(device, component, null);
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 

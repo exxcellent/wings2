@@ -71,6 +71,11 @@ public final class Utils {
     }
 
     /**
+     * Default list of javascript events to exlcude in {@link #writeEvents(org.wings.io.Device, org.wings.SComponent, String[])}
+     */
+    public final static String[] EXCLUDE_ON_CLICK = new String[] { JavaScriptEvent.ON_CLICK };
+
+    /**
      * Renders a container using its Layout manager or fallback just one after another.
      */
     public static void renderContainer(Device d, SContainer c)
@@ -90,11 +95,12 @@ public final class Utils {
         }
     }
 
-    public static void writeEvents(Device d, SComponent c)
-            throws IOException {
-        writeEvents(d, c, null);
-    }
-
+    /**
+     * Render event listeners attached to the passed component exlucding types of supressed listeners
+     * @param d output device
+     * @param c component to retrieve listeners from
+     * @param suppressScriptListenerTypes Array of String i.e. <code>new String[] { JavaScriptEvent.ON_CLICK } )</code>
+     */
     public static void writeEvents(Device d, SComponent c, String[] suppressScriptListenerTypes)
             throws IOException {
         List types = new ArrayList();
@@ -889,7 +895,7 @@ public final class Utils {
                 device.print("<a href=\"");
                 device.print(requestURL.toString());
                 device.print("\" ");
-                writeEvents(device, eventTarget);
+                writeEvents(device, eventTarget, null);
             }
         }
     }

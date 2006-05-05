@@ -13,8 +13,6 @@
  */
 package org.wings.plaf.css;
 
-
-
 public class ToggleButtonCG extends ButtonCG implements
         org.wings.plaf.ToggleButtonCG {
 

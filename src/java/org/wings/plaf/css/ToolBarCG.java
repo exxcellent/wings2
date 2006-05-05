@@ -22,9 +22,6 @@ import java.io.IOException;
 
 public class ToolBarCG extends AbstractComponentCG implements
         org.wings.plaf.ToolBarCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device, final SComponent _c)
@@ -34,6 +31,7 @@ public class ToolBarCG extends AbstractComponentCG implements
         if (components.length > 0) {
             device.print("<table");
             writeAllAttributes(device, toolBar);
+            Utils.writeEvents(device, toolBar, null);
             device.print("><tr>");
             for (int i = 0; i < components.length; i++) {
                 SComponent component = components[i];

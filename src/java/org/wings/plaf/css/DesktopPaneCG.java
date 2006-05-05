@@ -14,19 +14,16 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SComponent;
 import org.wings.SDesktopPane;
 import org.wings.SDimension;
 import org.wings.SInternalFrame;
 import org.wings.io.Device;
 
+import java.io.IOException;
+
 public class DesktopPaneCG extends AbstractComponentCG implements
         org.wings.plaf.DesktopPaneCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void installCG(SComponent component) {

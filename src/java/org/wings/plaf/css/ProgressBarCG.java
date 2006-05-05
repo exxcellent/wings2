@@ -23,9 +23,6 @@ import java.io.IOException;
 
 public class ProgressBarCG extends AbstractComponentCG implements  org.wings.plaf.ProgressBarCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void installCG(final SComponent comp) {

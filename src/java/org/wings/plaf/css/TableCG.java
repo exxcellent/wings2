@@ -48,7 +48,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     /**
      * Apache jakarta commons logger
      */
-    private final static Log log = LogFactory.getLog(TableCG.class);
+    private static final Log log = LogFactory.getLog(TableCG.class);
     protected String fixedTableBorderWidth;
     protected SIcon editIcon;
     protected String selectionColumnWidth = "22px";
@@ -283,6 +283,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         try {
             device.print("<table");
             writeAllAttributes(device, table);
+            Utils.writeEvents(device, table, null);
 
         // TODO: border="" should be obsolete
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse

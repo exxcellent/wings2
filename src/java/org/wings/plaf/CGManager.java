@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SLayoutManager;
-import org.wings.plaf.css.CGDecorator;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
 import org.wings.style.Style;
@@ -68,30 +67,10 @@ public class CGManager implements Serializable {
      * @param target the SComponent
      */
     public ComponentCG getCG(SComponent target) {
-        ComponentCG componentCG = (ComponentCG) getDefaults().get(target.getClass(), ComponentCG.class);
-        if (componentCG == null)
-            return null;
-//        CGDecorator cgDecorator = getCGDecorator();
-//        if (cgDecorator != null) {
-//            cgDecorator.setDelegate(componentCG);
-//            return cgDecorator;
-//        }
-//        else
-        return componentCG;
+        return (ComponentCG) getDefaults().get(target.getClass(), ComponentCG.class);
     }
 
-//    private CGDecorator getCGDecorator() {
-//        CGDecorator cgDecorator;
-//        try {
-//            Class cgDecoratorClass = (Class) getDefaults().get("AbstractComponentCG.PrefixAndSuffixDecorator", Class.class);
-//            cgDecorator = (CGDecorator) cgDecoratorClass.newInstance();
-//        }
-//        catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//        return cgDecorator;
-//    }
-//
+
     /**
      * Get a ComponentCG from the defaults table.
      * If the there's no value associated to the <code>target</code>'s cgClassID, the request
@@ -200,12 +179,5 @@ public class CGManager implements Serializable {
             ((PropertyService) SessionManager.getSession())
                     .setProperty("lookAndFeel", "" + newLookAndFeel.hashCode());
         }
-    }
-
-    /**
-     * @return the delegate responsible for the Prefix and Suffix of the target
-     */
-    public Class getPrefixSuffixDecorator() {
-        return (Class)getDefaults().get("AbstractComponentCG.PrefixAndSuffixDecorator", Class.class);
     }
 }

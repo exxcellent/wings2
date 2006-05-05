@@ -75,7 +75,7 @@ table.SButton  SPAN.disabled_formbutton {
    white-space: normal;
    text-indent: 0;
    display: block;
-   width: 0px; /* Rely on MSIE overflow bug/feature. */
+   height: 100%;
 }
 table.SButton A.formbutton:active {
    padding: 0px 5px 0px 7px;
@@ -362,7 +362,7 @@ table.STable tbody tr td.numbering {
 	border: #000000;
 	height: 2px;
 	white-space: nowrap;
-	margin: 0px; 
+	margin: 0px;
 	padding: 0px;
 	border-style: solid;
 	border-width: 1px;
@@ -555,7 +555,7 @@ li.SMenuItem, li.SMenu {
     white-space:nowrap;
     margin:0px;
 }
- 
+
 .SMenu a, .SMenu a:visited,
 .SPopupMenu a, .SPopupMenu a:visited {
     color:#000;
@@ -671,7 +671,7 @@ div.SInternalFrame {
 div.SInternalFrame div.WindowBar {
 	padding:.2em;
 	background-color: #aaf;
-   
+
 }
 
 div.SInternalFrame div.WindowBar  a.WindowButton,

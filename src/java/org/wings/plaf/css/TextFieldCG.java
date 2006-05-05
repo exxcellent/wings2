@@ -17,11 +17,10 @@ package org.wings.plaf.css;
 import org.wings.SComponent;
 import org.wings.SFormattedTextField;
 import org.wings.STextField;
-import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.plaf.css.dwr.CallableManager;
-import org.wings.script.ScriptListener;
 import org.wings.script.JavaScriptEvent;
+import org.wings.script.ScriptListener;
 import org.wings.text.SAbstractFormatter;
 
 import java.io.IOException;
@@ -29,9 +28,6 @@ import java.io.IOException;
 public class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void componentChanged(SComponent component) {
@@ -83,6 +79,7 @@ public class TextFieldCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "tabindex", textField.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", textField.getColumns());
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
+        Utils.writeEvents(device, textField, null);
         if (textField.isFocusOwner())
             Utils.optAttribute(device, "focus", textField.getName());
 

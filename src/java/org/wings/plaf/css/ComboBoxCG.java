@@ -25,9 +25,6 @@ import java.io.IOException;
 
 public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.ComboBoxCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public void installCG(final SComponent comp) {
@@ -47,7 +44,7 @@ public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.Co
         writeAllAttributes(device, component);
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-
+        Utils.writeEvents(device, component, null);
         if (!component.isEnabled())
             device.print(" disabled=\"true\"");
         if (component.isFocusOwner())

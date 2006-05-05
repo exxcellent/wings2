@@ -16,7 +16,6 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SContainer;
-import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
 public final class ContainerCG extends AbstractComponentCG implements
@@ -30,6 +29,7 @@ public final class ContainerCG extends AbstractComponentCG implements
         SContainer container = (SContainer)component;
         device.print("<table");
         writeAllAttributes(device, component);
+        Utils.writeEvents(device, component, null);
         device.print(">");
 
         Utils.renderContainer(device, container);

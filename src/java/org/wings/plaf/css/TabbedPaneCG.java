@@ -31,9 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TabbedPaneCG extends AbstractComponentCG {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private static final Map placements = new HashMap();
 
@@ -81,6 +78,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
             device.print("<table");
             writeAllAttributes(device, component);
+            Utils.writeEvents(device, tabbedPane, null);
             device.print(">");
 
             if (placement == SConstants.TOP) {
