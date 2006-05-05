@@ -81,7 +81,6 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
             device.print("<table");
             writeAllAttributes(device, component);
-            //Utils.writeEvents(device, component);
             device.print(">");
 
             if (placement == SConstants.TOP) {

@@ -43,7 +43,7 @@ public class BoxLayoutCG extends AbstractLayoutCG {
 
         openLayouterBody(d, layout);
 
-        printLayouterTableBody(d, cols, false, insets, border, components);
+        printLayouterTableBody(d, cols, false, components, null);
 
         closeLayouterBody(d, layout);
 

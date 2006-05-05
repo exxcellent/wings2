@@ -67,6 +67,10 @@ public interface SLayoutManager extends SConstants, Serializable, Renderable {
      * @see SLayoutManager#updateCG
      */
     void updateCG();
+
+    void setBorder(int pixel);
+
+    int getBorder();
 }
 
 

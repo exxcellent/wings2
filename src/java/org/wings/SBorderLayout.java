@@ -38,7 +38,6 @@ public class SBorderLayout
     public static final String CENTER = "Center";
 
     protected Map components = new HashMap(5);
-    protected int border = 0;
 
     /**
      * The horizontal gap (in pixels) specifiying the space
@@ -104,25 +103,6 @@ public class SBorderLayout
      */
     public Map getComponents() {
         return components;
-    }
-
-    /**
-     * Set the thickness of the border.
-     * Default is 0, which means no border.
-     *
-     * @param pixel thickness of the border
-     */
-    public void setBorder(int pixel) {
-        border = pixel;
-    }
-
-    /**
-     * Returns the thickness of the border.
-     *
-     * @return thickness of the border
-     */
-    public int getBorder() {
-        return border;
     }
 
     /**

@@ -35,7 +35,6 @@ public class PasswordFieldCG extends AbstractComponentCG implements
 
         device.print("<input type=\"password\"");
         writeAllAttributes(device, component);
-        //Utils.writeEvents(device, component);
         Utils.optAttribute(device, "size", component.getColumns());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());

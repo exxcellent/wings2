@@ -56,7 +56,6 @@ public class RadioButtonCG extends CheckBoxCG implements
         if (button.isSelected())
             device.print(" checked=\"true\"");
 
-        Utils.writeEvents(device, button);
         device.print("/>");
     }
 }

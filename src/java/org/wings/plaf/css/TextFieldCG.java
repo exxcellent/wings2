@@ -97,8 +97,6 @@ public class TextFieldCG extends AbstractComponentCG implements
             device.print(" disabled=\"true\"");
         }
 
-        Utils.writeEvents(device, textField);
-
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
     }

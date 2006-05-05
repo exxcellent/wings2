@@ -53,7 +53,6 @@ public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.Co
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
 
-        //Utils.writeEvents(device, component);
         device.print(">");
 
         javax.swing.ComboBoxModel model = component.getModel();

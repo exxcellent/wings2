@@ -13,13 +13,11 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Insets;
 import java.io.IOException;
+import java.awt.*;
 
-import org.wings.SBorderLayout;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SLayoutManager;
+import org.wings.*;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
 public final class BorderLayoutCG extends AbstractLayoutCG {
@@ -38,6 +36,8 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
         final SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
+        String styles = cellStyles(layout);
+
         int cols = 1;
         if (west != null) cols++;
         if (east != null) cols++;
@@ -47,7 +47,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
         if (north != null) {
             openLayouterRow(d, "0%");
             Utils.printNewline(d, north);
-            openLayouterCell(d, north, false, cols, -1, null, SConstants.LEFT, SConstants.TOP);
+            openLayouterCell(d, north, false, cols, -1, null, SConstants.LEFT, SConstants.TOP, styles);
             north.write(d);
             closeLayouterCell(d, false);
             Utils.printNewline(d, layout.getContainer());
@@ -59,14 +59,14 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
 
         if (west != null) {
             Utils.printNewline(d, west);
-            openLayouterCell(d, west, false, -1, -1, "0%", SConstants.LEFT, SConstants.CENTER);
+            openLayouterCell(d, west, false, -1, -1, "0%", SConstants.LEFT, SConstants.CENTER, styles);
             west.write(d);
             closeLayouterCell(d, false);
         }
 
         if (center != null) {
             Utils.printNewline(d, center);
-            openLayouterCell(d, center, false, -1, -1, "100%", SConstants.LEFT, SConstants.CENTER);
+            openLayouterCell(d, center, false, -1, -1, "100%", SConstants.LEFT, SConstants.CENTER, styles);
             center.write(d);
             closeLayouterCell(d, false);
         } else {
@@ -75,7 +75,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
 
         if (east != null) {
             Utils.printNewline(d, east);
-            openLayouterCell(d, east, false, -1, -1, "0%", SConstants.RIGHT, SConstants.CENTER);
+            openLayouterCell(d, east, false, -1, -1, "0%", SConstants.RIGHT, SConstants.CENTER, styles);
             east.write(d);
             closeLayouterCell(d, false);
         }
@@ -87,7 +87,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, layout.getContainer());
             openLayouterRow(d, "0%");
             Utils.printNewline(d, south);
-            openLayouterCell(d, south, false, cols, -1, "0%", SConstants.LEFT, SConstants.BOTTOM);
+            openLayouterCell(d, south, false, cols, -1, "0%", SConstants.LEFT, SConstants.BOTTOM, styles);
             south.write(d);
             closeLayouterCell(d, false);
             Utils.printNewline(d, layout.getContainer());
@@ -97,4 +97,5 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
 
         closeLayouterBody(d, layout);
     }
+
 }

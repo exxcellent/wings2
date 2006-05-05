@@ -51,8 +51,6 @@ public class ListCG extends AbstractComponentCG implements
         if (list.isFocusOwner())
             Utils.optAttribute(device, "focus", list.getName());
 
-        //Utils.writeEvents(device, list);
-
         device.print(">");
         javax.swing.ListModel model = list.getModel();
         int size = model.getSize();

@@ -150,7 +150,6 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         if (button.isSelected())
             device.print(" checked=\"true\"");
 
-        Utils.writeEvents(device, button);
         device.print("/>");
     }
 

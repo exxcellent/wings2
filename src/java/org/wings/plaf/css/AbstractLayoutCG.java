@@ -13,9 +13,7 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SLayoutManager;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 import org.wings.util.SStringBuilder;
@@ -67,11 +65,10 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      * @param cols                    Wrap after this amount of columns
      * @param renderFirstLineAsHeader Render cells in first line as TH-Element or regular TD.
      * @param components              The components to layout
-     * @param insets                  Layouter cell insets in px
-     * @param border                  Border width to draw.
+     * @param style
      */
     protected void printLayouterTableBody(Device d, int cols, final boolean renderFirstLineAsHeader,
-                                          Insets insets, int border, final List components)
+                                          final List components, String style)
             throws IOException {
         boolean firstRow = true;
         int col = 0;
@@ -87,7 +84,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
                 firstRow = false;
             }
 
-            openLayouterCell(d, c, firstRow && renderFirstLineAsHeader, -1, -1, null, SConstants.CENTER, SConstants.CENTER);
+            openLayouterCell(d, c, firstRow && renderFirstLineAsHeader, -1, -1, null, SConstants.CENTER, SConstants.CENTER, style);
 
             c.write(d); // Render component
 
@@ -168,8 +165,9 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      * @param width
      * @param defaultHorizontalAlignment
      * @param defaultVerticalAlignment
+     * @param style
      */
-    public static void openLayouterCell(final Device d, final SComponent component, final boolean renderAsHeader, int colspan, int rowspan, String width, int defaultHorizontalAlignment, int defaultVerticalAlignment) throws IOException {
+    public static void openLayouterCell(final Device d, final SComponent component, final boolean renderAsHeader, int colspan, int rowspan, String width, int defaultHorizontalAlignment, int defaultVerticalAlignment, String style) throws IOException {
         if (renderAsHeader)
             d.print("<th");
         else
@@ -179,7 +177,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         Utils.optAttribute(d, "colspan", colspan);
         Utils.optAttribute(d, "rowspan", rowspan);
         Utils.optAttribute(d, "width", width);
-
+        Utils.optAttribute(d, "style", style);
         d.print(">");
     }
 
@@ -190,5 +188,31 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      */
     public static void closeLayouterCell(final Device d, final boolean renderAsHeader) throws IOException {
         d.print(renderAsHeader ? "</th>" : "</td>");
+    }
+
+    protected static String cellStyles(SLayoutManager layout) {
+        SStringBuilder styles = new SStringBuilder();
+        if (layout instanceof SBorderLayout) {
+            SBorderLayout borderLayout = (SBorderLayout)layout;
+            Insets insets = convertGapsToInset(borderLayout.getHgap(), borderLayout.getVgap());
+            createInlineStylesForInsets(styles, insets);
+            if (borderLayout.getBorder() > 0)
+                styles.append("border:").append(borderLayout.getBorder()).append("px solid black");
+        }
+        else if (layout instanceof SGridLayout) {
+            SGridLayout gridLayout = (SGridLayout)layout;
+            Insets insets = convertGapsToInset(gridLayout.getHgap(), gridLayout.getVgap());
+            createInlineStylesForInsets(styles, insets);
+            if (gridLayout.getBorder() > 0)
+                styles.append("border:").append(gridLayout.getBorder()).append("px solid black");
+        }
+        else if (layout instanceof SGridBagLayout) {
+            SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+            Insets insets = convertGapsToInset(gridbagLayout.getHgap(), gridbagLayout.getVgap());
+            createInlineStylesForInsets(styles, insets);
+            if (gridbagLayout.getBorder() > 0)
+                styles.append("border:").append(gridbagLayout.getBorder()).append("px solid black");
+        }
+        return styles.length() > 0 ? styles.toString() : null;
     }
 }

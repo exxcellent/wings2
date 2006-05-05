@@ -51,6 +51,7 @@ public abstract class SAbstractLayoutManager
      * Preferred size of component in pixel.
      */
     protected SDimension preferredSize = null;
+    protected int border = 0;
 
 
     protected SAbstractLayoutManager() {
@@ -134,7 +135,25 @@ public abstract class SAbstractLayoutManager
             throw e;
         }
     }
-    
+
+    /**
+     * Set the thickness of the border.
+     * Default is 0, which means no border.
+     *
+     * @param pixel thickness of the border
+     */
+    public void setBorder(int pixel) {
+        border = pixel;
+    }
+
+    /**
+     * Returns the thickness of the border.
+     *
+     * @return thickness of the border
+     */
+    public int getBorder() {
+        return border;
+    }
 }
 
 

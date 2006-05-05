@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SContainer;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
 public final class ContainerCG extends AbstractComponentCG implements
@@ -26,11 +27,12 @@ public final class ContainerCG extends AbstractComponentCG implements
     public void writeInternal(final Device device, final SComponent component)
             throws java.io.IOException
     {
+        SContainer container = (SContainer)component;
         device.print("<table");
         writeAllAttributes(device, component);
         device.print(">");
 
-        Utils.renderContainer(device, (SContainer) component);
+        Utils.renderContainer(device, container);
 
         device.print("</table>");
     }

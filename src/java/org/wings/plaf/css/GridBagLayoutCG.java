@@ -14,7 +14,6 @@
 package org.wings.plaf.css;
 
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.io.IOException;
 
 import org.wings.SComponent;
@@ -40,6 +39,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         final SGridBagLayout layout = (SGridBagLayout) l;
         final boolean header = layout.getHeader();
         final SGridBagLayout.Grid grid = layout.getGrid();
+        String styles = cellStyles(layout);
 
         if (grid.cols == 0)
             return;
@@ -54,7 +54,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                 Utils.printNewline(d, layout.getContainer());
                 final boolean headerCell = row == grid.firstRow && header;
                 if (comp == null) {
-                    openLayouterCell(d, null, headerCell, -1, -1, null, SConstants.CENTER, SConstants.CENTER);
+                    openLayouterCell(d, null, headerCell, -1, -1, null, SConstants.CENTER, SConstants.CENTER, styles);
                     closeLayouterCell(d, headerCell);
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
@@ -84,7 +84,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         if (c.weightx > 0 && grid.colweight[row] > 0)
                             width = (int) (100 * c.weightx / grid.colweight[row]) + "%\"";
 
-                        openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER);
+                        openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER, styles);
 
                         Utils.printNewline(d, comp);
                         comp.write(d); // Render component

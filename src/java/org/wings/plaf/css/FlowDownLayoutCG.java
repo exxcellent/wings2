@@ -41,7 +41,7 @@ public class FlowDownLayoutCG extends AbstractLayoutCG {
 
         openLayouterBody(d, layout);
 
-        printLayouterTableBody(d, 1, false, insets, 0, layout.getComponents());
+        printLayouterTableBody(d, 1, false, layout.getComponents(), null);
 
         closeLayouterBody(d, layout);
     }
