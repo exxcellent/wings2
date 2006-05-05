@@ -441,7 +441,6 @@ table.STable tbody tr td.numbering {
     border: 1px solid black;
     white-space: nowrap;
     line-height: 1.6em;
-    font-size: 0.84em;
 }
 
 .STabbedPane_Tab_button_top,
@@ -452,7 +451,6 @@ table.STable tbody tr td.numbering {
     background: none;
     white-space: nowrap;
     line-height: 1.6em;
-    font-size: 0.84em;
 }
 
 td.STabbedPane_pane {
@@ -496,6 +494,10 @@ td.STabbedPane_pane {
 
 .STabbedPane_Tab_disabled {
     color : #808080;
+}
+
+a.STabbedPane_Tab_top img {
+    vertical-align: top;
 }
 
 .SButton {

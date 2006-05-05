@@ -190,7 +190,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
             // javascript needs even more & special quoting
             // FIXME: do this more efficiently
-            Utils.quote(device, toolTipText.replaceAll("\'","\\\\'"), true, true, true);
+            Utils.quote(device, toolTipText.replaceAll("'","\\'"), true, true, true);
             device.print("', 'predefined', 'default'));\"");
         }
     }
