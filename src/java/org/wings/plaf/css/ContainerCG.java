@@ -25,18 +25,21 @@ public final class ContainerCG extends AbstractComponentCG implements
     private static final long serialVersionUID = 1L;
 
     public void write(final Device device, final SComponent component)
-            throws java.io.IOException {
-
+            throws java.io.IOException
+    {
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
-        writeAllAttributes(device, component, "table");
+        component.fireRenderEvent(SComponent.START_RENDERING);
+
+        device.print("<table");
+        writeAllAttributes(device, component);
         device.print(">");
 
-        component.fireRenderEvent(SComponent.START_RENDERING);
         Utils.renderContainer(device, (SContainer) component);
-        component.fireRenderEvent(SComponent.DONE_RENDERING);
 
         device.print("</table>");
+
         writeInlineScripts(device, component);
+        component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 }
