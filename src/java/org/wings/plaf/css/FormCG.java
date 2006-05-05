@@ -35,10 +35,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         }
         device.print("\"");
         writeAllAttributes(device, component);
-
         Utils.optAttribute(device, "name", component.getName());
-        //Utils.writeEvents(device, component);
-        Utils.optAttribute(device, "class", component.getStyle());
         Utils.optAttribute(device, "enctype", component.getEncodingType());
         Utils.optAttribute(device, "action", component.getRequestURL());
 

@@ -202,8 +202,7 @@ ul.STree > li > * {
 }
 
 /* Selection color of STrees */
-ul.STree > li.selected > table > tbody > tr > td > a > div,
-ul.STree > li.selected > table > tbody > tr > td > button > div
+ul.STree > li.selected > table
  {
     background-color: #ffbbbb;
     border: 1px dotted black;
