@@ -71,7 +71,8 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         device.print(SConstants.UID_DIVIDER);
         device.print("\" />");
 
-        device.print("<table>");
+        device.print("<table");
+        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         // Render the container itself
         Utils.renderContainer(device, component);

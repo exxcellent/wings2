@@ -124,7 +124,9 @@ public class SGridBagLayout
     /**
      * creats a new gridbag layout
      */
-    public SGridBagLayout() {}
+    public SGridBagLayout() {
+        setPreferredSize(SDimension.FULLWIDTH);
+    }
 
     /**
      * Add the given component with the given constraints to the

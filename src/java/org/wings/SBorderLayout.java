@@ -58,7 +58,9 @@ public class SBorderLayout
     /**
      * creates a new border layout
      */
-    public SBorderLayout() {}
+    public SBorderLayout() {
+        this(0,0);
+    }
 
     /**
      * creates a new border layout
@@ -66,6 +68,8 @@ public class SBorderLayout
     public SBorderLayout(int hgap, int vgap) {
         setHgap(hgap);
         setVgap(vgap);
+        // like swing
+        setPreferredSize(SDimension.FULLWIDTH);
     }
 
 

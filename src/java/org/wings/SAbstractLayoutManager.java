@@ -87,6 +87,9 @@ public abstract class SAbstractLayoutManager
 
     public void setContainer(SContainer c) {
         container = c;
+        if (container != null) {
+            container.setPreferredSize(this.getPreferredSize());
+        }
     }
 
     public SContainer getContainer() {
