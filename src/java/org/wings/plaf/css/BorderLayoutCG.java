@@ -47,7 +47,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
         if (north != null) {
             openLayouterRow(d, "0%");
             Utils.printNewline(d, north);
-            openLayouterCell(d, north, false, cols, -1, null, SConstants.CENTER, SConstants.TOP);
+            openLayouterCell(d, north, false, cols, -1, null, SConstants.LEFT, SConstants.TOP);
             north.write(d);
             closeLayouterCell(d, false);
             Utils.printNewline(d, layout.getContainer());
@@ -66,7 +66,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
 
         if (center != null) {
             Utils.printNewline(d, center);
-            openLayouterCell(d, center, false, -1, -1, "100%", SConstants.CENTER, SConstants.CENTER);
+            openLayouterCell(d, center, false, -1, -1, "100%", SConstants.LEFT, SConstants.CENTER);
             center.write(d);
             closeLayouterCell(d, false);
         } else {
@@ -87,7 +87,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, layout.getContainer());
             openLayouterRow(d, "0%");
             Utils.printNewline(d, south);
-            openLayouterCell(d, south, false, cols, -1, "0%", SConstants.CENTER, SConstants.BOTTOM);
+            openLayouterCell(d, south, false, cols, -1, "0%", SConstants.LEFT, SConstants.BOTTOM);
             south.write(d);
             closeLayouterCell(d, false);
             Utils.printNewline(d, layout.getContainer());

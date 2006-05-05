@@ -26,9 +26,6 @@ public final class ContainerCG extends AbstractComponentCG implements
     public void writeInternal(final Device device, final SComponent component)
             throws java.io.IOException
     {
-        Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
-        component.fireRenderEvent(SComponent.START_RENDERING);
-
         device.print("<table");
         writeAllAttributes(device, component);
         device.print(">");
@@ -36,9 +33,5 @@ public final class ContainerCG extends AbstractComponentCG implements
         Utils.renderContainer(device, (SContainer) component);
 
         device.print("</table>");
-
-        writeInlineScripts(device, component);
-        component.fireRenderEvent(SComponent.DONE_RENDERING);
-        Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 }

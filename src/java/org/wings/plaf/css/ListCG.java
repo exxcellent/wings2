@@ -38,8 +38,9 @@ public class ListCG extends AbstractComponentCG implements
     }
 
     protected void writeFormList(Device device, SList list) throws IOException {
-
         device.print("<select");
+        writeAllAttributes(device, list);
+
         Utils.optAttribute(device, "name", Utils.event(list));
         Utils.optAttribute(device, "tabindex", list.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", list.getVisibleRowCount());
@@ -50,8 +51,7 @@ public class ListCG extends AbstractComponentCG implements
         if (list.isFocusOwner())
             Utils.optAttribute(device, "focus", list.getName());
 
-        Utils.printCSSInlineFullSize(device, list.getPreferredSize());
-        Utils.writeEvents(device, list);
+        //Utils.writeEvents(device, list);
 
         device.print(">");
         javax.swing.ListModel model = list.getModel();
@@ -121,12 +121,12 @@ public class ListCG extends AbstractComponentCG implements
             throws IOException {
         boolean renderSelection = list.getSelectionMode() != SList.NO_SELECTION;
 
+        writeTablePrefix(device, list);
         device.print("<");
         device.print(list.getType());
         Utils.optAttribute(device, "type", list.getOrderType());
         Utils.optAttribute(device, "start", list.getStart());
 
-        Utils.printCSSInlineFullSize(device, list.getPreferredSize());
         device.print(">");
 
         javax.swing.ListModel model = list.getModel();
@@ -172,14 +172,14 @@ public class ListCG extends AbstractComponentCG implements
         device.print("</");
         Utils.write(device, list.getType());
         device.print(">");
+        writeTableSuffix(device, list);
     }
 
     public void writeInternal(final Device device,
                       final SComponent _c)
             throws IOException {
-        final SList component = (SList) _c;
 
-        SList list = (SList) component;
+        SList list = (SList) _c;
         if (list.getShowAsFormComponent()) {
             writeFormList(device, list);
         } else {

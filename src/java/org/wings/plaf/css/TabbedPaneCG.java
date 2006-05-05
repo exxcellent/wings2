@@ -80,11 +80,8 @@ public class TabbedPaneCG extends AbstractComponentCG {
             SStringBuilder contentArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_CONTENT));
 
             device.print("<table");
-
-            Utils.optAttribute(device, "class", component.getStyle());
-
-            Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-            Utils.writeEvents(device, component);
+            writeAllAttributes(device, component);
+            //Utils.writeEvents(device, component);
             device.print(">");
 
             if (placement == SConstants.TOP) {

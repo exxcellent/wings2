@@ -114,9 +114,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     protected void writeAllAttributes(Device device, SComponent component) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
-        Utils.printDebugNewline(device, component);
-        Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
-
         final String classname = component.getStyle();
         Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
         Utils.optAttribute(device, "id", component.getName());

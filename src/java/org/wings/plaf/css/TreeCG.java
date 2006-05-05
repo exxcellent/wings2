@@ -208,7 +208,6 @@ public class TreeCG extends AbstractComponentCG implements
     public void writeInternal(final Device device, final SComponent _c)
             throws IOException {
         final STree component = (STree) _c;
-
         int start = 0;
         int count = component.getRowCount();
 
@@ -220,9 +219,8 @@ public class TreeCG extends AbstractComponentCG implements
 
         final int depth = component.getMaximumExpandedDepth();
 
-        device.print("<ul class=\"STree\"");
-        Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
-        device.print(">");
+        writeTablePrefix(device, component);
+        device.print("<ul class=\"STree\">");
         if (start != 0) {
             TreePath path = component.getPathForRow(start);
             indentRecursive(device, component, path.getParentPath());
@@ -232,6 +230,7 @@ public class TreeCG extends AbstractComponentCG implements
             writeTreeNode(component, device, i, depth);
         }
         device.print("</ul>");
+        writeTableSuffix(device, component);
     }
 
     /**

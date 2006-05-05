@@ -226,20 +226,20 @@ ul.STree > li > div.SSubTree {
     background-position: 0px 100px;
 }
 
-table.STable > table {
+table.STable {
     width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
 }
 
 
-table.STable > table > thead > tr > th {
+table.STable > thead > tr > th {
     border: 1px solid black;
     padding-left: 8px;
     padding-right: 8px;
 }
 
-table.STable > table > tbody > tr > td {
+table.STable > tbody > tr > td {
     cursor: pointer;
     padding-left: 8px;
     padding-right: 8px;
@@ -247,12 +247,12 @@ table.STable > table > tbody > tr > td {
 }
 
 /* let the link span the whole table */
-table.STable > table > tbody > tr > td > a {
+table.STable > tbody > tr > td > a {
     display: block;
     width: 100%;
 }
 
-table.STable > table > tbody > tr > td.numbering {
+table.STable > tbody > tr > td.numbering {
     text-align: right;
 }
 

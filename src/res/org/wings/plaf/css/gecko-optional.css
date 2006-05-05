@@ -38,52 +38,50 @@ A:link, A:visited, A:active {
 
 /* ----------- STable even/odd and selected line coloring */
 
-div.STable > table > tbody > tr[even="true"] {
+table.STable > tbody > tr[even="true"] {
     background-color: #efefef;
 }
 
-div.STable > table > tbody > tr[odd="true"] {
+table.STable > tbody > tr[odd="true"] {
     background-color: #e5e5e5;
 }
 
-div.STable > table > tbody > tr[selected="true"] td {
+table.STable > tbody > tr[selected="true"] td {
     background-color: #ffbbbb;
 }
 
 /* ----------- DISABLED COMPONENTS OPACITY = 0.7*/
 
 /* Disabled button transparent */
-div.SButton > button[disabled="true"] * {
+table.SButton > a[disabled="true"] * {
     opacity: 0.7;
 }
 /* Disabled button transparent */
-div.STextField > input[disabled="true"] {
+table.STextField > input[disabled="true"] {
     opacity: 0.7;
 }
-div.SFormattedTextField > input[disabled="true"] {
+table.SFormattedTextField > input[disabled="true"] {
     opacity: 0.7;
 }
 
 /* ----------- READONLY TEXTFIELDS: Grey background */
 
-div.STextField > input[readonly="true"], div.SFormattedTextField > input[readonly="true"]  {
+table.STextField > input[readonly="true"], table.SFormattedTextField > input[readonly="true"]  {
     background-color: #eeeeee;
 }
 
 /* ----------- DESKTOP PANE */
 
 /* Thin grey border around buttons in SToolBar. See desktop demo. */
-div.SToolBar {
-}
-div.SToolBar > table {
+table.SToolBar {
     background-color: inherit !important;
     border: 1px none !important;
 }
-div.SToolBar > table > tbody > tr > td {
+table.SToolBar > tbody > tr > td {
     background-color: inherit !important;
     padding: 2px;
 }
-div.SToolBar div.SButton {
+table.SToolBar table.SButton {
     background-color: inherit !important;
     border: 1px none !important;
 }
@@ -92,18 +90,18 @@ div.SToolBar div.SButton {
 
 /*  Note: SOptionPane extends SDialog. */
 
-div.SDialog > table > tbody > tr > th,
-div.SOptionPane > table > tbody > tr > th {
+table.SDialog > tbody > tr > th,
+table.SOptionPane > tbody > tr > th {
     padding-left: 1px;
     padding-right: 1px;
 }
-div.SDialog > table > tbody > tr > th[col="title"],
-div.SOptionPane > table > tbody > tr > th[col="title"] {
+table.SDialog > tbody > tr > th[col="title"],
+table.SOptionPane > tbody > tr > th[col="title"] {
     background-color: #aaaaff;
     text-align: left;
     width: 100%;
 }
-div.SDialog > table > tbody > tr > *,
-div.SOptionPane > table > tbody > tr > * {
+table.SDialog > tbody > tr > *,
+table.SOptionPane > tbody > tr > * {
     border: 1px solid #cccccc;
 }

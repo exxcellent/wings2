@@ -282,15 +282,11 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
         try {
             device.print("<table");
-        if (tableWidthByColumnModel != null)
-            Utils.optAttribute(device,"style",tableWidthByColumnModel.toString()); // apply table dimension if set
-        else
-            Utils.printCSSInlineFullSize(device, table.getPreferredSize()); // stretch if outer dimension has been set
+            writeAllAttributes(device, table);
 
         // TODO: border="" should be obsolete
         // TODO: cellspacing and cellpadding may be in conflict with border-collapse
         /* Tweaking: CG configured to have a fixed border="xy" width */
-        Utils.optAttribute(device, "class", "STable");
         Utils.optAttribute(device, "border", fixedTableBorderWidth);
         Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getWidthInt() : null));
         Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getHeightInt() : null));
