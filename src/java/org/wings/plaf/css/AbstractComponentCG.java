@@ -108,6 +108,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         Utils.printDebugNewline(device, component);
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         
+        device.print("<").print(tagName);
         final String classname = component.getStyle();
         Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
         Utils.optAttribute(device, "id", component.getName());
