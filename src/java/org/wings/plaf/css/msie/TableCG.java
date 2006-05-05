@@ -26,9 +26,6 @@ import org.wings.session.SessionManager;
 
 public class TableCG extends org.wings.plaf.css.TableCG implements SParentFrameListener {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private static final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 

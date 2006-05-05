@@ -13,14 +13,13 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.io.IOException;
-
 import org.wings.SComponent;
 import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
+
+import java.awt.*;
+import java.io.IOException;
 
 public class GridBagLayoutCG extends AbstractLayoutCG {
     /**
@@ -59,7 +58,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                 if (comp == null) {
                     openLayouterCell(d, headerCell, layoutInsets, border, null);
                     d.print(">");
-                    closeLayouterCell(d, headerCell);
+                    closeLayouterCell(d, layout.getContainer(), headerCell);
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
 
@@ -104,10 +103,9 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
 
                         d.print(">");
 
-                        Utils.printNewline(d, comp);
                         comp.write(d); // Render component
 
-                        closeLayouterCell(d, headerCell);
+                        closeLayouterCell(d, comp, headerCell);
                     }
                 }
             }

@@ -170,7 +170,8 @@ PageScroller as form-component
 /*
 PageScroller as non-form-component
 */
-.SPageScroller a{
+.SPageScroller A,
+.SPageScroller SPAN {
    text-decoration: underline !important;
    padding-left: 5px;
    padding-right: 5px;
@@ -180,13 +181,10 @@ PageScroller as non-form-component
    background-color: #ECECEC;
 }
 
-.SPageScroller a.disabled{
+.SPageScroller SPAN.disabled_button,
+.SPageScroller SPAN.disabled_formbutton {
 	text-decoration: none !important;
 	font-weight: bold !important;
-}
-
-.SPageScroller a.disabled:hover{
-	background-color: transparent;
 }
 
 /* style for scroll arrows as non-form components */

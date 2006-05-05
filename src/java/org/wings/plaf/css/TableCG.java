@@ -16,17 +16,24 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
-import org.wings.util.SStringBuilder;
+import org.wings.SCellRendererPane;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SIcon;
+import org.wings.SLabel;
+import org.wings.SListSelectionModel;
+import org.wings.STable;
+import org.wings.io.CachingDevice;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
-import org.wings.session.BrowserType;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
 import org.wings.table.STableColumnModel;
+import org.wings.util.SStringBuilder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,9 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     /**
      * Apache jakarta commons logger
@@ -56,7 +60,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         final CGManager manager = SessionManager.getSession().getCGManager();
         setFixedTableBorderWidth((String) manager.getObject("TableCG.fixedTableBorderWidth", String.class));
         setEditIcon(manager.getIcon("TableCG.editIcon"));
-        selectionColumnWidth = (String)manager.getObject("TableCG.selectionColumnWidth", String.class);
+        selectionColumnWidth = (String) manager.getObject("TableCG.selectionColumnWidth", String.class);
     }
 
     /**
@@ -97,6 +101,7 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
     /**
      * The width of the (optional) row selection column in px
+     *
      * @param selectionColumnWidth The width of the (optional) row selection column with unit
      */
     public void setSelectionColumnWidth(String selectionColumnWidth) {
@@ -256,19 +261,28 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
     }
 
 
-    public void write(final Device device, final SComponent _c)
-            throws IOException {
+    public final void write(final Device _device, final SComponent _c) throws IOException {
         final STable table = (STable) _c;
         final SDimension intercellPadding = table.getIntercellPadding();
         final SDimension intercellSpacing = table.getIntercellSpacing();
         final SListSelectionModel selectionModel = table.getSelectionModel();
         final SCellRendererPane rendererPane = table.getCellRendererPane();
-        final boolean childSelectorWorkaround = !(table.getSession().getUserAgent().getBrowserType() != BrowserType.IE);
         final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION && table.isEditable();
         final boolean showAsFormComponent = table.getShowAsFormComponent();
         final SDimension tableWidthByColumnModel = determineTableWidthByColumnModel(table, needsSelectionRow);
 
-        device.print("<table");
+        /**
+         * Description: This is a FIREFOX bug workaround. Currently we render all components surrounded by a DIV.
+         * During heavy load and incremental delivery of a page this leads to disorted tables as the firefox seems
+         * to have an bug. Refer to http://jira.j-wings.org/browse/WGS-139
+         *
+         * THis workaround tries to deliver the HTML code of a table at once. This should resolve this issue to 99%.
+         */
+        final boolean innerTable = _device instanceof CachingDevice;
+        final CachingDevice device = innerTable ? (CachingDevice) _device : new CachingDevice(_device);
+
+        try {
+            device.print("<table");
         if (tableWidthByColumnModel != null)
             Utils.optAttribute(device,"style",tableWidthByColumnModel.toString()); // apply table dimension if set
         else
@@ -342,38 +356,35 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             device.print("<tr");
             if (selectionModel.isSelectedIndex(r)){
                 Utils.optAttribute(device, "style", selectedArea);
-                if(childSelectorWorkaround)
                     rowClass.append("selected ");
-                else
-                    device.print(" selected=\"true\"");
             }
             else if (r % 2 != 0)
                 Utils.optAttribute(device, "style", oddArea);
             else
                 Utils.optAttribute(device, "style", evenArea);
 
-            rowClass.append(r % 2 != 0 ? "odd" : "even");
-            Utils.optAttribute(device, "class", rowClass);
+                rowClass.append(r % 2 != 0 ? "odd" : "even");
+                Utils.optAttribute(device, "class", rowClass);
+                device.print(">");
 
-            if (!childSelectorWorkaround) {
-                if (r % 2 != 0)
-                    device.print(" odd=\"true\"");
-                else
-                    device.print(" even=\"true\"");
+                if (needsSelectionRow) {
+                    renderSelectionColumn(device, table, rendererPane, r, showAsFormComponent);
+                }
+
+                for (int c = startCol; c < endCol; c++) {
+                    renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
+                }
+
+                device.print("</tr>");
+                Utils.printNewline(device, table);
             }
-            device.print(">");
-
-            if (needsSelectionRow)
-                renderSelectionColumn(device, table, rendererPane, r, showAsFormComponent);
-
-            for (int c = startCol; c < endCol; c++)
-                renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
-
-            device.print("</tr>");
-            Utils.printNewline(device, table);
+            device.print("</tbody>");
+            device.print("</table>");
+        } finally {
+            /* Refer to description above. */
+            device.flush();
+            //device = null;
         }
-        device.print("</tbody>");
-        device.print("</table>");
     }
 
     private boolean atLeastOneColumnWidthIsNotNull(STableColumnModel columnModel) {
@@ -404,23 +415,25 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
 
             for (int i = startcol; i < endcol; i++) {
                 final STableColumn column = columnModel.getColumn(i);
-                if (column != null && !column.isHidden())
+                if (column != null && !column.isHidden()) {
                     widthStrings.add(column.getWidth());
+                }
             }
         }
 
         return widthStrings;
     }
 
-    /** Renders the row sometimes needed to allow row selection. */
+    /**
+     * Renders the row sometimes needed to allow row selection.
+     */
     protected void renderSelectionColumn(final Device device, final STable table, final SCellRendererPane rendererPane,
-                                      final int row, final boolean showAsFormComponent)
+                                         final int row, final boolean showAsFormComponent)
             throws IOException {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
         final String columnStyle = Utils.joinStyles((SComponent) rowSelectionRenderer, "numbering");
 
         device.print("<td");
-        Utils.optAttribute(device, "col", "numbering");
         Utils.optAttribute(device, "class", columnStyle);
         Utils.optAttribute(device, "width", selectionColumnWidth);
         device.print(">");
@@ -433,7 +446,9 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         device.print("</td>");
     }
 
-    /** Renders the <b>content</b> of the row selection row. */
+    /**
+     * Renders the <b>content</b> of the row selection row.
+     */
     private void renderSelectionColumnContent(final Device device, int row, final STable table, final SCellRendererPane rendererPane)
             throws IOException {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();

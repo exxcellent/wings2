@@ -14,15 +14,6 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import javax.swing.InputMap;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.Renderable;
@@ -45,8 +36,15 @@ import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Browser;
-import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * PLAF renderer for SFrames.
@@ -295,16 +293,6 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         Utils.write(device, language);
         device.print("\">\n");
 
-        /* Insert version and compile time.
-         * Since the Version Class is generated on compile time, build errors
-         * in SDK's are quite normal. Just run the Version.java ant task.
-         */
-        device.print("<!-- This is wingS (http://www.j-wings.org) version ");
-        device.print(Version.getVersion());
-        device.print(" (Build date: ");
-        device.print(Version.getCompileTime());
-        device.print(") -->\n");
-
         device.print("<head>");
         if (title != null) {
             device.print("<title>");
@@ -317,6 +305,15 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         Utils.write(device, encoding);
         device.print("\"/>\n");
 
+        /* Insert version and compile time.
+         * Since the Version Class is generated on compile time, build errors
+         * in SDK's are quite normal. Just run the Version.java ant task.
+         */
+        device.print("<meta http-equiv=\"Generator\" content=\"wingS (http://www.j-wings.org) v");
+        device.print(Version.getVersion());
+        device.print(" built on: ");
+        device.print(Version.getCompileTime());
+        device.print("\" />\n");
 
         // Register and render DWR callables
         Collection callableNames = CallableManager.getInstance().callableNames();

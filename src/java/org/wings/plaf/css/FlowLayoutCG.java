@@ -27,9 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class FlowLayoutCG extends AbstractLayoutCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -76,12 +73,9 @@ public class FlowLayoutCG extends AbstractLayoutCG {
                 final SComponent component = (SComponent) componentIterator.next();
                 if (component.isVisible()) {
                     Utils.printNewline(d, component);
-                    d.print("<div style=\"");
-                    d.print(alignmentStyle);
-                    d.print( createInlineStylesForInsets(new SStringBuilder(),insets).toString() );
-                    d.print("\">");
+                    d.print("<div");
+                    Utils.optAttribute(d, "style", createInlineStylesForInsets(new SStringBuilder(alignmentStyle),insets));
                     component.write(d); // Render contained component
-                    Utils.printNewline(d, component);
                     d.print("</div>");
                 }
             }
@@ -108,7 +102,9 @@ public class FlowLayoutCG extends AbstractLayoutCG {
             final SComponent component = (SComponent) components.get(0);
             if (component.isVisible()) {
                 Utils.printNewline(d, component);
-                d.print("<div style=\"").print(createInlineStylesForInsets(new SStringBuilder(), insets).toString()).print("\">");
+                d.print("<div");
+                Utils.optAttribute(d, "style", createInlineStylesForInsets(new SStringBuilder(), insets));
+                 d.print(">");
                 component.write(d); // Render contained component
                 Utils.printNewline(d, component);
                 d.print("</div>");

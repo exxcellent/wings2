@@ -112,7 +112,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         // Regarding table height it is totally inveser. I love 'em.
         final String tableHeight = isMsIEBrowser ? " height=\"100%\"" : "";
 
-        d.print("<table orientation=\"vertical\"").print(tableHeight).print("><tbody>")
+        d.print("<table class=\"vertical\"").print(tableHeight).print("><tbody>")
                 .print("<tr").print(rowHeightFlattened).print(">")
                 .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
 
@@ -175,8 +175,8 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         final int maximum = sb.getMaximum();
         final int last = maximum - extent;
 
-        d.print("<table orientation=\"horizontal\"><tbody><tr>")
-                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>");
+        d.print("<table class=\"horizontal\"><tbody><tr>")
+                .print("<td width=\"1%\"><table class=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum);
@@ -198,7 +198,7 @@ public class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implemen
         horizontalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconHeight);
 
         d.print("</tr></tbody></table></td>")
-                .print("<td width=\"1%\"><table area=\"buttons\"><tbody><tr>");
+                .print("<td width=\"1%\"><table class=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + 1));

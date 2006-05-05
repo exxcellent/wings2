@@ -114,7 +114,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             //MSIEUtils.printNewline(d, c);
             c.write(d); // Render component
 
-            closeLayouterCell(d, firstRow && renderFirstLineAsHeader);
+            closeLayouterCell(d, c, firstRow && renderFirstLineAsHeader);
 
             col++;
 
@@ -194,7 +194,8 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      *
      * @param renderAsHeader Print TH instead of TD
      */
-    public static void closeLayouterCell(final Device d, final boolean renderAsHeader) throws IOException {
+    public static void closeLayouterCell(final Device d, final SComponent c, final boolean renderAsHeader) throws IOException {
         d.print(renderAsHeader ? "</th>" : "</td>");
+        Utils.printNewline(d, c);
     }
 }

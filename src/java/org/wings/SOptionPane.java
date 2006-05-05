@@ -17,11 +17,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
-import org.wings.border.SLineBorder;
 import org.wings.plaf.OptionPaneCG;
 import org.wings.resource.ResourceManager;
-import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -244,7 +243,7 @@ public class SOptionPane extends SDialog implements ActionListener {
     protected Object initialValue;
 
     /*
-     * Message type. 
+     * Message type.
      */
     protected int messageType;
     private Object inputValue;
@@ -389,10 +388,6 @@ public class SOptionPane extends SDialog implements ActionListener {
 
     private final void initPanel() {
         setHorizontalAlignment(SConstants.CENTER);
-        SBorder border = new SLineBorder(new Color(0xCC, 0xCC, 0xCC), 0);
-        border.setThickness(1,SConstants.TOP);
-        border.setInsets(new Insets(6,0,0,0));
-        setBorder(border);
         ((SFlowLayout)optionButtons.getLayout()).setHgap(8);
         optionButtons.add(optionOK, "OK");
         optionButtons.add(optionYes, "YES");
