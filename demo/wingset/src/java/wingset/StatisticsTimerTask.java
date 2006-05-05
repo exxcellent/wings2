@@ -56,8 +56,10 @@ public class StatisticsTimerTask extends TimerTask {
         oldSessionCount = stats.getOverallSessionCount();
 
         try {
-            infoWriter.write(result.toString());
-            infoWriter.flush();
+            if (infoWriter != null) {
+                infoWriter.write(result.toString());
+                infoWriter.flush();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -45,7 +45,6 @@ public class PageScrollerExample
 
     public SComponent createExample() {
         list = new SList(listData);
-        list.setVisibleRowCount(8);
         list.setShowAsFormComponent(false);
 
         scrollbar = new SPageScroller(Adjustable.VERTICAL);
@@ -100,7 +99,7 @@ public class PageScrollerExample
     class PageScrollerControls extends ComponentControls {
         public PageScrollerControls() {
             addControl(new SLabel("Visible Rows: "));
-            Object[] visRowsValues = {new Integer(4), new Integer(8), new Integer(12),
+            Integer[] visRowsValues = {new Integer(4), new Integer(10), new Integer(12),
                                       new Integer(16), new Integer(20), new Integer(50)};
             final SComboBox visRows = new SComboBox(visRowsValues);
             visRows.addItemListener(new ItemListener() {
@@ -108,7 +107,8 @@ public class PageScrollerExample
                     list.setVisibleRowCount(((Integer) visRows.getSelectedItem()).intValue());
                 }
             });
-            visRows.setSelectedItem(new Integer(list.getVisibleRowCount()));
+            list.setVisibleRowCount(visRowsValues[2].intValue());
+            visRows.setSelectedItem(visRowsValues[2]);
             addControl(visRows);
 
             addControl(new SLabel("Direct Pages: "));
@@ -124,8 +124,8 @@ public class PageScrollerExample
             addControl(comboBox);
 
 
-            add(new SLabel("Layout: "));
-            Object[] constraints = {"Top", "Left", "Bottom", "Right"};
+            addControl(new SLabel("Layout: "));
+            final Object[] constraints = {"Top", "Left", "Bottom", "Right"};
             final SComboBox layout = new SComboBox(constraints);
             layout.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
@@ -149,7 +149,7 @@ public class PageScrollerExample
                 }
             });
             layout.setSelectedItem("Bottom");
-            add(layout);
+            addControl(layout);
 
             /*
             final SCheckBox margin = new SCheckBox("Margin");

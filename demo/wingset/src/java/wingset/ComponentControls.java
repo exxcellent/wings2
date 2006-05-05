@@ -169,6 +169,8 @@ public class ComponentControls
     }
 
     public void addControl(SComponent component) {
+        if (localControls.getComponentCount() > 0)
+            localControls.add(new SLabel(" | ")); //spacer
         localControls.add(component);
         localControls.setVisible(true);
     }
