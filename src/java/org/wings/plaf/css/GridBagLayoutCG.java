@@ -13,19 +13,16 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.GridBagConstraints;
-import java.io.IOException;
-
 import org.wings.SComponent;
+import org.wings.SConstants;
 import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
-import org.wings.SConstants;
 import org.wings.io.Device;
 
+import java.awt.*;
+import java.io.IOException;
+
 public class GridBagLayoutCG extends AbstractLayoutCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /**

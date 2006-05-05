@@ -32,7 +32,6 @@ public class CachingDevice  implements Device {
     public void close() throws IOException {
         bufferDevice.flush();
         finalDevice.print(bufferDevice.toString());
-        finalDevice.close();
         bufferDevice.close();
     }
 

@@ -20,9 +20,7 @@ import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class AnchorCG
-        extends AbstractComponentCG
-        implements org.wings.plaf.AnchorCG {
+public class AnchorCG extends AbstractComponentCG implements org.wings.plaf.AnchorCG {
     private static final long serialVersionUID = 1L;
 
     /* (non-Javadoc)
@@ -32,7 +30,7 @@ public class AnchorCG
                       final SComponent _c)
             throws IOException {
         final SAnchor component = (SAnchor) _c;
-        final boolean useTable = hasDimension(component);
+        /*final boolean useTable = hasDimension(component);
         if (useTable) {
             writeTablePrefix(device, component);
             // render javascript event handlers
@@ -44,22 +42,30 @@ public class AnchorCG
             // render javascript event handlers
             Utils.writeEvents(device, component, null);
         }
+        */
+
+        final String target = component.getTarget() != null ? "'" + component.getTarget() + "'" : "null";
+        device.print("<a href=\"#\" onclick=\"wu_openlink(" + target + ",'"+component.getURL()+"');return false;\"");
+        writeAllAttributes(device, component);
 
         // spezielle anchor attributes
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
-        Utils.optAttribute(device, "target", component.getTarget());
+        //Utils.optAttribute(device, "target", component.getTarget());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "name", component.getName());
         
-
-
         device.print(">");
+        device.print("<table>"); // renderContainer expects table
         Utils.renderContainer(device, component);
-        Utils.printButtonEnd(device, component, null, true);
-        if (useTable) {
+        device.print("</table>");
+        //Utils.printButtonEnd(device, component, null, true);
+        /*if (useTable) {
             writeTableSuffix(device, component);
-        }
+        }*/
+
+        device.print("</a>");
     }
+
 
 }
