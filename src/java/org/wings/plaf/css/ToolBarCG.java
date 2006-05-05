@@ -30,19 +30,22 @@ public class ToolBarCG extends AbstractComponentCG implements
     public void writeInternal(final Device device, final SComponent _c)
             throws IOException {
         final SToolBar toolBar = (SToolBar) _c;
-
-        device.print("<table><tr>");
         SComponent[] components = toolBar.getComponents();
-        for (int i = 0; i < components.length; i++) {
-            SComponent component = components[i];
+        if (components.length > 0) {
+            device.print("<table");
+            writeAllAttributes(device, toolBar);
+            device.print("><tr>");
+            for (int i = 0; i < components.length; i++) {
+                SComponent component = components[i];
 
-            if (component.getHorizontalAlignment() == SConstants.RIGHT_ALIGN)
-                device.print("<td width=\"100%\"></td>");
+                if (component.getHorizontalAlignment() == SConstants.RIGHT_ALIGN)
+                    device.print("<td width=\"100%\"></td>");
 
-            device.print("<td>");
-            component.write(device);
-            device.print("</td>");
+                device.print("<td>");
+                component.write(device);
+                device.print("</td>");
+            }
+            device.print("</tr></table>");
         }
-        device.print("</tr></table>");
     }
 }

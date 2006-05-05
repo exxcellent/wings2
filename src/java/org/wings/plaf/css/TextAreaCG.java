@@ -46,6 +46,7 @@ public class TextAreaCG extends AbstractComponentCG implements
 
         } else {
             device.print("<textarea");
+            writeAllAttributes(device, component);
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             
             Utils.optAttribute(device, "cols", component.getColumns());
@@ -60,16 +61,6 @@ public class TextAreaCG extends AbstractComponentCG implements
                     break;
             }
 
-            // build special style for input elememts
-            // background/foreground/font is specified in the default css (gecko-optional.css, msie-optional)
-            // So it is not possible to specify this css properties in the inner div.
-            // TODO This is fast fix hack. Check if there is a better solution
-            SStringBuilder tStyle = new SStringBuilder();
-            Utils.appendCSSComponentInlineColorStyle(tStyle, component);
-            Utils.appendCSSComponentInlineFontStyle(tStyle, component);
-            Utils.appendCSSInlineFullSize(tStyle, component);
-            Utils.optAttribute(device, "style", tStyle);
-                 
             if (!component.isEditable() || !component.isEnabled()) {
                 device.print(" readonly=\"true\"");
             }

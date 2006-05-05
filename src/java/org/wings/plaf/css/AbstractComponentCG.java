@@ -131,7 +131,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         writeContextMenu(device, component);
 
         // javascript event handlers
-        Utils.writeEvents(device, component);
+        //Utils.writeEvents(device, component);
     }
 
     protected String getInlineStyles(SComponent component) {

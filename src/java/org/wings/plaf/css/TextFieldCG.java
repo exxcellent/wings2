@@ -79,19 +79,9 @@ public class TextFieldCG extends AbstractComponentCG implements
         final STextField textField = (STextField) component;
 
         device.print("<input type=\"text\"");
-        Utils.optAttribute(device, "id", textField.getName() + "_input");
+        writeAllAttributes(device, component);
         Utils.optAttribute(device, "size", textField.getColumns());
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
-
-        // build special style for input elememts
-        // background/foreground/font is specified in the default css (gecko-optional.css, msie-optional)
-        // So it is not possible to specify this css properties in the inner div.
-        // TODO This is fast fix hack. Check if there is a better solution 
-        SStringBuilder tStyle = new SStringBuilder();
-        Utils.appendCSSComponentInlineColorStyle(tStyle, component);
-        Utils.appendCSSComponentInlineFontStyle(tStyle, component);
-        Utils.appendCSSInlineFullSize(tStyle, component);
-        Utils.optAttribute(device, "style", tStyle);
 
         if (!textField.isEditable() || !textField.isEnabled()) {
             device.print(" readonly=\"true\"");
