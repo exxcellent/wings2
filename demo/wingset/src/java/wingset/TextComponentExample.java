@@ -52,7 +52,7 @@ public class TextComponentExample extends WingSetPane {
 
 
     public SComponent createExample() {
-        controls = new ComponentControls();
+        controls = new TextComponentControls();
 
         SGridLayout gridLayout = new SGridLayout(2);
         gridLayout.setHgap(10);
@@ -149,6 +149,8 @@ public class TextComponentExample extends WingSetPane {
 
         controls.addControllable(textField);
         controls.addControllable(textArea);
+        controls.addControllable(passwordField);
+        controls.addControllable(numberTextField);
         controls.addControllable(dateTextField);
 
         frame.add(controls, SBorderLayout.NORTH);
@@ -232,5 +234,13 @@ public class TextComponentExample extends WingSetPane {
                 return format.format(value);
         }
     }
-}
 
+    static class TextComponentControls
+        extends ComponentControls
+    {
+        public TextComponentControls() {
+            widthTextField.setText("100%");
+            showAsFormComponentCheckBox.setVisible(false);
+        }
+    }
+}

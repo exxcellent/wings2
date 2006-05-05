@@ -47,8 +47,8 @@ public class TextAreaCG extends AbstractComponentCG implements
         } else {
             device.print("<textarea");
             writeAllAttributes(device, component);
+
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-            
             Utils.optAttribute(device, "cols", component.getColumns());
             Utils.optAttribute(device, "rows", component.getRows());
 
@@ -64,6 +64,7 @@ public class TextAreaCG extends AbstractComponentCG implements
             if (!component.isEditable() || !component.isEnabled()) {
                 device.print(" readonly=\"true\"");
             }
+
             if (component.isEnabled()) {
                 device.print(" name=\"");
                 Utils.write(device, Utils.event(component));
@@ -75,7 +76,7 @@ public class TextAreaCG extends AbstractComponentCG implements
             if (component.isFocusOwner())
                 Utils.optAttribute(device, "focus", component.getName());
 
-            Utils.writeEvents(device, component);
+            //Utils.writeEvents(device, component);
             device.print(">");
             Utils.quote(device, component.getText(), false, false, false);
             device.print("</textarea>\n");

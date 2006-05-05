@@ -80,8 +80,11 @@ public class TextFieldCG extends AbstractComponentCG implements
 
         device.print("<input type=\"text\"");
         writeAllAttributes(device, component);
+        Utils.optAttribute(device, "tabindex", textField.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", textField.getColumns());
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
+        if (textField.isFocusOwner())
+            Utils.optAttribute(device, "focus", textField.getName());
 
         if (!textField.isEditable() || !textField.isEnabled()) {
             device.print(" readonly=\"true\"");
@@ -93,10 +96,6 @@ public class TextFieldCG extends AbstractComponentCG implements
         } else {
             device.print(" disabled=\"true\"");
         }
-        Utils.optAttribute(device, "tabindex", textField.getFocusTraversalIndex());
-
-        if (textField.isFocusOwner())
-            Utils.optAttribute(device, "focus", textField.getName());
 
         Utils.writeEvents(device, textField);
 

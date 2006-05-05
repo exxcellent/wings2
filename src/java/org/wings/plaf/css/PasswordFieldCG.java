@@ -34,13 +34,14 @@ public class PasswordFieldCG extends AbstractComponentCG implements
         final SPasswordField component = (SPasswordField) _c;
 
         device.print("<input type=\"password\"");
-        Utils.writeEvents(device, component);
+        writeAllAttributes(device, component);
+        //Utils.writeEvents(device, component);
         Utils.optAttribute(device, "size", component.getColumns());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());
-        Utils.optAttribute(device, "focus", component.getName());
+        if (component.isFocusOwner())
+            Utils.optAttribute(device, "focus", component.getName());
 
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         if (!component.isEditable() || !component.isEnabled()) {
             device.print(" readonly=\"true\"");
@@ -52,11 +53,6 @@ public class PasswordFieldCG extends AbstractComponentCG implements
         } else {
             device.print(" disabled=\"true\"");
         }
-
-        if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
-
-        Utils.writeEvents(device, component);
 
         Utils.optAttribute(device, "value", component.getText());
         device.print("/>");
