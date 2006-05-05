@@ -35,25 +35,30 @@ public class AnchorCG
                       final SComponent _c)
             throws IOException {
         final SAnchor component = (SAnchor) _c;
-        if (hasDimension(component)) {
+        final boolean useTable = hasDimension(component);
+        if (useTable) {
             writeTablePrefix(device, component);
-        } else {
-            Utils.printButtonStart(device, component, null, true, component.getShowAsFormComponent());
-            writeAllAttributes(device, component);
-            device.print(">");
         }
-        
+        Utils.printButtonStart(device, component, null, true, component.getShowAsFormComponent());
+        if (!useTable) {
+            writeAllAttributes(device, component);
+        }
 
-        Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
+        // spezielle anchor attributes
         if (component.isFocusOwner())
             Utils.optAttribute(device, "focus", component.getName());
-
         Utils.optAttribute(device, "target", component.getTarget());
-        Utils.optAttribute(device, "name", component.getName());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optAttribute(device, "name", component.getName());
+        
+
+
         device.print(">");
         Utils.renderContainer(device, component);
         Utils.printButtonEnd(device, component, null, true);
+        if (useTable) {
+            writeTableSuffix(device, component);
+        }
     }
 
 }
