@@ -35,8 +35,14 @@ public class AnchorCG
                       final SComponent _c)
             throws IOException {
         final SAnchor component = (SAnchor) _c;
-
-        Utils.printButtonStart(device, component, null, true, component.getShowAsFormComponent());
+        if (hasDimension(component)) {
+            writeTablePrefix(device, component);
+        } else {
+            Utils.printButtonStart(device, component, null, true, component.getShowAsFormComponent());
+            writeAllAttributes(device, component);
+            device.print(">");
+        }
+        
 
         Utils.printCSSInlineFullSize(device, _c.getPreferredSize());
         if (component.isFocusOwner())
@@ -49,4 +55,5 @@ public class AnchorCG
         Utils.renderContainer(device, component);
         Utils.printButtonEnd(device, component, null, true);
     }
+
 }

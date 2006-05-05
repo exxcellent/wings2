@@ -59,4 +59,5 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
     protected final boolean isIE() {
         return BrowserType.IE.equals(SessionManager.getSession().getUserAgent().getBrowserType());
     }
+
 }

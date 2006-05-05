@@ -24,6 +24,7 @@ import javax.swing.InputMap;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
 import org.wings.SConstants;
+import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SPopupMenu;
 import org.wings.SResourceIcon;
@@ -72,7 +73,13 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
         // This is the containing element of a component
         // it is responsible for styles, sizing...
-        writeAllAttributes(device, component, useTable? "table" : "div");
+        if (useTable) {
+            device.print("<table"); // table
+        } else {
+            device.print("<div"); // div
+        }
+
+        writeAllAttributes(device, component);
         
         if (useTable) {
             device.print("><tr><td>"); // table
@@ -102,13 +109,12 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
     
-    protected void writeAllAttributes(Device device, SComponent component, String tagName) throws IOException {
+    protected void writeAllAttributes(Device device, SComponent component) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
         Utils.printDebugNewline(device, component);
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         
-        device.print("<").print(tagName);
         final String classname = component.getStyle();
         Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
         Utils.optAttribute(device, "id", component.getName());
@@ -287,4 +293,13 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
+    /**
+     * @param component
+     * @return
+     */
+    protected final  boolean hasDimension(SComponent component) {
+        SDimension dim = component.getPreferredSize();
+        if (dim == null) return false;
+        return (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
+    }
 }

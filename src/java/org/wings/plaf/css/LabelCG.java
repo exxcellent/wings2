@@ -50,11 +50,14 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
         final int horizontalTextPosition = label.getHorizontalTextPosition();
         final int verticalTextPosition = label.getVerticalTextPosition();
         final boolean wordWrap = label.isWordWrap();
+        
+        writeTablePrefix(device, component);
         if (icon == null && text != null) {
             writeText(device, text, wordWrap);
         }
-        else if (icon != null && text == null)
+        else if (icon != null && text == null) {
             writeIcon(device, icon);
+        }
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
@@ -65,6 +68,7 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
                 }
             }.writeCompound(device, component, horizontalTextPosition, verticalTextPosition);
         }
+        writeTableSuffix(device, component);
     }
 
     /**

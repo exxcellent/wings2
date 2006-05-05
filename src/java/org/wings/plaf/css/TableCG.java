@@ -201,7 +201,6 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             device.print("></td>");
             return;
         }
-
         Utils.printTableCellAlignment(device, component, SConstants.LEFT, SConstants.TOP);
         device.print(">");
 

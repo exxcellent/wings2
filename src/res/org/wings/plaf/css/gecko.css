@@ -133,9 +133,9 @@ IMG {
 }
 
 /* Handle Labels as inline */
-div.SLabel {
+/*div.SLabel {
     display: table;
-}
+}*/
 
 /* No vertical distance on writing down many labels. */
 .SLabel p {
