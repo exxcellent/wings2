@@ -16,6 +16,7 @@ package org.wings;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.event.SInternalFrameListener;
 import org.wings.plaf.InternalFrameCG;
+import org.wings.style.Selector;
 
 /**
  * A root container repesenting an iconifyable and minimizable internal window. 
@@ -25,7 +26,19 @@ import org.wings.plaf.InternalFrameCG;
  */
 public class SInternalFrame
         extends SRootContainer
-        implements LowLevelEventListener {
+        implements LowLevelEventListener
+{
+    /**
+     * A Pseudo selector addressing the container area of this container.
+     * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
+     */
+    public static final Selector SELECTOR_CONTENT = new Selector("content area");
+    /**
+     * A Pseudo selector addressing the title bar
+     * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
+     */
+    public static final Selector SELECTOR_TITLE = new Selector("title bar");
+
     private boolean iconifyable = true;
     private boolean maximizable = true;
     private boolean closable = true;

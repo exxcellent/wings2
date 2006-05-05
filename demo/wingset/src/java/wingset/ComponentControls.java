@@ -13,17 +13,7 @@
  */
 package wingset;
 
-import org.wings.SButton;
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDefaultListCellRenderer;
-import org.wings.SDimension;
-import org.wings.SGridBagLayout;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.STextField;
-import org.wings.SToolBar;
+import org.wings.*;
 import org.wings.border.SBevelBorder;
 import org.wings.border.SBorder;
 import org.wings.border.SEtchedBorder;
@@ -55,11 +45,11 @@ public class ComponentControls
     };
 
     protected static final Object[] COLORS = new Object[] {
-        new Object[] { "translucent", null },
-        new Object[] { "yellow",      Color.YELLOW },
-        new Object[] { "red",         Color.RED },
-        new Object[] { "green",       Color.GREEN },
-        new Object[] { "blue",        Color.BLUE },
+        new Object[] { "none",   null },
+        new Object[] { "yellow", new Color(255, 255, 200) },
+        new Object[] { "red",    new Color(255, 200, 200) },
+        new Object[] { "green",  new Color(200, 255, 200) },
+        new Object[] { "blue",   new Color(200, 200, 255) },
     };
 
     protected final List components = new LinkedList();
@@ -76,6 +66,7 @@ public class ComponentControls
 
     protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
     protected final SButton applyButton;
+    private SCheckBox showAsFormComponentCheckBox = new SCheckBox("Show as Form Component");
 
     public ComponentControls() {
         super(new SGridBagLayout());
@@ -126,11 +117,13 @@ public class ComponentControls
         globalControls.add(new SLabel("    insets "));
         globalControls.add(insetsTextField);
         globalControls.add(new SLabel("   border "));
+        globalControls.add(borderThicknessTextField);
         globalControls.add(borderStyleComboBox);
         globalControls.add(borderColorComboBox);
-        globalControls.add(borderThicknessTextField);
         globalControls.add(new SLabel("   background "));
         globalControls.add(backgroundComboBox);
+        globalControls.add(new SLabel("   "));
+        globalControls.add(showAsFormComponentCheckBox);
 
         addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -155,16 +148,17 @@ public class ComponentControls
                     border.setColor((Color)getSelectedObject(borderColorComboBox));
                     border.setInsets(new Insets(insets, insets, insets, insets));
                     border.setThickness(borderThickness);
-                    
                 }
 
                 Color background = (Color)getSelectedObject(backgroundComboBox);
+                boolean showAsFormComponent = showAsFormComponentCheckBox.isSelected();
 
                 for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                     SComponent component = (SComponent) iterator.next();
                     component.setPreferredSize(preferredSize);
                     component.setBorder(border);
                     component.setBackground(background);
+                    component.setShowAsFormComponent(showAsFormComponent);
                 }
             }
         });
@@ -179,7 +173,7 @@ public class ComponentControls
         localControls.setVisible(true);
     }
 
-    public void addSizable(SComponent component) {
+    public void addControllable(SComponent component) {
         components.add(component);
     }
 

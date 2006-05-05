@@ -60,7 +60,7 @@ public class MenuExample extends WingSetPane {
         controls = new MenuControls();
 
         menuBar = createMenuBar(HugeTreeModel.ROOT_NODE);
-        controls.addSizable(menuBar);
+        controls.addControllable(menuBar);
 
         SPanel formPanel = new SPanel();
         formPanel.setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
@@ -198,13 +198,6 @@ public class MenuExample extends WingSetPane {
 
     class MenuControls extends ComponentControls {
         public MenuControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component ");
-            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    //menu.setShowAsFormComponent(showAsFormComponent.isSelected());
-                }
-            });
-
             final SCheckBox disableSomeMenus = new SCheckBox("Disable some Menus ");
             disableSomeMenus.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -212,7 +205,6 @@ public class MenuExample extends WingSetPane {
                 }
             });
 
-            addControl(showAsFormComponent);
             addControl(disableSomeMenus);
         }
     }

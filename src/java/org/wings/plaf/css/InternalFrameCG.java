@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SInternalFrame;
+import org.wings.util.SStringBuilder;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
@@ -88,7 +89,11 @@ public class InternalFrameCG extends AbstractComponentCG implements
 
         // write the actual content
         if (!frame.isIconified()) {
-            device.print("<div class=\"WindowContent\">");
+            device.print("<div class=\"WindowContent\"");
+            SStringBuilder contentArea = Utils.inlineStyles(frame.getDynamicStyle(SInternalFrame.SELECTOR_CONTENT));
+            Utils.optAttribute(device, "style", contentArea);
+            device.print(">");
+
             Utils.renderContainer(device, frame);
             device.print("</div>");
         }
@@ -105,7 +110,12 @@ public class InternalFrameCG extends AbstractComponentCG implements
         String text = frame.getTitle();
         if (text == null)
             text = "wingS";
-        device.print("<div class=\"WindowBar\">");
+
+        device.print("<div class=\"WindowBar\"");
+        SStringBuilder titleArea = Utils.inlineStyles(frame.getDynamicStyle(SInternalFrame.SELECTOR_TITLE));
+        Utils.optAttribute(device, "style", titleArea);
+        device.print(">");
+
         if (frame.isIconified()) {
             // frame is rendered in taskbar
             if (frame.getIcon() != null) {

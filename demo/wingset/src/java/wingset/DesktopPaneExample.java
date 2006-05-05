@@ -1,23 +1,25 @@
 package wingset;
 
-import org.wings.SBoxLayout;
-import org.wings.SComponent;
-import org.wings.SDesktopPane;
-import org.wings.SIcon;
-import org.wings.SInternalFrame;
-import org.wings.SLabel;
-import org.wings.STextField;
+import org.wings.*;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyleSheet;
 import org.wings.session.SessionManager;
 import org.wings.util.SStringBuilder;
 
+import java.awt.event.ActionEvent;
+import java.awt.*;
+
 public class DesktopPaneExample extends WingSetPane {
-    
+
     private SIcon windowIcon;
 
     private static final int FRAME_COUNT = 8;
+    private ComponentControls controls;
+    private SDesktopPane desktopPane = new SDesktopPane();
 
     protected SComponent createExample() {
-        SDesktopPane desktopPane = new SDesktopPane();
+        controls = new DesktopPaneControls();
+
         windowIcon = (SIcon)SessionManager.getSession().getCGManager().getObject("TableCG.editIcon", SIcon.class);
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
@@ -37,7 +39,12 @@ public class DesktopPaneExample extends WingSetPane {
                 iFrame.getContentPane().add(new SLabel(labelText.toString()));
             }
         }
-        return desktopPane;
+
+        SForm form = new SForm(new SBorderLayout());
+        form.add(controls, SBorderLayout.NORTH);
+        form.add(desktopPane, SBorderLayout.CENTER);
+
+        return form;
     }
 
     private void fillFrame(SInternalFrame frame) {
@@ -45,4 +52,36 @@ public class DesktopPaneExample extends WingSetPane {
         frame.getContentPane().add(new SLabel("This is a label"));
     }
 
+    private class DesktopPaneControls extends ComponentControls {
+
+        public DesktopPaneControls() {
+            final SComboBox titleColor = new SComboBox(COLORS);
+            titleColor.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Color color = (Color) ((Object[]) titleColor.getSelectedItem())[1];
+                    for (int i = 0; i < desktopPane.getComponents().length; i++) {
+                        SComponent component = desktopPane.getComponents()[i];
+                        component.setAttribute(SInternalFrame.SELECTOR_TITLE, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                    }
+                }
+            });
+            titleColor.setRenderer(new ObjectPairCellRenderer());
+            addControl(new SLabel("title"));
+            addControl(titleColor);
+
+            final SComboBox contentColor = new SComboBox(COLORS);
+            contentColor.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Color color = (Color) ((Object[]) contentColor.getSelectedItem())[1];
+                    for (int i = 0; i < desktopPane.getComponents().length; i++) {
+                        SComponent component = desktopPane.getComponents()[i];
+                        component.setAttribute(SInternalFrame.SELECTOR_CONTENT, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                    }
+                }
+            });
+            contentColor.setRenderer(new ObjectPairCellRenderer());
+            addControl(new SLabel("content"));
+            addControl(contentColor);
+        }
+    }
 }

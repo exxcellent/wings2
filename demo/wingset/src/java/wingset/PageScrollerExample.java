@@ -14,7 +14,6 @@
 package wingset;
 
 import org.wings.SBorderLayout;
-import org.wings.SCheckBox;
 import org.wings.SComboBox;
 import org.wings.SComponent;
 import org.wings.SDimension;
@@ -28,7 +27,6 @@ import org.wings.util.SStringBuilder;
 
 import javax.swing.tree.TreeNode;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -65,7 +63,7 @@ public class PageScrollerExample
         scrollPane.setPreferredSize(SDimension.FULLWIDTH);
         
         controls = new PageScrollerControls();
-        controls.addSizable(scrollPane);
+        controls.addControllable(scrollPane);
 
         SForm form = new SForm(new SBorderLayout());
         form.add(controls, SBorderLayout.NORTH);
@@ -101,16 +99,6 @@ public class PageScrollerExample
 
     class PageScrollerControls extends ComponentControls {
         public PageScrollerControls() {
-        	final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-        	
-            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    boolean selected = showAsFormComponent.isSelected();
-                    scrollbar.setShowAsFormComponent(selected);
-                }
-            });
-            addControl(showAsFormComponent);
-        	
             addControl(new SLabel("Visible Rows: "));
             Object[] visRowsValues = {new Integer(4), new Integer(8), new Integer(12),
                                       new Integer(16), new Integer(20), new Integer(50)};

@@ -100,7 +100,7 @@ public class RadioButtonExample
             buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
             buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
             group.add(buttons[i]);
-            controls.addSizable(buttons[i]);
+            controls.addControllable(buttons[i]);
         }
 
         final SGridLayout grid = new SGridLayout(3);
@@ -123,17 +123,6 @@ public class RadioButtonExample
 
     class ButtonControls extends ComponentControls {
         public ButtonControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
-                        SComponent component = (SComponent) iterator.next();
-                        component.setShowAsFormComponent(showAsFormComponent.isSelected());
-                    }
-                }
-            });
-            addControl(showAsFormComponent);
-
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
             useImages.addActionListener(new java.awt.event.ActionListener() {

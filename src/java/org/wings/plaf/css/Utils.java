@@ -25,6 +25,7 @@ import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
+import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
@@ -924,5 +925,15 @@ public final class Utils {
             }
         }
         return (JavaScriptListener[]) result.toArray(new JavaScriptListener[result.size()]);
+    }
+
+    public static SStringBuilder inlineStyles(Style tabAreaStyle) {
+        if (tabAreaStyle != null) {
+            SStringBuilder tabArea = new SStringBuilder();
+            tabArea.append(tabAreaStyle.toString());
+            return tabArea;
+        }
+        else
+            return null;
     }
 }

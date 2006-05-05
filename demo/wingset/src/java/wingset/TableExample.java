@@ -13,16 +13,9 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SCheckBox;
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SForm;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SResourceIcon;
-import org.wings.STable;
+import org.wings.*;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyleSheet;
 import org.wings.event.SMouseEvent;
 import org.wings.event.SMouseListener;
 import org.wings.plaf.css.TableCG;
@@ -85,7 +78,7 @@ public class TableExample
         table.setDefaultRenderer(cellRenderer);
         table.setShowAsFormComponent(false);
         table.setEditable(false);
-        controls.addSizable(table);
+        controls.addControllable(table);
 
         table.getColumnModel().getColumn(0).setWidth("200px");
         table.getColumnModel().getColumn(1).setWidth("*");
@@ -313,13 +306,6 @@ public class TableExample
         private final String[] SELECTION_MODES = new String[]{"no", "single", "multiple"};
 
         public TableControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component   ");
-            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    table.setShowAsFormComponent(showAsFormComponent.isSelected());
-                }
-            });
-
             final SCheckBox editable = new SCheckBox("<html>Editable&nbsp;&nbsp;&nbsp;");
             editable.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -348,11 +334,43 @@ public class TableExample
                 }
             });
 
-            addControl(showAsFormComponent);
             addControl(editable);
             addControl(consume);
             addControl(new SLabel(" selection mode "));
             addControl(selectionMode);
+
+            final SComboBox headerColor = new SComboBox(COLORS);
+            headerColor.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Color color = (Color) ((Object[]) headerColor.getSelectedItem())[1];
+                    table.setAttribute(STable.SELECTOR_HEADER, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                }
+            });
+            headerColor.setRenderer(new ObjectPairCellRenderer());
+            addControl(new SLabel("  header"));
+            addControl(headerColor);
+
+            final SComboBox oddColor = new SComboBox(COLORS);
+            oddColor.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Color color = (Color) ((Object[]) oddColor.getSelectedItem())[1];
+                    table.setAttribute(STable.SELECTOR_ODD_ROWS, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                }
+            });
+            oddColor.setRenderer(new ObjectPairCellRenderer());
+            addControl(new SLabel("odd row"));
+            addControl(oddColor);
+
+            final SComboBox evenColor = new SComboBox(COLORS);
+            evenColor.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Color color = (Color) ((Object[]) evenColor.getSelectedItem())[1];
+                    table.setAttribute(STable.SELECTOR_EVEN_ROWS, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                }
+            });
+            evenColor.setRenderer(new ObjectPairCellRenderer());
+            addControl(new SLabel("even row"));
+            addControl(evenColor);
         }
     }
 }

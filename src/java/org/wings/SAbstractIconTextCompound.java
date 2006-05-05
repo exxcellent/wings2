@@ -46,7 +46,11 @@ public abstract class SAbstractIconTextCompound
     public static final int ROLLOVER_SELECTED_ICON = 5;
     public static final int PRESSED_ICON = 6;
 
-    public static final Selector SELECTOR_SELECTION = new Selector("SELECTION");
+    /**
+     * A Pseudo selector for buttons in selected state
+     * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
+     */
+    public static final Selector SELECTOR_SELECTED = new Selector("selected");
 
     private SButtonModel model;
 
@@ -359,7 +363,7 @@ public abstract class SAbstractIconTextCompound
      * @return the background color
      */
     public Color getSelectionBackground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED));
     }
 
     /**
@@ -368,7 +372,7 @@ public abstract class SAbstractIconTextCompound
      * @param color the new foreground color
      */
     public void setSelectionBackground(Color color) {
-        setAttribute(SELECTOR_SELECTION, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTED, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -377,7 +381,7 @@ public abstract class SAbstractIconTextCompound
      * @return the foreground color
      */
     public Color getSelectionForeground() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED));
     }
 
     /**
@@ -386,7 +390,7 @@ public abstract class SAbstractIconTextCompound
      * @param color the new foreground color
      */
     public void setSelectionForeground(Color color) {
-        setAttribute(SELECTOR_SELECTION, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
+        setAttribute(SELECTOR_SELECTED, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
     }
 
     /**
@@ -395,7 +399,7 @@ public abstract class SAbstractIconTextCompound
      * @param font the new font
      */
     public void setSelectionFont(SFont font) {
-        setAttributes(SELECTOR_SELECTION, CSSStyleSheet.getAttributes(font));
+        setAttributes(SELECTOR_SELECTED, CSSStyleSheet.getAttributes(font));
     }
 
     /**
@@ -404,7 +408,7 @@ public abstract class SAbstractIconTextCompound
      * @return the font
      */
     public SFont getSelectionFont() {
-        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED));
     }
 
     /**

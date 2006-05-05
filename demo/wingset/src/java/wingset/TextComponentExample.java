@@ -147,9 +147,9 @@ public class TextComponentExample extends WingSetPane {
         actionEvent.setBorder(new SLineBorder(1));
         actionEvent.setBackground(Color.LIGHT_GRAY);
 
-        controls.addSizable(textField);
-        controls.addSizable(textArea);
-        controls.addSizable(dateTextField);
+        controls.addControllable(textField);
+        controls.addControllable(textArea);
+        controls.addControllable(dateTextField);
 
         frame.add(controls, SBorderLayout.NORTH);
         frame.add(p, SBorderLayout.CENTER);

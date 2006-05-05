@@ -62,7 +62,7 @@ public class LabelExample extends WingSetPane {
         testLabel.setIcon(WAIT_ICON);
         testLabel.setForeground(Color.RED);
         testLabel.setFont(new SFont("serif", SFont.ITALIC | SFont.BOLD, 10));
-        controls.addSizable(testLabel);
+        controls.addControllable(testLabel);
 
         SPanel p = new SPanel(new SGridLayout(3));
         p.setPreferredSize(SDimension.FULLAREA);

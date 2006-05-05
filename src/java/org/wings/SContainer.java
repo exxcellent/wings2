@@ -63,13 +63,6 @@ public class SContainer extends SComponent {
     private ArrayList constraintList;
 
     /**
-     * A Pseudo selector addressing the container area of this container.
-     * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
-     */
-    public static final Selector SELECTOR_CONTENT = new Selector("area of container content");
-
-
-    /**
      * creates a new container with the given layout
      *
      * @param l the layout for this container

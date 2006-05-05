@@ -93,7 +93,7 @@ public class FileChooserExample
         p.add(createUpload(), SBorderLayout.WEST);
         p.add(createPreview(), SBorderLayout.CENTER);
 
-        controls.addSizable(chooser);
+        controls.addControllable(chooser);
         return p;
     }
 

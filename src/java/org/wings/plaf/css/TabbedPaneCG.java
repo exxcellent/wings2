@@ -76,6 +76,9 @@ public class TabbedPaneCG extends AbstractComponentCG {
         if (tabbedPane.getTabCount() > 0) {
             final int placement = tabbedPane.getTabPlacement();
 
+            SStringBuilder tabArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_TABS));
+            SStringBuilder contentArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_CONTENT));
+
             device.print("<table");
 
             Utils.optAttribute(device, "class", component.getStyle());
@@ -88,17 +91,20 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("<tr><th");
             } else if (placement == SConstants.LEFT) {
                 device.print("<tr><th");
-            } else if (placement == SConstants.RIGHT || placement == SConstants.BOTTOM) {
+            } else {
                 device.print("<tr><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
             }
 
             if (placement == SConstants.TOP) {
                 Utils.optAttribute(device, "class", "STabbedPane_top");
+                Utils.optAttribute(device, "style", tabArea);
             } else if (placement == SConstants.LEFT) {
                 Utils.optAttribute(device, "class", "STabbedPane_left");
+                Utils.optAttribute(device, "style", tabArea);
             } else {
                 Utils.optAttribute(device, "class", "STabbedPane_pane");
+                Utils.optAttribute(device, "style", contentArea);
             }
             device.print(">");
 
@@ -111,13 +117,17 @@ public class TabbedPaneCG extends AbstractComponentCG {
             if (placement == SConstants.TOP) {
                 device.print("</th></tr><tr><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
+                Utils.optAttribute(device, "style", contentArea);
             } else if (placement == SConstants.LEFT) {
                 device.print("</th><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.TOP, SConstants.LEFT);
+                Utils.optAttribute(device, "style", contentArea);
             } else if (placement == SConstants.RIGHT) {
-                device.print("</td><th placement=\"right\"");
+                device.print("</td><th");
+                Utils.optAttribute(device, "style", tabArea);
             } else if (placement == SConstants.BOTTOM) {
                 device.print("</td></tr><tr><th");
+                Utils.optAttribute(device, "style", tabArea);
             }
 
             if (placement == SConstants.RIGHT) {
@@ -156,6 +166,10 @@ public class TabbedPaneCG extends AbstractComponentCG {
         // substitute whitespaces for konqueror and ie5.0x
         final boolean nbspWorkaround = browser.getBrowserType().equals(BrowserType.KONQUEROR);
 
+        SStringBuilder selectedTab = Utils.inlineStyles(tabbedPane.getDynamicStyle(STabbedPane.SELECTOR_SELECTED_TAB));
+        SStringBuilder unselectedTab = Utils.inlineStyles(tabbedPane.getDynamicStyle(STabbedPane.SELECTOR_UNSELECTED_TAB));
+        SStringBuilder disabledTab = Utils.inlineStyles(tabbedPane.getDynamicStyle(STabbedPane.SELECTOR_DISABLED_TAB));
+
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             final SIcon icon = tabbedPane.getIconAt(i);
             final String tooltip = tabbedPane.getToolTipText();
@@ -190,6 +204,13 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 cssClassName.append(" STabbedPane_Tab_disabled");
             } else {
                 cssClassName.append(" STabbedPane_Tab_unselected");
+            }
+            if (i == tabbedPane.getSelectedIndex()) {
+                Utils.optAttribute(device, "style", selectedTab);
+            } else if (!enabledTab) {
+                Utils.optAttribute(device, "style", disabledTab);
+            } else {
+                Utils.optAttribute(device, "style", unselectedTab);
             }
             Utils.optAttribute(device, "class", cssClassName);
 

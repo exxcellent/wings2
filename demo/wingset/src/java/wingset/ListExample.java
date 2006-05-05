@@ -65,7 +65,7 @@ public class ListExample
         singleSelectionList.setSelectionMode(SList.SINGLE_SELECTION);
         addListElements(singleSelectionList);
         cont.add(singleSelectionList);
-        controls.addSizable(singleSelectionList);
+        controls.addControllable(singleSelectionList);
 
         return cont;
     }
@@ -78,7 +78,7 @@ public class ListExample
         multiSelectionList.setSelectionMode(SList.MULTIPLE_SELECTION);
         addListElements(multiSelectionList);
         cont.add(multiSelectionList);
-        controls.addSizable(multiSelectionList);
+        controls.addControllable(multiSelectionList);
 
         return cont;
     }
@@ -103,7 +103,7 @@ public class ListExample
         anchorList.setSelectionMode(SList.SINGLE_SELECTION);
         addAnchorElements(anchorList);
         cont.add(anchorList);
-        controls.addSizable(anchorList);
+        controls.addControllable(anchorList);
 
         return cont;
     }

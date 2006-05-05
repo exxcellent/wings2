@@ -86,7 +86,7 @@ public class ButtonExample extends WingSetPane {
             buttons[i].setVerticalTextPosition(textVPos[(i / 3) % 3]);
             buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
             buttons[i].setActionCommand(buttonName);
-            controls.addSizable(buttons[i]);
+            controls.addControllable(buttons[i]);
         }
 
         updateIconUsage(true);
@@ -125,15 +125,6 @@ public class ButtonExample extends WingSetPane {
     }
 
     /**
-     * Update {@link SComponent#setShowAsFormComponent(boolean)}
-     */
-    private void updateFormAppearance(boolean showAsFormComp) {
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setShowAsFormComponent(showAsFormComp);
-        }
-    }
-
-    /**
      * Update {@link SComponent#setEnabled(boolean)}
      */
     private void updateEnabled(boolean allEnabled) {
@@ -147,15 +138,6 @@ public class ButtonExample extends WingSetPane {
      */
     private class ButtonControls extends ComponentControls {
         public ButtonControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    final boolean showAsFormComp = showAsFormComponent.isSelected();
-                    updateFormAppearance(showAsFormComp);
-                }
-            });
-            addControl(showAsFormComponent);
-
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
             useImages.addActionListener(new java.awt.event.ActionListener() {

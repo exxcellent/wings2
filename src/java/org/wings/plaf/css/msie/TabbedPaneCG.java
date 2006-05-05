@@ -49,16 +49,4 @@ public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG implemen
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {}
-
-    protected Map getSelectorMapping() {
-        return msieMappings;
-    }
-
-    private static final Map msieMappings = new HashMap(5);
-    static {
-        msieMappings.put(STabbedPane.SELECTOR_SELECTED_TAB, "#compid *.STabbedPane_Tab_selected");
-        msieMappings.put(STabbedPane.SELECTOR_UNSELECTED_TAB, "#compid *.STabbedPane_Tab_unselected");
-        msieMappings.put(STabbedPane.SELECTOR_CONTENT, "#compid td.STabbedPane_pane");
-        msieMappings.put(STabbedPane.SELECTOR_TAB_AREA, "#compid table.STabbedPane th");
-    }
 }

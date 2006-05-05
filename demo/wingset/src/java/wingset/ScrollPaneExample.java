@@ -58,7 +58,7 @@ public class ScrollPaneExample
         ((SScrollBar) scrollPane.getVerticalScrollBar()).setShowAsFormComponent(false);
 
         controls = new ScrollPaneControls();
-        controls.addSizable(scrollPane);
+        controls.addControllable(scrollPane);
 
         SForm p = new SForm(new SBorderLayout());
         p.add(controls, SBorderLayout.NORTH);
@@ -75,17 +75,6 @@ public class ScrollPaneExample
     
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
-            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    boolean selected = showAsFormComponent.isSelected();
-                    table.setShowAsFormComponent(selected);
-                    ((SScrollBar)scrollPane.getHorizontalScrollBar()).setShowAsFormComponent( selected);
-                    ((SScrollBar)scrollPane.getVerticalScrollBar()).setShowAsFormComponent(selected);
-                }
-            });
-            addControl(showAsFormComponent);
-
             final SCheckBox paging = new SCheckBox("Paged Scrolling");
             paging.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {

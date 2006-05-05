@@ -195,7 +195,7 @@ import java.util.HashMap;
       * A Pseudo CSS selector addressing the selected row elements.
       * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
       */
-     public static final Selector SELECTOR_SELECTION = new Selector("SELECTION");
+     public static final Selector SELECTOR_SELECTED = new Selector("SELECTED");
 
      /**
       * A Pseudo CSS selector addressing the regular odd row elements.
@@ -208,12 +208,6 @@ import java.util.HashMap;
       * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
       */
      public static final Selector SELECTOR_EVEN_ROWS = new Selector("EVEN_ROWS");
-
-     /**
-      * A Pseudo CSS selector addressing the regular even row elements.
-      * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
-      */
-     public static final Selector SELECTOR_NUMBERING_COLUMN = new Selector("NUMBERING_COLUMN");
 
      /**
       * The last low level event values this table received.
@@ -1107,7 +1101,7 @@ import java.util.HashMap;
       * @return the background color
       */
      public Color getSelectionBackground() {
-         return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+         return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED));
      }
 
      /**
@@ -1116,7 +1110,7 @@ import java.util.HashMap;
       * @param color the new foreground color
       */
      public void setSelectionBackground(Color color) {
-         setAttribute(SELECTOR_SELECTION, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+         setAttribute(SELECTOR_SELECTED, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
      }
 
      /**
@@ -1125,7 +1119,7 @@ import java.util.HashMap;
       * @return the foreground color
       */
      public Color getSelectionForeground() {
-         return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+         return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED));
      }
 
      /**
@@ -1134,7 +1128,7 @@ import java.util.HashMap;
       * @param color the new foreground color
       */
      public void setSelectionForeground(Color color) {
-         setAttribute(SELECTOR_SELECTION, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
+         setAttribute(SELECTOR_SELECTED, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
      }
 
      /**
@@ -1143,7 +1137,7 @@ import java.util.HashMap;
       * @param font the new font
       */
      public void setSelectionFont(SFont font) {
-         setAttributes(SELECTOR_SELECTION, CSSStyleSheet.getAttributes(font));
+         setAttributes(SELECTOR_SELECTED, CSSStyleSheet.getAttributes(font));
      }
 
      /**
@@ -1152,7 +1146,7 @@ import java.util.HashMap;
       * @return the font
       */
      public SFont getSelectionFont() {
-         return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTION) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTION));
+         return dynamicStyles == null || dynamicStyles.get(SELECTOR_SELECTED) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_SELECTED));
      }
 
      /**

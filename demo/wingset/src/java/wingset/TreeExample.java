@@ -26,7 +26,6 @@ import org.wings.SResourceIcon;
 import org.wings.STree;
 import org.wings.event.SMouseEvent;
 import org.wings.event.SMouseListener;
-import org.wings.style.CSSProperty;
 import org.wings.util.PropertyAccessor;
 
 import javax.swing.tree.DefaultTreeModel;
@@ -67,7 +66,7 @@ public class TreeExample
             }
         });
 
-        controls.addSizable(tree);
+        controls.addControllable(tree);
 
         SForm panel = new SForm(new SBorderLayout());
         panel.add(controls, SBorderLayout.NORTH);
@@ -81,14 +80,6 @@ public class TreeExample
         private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
 
         public TreeControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.setAttribute(CSSProperty.MARGIN_RIGHT, "1.5em");
-            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    tree.setShowAsFormComponent(showAsFormComponent.isSelected());
-                }
-            });
-
             final SCheckBox consume = new SCheckBox("<html>Consume events on leaves&nbsp;&nbsp;&nbsp;");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the tree anymore");
@@ -149,7 +140,6 @@ public class TreeExample
                 }
             });
 
-            addControl(showAsFormComponent);
             addControl(consume);
             addControl(new SLabel(" selection mode "));
             addControl(selectionMode);

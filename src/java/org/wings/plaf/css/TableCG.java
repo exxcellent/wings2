@@ -16,14 +16,7 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.SCellRendererPane;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SListSelectionModel;
-import org.wings.STable;
+import org.wings.*;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
@@ -323,7 +316,10 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
         * render the header
         */
         if (table.isHeaderVisible()) {
-            device.print("<thead><tr class=\"header\">");
+            SStringBuilder headerArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_HEADER));
+            device.print("<thead><tr class=\"header\"");
+            Utils.optAttribute(device, "style", headerArea);
+            device.print(">");
             Utils.printNewline(device, table);
 
             if (needsSelectionRow)
@@ -336,16 +332,25 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             device.print("</tr></thead>\n");
         }
 
+        SStringBuilder selectedArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_SELECTED));
+        SStringBuilder evenArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_EVEN_ROWS));
+        SStringBuilder oddArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_ODD_ROWS));
+
         device.print("<tbody>\n");
         for (int r = startRow; r < endRow; r++) {
             SStringBuilder rowClass = new SStringBuilder(table.getRowStyle(r) != null ? table.getRowStyle(r)+" " : "");
             device.print("<tr");
             if (selectionModel.isSelectedIndex(r)){
+                Utils.optAttribute(device, "style", selectedArea);
                 if(childSelectorWorkaround)
                     rowClass.append("selected ");
                 else
                     device.print(" selected=\"true\"");
             }
+            else if (r % 2 != 0)
+                Utils.optAttribute(device, "style", oddArea);
+            else
+                Utils.optAttribute(device, "style", evenArea);
 
             rowClass.append(r % 2 != 0 ? "odd" : "even");
             Utils.optAttribute(device, "class", rowClass);

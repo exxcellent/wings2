@@ -16,7 +16,6 @@ package wingset;
 
 import org.wings.SBorderLayout;
 import org.wings.SButton;
-import org.wings.SCheckBox;
 import org.wings.SComboBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
@@ -76,7 +75,7 @@ public class TabbedPaneExample extends WingSetPane {
                 logText.setText(logText.getText() + "Changed to tab: " + tabbedPane.getSelectedIndex() + "\n");
             }
         });
-        controls.addSizable(tabbedPane);
+        controls.addControllable(tabbedPane);
 
         final SForm form = new SForm(new SBorderLayout());
         form.add(controls, SBorderLayout.NORTH);
@@ -102,14 +101,6 @@ public class TabbedPaneExample extends WingSetPane {
         private int tabCount = INITIAL_TAB_COUNT;
 
         public TabbedPaneControls() {
-            final SCheckBox showAsFormComponent = new SCheckBox("Show as Form Component");
-            showAsFormComponent.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    tabbedPane.setShowAsFormComponent(showAsFormComponent.isSelected());
-                }
-            });
-            addControl(showAsFormComponent);
-
             final SComboBox placement = new SComboBox(TAB_PLACEMENTS);
             placement.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -119,31 +110,51 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             placement.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("<html>&nbsp;&nbsp;tab placement"));
+            addControl(new SLabel("tab placement"));
             addControl(placement);
 
-            final SComboBox tabColor = new SComboBox(COLORS);
-            tabColor.addActionListener(new java.awt.event.ActionListener() {
+            final SComboBox unselectedTabColor = new SComboBox(COLORS);
+            unselectedTabColor.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    Object[] objects = (Object[]) tabColor.getSelectedItem();
-                    Color color = (Color) objects[1];
+                    Color color = (Color) ((Object[]) unselectedTabColor.getSelectedItem())[1];
                     tabbedPane.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
                 }
             });
-            tabColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("tab color"));
-            addControl(tabColor);
+            unselectedTabColor.setRenderer(new ObjectPairCellRenderer());
+            addControl(new SLabel("unselected tab"));
+            addControl(unselectedTabColor);
+
+            final SComboBox selectedTabColor = new SComboBox(COLORS);
+            selectedTabColor.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Color color = (Color) ((Object[]) selectedTabColor.getSelectedItem())[1];
+                    tabbedPane.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                }
+            });
+            selectedTabColor.setRenderer(new ObjectPairCellRenderer());
+            addControl(new SLabel("selected tab"));
+            addControl(selectedTabColor);
+
+            final SComboBox disabledTabColor = new SComboBox(COLORS);
+            disabledTabColor.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Color color = (Color) ((Object[]) disabledTabColor.getSelectedItem())[1];
+                    tabbedPane.setAttribute(STabbedPane.SELECTOR_DISABLED_TAB, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+                }
+            });
+            disabledTabColor.setRenderer(new ObjectPairCellRenderer());
+            addControl(new SLabel("disabled tab"));
+            addControl(disabledTabColor);
 
             final SComboBox contentColor = new SComboBox(COLORS);
             contentColor.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    Object[] objects = (Object[]) contentColor.getSelectedItem();
-                    Color color = (Color) objects[1];
+                    Color color = (Color) ((Object[]) contentColor.getSelectedItem())[1];
                     tabbedPane.setAttribute(STabbedPane.SELECTOR_CONTENT, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
                 }
             });
             contentColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("content color"));
+            addControl(new SLabel("content"));
             addControl(contentColor);
 
             final SButton addTab = new SButton("add new tab");
