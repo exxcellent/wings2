@@ -39,7 +39,7 @@ public class ButtonCG extends AbstractLabelCG implements SParentFrameListener {
      */
     private static final long serialVersionUID = -1794530181411426283L;
 
-    public void write(final Device device, final SComponent component) throws IOException {
+    public void writeInternal(final Device device, final SComponent component) throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
         Utils.printButtonStart(device, button, button.getToggleSelectionParameter());

@@ -135,7 +135,7 @@ public class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.Co
 
 
 
-    public void write(final Device device, final SComponent _c) throws IOException {
+    public void writeInternal(final Device device, final SComponent _c) throws IOException {
         final SComboBox component = (SComboBox) _c;
 
         final SComboBox comboBox = (SComboBox) component;

@@ -29,7 +29,7 @@ public class TextAreaCG extends AbstractComponentCG implements
      */
     private static final long serialVersionUID = 1L;
 
-    public void write(final Device device,
+    public void writeInternal(final Device device,
                       final SComponent _c)
             throws IOException {
         final STextArea component = (STextArea) _c;

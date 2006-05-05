@@ -42,7 +42,7 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
         ((SLabel)component).setWordWrap(wordWrapDefault);
     }
 
-    public void write(final Device device, final SComponent component)
+    public void writeInternal(final Device device, final SComponent component)
             throws IOException {
         final SLabel label = (SLabel) component;
         final String text = label.getText();

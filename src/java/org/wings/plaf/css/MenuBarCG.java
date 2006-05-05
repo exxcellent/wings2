@@ -83,7 +83,7 @@ public class MenuBarCG extends AbstractComponentCG implements
     /* (non-Javadoc)
      * @see org.wings.plaf.css.AbstractComponentCG#writeContent(org.wings.io.Device, org.wings.SComponent)
      */
-    public void write(final Device device, final SComponent component) throws IOException {
+    public void writeInternal(final Device device, final SComponent component) throws IOException {
 
         final SMenuBar mbar = (SMenuBar) component;
         final int mcount = mbar.getComponentCount();

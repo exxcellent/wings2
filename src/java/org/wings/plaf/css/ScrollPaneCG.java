@@ -27,7 +27,7 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
 
     private static final long serialVersionUID = 1L;
 
-    public void write(Device device, SComponent component) throws IOException {
+    public void writeInternal(Device device, SComponent component) throws IOException {
         SScrollPane scrollPane = (SScrollPane) component;
         Scrollable scrollable = scrollPane.getScrollable();
         SScrollPaneLayout layout = (SScrollPaneLayout) scrollPane.getLayout();

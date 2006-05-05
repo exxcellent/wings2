@@ -177,7 +177,7 @@ public class ListCG extends AbstractComponentCG implements
         device.print(">");
     }
 
-    public void write(final Device device,
+    public void writeInternal(final Device device,
                       final SComponent _c)
             throws IOException {
         final SList component = (SList) _c;

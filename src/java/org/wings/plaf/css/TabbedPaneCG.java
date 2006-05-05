@@ -70,7 +70,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
         tab.setActionMap(actionMap);
     }
 
-    public void write(final Device device, final SComponent component)
+    public void writeInternal(final Device device, final SComponent component)
             throws java.io.IOException {
         final STabbedPane tabbedPane = (STabbedPane) component;
         if (tabbedPane.getTabCount() > 0) {

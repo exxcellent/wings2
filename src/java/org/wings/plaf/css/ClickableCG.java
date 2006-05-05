@@ -27,7 +27,7 @@ public class ClickableCG extends AbstractLabelCG implements org.wings.plaf.Butto
      */
     private static final long serialVersionUID = 1L;
 
-    public void write(final Device device, final SComponent component)
+    public void writeInternal(final Device device, final SComponent component)
             throws IOException {
         final SClickable button = (SClickable) component;
 

@@ -54,7 +54,7 @@ public class ProgressBarCG extends AbstractComponentCG implements  org.wings.pla
         }
     }
 
-    public void write(final Device device, final SComponent pComp) throws IOException {
+    public void writeInternal(final Device device, final SComponent pComp) throws IOException {
         final SProgressBar component = (SProgressBar) pComp;
 
         /* FIXME: The problem here is that the component size is used as the

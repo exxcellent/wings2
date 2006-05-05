@@ -59,7 +59,7 @@ public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
         return false;
     }
     
-    public void write(final Device device, final SComponent component)
+    public void writeInternal(final Device device, final SComponent component)
             throws IOException {
         final SMenuItem menuItem = (SMenuItem) component;
         writeItemContent(device, menuItem);

@@ -12,7 +12,7 @@ public class RawTextComponentCG extends AbstractComponentCG {
      */
     private static final long serialVersionUID = 1L;
 
-    public void write(final Device device, final SComponent component)
+    public void writeInternal(final Device device, final SComponent component)
             throws IOException {
         SRawTextComponent _c = (SRawTextComponent) component;
         device.print(_c.getText());

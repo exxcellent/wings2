@@ -34,7 +34,7 @@ public class DesktopPaneCG extends AbstractComponentCG implements
         component.setPreferredSize(SDimension.FULLWIDTH);
     }
 
-    public void write(final Device device, final SComponent _c)
+    public void writeInternal(final Device device, final SComponent _c)
             throws IOException
     {
         final SDesktopPane component = (SDesktopPane) _c;

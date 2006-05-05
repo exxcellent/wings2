@@ -163,7 +163,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
         addr.write(d);
     }
 
-    public void write(final Device device, final SComponent _c)
+    public void writeInternal(final Device device, final SComponent _c)
             throws IOException {
         SPopupMenu menu = (SPopupMenu) _c;
         writePopup(device, menu);

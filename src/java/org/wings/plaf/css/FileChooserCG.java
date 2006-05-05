@@ -28,7 +28,7 @@ public class FileChooserCG extends AbstractComponentCG implements
      */
     private static final long serialVersionUID = 1L;
 
-    public void write(final Device device,
+    public void writeInternal(final Device device,
                       final SComponent _c)
             throws IOException {
         final SFileChooser component = (SFileChooser) _c;

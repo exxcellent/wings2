@@ -171,7 +171,7 @@ public class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         return menu.getParentMenu() == null;
     }
 
-    public void write(final Device device, final SComponent _c)
+    public void writeInternal(final Device device, final SComponent _c)
         throws IOException {
         SMenu menu = (SMenu) _c;
         if (menu.getClientProperty("popup") == null)

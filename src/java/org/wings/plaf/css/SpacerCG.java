@@ -26,7 +26,7 @@ public class SpacerCG extends AbstractComponentCG implements org.wings.plaf.Spac
      */
     private static final long serialVersionUID = 1L;
 
-    public void write(final Device device, final SComponent c) throws IOException {
+    public void writeInternal(final Device device, final SComponent c) throws IOException {
         final SSpacer component = (SSpacer) c;
         int height = component.getPreferredSize().getHeightInt();
         int width = component.getPreferredSize().getWidthInt();
