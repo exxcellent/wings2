@@ -38,15 +38,15 @@ A:link, A:visited, A:active {
 
 /* ----------- STable even/odd and selected line coloring */
 
-table.STable > tbody > tr[even="true"] {
+table.STable > tbody > tr.even {
     background-color: #efefef;
 }
 
-table.STable > tbody > tr[odd="true"] {
+table.STable > tbody > tr.odd {
     background-color: #e5e5e5;
 }
 
-table.STable > tbody > tr[selected="true"] td {
+table.STable > tbody > tr.selected td {
     background-color: #ffbbbb;
 }
 

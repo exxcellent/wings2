@@ -47,7 +47,6 @@ public class SGridLayout extends SAbstractLayoutManager {
      * creates a new grid layout with 1 row and 1 column extent
      */
     public SGridLayout() {
-        this.setPreferredSize(SDimension.FULLAREA);
     }
 
     /**
