@@ -28,7 +28,6 @@ import org.wings.Resource;
 import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
-import org.wings.plaf.css.CGDecorator;
 import org.wings.resource.ClasspathResource;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;

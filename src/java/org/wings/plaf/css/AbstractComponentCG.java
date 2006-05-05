@@ -13,6 +13,7 @@
  */
 package org.wings.plaf.css;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Iterator;
@@ -20,11 +21,19 @@ import java.util.ArrayList;
 
 import javax.swing.InputMap;
 
+import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
+import org.wings.SPopupMenu;
 import org.wings.SResourceIcon;
 import org.wings.script.ScriptListener;
+import org.wings.style.Style;
+import org.wings.util.SStringBuilder;
+import org.wings.border.SBorder;
+import org.wings.border.STitledBorder;
+import org.wings.dnd.DragSource;
+import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.css.dwr.CallableManager;
 
@@ -41,6 +50,120 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     private static SIcon BLIND_ICON;
 
     protected AbstractComponentCG() {
+    }
+
+    protected void writeTablePrefix(Device device, SComponent component) throws IOException {
+        final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
+
+        Utils.printDebugNewline(device, component);
+        Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
+
+        //------------------------ OUTER DIV
+
+        // This is the containing DIV element of a component
+        // it is responsible for styles, sizing...
+        device.print("<table");
+        final String classname = component.getStyle();
+        Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
+        Utils.optAttribute(device, "id", component.getName());
+
+        Utils.optAttribute(device, "style", getInlineStyles(component));
+
+        if (component instanceof LowLevelEventListener) {
+            Utils.optAttribute(device, "eid", component.getEncodedLowLevelEventId());
+        }
+
+        // Tooltip handling
+        writeTooltipMouseOver(device, component);
+
+        // Component popup menu
+        writeContextMenu(device, component);
+
+        device.print("><tr><td>"); // div
+
+        // Special handling: Render title of STitledBorder
+        if (isTitleBorder) {
+            STitledBorder titledBorder = (STitledBorder) component.getBorder();
+            device.print("<div class=\"STitledBorderLegend\">");
+            device.print(titledBorder.getTitle());
+            device.print("</div>");
+        }
+
+        component.fireRenderEvent(SComponent.START_RENDERING);
+    }
+
+    public void writeTableSuffix(Device device, SComponent component) throws IOException {
+        component.fireRenderEvent(SComponent.DONE_RENDERING);
+        writeInlineScripts(device, component);
+        device.print("</td></tr></table>");
+        Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
+    }
+
+    protected String getInlineStyles(SComponent component) {
+        // write inline styles
+        final SStringBuilder builder = new SStringBuilder();
+
+        if (component instanceof DragSource)
+            builder.append("position:relative;");
+
+        Utils.appendCSSInlineSize(builder, component.getPreferredSize());
+
+        final Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
+        if (allStyle != null)
+            builder.append(allStyle.toString());
+
+        final SBorder border = component.getBorder();
+        if (border != null && border.getAttributes() != null)
+            builder.append(border.getAttributes().toString());
+
+        return builder.toString();
+    }
+
+    protected void writeInlineScripts(Device device, SComponent component) throws IOException {
+        boolean scriptTagOpen = false;
+        for (int i = 0; i < component.getScriptListeners().length; i++) {
+            ScriptListener scriptListener = component.getScriptListeners()[i];
+            String script = scriptListener.getScript();
+            if (script != null) {
+                if (!scriptTagOpen) {
+                    device.print("<script type=\"text/javascript\">");
+                    scriptTagOpen = true;
+                }
+                device.print(script);
+            }
+        }
+        if (scriptTagOpen)
+            device.print("</script>");
+    }
+
+    /**
+     * Write JS code for context menus. Common implementaton for MSIE and gecko.
+     */
+    protected static void writeContextMenu(Device device, SComponent component) throws IOException {
+        final SPopupMenu menu = component.getComponentPopupMenu();
+        if (menu != null) {
+            final String componentId = menu.getName();
+            final String popupId = componentId + "_pop";
+            device.print(" onContextMenu=\"return wpm_menuPopup(event, '");
+            device.print(popupId);
+            device.print("');\" onMouseDown=\"return wpm_menuPopup(event, '");
+            device.print(popupId);
+            device.print("');\"");
+        }
+    }
+
+    /**
+     * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
+     */
+    protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
+        final String toolTipText = component.getToolTipText();
+        if (toolTipText != null) {
+            device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
+            // javascript needs even more & special quoting
+            // FIXME: do this more efficiently
+            Utils.quote(device, toolTipText.replaceAll("\'","\\\\'"), true, true, true);
+            device.print("', 'predefined', 'default'));\"");
+        }
     }
 
     /**
@@ -63,6 +186,16 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      * @param component the component
      */
     public void uninstallCG(SComponent component) {
+    }
+
+    public boolean wantsPrefixAndSuffix(SComponent component) {
+        return true;
+    }
+    
+    protected final SIcon getBlindIcon() {
+        if (BLIND_ICON == null)
+            BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
+        return BLIND_ICON;
     }
 
     public void componentChanged(SComponent component) {
@@ -127,13 +260,4 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
-    public boolean wantsPrefixAndSuffix(SComponent component) {
-        return true;
-    }
-
-    protected final SIcon getBlindIcon() {
-        if (BLIND_ICON == null)
-            BLIND_ICON = new SResourceIcon("org/wings/icons/blind.gif");
-        return BLIND_ICON;
-    }
 }

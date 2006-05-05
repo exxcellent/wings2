@@ -14,7 +14,6 @@
 package org.wings.plaf;
 
 import org.wings.SComponent;
-import org.wings.style.Selector;
 import org.wings.io.Device;
 
 import java.io.IOException;

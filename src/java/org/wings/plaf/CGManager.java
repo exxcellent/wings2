@@ -71,27 +71,27 @@ public class CGManager implements Serializable {
         ComponentCG componentCG = (ComponentCG) getDefaults().get(target.getClass(), ComponentCG.class);
         if (componentCG == null)
             return null;
-        CGDecorator cgDecorator = getCGDecorator();
-        if (cgDecorator != null) {
-            cgDecorator.setDelegate(componentCG);
-            return cgDecorator;
-        }
-        else
-            return componentCG;
+//        CGDecorator cgDecorator = getCGDecorator();
+//        if (cgDecorator != null) {
+//            cgDecorator.setDelegate(componentCG);
+//            return cgDecorator;
+//        }
+//        else
+        return componentCG;
     }
 
-    private CGDecorator getCGDecorator() {
-        CGDecorator cgDecorator;
-        try {
-            Class cgDecoratorClass = (Class) getDefaults().get("AbstractComponentCG.PrefixAndSuffixDecorator", Class.class);
-            cgDecorator = (CGDecorator) cgDecoratorClass.newInstance();
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return cgDecorator;
-    }
-
+//    private CGDecorator getCGDecorator() {
+//        CGDecorator cgDecorator;
+//        try {
+//            Class cgDecoratorClass = (Class) getDefaults().get("AbstractComponentCG.PrefixAndSuffixDecorator", Class.class);
+//            cgDecorator = (CGDecorator) cgDecoratorClass.newInstance();
+//        }
+//        catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//        return cgDecorator;
+//    }
+//
     /**
      * Get a ComponentCG from the defaults table.
      * If the there's no value associated to the <code>target</code>'s cgClassID, the request
