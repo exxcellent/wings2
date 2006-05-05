@@ -53,6 +53,22 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     protected void writeTablePrefix(Device device, SComponent component) throws IOException {
+        writePrefix(device, component, true);
+    }
+    
+    protected void writeTableSuffix(Device device, SComponent component) throws IOException {
+        writeSuffix(device, component, true);
+    }
+    
+    protected void writeDivPrefix(Device device, SComponent component) throws IOException {
+        writePrefix(device, component, false);
+    }
+    
+    protected void writeDivSuffix(Device device, SComponent component) throws IOException {
+        writeSuffix(device, component, false);
+    }
+    
+    private void writePrefix(Device device, SComponent component, boolean useTable) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
         Utils.printDebugNewline(device, component);
@@ -62,7 +78,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         // This is the containing DIV element of a component
         // it is responsible for styles, sizing...
-        device.print("<table");
+        if (useTable) {
+            device.print("<table");
+        } else {
+            device.print("<div");
+        }
         final String classname = component.getStyle();
         Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
         Utils.optAttribute(device, "id", component.getName());
@@ -79,7 +99,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         // Component popup menu
         writeContextMenu(device, component);
 
-        device.print("><tr><td>"); // div
+        if (useTable) {
+            device.print("><tr><td>"); // table
+        } else {
+            device.print(">"); // div
+        }
 
         // Special handling: Render title of STitledBorder
         if (isTitleBorder) {
@@ -92,10 +116,14 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         component.fireRenderEvent(SComponent.START_RENDERING);
     }
 
-    public void writeTableSuffix(Device device, SComponent component) throws IOException {
+    private void writeSuffix(Device device, SComponent component, boolean useTable) throws IOException {
         component.fireRenderEvent(SComponent.DONE_RENDERING);
+        if (useTable) {
+            device.print("</td></tr></table>");
+        } else {
+            device.print("</div>");
+        }
         writeInlineScripts(device, component);
-        device.print("</td></tr></table>");
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 
