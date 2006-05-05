@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
+import org.wings.border.SLineBorder;
 import org.wings.plaf.OptionPaneCG;
 import org.wings.resource.ResourceManager;
 import org.wings.session.SessionManager;
@@ -388,21 +389,16 @@ public class SOptionPane extends SDialog implements ActionListener {
 
     private final void initPanel() {
         setHorizontalAlignment(SConstants.CENTER);
-        optionButtons.setAttribute(CSSProperty.BORDER_TOP, "1px solid #cccccc");
-        optionButtons.setAttribute(CSSProperty.PADDING_TOP, "6px");
+        SBorder border = new SLineBorder(new Color(0xCC, 0xCC, 0xCC), 0);
+        border.setThickness(1,SConstants.TOP);
+        border.setInsets(new Insets(6,0,0,0));
+        setBorder(border);
         ((SFlowLayout)optionButtons.getLayout()).setHgap(8);
         optionButtons.add(optionOK, "OK");
         optionButtons.add(optionYes, "YES");
         optionButtons.add(optionCancel, "CANCEL");
         optionButtons.add(optionNo, "NO");
 
-        /*    images.add(messageLabel);
-              messageLabel.setToolTipText("info");
-              images.add(questionLabel);
-              questionLabel.setToolTipText("question");
-              images.add(yesnoLabel);
-              yesnoLabel.setToolTipText("question");
-        */
         images.add(imageLabel);
         imageLabel.setToolTipText(null);
 

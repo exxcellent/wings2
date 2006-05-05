@@ -22,10 +22,13 @@ import org.wings.SLabel;
 import org.wings.STemplateLayout;
 import org.wings.STextArea;
 import org.wings.SToolBar;
+import org.wings.border.SBorder;
+import org.wings.border.SLineBorder;
 import org.wings.style.CSSProperty;
 import org.wings.template.StringTemplateSource;
 import org.wings.util.SStringBuilder;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -95,7 +98,9 @@ public class InteractiveTemplateExample
 
     class Controls extends SToolBar {
         public Controls() {
-            setAttribute(CSSProperty.BORDER_BOTTOM, "1px solid #cccccc");
+            SBorder border = new SLineBorder(new Color(0xCC, 0xCC, 0xCC), 0);
+            border.setThickness(1, SConstants.TOP);
+            setBorder(border);
             SButton resetButton = new SButton("Reset");
             resetButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {

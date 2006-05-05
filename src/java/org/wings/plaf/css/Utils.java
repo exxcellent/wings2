@@ -401,7 +401,12 @@ public final class Utils {
      */
     public static void printCSSInlineFullSize(Device device, SDimension preferredSize) throws IOException {
         if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO)) {
-            device.print(" style=\"width:100%;height:100%\"");
+            // opera doesn't show height 100% when parent has no defined height
+            if (preferredSize.getHeight() != SDimension.AUTO) {
+                device.print(" style=\"width:100%;height:100%\"");
+            } else {
+                device.print(" style=\"width:100%\"");
+            }
         }
     }
 

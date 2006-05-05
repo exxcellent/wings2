@@ -242,14 +242,29 @@ public class CSSProperty implements Serializable {
 
     public final static CSSProperty OVERFLOW = new CSSProperty("overflow");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty PADDING = new CSSProperty("padding");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty PADDING_BOTTOM = new CSSProperty("padding-bottom");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty PADDING_LEFT = new CSSProperty("padding-left");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty PADDING_RIGHT = new CSSProperty("padding-right");
 
+    /**
+     * @deprecated use SBorder instead
+     */
     public final static CSSProperty PADDING_TOP = new CSSProperty("padding-top");
 
     // only for paged output mediums, we don't need it at the moment
@@ -313,7 +328,9 @@ public class CSSProperty implements Serializable {
             CSSProperty.BORDER_LEFT, CSSProperty.BORDER_LEFT_COLOR, CSSProperty.BORDER_LEFT_STYLE,
             CSSProperty.BORDER_LEFT_WIDTH, CSSProperty.BORDER_RIGHT, CSSProperty.BORDER_RIGHT_COLOR,
             CSSProperty.BORDER_RIGHT_STYLE, CSSProperty.BORDER_RIGHT_WIDTH, CSSProperty.BORDER_TOP,
-            CSSProperty.BORDER_TOP_COLOR, CSSProperty.BORDER_TOP_STYLE, CSSProperty.BORDER_TOP_WIDTH, })));
+            CSSProperty.BORDER_TOP_COLOR, CSSProperty.BORDER_TOP_STYLE, CSSProperty.BORDER_TOP_WIDTH,
+            CSSProperty.PADDING, CSSProperty.PADDING_TOP, CSSProperty.PADDING_RIGHT,
+            CSSProperty.PADDING_BOTTOM, CSSProperty.PADDING_LEFT})));
 
     private final String name;
 

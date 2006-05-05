@@ -181,8 +181,13 @@ public abstract class SAbstractBorder
             BorderSpec bottom = specs[SConstants.BOTTOM];
 
             if (top.thickness == left.thickness && left.thickness == right.thickness && right.thickness == bottom.thickness
-                    && top.style.equals(left.style) && left.style.equals(right.style) && right.style.equals(bottom.style)
-                    && top.color.equals(left.color) && left.color.equals(right.color) && right.color.equals(bottom.color))
+                    && top.style != null && top.style.equals(left.style)
+                    && left.style != null && left.style.equals(right.style)
+                    && right.style != null && right.style.equals(bottom.style)
+                    && ((top.color != null && top.color.equals(left.color)
+                    && left.color != null && left.color.equals(right.color)
+                    && right.color != null && right.color.equals(bottom.color))
+                    || (top.color == null && right.color == null && left.color == null && bottom.color == null)))
             {
                 attributes.put(CSSProperty.BORDER, top.thickness + "px " + top.style + " " + (top.color != null ? CSSStyleSheet.getAttribute(top.color) : ""));
             }
@@ -209,4 +214,5 @@ public abstract class SAbstractBorder
         public String style;
         public Color color;
     }
+
 }
