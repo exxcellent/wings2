@@ -277,8 +277,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
          *
          * THis workaround tries to deliver the HTML code of a table at once. This should resolve this issue to 99%.
          */
-        final boolean innerTable = _device instanceof CachingDevice;
-        final CachingDevice device = innerTable ? (CachingDevice) _device : new CachingDevice(_device);
+        final boolean newCachingDevice = !(_device instanceof CachingDevice);
+        final CachingDevice device = newCachingDevice ? new CachingDevice(_device) : (CachingDevice) _device ;
 
         try {
             device.print("<table");
@@ -381,7 +381,8 @@ public class TableCG extends AbstractComponentCG implements org.wings.plaf.Table
             device.print("</table>");
         } finally {
             /* Refer to description above. */
-            device.flush();
+            if (newCachingDevice)
+                device.close();
             //device = null;
         }
     }
