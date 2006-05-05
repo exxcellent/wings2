@@ -70,35 +70,10 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     
     private void writePrefix(Device device, SComponent component, boolean useTable) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
-
-        Utils.printDebugNewline(device, component);
-        Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
-
-        //------------------------ OUTER DIV
-
-        // This is the containing DIV element of a component
+        // This is the containing element of a component
         // it is responsible for styles, sizing...
-        if (useTable) {
-            device.print("<table");
-        } else {
-            device.print("<div");
-        }
-        final String classname = component.getStyle();
-        Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
-        Utils.optAttribute(device, "id", component.getName());
-
-        Utils.optAttribute(device, "style", getInlineStyles(component));
-
-        if (component instanceof LowLevelEventListener) {
-            Utils.optAttribute(device, "eid", component.getEncodedLowLevelEventId());
-        }
-
-        // Tooltip handling
-        writeTooltipMouseOver(device, component);
-
-        // Component popup menu
-        writeContextMenu(device, component);
-
+        writeAllAttributes(device, component, useTable? "table" : "div");
+        
         if (useTable) {
             device.print("><tr><td>"); // table
         } else {
@@ -125,6 +100,29 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
         writeInlineScripts(device, component);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
+    }
+    
+    protected void writeAllAttributes(Device device, SComponent component, String tagName) throws IOException {
+        final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
+
+        Utils.printDebugNewline(device, component);
+        Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
+        
+        final String classname = component.getStyle();
+        Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
+        Utils.optAttribute(device, "id", component.getName());
+
+        Utils.optAttribute(device, "style", getInlineStyles(component));
+
+        if (component instanceof LowLevelEventListener) {
+            Utils.optAttribute(device, "eid", component.getEncodedLowLevelEventId());
+        }
+
+        // Tooltip handling
+        writeTooltipMouseOver(device, component);
+
+        // Component popup menu
+        writeContextMenu(device, component);
     }
 
     protected String getInlineStyles(SComponent component) {
