@@ -59,19 +59,19 @@ public final class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
             if (frame.isMaximizable() && !frame.isMaximized() && getMaximizeIcon() != null) {
                 device.print("<td>");
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, getMaximizeIcon(), BUTTONICON_CLASSNAME);
+                        SInternalFrameEvent.INTERNAL_FRAME_MAXIMIZED, getMaximizeIcon());
                 device.print("</td>");
             }
             if (frame.isIconifyable() && getIconifyIcon() != null) {
                 device.print("<td>");
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, getIconifyIcon(), BUTTONICON_CLASSNAME);
+                        SInternalFrameEvent.INTERNAL_FRAME_ICONIFIED, getIconifyIcon());
                 device.print("</td>");
             }
             if (frame.isClosable() && getCloseIcon() != null) {
                 device.print("<td>");
                 writeWindowIcon(device, frame,
-                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon(), BUTTONICON_CLASSNAME);
+                        SInternalFrameEvent.INTERNAL_FRAME_CLOSED, getCloseIcon());
                 device.print("</td>");
             }
             device.print("<td>&nbsp;&nbsp;</td></tr></table>");

@@ -686,13 +686,13 @@ div.SInternalFrame > div.WindowBar > div.WindowBar_title {
     white-space:pre;
 }
 
-div.SInternalFrame > div.WindowBar  a.WindowButton,
-div.SInternalFrame > div.WindowBar  button.WindowButton {
+div.SInternalFrame > div.WindowBar  a.formbutton {
     float: right;
 }
 
 div.SInternalFrame > div.WindowBar > a.DeiconifyButton {
     display: inline;
+    float:none;
 }
 
 div.SInternalFrame > div.WindowContent {

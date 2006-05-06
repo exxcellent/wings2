@@ -16,6 +16,8 @@ package wingset;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SGridLayout;
 import org.wings.SLabel;
@@ -56,7 +58,8 @@ public class JavaScriptListenerExample
             = new DecimalFormatSymbols(Locale.US); // '.' as fraction separator
 
     public SComponent createExample() {
-        SPanel p = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        SPanel p = new SPanel(new SBoxLayout(SConstants.VERTICAL));
+        p.setPreferredSize(SDimension.FULLWIDTH);
         p.add(new SLabel("The client side can handle simple events by JavaScript listeners. In this example, numbers are added locally."));
 
         final STextField firstField = createNumberField();

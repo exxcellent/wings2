@@ -66,13 +66,15 @@ public class InternalFrameCG extends AbstractComponentCG implements
 
     protected void writeWindowIcon(Device device, SInternalFrame frame,
             int event, SIcon icon, String cssClass) throws IOException {
-        // RequestURL addr = frame.getRequestURL();
-        // addr.addParameter(MSIEUtils.event(frame), event);
-
-        Utils.printButtonStart(device, frame, Integer.toString(event), true, frame.getShowAsFormComponent());
+        Utils.printButtonStart(device, frame, Integer.toString(event), true, frame.getShowAsFormComponent(), cssClass);
         device.print(">");
         writeIcon(device, icon, null);
         Utils.printButtonEnd(device,frame,Integer.toString(event),true  );
+    }
+
+    protected void writeWindowIcon(Device device, SInternalFrame frame,
+            int event, SIcon icon) throws IOException {
+        writeWindowIcon(device, frame, event, icon, null);
     }
 
 

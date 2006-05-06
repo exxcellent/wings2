@@ -13,6 +13,18 @@
  */
 package org.wings.plaf.css;
 
+import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
@@ -25,30 +37,21 @@ import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
-import org.wings.session.SessionManager;
-import org.wings.session.BrowserType;
-import org.wings.style.Style;
-import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
+import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.List;
-import java.awt.*;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
+import org.wings.style.Style;
+import org.wings.util.SStringBuilder;
 
 /**
- * MSIEUtils.java
+ * Utils.java
+ * 
+ * Helper class that collects static methods usable from CGs.
  *
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  * @version $Revision$
@@ -62,8 +65,9 @@ public final class Utils {
     /**
      * Print debug information in generated HTML
      */
-    public static boolean PRINT_DEBUG = true;
-
+    public static boolean PRINT_DEBUG = ( (Boolean) ResourceManager.getObject("SComponents.printDebug", Boolean.class)).booleanValue();  
+    public static boolean PRINT_PRETTY = ( (Boolean) ResourceManager.getObject("SComponents.printPretty", Boolean.class)).booleanValue();  
+        
     protected final static char[] hexDigits = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'a', 'b',
@@ -742,7 +746,12 @@ public final class Utils {
      * Prints a hierarchical idented newline. For each surrounding container of the passed component one ident level.
      */
     public static Device printNewline(final Device d, SComponent currentComponent) throws IOException {
-        if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
+        // special we save every ms handling for holger ;-)
+        /* (OL) I took out the test for PRINT_DEBUG, since
+         * sometimes we just need newlines (example tabbedPane)
+         * I hope Holger doesn't need that microsecond ;)
+         */ 
+        if (currentComponent == null)
             return d;
         d.print("\n");
         while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
@@ -759,9 +768,11 @@ public final class Utils {
         if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
             return d;
         d.print("\n");
-        while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
-            d.print("\t");
-            currentComponent = currentComponent.getParent();
+        if (PRINT_PRETTY) {
+            while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
+                d.print("\t");
+                currentComponent = currentComponent.getParent();
+            }
         }
         while (offset > 0) {
             d.print("\t");
@@ -879,8 +890,20 @@ public final class Utils {
         printButtonStart(device, eventTarget, eventValue, eventTarget.isEnabled(), eventTarget.getShowAsFormComponent());
     }
 
+    /**
+     * @param device
+     * @param eventTarget
+     * @param eventValue
+     * @param b
+     * @param showAsFormComponent
+     * @throws IOException 
+     */
+    public static void printButtonStart(Device device, SComponent eventTarget, String eventValue, boolean b, boolean showAsFormComponent) throws IOException {
+        printButtonStart(device, eventTarget, eventValue, b, showAsFormComponent, null);
+    }
+
     public static void printButtonStart(final Device device, final SComponent eventTarget, final String eventValue,
-                                        final boolean enabled, final boolean formComponent) throws IOException {
+                                        final boolean enabled, final boolean formComponent, String cssClassName) throws IOException {
         if (formComponent) {
             if (!enabled) {
                 device.print("<span");
@@ -894,12 +917,12 @@ public final class Utils {
                 device.print(applyOnClickListeners(eventTarget));
                 device.print(")\"");
                 Utils.writeEvents(device, eventTarget, new String[] { JavaScriptEvent.ON_CLICK } );
-                Utils.optAttribute(device, "class", "formbutton");
+                Utils.optAttribute(device, "class", cssClassName != null ? "formbutton " + cssClassName : "formbutton");
             }
         } else {
             if (!enabled) {
                 device.print("<span");
-                Utils.optAttribute(device, "class", "disabled_button");
+                Utils.optAttribute(device, "class", cssClassName != null ? "disabled_button " + cssClassName : "disabled_button");
             } else {
                 final RequestURL requestURL = eventTarget.getRequestURL();
                 if (eventValue != null) {

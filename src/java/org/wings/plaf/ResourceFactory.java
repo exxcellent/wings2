@@ -86,6 +86,8 @@ public class ResourceFactory
             return makeColor(property);
         else if (type.isAssignableFrom(SDimension.class))
             return makeDimension(property);
+        else if (type.isAssignableFrom(Boolean.class))
+            return makeBoolean(property);
         else if (type.isAssignableFrom(Class.class))
             return makeClass(property);
         else
@@ -159,7 +161,7 @@ public class ResourceFactory
 
     /**
      * Utility method that creates an Icon from a resource
-     * located realtive to the given base class. Uses the ClassLoader
+     * located relative to the given base class. Uses the ClassLoader
      * of the LookAndFeel
      *
      * @param fileName of the image file
@@ -167,6 +169,17 @@ public class ResourceFactory
      */
     public static SIcon makeIcon(String fileName) {
         return new SResourceIcon(fileName);
+    }
+
+    /**
+     * Utility method that creates a Boolean from a String
+     * Uses the ClassLoader of the LookAndFeel.
+     *
+     * @param bool The Boolean as String 
+     * @return a newly allocated Icon
+     */
+    public static Boolean makeBoolean(String bool) {
+        return Boolean.valueOf(bool);
     }
 
     /**
