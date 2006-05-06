@@ -13,17 +13,7 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SButtonGroup;
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SForm;
-import org.wings.SRadioButton;
-import org.wings.SScrollBar;
-import org.wings.SScrollPane;
-import org.wings.SScrollPaneLayout;
-import org.wings.STable;
-import org.wings.STree;
+import org.wings.*;
 
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
@@ -102,6 +92,7 @@ public class ScrollPaneExample
                 }
                 
             });
+            addControl(new SLabel(""));
             addControl(tableButton);
             addControl(treeButton);
         }

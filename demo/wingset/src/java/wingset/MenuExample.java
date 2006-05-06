@@ -204,7 +204,6 @@ public class MenuExample extends WingSetPane {
                     setMenuItemsEnabled(!disableSomeMenus.isSelected());
                 }
             });
-
             addControl(disableSomeMenus);
         }
     }

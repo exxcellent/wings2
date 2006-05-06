@@ -260,7 +260,7 @@ public class FileChooserExample
             });
             comboBox.setSelectedItem(new Integer(getSession().getMaxContentLength()));
 
-            addControl(new SLabel("Maximum Content Length [kB]: "));
+            addControl(new SLabel(" Maximum Content Length [kB]"));
             addControl(comboBox);
         }
     }

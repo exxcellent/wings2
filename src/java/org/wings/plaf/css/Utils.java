@@ -896,7 +896,7 @@ public final class Utils {
                 device.print(Utils.event(eventTarget));
                 device.print("'");
                 device.print(applyOnClickListeners(eventTarget));
-                device.print(")\" ");
+                device.print(")\"");
                 Utils.writeEvents(device, eventTarget, new String[] { JavaScriptEvent.ON_CLICK } );
                 Utils.optAttribute(device, "class", "formbutton");
             }
@@ -916,6 +916,7 @@ public final class Utils {
                 if (isMSIE()) {
                     device.print(" onclick=\"followLink('").print(requestURL.toString());
                     device.print(applyOnClickListeners(eventTarget));
+                    device.print(")\"");
                     writeEvents(device, eventTarget, EXCLUDE_ON_CLICK);
                 } else {
                     writeEvents(device, eventTarget, null);

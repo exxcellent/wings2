@@ -153,6 +153,7 @@ public class ButtonExample extends WingSetPane {
                     updateEnabled(!disableSomeButtons.isSelected());
                 }
             });
+            addControl(new SLabel(""));
             addControl(disableSomeButtons);
         }
 

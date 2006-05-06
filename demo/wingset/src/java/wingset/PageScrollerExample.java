@@ -97,7 +97,7 @@ public class PageScrollerExample
 
     class PageScrollerControls extends ComponentControls {
         public PageScrollerControls() {
-            addControl(new SLabel("Visible Rows: "));
+            addControl(new SLabel(" Visible Rows"));
             Integer[] visRowsValues = {new Integer(4), new Integer(10), new Integer(12),
                                       new Integer(16), new Integer(20), new Integer(50)};
             final SComboBox visRows = new SComboBox(visRowsValues);
@@ -110,7 +110,7 @@ public class PageScrollerExample
             visRows.setSelectedItem(visRowsValues[2]);
             addControl(visRows);
 
-            addControl(new SLabel("Direct Pages: "));
+            addControl(new SLabel(" Direct Pages"));
             Object[] values = {new Integer(5), new Integer(10), new Integer(15),
                                new Integer(20), new Integer(50)};
             final SComboBox comboBox = new SComboBox(values);
@@ -123,7 +123,7 @@ public class PageScrollerExample
             addControl(comboBox);
 
 
-            addControl(new SLabel("Layout: "));
+            addControl(new SLabel(" Layout"));
             final Object[] constraints = {"Top", "Left", "Bottom", "Right"};
             final SComboBox layout = new SComboBox(constraints);
             layout.addItemListener(new ItemListener() {

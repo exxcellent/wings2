@@ -66,7 +66,7 @@ public class DesktopPaneExample extends WingSetPane {
                 }
             });
             titleColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("title"));
+            addControl(new SLabel(" title"));
             addControl(titleColor);
 
             final SComboBox contentColor = new SComboBox(COLORS);
@@ -80,7 +80,7 @@ public class DesktopPaneExample extends WingSetPane {
                 }
             });
             contentColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("content"));
+            addControl(new SLabel(" content"));
             addControl(contentColor);
         }
     }

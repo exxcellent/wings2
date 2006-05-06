@@ -70,7 +70,7 @@ public class ComponentControls
 
     public ComponentControls() {
         super(new SGridBagLayout());
-        setPreferredSize(SDimension.AUTOAREA);
+        setPreferredSize(SDimension.FULLWIDTH);
         SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);
         setBorder(border);
@@ -85,16 +85,16 @@ public class ComponentControls
         border.setThickness(1, SConstants.LEFT);
         globalControls.setBorder(border);
         globalControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        ((SBoxLayout)globalControls.getLayout()).setHgap(2);
-        ((SBoxLayout)globalControls.getLayout()).setVgap(2);
+        ((SBoxLayout)globalControls.getLayout()).setHgap(6);
+        ((SBoxLayout)globalControls.getLayout()).setVgap(4);
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
         border.setThickness(1, SConstants.TOP);
         localControls.setBorder(border);
         localControls.setVisible(false);
         localControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        ((SBoxLayout)localControls.getLayout()).setHgap(2);
-        ((SBoxLayout)localControls.getLayout()).setVgap(2);
+        ((SBoxLayout)localControls.getLayout()).setHgap(6);
+        ((SBoxLayout)localControls.getLayout()).setVgap(4);
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;
@@ -110,26 +110,26 @@ public class ComponentControls
         heightTextField.setColumns(5);
         heightTextField.setToolTipText("length with unit (200px)");
         insetsTextField.setColumns(2);
-        insetsTextField.setToolTipText("length only");
+        insetsTextField.setToolTipText("length only (8)");
         borderThicknessTextField.setColumns(2);
-        borderThicknessTextField.setToolTipText("length only");
+        borderThicknessTextField.setToolTipText("length only (2)");
         borderStyleComboBox.setRenderer(new ObjectPairCellRenderer());
         borderColorComboBox.setRenderer(new ObjectPairCellRenderer());
         backgroundComboBox.setRenderer(new ObjectPairCellRenderer());
 
-        globalControls.add(new SLabel("width "));
+        globalControls.add(new SLabel("width"));
         globalControls.add(widthTextField);
-        globalControls.add(new SLabel("   height "));
+        globalControls.add(new SLabel(" height"));
         globalControls.add(heightTextField);
-        globalControls.add(new SLabel("    insets "));
+        globalControls.add(new SLabel(" insets"));
         globalControls.add(insetsTextField);
-        globalControls.add(new SLabel("   border "));
+        globalControls.add(new SLabel(" border"));
         globalControls.add(borderThicknessTextField);
         globalControls.add(borderStyleComboBox);
         globalControls.add(borderColorComboBox);
-        globalControls.add(new SLabel("   background "));
+        globalControls.add(new SLabel(" background"));
         globalControls.add(backgroundComboBox);
-        globalControls.add(new SLabel("   "));
+        globalControls.add(new SLabel(""));
         globalControls.add(showAsFormComponentCheckBox);
 
         addActionListener(new java.awt.event.ActionListener() {
@@ -180,8 +180,6 @@ public class ComponentControls
     }
 
     public void addControl(SComponent component) {
-        if (localControls.getComponentCount() > 0)
-            localControls.add(new SLabel(" | ")); //spacer
         localControls.add(component);
         localControls.setVisible(true);
     }

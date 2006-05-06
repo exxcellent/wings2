@@ -21,7 +21,6 @@ import org.wings.SContainer;
 import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SForm;
-import org.wings.SGridBagLayout;
 import org.wings.SGridLayout;
 import org.wings.SIcon;
 import org.wings.SLabel;
@@ -65,18 +64,20 @@ public class LabelExample extends WingSetPane {
         testLabel.setFont(new SFont("serif", SFont.ITALIC | SFont.BOLD, 10));
         controls.addControllable(testLabel);
 
-        SPanel p = new SPanel(new SGridLayout());
-        p.setPreferredSize(SDimension.FULLAREA);
-        p.add(new SLabel("Control the label's text position"));
-        p.add(new SSpacer(100,1));
-        p.add(new SLabel("Result"));
-        p.add(createRoundRadio(testLabel));
-        p.add(new SLabel());
-        p.add(testLabel);
+        SGridLayout layout = new SGridLayout(3);
+        layout.setRenderFirstLineAsHeader(true);
+        SPanel panel = new SPanel(layout);
+        //panel.setPreferredSize(SDimension.FULLAREA);
+        panel.add(new SLabel("Control the label's text position"));
+        panel.add(new SSpacer(100,1));
+        panel.add(new SLabel("Result"));
+        panel.add(createRoundRadio(testLabel));
+        panel.add(new SLabel());
+        panel.add(testLabel);
 
         SForm form = new SForm(new SBorderLayout());
         form.add(controls, SBorderLayout.NORTH);
-        form.add(p, SBorderLayout.CENTER);
+        form.add(panel, SBorderLayout.CENTER);
 
         return form;
     }

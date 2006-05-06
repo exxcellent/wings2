@@ -105,6 +105,8 @@ public class TableExample
 
 
     static class MyCellRenderer extends SDefaultTableCellRenderer {
+        private static final SFont MONOSPACE = new SFont("monospace", SFont.PLAIN, SFont.DEFAULT_SIZE);
+
         public MyCellRenderer() {
             setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));
         }
@@ -115,10 +117,14 @@ public class TableExample
                                                         int row,
                                                         int col) {
             setHorizontalAlignment(SConstants.LEFT);
+            setIcon(null);
+            setForeground(null);
+
             if (value instanceof Color) {
                 Color c = (Color) value;
-                setText("<html><span style=\"color:" + colorToHex(c) + "\">" + colorToHex(c) + "</span>");
-                setIcon(null);
+                setText(colorToHex(c));
+                setFont(MONOSPACE);
+                setForeground(c);
                 return this;
             }
             else if (value instanceof Boolean && row != -1) {
@@ -306,14 +312,14 @@ public class TableExample
         private final String[] SELECTION_MODES = new String[]{"no", "single", "multiple"};
 
         public TableControls() {
-            final SCheckBox editable = new SCheckBox("<html>Editable&nbsp;&nbsp;&nbsp;");
+            final SCheckBox editable = new SCheckBox("editable");
             editable.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     table.setEditable(editable.isSelected());
                 }
             });
 
-            final SCheckBox consume = new SCheckBox("Consume events on 2nd col   ");
+            final SCheckBox consume = new SCheckBox("Consume events on 2nd col");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the table anymore");
             consume.addActionListener(new java.awt.event.ActionListener() {
@@ -335,8 +341,9 @@ public class TableExample
             });
 
             addControl(editable);
+            addControl(new SLabel(""));
             addControl(consume);
-            addControl(new SLabel(" selection mode "));
+            addControl(new SLabel(" selection mode"));
             addControl(selectionMode);
 
             final SComboBox headerColor = new SComboBox(COLORS);
@@ -347,7 +354,7 @@ public class TableExample
                 }
             });
             headerColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("  header"));
+            addControl(new SLabel(" header"));
             addControl(headerColor);
 
             final SComboBox oddColor = new SComboBox(COLORS);
@@ -358,7 +365,7 @@ public class TableExample
                 }
             });
             oddColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("odd row"));
+            addControl(new SLabel(" odd row"));
             addControl(oddColor);
 
             final SComboBox evenColor = new SComboBox(COLORS);
@@ -369,7 +376,7 @@ public class TableExample
                 }
             });
             evenColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("even row"));
+            addControl(new SLabel(" even row"));
             addControl(evenColor);
         }
     }

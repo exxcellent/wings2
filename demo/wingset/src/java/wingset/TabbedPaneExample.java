@@ -110,7 +110,7 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             placement.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("tab placement"));
+            addControl(new SLabel(" tab placement"));
             addControl(placement);
 
             final SComboBox unselectedTabColor = new SComboBox(COLORS);
@@ -121,7 +121,7 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             unselectedTabColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("unselected tab"));
+            addControl(new SLabel(" unselected tab"));
             addControl(unselectedTabColor);
 
             final SComboBox selectedTabColor = new SComboBox(COLORS);
@@ -132,7 +132,7 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             selectedTabColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("selected tab"));
+            addControl(new SLabel(" selected tab"));
             addControl(selectedTabColor);
 
             final SComboBox disabledTabColor = new SComboBox(COLORS);
@@ -143,7 +143,7 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             disabledTabColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("disabled tab"));
+            addControl(new SLabel(" disabled tab"));
             addControl(disabledTabColor);
 
             final SComboBox contentColor = new SComboBox(COLORS);
@@ -154,7 +154,7 @@ public class TabbedPaneExample extends WingSetPane {
                 }
             });
             contentColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel("content"));
+            addControl(new SLabel(" content"));
             addControl(contentColor);
 
             final SButton addTab = new SButton("add new tab");

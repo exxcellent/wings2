@@ -80,7 +80,7 @@ public class TreeExample
         private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
 
         public TreeControls() {
-            final SCheckBox consume = new SCheckBox("<html>Consume events on leaves&nbsp;&nbsp;&nbsp;");
+            final SCheckBox consume = new SCheckBox("Consume events on leaves");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the tree anymore");
             consume.addActionListener(new java.awt.event.ActionListener() {
@@ -141,11 +141,11 @@ public class TreeExample
             });
 
             addControl(consume);
-            addControl(new SLabel(" selection mode "));
+            addControl(new SLabel(" selection mode"));
             addControl(selectionMode);
-            addControl(new SLabel(" indentation width "));
+            addControl(new SLabel(" indentation width"));
             addControl(indentationWidth);
-            addControl(new SLabel(" folding icons "));
+            addControl(new SLabel(" folding icons"));
             addControl(plusButton);
             addControl(arrowButton);
         }

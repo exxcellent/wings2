@@ -24,7 +24,6 @@ import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SListSelectionModel;
 import org.wings.STable;
-import org.wings.io.CachingDevice;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
@@ -194,8 +193,9 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
 
         final boolean contentContainsClickables = !(component instanceof SLabel);
 
-        device.print("<td");
-        Utils.optAttribute(device, "col", col);
+        device.print("<td class=\"cell\" col=\"");
+        device.print(col);
+        device.print("\"");
 
         if (component == null) {
             device.print("></td>");
@@ -246,12 +246,15 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
 
     protected void writeHeaderCell(final Device device, final STable table,
                                    final SCellRendererPane rendererPane,
-                                   final int c)
+                                   final int col)
             throws IOException {
 
-        final SComponent comp = table.prepareHeaderRenderer(c);
+        final SComponent comp = table.prepareHeaderRenderer(col);
 
-        device.print("<th");
+        device.print("<th class=\"cell\" col=\"");
+        device.print(col);
+        device.print("\"");
+
         Utils.printTableCellAlignment(device, comp, SConstants.CENTER, SConstants.CENTER);
         device.print(">");
         rendererPane.writeComponent(device, comp, table);

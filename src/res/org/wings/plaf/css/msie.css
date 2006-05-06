@@ -51,6 +51,18 @@ table, td, th {
     line-height: inherit;*/
 }
 
+span {
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-variant: inherit;
+    font-weight: inherit;
+    text-decoration: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;*/
+}
+
 td, th {
     padding: inherit;
     margin: inherit;
@@ -98,22 +110,6 @@ table.SButton SPAN.disabled_formbutton:active {
    border: 1px outset #ddd;
    cursor: default;
 }
-
-/* most of the containers should expand to 100% width of the surrounding component.
-   we definitely need this if we want to keep the table based containers for IE */
-/*
-TODO: delete after transition to div
-
-table.SPanel,
-table.SToolBar,
-table.STable,
-table.STextArea,
-table.STabbedPane,
-table.SMenuBar,
-table.SForm {
-    width: 100%;
-}
-*/
 
 /* SFlowLayout can't flow if the immediate inner children has defined 100% width.
    Some wingS component inheritly define 100% width i.e. like SForm.
@@ -202,9 +198,10 @@ PageScroller as non-form-component
 }
 
 /* No vertical distance on writing down many labels. */
-.SLabel p {
-    margin-top:0px;
-    margin-bottom:0px;
+table.SLabel {
+    border: none;
+    padding: 0px;
+    margin: 0px;
 }
 
 .STextField {
@@ -314,39 +311,23 @@ ul.STree li div.SSubTree {
 	background-position: 0px 100px;
 }
 
-.STable {
-   border-style: solid;
-   border-width: 1px;
-   border-color: black;
-   text-decoration: none;
-   font-family: sans-serif;
-   font-weight: normal;
-   font-style: normal;
-   color: #000000;
-}
-
 table.STable {
+    text-decoration: none;
+    font-family: sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
     width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
 }
 
-table.STable thead tr th {
+table.STable th.cell,
+table.STable td.cell
+{
     border: 1px solid black;
     padding-left: 8px;
     padding-right: 8px;
-}
-
-table.STable tbody tr td {
-    padding-left: 8px;
-    padding-right: 8px;
-    border-left: 1px solid black;
-}
-
-table.STable tbody tr td {
-    padding-left: 0px;
-    padding-right: 0px;
-    border-left: 0px solid black;
 }
 
 /* let the link span the whole table */
@@ -359,9 +340,16 @@ table.STable tbody tr td.numbering {
     text-align: right;
 }
 
-.tableheader {
-   font-weight: bold;
-   background-color: #dedede;
+table.STable tbody tr.odd {
+    background-color: #e5e5e5;
+}
+
+table.STable tbody tr.even {
+    background-color: #efefef;
+}
+
+table.STable tbody tr.selected {
+    background-color: #ffbbbb !important;
 }
 
 .SAnchor {
