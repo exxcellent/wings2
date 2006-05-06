@@ -16,8 +16,6 @@ package wingset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.SBorderLayout;
-import org.wings.SButton;
 import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.SIcon;
@@ -25,16 +23,18 @@ import org.wings.SResourceIcon;
 import org.wings.SRootLayout;
 import org.wings.STabbedPane;
 import org.wings.SURLIcon;
+import org.wings.SButton;
+import org.wings.SBorderLayout;
 import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.BrowserType;
 import org.wings.style.CSSProperty;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.net.URL;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * The root of the WingSet demo application.
@@ -63,7 +63,7 @@ public class WingSet implements Serializable {
 
     /**
      * Optional external custom CSS stylesheet to style your application according to your needs.
-      */
+     */
     private Link customStyleSheetLink;
 
     static {
@@ -79,9 +79,11 @@ public class WingSet implements Serializable {
 
     private final STabbedPane tab;
 
+    private boolean customStyleApplied;
+
     /**
      * Constructor of the wingS application.
-     *
+     * <p/>
      * <p>This class is referenced in the <code>web.xml</code> as root entry point for the wingS application.
      * For every new client an new {@link org.wings.session.Session} is created which constructs a new instance of this class.
      */
@@ -129,8 +131,23 @@ public class WingSet implements Serializable {
         tab.add(new ErrorPageExample(), "Error Page");
         tab.add(new TableNestingExample(), "Limited table nesting (DEVEL)");
         tab.add(new ListBugTest(), "BUG TODO: In IE List does not appear");
+
         // Add component to content pane using a layout constraint (
         frame.getContentPane().add(tab);
+
+        SButton switchStyleButton = new SButton("Toggle WingSet styling");
+        switchStyleButton.setShowAsFormComponent(false);
+        switchStyleButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (customStyleApplied)
+                    unstyleWingsetApp();
+                else
+                    styleWingsetApp();
+            }
+        });
+        switchStyleButton.setBorder(new SEmptyBorder(5, 0, 5, 0));
+        frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
+
         frame.show();
     }
 
@@ -158,17 +175,6 @@ public class WingSet implements Serializable {
         }
         frame.addHeader(customStyleSheetLink);
 
-        SButton switchStyleButton = new SButton("Toggle WingSet styling");
-        switchStyleButton.setShowAsFormComponent(false);
-        switchStyleButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (frame.removeHeader(customStyleSheetLink) == false)
-                    frame.addHeader(customStyleSheetLink);
-            }
-        });
-        switchStyleButton.setBorder(new SEmptyBorder(5,0,5,0));
-        frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
-
         // 3) Programatically set/Overwrite CSS properties on specific components (here global frame).
         //    Remember: It's cleaner to do such global definitions in your external css file vs. in th java code.
         frame.setAttribute(CSSProperty.MARGIN, "8px !important");
@@ -184,6 +190,21 @@ public class WingSet implements Serializable {
         //  Set a background image on selected and unselected tabs (gradient grey image or orange image):
         tab.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, STANDARD_TAB_BACKGROUND);
         tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, SELECTED_TAB_BACKGROUND);
+
+        customStyleApplied = true;
+    }
+
+    /**
+     * Revert styling done in {@link #styleWingsetApp()}
+     */
+    private void unstyleWingsetApp() {
+        frame.setLayout(new SRootLayout());
+        frame.removeHeader(customStyleSheetLink);
+        frame.setAttribute(CSSProperty.MARGIN, null);
+        tab.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, (SIcon) null);
+        tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, (SIcon) null);
+
+        customStyleApplied = false;
     }
 
 

@@ -48,10 +48,10 @@ public class ComponentControls
 
     protected static final Object[] COLORS = new Object[] {
         new Object[] { "none",   null },
-        new Object[] { "yellow", Color.yellow },
-        new Object[] { "red",    Color.red },
-        new Object[] { "green",  Color.green },
-        new Object[] { "blue",   Color.blue },
+        new Object[] { "yellow", new Color(255, 255, 200) },
+        new Object[] { "red",    new Color(255, 200, 200) },
+        new Object[] { "green",  new Color(200, 255, 200) },
+        new Object[] { "blue",   new Color(200, 200, 255) },
     };
 
     protected static final Object[] FONTS = new Object[] {
