@@ -13,15 +13,21 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
-import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
-import org.wings.util.SStringBuilder;
-
-import java.awt.*;
+import java.awt.Insets;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+
+import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SGridBagLayout;
+import org.wings.SGridLayout;
+import org.wings.SLayoutManager;
+import org.wings.io.Device;
+import org.wings.plaf.LayoutCG;
+import org.wings.util.SStringBuilder;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.

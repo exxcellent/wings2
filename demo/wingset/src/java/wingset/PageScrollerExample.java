@@ -106,8 +106,8 @@ public class PageScrollerExample
                     list.setVisibleRowCount(((Integer) visRows.getSelectedItem()).intValue());
                 }
             });
-            list.setVisibleRowCount(visRowsValues[2].intValue());
-            visRows.setSelectedItem(visRowsValues[2]);
+            list.setVisibleRowCount(visRowsValues[1].intValue());
+            visRows.setSelectedItem(visRowsValues[1]);
             addControl(visRows);
 
             addControl(new SLabel(" Direct Pages"));

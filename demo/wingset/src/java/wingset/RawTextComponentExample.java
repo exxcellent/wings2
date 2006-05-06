@@ -1,6 +1,9 @@
 package wingset;
 
+import org.wings.SBoxLayout;
 import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SRawTextComponent;
@@ -10,6 +13,7 @@ public class RawTextComponentExample extends WingSetPane {
 
     protected SComponent createExample() {
         final SPanel examplePanel = new SPanel();
+        examplePanel.setPreferredSize(SDimension.FULLWIDTH);
         try {
             java.net.URL templateURL =
                     getSession().getServletContext().getResource("/templates/RawTextComponentExample.thtml");

@@ -36,8 +36,9 @@ public final class EditTranscriptGenerator {
     /**
      * The exact calculation of document events is very memory and cpu intesive.
      * For texts beeing longer than this limit we use a dumb approximation.
+     * (OL) turning this off until we actually can do something useful with it.
      */
-    private static final int MAX_LENGTH_FOR_TRANSCRIPT_GENERATION = 200;
+    private static final int MAX_LENGTH_FOR_TRANSCRIPT_GENERATION = 0;
 
 
     /**
@@ -48,10 +49,11 @@ public final class EditTranscriptGenerator {
      *         or {@link javax.swing.event.DocumentEvent.EventType#REMOVE} with correct sourceIndexes and lengths.
      */
     public static List generateEvents(String source, String target) {
-        if (((source == null) || source.length() < MAX_LENGTH_FOR_TRANSCRIPT_GENERATION) &&
-                ((target == null) || target.length() < MAX_LENGTH_FOR_TRANSCRIPT_GENERATION))
-            return calculateEventsByStringDistance(source, target);
-        else
+        /* turning off complex handling until we need it */
+//        if (((source == null) || source.length() < MAX_LENGTH_FOR_TRANSCRIPT_GENERATION) &&
+//                ((target == null) || target.length() < MAX_LENGTH_FOR_TRANSCRIPT_GENERATION))
+//            return calculateEventsByStringDistance(source, target);
+//        else
             return calculateEventsByDumbApproximation(source, target);
     }
 
