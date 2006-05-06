@@ -82,28 +82,64 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                             device.print("px\">");
                             first(device, renderTextFirst);
                             device.print("</td><td></td></tr>");
-                            device.print("<tr><td></td><td align=\"right\" valign=\"bottom\">");
+                            device.print("<tr><td></td><td align=\"right\" valign=\"bottom\" style=\"padding-right:");
+                            device.print(insets.right);
+                            device.print("px; padding-bottom:");
+                            device.print(insets.bottom);
+                            device.print("px\">");
                             last(device, renderTextFirst);
                             device.print("</td></tr>");
                         } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.RIGHT ||
                             verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.LEFT) {
-                            device.print("<tr><td></td><td align=\"right\" valign=\"top\">");
+                            device.print("<tr><td></td><td align=\"right\" valign=\"top\" style=\"padding-right:");
+                            device.print(insets.right);
+                            device.print("px; padding-top:");
+                            device.print(insets.top);
+                            device.print("px\">");
                             first(device, renderTextFirst);
-                            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\">");
+                            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\" style=\"padding-left:");
+                            device.print(insets.left);
+                            device.print("px; padding-bottom:");
+                            device.print(insets.bottom);
+                            device.print("px\">");
                             last(device, renderTextFirst);
                             device.print("</td><td></td></tr>");
                         } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.CENTER ||
                             verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.CENTER) {
-                            device.print("<tr><td align=\"center\" valign=\"top\">");
+                            device.print("<tr><td align=\"center\" valign=\"top\" style=\"padding-top:");
+                            device.print(insets.top);
+                            device.print("px; padding-left:");
+                            device.print(insets.left);
+                            device.print("px; padding-right:");
+                            device.print(insets.right);
+                            device.print("px\">");
                             first(device, renderTextFirst);
-                            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\">");
+                            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\" style=\"padding-bottom:");
+                            device.print(insets.bottom);
+                            device.print("px; padding-left:");
+                            device.print(insets.left);
+                            device.print("px; padding-right:");
+                            device.print(insets.right);
+                            device.print("px\">");
                             last(device, renderTextFirst);
                             device.print("</td></tr>");
                         } else if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT ||
                             verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.RIGHT) {
-                            device.print("<tr><td align=\"left\">");
+                            device.print("<tr><td align=\"left\" style=\"padding-left:");
+                            device.print(insets.left);
+                            device.print("px; padding-top:");
+                            device.print(insets.top);
+                            device.print("px; padding-bottom:");
+                            device.print(insets.bottom);
+                            device.print("px\">");
                             first(device, renderTextFirst);
-                            device.print("</td><td align=\"right\">");
+                            device.print("</td><td align=\"right\" style=\"padding-right:");
+                            device.print(insets.right);
+                            device.print("px; padding-top:");
+                            device.print(insets.top);
+                            device.print("px; padding-bottom:");
+                            device.print(insets.bottom);
+                            device.print("px\">");
                             last(device, renderTextFirst);
                             device.print("</td></tr>");
                         } else {
