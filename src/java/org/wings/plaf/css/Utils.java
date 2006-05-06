@@ -25,6 +25,8 @@ import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
+import org.wings.session.SessionManager;
+import org.wings.session.BrowserType;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
@@ -78,9 +80,8 @@ public final class Utils {
     /**
      * Renders a container using its Layout manager or fallback just one after another.
      */
-    public static void renderContainer(Device d, SContainer c)
-            throws IOException {
-        SLayoutManager layout = c.getLayout();
+    public static void renderContainer(Device d, SContainer c) throws IOException {
+        final SLayoutManager layout = c.getLayout();
 
         if (layout == null) {
             d.print("<tbody><tr><td>");
@@ -89,7 +90,6 @@ public final class Utils {
                 c.getComponent(i).write(d);
             }
             d.print("</td></tr></tbody>");
-            return;
         } else {
             layout.write(d);
         }
@@ -97,11 +97,11 @@ public final class Utils {
 
     /**
      * Render event listeners attached to the passed component exlucding types of supressed listeners
-     * @param d output device
+     * @param device output device
      * @param c component to retrieve listeners from
      * @param suppressScriptListenerTypes Array of String i.e. <code>new String[] { JavaScriptEvent.ON_CLICK } )</code>
      */
-    public static void writeEvents(Device d, SComponent c, String[] suppressScriptListenerTypes)
+    public static void writeEvents(final Device device, final SComponent c, final String[] suppressScriptListenerTypes)
             throws IOException {
         List types = new ArrayList();
         if (suppressScriptListenerTypes != null && suppressScriptListenerTypes.length > 0) {
@@ -138,13 +138,9 @@ public final class Utils {
 
             Iterator it = eventScripts.keySet().iterator();
             while (it.hasNext()) {
-                String event = (String) it.next();
-                String code = (String) eventScripts.get(event);
-                d.print(" ");
-                d.print(event);
-                d.print("=\"");
-                d.print(code);
-                d.print("\"");
+                final String event = (String) it.next();
+                final String code = (String) eventScripts.get(event);
+                Utils.optAttribute(device, event, code);
             }
         }
     }
@@ -898,7 +894,7 @@ public final class Utils {
                 device.print(eventValue == null ? "" : eventValue);
                 device.print("','");
                 device.print(Utils.event(eventTarget));
-                device.print("'");
+                device.print("',");
                 device.print(applyOnClickListeners(eventTarget));
                 device.print(")\" ");
                 Utils.writeEvents(device, eventTarget, new String[] { JavaScriptEvent.ON_CLICK } );
@@ -915,8 +911,15 @@ public final class Utils {
                 }
                 device.print("<a href=\"");
                 device.print(requestURL.toString());
-                device.print("\" ");
-                writeEvents(device, eventTarget, null);
+                device.print("\"");
+
+                if (isMSIE()) {
+                    device.print(" onclick=\"followLink('").print(requestURL.toString()).print("',");
+                    device.print(applyOnClickListeners(eventTarget));
+                    writeEvents(device, eventTarget, EXCLUDE_ON_CLICK);
+                } else {
+                    writeEvents(device, eventTarget, null);
+                }
             }
         }
     }
@@ -929,21 +932,25 @@ public final class Utils {
             device.print("</span>");
     }
 
-    public static String applyOnClickListeners(final SComponent button) {
-        String script = "";
-        JavaScriptListener[] onClickListeners = getOnClickListeners(button);
+    /**
+     * Renders inline the onclick javascript methods for the <code>sendEvent</code> and <code>followLink</code>
+     * method declared in <code>Form.js</code>.  
+     */
+    public static SStringBuilder applyOnClickListeners(final SComponent component) {
+        SStringBuilder script = new SStringBuilder();
+        JavaScriptListener[] onClickListeners = getOnClickListeners(component);
         if (onClickListeners != null && onClickListeners.length > 0) {
-            script = "new Array(";
+            script.append("new Array(");
             for (int i = 0; i < onClickListeners.length; i++) {
+                if (i > 0)
+                    script.append(",");
                 if (onClickListeners[i].getScript() != null) {
-                    script += "function(){" + onClickListeners[i].getScript() + "},";
+                    script.append("function(){").append(onClickListeners[i].getScript()).append( "}");
                 } else {
-                    script += "function(){" + onClickListeners[i].getCode() + "},";
+                    script.append("function(){").append(onClickListeners[i].getCode()).append("}");
                 }
             }
-            script = script.substring(0, script.length()-1);
-            script += ")";
-            script = "," + script;
+            script.append(")");
         }
         return script;
     }
@@ -971,4 +978,12 @@ public final class Utils {
         else
             return null;
     }
+
+    /**
+     * @return true if current browser is microsoft exploder
+     */
+    public static boolean isMSIE() {
+        return SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE);
+    }
+
 }

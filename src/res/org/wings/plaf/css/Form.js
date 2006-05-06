@@ -37,6 +37,8 @@ function preventDefault(event) {
     event.cancelBubble = true;
 }
 
+/* Submits whole form and attaches an event name/value pair to submit.
+   Calls onclick handlers in advance. */
 function sendEvent(event, eventValue, eventName, clientHandlers) {
     event = getEvent(event);
     var target = getTarget(event)
@@ -67,6 +69,22 @@ function sendEvent(event, eventValue, eventName, clientHandlers) {
         else {
             document.location = "?" + eventName + "=" + eventValue;
         }
+    }
+}
+
+/* JavaScript to follow a link without submitting the form.
+   Calls concurrent onclick listeners. */
+function followLink(url, clientHandlers) {
+    var doSubmit = true;
+    if (clientHandlers) {
+        for (var i = 0; i < clientHandlers.length; i++) {
+            doSubmit = clientHandlers[i]();
+            if (doSubmit == false) break;
+        }
+    }
+
+    if (doSubmit == undefined || doSubmit) {
+        document.location = url;
     }
 }
 
