@@ -141,6 +141,11 @@ table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SFlowLayout table.SF
     width: 100%;
 }*/
 
+td.SFlowLayout div.spacer {
+    height:0px;
+    clear: both;
+}
+
 IMG {
     border: none !important;     /* This is needed to avoid those ugly borders around linked imgs's */
 }
@@ -730,7 +735,6 @@ div.SInternalFrame div.WindowContent {
 
 .SOptionPane {
     border: 1px solid #ccc;
-    margin: .2em;
     /* float:left;          This disables centered option panes! */
 	display:table;
 }

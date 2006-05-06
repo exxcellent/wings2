@@ -393,15 +393,18 @@ public class SOptionPane extends SDialog implements ActionListener {
         optionButtons.add(optionYes, "YES");
         optionButtons.add(optionCancel, "CANCEL");
         optionButtons.add(optionNo, "NO");
+        optionButtons.setPreferredSize(SDimension.FULLWIDTH);
 
         images.add(imageLabel);
         imageLabel.setToolTipText(null);
 
         optionData.setBorder(empty);
+        optionData.setPreferredSize(SDimension.FULLWIDTH);
         ((SFlowLayout)optionData.getLayout()).setVgap(8);
 
         contents.add(optionData, SBorderLayout.CENTER);
         contents.add(images, SBorderLayout.WEST);
+        contents.setPreferredSize(SDimension.FULLWIDTH);
 
         add(contents);
         add(optionButtons);
