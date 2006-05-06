@@ -909,18 +909,6 @@ public final class Utils {
             return styleString != null ? styleString : "";
     }
 
-    public static void printButtonStart(final Device device, final SComponent eventTarget, String eventValue) throws IOException {
-        printButtonStart(device, eventTarget, eventValue, eventTarget.isEnabled(), eventTarget.getShowAsFormComponent());
-    }
-
-    /**
-     * @param device
-     * @param eventTarget
-     * @param eventValue
-     * @param b
-     * @param showAsFormComponent
-     * @throws IOException
-     */
     public static void printButtonStart(Device device, SComponent eventTarget, String eventValue, boolean b, boolean showAsFormComponent) throws IOException {
         printButtonStart(device, eventTarget, eventValue, b, showAsFormComponent, null);
     }
@@ -930,7 +918,7 @@ public final class Utils {
         if (formComponent) {
             if (!enabled) {
                 device.print("<span");
-                Utils.optAttribute(device, "class", "disabled_formbutton");
+                Utils.optAttribute(device, "class", cssClassName);
             } else {
                 device.print("<a href=\"#\" onclick=\"sendEvent(event,'");
                 device.print(eventValue == null ? "" : eventValue);
@@ -940,12 +928,12 @@ public final class Utils {
                 device.print(applyOnClickListeners(eventTarget));
                 device.print(")\"");
                 Utils.writeEvents(device, eventTarget, new String[] { JavaScriptEvent.ON_CLICK } );
-                Utils.optAttribute(device, "class", cssClassName != null ? "formbutton " + cssClassName : "formbutton");
+                Utils.optAttribute(device, "class", cssClassName);
             }
         } else {
             if (!enabled) {
                 device.print("<span");
-                Utils.optAttribute(device, "class", cssClassName != null ? "disabled_button " + cssClassName : "disabled_button");
+                Utils.optAttribute(device, "class", cssClassName);
             } else {
                 final RequestURL requestURL = eventTarget.getRequestURL();
                 if (eventValue != null) {
@@ -954,7 +942,7 @@ public final class Utils {
                 device.print("<a href=\"");
                 device.print(requestURL.toString());
                 device.print("\"");
-                Utils.optAttribute(device, "class", "linkbutton");
+                Utils.optAttribute(device, "class", cssClassName);
 
                 if (isMSIE(eventTarget)) {
                     device.print(" onclick=\"followLink('").print(requestURL.toString()).print("'");

@@ -19,13 +19,12 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * A global way to access the current session. 
+ * A global way to access the current session.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public final class SessionManager {
-    private final transient static Log log = LogFactory.getLog(SessionManager.class);
     private static final ThreadLocal currentSession = new ThreadLocal();
 
     /**

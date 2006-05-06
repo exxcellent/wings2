@@ -9,6 +9,7 @@ import org.wings.SComponent;
 import org.wings.SLabel;
 import org.wings.SIcon;
 import org.wings.SConstants;
+import org.wings.border.SBorder;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -56,7 +57,8 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                 }
 
                 public void writeCompound(Device device, SComponent component, int horizontalTextPosition, int verticalTextPosition, boolean writeAllAttributes) throws IOException {
-                    final Insets insets = component.getBorder().getInsets();
+                    SBorder border = component.getBorder();
+                    final Insets insets = border != null ? border.getInsets() : null;
                     if (insets == null || insets.top == 0 && insets.left == 0 && insets.right == 0 && insets.bottom == 0)
                         super.writeCompound(device, component, horizontalTextPosition, verticalTextPosition, writeAllAttributes);
                     else {

@@ -37,7 +37,13 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         // may be ommitted if no width, border and backgrouund table
         writeTablePrefix(device, button);
 
-        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true, button.getShowAsFormComponent());
+        String cssClass;
+        if (button.isEnabled())
+            cssClass = button.getShowAsFormComponent() ? "formbutton" : "linkbutton";
+        else
+            cssClass = button.getShowAsFormComponent() ? "disabled_formbutton" : "disabled_linkbutton";
+
+        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent(), cssClass);
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         Utils.optAttribute(device, "accesskey", button.getMnemonic());
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());

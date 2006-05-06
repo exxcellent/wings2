@@ -36,7 +36,13 @@ public final class ButtonCG extends AbstractLabelCG {
 
         writeTablePrefix(device, component);
 
-        Utils.printButtonStart(device, button, button.getToggleSelectionParameter());
+        String cssClass;
+        if (button.isEnabled())
+            cssClass = button.getShowAsFormComponent() ? "linkbutton" : "formbutton";
+        else
+            cssClass = button.getShowAsFormComponent() ? "disabled_linkbutton" : "disabled_formbutton";
+
+        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent(), cssClass);
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
         Utils.optAttribute(device, "accesskey", button.getMnemonic());
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
