@@ -346,7 +346,7 @@ public final class Utils {
     public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
         SDimension preferredSize = pComponent.getPreferredSize();
         if (preferredSize != null) {
-            
+
             if (preferredSize.getWidth() != SDimension.AUTO) {
                 styleString.append("width:").append(preferredSize.getWidth()).append(';');
             }
@@ -397,8 +397,8 @@ public final class Utils {
         return styleString;
     }
 
-    
-    
+
+
 //    /**
 //     * Generates a new CSS Inline Style string for the passed SDimension.
 //     * <p>Sample: <code>width:100%;heigth=15px"</code>
@@ -1029,5 +1029,4 @@ public final class Utils {
     public static boolean isMSIE(SComponent component) {
         return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
-
 }

@@ -13,13 +13,7 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.LowLevelEventListener;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SIcon;
-import org.wings.SPopupMenu;
-import org.wings.SResourceIcon;
+import org.wings.*;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
@@ -31,6 +25,7 @@ import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -69,7 +64,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     private void writePrefix(Device device, SComponent component, boolean useTable) throws IOException {
-        final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
+        SBorder border = component.getBorder();
+        final boolean isTitleBorder = border instanceof STitledBorder;
         // This is the containing element of a component
         // it is responsible for styles, sizing...
         if (useTable) {
@@ -84,14 +80,36 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         writeAllAttributes(device, component);
 
         if (useTable) {
-            device.print("><tr><td>"); // table
+            device.print("><tr><td"); // table
+            if (border != null && Utils.isMSIE(component)) {
+                Insets insets = border.getInsets();
+                if (insets != null) {
+                    if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
+                        device.print(" style=\"padding:");
+                        device.print(insets.top);
+                        device.print("px\"");
+                    }
+                    else {
+                        device.print(" style=\"padding:");
+                        device.print(insets.top);
+                        device.print("px ");
+                        device.print(insets.right);
+                        device.print("px ");
+                        device.print(insets.bottom);
+                        device.print("px ");
+                        device.print(insets.left);
+                        device.print("px\"");
+                    }
+                }
+            }
+            device.print(">"); // table
         } else {
             device.print(">"); // div
         }
 
         // Special handling: Render title of STitledBorder
         if (isTitleBorder) {
-            STitledBorder titledBorder = (STitledBorder) component.getBorder();
+            STitledBorder titledBorder = (STitledBorder) border;
             device.print("<div class=\"STitledBorderLegend\">");
             device.print(titledBorder.getTitle());
             device.print("</div>");
