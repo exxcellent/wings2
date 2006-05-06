@@ -18,6 +18,7 @@ import org.wings.session.SessionManager;
 import org.wings.SComponent;
 import org.wings.SLabel;
 import org.wings.SIcon;
+import org.wings.SDimension;
 import org.wings.io.Device;
 import java.io.IOException;
 
@@ -26,7 +27,7 @@ import java.io.IOException;
  *
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
  */
-public final class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
+public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
 
     private static final long serialVersionUID = 1L;
     private boolean wordWrapDefault;
@@ -51,12 +52,15 @@ public final class LabelCG extends AbstractLabelCG implements org.wings.plaf.Lab
         final int verticalTextPosition = label.getVerticalTextPosition();
         final boolean wordWrap = label.isWordWrap();
         
-        writeTablePrefix(device, component);
         if (icon == null && text != null) {
+            writeTablePrefix(device, component);
             writeText(device, text, wordWrap);
+            writeTableSuffix(device, component);
         }
         else if (icon != null && text == null) {
+            writeTablePrefix(device, component);
             writeIcon(device, icon);
+            writeTableSuffix(device, component);
         }
         else if (icon != null && text != null) {
             new IconTextCompound() {
@@ -66,9 +70,12 @@ public final class LabelCG extends AbstractLabelCG implements org.wings.plaf.Lab
                 protected void icon(Device d) throws IOException {
                     writeIcon(d, icon);
                 }
-            }.writeCompound(device, component, horizontalTextPosition, verticalTextPosition);
+
+                protected void tableAttributes(Device d) throws IOException {
+                    writeAllAttributes(d, label);
+                }
+            }.writeCompound(device, component, horizontalTextPosition, verticalTextPosition, true);
         }
-        writeTableSuffix(device, component);
     }
 
     /**

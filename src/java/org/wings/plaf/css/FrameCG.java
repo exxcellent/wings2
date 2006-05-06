@@ -37,6 +37,7 @@ import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Browser;
 import org.wings.session.SessionManager;
+import org.wings.session.Session;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -132,9 +133,10 @@ public class FrameCG implements org.wings.plaf.FrameCG {
      * @return the URLs under which the css file(s) was externalized
      */
     private List externalizeBrowserStylesheets(SFrame forFrame) {
-        final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
-        final CGManager manager = SessionManager.getSession().getCGManager();
-        final String browserName = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
+        Session session = forFrame.getSession();
+        final ExternalizeManager extManager = session.getExternalizeManager();
+        final CGManager manager = session.getCGManager();
+        final String browserName = session.getUserAgent().getBrowserType().getShortName();
         final String cssResource = PROPERTY_STYLESHEET + browserName;
         String cssClassPaths = (String)manager.getObject(cssResource, String.class);
         // catch missing browser entry in properties file
@@ -215,7 +217,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
 
     private void addJavaScriptLibrary(final SFrame frame, final String scriptFileName) {
         ClasspathResource res = new ClasspathResource(scriptFileName, "text/javascript");
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         frame.addHeader(new Script("text/javascript", new DefaultURLResource(jScriptUrl)));
     }
 
@@ -227,7 +229,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
      */
     private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
         ClasspathResource res = new ClasspathResource(classPath, mimeType);
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        String jScriptUrl = parentFrame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
     }
 
@@ -276,11 +278,12 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         else
             frame.fireRenderEvent(SComponent.START_RENDERING);
 
-        final Browser browser = SessionManager.getSession().getUserAgent();
-        final String language = SessionManager.getSession().getLocale().getLanguage();
+        Session session = SessionManager.getSession();
+        final Browser browser = session.getUserAgent();
+        final String language = session.getLocale().getLanguage();
         final String title = frame.getTitle();
         final List headers = frame.headers();
-        final String encoding = SessionManager.getSession().getCharacterEncoding();
+        final String encoding = session.getCharacterEncoding();
 
         // <?xml version="1.0" encoding="...">
         if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
@@ -453,7 +456,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
                 device.print("//-->\n</script>");
                 // TODO: is caching by the VM enough or make this only initialize once?
                 ClasspathResource res = new ClasspathResource(DND_JS, "text/javascript");
-                String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+                String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
                 device.print("<script type=\"text/javascript\" src=\"");
                 device.print(jScriptUrl);
                 device.print("\"></script>\n");

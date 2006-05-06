@@ -20,6 +20,7 @@ import org.wings.SIcon;
 import org.wings.SLayoutManager;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
+import org.wings.session.Session;
 import org.wings.style.Style;
 import org.wings.style.StyleSheet;
 
@@ -175,9 +176,9 @@ public class CGManager implements Serializable {
         }
 
         // have the session fire a propertyChangeEvent regarding the new lookAndFeel
-        if (SessionManager.getSession() != null) {
-            ((PropertyService) SessionManager.getSession())
-                    .setProperty("lookAndFeel", "" + newLookAndFeel.hashCode());
+        Session session = SessionManager.getSession();
+        if (session != null) {
+            ((PropertyService) session).setProperty("lookAndFeel", "" + newLookAndFeel.hashCode());
         }
     }
 }

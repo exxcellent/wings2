@@ -205,7 +205,7 @@ public class SFrame
         RequestURL result = null;
         // first time we are called, and we didn't get any change yet
         if (requestURL == null) {
-            requestURL = (RequestURL) SessionManager.getSession().getProperty("request.url");
+            requestURL = (RequestURL) getSession().getProperty("request.url");
         }
         if (requestURL != null) {
             result = (RequestURL) requestURL.clone();

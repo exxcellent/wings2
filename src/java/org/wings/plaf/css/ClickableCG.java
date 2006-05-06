@@ -52,7 +52,11 @@ public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf
                 protected void icon(Device d) throws IOException {
                     writeIcon(d, icon);
                 }
-            }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+
+                protected void tableAttributes(Device d) throws IOException {
+                    Utils.printCSSInlineFullSize(d, button.getPreferredSize());
+                }
+            }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
         }
 
         Utils.printButtonEnd(device, button, button.getEvent(), true);

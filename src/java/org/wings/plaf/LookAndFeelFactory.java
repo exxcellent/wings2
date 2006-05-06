@@ -78,12 +78,12 @@ public abstract class LookAndFeelFactory {
 
         public LookAndFeel create()
                 throws IOException {
-            LookAndFeel laf = (LookAndFeel)lafs.get(SessionManager.getSession().getUserAgent().getBrowserType());
+            Session session = SessionManager.getSession();
+            LookAndFeel laf = (LookAndFeel)lafs.get(session.getUserAgent().getBrowserType());
             if (laf == null) {
                 synchronized (Default.class) {
-                    laf = (LookAndFeel)lafs.get(SessionManager.getSession().getUserAgent().getBrowserType());
+                    laf = (LookAndFeel)lafs.get(session.getUserAgent().getBrowserType());
                     if (laf == null) {
-                        Session session = SessionManager.getSession();
                         String lafName = (String) session.getProperty("wings.lookandfeel.default");
                         if (lafName == null)
                             lafName = DEFAULT_LOOKANDFEEL;
@@ -94,7 +94,7 @@ public abstract class LookAndFeelFactory {
                             log.fatal("create", e);
                             throw new IOException(e.getMessage());
                         }
-                        lafs.put(SessionManager.getSession().getUserAgent().getBrowserType(), laf);
+                        lafs.put(session.getUserAgent().getBrowserType(), laf);
                     }
                 }
             }

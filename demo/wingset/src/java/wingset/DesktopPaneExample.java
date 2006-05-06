@@ -20,7 +20,7 @@ public class DesktopPaneExample extends WingSetPane {
     protected SComponent createExample() {
         controls = new DesktopPaneControls();
 
-        windowIcon = (SIcon)SessionManager.getSession().getCGManager().getObject("TableCG.editIcon", SIcon.class);
+        windowIcon = (SIcon)getSession().getCGManager().getObject("TableCG.editIcon", SIcon.class);
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
             iFrame.getContentPane().setLayout(new SBoxLayout(SBoxLayout.VERTICAL));

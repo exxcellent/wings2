@@ -19,6 +19,7 @@ import org.wings.externalizer.ExternalizeManager;
 import org.wings.io.Device;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
+import org.wings.session.Session;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -89,10 +90,11 @@ public abstract class StaticResource extends Resource {
         }
 
         private void initMaxSizeToBuffer() {
-            if (SessionManager.getSession() == null)
+            Session session = SessionManager.getSession();
+            if (session == null)
                 return;
             Object prop =
-                    SessionManager.getSession().getProperty("Resource.MaxSizeToBuffer");
+                    session.getProperty("Resource.MaxSizeToBuffer");
 
             if (prop != null &&
                     prop instanceof Number) {
@@ -161,8 +163,9 @@ public abstract class StaticResource extends Resource {
      * @return the externalization id
      */
     public String getId() {
-        if (id == null && SessionManager.getSession() != null) {
-            ExternalizeManager ext = SessionManager.getSession().getExternalizeManager();
+        Session session = SessionManager.getSession();
+        if (id == null && session != null) {
+            ExternalizeManager ext = session.getExternalizeManager();
             id = ext.getId(ext.externalize(this, externalizerFlags));
             log.debug("new " + getClass().getName() + " with id " + id);
         }

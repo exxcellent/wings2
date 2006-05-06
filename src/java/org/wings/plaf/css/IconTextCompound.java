@@ -27,9 +27,9 @@ import java.io.IOException;
  * @version $Revision$
  */
 public abstract class IconTextCompound {
-    private final static transient Log log = LogFactory.getLog(IconTextCompound.class);
+    protected final static transient Log log = LogFactory.getLog(IconTextCompound.class);
 
-    public void writeCompound(Device device, SComponent component, int horizontalTextPosition, int verticalTextPosition) throws IOException {
+    public void writeCompound(Device device, SComponent component, int horizontalTextPosition, int verticalTextPosition, boolean writeAllAttributes) throws IOException {
         if (horizontalTextPosition == SConstants.NO_ALIGN)
             horizontalTextPosition = SConstants.RIGHT;
         if (verticalTextPosition == SConstants.NO_ALIGN)
@@ -40,11 +40,8 @@ public abstract class IconTextCompound {
         boolean renderTextFirst = verticalTextPosition == SConstants.TOP ||
                 (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT);
 
-        device.print("<table ");
-        SDimension prefSize = component.getPreferredSize();
-        if (prefSize != null && (prefSize.getWidth() != null || prefSize.getHeight() != null)) {
-            device.print(" style=\"width:100%;height:100%\"");
-        }
+        device.print("<table");
+        tableAttributes(device);
         device.print(">");
 
         if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.LEFT ||
@@ -83,7 +80,7 @@ public abstract class IconTextCompound {
         device.print("</table>");
     }
 
-    private void first(Device device, boolean textFirst) throws IOException {
+    protected void first(Device device, boolean textFirst) throws IOException {
         if (textFirst) {
             // avoid that in case that horizontalAlignment of text is right, that the text itself
             // becomes right-aligned
@@ -94,11 +91,13 @@ public abstract class IconTextCompound {
             icon(device);
     }
 
-    private void last(Device device, boolean textFirst) throws IOException {
+    protected void last(Device device, boolean textFirst) throws IOException {
         first(device, !textFirst);
     }
 
     protected abstract void text(Device d) throws IOException;
 
     protected abstract void icon(Device d) throws IOException;
+
+    protected abstract void tableAttributes(Device d) throws IOException;
 }

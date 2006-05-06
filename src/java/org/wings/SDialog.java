@@ -189,7 +189,7 @@ public class SDialog extends SForm {
     public void show(SComponent c) {
         log.debug("show dialog");
         if (c == null)
-            c = SessionManager.getSession().getRootFrame();
+            c = getSession().getRootFrame();
 
         SContainer frame = null;
         if (c instanceof SContainer)
@@ -203,7 +203,7 @@ public class SDialog extends SForm {
         }
 
         if (frame == null) {
-            frame = SessionManager.getSession().getRootFrame();
+            frame = getSession().getRootFrame();
         }
 
         if (frame == null) {

@@ -104,7 +104,11 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
                     protected void icon(Device device) throws IOException {
                         writeInput(device, button);
                     }
-                }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+
+                    protected void tableAttributes(Device d) throws IOException {
+                        Utils.printCSSInlineFullSize(d, button.getPreferredSize());
+                    }
+                }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
             }
         }
         else {
@@ -121,7 +125,11 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
                     protected void icon(Device device) throws IOException {
                         writeIcon(device, icon);
                     }
-                }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+
+                    protected void tableAttributes(Device d) throws IOException {
+                        Utils.printCSSInlineFullSize(d, button.getPreferredSize());
+                    }
+                }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
             }
         }
 

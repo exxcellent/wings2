@@ -59,7 +59,7 @@ public class MemUsageExample extends WingSetPane {
         // Action listener for exit button trigger
         exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SessionManager.getSession().exit();
+                getSession().exit();
             }
         });
 

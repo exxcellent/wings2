@@ -20,6 +20,7 @@ import org.wings.SFrame;
 import org.wings.io.Device;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.session.SessionManager;
+import org.wings.session.Session;
 import org.wings.util.SStringBuilder;
 
 import java.io.IOException;
@@ -110,9 +111,10 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
         List headers = frameSet.headers();
 
         if (frameSet.getParent() == null) {
-            final String language = SessionManager.getSession().getLocale().getLanguage();
+            Session session = SessionManager.getSession();
+            final String language = session.getLocale().getLanguage();
             final String title = frameSet.getTitle();
-            final String encoding = SessionManager.getSession().getCharacterEncoding();
+            final String encoding = session.getCharacterEncoding();
 
             d.print("<?xml version=\"1.0\" encoding=\"");
             d.print(encoding);

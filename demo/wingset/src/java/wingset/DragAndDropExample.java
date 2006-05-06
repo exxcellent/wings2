@@ -218,9 +218,9 @@ public class DragAndDropExample extends WingSetPane {
         public void setDragEnabled(boolean dragEnabled) {
             this.dragEnabled = dragEnabled;
             if (dragEnabled) {
-                SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+                getSession().getDragAndDropManager().registerDragSource((DragSource)this);
             } else {
-                SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+                getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
             }
         }
         
@@ -240,7 +240,7 @@ public class DragAndDropExample extends WingSetPane {
          */
         public void addComponentDropListener(SComponentDropListener listener) {
             componentDropListeners.add(listener);
-            SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
+            getSession().getDragAndDropManager().registerDropTarget(this);
         }
 
         /* (non-Javadoc)

@@ -21,6 +21,7 @@ import org.wings.template.PropertyManager;
 import org.wings.template.DefaultPropertyValueConverter;
 import org.wings.template.PropertyValueConverter;
 import org.wings.session.SessionManager;
+import org.wings.session.Session;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -59,7 +60,8 @@ public class DefaultPropertyManager implements PropertyManager {
 
     public void setProperty(SComponent comp, String name, String value) {
         if ("SCRIPT".equals(name)) {
-            final Boolean scriptEnabled = Boolean.valueOf((String) SessionManager.getSession().getProperty(BEANSCRIPT_ENABLE));
+            Session session = SessionManager.getSession();
+            final Boolean scriptEnabled = Boolean.valueOf((String) session.getProperty(BEANSCRIPT_ENABLE));
 
             if (scriptEnabled.booleanValue()) {
                 final Interpreter interpreter = createInterpreter();
@@ -68,7 +70,7 @@ public class DefaultPropertyManager implements PropertyManager {
                     log.debug("eval script " + value);
 
                     interpreter.set("component", comp);
-                    interpreter.set("session", SessionManager.getSession());
+                    interpreter.set("session", session);
 
                     interpreter.eval(value);
                 } catch (Exception ex) {

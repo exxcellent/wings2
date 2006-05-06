@@ -17,6 +17,7 @@ package org.wings.plaf.css;
 import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SIcon;
+import org.wings.SDimension;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
@@ -74,7 +75,11 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
                 protected void icon(Device d) throws IOException {
                     writeIcon(d, icon);
                 }
-            }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition());
+
+                protected void tableAttributes(Device d) throws IOException {
+                    Utils.printCSSInlineFullSize(d, button.getPreferredSize());
+                }
+            }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
         }
 
         Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), true);

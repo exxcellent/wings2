@@ -79,7 +79,7 @@ public class SContainer extends SComponent {
         // init defaultLayout if not initialized yet
         if (defaultLayout == null) {
             // lookup the default Layout Behaviour
-            final CGManager manager = SessionManager.getSession().getCGManager();
+            final CGManager manager = getSession().getCGManager();
             defaultLayout = (String) manager.getObject("SContainer.defaultLayoutBehaviour", String.class);
         }
         SLayoutManager layout = null;

@@ -26,10 +26,11 @@ public class CallableManager implements Serializable {
     private SessionCreatorManager creatorManager = new SessionCreatorManager();
 
     public static CallableManager getInstance() {
-        CallableManager callableManager = (CallableManager) SessionManager.getSession().getProperty("CallableManager");
+        Session session = SessionManager.getSession();
+        CallableManager callableManager = (CallableManager) session.getProperty("CallableManager");
         if (callableManager == null) {
             callableManager = new CallableManager();
-            SessionManager.getSession().setProperty("CallableManager", callableManager);
+            session.setProperty("CallableManager", callableManager);
         }
         return callableManager;
     }
