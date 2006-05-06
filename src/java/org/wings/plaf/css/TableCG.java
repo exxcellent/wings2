@@ -351,7 +351,8 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
 
         device.print("<tbody>\n");
         for (int r = startRow; r < endRow; r++) {
-            SStringBuilder rowClass = new SStringBuilder(table.getRowStyle(r) != null ? table.getRowStyle(r)+" " : "");
+            String rowStyle = table.getRowStyle(r);
+            SStringBuilder rowClass = new SStringBuilder(rowStyle != null ? rowStyle + " " : "");
             device.print("<tr");
             if (selectionModel.isSelectedIndex(r)){
                 Utils.optAttribute(device, "style", selectedArea);

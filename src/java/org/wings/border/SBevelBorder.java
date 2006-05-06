@@ -59,7 +59,7 @@ public class SBevelBorder
      * @param insets   (space between border and component) around
      */
     public SBevelBorder(int bevelType, Insets insets) {
-        super(Color.black, 2, insets);
+        super(Color.GRAY, 2, insets);
         setBevelType(bevelType);
     }
 
@@ -73,7 +73,7 @@ public class SBevelBorder
      * @param thickness the thickness of drawn line
      */
     public SBevelBorder(int bevelType, Insets insets, int thickness) {
-        super(Color.black, thickness, insets);
+        super(Color.GRAY, thickness, insets);
         setBevelType(bevelType);
     }
 
