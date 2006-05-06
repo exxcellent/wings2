@@ -38,12 +38,11 @@ public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf
 
         final String text = button.getText();
         final SIcon icon = getIcon(button);
-        final boolean isMSIE = Utils.isMSIE(button);
 
         if (icon == null && text != null)
             writeText(device, text, false);
         else if (icon != null && text == null)
-            writeIcon(device, icon, isMSIE);
+            writeIcon(device, icon, Utils.isMSIE(component));
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
@@ -51,7 +50,7 @@ public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf
                 }
 
                 protected void icon(Device d) throws IOException {
-                    writeIcon(d, icon, isMSIE);
+                    writeIcon(d, icon, Utils.isMSIE(component));
                 }
 
                 protected void tableAttributes(Device d) throws IOException {

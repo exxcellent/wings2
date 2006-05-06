@@ -31,8 +31,6 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
         final int horizontalTextPosition = label.getHorizontalTextPosition();
         final int verticalTextPosition = label.getVerticalTextPosition();
         final boolean wordWrap = label.isWordWrap();
-        final boolean isMSIE = Utils.isMSIE(component);
-        
 
         if (icon == null && text != null) {
             writeTablePrefix(device, component);
@@ -41,7 +39,7 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
         }
         else if (icon != null && text == null) {
             writeTablePrefix(device, component);
-            writeIcon(device, icon, isMSIE);
+            writeIcon(device, icon, Utils.isMSIE(component));
             writeTableSuffix(device, component);
         }
         else if (icon != null && text != null) {
@@ -50,7 +48,7 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                     writeText(d, text, wordWrap);
                 }
                 protected void icon(Device d) throws IOException {
-                    writeIcon(d, icon, isMSIE);
+                    writeIcon(d, icon, Utils.isMSIE(component));
                 }
 
                 protected void tableAttributes(Device d) throws IOException {

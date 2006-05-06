@@ -112,9 +112,8 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             }
         }
         else {
-            final boolean isMSIE = Utils.isMSIE(button);
             if (icon != null && text == null)
-                writeIcon(device, icon, isMSIE);
+                writeIcon(device, icon, Utils.isMSIE(component));
             else if (text != null && icon == null)
                 writeText(device, text, false);
             else if (text != null) {
@@ -124,7 +123,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
                     }
 
                     protected void icon(Device device) throws IOException {
-                        writeIcon(device, icon, isMSIE);
+                        writeIcon(device, icon, Utils.isMSIE(component));
                     }
 
                     protected void tableAttributes(Device d) throws IOException {
