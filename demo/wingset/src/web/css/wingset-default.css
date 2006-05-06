@@ -8,33 +8,33 @@
 /* ----- Input text fields, dropdown lists, buttons: Orange background, orange outline. */
 textarea.STextArea, input.STextField, input.SFormattedTextField,
 input.SPasswordField, select.SComboBox, select.SList,
+TABLE.SButton A.formbutton, .SToggleButton a.formbutton
+{
+    border: 1px solid #e66e32;
+}
+
+textarea.STextArea, input.STextField, input.SFormattedTextField,
+input.SPasswordField, select.SComboBox, select.SList,
 TABLE.SButton A.formbutton, .SToggleButton a.formbutton,
 table.SCheckBox input, table.SRadioButton input
 {
     background-color: #f6decc;
-    border: 1px solid #e66e32;
 }
 
-/* Hover button on mouse-over. */
-/*div.SButton > button:hover { border: 1px outset #cccccc; } */
-/* Don't hover if disabled button. */
-/*div.SButton > button:hover[disabled="true"] { border: 1px solid #cccccc;} */
-
-
 /* ----- STable selection line: orange */
-div.STable > table > tbody > tr[selected="true"] {
+div.STable > table > tbody > tr.selected {
     background-color: #f6decc !important;
 }
 
 /* ----- Orange Selection color of STrees */
-ul.STree > li[selected="true"] > table > tbody > tr > td > a > div,
-ul.STree > li[selected="true"] > table > tbody > tr > td > button > div
+ul.STree > li.selected > table > tbody > tr > td > a > div,
+ul.STree > li.selected > table > tbody > tr > td > button > div
  {
     background-color: #f6decc;
     border: 1px dotted black;
 }
 
 /* ----- Background color of selected STabbedPane tabs */
-div.STabbedPane > table > tbody > tr > th > *[selected="true"] {
+div.STabbedPane > table > tbody > tr > th > .selected {
     background-color: #f6decc;
 }

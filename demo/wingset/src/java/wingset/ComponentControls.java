@@ -33,9 +33,7 @@ import java.util.List;
  * @author hengels
  * @version $Revision$
  */
-public class ComponentControls
-    extends SPanel
-{
+public class ComponentControls  extends SPanel {
     protected static final Object[] BORDERS = new Object[] {
         new Object[] { "none",    null },
         new Object[] { "raised",  new SBevelBorder(SBevelBorder.RAISED, new Insets(5, 5, 5, 5)) },
@@ -48,17 +46,17 @@ public class ComponentControls
 
     protected static final Object[] COLORS = new Object[] {
         new Object[] { "none",   null },
-        new Object[] { "yellow", new Color(255, 255, 200) },
-        new Object[] { "red",    new Color(255, 200, 200) },
-        new Object[] { "green",  new Color(200, 255, 200) },
-        new Object[] { "blue",   new Color(200, 200, 255) },
+        new Object[] { "yellow", new Color(255, 255, 100) },
+        new Object[] { "red",    new Color(255, 100, 100) },
+        new Object[] { "green",  new Color(100, 255, 100) },
+        new Object[] { "blue",   new Color(100, 100, 255) },
     };
 
     protected static final Object[] FONTS = new Object[] {
         new Object[] { "default font",   null },
-        new Object[] { "16pt Arial bold & italic", new SFont("Arial,sans-serif",SFont.BOLD+SFont.ITALIC, 16)},
-        new Object[] { "default Times plain",    new SFont("Times, Times New Roman",SFont.DEFAULT_SIZE, SFont.PLAIN) },
-        new Object[] { "24pt Comic italic",    new SFont("Comic,Comic Sans MS",SFont.ITALIC, 24) }
+        new Object[] { "16pt sans-serif bold & italic", new SFont("Arial,sans-serif",SFont.BOLD+SFont.ITALIC, 16)},
+        new Object[] { "default serif plain",    new SFont("Times, Times New Roman,serif",SFont.DEFAULT_SIZE, SFont.PLAIN) },
+        new Object[] { "24pt fantasy italic",    new SFont("Comic,Comic Sans MS,fantasy",SFont.ITALIC, 24) }
     };
 
     protected final List components = new LinkedList();
@@ -125,9 +123,9 @@ public class ComponentControls
         borderThicknessTextField.setColumns(1);
         borderThicknessTextField.setToolTipText("length only (example: '2')");
         borderStyleComboBox.setRenderer(new ObjectPairCellRenderer());
-        borderColorComboBox.setRenderer(new ColorObjectPairCellRenderer());
-        backgroundComboBox.setRenderer(new ColorObjectPairCellRenderer());
-        foregroundComboBox.setRenderer(new ColorObjectPairCellRenderer());
+        borderColorComboBox.setRenderer(new ObjectPairCellRenderer());
+        backgroundComboBox.setRenderer(new ObjectPairCellRenderer());
+        foregroundComboBox.setRenderer(new ObjectPairCellRenderer());
         fontComboBox.setRenderer(new ObjectPairCellRenderer());
 
         globalControls.add(new SLabel("width"));
@@ -222,20 +220,6 @@ public class ComponentControls
             Object[] objects = (Object[])value;
             value = objects[0];
             return super.getListCellRendererComponent(list, value, selected, row);
-        }
-    }
-
-    /**
-     * Renderer which expects <code>Object[]</code> values and returns the first value encouloured with the second value.
-     */
-    protected static class ColorObjectPairCellRenderer extends SDefaultListCellRenderer {
-        public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int row) {
-            Object[] objects = (Object[])value;
-            value = objects[0];
-            Color color = (Color) objects[1];
-            SComponent component = super.getListCellRendererComponent(list, value, selected, row);
-            component.setForeground(color);
-            return component;
         }
     }
 }

@@ -120,12 +120,24 @@ public class TableExample
             setIcon(null);
             setFont(null);
             setForeground(null);
+            setComponentPopupMenu(null);
 
             if (value instanceof Color) {
                 Color c = (Color) value;
                 setFont(MONOSPACE);
                 setText(colorToHex(c));
                 setForeground(c);
+        // TODO bsc -- remove context menu test
+        SPopupMenu menu = new SPopupMenu();
+        menu.add(new SMenuItem("Context Menu for Row #"+row));
+        menu.add(new SMenuItem("Copy"));
+        menu.add(new SMenuItem("Paste"));
+        SMenu subMenu = new SMenu("Help");
+        subMenu.add(new SMenuItem("About"));
+        subMenu.add(new SMenuItem("Topics"));
+        menu.add(subMenu);
+        this.setComponentPopupMenu(menu);
+        // --------------------------------------------------
                 return this;
             }
             else if (value instanceof Boolean && row != -1) {

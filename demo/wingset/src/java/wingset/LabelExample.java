@@ -56,7 +56,7 @@ public class LabelExample extends WingSetPane {
     public SComponent createExample() {
         controls = new ComponentControls();
 
-        final SLabel testLabel = new SLabel("A red, bold, italic, serif text");
+        final SLabel testLabel = new SLabel("A styled SLabel with an icon");
         testLabel.setHorizontalAlignment(LEFT);
         testLabel.setIcon(WAIT_ICON);
         testLabel.setForeground(Color.RED);
@@ -169,12 +169,6 @@ public class LabelExample extends WingSetPane {
         n.setSelected(true);
 
         return b;
-    }
-
-    private static class LabelControl extends ComponentControls {
-        public LabelControl() {
-            
-        }
     }
 }
 
