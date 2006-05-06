@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * The root component of every component hierarchy.
@@ -235,19 +236,33 @@ public class SFrame
     /**
      * Add an {@link Renderable}  into the header of the HTML page
      *
-     * @param m is typically a {@link org.wings.header.Link} or {@link DynamicResource}.
+     * @param headerElement is typically a {@link org.wings.header.Link} or {@link DynamicResource}.
      * @see org.wings.header.Link
      */
-    public void addHeader(Object m) {
-        if (!headers().contains(m))
-            headers.add(m);
+    public void addHeader(Object headerElement) {
+        if (!headers().contains(headerElement) && headerElement != null)
+            headers.add(headerElement);
+    }
+
+    /**
+     * Add an {@link Renderable} into the header of the HTML page at the desired index position
+     *
+     * @param headerElement is typically a {@link org.wings.header.Link} or {@link DynamicResource}.
+     * @param index index in header list to add this item
+     * @see org.wings.header.Link
+     * @see #headers()
+     */
+    public void addHeader(int index, Object headerElement) {
+        if (!headers().contains(headerElement) && headerElement != null)
+            headers.add(index, headerElement);
     }
 
     /**
      * @see #addHeader(Object)
+     * @return <tt>true</tt> if this frame contained the specified header element.
      */
-    public void removeHeader(Object m) {
-        headers.remove(m);
+    public boolean removeHeader(Object m) {
+        return headers.remove(m);
     }
 
     /**
@@ -265,7 +280,7 @@ public class SFrame
     public List headers() {
         if (headers == null)
             headers = new ArrayList(2);
-        return headers;
+        return Collections.unmodifiableList(headers);
     }
 
     /**
@@ -396,7 +411,7 @@ public class SFrame
     }
 
     /**
-     * @see #setFocus(SComponent) 
+     * @see #setFocus(SComponent)
      */
     public SComponent getFocus() {
         return focusComponent;

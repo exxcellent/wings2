@@ -197,7 +197,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         // Retrieve list of static CSS files to be attached to this frame for this browser.
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component);
         for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
-            component.headers().add(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));;
+            component.addHeader(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
         }
 
         // add Form.js to frame
