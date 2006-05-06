@@ -16,6 +16,8 @@ package wingset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.SBorderLayout;
+import org.wings.SButton;
 import org.wings.SConstants;
 import org.wings.SFrame;
 import org.wings.SIcon;
@@ -23,21 +25,16 @@ import org.wings.SResourceIcon;
 import org.wings.SRootLayout;
 import org.wings.STabbedPane;
 import org.wings.SURLIcon;
-import org.wings.SButton;
-import org.wings.SBorderLayout;
-import org.wings.SFont;
 import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.net.URL;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.*;
 
 /**
  * The root of the WingSet demo application.
@@ -169,8 +166,6 @@ public class WingSet implements Serializable {
                     frame.addHeader(customStyleSheetLink);
             }
         });
-        switchStyleButton.setForeground(Color.RED);
-        switchStyleButton.setSelectionFont(new SFont("Arial, sans-serif", SFont.ITALIC+SFont.BOLD, -1));
         switchStyleButton.setBorder(new SEmptyBorder(5,0,5,0));
         frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
 

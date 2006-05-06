@@ -18,7 +18,6 @@ import org.wings.SBoxLayout;
 import org.wings.SButtonGroup;
 import org.wings.SComponent;
 import org.wings.SContainer;
-import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SForm;
 import org.wings.SGridLayout;
@@ -67,7 +66,6 @@ public class LabelExample extends WingSetPane {
         SGridLayout layout = new SGridLayout(3);
         layout.setRenderFirstLineAsHeader(true);
         SPanel panel = new SPanel(layout);
-        //panel.setPreferredSize(SDimension.FULLAREA);
         panel.add(new SLabel("Control the label's text position"));
         panel.add(new SSpacer(100,1));
         panel.add(new SLabel("Result"));
@@ -171,6 +169,12 @@ public class LabelExample extends WingSetPane {
         n.setSelected(true);
 
         return b;
+    }
+
+    private static class LabelControl extends ComponentControls {
+        public LabelControl() {
+            
+        }
     }
 }
 

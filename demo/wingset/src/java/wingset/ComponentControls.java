@@ -28,6 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * A visual control used in many WingSet demos.
+ *
  * @author hengels
  * @version $Revision$
  */
@@ -46,10 +48,17 @@ public class ComponentControls
 
     protected static final Object[] COLORS = new Object[] {
         new Object[] { "none",   null },
-        new Object[] { "yellow", new Color(255, 255, 200) },
-        new Object[] { "red",    new Color(255, 200, 200) },
-        new Object[] { "green",  new Color(200, 255, 200) },
-        new Object[] { "blue",   new Color(200, 200, 255) },
+        new Object[] { "yellow", Color.yellow },
+        new Object[] { "red",    Color.red },
+        new Object[] { "green",  Color.green },
+        new Object[] { "blue",   Color.blue },
+    };
+
+    protected static final Object[] FONTS = new Object[] {
+        new Object[] { "default font",   null },
+        new Object[] { "16pt Arial bold & italic", new SFont("Arial,sans-serif",SFont.BOLD+SFont.ITALIC, 16)},
+        new Object[] { "default Times plain",    new SFont("Times, Times New Roman",SFont.DEFAULT_SIZE, SFont.PLAIN) },
+        new Object[] { "24pt Comic italic",    new SFont("Comic,Comic Sans MS",SFont.ITALIC, 24) }
     };
 
     protected final List components = new LinkedList();
@@ -65,8 +74,10 @@ public class ComponentControls
     protected final STextField borderThicknessTextField = new STextField();
 
     protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
+    protected final SComboBox foregroundComboBox = new SComboBox(COLORS);
+    protected final SComboBox fontComboBox = new SComboBox(FONTS);
     protected final SButton applyButton;
-    protected SCheckBox showAsFormComponentCheckBox = new SCheckBox("Show as Form Component");
+    protected SCheckBox showAsFormComponentCheckBox = new SCheckBox("Form components");
 
     public ComponentControls() {
         super(new SGridBagLayout());
@@ -105,17 +116,19 @@ public class ComponentControls
         add(globalControls, c);
         add(localControls, c);
 
-        widthTextField.setColumns(5);
-        widthTextField.setToolTipText("length with unit (200px)");
-        heightTextField.setColumns(5);
-        heightTextField.setToolTipText("length with unit (200px)");
-        insetsTextField.setColumns(2);
-        insetsTextField.setToolTipText("length only (8)");
-        borderThicknessTextField.setColumns(2);
-        borderThicknessTextField.setToolTipText("length only (2)");
+        widthTextField.setColumns(3);
+        widthTextField.setToolTipText("length with unit (example: '200px')");
+        heightTextField.setColumns(3);
+        heightTextField.setToolTipText("length with unit (example: '200px')");
+        insetsTextField.setColumns(1);
+        insetsTextField.setToolTipText("length only (example: '8')");
+        borderThicknessTextField.setColumns(1);
+        borderThicknessTextField.setToolTipText("length only (example: '2')");
         borderStyleComboBox.setRenderer(new ObjectPairCellRenderer());
-        borderColorComboBox.setRenderer(new ObjectPairCellRenderer());
-        backgroundComboBox.setRenderer(new ObjectPairCellRenderer());
+        borderColorComboBox.setRenderer(new ColorObjectPairCellRenderer());
+        backgroundComboBox.setRenderer(new ColorObjectPairCellRenderer());
+        foregroundComboBox.setRenderer(new ColorObjectPairCellRenderer());
+        fontComboBox.setRenderer(new ObjectPairCellRenderer());
 
         globalControls.add(new SLabel("width"));
         globalControls.add(widthTextField);
@@ -127,8 +140,12 @@ public class ComponentControls
         globalControls.add(borderThicknessTextField);
         globalControls.add(borderStyleComboBox);
         globalControls.add(borderColorComboBox);
+        globalControls.add(new SLabel(" foreground"));
+        globalControls.add(foregroundComboBox);
         globalControls.add(new SLabel(" background"));
         globalControls.add(backgroundComboBox);
+        globalControls.add(new SLabel(" font"));
+        globalControls.add(fontComboBox);
         globalControls.add(new SLabel(""));
         globalControls.add(showAsFormComponentCheckBox);
 
@@ -157,9 +174,6 @@ public class ComponentControls
                     border.setThickness(borderThickness);
                 }
 
-                Color background = (Color)getSelectedObject(backgroundComboBox);
-                boolean showAsFormComponent = showAsFormComponentCheckBox.isSelected();
-
                 for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                     SComponent component = (SComponent) iterator.next();
                     if (widthTextField.isVisible())
@@ -167,9 +181,13 @@ public class ComponentControls
                     if (borderThicknessTextField.isVisible())
                         component.setBorder(border);
                     if (backgroundComboBox.isVisible())
-                        component.setBackground(background);
+                        component.setBackground((Color)getSelectedObject(backgroundComboBox));
+                    if (foregroundComboBox.isVisible())
+                        component.setForeground((Color)getSelectedObject(foregroundComboBox));
                     if (showAsFormComponentCheckBox.isVisible())
-                        component.setShowAsFormComponent(showAsFormComponent);
+                        component.setShowAsFormComponent(showAsFormComponentCheckBox.isSelected());
+                    if (fontComboBox.isVisible())
+                        component.setFont((SFont) getSelectedObject(fontComboBox));
                 }
             }
         });
@@ -192,11 +210,28 @@ public class ComponentControls
         applyButton.addActionListener(actionListener);
     }
 
+    /**
+     * Renderer which expects <code>Object[]</code> values and returns the first value
+     */
     protected static class ObjectPairCellRenderer extends SDefaultListCellRenderer {
         public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int row) {
             Object[] objects = (Object[])value;
             value = objects[0];
             return super.getListCellRendererComponent(list, value, selected, row);
+        }
+    }
+
+    /**
+     * Renderer which expects <code>Object[]</code> values and returns the first value encouloured with the second value.
+     */
+    protected static class ColorObjectPairCellRenderer extends SDefaultListCellRenderer {
+        public SComponent getListCellRendererComponent(SComponent list, Object value, boolean selected, int row) {
+            Object[] objects = (Object[])value;
+            value = objects[0];
+            Color color = (Color) objects[1];
+            SComponent component = super.getListCellRendererComponent(list, value, selected, row);
+            component.setForeground(color);
+            return component;
         }
     }
 }
