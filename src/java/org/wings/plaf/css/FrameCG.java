@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * PLAF renderer for SFrames.
  * Does quite many abritriray things i.e. registering diverse service scripts, etc.
  */
-public class FrameCG implements org.wings.plaf.FrameCG {
+public class FrameCG extends AbstractComponentCG implements org.wings.plaf.FrameCG {
     private static final long serialVersionUID = 1L;
 
     private final transient static Log log = LogFactory.getLog(FrameCG.class);
@@ -98,11 +98,13 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         final String userDocType = (String) manager.getObject("FrameCG.userDocType", String.class);
         final Boolean userRenderXmlDecl = (Boolean) manager.getObject("FrameCG.renderXmlDeclaration", Boolean.class);
 
-        if (userDocType != null)
+        if (userDocType != null) {
             setDocumentType(userDocType);
+        }
 
-        if (userRenderXmlDecl != null)
+        if (userRenderXmlDecl != null) {
             setRenderXmlDeclaration(userRenderXmlDecl);
+        }
     }
 
     /**
@@ -251,8 +253,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         // first, delete all of them, they are from the last request...
         for (int i = 0; i < scriptListeners.length; i++) {
             ScriptListener scriptListener = scriptListeners[i];
-            if (scriptListener instanceof InputMapScriptListener)
+            if (scriptListener instanceof InputMapScriptListener) {
                 frame.removeScriptListener(scriptListener);
+            }
         }
         // then install the ones we need for the request going on...
         List inputMapComponents = frame.getGlobalInputMapComponents();
@@ -273,10 +276,11 @@ public class FrameCG implements org.wings.plaf.FrameCG {
     public void write(final Device device, final SComponent pComp)
             throws IOException {
         final SFrame frame = (SFrame) pComp;
-        if (!frame.isVisible())
+        if (!frame.isVisible()) {
             return;
-        else
+        } else {
             frame.fireRenderEvent(SComponent.START_RENDERING);
+        }
 
         Session session = SessionManager.getSession();
         final Browser browser = session.getUserAgent();
@@ -356,8 +360,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
 
                 for (int i = 0; i < scriptListeners.length; i++) {
                     ScriptListener scriptListener = scriptListeners[i];
-                    if (scriptListener instanceof FocusScriptListener)
+                    if (scriptListener instanceof FocusScriptListener) {
                         frame.removeScriptListener(scriptListener);
+                    }
                 }
             }
             if (focus != null) {
@@ -373,8 +378,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         device
                 .print("<script type=\"text/javascript\">\n")
                 .print("domTT_addPredefined('default', 'caption', false");
-        if (toolTipManager.isFollowMouse())
+        if (toolTipManager.isFollowMouse()) {
             device.print(", 'trail', true");
+        }
         device.print(", 'delay', ").print(toolTipManager.getInitialDelay());
         device.print(", 'lifetime', ").print(toolTipManager.getDismissDelay());
         device
@@ -386,6 +392,7 @@ public class FrameCG implements org.wings.plaf.FrameCG {
         Utils.optAttribute(device, "id", frame.getName());
         Utils.optAttribute(device, "class", frame.getStyle());
         Utils.writeFrameEvents(device, frame);
+        writeAllAttributes(device, frame);
         device.print(">\n");
         if (frame.isVisible()) {
             // now add JS for DnD if neccessary.
@@ -481,8 +488,9 @@ public class FrameCG implements org.wings.plaf.FrameCG {
                 device.print(script);
             }
         }
-        if (scriptTagOpen)
+        if (scriptTagOpen) {
             device.print("</script>");
+        }
     }
 
     public String getDocumentType() {

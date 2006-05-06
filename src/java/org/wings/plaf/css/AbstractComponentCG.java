@@ -318,6 +318,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 
-    public abstract void writeInternal(Device device, SComponent component) throws IOException;
-
+    public void writeInternal(Device device, SComponent component) throws IOException {
+    }
 }
