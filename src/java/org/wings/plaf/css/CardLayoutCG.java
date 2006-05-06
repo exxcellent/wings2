@@ -13,18 +13,15 @@
  */
 package org.wings.plaf.css;
 
-import java.io.IOException;
-
 import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
+import java.io.IOException;
+
 public class CardLayoutCG implements LayoutCG {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /**

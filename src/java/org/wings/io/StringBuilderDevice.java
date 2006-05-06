@@ -17,7 +17,6 @@ import org.wings.util.SStringBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Serializable;
 
 /**
@@ -60,7 +59,7 @@ public final class StringBuilderDevice implements Device, Serializable {
         builder.setLength(0);
     }
 
-    private OutputStream getStream() {
+    private ByteArrayOutputStream getStream() {
         if (byteStream != null)
             return byteStream;
         byteStream = new ByteArrayOutputStream();
@@ -88,7 +87,7 @@ public final class StringBuilderDevice implements Device, Serializable {
     /**
      * Print a character array.
      */
-    public Device print(char[] c) throws IOException {
+    public Device print(char[] c) {
         if (byteStream != null) flush();
         builder.append(c);
         return this;
@@ -97,7 +96,7 @@ public final class StringBuilderDevice implements Device, Serializable {
     /**
      * Print a character array.
      */
-    public Device print(char[] c, int start, int len) throws IOException {
+    public Device print(char[] c, int start, int len) {
         if (byteStream != null) flush();
         builder.append(c, start, len);
         return this;
@@ -124,7 +123,7 @@ public final class StringBuilderDevice implements Device, Serializable {
     /**
      * Writes the specified byte to this data output stream.
      */
-    public Device write(int c) throws IOException {
+    public Device write(int c) {
         getStream().write(c);
         return this;
     }
@@ -142,7 +141,7 @@ public final class StringBuilderDevice implements Device, Serializable {
      * Writes len bytes from the specified byte array starting at offset
      * off to this output stream.
      */
-    public Device write(byte b[], int off, int len) throws IOException {
+    public Device write(byte b[], int off, int len) {
         getStream().write(b, off, len);
         return this;
     }

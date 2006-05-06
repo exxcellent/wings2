@@ -13,15 +13,13 @@
  */
 package org.wings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.ContainerCG;
-import org.wings.session.SessionManager;
-import org.wings.style.Selector;
 import org.wings.util.ComponentVisitor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,13 +42,8 @@ public class SContainer extends SComponent {
      * The layout for the component.
      */
     private SLayoutManager layout;
-    
+
     private static String defaultLayout;
- 
-    /**
-     * background image, that is rendered for this container.
-     */
-    private SIcon backgroundImage;
 
     /**
      * The components in this container.
@@ -514,7 +507,7 @@ public class SContainer extends SComponent {
      * Collects all {@link SComponent#getComponentPopupMenu()} of all contained and visible components.
      * @return all menus of all sub components (recursively)
      */
-    public ArrayList getMenus() {
+    /*public ArrayList getMenus() {
         ArrayList menus = new ArrayList();
         if (isVisible()) {
             final Iterator iter = getComponentList().iterator();
@@ -536,5 +529,5 @@ public class SContainer extends SComponent {
             }
         }
         return menus;
-    }
+    }*/
 }

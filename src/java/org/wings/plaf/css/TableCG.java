@@ -25,7 +25,6 @@ import org.wings.SLabel;
 import org.wings.SListSelectionModel;
 import org.wings.STable;
 import org.wings.io.Device;
-import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
 import org.wings.table.SDefaultTableCellRenderer;
@@ -204,23 +203,6 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
         Utils.printTableCellAlignment(device, component, SConstants.LEFT, SConstants.TOP);
         device.print(">");
 
-        // Collect inline dynamic styles of cell renderer component:
-        // Cell renderer components are not visible to the DynamicStyleResource as they are not
-        // reachable via the component hierarchy. They'd also not be reachable for the event
-        // dispatcher if not added to the CellRendererPane. Adding to the cellrenderer pane
-        // does the job of registering those items as low level event listener.
-        // the following code does the job of rendering their styles inline.
-        // TODO: Maybe "compress" repeated styles here as well as in the stylesheet writer.
-        try {
-            final StringBuilderDevice stringBuilderDevice = new StringBuilderDevice();
-            final String styleString = stringBuilderDevice.toString();
-            if (styleString.length() > 0) {
-                device.print("<style>").print(styleString).print("</style>");
-            }
-        } catch (Exception e) {
-            log.info("Unexpected Exception durign collection of cell renderer styles", e);
-        }
-
         String parameter = null;
         if (table.isEditable() && !isEditingCell && editableCell)
             parameter = table.getEditParameter(row, col);
@@ -283,7 +265,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
         //final boolean newCachingDevice = !(_device instanceof CachingDevice);
         //final CachingDevice device = newCachingDevice ? new CachingDevice(_device) : (CachingDevice) _device ;
 
-        try {
+        //try {
             device.print("<table");
             writeAllAttributes(device, table);
             Utils.writeEvents(device, table, null);
@@ -380,12 +362,12 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
             }
             device.print("</tbody>");
             device.print("</table>");
-        } finally {
+        //} finally {
             /* Refer to description above. */
             //if (newCachingDevice)
               //  device.close();
             //device = null;
-        }
+        //}
     }
 
     private boolean atLeastOneColumnWidthIsNotNull(STableColumnModel columnModel) {

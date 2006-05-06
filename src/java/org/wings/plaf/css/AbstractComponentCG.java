@@ -124,7 +124,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
-    public final void writeAllAttributes(Device device, SComponent component) throws IOException {
+    public static final void writeAllAttributes(Device device, SComponent component) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
         final String classname = component.getStyle();
@@ -144,7 +144,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         writeContextMenu(device, component);
     }
 
-    protected String getInlineStyles(SComponent component) {
+    protected static String getInlineStyles(SComponent component) {
         // write inline styles
         final SStringBuilder builder = new SStringBuilder();
 
@@ -307,17 +307,19 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         return (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
     }
 
-    public void write(Device device, SComponent component) throws IOException {
+    public final void write(final Device device, final SComponent component) throws IOException {
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         component.fireRenderEvent(SComponent.START_RENDERING);
 
         writeInternal(device, component);
 
         writeInlineScripts(device, component);
+
+        Utils.getRenderHelper(component).collectMenues(component);
+
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
     }
 
-    public void writeInternal(Device device, SComponent component) throws IOException {
-    }
+    public abstract void writeInternal(Device device, SComponent component) throws IOException;
 }

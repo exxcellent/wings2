@@ -50,7 +50,7 @@ import java.util.StringTokenizer;
  * PLAF renderer for SFrames.
  * Does quite many abritriray things i.e. registering diverse service scripts, etc.
  */
-public class FrameCG extends AbstractComponentCG implements org.wings.plaf.FrameCG {
+public final class FrameCG implements org.wings.plaf.FrameCG {
     private static final long serialVersionUID = 1L;
 
     private final transient static Log log = LogFactory.getLog(FrameCG.class);
@@ -275,6 +275,7 @@ public class FrameCG extends AbstractComponentCG implements org.wings.plaf.Frame
     public void write(final Device device, final SComponent pComp)
             throws IOException {
         final SFrame frame = (SFrame) pComp;
+        Utils.getRenderHelper(frame).reset();
         if (!frame.isVisible()) {
             return;
         } else {
@@ -388,7 +389,7 @@ public class FrameCG extends AbstractComponentCG implements org.wings.plaf.Frame
         device.print("</head>\n");
         device.print("<body");
         Utils.writeEvents(device, frame, null);
-        writeAllAttributes(device, frame);
+        AbstractComponentCG.writeAllAttributes(device, frame);
         device.print(">\n");
         if (frame.isVisible()) {
             // now add JS for DnD if neccessary.
@@ -416,12 +417,8 @@ public class FrameCG extends AbstractComponentCG implements org.wings.plaf.Frame
             frame.getLayout().write(device);
             device.print("\n");
             // now add all menus
-            Iterator iter = frame.getMenus().iterator();
-            while (iter.hasNext()) {
-                SComponent menu = (SComponent)iter.next();
-                menu.putClientProperty("popup", Boolean.TRUE);
-                menu.write(device);
-            }
+            device.print(Utils.getRenderHelper(frame).getMenueRenderBuffer().toString());
+            
             // now add final JS for DnD if neccessary.
             if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) { // initialize only if dragSources are present
                 device.print("<script type=\"text/javascript\">\n<!--\n");
@@ -469,6 +466,7 @@ public class FrameCG extends AbstractComponentCG implements org.wings.plaf.Frame
         writeInlineScripts(device, frame);
         device.print("</html>\n");
         pComp.fireRenderEvent(SComponent.DONE_RENDERING);
+        Utils.getRenderHelper(frame).reset();
     }
 
     protected void writeInlineScripts(Device device, SComponent component) throws IOException {

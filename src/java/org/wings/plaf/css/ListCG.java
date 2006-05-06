@@ -67,7 +67,8 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             device.print("<option");
             Utils.optAttribute(device, "value", list.getSelectionParameter(i));
             if (list.isSelectedIndex(i)) {
-                Utils.optAttribute(device, "class", "selected");
+                device.print(" selected");
+                //Utils.optAttribute(device, "class", "selected");
             }
 
             SStringBuilder buffer = Utils.generateCSSComponentInlineStyle(renderer);

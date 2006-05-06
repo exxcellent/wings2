@@ -23,7 +23,6 @@ import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.SDimension;
 import org.wings.SFont;
-import org.wings.SFrame;
 import org.wings.SLayoutManager;
 import org.wings.border.SBorder;
 import org.wings.io.Device;
@@ -33,7 +32,6 @@ import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
 
@@ -51,7 +49,7 @@ import java.util.StringTokenizer;
 
 /**
  * Utils.java
- *
+ * <p/>
  * Helper class that collects static methods usable from CGs.
  *
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
@@ -66,13 +64,13 @@ public final class Utils {
     /**
      * Print debug information in generated HTML
      */
-    public static boolean PRINT_DEBUG = ( (Boolean) ResourceManager.getObject("SComponents.printDebug", Boolean.class)).booleanValue();
-    public static boolean PRINT_PRETTY = ( (Boolean) ResourceManager.getObject("SComponents.printPretty", Boolean.class)).booleanValue();
+    public static boolean PRINT_DEBUG = ((Boolean) ResourceManager.getObject("SComponents.printDebug", Boolean.class)).booleanValue();
+    public static boolean PRINT_PRETTY = ((Boolean) ResourceManager.getObject("SComponents.printPretty", Boolean.class)).booleanValue();
 
     protected final static char[] hexDigits = {
-        '0', '1', '2', '3', '4', '5',
-        '6', '7', '8', '9', 'a', 'b',
-        'c', 'd', 'e', 'f'};
+            '0', '1', '2', '3', '4', '5',
+            '6', '7', '8', '9', 'a', 'b',
+            'c', 'd', 'e', 'f'};
 
     protected Utils() {
     }
@@ -80,7 +78,7 @@ public final class Utils {
     /**
      * Default list of javascript events to exlcude in {@link #writeEvents(org.wings.io.Device, org.wings.SComponent, String[])}
      */
-    public final static String[] EXCLUDE_ON_CLICK = new String[] { JavaScriptEvent.ON_CLICK };
+    public final static String[] EXCLUDE_ON_CLICK = new String[]{JavaScriptEvent.ON_CLICK};
 
     /**
      * Renders a container using its Layout manager or fallback just one after another.
@@ -102,8 +100,9 @@ public final class Utils {
 
     /**
      * Render event listeners attached to the passed component exlucding types of supressed listeners
-     * @param device output device
-     * @param c component to retrieve listeners from
+     *
+     * @param device                      output device
+     * @param c                           component to retrieve listeners from
      * @param suppressScriptListenerTypes Array of String i.e. <code>new String[] { JavaScriptEvent.ON_CLICK } )</code>
      */
     public static void writeEvents(final Device device, final SComponent c, final String[] suppressScriptListenerTypes)
@@ -119,8 +118,9 @@ public final class Utils {
             Map eventScripts = new HashMap();
             for (int i = 0; i < listeners.length; i++) {
                 final ScriptListener script = listeners[i];
-                if (types.contains(script.getEvent().toLowerCase()))
+                if (types.contains(script.getEvent().toLowerCase())) {
                     continue;
+                }
 
                 final String event = script.getEvent();
                 String eventScriptCode = script.getCode();
@@ -210,8 +210,9 @@ public final class Utils {
     /**
      * Renders the alignment commands for a table cell (horzontal and vertical).
      * To ensure a consistent behaviour you have to pass the default alignment applied for <code>SConstants.NO_ALIGN</code>.
+     *
      * @param defaultHorizontal default horizontal alignment to use is not aligned
-     * @param defaultVertical default vertical alignment to use if component is not aligned
+     * @param defaultVertical   default vertical alignment to use if component is not aligned
      */
     public static void printTableCellAlignment(final Device d, final SComponent c,
                                                final int defaultHorizontal, final int defaultVertical)
@@ -255,8 +256,9 @@ public final class Utils {
 
     /**
      * Append a inline CSS style definition for the passed component of the aspect foreground- and background color.
+     *
      * @param styleString SStringBuilder to append to
-     * @param component Component to use as style source
+     * @param component   Component to use as style source
      * @return The passed styleString
      */
     public static SStringBuilder appendCSSComponentInlineColorStyle(SStringBuilder styleString, final SComponent component) {
@@ -272,10 +274,11 @@ public final class Utils {
         return styleString;
     }
 
-        /**
+    /**
      * Append a inline CSS style definition for the passed component of the aspect font properties.
+     *
      * @param styleString SStringBuilder to append to
-     * @param component Component to use as style source
+     * @param component   Component to use as style source
      * @return The passed styleString
      */
     public static SStringBuilder appendCSSComponentInlineFontStyle(final SStringBuilder styleString, final SComponent component) {
@@ -314,9 +317,9 @@ public final class Utils {
                         styleString.append(")+'px');");
                     } else if (oversizeHorizontal != 0 && isPixel) {
                         // size darf nicht <0 sein.
-                        int size = Math.max(preferredSize.getWidthInt()-oversizeHorizontal, 0);
+                        int size = Math.max(preferredSize.getWidthInt() - oversizeHorizontal, 0);
                         styleString.append("width:").append(size).append("px;");
-                        
+
                     } else {
                         styleString.append("width:").append(preferredSize.getWidth()).append(";");
                     }
@@ -335,9 +338,9 @@ public final class Utils {
                         styleString.append(")+'px');");
                     } else if (oversizeVertical != 0 && isPixel) {
                         // size darf nicht <0 sein.
-                        int size = Math.max(preferredSize.getHeightInt()-oversizeVertical, 0);
+                        int size = Math.max(preferredSize.getHeightInt() - oversizeVertical, 0);
                         styleString.append("height:").append(size).append("px;");
-                        
+
                     } else {
                         styleString.append("height:").append(preferredSize.getHeight()).append(";");
                     }
@@ -355,13 +358,17 @@ public final class Utils {
         return styleString;
     }
 
-    /** Helper method to calculate the difference between border-box and content-box mode
+    /**
+     * Helper method to calculate the difference between border-box and content-box mode
+     *
      * @param component the component to investigate
      * @return the horizontal oversize
      */
     private static int getVerticalOversize(SComponent component) {
         final SBorder border = component.getBorder();
-        if (border == null) return 0;
+        if (border == null) {
+            return 0;
+        }
         int oversize = 0;
         int[] sides = {SConstants.TOP, SConstants.BOTTOM};
         final Insets insets = border.getInsets();
@@ -374,13 +381,17 @@ public final class Utils {
         return oversize;
     }
 
-    /** Helper method to calculate the difference between border-box and content-box mode
+    /**
+     * Helper method to calculate the difference between border-box and content-box mode
+     *
      * @param component the component to investigate
      * @return the vertical oversize
      */
     private static int getHorizontalOversize(SComponent component) {
         final SBorder border = component.getBorder();
-        if (border == null) return 0;
+        if (border == null) {
+            return 0;
+        }
         int oversize = 0;
         int[] sides = {SConstants.LEFT, SConstants.RIGHT};
         final Insets insets = border.getInsets();
@@ -405,16 +416,17 @@ public final class Utils {
     /**
      * Prints a HTML style attribute with widht/height of 100% if the passed dimension defines a height or width..
      * <p>Sample: <code> style="width:100%;"</code>
-     *
+     * <p/>
      * <p>This is typicall needed to stretch inner HTML element to expand to the full dimenstion defined
      * on an outer, sized HTML element. Otherwise the component would appear to small (as size is applied only
      * on the invisible outer limiting element)
      *
-     * @param device Device to print to
+     * @param device        Device to print to
      * @param preferredSize trigger dimension
      */
     public static void printCSSInlineFullSize(Device device, SDimension preferredSize) throws IOException {
-        if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO)) {
+        if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO))
+        {
             // opera doesn't show height 100% when parent has no defined height
             if (preferredSize.getHeight() != SDimension.AUTO) {
                 device.print(" style=\"width:100%;height:100%\"");
@@ -427,31 +439,33 @@ public final class Utils {
     /**
      * Prints a HTML style attribute with widht/height of 100% if the passed dimension defines a height or width..
      * <p>Sample: <code> style="width:100%;"</code>
-     *
+     * <p/>
      * <p>This is typicall needed to stretch inner HTML element to expand to the full dimenstion defined
      * on an outer, sized HTML element. Otherwise the component would appear to small (as size is applied only
      * on the invisible outer limiting element)
      *
      * @param pSStringBuilder buffer to append to
-     * @param pComponent preferredSize trigger dimension
+     * @param pComponent      preferredSize trigger dimension
      */
     public static void appendCSSInlineFullSize(SStringBuilder pSStringBuilder, SComponent pComponent) {
         SDimension preferredSize = pComponent.getPreferredSize();
-        if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO)) {
+        if (preferredSize != null && (preferredSize.getWidth() != SDimension.AUTO || preferredSize.getHeight() != SDimension.AUTO))
+        {
             pSStringBuilder.append("width:100%;height:100%;");
         }
     }
 
     /**
-      * Writes an {X|HT}ML quoted string according to RFC 1866.
-      * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
-      * @param d The device to print out on
-      * @param s the String to print
-      * @param quoteNewline should newlines be transformed into <code>&lt;br&gt;</code> tags
-      * @param quoteSpaces should spaces be transformed into <code>&amp;nbsp</code>  chars
-      * @param quoteApostroph Quote apostroph <code>'</code> by <code>\'</code>
-      * @throws IOException
-      */
+     * Writes an {X|HT}ML quoted string according to RFC 1866.
+     * '"', '<', '>', '&'  become '&quot;', '&lt;', '&gt;', '&amp;'
+     *
+     * @param d              The device to print out on
+     * @param s              the String to print
+     * @param quoteNewline   should newlines be transformed into <code>&lt;br&gt;</code> tags
+     * @param quoteSpaces    should spaces be transformed into <code>&amp;nbsp</code>  chars
+     * @param quoteApostroph Quote apostroph <code>'</code> by <code>\'</code>
+     * @throws IOException
+     */
     public static void quote(final Device d, final String s, final boolean quoteNewline,
                              final boolean quoteSpaces, final boolean quoteApostroph)
             throws IOException {
@@ -520,7 +534,7 @@ public final class Utils {
                             last = pos + 1;
                         }
                         break;
-                    /* Needed for i.e. js-code. */
+                        /* Needed for i.e. js-code. */
                     case '\'':
                         if (quoteApostroph) {
                             d.print(chars, last, (pos - last));
@@ -537,6 +551,7 @@ public final class Utils {
 
     /**
      * write string as it is
+     *
      * @param d
      * @param s
      * @throws IOException
@@ -575,7 +590,7 @@ public final class Utils {
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
         } else {
-            quote(d,s,quoteNewline, false, false);
+            quote(d, s, quoteNewline, false, false);
         }
     }
 
@@ -598,7 +613,7 @@ public final class Utils {
             throws IOException {
         if (value != null && value.trim().length() > 0) {
             d.print(" ").print(attr).print("=\"");
-            quote(d,value,true, false, false);
+            quote(d, value, true, false, false);
             d.print("\"");
         }
     }
@@ -704,7 +719,7 @@ public final class Utils {
         Color c = new Color(255, 254, 7);
         Device d = new org.wings.io.StringBuilderDevice();
         write(d, c);
-        quote(d,"\nThis is a <abc> string \"; foo & sons\nmoin",true, false, false);
+        quote(d, "\nThis is a <abc> string \"; foo & sons\nmoin", true, false, false);
         d.print(String.valueOf(-42));
         d.print(String.valueOf(Integer.MIN_VALUE));
 
@@ -714,7 +729,7 @@ public final class Utils {
         d = new org.wings.io.NullDevice();
         long start = System.currentTimeMillis();
         for (int i = 0; i < 1000000; ++i) {
-            quote(d,"this is a little & foo",true, false, false);
+            quote(d, "this is a little & foo", true, false, false);
         }
         System.out.println("took: " + (System.currentTimeMillis() - start) + "ms");
     }
@@ -756,8 +771,9 @@ public final class Utils {
          * sometimes we just need newlines (example tabbedPane)
          * I hope Holger doesn't need that microsecond ;)
          */
-        if (currentComponent == null)
+        if (currentComponent == null) {
             return d;
+        }
         d.print("\n");
         while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
             d.print("\t");
@@ -771,7 +787,9 @@ public final class Utils {
      */
     public static Device printNewline(final Device d, SComponent currentComponent, int offset) throws IOException {
         if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
+        {
             return d;
+        }
         d.print("\n");
         if (PRINT_PRETTY) {
             while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
@@ -809,7 +827,7 @@ public final class Utils {
 
             return buffer.toString();
         } catch (Exception e) {
-            log.warn("Unable to load script '"+path+"'", e);
+            log.warn("Unable to load script '" + path + "'", e);
             return "";
         } finally {
             try {
@@ -833,25 +851,29 @@ public final class Utils {
 
     /**
      * Takes a string, tokenizes it and appends the wordSuffix on each word.
-     * @param words A list of words, may be <code>null</code>.
+     *
+     * @param words      A list of words, may be <code>null</code>.
      * @param wordSuffix A suffix string to append to each word
      * @return modified string (<code>i.e. "slayout myclass","_box"</code>  gets <code>"slayout_box myclass_box"</code>).
      */
     public static String appendSuffixesToWords(String words, String wordSuffix) {
-        if (words == null || words.length() == 0 || wordSuffix == null || wordSuffix.length() == 0)
+        if (words == null || words.length() == 0 || wordSuffix == null || wordSuffix.length() == 0) {
             return words;
+        }
 
         // trivial case
-        if (words.indexOf(" ") < 0)
-            return words+wordSuffix;
+        if (words.indexOf(" ") < 0) {
+            return words + wordSuffix;
+        }
 
         // more than one word
         StringTokenizer tokenizer = new StringTokenizer(words, " ");
         SStringBuilder returnValue = new SStringBuilder();
         while (tokenizer.hasMoreElements()) {
             returnValue.append(tokenizer.nextToken()).append(wordSuffix);
-            if (tokenizer.hasMoreTokens())
+            if (tokenizer.hasMoreTokens()) {
                 returnValue.append(" ");
+            }
         }
 
         return returnValue.toString();
@@ -859,14 +881,15 @@ public final class Utils {
 
     /**
      * Prepends the component style class set on the component to the existing style string.
-     * @param component Component may be <code>null</code> and may have a <code>null</code> style string.
+     *
+     * @param component   Component may be <code>null</code> and may have a <code>null</code> style string.
      * @param styleString The style string to append
      */
     public static SStringBuilder joinStyles(final SComponent component, final SStringBuilder styleString) {
         if (component != null && component.getStyle() != null) {
             if (styleString != null) {
-                styleString.insert(0," ");
-                styleString.insert(0,component.getStyle());
+                styleString.insert(0, " ");
+                styleString.insert(0, component.getStyle());
                 return styleString;
             } else {
                 return new SStringBuilder(component.getStyle());
@@ -878,17 +901,20 @@ public final class Utils {
 
     /**
      * Prepends the component style class set on the component to the existing style string.
-     * @param component Component may be <code>null</code> and may have a <code>null</code> style string.
+     *
+     * @param component   Component may be <code>null</code> and may have a <code>null</code> style string.
      * @param styleString The style string to append
      */
     public static String joinStyles(final SComponent component, final String styleString) {
         if (component != null && component.getStyle() != null) {
-            if (styleString != null)
-                return component.getStyle()+" "+styleString;
-            else
+            if (styleString != null) {
+                return component.getStyle() + " " + styleString;
+            } else {
                 return component.getStyle();
-        } else
+            }
+        } else {
             return styleString != null ? styleString : "";
+        }
     }
 
     public static void printButtonStart(Device device, SComponent eventTarget, String eventValue, boolean b, boolean showAsFormComponent) throws IOException {
@@ -909,7 +935,7 @@ public final class Utils {
                 device.print("'");
                 device.print(applyOnClickListeners(eventTarget));
                 device.print(")\"");
-                Utils.writeEvents(device, eventTarget, new String[] { JavaScriptEvent.ON_CLICK } );
+                Utils.writeEvents(device, eventTarget, new String[]{JavaScriptEvent.ON_CLICK});
                 Utils.optAttribute(device, "class", cssClassName);
             }
         } else {
@@ -940,10 +966,11 @@ public final class Utils {
 
     public static void printButtonEnd(final Device device, final SComponent button,
                                       final String value, final boolean enabled) throws IOException {
-        if (enabled)
+        if (enabled) {
             device.print("</a>");
-        else
+        } else {
             device.print("</span>");
+        }
     }
 
     /**
@@ -956,10 +983,11 @@ public final class Utils {
         if (onClickListeners != null && onClickListeners.length > 0) {
             script.append(",new Array(");
             for (int i = 0; i < onClickListeners.length; i++) {
-                if (i > 0)
+                if (i > 0) {
                     script.append(",");
+                }
                 if (onClickListeners[i].getScript() != null) {
-                    script.append("function(){").append(onClickListeners[i].getScript()).append( "}");
+                    script.append("function(){").append(onClickListeners[i].getScript()).append("}");
                 } else {
                     script.append("function(){").append(onClickListeners[i].getCode()).append("}");
                 }
@@ -988,9 +1016,9 @@ public final class Utils {
             SStringBuilder tabArea = new SStringBuilder();
             tabArea.append(tabAreaStyle.toString());
             return tabArea;
-        }
-        else
+        } else {
             return null;
+        }
     }
 
     /**
@@ -999,4 +1027,15 @@ public final class Utils {
     public static boolean isMSIE(SComponent component) {
         return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
+
+
+    public static RenderHelper getRenderHelper(SComponent forComponent) {
+        RenderHelper renderHelper = (RenderHelper) forComponent.getSession().getProperty("css_plaf-render-helper");
+        if (renderHelper == null) {
+            renderHelper = new RenderHelper();
+            forComponent.getSession().setProperty("css_plaf-render-helper", renderHelper);
+        }
+        return renderHelper;
+    }
+
 }
