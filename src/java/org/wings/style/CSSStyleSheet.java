@@ -497,12 +497,16 @@ public class CSSStyleSheet implements StyleSheet {
         CSSAttributeSet attributes = new CSSAttributeSet();
         if (font == null)
             return attributes;
+
         String face = font.getFace();
+        if (face != null && face.length() == 0)
+            face = null;
+
         boolean italic = (font.getStyle() & Font.ITALIC) > 0;
         boolean bold = (font.getStyle() & Font.BOLD) > 0;
         int size = font.getSize();
 
-        if (face != null && face.length() > 0) {
+        if (face != null && size != -1) {
             // use font property
             SStringBuilder builder = new SStringBuilder();
             if (italic) {
@@ -519,17 +523,17 @@ public class CSSStyleSheet implements StyleSheet {
                 builder.append(face);
             }
             attributes.put(CSSProperty.FONT, builder.toString());
-        } else {
+        }
+        else {
             // use special properties
-            if (italic) {
+            if (italic)
                 attributes.put(CSSProperty.FONT_STYLE, "italic");
-            }
-            if (bold) {
+            if (bold)
                 attributes.put(CSSProperty.FONT_WEIGHT, "bold");
-            }
-            if (size > 0) {
+            if (size > -1)
                 attributes.put(CSSProperty.FONT_SIZE, size + "pt");
-            }
+            if (face != null)
+                attributes.put(CSSProperty.FONT_FAMILY, face);
         }
         return attributes;
     }

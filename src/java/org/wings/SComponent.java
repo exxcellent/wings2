@@ -959,7 +959,19 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param font the new font
      */
     public void setFont(SFont font) {
-        setAttributes(SELECTOR_ALL, CSSStyleSheet.getAttributes(font));
+        CSSAttributeSet attributes = CSSStyleSheet.getAttributes(font);
+        Style style = getDynamicStyle(SELECTOR_ALL);
+        if (style == null) {
+            addDynamicStyle(new CSSStyle(SELECTOR_ALL, attributes));
+        }
+        else {
+            style.remove(CSSProperty.FONT);
+            style.remove(CSSProperty.FONT_FAMILY);
+            style.remove(CSSProperty.FONT_SIZE);
+            style.remove(CSSProperty.FONT_STYLE);
+            style.remove(CSSProperty.FONT_WEIGHT);
+            style.putAll(attributes);
+        }
     }
 
     /**

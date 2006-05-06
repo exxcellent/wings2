@@ -105,7 +105,7 @@ public class TableExample
 
 
     static class MyCellRenderer extends SDefaultTableCellRenderer {
-        private static final SFont MONOSPACE = new SFont("monospace", SFont.PLAIN, SFont.DEFAULT_SIZE);
+        private static final SFont MONOSPACE = new SFont("monospace", SFont.BOLD, 10);
 
         public MyCellRenderer() {
             setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));
@@ -118,12 +118,13 @@ public class TableExample
                                                         int col) {
             setHorizontalAlignment(SConstants.LEFT);
             setIcon(null);
+            setFont(null);
             setForeground(null);
 
             if (value instanceof Color) {
                 Color c = (Color) value;
-                setText(colorToHex(c));
                 setFont(MONOSPACE);
+                setText(colorToHex(c));
                 setForeground(c);
                 return this;
             }
