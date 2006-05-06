@@ -124,7 +124,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
-    protected final void writeAllAttributes(Device device, SComponent component) throws IOException {
+    public final void writeAllAttributes(Device device, SComponent component) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
         final String classname = component.getStyle();

@@ -14,17 +14,17 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
-import org.wings.io.Device;
 import java.io.IOException;
+
+import org.wings.SIcon;
+import org.wings.SResourceIcon;
+import org.wings.io.Device;
 
 public abstract class AbstractLabelCG extends AbstractComponentCG {
 
     public static SIcon TRANSPARENT_ICON = new SResourceIcon("org/wings/icons/transdot.gif");
 
-    protected final void writeText(Device device, String text, boolean wordWrap) throws IOException {
+    public final void writeText(Device device, String text, boolean wordWrap) throws IOException {
         // white-space:nowrap seems to work in all major browser.
         // Except leading and trailing spaces!
         device.print("<span").print(wordWrap ? "" : " style=\"white-space:nowrap\"");
@@ -40,7 +40,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
         device.print("</span>");
     }
 
-    protected final void writeIcon(Device device, SIcon icon, boolean isMSIE) throws IOException {
+    public final void writeIcon(Device device, SIcon icon, boolean isMSIE) throws IOException {
         device.print("<img");
         if (isMSIE && icon.getURL().toString().endsWith(".png") && icon.getIconWidth() > 0 && icon.getIconHeight() > 0) {
             Utils.optAttribute(device, "style", "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + icon.getURL() + "', sizingMethod='scale')");

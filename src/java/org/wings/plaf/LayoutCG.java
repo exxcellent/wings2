@@ -23,5 +23,3 @@ public interface LayoutCG
         extends Serializable {
     void write(Device d, SLayoutManager c) throws IOException;
 }
-
-

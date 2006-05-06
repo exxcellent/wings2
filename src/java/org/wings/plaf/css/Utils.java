@@ -25,6 +25,7 @@ import org.wings.SDimension;
 import org.wings.SFont;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
+import org.wings.border.SBorder;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.resource.ResourceManager;
@@ -346,70 +347,102 @@ public final class Utils {
     public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
         SDimension preferredSize = pComponent.getPreferredSize();
         if (preferredSize != null) {
-
-            if (preferredSize.getWidth() != SDimension.AUTO) {
-                styleString.append("width:").append(preferredSize.getWidth()).append(';');
-            }
-            if (preferredSize.getHeight() != SDimension.AUTO) {
-                styleString.append("height:").append(preferredSize.getHeight()).append(';');
-            }
-        }
-        return styleString;
-    }
-
-    /**
-     * Appends a new CSS Inline Style string for the passed SDimension to the passed stringbuffer.
-     * <p>Sample: <code>width:100%;heigth=15px"</code>
-     *
-     * @param preferredSize Preferred sitze. May be null or contain null attributes
-     * @param device Device to append to.
-     * @param oversize the size of border and padding that might need to be subtracted
-     * @param oversizeVertical
-     */
-    public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
-        if (preferredSize != null) {
-            if (preferredSize.getWidth() != SDimension.AUTO) {
-                boolean isPercent = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1;
-                boolean isPixel = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("px") != -1;
-                if (oversizeHorizontal != 0 &&
-                        isPercent) {
-                    double factor = Math.min(preferredSize.getWidthInt(), 100) / 100.0;
-                    // size berechnen anhand des Parents - auf Clientseite
-                    styleString.append("width:expression(((this.parentNode.offsetWidth-").append(oversizeHorizontal).append(")");
-                    if (factor != 1.0) {
-                        styleString.append("*").append(factor);
+            //use special expression for IE
+            if (Utils.isMSIE(pComponent)) {
+                int oversizeHorizontal = getHorizontalOversize(pComponent);
+                int oversizeVertical = getVerticalOversize(pComponent);
+                if (preferredSize.getWidth() != SDimension.AUTO) {
+                    boolean isPercent = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1;
+                    boolean isPixel = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("px") != -1;
+                    if (oversizeHorizontal != 0 && isPercent) {
+                        // faktor zwischen 0 und 1
+                        double factor = Math.max(Math.min(preferredSize.getWidthInt(), 100) / 100.0, 0);
+                        // size berechnen anhand des Parents - auf Clientseite
+                        styleString.append("width:expression(((this.parentNode.offsetWidth-").append(oversizeHorizontal).append(")");
+                        if (factor < 1.0) {
+                            styleString.append("*").append(factor);
+                        }
+                        styleString.append(")+'px');");
+                    } else if (oversizeHorizontal != 0 && isPixel) {
+                        // size darf nicht <0 sein.
+                        int size = Math.max(preferredSize.getWidthInt()-oversizeHorizontal, 0);
+                        styleString.append("width:").append(size).append("px;");
+                        
+                    } else {
+                        styleString.append("width:").append(preferredSize.getWidth()).append(";");
                     }
-                    styleString.append(")+'px');");
-                } else {
-                    styleString.append("width:").append(preferredSize.getWidth()).append(";");
                 }
-            }
-            if (preferredSize.getHeight() != SDimension.AUTO) {
-                if (oversizeVertical != 0 &&
-                        preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1) {
-                    // size berechnen anhand des Parents - auf Clientseite
-                    styleString.append("height:expression(this.parentNode.offsetHeight-").append(oversizeVertical).append("+'px');");
-                } else {
-                    styleString.append("height:").append(preferredSize.getHeight()).append(";");
+                if (preferredSize.getHeight() != SDimension.AUTO) {
+                    boolean isPercent = preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1;
+                    boolean isPixel = preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("px") != -1;
+                    if (oversizeVertical != 0 && isPercent) {
+                        // faktor zwischen 0 und 1
+                        double factor = Math.max(Math.min(preferredSize.getHeightInt(), 100) / 100.0, 0);
+                        // size berechnen anhand des Parents - auf Clientseite
+                        styleString.append("height:expression(((this.parentNode.offsetHeight-").append(oversizeVertical).append(")");
+                        if (factor < 1.0) {
+                            styleString.append("*").append(factor);
+                        }
+                        styleString.append(")+'px');");
+                    } else if (oversizeVertical != 0 && isPixel) {
+                        // size darf nicht <0 sein.
+                        int size = Math.max(preferredSize.getHeightInt()-oversizeVertical, 0);
+                        styleString.append("height:").append(size).append("px;");
+                        
+                    } else {
+                        styleString.append("height:").append(preferredSize.getHeight()).append(";");
+                    }
+                }
+
+            } else {
+                if (preferredSize.getWidth() != SDimension.AUTO) {
+                    styleString.append("width:").append(preferredSize.getWidth()).append(';');
+                }
+                if (preferredSize.getHeight() != SDimension.AUTO) {
+                    styleString.append("height:").append(preferredSize.getHeight()).append(';');
                 }
             }
         }
         return styleString;
     }
 
+    /** Helper method to calculate the difference between border-box and content-box mode
+     * @param component the component to investigate
+     * @return the horizontal oversize
+     */
+    private static int getVerticalOversize(SComponent component) {
+        final SBorder border = component.getBorder();
+        if (border == null) return 0;
+        int oversize = 0;
+        int[] sides = {SConstants.TOP, SConstants.BOTTOM};
+        final Insets insets = border.getInsets();
+        for (int i = 0; i < sides.length; i++) {
+            oversize += border.getThickness(sides[i]);
+        }
+        if (insets != null) {
+            oversize += insets.top + insets.bottom;
+        }
+        return oversize;
+    }
 
-
-//    /**
-//     * Generates a new CSS Inline Style string for the passed SDimension.
-//     * <p>Sample: <code>width:100%;heigth=15px"</code>
-//     *
-//     * @param preferredSize Preferred sitze. May be null or contain null attributes
-//     * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
-//     */
-//    public static SStringBuilder generateCSSInlinePreferredSize(SDimension preferredSize) {
-//        return appendCSSInlineSize(new SStringBuilder(), preferredSize, 0, 0);
-//    }
-//
+    /** Helper method to calculate the difference between border-box and content-box mode
+     * @param component the component to investigate
+     * @return the vertical oversize
+     */
+    private static int getHorizontalOversize(SComponent component) {
+        final SBorder border = component.getBorder();
+        if (border == null) return 0;
+        int oversize = 0;
+        int[] sides = {SConstants.LEFT, SConstants.RIGHT};
+        final Insets insets = border.getInsets();
+        for (int i = 0; i < sides.length; i++) {
+            oversize += border.getThickness(sides[i]);
+        }
+        if (insets != null) {
+            oversize += insets.left + insets.right;
+        }
+        return oversize;
+    }
 
     public static SStringBuilder generateCSSInlineBorder(SStringBuilder styles, int borderSize) {
         if (borderSize > 0) {
