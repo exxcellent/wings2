@@ -297,7 +297,7 @@ public final class Utils {
      */
     public static SStringBuilder generateCSSComponentInlineStyle(SComponent component) {
         final SStringBuilder styleString = new SStringBuilder();
-        appendCSSInlineSize(styleString, component.getPreferredSize());
+        appendCSSInlineSize(styleString, component);
         appendCSSComponentInlineColorStyle(styleString, component);
         appendCSSComponentInlineFontStyle(styleString, component);
         return styleString;
@@ -343,8 +343,18 @@ public final class Utils {
      * Appends a CSS inline style string for the preferred size of the passed component to the passed stringbuffer.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      */
-    public static void appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
-        appendCSSInlineSize(styleString, pComponent.getPreferredSize());
+    public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
+        SDimension preferredSize = pComponent.getPreferredSize();
+        if (preferredSize != null) {
+            
+            if (preferredSize.getWidth() != SDimension.AUTO) {
+                styleString.append("width:").append(preferredSize.getWidth()).append(';');
+            }
+            if (preferredSize.getHeight() != SDimension.AUTO) {
+                styleString.append("height:").append(preferredSize.getHeight()).append(';');
+            }
+        }
+        return styleString;
     }
 
     /**
@@ -352,20 +362,43 @@ public final class Utils {
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      *
      * @param preferredSize Preferred sitze. May be null or contain null attributes
-     * @return the appended StringBuilder
+     * @param device Device to append to.
+     * @param oversize the size of border and padding that might need to be subtracted
+     * @param oversizeVertical
      */
-    public static SStringBuilder appendCSSInlineSize(final SStringBuilder buffer, final SDimension preferredSize) {
+    public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SDimension preferredSize, int oversizeHorizontal, int oversizeVertical) {
         if (preferredSize != null) {
             if (preferredSize.getWidth() != SDimension.AUTO) {
-                buffer.append("width:").append(preferredSize.getWidth()).append(';');
+                boolean isPercent = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1;
+                boolean isPixel = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("px") != -1;
+                if (oversizeHorizontal != 0 &&
+                        isPercent) {
+                    double factor = Math.min(preferredSize.getWidthInt(), 100) / 100.0;
+                    // size berechnen anhand des Parents - auf Clientseite
+                    styleString.append("width:expression(((this.parentNode.offsetWidth-").append(oversizeHorizontal).append(")");
+                    if (factor != 1.0) {
+                        styleString.append("*").append(factor);
+                    }
+                    styleString.append(")+'px');");
+                } else {
+                    styleString.append("width:").append(preferredSize.getWidth()).append(";");
+                }
             }
             if (preferredSize.getHeight() != SDimension.AUTO) {
-                buffer.append("height:").append(preferredSize.getHeight()).append(';');
+                if (oversizeVertical != 0 &&
+                        preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1) {
+                    // size berechnen anhand des Parents - auf Clientseite
+                    styleString.append("height:expression(this.parentNode.offsetHeight-").append(oversizeVertical).append("+'px');");
+                } else {
+                    styleString.append("height:").append(preferredSize.getHeight()).append(";");
+                }
             }
         }
-        return buffer;
+        return styleString;
     }
 
+    
+    
 //    /**
 //     * Generates a new CSS Inline Style string for the passed SDimension.
 //     * <p>Sample: <code>width:100%;heigth=15px"</code>
@@ -377,16 +410,6 @@ public final class Utils {
 //        return appendCSSInlineSize(new SStringBuilder(), preferredSize, 0, 0);
 //    }
 //
-    /**
-     * Generates a new CSS Inline Style string for the passed SDimension.
-     * <p>Sample: <code>width:100%;heigth=15px"</code>
-     *
-     * @param preferredSize Preferred size. May be null or contain null attributes
-     * @return Style string. Sample: <code>width:100%;heigth=15px"</code>
-     */
-    public static SStringBuilder generateCSSInlinePreferredSize(SStringBuilder buffer, SDimension preferredSize) {
-        return appendCSSInlineSize(buffer, preferredSize);
-    }
 
     public static SStringBuilder generateCSSInlineBorder(SStringBuilder styles, int borderSize) {
         if (borderSize > 0) {
@@ -932,7 +955,7 @@ public final class Utils {
                 device.print(requestURL.toString());
                 device.print("\"");
 
-                if (isMSIE()) {
+                if (isMSIE(eventTarget)) {
                     device.print(" onclick=\"followLink('").print(requestURL.toString()).print("'");
                     device.print(applyOnClickListeners(eventTarget));
                     device.print(")\"");
@@ -1002,8 +1025,8 @@ public final class Utils {
     /**
      * @return true if current browser is microsoft exploder
      */
-    public static boolean isMSIE() {
-        return SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE);
+    public static boolean isMSIE(SComponent component) {
+        return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
 
 }
