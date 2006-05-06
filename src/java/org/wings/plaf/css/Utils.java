@@ -894,7 +894,7 @@ public final class Utils {
                 device.print(eventValue == null ? "" : eventValue);
                 device.print("','");
                 device.print(Utils.event(eventTarget));
-                device.print("',");
+                device.print("'");
                 device.print(applyOnClickListeners(eventTarget));
                 device.print(")\" ");
                 Utils.writeEvents(device, eventTarget, new String[] { JavaScriptEvent.ON_CLICK } );
@@ -914,7 +914,7 @@ public final class Utils {
                 device.print("\"");
 
                 if (isMSIE()) {
-                    device.print(" onclick=\"followLink('").print(requestURL.toString()).print("',");
+                    device.print(" onclick=\"followLink('").print(requestURL.toString());
                     device.print(applyOnClickListeners(eventTarget));
                     writeEvents(device, eventTarget, EXCLUDE_ON_CLICK);
                 } else {
@@ -934,13 +934,13 @@ public final class Utils {
 
     /**
      * Renders inline the onclick javascript methods for the <code>sendEvent</code> and <code>followLink</code>
-     * method declared in <code>Form.js</code>.  
+     * method declared in <code>Form.js</code>.
      */
     public static SStringBuilder applyOnClickListeners(final SComponent component) {
         SStringBuilder script = new SStringBuilder();
         JavaScriptListener[] onClickListeners = getOnClickListeners(component);
         if (onClickListeners != null && onClickListeners.length > 0) {
-            script.append("new Array(");
+            script.append(",new Array(");
             for (int i = 0; i < onClickListeners.length; i++) {
                 if (i > 0)
                     script.append(",");
