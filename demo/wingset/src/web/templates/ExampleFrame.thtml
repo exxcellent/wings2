@@ -1,6 +1,6 @@
 <!--Example Application Template                                        -->
 <!--$Id$  -->
-<table align="center">
+<table align="center" style="margin:8px;">
     <tr>
         <td>
             <h2 style="margin-top:0;">wingS Example</h2>

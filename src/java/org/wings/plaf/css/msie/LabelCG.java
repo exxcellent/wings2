@@ -153,6 +153,10 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                     }
                 }
             }.writeCompound(device, component, horizontalTextPosition, verticalTextPosition, true);
+        } else {
+            //leeres label
+            writeTablePrefix(device, component);
+            writeTableSuffix(device, component);
         }
     }
 }

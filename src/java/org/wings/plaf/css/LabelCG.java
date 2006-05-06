@@ -75,6 +75,10 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
                     writeAllAttributes(d, label);
                 }
             }.writeCompound(device, component, horizontalTextPosition, verticalTextPosition, true);
+        } else {
+            //leeres label
+            writeTablePrefix(device, component);
+            writeTableSuffix(device, component);
         }
     }
 

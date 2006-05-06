@@ -177,7 +177,7 @@ public class WingSet implements Serializable {
 
         // 3) Programatically set/Overwrite CSS properties on specific components (here global frame).
         //    Remember: It's cleaner to do such global definitions in your external css file vs. in th java code.
-        frame.setAttribute(CSSProperty.MARGIN, "8px !important");
+        frame.getContentPane().setAttribute(CSSProperty.MARGIN, "8px");
 
         // 4) More advanced version of 3)
         //    Here we demonstrate how you can style single component by applying a CSS properties on a
