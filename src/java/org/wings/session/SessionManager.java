@@ -24,7 +24,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class SessionManager {
+public final class SessionManager {
     private final transient static Log log = LogFactory.getLog(SessionManager.class);
     private static final ThreadLocal currentSession = new ThreadLocal();
 

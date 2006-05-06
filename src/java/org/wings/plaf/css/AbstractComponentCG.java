@@ -13,14 +13,6 @@
  */
 package org.wings.plaf.css;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
-
-import javax.swing.InputMap;
-
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
 import org.wings.SConstants;
@@ -28,15 +20,15 @@ import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SPopupMenu;
 import org.wings.SResourceIcon;
-import org.wings.script.ScriptListener;
-import org.wings.style.Style;
-import org.wings.util.SStringBuilder;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.css.dwr.CallableManager;
+import org.wings.script.ScriptListener;
+import org.wings.style.Style;
+import org.wings.util.SStringBuilder;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -86,6 +78,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print("<div"); // div
         }
 
+        // we cant render this here.
+        //Utils.writeEvents(device, component, null);
+
         writeAllAttributes(device, component);
 
         if (useTable) {
@@ -111,7 +106,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
-    protected void writeAllAttributes(Device device, SComponent component) throws IOException {
+    protected final void writeAllAttributes(Device device, SComponent component) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
         final String classname = component.getStyle();
@@ -129,9 +124,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         // Component popup menu
         writeContextMenu(device, component);
-
-        // javascript event handlers
-        //Utils.writeEvents(device, component);
     }
 
     protected String getInlineStyles(SComponent component) {
@@ -196,7 +188,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
             // javascript needs even more & special quoting
             // FIXME: do this more efficiently
-            Utils.quote(device, toolTipText.replaceAll("\'","\\\\'"), true, true, true);
+            Utils.quote(device, toolTipText.replaceAll("'","\\'"), true, true, true);
             device.print("', 'predefined', 'default'));\"");
         }
     }
@@ -221,10 +213,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      * @param component the component
      */
     public void uninstallCG(SComponent component) {
-    }
-
-    public boolean wantsPrefixAndSuffix(SComponent component) {
-        return true;
     }
 
     protected final SIcon getBlindIcon() {
@@ -295,10 +283,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
-    /**
-     * @param component
-     * @return
-     */
     protected final  boolean hasDimension(SComponent component) {
         SDimension dim = component.getPreferredSize();
         if (dim == null) return false;
@@ -314,7 +298,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         writeInlineScripts(device, component);
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
-
     }
 
     public abstract void writeInternal(Device device, SComponent component) throws IOException;

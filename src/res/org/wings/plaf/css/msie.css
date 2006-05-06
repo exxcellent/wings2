@@ -110,6 +110,9 @@ table.SButton SPAN.disabled_formbutton:active {
    border: 1px outset #ddd;
    cursor: default;
 }
+table.SButton A.linkbutton {
+   color: inherit;  /* Inherit color from outer container. */
+}
 
 /* SFlowLayout can't flow if the immediate inner children has defined 100% width.
    Some wingS component inheritly define 100% width i.e. like SForm.
@@ -186,8 +189,8 @@ PageScroller as non-form-component
    background-color: #ECECEC;
 }
 
-.SPageScroller SPAN.disabled_button,
-.SPageScroller SPAN.disabled_formbutton {
+.SPageScroller SPAN.disabled_linkbutton,
+.SPageScroller SPAN.disabled_linkbutton {
 	text-decoration: none !important;
 	font-weight: bold !important;
 }

@@ -13,18 +13,6 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
@@ -48,9 +36,21 @@ import org.wings.session.SessionManager;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
 
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 /**
  * Utils.java
- * 
+ *
  * Helper class that collects static methods usable from CGs.
  *
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
@@ -65,9 +65,9 @@ public final class Utils {
     /**
      * Print debug information in generated HTML
      */
-    public static boolean PRINT_DEBUG = ( (Boolean) ResourceManager.getObject("SComponents.printDebug", Boolean.class)).booleanValue();  
-    public static boolean PRINT_PRETTY = ( (Boolean) ResourceManager.getObject("SComponents.printPretty", Boolean.class)).booleanValue();  
-        
+    public static boolean PRINT_DEBUG = ( (Boolean) ResourceManager.getObject("SComponents.printDebug", Boolean.class)).booleanValue();
+    public static boolean PRINT_PRETTY = ( (Boolean) ResourceManager.getObject("SComponents.printPretty", Boolean.class)).booleanValue();
+
     protected final static char[] hexDigits = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'a', 'b',
@@ -773,7 +773,7 @@ public final class Utils {
         /* (OL) I took out the test for PRINT_DEBUG, since
          * sometimes we just need newlines (example tabbedPane)
          * I hope Holger doesn't need that microsecond ;)
-         */ 
+         */
         if (currentComponent == null)
             return d;
         d.print("\n");
@@ -919,7 +919,7 @@ public final class Utils {
      * @param eventValue
      * @param b
      * @param showAsFormComponent
-     * @throws IOException 
+     * @throws IOException
      */
     public static void printButtonStart(Device device, SComponent eventTarget, String eventValue, boolean b, boolean showAsFormComponent) throws IOException {
         printButtonStart(device, eventTarget, eventValue, b, showAsFormComponent, null);
@@ -954,14 +954,15 @@ public final class Utils {
                 device.print("<a href=\"");
                 device.print(requestURL.toString());
                 device.print("\"");
+                Utils.optAttribute(device, "class", "linkbutton");
 
                 if (isMSIE(eventTarget)) {
                     device.print(" onclick=\"followLink('").print(requestURL.toString()).print("'");
                     device.print(applyOnClickListeners(eventTarget));
                     device.print(")\"");
-                    writeEvents(device, eventTarget, EXCLUDE_ON_CLICK);
+                    Utils.writeEvents(device, eventTarget, EXCLUDE_ON_CLICK);
                 } else {
-                    writeEvents(device, eventTarget, null);
+                    Utils.writeEvents(device, eventTarget, null);
                 }
             }
         }
