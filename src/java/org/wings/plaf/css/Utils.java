@@ -150,57 +150,6 @@ public final class Utils {
         }
     }
 
-    public static void writeFrameEvents(Device d, SFrame frame) throws IOException {
-        ScriptListener[] listeners = frame.getScriptListeners();
-        Map eventScripts = new HashMap();
-        if (listeners.length > 0) {
-            for (int i = 0; i < listeners.length; i++) {
-                final ScriptListener script = listeners[i];
-                final String event = script.getEvent();
-                String eventScriptCode = script.getCode();
-
-                if (event == null
-                        || event.length() == 0
-                        || eventScriptCode == null
-                        || eventScriptCode.length() == 0) {
-                    continue;
-                }
-
-                if (eventScripts.containsKey(event)) {
-                    String savedEventScriptCode = (String) eventScripts.get(event);
-                    eventScriptCode = savedEventScriptCode
-                            + (savedEventScriptCode.trim().endsWith(";") ? "" : ";")
-                            + eventScriptCode;
-                }
-                eventScripts.put(event, eventScriptCode);
-            }
-        }
-
-        Iterator it = eventScripts.keySet().iterator();
-        while (it.hasNext()) {
-            String event = (String) it.next();
-            String code = (String) eventScripts.get(event);
-            d.print(" ");
-            d.print(event);
-            d.print("=\"");
-            d.print(code);
-            d.print("\"");
-
-        }
-    }
-
-    /*
-      static String event(SComponent component, String lowLevelEventId) {
-      if (component.getSession().getEventInvalidation() && component.getParentFrame() != null) {
-      if (!(component instanceof LowLevelEventListener) || ((LowLevelEventListener)component).checkEpoch())
-      return (component.getParentFrame().getEventEpoch()
-      + SConstants.UID_DIVIDER
-      + lowLevelEventId);
-      }
-      return lowLevelEventId;
-      }
-    */
-
     /**
      * Encodes a low level event id for using it in a request parameter. Every
      * {@link LowLevelEventListener} should encode its LowLevelEventId before

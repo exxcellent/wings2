@@ -35,9 +35,8 @@ import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
-import org.wings.session.Browser;
-import org.wings.session.SessionManager;
 import org.wings.session.Session;
+import org.wings.session.SessionManager;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -283,7 +282,6 @@ public class FrameCG extends AbstractComponentCG implements org.wings.plaf.Frame
         }
 
         Session session = SessionManager.getSession();
-        final Browser browser = session.getUserAgent();
         final String language = session.getLocale().getLanguage();
         final String title = frame.getTitle();
         final List headers = frame.headers();
@@ -389,9 +387,7 @@ public class FrameCG extends AbstractComponentCG implements org.wings.plaf.Frame
 
         device.print("</head>\n");
         device.print("<body");
-        Utils.optAttribute(device, "id", frame.getName());
-        Utils.optAttribute(device, "class", frame.getStyle());
-        Utils.writeFrameEvents(device, frame);
+        Utils.writeEvents(device, frame, null);
         writeAllAttributes(device, frame);
         device.print(">\n");
         if (frame.isVisible()) {
@@ -427,7 +423,7 @@ public class FrameCG extends AbstractComponentCG implements org.wings.plaf.Frame
                 menu.write(device);
             }
             // now add final JS for DnD if neccessary.
-            if (dndManager.isVisible() && dragIter.hasNext()) { // initialize only if dragSources are present
+            if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) { // initialize only if dragSources are present
                 device.print("<script type=\"text/javascript\">\n<!--\n");
                 device.print("SET_DHTML();\n");
                 while (dragIter.hasNext()) {
@@ -508,6 +504,12 @@ public class FrameCG extends AbstractComponentCG implements org.wings.plaf.Frame
         return renderXmlDeclaration;
     }
 
+    /**
+     * Sets should the returned HTML page start with the &lt;?xml version="1.0" encoding="..."&gt;.
+     * This has effects which rendering mode the browsers will choose (quirks/strict)
+     *
+     * @param renderXmlDeclaration should the returned HTML page start with the &lt;?xml version="1.0" encoding="..."&gt;.
+     */
     public void setRenderXmlDeclaration(Boolean renderXmlDeclaration) {
         this.renderXmlDeclaration = renderXmlDeclaration;
     }

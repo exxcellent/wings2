@@ -86,6 +86,8 @@ function followLink(url, clientHandlers) {
     if (doSubmit == undefined || doSubmit) {
         document.location = url;
     }
+
+    return false;
 }
 
 function requestFocus(id) {
