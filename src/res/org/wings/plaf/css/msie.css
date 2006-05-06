@@ -232,12 +232,17 @@ table.SLabel {
    font-weight: normal;
    font-style: normal;
    color: #000000;
+    text-align: left;
 }
 
 .SList li.SList_selected {
     background-color: #f6decc !important;
     border: 1px dotted black;
     cursor: pointer
+}
+
+.SList li table {
+    display: inline;
 }
 
 .STree {

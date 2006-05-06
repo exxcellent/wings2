@@ -125,7 +125,6 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         device.print(list.getType());
         Utils.optAttribute(device, "type", list.getOrderType());
         Utils.optAttribute(device, "start", list.getStart());
-
         device.print(">");
 
         javax.swing.ListModel model = list.getModel();
