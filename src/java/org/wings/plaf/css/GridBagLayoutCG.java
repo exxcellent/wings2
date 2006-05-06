@@ -79,7 +79,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
 
                         String width = null;
                         if (c.weightx > 0 && grid.colweight[row] > 0)
-                            width = (int) (100 * c.weightx / grid.colweight[row]) + "%\"";
+                            width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
 
                         openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER, styles);
 
