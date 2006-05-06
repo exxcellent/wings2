@@ -743,9 +743,7 @@ public final class Utils {
      */
     public static Device printNewline(final Device d, SComponent currentComponent) throws IOException {
         if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
-        {
             return d;
-        }
         d.print("\n");
         while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
             d.print("\t");
@@ -759,9 +757,7 @@ public final class Utils {
      */
     public static Device printNewline(final Device d, SComponent currentComponent, int offset) throws IOException {
         if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
-        {
             return d;
-        }
         d.print("\n");
         while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
             d.print("\t");
@@ -914,7 +910,7 @@ public final class Utils {
                 device.print("\"");
 
                 if (isMSIE()) {
-                    device.print(" onclick=\"followLink('").print(requestURL.toString());
+                    device.print(" onclick=\"followLink('").print(requestURL.toString()).print("'");
                     device.print(applyOnClickListeners(eventTarget));
                     device.print(")\"");
                     writeEvents(device, eventTarget, EXCLUDE_ON_CLICK);
