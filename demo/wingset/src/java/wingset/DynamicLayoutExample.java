@@ -547,6 +547,7 @@ public class DynamicLayoutExample extends WingSetPane {
         SLabel multiLineLabel = new SLabel();
         //multiLineLabel.setEditable(false);
         multiLineLabel.setWordWrap(true);
+        multiLineLabel.setPreferredSize(SDimension.FULLWIDTH);
         multiLineLabel.setText(description);
         multiLineLabel.setBorder(new SLineBorder(Color.gray, 1));
         multiLineLabel.setBackground(Color.orange);

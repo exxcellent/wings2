@@ -23,6 +23,10 @@ import org.wings.SResourceIcon;
 import org.wings.SRootLayout;
 import org.wings.STabbedPane;
 import org.wings.SURLIcon;
+import org.wings.SButton;
+import org.wings.SBorderLayout;
+import org.wings.SFont;
+import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
 import org.wings.resource.DefaultURLResource;
 import org.wings.session.BrowserType;
@@ -31,6 +35,9 @@ import org.wings.style.CSSProperty;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.*;
 
 /**
  * The root of the WingSet demo application.
@@ -56,6 +63,11 @@ public class WingSet implements Serializable {
      * (Typically a file named wings-statisticsxxxlog placed in jakarta-tomcat/temp directory)
      */
     private static final boolean LOG_STATISTICS_TO_FILE = true;
+
+    /**
+     * Optional external custom CSS stylesheet to style your application according to your needs.
+      */
+    private Link customStyleSheetLink;
 
     static {
         if (LOG_STATISTICS_TO_FILE) {
@@ -141,12 +153,27 @@ public class WingSet implements Serializable {
         }
 
         // 2) Include an application specific CSS stylesheet to extend/overwrite the default wingS style set.
+
         if (SessionManager.getSession().getUserAgent().getBrowserType().equals(BrowserType.IE)) {
             // Yeah - some 'browsers' always require special attention
-            frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset-ie.css")));
+            customStyleSheetLink = new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset-ie.css"));
         } else {
-            frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset-default.css")));
+            customStyleSheetLink = new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset-default.css"));
         }
+        frame.addHeader(customStyleSheetLink);
+
+        SButton switchStyleButton = new SButton("Toggle WingSet styling");
+        switchStyleButton.setShowAsFormComponent(false);
+        switchStyleButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (frame.removeHeader(customStyleSheetLink) == false)
+                    frame.addHeader(customStyleSheetLink);
+            }
+        });
+        switchStyleButton.setForeground(Color.RED);
+        switchStyleButton.setSelectionFont(new SFont("Arial, sans-serif", SFont.ITALIC+SFont.BOLD, -1));
+        switchStyleButton.setBorder(new SEmptyBorder(5,0,5,0));
+        frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
 
         // 3) Programatically set/Overwrite CSS properties on specific components (here global frame).
         //    Remember: It's cleaner to do such global definitions in your external css file vs. in th java code.

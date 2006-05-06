@@ -25,6 +25,8 @@ import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SURLIcon;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.JavaScriptEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -106,7 +108,20 @@ public class ButtonExample extends WingSetPane {
         panel.add(buttonGrid);
         panel.add(reportLabel);
 
+        addSomeConfirmDialogues();
+
         return panel;
+    }
+
+    /**
+     * Register and use some <code>JavaScriptEvent.ON_CLICK</code> listeners to react on button click.
+     * This tests the feature that return false aborts the button submit. 
+      */
+    private void addSomeConfirmDialogues() {
+        for (int i = 0; i < 3; i++) {
+            buttons[i].addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_CLICK,
+                    "return window.confirm('Please confirm click of button "+(i+1)+"');"));
+        }
     }
 
     /**

@@ -8,7 +8,7 @@
 /* ----- Input text fields, dropdown lists, buttons: Orange background, orange outline. */
 textarea.STextArea, input.STextField, input.SFormattedTextField,
 input.SPasswordField, select.SComboBox, select.SList,
-table.SButton a, table.SToggleButton a,
+TABLE.SButton A.formbutton, .SToggleButton a.formbutton,
 table.SCheckBox input, table.SRadioButton input
 {
     background-color: #f6decc;
