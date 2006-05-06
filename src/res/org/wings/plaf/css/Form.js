@@ -45,7 +45,7 @@ function sendEvent(event, eventValue, eventName, clientHandlers) {
     var form = getParentByTagName(target, "FORM");
     var eidprovider = target;
     if (!eventName) {
-        var eidprovider = getParentByAttributeName()(target, "eid");
+        var eidprovider = getParentByAttributeName(target, "eid");
         eventName = eidprovider.getAttribute("eid");
     }
 

@@ -32,6 +32,7 @@ public class SLabel extends SComponent {
     protected SIcon disabledIcon = null;
     protected int verticalTextPosition = SConstants.CENTER;
     protected int horizontalTextPosition = SConstants.RIGHT;
+    protected int iconTextGap = 4;
     protected boolean wordWrap;
 
     /**
@@ -230,7 +231,35 @@ public class SLabel extends SComponent {
      * @param wordWrap Set to <code>true</code> if you want labels to allow to break into more lines than passed.
      */
     public void setWordWrap(boolean wordWrap) {
-        this.wordWrap = wordWrap;
+        if (this.wordWrap != wordWrap) {
+            this.wordWrap = wordWrap;
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Returns the amount of space between the text and the icon
+     * displayed in this label.
+     *
+     * @return an int equal to the number of pixels between the text
+     *         and the icon.
+     * @see #setIconTextGap
+     */
+    public int getIconTextGap() {
+        return iconTextGap;
+    }
+
+    /**
+     * If both the icon and text properties are set, this property
+     * defines the space between them.
+     * <p>
+     * The default value of this property is 4 pixels.
+     * <p>
+     *
+     * @see #getIconTextGap
+     */
+    public void setIconTextGap(int iconTextGap) {
+        this.iconTextGap = iconTextGap;
     }
 
     public void setCG(LabelCG cg) {

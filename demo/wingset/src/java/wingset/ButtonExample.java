@@ -13,23 +13,13 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SButton;
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SURLIcon;
+import org.wings.*;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.JavaScriptEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -65,7 +55,7 @@ public class ButtonExample extends WingSetPane {
         form.add(controls, SBorderLayout.NORTH);
         form.add(p, SBorderLayout.CENTER);
 
-        controls.getApplyButton().addActionListener(action);
+        controls.addActionListener(action);
         final SButton defaultButton = new SButton();
         defaultButton.addActionListener(action);
         defaultButton.setActionCommand("Default Button (Enter key)");
@@ -151,7 +141,10 @@ public class ButtonExample extends WingSetPane {
     /**
      * The additional control toolbar for the button example
      */
-    private class ButtonControls extends ComponentControls {
+    private class ButtonControls extends ComponentControls implements ActionListener
+    {
+        private STextField iconTextGap = new STextField("4");
+
         public ButtonControls() {
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
@@ -170,10 +163,17 @@ public class ButtonExample extends WingSetPane {
             });
             addControl(new SLabel(""));
             addControl(disableSomeButtons);
+            addControl(new SLabel("iconTextGap"));
+            addControl(iconTextGap);
+
+            addActionListener(this);
         }
 
-        public SButton getApplyButton() {
-            return super.applyButton;
+        public void actionPerformed(ActionEvent e) {
+            for (Iterator iterator = getControllables().iterator(); iterator.hasNext();) {
+                SAbstractIconTextCompound component = (SAbstractIconTextCompound)iterator.next();
+                component.setIconTextGap(new Integer(iconTextGap.getText()).intValue());
+            }
         }
     }
 }

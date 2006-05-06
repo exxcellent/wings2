@@ -206,6 +206,10 @@ public class ComponentControls
         components.add(component);
     }
 
+    public List getControllables() {
+        return components;
+    }
+
     protected void addActionListener(ActionListener actionListener) {
         applyButton.addActionListener(actionListener);
     }

@@ -13,9 +13,7 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
+import org.wings.*;
 import org.wings.io.Device;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +34,7 @@ public abstract class IconTextCompound {
             verticalTextPosition = SConstants.CENTER;
         if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.CENTER)
             horizontalTextPosition = SConstants.RIGHT;
+        int iconTextGap = getIconTextGap(component);
 
         boolean renderTextFirst = verticalTextPosition == SConstants.TOP ||
                 (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT);
@@ -46,7 +45,11 @@ public abstract class IconTextCompound {
 
         if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.LEFT ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.RIGHT) {
-            device.print("<tr><td align=\"left\" valign=\"top\">");
+            device.print("<tr><td align=\"left\" valign=\"top\" style=\"padding-right:");
+            device.print(iconTextGap);
+            device.print("px; padding-bottom:");
+            device.print(iconTextGap);
+            device.print("px\">");
             first(device, renderTextFirst);
             device.print("</td><td></td></tr>");
             device.print("<tr><td></td><td align=\"right\" valign=\"bottom\">");
@@ -54,21 +57,29 @@ public abstract class IconTextCompound {
             device.print("</td></tr>");
         } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.RIGHT ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.LEFT) {
-            device.print("<tr><td></td><td align=\"right\" valign=\"top\">");
+            device.print("<tr><td></td><td align=\"right\" valign=\"top\" style=\"padding-left:");
+            device.print(iconTextGap);
+            device.print("px; padding-bottom:");
+            device.print(iconTextGap);
+            device.print("px\">");
             first(device, renderTextFirst);
             device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\">");
             last(device, renderTextFirst);
             device.print("</td><td></td></tr>");
         } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.CENTER ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.CENTER) {
-            device.print("<tr><td align=\"center\" valign=\"top\">");
+            device.print("<tr><td align=\"center\" valign=\"top\" style=\"padding-bottom:");
+            device.print(iconTextGap);
+            device.print("px\">");
             first(device, renderTextFirst);
             device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\">");
             last(device, renderTextFirst);
             device.print("</td></tr>");
         } else if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT ||
                 verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.RIGHT) {
-            device.print("<tr><td align=\"left\">");
+            device.print("<tr><td align=\"left\" style=\"padding-right:");
+            device.print(iconTextGap);
+            device.print("px\">");
             first(device, renderTextFirst);
             device.print("</td><td align=\"right\">");
             last(device, renderTextFirst);
@@ -80,11 +91,19 @@ public abstract class IconTextCompound {
         device.print("</table>");
     }
 
+    protected int getIconTextGap(SComponent component) {
+        if (component instanceof SLabel)
+            return ((SLabel)component).getIconTextGap();
+        if (component instanceof SAbstractButton)
+            return ((SAbstractButton)component).getIconTextGap();
+        return 4;
+    }
+
     protected void first(Device device, boolean textFirst) throws IOException {
         if (textFirst) {
             // avoid that in case that horizontalAlignment of text is right, that the text itself
             // becomes right-aligned
-            device.print("<div style=\"text-align:left\">");           
+            device.print("<div style=\"text-align:left\">");
             text(device);
             device.print("</div>");
         } else

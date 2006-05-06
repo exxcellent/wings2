@@ -68,6 +68,7 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                             verticalTextPosition = SConstants.CENTER;
                         if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.CENTER)
                             horizontalTextPosition = SConstants.RIGHT;
+                        int iconTextGap = getIconTextGap(component);
 
                         final boolean renderTextFirst = verticalTextPosition == SConstants.TOP ||
                             (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT);
@@ -82,6 +83,10 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                             device.print(insets.left);
                             device.print("px; padding-top:");
                             device.print(insets.top);
+                            device.print("px; padding-right:");
+                            device.print(iconTextGap);
+                            device.print("px; padding-bottom:");
+                            device.print(iconTextGap);
                             device.print("px\">");
                             first(device, renderTextFirst);
                             device.print("</td><td></td></tr>");
@@ -98,6 +103,10 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                             device.print(insets.right);
                             device.print("px; padding-top:");
                             device.print(insets.top);
+                            device.print("px; padding-left:");
+                            device.print(iconTextGap);
+                            device.print("px; padding-bottom:");
+                            device.print(iconTextGap);
                             device.print("px\">");
                             first(device, renderTextFirst);
                             device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\" style=\"padding-left:");
@@ -115,6 +124,8 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                             device.print(insets.left);
                             device.print("px; padding-right:");
                             device.print(insets.right);
+                            device.print("px; padding-bottom:");
+                            device.print(iconTextGap);
                             device.print("px\">");
                             first(device, renderTextFirst);
                             device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\" style=\"padding-bottom:");
@@ -134,6 +145,8 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                             device.print(insets.top);
                             device.print("px; padding-bottom:");
                             device.print(insets.bottom);
+                            device.print("px; padding-right:");
+                            device.print(iconTextGap);
                             device.print("px\">");
                             first(device, renderTextFirst);
                             device.print("</td><td align=\"right\" style=\"padding-right:");

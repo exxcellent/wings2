@@ -87,7 +87,7 @@ public abstract class SAbstractIconTextCompound
 
     private int horizontalTextPosition = SConstants.RIGHT;
 
-    private int iconTextGap = 0;
+    private int iconTextGap = 4;
 
     private boolean delayEvents = false;
 
