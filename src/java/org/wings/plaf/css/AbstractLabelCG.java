@@ -40,9 +40,9 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
         device.print("</span>");
     }
 
-    protected final void writeIcon(Device device, SIcon icon) throws IOException {
+    protected final void writeIcon(Device device, SIcon icon, boolean isMSIE) throws IOException {
         device.print("<img");
-        if (isIE() && icon.getURL().toString().endsWith(".png") && icon.getIconWidth() > 0 && icon.getIconHeight() > 0) {
+        if (isMSIE && icon.getURL().toString().endsWith(".png") && icon.getIconWidth() > 0 && icon.getIconHeight() > 0) {
             Utils.optAttribute(device, "style", "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + icon.getURL() + "', sizingMethod='scale')");
             Utils.optAttribute(device, "src", TRANSPARENT_ICON.getURL());
         }
@@ -54,10 +54,6 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
         device.print(" alt=\"");
         device.print(icon.getIconTitle());
         device.print("\"/>");
-    }
-
-    protected final boolean isIE() {
-        return BrowserType.IE.equals(SessionManager.getSession().getUserAgent().getBrowserType());
     }
 
 }

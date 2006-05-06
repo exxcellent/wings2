@@ -109,7 +109,7 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         // Workaround -- enable this renderer for the MSIE.
         // MSIE stretches the rows to the length of the universe if we advise the rows to be 100%/1% height
         // Gecko fails to stretch if we do not advise the preffered sizes.
-        final boolean isMsIEBrowser = BrowserType.IE.equals(sb.getSession().getUserAgent().getBrowserType());
+        final boolean isMsIEBrowser = Utils.isMSIE(sb);
         final String rowHeightExpanded = isMsIEBrowser ? "" : " height=\"100%\"";
         final String rowHeightFlattened = isMsIEBrowser ? "" : " height=\"1%\"";
         // Regarding table height it is totally inveser. I love 'em.

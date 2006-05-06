@@ -129,8 +129,6 @@ public final class LowLevelEventDispatcher
         if (log.isDebugEnabled())
             log.debug("dispatch " + name + " = " + Arrays.asList(values));
 
-        final boolean isIE = SessionManager.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
-
         boolean result = false;
         int dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
         String epoch = null;
@@ -169,29 +167,11 @@ public final class LowLevelEventDispatcher
                 LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
                 if (gl.isEnabled()) {
                     if (checkEpoch(epoch, name, gl)) {
-                        if (isIE) {
-                            // see comment above, is this a form event?
-                            boolean isFormEvent = (gl instanceof SComponent) &&((SComponent)gl).getResidesInForm() && ((SComponent)gl).getShowAsFormComponent(); 
-                            if (isFormEvent) {
-                                log.debug("process form event '" + name + "' by " +
-                                        gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                        ")");
-                                gl.processLowLevelEvent(name, values);
-                                result = true;
-                            } else {
-                                log.debug("process event '" + name + "' by " +
-                                        gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                        ")");
-                                gl.processLowLevelEvent(name, values);
-                                result = true;
-                            }
-                        } else {
-                            log.debug("process event '" + name + "' by " +
-                                    gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                    ")");
-                            gl.processLowLevelEvent(name, values);
-                            result = true;
-                        }
+                        log.debug("process event '" + name + "' by " +
+                                gl.getClass() + "(" + gl.getLowLevelEventId() +
+                                ")");
+                        gl.processLowLevelEvent(name, values);
+                        result = true;
                     }
                 }
             }

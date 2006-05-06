@@ -51,6 +51,7 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
         final int horizontalTextPosition = label.getHorizontalTextPosition();
         final int verticalTextPosition = label.getVerticalTextPosition();
         final boolean wordWrap = label.isWordWrap();
+        final boolean isMSIE = Utils.isMSIE(component);
         
         if (icon == null && text != null) {
             writeTablePrefix(device, component);
@@ -59,7 +60,7 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
         }
         else if (icon != null && text == null) {
             writeTablePrefix(device, component);
-            writeIcon(device, icon);
+            writeIcon(device, icon, isMSIE);
             writeTableSuffix(device, component);
         }
         else if (icon != null && text != null) {
@@ -68,7 +69,7 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
                     writeText(d, text, wordWrap);
                 }
                 protected void icon(Device d) throws IOException {
-                    writeIcon(d, icon);
+                    writeIcon(d, icon, isMSIE);
                 }
 
                 protected void tableAttributes(Device d) throws IOException {

@@ -61,11 +61,12 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
 
         final String text = button.getText();
         final SIcon icon = getIcon(button);
+        final boolean isMSIE = Utils.isMSIE(button);
 
         if (icon == null && text != null)
             writeText(device, text, false);
         else if (icon != null && text == null)
-            writeIcon(device, icon);
+            writeIcon(device, icon, isMSIE);
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
@@ -73,7 +74,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
                 }
 
                 protected void icon(Device d) throws IOException {
-                    writeIcon(d, icon);
+                    writeIcon(d, icon, isMSIE);
                 }
 
                 protected void tableAttributes(Device d) throws IOException {
