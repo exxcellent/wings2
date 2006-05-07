@@ -254,17 +254,18 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
         final SCellRendererPane rendererPane = table.getCellRendererPane();
         final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION && table.isEditable();
         final boolean showAsFormComponent = table.getShowAsFormComponent();
-        final SDimension tableWidthByColumnModel = determineTableWidthByColumnModel(table, needsSelectionRow);
+        //final SDimension tableWidthByColumnModel = determineTableWidthByColumnModel(table, needsSelectionRow);
 
-        /**
-         * Description: This is a FIREFOX bug workaround. Currently we render all components surrounded by a DIV.
+        /*
+         * Description: This is a FIREFOX bug workaround. Currently we render all components surrounded by a DIV/TABLE.
          * During heavy load and incremental delivery of a page this leads to disorted tables as the firefox seems
-         * to have an bug. Refer to http://jira.j-wings.org/browse/WGS-139
+         * to have an bug.
+         * Refer to http://jira.j-wings.org/browse/WGS-139 for screenshots
          *
-         * THis workaround tries to deliver the HTML code of a table at once. This should resolve this issue to 99%.
+         * THis workaround tries to deliver the HTML code of a table at once.
+         * This seems to resolve this issue to 99%.
          */
-        final boolean newCachingDevice = !(_device instanceof CachingDevice);
-        final CachingDevice device = newCachingDevice ? new CachingDevice(_device) : (CachingDevice) _device ;
+        final CachingDevice device = new CachingDevice(_device);
 
         try {
             device.print("<table");
@@ -282,6 +283,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
 
         STableColumnModel columnModel = table.getColumnModel();
         if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
+            device.print("<colgroup>");
             if (needsSelectionRow)
                 writeCol(device, selectionColumnWidth);
 
@@ -291,6 +293,8 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                 if (!column.isHidden())
                     writeCol(device, column.getWidth());
             }
+            device.print("</colgroup>");
+            Utils.printNewline(device, table);
         }
 
         /*
@@ -316,8 +320,8 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
             device.print("<thead><tr class=\"header\"");
             Utils.optAttribute(device, "style", headerArea);
             device.print(">");
-            Utils.printNewline(device, table);
 
+            Utils.printNewline(device, table, 1);
             if (needsSelectionRow)
                 device.print("<th width=\"").print(selectionColumnWidth).print("\"></th>");
 
@@ -325,14 +329,16 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                 writeHeaderCell(device, table, rendererPane, table.convertColumnIndexToModel(c));
             }
 
-            device.print("</tr></thead>\n");
+            Utils.printNewline(device, table);
+            device.print("</tr></thead>");
         }
 
         SStringBuilder selectedArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_SELECTED));
         SStringBuilder evenArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_EVEN_ROWS));
         SStringBuilder oddArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_ODD_ROWS));
 
-        device.print("<tbody>\n");
+        Utils.printNewline(device, table);
+        device.print("<tbody>");
         for (int r = startRow; r < endRow; r++) {
             String rowStyle = table.getRowStyle(r);
             SStringBuilder rowClass = new SStringBuilder(rowStyle != null ? rowStyle + " " : "");
@@ -361,12 +367,10 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                 device.print("</tr>");
                 Utils.printNewline(device, table);
             }
-            device.print("</tbody>");
-            device.print("</table>");
+            device.print("</tbody></table>");
         } finally {
             /* Refer to description above. */
-            if (newCachingDevice)
-                device.close();
+            device.close();
             //device = null;
         }
     }
@@ -382,7 +386,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
     private void writeCol(Device device, String width) throws IOException {
         device.print("<col");
         Utils.optAttribute(device, "width", width);
-        device.print(">");
+        device.print("/>");
     }
 
     /**
