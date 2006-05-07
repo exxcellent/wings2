@@ -3,25 +3,28 @@
  */
 package org.wings.jsp;
 
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
-import org.wings.externalizer.ExternalizedResource;
+import org.wings.Renderable;
+import org.wings.RequestURL;
+import org.wings.SComponent;
+import org.wings.SForm;
+import org.wings.SFrame;
 import org.wings.event.SRequestEvent;
 import org.wings.event.SRequestListener;
-import org.wings.*;
+import org.wings.externalizer.ExternalizedResource;
+import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.css.Utils;
-import org.wings.io.StringBufferDevice;
+import org.wings.session.Session;
+import org.wings.session.SessionManager;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.ServletConfig; 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author hengels
@@ -136,7 +139,7 @@ public class WingsSession
             WingsSession wingsSession = getSession(request, response);
             SFrame frame = getFrame(wingsSession);
 
-            StringBufferDevice headerdev = new StringBufferDevice();
+            StringBuilderDevice headerdev = new StringBuilderDevice();
             for (Iterator iterator = frame.headers().iterator(); iterator.hasNext();) {
                 Object next = iterator.next();
                 if (next instanceof Renderable) {
@@ -154,8 +157,7 @@ public class WingsSession
 
     public static void writeComponent(HttpServletRequest request, HttpServletResponse response, JspWriter out, SComponent component) throws IOException, ServletException {
         synchronized (request.getSession()) {
-            WingsSession wingsSession = getSession(request, response);
-            StringBufferDevice outdev = new StringBufferDevice();
+            StringBuilderDevice outdev = new StringBuilderDevice();
             component.write(outdev);
             out.print(outdev);
             SessionManager.removeSession();

@@ -17,6 +17,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
+import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 
 import java.io.IOException;
@@ -77,7 +78,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
 
             if (renderer != null) {
                 // Hack: remove all tags, because in form selections, looks ugly.
-                org.wings.io.StringBufferDevice string = getStringBufferDevice();
+                StringBuilderDevice string = getStringBuilderDevice();
                 renderer.write(string);
                 char[] chars = string.toString().toCharArray();
                 int pos = 0;
@@ -107,11 +108,11 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         device.print("/>");
     }
 
-    private org.wings.io.StringBufferDevice stringBufferDevice = null;
+    private StringBuilderDevice stringBufferDevice = null;
 
-    protected org.wings.io.StringBufferDevice getStringBufferDevice() {
+    protected org.wings.io.StringBuilderDevice getStringBuilderDevice() {
         if (stringBufferDevice == null) {
-            stringBufferDevice = new org.wings.io.StringBufferDevice();
+            stringBufferDevice = new StringBuilderDevice();
         }
         stringBufferDevice.reset();
         return stringBufferDevice;
