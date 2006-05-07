@@ -25,6 +25,7 @@ import org.wings.SLabel;
 import org.wings.SListSelectionModel;
 import org.wings.STable;
 import org.wings.io.Device;
+import org.wings.io.CachingDevice;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
 import org.wings.table.SDefaultTableCellRenderer;
@@ -245,7 +246,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
     }
 
 
-    public final void writeInternal(final Device device, final SComponent _c) throws IOException {
+    public final void writeInternal(final Device _device, final SComponent _c) throws IOException {
         final STable table = (STable) _c;
         final SDimension intercellPadding = table.getIntercellPadding();
         final SDimension intercellSpacing = table.getIntercellSpacing();
@@ -262,10 +263,10 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
          *
          * THis workaround tries to deliver the HTML code of a table at once. This should resolve this issue to 99%.
          */
-        //final boolean newCachingDevice = !(_device instanceof CachingDevice);
-        //final CachingDevice device = newCachingDevice ? new CachingDevice(_device) : (CachingDevice) _device ;
+        final boolean newCachingDevice = !(_device instanceof CachingDevice);
+        final CachingDevice device = newCachingDevice ? new CachingDevice(_device) : (CachingDevice) _device ;
 
-        //try {
+        try {
             device.print("<table");
             writeAllAttributes(device, table);
             Utils.writeEvents(device, table, null);
@@ -362,12 +363,12 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
             }
             device.print("</tbody>");
             device.print("</table>");
-        //} finally {
+        } finally {
             /* Refer to description above. */
-            //if (newCachingDevice)
-              //  device.close();
+            if (newCachingDevice)
+                device.close();
             //device = null;
-        //}
+        }
     }
 
     private boolean atLeastOneColumnWidthIsNotNull(STableColumnModel columnModel) {
