@@ -175,11 +175,7 @@ public class WingSet implements Serializable {
         }
         frame.addHeader(customStyleSheetLink);
 
-        // 3) Programatically set/Overwrite CSS properties on specific components (here global frame).
-        //    Remember: It's cleaner to do such global definitions in your external css file vs. in th java code.
-        frame.getContentPane().setAttribute(CSSProperty.MARGIN, "8px");
-
-        // 4) More advanced version of 3)
+        // 3) More advanced version of 3)
         //    Here we demonstrate how you can style single component by applying a CSS properties on a
         //    part of a component using component specific "css selectors" or "pseudo css selectors".
         //
@@ -200,10 +196,8 @@ public class WingSet implements Serializable {
     private void unstyleWingsetApp() {
         frame.setLayout(new SRootLayout());
         frame.removeHeader(customStyleSheetLink);
-        frame.setAttribute(CSSProperty.MARGIN, null);
         tab.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, (SIcon) null);
         tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, (SIcon) null);
-
         customStyleApplied = false;
     }
 
