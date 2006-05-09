@@ -97,10 +97,6 @@ public final class LowLevelEventDispatcher
         }
     }
 
-    /**
-     * This should remove the GetListener from the HashMap, not the Names of
-     * the GetListener (Names may change)
-     */
     public void unregister(LowLevelEventListener gl) {
         if (gl == null)
             return;
@@ -152,7 +148,7 @@ public final class LowLevelEventDispatcher
         // does name contain underscores? Then use the part before the underscore for
         // identification of the low level event listener
         String id;
-        dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
+        dividerIndex = name.indexOf('_');
         if (dividerIndex > -1) {
             id = name.substring(0, dividerIndex);
         }
@@ -162,14 +158,14 @@ public final class LowLevelEventDispatcher
 
         final List l = (List) listeners.get(id);
         if (l != null && l.size() > 0) {
-            log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
+            if (log.isDebugEnabled())
+                log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
             for (int i = 0; i < l.size(); ++i) {
                 LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
                 if (gl.isEnabled()) {
                     if (checkEpoch(epoch, name, gl)) {
-                        log.debug("process event '" + name + "' by " +
-                                gl.getClass() + "(" + gl.getLowLevelEventId() +
-                                ")");
+                        if (log.isDebugEnabled())
+                            log.debug("process event '" + name + "' by " + gl.getClass() + "(" + gl.getLowLevelEventId() + ")");
                         gl.processLowLevelEvent(name, values);
                         result = true;
                     }

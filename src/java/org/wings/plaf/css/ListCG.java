@@ -177,13 +177,20 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
 
     public void writeInternal(final Device device,
                       final SComponent _c)
-            throws IOException {
+            throws IOException
+    {
+        Utils.getRenderHelper(_c).forbidCaching();
 
-        SList list = (SList) _c;
-        if (list.getShowAsFormComponent()) {
-            writeFormList(device, list);
-        } else {
-            writeAnchorList(device, list);
+        try {
+            SList list = (SList) _c;
+            if (list.getShowAsFormComponent()) {
+                writeFormList(device, list);
+            } else {
+                writeAnchorList(device, list);
+            }
+        }
+        finally {
+            Utils.getRenderHelper(_c).allowCaching();
         }
     }
 }

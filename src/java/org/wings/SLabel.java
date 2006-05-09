@@ -139,6 +139,7 @@ public class SLabel extends SComponent {
      *                     <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>.
      */
     public void setHorizontalTextPosition(int textPosition) {
+        reloadIfChange(horizontalTextPosition, textPosition);
         horizontalTextPosition = textPosition;
     }
 
@@ -152,6 +153,7 @@ public class SLabel extends SComponent {
      *                     <code>TOP</code>, <code>CENTER</code>, <code>BOTTOM</code>.
      */
     public void setVerticalTextPosition(int textPosition) {
+        reloadIfChange(verticalTextPosition, textPosition);
         verticalTextPosition = textPosition;
     }
 
@@ -259,6 +261,7 @@ public class SLabel extends SComponent {
      * @see #getIconTextGap
      */
     public void setIconTextGap(int iconTextGap) {
+        reloadIfChange(this.iconTextGap, iconTextGap);
         this.iconTextGap = iconTextGap;
     }
 
@@ -266,5 +269,3 @@ public class SLabel extends SComponent {
         super.setCG(cg);
     }
 }
-
-

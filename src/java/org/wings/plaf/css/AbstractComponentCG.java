@@ -18,11 +18,14 @@ import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
+import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,6 +42,7 @@ import java.util.List;
  * @version $Revision$
  */
 public abstract class AbstractComponentCG implements ComponentCG, SConstants, Serializable {
+    private static final Log log = LogFactory.getLog(AbstractComponentCG.class);
     /**
      * An invisible icon / graphic (spacer graphic)
      */
@@ -240,6 +244,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     public void componentChanged(SComponent component) {
+        component.putClientProperty("render-cache", null);
+        log.debug("invalidating = " + component.getName());
+
         InputMap inputMap = component.getInputMap();
         if (inputMap != null && inputMap.size() > 0) {
             if (!(inputMap instanceof VersionedInputMap)) {
@@ -307,7 +314,40 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         return (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
     }
 
+    /**
+     * Caching code disabled for all LowLevelEventListeners, because event epochs won't change.
+     *
+     * @param device
+     * @param component
+     * @throws IOException
+     */
     public final void write(final Device device, final SComponent component) throws IOException {
+        if (component instanceof LowLevelEventListener || component instanceof SContainer || !Utils.getRenderHelper(component).isCachingAllowed()) {
+            writeReally(device, component);
+            log.debug("not caching = " + component.getName());
+            return;
+        }
+        String cache = (String)component.getClientProperty("render-cache");
+        if (cache == null) {
+            try {
+                StringBuilderDevice cacheDevice = new StringBuilderDevice();
+                writeReally(cacheDevice, component);
+                cache = cacheDevice.toString();
+                component.putClientProperty("render-cache", cache);
+                log.debug("caching = " + component.getName());
+            }
+            catch (RuntimeException e) {
+                e.printStackTrace(System.err);
+                device.print("<blink>" + e.getClass().getName() + " during code generation of " + component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
+                return;
+            }
+        }
+        else
+            log.debug("reusing = " + component.getName());
+        device.print(cache);
+    }
+
+    private void writeReally(Device device, SComponent component) throws IOException {
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         component.fireRenderEvent(SComponent.START_RENDERING);
 

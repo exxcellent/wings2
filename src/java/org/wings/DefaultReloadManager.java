@@ -40,11 +40,6 @@ public class DefaultReloadManager
      */
     protected final Set dirtyComponents = new HashSet();
 
-    /**
-     * Set of SComponents with dirty HTML representation
-     */
-    protected final Set dirtyCodeResourceComponents = new HashSet(1024);
-
     private boolean deliveryPhase = false;
 
     public DefaultReloadManager() {
@@ -54,12 +49,8 @@ public class DefaultReloadManager
         if (deliveryPhase && log.isDebugEnabled())
             log.debug("Component " + component.getName() + " changed during delivery phase");
 
-        if (component != null) {
+        if (component != null)
             dirtyComponents.add(component);
-
-            if ((aspect & STATE) != 0)
-                dirtyCodeResourceComponents.add(component);
-        }
     }
 
     public Set getDirtyComponents() {
@@ -72,7 +63,7 @@ public class DefaultReloadManager
         SComponent component;
         SFrame parentFrame;
         // collect dirty HTML resources
-        for (Iterator iterator = dirtyCodeResourceComponents.iterator(); iterator.hasNext();) {
+        for (Iterator iterator = dirtyComponents.iterator(); iterator.hasNext();) {
             component = (SComponent) iterator.next();
             parentFrame = component.getParentFrame();
             if (parentFrame != null)
@@ -85,7 +76,6 @@ public class DefaultReloadManager
     public synchronized void clear() {
         deliveryPhase = false;
         dirtyComponents.clear();
-        dirtyCodeResourceComponents.clear();
     }
 
     public synchronized void invalidateResources() {
@@ -106,5 +96,3 @@ public class DefaultReloadManager
         }
     }
 }
-
-

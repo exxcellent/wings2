@@ -17,6 +17,8 @@ import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.CSSProperty;
 import org.wings.SConstants;
+import org.wings.SComponent;
+import org.wings.ReloadManager;
 
 import java.awt.*;
 
@@ -42,6 +44,7 @@ public abstract class SAbstractBorder
     protected Insets insets;
 
     private CSSAttributeSet attributes = new CSSAttributeSet();
+    private SComponent component;
 
     public SAbstractBorder() {
         this(null, -1, null);
@@ -65,12 +68,18 @@ public abstract class SAbstractBorder
         this(null, thickness, null);
     }
 
+    public void setComponent(SComponent component) {
+        this.component = component;
+    }
+
     /**
      * set the insets of the border
      */
     public void setInsets(Insets insets) {
         this.insets = insets;
         attributes = null;
+        if (component != null)
+            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
     }
 
     /**
@@ -104,6 +113,8 @@ public abstract class SAbstractBorder
     public void setColor(Color color, int position) {
         specs[position].color = color;
         attributes = null;
+        if (component != null)
+            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
     }
 
     /**
@@ -120,6 +131,8 @@ public abstract class SAbstractBorder
     public void setThickness(int thickness, int position) {
         specs[position].thickness = thickness;
         attributes = null;
+        if (component != null)
+            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
     }
 
     /**
@@ -147,6 +160,8 @@ public abstract class SAbstractBorder
     public void setStyle(String style, int position) {
         specs[position].style = style;
         attributes = null;
+        if (component != null)
+            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
     }
 
     /**
@@ -214,5 +229,4 @@ public abstract class SAbstractBorder
         public String style;
         public Color color;
     }
-
 }

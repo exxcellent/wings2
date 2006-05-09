@@ -24,6 +24,7 @@ public final class RenderHelper {
     private static final Log log = LogFactory.getLog(RenderHelper.class);
     private final List menus = new ArrayList();
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
+    private boolean caching = true;
 
     public void reset() {
         menus.clear();
@@ -51,5 +52,17 @@ public final class RenderHelper {
                 }
             }
         }
+    }
+
+    public void allowCaching() {
+        caching = true;
+        log.debug("allow caching");
+    }
+    public void forbidCaching() {
+        caching = false;
+        log.debug("forbid caching");
+    }
+    public boolean isCachingAllowed() {
+        return caching;
     }
 }

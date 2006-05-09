@@ -29,6 +29,8 @@ public class SimpleURL implements Serializable, Renderable {
     protected SimpleURL() {}
 
     public SimpleURL(String url) {
+        if (url == null)
+            throw new IllegalArgumentException("null not allowed");
         baseURL = url;
     }
 

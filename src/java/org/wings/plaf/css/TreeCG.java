@@ -206,31 +206,39 @@ public final class TreeCG extends AbstractComponentCG implements
     }
 
     public void writeInternal(final Device device, final SComponent _c)
-            throws IOException {
-        final STree component = (STree) _c;
-        int start = 0;
-        int count = component.getRowCount();
+            throws IOException
+    {
+        Utils.getRenderHelper(_c).forbidCaching();
 
-        java.awt.Rectangle viewport = component.getViewportSize();
-        if (viewport != null) {
-            start = viewport.y;
-            count = viewport.height;
+        try {
+            final STree component = (STree) _c;
+            int start = 0;
+            int count = component.getRowCount();
+
+            java.awt.Rectangle viewport = component.getViewportSize();
+            if (viewport != null) {
+                start = viewport.y;
+                count = viewport.height;
+            }
+
+            final int depth = component.getMaximumExpandedDepth();
+
+            writeTablePrefix(device, component);
+            device.print("<ul class=\"STree\">");
+            if (start != 0) {
+                TreePath path = component.getPathForRow(start);
+                indentRecursive(device, component, path.getParentPath());
+            }
+
+            for (int i = start; i < start + count; ++i) {
+                writeTreeNode(component, device, i, depth);
+            }
+            device.print("</ul>");
+            writeTableSuffix(device, component);
         }
-
-        final int depth = component.getMaximumExpandedDepth();
-
-        writeTablePrefix(device, component);
-        device.print("<ul class=\"STree\">");
-        if (start != 0) {
-            TreePath path = component.getPathForRow(start);
-            indentRecursive(device, component, path.getParentPath());
+        finally {
+            Utils.getRenderHelper(_c).allowCaching();
         }
-
-        for (int i = start; i < start + count; ++i) {
-            writeTreeNode(component, device, i, depth);
-        }
-        device.print("</ul>");
-        writeTableSuffix(device, component);
     }
 
     /**

@@ -109,7 +109,7 @@ public class SDefaultCellEditor
     protected SDefaultCellEditor(SComponent editorComponent,
                                  boolean initializeButtons) {
         this.messageLabel = new SLabel();
-        this.editorPanel = new SPanel(new SBoxLayout(SBoxLayout.HORIZONTAL));
+        this.editorPanel = new EditorPanel();
         this.ok = new SButton();
         this.cancel = new SButton();
         this.listenerList = new EventListenerList();
@@ -398,6 +398,39 @@ public class SDefaultCellEditor
             } else if (e.getSource() == cancel) {
                 cancelCellEditing();
             }
+        }
+    }
+
+    private class EditorPanel extends SPanel
+        implements LowLevelEventListener
+    {
+        public EditorPanel() {
+            super(new SBoxLayout(SBoxLayout.HORIZONTAL));
+        }
+
+        public void processLowLevelEvent(String name, String[] values) {
+            if (editorComponent instanceof LowLevelEventListener) {
+                LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editorComponent;
+                lowLevelEventListener.processLowLevelEvent(name, values);
+            }
+        }
+
+        public void fireIntermediateEvents() {
+            if (editorComponent instanceof LowLevelEventListener) {
+                LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editorComponent;
+                lowLevelEventListener.fireIntermediateEvents();
+            }
+        }
+
+        public void fireFinalEvents() {
+            if (editorComponent instanceof LowLevelEventListener) {
+                LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editorComponent;
+                lowLevelEventListener.fireFinalEvents();
+            }
+        }
+
+        public boolean isEpochCheckEnabled() {
+            return true;
         }
     }
 }

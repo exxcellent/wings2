@@ -20,6 +20,7 @@ import org.wings.event.SMouseEvent;
 import org.wings.event.SMouseListener;
 import org.wings.plaf.css.TableCG;
 import org.wings.table.SDefaultTableCellRenderer;
+import org.wings.table.STableCellEditor;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -68,8 +69,22 @@ public class TableExample
                 int pos = action.indexOf('_');
                 if (pos == -1)
                     super.processLowLevelEvent(action, values);
-                else
-                    System.out.println("delegate " + Arrays.asList(values) + " to renderer at " + action.substring(pos + 1));
+                else {
+                    String coordinates = action.substring(pos + 1);
+                    pos = coordinates.indexOf('_');
+                    System.out.println("delegate " + Arrays.asList(values) + " to renderer at " + coordinates);
+                    int row = new Integer(coordinates.substring(0, pos)).intValue();
+                    int col = new Integer(coordinates.substring(pos +1)).intValue();
+                    STableCellEditor cellEditor = getCellEditor(row, col);
+                    SComponent editor = prepareEditor(cellEditor, row, col);
+                    if (editor instanceof LowLevelEventListener) {
+                        LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editor;
+                        lowLevelEventListener.processLowLevelEvent(action, values);
+                        cellEditor.stopCellEditing();
+                        setValueAt(cellEditor.getCellEditorValue(), row, col);
+                        removeEditor();
+                    }
+                }
             }
         };
         table.setName("table");
@@ -103,7 +118,6 @@ public class TableExample
         return panel;
     }
 
-
     static class MyCellRenderer extends SDefaultTableCellRenderer {
         private static final SFont MONOSPACE = new SFont("monospace", SFont.BOLD, 10);
 
@@ -133,7 +147,6 @@ public class TableExample
                 SCheckBox checkBox = new SCheckBox();
                 setHorizontalAlignment(SConstants.CENTER);
                 Boolean b = (Boolean) value;
-                //checkBox.setName(name(table, row, col));
                 checkBox.setSelected(b.booleanValue());
                 return checkBox;
             }

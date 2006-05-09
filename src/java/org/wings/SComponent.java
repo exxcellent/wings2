@@ -248,7 +248,11 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public void setBorder(SBorder border) {
         reloadIfChange(this.border, border, ReloadManager.STATE + ReloadManager.STYLE);
+        if (this.border != null)
+            this.border.setComponent(null);
         this.border = border;
+        if (this.border != null)
+            this.border.setComponent(this);
     }
 
     /**
@@ -266,7 +270,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param parent the container
      */
     public void setParent(SContainer parent) {
-        reloadIfChange(this.parent, parent, ReloadManager.STATE);
         this.parent = parent;
         if (parent != null)
             setParentFrame(parent.getParentFrame());
@@ -991,10 +994,13 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     public void setVisible(boolean visible) {
         boolean old = this.visible;
         this.visible = visible;
-        if (fireComponentChangeEvents && (visible != old)) {
-            fireComponentChangeEvent(new SComponentEvent(this, visible
-                    ? SComponentEvent.COMPONENT_SHOWN
-                    : SComponentEvent.COMPONENT_HIDDEN));
+        if (visible != old) {
+            if (fireComponentChangeEvents) {
+                fireComponentChangeEvent(new SComponentEvent(this, visible
+                        ? SComponentEvent.COMPONENT_SHOWN
+                        : SComponentEvent.COMPONENT_HIDDEN));
+            }
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -1024,6 +1030,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param enabled true if the component is enabled, false otherwise
      */
     public void setEnabled(boolean enabled) {
+        reloadIfChange(this.enabled, enabled);
         this.enabled = enabled;
     }
 
@@ -1330,6 +1337,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param t the new tooltip text
      */
     public void setToolTipText(String t) {
+        reloadIfChange(this.tooltip, t);
         tooltip = t;
     }
 
@@ -1356,6 +1364,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      *              Must not be zero.
      */
     public void setFocusTraversalIndex(int index) {
+        reloadIfChange(this.focusTraversalIndex, index);
         focusTraversalIndex = index;
     }
 
@@ -1399,6 +1408,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see SConstants
      */
     public void setHorizontalAlignment(int alignment) {
+        reloadIfChange(this.horizontalAlignment, alignment);
         horizontalAlignment = alignment;
     }
 
@@ -1409,6 +1419,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see SConstants
      */
     public void setVerticalAlignment(int alignment) {
+        reloadIfChange(this.verticalAlignment, alignment);
         verticalAlignment = alignment;
     }
 

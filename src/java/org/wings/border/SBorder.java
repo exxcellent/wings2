@@ -15,6 +15,7 @@ package org.wings.border;
 
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
+import org.wings.SComponent;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -91,4 +92,6 @@ public interface SBorder extends Serializable {
     String getStyle();
 
     String getStyle(int position);
+
+    void setComponent(SComponent component);
 }

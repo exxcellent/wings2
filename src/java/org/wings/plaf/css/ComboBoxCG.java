@@ -130,14 +130,21 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
 
 
     public void writeInternal(final Device device, final SComponent _c) throws IOException {
-        final SComboBox component = (SComboBox) _c;
+        Utils.getRenderHelper(_c).forbidCaching();
 
-        final SComboBox comboBox = (SComboBox) component;
-        // TODO: implement anchor combobox
-        //if (comboBox.getShowAsFormComponent()) {
-        writeFormComboBox(device, comboBox);
-        //} else {
-        //    writeAnchorComboBox(device, comboBox);
-        // }
+        try {
+            final SComboBox component = (SComboBox) _c;
+
+            final SComboBox comboBox = (SComboBox) component;
+            // TODO: implement anchor combobox
+            //if (comboBox.getShowAsFormComponent()) {
+            writeFormComboBox(device, comboBox);
+            //} else {
+            //    writeAnchorComboBox(device, comboBox);
+            // }
+        }
+        finally {
+            Utils.getRenderHelper(_c).allowCaching();
+        }
     }
 }
