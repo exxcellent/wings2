@@ -1,0 +1,614 @@
+/*
+   $Id: gecko.css 2658 2006-05-06 15:11:24Z neurolabs $
+   wings core CSS Style Sheet for all browsers.
+
+   >> This file contains CORE CSS declarations needed for correct operation.  <<
+   >> It is applied to all browsers. You can define Browser specifics in the  <<
+   >> css files named after the browsers.  <<
+
+   Includes CSS definitions that are required for wings to work correctly.
+   - Please use the optional css files for purely optional visual stylings
+   - Please avoid generic/global css selectors and use the wings css
+     classes in your selection path
+*/
+
+/* either use this or cellpadding/cellspacing/border in table element.
+   css overwrites all attributes! */
+
+body {
+    padding:0px;
+    margin:0px;
+    background:#ffffff;
+    font-family:sans-serif;
+    font-style:normal;
+    font-size:0.8em;
+    height:100%;
+}
+
+form {
+    margin: 0px;
+}
+
+a {
+    text-decoration: inherit;
+}
+
+a:link, a:visited, a:active {
+    color: #000066;
+    text-decoration: none;
+}
+
+/* Class for all invisible HTML tables used for layouting purposes. */
+table, td, th {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    border-spacing: 0px;
+    /*text-align: inherit; breaks layouting of DIVs inside TD */
+}
+
+/* define cross browser style for lists */
+li, ul {
+    margin: 0px;
+    padding: 0px;
+}
+ul {
+    padding-left: 24px;
+}
+
+/* Simulate and style FORM buttons for A HREF*/
+TABLE.SButton A.formbutton,
+TABLE.SButton SPAN.disabled_formbutton {
+   padding: 0px 6px 0px 6px;
+   border: 2px outset #ddd;
+   background-color: #ddd;
+   color: #000;
+   line-height: normal !important;
+   cursor: default;
+   text-align: center;
+   white-space: normal;
+   text-indent: 0px;
+   display:block;
+   height: 100%;
+}
+table.SButton A.linkbutton {
+   color: inherit;  /* Inherit color from outer container. */
+}
+IMG {
+    /* keeps images inside tabs */
+    vertical-align: middle;
+    /* Avoid those ugly borders around linked imgs's */
+    border: none !important;
+}
+
+/* STextField default style */
+input.STextField,
+input.SFormattedTextField {
+    font-family: sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000;
+}
+
+/* STree default style */
+table.STree {
+    vertical-align: top;
+    text-align: left;
+}
+ul.STree{
+	list-style: none;
+	margin-left:0px;
+	padding-left:0px;
+}
+ul.STree li {
+	padding-left: 0px;
+	margin-left: 0px;
+}
+ul.STree > li > * {
+    white-space: nowrap;
+    padding-right: 2px;
+    padding-bottom: 1px;
+}
+
+/* STabbedPane default style */
+/* Default text alignments of labels in tabs. */
+th.STabbedPane_top {
+    text-align: left;
+    padding-top:.1em;
+}
+th.STabbedPane_left {
+    vertical-align: top;
+    text-align: right;
+}
+th.STabbedPane_right {
+    vertical-align: top;
+    text-align: left;
+}
+th.STabbedPane_bottom {
+    text-align: left;
+    padding-bottom:.1em;
+}
+
+.STabbedPane_Tab_top,
+.STabbedPane_Tab_bottom,
+.STabbedPane_Tab_left,
+.STabbedPane_Tab_right {
+    border: 1px solid black;
+    white-space: nowrap;
+    line-height: 1.6em;
+}
+
+td.STabbedPane_pane {
+    border: 2px ridge black;
+    width: 100%;
+}
+
+.STabbedPane_Tab_top {
+    border-bottom: none !important;
+}
+
+.STabbedPane_Tab_bottom {
+    border-top: none !important;
+}
+
+.STabbedPane_Tab_left {
+    border-right: none !important;
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 100%;
+}
+
+.STabbedPane_Tab_right {
+    border-left: none !important;
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 100%;
+}
+
+/* Background color of selected STabbedPane tabs */
+.STabbedPane_Tab_selected {
+    background-color: #ffbbbb;
+}
+
+.STabbedPane_Tab_disabled {
+    color : #808080;
+}
+
+/* STree */
+
+ul.STree li div.SSubTree {
+	background-image: url(org/wings/icons/TreeLine.gif);
+	background-repeat:repeat-y;
+	background-position: 0px 100px;
+}
+
+/* Selection color of STrees */
+/*ul.STree > li.selected > table
+ {
+    background-color: #ffbbbb;
+    border: 1px dotted black;
+}*/
+
+ul.STree li a {
+    border: none;
+    background-color: inherit;
+    padding: 0px;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
+}
+
+/* ---- Selection color of STrees ----------------------------------------------------------------------*/
+/* we need cascading styles here since else children get selected.
+   if you need to select across more than 4 levels, you need to expand these rules.
+   and I don't take the blame, it's all IE's fault ;) (ol) */
+ul.STree li.selected table.selected tr td.selected {
+    background-color: #ffbbbb;
+    border: 1px dotted black;
+}
+/* lift former style for children */
+ul.STree li.norm table.norm tr td.norm {
+    background-color: none;
+    border: none;
+	margin: 1px;
+}
+/*ul.STree li.selected table.selected li.norm table.norm tr td.norm {
+    background-color: transparent;
+	margin: 1px;
+}
+ul.STree li.norm table.norm li.selected table.selected tr td.selected {
+    background-color: #ffbbbb;
+    border: 1px dotted black;
+}*/
+/* ---------------------------------------------------------------------------------------------------- */
+
+/* ---------- Menus */
+table.SMenuBar{
+    width:100%;
+    background-color: #eef;
+    border-bottom: 1px solid #ccc;
+    color: #000044;
+}
+
+/* clears the menu */
+table.SMenuBar div.spacer {
+    height:0px;
+    clear: both;
+}
+
+table.SMenuBar div.SMenu,
+table.SMenuBar div.SMenu_Disabled {
+    float:left;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #eee #999 #999 #eee;
+    padding:1px 3px 1px 3px;
+    background:#eef;
+    white-space:nowrap;
+    margin:0px;
+}
+
+table.SMenuBar div.SMenu{
+    color: #004;
+}
+
+table.SMenuBar div.SMenu_Disabled {
+    color: #666;
+}
+
+ul.SMenu A,
+ul.SPopupMenu A {
+    padding:1px 3px 1px 3px;
+    display:block;
+    white-space:nowrap;
+    margin:0px;
+}
+
+ul.SMenu a, .SMenu a:visited,
+ul.SPopupMenu a, .SPopupMenu a:visited {
+    color:#000;
+}
+
+ul.SMenu a:hover,
+ul.SPopupMenu a:hover {
+    color:#fff;
+    background:#66b;
+}
+
+ul.SMenu a:active,
+ul.SPopupMenu a:active{
+    color:#aaa;
+    background:#66b;
+}
+
+ul.SMenu li,
+ul.SPopupMenu li {
+    position:relative;
+    background: #eee;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #999;
+    width:auto;
+}
+
+ul.SMenu,
+ul.SPopupMenu {
+    list-style:none;
+    margin:0px;
+    padding:0px;
+    position:absolute;
+    z-index:500;
+    top:auto;
+    display:none;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #999;
+    width:auto;
+}
+
+/* Position the sub menus besides parent menus. */
+ul.SMenu ul,
+ul.SPopupMenu ul{
+    top:-1px;
+    left:100%;
+}
+
+ul.SMenu a span.accelerator {
+	font-size: .7em;
+	margin-left: 1.5em;
+}
+
+/* Begin non-anchor hover selectors */
+ul.SMenu li,
+ul.SMenuBar div.SMenu,
+ul.SPopupMenu li{
+cursor:pointer;
+}
+
+/* End of non-anchor hover selectors */
+
+/* Styling for Expand */
+
+ul.SMenu a.x, ul.SMenu a.x:visited,
+ul.SMenu a.y, ul.SMenu a.y:visited, ul.SMenu a.y:hover,
+ul.SPopupMenu a.x, ul.SPopupMenu a.x:visited,
+ul.SPopupMenu a.y, ul.SPopupMenu a.y:visited, ul.SPopupMenu a.y:hover{
+    background:#eee url( 'org/wings/icons/MenuArrowRight.gif' ) no-repeat center right;
+    padding-right:10px;
+}
+
+ul.SMenu a.x:hover,
+ul.SPopupMenu a.x:hover{
+    background:#66b url("org/wings/icons/MenuArrowRight.gif") no-repeat center right;
+    padding-right:10px;
+}
+
+/* SList */
+.SList li.SList_selected {
+    background-color: #f6decc !important;
+    border: 1px dotted black;
+    cursor: pointer
+}
+
+/* No vertical distance on writing down many labels. */
+.SLabel p {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+
+
+
+
+
+
+table.STable {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table.STable th.cell
+{
+    border: 1px solid black;
+    padding: 0px 8px;
+}
+table.STable td.cell
+{
+    border-left: 1px solid black;
+    padding: 0px 8px;
+}
+/* let the link span the whole table */
+table.STable tbody tr td a {
+	display: block;
+	width: 100%;
+}
+
+table.STable tbody tr td.numbering {
+    text-align: right;
+}
+
+table.STable tbody tr.odd {
+    background-color: #e5e5e5;
+}
+
+table.STable tbody tr.even {
+    background-color: #efefef;
+}
+
+table.STable tbody tr.selected {
+    background-color: #ffbbbb !important;
+}
+
+
+/* -------untested --------- */
+
+
+table.SAnchor {
+    color: #004;
+}
+
+/* ---------- DOM ToolTips */
+div.domTT {
+    border: 1px solid #333333;
+}
+div.domTTCaption {
+    font-family: serif;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 1px 2px;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+div.domTTContent {
+    font-size: 12px;
+    font-family: sans-serif;
+    padding: 3px 2px;
+    background-color: #F1F1FF;
+}
+
+/* clears the windows */
+.SDesktopPane div.spacer, .SFlowLayout div.spacer {
+    height:0px;
+    clear: both;
+	line-height:0px; /* for konq */
+    font-size: 1px; /* for konq */
+}
+
+table.SScrollPane table.SList, table.SScrollPane table.STree, table.SScrollPane table.STable {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+scroll arrows of PageScroller as form-components
+*/
+table.SPageScroller table.buttons a,
+table.SPageScroller table.buttons span {
+    border: 1px solid #cccccc;
+	background-color: transparent;
+    padding:0em .5em;
+}
+
+table.SPageScroller table.buttons A:hover {
+    border: 1px outset #cccccc;
+}
+/*
+paging numbers of PageScroller as form-components
+*/
+table.SPageScroller table.pages a,
+table.SPageScroller table.pages td.page_selected span {
+    margin: 1px;
+    padding:0em .5em;
+}
+/*
+links around paging numbers of PageScroller as non-form-components
+*/
+table.SPageScroller table.pages a {
+     text-decoration: underline;
+}
+
+table.SPageScroller table.pages a:hover {
+	background-color: #ECECEC;
+}
+
+table.SPageScroller table.pages SPAN.disabled_linkbutton {
+    margin: 1px;
+    font-weight: bold;
+    color: #000000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ----------- SOPTIONPANE */
+
+div.SOptionPane,
+div.SDialog,
+div.SInternalFrame {
+    border: 1px solid #ccc;
+    margin: .2em;
+}
+
+div.SOptionPane div.WindowBar,
+div.SDialog div.WindowBar,
+div.SInternalFrame div.WindowBar {
+	padding:.2em;
+	background-color: #aaf;
+}
+
+div.SOptionPane div.WindowBar div.WindowBar_title,
+div.SDialog div.WindowBar div.WindowBar_title,
+div.SInternalFrame div.WindowBar div.WindowBar_title {
+	padding-right:4em;
+	white-space:pre;
+}
+
+div.SOptionPane div.WindowBar a.WindowButton,
+div.SDialog div.WindowBar a.WindowButton,
+div.SInternalFrame div.WindowBar a.WindowButton {
+	float: right;
+}
+
+div.SOptionPane div.WindowBar a.DeiconifyButton,
+div.SDialog div.WindowBar a.DeiconifyButton,
+div.SInternalFrame div.WindowBar a.DeiconifyButton {
+	display: inline;
+}
+
+div.SOptionPane div.WindowContent,
+div.SDialog div.WindowContent,
+div.SInternalFrame div.WindowContent {
+	padding: .2em;
+}
+
+
+
+
+
+
+table.SScrollBar, table.SPageScroller {
+    height: 100%;
+    width: 100%;
+	font-size: 1px;
+	border-width: 0px;
+}
+
+table.SScrollBar_vertical, table.SPageScroller_vertical {
+    height: 100%;
+}
+
+table.SScrollBar_horizontal, table.SPageScroller_horizontal {
+    height: auto;
+}
+
+table.SScrollBar table.buttons a {
+    border: 1px solid #cccccc;
+    background-color: transparent;
+    width: 20px;
+}
+
+table.SScrollBar table.buttons a:hover {
+    border: 1px outset #cccccc;
+}
+
+
+.SSeparator {
+    height: 0px; /* evtl. 2px für IE */
+    white-space: nowrap;
+    margin: 0px;
+    padding: 0px;
+    border-style: solid;
+    border-width: 0px;
+    border-top-width: 1px;
+    border-color: #000;
+}
+
+/* soll das so sein?  */
+table.SButton {
+    color: #004;
+}
+
+
+
+
+
+
+

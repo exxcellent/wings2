@@ -101,7 +101,7 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
         writeAllAttributes(d, sb);
         Utils.writeEvents(d, sb, null);
         d.print("><tbody><tr height=\"1%\">")
-            .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
+            .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum, !firstPage);
@@ -132,7 +132,7 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
         d.print("</tbody></table></td>")
                 .print("</tr>")
                 .print("<tr height=\"1%\">")
-                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
+                .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + extent), forwardEnabled);
@@ -168,7 +168,7 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
         writeAllAttributes(d, sb);
         Utils.writeEvents(d, sb, null);
         d.print("><tbody><tr>")
-            .print("<td><table area=\"buttons\"><tbody><tr>");
+            .print("<td><table class=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum, !firstPage);
@@ -194,7 +194,7 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
         }
 
         d.print("</tr></tbody></table></td>")
-                .print("<td><table area=\"buttons\"><tbody><tr>");
+                .print("<td><table class=\"buttons\"><tbody><tr>");
 
         d.print("<td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + extent), forwardEnabled);

@@ -112,6 +112,8 @@ public final class TreeCG extends AbstractComponentCG implements
         device.print("<li");
         if (isSelected) {
             Utils.optAttribute(device, "class", "selected");
+        } else {
+            Utils.optAttribute(device, "class", "norm");
         }
         device.print(">");
 
@@ -127,7 +129,13 @@ public final class TreeCG extends AbstractComponentCG implements
              * This table has to be here so that block level elements can be
              * nodes. I just can't think around it. So it won...
              */
-            device.print("<table><tr><td>");
+            device.print("<table");
+            if (isSelected) {
+                Utils.optAttribute(device, "class", "selected");
+            } else {
+                Utils.optAttribute(device, "class", "norm");
+            }
+            device.print("><tr><td>");
 
             final String expansionParameter = component.getExpansionParameter(row, false);
             if (isLeaf) {
@@ -158,7 +166,13 @@ public final class TreeCG extends AbstractComponentCG implements
             /*
              * closing layout td
              */
-            device.print("</td><td>");
+            device.print("</td><td");
+            if (isSelected) {
+                Utils.optAttribute(device, "class", "selected");
+            } else {
+                Utils.optAttribute(device, "class", "norm");
+            }
+            device.print(">");
 
         }
 

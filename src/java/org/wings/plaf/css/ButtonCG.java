@@ -33,7 +33,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
-        // may be ommitted if no width, border and backgrouund table
+        // may be ommitted if no width, border and background table
         writeTablePrefix(device, button);
 
         String cssClass;

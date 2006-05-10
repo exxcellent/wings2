@@ -11,64 +11,20 @@
      classes in your selection path
 */
 
-/* either use this or cellpadding/cellspacing/border in table element.
-   css overwrites all attributes! */
-
-body {
-    padding: 0px;
-    margin: 0px;
-    background: #ffffff;
-    font-family: sans-serif;
-    font-style: normal;
-    font-size: 0.8em;
-    height: 100%;
-}
-
-/* Class for all invisible HTML tables used for layouting purposes. */
-table, td, th {
-    padding: 0px;
-    margin: 0px;
-    border: none;
-    border-spacing: 0px;
-    /*text-align: inherit; breaks layouting of DIVs inside TD */
-}
-
 /* tables inherit certain properties from their parents. These need to be
    defined here. This works with konq, moz, opera. */
+/* please comment on these...are they needed? */
 tr {
     text-align: inherit;
     vertical-align: inherit;
-/*  these already work without specifying them
-    background-color:inherit;
-    font-family:inherit;
-    font-size:inherit;
-    font-style:inherit;
-    font-weight:inherit;
-    color:inherit;                              */
 }
 
-li, ul {
-    margin: 0px;
-    padding: 0px;
-}
-ul {
-    padding-left: 24px;
-}
 
 /* Simulate and style FORM buttons for A HREF*/
 TABLE.SButton A.formbutton,
 TABLE.SButton SPAN.disabled_formbutton {
    -moz-appearance: button;
-   padding: 0px 6px 0px 6px;
-   border: 2px outset #ddd;
-   background-color: #ddd;
-   color: #000;
-   line-height: normal !important;
-   cursor: default;
-   text-align: center;
-   white-space: normal;
-   text-indent: 0;
- }
+}
 table.SButton A.formbutton:active:hover {
    padding: 0px 5px 0px 7px;
    border-style: inset;
@@ -79,10 +35,25 @@ table.SButton SPAN.disabled_formbutton:active:hover {
    color: gray;
    cursor: default;
 }
-table.SButton A.linkbutton {
-   color: inherit;  /* Inherit color from outer container. */
+
+/* rounded corners for gecko */
+.STabbedPane_Tab_top {
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-topleft: 4px;
+}
+.STabbedPane_Tab_left {
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-bottomleft: 4px;
+}
+.STabbedPane_Tab_right {
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-bottomright: 4px;
 }
 
+.STabbedPane_Tab_bottom {
+    -moz-border-radius-bottomright: 4px;
+    -moz-border-radius-bottomleft: 4px;
+}
 
 /* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
    Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
@@ -92,377 +63,36 @@ img.spacer {
 
 /* this stays in here!
    it switches the gecko-compatible browsers into border-box mode */
+/* is it still needed? (OL 6.5.2006) */
 div {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-
     /* This is necessary for konqueror. Otherwise component alignment does not work. */
     text-align: inherit;
 }
 
-form {
-    margin: 0px;
+/* tooltips opacity */
+div.domTT {
+    -moz-opacity: 0.8;
 }
 
-ul {
-    margin: 0px;
-}
-
-a {
-    text-decoration: inherit;
-}
-
-a:link, a:visited, a:active {
-    color: #000066;
-    text-decoration: none;
-}
+/* reworked tag */
 
 
-/* By Ole:
-     Simplified we use this declaration to make a's and buttons block elements
-   BUT
-     I can't really think of any at the moment, since we have the div's around
-     every element. maybe an element which has a link or button as a part...
-   So: Commented out to avoid negative effect on konqueror (alignment of logo failed)               */
-/*A, BUTTON {
-    display: table;
-}*/
 
-/* SFlowLayout can't flow if the immediate inner children has defined 100% width.
-   Some wingS component inheritly define 100% width i.e. like SForm.
-   We overwrite their width in this case to 1%. This leads to many rules, but is easily implementable. */
-/* BS: Commented out - this had bad side effects as width 1% sequeezed componentes overdue.
-   In IE this rule was disabled already by Ole. */
-/*div.SFlowLayout > div > div.SForm_Box  > div.SForm {
-    width: 1%;
-   }*/
-
-IMG {
-    /* keeps images inside tabs */
-    vertical-align: middle;
-    /* Avoid those ugly borders around linked imgs's */
-    border: none !important;
-}
-
-
-/* No vertical distance on writing down many labels. */
-.SLabel p {
-    margin-top:0px;
-    margin-bottom:0px;
-}
-
-pre.label {
+/*pre.label {
     font-family: inherit;
     margin: 0px;
     padding: 0px;
-}
+}*/
 
-table.SButton {
-    color: #004;
-}
-
-/* selected state */
-table.SButton > button.SButton_selected,
-table.SToggleButton > button.SToggleButton_selected
-{
-    border-style: inset;
-}
-
-input.STextField {
-    font-family: sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    color: #000;
-}
-
-input.SFormattedTextField {
-    font-family: sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    color: #000;
-}
-
-table.STree {
-    vertical-align: top;
-    text-align: left;
-}
-
-ul.STree{
-    list-style: none;
-    margin-left:0px;
-    padding-left:0px;
-}
-
-ul.STree > li {
-    padding-left: 0px;
-    margin-left: 0px;
-}
-
-ul.STree > li > * {
-    white-space: nowrap;
-    padding-right: 2px;
-    padding-bottom: 1px;
-}
-
-/* Selection color of STrees */
-ul.STree > li.selected > table
- {
-    background-color: #ffbbbb;
-    border: 1px dotted black;
-}
-
-ul.STree > li button, ul.STree > li a {
-    border: none;
-    background-color: inherit;
-    padding: 0px;
-    text-decoration: none;
-    font-family: sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    color: #000000;
-}
-
-ul.STree > li > div.SSubTree {
-    background-image: url( "org/wings/icons/TreeLine.gif" );
-    background-repeat:repeat-y;
-    background-position: 0px 100px;
-}
-
-table.STable {
-    width: 100%;
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-
-
-table.STable > thead > tr > th {
-    border: 1px solid black;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-table.STable > tbody > tr > td {
-    padding-left: 8px;
-    padding-right: 8px;
-    border-left: 1px solid black;
-}
-
-/* let the link span the whole table */
-table.STable > tbody > tr > td > a {
-    display: block;
-    width: 100%;
-}
-
-table.STable > tbody > tr > td.numbering {
-    text-align: right;
-}
-
-table.STable > tbody > tr.even {
-    background-color: #efefef;
-}
-
-table.STable > tbody > tr.odd {
-    background-color: #e5e5e5;
-}
-
-table.STable > tbody > tr.selected td {
-    background-color: #ffbbbb;
-}
-
-table.SList li.SList_selected {
-    background-color: #f6decc !important;
-    border: 1px dotted black;
-    cursor: pointer
-}
-
-table.SAnchor {
-    color: #000044;
-}
-
-.SSeparator {
-    height: 0px;
-    white-space: nowrap;
-    margin: 0px;
-    padding: 0px;
-    border-style: solid;
-    border-width: 0px;
-    border-top-width: 1px;
-}
-
-table.SScrollBar, table.SPageScroller {
-    height: 100%;
-    width: 100%;
-}
-
-table.SScrollBar_vertical, table.SPageScroller_vertical {
-    height: 100%;
-}
-
-table.SScrollBar_horizontal, table.SPageScroller_horizontal {
-    height: auto;
-}
-
-table.SScrollBar table.buttons button, table.SScrollBar table.buttons a {
-    border: 1px solid #cccccc;
-    background-color: transparent;
-    width: 20px;
-}
-
-table.SScrollBar table.buttons button:hover, table.SScrollBar table.buttons a:hover {
-    border: 1px outset #cccccc;
-}
-
-/*
-scroll arrows of PageScroller as form-components
-*/
-table.SPageScroller table.buttons A {
-    border: 1px solid #cccccc;
-	background-color: transparent;
-    width: 20px;
-}
-
-table.SPageScroller table.buttons A:hover {
-    border: 1px outset #cccccc;
-}
-/*
-paging numbers of PageScroller as form-components
-*/
-table.SPageScroller table.pages a {
-    border: 1px solid transparent;
-	background-color: transparent;
-    width: 20px;
-}
-
-table.SPageScroller table.pages a:hover {
-	background-color: #ECECEC;
-}
-
-table.SPageScroller table.pages SPAN.disabled_linkbutton {
-    border: 1px solid transparent;
-    font-weight: bold;
-    color: #000000;
-    background-color: transparent;
-}
-/*
-scroll arrows of PageScroller as non-form-components
-*/
-table.SPageScroller table.buttons a {
-    border: 1px solid #cccccc;
-}
-
-table.SPageScroller table.buttons a:hover {
-    border: 1px outset #cccccc;
-}
-/*
-links around paging numbers of PageScroller as non-form-components
-*/
-table.SPageScroller table.pages a {
-     text-decoration: underline;
-     padding-left: 5px;
-     padding-right: 5px;
-}
-
-table.SPageScroller table.pages SPAN.disabled_linkbutton,
-table.SPageScroller table.pages SPAN.disabled_formbutton{
-     padding-left: 5px;
-     padding-right: 5px;
-}
-
-table.SPageScroller table.pages a:hover {
-	 background-color: #ECECEC;
-}
-
-
-table.SScrollPane > table.SList, table.SScrollPane > table.STree, table.SScrollPane > table.STable {
-    width: 100%;
-    height: 100%;
-    overflow: scroll;
-}
-
-table.STabbedPane > tbody > tr > th > * {
-    display: inline;
-    white-space: nowrap;
-    line-height: 1.6em;
-}
-
-table.STabbedPane > tbody > tr > th a,
-span.STabbedPane_Tab_disabled  {
-    border: 1px solid black;
-}
-
-/* Background color of selected STabbedPane tabs */
-.STabbedPane_Tab_selected {
-    background-color: #ffbbbb;
-}
-
-.STabbedPane_Tab_disabled {
-    color : #808080;
-}
-
-table.STabbedPane > tbody > tr > td {
-    border: 2px ridge black;
-    width: 100%;
-    /*height: 100%;  leads to invisble elements in opera  */
-}
-
-/* Default text alignments of labels in tabs. */
-th.STabbedPane_top {
-    text-align: left;
-}
-th.STabbedPane_left {
-    vertical-align: top;
-    text-align: right;
-}
-th.STabbedPane_right {
-    vertical-align: top;
-    text-align: left;
-}
-th.STabbedPane_bottom {
-    text-align: left;
-}
-
-/* Round the tabbed pane border and remove additonal, superflous line. */
-th.STabbedPane_top  a,
-th.STabbedPane_top span.STabbedPane_Tab_disabled {
-    border-bottom: none !important;
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-topleft: 4px;
-}
-th.STabbedPane_left a,
-th.STabbedPane_left span.STabbedPane_Tab_disabled {
-    display: block;
-    border-right: none !important;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    -moz-border-radius-topleft: 4px;
-    -moz-border-radius-bottomleft: 4px;
-}
-th.STabbedPane_right a,
-th.STabbedPane_right span.STabbedPane_Tab_disabled {
-    display: block;
-    border-left: none !important;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-bottomright: 4px;
-}
-
-th.STabbedPane_bottom a,
-th.STabbedPane_bottom span.STabbedPane_Tab_disabled {
-    border-top: none !important;
-    -moz-border-radius-bottomright: 4px;
-    -moz-border-radius-bottomleft: 4px;
-}
-
-
-/* the layouts should all expand to 100% width & height of the surrounding SPanel */
-table.SPanel {
+/*table.SPanel {
     border-collapse: collapse;
 }
 
 table.SGridLayout {
     border-collapse: collapse;
-}
+}*/
 
 /* Style of the Legend label for STitledBorder */
 .STitledBorderLegend {
@@ -485,262 +115,3 @@ table.SGridLayout {
 }
 
 
-/* ---------- DOM ToolTips */
-div.domTT {
-    border: 1px solid #333333;
-    -moz-opacity: 0.8;
-}
-div.domTTCaption {
-    font-family: serif;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 1px 2px;
-    color: #FFFFFF;
-    background-color: #333333;
-}
-div.domTTContent {
-    font-size: 12px;
-    font-family: sans-serif;
-    padding: 3px 2px;
-    background-color: #F1F1FF;
-}
-
-/* ---------- Menus */
-table.SMenuBar{
-    width:100%;
-    background-color: #eef;
-    border-bottom: 1px solid #ccc;
-    color: #000044;
-}
-
-/* clears the menu */
-table.SMenuBar div.spacer {
-    height:0px;
-    clear: both;
-}
-
-table.SMenuBar div.SMenu,
-table.SMenuBar div.SMenu_Disabled {
-    float:left;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #eee #999 #999 #eee;
-    padding:1px 3px 1px 3px;
-    background:#eef;
-    white-space:nowrap;
-    margin:0;
-}
-
-table.SMenuBar div.SMenu{
-    color: #004;
-}
-
-table.SMenuBar div.SMenu_Disabled {
-    color: #666;
-}
-
-ul.SMenu A,
-ul.SPopupMenu A {
-    padding:1px 3px 1px 3px;
-    display:block;
-    white-space:nowrap;
-    margin:0;
-}
-
-ul.SMenu a, .SMenu a:visited,
-ul.SPopupMenu a, .SPopupMenu a:visited {
-    color:#000;
-}
-
-ul.SMenu a:hover,
-ul.SPopupMenu a:hover {
-    color:#fff;
-    background:#66b;
-}
-
-ul.SMenu a:active,
-ul.SPopupMenu a:active{
-    color:#aaa;
-    background:#66b;
-}
-
-ul.SMenu .SMenu_Disabled a,
-ul.SMenu .SMenuItem_Disabled a,
-ul.SPopupMenu .SMenu_Disabled a,
-ul.SPopupMenu .SMenuItem_Disabled a {
-    color:#666;
-}
-
-ul.SMenu .SMenu_Disabled a:hover,
-ul.SMenu .SMenuItem_Disabled a:hover,
-ul.SPopupMenu .SMenu_Disabled a:hover,
-ul.SPopupMenu .SMenuItem_Disabled a:hover{
-    background:#eee;
-}
-
-ul.SMenu li,
-ul.SPopupMenu li {
-    position:relative;
-    background: #eee;
-    border-left: 1px solid #eee;
-    border-right: 1px solid #999;
-    width:auto;
-}
-
-ul.SMenu,
-ul.SPopupMenu {
-    list-style:none;
-    margin:0px;
-    padding:0px;
-    position:absolute;
-    z-index:500;
-    top:auto;
-    display:none;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #999;
-    width:auto;
-}
-
-/* Position the sub menus besides parent menus. */
-ul.SMenu ul,
-    div.SPopupMenu ul ul{
-    top:-1px;
-    left:100%;
-}
-
-ul.SMenu a span.accelerator {
-	font-size: .7em;
-	margin-left: 1.5em;
-}
-
-/* Begin non-anchor hover selectors */
-
-ul.SMenu li:hover,
-ul.SMenuBar div.SMenu:hover,
-ul.SPopupMenu li:hover{
-cursor:pointer;
-}
-
-/* End of non-anchor hover selectors */
-
-/* Styling for Expand */
-
-ul.SMenu a.x, ul.SMenu a.x:visited,
-ul.SMenu a.y, ul.SMenu a.y:visited, ul.SMenu a.y:hover,
-ul.SPopupMenu a.x, ul.SPopupMenu a.x:visited,
-ul.SPopupMenu a.y, ul.SPopupMenu a.y:visited, ul.SPopupMenu a.y:hover{
-    background:#eee url( 'org/wings/icons/MenuArrowRight.gif' ) no-repeat center right;
-    padding-right:10px;
-}
-
-ul.SMenu a.x:hover,
-ul.SPopupMenu a.x:hover{
-    background:#66b url("org/wings/icons/MenuArrowRight.gif") no-repeat center right;
-    padding-right:10px;
-}
-
-/* clears the windows */
-div.SDesktopPane div.spacer, .SFlowLayout div.spacer {
-    height:0px;
-    clear: both;
-	line-height:0px; /* for konq */
-    font-size: 1px; /* for konq */
-}
-
-/* Note: internal frame, dialog and option pane are identical
-/* ----------- SINTERNALFRAME */
-
-div.SInternalFrame {
-    border: 1px solid #ccc;
-    margin: .2em;
-    float:left;
-/*    clear:right;*/
-    display:table;
-}
-
-div.SInternalFrame > div.WindowBar {
-    padding:.2em;
-    background-color: #aaf;
-}
-
-div.SInternalFrame > div.WindowBar > div.WindowBar_title {
-    padding-right:4em;
-    white-space:pre;
-}
-
-div.SInternalFrame > div.WindowBar  a.WindowButton {
-    float: right;
-}
-
-div.SInternalFrame > div.WindowBar > a.DeiconifyButton {
-    display: inline;
-    float:none;
-}
-
-div.SInternalFrame > div.WindowContent {
-    padding: .2em;
-}
-
-/* ----------- SDIALOG */
-
-div.SDialog {
-    border: 1px solid #ccc;
-    margin: .2em;
-/*	clear:right;*/
-	display:table;
-}
-
-div.SDialog > div.WindowBar {
-	padding:.2em;
-	background-color: #aaf;
-}
-
-div.SDialog > div.WindowBar > div.WindowBar_title {
-	padding-right:4em;
-	white-space:pre;
-}
-
-div.SDialog > div.WindowBar  a.WindowButton,
-div.SDialog > div.WindowBar  button.WindowButton {
-	float: right;
-}
-
-div.SDialog > div.WindowBar > a.DeiconifyButton {
-	display: inline;
-}
-
-div.SDialog > div.WindowContent {
-	padding: .2em;
-}
-
-/* ----------- SOPTIONPANE */
-
-div.SOptionPane {
-    border: 1px solid #ccc;
-    margin: .2em;
-/*	clear:right;*/
-	display:table;
-}
-
-div.SOptionPane > div.WindowBar {
-	padding:.2em;
-	background-color: #aaf;
-}
-
-div.SOptionPane > div.WindowBar > div.WindowBar_title {
-	padding-right:4em;
-	white-space:pre;
-}
-
-div.SOptionPane > div.WindowBar  a.WindowButton,
-div.SOptionPane > div.WindowBar  button.WindowButton {
-	float: right;
-}
-
-div.SOptionPane > div.WindowBar > a.DeiconifyButton {
-	display: inline;
-}
-
-div.SOptionPane > div.WindowContent {
-	padding: .2em;
-}
