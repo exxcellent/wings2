@@ -240,6 +240,8 @@ function wpm_openMenu(event, id, parentId) {
         wpm_openMenus[wpm_openMenus.length] = id;
     }
     wpm_toggleFormElements(wpm_buildBoundsArray(wpm_openMenus));
+    preventDefault(realEvent);
+    return false;
 }
 
 function parentULId(event) {

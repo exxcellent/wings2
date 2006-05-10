@@ -6,10 +6,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SPopupMenu;
+import org.wings.SMenuBar;
+import org.wings.SMenuItem;
 import org.wings.io.StringBuilderDevice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 import java.io.IOException;
 
 /**
@@ -43,14 +46,25 @@ public final class RenderHelper {
         if (component.isVisible()) {
             final SPopupMenu componentMenu = component.getComponentPopupMenu();
             if (componentMenu != null && menus.contains(componentMenu) == false) {
-                try {
-                    menus.add(componentMenu);
-                    componentMenu.putClientProperty("popup", Boolean.TRUE);
-                    componentMenu.write(menueRenderBuffer);
-                } catch (IOException e) {
-                    log.error("IO Exception during writing into StringBuffer?!?", e);
+                addMenu(componentMenu);
+            }
+            else if (component instanceof SMenuBar) {
+                SMenuBar menuBar = (SMenuBar)component;
+                for (Iterator iterator = menuBar.getMenus().iterator(); iterator.hasNext();) {
+                    SMenuItem menuItem = (SMenuItem) iterator.next();
+                    addMenu(menuItem);
                 }
             }
+        }
+    }
+
+    private void addMenu(SComponent menuItem) {
+        try {
+            menus.add(menuItem);
+            menuItem.putClientProperty("popup", Boolean.TRUE);
+            menuItem.write(menueRenderBuffer);
+        } catch (IOException e) {
+            log.error("IO Exception during writing into StringBuffer?!?", e);
         }
     }
 
