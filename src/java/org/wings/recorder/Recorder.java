@@ -225,8 +225,7 @@ public class Recorder
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try { out.close(); } catch (Exception ign) {}
-            ;
+            try { out.close(); } catch (Exception ign) {/*ignored*/}
         }
     }
 

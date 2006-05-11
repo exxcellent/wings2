@@ -408,7 +408,7 @@ public final class Utils {
         if (borderSize > 0) {
             styles.append("border:").append(borderSize).append("px solid black;");
         } else {
-            ; //styleString.append("border:none;"); Not necessary. Default
+            //styleString.append("border:none;"); Not necessary. Default
         }
         return styles;
     }

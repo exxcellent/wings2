@@ -370,7 +370,7 @@ final class SessionServlet
                     //dispatch cookies
                     for (int i = 0; i < cookies.length; i++) {
                         Cookie cookie = cookies[i];
-                        String paramName = (String) cookie.getName();
+                        String paramName = cookie.getName();
                         String value = cookie.getValue();
     
                         if (log.isDebugEnabled())
@@ -554,7 +554,7 @@ final class SessionServlet
         while (defaultFrame.getParent() != null)
             defaultFrame = (SFrame) defaultFrame.getParent();
 
-        return (Resource)defaultFrame.getDynamicResource(DynamicCodeResource.class);
+        return defaultFrame.getDynamicResource(DynamicCodeResource.class);
     }
 
     /**

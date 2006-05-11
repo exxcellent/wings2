@@ -26,7 +26,7 @@ public class BirdsNestCG
             throws IOException
     {
         final BirdsNest component = (BirdsNest) _c;
-        BirdsNest desktop = (BirdsNest) component;
+        BirdsNest desktop = component;
         // is one window maximized? if yes, skip rendering of other windows
         boolean maximized = false;
 

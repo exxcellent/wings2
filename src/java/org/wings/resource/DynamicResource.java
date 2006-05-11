@@ -125,7 +125,7 @@ public abstract class DynamicResource
 
     protected PropertyService getPropertyService() {
         if (propertyService == null)
-            propertyService = (PropertyService) SessionManager.getSession();
+            propertyService = SessionManager.getSession();
         return propertyService;
     }
 

@@ -92,7 +92,7 @@ public class SMenuBar extends SContainer {
      * @return the SMenu at that position
      */
     public SMenu getMenu(int index) {
-        SComponent c = (SComponent) super.getComponent(index);
+        SComponent c = super.getComponent(index);
         if (c instanceof SMenu)
             return (SMenu) c;
         return null;

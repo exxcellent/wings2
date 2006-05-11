@@ -127,7 +127,7 @@ public class CSSStyleSheet implements StyleSheet {
          * If the vertical alignment is set to either superscirpt or
          * subscript we reduce the font size by 2 points.
          */
-        String vAlign = (String) a.get(CSSProperty.VERTICAL_ALIGN);
+        String vAlign = a.get(CSSProperty.VERTICAL_ALIGN);
 
         if (vAlign != null) {
             if ((vAlign.indexOf("sup") >= 0) ||
@@ -136,11 +136,11 @@ public class CSSStyleSheet implements StyleSheet {
             }
         }
 
-        String family = (String) a.get(CSSProperty.FONT_FAMILY);
+        String family = a.get(CSSProperty.FONT_FAMILY);
         anyFontAttribute |= (family != null);
 
         int style = Font.PLAIN;
-        String weight = (String) a.get(CSSProperty.FONT_WEIGHT);
+        String weight = a.get(CSSProperty.FONT_WEIGHT);
         if (weight == null)
             ;
         else if (weight.equals("bold")) {
@@ -157,7 +157,7 @@ public class CSSStyleSheet implements StyleSheet {
         }
         anyFontAttribute |= (weight != null);
 
-        String styleValue = (String) a.get(CSSProperty.FONT_STYLE);
+        String styleValue = a.get(CSSProperty.FONT_STYLE);
         if ((styleValue != null) && (styleValue.toLowerCase().indexOf("italic") >= 0)) style |= Font.ITALIC;
         anyFontAttribute |= (styleValue != null);
         return anyFontAttribute ? new SFont(family, style, size) : null;
@@ -201,7 +201,7 @@ public class CSSStyleSheet implements StyleSheet {
      * is specified.
      */
     private static int getFontSize(CSSAttributeSet attr) {
-        String value = (String) attr.get(CSSProperty.FONT_SIZE);
+        String value = attr.get(CSSProperty.FONT_SIZE);
         if (value == null)
             return -1;
         try {
@@ -281,7 +281,7 @@ public class CSSStyleSheet implements StyleSheet {
     }
 
     static Color getColor(CSSAttributeSet a, CSSProperty cssProperty) {
-        String cv = (String) a.get(cssProperty);
+        String cv = a.get(cssProperty);
         if (cv != null) {
             return stringToColor(cv);
         }

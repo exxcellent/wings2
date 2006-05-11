@@ -124,10 +124,10 @@ public class JavaScriptListener
             char c = code.charAt(i);
             endPos = i;
             if (lastChar == '{' && Character.isDigit(c)) {
-                int varIndex = (int) (c - '0');
+                int varIndex = (c - '0');
                 while (Character.isDigit(code.charAt(++i))) {
                     varIndex *= 10;
-                    varIndex += (int) (code.charAt(i) - '0');
+                    varIndex += (code.charAt(i) - '0');
                 }
                 c = code.charAt(i);
                 if (c == '}') {

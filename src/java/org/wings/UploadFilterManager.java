@@ -51,7 +51,7 @@ public class UploadFilterManager {
         int dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
         name = name.substring(dividerIndex + 1);
 
-        return (Class) ((Entry) filterMappings.get(name)).filterClass;
+        return ((Entry) filterMappings.get(name)).filterClass;
     }
 
     public static FilterOutputStream createFilterInstance(String name, OutputStream out) {

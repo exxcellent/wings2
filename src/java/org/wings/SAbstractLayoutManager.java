@@ -78,7 +78,7 @@ public abstract class SAbstractLayoutManager
      * @see SComponent#updateCG
      */
     public void updateCG() {
-        setCG((LayoutCG) SessionManager.getSession().getCGManager().getCG(this));
+        setCG(SessionManager.getSession().getCGManager().getCG(this));
     }
 
     public void write(Device d)

@@ -39,22 +39,22 @@ public abstract class SComponentAdapter
     /**
      * Invoked when the component has been made invisible.
      */
-    public void componentHidden(SComponentEvent e) {};
+    public void componentHidden(SComponentEvent e) {}
 
     /**
      * Invoked when the component's position changes.
      */
-    public void componentMoved(SComponentEvent e) {};
+    public void componentMoved(SComponentEvent e) {}
 
     /**
      * Invoked when the component's size changes.
      */
-    public void componentResized(SComponentEvent e) {};
+    public void componentResized(SComponentEvent e) {}
 
     /**
      * Invoked when the component has been made visible.
      */
-    public void componentShown(SComponentEvent e) {};
+    public void componentShown(SComponentEvent e) {}
 }
 
 

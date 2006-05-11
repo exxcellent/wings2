@@ -313,9 +313,9 @@ public class Desktop
         public void setDragEnabled(boolean dragEnabled) {
             this.dragEnabled = dragEnabled;
             if (dragEnabled) {
-                SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+                SessionManager.getSession().getDragAndDropManager().registerDragSource(this);
             } else {
-                SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+                SessionManager.getSession().getDragAndDropManager().deregisterDragSource(this);
             }
         }
     }

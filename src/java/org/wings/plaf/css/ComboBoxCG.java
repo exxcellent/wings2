@@ -133,9 +133,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         Utils.getRenderHelper(_c).forbidCaching();
 
         try {
-            final SComboBox component = (SComboBox) _c;
-
-            final SComboBox comboBox = (SComboBox) component;
+            final SComboBox comboBox = (SComboBox) _c;
             // TODO: implement anchor combobox
             //if (comboBox.getShowAsFormComponent()) {
             writeFormComboBox(device, comboBox);
