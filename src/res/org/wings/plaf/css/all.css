@@ -520,42 +520,42 @@ table.SPageScroller table.pages SPAN.disabled_linkbutton {
 
 /* ----------- SOPTIONPANE */
 
-div.SOptionPane,
-div.SDialog,
-div.SInternalFrame {
+.SOptionPane,
+.SDialog,
+.SInternalFrame {
     border: 1px solid #ccc;
     margin: .2em;
 }
 
-div.SOptionPane div.WindowBar,
-div.SDialog div.WindowBar,
-div.SInternalFrame div.WindowBar {
+.SOptionPane div.WindowBar,
+.SDialog div.WindowBar,
+.SInternalFrame div.WindowBar {
 	padding:.2em;
 	background-color: #aaf;
 }
 
-div.SOptionPane div.WindowBar div.WindowBar_title,
-div.SDialog div.WindowBar div.WindowBar_title,
-div.SInternalFrame div.WindowBar div.WindowBar_title {
+.SOptionPane div.WindowBar div.WindowBar_title,
+.SDialog div.WindowBar div.WindowBar_title,
+.SInternalFrame div.WindowBar div.WindowBar_title {
 	padding-right:4em;
 	white-space:pre;
 }
 
-div.SOptionPane div.WindowBar a.WindowButton,
-div.SDialog div.WindowBar a.WindowButton,
-div.SInternalFrame div.WindowBar a.WindowButton {
+.SOptionPane div.WindowBar a.WindowButton,
+.SDialog div.WindowBar a.WindowButton,
+.SInternalFrame div.WindowBar a.WindowButton {
 	float: right;
 }
 
-div.SOptionPane div.WindowBar a.DeiconifyButton,
-div.SDialog div.WindowBar a.DeiconifyButton,
-div.SInternalFrame div.WindowBar a.DeiconifyButton {
+.SOptionPane div.WindowBar a.DeiconifyButton,
+.SDialog div.WindowBar a.DeiconifyButton,
+.SInternalFrame div.WindowBar a.DeiconifyButton {
 	display: inline;
 }
 
-div.SOptionPane div.WindowContent,
-div.SDialog div.WindowContent,
-div.SInternalFrame div.WindowContent {
+.SOptionPane div.WindowContent,
+.SDialog div.WindowContent,
+.SInternalFrame div.WindowContent {
 	padding: .2em;
 }
 

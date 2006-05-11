@@ -15,6 +15,8 @@ package org.wings;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -47,6 +49,7 @@ public class SDefaultListModel
 
 
     public SDefaultListModel() {
+        // default constructor
     }
 
 
@@ -59,6 +62,21 @@ public class SDefaultListModel
         return data.get(i);
     }
 
+    public int indexOf(Object element) {
+        return data.indexOf(element);
+    }
+
+    public Enumeration elements() {
+        return Collections.enumeration(data);
+    }
+
+    public void clear() {
+        data.clear();
+    }
+
+    public void addElement(Object element) {
+        data.add(element);
+    }
 }
 
 
