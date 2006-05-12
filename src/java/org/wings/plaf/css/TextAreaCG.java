@@ -71,7 +71,7 @@ public final class TextAreaCG extends AbstractComponentCG implements
             }
 
             if (component.isFocusOwner())
-                Utils.optAttribute(device, "focus", component.getName());
+                Utils.optAttribute(device, "foc", component.getName());
 
             device.print(">");
             Utils.quote(device, component.getText(), false, false, false);

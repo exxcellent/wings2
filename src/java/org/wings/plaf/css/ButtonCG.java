@@ -60,7 +60,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         Utils.optAttribute(device, "class", className);
 
         if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "foc", component.getName());
 
         device.print(">");
 

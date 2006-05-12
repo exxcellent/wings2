@@ -209,11 +209,13 @@ public class Session implements PropertyService, Serializable {
      *
      * @param servletConfig a <code>ServletConfig</code> value
      * @param request a <code>HttpServletRequest</code> value
+     * @param response
      * @throws ServletException if an error occurs
      */
-    public void init(ServletConfig servletConfig, HttpServletRequest request) throws ServletException {
+    public void init(ServletConfig servletConfig, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         servletContext = request.getSession().getServletContext();
         setServletRequest(request);
+        setServletResponse(response);
         setUserAgentFromRequest(request);
 
         initProps(servletConfig);

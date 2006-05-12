@@ -120,6 +120,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
     public static final JavaScriptListener FOCUS_SCRIPT =
             new JavaScriptListener("onfocus", "storeFocus(event)");
+    public static final JavaScriptListener FOCUS_SCRIPT_IE =
+            new JavaScriptListener("onactivate", "storeFocus(event)");
 
     public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
             new JavaScriptListener("onscroll", "storeScrollPosition(event)");
@@ -210,7 +212,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         addExternalizedHeader(component, FORM_SCRIPT, "text/javascript");
         addExternalizedHeader(component, DOMLIB_SCRIPT, "text/javascript");
         addExternalizedHeader(component, DOMTT_SCRIPT, "text/javascript");
-        component.addScriptListener(FOCUS_SCRIPT);
+        component.addScriptListener(Utils.isMSIE(component) ? FOCUS_SCRIPT_IE : FOCUS_SCRIPT);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
         component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);

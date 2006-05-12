@@ -37,7 +37,7 @@ public final class PasswordFieldCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());
         Utils.writeEvents(device, component, null);
         if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "foc", component.getName());
 
 
         if (!component.isEditable() || !component.isEnabled()) {

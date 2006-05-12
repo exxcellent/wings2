@@ -45,7 +45,7 @@ public final class RenderHelper {
     public void collectMenues(final SComponent component) {
         if (component.isVisible()) {
             final SPopupMenu componentMenu = component.getComponentPopupMenu();
-            if (componentMenu != null && menus.contains(componentMenu) == false) {
+            if (componentMenu != null && !menus.contains(componentMenu)) {
                 addMenu(componentMenu);
             }
             else if (component instanceof SMenuBar) {

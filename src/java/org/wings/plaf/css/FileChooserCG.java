@@ -47,7 +47,7 @@ public final class FileChooserCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.writeEvents(device, component, null);
         if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "foc", component.getName());
 
         if (component.isEnabled()) {
             device.print(" name=\"");

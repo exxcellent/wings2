@@ -184,7 +184,7 @@ public final class TabbedPaneCG extends AbstractComponentCG {
             }
 
             if (i == tabbedPane.getSelectedIndex() && tabbedPane.isFocusOwner()) {
-                Utils.optAttribute(device, "focus", tabbedPane.getName());
+                Utils.optAttribute(device, "foc", tabbedPane.getName());
             }
 
             final SStringBuilder cssClassName = new SStringBuilder("STabbedPane_Tab_");

@@ -50,7 +50,7 @@ public final class AnchorCG extends AbstractComponentCG implements org.wings.pla
 
         // spezielle anchor attributes
         if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "foc", component.getName());
         //Utils.optAttribute(device, "target", component.getTarget());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "name", component.getName());

@@ -329,6 +329,7 @@ public abstract class SAbstractButton
     }
 
     public void fireIntermediateEvents() {
+        requestFocus();
         super.fireIntermediateEvents();
         if (buttonGroup != null) {
             buttonGroup.fireDelayedIntermediateEvents();
@@ -336,8 +337,6 @@ public abstract class SAbstractButton
     }
 
     public void fireFinalEvents() {
-        // The user wouldn't be able to request focus anymore as this overrides it all the time
-        //requestFocus();
         super.fireFinalEvents();
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
         if (buttonGroup != null)

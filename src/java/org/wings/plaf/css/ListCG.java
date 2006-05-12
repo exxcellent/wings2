@@ -50,7 +50,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         if (!list.isEnabled())
             device.print(" disabled=\"true\"");
         if (list.isFocusOwner())
-            Utils.optAttribute(device, "focus", list.getName());
+            Utils.optAttribute(device, "foc", list.getName());
 
         device.print(">");
 
@@ -154,7 +154,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
 
             if (renderSelection) {
                 Utils.printButtonStart(device, list, list.getToggleSelectionParameter(i), true, list.getShowAsFormComponent());
-                Utils.optAttribute(device, "focus", renderer.getName());
+                Utils.optAttribute(device, "foc", renderer.getName());
                 device.print(">");
             } else
                 device.print("<span>");

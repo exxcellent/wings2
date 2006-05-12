@@ -23,11 +23,10 @@ function getParentByTagName(element, tag) {
 
 function getParentByAttributeName(element, attribute) {
   while (element != null) {
-    if (element.attributes.contains(attribute))
-      return element;
+      if (element.attributes && element.attributes.contains(attribute))
+          return element;
     element = element.parentNode;
   }
-    alert("no parent for for attibute "+attribute);
   return null;
 }
 
@@ -45,7 +44,7 @@ function sendEvent(event, eventValue, eventName, clientHandlers) {
     var form = getParentByTagName(target, "FORM");
     var eidprovider = target;
     if (!eventName) {
-        var eidprovider = getParentByAttributeName(target, "eid");
+        eidprovider = getParentByAttributeName(target, "eid");
         eventName = eidprovider.getAttribute("eid");
     }
 
@@ -93,30 +92,35 @@ function followLink(url, clientHandlers) {
 function requestFocus(id) {
     var div = document.getElementById(id);
 	if (div) {
-	    var elements = div.getElementsByTagName("INPUT");
+        if (div.getAttribute("foc") == id) {
+            div.focus();
+            return;
+        }
+
+        var elements = div.getElementsByTagName("INPUT");
 	    for (var i = 0; i < elements.length; i++) {
-	        if (elements[i].getAttribute("focus") == id) {
+	        if (elements[i].getAttribute("foc") == id) {
 	            elements[i].focus();
 	            return;
 	        }
 	    }
 	    elements = div.getElementsByTagName("SELECT");
 	    for (var i = 0; i < elements.length; i++) {
-	        if (elements[i].getAttribute("focus") == id) {
+	        if (elements[i].getAttribute("foc") == id) {
 	            elements[i].focus();
 	            return;
 	        }
 	    }
 	    elements = div.getElementsByTagName("TEXTAREA");
 	    for (var i = 0; i < elements.length; i++) {
-	        if (elements[i].getAttribute("focus") == id) {
+	        if (elements[i].getAttribute("foc") == id) {
 	            elements[i].focus();
 	            return;
 	        }
 	    }
 	    elements = div.getElementsByTagName("A");
 	    for (var i = 0; i < elements.length; i++) {
-	        if (elements[i].getAttribute("focus") == id) {
+	        if (elements[i].getAttribute("foc") == id) {
 	            elements[i].focus();
 	            return;
 	        }
@@ -125,7 +129,7 @@ function requestFocus(id) {
 	    if (!(wu_konqueror)) {
 		    elements = div.getElementsByTagName("BUTTON");
 		    for (var i = 0; i < elements.length; i++) {
-		        if (elements[i].getAttribute("focus") == id) {
+		        if (elements[i].getAttribute("foc") == id) {
 		            elements[i].focus();
 		            return;
 		        }
@@ -205,9 +209,10 @@ function getScrollableElement(el) {
 
 function storeFocus(event) {
     event = getEvent(event);
+    var target = getTarget(event);
 
-    var div = getParentByTagName(getTarget(event), "DIV");
-    var body = getParentByTagName(getTarget(event), "BODY");
+    var div = getParentByAttributeName(target, "eid");
+    var body = getParentByTagName(target, "BODY");
     if (div && body)
-        setCookie(body.getAttribute("id") + "_focus", "focus_" + div.getAttribute("id"), 1);
+        setCookie(body.getAttribute("id") + "-focus", "focus_" + div.getAttribute("id"), 1);
 }

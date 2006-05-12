@@ -51,7 +51,7 @@ public final class RadioButtonCG extends CheckBoxCG implements
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
         if (button.isFocusOwner())
-            Utils.optAttribute(device, "focus", button.getName());
+            Utils.optAttribute(device, "foc", button.getName());
 
         if (button.isSelected())
             device.print(" checked=\"true\"");

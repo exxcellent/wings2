@@ -110,8 +110,6 @@ public class SButton extends SAbstractButton {
     }
 
     public void fireFinalEvents() {
-        // The user wouldn't be able to request focus anymore as this overrides it all the time
-        //requestFocus();
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, actionCommandToFire));
         if (getGroup() != null) {
             getGroup().fireDelayedFinalEvents();

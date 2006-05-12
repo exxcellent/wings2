@@ -81,7 +81,7 @@ public final class TextFieldCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
         Utils.writeEvents(device, textField, null);
         if (textField.isFocusOwner())
-            Utils.optAttribute(device, "focus", textField.getName());
+            Utils.optAttribute(device, "foc", textField.getName());
 
         if (!textField.isEditable() || !textField.isEnabled()) {
             device.print(" readonly=\"true\"");

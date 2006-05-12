@@ -48,7 +48,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         if (!component.isEnabled())
             device.print(" disabled=\"true\"");
         if (component.isFocusOwner())
-            Utils.optAttribute(device, "focus", component.getName());
+            Utils.optAttribute(device, "foc", component.getName());
 
         device.print(">");
 
