@@ -277,7 +277,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public void write(final Device device, final SComponent pComp)
             throws IOException {
         final SFrame frame = (SFrame) pComp;
-        Utils.getRenderHelper(frame).reset();
+        RenderHelper.getInstance(frame).reset();
         if (!frame.isVisible()) {
             return;
         } else {
@@ -419,7 +419,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             frame.getLayout().write(device);
             device.print("\n");
             // now add all menus
-            device.print(Utils.getRenderHelper(frame).getMenueRenderBuffer().toString());
+            device.print(RenderHelper.getInstance(frame).getMenueRenderBuffer().toString());
             
             // now add final JS for DnD if neccessary.
             if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) { // initialize only if dragSources are present
@@ -468,7 +468,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         writeInlineScripts(device, frame);
         device.print("</html>\n");
         pComp.fireRenderEvent(SComponent.DONE_RENDERING);
-        Utils.getRenderHelper(frame).reset();
+        RenderHelper.getInstance(frame).reset();
     }
 
     protected void writeInlineScripts(Device device, SComponent component) throws IOException {

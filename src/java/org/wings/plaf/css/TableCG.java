@@ -247,7 +247,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
 
 
     public final void writeInternal(final Device _device, final SComponent _c) throws IOException {
-        Utils.getRenderHelper(_c).forbidCaching();
+        RenderHelper.getInstance(_c).forbidCaching();
         final STable table = (STable) _c;
         final SDimension intercellPadding = table.getIntercellPadding();
         final SDimension intercellSpacing = table.getIntercellSpacing();
@@ -373,7 +373,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
             /* Refer to description above. */
             device.close();
             //device = null;
-            Utils.getRenderHelper(_c).allowCaching();
+            RenderHelper.getInstance(_c).allowCaching();
         }
     }
 

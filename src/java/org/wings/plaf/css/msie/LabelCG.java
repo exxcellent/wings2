@@ -1,19 +1,17 @@
 package org.wings.plaf.css.msie;
 
-import org.wings.plaf.css.AbstractLabelCG;
-import org.wings.plaf.css.IconTextCompound;
-import org.wings.plaf.css.Utils;
-import org.wings.plaf.CGManager;
-import org.wings.session.SessionManager;
 import org.wings.SComponent;
-import org.wings.SLabel;
-import org.wings.SIcon;
 import org.wings.SConstants;
+import org.wings.SIcon;
+import org.wings.SLabel;
 import org.wings.border.SBorder;
 import org.wings.io.Device;
+import org.wings.plaf.css.IconTextCompound;
+import org.wings.plaf.css.Utils;
+import org.wings.plaf.css.RenderHelper;
 
-import java.io.IOException;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * CG for SLabel instances.
@@ -56,8 +54,13 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                     writeAllAttributes(d, label);
                 }
 
-                public void writeCompound(Device device, SComponent component, int horizontalTextPosition, int verticalTextPosition, boolean writeAllAttributes) throws IOException {
-                    SBorder border = component.getBorder();
+                // TODO What is this Voodoo for? Why only IE and not Gecko etc.
+                // FIXME Avoid Code prolifieration
+                public void writeCompound(final Device device, final SComponent component,
+                                          int horizontalTextPosition, int verticalTextPosition,
+                                          final boolean writeAllAttributes) throws IOException {
+                    RenderHelper.getInstance(component).collectMenues(component);
+                    final SBorder border = component.getBorder();
                     final Insets insets = border != null ? border.getInsets() : null;
                     if (insets == null || insets.top == 0 && insets.left == 0 && insets.right == 0 && insets.bottom == 0)
                         super.writeCompound(device, component, horizontalTextPosition, verticalTextPosition, writeAllAttributes);

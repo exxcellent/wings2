@@ -179,7 +179,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
                       final SComponent _c)
             throws IOException
     {
-        Utils.getRenderHelper(_c).forbidCaching();
+        RenderHelper.getInstance(_c).forbidCaching();
 
         try {
             SList list = (SList) _c;
@@ -190,7 +190,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             }
         }
         finally {
-            Utils.getRenderHelper(_c).allowCaching();
+            RenderHelper.getInstance(_c).allowCaching();
         }
     }
 }

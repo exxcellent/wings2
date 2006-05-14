@@ -1027,15 +1027,4 @@ public final class Utils {
     public static boolean isMSIE(SComponent component) {
         return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
-
-
-    public static RenderHelper getRenderHelper(SComponent forComponent) {
-        RenderHelper renderHelper = (RenderHelper) forComponent.getSession().getProperty("css_plaf-render-helper");
-        if (renderHelper == null) {
-            renderHelper = new RenderHelper();
-            forComponent.getSession().setProperty("css_plaf-render-helper", renderHelper);
-        }
-        return renderHelper;
-    }
-
 }

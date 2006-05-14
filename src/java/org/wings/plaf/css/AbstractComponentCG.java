@@ -322,8 +322,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      * @throws IOException
      */
     public final void write(final Device device, final SComponent component) throws IOException {
-        if (component instanceof LowLevelEventListener || component instanceof SContainer || !Utils.getRenderHelper(component).isCachingAllowed()) {
-            writeReally(device, component);
+        if (component instanceof LowLevelEventListener || component instanceof SContainer || !RenderHelper.getInstance(component).isCachingAllowed()) {
+            renderAndWrapComponent(device, component);
             log.debug("not caching = " + component.getName());
             return;
         }
@@ -331,7 +331,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         if (cache == null) {
             try {
                 StringBuilderDevice cacheDevice = new StringBuilderDevice();
-                writeReally(cacheDevice, component);
+                renderAndWrapComponent(cacheDevice, component);
                 cache = cacheDevice.toString();
                 component.putClientProperty("render-cache", cache);
                 log.debug("caching = " + component.getName());
@@ -347,7 +347,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         device.print(cache);
     }
 
-    private void writeReally(Device device, SComponent component) throws IOException {
+    private void renderAndWrapComponent(Device device, SComponent component) throws IOException {
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         component.fireRenderEvent(SComponent.START_RENDERING);
 
@@ -355,7 +355,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         writeInlineScripts(device, component);
 
-        Utils.getRenderHelper(component).collectMenues(component);
+        RenderHelper.getInstance(component).collectMenues(component);
 
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");

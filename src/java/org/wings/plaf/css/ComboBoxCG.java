@@ -130,7 +130,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
 
 
     public void writeInternal(final Device device, final SComponent _c) throws IOException {
-        Utils.getRenderHelper(_c).forbidCaching();
+        RenderHelper.getInstance(_c).forbidCaching();
 
         try {
             final SComboBox comboBox = (SComboBox) _c;
@@ -142,7 +142,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
             // }
         }
         finally {
-            Utils.getRenderHelper(_c).allowCaching();
+            RenderHelper.getInstance(_c).allowCaching();
         }
     }
 }

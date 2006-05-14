@@ -47,9 +47,8 @@ public final class RenderHelper {
             final SPopupMenu componentMenu = component.getComponentPopupMenu();
             if (componentMenu != null && !menus.contains(componentMenu)) {
                 addMenu(componentMenu);
-            }
-            else if (component instanceof SMenuBar) {
-                SMenuBar menuBar = (SMenuBar)component;
+            } else if (component instanceof SMenuBar) {
+                SMenuBar menuBar = (SMenuBar) component;
                 for (Iterator iterator = menuBar.getMenus().iterator(); iterator.hasNext();) {
                     SMenuItem menuItem = (SMenuItem) iterator.next();
                     addMenu(menuItem);
@@ -72,11 +71,22 @@ public final class RenderHelper {
         caching = true;
         log.debug("allow caching");
     }
+
     public void forbidCaching() {
         caching = false;
         log.debug("forbid caching");
     }
+
     public boolean isCachingAllowed() {
         return caching;
+    }
+
+    public static RenderHelper getInstance(SComponent forComponent) {
+        RenderHelper renderHelper = (RenderHelper) forComponent.getSession().getProperty("css_plaf-render-helper");
+        if (renderHelper == null) {
+            renderHelper = new RenderHelper();
+            forComponent.getSession().setProperty("css_plaf-render-helper", renderHelper);
+        }
+        return renderHelper;
     }
 }
