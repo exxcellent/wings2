@@ -36,7 +36,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         final SGridBagLayout layout = (SGridBagLayout) l;
         final boolean header = layout.getHeader();
         final SGridBagLayout.Grid grid = layout.getGrid();
-        String styles = cellStyles(layout);
+        String styles = layoutStyles(layout);
 
         if (grid.cols == 0)
             return;
@@ -81,7 +81,8 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         if (c.weightx > 0 && grid.colweight[row] > 0)
                             width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
 
-                        openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER, styles);
+                        String cellStyles = c.insets != null ? cellStyles(layout,  c.insets) : styles;
+                        openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER, cellStyles);
 
                         Utils.printNewline(d, comp);
                         comp.write(d); // Render component

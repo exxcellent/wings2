@@ -37,7 +37,7 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
         final SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
-        String styles = cellStyles(layout);
+        String styles = layoutStyles(layout);
 
         int cols = 1;
         if (west != null) cols++;

@@ -35,7 +35,7 @@ public class GridLayoutCG extends AbstractLayoutCG {
         final int rows = layout.getRows();
         //final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
-        String styles = cellStyles(layout);
+        String styles = layoutStyles(layout);
 
         int cols = layout.getColumns();
         if (cols <= 0)

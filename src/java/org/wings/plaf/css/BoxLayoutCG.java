@@ -17,7 +17,6 @@ import org.wings.SBoxLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class BoxLayoutCG extends AbstractLayoutCG {
         final SBoxLayout layout = (SBoxLayout) l;
         final List components = layout.getComponents();
         final int cols = layout.getOrientation() == SBoxLayout.HORIZONTAL ? components.size() : 1;
-        String styles = cellStyles(layout);
+        String styles = layoutStyles(layout);
 
         openLayouterBody(d, layout);
 

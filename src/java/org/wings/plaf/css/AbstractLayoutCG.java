@@ -199,7 +199,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         d.print(renderAsHeader ? "</th>" : "</td>");
     }
 
-    protected static String cellStyles(SLayoutManager layout) {
+    protected static String layoutStyles(SLayoutManager layout) {
         SStringBuilder styles = new SStringBuilder();
         if (layout instanceof SBorderLayout) {
             SBorderLayout borderLayout = (SBorderLayout)layout;
@@ -226,6 +226,32 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             SBoxLayout boxLayout = (SBoxLayout)layout;
             Insets insets = convertGapsToInset(boxLayout.getHgap(), boxLayout.getVgap());
             createInlineStylesForInsets(styles, insets);
+            if (boxLayout.getBorder() > 0)
+                styles.append("border:").append(boxLayout.getBorder()).append("px solid black");
+        }
+        return styles.length() > 0 ? styles.toString() : null;
+    }
+
+    protected static String cellStyles(SLayoutManager layout, Insets insets) {
+        SStringBuilder styles = new SStringBuilder();
+        createInlineStylesForInsets(styles, insets);
+        if (layout instanceof SBorderLayout) {
+            SBorderLayout borderLayout = (SBorderLayout)layout;
+            if (borderLayout.getBorder() > 0)
+                styles.append("border:").append(borderLayout.getBorder()).append("px solid black");
+        }
+        else if (layout instanceof SGridLayout) {
+            SGridLayout gridLayout = (SGridLayout)layout;
+            if (gridLayout.getBorder() > 0)
+                styles.append("border:").append(gridLayout.getBorder()).append("px solid black");
+        }
+        else if (layout instanceof SGridBagLayout) {
+            SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+            if (gridbagLayout.getBorder() > 0)
+                styles.append("border:").append(gridbagLayout.getBorder()).append("px solid black");
+        }
+        else if (layout instanceof SBoxLayout) {
+            SBoxLayout boxLayout = (SBoxLayout)layout;
             if (boxLayout.getBorder() > 0)
                 styles.append("border:").append(boxLayout.getBorder()).append("px solid black");
         }
