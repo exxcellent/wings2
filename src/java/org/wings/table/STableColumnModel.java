@@ -13,6 +13,7 @@
  */
 package org.wings.table;
 
+import javax.swing.event.TableColumnModelListener;
 import java.util.Collection;
 
 /**

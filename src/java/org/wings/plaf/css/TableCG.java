@@ -306,7 +306,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
 
             int columnCount = columnModel.getColumnCount();
             for (int i=startCol; i < endCol; i++) {
-                if (endCol >= columnCount)
+                if (endCol > columnCount)
                     System.out.println("i = " + i);
 
                 STableColumn column = columnModel.getColumn(i);
@@ -370,7 +370,9 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                 }
 
                 for (int c = startCol; c < endCol; c++) {
-                    renderCellContent(device, table, rendererPane, r, c);
+                    STableColumn column = columnModel.getColumn(c);
+                    if (!column.isHidden())
+                        renderCellContent(device, table, rendererPane, r, c);
                 }
 
                 device.print("</tr>");

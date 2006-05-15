@@ -46,14 +46,16 @@ public final class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG i
                 scrollable.setViewportSize(viewportSize);
                 center.setPreferredSize(preferredSize);
             }
-        } else
+        }
+        else {
+            scrollPane.synchronizeAdjustables();
             writeContent(device, component);
+        }
     }
 
     public void writeContent(Device device, SComponent c)
             throws IOException {
         SScrollPane scrollPane = (SScrollPane) c;
-        scrollPane.synchronizeAdjustables();
         device.print("<table");
         writeAllAttributes(device, scrollPane);
         device.print(">");

@@ -40,6 +40,7 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
  /**
@@ -289,6 +290,20 @@ import java.util.HashMap;
          return model.getColumnCount();
      }
 
+     public int getVisibleColumnCount() {
+         if (columnModel != null) {
+            int columnCount = 0;
+             for (Iterator iterator = columnModel.getColumns().iterator(); iterator.hasNext();) {
+                 STableColumn tableColumn = (STableColumn) iterator.next();
+                 if (!tableColumn.isHidden())
+                     columnCount++;
+             }
+             return columnCount;
+         }
+         else
+             return model.getColumnCount();
+     }
+
      public String getColumnName(int col) {
          return model.getColumnName(convertColumnIndexToModel(col));
      }
@@ -518,7 +533,7 @@ import java.util.HashMap;
 
      public SComponent prepareRenderer(STableCellRenderer r, int row, int col) {
          final SComponent tableCellRendererComponent = r.getTableCellRendererComponent(this,
-                 model.getValueAt(row, col),
+                 getValueAt(row, col),
                  isRowSelected(row),
                  row, col);
          nameCellComponent(tableCellRendererComponent, row, col);
@@ -1405,7 +1420,7 @@ import java.util.HashMap;
       * @return maximum size
       */
      public Rectangle getScrollableViewportSize() {
-         return new Rectangle(0, 0, getColumnCount(), getRowCount());
+         return new Rectangle(0, 0, getVisibleColumnCount(), getRowCount());
      }
 
      /*

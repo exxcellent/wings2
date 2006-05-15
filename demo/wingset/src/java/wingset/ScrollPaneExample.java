@@ -14,9 +14,13 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.table.STableColumnModel;
+import org.wings.table.STableColumn;
 
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
+import java.util.Collections;
+import java.util.Iterator;
 
 
 /**
@@ -39,7 +43,7 @@ public class ScrollPaneExample
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
         tree.setName("tree");
         tree.setShowAsFormComponent(false);
-        
+
         scrollPane = new SScrollPane(table);
         scrollPane.getHorizontalScrollBar().setBlockIncrement(3);
         scrollPane.getVerticalScrollBar().setBlockIncrement(3);
@@ -62,7 +66,7 @@ public class ScrollPaneExample
     protected void showInPane(SComponent comp) {
         scrollPane.setViewportView(comp);
     }
-    
+
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
             final SCheckBox paging = new SCheckBox("Paged Scrolling");
@@ -90,11 +94,26 @@ public class ScrollPaneExample
                         showInPane(tree);
                     }
                 }
-                
+
             });
+
+            final SCheckBox hideSomeColumns = new SCheckBox("Hide some columns");
+            hideSomeColumns.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    STableColumnModel columnModel = table.getColumnModel();
+                    for (int i=0; i < columnModel.getColumnCount(); i++) {
+                        if (i % 3 == 0) {
+                            STableColumn column = columnModel.getColumn(i);
+                            column.setHidden(hideSomeColumns.isSelected());
+                        }
+                    }
+                }
+            });
+
             addControl(new SLabel(""));
             addControl(tableButton);
             addControl(treeButton);
+            addControl(hideSomeColumns);
         }
     }
 }
