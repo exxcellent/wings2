@@ -36,6 +36,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -289,11 +290,11 @@ import java.util.HashMap;
      }
 
      public String getColumnName(int col) {
-         return model.getColumnName(col);
+         return model.getColumnName(convertColumnIndexToModel(col));
      }
 
      public Class getColumnClass(int col) {
-         return model.getColumnClass(col);
+         return model.getColumnClass(convertColumnIndexToModel(col));
      }
 
      /**
@@ -316,15 +317,44 @@ import java.util.HashMap;
      }
 
      public Object getValueAt(int row, int column) {
-         return model.getValueAt(row, column);
+         return model.getValueAt(row, convertColumnIndexToModel(column));
      }
 
      public void setValueAt(Object v, int row, int column) {
-         model.setValueAt(v, row, column);
+         model.setValueAt(v, row, convertColumnIndexToModel(column));
      }
 
      public int convertColumnIndexToModel(int viewColumnIndex) {
-         return viewColumnIndex;
+         if (viewColumnIndex < 0) {
+             return viewColumnIndex;
+         }
+         return getColumnModel().getColumn(viewColumnIndex).getModelIndex();
+     }
+
+     /**
+      * Maps the index of the column in the table model at
+      * <code>modelColumnIndex</code> to the index of the column
+      * in the view.  Returns the index of the
+      * corresponding column in the view; returns -1 if this column is not
+      * being displayed.  If <code>modelColumnIndex</code> is less than zero,
+      * returns <code>modelColumnIndex</code>.
+      *
+      * @param   modelColumnIndex     the index of the column in the model
+      * @return   the index of the corresponding column in the view
+      *
+      * @see #convertColumnIndexToModel
+      */
+     public int convertColumnIndexToView(int modelColumnIndex) {
+         if (modelColumnIndex < 0) {
+             return modelColumnIndex;
+         }
+         STableColumnModel cm = getColumnModel();
+         for (int column = 0; column < getColumnCount(); column++) {
+             if (cm.getColumn(column).getModelIndex() == modelColumnIndex) {
+                 return column;
+             }
+         }
+         return -1;
      }
 
      /**
@@ -452,18 +482,38 @@ import java.util.HashMap;
      /**
       * Returns the cell renderer for the given table cell.
       * @param row Table row
-      * @param column Table column
+      * @param col Table column
       * @return The cell renderer for the given table cell.
       */
-     public STableCellRenderer getCellRenderer( int row, int column ) {
-         if ( getColumnModel() == null || getColumnModel().getColumn(column) == null)
-             return getDefaultRenderer(getColumnClass(column));
+     public STableCellRenderer getCellRenderer( int row, int col ) {
+         STableColumnModel columnModel = getColumnModel();
+         if (columnModel != null) {
+             STableColumn column = columnModel.getColumn(col);
+             if (column != null) {
+                 STableCellRenderer renderer = column.getCellRenderer();
+                 if (renderer != null)
+                     return renderer;
+             }
+         }
+         return getDefaultRenderer(getColumnClass(col));
+     }
 
-         STableCellRenderer renderer = getColumnModel().getColumn( column ).getCellRenderer();
-         if ( renderer == null )
-             renderer = getDefaultRenderer( getColumnClass( getColumnModel().getColumn( column ).getModelIndex() ) );
-
-         return renderer;
+     /**
+      * Returns the header renderer for the given header cell.
+      * @param col Table column
+      * @return The header renderer for the given header cell.
+      */
+     public STableCellRenderer getHeaderRenderer( int col ) {
+         STableColumnModel columnModel = getColumnModel();
+         if ( columnModel != null) {
+             STableColumn column = columnModel.getColumn(col);
+             if (column != null) {
+                 STableCellRenderer renderer = column.getHeaderRenderer();
+                 if (renderer != null)
+                    return renderer;
+             }
+         }
+         return getHeaderRenderer();
      }
 
      public SComponent prepareRenderer(STableCellRenderer r, int row, int col) {
@@ -480,7 +530,7 @@ import java.util.HashMap;
       * @param col Column number to render. Starts with <code>0</code>. May be <code>-1</code> for row selection column.
       * @return The renderer to render the column header
       */
-     public SComponent prepareHeaderRenderer( int col ) {
+     public SComponent prepareHeaderRenderer(STableCellRenderer headerRenderer, int col ) {
          Object headerValue = col >= 0 ? model.getColumnName(col) : null;
          if ( getColumnModel() != null && getColumnModel().getColumn( col ) != null)
              headerValue = getColumnModel().getColumn( col ).getHeaderValue();
@@ -623,7 +673,7 @@ import java.util.HashMap;
          if (col >= getColumnCount() || row == -1)
              return false;
          else
-             return getModel().isCellEditable(row, col);
+             return getModel().isCellEditable(row, convertColumnIndexToModel(col));
      }
 
      /**
@@ -718,17 +768,19 @@ import java.util.HashMap;
       * and return the default editor for this type of data.
       *
       * @param row    the row of the cell to edit, where 0 is the first
-      * @param column the column of the cell to edit, where 0 is the first
+      * @param col the column of the cell to edit, where 0 is the first
       */
-     public STableCellEditor getCellEditor( int row, int column ) {
-         if ( getColumnModel() == null )
-             return getDefaultEditor(getColumnClass(column));
-
-         STableColumn tableColumn = getColumnModel().getColumn( column );
-         STableCellEditor editor = tableColumn.getCellEditor();
-         if ( editor == null )
-             editor = getDefaultEditor( getColumnClass( tableColumn.getModelIndex() ) );
-         return editor;
+     public STableCellEditor getCellEditor( int row, int col ) {
+         STableColumnModel columnModel = getColumnModel();
+         if (columnModel != null) {
+             STableColumn column = columnModel.getColumn(col);
+             if (column != null) {
+                 STableCellEditor editor = column.getCellEditor();
+                 if (editor != null)
+                    return editor;
+             }
+         }
+         return getDefaultEditor(getColumnClass(col));
      }
 
      /**

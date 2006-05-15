@@ -21,6 +21,7 @@ import org.wings.event.SMouseListener;
 import org.wings.plaf.css.TableCG;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellEditor;
+import org.wings.table.STableColumnModel;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -28,7 +29,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -393,6 +394,15 @@ public class TableExample
             evenColor.setRenderer(new ObjectPairCellRenderer());
             addControl(new SLabel(" even row"));
             addControl(evenColor);
+
+            final SCheckBox reverseColumnOrder = new SCheckBox("Reverse column order");
+            reverseColumnOrder.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    STableColumnModel columnModel = table.getColumnModel();
+                    Collections.reverse((java.util.List)columnModel.getColumns());
+                }
+            });
+            addControl(reverseColumnOrder);
         }
     }
 }

@@ -180,11 +180,11 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
     protected void renderCellContent(final Device device, final STable table, final SCellRendererPane rendererPane,
                                      final int row, final int col)
             throws IOException {
-        SComponent component = null;
         final boolean isEditingCell = table.isEditing() && row == table.getEditingRow() && col == table.getEditingColumn();
         final boolean editableCell = table.isCellEditable(row, col);
         final boolean selectableCell = table.getSelectionMode() != SListSelectionModel.NO_SELECTION && !table.isEditable();
 
+        final SComponent component;
         if (isEditingCell) {
             component = table.getEditorComponent();
         } else {
@@ -232,7 +232,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                                    final int col)
             throws IOException {
 
-        final SComponent comp = table.prepareHeaderRenderer(col);
+        final SComponent comp = table.prepareHeaderRenderer(table.getHeaderRenderer(col), col);
 
         device.print("<th class=\"cell\" col=\"");
         device.print(col);
@@ -273,14 +273,30 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
             writeAllAttributes(device, table);
             Utils.writeEvents(device, table, null);
 
-        // TODO: border="" should be obsolete
-        // TODO: cellspacing and cellpadding may be in conflict with border-collapse
-        /* Tweaking: CG configured to have a fixed border="xy" width */
-        Utils.optAttribute(device, "border", fixedTableBorderWidth);
-        Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getWidthInt() : null));
-        Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getHeightInt() : null));
-        device.print(">");
-        Utils.printNewline(device, table);
+            // TODO: border="" should be obsolete
+            // TODO: cellspacing and cellpadding may be in conflict with border-collapse
+            /* Tweaking: CG configured to have a fixed border="xy" width */
+            Utils.optAttribute(device, "border", fixedTableBorderWidth);
+            Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""+intercellSpacing.getWidthInt() : null));
+            Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""+intercellPadding.getHeightInt() : null));
+            device.print(">");
+            Utils.printNewline(device, table);
+
+            /*
+            * get viewable area
+            */
+            int startRow = 0;
+            int startCol = 0;
+            int endRow = table.getRowCount();
+            int endCol = table.getColumnCount();
+
+            final Rectangle viewport = table.getViewportSize();
+            if (viewport != null) {
+                startRow = viewport.y;
+                startCol = viewport.x;
+                endRow = Math.min(startRow + viewport.height, endRow);
+                endCol = Math.min(startCol + viewport.width, endCol);
+            }
 
         STableColumnModel columnModel = table.getColumnModel();
         if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
@@ -289,28 +305,18 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                 writeCol(device, selectionColumnWidth);
 
             int columnCount = columnModel.getColumnCount();
-            for (int i=0; i < columnCount; i++) {
+            for (int i=startCol; i < endCol; i++) {
+                if (endCol >= columnCount)
+                    System.out.println("i = " + i);
+
                 STableColumn column = columnModel.getColumn(i);
                 if (!column.isHidden())
                     writeCol(device, column.getWidth());
+                else
+                    endCol++;
             }
             device.print("</colgroup>");
             Utils.printNewline(device, table);
-        }
-
-        /*
-        * get viewable area
-        */
-        int startRow = 0;
-        int startCol = 0;
-        int endRow = table.getRowCount();
-        int endCol = table.getColumnCount();
-        final Rectangle viewport = table.getViewportSize();
-        if (viewport != null) {
-            startRow = viewport.y;
-            startCol = viewport.x;
-            endRow = Math.min(startRow + viewport.height, endRow);
-            endCol = Math.min(startCol + viewport.width, endCol);
         }
 
         /*
@@ -326,8 +332,10 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
             if (needsSelectionRow)
                 device.print("<th width=\"").print(selectionColumnWidth).print("\"></th>");
 
-            for (int c = startCol; c < endCol; c++) {
-                writeHeaderCell(device, table, rendererPane, table.convertColumnIndexToModel(c));
+            for (int i=startCol; i < endCol; i++) {
+                STableColumn column = columnModel.getColumn(i);
+                if (!column.isHidden())
+                    writeHeaderCell(device, table, rendererPane, i);
             }
 
             Utils.printNewline(device, table);
@@ -362,7 +370,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                 }
 
                 for (int c = startCol; c < endCol; c++) {
-                    renderCellContent(device, table, rendererPane, r, table.convertColumnIndexToModel(c));
+                    renderCellContent(device, table, rendererPane, r, c);
                 }
 
                 device.print("</tr>");
