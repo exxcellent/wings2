@@ -609,12 +609,13 @@ public class SComboBox
                 // doesn't fire a ListDataEvent when the selection
                 // changes.
                 selectingItem = true;
+                Object selectedItemReminderBackup = selectedItemReminder;
                 dataModel.setSelectedItem(selectedItemReminder);
                 selectingItem = false;
+                selectedItemReminder = selectedItemReminderBackup;
                 selectedItemChanged();
                 fireActionEvent();
             }
-
 
             delayedEvent = false;
         }
