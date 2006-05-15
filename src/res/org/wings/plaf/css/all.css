@@ -471,29 +471,20 @@ table.SScrollPane table.SList, table.SScrollPane table.STree, table.SScrollPane 
 /*
 scroll arrows of PageScroller as form-components
 */
-table.SPageScroller table.buttons a,
-table.SPageScroller table.buttons span {
+table.SPageScroller table.buttons td {
     border: 1px solid #cccccc;
-	background-color: transparent;
-    padding:0em .5em;
+    background-color: transparent;
+    padding: 0px;
 }
 
-table.SPageScroller table.buttons A:hover {
-    border: 1px outset #cccccc;
-}
 /*
 paging numbers of PageScroller as form-components
 */
 table.SPageScroller table.pages a,
 table.SPageScroller table.pages td.page_selected span {
-    margin: 1px;
-    padding:0em .5em;
-}
-/*
-links around paging numbers of PageScroller as non-form-components
-*/
-table.SPageScroller table.pages a {
-     text-decoration: underline;
+    margin:  6px;
+    padding: 0px;
+    font-size: 12px;
 }
 
 table.SPageScroller table.pages a:hover {
@@ -505,6 +496,11 @@ table.SPageScroller table.pages SPAN.disabled_linkbutton {
     font-weight: bold;
     color: #000000;
 }
+
+
+
+
+
 
 
 
@@ -564,18 +560,18 @@ table.SPageScroller table.pages SPAN.disabled_linkbutton {
 
 
 
-table.SScrollBar, table.SPageScroller {
+table.SScrollBar {
     height: 100%;
     width: 100%;
 	font-size: 1px;
 	border-width: 0px;
 }
 
-table.SScrollBar_vertical, table.SPageScroller_vertical {
+table.SScrollBar_vertical {
     height: 100%;
 }
 
-table.SScrollBar_horizontal, table.SPageScroller_horizontal {
+table.SScrollBar_horizonta {
     height: auto;
 }
 

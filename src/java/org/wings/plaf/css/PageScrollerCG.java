@@ -208,10 +208,6 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
     }
 
     private void writePage(Device device, SPageScroller pageScroller, int page, boolean enabled, int firstDirectPage) throws IOException {
-    	Object separator = pageScroller.getSession().getCGManager().getObject("PageScrollerCG.pageSeparator", String.class);
-    	if(page != firstDirectPage)
-    	    device.print(separator.toString());
-
         Utils.printButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()), enabled, pageScroller.getShowAsFormComponent());
         device.print(">");
 
