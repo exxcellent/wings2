@@ -218,7 +218,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
 
         rendererPane.writeComponent(device, component, table);
 
-        if (parameter != null && !isEditingCell && selectableCell && !contentContainsClickables) {
+        if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
             Utils.printButtonEnd(device, table, parameter, true);
         } else
             device.print("</span>");

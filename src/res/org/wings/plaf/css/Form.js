@@ -34,6 +34,8 @@ function getParentByAttributeName(element, attribute) {
 function preventDefault(event) {
     if (event.preventDefault)
         event.preventDefault();
+    if (event.returnValue)
+        event.returnValue = false;
     event.cancelBubble = true;
 }
 

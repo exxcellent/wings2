@@ -16,6 +16,9 @@ HTML {
     height: 100%;
 }
 
+a {
+    cursor: pointer;
+}
 /** 
  * Class for all invisible HTML tables used for layouting purposes. 
  * without border-collapse, ie keeps borders, even if we set no border

@@ -54,8 +54,7 @@ public final class LabelCG extends org.wings.plaf.css.LabelCG implements org.win
                     writeAllAttributes(d, label);
                 }
 
-                // TODO What is this Voodoo for? Why only IE and not Gecko etc.
-                // FIXME Avoid Code prolifieration
+                // msie doesn't respect padding attributes on the table tag .. thus we have to apply it on the td tag
                 public void writeCompound(final Device device, final SComponent component,
                                           int horizontalTextPosition, int verticalTextPosition,
                                           final boolean writeAllAttributes) throws IOException {
