@@ -54,12 +54,11 @@ public class DWRExample
         String name = "countrySelection_" + System.identityHashCode(countryInput);
         countryInput.addScriptListener(new DWRScriptListener(
                 JavaScriptEvent.ON_KEY_UP,
-                name + ".getData(DWRUtil.getValue('" + countryInput.getName() + "_input'),          \n" +
-                        "                                                                           \n" +
-                        "function(countries) {                                                      \n" +
-                        "    DWRUtil.removeAllOptions('" + countryBox.getName() + "_select');       \n" +
-                        "    DWRUtil.addOptions('" + countryBox.getName() + "_select', countries);  \n" +
-                        "});                                                                        \n",
+                name + ".getData(DWRUtil.getValue('" + countryInput.getName() + "')," +
+                        "function(countries) {" +
+                        "    DWRUtil.removeAllOptions('" + countryBox.getName() + "');" +
+                        "    DWRUtil.addOptions('" + countryBox.getName() + "', countries);" +
+                        "});",
                 name,
                 new AutoCompletionDummy()
         ));

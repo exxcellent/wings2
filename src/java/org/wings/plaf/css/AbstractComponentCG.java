@@ -31,8 +31,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -274,7 +272,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             final Integer scriptListenerListVersion = (Integer) component.getClientProperty("scriptListenerListVersion");
             if (scriptListenerListVersion == null || versionedList.getVersion() != scriptListenerListVersion.intValue())
             {
-
+                /* TODO: this code destroys the dwr functionality
                 List removeCallables = new ArrayList();
                 // Remove all existing - and maybe unusable - DWR script listeners.
                 for (Iterator iter = CallableManager.getInstance().callableNames().iterator(); iter.hasNext();) {
@@ -290,6 +288,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                         CallableManager.getInstance().unregisterCallable((String) o);
                     }
                 }
+                */
 
                 // Add DWR script listener support.
                 ScriptListener[] scriptListeners = component.getScriptListeners();
@@ -297,9 +296,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                     if (scriptListeners[i] instanceof DWRScriptListener) {
                         DWRScriptListener scriptListener = (DWRScriptListener) scriptListeners[i];
                         CallableManager.getInstance().registerCallable(scriptListener.getCallableName(), scriptListener.getCallable());
-
-                        // TODO: maybe unnecessary. check for former or later usage.
-                        //component.putClientProperty("callable", scriptListener.getCallableName());
                     }
                 }
 
