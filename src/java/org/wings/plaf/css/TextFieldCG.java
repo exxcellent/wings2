@@ -51,16 +51,16 @@ public final class TextFieldCG extends AbstractComponentCG implements
                 }
 
                 textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
-                        "document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = '';" +
+                        "document.getElementById('{0}').style.color = '';" +
                         name +
-                        ".validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('INPUT')[0].value)",
+                        ".validate(callback_{0}, document.getElementById('{0}').value)",
                         "function callback_{0}(data) {\n" +
                         "   if (!data && data != '') {\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].focus();\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].style.color = '#ff0000';\n" +
+                        "       document.getElementById('{0}').focus();\n" +
+                        "       document.getElementById('{0}').style.color = '#ff0000';\n" +
                         "   }\n" +
                         "   else\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('INPUT')[0].value = data;\n" +
+                        "       document.getElementById('{0}').value = data;\n" +
                         "}\n", new SComponent[] { textField }));
             }
         }

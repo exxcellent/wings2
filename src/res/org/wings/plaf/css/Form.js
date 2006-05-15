@@ -23,7 +23,7 @@ function getParentByTagName(element, tag) {
 
 function getParentByAttributeName(element, attribute) {
   while (element != null) {
-      if (element.getAttribute(attribute)) {
+      if (element.getAttribute && element.getAttribute(attribute)) {
           return element;
       }
     element = element.parentNode;
