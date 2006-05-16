@@ -216,6 +216,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
         component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);
+
+        component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
+        component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
     }
 
     private void addJavaScriptLibrary(final SFrame frame, final String scriptFileName) {

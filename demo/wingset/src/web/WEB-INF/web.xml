@@ -100,7 +100,7 @@
             <description>How verbose do we want logging to be?</description>
         </init-param>
         <init-param>
-            <param-name>uk.ltd.getahead.dwr.CreatorManager</param-name>
+            <param-name>org.directwebremoting.CreatorManager</param-name>
             <param-value>org.wings.plaf.css.dwr.SessionCreatorManager</param-value>
             <description>Install a session local CreatorManager</description>
         </init-param>
