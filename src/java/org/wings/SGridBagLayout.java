@@ -88,14 +88,14 @@ public class SGridBagLayout
      * between columns.  They can be changed at any time.
      * This should be a non-negative integer.
      */
-    protected int hgap = 0;
+    protected int hgap = -1;
 
     /**
      * The vertical gap (in pixels) which specifiying the space
      * between rows.  They can be changed at any time.
      * This should be a non negative integer.
      */
-    protected int vgap = 0;
+    protected int vgap = -1;
 
     /**
      * @see #getHeader

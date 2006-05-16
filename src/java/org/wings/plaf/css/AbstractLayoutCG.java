@@ -116,8 +116,9 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     protected static SStringBuilder createInlineStylesForInsets(SStringBuilder styles, Insets insets) {
         if (insets != null && (insets.top > 0 || insets.left > 0 || insets.right > 0 || insets.bottom > 0)) {
             if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
-                // Trivial style: all the same
                 styles.append("padding:").append(insets.top).append("px;");
+            } else if (insets.top == insets.bottom && insets.left == insets.right) {
+                styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px;");
             } else {
                 styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px ")
                         .append(insets.bottom).append("px ").append(insets.left).append("px;");
@@ -136,12 +137,12 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      */
     protected static Insets convertGapsToInset(int hgap, int vgap) {
         Insets insets = null;
-        if (hgap > 0 || vgap > 0) {
-            final int hPaddingTop = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0);
-            final int hPaddingBottom = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0 + 0.1); // round up
-            final int vPaddingLeft = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0);
-            final int vPaddingRight = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0 + 0.1); // round up
-            insets = new Insets(hPaddingTop, vPaddingLeft, hPaddingBottom, vPaddingRight);
+        if (hgap > -1 || vgap > -1) {
+            final int paddingTop = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0);
+            final int paddingBottom = (int) Math.round((vgap < 0 ? 0 : vgap) / 2.0 + 0.1); // round up
+            final int paddingLeft = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0);
+            final int paddingRight = (int) Math.round((hgap < 0 ? 0 : hgap) / 2.0 + 0.1); // round up
+            insets = new Insets(paddingTop, paddingLeft, paddingBottom, paddingRight);
         }
         return insets;
     }

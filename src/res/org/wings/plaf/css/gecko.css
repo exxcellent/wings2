@@ -64,11 +64,9 @@ img.spacer {
 /* this stays in here!
    it switches the gecko-compatible browsers into border-box mode */
 /* is it still needed? (OL 6.5.2006) */
-div {
+div, input, select, textarea, table {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    /* This is necessary for konqueror. Otherwise component alignment does not work. */
-    text-align: inherit;
 }
 
 /* tooltips opacity */
