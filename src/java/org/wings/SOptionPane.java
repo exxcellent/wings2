@@ -440,6 +440,11 @@ public class SOptionPane extends SDialog implements ActionListener {
         }
     }
 
+    protected void fireActionPerformed(String pActionCommand) {
+        if (pActionCommand != null)
+            super.fireActionPerformed(pActionCommand);
+    }
+
     protected void resetOptions() {
         optionOK.setVisible(false);
         optionYes.setVisible(false);

@@ -237,7 +237,7 @@ public class SDialog extends SForm {
     }
 
     // refer to http://jira.j-wings.org/browse/WGS-138
-    protected void fireKeyEvents() {
+    public void blub_fireFinalEvents() {
     }
 
     public void setCG(DialogCG cg) {
