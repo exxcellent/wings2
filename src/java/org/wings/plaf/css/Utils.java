@@ -310,7 +310,7 @@ public final class Utils {
                         // faktor zwischen 0 und 1
                         double factor = Math.max(Math.min(preferredSize.getWidthInt(), 100) / 100.0, 0);
                         // size berechnen anhand des Parents - auf Clientseite
-                        styleString.append("width:expression(((this.parentNode.offsetWidth-").append(oversizeHorizontal).append(")");
+                        styleString.append("width:expression(((this.parentNode.clientWidth-").append(oversizeHorizontal).append(")");
                         if (factor < 1.0) {
                             styleString.append("*").append(factor);
                         }
@@ -331,7 +331,7 @@ public final class Utils {
                         // faktor zwischen 0 und 1
                         double factor = Math.max(Math.min(preferredSize.getHeightInt(), 100) / 100.0, 0);
                         // size berechnen anhand des Parents - auf Clientseite
-                        styleString.append("height:expression(((this.parentNode.offsetHeight-").append(oversizeVertical).append(")");
+                        styleString.append("height:expression(((this.parentNode.clientHeight-").append(oversizeVertical).append(")");
                         if (factor < 1.0) {
                             styleString.append("*").append(factor);
                         }
@@ -365,18 +365,17 @@ public final class Utils {
      * @return the horizontal oversize
      */
     private static int getVerticalOversize(SComponent component) {
+        RenderHelper renderHelper = RenderHelper.getInstance(component);
+        int oversize = renderHelper.getVerticalLayoutPadding();
+
         final SBorder border = component.getBorder();
-        if (border == null) {
-            return 0;
-        }
-        int oversize = 0;
-        int[] sides = {SConstants.TOP, SConstants.BOTTOM};
-        final Insets insets = border.getInsets();
-        for (int i = 0; i < sides.length; i++) {
-            oversize += border.getThickness(sides[i]);
-        }
-        if (insets != null) {
-            oversize += insets.top + insets.bottom;
+        if (border != null) {
+            oversize += border.getThickness(SConstants.TOP);
+            oversize += border.getThickness(SConstants.BOTTOM);
+            final Insets insets = border.getInsets();
+            if (insets != null) {
+                oversize += insets.top + insets.bottom;
+            }
         }
         return oversize;
     }
@@ -388,18 +387,17 @@ public final class Utils {
      * @return the vertical oversize
      */
     private static int getHorizontalOversize(SComponent component) {
+        RenderHelper renderHelper = RenderHelper.getInstance(component);
+        int oversize = renderHelper.getHorizontalLayoutPadding();
+
         final SBorder border = component.getBorder();
-        if (border == null) {
-            return 0;
-        }
-        int oversize = 0;
-        int[] sides = {SConstants.LEFT, SConstants.RIGHT};
-        final Insets insets = border.getInsets();
-        for (int i = 0; i < sides.length; i++) {
-            oversize += border.getThickness(sides[i]);
-        }
-        if (insets != null) {
-            oversize += insets.left + insets.right;
+        if (border != null) {
+            oversize += border.getThickness(SConstants.LEFT);
+            oversize += border.getThickness(SConstants.RIGHT);
+            final Insets insets = border.getInsets();
+            if (insets != null) {
+                oversize += insets.left + insets.right;
+            }
         }
         return oversize;
     }

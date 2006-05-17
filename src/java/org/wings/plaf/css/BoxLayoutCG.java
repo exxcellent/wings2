@@ -35,6 +35,9 @@ public class BoxLayoutCG extends AbstractLayoutCG {
         final List components = layout.getComponents();
         final int cols = layout.getOrientation() == SBoxLayout.HORIZONTAL ? components.size() : 1;
         String styles = layoutStyles(layout);
+        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
+        renderHelper.setVerticalLayoutPadding(layout.getVgap());
+        renderHelper.setHorizontalLayoutPadding(layout.getHgap());
 
         openLayouterBody(d, layout);
 
@@ -42,6 +45,8 @@ public class BoxLayoutCG extends AbstractLayoutCG {
 
         closeLayouterBody(d, layout);
 
+        renderHelper.setVerticalLayoutPadding(0);
+        renderHelper.setHorizontalLayoutPadding(0);
     }
 }
 

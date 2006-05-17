@@ -14,6 +14,7 @@
 package org.wings;
 
 import org.wings.io.Device;
+import org.wings.plaf.css.RenderHelper;
 
 import java.io.IOException;
 
@@ -77,6 +78,9 @@ public class SCellRendererPane
             this.addComponent(c);
         }
 
+        RenderHelper renderHelper = RenderHelper.getInstance(c);
+        renderHelper.setVerticalLayoutPadding(0);
+        renderHelper.setHorizontalLayoutPadding(0);
         c.write(d);
     }
 }

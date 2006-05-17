@@ -38,6 +38,9 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
         String styles = layoutStyles(layout);
+        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
+        renderHelper.setVerticalLayoutPadding(layout.getVgap());
+        renderHelper.setHorizontalLayoutPadding(layout.getHgap());
 
         int cols = 1;
         if (west != null) cols++;
@@ -97,6 +100,8 @@ public final class BorderLayoutCG extends AbstractLayoutCG {
         }
 
         closeLayouterBody(d, layout);
-    }
 
+        renderHelper.setVerticalLayoutPadding(0);
+        renderHelper.setHorizontalLayoutPadding(0);
+    }
 }

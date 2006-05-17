@@ -36,6 +36,9 @@ public class GridLayoutCG extends AbstractLayoutCG {
         //final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
         String styles = layoutStyles(layout);
+        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
+        renderHelper.setVerticalLayoutPadding(layout.getVgap());
+        renderHelper.setHorizontalLayoutPadding(layout.getHgap());
 
         int cols = layout.getColumns();
         if (cols <= 0)
@@ -47,5 +50,8 @@ public class GridLayoutCG extends AbstractLayoutCG {
         printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), components, styles);
 
         closeLayouterBody(d, layout);
+
+        renderHelper.setVerticalLayoutPadding(0);
+        renderHelper.setHorizontalLayoutPadding(0);
     }
 }

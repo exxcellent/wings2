@@ -28,6 +28,8 @@ public final class RenderHelper {
     private final List menus = new ArrayList();
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
     private boolean caching = true;
+    private int horizontalLayoutPadding = 0;
+    private int verticalLayoutPadding = 0;
 
     public void reset() {
         menus.clear();
@@ -88,5 +90,21 @@ public final class RenderHelper {
             forComponent.getSession().setProperty("css_plaf-render-helper", renderHelper);
         }
         return renderHelper;
+    }
+
+    public int getHorizontalLayoutPadding() {
+        return horizontalLayoutPadding;
+    }
+
+    public void setHorizontalLayoutPadding(int horizontalLayoutPadding) {
+        this.horizontalLayoutPadding = horizontalLayoutPadding;
+    }
+
+    public int getVerticalLayoutPadding() {
+        return verticalLayoutPadding;
+    }
+
+    public void setVerticalLayoutPadding(int verticalLayoutPadding) {
+        this.verticalLayoutPadding = verticalLayoutPadding;
     }
 }
