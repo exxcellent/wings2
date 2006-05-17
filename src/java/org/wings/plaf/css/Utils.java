@@ -15,15 +15,7 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.LowLevelEventListener;
-import org.wings.Renderable;
-import org.wings.RequestURL;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SDimension;
-import org.wings.SFont;
-import org.wings.SLayoutManager;
+import org.wings.*;
 import org.wings.border.SBorder;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
@@ -367,6 +359,11 @@ public final class Utils {
     private static int getVerticalOversize(SComponent component) {
         RenderHelper renderHelper = RenderHelper.getInstance(component);
         int oversize = renderHelper.getVerticalLayoutPadding();
+
+        // IE puts an auto margin of 1px for top and bottom on input fields
+        if ((component instanceof STextComponent || component instanceof SFileChooser) && isMSIE(component)) {
+            oversize +=2;
+        }
 
         final SBorder border = component.getBorder();
         if (border != null) {

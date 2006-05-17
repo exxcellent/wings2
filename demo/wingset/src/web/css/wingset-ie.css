@@ -7,12 +7,14 @@
 /* Input text fields, dropdown lists, buttons: Orange background, orange outline. */
 textarea, select, button {
     background-color: #f6decc;
-    border: 1px solid #e66e32;
+    border-style: solid;
+    border-color: #e66e32;
 }
 /* text input same as above */
 input {
     background-color: expression((this.type=="text" || this.type=="password") ? '#f6decc' : 'inherit');
-    border: expression((this.type=="text" || this.type=="password") ? '1px solid #e66e32' : 'inherit');
+    border-style: solid;
+    border-color: #e66e32;
 }
 
 /* ----- STable selection line: orange */

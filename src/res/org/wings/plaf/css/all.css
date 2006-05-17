@@ -56,6 +56,11 @@ ul {
     padding-left: 24px;
 }
 
+/* TODO: didn't help */
+input, select, textarea {
+    margin: 0px !important;
+}
+
 /* Simulate and style FORM buttons for A HREF*/
 TABLE.SButton A.formbutton,
 TABLE.SButton SPAN.disabled_formbutton {
