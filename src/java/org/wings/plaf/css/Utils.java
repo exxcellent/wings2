@@ -361,11 +361,14 @@ public final class Utils {
         int oversize = renderHelper.getVerticalLayoutPadding();
 
         // IE puts an auto margin of 1px for top and bottom on input fields
-        if ((component instanceof STextComponent || component instanceof SFileChooser) && isMSIE(component)) {
+        if ((component instanceof STextComponent || component instanceof SFileChooser))
             oversize +=2;
-        }
 
-        final SBorder border = component.getBorder();
+        SBorder border = component.getBorder();
+        // Respect oversize coming from (default) stylsheet padding and border
+        if (border == null)
+            border = (SBorder)component.getClientProperty("oversize");
+
         if (border != null) {
             oversize += border.getThickness(SConstants.TOP);
             oversize += border.getThickness(SConstants.BOTTOM);
@@ -387,7 +390,11 @@ public final class Utils {
         RenderHelper renderHelper = RenderHelper.getInstance(component);
         int oversize = renderHelper.getHorizontalLayoutPadding();
 
-        final SBorder border = component.getBorder();
+        SBorder border = component.getBorder();
+        // Respect oversize coming from (default) stylsheet padding and border
+        if (border == null)
+            border = (SBorder)component.getClientProperty("oversize");
+
         if (border != null) {
             oversize += border.getThickness(SConstants.LEFT);
             oversize += border.getThickness(SConstants.RIGHT);

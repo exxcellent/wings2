@@ -16,10 +16,12 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
+import org.wings.border.SEmptyBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.ComponentCG;
+import org.wings.plaf.CGManager;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
 import org.wings.style.Style;
@@ -225,6 +227,22 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);
         component.setStyle(style); // set default style name to component class (ie. SLabel).
+
+        if (Utils.isMSIE(component)) {
+            final CGManager manager = component.getSession().getCGManager();
+            Object value;
+            int verticalOversize = 0;
+            value = manager.getObject(style + ".verticalOversize", Integer.class);
+            if (value != null)
+                verticalOversize = ((Integer)value).intValue();
+            int horizontalOversize = 0;
+            value = manager.getObject(style + ".horizontalOversize", Integer.class);
+            if (value != null)
+                horizontalOversize = ((Integer)value).intValue();
+
+            if (verticalOversize != 0 || horizontalOversize != 0)
+                component.putClientProperty("oversize", new SEmptyBorder(verticalOversize, horizontalOversize, verticalOversize, horizontalOversize));
+        }
     }
 
     /**
