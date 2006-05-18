@@ -40,8 +40,8 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         boolean useCellStyles = layout.getVgap() == -1 && layout.getHgap() == -1;
 
         RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(layout.getVgap());
-        renderHelper.setHorizontalLayoutPadding(layout.getHgap());
+        renderHelper.setVerticalLayoutPadding(useCellStyles ? 0 : layout.getVgap());
+        renderHelper.setHorizontalLayoutPadding(useCellStyles ? 0 : layout.getHgap());
 
         if (grid.cols == 0)
             return;

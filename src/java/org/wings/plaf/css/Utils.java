@@ -359,6 +359,8 @@ public final class Utils {
     private static int getVerticalOversize(SComponent component) {
         RenderHelper renderHelper = RenderHelper.getInstance(component);
         int oversize = renderHelper.getVerticalLayoutPadding();
+        if (oversize == -1)
+            oversize = 0;
 
         // IE puts an auto margin of 1px for top and bottom on input fields
         if ((component instanceof STextComponent || component instanceof SFileChooser))
@@ -370,8 +372,12 @@ public final class Utils {
             border = (SBorder)component.getClientProperty("oversize");
 
         if (border != null) {
-            oversize += border.getThickness(SConstants.TOP);
-            oversize += border.getThickness(SConstants.BOTTOM);
+            int thickness = border.getThickness(SConstants.TOP);
+            if (thickness != -1)
+                oversize += thickness;
+            thickness = border.getThickness(SConstants.BOTTOM);
+            if (thickness != -1)
+                oversize += thickness;
             final Insets insets = border.getInsets();
             if (insets != null) {
                 oversize += insets.top + insets.bottom;
@@ -389,6 +395,8 @@ public final class Utils {
     private static int getHorizontalOversize(SComponent component) {
         RenderHelper renderHelper = RenderHelper.getInstance(component);
         int oversize = renderHelper.getHorizontalLayoutPadding();
+        if (oversize == -1)
+            oversize = 0;
 
         SBorder border = component.getBorder();
         // Respect oversize coming from (default) stylsheet padding and border
@@ -396,8 +404,12 @@ public final class Utils {
             border = (SBorder)component.getClientProperty("oversize");
 
         if (border != null) {
-            oversize += border.getThickness(SConstants.LEFT);
-            oversize += border.getThickness(SConstants.RIGHT);
+            int thickness = border.getThickness(SConstants.LEFT);
+            if (thickness != -1)
+                oversize += thickness;
+            thickness = border.getThickness(SConstants.RIGHT);
+            if (thickness != -1)
+                oversize += thickness;
             final Insets insets = border.getInsets();
             if (insets != null) {
                 oversize += insets.left + insets.right;
