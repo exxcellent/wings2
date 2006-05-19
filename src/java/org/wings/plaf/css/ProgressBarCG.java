@@ -67,12 +67,22 @@ public final class ProgressBarCG extends AbstractComponentCG implements  org.win
         int height = (size != null && size.getHeightInt() >= minSize) ? size.getHeightInt() : 10;
 
         if (component.isBorderPainted()) {
+            if (isMSIE(component)) {
+                // compensation for whole component as MSIE uses the correct CSS
+                // border mox model. Hence border is rendered AROUND the content size
+                width -= 2;
+                height -= 2;
+            }
             device.print("<div style=\"width:").print(width).print("px;height:");
             device.print(height).print("px;border:1px solid ");
             Utils.write(device, component.getBorderColor());
             device.print(";\">");
-            width -= 2; //compensate for border
-            height -= 2;
+            if (isMSIE(component) == false) {
+                // compensation for inner component to border only
+                // for border  box mode used by gecko (and formerly MSIE).
+                width -= 2;
+                height -= 2;
+            }
         }
 
         device.print("<table><tr style=\"height:").print(height).print("px\"\">");
@@ -90,7 +100,7 @@ public final class ProgressBarCG extends AbstractComponentCG implements  org.win
         device.print("</td>");
 
         // Part with remaining, incompleted bar
-        final int incompleteWidth = (int) Math.round(width * (1 - component.getPercentComplete()));
+        final int incompleteWidth = width - completedWidth;
         device.print("<td");
         if (component.getUnfilledColor() != null) {
             device.print(" style=\"background-color: ");

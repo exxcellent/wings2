@@ -14,6 +14,7 @@
 package org.wings.plaf.css;
 
 import org.wings.*;
+import org.wings.session.BrowserType;
 import org.wings.border.SBorder;
 import org.wings.border.STitledBorder;
 import org.wings.border.SEmptyBorder;
@@ -376,4 +377,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     public abstract void writeInternal(Device device, SComponent component) throws IOException;
+
+    /**
+     * @return true if current browser is microsoft exploder
+     */
+    protected final boolean isMSIE(final SComponent component) {
+        return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
+    }
 }

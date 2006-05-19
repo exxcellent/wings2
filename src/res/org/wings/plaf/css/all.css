@@ -47,6 +47,16 @@ table, td, th {
     /*text-align: inherit; breaks layouting of DIVs inside TD */
 }
 
+/* If the surrounding container aligns an inner component, then 
+   this alignments is inherited (at least in MSIE, but this is
+   correct). To avoid this inheritance we declare a default
+   left-alignment on the table element.
+   Otherwise i.e buttons in MemoryUsage would be centered. */
+table {
+    text-align: left;
+}
+
+
 /* define cross browser style for lists */
 li, ul {
     margin: 0px;
@@ -81,7 +91,9 @@ table.SButton A.linkbutton {
 }
 IMG {
     /* keeps images inside tabs */
-    vertical-align: middle;
+    /* vertical-align: middle;       bsc:
+    This breaks IMG height in MSIE! They take always at least a lineheight!
+    --> see memory usage http://jira.j-wings.org/browse/WGS-164 */
     /* Avoid those ugly borders around linked imgs's */
     border: none !important;
 }
@@ -179,6 +191,11 @@ td.STabbedPane_pane {
 
 .STabbedPane_Tab_disabled {
     color : #808080;
+}
+
+A.STabbedPane_Tab_top IMG {
+   /* keeps images inside tabs */
+    vertical-align: middle;
 }
 
 /* STree */
