@@ -13,16 +13,12 @@
  */
 package org.wings.plaf.css;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
 import org.wings.SScrollBar;
 import org.wings.io.Device;
-import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
@@ -33,7 +29,6 @@ import java.io.IOException;
  */
 public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollBarCG {
     private static final long serialVersionUID = 1L;
-    private final static transient Log log = LogFactory.getLog(ScrollBarCG.class);
     public static final int FORWARD = 0;
     public static final int BACKWARD = 1;
     public static final int FORWARD_BLOCK = 2;
@@ -115,11 +110,12 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         // Regarding table height it is totally inveser. I love 'em.
         final String tableHeight = isMsIEBrowser ? " height=\"100%\"" : "";
 
+        Utils.printNewline(d, sb);
         d.print("<table").print(tableHeight);
         writeAllAttributes(d, sb);
         d.print("><tbody>")
                 .print("<tr").print(rowHeightFlattened).print(">")
-                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
+                .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum);
@@ -131,10 +127,10 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - 1));
         d.print("</td></tr>");
 
-        d.print("</tbody></table></td>")
-                .print("</tr>")
-                .print("<tr").print(rowHeightExpanded).print(">")
-                .print("<td><table area=\"slider\" height=\"100%\"><tbody>");
+        d.print("</tbody></table></td>").print("</tr>");
+        Utils.printNewline(d, sb);
+        d.print("<tr").print(rowHeightExpanded).print(">")
+                .print("<td><table class=\"slider\" height=\"100%\"><tbody>");
 
         int range = maximum - minimum;
         int iconWidth = DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0].getIconWidth();
@@ -143,9 +139,10 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         verticalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconWidth);
 
         d.print("</tbody></table></td>")
-                .print("</tr>")
-                .print("<tr").print(rowHeightFlattened).print(">")
-                .print("<td height=\"1%\"><table area=\"buttons\"><tbody>");
+                .print("</tr>");
+        Utils.printNewline(d, sb);
+        d.print("<tr").print(rowHeightFlattened).print(">")
+                .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
         d.print("<tr><td>");
         writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + 1));
@@ -196,7 +193,7 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         d.print("</td>");
 
         d.print("</tr></tbody></table></td>")
-                .print("<td width=\"100%\"><table area=\"slider\" width=\"100%\"><tbody><tr>");
+                .print("<td width=\"100%\"><table class=\"slider\" width=\"100%\"><tbody><tr>");
 
         int range = maximum - minimum;
         int iconHeight = DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0].getIconHeight();

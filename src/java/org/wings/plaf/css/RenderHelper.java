@@ -27,7 +27,7 @@ public final class RenderHelper {
     private static final Log log = LogFactory.getLog(RenderHelper.class);
     private final List menus = new ArrayList();
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
-    private boolean caching = true;
+    private boolean cachingAllowed = false;
     private int horizontalLayoutPadding = 0;
     private int verticalLayoutPadding = 0;
 
@@ -69,18 +69,24 @@ public final class RenderHelper {
         }
     }
 
+
+    /*
+
+    no good idea to use these methods on a component base - if turned of you must recover to previous state, not reforce on
+    better localize in component
+
     public void allowCaching() {
-        caching = true;
+        cachingAllowed = true;
         log.debug("allow caching");
     }
 
     public void forbidCaching() {
-        caching = false;
+        cachingAllowed = false;
         log.debug("forbid caching");
-    }
+    }*/
 
     public boolean isCachingAllowed() {
-        return caching;
+        return cachingAllowed;
     }
 
     public static RenderHelper getInstance(SComponent forComponent) {

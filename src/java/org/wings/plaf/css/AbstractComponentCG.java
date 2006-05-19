@@ -338,28 +338,30 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      */
     public final void write(final Device device, final SComponent component) throws IOException {
         if (component instanceof LowLevelEventListener || component instanceof SContainer || !RenderHelper.getInstance(component).isCachingAllowed()) {
+            // log.debug("Rendering = " + component.getName());
             renderAndWrapComponent(device, component);
-            log.debug("not caching = " + component.getName());
             return;
         }
-        String cache = (String)component.getClientProperty("render-cache");
-        if (cache == null) {
+        String renderedCode = (String)component.getClientProperty("render-cache");
+        if (renderedCode == null) {
             try {
+                // TODO -- reuse and keep the string builder in the cache. Just check if empty. 
                 StringBuilderDevice cacheDevice = new StringBuilderDevice();
                 renderAndWrapComponent(cacheDevice, component);
-                cache = cacheDevice.toString();
-                component.putClientProperty("render-cache", cache);
+                renderedCode = cacheDevice.toString();
+                component.putClientProperty("render-cache", renderedCode);
                 log.debug("caching = " + component.getName());
             }
             catch (RuntimeException e) {
-                e.printStackTrace(System.err);
+                log.fatal("Runtime exception during rendering", e);
                 device.print("<blink>" + e.getClass().getName() + " during code generation of " + component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
-                return;
             }
         }
-        else
-            log.debug("reusing = " + component.getName());
-        device.print(cache);
+        else {
+            log.debug("using cached code for = " + component.getName());
+        }
+
+        device.print(renderedCode);
     }
 
     private void renderAndWrapComponent(Device device, SComponent component) throws IOException {

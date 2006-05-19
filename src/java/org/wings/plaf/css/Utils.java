@@ -24,6 +24,8 @@ import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
+import org.wings.session.Session;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
 
@@ -56,8 +58,23 @@ public final class Utils {
     /**
      * Print debug information in generated HTML
      */
-    public static boolean PRINT_DEBUG = ((Boolean) ResourceManager.getObject("SComponents.printDebug", Boolean.class)).booleanValue();
-    public static boolean PRINT_PRETTY = ((Boolean) ResourceManager.getObject("SComponents.printPretty", Boolean.class)).booleanValue();
+    public final static boolean PRINT_DEBUG;
+    public final static boolean PRINT_PRETTY;
+    static {
+        Session session = SessionManager.getSession();
+        // Respect settings from resource.properties
+        Boolean printDebug = (Boolean) ResourceManager.getObject("SComponent.printDebug", Boolean.class);
+        Boolean printPretty = (Boolean) ResourceManager.getObject("SComponent.printPretty", Boolean.class);
+        // May be overriden in i.e. web.xml. Hopefully we touch the class inside a session for the first time
+        if (session != null) {
+            if (session.getProperty("SComponent.printDebug") != null)
+                printDebug = Boolean.valueOf((String) session.getProperty("SComponent.printDebug"));
+            if (session.getProperty("SComponent.printPretty") != null)
+                printPretty = Boolean.valueOf((String) session.getProperty("SComponent.printPretty"));
+        }
+        PRINT_DEBUG = printDebug.booleanValue();
+        PRINT_PRETTY = printPretty.booleanValue();
+    }
 
     protected final static char[] hexDigits = {
             '0', '1', '2', '3', '4', '5',
