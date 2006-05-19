@@ -43,16 +43,15 @@ public abstract class SRootContainer extends SContainer {
     /**
      * The container for the contentPane.
      */
-    protected final SContainer contentPane;
+    protected SContainer contentPane;
 
     /**
      * default constructor initializes the stack layout system of this
      * SRootContainer.
      */
     public SRootContainer() {
-        contentPane = new SPanel(new SBorderLayout());
-        super.setLayout(new SRootLayout());
-        super.addComponent(getContentPane(), null, getComponentCount());
+        super(new SRootLayout());
+        setContentPane(new SPanel(new SBorderLayout()));
     }
 
     /**
@@ -105,6 +104,13 @@ public abstract class SRootContainer extends SContainer {
      */
     public SContainer getContentPane() {
         return contentPane;
+    }
+
+    public void setContentPane(SContainer container) {
+        if (this.contentPane != null)
+            super.remove(contentPane);
+        this.contentPane = container;
+        super.addComponent(this.contentPane, null, 0);
     }
 
     /**
