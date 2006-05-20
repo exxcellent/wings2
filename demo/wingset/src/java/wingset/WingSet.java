@@ -167,12 +167,7 @@ public class WingSet implements Serializable {
         }
 
         // 2) Include an application specific CSS stylesheet to extend/overwrite the default wingS style set.
-        if (frame.getSession().getUserAgent().getBrowserType() == BrowserType.IE) {
-            // Yeah - some 'browsers' always require special attention
-            customStyleSheetLink = new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset-ie.css"));
-        } else {
-            customStyleSheetLink = new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset-default.css"));
-        }
+        customStyleSheetLink = new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset.css"));
         frame.addHeader(customStyleSheetLink);
 
         // 3) More advanced version of 3)

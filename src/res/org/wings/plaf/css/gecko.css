@@ -57,7 +57,11 @@ table.SButton SPAN.disabled_formbutton:active:hover {
 
 /* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
    Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
-img.spacer {
+img.spacer,
+.SLabel img,
+.SButton img,
+.SRadioButton img,
+.SCheckBox img {
   display: block;
 }
 

@@ -40,11 +40,13 @@ public final class FileChooserCG extends AbstractComponentCG implements
         //int maxContent = component.getSession().getMaxContentLength()*1024;
 
         // maxLength = maxContent removed, since it does not work.
+        writeTablePrefix(device, component);
         device.print("<input type=\"file\"");
-        writeAllAttributes(device, component);
+        //writeAllAttributes(device, component);
         Utils.optAttribute(device, "size", columns);
         Utils.optAttribute(device, "accept", component.getFileNameFilter());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
+        Utils.optFullSize(device, component);
         Utils.writeEvents(device, component, null);
         if (component.isFocusOwner())
             Utils.optAttribute(device, "foc", component.getName());
@@ -58,5 +60,7 @@ public final class FileChooserCG extends AbstractComponentCG implements
             device.print(" readonly=\"true\"");
 
         device.print("/>");
+        writeTableSuffix(device, component);
+        
     }
 }

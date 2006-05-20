@@ -36,16 +36,26 @@ table.STable tbody tr.selected {
 
 
 /* ----------- Input text fields, dropdown lists, buttons: Orange background, orange outline. */
-textarea, select, button {
+.STextArea textarea, .STextField input, .SFormattedTextField input,
+.SPasswordField input, .SComboBox select, .SList select,
+.SCheckBox input, .SRadioButton input {
+    background-color: #eee;
+}
+.STextArea, .STextField, .SFormattedTextField,
+.SPasswordField, .SComboBox, .SList,
+.SCheckBox, .SRadioButton {
+    border: 1px solid #aaa;
+}
+/*.STextArea, .SComboBox {
     background-color: #eee;
     border: 1px solid #aaa;
 }
 
-/* text input same as above */
-input {
+ text input same as above 
+.STextField, .SPassword {
     background-color: expression((this.type=="text" || this.type=="password") ? '#eee' : 'inherit');
     border: expression((this.type=="text" || this.type=="password") ? '1px solid #aaa' : 'inherit');
-}
+}*/
 
 /* Links: No visited colour, no underline  */
 A:link, A:visited, A:active {

@@ -66,9 +66,11 @@ ul {
     padding-left: 24px;
 }
 
-/* TODO: didn't help */
+/* taken over by table */
 input, select, textarea {
-    margin: 0px !important;
+    margin: 0px;
+    padding: 0px;
+    border: none;
 }
 
 /* Simulate and style FORM buttons for A HREF*/
@@ -99,16 +101,27 @@ IMG {
 }
 
 /* STextField default style */
-input.STextField,
-input.SFormattedTextField {
+.STextField input,
+.SFormattedTextField input
+.SPasswordField input,
+.STextArea textarea,
+.SComboBox select {
     font-family: sans-serif;
     font-weight: normal;
     font-style: normal;
     color: #000;
 }
 
+.STextField,
+.SFormattedTextField,
+.SPasswordField,
+.STextArea,
+.SComboBox {
+	border: 2px inset #dddddd;
+}
+
 /* STree default style */
-table.STree {
+.STree {
     vertical-align: top;
     text-align: left;
 }
@@ -238,18 +251,10 @@ ul.STree li.norm table.norm tr td.norm {
     border: none;
 	margin: 1px;
 }
-/*ul.STree li.selected table.selected li.norm table.norm tr td.norm {
-    background-color: transparent;
-	margin: 1px;
-}
-ul.STree li.norm table.norm li.selected table.selected tr td.selected {
-    background-color: #ffbbbb;
-    border: 1px dotted black;
-}*/
 /* ---------------------------------------------------------------------------------------------------- */
 
 /* ---------- Menus */
-table.SMenuBar{
+.SMenuBar{
     width:100%;
     background-color: #eef;
     border-bottom: 1px solid #ccc;
@@ -257,13 +262,13 @@ table.SMenuBar{
 }
 
 /* clears the menu */
-table.SMenuBar div.spacer {
+.SMenuBar div.spacer {
     height:0px;
     clear: both;
 }
 
-table.SMenuBar div.SMenu,
-table.SMenuBar div.SMenu_Disabled {
+.SMenuBar div.SMenu,
+.SMenuBar div.SMenu_Disabled {
     float:left;
     border-style: solid;
     border-width: 1px;
@@ -274,11 +279,11 @@ table.SMenuBar div.SMenu_Disabled {
     margin:0px;
 }
 
-table.SMenuBar div.SMenu{
+.SMenuBar div.SMenu{
     color: #004;
 }
 
-table.SMenuBar div.SMenu_Disabled {
+.SMenuBar div.SMenu_Disabled {
     color: #666;
 }
 
@@ -385,41 +390,41 @@ ul.SPopupMenu a.x:hover{
 
 
 
-table.STable {
+.STable {
     width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
 }
 
-table.STable th.cell
+.STable th.cell
 {
     border: 1px solid black;
     padding: 0px 8px;
 }
-table.STable td.cell
+.STable td.cell
 {
     border-left: 1px solid black;
     padding: 0px 8px;
 }
 /* let the link span the whole table */
-table.STable tbody tr td a {
+.STable tbody tr td a {
 	display: block;
 	width: 100%;
 }
 
-table.STable tbody tr td.numbering {
+.STable tbody tr td.numbering {
     text-align: right;
 }
 
-table.STable tbody tr.odd {
+.STable tbody tr.odd {
     background-color: #e5e5e5;
 }
 
-table.STable tbody tr.even {
+.STable tbody tr.even {
     background-color: #efefef;
 }
 
-table.STable tbody tr.selected {
+.STable tbody tr.selected {
     background-color: #ffbbbb !important;
 }
 
@@ -427,7 +432,7 @@ table.STable tbody tr.selected {
 /* -------untested --------- */
 
 
-table.SAnchor {
+.SAnchor {
     color: #004;
 }
 
@@ -458,7 +463,7 @@ div.domTTContent {
     font-size: 1px; /* for konq */
 }
 
-table.SScrollPane table.SList, table.SScrollPane table.STree, table.SScrollPane table.STable {
+.SScrollPane table.SList, table.SScrollPane table.STree, table.SScrollPane table.STable {
     width: 100%;
     height: 100%;
     overflow: scroll;

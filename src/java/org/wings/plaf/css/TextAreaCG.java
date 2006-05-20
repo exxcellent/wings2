@@ -30,6 +30,9 @@ public final class TextAreaCG extends AbstractComponentCG implements
             throws IOException {
         final STextArea component = (STextArea) _c;
 
+        /*
+         * a swing like way to write multiline labels
+         */
         if (!component.isEditable() && (component.getLineWrap() == STextArea.NO_WRAP) && (component.getColumns() == 0) && (component.getRows() == 0)) {
                /* A second way could be to calculate rows and columns and generate a textarea, but this will be
                 * very time consuming at large texts. But if this way makes to much trouble, the other will be quite equal */
@@ -41,12 +44,15 @@ public final class TextAreaCG extends AbstractComponentCG implements
             }
 
         } else {
+            writeTablePrefix(device, component);
+            
             device.print("<textarea");
-            writeAllAttributes(device, component);
+            //writeAllAttributes(device, component);
 
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             Utils.optAttribute(device, "cols", component.getColumns());
             Utils.optAttribute(device, "rows", component.getRows());
+            Utils.optFullSize(device, component);
             Utils.writeEvents(device, component, null);
 
             switch (component.getLineWrap()) {
@@ -76,6 +82,8 @@ public final class TextAreaCG extends AbstractComponentCG implements
             device.print(">");
             Utils.quote(device, component.getText(), false, false, false);
             device.print("</textarea>\n");
+            
+            writeTableSuffix(device, component);
         }
     }
 }

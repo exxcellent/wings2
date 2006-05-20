@@ -4,18 +4,19 @@
     $Id$
 */
 
-/* Input text fields, dropdown lists, buttons: Orange background, orange outline. */
-textarea, select, button {
-    background-color: #f6decc;
-    border-style: solid;
-    border-color: #e66e32;
+.STextArea textarea, .STextField input, .SFormattedTextField input,
+.SPasswordField input, .SComboBox select, .SList select,
+.SRadioButton input {
+    background-color: #eee;
 }
-/* text input same as above */
-input {
-    background-color: expression((this.type=="text" || this.type=="password") ? '#f6decc' : 'inherit');
-    border-style: solid;
-    border-color: #e66e32;
+/*.SRadioButton input {
+    border: 1px solid #aaa;
+}*/
+.STextArea, .STextField, .SFormattedTextField,
+.SPasswordField, .SList, .SComboBox {
+    border: 1px solid #aaa;
 }
+
 
 /* ----- STable selection line: orange */
 .STable table tbody tr.selected {
@@ -24,7 +25,7 @@ input {
 
 /* ---- Orange Selection color of STrees */
 /* Don't blame us for the following code, it's all IE's fault! */
-ul.STree li.selected table tr td a table,
+/*ul.STree li.selected table tr td a table,
 ul.STree li.selected table tr td button table,
 ul.STree li.selected li.selected table tr td a table,
 ul.STree li.selected li.selected table tr td button table,
@@ -34,7 +35,7 @@ ul.STree li.selected li.selected li.selected li.selected table tr td a table,
 ul.STree li.selected li.selected li.selected li.selected table tr td button table {
     background-color: #f6decc;
     border: 1px dotted black;
-}
+}*/
 
 /* ----- Background color of selected STabbedPane tabs */
 .STabbedPane_Tab_selected {

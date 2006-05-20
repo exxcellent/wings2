@@ -29,12 +29,15 @@ public final class PasswordFieldCG extends AbstractComponentCG implements
                       final SComponent _c)
             throws IOException {
         final SPasswordField component = (SPasswordField) _c;
+        
+        writeTablePrefix(device, component);
 
         device.print("<input type=\"password\"");
-        writeAllAttributes(device, component);
+        //writeAllAttributes(device, component);
         Utils.optAttribute(device, "size", component.getColumns());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());
+        Utils.optFullSize(device, component);
         Utils.writeEvents(device, component, null);
         if (component.isFocusOwner())
             Utils.optAttribute(device, "foc", component.getName());
@@ -53,5 +56,7 @@ public final class PasswordFieldCG extends AbstractComponentCG implements
 
         Utils.optAttribute(device, "value", component.getText());
         device.print("/>");
+        
+        writeTableSuffix(device, component);
     }
 }

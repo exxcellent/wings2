@@ -85,12 +85,12 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         writeAllAttributes(device, component);
 
         if (useTable) {
-            device.print("><tr><td"); // table
+            device.print("><tr><td style=\""); // table
             if (border != null && Utils.isMSIE(component)) {
                 Insets insets = border.getInsets();
                 if (insets != null) {
                     if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
-                        device.print(" style=\"padding:");
+                        device.print("padding:");
                         device.print(insets.top);
                         device.print("px\"");
                     }
@@ -103,10 +103,12 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                         device.print(insets.bottom);
                         device.print("px ");
                         device.print(insets.left);
-                        device.print("px\"");
+                        device.print("px;");
                     }
                 }
             }
+            // das hier für height 100% der inneren Komponenten, funzt im Firefox, nicht im IE
+            device.print("width:100%;height:100%\"");
             device.print(">"); // table
         } else {
             device.print(">"); // div

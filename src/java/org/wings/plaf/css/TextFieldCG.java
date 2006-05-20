@@ -14,7 +14,10 @@
 package org.wings.plaf.css;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
+import org.wings.SDimension;
 import org.wings.SFormattedTextField;
 import org.wings.STextField;
 import org.wings.io.Device;
@@ -23,10 +26,13 @@ import org.wings.script.JavaScriptEvent;
 import org.wings.script.ScriptListener;
 import org.wings.text.SAbstractFormatter;
 
+import sun.util.logging.resources.logging;
+
 import java.io.IOException;
 
 public final class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
+    private final static transient Log log = LogFactory.getLog(TextFieldCG.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -51,15 +57,15 @@ public final class TextFieldCG extends AbstractComponentCG implements
                 }
 
                 textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
-                        "document.getElementById('{0}').style.color = '';" +
+                        "document.getElementById('{0}').getElementsByTagName('input')[0].style.color = '';" +
                         name +
-                        ".validate(callback_{0}, document.getElementById('{0}').value)",
+                        ".validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('input')[0].value)",
                         "function callback_{0}(data) {\n" +
                         "   if (!data && data != '') {\n" +
-                        "       document.getElementById('{0}').style.color = '#ff0000';\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('input')[0].style.color = '#ff0000';\n" +
                         "   }\n" +
                         "   else\n" +
-                        "       document.getElementById('{0}').value = data;\n" +
+                        "       document.getElementById('{0}').getElementsByTagName('input')[0].value = data;\n" +
                         "}\n", new SComponent[] { textField }));
             }
         }
@@ -73,11 +79,14 @@ public final class TextFieldCG extends AbstractComponentCG implements
             throws IOException {
         final STextField textField = (STextField) component;
 
+        writeTablePrefix(device, textField);
+        
         device.print("<input type=\"text\"");
-        writeAllAttributes(device, component);
+        //writeAllAttributes(device, component);
         Utils.optAttribute(device, "tabindex", textField.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", textField.getColumns());
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
+        Utils.optFullSize(device, component);
         Utils.writeEvents(device, textField, null);
         if (textField.isFocusOwner())
             Utils.optAttribute(device, "foc", textField.getName());
@@ -95,5 +104,7 @@ public final class TextFieldCG extends AbstractComponentCG implements
 
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
+        
+        writeTableSuffix(device, textField);
     }
 }

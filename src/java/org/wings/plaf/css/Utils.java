@@ -309,59 +309,59 @@ public final class Utils {
         SDimension preferredSize = pComponent.getPreferredSize();
         if (preferredSize != null) {
             //use special expression for IE
-            if (Utils.isMSIE(pComponent)) {
-                int oversizeHorizontal = getHorizontalOversize(pComponent);
-                int oversizeVertical = getVerticalOversize(pComponent);
-                if (preferredSize.getWidth() != SDimension.AUTO) {
-                    boolean isPercent = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1;
-                    boolean isPixel = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("px") != -1;
-                    if (oversizeHorizontal != 0 && isPercent) {
-                        // faktor zwischen 0 und 1
-                        double factor = Math.max(Math.min(preferredSize.getWidthInt(), 100) / 100.0, 0);
-                        // size berechnen anhand des Parents - auf Clientseite
-                        styleString.append("width:expression(((this.parentNode.clientWidth-").append(oversizeHorizontal).append(")");
-                        if (factor < 1.0) {
-                            styleString.append("*").append(factor);
-                        }
-                        styleString.append(")+'px');");
-                    } else if (oversizeHorizontal != 0 && isPixel) {
-                        // size darf nicht <0 sein.
-                        int size = Math.max(preferredSize.getWidthInt() - oversizeHorizontal, 0);
-                        styleString.append("width:").append(size).append("px;");
-
-                    } else {
-                        styleString.append("width:").append(preferredSize.getWidth()).append(";");
-                    }
-                }
-                if (preferredSize.getHeight() != SDimension.AUTO) {
-                    boolean isPercent = preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1;
-                    boolean isPixel = preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("px") != -1;
-                    if (oversizeVertical != 0 && isPercent) {
-                        // faktor zwischen 0 und 1
-                        double factor = Math.max(Math.min(preferredSize.getHeightInt(), 100) / 100.0, 0);
-                        // size berechnen anhand des Parents - auf Clientseite
-                        styleString.append("height:expression(((this.parentNode.clientHeight-").append(oversizeVertical).append(")");
-                        if (factor < 1.0) {
-                            styleString.append("*").append(factor);
-                        }
-                        styleString.append(")+'px');");
-                    } else if (oversizeVertical != 0 && isPixel) {
-                        // size darf nicht <0 sein.
-                        int size = Math.max(preferredSize.getHeightInt() - oversizeVertical, 0);
-                        styleString.append("height:").append(size).append("px;");
-
-                    } else {
-                        styleString.append("height:").append(preferredSize.getHeight()).append(";");
-                    }
-                }
-
-            } else {
+//            if (Utils.isMSIE(pComponent)) {
+//                int oversizeHorizontal = getHorizontalOversize(pComponent);
+//                int oversizeVertical = getVerticalOversize(pComponent);
+//                if (preferredSize.getWidth() != SDimension.AUTO) {
+//                    boolean isPercent = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1;
+//                    boolean isPixel = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("px") != -1;
+//                    if (oversizeHorizontal != 0 && isPercent) {
+//                        // faktor zwischen 0 und 1
+//                        double factor = Math.max(Math.min(preferredSize.getWidthInt(), 100) / 100.0, 0);
+//                        // size berechnen anhand des Parents - auf Clientseite
+//                        styleString.append("width:expression(((this.parentNode.clientWidth-").append(oversizeHorizontal).append(")");
+//                        if (factor < 1.0) {
+//                            styleString.append("*").append(factor);
+//                        }
+//                        styleString.append(")+'px');");
+//                    } else if (oversizeHorizontal != 0 && isPixel) {
+//                        // size darf nicht <0 sein.
+//                        int size = Math.max(preferredSize.getWidthInt() - oversizeHorizontal, 0);
+//                        styleString.append("width:").append(size).append("px;");
+//
+//                    } else {
+//                        styleString.append("width:").append(preferredSize.getWidth()).append(";");
+//                    }
+//                }
+//                if (preferredSize.getHeight() != SDimension.AUTO) {
+//                    boolean isPercent = preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1;
+//                    boolean isPixel = preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("px") != -1;
+//                    if (oversizeVertical != 0 && isPercent) {
+//                        // faktor zwischen 0 und 1
+//                        double factor = Math.max(Math.min(preferredSize.getHeightInt(), 100) / 100.0, 0);
+//                        // size berechnen anhand des Parents - auf Clientseite
+//                        styleString.append("height:expression(((this.parentNode.clientHeight-").append(oversizeVertical).append(")");
+//                        if (factor < 1.0) {
+//                            styleString.append("*").append(factor);
+//                        }
+//                        styleString.append(")+'px');");
+//                    } else if (oversizeVertical != 0 && isPixel) {
+//                        // size darf nicht <0 sein.
+//                        int size = Math.max(preferredSize.getHeightInt() - oversizeVertical, 0);
+//                        styleString.append("height:").append(size).append("px;");
+//
+//                    } else {
+//                        styleString.append("height:").append(preferredSize.getHeight()).append(";");
+//                    }
+//                }
+//
+//            } else {
                 if (preferredSize.getWidth() != SDimension.AUTO) {
                     styleString.append("width:").append(preferredSize.getWidth()).append(';');
                 }
                 if (preferredSize.getHeight() != SDimension.AUTO) {
                     styleString.append("height:").append(preferredSize.getHeight()).append(';');
-                }
+//                }
             }
         }
         return styleString;
@@ -1057,5 +1057,29 @@ public final class Utils {
      */
     public static boolean isMSIE(SComponent component) {
         return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
+    }
+
+    /**
+     * @param device
+     * @param component
+     * @throws IOException 
+     */
+    public static void optFullSize(Device device, SComponent component) throws IOException {
+        SDimension dim = component.getPreferredSize();
+        if (dim != null) {
+            String width = dim.getWidth();
+            boolean widthSet = width != null && !"".equals(width) && !SDimension.AUTO.equals(width);
+            String height = dim.getHeight();
+            boolean heightSet = height != null && !"".equals(height) && !SDimension.AUTO.equals(height);
+            SStringBuilder style = new SStringBuilder();
+            if (widthSet) {
+                style.append("width:100%;");
+            }
+            if (heightSet) {
+                style.append("height:100%;");
+            }
+            if (style.length() > 0)
+            Utils.optAttribute(device, "style", style.toString());
+        }
     }
 }
