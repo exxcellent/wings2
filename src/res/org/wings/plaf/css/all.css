@@ -112,11 +112,12 @@ IMG {
     color: #000;
 }
 
-.STextField,
-.SFormattedTextField,
-.SPasswordField,
-.STextArea,
-.SComboBox {
+.STextField INPUT,
+.SFormattedTextField INPUT,
+.SPasswordField INPUT,
+.STextArea TEXTAREA,
+SELECT.SComboBox,
+.SList SELECT {
 	border: 2px inset #dddddd;
 }
 

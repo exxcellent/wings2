@@ -14,6 +14,9 @@ table, tbody, tr, td {
 
 <table width="100%" height="100%">
 <tr ><td style="background-color: green">top<br>blub</td></tr>
+    <!--- Vorschlag: am ersten und letzten TR die height auf die absolute größe der CHILDS setzen und center nichts setzen:
+        ergo: tabelle wird gestreckt und kann nur die mittlere zelle strecken! -->
+
 <tr style="height: expression((this.parentNode.parentNode.offsetHeight - this.parentNode.parentNode.rows[0].offsetHeight -this.parentNode.parentNode.rows[2].offsetHeight) + 'px')">
 	<td style="background-color: yellow">
 		center<!--br>blub<br>blub<br>blub<br>blub<br>blub<br>blub<br>blub<br>blub<br>blub<br>blub<br>blub<br>blub<br>blub<br>blub-->
@@ -22,7 +25,14 @@ table, tbody, tr, td {
 <tr ><td style="background-color: green">bottom<br>blub</td></tr>
 </table>
 
-</td></tr></table>
+<td width=200 height=200 >
+
+<table style="width:200px;height:200px;background-color:red;border:1px solid black">
+<tr><td>200px x 200px. Should be same size as left</td></tr>
+</table>
+
+</td>
+</tr></table>
 
 </body>
 </html>
