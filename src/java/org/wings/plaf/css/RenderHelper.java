@@ -8,6 +8,9 @@ import org.wings.SComponent;
 import org.wings.SPopupMenu;
 import org.wings.SMenuBar;
 import org.wings.SMenuItem;
+import org.wings.LowLevelEventListener;
+import org.wings.SContainer;
+import org.wings.resource.ResourceManager;
 import org.wings.io.StringBuilderDevice;
 
 import java.util.ArrayList;
@@ -25,11 +28,14 @@ public final class RenderHelper {
      * Apache jakarta commons logger
      */
     private static final Log log = LogFactory.getLog(RenderHelper.class);
+    private final static boolean ALLOW_COMPONENT_CACHING =  // modify in resource.properties
+            ((Boolean) ResourceManager.getObject("SComponent.renderCache", Boolean.class)).booleanValue();
+
     private final List menus = new ArrayList();
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
-    private boolean cachingAllowed = false;
     private int horizontalLayoutPadding = 0;
     private int verticalLayoutPadding = 0;
+    private boolean allowUsageOfCachedInstances = true;
 
     public void reset() {
         menus.clear();
@@ -69,24 +75,14 @@ public final class RenderHelper {
         }
     }
 
-
-    /*
-
-    no good idea to use these methods on a component base - if turned of you must recover to previous state, not reforce on
-    better localize in component
-
-    public void allowCaching() {
-        cachingAllowed = true;
-        log.debug("allow caching");
+    /** Allow / forbid usage of cached code. Use to forbid caching below a component level (table cell renderers). */
+    public void setAllowUsageOfCachedInstances(boolean allowUsageOfCachedInstances) {
+        this.allowUsageOfCachedInstances = allowUsageOfCachedInstances;
     }
 
-    public void forbidCaching() {
-        cachingAllowed = false;
-        log.debug("forbid caching");
-    }*/
-
-    public boolean isCachingAllowed() {
-        return cachingAllowed;
+    public boolean isCachingAllowed(final SComponent component) {
+        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances &&
+                !(component instanceof LowLevelEventListener || component instanceof SContainer);
     }
 
     public static RenderHelper getInstance(SComponent forComponent) {

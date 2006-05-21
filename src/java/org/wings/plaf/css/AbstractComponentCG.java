@@ -333,13 +333,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
     /**
      * Caching code disabled for all LowLevelEventListeners, because event epochs won't change.
-     *
-     * @param device
-     * @param component
-     * @throws IOException
      */
     public final void write(final Device device, final SComponent component) throws IOException {
-        if (component instanceof LowLevelEventListener || component instanceof SContainer || !RenderHelper.getInstance(component).isCachingAllowed()) {
+        if (!RenderHelper.getInstance(component).isCachingAllowed(component)) {
             // log.debug("Rendering = " + component.getName());
             renderAndWrapComponent(device, component);
             return;
@@ -347,7 +343,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         String renderedCode = (String)component.getClientProperty("render-cache");
         if (renderedCode == null) {
             try {
-                // TODO -- reuse and keep the string builder in the cache. Just check if empty. 
+                // TODO -- reuse and keep the string builder in the cache. Just check if empty.
                 StringBuilderDevice cacheDevice = new StringBuilderDevice();
                 renderAndWrapComponent(cacheDevice, component);
                 renderedCode = cacheDevice.toString();

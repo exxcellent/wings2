@@ -130,6 +130,9 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
 
 
     public void writeInternal(final Device device, final SComponent _c) throws IOException {
+        RenderHelper.getInstance(_c).setAllowUsageOfCachedInstances(false);
+
+        //try {             try finally are expensive. Rerender once after ex not
             final SComboBox comboBox = (SComboBox) _c;
             // TODO: implement anchor combobox
             //if (comboBox.getShowAsFormComponent()) {
@@ -137,5 +140,9 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
             //} else {
             //    writeAnchorComboBox(device, comboBox);
             // }
+        //}
+        //finally {
+        RenderHelper.getInstance(_c).setAllowUsageOfCachedInstances(true);
+        //}
     }
 }

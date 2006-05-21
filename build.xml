@@ -255,7 +255,7 @@
     <!-- ### Utility tasks ################################################### -->
 
     <target name="splash" unless="nosplash">
-        <splash imageurl="file:${basedir}/src/doc/wings-logo.png"/>
+        <splash imageurl="file:${basedir}/demo/wingset/src/web/icons/wings-logo.png"/>
     </target>
 
     <target name="check-full-dist">

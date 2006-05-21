@@ -6,12 +6,14 @@
 
 <web-app>
     <servlet>
-        <servlet-name>WingSet2</servlet-name>
+        <servlet-name>WingSet</servlet-name>
         <servlet-class>org.wings.session.WingServlet</servlet-class>
         <init-param>
             <param-name>wings.mainclass</param-name>
             <param-value>wingset.WingSet</param-value>
         </init-param>
+
+        <!-- NOTE: The entries below are optionally. We included them mainly for documentation purpose -->
         <init-param>
             <param-name>wings.lookandfeel.factory</param-name>
             <param-value>org.wings.plaf.LookAndFeelFactory$Default</param-value>
@@ -35,53 +37,22 @@
             <param-value>TRUE</param-value>
     	    <description>Allows bean scripting in STemplate layout templates.</description>
         </init-param>
-        <!--
         <init-param>
+            <param-name>SComponent.printDebug</param-name>
+            <param-value>TRUE</param-value>
+    	    <description>Decorate generated HTML with comments about the compoennt</description>
+        </init-param>
+        <init-param>
+            <param-name>SComponent.printPretty</param-name>
+            <param-value>TRUE</param-value>
+    	    <description>Do identation according to component depth.</description>
+        </init-param>
+<!--    <init-param>
             <param-name>wings.event.usenames</param-name>
             <param-value>TRUE</param-value>
             <description>With this property wingS uses static ids (the component names)
                          enabling test tools to rely on ids. Do not use in productional environments!</description>
-        </init-param>
-        -->
-    </servlet>
-    <servlet>
-        <servlet-name>WingSet</servlet-name>
-        <servlet-class>org.wings.session.WingServlet</servlet-class>
-        <init-param>
-            <param-name>wings.mainclass</param-name>
-            <param-value>wingset.WingSet</param-value>
-        </init-param>
-        <init-param>
-            <param-name>wings.lookandfeel.factory</param-name>
-            <param-value>org.wings.plaf.LookAndFeelFactory$Default</param-value>
-        </init-param>
-        <init-param>
-            <param-name>wings.lookandfeel.default</param-name>
-            <param-value>org.wings.plaf.css.CSSLookAndFeel</param-value>
-        </init-param>
-        <init-param>
-            <param-name>wings.error.template</param-name>
-            <param-value>/templates/ErrorTemplate.thtml</param-value>
-    	    <description>The template for the default error catcher</description>
-        </init-param>
-        <init-param>
-            <param-name>wings.capture.default.bindings</param-name>
-            <param-value>alt LEFT, alt RIGHT, F1</param-value>
-    	    <description>See KeyStroke.getKeyStroke(String s).</description>
-        </init-param>
-        <init-param>
-            <param-name>wings.template.beanscript</param-name>
-            <param-value>TRUE</param-value>
-    	    <description>Allows bean scripting in STemplate layout templates.</description>
-        </init-param>
-        <!--
-        <init-param>
-            <param-name>wings.event.usenames</param-name>
-            <param-value>TRUE</param-value>
-            <description>With this property wingS uses static ids (the component names)
-                         enabling test tools to rely on ids. Do not use in productional environments!</description>
-        </init-param>
-        -->
+        </init-param>                 -->
     </servlet>
 
     <servlet>
@@ -108,18 +79,13 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>dwr-invoker</servlet-name>
-        <url-pattern>/dwr/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>WingSet2</servlet-name>
-        <url-pattern>/WingSet2/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>WingSet</servlet-name>
         <url-pattern>/WingSet/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>dwr-invoker</servlet-name>
+        <url-pattern>/dwr/*</url-pattern>
     </servlet-mapping>
 
     <session-config>

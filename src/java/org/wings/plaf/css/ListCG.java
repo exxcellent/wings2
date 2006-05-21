@@ -179,11 +179,18 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
                       final SComponent _c)
             throws IOException
     {
+        RenderHelper.getInstance(_c).setAllowUsageOfCachedInstances(false);
+
+        //try {             try finally are expensive. Rerender once after ex not
             SList list = (SList) _c;
             if (list.getShowAsFormComponent()) {
                 writeFormList(device, list);
             } else {
                 writeAnchorList(device, list);
             }
+        //}
+        //finally {
+        RenderHelper.getInstance(_c).setAllowUsageOfCachedInstances(true);
+        //}
     }
 }
