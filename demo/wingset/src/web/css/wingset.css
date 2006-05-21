@@ -12,9 +12,13 @@
 /*.SRadioButton input {
     border: 1px solid #aaa;
 }*/
-.STextArea, .STextField, .SFormattedTextField,
-.SPasswordField, .SList, .SComboBox {
-    border: 1px solid #aaa;
+.STextField INPUT,
+.SFormattedTextField INPUT,
+.SPasswordField INPUT,
+.STextArea TEXTAREA,
+SELECT.SComboBox,
+.SList SELECT{
+	border: 1px solid #ddd;
 }
 
 
