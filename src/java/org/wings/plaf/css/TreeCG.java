@@ -222,7 +222,7 @@ public final class TreeCG extends AbstractComponentCG implements
     public void writeInternal(final Device device, final SComponent _c)
             throws IOException
     {
-        RenderHelper.getInstance(_c).setAllowUsageOfCachedInstances(false);
+        RenderHelper.getInstance(_c).forbidCaching();
 
         //try {             try finally are expensive. Rerender once after ex not
             final STree component = (STree) _c;
@@ -251,7 +251,7 @@ public final class TreeCG extends AbstractComponentCG implements
             writeTableSuffix(device, component);
         //}
         //finally {
-        RenderHelper.getInstance(_c).setAllowUsageOfCachedInstances(true);
+        RenderHelper.getInstance(_c).allowCaching();
         //}
     }
 

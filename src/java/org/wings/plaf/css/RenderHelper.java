@@ -75,9 +75,11 @@ public final class RenderHelper {
         }
     }
 
-    /** Allow / forbid usage of cached code. Use to forbid caching below a component level (table cell renderers). */
-    public void setAllowUsageOfCachedInstances(boolean allowUsageOfCachedInstances) {
-        this.allowUsageOfCachedInstances = allowUsageOfCachedInstances;
+    public void allowCaching() {
+        this.allowUsageOfCachedInstances = true;
+    }
+    public void forbidCaching() {
+        this.allowUsageOfCachedInstances = false;
     }
 
     public boolean isCachingAllowed(final SComponent component) {
