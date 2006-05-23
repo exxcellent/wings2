@@ -1,55 +1,27 @@
-/*
- * Copyright (c) 2005 Your Corporation. All Rights Reserved.
- */
-package org.wings.plaf.css;
+package org.wings.plaf.css.msie;
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SScrollPaneLayout;
 import org.wings.io.Device;
-import org.wings.util.SStringBuilder;
+import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
-import java.awt.Rectangle;
-import java.util.*;
+import java.util.Map;
 
-public class ScrollPaneLayoutCG extends AbstractLayoutCG {
+public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
-    public void write(Device d, SLayoutManager l)
-            throws IOException {
-        SScrollPaneLayout layout = (SScrollPaneLayout) l;
-
-        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
-
-        if (layout.isPaging()) {
-            writePaging(d, layout);
-        } else {
-            writeNonePaging(d, layout);
-        }
-    }
-
-    protected void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
-        openLayouterBody(d, layout);
-        d.print("<tr><td>");
-        Map components = layout.getComponents();
-        SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
-        Scrollable scrollable = (Scrollable) center;
-        Rectangle viewportSize = scrollable.getViewportSize();
-        Rectangle scrollableViewportSize = scrollable.getScrollableViewportSize();
-        scrollable.setViewportSize(scrollableViewportSize);
-        writeComponent(d, center);
-        scrollable.setViewportSize(viewportSize);
-
-        d.print("</td></tr>");
-        closeLayouterBody(d, layout);
-    }
 
     protected void writePaging(Device d, SScrollPaneLayout layout) throws IOException {
+        if (layout.getContainer().getPreferredSize() == null || layout.getContainer().getPreferredSize().getHeight() == null) {
+            super.writePaging(d, layout);
+            return;
+        }
+        // special implementation with expressions is only required, if the center component
+        // shall consume the remaining height
+
         Map components = layout.getComponents();
         SComponent north = (SComponent) components.get(SScrollPaneLayout.NORTH);
         SComponent east = (SComponent) components.get(SScrollPaneLayout.EAST);
@@ -60,7 +32,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         openLayouterBody(d, layout);
 
         if (north != null) {
-            d.print("<tr height=\"0%\">");
+            d.print("<tr>");
             if (west != null) {
                 d.print("<td width=\"0%\"></td>");
             }
@@ -75,7 +47,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
             d.print("</tr>\n");
         }
 
-        d.print("<tr height=\"100%\">");
+        d.print("<tr fill=\"1\">");
         if (west != null) {
             d.print("<td width=\"0%\">");
             writeComponent(d, west);
@@ -96,7 +68,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         d.print("</tr>\n");
 
         if (south != null) {
-            d.print("<tr height=\"0%\">");
+            d.print("<tr>");
             if (west != null) {
                 d.print("<td width=\"0%\"></td>");
             }
@@ -112,10 +84,5 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         }
 
         closeLayouterBody(d, layout);
-    }
-
-    protected void writeComponent(Device d, SComponent c)
-            throws IOException {
-        c.write(d);
     }
 }

@@ -20,7 +20,7 @@ import org.wings.SContainer;
 import org.wings.STemplateLayout;
 import org.wings.io.Device;
 
-public final class ContainerCG extends AbstractComponentCG implements org.wings.plaf.PanelCG {
+public class ContainerCG extends AbstractComponentCG implements org.wings.plaf.PanelCG {
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device, final SComponent component) throws java.io.IOException {
@@ -29,6 +29,7 @@ public final class ContainerCG extends AbstractComponentCG implements org.wings.
         writeAllAttributes(device, component);
         Utils.writeEvents(device, component, null);
         device.print(">");
+
         // special case templateLayout, open cell
         boolean writeTableData = container.getLayout() instanceof STemplateLayout
             || container.getLayout() instanceof SCardLayout;

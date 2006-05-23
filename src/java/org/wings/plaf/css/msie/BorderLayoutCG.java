@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: BorderLayoutCG.java 2686 2006-05-17 11:59:07 +0200 (Wed, 17 May 2006) hengels $
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -11,17 +11,19 @@
  *
  * Please see COPYING for the complete licence.
  */
-package org.wings.plaf.css;
+package org.wings.plaf.css.msie;
 
+import org.wings.plaf.css.RenderHelper;
+import org.wings.plaf.css.Utils;
+import org.wings.io.Device;
+import org.wings.SLayoutManager;
 import org.wings.SBorderLayout;
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.SLayoutManager;
-import org.wings.io.Device;
 
 import java.io.IOException;
 
-public class BorderLayoutCG extends AbstractLayoutCG {
+public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
 
     /**
      *
@@ -31,6 +33,14 @@ public class BorderLayoutCG extends AbstractLayoutCG {
     public void write(Device d, SLayoutManager l)
             throws IOException {
         final SBorderLayout layout = (SBorderLayout) l;
+
+        if (layout.getContainer().getPreferredSize() == null || layout.getContainer().getPreferredSize().getHeight() == null) {
+            super.write(d, l);
+            return;
+        }
+        // special implementation with expressions is only required, if the center component
+        // shall consume the remaining height
+
         final SComponent north = (SComponent) layout.getComponents().get(SBorderLayout.NORTH);
         final SComponent east = (SComponent) layout.getComponents().get(SBorderLayout.EAST);
         final SComponent center = (SComponent) layout.getComponents().get(SBorderLayout.CENTER);
@@ -49,7 +59,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         openLayouterBody(d, layout);
 
         if (north != null) {
-            openLayouterRow(d, "0%");
+            d.print("<tr>");
             Utils.printNewline(d, north);
             openLayouterCell(d, north, false, cols, -1, null, SConstants.LEFT, SConstants.TOP, styles);
             north.write(d);
@@ -59,7 +69,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, layout.getContainer());
         }
 
-        openLayouterRow(d, "100%");
+        d.print("<tr fill=\"1\">");
 
         if (west != null) {
             Utils.printNewline(d, west);
@@ -89,7 +99,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
 
         if (south != null) {
             Utils.printNewline(d, layout.getContainer());
-            openLayouterRow(d, "0%");
+            d.print("<tr>");
             Utils.printNewline(d, south);
             openLayouterCell(d, south, false, cols, -1, "0%", SConstants.LEFT, SConstants.BOTTOM, styles);
             south.write(d);

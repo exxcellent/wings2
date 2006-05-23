@@ -23,7 +23,7 @@ import org.wings.io.Device;
 import java.awt.*;
 import java.io.IOException;
 
-public final class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
+public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
 
     private static final long serialVersionUID = 1L;
 

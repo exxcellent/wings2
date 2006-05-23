@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class TabbedPaneCG extends AbstractComponentCG {
+public class TabbedPaneCG extends AbstractComponentCG {
     private static final long serialVersionUID = 1L;
     private static final Map placements = new HashMap();
 
@@ -148,14 +148,14 @@ public final class TabbedPaneCG extends AbstractComponentCG {
     /**
      * Renders the currently selected pane of the tabbed Pane.
      */
-    private void writeSelectedPaneContent(Device device, STabbedPane tabbedPane) throws IOException {
+    protected void writeSelectedPaneContent(Device device, STabbedPane tabbedPane) throws IOException {
         SComponent selected = tabbedPane.getSelectedComponent();
         if (selected != null) {
             selected.write(device);
         }
     }
 
-    private void writeTabs(Device device, STabbedPane tabbedPane) throws IOException {
+    protected void writeTabs(Device device, STabbedPane tabbedPane) throws IOException {
         final Browser browser = tabbedPane.getSession().getUserAgent();
         // substitute whitespaces for konqueror and ie5.0x
         final boolean nbspWorkaround = browser.getBrowserType().equals(BrowserType.KONQUEROR);

@@ -357,20 +357,6 @@ public class SScrollPane
         }
     }
 
-    /**
-     * Set the preferred size for this scrollpane and
-     * the scrollbars aswell.
-     */
-    public void setPreferredSize(SDimension dim) {
-        super.setPreferredSize(dim);
-        if (horizontalScrollBar instanceof SComponent) {
-            ((SComponent) horizontalScrollBar).setPreferredSize(dim);
-        }
-        if (verticalScrollBar instanceof SComponent) {
-            ((SComponent) verticalScrollBar).setPreferredSize(dim);
-        }
-    }
-
 
     public void setHorizontalExtent(int horizontalExtent) {
         this.horizontalExtent = horizontalExtent;

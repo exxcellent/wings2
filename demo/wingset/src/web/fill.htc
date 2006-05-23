@@ -1,0 +1,22 @@
+<public:component>
+<public:attach event="onload" for="window" onevent="resize()"/>
+<script language="JScript">
+
+function resize() {
+  var fill;
+  var height = 0;
+
+  var rows = element.rows;
+  for (i=0; i < rows.length; i++) {
+    var row = rows[i];
+    if (row.getAttribute("fill"))
+      fill = row;
+    else
+      height += row.clientHeight;
+  }
+  element.style.height = element.getAttribute("intendedHeight");
+  fill.height = element.clientHeight - height;
+}
+
+</script>
+</public:component>
