@@ -14,6 +14,7 @@
 package org.wings.plaf.css;
 
 
+import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SContainer;
 import org.wings.STemplateLayout;
@@ -29,14 +30,15 @@ public final class ContainerCG extends AbstractComponentCG implements org.wings.
         Utils.writeEvents(device, component, null);
         device.print(">");
         // special case templateLayout, open cell
-        boolean isTemplateLayout = container.getLayout() instanceof STemplateLayout;
-        if (isTemplateLayout) {
+        boolean writeTableData = container.getLayout() instanceof STemplateLayout
+            || container.getLayout() instanceof SCardLayout;
+        if (writeTableData) {
             device.print("<tr><td>");
         }
 
         Utils.renderContainer(device, container);
 
-        if (isTemplateLayout) {
+        if (writeTableData) {
             device.print("</td></tr>");
         }
         device.print("</table>");

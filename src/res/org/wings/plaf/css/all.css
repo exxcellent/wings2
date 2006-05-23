@@ -102,7 +102,7 @@ IMG {
 
 /* STextField default style */
 .STextField input,
-.SFormattedTextField input
+.SFormattedTextField input,
 .SPasswordField input,
 .STextArea textarea,
 .SComboBox select {
