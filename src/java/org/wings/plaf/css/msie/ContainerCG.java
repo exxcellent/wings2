@@ -15,7 +15,7 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
         boolean requiresFillBehaviour = false;
         SDimension preferredSize = null;
         String height = null;
-        if (layout instanceof BorderLayoutCG) {
+        if (layout instanceof SBorderLayout) {
             preferredSize = container.getPreferredSize();
             if (preferredSize != null) {
                 height = preferredSize.getHeight();

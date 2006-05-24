@@ -7,7 +7,7 @@ function resize() {
   var height = 0;
 
   var rows = element.rows;
-  for (i=0; i < rows.length; i++) {
+  for (var i=0; i < rows.length; i++) {
     var row = rows[i];
     if (row.getAttribute("fill"))
       fill = row;
