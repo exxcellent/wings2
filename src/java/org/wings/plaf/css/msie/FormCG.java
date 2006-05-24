@@ -67,7 +67,7 @@ public class FormCG extends org.wings.plaf.css.FormCG {
             preferredSize = component.getPreferredSize();
             if (preferredSize != null) {
                 height = preferredSize.getHeight();
-                if (height != null)
+                if (height != null && !"auto".equals(height))
                     requiresFillBehaviour = true;
             }
         }

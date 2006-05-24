@@ -16,10 +16,7 @@ package org.wings.plaf.css.msie;
 import org.wings.plaf.css.RenderHelper;
 import org.wings.plaf.css.Utils;
 import org.wings.io.Device;
-import org.wings.SLayoutManager;
-import org.wings.SBorderLayout;
-import org.wings.SComponent;
-import org.wings.SConstants;
+import org.wings.*;
 
 import java.io.IOException;
 
@@ -34,10 +31,17 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
             throws IOException {
         final SBorderLayout layout = (SBorderLayout) l;
 
-        if (layout.getContainer().getPreferredSize() == null || layout.getContainer().getPreferredSize().getHeight() == null) {
+        SDimension preferredSize = layout.getContainer().getPreferredSize();
+        if (preferredSize == null) {
             super.write(d, l);
             return;
         }
+        String height = preferredSize.getHeight();
+        if (height == null || "auto".equals(height)) {
+            super.write(d, l);
+            return;
+        }
+
         // special implementation with expressions is only required, if the center component
         // shall consume the remaining height
 

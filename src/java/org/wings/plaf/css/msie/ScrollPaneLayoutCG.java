@@ -3,6 +3,7 @@ package org.wings.plaf.css.msie;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SScrollPaneLayout;
+import org.wings.SDimension;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 
@@ -15,10 +16,17 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
 
     protected void writePaging(Device d, SScrollPaneLayout layout) throws IOException {
-        if (layout.getContainer().getPreferredSize() == null || layout.getContainer().getPreferredSize().getHeight() == null) {
-            super.writePaging(d, layout);
+        SDimension preferredSize = layout.getContainer().getPreferredSize();
+        if (preferredSize == null) {
+            super.write(d, layout);
             return;
         }
+        String height = preferredSize.getHeight();
+        if (height == null || "auto".equals(height)) {
+            super.write(d, layout);
+            return;
+        }
+
         // special implementation with expressions is only required, if the center component
         // shall consume the remaining height
 

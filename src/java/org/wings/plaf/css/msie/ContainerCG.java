@@ -19,7 +19,7 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
             preferredSize = container.getPreferredSize();
             if (preferredSize != null) {
                 height = preferredSize.getHeight();
-                if (height != null)
+                if (height != null && !"auto".equals(height))
                     requiresFillBehaviour = true;
             }
         }

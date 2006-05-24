@@ -20,7 +20,7 @@ public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG {
             return;
         }
         String height = preferredSize.getHeight();
-        if (height == null) {
+        if (height == null || "auto".equals(height)) {
             super.writeInternal(device, component);
             return;
         }

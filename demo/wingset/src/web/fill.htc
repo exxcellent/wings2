@@ -2,20 +2,28 @@
 <public:attach event="onload" for="window" onevent="resize()"/>
 <script language="JScript">
 
-function resize() {
-  var fill;
-  var height = 0;
+if (!document.parentWindow.resizables)
+  document.parentWindow.resizables = new Array();
 
-  var rows = element.rows;
-  for (var i=0; i < rows.length; i++) {
-    var row = rows[i];
-    if (row.getAttribute("fill"))
-      fill = row;
-    else
-      height += row.clientHeight;
+var resizables = document.parentWindow.resizables;
+var height = 0;
+
+var rows = element.rows;
+for (var i=0; i < rows.length; i++) {
+  var row = rows[i];
+  if (row.getAttribute("fill"))
+    resizables.push(row);
+  else
+    height += row.clientHeight;
+}
+
+function resize() {
+  if (resizables.length > 0) {
+    var fill = resizables.splice(0, 1)[0];
+    var table = fill.parentNode.parentNode;
+    table.style.height = table.getAttribute("intendedHeight");
+    fill.height = table.clientHeight - height;
   }
-  element.style.height = element.getAttribute("intendedHeight");
-  fill.height = element.clientHeight - height;
 }
 
 </script>
