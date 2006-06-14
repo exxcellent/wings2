@@ -193,25 +193,23 @@ public class SComboBox
             // Must toggle the state of this flag since this method
             // call may result in ListDataEvents being fired.
 
+            selectingItem = true;
+            dataModel.setSelectedItem(object);
+            selectingItem = false;
+
             if (!delayEvent) {
-                selectingItem = true;
-                dataModel.setSelectedItem(object);
-                selectingItem = false;
-
-                //       if (isDifferent(selectedItemReminder , dataModel.getSelectedItem())) {
-                // in case a users implementation of ComboBoxModel
-                // doesn't fire a ListDataEvent when the selection
-                // changes.
-                selectedItemChanged();
-                //      }
-
+                if (selectedItemReminder != dataModel.getSelectedItem()) {
+                    // in case a users implementation of ComboBoxModel
+                    // doesn't fire a ListDataEvent when the selection
+                    // changes.
+                    selectedItemChanged();
+                }
                 fireActionEvent();
 
                 delayedEvent = false;
-            } else {
-                delayedEvent = true;
-                selectedItemReminder = object;
             }
+            else
+                delayedEvent = true;
 
             reload(ReloadManager.STATE);
         }
@@ -490,10 +488,14 @@ public class SComboBox
      */
     public void contentsChanged(ListDataEvent e) {
         if (isDifferent(selectedItemReminder, dataModel.getSelectedItem())) {
-            selectedItemChanged();
-            if (!selectingItem) {
-                fireActionEvent();
+            if (!delayEvent) {
+                selectedItemChanged();
+                if (!selectingItem)
+                    fireActionEvent();
+
+                delayedEvent = false;
             }
+
             reload(ReloadManager.STATE);
         }
     }
@@ -604,22 +606,16 @@ public class SComboBox
     public void fireFinalEvents() {
         super.fireFinalEvents();
         if (delayedEvent) {
-            if (isDifferent(selectedItemReminder, dataModel.getSelectedItem())) {
+            if (selectedItemReminder != dataModel.getSelectedItem()) {
                 // in case a users implementation of ComboBoxModel
                 // doesn't fire a ListDataEvent when the selection
                 // changes.
-                selectingItem = true;
-                Object selectedItemReminderBackup = selectedItemReminder;
-                dataModel.setSelectedItem(selectedItemReminder);
-                selectingItem = false;
-                selectedItemReminder = selectedItemReminderBackup;
                 selectedItemChanged();
-                fireActionEvent();
             }
+            fireActionEvent();
 
             delayedEvent = false;
         }
-
     }
 
     /** @see LowLevelEventListener#isEpochCheckEnabled() */

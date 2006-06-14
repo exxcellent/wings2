@@ -52,6 +52,7 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
         String styles = layoutStyles(layout);
+        int oversize = layoutOversize(layout);
         RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
         renderHelper.setVerticalLayoutPadding(layout.getVgap());
         renderHelper.setHorizontalLayoutPadding(layout.getHgap());
@@ -63,7 +64,9 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         openLayouterBody(d, layout);
 
         if (north != null) {
-            d.print("<tr>");
+            d.print("<tr");
+            Utils.optAttribute(d, "oversize", oversize);
+            d.print(">");
             Utils.printNewline(d, north);
             openLayouterCell(d, north, false, cols, -1, null, SConstants.LEFT, SConstants.TOP, styles);
             north.write(d);
@@ -73,7 +76,9 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
             Utils.printNewline(d, layout.getContainer());
         }
 
-        d.print("<tr fill=\"1\">");
+        d.print("<tr yweight=\"100\"");
+        Utils.optAttribute(d, "oversize", oversize);
+        d.print(">");
 
         if (west != null) {
             Utils.printNewline(d, west);
@@ -103,7 +108,9 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
 
         if (south != null) {
             Utils.printNewline(d, layout.getContainer());
-            d.print("<tr>");
+            d.print("<tr");
+            Utils.optAttribute(d, "oversize", oversize);
+            d.print(">");
             Utils.printNewline(d, south);
             openLayouterCell(d, south, false, cols, -1, "0%", SConstants.LEFT, SConstants.BOTTOM, styles);
             south.write(d);

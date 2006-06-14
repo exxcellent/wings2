@@ -4,6 +4,7 @@ import org.wings.plaf.css.*;
 import org.wings.plaf.css.BorderLayoutCG;
 import org.wings.io.Device;
 import org.wings.*;
+import org.wings.border.SBorder;
 
 public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
     private static final long serialVersionUID = 1L;
@@ -15,7 +16,7 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
         boolean requiresFillBehaviour = false;
         SDimension preferredSize = null;
         String height = null;
-        if (layout instanceof SBorderLayout) {
+        if (layout instanceof SBorderLayout || layout instanceof SGridBagLayout) {
             preferredSize = container.getPreferredSize();
             if (preferredSize != null) {
                 height = preferredSize.getHeight();
@@ -25,8 +26,16 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
         }
 
         if (requiresFillBehaviour) {
+            int borderHeight = 0;
+            SBorder border = container.getBorder();
+            if (border != null) {
+                borderHeight += border.getThickness(SConstants.TOP);
+                borderHeight += border.getThickness(SConstants.BOTTOM);
+            }
+
             device.print("<table style=\"behavior:url(../fill.htc)\"");
-            Utils.optAttribute(device, "intendedHeight", height);
+            Utils.optAttribute(device, "layoutHeight", height);
+            Utils.optAttribute(device, "borderHeight", borderHeight);
             preferredSize.setHeight(null);
         }
         else

@@ -4,6 +4,7 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.STabbedPane;
 import org.wings.SDimension;
+import org.wings.border.SBorder;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 import org.wings.util.SStringBuilder;
@@ -35,7 +36,7 @@ public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG {
             SStringBuilder contentArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_CONTENT));
 
             device.print("<table style=\"behavior:url(../fill.htc)\"");
-            Utils.optAttribute(device, "intendedHeight", height);
+            Utils.optAttribute(device, "layoutHeight", height);
 
             preferredSize.setHeight(null);
             writeAllAttributes(device, component);
@@ -52,7 +53,8 @@ public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG {
                 device.print("<tr><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
             } else if (placement == SConstants.BOTTOM) {
-                device.print("<tr fill=\"1\"><td");
+                device.print("<tr yweight=\"100\" oversize=\"2\"");
+                device.print("><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
             }
 
@@ -75,7 +77,7 @@ public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG {
             }
 
             if (placement == SConstants.TOP) {
-                device.print("</th></tr><tr fill=\"1\"><td");
+                device.print("</th></tr><tr yweight=\"100\" oversize=\"2\"><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
                 Utils.optAttribute(device, "style", contentArea);
             } else if (placement == SConstants.LEFT) {

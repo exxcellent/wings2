@@ -233,29 +233,35 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         return styles.length() > 0 ? styles.toString() : null;
     }
 
-    protected static String cellStyles(SLayoutManager layout, Insets insets) {
+    protected static String cellStyles(SGridBagLayout layout, Insets insets) {
         SStringBuilder styles = new SStringBuilder();
         createInlineStylesForInsets(styles, insets);
+        if (layout.getBorder() > 0)
+            styles.append("border:").append(layout.getBorder()).append("px solid black");
+        return styles.length() > 0 ? styles.toString() : null;
+    }
+
+    protected static int layoutOversize(SLayoutManager layout) {
         if (layout instanceof SBorderLayout) {
             SBorderLayout borderLayout = (SBorderLayout)layout;
-            if (borderLayout.getBorder() > 0)
-                styles.append("border:").append(borderLayout.getBorder()).append("px solid black");
+            return borderLayout.getHgap() + borderLayout.getBorder();
         }
         else if (layout instanceof SGridLayout) {
             SGridLayout gridLayout = (SGridLayout)layout;
-            if (gridLayout.getBorder() > 0)
-                styles.append("border:").append(gridLayout.getBorder()).append("px solid black");
+            return gridLayout.getHgap() + gridLayout.getBorder();
         }
         else if (layout instanceof SGridBagLayout) {
             SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
-            if (gridbagLayout.getBorder() > 0)
-                styles.append("border:").append(gridbagLayout.getBorder()).append("px solid black");
+            return gridbagLayout.getHgap() + gridbagLayout.getBorder();
         }
         else if (layout instanceof SBoxLayout) {
             SBoxLayout boxLayout = (SBoxLayout)layout;
-            if (boxLayout.getBorder() > 0)
-                styles.append("border:").append(boxLayout.getBorder()).append("px solid black");
+            return boxLayout.getHgap() + boxLayout.getBorder();
         }
-        return styles.length() > 0 ? styles.toString() : null;
+        return 0;
+    }
+
+    protected static int cellOversize(SGridBagLayout layout, Insets insets) {
+        return insets.top + insets.bottom + layout.getBorder();
     }
 }

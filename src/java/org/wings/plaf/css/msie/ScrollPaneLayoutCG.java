@@ -55,7 +55,7 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
             d.print("</tr>\n");
         }
 
-        d.print("<tr fill=\"1\">");
+        d.print("<tr yweight=\"100\">");
         if (west != null) {
             d.print("<td width=\"0%\">");
             writeComponent(d, west);

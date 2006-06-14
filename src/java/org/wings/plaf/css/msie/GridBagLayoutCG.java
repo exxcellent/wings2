@@ -1,28 +1,16 @@
-/*
- * $Id$
- * Copyright 2000,2005 wingS development team.
- *
- * This file is part of wingS (http://www.j-wings.org).
- *
- * wingS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- *
- * Please see COPYING for the complete licence.
- */
-package org.wings.plaf.css;
+package org.wings.plaf.css.msie;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SGridBagLayout;
-import org.wings.SLayoutManager;
+import org.wings.plaf.css.AbstractLayoutCG;
+import org.wings.plaf.css.RenderHelper;
+import org.wings.plaf.css.Utils;
 import org.wings.io.Device;
+import org.wings.*;
+import org.wings.border.SBorder;
 
-import java.awt.*;
 import java.io.IOException;
+import java.awt.*;
 
-public class GridBagLayoutCG extends AbstractLayoutCG {
+public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,9 +22,23 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
     public void write(Device d, SLayoutManager l)
             throws IOException {
         final SGridBagLayout layout = (SGridBagLayout) l;
+
+        SDimension preferredSize = layout.getContainer().getPreferredSize();
+        if (preferredSize == null) {
+            super.write(d, l);
+            return;
+        }
+        String height = preferredSize.getHeight();
+        if (height == null || "auto".equals(height)) {
+            super.write(d, l);
+            return;
+        }
+
+
         final boolean header = layout.getHeader();
         final SGridBagLayout.Grid grid = layout.getGrid();
         String styles = layoutStyles(layout);
+        int oversize = layoutOversize(layout);
         boolean useCellStyles = layout.getVgap() == -1 && layout.getHgap() == -1;
 
         RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
@@ -50,7 +52,24 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
             Utils.printNewline(d, layout.getContainer());
-            openLayouterRow(d, determineRowHeight(layout, row) + "%");
+            d.print("<tr");
+            Utils.optAttribute(d, "yweight", determineRowHeight(layout, row));
+            if (useCellStyles) {
+                oversize = 0;
+                for (int col = grid.firstCol; col < grid.cols; col++) {
+                    final SComponent comp = grid.grid[col][row];
+                    if (comp != null) {
+                        SBorder border = comp.getBorder();
+                        if (border != null) {
+                            Insets insets = border.getInsets();
+                            if (insets != null)
+                                oversize = Math.max(oversize, cellOversize(layout, insets));
+                        }
+                    }
+                }
+            }
+            Utils.optAttribute(d, "oversize", oversize);
+            d.print(">");
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 final SComponent comp = grid.grid[col][row];
                 Utils.printNewline(d, layout.getContainer());
@@ -107,35 +126,5 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
 
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);
-    }
-
-    /**
-     * Copy and paste extracted method to determine an optional row height of the passed row.
-     * Was necessary to avoid a rendering bug with Gecko engines leading to a messed up layout.
-     * Refer to http://jira.j-wings.org/browse/WGS-120
-     *
-     * @param layout The gridbaglayout
-     * @param row The row
-     * @return Row height percentage as int or 0
-     */
-    protected int determineRowHeight(SGridBagLayout layout, int row) {
-        final SGridBagLayout.Grid grid = layout.getGrid();
-        int rowHeight = 0;
-
-        for (int col = grid.firstCol; col < grid.cols; col++) {
-            SComponent comp = grid.grid[col][row];
-            if (comp != null) {
-                GridBagConstraints c = layout.getConstraints(comp);
-                if ((c.gridx == SGridBagLayout.LAST_CELL || c.gridx == col)
-                        && (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
-                    if (c.weighty > 0 && grid.rowweight[col] > 0) {
-                        int cellHeight = (int) (100 * c.weighty / grid.rowweight[col]);
-                        if (cellHeight > rowHeight)
-                            rowHeight = cellHeight;
-                    }
-                }
-            }
-        }
-        return rowHeight;
     }
 }

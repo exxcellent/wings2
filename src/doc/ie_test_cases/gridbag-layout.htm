@@ -6,6 +6,8 @@ table, tbody, tr, td {
   padding: 0px;
   margin: 0px;
   border: none;
+  font-size: 10px;
+  font-family: sans-serif
 }
 </style>
 <body>
@@ -13,25 +15,25 @@ table, tbody, tr, td {
 <table><tr><td width=200 height=200 style="background-color: black">
 
 <table id="outer" width="100%" layoutHeight="100%" style="behavior:url(fill.htc); border: 10px solid green">
-<tr><td style="background-color: red">top<br>blub</td></tr>
-<tr yweight="100">
+<tr yweight="10"><td style="background-color: red">top</td></tr>
+<tr yweight="80">
 	<td style="background-color: black">
 
+
 <table id="inner" width="100%" layoutHeight="100%" style="behavior:url(fill.htc); border: 10px solid green">
-<tr><td style="background-color: orange">top</td></tr>
-<tr yweight="100">
-	<td style="background-color: red">
-
-
+<tr yweight="20"><td style="background-color: orange">top</td></tr>
+<tr yweight="60" oversize="30">
+	<td style="background-color: red; border: yellow solid 10px; padding: 5px">
+		center
 	</td>
 </tr>
-<tr><td style="background-color: orange">bottom</td></tr>
+<tr yweight="20"><td style="background-color: orange">bottom</td></tr>
 </table>
 
 
 	</td>
 </tr>
-<tr><td style="background-color: red">bottom<br>blub</td></tr>
+<tr yweight="10"><td style="background-color: red">bottom</td></tr>
 </table>
 
 </td></tr></table>

@@ -2,6 +2,7 @@ package org.wings.plaf.css.msie;
 
 import org.wings.io.Device;
 import org.wings.*;
+import org.wings.border.SBorder;
 import org.wings.plaf.css.*;
 
 import java.io.IOException;
@@ -26,8 +27,16 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
         }
 
         if (requiresFillBehaviour) {
+            int borderHeight = 0;
+            SBorder border = scrollPane.getBorder();
+            if (border != null) {
+                borderHeight += border.getThickness(SConstants.TOP);
+                borderHeight += border.getThickness(SConstants.BOTTOM);
+            }
+
             device.print("<table style=\"behavior:url(../fill.htc)\"");
-            Utils.optAttribute(device, "intendedHeight", height);
+            Utils.optAttribute(device, "layoutHeight", height);
+            Utils.optAttribute(device, "borderHeight", borderHeight);
             preferredSize.setHeight(null);
         }
         else
