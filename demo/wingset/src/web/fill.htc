@@ -31,8 +31,6 @@ function resize() {
     var consumedHeight = table.getAttribute("consumedHeight");
     var diff = table.clientHeight - consumedHeight;
 
-    alert("diff " + table.clientHeight + " - " + consumedHeight + " = " + diff);
-
     var rows = table.rows;
     for (var i=0; i < rows.length; i++) {
       var row = rows[i];
