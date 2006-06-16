@@ -123,13 +123,13 @@ public class MenuExample extends WingSetPane {
     private void recursiveMenuItemSwitch(SMenuItem first, SMenuItem last, boolean enabled) {
         last.setEnabled(enabled);
         if (first instanceof SMenu) {
-            if (((SMenu) first).getChildrenCount() > 1) {
-                SMenu parent = (SMenu) first;
+            SMenu parent = (SMenu) first;
+            if (parent.getChildrenCount() > 1) {
                 SMenuItem firstChild = (SMenuItem) parent.getChild(0);
                 SMenuItem lastChild = (SMenuItem) parent.getChild(parent.getChildrenCount() - 1);
                 recursiveMenuItemSwitch(firstChild, lastChild, enabled);
             } else if (((SMenu) first).getChildrenCount() == 1) {
-                ((SMenuItem) ((SMenu) first).getChild(0)).setEnabled(enabled);
+                parent.getChild(0).setEnabled(enabled);
             }
         }
     }
@@ -140,7 +140,7 @@ public class MenuExample extends WingSetPane {
         item.addActionListener(menuItemListener);
         if (shortcutKey != 0) {
             item.setAccelerator(KeyStroke.getKeyStroke(shortcutKey,
-                    java.awt.Event.CTRL_MASK));
+                    java.awt.Event.ALT_MASK));
             if (shortcutKey == java.awt.event.KeyEvent.VK_Z) {
                 shortcutKey = 0;
             } else {
