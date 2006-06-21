@@ -1195,8 +1195,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public void write(Device s) throws IOException {
         try {
-            if (visible)
+            if (visible) {
                 cg.write(s, this);
+            }
         } catch (IOException se) {
             // Typical double-clicks. Not severe
             log.debug("Not Severe: Socket exception during code generation for " + getClass().getName() + se);

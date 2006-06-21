@@ -70,6 +70,10 @@ public class SMenuItem extends SButton {
     public KeyStroke getAccelerator() {
         return accelerator;
     }
+
+    public boolean isRecursivelyVisible() {
+        return visible && (menuParent != null ? menuParent.isRecursivelyVisible() : super.isRecursivelyVisible());
+    }
 }
 
 

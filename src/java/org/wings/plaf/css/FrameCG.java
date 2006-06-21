@@ -39,6 +39,7 @@ import org.wings.session.Session;
 import org.wings.session.SessionManager;
 
 import javax.swing.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -250,14 +251,30 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     public void componentChanged(SComponent c) {
-        SFrame frame = (SFrame)c;
+        /*
+         * the update of the input maps happens on every write,
+         * so here it's unnecessary. 
+         */
+        //updateGlobalInputMaps(frame);
+    }
 
+
+    /**
+     * @param frame
+     */
+    private void updateGlobalInputMaps(SFrame frame) {
         // here it goes, global input maps
         ScriptListener[] scriptListeners = frame.getScriptListeners();
         // first, delete all of them, they are from the last request...
         for (int i = 0; i < scriptListeners.length; i++) {
             ScriptListener scriptListener = scriptListeners[i];
             if (scriptListener instanceof InputMapScriptListener) {
+                /*
+                 * one could collect this as a list and only add/remove
+                 * the changes. But the listeners are added as anonymous
+                 * classes, which makes identifying them expensive. That
+                 * would have to be changed.
+                 */ 
                 frame.removeScriptListener(scriptListener);
             }
         }
@@ -280,6 +297,13 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public void write(final Device device, final SComponent pComp)
             throws IOException {
         final SFrame frame = (SFrame) pComp;
+        /*
+         * the input maps must be updated on every rendering of the SFrame, since
+         * some components could be invisible in this request that registered an
+         * input map before. To avoid too much code sent to the client, this update
+         * is calles.
+         */
+        updateGlobalInputMaps(frame);
         RenderHelper.getInstance(frame).reset();
         if (!frame.isVisible()) {
             return;

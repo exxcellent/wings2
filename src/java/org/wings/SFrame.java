@@ -112,8 +112,7 @@ public class SFrame
      * Global input maps
      */
     private ArrayList globalInputMapComponents;
-
-
+    
     /**
      * Creates a new SFrame
      */
