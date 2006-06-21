@@ -13,34 +13,33 @@
  */
 package org.wings;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSProperty;
-import org.wings.style.Selector;
-import org.wings.style.CSSStyleSheet;
-import org.wings.table.SDefaultTableColumnModel;
-import org.wings.table.STableCellEditor;
-import org.wings.table.STableCellRenderer;
-import org.wings.table.STableColumn;
-import org.wings.table.STableColumnModel;
-import org.wings.event.SMouseListener;
-import org.wings.event.SMouseEvent;
-import org.wings.util.SStringBuilder;
+ import org.apache.commons.logging.Log;
+ import org.apache.commons.logging.LogFactory;
+ import org.wings.event.SMouseEvent;
+ import org.wings.event.SMouseListener;
+ import org.wings.style.CSSAttributeSet;
+ import org.wings.style.CSSProperty;
+ import org.wings.style.CSSStyleSheet;
+ import org.wings.style.Selector;
+ import org.wings.table.SDefaultTableColumnModel;
+ import org.wings.table.STableCellEditor;
+ import org.wings.table.STableCellRenderer;
+ import org.wings.table.STableColumn;
+ import org.wings.table.STableColumnModel;
+ import org.wings.util.SStringBuilder;
 
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.util.EventObject;
-import java.util.HashMap;
-import java.util.Iterator;
+ import javax.swing.event.CellEditorListener;
+ import javax.swing.event.ChangeEvent;
+ import javax.swing.event.ListSelectionEvent;
+ import javax.swing.event.ListSelectionListener;
+ import javax.swing.event.TableModelEvent;
+ import javax.swing.event.TableModelListener;
+ import javax.swing.table.DefaultTableModel;
+ import javax.swing.table.TableModel;
+ import java.awt.*;
+ import java.util.EventObject;
+ import java.util.HashMap;
+ import java.util.Iterator;
 
 
  /**
@@ -1157,6 +1156,11 @@ import java.util.Iterator;
                          getSelectionModel().removeIndexInterval(e.getFirstRow(),
                                  e.getLastRow());
                      break;
+                case TableModelEvent.UPDATE:
+                    /* event fire on javax.swing.table.AbstractTableModel.fireTableDataChanged() */
+                    if (e.getLastRow() == Integer.MAX_VALUE)
+                        clearSelection();
+                    break;                 
              }
          }
          reload(ReloadManager.STATE);
