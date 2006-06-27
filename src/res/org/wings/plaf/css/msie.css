@@ -58,7 +58,12 @@ div.domTT {
     filter:alpha(opacity=80);
 }
 
-/* Simulate and style FORM buttons for A HREF*/
+/*
+  Simulate and style FORM buttons for A HREF
+
+  To make this work even in MSIE we need to play a bit with the focus.
+  See org.wings.plaf.css.Utils#printButtonStart which renders some JS to handle the focus
+*/
 table.SButton A.formbutton:active {
    padding: 0px 5px 0px 7px;
    border-style: inset;
@@ -83,7 +88,6 @@ table.SButton SPAN.disabled_formbutton:active {
     position: relative;
     top:-1.7em;
 	margin-bottom:-1em;
-    margin-right: 1.0em;
     margin-left: 1.0em;
     margin-right: 1.0em;
     padding-left: 0.4em;

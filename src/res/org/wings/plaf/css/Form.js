@@ -92,6 +92,69 @@ function followLink(url, clientHandlers) {
     return false;
 }
 
+/* JavaScript to follow a link without submitting the form.
+   Calls concurrent onclick listeners. */
+function followLink(url, clientHandlers) {
+    var doSubmit = true;
+    if (clientHandlers) {
+        for (var i = 0; i < clientHandlers.length; i++) {
+            doSubmit = clientHandlers[i]();
+            if (doSubmit == false) break;
+        }
+    }
+
+    if (doSubmit == undefined || doSubmit) {
+        document.location = url;
+    }
+
+    return false;
+}
+
+/* Remove focus from a component and respect
+   additonal custom script listeners attached
+   by user.
+   Core usage/doc see Utils.printButtonStart()*/
+function blurComponent(component, clientHandlers) {
+    var success = true;
+    if (clientHandlers) {
+        for (var i = 0; i < clientHandlers.length; i++) {
+            success = clientHandlers[i]();
+            if (success == false) break;
+        }
+    }
+
+    if (success == undefined || success && component.blur()) {
+        component.blur();
+    }
+
+    return true;
+}
+
+/* Set focus to a component and respect
+   additonal custom script listeners attached
+   by user.
+   Core usage/doc see Utils.printButtonStart()*/
+function focusComponent(component, clientHandlers) {
+    var success = true;
+    if (clientHandlers) {
+        for (var i = 0; i < clientHandlers.length; i++) {
+            success = clientHandlers[i]();
+            if (success == false) break;
+        }
+    }
+
+    if (success == undefined || success && component.focus()) {
+        component.focus();
+    }
+
+    return true;
+}
+
+
+/* Set the focus to a component identified by a wingS id.
+   Also do some heuristic trace-down of the real component mean.
+   i.e. a STextFields renders as <table id=...><input...></table>
+   but you want the focus to be the input element. Not the table element. */
 function requestFocus(id) {
     var div = document.getElementById(id);
 	if (div) {

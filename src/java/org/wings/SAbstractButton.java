@@ -329,7 +329,6 @@ public abstract class SAbstractButton
     }
 
     public void fireIntermediateEvents() {
-        requestFocus();
         super.fireIntermediateEvents();
         if (buttonGroup != null) {
             buttonGroup.fireDelayedIntermediateEvents();

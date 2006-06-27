@@ -90,6 +90,14 @@ public final class Utils {
     public final static String[] EXCLUDE_ON_CLICK = new String[]{JavaScriptEvent.ON_CLICK};
 
     /**
+     * Default list of javascript events to exlcude in form case of
+     * {@link #printButtonStart(org.wings.io.Device, org.wings.SComponent, String, boolean, boolean)}
+     */
+    private final static String[] EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT= new String[]
+            {JavaScriptEvent.ON_CLICK, JavaScriptEvent.ON_MOUSE_DOWN,
+             JavaScriptEvent.ON_MOUSE_DOWN, JavaScriptEvent.ON_MOUSE_OUT};
+
+    /**
      * Renders a container using its Layout manager or fallback just one after another.
      */
     public static void renderContainer(Device d, SContainer c) throws IOException {
@@ -959,14 +967,34 @@ public final class Utils {
                 device.print("<span");
                 Utils.optAttribute(device, "class", cssClassName);
             } else {
-                device.print("<a href=\"#\" onclick=\"sendEvent(event,'");
+                device.print("<a href=\"#\"");
+
+                // Render onclick JS listeners
+                device.print(" onclick=\"sendEvent(event,'");
                 device.print(eventValue == null ? "" : eventValue);
                 device.print("','");
                 device.print(Utils.event(eventTarget));
                 device.print("'");
-                device.print(applyOnClickListeners(eventTarget));
+                device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_CLICK));
                 device.print(")\"");
-                Utils.writeEvents(device, eventTarget, new String[]{JavaScriptEvent.ON_CLICK});
+
+                // Render mouseup/down/out listeners.
+                // These add/remove the focus when clicked/released the button.
+                // This is due to fact that we render the "form" buttons as A href but want them to appear/behave
+                // like regular form buttons. To simulate the "appear pressed" when pressed behaviour we use the
+                // :active selector in the CSS (table.SButton A.formbutton:active ) to style the button
+                // Only the MSIE interprets the :active selector as focus. That's why we tune here.
+                device.print(" onmouseup=\"blurComponent(this");
+                device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_UP));
+                device.print(")\" onmousedown=\"focusComponent(this");
+                device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_DOWN));
+                device.print(")\" onmouseout=\"blurComponent(this");
+                device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_OUT));
+                device.print(")\"");
+
+                // Render remaining JS listeners
+                Utils.writeEvents(device, eventTarget, EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT);
+
                 Utils.optAttribute(device, "class", cssClassName);
             }
         } else {
@@ -984,9 +1012,11 @@ public final class Utils {
                 Utils.optAttribute(device, "class", cssClassName);
 
                 if (isMSIE(eventTarget)) {
+                    // Render onclick JS listeners
                     device.print(" onclick=\"followLink('").print(requestURL.toString()).print("'");
-                    device.print(applyOnClickListeners(eventTarget));
+                    device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_CLICK));
                     device.print(")\"");
+                    // Render remaining JS listeners
                     Utils.writeEvents(device, eventTarget, EXCLUDE_ON_CLICK);
                 } else {
                     Utils.writeEvents(device, eventTarget, null);
@@ -1005,22 +1035,28 @@ public final class Utils {
     }
 
     /**
-     * Renders inline the onclick javascript methods for the <code>sendEvent</code> and <code>followLink</code>
+     * Renders inline the javascript code attached to the passed javascipt event type
+     * on the component. Used to allow usage of javascript events by the framework
+     * as well as by the application itself.
+     * <p> For an example: See the <code>sendEvent</code> and <code>followLink</code>
      * method declared in <code>Form.js</code>.
-     */
-    public static SStringBuilder applyOnClickListeners(final SComponent component) {
-        SStringBuilder script = new SStringBuilder();
-        JavaScriptListener[] onClickListeners = getOnClickListeners(component);
-        if (onClickListeners != null && onClickListeners.length > 0) {
+     * @param component The component wearing the event handler
+     * @param javascriptEventType the event type declared in {@link JavaScriptEvent}
+     * @return javascript code fragment n the form of <code>,new Array(function(){...},function(){...})</code>
+      */
+    public static SStringBuilder collectJavaScriptListenerCode(final SComponent component, final String javascriptEventType) {
+        final SStringBuilder script = new SStringBuilder();
+        JavaScriptListener[] eventListeners = getOnClickListeners(component, javascriptEventType);
+        if (eventListeners != null && eventListeners.length > 0) {
             script.append(",new Array(");
-            for (int i = 0; i < onClickListeners.length; i++) {
+            for (int i = 0; i < eventListeners.length; i++) {
                 if (i > 0) {
                     script.append(",");
                 }
-                if (onClickListeners[i].getScript() != null) {
-                    script.append("function(){").append(onClickListeners[i].getScript()).append("}");
+                if (eventListeners[i].getScript() != null) {
+                    script.append("function(){").append(eventListeners[i].getScript()).append("}");
                 } else {
-                    script.append("function(){").append(onClickListeners[i].getCode()).append("}");
+                    script.append("function(){").append(eventListeners[i].getCode()).append("}");
                 }
             }
             script.append(")");
@@ -1028,13 +1064,18 @@ public final class Utils {
         return script;
     }
 
-    private static JavaScriptListener[] getOnClickListeners(final SComponent button) {
+    /**
+     * @param button The component wearing the event handler
+     * @param javaScriptEvent the event type declared in {@link JavaScriptEvent}
+     * @return The attached listeners to event type
+     */
+    private static JavaScriptListener[] getOnClickListeners(final SComponent button, final String javaScriptEvent) {
         ArrayList result = new ArrayList();
         ScriptListener[] listeners = button.getScriptListeners();
         for (int i = 0; i < listeners.length; i++) {
             if (listeners[i] instanceof JavaScriptListener) {
                 JavaScriptListener jsListener = (JavaScriptListener) listeners[i];
-                if (JavaScriptEvent.ON_CLICK.equals(jsListener.getEvent().toLowerCase())) {
+                if (javaScriptEvent.equals(jsListener.getEvent().toLowerCase())) {
                     result.add(jsListener);
                 }
             }
