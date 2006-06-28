@@ -17,13 +17,9 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
     protected void writePaging(Device d, SScrollPaneLayout layout) throws IOException {
         SDimension preferredSize = layout.getContainer().getPreferredSize();
-        if (preferredSize == null) {
-            super.write(d, layout);
-            return;
-        }
-        String height = preferredSize.getHeight();
-        if (height == null || "auto".equals(height)) {
-            super.write(d, layout);
+        if (preferredSize == null || preferredSize.getHeight() == null ||
+                SDimension.AUTO.equals(preferredSize.getHeight())) {
+            super.writePaging(d, layout);
             return;
         }
 
