@@ -42,10 +42,6 @@ public class MenuBarCG extends AbstractComponentCG implements
     private static final long serialVersionUID = 1L;
 
     /**
-     * the menu javascript needs this script as a helper (browser detection).
-     */
-    public static final String UTILS_JS = (String) ResourceManager.getObject("JScripts.utils", String.class);
-    /**
      * javascript with the menu magic
      */
     private static final String MENU_JS = (String) ResourceManager.getObject("JScripts.menu", String.class);
@@ -148,7 +144,6 @@ public class MenuBarCG extends AbstractComponentCG implements
      */
     private void addListenersToParentFrame(SFrame parentFrame) {
         parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
-        addExternalizedHeader(parentFrame, UTILS_JS, "text/javascript");
         addExternalizedHeader(parentFrame, MENU_JS, "text/javascript");
     }
 

@@ -50,9 +50,11 @@ public class JavaScriptListenerExample
      * SComponent argument.
      */
     private final static String JS_ADD_SCRIPT =
-            "document.getElementById('{2}').value" +
-            " = ((1.0 * document.getElementById('{0}').value)" +
-            " + (1.0 * document.getElementById('{1}').value));";
+            "function add() { " +
+            "  wu_findElement('{2}','INPUT').value" +
+            "  = ((1.0 * wu_findElement('{0}','INPUT').value)" +
+            "  + (1.0 * wu_findElement('{1}','INPUT').value));" +
+            " }";
 
     private final static DecimalFormatSymbols DSYM
             = new DecimalFormatSymbols(Locale.US); // '.' as fraction separator
@@ -60,7 +62,8 @@ public class JavaScriptListenerExample
     public SComponent createExample() {
         SPanel p = new SPanel(new SBoxLayout(SConstants.VERTICAL));
         p.setPreferredSize(SDimension.FULLWIDTH);
-        p.add(new SLabel("The client side can handle simple events by JavaScript listeners. In this example, numbers are added locally."));
+        p.add(new SLabel("The client side can handle simple events by JavaScript listeners. " +
+                "In this example, numbers are added locally inside the browser."));
 
         final STextField firstField = createNumberField();
         final STextField secondField = createNumberField();
@@ -97,13 +100,11 @@ public class JavaScriptListenerExample
          * add the client side script listener. The variables 
          * in curly braces are replaced by the actual IDs of the components.
          */
-        SComponent[] jsParams = new SComponent[]{firstField, secondField,
-                                                 sumField};
-        JavaScriptListener jsListener;
-        jsListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE,
+        SComponent[] jsParams = new SComponent[]{firstField, secondField, sumField};
+        JavaScriptListener jsListener = new JavaScriptListener(JavaScriptEvent.ON_CHANGE,
                 "add()",
-                "function add() { " + JS_ADD_SCRIPT + " }",
-                jsParams);
+               JS_ADD_SCRIPT,
+               jsParams);
 
         firstField.addScriptListener(jsListener);
         secondField.addScriptListener(jsListener);

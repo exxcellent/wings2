@@ -68,7 +68,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         writeSuffix(device, component, false);
     }
 
-    private void writePrefix(Device device, SComponent component, boolean useTable) throws IOException {
+    private void writePrefix(final Device device, final SComponent component, final boolean useTable) throws IOException {
         SBorder border = component.getBorder();
         final boolean isTitleBorder = border instanceof STitledBorder;
         // This is the containing element of a component

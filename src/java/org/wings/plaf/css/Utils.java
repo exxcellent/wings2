@@ -984,11 +984,11 @@ public final class Utils {
                 // like regular form buttons. To simulate the "appear pressed" when pressed behaviour we use the
                 // :active selector in the CSS (table.SButton A.formbutton:active ) to style the button
                 // Only the MSIE interprets the :active selector as focus. That's why we tune here.
-                device.print(" onmouseup=\"blurComponent(this");
+                device.print(" onmouseup=\"wu_blurComponent(this");
                 device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_UP));
-                device.print(")\" onmousedown=\"focusComponent(this");
+                device.print(")\" onmousedown=\"wu_focusComponent(this");
                 device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_DOWN));
-                device.print(")\" onmouseout=\"blurComponent(this");
+                device.print(")\" onmouseout=\"wu_blurComponent(this");
                 device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_OUT));
                 device.print(")\"");
 
@@ -1039,7 +1039,7 @@ public final class Utils {
      * on the component. Used to allow usage of javascript events by the framework
      * as well as by the application itself.
      * <p> For an example: See the <code>sendEvent</code> and <code>followLink</code>
-     * method declared in <code>Form.js</code>.
+     * method declared in <code>Wings.js</code>.
      * @param component The component wearing the event handler
      * @param javascriptEventType the event type declared in {@link JavaScriptEvent}
      * @return javascript code fragment n the form of <code>,new Array(function(){...},function(){...})</code>

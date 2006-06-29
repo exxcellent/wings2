@@ -113,20 +113,16 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private static final String PROPERTY_STYLESHEET = "Stylesheet.";
     private static final String BROWSER_DEFAULT = "default";
 
-    public final String UTILS_SCRIPT = (String) ResourceManager.getObject("JScripts.utils", String.class);
     public final String FORM_SCRIPT = (String) ResourceManager.getObject("JScripts.form", String.class);
     public final String DOMLIB_SCRIPT = (String) ResourceManager.getObject("JScripts.domlib", String.class);
     public final String DOMTT_SCRIPT = (String) ResourceManager.getObject("JScripts.domtt", String.class);
-    public final String FORMS_JS = (String) ResourceManager.getObject("JScripts.form", String.class);
 
     public static final JavaScriptListener FOCUS_SCRIPT =
             new JavaScriptListener("onfocus", "storeFocus(event)");
     public static final JavaScriptListener FOCUS_SCRIPT_IE =
             new JavaScriptListener("onactivate", "storeFocus(event)");
-
     public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
             new JavaScriptListener("onscroll", "storeScrollPosition(event)");
-
     public static final JavaScriptListener RESTORE_SCROLL_POSITION_SCRIPT =
             new JavaScriptListener("onload", "restoreScrollPosition()");
 
@@ -206,13 +202,11 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             component.addHeader(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
         }
 
-        // add Form.js to frame
-        addJavaScriptLibrary(component, FORMS_JS);
-
-        addExternalizedHeader(component, UTILS_SCRIPT, "text/javascript");
+        // add JavaScript files to frame
         addExternalizedHeader(component, FORM_SCRIPT, "text/javascript");
         addExternalizedHeader(component, DOMLIB_SCRIPT, "text/javascript");
         addExternalizedHeader(component, DOMTT_SCRIPT, "text/javascript");
+
         component.addScriptListener(Utils.isMSIE(component) ? FOCUS_SCRIPT_IE : FOCUS_SCRIPT);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
         component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);
@@ -220,12 +214,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
         component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
-    }
-
-    private void addJavaScriptLibrary(final SFrame frame, final String scriptFileName) {
-        ClasspathResource res = new ClasspathResource(scriptFileName, "text/javascript");
-        String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        frame.addHeader(new Script("text/javascript", new DefaultURLResource(jScriptUrl)));
     }
 
     /**
@@ -253,7 +241,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public void componentChanged(SComponent c) {
         /*
          * the update of the input maps happens on every write,
-         * so here it's unnecessary. 
+         * so here it's unnecessary.
          */
         //updateGlobalInputMaps(frame);
     }
@@ -274,7 +262,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                  * the changes. But the listeners are added as anonymous
                  * classes, which makes identifying them expensive. That
                  * would have to be changed.
-                 */ 
+                 */
                 frame.removeScriptListener(scriptListener);
             }
         }
@@ -447,7 +435,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             device.print("\n");
             // now add all menus
             device.print(RenderHelper.getInstance(frame).getMenueRenderBuffer().toString());
-            
+
             // now add final JS for DnD if neccessary.
             if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) { // initialize only if dragSources are present
                 device.print("<script type=\"text/javascript\">\n<!--\n");
@@ -491,9 +479,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 device.print("\"></script>\n");
             }
         }
-        device.print("\n</body>\n");
         writeInlineScripts(device, frame);
-        device.print("</html>\n");
+        device.print("</body>\n</html>\n");
         pComp.fireRenderEvent(SComponent.DONE_RENDERING);
         RenderHelper.getInstance(frame).reset();
     }
@@ -505,7 +492,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             String script = scriptListener.getScript();
             if (script != null) {
                 if (!scriptTagOpen) {
-                    device.print("<script type=\"text/javascript\">");
+                    device.print("\n<script type=\"text/javascript\">");
                     scriptTagOpen = true;
                 }
                 device.print(script);

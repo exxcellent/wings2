@@ -32,7 +32,7 @@ import org.wings.resource.ClasspathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
-import org.wings.session.SessionManager;
+
 import java.io.IOException;
 
 public final class PopupMenuCG extends AbstractComponentCG implements
@@ -52,7 +52,6 @@ public final class PopupMenuCG extends AbstractComponentCG implements
     public void uninstallCG(final SComponent comp) {
     }
 
-    public static final String UTILS_JS = (String) ResourceManager.getObject("JScripts.utils", String.class);
     private static final String MENU_JS = (String) ResourceManager.getObject("JScripts.menu", String.class);
     private static final JavaScriptListener BODY_ONCLICK_SCRIPT =
         new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
@@ -180,7 +179,6 @@ public final class PopupMenuCG extends AbstractComponentCG implements
      */
     private void addListenersToParentFrame(SFrame parentFrame) {
         parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
-        addExternalizedHeader(parentFrame, UTILS_JS, "text/javascript");
         addExternalizedHeader(parentFrame, MENU_JS, "text/javascript");
     }
 
