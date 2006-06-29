@@ -16,7 +16,6 @@ package wingset;
 import org.wings.SBorderLayout;
 import org.wings.SComboBox;
 import org.wings.SComponent;
-import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SLabel;
 import org.wings.SList;
@@ -97,6 +96,9 @@ public class PageScrollerExample
 
     class PageScrollerControls extends ComponentControls {
         public PageScrollerControls() {
+            removeGlobalControl(foregroundComboBox);
+            removeGlobalControl(fontComboBox);
+
             addControl(new SLabel(" Visible Rows"));
             Integer[] visRowsValues = {new Integer(4), new Integer(10), new Integer(12),
                                       new Integer(16), new Integer(20), new Integer(50)};

@@ -172,7 +172,11 @@ public class ButtonExample extends WingSetPane {
         public void actionPerformed(ActionEvent e) {
             for (Iterator iterator = getControllables().iterator(); iterator.hasNext();) {
                 SAbstractIconTextCompound component = (SAbstractIconTextCompound)iterator.next();
-                component.setIconTextGap(new Integer(iconTextGap.getText()).intValue());
+                try {
+                    component.setIconTextGap(Integer.parseInt(iconTextGap.getText()));
+                } catch (NumberFormatException invalidNumber) {
+                    component.setIconTextGap(0);
+                }
             }
         }
     }

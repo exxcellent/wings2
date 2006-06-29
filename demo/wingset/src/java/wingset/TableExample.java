@@ -335,7 +335,7 @@ public class TableExample
                 }
             });
 
-            final SCheckBox consume = new SCheckBox("Consume events on 2nd col");
+            final SCheckBox consume = new SCheckBox("Consume events on 'col 1'");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the table anymore");
             consume.addActionListener(new java.awt.event.ActionListener() {

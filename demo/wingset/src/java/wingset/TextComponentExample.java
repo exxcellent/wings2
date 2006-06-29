@@ -240,7 +240,7 @@ public class TextComponentExample extends WingSetPane {
     {
         public TextComponentControls() {
             widthTextField.setText("100%");
-            showAsFormComponentCheckBox.setVisible(false);
+            formComponentCheckBox.setVisible(false);
         }
     }
 }

@@ -57,9 +57,10 @@ public class MenuExample extends WingSetPane {
     private ComponentControls controls;
 
     public SComponent createExample() {
-        controls = new MenuControls();
 
         menuBar = createMenuBar(HugeTreeModel.ROOT_NODE);
+
+        controls = new MenuControls();
         controls.addControllable(menuBar);
 
         SPanel formPanel = new SPanel();
@@ -116,7 +117,7 @@ public class MenuExample extends WingSetPane {
             SMenuItem last = (SMenuItem) menuBar.getComponent(menuBar.getComponentCount() - 1);
             recursiveMenuItemSwitch(first, last, enabled);
         } else if (menuBar.getComponentCount() == 1) {
-            ((SMenuItem) menuBar.getComponent(0)).setEnabled(enabled);
+            menuBar.getComponent(0).setEnabled(enabled);
         }
     }
 
@@ -198,6 +199,11 @@ public class MenuExample extends WingSetPane {
 
     class MenuControls extends ComponentControls {
         public MenuControls() {
+            removeGlobalControl(fontComboBox);
+            removeGlobalControl(foregroundComboBox);
+            removeGlobalControl(backgroundComboBox);
+            removeGlobalControl(formComponentCheckBox);
+
             final SCheckBox disableSomeMenus = new SCheckBox("Disable some Menus ");
             disableSomeMenus.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {

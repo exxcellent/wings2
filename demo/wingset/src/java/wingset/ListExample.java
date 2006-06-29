@@ -185,7 +185,7 @@ public class ListExample
         extends ComponentControls
     {
         public ListControls() {
-            showAsFormComponentCheckBox.setVisible(false);
+            formComponentCheckBox.setVisible(false);
         }
     }
 }

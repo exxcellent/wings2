@@ -13,9 +13,23 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SBoxLayout;
+import org.wings.SButton;
+import org.wings.SCheckBox;
+import org.wings.SComboBox;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDefaultListCellRenderer;
+import org.wings.SDimension;
+import org.wings.SFont;
+import org.wings.SGridBagLayout;
+import org.wings.SLabel;
+import org.wings.SPanel;
+import org.wings.STextField;
+import org.wings.SToolBar;
 import org.wings.border.SBevelBorder;
 import org.wings.border.SBorder;
+import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
 import org.wings.border.SLineBorder;
 import org.wings.border.STitledBorder;
@@ -26,6 +40,7 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Arrays;
 
 /**
  * A visual control used in many WingSet demos.
@@ -36,12 +51,13 @@ import java.util.List;
 public class ComponentControls  extends SPanel {
     protected static final Object[] BORDERS = new Object[] {
         new Object[] { "none",    null },
-        new Object[] { "raised",  new SBevelBorder(SBevelBorder.RAISED, new Insets(5, 5, 5, 5)) },
-        new Object[] { "lowered", new SBevelBorder(SBevelBorder.LOWERED, new Insets(5, 5, 5, 5)) },
-        new Object[] { "line",    new SLineBorder(2, new Insets(5, 5, 5, 5)) },
-        new Object[] { "grooved", new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)) },
-        new Object[] { "ridged",  new SEtchedBorder(SEtchedBorder.RAISED, new Insets(5, 5, 5, 5)) },
-        new Object[] { "titled",  new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED, new Insets(5, 5, 5, 5)), "Border Title") },
+        new Object[] { "raised",  new SBevelBorder(SBevelBorder.RAISED) },
+        new Object[] { "lowered", new SBevelBorder(SBevelBorder.LOWERED) },
+        new Object[] { "line",    new SLineBorder(2) },
+        new Object[] { "grooved", new SEtchedBorder(SEtchedBorder.LOWERED) },
+        new Object[] { "ridged",  new SEtchedBorder(SEtchedBorder.RAISED) },
+        new Object[] { "titled",  new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED), "Border Title") },
+        new Object[] { "empty",   new SEmptyBorder(5,5,5,5)}
     };
 
     protected static final Object[] COLORS = new Object[] {
@@ -61,8 +77,11 @@ public class ComponentControls  extends SPanel {
 
     protected final List components = new LinkedList();
 
-    protected SToolBar globalControls = new SToolBar();
-    protected SToolBar localControls = new SToolBar();
+    protected final SToolBar globalControls = new SToolBar();
+    protected final SToolBar localControls = new SToolBar();
+
+    protected final SButton applyButton;
+
     protected final STextField widthTextField = new STextField();
     protected final STextField heightTextField = new STextField();
     protected final STextField insetsTextField = new STextField();
@@ -74,8 +93,7 @@ public class ComponentControls  extends SPanel {
     protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
     protected final SComboBox foregroundComboBox = new SComboBox(COLORS);
     protected final SComboBox fontComboBox = new SComboBox(FONTS);
-    protected final SButton applyButton;
-    protected SCheckBox showAsFormComponentCheckBox = new SCheckBox("Form components");
+    protected final SCheckBox formComponentCheckBox = new SCheckBox("Form components");
 
     public ComponentControls() {
         super(new SGridBagLayout());
@@ -132,12 +150,12 @@ public class ComponentControls  extends SPanel {
         globalControls.add(widthTextField);
         globalControls.add(new SLabel(" height"));
         globalControls.add(heightTextField);
-        globalControls.add(new SLabel(" insets"));
-        globalControls.add(insetsTextField);
         globalControls.add(new SLabel(" border"));
         globalControls.add(borderThicknessTextField);
         globalControls.add(borderStyleComboBox);
         globalControls.add(borderColorComboBox);
+        globalControls.add(new SLabel(" border insets"));
+        globalControls.add(insetsTextField);
         globalControls.add(new SLabel(" foreground"));
         globalControls.add(foregroundComboBox);
         globalControls.add(new SLabel(" background"));
@@ -145,7 +163,7 @@ public class ComponentControls  extends SPanel {
         globalControls.add(new SLabel(" font"));
         globalControls.add(fontComboBox);
         globalControls.add(new SLabel(""));
-        globalControls.add(showAsFormComponentCheckBox);
+        globalControls.add(formComponentCheckBox);
 
         addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -182,8 +200,8 @@ public class ComponentControls  extends SPanel {
                         component.setBackground((Color)getSelectedObject(backgroundComboBox));
                     if (foregroundComboBox.isVisible())
                         component.setForeground((Color)getSelectedObject(foregroundComboBox));
-                    if (showAsFormComponentCheckBox.isVisible())
-                        component.setShowAsFormComponent(showAsFormComponentCheckBox.isSelected());
+                    if (formComponentCheckBox.isVisible())
+                        component.setShowAsFormComponent(formComponentCheckBox.isSelected());
                     if (fontComboBox.isVisible())
                         component.setFont((SFont) getSelectedObject(fontComboBox));
                 }
@@ -193,6 +211,14 @@ public class ComponentControls  extends SPanel {
 
     protected Object getSelectedObject(SComboBox combo) {
         return combo.getSelectedIndex() != -1 ? ((Object[])combo.getSelectedItem())[1] : null;
+    }
+
+    public void removeGlobalControl(SComponent control) {
+        int index = Arrays.asList(globalControls.getComponents()).indexOf(control);
+        if (index >= 0) {
+            globalControls.remove(index);    // comp
+            globalControls.remove(index-1);  // label
+        }
     }
 
     public void addControl(SComponent component) {
