@@ -14,26 +14,6 @@
 package org.wings;
 
 
-import java.awt.Color;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.*;
-
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.event.EventListenerList;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.border.SBorder;
@@ -44,18 +24,41 @@ import org.wings.event.SParentFrameListener;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
-import org.wings.util.SStringBuilder;
 import org.wings.plaf.ComponentCG;
 import org.wings.script.ScriptListener;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
-import org.wings.style.Selector;
 import org.wings.style.CSSStyle;
 import org.wings.style.CSSStyleSheet;
+import org.wings.style.Selector;
 import org.wings.style.Style;
 import org.wings.util.ComponentVisitor;
+import org.wings.util.SStringBuilder;
+
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EventListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Object having a graphical representation that can be displayed on the
@@ -182,7 +185,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Contains all script listeners of the component.
      */
-    private List scriptListenerList = new LinkedList();
+    private final List scriptListenerList = new LinkedList();
 
     private ActionMap actionMap;
 
@@ -575,19 +578,20 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see org.wings.SComponent#removeComponentListener
      */
     public final void addScriptListener(ScriptListener listener) {
-        List scriptListeners = getScriptListenerList();
-        for (Iterator iter = scriptListeners.iterator(); iter.hasNext(); ) {
-            Object o = iter.next();
+        if (scriptListenerList.contains(listener))
+            return;
 
-            if (o instanceof ScriptListener) {
-                ScriptListener scriptListener = (ScriptListener) o;
-                if (scriptListener.equals(listener)) {
-                    return;
-                }
-            }
+        int placingPosition = -1;
+        for (int i = 0; i < scriptListenerList.size() && placingPosition < 0; i++) {
+            ScriptListener existingListener = (ScriptListener) scriptListenerList.get(i);
+            if (existingListener.getPriority() < listener.getPriority())
+                placingPosition = i;
         }
         reload(ReloadManager.STATE | ReloadManager.SCRIPT);
-        scriptListeners.add(listener);
+        if (placingPosition >= 0)
+            scriptListenerList.add(placingPosition, listener);
+        else
+            scriptListenerList.add(listener);
     }
 
 
@@ -623,18 +627,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return The <code>ScriptListener</code>s in a <code>List</code>.
      */
     public List getScriptListenerList() {
-        return scriptListenerList;
-    }
-
-    /**
-     * Sets the script listeners that should be used by this
-     * component.
-     *
-     * @param scriptListeners The <code>ScriptListener</code>s of
-     * this component in a <code>List</code>.
-     */
-    public void setScriptListenerList(List scriptListeners) {
-        this.scriptListenerList = scriptListeners;
+        return Collections.unmodifiableList(scriptListenerList);
     }
 
     /**

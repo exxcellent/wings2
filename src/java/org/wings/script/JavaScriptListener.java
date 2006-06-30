@@ -23,6 +23,7 @@ public class JavaScriptListener
     private String code;
     private String script;
     private SComponent[] components;
+    private int priority = DEFAULT_PRIORITY;
 
     /**
      * Use this java script implementation to submit forms on button click
@@ -152,40 +153,49 @@ public class JavaScriptListener
         /* only checking for instanceof, not exact class, so we don't
          * need to implement this in inherited classes
          */
-        if (!(obj instanceof JavaScriptListener))
+        if (!(obj instanceof JavaScriptListener)) {
             return false;
+        }
         JavaScriptListener testObj = (JavaScriptListener) obj;
         
         if (testObj.getEvent() == null) {
-            if (getEvent() != null)
+            if (getEvent() != null) {
                 return false;
+            }
         } else {
-            if (!testObj.getEvent().equals(getEvent()))
+            if (!testObj.getEvent().equals(getEvent())) {
                 return false;
+            }
         }
         
         if (testObj.getCode() == null) {
-            if (getCode() != null)
+            if (getCode() != null) {
                 return false;
+            }
         } else {
-            if (!testObj.getCode().equals(getCode()))
+            if (!testObj.getCode().equals(getCode())) {
                 return false;
+            }
         }
         
         if (testObj.getComponents() == null) {
-            if (getComponents() != null)
+            if (getComponents() != null) {
                 return false;
+            }
         } else {
-            if (!testObj.getComponents().equals(getComponents()))
+            if (!testObj.getComponents().equals(getComponents())) {
                 return false;
+            }
         }
         
         if (testObj.getScript() == null) {
-            if (getScript() != null)
+            if (getScript() != null) {
                 return false;
+            }
         } else {
-            if (!testObj.getScript().equals(getScript()))
+            if (!testObj.getScript().equals(getScript())) {
                 return false;
+            }
         }
 
         return true;
@@ -193,6 +203,19 @@ public class JavaScriptListener
 
     public int hashCode() {
         return code != null ? code.hashCode() : super.hashCode();
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    /**
+     * Modifies the scripting priority of this script.
+     * 
+     * @param priority New priority as describe inn {@link org.wings.script.ScriptListener#getPriority()}
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
 }

@@ -282,6 +282,7 @@ ul.STree li.norm table.norm tr td.norm {
 
 .SMenuBar div.SMenu{
     color: #004;
+    cursor: pointer;
 }
 
 .SMenuBar div.SMenu_Disabled {

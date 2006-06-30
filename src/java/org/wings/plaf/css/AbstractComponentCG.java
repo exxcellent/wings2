@@ -284,14 +284,23 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         // Add script listener support.
         List scriptListenerList = component.getScriptListenerList();
         if (scriptListenerList != null && scriptListenerList.size() > 0) {
+            // BSC START ----------------: Bad code : behaviour injection !!!
+            /*
+
+            HINT: Just try a
+               - oldList = xx;
+               - if (!currerntList.equals(oldList) !!!!!!!!!
+
             if (!(scriptListenerList instanceof VersionedList)) {
                 scriptListenerList = new VersionedList(scriptListenerList);
                 component.setScriptListenerList(scriptListenerList);
             }
 
+
             final VersionedList versionedList = (VersionedList) scriptListenerList;
             final Integer scriptListenerListVersion = (Integer) component.getClientProperty("scriptListenerListVersion");
             if (scriptListenerListVersion == null || versionedList.getVersion() != scriptListenerListVersion.intValue())
+            */if (true) // BSC ------------ END
             {
                 /* TODO: this code destroys the dwr functionality
                 List removeCallables = new ArrayList();
@@ -320,7 +329,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                     }
                 }
 
-                component.putClientProperty("scriptListenerListVersion", new Integer(versionedList.getVersion()));
+                //component.putClientProperty("scriptListenerListVersion", new Integer(versionedList.getVersion()));
             }
         }
     }

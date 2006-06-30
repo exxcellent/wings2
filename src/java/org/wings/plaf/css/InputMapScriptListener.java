@@ -52,50 +52,23 @@ public class InputMapScriptListener
         SStringBuilder pressed = new SStringBuilder();
         SStringBuilder typed = new SStringBuilder();
         SStringBuilder released = new SStringBuilder();
-        KeyStroke[] keyStrokes = inputMap.keys();
-
-        for (int i = 0; i < keyStrokes.length; i++) {
-            KeyStroke keyStroke = keyStrokes[i];
-            Object binding = inputMap.get(keyStroke);
-
-            /*
-            writeMatch(typed, keyStroke);
-            writeRequest(typed, binding);
-            */
-
-            switch (keyStroke.getKeyEventType()) {
-                case KeyEvent.KEY_PRESSED:
-                    writeMatch(pressed, keyStroke);
-                    writeRequest(pressed, binding);
-                    break;
-                case KeyEvent.KEY_TYPED:
-                    writeMatch(typed, keyStroke);
-                    writeRequest(typed, binding);
-                    log.debug("typed binding = " + binding);
-                    break;
-                case KeyEvent.KEY_RELEASED:
-                    writeMatch(released, keyStroke);
-                    writeRequest(released, binding);
-                    log.debug("released binding = " + binding);
-                    break;
-            }
-        }
+        createScriptCodes(inputMap, component, pressed, typed, released);
 
         if (pressed.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeydown", "return pressed_" + component.getName() + "(event)",
                     "function pressed_" + component.getName() + "(event) {\n  " +
-                    "event = getEvent(event);\n  " +
-                    pressed.toString() + "  return true;\n}\n"));
+                            "event = getEvent(event);\n  " +
+                            pressed.toString() + "  return true;\n}\n"));
         if (typed.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeypress", "return typed_" + component.getName() + "(event)",
                     "function typed_" + component.getName() + "(event) {\n  " +
-                    "event = getEvent(event);\n  " +
-                    typed.toString() + "  return true;\n}\n"));
+                            "event = getEvent(event);\n  " +
+                            typed.toString() + "  return true;\n}\n"));
         if (released.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeyup", "return released_" + component.getName() + "(event)",
                     "function released_" + component.getName() + "(event) {\n" +
-                    "event = getEvent(event);\n  " +
-                    released.toString() + "  return true;\n}\n"));
+                            "event = getEvent(event);\n  " +
+                            released.toString() + "  return true;\n}\n"));
     }
 
     public static void installToFrame(SFrame frame, SComponent component) {
@@ -105,34 +78,7 @@ public class InputMapScriptListener
         SStringBuilder pressed = new SStringBuilder();
         SStringBuilder typed = new SStringBuilder();
         SStringBuilder released = new SStringBuilder();
-        KeyStroke[] keyStrokes = inputMap.keys();
-
-        for (int i = 0; i < keyStrokes.length; i++) {
-            KeyStroke keyStroke = keyStrokes[i];
-            Object binding = inputMap.get(keyStroke);
-
-            /*
-            writeMatch(typed, keyStroke);
-            writeRequest(typed, binding);
-            */
-
-            switch (keyStroke.getKeyEventType()) {
-                case KeyEvent.KEY_PRESSED:
-                    writeMatch(pressed, keyStroke);
-                    writeRequestForFrame(pressed, binding, component.getName());
-                    break;
-                case KeyEvent.KEY_TYPED:
-                    writeMatch(typed, keyStroke);
-                    writeRequestForFrame(typed, binding, component.getName());
-                    log.debug("typed binding = " + binding);
-                    break;
-                case KeyEvent.KEY_RELEASED:
-                    writeMatch(released, keyStroke);
-                    writeRequestForFrame(released, binding, component.getName());
-                    log.debug("released binding = " + binding);
-                    break;
-            }
-        }
+        createScriptCodes(inputMap, component, pressed, typed, released);
 
         if (pressed.length() > 0)
             frame.addScriptListener(new InputMapScriptListener("onkeydown", "pressed_frame_" + component.getName() + "(event)",
@@ -151,7 +97,33 @@ public class InputMapScriptListener
                     released.toString() + "  return true;\n}\n"));
     }
 
-    private static void writeMatch(SStringBuilder buffer, KeyStroke keyStroke) {
+    private static void createScriptCodes(InputMap inputMap, SComponent component, SStringBuilder pressed, SStringBuilder typed, SStringBuilder released) {
+        KeyStroke[] keyStrokes = inputMap.keys();
+
+        for (int i = 0; i < keyStrokes.length; i++) {
+            KeyStroke keyStroke = keyStrokes[i];
+            Object binding = inputMap.get(keyStroke);
+
+            switch (keyStroke.getKeyEventType()) {
+                case KeyEvent.KEY_PRESSED:
+                    appendMatchCode(pressed, keyStroke);
+                    appendSendRequestCode(pressed, binding, component);
+                    break;
+                case KeyEvent.KEY_TYPED:
+                    appendMatchCode(typed, keyStroke);
+                    appendSendRequestCode(typed, binding, component);
+                    log.debug("typed binding = " + binding);
+                    break;
+                case KeyEvent.KEY_RELEASED:
+                    appendMatchCode(released, keyStroke);
+                    appendSendRequestCode(released, binding, component);
+                    log.debug("released binding = " + binding);
+                    break;
+            }
+        }
+    }
+    
+    private static void appendMatchCode(SStringBuilder buffer, KeyStroke keyStroke) {
         buffer.append("if (event.keyCode == " + keyStroke.getKeyCode());
         if ((keyStroke.getModifiers() & InputEvent.SHIFT_DOWN_MASK) != 0)
             buffer.append(" && event.shiftKey");
@@ -168,10 +140,10 @@ public class InputMapScriptListener
         buffer.append(")");
     }
 
-    private static void writeRequest(SStringBuilder buffer, Object binding) {
-        buffer.append(" { sendEvent(event, \"").append(binding).append("\"); return false; }\n");
-    }
-    private static void writeRequestForFrame(SStringBuilder buffer, Object binding, String eventId) {
-        buffer.append(" { sendEvent(event, \"").append(binding).append("\", \"").append(eventId).append("\"); return false; }\n");
+    private static void appendSendRequestCode(SStringBuilder buffer, Object binding, SComponent targetComponent) {
+        buffer.append(" { sendEvent(event, \"").append(binding).append("\"");
+        if (targetComponent != null)
+            buffer.append(", \"").append(targetComponent.getName());
+        buffer.append("\"); return false; }\n");
     }
 }

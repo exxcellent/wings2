@@ -597,7 +597,7 @@ final class SessionServlet
             res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
             // build the stacktrace wrapped by pre's so line breaks are preserved
-            SStringBuilder stackTrace = new SStringBuilder("<pre>");
+            SStringBuilder stackTrace = new SStringBuilder("<html><pre>");
             stackTrace.append(getStackTraceString(e));
             stackTrace.append("</pre>");
             errorStackTraceLabel.setText(stackTrace.toString());

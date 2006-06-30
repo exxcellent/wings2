@@ -117,8 +117,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public final String DOMLIB_SCRIPT = (String) ResourceManager.getObject("JScripts.domlib", String.class);
     public final String DOMTT_SCRIPT = (String) ResourceManager.getObject("JScripts.domtt", String.class);
 
-    public static final JavaScriptListener FOCUS_SCRIPT =
-            new JavaScriptListener("onfocus", "storeFocus(event)");
+    public static final JavaScriptListener FOCUS_SCRIPT_MOZILLA =
+            new JavaScriptListener("onload", "wu_registerEvent(document,'focus',storeFocus,true)");
     public static final JavaScriptListener FOCUS_SCRIPT_IE =
             new JavaScriptListener("onactivate", "storeFocus(event)");
     public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
@@ -207,7 +207,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         addExternalizedHeader(component, DOMLIB_SCRIPT, "text/javascript");
         addExternalizedHeader(component, DOMTT_SCRIPT, "text/javascript");
 
-        component.addScriptListener(Utils.isMSIE(component) ? FOCUS_SCRIPT_IE : FOCUS_SCRIPT);
+        component.addScriptListener(Utils.isMSIE(component) ? FOCUS_SCRIPT_IE : FOCUS_SCRIPT_MOZILLA);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
         component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);
@@ -480,7 +480,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
         writeInlineScripts(device, frame);
-        device.print("</body>\n</html>\n");
+        device.print("\n</body>\n</html>\n");
         pComp.fireRenderEvent(SComponent.DONE_RENDERING);
         RenderHelper.getInstance(frame).reset();
     }
@@ -492,7 +492,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             String script = scriptListener.getScript();
             if (script != null) {
                 if (!scriptTagOpen) {
-                    device.print("\n<script type=\"text/javascript\">");
+                    device.print("\n  <script type=\"text/javascript\">");
                     scriptTagOpen = true;
                 }
                 device.print(script);

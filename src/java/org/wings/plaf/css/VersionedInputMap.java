@@ -19,8 +19,12 @@ import javax.swing.KeyStroke;
 /**
  * @author hengels
  * @version $Revision$
+ *
+ * @deprecated Hohoho....better try sth. like ComponentCG.componentChanged(ASPECT.InputMap) and use this wrapping INTERNALLY!.
+ * What about MyClientInputMap ????
+ * Better use reflection proxies!
  */
-public class VersionedInputMap extends InputMap {
+class VersionedInputMap extends InputMap {
     /**
      * 
      */

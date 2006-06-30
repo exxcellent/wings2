@@ -21,7 +21,7 @@ function getTarget(event) {
     return event.target;
 }
 
-function getParentByTagName(element, tag) {
+function getElementByTagName(element, tag) {
   while (element != null) {
     if (tag == element.tagName)
       return element;
@@ -30,7 +30,7 @@ function getParentByTagName(element, tag) {
   return null;
 }
 
-function getParentByAttributeName(element, attribute) {
+function getElementWearingAttribute(element, attribute) {
   while (element != null) {
       if (element.getAttribute && element.getAttribute(attribute)) {
           return element;
@@ -53,10 +53,10 @@ function preventDefault(event) {
 function sendEvent(event, eventValue, eventName, clientHandlers) {
     event = getEvent(event);
     var target = getTarget(event)
-    var form = getParentByTagName(target, "FORM");
+    var form = getElementByTagName(target, "FORM");
     var eidprovider = target;
     if (!eventName) {
-        eidprovider = getParentByAttributeName(target, "eid");
+        eidprovider = getElementWearingAttribute(target, "eid");
         eventName = eidprovider.getAttribute("eid");
     }
 
@@ -284,8 +284,8 @@ function storeFocus(event) {
     event = getEvent(event);
     var target = getTarget(event);
 
-    var div = getParentByAttributeName(target, "eid");
-    var body = getParentByTagName(target, "BODY");
+    var div = getElementWearingAttribute(target, "eid");
+    var body = getElementByTagName(target, "BODY");
     if (div && body)
         setCookie(body.getAttribute("id") + "-focus", "focus_" + div.getAttribute("id"), 1);
 }
@@ -349,4 +349,22 @@ function wu_framewidth() {
 	    return document.body.clientWidth;
     } else
         return -1;
+}
+
+/*
+  Cross-Browser mehtod to register an event listener on the passed obj.
+  Only Mozilla will support captive mode of event handling.
+  eventType is withouth the onPrefix.
+  Example: wu_addEvent(document,'focus',storeFocus,false);
+*/
+function wu_registerEvent(obj, eventType, func, useCaption) {
+  if (obj.addEventListener) {
+    obj.addEventListener(eventType, func, useCaption);
+    return true;
+  } else if (obj.attachEvent) {
+    var retVal = object.attachEvent("on"+eventType, func);
+    return retVal;
+  } else {
+    return false;
+  }
 }

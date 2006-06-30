@@ -21,7 +21,7 @@
             <param-value>org.wings.plaf.css.CSSLookAndFeel</param-value>
         </init-param>
         <init-param>
-            <param-name>wings.capture.default.bindings</param-name>
+            <param-name>wings.prevent.default.keybindings</param-name>
             <param-value>alt F4, alt UP, alt DOWN, F1</param-value>
 	    <description>See KeyStroke.getKeyStroke(String s).</description>
         </init-param>
