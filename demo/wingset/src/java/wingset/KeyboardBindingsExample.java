@@ -18,33 +18,43 @@ import org.wings.SFlowDownLayout;
 import org.wings.SForm;
 import org.wings.SLabel;
 import org.wings.STextField;
+import org.wings.SFont;
+import org.wings.SCheckBox;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.*;
 
 /**
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
 public class KeyboardBindingsExample extends WingSetPane {
-    private final SLabel label = new SLabel();
+    private final SLabel actionEventLabel = new SLabel();
     private final STextField textField = new STextField();
     private final SForm form = new SForm(new SFlowDownLayout());
 
     public KeyboardBindingsExample() {
-        final InputMap inputMap = new InputMap();
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0, false), "F1");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0, false), "F2");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0, false), "F3");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0, false), "F4");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0, false), "F5");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0, false), "F6");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0, false), "F7");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0, false), "F8");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0, false), "F9");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0, false), "F10");
 
+        /**
+         * Input/Action map locally for the textfield
+         */
+        final InputMap textfieldInputMap = new InputMap();
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0, false), "F1");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0, false), "F2");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0, false), "F3");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0, false), "F4");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0, false), "F5");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0, false), "F6");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0, false), "F7");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0, false), "F8");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0, false), "F9");
+        textfieldInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0, false), "F10");
+
+        /**
+         * Input/Action map locally for the SForm element
+         */
         final InputMap formInputMap = new InputMap();
         formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F1");
         formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F2");
@@ -57,6 +67,9 @@ public class KeyboardBindingsExample extends WingSetPane {
         formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F9");
         formInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, KeyEvent.SHIFT_DOWN_MASK, false), "Shift F10");
 
+        /**
+         * Input/Action map globally on the whole dialog/page, but assigned via the textfield
+         */
         final InputMap pageInputMap = new InputMap();
         pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.ALT_DOWN_MASK, false), "Alt F1");
         pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, KeyEvent.ALT_DOWN_MASK, false), "Alt F2");
@@ -68,10 +81,10 @@ public class KeyboardBindingsExample extends WingSetPane {
         pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, KeyEvent.ALT_DOWN_MASK, false), "Alt F8");
         pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, KeyEvent.ALT_DOWN_MASK, false), "Alt F9");
         pageInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, KeyEvent.ALT_DOWN_MASK, false), "Alt F10");
-        
+
         final Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                label.setText(e.getActionCommand());
+                actionEventLabel.setText(e.getActionCommand());
             }
         };
 
@@ -107,27 +120,43 @@ public class KeyboardBindingsExample extends WingSetPane {
         actionMap.put("Alt F9", action);
         actionMap.put("Alt F10", action);
 
-        // directly to textfield
-        textField.setInputMap(inputMap);
+        // Define key bindinings only if focus inside textfield
+        textField.setInputMap(textfieldInputMap);
         textField.setActionMap(actionMap);
-        
-        // onto whole frame
+
+        // Define key bindings on the textfield, valid all over the page
         textField.setInputMap(WHEN_IN_FOCUSED_FRAME, pageInputMap);
 
+        // Define key bindinings if focus inside the containing SForm
         form.setInputMap(formInputMap);
-        // or:  form.setInputMap(formInputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
-        // same thing.
+             // equal to :  form.setInputMap(formInputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
         form.setActionMap(actionMap);
 
-        form.add(new SLabel("<html>&nbsp;"));
-        form.add(new SLabel("Try ALT-Left and ALT-Right to cycle inside the WingSet application between the different tabs"));
-        form.add(new SLabel("<html>&nbsp;"));
-        form.add(new SLabel("<html>The keys F1 through F10 are captured by the STextField.<br/>" +
-                "Shift F1 through Shift F10 are bubbling up to the containing SForm.\n" + 
-                "Alt F1 through Alt F10 are captured by the whole page, then routed back to the STextField\n" + 
-                "(that's the only shortcut that works no matter of focus)."));
+        SLabel titleLabel = new SLabel("wingS key binding feature demonstration\n ");
+        titleLabel.setFont(new SFont("sans-serif", SFont.PLAIN, 16));
+        form.add(titleLabel);
+
+        form.add(new SLabel(
+                "This page demonstrates the feature of attaching key binbding to specific component.\n" +
+                "Some components provide already default bindings like STabbedPane (try [Alt]-[LEFT] \n" +
+                "or [Alt]-[RIGHT].\n" +
+                "\n" +
+                "On this page The keys [F1] through [F10] are captured locally by the STextField. This means\n" +
+                "the keypress will only trigger an event for thesekeys if the focus is inside the textfield.\n" +
+                "\n" +
+                "[Shift]-[F1] through [Shift]-[F10] are attached up to the containing SForm, so these keys should\n" +
+                "trigger events if the focus is inside the textfield or on the checkbox.\n" +
+                "\n"+
+                "[Alt]-[F1] through [Alt]-[F10] are also attached to the textfield but with global focus, hence \n" +
+                "captured by the whole page, then routed back to the STextField. These shortcuts will work\n" +
+                "everythere on the page."));
+        form.add(new SLabel(""));
+
         form.add(textField);
-        form.add(label);
+        form.add(new SCheckBox("Checkbox: Use as alternative focus point"));
+
+        form.add(actionEventLabel);
+        actionEventLabel.setForeground(Color.RED);
 
         form.setHorizontalAlignment(CENTER);
     }
