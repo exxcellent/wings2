@@ -18,6 +18,8 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.event.InvalidLowLevelEvent;
 import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderListener;
+import org.wings.event.SRequestListener;
+import org.wings.event.SRequestEvent;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
 import org.wings.resource.DynamicCodeResource;
@@ -89,7 +91,7 @@ public class SFrame
     /*
      * see fireDefaultBackButton()
      */
-    private long defaultBackButtonLastPressedTime;
+    private LastRequestListener backbuttonRequestListener;
 
     /**
      * @see #setNoCaching(boolean)
@@ -240,8 +242,9 @@ public class SFrame
      * @see org.wings.header.Link
      */
     public void addHeader(Object headerElement) {
-        if (!headers().contains(headerElement) && headerElement != null)
+        if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
+        }
     }
 
     /**
@@ -253,8 +256,9 @@ public class SFrame
      * @see #headers()
      */
     public void addHeader(int index, Object headerElement) {
-        if (!headers().contains(headerElement) && headerElement != null)
+        if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
+        }
     }
 
     /**
@@ -278,8 +282,9 @@ public class SFrame
      * @see #addHeader(Object)
      */
     public List headers() {
-        if (headers == null)
+        if (headers == null) {
             headers = new ArrayList(2);
+        }
         return Collections.unmodifiableList(headers);
     }
 
@@ -316,8 +321,9 @@ public class SFrame
     }
 
     public void write(Device s) throws IOException {
-        if (isNoCaching())
+        if (isNoCaching()) {
             reload(ReloadManager.STATE); // invalidate frame on each rendering!
+        }
         super.write(s);
     }
 
@@ -428,8 +434,9 @@ public class SFrame
             List listeners = getSession().getDispatcher().getLowLevelEventListener(eventId);
             for (int i = 0; i < listeners.size() && focusComponent == null; i++) {
                 Object listener = listeners.get(i);
-                if (listener instanceof SComponent)
+                if (listener instanceof SComponent) {
                     focusComponent = (SComponent) listener;
+                }
             }
         }
     }
@@ -470,8 +477,9 @@ public class SFrame
             for (int i = listeners.length - 2; i >= 0; i -= 2) {
                 if (listeners[i] == SInvalidLowLevelEventListener.class) {
                     // Lazily create the event:
-                    if (e == null)
+                    if (e == null) {
                         e = new InvalidLowLevelEvent(source);
+                    }
                     ((SInvalidLowLevelEventListener) listeners[i + 1]).invalidLowLevelEvent(e);
                 }
             }
@@ -506,6 +514,10 @@ public class SFrame
      * @param defaultBackButton A button to trigger upon detected invalid epochs.
      */
     public void setBackButton(SButton defaultBackButton) {
+        if (backbuttonRequestListener == null) {
+            backbuttonRequestListener  = new LastRequestListener();
+            getSession().addRequestListener(backbuttonRequestListener);
+        }
         this.backButton = defaultBackButton;
     }
 
@@ -513,14 +525,13 @@ public class SFrame
      * Fire back button only once and if some time already passed by to avoid double clicks.
      */
     private void fireDefaultBackButton() {
-        final int TIME_TO_ASSUME_DOUBLECLICKS_MS = 750;
-        if (this.backButton != null) {
+        final int DISPATCHINGFINISH_BACKBUTTON_DEADTIME = 500;
+        if (this.backButton != null && this.backbuttonRequestListener != null) {
             long currentTime = System.currentTimeMillis();
-            if (currentTime - defaultBackButtonLastPressedTime > TIME_TO_ASSUME_DOUBLECLICKS_MS) {
+            if (currentTime - backbuttonRequestListener.lastDispatchingFinished > DISPATCHINGFINISH_BACKBUTTON_DEADTIME) {
                 // Simulate a button press
                 backButton.processLowLevelEvent(null, new String[]{"1"});
             }
-            defaultBackButtonLastPressedTime = currentTime;
         }
     }
 
@@ -587,5 +598,18 @@ public class SFrame
 
     public List getGlobalInputMapComponents() {
         return globalInputMapComponents;
+    }
+
+    /**
+     * Private helper class to remember the end of the last dispatch.
+     * @see org.wings.SFrame#fireDefaultBackButton()
+     */
+    private static class LastRequestListener implements SRequestListener {
+        private long lastDispatchingFinished = -1;
+
+        public void processRequest(SRequestEvent e) {
+            if (e.getType() == SRequestEvent.DISPATCH_DONE)
+                lastDispatchingFinished = System.currentTimeMillis();
+        }
     }
 }

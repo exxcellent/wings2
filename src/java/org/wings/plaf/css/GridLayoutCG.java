@@ -15,6 +15,7 @@ package org.wings.plaf.css;
 
 import org.wings.SGridLayout;
 import org.wings.SLayoutManager;
+import org.wings.SConstants;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -75,4 +76,13 @@ public class GridLayoutCG extends AbstractLayoutCG {
         SGridLayout gridLayout = (SGridLayout)layout;
         return gridLayout.getHgap() + gridLayout.getBorder();
     }
+
+    public int getDefaultLayoutCellHAlignment() {
+        return SConstants.CENTER;
+    }
+
+    public int getDefaultLayoutCellVAlignment() {
+        return SConstants.CENTER;
+    }
+    
 }

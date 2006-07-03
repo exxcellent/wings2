@@ -90,7 +90,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                             width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
                         }
 
-                        String cellStyles = useCellStyles ? cellStyles(layout,  c.insets) : styles;
+                        String cellStyles = useCellStyles ? cellStyles(layout, c.insets) : styles;
                         if (useCellStyles) {
                             renderHelper.setVerticalLayoutPadding(c.insets.top + c.insets.bottom);
                             renderHelper.setHorizontalLayoutPadding(c.insets.left + c.insets.right);
@@ -119,7 +119,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
      * Refer to http://jira.j-wings.org/browse/WGS-120
      *
      * @param layout The gridbaglayout
-     * @param row The row
+     * @param row    The row
      * @return Row height percentage as int or 0
      */
     protected int determineRowHeight(SGridBagLayout layout, int row) {
@@ -145,22 +145,31 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
     }
 
     protected int getLayoutHGap(SLayoutManager layout) {
-         SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+        SGridBagLayout gridbagLayout = (SGridBagLayout) layout;
         return gridbagLayout.getHgap();
     }
 
     protected int getLayoutVGap(SLayoutManager layout) {
-         SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+        SGridBagLayout gridbagLayout = (SGridBagLayout) layout;
         return gridbagLayout.getVgap();
     }
 
     protected int getLayoutBorder(SLayoutManager layout) {
-         SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+        SGridBagLayout gridbagLayout = (SGridBagLayout) layout;
         return gridbagLayout.getBorder();
     }
 
     protected int layoutOversize(SLayoutManager layout) {
-                    SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
-            return gridbagLayout.getHgap() + gridbagLayout.getBorder();
+        SGridBagLayout gridbagLayout = (SGridBagLayout) layout;
+        return gridbagLayout.getHgap() + gridbagLayout.getBorder();
     }
+
+    public int getDefaultLayoutCellHAlignment() {
+        return SConstants.NO_ALIGN;  // Don't knoff.
+    }
+
+    public int getDefaultLayoutCellVAlignment() {
+        return SConstants.NO_ALIGN;  // Don't knoff.
+    }
+
 }

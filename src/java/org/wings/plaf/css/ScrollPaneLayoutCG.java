@@ -134,4 +134,13 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
     protected int layoutOversize(SLayoutManager layout) {
         return 0;
     }
+
+    public int getDefaultLayoutCellHAlignment() {
+        return SConstants.NO_ALIGN;
+    }
+
+    public int getDefaultLayoutCellVAlignment() {
+        return SConstants.NO_ALIGN;  
+    }
+
 }

@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 
 import org.wings.SFlowDownLayout;
 import org.wings.SLayoutManager;
+import org.wings.SConstants;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -40,4 +41,13 @@ public class FlowDownLayoutCG extends FlowLayoutCG {
 
         closeLayouterBody(d, layout);
     }
+
+    public int getDefaultLayoutCellHAlignment() {
+        return SConstants.LEFT;
+    }
+
+    public int getDefaultLayoutCellVAlignment() {
+        return SConstants.NO_ALIGN;
+    }
+
 }

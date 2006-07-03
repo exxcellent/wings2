@@ -26,10 +26,30 @@ package org.wings;
  */
 public class SFlowDownLayout extends SFlowLayout {
     /**
-     * creates a new flow down layouts
+     * Creates a new SFlowDownLayout.
      */
     public SFlowDownLayout() {
-        super();
+        super(LEFT_ALIGN);
+    }
+
+    /**
+     * Creates a new <code>SFlowDownLayout</code> with vertical orientation and the given alignment
+     * and gaps
+     * @param alignment the alignment
+     */
+    public SFlowDownLayout(int alignment) {
+        super(alignment);
+    }
+
+    /**
+     * Creates a new <code>SFlowDownLayout</code> with vertical orientation and the given alignment
+     * and gaps
+     * @param alignment the alignment
+     * @param hgap the horizontal gap
+     * @param vgap the vertical gap
+     */
+    public SFlowDownLayout(int alignment, int hgap, int vgap) {
+        super(alignment, hgap, vgap);
     }
 
 }

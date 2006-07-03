@@ -96,7 +96,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             else {
                 new IconTextCompound() {
                     protected void text(Device device) throws IOException {
-                        writeText(device, text, false);
+                        writeText(device, text, button.isWordWrap());
                     }
 
                     protected void icon(Device device) throws IOException {

@@ -15,6 +15,7 @@ package org.wings.plaf.css;
 
 import org.wings.SBoxLayout;
 import org.wings.SLayoutManager;
+import org.wings.SConstants;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -67,6 +68,14 @@ public class BoxLayoutCG extends AbstractLayoutCG {
     protected int layoutOversize(SLayoutManager layout) {
         SBoxLayout boxLayout = (SBoxLayout) layout;
         return boxLayout.getHgap() + boxLayout.getBorder();
+    }
+
+    public int getDefaultLayoutCellHAlignment() {
+        return SConstants.CENTER;
+    }
+
+    public int getDefaultLayoutCellVAlignment() {
+        return SConstants.CENTER;
     }
 }
 

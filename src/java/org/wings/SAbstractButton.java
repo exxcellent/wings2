@@ -57,6 +57,8 @@ public abstract class SAbstractButton
     /** @see LowLevelEventListener#isEpochCheckEnabled() */
     private boolean epochCheckEnabled = true;
 
+    private boolean wordWrap = false;
+
     /**
      * Create a button with given text.
      *
@@ -500,5 +502,24 @@ public abstract class SAbstractButton
     /** @see LowLevelEventListener#isEpochCheckEnabled() */
     public void setEpochCheckEnabled(boolean epochCheckEnabled) {
         this.epochCheckEnabled = epochCheckEnabled;
+    }
+
+    /**
+     * Determiens if the label text word wrap inside the browser. Defaults to <code>false</code> (Swing).
+     * @return <code>false</code> if the label should not word wrap an be in line as in Swing.
+     */
+    public boolean isWordWrap() {
+        return wordWrap;
+    }
+
+    /**
+     * Defines if the label is allowed to wrap.
+     * @param wordWrap Set to <code>true</code> if you want labels to allow to break into more lines than passed.
+     */
+    public void setWordWrap(boolean wordWrap) {
+        if (this.wordWrap != wordWrap) {
+            this.wordWrap = wordWrap;
+            reload(ReloadManager.STATE);
+        }
     }
 }

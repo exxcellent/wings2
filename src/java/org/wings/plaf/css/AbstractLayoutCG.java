@@ -14,7 +14,6 @@
 package org.wings.plaf.css;
 
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
@@ -88,7 +87,8 @@ public abstract class AbstractLayoutCG implements LayoutCG {
                 firstRow = false;
             }
 
-            openLayouterCell(d, c, firstRow && renderFirstLineAsHeader, -1, -1, null, SConstants.CENTER, SConstants.CENTER, style);
+            openLayouterCell(d, c, firstRow && renderFirstLineAsHeader, -1, -1, null,
+                    getDefaultLayoutCellHAlignment(), getDefaultLayoutCellVAlignment(), style);
 
             c.write(d); // Render component
 
@@ -102,6 +102,11 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             }
         }
     }
+
+    /** The default horizontal alignment for components inside a layout cell. */
+    public abstract int getDefaultLayoutCellHAlignment();
+    /** The default vertical alignment for components inside a layout cell. */
+    public abstract int getDefaultLayoutCellVAlignment();
 
     /**
      * Converts a hgap/vgap in according inset declaration.
@@ -140,16 +145,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     /**
      * Opens a TD or TH cell of an invisible layouter table. This method also does component alignment.
      * <b>Attention:</b> As you want to attach more attributes you need to close the tag with &gt; on your own!
-     *
-
-
-     @param renderAsHeader Print TH instead of TD
-      * @param colspan
-     * @param rowspan
-     * @param width
-     * @param defaultHorizontalAlignment
-     * @param defaultVerticalAlignment
-     * @param style
+     * @param renderAsHeader Print TH instead of TD
      */
     public static void openLayouterCell(final Device d, final SComponent component, final boolean renderAsHeader, int colspan, int rowspan, String width, int defaultHorizontalAlignment, int defaultVerticalAlignment, String style) throws IOException {
         Utils.printNewline(d, component);
