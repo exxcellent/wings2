@@ -3,19 +3,19 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SLayoutManager;
+import org.wings.SScrollPaneLayout;
+import org.wings.Scrollable;
 import org.wings.io.Device;
-import org.wings.util.SStringBuilder;
 
+import java.awt.*;
 import java.io.IOException;
-import java.awt.Rectangle;
-import java.util.*;
+import java.util.Map;
 
 public class ScrollPaneLayoutCG extends AbstractLayoutCG {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     public void write(Device d, SLayoutManager l)
@@ -117,5 +117,21 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
     protected void writeComponent(Device d, SComponent c)
             throws IOException {
         c.write(d);
+    }
+
+    protected int getLayoutHGap(SLayoutManager layout) {
+        return -1;
+    }
+
+    protected int getLayoutVGap(SLayoutManager layout) {
+        return -1;
+    }
+
+    protected int getLayoutBorder(SLayoutManager layout) {
+        return -1;
+    }
+
+    protected int layoutOversize(SLayoutManager layout) {
+        return 0;
     }
 }

@@ -74,7 +74,7 @@ public class FlowLayoutCG extends AbstractLayoutCG {
                 if (component.isVisible()) {
                     Utils.printNewline(d, component);
                     d.print("<div");
-                    Utils.optAttribute(d, "style", createInlineStylesForInsets(new SStringBuilder(alignmentStyle),insets));
+                    Utils.optAttribute(d, "style", Utils.createInlineStylesForInsets(new SStringBuilder(alignmentStyle), insets));
                     d.print(">");
                     component.write(d); // Render contained component
                     d.print("</div>");
@@ -104,8 +104,8 @@ public class FlowLayoutCG extends AbstractLayoutCG {
             if (component.isVisible()) {
                 Utils.printNewline(d, component);
                 d.print("<div");
-                Utils.optAttribute(d, "style", createInlineStylesForInsets(new SStringBuilder(), insets));
-                 d.print(">");
+                Utils.optAttribute(d, "style", Utils.createInlineStylesForInsets(new SStringBuilder(), insets));
+                d.print(">");
                 component.write(d); // Render contained component
                 Utils.printNewline(d, component);
                 d.print("</div>");
@@ -113,6 +113,25 @@ public class FlowLayoutCG extends AbstractLayoutCG {
         }
         d.print("</td></tr>");
         closeLayouterBody(d, layout);
+    }
+
+    protected int getLayoutHGap(SLayoutManager layout) {
+        SFlowLayout flowLayout = (SFlowLayout) layout;
+        return flowLayout.getHgap();
+    }
+
+    protected int getLayoutVGap(SLayoutManager layout) {
+        SFlowLayout flowLayout = (SFlowLayout) layout;
+        return flowLayout.getVgap();
+    }
+
+    protected int getLayoutBorder(SLayoutManager layout) {
+        SFlowLayout flowLayout = (SFlowLayout) layout;
+        return flowLayout.getBorder();
+    }
+
+    protected int layoutOversize(SLayoutManager layout) {
+        return 0;
     }
 }
 

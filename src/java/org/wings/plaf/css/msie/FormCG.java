@@ -1,9 +1,13 @@
 package org.wings.plaf.css.msie;
 
-import org.wings.plaf.css.*;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SForm;
+import org.wings.SLayoutManager;
+import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
-import org.wings.*;
-import org.wings.border.SBorder;
+import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
 
@@ -75,7 +79,7 @@ public class FormCG extends org.wings.plaf.css.FormCG {
 
         if (requiresFillBehaviour) {
             int borderHeight = 0;
-            SBorder border = component.getBorder();
+            SAbstractBorder border = (SAbstractBorder) component.getBorder();
             if (border != null) {
                 borderHeight += border.getThickness(SConstants.TOP);
                 borderHeight += border.getThickness(SConstants.BOTTOM);

@@ -1,12 +1,14 @@
 package org.wings.plaf.css.msie;
 
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SScrollPane;
+import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
-import org.wings.*;
-import org.wings.border.SBorder;
-import org.wings.plaf.css.*;
+import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
-import java.awt.*;
 
 public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
 
@@ -28,7 +30,7 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
 
         if (requiresFillBehaviour) {
             int borderHeight = 0;
-            SBorder border = scrollPane.getBorder();
+            SAbstractBorder border = (SAbstractBorder) scrollPane.getBorder();
             if (border != null) {
                 borderHeight += border.getThickness(SConstants.TOP);
                 borderHeight += border.getThickness(SConstants.BOTTOM);

@@ -41,8 +41,9 @@ public class GridLayoutCG extends AbstractLayoutCG {
         renderHelper.setHorizontalLayoutPadding(layout.getHgap());
 
         int cols = layout.getColumns();
-        if (cols <= 0)
+        if (cols <= 0) {
             cols = components.size() / rows;
+        }
         //final int border = layout.getBorder();
 
         openLayouterBody(d, layout);
@@ -53,5 +54,25 @@ public class GridLayoutCG extends AbstractLayoutCG {
 
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);
+    }
+
+    protected int getLayoutHGap(SLayoutManager layout) {
+        SGridLayout gridLayout = (SGridLayout)layout;
+        return gridLayout.getHgap();
+    }
+
+    protected int getLayoutVGap(SLayoutManager layout) {
+        SGridLayout gridLayout = (SGridLayout)layout;
+        return gridLayout.getVgap();
+    }
+
+    protected int getLayoutBorder(SLayoutManager layout) {
+        SGridLayout gridLayout = (SGridLayout)layout;
+        return gridLayout.getBorder();
+    }
+
+    protected int layoutOversize(SLayoutManager layout) {
+        SGridLayout gridLayout = (SGridLayout)layout;
+        return gridLayout.getHgap() + gridLayout.getBorder();
     }
 }

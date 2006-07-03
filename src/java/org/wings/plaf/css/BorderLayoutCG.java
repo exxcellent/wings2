@@ -23,9 +23,6 @@ import java.io.IOException;
 
 public class BorderLayoutCG extends AbstractLayoutCG {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     public void write(Device d, SLayoutManager l)
@@ -43,8 +40,12 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         renderHelper.setHorizontalLayoutPadding(layout.getHgap());
 
         int cols = 1;
-        if (west != null) cols++;
-        if (east != null) cols++;
+        if (west != null) {
+            cols++;
+        }
+        if (east != null) {
+            cols++;
+        }
 
         openLayouterBody(d, layout);
 
@@ -103,5 +104,24 @@ public class BorderLayoutCG extends AbstractLayoutCG {
 
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);
+    }
+
+    protected int getLayoutHGap(SLayoutManager layout) {
+        SBorderLayout borderLayout = (SBorderLayout) layout;
+        return borderLayout.getHgap();
+    }
+
+    protected int getLayoutVGap(SLayoutManager layout) {
+        SBorderLayout borderLayout = (SBorderLayout) layout;
+        return borderLayout.getVgap();
+    }
+
+    protected int getLayoutBorder(SLayoutManager layout) {
+        SBorderLayout borderLayout = (SBorderLayout) layout;
+        return borderLayout.getBorder();
+    }
+
+    protected int layoutOversize(SLayoutManager layout) {
+        return 0;
     }
 }

@@ -22,9 +22,6 @@ import java.io.IOException;
 
 public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     public void write(Device d, SLayoutManager l)
@@ -58,8 +55,12 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         renderHelper.setHorizontalLayoutPadding(layout.getHgap());
 
         int cols = 1;
-        if (west != null) cols++;
-        if (east != null) cols++;
+        if (west != null) {
+            cols++;
+        }
+        if (east != null) {
+            cols++;
+        }
 
         openLayouterBody(d, layout);
 
@@ -124,5 +125,25 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
 
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);
+    }
+
+    protected int getLayoutHGap(SLayoutManager layout) {
+        SBorderLayout borderLayout = (SBorderLayout) layout;
+        return borderLayout.getHgap();
+    }
+
+    protected int getLayoutVGap(SLayoutManager layout) {
+        SBorderLayout borderLayout = (SBorderLayout) layout;
+        return borderLayout.getVgap();
+    }
+
+    protected int getLayoutBorder(SLayoutManager layout) {
+        SBorderLayout borderLayout = (SBorderLayout) layout;
+        return borderLayout.getBorder(); 
+    }
+
+    protected int layoutOversize(SLayoutManager layout) {
+        SBorderLayout borderLayout = (SBorderLayout) layout;
+        return borderLayout.getHgap() + borderLayout.getBorder();
     }
 }

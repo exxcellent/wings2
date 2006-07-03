@@ -13,9 +13,8 @@
  */
 package org.wings.border;
 
-import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSProperty;
 import org.wings.SComponent;
+import org.wings.style.CSSAttributeSet;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -77,21 +76,8 @@ public interface SBorder extends Serializable {
      */
     CSSAttributeSet getAttributes();
 
-    Color getColor(int position);
-
-    void setColor(Color color, int position);
-
-    void setThickness(int thickness, int position);
-
-    int getThickness(int position);
-
-    void setStyle(String style);
-
-    void setStyle(String style, int position);
-
-    String getStyle();
-
-    String getStyle(int position);
-
+    /**
+     * @param component The component owning this border
+     */
     void setComponent(SComponent component);
 }

@@ -15,8 +15,18 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
-import org.wings.border.SBorder;
+import org.wings.LowLevelEventListener;
+import org.wings.Renderable;
+import org.wings.RequestURL;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SDimension;
+import org.wings.SFileChooser;
+import org.wings.SFont;
+import org.wings.SLayoutManager;
+import org.wings.STextComponent;
+import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.resource.ResourceManager;
@@ -24,8 +34,8 @@ import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
 import org.wings.session.Session;
+import org.wings.session.SessionManager;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
 
@@ -391,10 +401,10 @@ public final class Utils {
         if ((component instanceof STextComponent || component instanceof SFileChooser))
             oversize +=2;
 
-        SBorder border = component.getBorder();
+        SAbstractBorder border = (SAbstractBorder) component.getBorder();
         // Respect oversize coming from (default) stylsheet padding and border
         if (border == null)
-            border = (SBorder)component.getClientProperty("oversize");
+            border = (SAbstractBorder)component.getClientProperty("oversize");
 
         if (border != null) {
             int thickness = border.getThickness(SConstants.TOP);
@@ -423,10 +433,10 @@ public final class Utils {
         if (oversize == -1)
             oversize = 0;
 
-        SBorder border = component.getBorder();
+        SAbstractBorder border = (SAbstractBorder) component.getBorder();
         // Respect oversize coming from (default) stylsheet padding and border
         if (border == null)
-            border = (SBorder)component.getClientProperty("oversize");
+            border = (SAbstractBorder)component.getClientProperty("oversize");
 
         if (border != null) {
             int thickness = border.getThickness(SConstants.LEFT);
@@ -1122,5 +1132,26 @@ public final class Utils {
             if (style.length() > 0)
             Utils.optAttribute(device, "style", style.toString());
         }
+    }
+
+    /**
+     * Converts a hgap/vgap in according inline css padding style.
+     * @param styles
+     *
+     * @param insets The insets to generate CSS padding declaration
+     * @return Empty or fille stringbuffer with padding declaration
+     */
+    static SStringBuilder createInlineStylesForInsets(SStringBuilder styles, Insets insets) {
+        if (insets != null && (insets.top > 0 || insets.left > 0 || insets.right > 0 || insets.bottom > 0)) {
+            if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
+                styles.append("padding:").append(insets.top).append("px;");
+            } else if (insets.top == insets.bottom && insets.left == insets.right) {
+                styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px;");
+            } else {
+                styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px ")
+                        .append(insets.bottom).append("px ").append(insets.left).append("px;");
+            }
+        }
+        return styles;
     }
 }

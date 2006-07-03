@@ -13,25 +13,30 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.*;
-import org.wings.session.BrowserType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.LowLevelEventListener;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SIcon;
+import org.wings.SPopupMenu;
+import org.wings.SResourceIcon;
 import org.wings.border.SBorder;
-import org.wings.border.STitledBorder;
 import org.wings.border.SEmptyBorder;
+import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
-import org.wings.plaf.ComponentCG;
 import org.wings.plaf.CGManager;
+import org.wings.plaf.ComponentCG;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
+import org.wings.session.BrowserType;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -85,30 +90,15 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         writeAllAttributes(device, component);
 
         if (useTable) {
-            device.print("><tr><td style=\""); // table
+            device.print("><tr><td"); // table
+            final SStringBuilder styleString = new SStringBuilder();
             if (border != null && Utils.isMSIE(component)) {
-                Insets insets = border.getInsets();
-                if (insets != null) {
-                    if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
-                        device.print("padding:");
-                        device.print(insets.top);
-                        device.print("px\"");
-                    }
-                    else {
-                        device.print(" style=\"padding:");
-                        device.print(insets.top);
-                        device.print("px ");
-                        device.print(insets.right);
-                        device.print("px ");
-                        device.print(insets.bottom);
-                        device.print("px ");
-                        device.print(insets.left);
-                        device.print("px;");
-                    }
-                }
+                Utils.createInlineStylesForInsets(styleString, border.getInsets());
             }
             // das hier für height 100% der inneren Komponenten, funzt im Firefox, nicht im IE
-            device.print("width:100%;height:100%\"");
+            styleString.append("width:100%;height:100%;");
+            Utils.optAttribute(device, "style", styleString);
+
             device.print(">"); // table
         } else {
             device.print(">"); // div
@@ -151,7 +141,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         writeContextMenu(device, component);
     }
 
-    protected static String getInlineStyles(SComponent component) {
+    private static String getInlineStyles(SComponent component) {
         // write inline styles
         final SStringBuilder builder = new SStringBuilder();
 

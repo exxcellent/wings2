@@ -13,12 +13,14 @@
  */
 package org.wings.border;
 
-import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSStyleSheet;
-import org.wings.style.CSSProperty;
-import org.wings.SConstants;
-import org.wings.SComponent;
 import org.wings.ReloadManager;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyleSheet;
 
 import java.awt.*;
 
@@ -68,8 +70,16 @@ public abstract class SAbstractBorder
         this(null, thickness, null);
     }
 
-    public void setComponent(SComponent component) {
-        this.component = component;
+    public void setComponent(SComponent newComponent) {
+        if (this.component != newComponent) {
+            if (this.component != null && this.component.getBorder() == this) {
+                final SComponent origOwner = this.component;
+                this.component = newComponent; // avoid loopback
+                origOwner.setBorder(null);
+            } else {
+                this.component = newComponent;
+            }
+        }
     }
 
     /**
@@ -179,14 +189,27 @@ public abstract class SAbstractBorder
         if (attributes == null) {
             attributes = new CSSAttributeSet();
             if (insets != null) {
-                if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
-                    attributes.put(CSSProperty.PADDING, insets.top + "px");
-                }
-                else {
-                    attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
-                    attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
-                    attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
-                    attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
+                if (SessionManager.getSession().getUserAgent().getBrowserType() != BrowserType.IE) {
+                    if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
+                        attributes.put(CSSProperty.PADDING, insets.top + "px");
+                    }
+                    else {
+                        attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
+                        attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
+                        attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
+                        attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
+                    }
+                } else {
+                    // IE is unable to handle PADDING on TABLE elements.
+                    if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
+                        attributes.put(CSSProperty.MARGIN, insets.top + "px");
+                    }
+                    else {
+                        attributes.put(CSSProperty.MARGIN_TOP, insets.top + "px");
+                        attributes.put(CSSProperty.MARGIN_LEFT, insets.left + "px");
+                        attributes.put(CSSProperty.MARGIN_RIGHT, insets.right + "px");
+                        attributes.put(CSSProperty.MARGIN_BOTTOM, insets.bottom + "px");
+                    }
                 }
             }
 

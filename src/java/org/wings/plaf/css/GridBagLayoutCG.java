@@ -43,8 +43,9 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         renderHelper.setVerticalLayoutPadding(useCellStyles ? 0 : layout.getVgap());
         renderHelper.setHorizontalLayoutPadding(useCellStyles ? 0 : layout.getHgap());
 
-        if (grid.cols == 0)
+        if (grid.cols == 0) {
             return;
+        }
 
         openLayouterBody(d, layout);
 
@@ -70,8 +71,9 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         } else if (gridwidth == GridBagConstraints.REMAINDER) {
                             gridwidth = grid.cols - col;
                         }
-                        if (gridwidth < 2)
+                        if (gridwidth < 2) {
                             gridwidth = -1;
+                        }
 
                         int gridheight = c.gridheight;
                         if (gridheight == GridBagConstraints.RELATIVE) {
@@ -79,12 +81,14 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         } else if (gridheight == GridBagConstraints.REMAINDER) {
                             gridheight = grid.cols - col;
                         }
-                        if (gridheight < 2)
+                        if (gridheight < 2) {
                             gridheight = -1;
+                        }
 
                         String width = null;
-                        if (c.weightx > 0 && grid.colweight[row] > 0)
+                        if (c.weightx > 0 && grid.colweight[row] > 0) {
                             width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
+                        }
 
                         String cellStyles = useCellStyles ? cellStyles(layout,  c.insets) : styles;
                         if (useCellStyles) {
@@ -130,12 +134,33 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         && (c.gridy == SGridBagLayout.LAST_CELL || c.gridy == row)) {
                     if (c.weighty > 0 && grid.rowweight[col] > 0) {
                         int cellHeight = (int) (100 * c.weighty / grid.rowweight[col]);
-                        if (cellHeight > rowHeight)
+                        if (cellHeight > rowHeight) {
                             rowHeight = cellHeight;
+                        }
                     }
                 }
             }
         }
         return rowHeight;
+    }
+
+    protected int getLayoutHGap(SLayoutManager layout) {
+         SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+        return gridbagLayout.getHgap();
+    }
+
+    protected int getLayoutVGap(SLayoutManager layout) {
+         SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+        return gridbagLayout.getVgap();
+    }
+
+    protected int getLayoutBorder(SLayoutManager layout) {
+         SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+        return gridbagLayout.getBorder();
+    }
+
+    protected int layoutOversize(SLayoutManager layout) {
+                    SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
+            return gridbagLayout.getHgap() + gridbagLayout.getBorder();
     }
 }

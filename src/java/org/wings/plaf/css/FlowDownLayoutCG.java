@@ -14,20 +14,16 @@
 
 package org.wings.plaf.css;
 
-import java.awt.Insets;
-import java.io.IOException;
-
 import org.wings.SFlowDownLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 
+import java.io.IOException;
+
 /**
  * @author bschmid
  */
-public class FlowDownLayoutCG extends AbstractLayoutCG {
-    /**
-     * 
-     */
+public class FlowDownLayoutCG extends FlowLayoutCG {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -37,7 +33,6 @@ public class FlowDownLayoutCG extends AbstractLayoutCG {
      */
     public void write(Device d, SLayoutManager l) throws IOException {
         final SFlowDownLayout layout = (SFlowDownLayout) l;
-        final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
         openLayouterBody(d, layout);
 

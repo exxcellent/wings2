@@ -48,6 +48,26 @@ public class BoxLayoutCG extends AbstractLayoutCG {
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);
     }
+
+    protected int getLayoutHGap(SLayoutManager layout) {
+        SBoxLayout boxLayout = (SBoxLayout) layout;
+        return boxLayout.getHgap();
+    }
+
+    protected int getLayoutVGap(SLayoutManager layout) {
+        SBoxLayout boxLayout = (SBoxLayout) layout;
+        return boxLayout.getVgap();
+    }
+
+    protected int getLayoutBorder(SLayoutManager layout) {
+        SBoxLayout boxLayout = (SBoxLayout) layout;
+        return boxLayout.getBorder();
+    }
+
+    protected int layoutOversize(SLayoutManager layout) {
+        SBoxLayout boxLayout = (SBoxLayout) layout;
+        return boxLayout.getHgap() + boxLayout.getBorder();
+    }
 }
 
 

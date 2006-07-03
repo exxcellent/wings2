@@ -1,10 +1,17 @@
 package org.wings.plaf.css.msie;
 
-import org.wings.plaf.css.*;
-import org.wings.plaf.css.BorderLayoutCG;
+import org.wings.SBorderLayout;
+import org.wings.SCardLayout;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SDimension;
+import org.wings.SGridBagLayout;
+import org.wings.SLayoutManager;
+import org.wings.STemplateLayout;
+import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
-import org.wings.*;
-import org.wings.border.SBorder;
+import org.wings.plaf.css.Utils;
 
 public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
     private static final long serialVersionUID = 1L;
@@ -27,7 +34,7 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
 
         if (requiresFillBehaviour) {
             int borderHeight = 0;
-            SBorder border = container.getBorder();
+            SAbstractBorder border = (SAbstractBorder) container.getBorder();
             if (border != null) {
                 borderHeight += border.getThickness(SConstants.TOP);
                 borderHeight += border.getThickness(SConstants.BOTTOM);

@@ -13,21 +13,18 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Insets;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-
-import org.wings.SBorderLayout;
-import org.wings.SBoxLayout;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SGridBagLayout;
-import org.wings.SGridLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 import org.wings.util.SStringBuilder;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.
@@ -107,27 +104,6 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     }
 
     /**
-     * Converts a hgap/vgap in according inline css padding style.
-     * @param styles
-     *
-     * @param insets The insets to generate CSS padding declaration
-     * @return Empty or fille stringbuffer with padding declaration
-     */
-    protected static SStringBuilder createInlineStylesForInsets(SStringBuilder styles, Insets insets) {
-        if (insets != null && (insets.top > 0 || insets.left > 0 || insets.right > 0 || insets.bottom > 0)) {
-            if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
-                styles.append("padding:").append(insets.top).append("px;");
-            } else if (insets.top == insets.bottom && insets.left == insets.right) {
-                styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px;");
-            } else {
-                styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px ")
-                        .append(insets.bottom).append("px ").append(insets.left).append("px;");
-            }
-        }
-        return styles;
-    }
-
-    /**
      * Converts a hgap/vgap in according inset declaration.
      * If a gapp is odd, the overlapping additonal pixel is added to the right/bottom inset.
      *
@@ -200,66 +176,29 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         d.print(renderAsHeader ? "</th>" : "</td>");
     }
 
-    protected static String layoutStyles(SLayoutManager layout) {
+    protected abstract int getLayoutHGap(SLayoutManager layout);
+    protected abstract int getLayoutVGap(SLayoutManager layout);
+    protected abstract int getLayoutBorder(SLayoutManager layout);
+
+    protected String layoutStyles(SLayoutManager layout) {
         SStringBuilder styles = new SStringBuilder();
-        if (layout instanceof SBorderLayout) {
-            SBorderLayout borderLayout = (SBorderLayout)layout;
-            Insets insets = convertGapsToInset(borderLayout.getHgap(), borderLayout.getVgap());
-            createInlineStylesForInsets(styles, insets);
-            if (borderLayout.getBorder() > 0)
-                styles.append("border:").append(borderLayout.getBorder()).append("px solid black");
-        }
-        else if (layout instanceof SGridLayout) {
-            SGridLayout gridLayout = (SGridLayout)layout;
-            Insets insets = convertGapsToInset(gridLayout.getHgap(), gridLayout.getVgap());
-            createInlineStylesForInsets(styles, insets);
-            if (gridLayout.getBorder() > 0)
-                styles.append("border:").append(gridLayout.getBorder()).append("px solid black");
-        }
-        else if (layout instanceof SGridBagLayout) {
-            SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
-            Insets insets = convertGapsToInset(gridbagLayout.getHgap(), gridbagLayout.getVgap());
-            createInlineStylesForInsets(styles, insets);
-            if (gridbagLayout.getBorder() > 0)
-                styles.append("border:").append(gridbagLayout.getBorder()).append("px solid black");
-        }
-        else if (layout instanceof SBoxLayout) {
-            SBoxLayout boxLayout = (SBoxLayout)layout;
-            Insets insets = convertGapsToInset(boxLayout.getHgap(), boxLayout.getVgap());
-            createInlineStylesForInsets(styles, insets);
-            if (boxLayout.getBorder() > 0)
-                styles.append("border:").append(boxLayout.getBorder()).append("px solid black");
-        }
+        Insets insets = convertGapsToInset(getLayoutHGap(layout), getLayoutVGap(layout));
+        Utils.createInlineStylesForInsets(styles, insets);
+        if (getLayoutBorder(layout) > 0)
+            styles.append("border:").append(getLayoutBorder(layout)).append("px solid black");
+
         return styles.length() > 0 ? styles.toString() : null;
     }
 
     protected static String cellStyles(SGridBagLayout layout, Insets insets) {
         SStringBuilder styles = new SStringBuilder();
-        createInlineStylesForInsets(styles, insets);
+        Utils.createInlineStylesForInsets(styles, insets);
         if (layout.getBorder() > 0)
             styles.append("border:").append(layout.getBorder()).append("px solid black");
         return styles.length() > 0 ? styles.toString() : null;
     }
 
-    protected static int layoutOversize(SLayoutManager layout) {
-        if (layout instanceof SBorderLayout) {
-            SBorderLayout borderLayout = (SBorderLayout)layout;
-            return borderLayout.getHgap() + borderLayout.getBorder();
-        }
-        else if (layout instanceof SGridLayout) {
-            SGridLayout gridLayout = (SGridLayout)layout;
-            return gridLayout.getHgap() + gridLayout.getBorder();
-        }
-        else if (layout instanceof SGridBagLayout) {
-            SGridBagLayout gridbagLayout = (SGridBagLayout)layout;
-            return gridbagLayout.getHgap() + gridbagLayout.getBorder();
-        }
-        else if (layout instanceof SBoxLayout) {
-            SBoxLayout boxLayout = (SBoxLayout)layout;
-            return boxLayout.getHgap() + boxLayout.getBorder();
-        }
-        return 0;
-    }
+    protected abstract int layoutOversize(SLayoutManager layout);
 
     protected static int cellOversize(SGridBagLayout layout, Insets insets) {
         return insets.top + insets.bottom + layout.getBorder();
