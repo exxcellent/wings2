@@ -455,7 +455,7 @@ public class Session implements PropertyService, Serializable {
      * @return a <code>Set</code> value
      */
     public Set getFrames() {
-        return frames;
+        return Collections.unmodifiableSet(frames);
     }
 
     /**

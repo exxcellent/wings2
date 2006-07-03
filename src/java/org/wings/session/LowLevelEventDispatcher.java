@@ -19,10 +19,12 @@ import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SFrame;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Registers session component instants which want to receive low level events.
@@ -38,11 +40,16 @@ public final class LowLevelEventDispatcher
         implements java.io.Serializable {
     private final transient static Log log = LogFactory.getLog(LowLevelEventDispatcher.class);
 
+    /**
+     * The name prefix is stored in the
+     * HashMap as key. The value is a Set (ArrayList) of {@link LowLevelEventListener}s
+     */
     private final HashMap listeners = new HashMap();
 
     protected boolean namedEvents = true;
-    
-    public LowLevelEventDispatcher() {}
+
+    public LowLevelEventDispatcher() {
+    }
 
     public final void addLowLevelEventListener(LowLevelEventListener gl,
                                                String eventId) {
@@ -51,8 +58,9 @@ public final class LowLevelEventDispatcher
             l = new ArrayList(2);
             l.add(gl);
             listeners.put(eventId, l);
-        } else if (!l.contains(gl))
+        } else if (!l.contains(gl)) {
             l.add(gl);
+        }
     }
 
     public final void removeLowLevelEventListener(LowLevelEventListener gl,
@@ -60,28 +68,45 @@ public final class LowLevelEventDispatcher
         List l = (List) listeners.get(eventId);
         if (l != null) {
             l.remove(gl);
-            if (l.size() == 0)
+            if (l.isEmpty()) {
                 listeners.remove(eventId);
+            }
         }
     }
 
-    public final LowLevelEventListener getLowLevelEventListener(String eventId) {
-        return (LowLevelEventListener) listeners.get(eventId);
-    }
-
-    public final void setNamedEvents(boolean b) {
-        namedEvents = b;
+    /**
+     * Returns list of registered low level event listener for the given event id.
+     *
+     * @param eventId The id (HTTP request parameter name) under which the listeners are registered.
+     * @return A list of registered low level event listener for the given event id.
+     */
+    public final List getLowLevelEventListener(String eventId) {
+        return Collections.unmodifiableList((List) listeners.get(eventId));
     }
 
     /**
-     * Registers a listeners. The NamePrefix of the listeners is stored in the
-     * HashMap as key. The value is a Set (ArrayList) of {@link LowLevelEventListener}s.
+     * Register low level event listeners additionally by their component name as event id.
+     * Used for purposes where you use fixed ids vs. dnymaically applied ids.
+     *
+     * @param registerListenerAlsoUnderName if <code>true</code> then components will also receieve
+     *                                      HTTP values under their {@link org.wings.SComponent#getName()}
+     *                                      in addition to {@link org.wings.LowLevelEventListener#getLowLevelEventId()}
+     */
+    public final void setNamedEvents(boolean registerListenerAlsoUnderName) {
+        namedEvents = registerListenerAlsoUnderName;
+    }
+
+    /**
+     * Registers a low level event listeners (for HTTP request processing).
+     * <p/>
+     * The NamePrefix of the listeners id is used as HTTP requestr parameter name. .
      *
      * @param gl listeners
      */
     public void register(LowLevelEventListener gl) {
-        if (gl == null)
+        if (gl == null) {
             return;
+        }
 
         String key = gl.getLowLevelEventId();
 
@@ -98,8 +123,9 @@ public final class LowLevelEventDispatcher
     }
 
     public void unregister(LowLevelEventListener gl) {
-        if (gl == null)
+        if (gl == null) {
             return;
+        }
 
         String key = gl.getLowLevelEventId();
 
@@ -117,13 +143,15 @@ public final class LowLevelEventDispatcher
     /**
      * dispatch the events, encoded as [name/(multiple)values]
      * in the HTTP request.
+     *
      * @param name
      * @param values
      * @return if the event has been dispatched
      */
     public boolean dispatch(String name, String[] values) {
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("dispatch " + name + " = " + Arrays.asList(values));
+        }
 
         boolean result = false;
         int dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
@@ -151,21 +179,23 @@ public final class LowLevelEventDispatcher
         dividerIndex = name.indexOf('_');
         if (dividerIndex > -1) {
             id = name.substring(0, dividerIndex);
-        }
-        else
+        } else {
             id = name;
+        }
 
 
         final List l = (List) listeners.get(id);
         if (l != null && l.size() > 0) {
-            if (log.isDebugEnabled())
+            if (log.isDebugEnabled()) {
                 log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
+            }
             for (int i = 0; i < l.size(); ++i) {
                 LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
                 if (gl.isEnabled()) {
                     if (checkEpoch(epoch, name, gl)) {
-                        if (log.isDebugEnabled())
+                        if (log.isDebugEnabled()) {
                             log.debug("process event '" + name + "' by " + gl.getClass() + "(" + gl.getLowLevelEventId() + ")");
+                        }
                         gl.processLowLevelEvent(name, values);
                         result = true;
                     }
@@ -180,8 +210,9 @@ public final class LowLevelEventDispatcher
         if (epoch != null) {
             SFrame frame = ((SComponent) gl).getParentFrame();
             if (frame == null) {
-                if (log.isDebugEnabled())
+                if (log.isDebugEnabled()) {
                     log.debug("request for dangling component '" + epoch + SConstants.UID_DIVIDER + name);
+                }
                 unregister(gl);
                 return false;
             }

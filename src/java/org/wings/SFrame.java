@@ -22,17 +22,17 @@ import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.DynamicResource;
-import org.wings.session.SessionManager;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
+
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Collections;
 
 /**
  * The root component of every component hierarchy.
@@ -112,13 +112,14 @@ public class SFrame
      * Global input maps
      */
     private ArrayList globalInputMapComponents;
-    
+
     /**
      * Creates a new SFrame
      */
     public SFrame() {
         getSession().addPropertyChangeListener("lookAndFeel", this);
         getSession().addPropertyChangeListener("request.url", this);
+        this.visible = false; // Frames are invisible originally.
     }
 
     /**
@@ -361,13 +362,17 @@ public class SFrame
      *
      * @see org.wings.session.Session#getFrames()
      */
-    public void setVisible(boolean b) {
-        if (b) {
-            getSession().addFrame(this);
-        } else {
-            getSession().removeFrame(this);
+    public void setVisible(boolean visible) {
+        if (visible != isVisible()) {
+            if (visible) {
+                getSession().addFrame(this);
+                register();
+            } else {
+                getSession().removeFrame(this);
+                unregister();
+            }
+            super.setVisible(visible);
         }
-        super.setVisible(b);
     }
 
     public void propertyChange(PropertyChangeEvent pe) {
@@ -417,11 +422,15 @@ public class SFrame
     }
 
     public void processLowLevelEvent(String name, String[] values) {
-        if (values.length == 1) {
-            String eventId = values[0];
-            eventId = eventId.substring("focus_".length());
-            SComponent component = (SComponent) getSession().getDispatcher().getLowLevelEventListener(eventId);
-            component.requestFocus();
+        focusComponent = null;
+        if (values.length == 1 && values[0].startsWith("focus_")) {
+            String eventId = values[0].substring("focus_".length());
+            List listeners = getSession().getDispatcher().getLowLevelEventListener(eventId);
+            for (int i = 0; i < listeners.size() && focusComponent == null; i++) {
+                Object listener = listeners.get(i);
+                if (listener instanceof SComponent)
+                    focusComponent = (SComponent) listener;
+            }
         }
     }
 

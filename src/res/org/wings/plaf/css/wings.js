@@ -286,8 +286,11 @@ function storeFocus(event) {
 
     var div = getElementWearingAttribute(target, "eid");
     var body = getElementByTagName(target, "BODY");
-    if (div && body)
-        setCookie(body.getAttribute("id") + "-focus", "focus_" + div.getAttribute("id"), 1);
+    /* Avoid rembering FORM as focus component as this automatically gains
+       focus on pressing Enter in MSIE. */
+    if (div && body && div.tagName != "FORM") {
+        setCookie(body.getAttribute("id"), "focus_" + div.getAttribute("id"), 1);
+    }
 }
 
 var wu_dom = document.getElementById?1:0;

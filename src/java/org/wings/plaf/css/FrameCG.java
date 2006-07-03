@@ -368,25 +368,19 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         // Focus management. Put focus in selected object.
         final SComponent focus = frame.getFocus();
-        final Object lastFocus = frame.getClientProperty("focus");
-        if (focus != lastFocus) {
-            if (lastFocus != null) {
+        FocusScriptListener gainFocusScript = (FocusScriptListener) frame.getClientProperty("gain-focus-script");
+        if (gainFocusScript == null || gainFocusScript.getFocusComponent() != focus) {
+            if (gainFocusScript != null) {
                 // Drop old focus gain script
-                ScriptListener[] scriptListeners = frame.getScriptListeners();
-
-                for (int i = 0; i < scriptListeners.length; i++) {
-                    ScriptListener scriptListener = scriptListeners[i];
-                    if (scriptListener instanceof FocusScriptListener) {
-                        frame.removeScriptListener(scriptListener);
-                    }
-                }
+                frame.removeScriptListener(gainFocusScript);
+                frame.putClientProperty("gain-focus-script", null);
             }
             if (focus != null) {
                 // add new focus gain script
-                FocusScriptListener listener = new FocusScriptListener("onload", "requestFocus('" + focus.getName() + "')");
-                frame.addScriptListener(listener);
+                gainFocusScript = new FocusScriptListener(focus);
+                frame.addScriptListener(gainFocusScript);
+                frame.putClientProperty("gain-focus-script", gainFocusScript);
             }
-            frame.putClientProperty("focus", focus);
         }
 
         // TODO: move this to a dynamic script resource

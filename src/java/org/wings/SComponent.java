@@ -699,7 +699,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * If a subclass implements the {@link LowLevelEventListener} interface,
      * it will be unregistered at the associated dispatcher.
      */
-    private final void unregister() {
+    final void unregister() {
         if (getSession().getDispatcher() != null && this instanceof LowLevelEventListener) {
             getSession().getDispatcher().unregister((LowLevelEventListener) this);
         }
@@ -709,7 +709,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * If a subclass implements the {@link LowLevelEventListener} interface,
      * it will be registered at the associated dispatcher.
      */
-    private void register() {
+    final void register() {
         if (getSession().getDispatcher() != null && this instanceof LowLevelEventListener) {
             getSession().getDispatcher().register((LowLevelEventListener) this);
         }

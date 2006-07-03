@@ -14,14 +14,24 @@
 package org.wings.plaf.css;
 
 import org.wings.script.JavaScriptListener;
+import org.wings.SComponent;
 
 /**
+ * Listenerer to
+ *
  * @author hengels
  * @version $Revision$
  */
-class FocusScriptListener
-        extends JavaScriptListener {
-    public FocusScriptListener(String event, String code) {
-        super(event, code);
+class FocusScriptListener extends JavaScriptListener {
+
+    private final SComponent focusComponent;
+
+    public FocusScriptListener(SComponent setFocusOnLoadOntoComponent) {
+        super("onload", "requestFocus('" + setFocusOnLoadOntoComponent.getName() + "')");
+        this.focusComponent = setFocusOnLoadOntoComponent;
+    }
+
+    public SComponent getFocusComponent() {
+        return focusComponent;
     }
 }

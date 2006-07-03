@@ -87,8 +87,6 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
 
         if (button.isSelected())
             device.print(" checked=\"true\"");
-        if (component.isFocusOwner())
-            Utils.optAttribute(device, "foc", component.getName());
 
         device.print(">");
 
@@ -157,6 +155,8 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             device.print(" disabled=\"true\"");
         if (button.isSelected())
             device.print(" checked=\"true\"");
+        if (button.isFocusOwner())
+            Utils.optAttribute(device, "foc", button.getName());
 
         device.print("/>");
     }
