@@ -57,7 +57,7 @@ public class DynamicLayoutExample extends WingSetPane {
 
     protected SComponent createExample() {
         SToolBar controls = new SToolBar();
-        SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);
         controls.setBorder(border);
 

@@ -13,13 +13,24 @@
  */
 package wingset;
 
-import org.wings.*;
+import org.wings.SAnchor;
+import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SButton;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SFlowDownLayout;
+import org.wings.SForm;
+import org.wings.SLabel;
+import org.wings.SOptionPane;
+import org.wings.SPanel;
+import org.wings.STextField;
+import org.wings.SToolBar;
 import org.wings.border.SLineBorder;
-import org.wings.border.SBorder;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -30,7 +41,7 @@ public class OptionPaneExample
 {
     protected SComponent createExample() {
         SToolBar toolBar = new SToolBar();
-        SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);
         toolBar.setBorder(border);
         toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);

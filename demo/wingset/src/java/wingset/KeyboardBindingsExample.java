@@ -20,6 +20,7 @@ import org.wings.SLabel;
 import org.wings.STextField;
 import org.wings.SFont;
 import org.wings.SCheckBox;
+import org.wings.SDimension;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -132,25 +133,26 @@ public class KeyboardBindingsExample extends WingSetPane {
              // equal to :  form.setInputMap(formInputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
         form.setActionMap(actionMap);
 
-        SLabel titleLabel = new SLabel("wingS key binding feature demonstration\n ");
+        final SLabel titleLabel = new SLabel("wingS key binding feature demonstration\n ");
         titleLabel.setFont(new SFont("sans-serif", SFont.PLAIN, 16));
         form.add(titleLabel);
 
-        form.add(new SLabel(
-                "This page demonstrates the feature of attaching key binbding to specific component.\n" +
-                "Some components provide already default bindings like STabbedPane (try [Alt]-[LEFT] \n" +
-                "or [Alt]-[RIGHT].\n" +
-                "\n" +
-                "On this page The keys [F1] through [F10] are captured locally by the STextField. This means\n" +
-                "the keypress will only trigger an event for thesekeys if the focus is inside the textfield.\n" +
-                "\n" +
-                "[Shift]-[F1] through [Shift]-[F10] are attached up to the containing SForm, so these keys should\n" +
-                "trigger events if the focus is inside the textfield or on the checkbox.\n" +
-                "\n"+
-                "[Alt]-[F1] through [Alt]-[F10] are also attached to the textfield but with global focus, hence \n" +
-                "captured by the whole page, then routed back to the STextField. These shortcuts will work\n" +
-                "everythere on the page."));
-        form.add(new SLabel(""));
+        final SLabel instructions = new SLabel(
+                "This page demonstrates the feature of attaching key binbding to specific component. " +
+                        "Some components provide already default bindings like STabbedPane (try [Alt]-[LEFT] " +
+                        "or [Alt]-[RIGHT].\n" +
+                        "\n" +
+                        "On this page The keys [F1] through [F10] are captured locally by the STextField. This means " +
+                        "the keypress will only trigger an event for thesekeys if the focus is inside the textfield." +
+                        "\n" +
+                        "[Shift]-[F1] through [Shift]-[F10] are attached up to the containing SForm, so these keys should " +
+                        "trigger events if the focus is inside the textfield or on the checkbox.\n" +
+                        "\n" +
+                        "[Alt]-[F1] through [Alt]-[F10] are also attached to the textfield but with global focus, hence " +
+                        "captured by the whole page, then routed back to the STextField. These shortcuts will work " +
+                        "everythere on the page.\n\n");
+        instructions.setWordWrap(true);
+        form.add(instructions);
 
         form.add(textField);
         form.add(new SCheckBox("Checkbox: Use as alternative focus point"));
@@ -159,6 +161,7 @@ public class KeyboardBindingsExample extends WingSetPane {
         actionEventLabel.setForeground(Color.RED);
 
         form.setHorizontalAlignment(CENTER);
+        form.setPreferredSize(new SDimension(550, SDimension.AUTO_INT));
     }
 
     public SComponent createExample() {

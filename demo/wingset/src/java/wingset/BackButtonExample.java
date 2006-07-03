@@ -25,6 +25,7 @@ import org.wings.SForm;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SRadioButton;
+import org.wings.SDimension;
 import org.wings.border.SEmptyBorder;
 import org.wings.event.InvalidLowLevelEvent;
 import org.wings.event.SInvalidLowLevelEventListener;
@@ -55,19 +56,23 @@ public class BackButtonExample extends WingSetPane {
     private final SLabel virtualBackButtonSignal = new SLabel("Virtual back button pressed");
 
     private final SButton nonEpochedButton = new SButton("Non epoch-checked button");
-    private final SLabel nonEpochedButtonSignal = new SLabel("Non epoch-checked button pressed");
+    private final SLabel nonEpochedButtonSignal = new SLabel("Non epoch-checked button accepted");
 
     protected SComponent createExample() {
         mainPanel.setLayout(new SFlowDownLayout());
         mainPanel.setHorizontalAlignment(CENTER);
-        mainPanel.add(new SLabel("<html>wingS is able to handle browser back navigation in different ways<br><ul>" +
-                "<li><b>Default: </b>Drop requests from old views and just redisplay page</li>" +
-                "<li><b>Extended default: </b>Register a virtual \"back\" button and trigger this on back operations" +
-                "You can use this. i.e. to display a information message or for navigation purpose.</li>" +
-                "<li><b>Allow: </b>Allow & don't intercept back navigation. Modifications (i.e. clicks) on past pages will" +
-                "be ignored by default, but can be enabled via setEpochCheckEnabled() for selected components</li>" +
-                "</ul>" +
-                "<p>Below is some example to experiment with these different modes to handle back navigation"));
+        mainPanel.setPreferredSize(new SDimension(550, SDimension.AUTO_INT));
+
+        final SLabel titleLabel = new SLabel("wingS browser back-button detection\n ");
+        titleLabel.setFont(new SFont("sans-serif", SFont.PLAIN, 16));
+        mainPanel.add(titleLabel);
+
+        final SLabel instructions = new SLabel("The epoch checking mechanism allows wingS " +
+                "to tackle the browser back navigation in threee different ways demonstrated in this example.\n\n" +
+                "To try this example just choose one of the described ways, click several time the buttons and try " +
+                "what happens if you go back with your browser.");
+        instructions.setWordWrap(true);
+        mainPanel.add(instructions);
 
         mainPanel.addRenderListener(new SRenderListener() {
             public void startRendering(SRenderEvent e) {
@@ -111,18 +116,29 @@ public class BackButtonExample extends WingSetPane {
         nonEpochedButton.setVisible(false);
 
         final SButtonGroup buttonGroup = new SButtonGroup();
-        final SRadioButton postMode = new SRadioButton("<html><b>Default:</b> HTTP POST " +
-                "(Browsers present a 'repost form' query after submits. wingS can optionally identify back operations");
-        final SRadioButton getMode = new SRadioButton("<html><b>Extended default:</b> HTTP GET mode (Browsers <i>don't</i> present" +
-                " a 'repost form' query. wingS <i>immediately</i> catches back operations and triggers virtual back button)");
-        final SRadioButton getMode2 = new SRadioButton("<html><b>Allow:</b> HTTP GET mode and no page refresh on back navigation." +
-                "wingS doesn't catch back navigation and may allow manipulation on selected buttons. " +
-                "<br>Clicks on <b>regular</b> buttons lead to an <i>delayed</i> back button event." +
-                "<br>Clicks on <b>Not epoch-checked button</b> will be accepted.");
+        final SRadioButton postMode = new SRadioButton("<html><b>Default:</b> Drop and ignore requests from old views" +
+                " and just redisplay the current view. This ensures that no activity is falsely triggered and the " +
+                "user only starts actions he expects. Typicall web applications are operating with HTTP POST, so " +
+                "most wrowsers will present a 'repost form' confirmation dialog on navigating back.<p> ");
+        final SRadioButton getMode = new SRadioButton("<html><b>Extended default:</b> Same as the default case, " +
+                "but you register a virtual \"back\" button. wingS will <i>immediately</i> notify and catch " +
+                "back operations and and trigger your virtual back button by heuristics. " +
+                "Probably you want to use this. event i.e. to display a information message or trigger applaciation backs/undos." +
+                "This example switches into HTTP GET mode to avoid the anyoing 'repost form' confirmations.<p> ");
+        final SRadioButton getMode2 = new SRadioButton("<html><b>Allow:</b> Allows and doesn't intercept back navigations. " +
+                "The user will be able to see and click within 'old views'. Just as the default case" +
+                "wingS will ignored by default clicks on any component, unless you marked it via <b>setEpochCheckEnabled()</b> " +
+                "to be always valid. From the developers perspective your application logic must be aware that those " +
+                "non-epoched components will be able to fire events at any time." +
+                "In this example clicks on the <b>regular</b> buttons will be dropped and lead to the back button event, " +
+                "while clicking on the <b>Not epoch-checked button</b> will also accepted in old views.<p> ");
         buttonGroup.add(postMode);
         buttonGroup.add(getMode);
         buttonGroup.add(getMode2);
         postMode.setSelected(true);
+        postMode.setWordWrap(true);
+        getMode.setWordWrap(true);
+        getMode2.setWordWrap(true);
         mainPanel.add(postMode);
         mainPanel.add(getMode);
         mainPanel.add(getMode2);

@@ -50,7 +50,7 @@ public class TableNestingExample  extends WingSetPane{
         SPanel panel = new SPanel(new SGridLayout());
         panel.add(new SLabel ("Depth "+depth));
         panel.setBackground(colors[depth % colors.length]);
-        panel.setBorder(new SEmptyBorder(5,5,5,5));
+        panel.setBorder(new SEmptyBorder(20,20,20,20));
         if (depth > 1)
             panel.add(nestPanel(depth-1));
         return panel;

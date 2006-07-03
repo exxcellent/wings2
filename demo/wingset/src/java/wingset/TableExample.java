@@ -166,9 +166,9 @@ public class TableExample
         Object[][] data;
         boolean asc[];
 
-        MyTableModel(int cols, int rows) {
-            this.cols = cols;
-            this.rows = rows;
+        MyTableModel(int pCols, int pRows) {
+            this.cols = pCols > 6 ? pCols: 6;
+            this.rows = pRows;
 
             data = new Object[rows][cols];
             asc = new boolean[cols];

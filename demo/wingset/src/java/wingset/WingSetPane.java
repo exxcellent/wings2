@@ -24,7 +24,6 @@ import org.wings.SFlowDownLayout;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SResourceIcon;
-import org.wings.border.SBorder;
 import org.wings.border.SLineBorder;
 import org.wings.event.SComponentAdapter;
 import org.wings.event.SComponentEvent;
@@ -53,7 +52,7 @@ abstract public class WingSetPane
         anchor.setTarget("sourceWindow");
         anchor.add(new SLabel("view java source code", SOURCE_LABEL_ICON));
         anchor.setPreferredSize(SDimension.FULLWIDTH);
-        SBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.TOP);
         anchor.setBorder(border);
 
