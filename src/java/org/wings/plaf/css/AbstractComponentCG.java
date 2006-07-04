@@ -254,7 +254,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
     public void componentChanged(SComponent component) {
         component.putClientProperty("render-cache", null);
-        log.debug("invalidating = " + component.getName());
+        //log.debug("invalidating = " + component.getName());
 
         InputMap inputMap = component.getInputMap();
         if (inputMap != null && inputMap.size() > 0) {

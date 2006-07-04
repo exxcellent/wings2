@@ -16,6 +16,7 @@ package org.wings.session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.RequestURL;
+import org.wings.util.SStringBuilder;
 import org.wings.externalizer.AbstractExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
 import org.wings.externalizer.SystemExternalizeManager;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.text.DateFormat;
 
 /**
  * Central servlet delegating all requests to the according wingS session servlet.
@@ -93,10 +95,10 @@ public final class WingServlet
         servletConfig = config;
 
         if (log.isInfoEnabled()) {
-            log.info("init-params:");
+            log.info("Initializing wingS global servlet with configuration:");
             for (Enumeration en = config.getInitParameterNames(); en.hasMoreElements();) {
                 String param = (String) en.nextElement();
-                log.info(param + " = " + config.getInitParameter(param));
+                log.info("    " + param + " = " + config.getInitParameter(param));
             }
         }
 
@@ -180,7 +182,7 @@ public final class WingServlet
             throws ServletException {
         long timestamp = System.currentTimeMillis();
         try {
-            log.debug("new session");
+            log.debug("--- new SessionServlet()");
 
             SessionServlet sessionServlet = new SessionServlet();
             sessionServlet.init(servletConfig, request, response);
@@ -199,7 +201,8 @@ public final class WingServlet
 
             sessionServlet.setParent(this);
 
-            log.debug("time to create a new session " + (System.currentTimeMillis() - timestamp));
+            log.debug("--- Time needed to create new session " + (System.currentTimeMillis() - timestamp) + "ms");
+
             return sessionServlet;
         } catch (Exception e) {
             log.fatal("Error on creating new wingS session", e);
@@ -238,27 +241,33 @@ public final class WingServlet
                     sessionServlet = newSession(request, response);
                     httpSession.setAttribute(lookupName, sessionServlet);
                 } else {
-                    log.info("no session servlet found, returning null");
                     return null;
                 }
             }
 
 
             if (log.isDebugEnabled()) {
-                log.debug("session id " + request.getRequestedSessionId());
-                log.debug("session from cookie " + request.isRequestedSessionIdFromCookie());
-                log.debug("session from url " + request.isRequestedSessionIdFromURL());
-                log.debug("session valid " + request.isRequestedSessionIdValid());
-                log.debug("session created at " +
-                        new java.util.Date(httpSession.getCreationTime()));
-                log.debug("session httpsession id " + httpSession.getId());
-                log.debug("session httpsession new " + httpSession.isNew());
-                log.debug("session last accessed at " +
-                        new java.util.Date(httpSession.getLastAccessedTime()));
-                log.debug("session max inactive interval " +
-                        httpSession.getMaxInactiveInterval());
-                log.debug("session contains wings session " +
-                        (httpSession.getAttribute(lookupName) != null));
+                SStringBuilder message = new SStringBuilder()
+                        .append("session id: ").append(request.getRequestedSessionId())
+                        .append(", created at: ")
+                        .append(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+                                .format(new java.util.Date(httpSession.getCreationTime())))
+                        .append(", identified via:").append(request.isRequestedSessionIdFromCookie() ? " cookie" : "")
+                        .append(request.isRequestedSessionIdFromURL() ? " URL" : "")
+                        .append(", expiring after: ")
+                        .append(httpSession.getMaxInactiveInterval())
+                        .append("s ");
+                log.debug(message.toString()
+                );
+                //log.debug("session valid " + request.isRequestedSessionIdValid());
+                //log.debug("session httpsession id " + httpSession.getId());
+                //log.debug("session httpsession new " + httpSession.isNew());
+                //log.debug("session last accessed at " +
+                //        new java.util.Date(httpSession.getLastAccessedTime()));
+                //log.debug("session expiration timeout (s) " +
+                //        httpSession.getMaxInactiveInterval());
+                //log.debug("session contains wings session " +
+                //        (httpSession.getAttribute(lookupName) != null));
             }
 
             sessionServlet.getSession().getExternalizeManager().setResponse(response);
@@ -300,7 +309,7 @@ public final class WingServlet
              */
             if ((request.getCharacterEncoding() == null)) { // was servlet container able to identify encoding? 
                 try {
-                    String sessionCharacterEncoding = sessionServlet.getSession().getCharacterEncoding();                 
+                    String sessionCharacterEncoding = sessionServlet.getSession().getCharacterEncoding();
                     // We know better about the used character encoding than tomcat
                     log.debug("Advising servlet container to interpret request as " + sessionCharacterEncoding);
                     request.setCharacterEncoding(sessionCharacterEncoding);
@@ -320,7 +329,7 @@ public final class WingServlet
         if (lookupName == null || lookupName.trim().length() == 0) {
             lookupName = "SessionServlet:" + context.getInitParameter("wings.mainclass");
         }
-        SessionServlet sessionServlet = (SessionServlet)req.getSession().getAttribute(lookupName);
+        SessionServlet sessionServlet = (SessionServlet) req.getSession().getAttribute(lookupName);
         if (sessionServlet != null) {
             Session session = sessionServlet.getSession();
             session.setServletRequest(req);
@@ -393,12 +402,11 @@ public final class WingServlet
                 return;
             }
 
-
             /*
-             * we either have a request for the system externalizer
-             * (if there is something in the path info, that starts with '-')
-             * or just a normal request to this servlet.
-             */
+            * we either have a request for the system externalizer
+            * (if there is something in the path info, that starts with '-')
+            * or just a normal request to this servlet.
+            */
             if (isSystemExternalizeRequest(req)) {
                 String identifier = pathInfo.substring(1);
                 AbstractExternalizeManager extManager =
@@ -416,11 +424,10 @@ public final class WingServlet
                 return;
             }
 
-            log.debug("session servlet");
-
             SessionServlet sessionServlet = getSessionServlet(req, response, true);
 
             sessionServlet.doGet(req, response);
+
         } catch (ServletException e) {
             log.fatal("doGet", e);
             throw e;
@@ -456,8 +463,8 @@ public final class WingServlet
         return new ServletDevice(response.getOutputStream());
     }
 
-
     // TODO BSC: This issue is still pending. Refer to http://jira.j-wings.org/browse/WGS-84
+
     /**
      * Workaround implementation for WebSphere.
      *

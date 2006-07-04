@@ -193,7 +193,7 @@ public class Session implements PropertyService, Serializable {
 
 
     public Session() {
-        log.debug("new session()");
+        //log.debug("new session()");
         if (collectStatistics) {
             WingsStatistics.getStatistics().incrementSessionCount();
             WingsStatistics.getStatistics().incrementActiveSessionCount();

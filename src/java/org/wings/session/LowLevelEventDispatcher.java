@@ -21,10 +21,9 @@ import org.wings.SConstants;
 import org.wings.SFrame;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Collections;
 
 /**
  * Registers session component instants which want to receive low level events.
@@ -81,7 +80,8 @@ public final class LowLevelEventDispatcher
      * @return A list of registered low level event listener for the given event id.
      */
     public final List getLowLevelEventListener(String eventId) {
-        return Collections.unmodifiableList((List) listeners.get(eventId));
+        final List list = (List) listeners.get(eventId);
+        return list != null ? Collections.unmodifiableList(list) : Collections.EMPTY_LIST;
     }
 
     /**
@@ -104,20 +104,16 @@ public final class LowLevelEventDispatcher
      * @param gl listeners
      */
     public void register(LowLevelEventListener gl) {
-        if (gl == null) {
-            return;
-        }
+        if (gl != null) {
+            final String key = gl.getLowLevelEventId();
+            final String name = gl.getName();
 
-        String key = gl.getLowLevelEventId();
+            log.debug("dispatcher: register id    '" + key + "' type: " + gl.getClass());
+            addLowLevelEventListener(gl, key);
 
-        log.debug("dispatcher: register '" + key + "' type: " + gl.getClass());
-        addLowLevelEventListener(gl, key);
-
-        if (namedEvents) {
-            key = gl.getName();
-            if (key != null && key.trim().length() > 0) {
-                log.debug("dispatcher: register named '" + key + "'");
-                addLowLevelEventListener(gl, key);
+            if (namedEvents && (name != null) && !name.equals(key) && (name.length() > 0) ) {
+                log.debug("dispatcher: register named '" + name + "'");
+                addLowLevelEventListener(gl, name);
             }
         }
     }
@@ -149,10 +145,6 @@ public final class LowLevelEventDispatcher
      * @return if the event has been dispatched
      */
     public boolean dispatch(String name, String[] values) {
-        if (log.isDebugEnabled()) {
-            log.debug("dispatch " + name + " = " + Arrays.asList(values));
-        }
-
         boolean result = false;
         int dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
         String epoch = null;
