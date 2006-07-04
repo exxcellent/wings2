@@ -323,64 +323,29 @@ public final class Utils {
      * Appends a CSS inline style string for the preferred size of the passed component to the passed stringbuffer.
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      */
-    public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SComponent pComponent) {
-        SDimension preferredSize = pComponent.getPreferredSize();
+    public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SComponent component) {
+        SDimension preferredSize = component.getPreferredSize();
         if (preferredSize != null) {
-            //use special expression for IE
-//            if (Utils.isMSIE(pComponent)) {
-//                int oversizeHorizontal = getHorizontalOversize(pComponent);
-//                int oversizeVertical = getVerticalOversize(pComponent);
-//                if (preferredSize.getWidth() != SDimension.AUTO) {
-//                    boolean isPercent = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("%") != -1;
-//                    boolean isPixel = preferredSize.getWidthUnit() != null && preferredSize.getWidthUnit().indexOf("px") != -1;
-//                    if (oversizeHorizontal != 0 && isPercent) {
-//                        // faktor zwischen 0 und 1
-//                        double factor = Math.max(Math.min(preferredSize.getWidthInt(), 100) / 100.0, 0);
-//                        // size berechnen anhand des Parents - auf Clientseite
-//                        styleString.append("width:expression(((this.parentNode.clientWidth-").append(oversizeHorizontal).append(")");
-//                        if (factor < 1.0) {
-//                            styleString.append("*").append(factor);
-//                        }
-//                        styleString.append(")+'px');");
-//                    } else if (oversizeHorizontal != 0 && isPixel) {
-//                        // size darf nicht <0 sein.
-//                        int size = Math.max(preferredSize.getWidthInt() - oversizeHorizontal, 0);
-//                        styleString.append("width:").append(size).append("px;");
-//
-//                    } else {
-//                        styleString.append("width:").append(preferredSize.getWidth()).append(";");
-//                    }
-//                }
-//                if (preferredSize.getHeight() != SDimension.AUTO) {
-//                    boolean isPercent = preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("%") != -1;
-//                    boolean isPixel = preferredSize.getHeightUnit() != null && preferredSize.getHeightUnit().indexOf("px") != -1;
-//                    if (oversizeVertical != 0 && isPercent) {
-//                        // faktor zwischen 0 und 1
-//                        double factor = Math.max(Math.min(preferredSize.getHeightInt(), 100) / 100.0, 0);
-//                        // size berechnen anhand des Parents - auf Clientseite
-//                        styleString.append("height:expression(((this.parentNode.clientHeight-").append(oversizeVertical).append(")");
-//                        if (factor < 1.0) {
-//                            styleString.append("*").append(factor);
-//                        }
-//                        styleString.append(")+'px');");
-//                    } else if (oversizeVertical != 0 && isPixel) {
-//                        // size darf nicht <0 sein.
-//                        int size = Math.max(preferredSize.getHeightInt() - oversizeVertical, 0);
-//                        styleString.append("height:").append(size).append("px;");
-//
-//                    } else {
-//                        styleString.append("height:").append(preferredSize.getHeight()).append(";");
-//                    }
-//                }
-//
-//            } else {
-                if (preferredSize.getWidth() != SDimension.AUTO) {
-                    styleString.append("width:").append(preferredSize.getWidth()).append(';');
-                }
-                if (preferredSize.getHeight() != SDimension.AUTO) {
-                    styleString.append("height:").append(preferredSize.getHeight()).append(';');
-//                }
+            boolean msie = isMSIE(component);
+            if (msie && "px".equals(preferredSize.getWidthUnit())) {
+                int oversize = calculateHorizontalOversize(component, false);
+                styleString
+                        .append("width:")
+                        .append(preferredSize.getWidthInt() - oversize)
+                        .append("px;");
             }
+            else if (!SDimension.AUTO.equals(preferredSize.getWidthUnit()))
+                styleString.append("width:").append(preferredSize.getWidth()).append(';');
+
+            if (msie && "px".equals(preferredSize.getHeightUnit())) {
+                int oversize = calculateVerticalOversize(component, false);
+                styleString
+                        .append("height:")
+                        .append(preferredSize.getHeightInt() - oversize)
+                        .append("px;");
+            }
+            else if (!SDimension.AUTO.equals(preferredSize.getHeightUnit()))
+                styleString.append("height:").append(preferredSize.getHeight()).append(';');
         }
         return styleString;
     }
@@ -438,18 +403,6 @@ public final class Utils {
         if (border == null)
             border = (SAbstractBorder)component.getClientProperty("oversize");
 
-        if (border != null) {
-            int thickness = border.getThickness(SConstants.LEFT);
-            if (thickness != -1)
-                oversize += thickness;
-            thickness = border.getThickness(SConstants.RIGHT);
-            if (thickness != -1)
-                oversize += thickness;
-            final Insets insets = border.getInsets();
-            if (insets != null) {
-                oversize += insets.left + insets.right;
-            }
-        }
         return oversize;
     }
 
@@ -1153,5 +1106,71 @@ public final class Utils {
             }
         }
         return styles;
+    }
+
+    public static int calculateHorizontalOversize(SComponent component, boolean percentageUnitOnly) {
+        if (component != null && isMSIE(component) && component instanceof STextComponent) {
+            SDimension preferredSize = component.getPreferredSize();
+            if (preferredSize != null) {
+                String widthUnit = preferredSize.getWidthUnit();
+                if (!SDimension.AUTO.equals(widthUnit)) {
+                    if (percentageUnitOnly && !"%".equals(widthUnit))
+                        return 0;
+
+                    SAbstractBorder border = (SAbstractBorder)component.getBorder();
+                    if (border != null) {
+                        int oversize = 0;
+                        int thickness = border.getThickness(SConstants.LEFT);
+                        if (thickness != -1)
+                            oversize += thickness;
+                        thickness = border.getThickness(SConstants.RIGHT);
+                        if (thickness != -1)
+                            oversize += thickness;
+                        final Insets insets = border.getInsets();
+                        if (insets != null) {
+                            oversize += insets.left + insets.right;
+                        }
+                        return oversize;
+                    }
+                    else {
+                        return 4;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static int calculateVerticalOversize(SComponent component, boolean percentageUnitOnly) {
+        if (component != null && isMSIE(component) && component instanceof STextComponent) {
+            SDimension preferredSize = component.getPreferredSize();
+            if (preferredSize != null) {
+                String heightUnit = preferredSize.getHeightUnit();
+                if (!SDimension.AUTO.equals(heightUnit)) {
+                    if (percentageUnitOnly && !"%".equals(heightUnit))
+                        return 0;
+
+                    SAbstractBorder border = (SAbstractBorder)component.getBorder();
+                    if (border != null) {
+                        int oversize = 0;
+                        int thickness = border.getThickness(SConstants.TOP);
+                        if (thickness != -1)
+                            oversize += thickness;
+                        thickness = border.getThickness(SConstants.BOTTOM);
+                        if (thickness != -1)
+                            oversize += thickness;
+                        final Insets insets = border.getInsets();
+                        if (insets != null) {
+                            oversize += insets.top + insets.bottom;
+                        }
+                        return oversize;
+                    }
+                    else {
+                        return 4;
+                    }
+                }
+            }
+        }
+        return 0;
     }
 }

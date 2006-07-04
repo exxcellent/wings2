@@ -51,9 +51,9 @@ public class JavaScriptListenerExample
      */
     private final static String JS_ADD_SCRIPT =
             "function add() { " +
-            "  wu_findElement('{2}','INPUT').value" +
-            "  = ((1.0 * wu_findElement('{0}','INPUT').value)" +
-            "  + (1.0 * wu_findElement('{1}','INPUT').value));" +
+            "  document.getElementById('{2}').value" +
+            "  = ((1.0 * document.getElementById('{0}').value)" +
+            "  + (1.0 * document.getElementById('{1}').value));" +
             " }";
 
     private final static DecimalFormatSymbols DSYM

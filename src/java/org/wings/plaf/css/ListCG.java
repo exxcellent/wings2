@@ -122,11 +122,11 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             throws IOException {
         boolean renderSelection = list.getSelectionMode() != SList.NO_SELECTION;
 
-        writeTablePrefix(device, list);
         device.print("<");
         device.print(list.getType());
         Utils.optAttribute(device, "type", list.getOrderType());
         Utils.optAttribute(device, "start", list.getStart());
+        writeAllAttributes(device, list);
         device.print(">");
 
         javax.swing.ListModel model = list.getModel();
@@ -172,7 +172,6 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         device.print("</");
         Utils.write(device, list.getType());
         device.print(">");
-        writeTableSuffix(device, list);
     }
 
     public void writeInternal(final Device device,

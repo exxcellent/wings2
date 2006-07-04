@@ -44,10 +44,8 @@ public final class TextAreaCG extends AbstractComponentCG implements
             }
 
         } else {
-            writeTablePrefix(device, component);
-            
             device.print("<textarea");
-            //writeAllAttributes(device, component);
+            writeAllAttributes(device, component);
 
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             Utils.optAttribute(device, "cols", component.getColumns());
@@ -82,8 +80,6 @@ public final class TextAreaCG extends AbstractComponentCG implements
             device.print(">");
             Utils.quote(device, component.getText(), false, false, false);
             device.print("</textarea>\n");
-            
-            writeTableSuffix(device, component);
         }
     }
 }

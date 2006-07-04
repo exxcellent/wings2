@@ -25,7 +25,7 @@ import java.io.Serializable;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public interface SBorder extends Serializable {
+public interface SBorder extends Serializable, Cloneable {
     /**
      * Sets the insets of this border. Insets describe the amount
      * of space 'around' the bordered component.

@@ -4,21 +4,20 @@
     $Id$
 */
 
-.STextArea textarea, .STextField input, .SFormattedTextField input,
-.SPasswordField input, .SComboBox select, .SList select,
 .SRadioButton input {
     background-color: #eee;
 }
 /*.SRadioButton input {
     border: 1px solid #aaa;
 }*/
-.STextField INPUT,
-.SFormattedTextField INPUT,
-.SPasswordField INPUT,
-.STextArea TEXTAREA,
-SELECT.SComboBox,
-.SList SELECT{
+input.STextField,
+input.SFormattedTextField,
+input.SPasswordField,
+textarea.STextArea,
+select.SComboBox,
+select.SList{
 	border: 1px solid #ddd;
+    background-color: #eee;
 }
 
 

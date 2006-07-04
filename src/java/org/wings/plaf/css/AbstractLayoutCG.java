@@ -13,17 +13,15 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SComponent;
-import org.wings.SGridBagLayout;
-import org.wings.SLayoutManager;
-import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
-import org.wings.util.SStringBuilder;
-
-import java.awt.*;
+import java.awt.Insets;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+
+import org.wings.*;
+import org.wings.util.SStringBuilder;
+import org.wings.io.Device;
+import org.wings.plaf.LayoutCG;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.
@@ -153,6 +151,21 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             d.print("<th");
         else
             d.print("<td");
+
+        int oversizePadding = Utils.calculateHorizontalOversize(component, true);
+        if (oversizePadding != 0) {
+            SStringBuilder builder = new SStringBuilder();
+            if (style != null) {
+                builder.append(style);
+                builder.append("; padding-right:");
+            }
+            else
+                builder.append("padding-right:");
+
+            builder.append(oversizePadding * 2);
+            builder.append("px");
+            style = builder.toString();
+        }
 
         Utils.printTableCellAlignment(d, component, defaultHorizontalAlignment, defaultVerticalAlignment);
         Utils.optAttribute(d, "colspan", colspan);

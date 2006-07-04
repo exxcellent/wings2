@@ -57,15 +57,15 @@ public final class TextFieldCG extends AbstractComponentCG implements
                 }
 
                 textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
-                        "document.getElementById('{0}').getElementsByTagName('input')[0].style.color = '';" +
+                        "document.getElementById('{0}').style.color = '';" +
                         name +
-                        ".validate(callback_{0}, document.getElementById('{0}').getElementsByTagName('input')[0].value)",
+                        ".validate(callback_{0}, document.getElementById('{0}').value)",
                         "function callback_{0}(data) {\n" +
                         "   if (!data && data != '') {\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('input')[0].style.color = '#ff0000';\n" +
+                        "       document.getElementById('{0}').style.color = '#ff0000';\n" +
                         "   }\n" +
                         "   else\n" +
-                        "       document.getElementById('{0}').getElementsByTagName('input')[0].value = data;\n" +
+                        "       document.getElementById('{0}').value = data;\n" +
                         "}\n", new SComponent[] { textField }));
             }
         }
@@ -79,10 +79,8 @@ public final class TextFieldCG extends AbstractComponentCG implements
             throws IOException {
         final STextField textField = (STextField) component;
 
-        writeTablePrefix(device, textField);
-        
         device.print("<input type=\"text\"");
-        //writeAllAttributes(device, component);
+        writeAllAttributes(device, component);
         Utils.optAttribute(device, "tabindex", textField.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", textField.getColumns());
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
@@ -104,7 +102,5 @@ public final class TextFieldCG extends AbstractComponentCG implements
 
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
-        
-        writeTableSuffix(device, textField);
     }
 }

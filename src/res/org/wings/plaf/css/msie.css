@@ -93,8 +93,8 @@ table.SButton SPAN.disabled_formbutton:active {
     padding-left: 0.4em;
     padding-right: 0.4em;
     /*background-color: inherit;*/     /* IE doesnt understand inherit */
-    border-left:  #c0c0c0 2px groove;  /* IE doesnt understand inherit, so need to guess :-( */
-    border-right: #c0c0c0 2px groove;  /* IE doesnt understand inherit, so need to guess :-( */
+    border-left:  #333333 2px groove;  /* IE doesnt understand inherit, so need to guess :-( */
+    border-right: #333333 2px groove;  /* IE doesnt understand inherit, so need to guess :-( */
     background: #ccc;                  /* IE doesnt understand inherit, so need to guess :-( */
 }
 

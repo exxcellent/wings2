@@ -101,24 +101,24 @@ IMG {
 }
 
 /* STextField default style */
-.STextField input,
-.SFormattedTextField input,
-.SPasswordField input,
-.STextArea textarea,
-.SComboBox select {
+input.STextField,
+input.SFormattedTextField,
+input.SPasswordField,
+textarea.STextArea,
+select.SComboBox {
     font-family: sans-serif;
     font-weight: normal;
     font-style: normal;
     color: #000;
 }
 
-.STextField INPUT,
-.SFormattedTextField INPUT,
-.SPasswordField INPUT,
-.STextArea TEXTAREA,
-SELECT.SComboBox,
-.SList SELECT {
-	border: 2px inset #dddddd;
+input.STextField,
+input.SFormattedTextField,
+input.SPasswordField,
+textarea.STextArea,
+select.SComboBox,
+select.SList {
+	border: 1px solid #333333;
 }
 
 /* STree default style */
@@ -164,13 +164,13 @@ th.STabbedPane_bottom {
 .STabbedPane_Tab_bottom,
 .STabbedPane_Tab_left,
 .STabbedPane_Tab_right {
-    border: 1px solid black;
+    border: 1px solid #333333;
     white-space: nowrap;
     line-height: 1.6em;
 }
 
 td.STabbedPane_pane {
-    border: 2px ridge black;
+    border: 2px ridge #333333;
     width: 100%;
 }
 

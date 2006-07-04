@@ -27,12 +27,7 @@ import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.STextField;
 import org.wings.SToolBar;
-import org.wings.border.SBevelBorder;
-import org.wings.border.SBorder;
-import org.wings.border.SEmptyBorder;
-import org.wings.border.SEtchedBorder;
-import org.wings.border.SLineBorder;
-import org.wings.border.STitledBorder;
+import org.wings.border.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -183,7 +178,7 @@ public class ComponentControls  extends SPanel {
                 }
                 catch (NumberFormatException e) {}
 
-                SBorder border = (SBorder)getSelectedObject(borderStyleComboBox);
+                SAbstractBorder border = (SAbstractBorder) getSelectedObject(borderStyleComboBox);
                 if (border != null) {
                     border.setColor((Color)getSelectedObject(borderColorComboBox));
                     border.setInsets(new Insets(insets, insets, insets, insets));
@@ -195,7 +190,7 @@ public class ComponentControls  extends SPanel {
                     if (widthTextField.isVisible())
                         component.setPreferredSize(preferredSize);
                     if (borderThicknessTextField.isVisible())
-                        component.setBorder(border);
+                        component.setBorder(border != null ? (SBorder)border.clone() : null);
                     if (backgroundComboBox.isVisible())
                         component.setBackground((Color)getSelectedObject(backgroundComboBox));
                     if (foregroundComboBox.isVisible())

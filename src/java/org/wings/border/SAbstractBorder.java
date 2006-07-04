@@ -189,27 +189,14 @@ public abstract class SAbstractBorder
         if (attributes == null) {
             attributes = new CSSAttributeSet();
             if (insets != null) {
-                if (SessionManager.getSession().getUserAgent().getBrowserType() != BrowserType.IE) {
-                    if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
-                        attributes.put(CSSProperty.PADDING, insets.top + "px");
-                    }
-                    else {
-                        attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
-                        attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
-                        attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
-                        attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
-                    }
-                } else {
-                    // IE is unable to handle PADDING on TABLE elements.
-                    if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
-                        attributes.put(CSSProperty.MARGIN, insets.top + "px");
-                    }
-                    else {
-                        attributes.put(CSSProperty.MARGIN_TOP, insets.top + "px");
-                        attributes.put(CSSProperty.MARGIN_LEFT, insets.left + "px");
-                        attributes.put(CSSProperty.MARGIN_RIGHT, insets.right + "px");
-                        attributes.put(CSSProperty.MARGIN_BOTTOM, insets.bottom + "px");
-                    }
+                if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
+                    attributes.put(CSSProperty.PADDING, insets.top + "px");
+                }
+                else {
+                    attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
+                    attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
+                    attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
+                    attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
                 }
             }
 
@@ -251,5 +238,14 @@ public abstract class SAbstractBorder
         public int thickness;
         public String style;
         public Color color;
+    }
+
+    public Object clone() {
+        try {
+            return super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
