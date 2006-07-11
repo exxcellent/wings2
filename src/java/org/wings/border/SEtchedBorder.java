@@ -13,8 +13,6 @@
  */
 package org.wings.border;
 
-import org.wings.style.CSSProperty;
-
 import java.awt.*;
 
 /**
@@ -34,11 +32,11 @@ public class SEtchedBorder
     int etchedType = RAISED;
 
     public SEtchedBorder() {
-        setEtchedType(RAISED);
+        this(RAISED);
     }
 
     public SEtchedBorder(int etchedType) {
-        setEtchedType(etchedType);
+        this(etchedType, null );
     }
 
     public SEtchedBorder(int etchedType, Insets insets) {
