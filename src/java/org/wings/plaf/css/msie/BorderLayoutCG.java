@@ -144,6 +144,6 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
 
     protected int layoutOversize(SLayoutManager layout) {
         SBorderLayout borderLayout = (SBorderLayout) layout;
-        return borderLayout.getHgap() + borderLayout.getBorder();
+        return borderLayout.getVgap() + borderLayout.getBorder();
     }
 }

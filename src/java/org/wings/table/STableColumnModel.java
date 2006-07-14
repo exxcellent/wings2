@@ -13,6 +13,8 @@
  */
 package org.wings.table;
 
+import org.wings.event.STableColumnModelListener;
+
 import javax.swing.event.TableColumnModelListener;
 import java.util.Collection;
 

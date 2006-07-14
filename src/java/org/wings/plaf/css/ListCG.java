@@ -146,7 +146,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             boolean selected = list.isSelectedIndex(i);
 
             if (renderSelection && selected)
-                device.print("<li class=\"SList_selected\"");
+                device.print("<li class=\"SList_selected\">");
             else
                 device.print("<li>");
 

@@ -88,7 +88,12 @@ public class SScrollPane
         Rectangle viewport = scrollable.getViewportSize();
         Rectangle maxViewport = scrollable.getScrollableViewportSize();
 
-        if (viewport == null) viewport = maxViewport;
+        if (viewport == null)
+            viewport = maxViewport;
+        else if (viewport.width > maxViewport.width)
+            viewport.width = maxViewport.width;
+        else if (viewport.height > maxViewport.height)
+            viewport.height = maxViewport.height;
 
         if (getHorizontalScrollBar() != null &&
                 getHorizontalScrollBarPolicy() != HORIZONTAL_SCROLLBAR_NEVER) {

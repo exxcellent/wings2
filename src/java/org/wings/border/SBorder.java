@@ -80,4 +80,46 @@ public interface SBorder extends Serializable, Cloneable {
      * @param component The component owning this border
      */
     void setComponent(SComponent component);
+
+    /**
+     * Get the color of the border for one of SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM.
+     * @param position SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM
+     * @return the color
+     */
+    Color getColor(int position);
+
+    /**
+     * Set the color of the border for one of SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM.
+     * @param position SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM
+     * @param color the color
+     */
+    void setColor(Color color, int position);
+
+    /**
+     * Set the thickness of the border for one of SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM.
+     * @param position SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM
+     * @param thickness the thickness
+     */
+    void setThickness(int thickness, int position);
+
+    /**
+     * Get the thickness of the border for one of SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM.
+     * @param position SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM
+     * @return the thickness
+     */
+    int getThickness(int position);
+
+    /**
+     * Set the style of the border for one of SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM.
+     * @param position SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM
+     * @param style the style
+     */
+    void setStyle(String style, int position);
+
+    /**
+     * Get the style of the border for one of SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM.
+     * @param position SConstants.TOP, SConstants.LEFT, SConstants.RIGHT or SConstants.BOTTOM
+     * @return the style
+     */
+    String getStyle(int position);
 }

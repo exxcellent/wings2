@@ -806,7 +806,7 @@ package org.wings;
       */
      protected SComponent prepareEditor(STableCellEditor editor, int row, int col) {
          return editor.getTableCellEditorComponent(this,
-                 model.getValueAt(row, col),
+                 getValueAt(row, col),
                  isRowSelected(row), // true?
                  row, col);
      }
@@ -1577,23 +1577,13 @@ package org.wings;
      * @param col Data column of this edit component
      */
     protected void nameCellComponent(final SComponent component, final int row, final int col) {
-        if (component instanceof LowLevelEventListener) {
-            // Low level events need to receive events on their own. Do not redirect their ids
-            // to table, otherwise they would never receive their events.
-            //
-            // BUT: User must ensure to return UNIQUE components
-
-            // do nothing:
-            nameBuffer.setLength(0);
-        } else {
-            nameBuffer.setLength(0);
-            nameBuffer.append(this.getName()).append("_");
-            if (row == -1)
-                nameBuffer.append('h');
-            else
-                nameBuffer.append(row);
-            nameBuffer.append("_").append(col);
-            component.setNameRaw(nameBuffer.toString());
-        }
+        nameBuffer.setLength(0);
+        nameBuffer.append(this.getName()).append("_");
+        if (row == -1)
+            nameBuffer.append('h');
+        else
+            nameBuffer.append(row);
+        nameBuffer.append("_").append(col);
+        component.setNameRaw(nameBuffer.toString());
     }
- }
+}

@@ -145,23 +145,19 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
     }
 
     protected int getLayoutHGap(SLayoutManager layout) {
-        SGridBagLayout gridbagLayout = (SGridBagLayout) layout;
-        return gridbagLayout.getHgap();
+        return ((SGridBagLayout)layout).getHgap();
     }
 
     protected int getLayoutVGap(SLayoutManager layout) {
-        SGridBagLayout gridbagLayout = (SGridBagLayout) layout;
-        return gridbagLayout.getVgap();
+        return ((SGridBagLayout)layout).getVgap();
     }
 
     protected int getLayoutBorder(SLayoutManager layout) {
-        SGridBagLayout gridbagLayout = (SGridBagLayout) layout;
-        return gridbagLayout.getBorder();
+        return layout.getBorder();
     }
 
     protected int layoutOversize(SLayoutManager layout) {
-        SGridBagLayout gridbagLayout = (SGridBagLayout) layout;
-        return gridbagLayout.getHgap() + gridbagLayout.getBorder();
+        return ((SGridBagLayout)layout).getVgap() + layout.getBorder();
     }
 
     public int getDefaultLayoutCellHAlignment() {

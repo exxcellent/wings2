@@ -59,12 +59,10 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
                 for (int col = grid.firstCol; col < grid.cols; col++) {
                     final SComponent comp = grid.grid[col][row];
                     if (comp != null) {
-                        SBorder border = comp.getBorder();
-                        if (border != null) {
-                            Insets insets = border.getInsets();
-                            if (insets != null)
-                                oversize = Math.max(oversize, cellOversize(layout, insets));
-                        }
+                        GridBagConstraints c = layout.getConstraints(comp);
+                        Insets insets = c.insets;
+                        if (insets != null)
+                            oversize = Math.max(oversize, cellOversize(layout, insets));
                     }
                 }
             }

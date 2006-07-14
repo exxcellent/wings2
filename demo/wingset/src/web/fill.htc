@@ -37,7 +37,7 @@ function resize() {
       var yweight = row.getAttribute("yweight");
       if (yweight) {
         var oversize = row.getAttribute("oversize");
-        row.height = Math.round((diff * yweight) / 100) - oversize;
+        row.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
       }
     }
   }

@@ -39,8 +39,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class TableCG extends AbstractComponentCG implements org.wings.plaf.TableCG {
     private static final long serialVersionUID = 1L;
@@ -282,21 +280,14 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
             device.print(">");
             Utils.printNewline(device, table);
 
-            /*
-            * get viewable area
-            */
-            int startRow = 0;
-            int startCol = 0;
-            int endRow = table.getRowCount();
-            int endCol = table.getColumnCount();
+            Rectangle viewport = table.getViewportSize();
+            if (viewport == null)
+                viewport = table.getScrollableViewportSize();
 
-            final Rectangle viewport = table.getViewportSize();
-            if (viewport != null) {
-                startRow = viewport.y;
-                startCol = viewport.x;
-                endRow = Math.min(startRow + viewport.height, endRow);
-                endCol = Math.min(startCol + viewport.width, endCol);
-            }
+            int startRow = viewport.y;
+            int startCol = viewport.x;
+            int endRow = Math.min(startRow + viewport.height, table.getRowCount());
+            int endCol = Math.min(startCol + viewport.width, table.getColumnCount());
 
         STableColumnModel columnModel = table.getColumnModel();
         if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
@@ -305,10 +296,9 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                 writeCol(device, selectionColumnWidth);
 
             int columnCount = columnModel.getColumnCount();
-            for (int i=startCol; i < endCol; i++) {
-                if (endCol > columnCount)
-                    System.out.println("i = " + i);
+            System.out.println("columnCount = " + columnCount);
 
+            for (int i=startCol; i < endCol; i++) {
                 STableColumn column = columnModel.getColumn(i);
                 if (!column.isHidden())
                     writeCol(device, column.getWidth());
@@ -330,7 +320,7 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
 
             Utils.printNewline(device, table, 1);
             if (needsSelectionRow)
-                device.print("<th width=\"").print(selectionColumnWidth).print("\"></th>");
+                device.print("<th class=\"cell\" width=\"").print(selectionColumnWidth).print("\"></th>\n");
 
             for (int i=startCol; i < endCol; i++) {
                 STableColumn column = columnModel.getColumn(i);
@@ -402,29 +392,6 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
     }
 
     /**
-     * Renders a COLGROUP html element to format the column widths
-     */
-    protected List determineColumnWidths(final STable table,
-                                         final boolean needsSelectionRow, final int startcol, final int endcol) throws IOException {
-        final STableColumnModel columnModel = table.getColumnModel();
-        final String totalWidth = columnModel.getTotalColumnWidth();
-        ArrayList widthStrings = null;
-
-        if (totalWidth != null) {
-            widthStrings = new ArrayList();
-
-            for (int i = startcol; i < endcol; i++) {
-                final STableColumn column = columnModel.getColumn(i);
-                if (column != null && !column.isHidden()) {
-                    widthStrings.add(column.getWidth());
-                }
-            }
-        }
-
-        return widthStrings;
-    }
-
-    /**
      * Renders the row sometimes needed to allow row selection.
      */
     protected void renderSelectionColumn(final Device device, final STable table, final SCellRendererPane rendererPane,
@@ -462,18 +429,6 @@ public final class TableCG extends AbstractComponentCG implements org.wings.plaf
                     table.isRowSelected(row),
                     row, -1);
             rendererPane.writeComponent(device, comp, table);
-        }
-    }
-
-    /**
-     * @return The total width for this table or <code>null</code> if none.
-     */
-    protected SDimension determineTableWidthByColumnModel(final STable table, final boolean needsSelectionRow) {
-        if (table.getColumnModel() == null) {
-            return null;
-        } else {
-            String totalWidth = table.getColumnModel().getTotalColumnWidth();
-            return totalWidth != null ? new SDimension(totalWidth, null) : null;
         }
     }
 }

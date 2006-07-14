@@ -19,9 +19,7 @@ import org.wings.style.CSSStyleSheet;
 import org.wings.event.SMouseEvent;
 import org.wings.event.SMouseListener;
 import org.wings.plaf.css.TableCG;
-import org.wings.table.SDefaultTableCellRenderer;
-import org.wings.table.STableCellEditor;
-import org.wings.table.STableColumnModel;
+import org.wings.table.*;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -81,9 +79,7 @@ public class TableExample
                     if (editor instanceof LowLevelEventListener) {
                         LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editor;
                         lowLevelEventListener.processLowLevelEvent(action, values);
-                        cellEditor.stopCellEditing();
                         setValueAt(cellEditor.getCellEditorValue(), row, col);
-                        removeEditor();
                     }
                 }
             }
@@ -403,6 +399,18 @@ public class TableExample
                 }
             });
             addControl(reverseColumnOrder);
+
+            final SCheckBox hideSomeColumns = new SCheckBox("Hide some Columns");
+            hideSomeColumns.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boolean hide = hideSomeColumns.isSelected();
+                    STableColumnModel columnModel = table.getColumnModel();
+                    for (int i=0; i < columnModel.getColumnCount(); i++) {
+                        columnModel.getColumn(i).setHidden(hide && i %3 == 0);
+                    }
+                }
+            });
+            addControl(hideSomeColumns);
         }
     }
 }
