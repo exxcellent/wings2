@@ -33,6 +33,7 @@ public final class RenderHelper {
 
     private final List menus = new ArrayList();
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
+    // TODO(he): never used
     private int horizontalLayoutPadding = 0;
     private int verticalLayoutPadding = 0;
     private boolean allowUsageOfCachedInstances = true;

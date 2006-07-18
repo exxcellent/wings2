@@ -20,10 +20,8 @@
 package org.wings;
 
 import org.wings.text.SAbstractFormatter;
-import org.wings.text.SDefaultFormatter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 
@@ -84,31 +82,6 @@ public class SFormattedTextField extends STextField {
     }
 
     public void setFormatter(SAbstractFormatter formatter) {
-        if (this.formatter != null) {
-            this.formatter.uninstall(this);
-        }
         this.formatter = formatter;
-        formatter.install(this);
-    }
-
-    /*
-     * When an ActionListener is added, the Formatter must be updated.
-     */
-    public void addActionListener(ActionListener listener) {
-        super.addActionListener(listener);
-        if (formatter == null) {
-            formatter = new SDefaultFormatter();
-            formatter.install(this);
-        } else {
-            formatter.updateFormatter();
-        }
-    }
-
-    protected void setParentFrame(SFrame parentFrame) {
-        if (super.getParentFrame() != null)
-            formatter.uninstall(this);
-        super.setParentFrame(parentFrame);
-        if (super.getParentFrame() != null)
-            formatter.install(this);
     }
 }

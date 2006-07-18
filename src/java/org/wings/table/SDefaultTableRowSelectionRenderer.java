@@ -51,11 +51,11 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
 
     protected SResourceIcon multiSelectionIcon = DEFAULT_MULTI_SELECTION_ICON;
 
-    protected SResourceIcon multiNotSelectionIcon = DEFAULT_MULTI_NOT_SELECTION_ICON;
+    protected SResourceIcon multiNonSelectionIcon = DEFAULT_MULTI_NOT_SELECTION_ICON;
 
     protected SResourceIcon singleSelectionIcon = DEFAULT_SINGLE_SELECTION_ICON;
 
-    protected SResourceIcon singleNotSelectionIcon = DEFAULT_SINGLE_NOT_SELECTION_ICON;
+    protected SResourceIcon singleNonSelectionIcon = DEFAULT_SINGLE_NOT_SELECTION_ICON;
 
     /**
      * If set to true render the row selection colum with icons, otherwise simple text.
@@ -67,15 +67,17 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
 
     public SComponent getTableCellRendererComponent(STable table, Object value, boolean selected, int row, int col) {
         if (useIcons) {
+            setText(null);
             switch (table.getSelectionMode()) {
                 case ListSelectionModel.SINGLE_SELECTION:
-                    setIcon(selected ? singleSelectionIcon : singleNotSelectionIcon);
+                    setIcon(selected ? singleSelectionIcon : singleNonSelectionIcon);
                     break;
                 default:
-                    setIcon(selected ? multiSelectionIcon : multiNotSelectionIcon);
+                    setIcon(selected ? multiSelectionIcon : multiNonSelectionIcon);
                     break;
             }
         } else {
+            setIcon(null);
             setText("" + (row + 1));
         }
         // style
@@ -133,15 +135,15 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
     /**
      * @return Icon used for selected rows in multi-selection mode for unselected lines
      */
-    public SResourceIcon getMultiNotSelectionIcon() {
-        return multiNotSelectionIcon;
+    public SResourceIcon getMultiNonSelectionIcon() {
+        return multiNonSelectionIcon;
     }
 
     /**
-     * @param multiNotSelectionIcon Icon used for selected rows in multi-selection mode for unselected lines
+     * @param multiNonSelectionIcon Icon used for selected rows in multi-selection mode for unselected lines
      */
-    public void setMultiNotSelectionIcon(SResourceIcon multiNotSelectionIcon) {
-        this.multiNotSelectionIcon = multiNotSelectionIcon;
+    public void setMultiNonSelectionIcon(SResourceIcon multiNonSelectionIcon) {
+        this.multiNonSelectionIcon = multiNonSelectionIcon;
     }
 
     /**
@@ -161,15 +163,15 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
     /**
      * @return Icon used for selected rows in single-selection mode tables for unselected lines
      */
-    public SResourceIcon getSingleNotSelectionIcon() {
-        return singleNotSelectionIcon;
+    public SResourceIcon getSingleNonSelectionIcon() {
+        return singleNonSelectionIcon;
     }
 
     /**
-     * @param singleNotSelectionIcon Icon used for selected rows in single-selection mode tables for unselected lines
+     * @param singleNonSelectionIcon Icon used for selected rows in single-selection mode tables for unselected lines
      */
-    public void setSingleNotSelectionIcon(SResourceIcon singleNotSelectionIcon) {
-        this.singleNotSelectionIcon = singleNotSelectionIcon;
+    public void setSingleNonSelectionIcon(SResourceIcon singleNonSelectionIcon) {
+        this.singleNonSelectionIcon = singleNonSelectionIcon;
     }
 
     /**

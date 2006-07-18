@@ -156,6 +156,13 @@ public class TableExample
         }
     }
 
+    static class MyRowSelectionRenderer extends SDefaultTableRowSelectionRenderer
+    {
+        public SComponent getTableCellRendererComponent(STable table, Object value, boolean selected, int row, int col) {
+            return super.getTableCellRendererComponent(table, value, selected, row, col);    //To change body of overridden methods use File | Settings | File Templates.
+        }
+    }
+
     static class MyTableModel extends AbstractTableModel {
         int cols, rows;
 
@@ -267,31 +274,25 @@ public class TableExample
     }
 
     static String colorToHex(Color color) {
-        String colorstr = new String("#");
+        String colorstr = "#";
 
         // Red
         String str = Integer.toHexString(color.getRed());
-        if (str.length() > 2)
-            str = str.substring(0, 2);
-        else if (str.length() < 2)
+        if (str.length() < 2)
             colorstr += "0" + str;
         else
             colorstr += str;
 
         // Green
         str = Integer.toHexString(color.getGreen());
-        if (str.length() > 2)
-            str = str.substring(0, 2);
-        else if (str.length() < 2)
+        if (str.length() < 2)
             colorstr += "0" + str;
         else
             colorstr += str;
 
         // Blue
         str = Integer.toHexString(color.getBlue());
-        if (str.length() > 2)
-            str = str.substring(0, 2);
-        else if (str.length() < 2)
+        if (str.length() < 2)
             colorstr += "0" + str;
         else
             colorstr += str;

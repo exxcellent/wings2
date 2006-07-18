@@ -398,15 +398,13 @@ ul.SPopupMenu a.x:hover{
     border-collapse: collapse;
 }
 
-.STable th.cell
-{
+.STable th.cell, th.numbering {
     border: 1px solid black;
-    padding: 0px 8px;
+    padding: 1px 8px;
 }
-.STable td.cell
-{
+.STable td.cell, td.numbering {
     border-left: 1px solid black;
-    padding: 0px 8px;
+    padding: 1px 8px;
 }
 /* let the link span the whole table */
 .STable tbody tr td a {

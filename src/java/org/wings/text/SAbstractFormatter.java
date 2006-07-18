@@ -28,31 +28,6 @@ import java.text.ParseException;
  */
 public abstract class SAbstractFormatter implements Serializable {
 
-    public SAbstractFormatter() {
-    }
-
-    /*
-     * Installs a SFormattedTextField to the Formatter. This is important, because the
-     * Formatter must create JavaScript for the FormattedTextField everytime the Formatter
-     * is changed.
-     **/
-    public void install(SFormattedTextField textField) {
-    }
-
-    /*
-     * removes the Formatter
-     */
-    public void uninstall(SFormattedTextField textField) {
-    }
-
-    /*
-     * Generates the new JavaScript for all registered SFormattedTextFields.
-     * New code must be created if the Format of the formatter changes or if
-     * a new ActionListener is registered.
-     */
-    public void updateFormatter() {
-    }
-
     /**
      * @param text String to convert
      * @return Object representation of text
@@ -64,13 +39,4 @@ public abstract class SAbstractFormatter implements Serializable {
      * @return String representation of value
      */
     public abstract String valueToString(Object value) throws ParseException;
-
-    public String validate(String text) {
-        try {
-            return valueToString(stringToValue(text));
-        }
-        catch (ParseException e) {
-            return null;
-        }
-    }
 }
