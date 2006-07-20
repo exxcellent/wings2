@@ -40,7 +40,7 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
                 borderHeight += border.getThickness(SConstants.BOTTOM);
             }
 
-            device.print("<table style=\"behavior:url(../fill.htc)\"");
+            device.print("<table style=\"behavior:url(../fill.htc)\" rule=\"fill\"");
             Utils.optAttribute(device, "layoutHeight", height);
             Utils.optAttribute(device, "borderHeight", borderHeight);
             preferredSize.setHeight(null);

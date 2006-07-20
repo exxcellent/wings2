@@ -1,18 +1,54 @@
 package org.wings.plaf.css.msie;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SScrollPane;
+import org.wings.*;
 import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
+import java.awt.*;
 
 public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
 
     private static final long serialVersionUID = 1L;
+
+    public void writeInternal(Device device, SComponent component) throws IOException {
+        boolean requiresFillBehaviour = false;
+        SDimension preferredSize;
+        String height = null;
+        preferredSize = component.getPreferredSize();
+        if (preferredSize != null) {
+            height = preferredSize.getHeight();
+            if (height != null)
+                requiresFillBehaviour = true;
+        }
+        if (!requiresFillBehaviour) {
+            super.writeInternal(device, component);
+            return;
+        }
+
+        SScrollPane scrollPane = (SScrollPane) component;
+        Scrollable scrollable = scrollPane.getScrollable();
+        SScrollPaneLayout layout = (SScrollPaneLayout) scrollPane.getLayout();
+
+        if (!layout.isPaging() && scrollable instanceof SComponent) {
+            SComponent center = (SComponent) scrollable;
+            Rectangle viewportSizeBackup = scrollable.getViewportSize();
+            SDimension preferredSizeBackup = center.getPreferredSize();
+            try {
+                scrollable.setViewportSize(scrollable.getScrollableViewportSize());
+                writeContent(device, component);
+            } finally {
+                //component.setPreferredSize(center.getPreferredSize());
+                scrollable.setViewportSize(viewportSizeBackup);
+                center.setPreferredSize(preferredSizeBackup);
+            }
+        }
+        else {
+            scrollPane.synchronizeAdjustables();
+            writeContent(device, component);
+        }
+    }
 
     public void writeContent(Device device, SComponent c)
             throws IOException {
@@ -36,7 +72,7 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
                 borderHeight += border.getThickness(SConstants.BOTTOM);
             }
 
-            device.print("<table style=\"behavior:url(../fill.htc)\"");
+            device.print("<table style=\"behavior:url(../fill.htc)\" rule=\"fill\"");
             Utils.optAttribute(device, "layoutHeight", height);
             Utils.optAttribute(device, "borderHeight", borderHeight);
             preferredSize.setHeight(null);

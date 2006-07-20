@@ -8,6 +8,7 @@ import org.wings.SConstants;
 import org.wings.SLayoutManager;
 import org.wings.SScrollPaneLayout;
 import org.wings.Scrollable;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
 import java.awt.*;
@@ -35,7 +36,8 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
 
     protected void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
         openLayouterBody(d, layout);
-        d.print("<tr><td>");
+        d.print("<tr><td valign=\"top\"><div style=\"overflow: auto; display: none\">");
+        
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
         Scrollable scrollable = (Scrollable) center;
@@ -45,7 +47,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         writeComponent(d, center);
         scrollable.setViewportSize(viewportSize);
 
-        d.print("</td></tr>");
+        d.print("</div></td></tr>");
         closeLayouterBody(d, layout);
     }
 

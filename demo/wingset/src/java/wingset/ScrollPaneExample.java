@@ -19,8 +19,6 @@ import org.wings.table.STableColumn;
 
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
-import java.util.Collections;
-import java.util.Iterator;
 
 
 /**
@@ -60,9 +58,6 @@ public class ScrollPaneExample
         return p;
     }
 
-    /**
-     * @param table
-     */
     protected void showInPane(SComponent comp) {
         scrollPane.setViewportView(comp);
     }

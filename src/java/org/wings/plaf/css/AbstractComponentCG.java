@@ -96,7 +96,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                 Utils.createInlineStylesForInsets(styleString, border.getInsets());
             }
             // das hier für height 100% der inneren Komponenten, funzt im Firefox, nicht im IE
-            styleString.append("width:100%;height:100%;");
+            styleString.append("width:100%;height:100%;vertical-align:top");
             Utils.optAttribute(device, "style", styleString);
 
             device.print(">"); // table

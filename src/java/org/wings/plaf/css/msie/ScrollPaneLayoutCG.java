@@ -1,19 +1,33 @@
 package org.wings.plaf.css.msie;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SScrollPaneLayout;
-import org.wings.SDimension;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.awt.*;
 
 public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
     private static final long serialVersionUID = 1L;
 
+    protected void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
+        openLayouterBody(d, layout);
+        d.print("<tr><td valign=\"top\"><div style=\"display: none; behavior:url(../fill.htc)\" rule=\"scroll\">");
+        
+        Map components = layout.getComponents();
+        SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
+        Scrollable scrollable = (Scrollable) center;
+        Rectangle viewportSize = scrollable.getViewportSize();
+        Rectangle scrollableViewportSize = scrollable.getScrollableViewportSize();
+        scrollable.setViewportSize(scrollableViewportSize);
+        writeComponent(d, center);
+        scrollable.setViewportSize(viewportSize);
+
+        d.print("</div></td></tr>");
+        closeLayouterBody(d, layout);
+    }
 
     protected void writePaging(Device d, SScrollPaneLayout layout) throws IOException {
         SDimension preferredSize = layout.getContainer().getPreferredSize();

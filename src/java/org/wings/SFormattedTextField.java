@@ -48,7 +48,7 @@ public class SFormattedTextField extends STextField {
     }
 
     public SFormattedTextField(SAbstractFormatter formatter) {
-        this.formatter = formatter;
+        setFormatter( formatter );
     }
 
     public void setValue(Object object) {
@@ -82,6 +82,17 @@ public class SFormattedTextField extends STextField {
     }
 
     public void setFormatter(SAbstractFormatter formatter) {
+        SAbstractFormatter oldFormatter = this.formatter;
+        
+        if ( oldFormatter != null ) {
+            oldFormatter.uninstall();
+        }
+        
         this.formatter = formatter;
+        
+        if ( formatter != null ) {
+            formatter.install( this );
+        }
+        
     }
 }

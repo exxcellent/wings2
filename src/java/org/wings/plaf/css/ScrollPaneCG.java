@@ -34,17 +34,21 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
 
         if (!layout.isPaging() && scrollable instanceof SComponent) {
             SComponent center = (SComponent) scrollable;
-            Rectangle viewportSize = scrollable.getViewportSize();
-            SDimension preferredSize = center.getPreferredSize();
+            Rectangle viewportSizeBackup = scrollable.getViewportSize();
+            SDimension preferredSizeBackup = center.getPreferredSize();
             try {
                 scrollable.setViewportSize(scrollable.getScrollableViewportSize());
-                center.setPreferredSize(component.getPreferredSize());
-                component.setPreferredSize(null);
                 writeContent(device, component);
+                device.print("<script type=\"text/javascript\">\n" +
+                    "    var outer = document.getElementById(\"" + component.getName() + "\");\n" +
+                    "    var div = outer.getElementsByTagName(\"div\")[0];\n" +
+                    "    div.style.height = document.defaultView.getComputedStyle(outer, null).getPropertyValue(\"height\");\n" +
+                    "    div.style.display = \"block\";" +
+                    "</script>");
             } finally {
-                component.setPreferredSize(center.getPreferredSize());
-                scrollable.setViewportSize(viewportSize);
-                center.setPreferredSize(preferredSize);
+                //component.setPreferredSize(center.getPreferredSize());
+                scrollable.setViewportSize(viewportSizeBackup);
+                center.setPreferredSize(preferredSizeBackup);
             }
         }
         else {
@@ -63,5 +67,3 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
         device.print("</table>");
     }
 }
-
-

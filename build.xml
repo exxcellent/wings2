@@ -68,9 +68,11 @@
             <fileset dir="build/class">
                 <include name="org/wings/plaf/xhtml/**"/>
                 <include name="org/wings/plaf/css/**"/>
+                <include name="org/wingx/plaf/**"/>
             </fileset>
             <fileset dir="src/java">
                 <include name="org/wings/plaf/css/*.js"/>
+                <include name="org/wingx/plaf/**/*.js"/>
             </fileset>
             <fileset dir="src/res">
                 <include name="**/*.js"/>

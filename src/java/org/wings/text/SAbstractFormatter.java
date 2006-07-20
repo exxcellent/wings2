@@ -28,6 +28,8 @@ import java.text.ParseException;
  */
 public abstract class SAbstractFormatter implements Serializable {
 
+    private SFormattedTextField formattedTextField = null;
+    
     /**
      * @param text String to convert
      * @return Object representation of text
@@ -39,4 +41,17 @@ public abstract class SAbstractFormatter implements Serializable {
      * @return String representation of value
      */
     public abstract String valueToString(Object value) throws ParseException;
+    
+    public void install( SFormattedTextField formattedTextField ) {
+        this.formattedTextField = formattedTextField;
+    }
+    
+    public void uninstall() {
+        this.formattedTextField = null;
+    }
+    
+    public final SFormattedTextField getFormattedTextField() {
+        return formattedTextField;
+    }    
+    
 }

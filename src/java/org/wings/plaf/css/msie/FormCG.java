@@ -85,7 +85,7 @@ public class FormCG extends org.wings.plaf.css.FormCG {
                 borderHeight += border.getThickness(SConstants.BOTTOM);
             }
 
-            device.print("<table style=\"behavior:url(../fill.htc)\"");
+            device.print("<table style=\"behavior:url(../fill.htc)\" rule=\"fill\"");
             Utils.optAttribute(device, "layoutHeight", height);
             Utils.optAttribute(device, "borderHeight", borderHeight);
             preferredSize.setHeight(null);
