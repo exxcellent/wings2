@@ -19,55 +19,69 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SFormattedTextField;
 import org.wings.STextField;
+import org.wings.event.SParentFrameListener;
 import org.wings.io.Device;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.ScriptListener;
-import org.wings.text.SAbstractFormatter;
 
 import java.io.IOException;
 import java.text.ParseException;
 
 public final class TextFieldCG extends AbstractComponentCG implements
-        org.wings.plaf.TextFieldCG {
+        org.wings.plaf.TextFieldCG, SParentFrameListener {
     private final static transient Log log = LogFactory.getLog(TextFieldCG.class);
 
     private static final long serialVersionUID = 1L;
 
+    public void installCG( SComponent comp ) {
+        super.installCG( comp );
+        if ( comp instanceof SFormattedTextField ) {
+            comp.addParentFrameListener( this );
+        }
+    }
+    
+    public void parentFrameAdded(org.wings.event.SParentFrameEvent e ) {
+        SComponent comp = e.getComponent();
+        SFormattedTextField formattedTextField = (SFormattedTextField)comp;
+        CallableFormatter cf = new CallableFormatter(formattedTextField);
+        String name = "formatter_" + System.identityHashCode(cf);
+        if (!CallableManager.getInstance().containsCallable(name)) {
+            CallableManager.getInstance().registerCallable(name, cf );
+        } 
+        formattedTextField.putClientProperty("callable", name);
+        // keep a reference to the name, otherwise the callable will get garbage collected/
+    }
+    
+    public void parentFrameRemoved(org.wings.event.SParentFrameEvent e ) {
+        CallableManager.getInstance().unregisterCallable( (String)e.getComponent().getClientProperty("callable") );
+    }
+    
     public void componentChanged(SComponent component) {
         final STextField textField = (STextField) component;
-
+        
         if (textField instanceof SFormattedTextField) {
-            SFormattedTextField formattedTextField = (SFormattedTextField) textField;
-            SAbstractFormatter formatter = formattedTextField.getFormatter();
-            String name = "formatter_" + System.identityHashCode(formatter);
-            if (!CallableManager.getInstance().containsCallable(name)) {
-                CallableManager.getInstance().registerCallable(name, new CallableFormatter(formatter));
-                textField.putClientProperty("callable", name);
-                // keep a reference to the name, otherwise the callable will get garbage collected
-
-                ScriptListener[] scriptListeners = textField.getScriptListeners();
-
-                for (int i = 0; i < scriptListeners.length; i++) {
-                    ScriptListener scriptListener = scriptListeners[i];
-                    if (scriptListener instanceof DWRScriptListener)
-                        textField.removeScriptListener(scriptListener);
-                }
-
-                textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
-                                                                  "document.getElementById('{0}').style.color = '';" +
-                                                                  name +
-                                                                  ".validate(callback_{0}, document.getElementById('{0}').value)",
-                                                                  "function callback_{0}(data) {\n" +
-                                                                  "   if (!data && data != '') {\n" +
-                                                                  "       document.getElementById('{0}').style.color = '#ff0000';\n" +
-                                                                  "   }\n" +
-                                                                  "   else\n" +
-                                                                  "       document.getElementById('{0}').value = data;\n" +
-                                                                  "}\n", new SComponent[] { textField }));
+            ScriptListener[] scriptListeners = textField.getScriptListeners();
+            
+            for (int i = 0; i < scriptListeners.length; i++) {
+                ScriptListener scriptListener = scriptListeners[i];
+                if (scriptListener instanceof DWRScriptListener)
+                    textField.removeScriptListener(scriptListener);
             }
-        }
-        else {
+            
+            textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
+                    "document.getElementById('{0}').style.color = '';" +
+                    component.getClientProperty("callable") +
+                    ".validate(callback_{0}, document.getElementById('{0}').value)",
+                    "function callback_{0}(data) {\n" +
+                    "   if (!data && data != '') {\n" +
+                    "       document.getElementById('{0}').style.color = '#ff0000';\n" +
+                    "   }\n" +
+                    "   else\n" +
+                    "       document.getElementById('{0}').value = data;\n" +
+                    "}\n", new SComponent[] { textField }));
+            
+        } else {
             super.componentChanged(component);
         }
     }
@@ -101,21 +115,35 @@ public final class TextFieldCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
     }
-
+    
+    
     public static class CallableFormatter {
-        SAbstractFormatter formatter;
+        SFormattedTextField fTextField = null;
 
-        public CallableFormatter(SAbstractFormatter formatter) {
-            this.formatter = formatter;
+        public CallableFormatter(SFormattedTextField fTextField) {
+            this.fTextField = fTextField;
         }
 
         public String validate(String text) {
+            String string = "";
             try {
-                return formatter.valueToString(formatter.stringToValue(text));
+                Object value = fTextField.getFormatter().stringToValue(text);
+                string = fTextField.getFormatter().valueToString( value );
+                fTextField.setValue( value );
+            } catch (ParseException e) {
+                switch ( fTextField.getFocusLostBehavior() ) {
+                    case SFormattedTextField.COMMIT:
+                        string = null;
+                        break;
+                    case SFormattedTextField.COMMIT_OR_REVERT:
+                        string = fTextField.getText();
+                        break;
+                    default:
+                        break;
+                }
             }
-            catch (ParseException e) {
-                return null;
-            }
+            
+            return string;
         }
     }
 }
