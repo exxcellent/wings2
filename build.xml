@@ -72,6 +72,7 @@
             </fileset>
             <fileset dir="src/java">
                 <include name="org/wings/plaf/css/*.js"/>
+                <include name="org/wingx/calendar/**"/>
                 <include name="org/wingx/plaf/**/*.js"/>
             </fileset>
             <fileset dir="src/res">
