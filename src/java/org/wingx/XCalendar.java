@@ -64,7 +64,7 @@ public class XCalendar extends SContainer {
     }
     
     public XCalendar( Date date, SDateFormatter formatter ) {
-        getFormattedTextField().setFocusLostBehavior( SFormattedTextField.COMMIT_OR_REVERT );
+//        getFormattedTextField().setFocusLostBehavior( SFormattedTextField.COMMIT_OR_REVERT );
         this.setFormatter( formatter );
         this.setDate( date );
         this.add( getFormattedTextField() );
