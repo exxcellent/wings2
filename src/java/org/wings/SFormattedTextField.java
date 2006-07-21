@@ -31,13 +31,23 @@ import java.text.ParseException;
  * @author theresia
  */
 public class SFormattedTextField extends STextField {
+    
     private final static Log log = LogFactory.getLog(SFormattedTextField.class);
+ 
+    public final static int COMMIT = 0;
+    public final static int COMMIT_OR_REVERT = 1;
+    
+    private int focusLostBehavior = COMMIT_OR_REVERT;
+    
+    /* The last valid value */
+    private Object value = null;
+    
     private SAbstractFormatter formatter = null;
+    
     private static final SAbstractFormatter NO_FORMATTER = new SAbstractFormatter() {
         public Object stringToValue(String text) throws ParseException {
             return null;
         }
-
         public String valueToString(Object value) throws ParseException {
             return null;
         }
@@ -51,48 +61,77 @@ public class SFormattedTextField extends STextField {
         setFormatter( formatter );
     }
 
+    /**
+     * Sets the value
+     * @param object value
+     */
     public void setValue(Object object) {
         String string = null;
         if (formatter != null)
             try {
                 string = this.formatter.valueToString(object);
+                this.value = object;
             } catch (ParseException e) {
                 log.info("Unable to parse object" + e);
             }
         super.setText(string);
     }
 
+    /**
+     * Returns the last valid value
+     * @return the last valid value
+     */
     public Object getValue() {
         Object returnValue = null;
         try {
             returnValue = this.formatter.stringToValue(this.getText());
+            value = returnValue;
         } catch (ParseException e) {
             log.debug("Unable to parse string" + e);
+            returnValue = value;
         }
-        return returnValue;
+        return returnValue;       
     }
 
     // brauch man das?? So wohl nicht...
     public SFormattedTextField(Object value) {
         setValue(value);
     }
+    
+    /**
+     * Sets the focus lost behavior
+     * <code>COMMIT</code>
+     * <code>COMMIT_OR_REVERT</code>
+     * @param behavior focus lost behavior
+     */
+    public void setFocusLostBehavior( int behavior ) {
+        if ( behavior != COMMIT && behavior != COMMIT_OR_REVERT ) {
+            throw new IllegalArgumentException("i don't know your behavior");
+        }
+        focusLostBehavior = behavior;
+    }
+    
+    /**
+     * Returns the focus lost behavior
+     * @return focus lost behavior
+     */
+    public int getFocusLostBehavior () {
+        return this.focusLostBehavior;
+    }
 
+    /**
+     * Returns the SAbstractFormatter
+     * @return SAbstractFormatter
+     */
     public SAbstractFormatter getFormatter() {
         return formatter;
     }
 
+    /**
+     * Sets the SAbstractFormatter
+     * @param formatter SAbstactFormatter
+     */
     public void setFormatter(SAbstractFormatter formatter) {
-        SAbstractFormatter oldFormatter = this.formatter;
-        
-        if ( oldFormatter != null ) {
-            oldFormatter.uninstall();
-        }
-        
         this.formatter = formatter;
-        
-        if ( formatter != null ) {
-            formatter.install( this );
-        }
-        
     }
 }

@@ -9,6 +9,7 @@
 
 package org.wingx.plaf.css;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import org.wings.*;
@@ -37,20 +38,6 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         comp.addParentFrameListener( this );
-    }
-    
-    private void registerCallable(SComponent component) {
-        XCalendar calendar = (XCalendar)component;
-        CallableCalendar callableCalendar = new CallableCalendar( calendar.getFormattedTextField(), calendar.getTimeZone() );
-        String name = "xcalendar_" + System.identityHashCode(callableCalendar);
-        if (!CallableManager.getInstance().containsCallable(name)) {
-            CallableManager.getInstance().registerCallable(name, callableCalendar);
-            component.putClientProperty( "callable", name );
-        }
-    }
-    
-    private void unregisterCallable(SComponent component) {
-        CallableManager.getInstance().unregisterCallable( (String)component.getClientProperty("callable") );
     }
     
     private void addHeaders ( SFrame parentFrame ) {
@@ -82,6 +69,85 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         return retVal;
     }
 
+    public Locale getLocale( ) {
+        return SessionManager.getSession().getLocale() != null ? SessionManager.getSession().getLocale() : Locale.getDefault();
+    }
+    
+    public void writeInternal(org.wings.io.Device device, org.wings.SComponent _c )
+    throws java.io.IOException {
+        if ( !_c.isVisible() ) return;
+        _c.fireRenderEvent(SComponent.START_RENDERING);
+        final XCalendar component = (org.wingx.XCalendar) _c;
+
+        SFormattedTextField fTextField = component.getFormattedTextField();
+          
+
+        String textFieldId  = "document.getElementById('" + fTextField.getName() + "')";
+        String funcPrefix   = component.getName();
+        String callable     = (String)component.getClientProperty( "callable" );
+        
+        fTextField.setEnabled( component.isEnabled() );
+        fTextField.addScriptListener( new JavaScriptListener( JavaScriptEvent.ON_CHANGE, funcPrefix+"_onFieldChange("+textFieldId+".value)" ) );
+        
+        dateFormat.setTimeZone( component.getTimeZone() );
+        
+        device.print("\n<input type=\"hidden\" id=\""+callable+"\" name=\""+callable+"\" value=\""+dateFormat.format( component.getDate() )+"\">\n");
+        
+        device.print("<table cellspacing=\"0\" cellpadding=\"0\"><tr><td>\n");
+        
+        fTextField.write(device);
+        
+        device.print("\n</td><td>\n");
+       
+        SLabel label = new SLabel();
+        device.print("<input style=\"margin-left:2px;\" type=\"image\" id=\""+label.getName()+"\" src=\""+component.getIcon().getURL()+"\"");
+        if ( !component.isEnabled() ) {
+            device.print( " disabled");
+        }
+        device.print(">\n");
+        
+        device.print("</td></tr></table>\n");
+        
+        device.print("<script type=\"text/javascript\">\n");
+            printJavaScriptFunctions( device, callable, textFieldId, component, funcPrefix );
+            printCalendarSetup( device, callable, label.getName(), funcPrefix );
+        device.print("</script>\n" );
+
+        _c.fireRenderEvent(SComponent.DONE_RENDERING);
+        
+    }
+    
+    private final void printJavaScriptFunctions( org.wings.io.Device device, String callable, String textFieldId, XCalendar cal, String functionPrefix )
+    throws IOException {
+        device.print(" function "+functionPrefix+"_onFieldChange(dateString) {");
+        device.print(" "+callable+".onFieldChange( "+functionPrefix+"_onFieldChangeCallback, dateString );");
+        device.print(" }\n");
+        device.print(" function "+functionPrefix+"_onFieldChangeCallback(data) {");
+        device.print(" document.getElementById('"+callable+"').value = data;");
+        device.print( "}\n");
+        device.print(" function "+functionPrefix+"_onCalUpdate(cal) {");
+        device.print(" "+callable+".onCalUpdate( "+functionPrefix+"_onCalUpdateCallback, cal.date );");
+        device.print(" }\n");
+        device.print(" function "+functionPrefix+"_onCalUpdateCallback(data) {");
+        device.print(" "+textFieldId+".value = data;");
+        if ( cal.getActionListeners().length > 0 ) {
+            device.print("   "+textFieldId+".form.submit();");
+        } 
+        device.print(" }\n");        
+    }
+    
+    private final void printCalendarSetup( org.wings.io.Device device, String callable, String buttonName, String functionPrefix )
+    throws IOException {
+        device.print(" Calendar.setup({" );
+        device.print(" inputField  : \"" ).print(callable).print("\"");
+        device.print(", ifFormat : \"%Y.%m.%d\"");
+        device.print(", button : \"").print(buttonName).print("\"");
+        device.print(", showOthers : true" );
+        device.print(", electric : false" );
+        device.print(", onUpdate : "+functionPrefix+"_onCalUpdate" );
+        device.print(" });\n" );
+    }
+    
     public void parentFrameAdded(org.wings.event.SParentFrameEvent e ) {
         addHeaders( e.getParentFrame() );
         registerCallable(e.getComponent());
@@ -91,36 +157,28 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         unregisterCallable(e.getComponent());
     }
     
-    public Locale getLocale( ) {
-        return SessionManager.getSession().getLocale() != null ? SessionManager.getSession().getLocale() : Locale.getDefault();
-    }
+    public final static class CallableCalendar {
 
-    public static class CallableCalendar {
+        private SFormattedTextField fTextField  = null;
+        private TimeZone            timeZone    = null;
 
-        private SFormattedTextField fTextField = null;
-        private TimeZone            timeZone   = null;
-        
         public CallableCalendar( SFormattedTextField fTextField, TimeZone timeZone ){
             this.fTextField = fTextField;
             this.timeZone = timeZone;
         }
         /* Timestamt to Human readable */
-        public String ts2hr(String test) {
+        public String onCalUpdate(String test) {
             String retVal = "";
             try {
                 Date newDate = new Date( Long.parseLong( test ) );
                 retVal = fTextField.getFormatter().valueToString( newDate );
-                fTextField.setValue( newDate );
-                if ( fTextField.getActionListeners().length > 0 ) {
-                    fTextField.fireFinalEvents();
-                }
             } catch ( ParseException e ) {
                 retVal = "";
             }
             return retVal;
         }
         /* Human readabel to JSCalendar understandable */
-        public String hr2df(String test) {
+        public String onFieldChange(String test) {
             String retVal = "";
             dateFormat.setTimeZone( this.timeZone );
             try {
@@ -132,71 +190,19 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
             return retVal;
         }
         
+    }   
+    
+    private void registerCallable(SComponent component) {
+        XCalendar calendar = (XCalendar)component;
+        CallableCalendar callableCalendar = new CallableCalendar( calendar.getFormattedTextField(), calendar.getTimeZone() );
+        String name = "xcalendar_" + System.identityHashCode(callableCalendar);
+        if (!CallableManager.getInstance().containsCallable(name)) {
+            CallableManager.getInstance().registerCallable(name, callableCalendar);
+            component.putClientProperty( "callable", name );
+        }
     }
     
-    public void writeInternal(org.wings.io.Device device, org.wings.SComponent _c )
-    throws java.io.IOException {
-        if ( !_c.isVisible() ) return;
-        _c.fireRenderEvent(SComponent.START_RENDERING);
-        final XCalendar component = (org.wingx.XCalendar) _c;
-
-        SFormattedTextField fTextField = component.getFormattedTextField();
-        
-        String textFieldId  = "document.getElementById('" + fTextField.getName() + "')";
-        String funcPrefix   = fTextField.getName();
-        String callable     = (String)component.getClientProperty( "callable" );
-        
-        fTextField.setEnabled( component.isEnabled() );
-        fTextField.addScriptListener( new JavaScriptListener( JavaScriptEvent.ON_CHANGE, funcPrefix+"_datetots("+textFieldId+".value)" ) );
-        
-        dateFormat.setTimeZone( component.getTimeZone() );
-        
-        device.print("\n<input type=\"hidden\" id=\""+callable+"\" name=\""+callable+"\" value=\""+dateFormat.format( component.getDate() )+"\">");
-        device.print("\n<table cellspacing=\"0\" cellpadding=\"0\"><tr><td>\n");
-        
-        // Calendar Textfield
-        fTextField.write(device);
-        
-        device.print("\n</td><td>\n");
-        
-        SLabel label = new SLabel();
-        device.print("<input style=\"margin-left:2px;\" type=\"image\" id=\""+label.getName()+"\" src=\""+component.getIcon().getURL()+"\"");
-        
-        if ( !component.isEnabled() ) {
-            device.print( " disabled");
-        }
-        device.print(">");
-        
-        device.print("\n</td></tr></table>\n");
-        
-        device.print("\n<script type=\"text/javascript\">\n");
-        
-        device.print(" function "+funcPrefix+"_datetots ( dateString ) { "+callable+".hr2df( "+funcPrefix+"_mycallback2, dateString ); }\n");
-        device.print(" function "+funcPrefix+"_mycallback2 (data) { document.getElementById('"+callable+"').value = data; }\n");
-
-        device.print(" function "+funcPrefix+"_onCalUpdate( cal ) {\n");
-        device.print("   "+callable+".ts2hr( "+funcPrefix+"_onCalUpdateCallback, cal.date );\n");
-        device.print(" }\n");
-        
-        device.print(" function "+funcPrefix+"_onCalUpdateCallback(data) {\n");
-        device.print("   document.getElementById('"+fTextField.getName()+"').value = data;\n");
-        if ( component.getActionListeners().length > 0 ) {
-            device.print("   "+textFieldId+".form.submit();\n");
-        } 
-        device.print(" }\n");
-
-        device.print(" Calendar.setup({" );
-        device.print("\n  inputField  : \"" ).print(callable).print("\"");
-        device.print(",\n  ifFormat    : \"%Y.%m.%d\"");
-        device.print(",\n  button      : \"").print(label.getName()).print("\"");
-        device.print(",\n  showOthers  : true" );
-        device.print(",\n  electric    : false" );
-        device.print(",\n  onUpdate    : "+funcPrefix+"_onCalUpdate" );
-        device.print("\n });\n" );
-        
-        device.print("</script>\n" );
-        
-        _c.fireRenderEvent(SComponent.DONE_RENDERING);
-        
+    private void unregisterCallable(SComponent component) {
+        CallableManager.getInstance().unregisterCallable( (String)component.getClientProperty("callable") );
     }
 }
