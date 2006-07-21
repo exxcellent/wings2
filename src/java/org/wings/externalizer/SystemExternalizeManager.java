@@ -73,13 +73,6 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
             return null;
 
         log.debug("system externalizer: " + identifier);
-
-        int pos = identifier.indexOf(".");
-        if (pos > -1) {
-            identifier = identifier.substring(0, pos);
-        }
-
-        log.debug("system externalizer " + identifier);
         return (ExternalizedResource) externalized.get(identifier);
     }
 

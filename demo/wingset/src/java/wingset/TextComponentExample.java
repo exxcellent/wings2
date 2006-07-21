@@ -34,6 +34,7 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.session.SessionManager;
 import org.wings.text.SAbstractFormatter;
+import org.wingx.XCalendar;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -58,6 +59,13 @@ public class TextComponentExample extends WingSetPane {
         gridLayout.setHgap(10);
         gridLayout.setVgap(4);
         SPanel p = new SPanel(gridLayout);
+
+        p.add(new SLabel("XCalendar: "));
+        XCalendar calendar = new XCalendar();
+        calendar.setName("calendar");
+        calendar.setToolTipText("A Date Picker.");
+        calendar.getFormattedTextField().addDocumentListener(new MyDocumentListener(calendar.getFormattedTextField()));
+        p.add(calendar);
 
         p.add(new SLabel("STextField: "));
         STextField textField = new STextField();
@@ -98,18 +106,6 @@ public class TextComponentExample extends WingSetPane {
         textArea.addDocumentListener(new MyDocumentListener(textArea));
         p.add(textArea);
 
-        /* No longer necessary. SLabel now has a wordwrap property.
-        p.add(new SLabel("Multiline label: "));
-        STextArea disabledTextArea = new STextArea(
-                "A very simple multiline text only separated by \\n.\n" +
-                "Width and height is controlled by the size of the text.\n" +
-                "Like in Swing regular SLabels don't wrap, \n" +
-                "so use uneditable STextAreas as demonstrated.");
-        disabledTextArea.setName("multilineArea");
-        disabledTextArea.setEditable(false);
-        disabledTextArea.setBorder(new SLineBorder());
-        p.add(disabledTextArea);*/
-
         p.add(new SLabel("SDocumentEvents: "));
         p.add(eventLog);
 
@@ -137,6 +133,8 @@ public class TextComponentExample extends WingSetPane {
             SComponent component = p.getComponents()[i];
             component.setVerticalAlignment(SConstants.TOP);
             if ((component instanceof STextComponent) /*&& (component != disabledTextArea)*/ && (component != textArea))
+                component.setPreferredSize(new SDimension("250px", null));
+            if ((component instanceof XCalendar))
                 component.setPreferredSize(new SDimension("250px", null));
         }
 

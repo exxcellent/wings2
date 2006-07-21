@@ -33,22 +33,17 @@ public class StaticResourceExternalizer implements Externalizer {
     public static final StaticResourceExternalizer SHARED_INSTANCE = new StaticResourceExternalizer();
 
     public String getId(Object obj) {
-        if (obj instanceof ClassPathResource) {
-            ClassPathResource resource = (ClassPathResource)obj;
-            String id = resource.getResourceName();
-            String extension = resource.getExtension();
-            if (extension != null)
-                id = id.substring(0, id.length() - extension.length() - 1);
-            return id;
-        }
-        return null;
+        if (obj instanceof ClassPathResource)
+            return ((ClassPathResource)obj).getResourceName();
+        else
+            return null;
     }
 
     public String getExtension(Object obj) {
-        if (obj != null)
-            return ((StaticResource) obj).getExtension();
+        if (obj instanceof ClassPathResource)
+            return null;
         else
-            return "";
+            return ((StaticResource)obj).getExtension();
     }
 
     public String getMimeType(Object obj) {

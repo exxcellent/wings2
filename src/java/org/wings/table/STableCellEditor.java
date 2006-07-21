@@ -26,7 +26,7 @@ import java.io.Serializable;
 public interface STableCellEditor extends CellEditor, Serializable {
     SComponent getTableCellEditorComponent(STable table,
                                            Object value,
-                                           boolean isSelected,
+                                           boolean selected,
                                            int row,
                                            int column);
 }

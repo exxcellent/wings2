@@ -228,9 +228,9 @@ public class ImageInfo {
      * this array.
      */
     public static final String[] FORMAT_NAMES =
-            {"JPEG", "GIF", "PNG", "BMP", "PCX",
-             "IFF", "RAS", "PBM", "PGM", "PPM",
-             "PSD", "SWF"};
+            {"jpeg", "gif", "png", "bmp", "pcx",
+             "iff", "ras", "pbm", "pgm", "ppm",
+             "psd", "swf"};
 
     /**
      * The names of the MIME types for all supported file formats.

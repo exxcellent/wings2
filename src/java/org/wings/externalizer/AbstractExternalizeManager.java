@@ -296,8 +296,7 @@ public abstract class AbstractExternalizeManager {
         if (externalizer == null) {
             throw new IllegalStateException("no externalizer");
         }
-        ExternalizedResource extInfo = new ExternalizedResource(obj, externalizer,
-                mimeType, headers, flags);
+        ExternalizedResource extInfo = new ExternalizedResource(obj, externalizer, mimeType, headers, flags);
 
         extInfo.setId(externalizer.getId(obj));
         if ((flags & GLOBAL) > 0) {
@@ -324,14 +323,14 @@ public abstract class AbstractExternalizeManager {
                 identifier = "-" + identifier;
             else
                 identifier = createIdentifier();
-            extInfo.setId(identifier);
 
+            String extension = extInfo.getExtension();
+            if (extension != null)
+                identifier += ("." + extension);
+
+            extInfo.setId(identifier);
             storeExternalizedResource(identifier, extInfo);
             reverseExternalized.put(extInfo, identifier);
-        }
-        String extension = extInfo.getExtension();
-        if (extension != null) {
-            identifier += ("." + extension);
         }
 
         return identifier + sessionEncoding;

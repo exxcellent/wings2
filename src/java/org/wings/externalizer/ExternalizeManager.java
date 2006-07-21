@@ -90,11 +90,6 @@ public class ExternalizeManager extends AbstractExternalizeManager {
         if (pos > -1) {
             identifier = identifier.substring(pos + 1);
         }
-        pos = identifier.indexOf(".");
-        if (pos > -1) {
-            identifier = identifier.substring(0, pos);
-        }
-
         if (identifier.length() < 1) {
             return null;
         }

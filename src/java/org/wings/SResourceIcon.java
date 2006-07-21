@@ -117,5 +117,3 @@ public class SResourceIcon extends ClassPathResource implements SIcon {
         this.title = title;
     }
 }
-
-
