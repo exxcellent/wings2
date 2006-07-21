@@ -28,7 +28,7 @@ import org.wings.Resource;
 import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
-import org.wings.resource.ClasspathResource;
+import org.wings.resource.ClassPathResource;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
@@ -208,7 +208,7 @@ public class ResourceFactory
      * @return the styleSheet
      */
     public static Resource makeResource(String resourceName) {
-        return new ClasspathResource(resourceName);
+        return new ClassPathResource(resourceName);
     }
 
     /**

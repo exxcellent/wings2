@@ -24,7 +24,7 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
-import org.wings.resource.ClasspathResource;
+import org.wings.resource.ClassPathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
@@ -155,7 +155,7 @@ public class MenuBarCG extends AbstractComponentCG implements
      * @param mimeType the mimetype of the file
      */
     private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
-        ClasspathResource res = new ClasspathResource(classPath, mimeType);
+        ClassPathResource res = new ClassPathResource(classPath, mimeType);
         String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
     }

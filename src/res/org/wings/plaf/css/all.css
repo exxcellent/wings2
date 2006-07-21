@@ -215,7 +215,7 @@ A.STabbedPane_Tab_top IMG {
 /* STree */
 
 ul.STree li div.SSubTree {
-	background-image: url(org/wings/icons/TreeLine.gif);
+	background-image: url('-org/wings/icons/TreeLine.gif');
 	background-repeat:repeat-y;
 	background-position: 0px 100px;
 }
@@ -364,13 +364,13 @@ ul.SMenu a.x, ul.SMenu a.x:visited,
 ul.SMenu a.y, ul.SMenu a.y:visited, ul.SMenu a.y:hover,
 ul.SPopupMenu a.x, ul.SPopupMenu a.x:visited,
 ul.SPopupMenu a.y, ul.SPopupMenu a.y:visited, ul.SPopupMenu a.y:hover{
-    background:#eee url( 'org/wings/icons/MenuArrowRight.gif' ) no-repeat center right;
+    background:#eee url('-org/wings/icons/MenuArrowRight.gif') no-repeat center right;
     padding-right:10px;
 }
 
 ul.SMenu a.x:hover,
 ul.SPopupMenu a.x:hover{
-    background:#66b url("org/wings/icons/MenuArrowRight.gif") no-repeat center right;
+    background:#66b url('-org/wings/icons/MenuArrowRight.gif') no-repeat center right;
     padding-right:10px;
 }
 

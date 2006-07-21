@@ -20,7 +20,7 @@ import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Link;
 import org.wings.header.Script;
 import org.wings.plaf.css.dwr.CallableManager;
-import org.wings.resource.ClasspathResource;
+import org.wings.resource.ClassPathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
@@ -34,28 +34,32 @@ import org.wingx.XCalendar;
 public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.CalendarCG, SParentFrameListener {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-    
+
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         comp.addParentFrameListener( this );
     }
-    
+
     private void addHeaders ( SFrame parentFrame ) {
-        ClasspathResource res = new ClasspathResource("org/wingx/calendar/calendar.css", "text/css");
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        parentFrame.addHeader( new Link("stylesheet", null, "text/css", null, new DefaultURLResource(jScriptUrl)));
-        
-        addExternalizedScriptHeader( parentFrame, "org/wingx/calendar/calendar.js", "text/javascript" );
-        addExternalizedScriptHeader( parentFrame, getLangScriptURL(), "text/javascript" );
-        addExternalizedScriptHeader( parentFrame, "org/wingx/calendar/calendar-setup.js", "text/javascript" );
+        if (parentFrame.getClientProperty("calendarHeaders") == null) {
+            ClassPathResource res = new ClassPathResource("org/wingx/calendar/calendar.css", "text/css");
+            String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+            parentFrame.addHeader( new Link("stylesheet", null, "text/css", null, new DefaultURLResource(jScriptUrl)));
+
+            addExternalizedScriptHeader( parentFrame, "org/wingx/calendar/calendar.js", "text/javascript" );
+            addExternalizedScriptHeader( parentFrame, getLangScriptURL(), "text/javascript" );
+            addExternalizedScriptHeader( parentFrame, "org/wingx/calendar/calendar-setup.js", "text/javascript" );
+
+            parentFrame.putClientProperty("calendarHeaders", Boolean.TRUE);
+        }
     }
-    
-    private void addExternalizedScriptHeader(SFrame parentFrame, String classPath, String mimeType) {
-        ClasspathResource res = new ClasspathResource(classPath, mimeType);
+
+    private void addExternalizedScriptHeader(SFrame parentFrame, String ClassPath, String mimeType) {
+        ClassPathResource res = new ClassPathResource(ClassPath, mimeType);
         String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
     }
-    
+
     /**
      * Returns the language file.
      *
@@ -72,7 +76,7 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
     public Locale getLocale( ) {
         return SessionManager.getSession().getLocale() != null ? SessionManager.getSession().getLocale() : Locale.getDefault();
     }
-    
+
     public void writeInternal(org.wings.io.Device device, org.wings.SComponent _c )
     throws java.io.IOException {
         if ( !_c.isVisible() ) return;
@@ -80,43 +84,47 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         final XCalendar component = (org.wingx.XCalendar) _c;
 
         SFormattedTextField fTextField = component.getFormattedTextField();
-          
+
 
         String textFieldId  = "document.getElementById('" + fTextField.getName() + "')";
         String funcPrefix   = component.getName();
         String callable     = (String)component.getClientProperty( "callable" );
-        
+
         fTextField.setEnabled( component.isEnabled() );
         fTextField.addScriptListener( new JavaScriptListener( JavaScriptEvent.ON_CHANGE, funcPrefix+"_onFieldChange("+textFieldId+".value)" ) );
-        
+
         dateFormat.setTimeZone( component.getTimeZone() );
-        
-        device.print("\n<input type=\"hidden\" id=\""+callable+"\" name=\""+callable+"\" value=\""+dateFormat.format( component.getDate() )+"\">\n");
-        
+
+        device.print("\n<input type=\"hidden\" id=\""+callable+"\" name=\""+callable+"\" value=\""+format( component.getDate() )+"\">\n");
+
         device.print("<table cellspacing=\"0\" cellpadding=\"0\"><tr><td>\n");
-        
+
         fTextField.write(device);
-        
+
         device.print("\n</td><td>\n");
-       
+
         SLabel label = new SLabel();
         device.print("<input style=\"margin-left:2px;\" type=\"image\" id=\""+label.getName()+"\" src=\""+component.getIcon().getURL()+"\"");
         if ( !component.isEnabled() ) {
             device.print( " disabled");
         }
         device.print(">\n");
-        
+
         device.print("</td></tr></table>\n");
-        
+
         device.print("<script type=\"text/javascript\">\n");
             printJavaScriptFunctions( device, callable, textFieldId, component, funcPrefix );
             printCalendarSetup( device, callable, label.getName(), funcPrefix );
         device.print("</script>\n" );
 
         _c.fireRenderEvent(SComponent.DONE_RENDERING);
-        
+
     }
-    
+
+    private String format(Date date) {
+        return date != null ? dateFormat.format( date ) : "";
+    }
+
     private final void printJavaScriptFunctions( org.wings.io.Device device, String callable, String textFieldId, XCalendar cal, String functionPrefix )
     throws IOException {
         device.print(" function "+functionPrefix+"_onFieldChange(dateString) {");
@@ -132,10 +140,10 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         device.print(" "+textFieldId+".value = data;");
         if ( cal.getActionListeners().length > 0 ) {
             device.print("   "+textFieldId+".form.submit();");
-        } 
-        device.print(" }\n");        
+        }
+        device.print(" }\n");
     }
-    
+
     private final void printCalendarSetup( org.wings.io.Device device, String callable, String buttonName, String functionPrefix )
     throws IOException {
         device.print(" Calendar.setup({" );
@@ -147,16 +155,16 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         device.print(", onUpdate : "+functionPrefix+"_onCalUpdate" );
         device.print(" });\n" );
     }
-    
+
     public void parentFrameAdded(org.wings.event.SParentFrameEvent e ) {
         addHeaders( e.getParentFrame() );
         registerCallable(e.getComponent());
     }
-    
+
     public void parentFrameRemoved(org.wings.event.SParentFrameEvent e ) {
         unregisterCallable(e.getComponent());
     }
-    
+
     public final static class CallableCalendar {
 
         private SFormattedTextField fTextField  = null;
@@ -189,9 +197,9 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
             }
             return retVal;
         }
-        
-    }   
-    
+
+    }
+
     private void registerCallable(SComponent component) {
         XCalendar calendar = (XCalendar)component;
         CallableCalendar callableCalendar = new CallableCalendar( calendar.getFormattedTextField(), calendar.getTimeZone() );
@@ -201,7 +209,7 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
             component.putClientProperty( "callable", name );
         }
     }
-    
+
     private void unregisterCallable(SComponent component) {
         CallableManager.getInstance().unregisterCallable( (String)component.getClientProperty("callable") );
     }

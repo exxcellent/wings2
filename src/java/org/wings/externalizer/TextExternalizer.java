@@ -51,6 +51,10 @@ public class TextExternalizer implements Externalizer {
         this.extension = extension;
     }
 
+    public String getId(Object obj) {
+        return null;
+    }
+
     public String getExtension(Object obj) {
         return extension;
     }
@@ -94,5 +98,3 @@ public class TextExternalizer implements Externalizer {
         return null;
     }
 }
-
-

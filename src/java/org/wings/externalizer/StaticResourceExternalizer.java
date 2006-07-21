@@ -15,6 +15,7 @@ package org.wings.externalizer;
 
 import org.wings.Renderable;
 import org.wings.StaticResource;
+import org.wings.resource.ClassPathResource;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -30,6 +31,18 @@ public class StaticResourceExternalizer implements Externalizer {
     private static final Class[] SUPPORTED_CLASSES = {StaticResource.class};
 
     public static final StaticResourceExternalizer SHARED_INSTANCE = new StaticResourceExternalizer();
+
+    public String getId(Object obj) {
+        if (obj instanceof ClassPathResource) {
+            ClassPathResource resource = (ClassPathResource)obj;
+            String id = resource.getResourceName();
+            String extension = resource.getExtension();
+            if (extension != null)
+                id = id.substring(0, id.length() - extension.length() - 1);
+            return id;
+        }
+        return null;
+    }
 
     public String getExtension(Object obj) {
         if (obj != null)

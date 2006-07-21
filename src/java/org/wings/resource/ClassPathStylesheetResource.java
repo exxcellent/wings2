@@ -32,7 +32,7 @@ import java.io.InputStream;
  * @version $$
  */
 public class ClassPathStylesheetResource
-        extends ClasspathResource {
+        extends ClassPathResource {
     private final transient static Log log = LogFactory.getLog(ClassPathStylesheetResource.class);
     /**
      * The default max size for the buffer. since we do some replacement every time we
@@ -111,7 +111,7 @@ public class ClassPathStylesheetResource
 
     /**
      * Two ClassPathStylesheetResource are equal if both of them are instances
-     * of ClassPathStylesheetResource and the equals method of ClasspathResource
+     * of ClassPathStylesheetResource and the equals method of ClassPathResource
      * is true.
      *
      * @return true if the two instances are equal.

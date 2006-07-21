@@ -15,25 +15,9 @@ package org.wings.plaf;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.Resource;
-import org.wings.SDimension;
-import org.wings.SIcon;
-import org.wings.SResourceIcon;
-import org.wings.resource.ClasspathResource;
 import org.wings.resource.ResourceManager;
-import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSProperty;
-import org.wings.style.CSSStyleSheet;
-import org.wings.style.StyleSheet;
-import java.awt.*;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 /**
  * A Look-and-Feel consists of a bunch of CGs and resource properties.

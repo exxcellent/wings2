@@ -24,7 +24,7 @@ import org.wings.SFont;
 import org.wings.SIcon;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.ResourceFactory;
-import org.wings.resource.ClasspathResource;
+import org.wings.resource.ClassPathResource;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.StyleSheet;
@@ -115,7 +115,7 @@ public class DefaultPropertyValueConverter implements PropertyValueConverter {
         }
 
         if (Resource.class.isAssignableFrom(targetClass)) {
-            return new ClasspathResource(value);
+            return new ClassPathResource(value);
         }
 
         if (CSSAttributeSet.class.isAssignableFrom(targetClass)) {

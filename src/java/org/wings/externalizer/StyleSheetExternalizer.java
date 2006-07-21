@@ -30,6 +30,10 @@ public class StyleSheetExternalizer implements Externalizer {
     private static final Class[] SUPPORTED_CLASSES = {StyleSheet.class};
     private static final String[] SUPPORTED_MIME_TYPES = {"text/css"};
 
+    public String getId(Object obj) {
+        return null;
+    }
+
     public String getExtension(Object obj) {
         return "css";
     }

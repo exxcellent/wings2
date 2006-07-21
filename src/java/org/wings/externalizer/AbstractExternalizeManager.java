@@ -299,6 +299,7 @@ public abstract class AbstractExternalizeManager {
         ExternalizedResource extInfo = new ExternalizedResource(obj, externalizer,
                 mimeType, headers, flags);
 
+        extInfo.setId(externalizer.getId(obj));
         if ((flags & GLOBAL) > 0) {
             // session encoding is not necessary here
             return SystemExternalizeManager.getSharedInstance().externalize(extInfo);
@@ -318,7 +319,11 @@ public abstract class AbstractExternalizeManager {
         String identifier = (String) reverseExternalized.get(extInfo);
 
         if (identifier == null) {
-            identifier = createIdentifier();
+            identifier = extInfo.getId();
+            if (identifier != null)
+                identifier = "-" + identifier;
+            else
+                identifier = createIdentifier();
             extInfo.setId(identifier);
 
             storeExternalizedResource(identifier, extInfo);

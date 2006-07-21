@@ -28,8 +28,7 @@ import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.css.dwr.CallableManager;
-import org.wings.resource.ClassPathStylesheetResource;
-import org.wings.resource.ClasspathResource;
+import org.wings.resource.ClassPathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.ResourceManager;
@@ -148,7 +147,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         ArrayList cssUrls = new ArrayList();
         while (tokenizer.hasMoreTokens()) {
             String cssClassPath = tokenizer.nextToken();
-            ClassPathStylesheetResource res = new ClassPathStylesheetResource(cssClassPath, "text/css");
+            ClassPathResource res = new ClassPathResource(cssClassPath, "text/css");
             String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
             if (cssUrl != null) {
                 log.info("Attaching CSS Stylesheet "+cssClassPath+" found for browser "+browserName+" to frame. " +
@@ -158,6 +157,11 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 log.warn("Did not attach CSS Stylesheet "+cssClassPath+" for browser "+browserName+" to frame. " +
                         "(See Stylesheet.xxx entries in default.properties)");
             }
+        }
+        if (Utils.isMSIE(forFrame)) {
+            ClassPathResource layout = new ClassPathResource("org/wings/plaf/css/layout.htc", "text/htc");
+            layout.getId(); // externalize ..
+            forFrame.putClientProperty("layout.htc", layout);
         }
 
         return cssUrls;
@@ -170,7 +174,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         String jsClassPath = (String)manager.getObject(jsResKey, String.class);
         // catch missing script entry in properties file
         if (jsClassPath != null) {
-            ClasspathResource res = new ClasspathResource(jsClassPath, "text/javascript");
+            ClassPathResource res = new ClassPathResource(jsClassPath, "text/javascript");
             return extManager.externalize(res, ExternalizeManager.GLOBAL);
         }
         return null;
@@ -223,7 +227,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
      * @param mimeType the mimetype of the file
      */
     private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
-        ClasspathResource res = new ClasspathResource(classPath, mimeType);
+        ClassPathResource res = new ClassPathResource(classPath, mimeType);
         String jScriptUrl = parentFrame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
     }
@@ -417,7 +421,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 if (dragIter.hasNext()) {
                     // this needs to be added to the body, so use device.print()
                     // TODO: is caching by the VM enough or make this only initialize once?
-                    ClasspathResource res = new ClasspathResource(WZ_DND_JS, "text/javascript");
+                    ClassPathResource res = new ClassPathResource(WZ_DND_JS, "text/javascript");
                     String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
                     device.print("<script type=\"text/javascript\" src=\"");
                     device.print(jScriptUrl);
@@ -466,7 +470,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 device.print("';\n");
                 device.print("//-->\n</script>");
                 // TODO: is caching by the VM enough or make this only initialize once?
-                ClasspathResource res = new ClasspathResource(DND_JS, "text/javascript");
+                ClassPathResource res = new ClassPathResource(DND_JS, "text/javascript");
                 String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
                 device.print("<script type=\"text/javascript\" src=\"");
                 device.print(jScriptUrl);

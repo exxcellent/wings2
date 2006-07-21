@@ -68,6 +68,10 @@ public class ImageExternalizer implements Externalizer {
         throw new IllegalArgumentException("Unsupported Format " + format);
     }
 
+    public String getId(Object obj) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public String getExtension(Object obj) {
         return format;
     }

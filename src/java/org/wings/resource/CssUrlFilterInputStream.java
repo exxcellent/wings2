@@ -110,7 +110,7 @@ public class CssUrlFilterInputStream extends BufferedInputStream {
      * @return the url of the externalized Image
      */
     private String externalizeImage(String classPath, String mimeType) {
-        ClasspathResource res = new ClasspathResource(classPath, mimeType);
+        ClassPathResource res = new ClassPathResource(classPath, mimeType);
         if (res.getResourceStream() == null) {
             // no resource found at classPath, return old string
             log.debug("Could not find resource at classpath: " + classPath);

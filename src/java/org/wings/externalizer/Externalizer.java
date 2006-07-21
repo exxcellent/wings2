@@ -38,6 +38,12 @@ import java.util.Collection;
  */
 public interface Externalizer {
     /**
+     * Suggest an id.
+     * If a resource has a reasonable unique id, then it will be used as the externalized id.
+     */
+    String getId(Object obj);
+
+    /**
      * Returns the file extension of the given object. Some (old) browsers use
      * this information instead of the mime type. This is especially necessary
      * if delivering anything different than HTML.

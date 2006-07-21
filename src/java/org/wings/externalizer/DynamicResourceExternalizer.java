@@ -30,6 +30,10 @@ public class DynamicResourceExternalizer implements Externalizer {
 
     public static final DynamicResourceExternalizer SHARED_INSTANCE = new DynamicResourceExternalizer();
 
+    public String getId(Object obj) {
+        return null;
+    }
+
     public String getExtension(Object obj) {
         if (obj != null)
             return ((DynamicResource) obj).getExtension();

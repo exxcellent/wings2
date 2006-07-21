@@ -14,7 +14,7 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
     protected void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
         openLayouterBody(d, layout);
-        d.print("<tr><td valign=\"top\"><div style=\"display: none; behavior:url(../fill.htc)\" rule=\"scroll\">");
+        d.print("<tr><td valign=\"top\"><div style=\"display: none; behavior:url(-org/wings/plaf/css/layout.htc)\" rule=\"scroll\">");
         
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);

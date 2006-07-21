@@ -29,6 +29,10 @@ public class ResourceExternalizer implements Externalizer {
 
     public static final ResourceExternalizer SHARED_INSTANCE = new ResourceExternalizer();
 
+    public String getId(Object obj) {
+        return null;
+    }
+
     public String getExtension(Object obj) {
         return ((Resource) obj).getExtension();
     }

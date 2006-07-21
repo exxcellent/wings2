@@ -14,6 +14,8 @@
 package org.wings.resource;
 
 import org.wings.StaticResource;
+import org.wings.session.Session;
+import org.wings.session.SessionManager;
 import org.wings.externalizer.ExternalizeManager;
 import java.io.InputStream;
 
@@ -25,7 +27,7 @@ import java.io.InputStream;
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$
  */
-public class ClasspathResource
+public class ClassPathResource
         extends StaticResource {
     /**
      * The class loader from which the resource is loaded
@@ -40,14 +42,14 @@ public class ClasspathResource
     /**
      * A static resource that is obtained from the default classpath.
      */
-    public ClasspathResource(String resourceFileName) {
+    public ClassPathResource(String resourceFileName) {
         this(null, resourceFileName, "unkonwn");
     }
 
     /**
      * A static resource that is obtained from the default classpath.
      */
-    public ClasspathResource(String resourceFileName, String mimeType) {
+    public ClassPathResource(String resourceFileName, String mimeType) {
         this(null, resourceFileName, mimeType);
     }
 
@@ -57,7 +59,7 @@ public class ClasspathResource
      * @param classLoader      the classLoader from which the resource is obtained
      * @param resourceFileName the resource relative to the baseClass
      */
-    public ClasspathResource(ClassLoader classLoader, String resourceFileName) {
+    public ClassPathResource(ClassLoader classLoader, String resourceFileName) {
         this(classLoader, resourceFileName, "unknown");
     }
 
@@ -67,7 +69,7 @@ public class ClasspathResource
      * @param classLoader      the classLoader from which the resource is obtained
      * @param resourceFileName the resource relative to the baseClass
      */
-    public ClasspathResource(ClassLoader classLoader, String resourceFileName, String mimeType) {
+    public ClassPathResource(ClassLoader classLoader, String resourceFileName, String mimeType) {
         super(null, mimeType);
         this.classLoader = classLoader;
         this.resourceFileName = resourceFileName;
@@ -76,11 +78,6 @@ public class ClasspathResource
             extension = resourceFileName.substring(dotIndex + 1);
         }
         externalizerFlags = ExternalizeManager.GLOBAL | ExternalizeManager.FINAL;
-    }
-
-
-    public String toString() {
-        return getId() + " " + resourceFileName;
     }
 
     protected InputStream getResourceStream() {
@@ -111,8 +108,8 @@ public class ClasspathResource
      * @return true if classloader and resource name are equal.
      */
     public boolean equals(Object o) {
-        if (o instanceof ClasspathResource) {
-            ClasspathResource other = (ClasspathResource) o;
+        if (o instanceof ClassPathResource) {
+            ClassPathResource other = (ClassPathResource) o;
             return ((this == other)
                     || ((classLoader == other.classLoader || (classLoader != null && classLoader.equals(other.classLoader)))
                     && resourceFileName.equals(other.resourceFileName)));
@@ -125,6 +122,10 @@ public class ClasspathResource
      */
     protected ClassLoader getClassLoader() {
         return this.classLoader == null ? Thread.currentThread().getContextClassLoader() : this.classLoader;
+    }
+
+    public String getResourceName() {
+        return resourceFileName;
     }
 }
 

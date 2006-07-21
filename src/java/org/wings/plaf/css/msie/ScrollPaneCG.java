@@ -72,7 +72,7 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
                 borderHeight += border.getThickness(SConstants.BOTTOM);
             }
 
-            device.print("<table style=\"behavior:url(../fill.htc)\" rule=\"fill\"");
+            device.print("<table style=\"behavior:url(-org/wings/plaf/css/layout.htc)\" rule=\"fill\"");
             Utils.optAttribute(device, "layoutHeight", height);
             Utils.optAttribute(device, "borderHeight", borderHeight);
             preferredSize.setHeight(null);
