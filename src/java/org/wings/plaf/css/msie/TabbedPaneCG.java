@@ -35,7 +35,7 @@ public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG {
             SStringBuilder tabArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_TABS));
             SStringBuilder contentArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_CONTENT));
 
-            device.print("<table style=\"behavior:url(-org/wings/plaf/css/layout.htc)\" rule=\"fill\"");
+            device.print("<table style=\"behavior:url('-org/wings/plaf/css/layout.htc')\" rule=\"fill\"");
             Utils.optAttribute(device, "layoutHeight", height);
 
             preferredSize.setHeight(null);

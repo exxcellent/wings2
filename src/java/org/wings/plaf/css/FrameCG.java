@@ -159,7 +159,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
         if (Utils.isMSIE(forFrame)) {
-            ClassPathResource layout = new ClassPathResource("org/wings/plaf/css/layout.htc", "text/htc");
+            ClassPathResource layout = new ClassPathResource("org/wings/plaf/css/layout.htc", "text/x-component");
             layout.getId(); // externalize ..
             forFrame.putClientProperty("layout.htc", layout);
         }

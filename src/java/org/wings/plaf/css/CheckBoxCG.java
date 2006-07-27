@@ -59,18 +59,6 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         final String text = button.getText();
         final SIcon icon = getIcon(button);
 
-        /* TODO for the button support in IE hack to be working, this component
-         * needs to always or never use buttons when rendered as form component.
-         * Therefore best would be to drop button support on this component, since
-         * one probably wants to change CheckBox state without submitting.
-         * Therefore replace button with table...
-         * At this time it probably never uses buttons, since useIconsInForms is false
-         * by default (and probably never set). useIconsInForms should be dropped!
-         * Try #setShowAsFormComponent(false) if you want icon checkboxes in your
-         * application.
-         * (OL)
-         */
-
         writeTablePrefix(device, component);
 
         if (showAsFormComponent && useIconsInForms) {

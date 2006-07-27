@@ -35,10 +35,6 @@ public final class TableCG
     implements org.wings.plaf.TableCG
 {
     private static final long serialVersionUID = 1L;
-    /**
-     * Apache jakarta commons logger
-     */
-    private static final Log log = LogFactory.getLog(TableCG.class);
     protected String fixedTableBorderWidth;
     protected SIcon editIcon;
     protected String selectionColumnWidth = "22px";
@@ -185,7 +181,7 @@ public final class TableCG
             component = table.prepareRenderer(table.getCellRenderer(row, col), row, col);
         }
 
-        final boolean contentContainsClickables = !(component instanceof SLabel);
+        final boolean contentContainsClickables = component instanceof SClickable;
 
         device.print("<td class=\"cell\" col=\"");
         device.print(col);
