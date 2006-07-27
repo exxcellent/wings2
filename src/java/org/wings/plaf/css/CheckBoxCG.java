@@ -137,6 +137,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         device.print("<input type=\"checkbox\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\"");
+        Utils.writeEvents(device, button, null);
         Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
 
         if (!button.isEnabled())
