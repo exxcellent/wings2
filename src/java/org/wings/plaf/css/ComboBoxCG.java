@@ -18,6 +18,8 @@ import org.wings.SComboBox;
 import org.wings.SComponent;
 import org.wings.SDefaultListCellRenderer;
 import org.wings.SListCellRenderer;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
@@ -38,8 +40,20 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         }
     }
 
-
     protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
+        
+        Object clientProperty = component.getClientProperty("onChangeSubmitListener");
+        if ( ( component.getActionListeners().length > 0 || component.getItemListener().length > 0 ) ) {
+            if ( clientProperty == null ) {
+                JavaScriptListener javaScriptListener = new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "this.form.submit()" );
+                component.addScriptListener( javaScriptListener );
+                component.putClientProperty( "onChangeSubmitListener", javaScriptListener );                
+            }
+        } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
+            component.removeScriptListener( (JavaScriptListener)clientProperty );
+            component.putClientProperty( "onChangeSubmitListener", null );         
+        }  
+        
         device.print("<select size=\"1\"");
         writeAllAttributes(device, component);
         Utils.optAttribute(device, "name", Utils.event(component));

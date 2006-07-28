@@ -21,6 +21,8 @@ import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 
 import java.io.IOException;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 
 public final class ListCG extends AbstractComponentCG implements  org.wings.plaf.ListCG {
 
@@ -38,6 +40,19 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
     }
 
     protected void writeFormList(final Device device, final SList list) throws IOException {
+        
+        Object clientProperty = list.getClientProperty("onChangeSubmitListener");
+        if ( list.getListSelectionListeners().length > 0 ) {
+            if ( clientProperty == null ) {
+                JavaScriptListener javaScriptListener = new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "this.form.submit()" );
+                list.addScriptListener( javaScriptListener );
+                list.putClientProperty( "onChangeSubmitListener", javaScriptListener );                
+            }
+        } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
+            list.removeScriptListener( (JavaScriptListener)clientProperty );
+            list.putClientProperty( "onChangeSubmitListener", null );         
+        }
+        
         device.print("<select");
         writeAllAttributes(device, list);
 
@@ -46,7 +61,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         Utils.optAttribute(device, "size", list.getVisibleRowCount());
         Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SList.MULTIPLE_SELECTION) ? "multiple" : null);
         Utils.writeEvents(device, list, null);
-
+        
         if (!list.isEnabled())
             device.print(" disabled=\"true\"");
         if (list.isFocusOwner())
@@ -72,6 +87,10 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
                 //Utils.optAttribute(device, "class", "selected");
             }
 
+            writeTooltipMouseOver( device, renderer );
+            String tooltipText = renderer.getToolTipText();
+            renderer.setToolTipText(null);
+            
             SStringBuilder buffer = Utils.generateCSSComponentInlineStyle(renderer);
             Utils.optAttribute(device, "style", buffer.toString());
             device.print(">");
@@ -96,6 +115,8 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
                 device.print(model.getElementAt(i).toString());
             }
 
+            renderer.setToolTipText( tooltipText );
+            
             device.print("</option>");
         }
 

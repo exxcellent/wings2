@@ -20,6 +20,8 @@ import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
 
 import java.io.IOException;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 
 public final class RadioButtonCG extends CheckBoxCG implements
         org.wings.plaf.RadioButtonCG {
@@ -36,17 +38,31 @@ public final class RadioButtonCG extends CheckBoxCG implements
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {
+        
+        Object clientProperty = button.getClientProperty("onChangeSubmitListener");
+        if ( button.getActionListeners().length > 0 ) {
+            if ( clientProperty == null ) {
+                JavaScriptListener javaScriptListener = new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "this.form.submit()" );
+                button.addScriptListener( javaScriptListener );
+                button.putClientProperty( "onChangeSubmitListener", javaScriptListener );                
+            }
+        } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
+            button.removeScriptListener( (JavaScriptListener)clientProperty );
+            button.putClientProperty( "onChangeSubmitListener", null );         
+        } 
+        
         device.print("<input type=\"hidden\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"");
         Utils.write(device, button.getDeselectionParameter());
         device.print("\"/>");
-
+        
         device.print("<input type=\"radio\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"");
         Utils.write(device, button.getToggleSelectionParameter());
         device.print("\"");
+        Utils.writeEvents( device, button, null );
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
@@ -55,7 +71,7 @@ public final class RadioButtonCG extends CheckBoxCG implements
 
         if (button.isSelected())
             device.print(" checked=\"true\"");
-
+        
         device.print("/>");
     }
 }
