@@ -324,6 +324,8 @@ public final class Utils {
      * <p>Sample: <code>width:100%;heigth=15px"</code>
      */
     public static SStringBuilder appendCSSInlineSize(SStringBuilder styleString, SComponent component) {
+        if (component == null)
+            return styleString;
         SDimension preferredSize = component.getPreferredSize();
         if (preferredSize != null) {
             boolean msie = isMSIE(component);

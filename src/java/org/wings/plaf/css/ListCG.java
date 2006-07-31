@@ -14,15 +14,18 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.util.SStringBuilder;
+import org.wings.SCellRendererPane;
+import org.wings.SComponent;
+import org.wings.SDefaultListCellRenderer;
+import org.wings.SList;
+import org.wings.SListCellRenderer;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
-
-import java.io.IOException;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
+
+import java.io.IOException;
 
 public final class ListCG extends AbstractComponentCG implements  org.wings.plaf.ListCG {
 
@@ -40,19 +43,19 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
     }
 
     protected void writeFormList(final Device device, final SList list) throws IOException {
-        
+
         Object clientProperty = list.getClientProperty("onChangeSubmitListener");
         if ( list.getListSelectionListeners().length > 0 ) {
             if ( clientProperty == null ) {
                 JavaScriptListener javaScriptListener = new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "this.form.submit()" );
                 list.addScriptListener( javaScriptListener );
-                list.putClientProperty( "onChangeSubmitListener", javaScriptListener );                
+                list.putClientProperty( "onChangeSubmitListener", javaScriptListener );
             }
         } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
             list.removeScriptListener( (JavaScriptListener)clientProperty );
-            list.putClientProperty( "onChangeSubmitListener", null );         
+            list.putClientProperty( "onChangeSubmitListener", null );
         }
-        
+
         device.print("<select");
         writeAllAttributes(device, list);
 
@@ -61,7 +64,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         Utils.optAttribute(device, "size", list.getVisibleRowCount());
         Utils.optAttribute(device, "multiple", (list.getSelectionMode() == SList.MULTIPLE_SELECTION) ? "multiple" : null);
         Utils.writeEvents(device, list, null);
-        
+
         if (!list.isEnabled())
             device.print(" disabled=\"true\"");
         if (list.isFocusOwner())
@@ -87,15 +90,16 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
                 //Utils.optAttribute(device, "class", "selected");
             }
 
-            writeTooltipMouseOver( device, renderer );
-            String tooltipText = renderer.getToolTipText();
-            renderer.setToolTipText(null);
-            
-            SStringBuilder buffer = Utils.generateCSSComponentInlineStyle(renderer);
-            Utils.optAttribute(device, "style", buffer.toString());
+            if (renderer != null) {
+                writeTooltipMouseOver( device, renderer );
+                Utils.optAttribute(device, "style", Utils.generateCSSComponentInlineStyle(renderer));
+            }
             device.print(">");
 
             if (renderer != null) {
+                String tooltipText = renderer.getToolTipText();
+                renderer.setToolTipText(null);
+
                 // Hack: remove all tags, because in form selections, looks ugly.
                 StringBuilderDevice string = getStringBuilderDevice();
                 renderer.write(string);
@@ -111,12 +115,12 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
                     }
                 }
                 device.print(chars, pos, chars.length - pos);
+
+                renderer.setToolTipText( tooltipText );
             } else {
                 device.print(model.getElementAt(i).toString());
             }
 
-            renderer.setToolTipText( tooltipText );
-            
             device.print("</option>");
         }
 
