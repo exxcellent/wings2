@@ -13,19 +13,8 @@
  */
 package wingset;
 
-import org.wings.SAnchor;
-import org.wings.SBorderLayout;
-import org.wings.SBoxLayout;
-import org.wings.SButton;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SFlowDownLayout;
-import org.wings.SForm;
-import org.wings.SLabel;
-import org.wings.SOptionPane;
-import org.wings.SPanel;
-import org.wings.STextField;
-import org.wings.SToolBar;
+import org.wings.*;
+import org.wings.resource.ResourceManager;
 import org.wings.border.SLineBorder;
 
 import java.awt.*;
@@ -48,10 +37,12 @@ public class OptionPaneExample
         ((SBoxLayout)toolBar.getLayout()).setHgap(6);
         ((SBoxLayout)toolBar.getLayout()).setVgap(4);
 
+        final SComboBox combo = new SComboBox(new String[]{"Erstens", "Zweitens", "Drittens"});
+
         SButton msg = new SButton("show Message");
         msg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SOptionPane.showMessageDialog(null, "This is a simple message", "A Message");
+                SOptionPane.showPlainMessageDialog(null, "This is a simple message", "A Message");
             }
         });
         toolBar.add(msg);
@@ -59,17 +50,18 @@ public class OptionPaneExample
         SButton question = new SButton("show Question");
         final ActionListener comment = new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand() == SOptionPane.OK_ACTION)
-                    SOptionPane.showMessageDialog(null, "Fine !");
-                else
-                    SOptionPane.showMessageDialog(null, "No Problem, just look at another site");
+                if (e.getActionCommand().equals(SOptionPane.OK_ACTION)) {
+                    SOptionPane.showPlainMessageDialog(null, "Fine !");
+                }
+                else {
+                    SOptionPane.showPlainMessageDialog(null, "No Problem, just look at another site");
+                }
             }
         };
 
         question.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SOptionPane.showQuestionDialog(null, "Continue this example?",
-                        "A Question", comment);
+                SOptionPane.showQuestionDialog(null, "Continue this example?", "A Question", comment);
             }
         });
         toolBar.add(question);
@@ -77,23 +69,22 @@ public class OptionPaneExample
         SButton yesno = new SButton("show Yes No");
         final ActionListener feedback = new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand() == SOptionPane.NO_ACTION) {
+                if (e.getActionCommand().equals(SOptionPane.NO_ACTION)) {
                     SPanel p = new SPanel(new SFlowDownLayout());
                     p.add(new SLabel("That's sad!"));
                     SAnchor sendMail = new SAnchor("mailto:haaf@mercatis.de");
                     sendMail.add(new SLabel("Please send my why!"));
                     p.add(sendMail);
-                    SOptionPane.showMessageDialog(null, p);
-                } else
-                    SOptionPane.showMessageDialog(null, "Fine, so do we!");
+                    SOptionPane.showPlainMessageDialog(null, p);
+                } else {
+                    SOptionPane.showPlainMessageDialog(null, "Fine, so do we!");
+                }
             }
         };
 
         yesno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SOptionPane.showYesNoDialog(null,
-                        "Do you like wingS",
-                        "A Yes No Question", feedback);
+                SOptionPane.showYesNoDialog(null, "Do you like wingS", "A Yes No Question", feedback);
             }
         });
 
@@ -102,11 +93,21 @@ public class OptionPaneExample
         final SLabel label = new SLabel();
         final ActionListener inputListener = new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SOptionPane optionPane = (SOptionPane) e.getSource();
-                STextField inputValue = (STextField) optionPane.getInputValue();
-                label.setText("" + inputValue.getText());
+                if (e.getActionCommand().equals(SOptionPane.OK_ACTION)) {
+                    SOptionPane optionPane = (SOptionPane) e.getSource();
+                    STextField inputValue = (STextField) optionPane.getInputValue();
+                    label.setText("" + inputValue.getText());
+                }
             }
         };
+
+        SButton information = new SButton("show Information");
+        information.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SOptionPane.showMessageDialog(null, "wingS2 WingSet", "Information");
+            }
+        });
+        toolBar.add(information);
 
         SButton input = new SButton("show Input");
         input.addActionListener(new java.awt.event.ActionListener() {
@@ -119,6 +120,7 @@ public class OptionPaneExample
 
         SForm c = new SForm(new SBorderLayout());
         c.add(toolBar, SBorderLayout.NORTH);
+        c.add(combo, SBorderLayout.SOUTH);
         return c;
     }
 }

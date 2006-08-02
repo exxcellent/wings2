@@ -47,7 +47,7 @@ table, td, th {
     /*text-align: inherit; breaks layouting of DIVs inside TD */
 }
 
-/* If the surrounding container aligns an inner component, then 
+/* If the surrounding container aligns an inner component, then
    this alignments is inherited (at least in MSIE, but this is
    correct). To avoid this inheritance we declare a default
    left-alignment on the table element.
@@ -541,48 +541,78 @@ table.SPageScroller table.pages SPAN.disabled_linkbutton {
 
 
 
+/* ----------- SINTERNAL FRAME ----------- */
 
-/* ----------- SOPTIONPANE */
-
-.SOptionPane,
-.SDialog,
 .SInternalFrame {
     border: 1px solid #ccc;
     margin: .2em;
 }
 
-.SOptionPane div.WindowBar,
-.SDialog div.WindowBar,
 .SInternalFrame div.WindowBar {
 	padding:.2em;
 	background-color: #aaf;
 }
 
-.SOptionPane div.WindowBar div.WindowBar_title,
-.SDialog div.WindowBar div.WindowBar_title,
 .SInternalFrame div.WindowBar div.WindowBar_title {
 	padding-right:4em;
 	white-space:pre;
 }
 
-.SOptionPane div.WindowBar a.WindowButton,
-.SDialog div.WindowBar a.WindowButton,
 .SInternalFrame div.WindowBar a.WindowButton {
 	float: right;
 }
 
-.SOptionPane div.WindowBar a.DeiconifyButton,
-.SDialog div.WindowBar a.DeiconifyButton,
 .SInternalFrame div.WindowBar a.DeiconifyButton {
 	display: inline;
 }
 
-.SOptionPane div.WindowContent,
-.SDialog div.WindowContent,
 .SInternalFrame div.WindowContent {
 	padding: .2em;
 }
 
+
+/* ----------- SOPTIONPANE AND SDIALOG ----------- */
+
+.SOptionPane,
+.SDialog {
+    border: 1px solid #a6a6a6;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+}
+
+form.SOptionPane,
+form.SDialog {
+    border: none;
+}
+
+.SOptionPane div.WindowBar,
+.SDialog div.WindowBar {
+	padding:.2em;
+	background-color: #1f1faa;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.SOptionPane div.WindowBar div.WindowBar_title,
+.SDialog div.WindowBar div.WindowBar_title {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.SOptionPane div.WindowBar a.WindowButton,
+.SDialog div.WindowBar a.WindowButton {
+	float: right;
+}
+
+.SOptionPane div.WindowBar a.DeiconifyButton,
+.SDialog div.WindowBar a.DeiconifyButton {
+	display: inline;
+}
+
+.SOptionPane div.WindowContent,
+.SDialog div.WindowContent {
+    padding: .8em;
+    background-color: #e6e6e6;
+}
 
 
 
@@ -629,10 +659,3 @@ table.SScrollBar table.buttons a:hover {
 table.SButton {
     color: #004;
 }
-
-
-
-
-
-
-

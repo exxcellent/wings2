@@ -269,12 +269,13 @@
          *             argument is negative or not less than the length of this
          *             sequence.
          */
-        public int codePointAt(int index) {
-            if ((index < 0) || (index >= count)) {
-                throw new StringIndexOutOfBoundsException(index);
-            }
-            return Character.codePointAt(value, index);
-        }
+// TODO: Character.codePointAt(value, index) since JDK 1.5
+//        public int codePointAt(int index) {
+//            if ((index < 0) || (index >= count)) {
+//                throw new StringIndexOutOfBoundsException(index);
+//            }
+//            return Character.codePointAt(value, index);
+//        }
 
         /**
          * Returns the character (Unicode code point) before the specified
@@ -297,13 +298,14 @@
          *            argument is less than 1 or greater than the length
          *            of this sequence.
          */
-        public int codePointBefore(int index) {
-        int i = index - 1;
-            if ((i < 0) || (i >= count)) {
-                throw new StringIndexOutOfBoundsException(index);
-            }
-            return Character.codePointBefore(value, index);
-        }
+// TODO: Character.codePointBefore(value, index) since JDK 1.5
+//        public int codePointBefore(int index) {
+//        int i = index - 1;
+//            if ((i < 0) || (i >= count)) {
+//                throw new StringIndexOutOfBoundsException(index);
+//            }
+//            return Character.codePointBefore(value, index);
+//        }
 
         /**
          * Returns the number of Unicode code points in the specified text
@@ -1039,34 +1041,35 @@
          *
          * @return  a reference to this object.
          */
-        public SStringBuilder reverse() {
-        boolean hasSurrogate = false;
-        int n = count - 1;
-        for (int j = (n-1) >> 1; j >= 0; --j) {
-            char temp = value[j];
-            char temp2 = value[n - j];
-            if (!hasSurrogate) {
-            hasSurrogate = (temp >= Character.MIN_SURROGATE && temp <= Character.MAX_SURROGATE)
-                || (temp2 >= Character.MIN_SURROGATE && temp2 <= Character.MAX_SURROGATE);
-            }
-            value[j] = temp2;
-            value[n - j] = temp;
-        }
-        if (hasSurrogate) {
-            // Reverse back all valid surrogate pairs
-            for (int i = 0; i < count - 1; i++) {
-            char c2 = value[i];
-            if (Character.isLowSurrogate(c2)) {
-                char c1 = value[i + 1];
-                if (Character.isHighSurrogate(c1)) {
-                value[i++] = c1;
-                value[i] = c2;
-                }
-            }
-            }
-        }
-        return this;
-        }
+// TODO: Character.reverse() since JDK 1.5
+//        public SStringBuilder reverse() {
+//        boolean hasSurrogate = false;
+//        int n = count - 1;
+//        for (int j = (n-1) >> 1; j >= 0; --j) {
+//            char temp = value[j];
+//            char temp2 = value[n - j];
+//            if (!hasSurrogate) {
+//            hasSurrogate = (temp >= Character.MIN_SURROGATE && temp <= Character.MAX_SURROGATE)
+//                || (temp2 >= Character.MIN_SURROGATE && temp2 <= Character.MAX_SURROGATE);
+//            }
+//            value[j] = temp2;
+//            value[n - j] = temp;
+//        }
+//        if (hasSurrogate) {
+//            // Reverse back all valid surrogate pairs
+//            for (int i = 0; i < count - 1; i++) {
+//            char c2 = value[i];
+//            if (Character.isLowSurrogate(c2)) {
+//                char c1 = value[i + 1];
+//                if (Character.isHighSurrogate(c1)) {
+//                value[i++] = c1;
+//                value[i] = c2;
+//                }
+//            }
+//            }
+//        }
+//        return this;
+//        }
 
         /**
          * Needed by <tt>String</tt> for the contentEquals method.

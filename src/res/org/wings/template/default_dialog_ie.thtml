@@ -1,0 +1,39 @@
+<object name="frame"></object>
+<div style="position:absolute;top:0px;left:0px;bottom:0px;right:0px;width:100%;height:100%;"></div>
+<div id="my_dialog" style="z-index:1000;position:absolute;">
+    <object name="dialog"></object>
+</div>
+
+<script type="text/javascript">
+
+    /**
+     * Hides all drop down form select boxes on the screen
+     * so they do not appear above the mask layer.
+     * IE has a problem with wanted select form tags to always
+     * be the topmost z-index or layer.
+     */
+    function hideSelectBoxes() {
+        for (var i = 0; i < document.forms.length; i++) {
+            for (var e = 0; e < document.forms[i].length; e++) {
+                if (document.forms[i].elements[e].tagName == "SELECT") {
+                    document.forms[i].elements[e].style.visibility = "hidden";
+                }
+            }
+        }
+    }
+    hideSelectBoxes();
+
+    function centerDialog() {
+        var pageX = (document.all) ? document.body.offsetWidth : window.innerWidth;
+        var pageY = (document.all) ? document.body.offsetHeight : window.innerHeight;
+
+        var objRef = document.getElementById('my_dialog');
+
+        var objW = objRef.offsetWidth;
+        var objH = objRef.offsetHeight;
+        objRef.style.left = ((pageX / 2) - (objW / 2)) + "px";
+        objRef.style.top = ((pageY / 2) - (objH / 2)) + "px";
+    }
+    window.onresize = centerDialog;
+    centerDialog();
+</script>

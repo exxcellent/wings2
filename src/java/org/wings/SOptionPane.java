@@ -207,9 +207,7 @@ public class SOptionPane extends SDialog implements ActionListener {
      */
     private static final SIcon errorImage = (SIcon) ResourceManager.getObject("SOptionPane.errorIcon", SIcon.class);
 
-    //  protected final SLabel messageLabel  = new SLabel(messageImage);
-    //  protected final SLabel questionLabel = new SLabel(questionImage);
-    //  protected final SLabel yesnoLabel    = new SLabel(yesnoImage);
+    // The label that contains the option pane image.
     protected final SLabel imageLabel = new SLabel();
 
     /**
@@ -371,6 +369,10 @@ public class SOptionPane extends SDialog implements ActionListener {
         // inputValue = UNINITIALIZED_VALUE;
     }
 
+    public void setCG(OptionPaneCG cg) {
+        super.setCG(cg);
+    }
+
     /*
      * The chosen option.
      * @see #OK_OPTIONhttp://localhost:8080/RLSAdmin/Admin/mP1
@@ -386,21 +388,22 @@ public class SOptionPane extends SDialog implements ActionListener {
         return inputValue;
     }
 
-    private final void initPanel() {
-        setHorizontalAlignment(SConstants.CENTER);
-        ((SFlowLayout)optionButtons.getLayout()).setHgap(8);
+    private void initPanel() {        
+        //setHorizontalAlignment(SConstants.LEFT);
+        ((SFlowLayout) optionButtons.getLayout()).setHgap(8);
         optionButtons.add(optionOK, "OK");
         optionButtons.add(optionYes, "YES");
         optionButtons.add(optionCancel, "CANCEL");
         optionButtons.add(optionNo, "NO");
         optionButtons.setPreferredSize(SDimension.FULLWIDTH);
+        optionButtons.setBorder(new SEmptyBorder(8, 0, 0, 0));
 
+        imageLabel.setBorder(new SEmptyBorder(0, 0, 0, 8));
         images.add(imageLabel);
         imageLabel.setToolTipText(null);
 
-        optionData.setBorder(empty);
         optionData.setPreferredSize(SDimension.FULLWIDTH);
-        ((SFlowLayout)optionData.getLayout()).setVgap(8);
+        //((SFlowLayout) optionData.getLayout()).setVgap(8);
 
         contents.add(optionData, SBorderLayout.CENTER);
         contents.add(images, SBorderLayout.WEST);
@@ -429,13 +432,17 @@ public class SOptionPane extends SDialog implements ActionListener {
 
         if (e.getSource() == optionOK) {
             fireActionPerformed(OK_ACTION);
-        } else if (e.getSource() == optionYes) {
+        }
+        else if (e.getSource() == optionYes) {
             fireActionPerformed(YES_ACTION);
-        } else if (e.getSource() == optionCancel) {
+        }
+        else if (e.getSource() == optionCancel) {
             fireActionPerformed(CANCEL_ACTION);
-        } else if (e.getSource() == optionNo) {
+        }
+        else if (e.getSource() == optionNo) {
             fireActionPerformed(NO_ACTION);
-        } else {
+        }
+        else {
             fireActionPerformed(UNKNOWN_ACTION);
         }
     }
@@ -450,11 +457,6 @@ public class SOptionPane extends SDialog implements ActionListener {
         optionYes.setVisible(false);
         optionCancel.setVisible(false);
         optionNo.setVisible(false);
-
-        //    messageLabel.setVisible(false);
-        //    questionLabel.setVisible(false);
-        //    yesnoLabel.setVisible(false);
-        imageLabel.setVisible(false);
     }
 
     SContainer customButtons = null;
@@ -470,7 +472,8 @@ public class SOptionPane extends SDialog implements ActionListener {
                 if (options[i] instanceof SAbstractButton)
                     ((SAbstractButton) options[i]).addActionListener(this);
                 customButtons.add((SComponent) options[i]);
-            } else {
+            }
+            else {
                 SButton b = new SButton(options[i].toString());
                 b.addActionListener(this);
                 customButtons.add(b);
@@ -492,40 +495,31 @@ public class SOptionPane extends SDialog implements ActionListener {
      */
     public void setMessageType(int newType) {
         switch (newType) {
-            case ERROR_MESSAGE:
-                {
-                    imageLabel.setIcon(errorImage);
-                    imageLabel.setToolTipText("Error");
-                    break;
-                }
-            case INFORMATION_MESSAGE:
-                {
-                    //informationLabel.setVisible(true);
-                    imageLabel.setIcon(messageImage);
-                    imageLabel.setToolTipText("Information");
-                    break;
-                }
-            case WARNING_MESSAGE:
-                {
-                    imageLabel.setIcon(yesnoImage);
-                    imageLabel.setToolTipText("Warning");
-                    //warningLabel.setVisble(true);
-                    break;
-                }
-            case QUESTION_MESSAGE:
-                {
-                    //questionLabel.setVisible(true);
-                    imageLabel.setIcon(questionImage);
-                    imageLabel.setToolTipText("Question");
-                    break;
-                }
+            case ERROR_MESSAGE: {
+                imageLabel.setIcon(errorImage);
+                imageLabel.setToolTipText("Error");
+                break;
+            }
+            case INFORMATION_MESSAGE: {
+                imageLabel.setIcon(messageImage);
+                imageLabel.setToolTipText("Information");
+                break;
+            }
+            case WARNING_MESSAGE: {
+                imageLabel.setIcon(yesnoImage);
+                imageLabel.setToolTipText("Warning");
+                break;
+            }
+            case QUESTION_MESSAGE: {
+                imageLabel.setIcon(questionImage);
+                imageLabel.setToolTipText("Question");
+                break;
+            }
             case PLAIN_MESSAGE:
-            default:
-                {
-                    imageLabel.setIcon(null);
-                    imageLabel.setToolTipText(null);
-                    //questionLabel.setIcon(null);
-                }
+            default: {
+                imageLabel.setIcon(null);
+                imageLabel.setToolTipText(null);
+            }
         }
 
         messageType = newType;
@@ -597,7 +591,8 @@ public class SOptionPane extends SDialog implements ActionListener {
         optionData.removeAll();
         if (message instanceof SComponent) {
             optionData.add((SComponent) message);
-        } else {
+        }
+        else {
             StringTokenizer stt = new StringTokenizer(message.toString(), "\n");
             while (stt.hasMoreElements()) {
                 optionData.add(new SLabel(stt.nextElement().toString()));
@@ -606,158 +601,168 @@ public class SOptionPane extends SDialog implements ActionListener {
         show(c);
     }
 
-    public static void showMessageDialog(SComponent parent, Object message,
-                                         ActionListener al) {
-        showMessageDialog(parent, message, null, 0, al);
-    }
-
-    public static void showMessageDialog(SComponent parent, Object message) {
-        showMessageDialog(parent, message, null, 0, null);
-    }
-
-    public static void showMessageDialog(SComponent parent, Object message, String title) {
-        showMessageDialog(parent, message, title, 0, null);
-    }
-
-    public static void showMessageDialog(SComponent parent, Object message,
-                                         String title, int messageType, ActionListener al) {
-        SOptionPane p = new SOptionPane();
-
-        p.showPlainMessage(parent, message, title);
-        p.addActionListener(al);
-    }
-
-    public static void showPlainMessageDialog(SComponent parent, Object message,
-                                              String title) {
-        showPlainMessageDialog(parent, message, title, 0, null);
-    }
-
-
-    public static void showPlainMessageDialog(SComponent parent, Object message,
-                                              String title, int messageType,
-                                              ActionListener al) {
-        SOptionPane p = new SOptionPane();
-
-        p.showPlainMessage(parent, message, title);
-        p.addActionListener(al);
-        p.setMessageType(PLAIN_MESSAGE);
-        //    p.messageLabel.setVisible(false);
-    }
-
     public void showPlainMessage(SComponent parent, Object message, String title) {
         showOption(parent, title, message);
 
-        setOptionType(DEFAULT_OPTION);
-        setMessageType(PLAIN_MESSAGE);
-        //    messageLabel.setVisible(true);
+        setOptionType(SOptionPane.DEFAULT_OPTION);
+        setMessageType(SOptionPane.PLAIN_MESSAGE);
     }
 
     public void showQuestion(SComponent parent, Object message, String title) {
         showOption(parent, title, message);
 
-        setOptionType(OK_CANCEL_OPTION);
-        setMessageType(QUESTION_MESSAGE);
-        //    questionLabel.setVisible(true);
+        setOptionType(SOptionPane.OK_CANCEL_OPTION);
+        setMessageType(SOptionPane.QUESTION_MESSAGE);
     }
 
-    public void showInput(SComponent parent, Object message,
-                          SComponent inputElement, String title) {
+    public void showInput(SComponent parent, Object message, SComponent inputElement, String title) {
         showOption(parent, title, message);
         optionData.add(inputElement);
         inputValue = inputElement;
 
-        setOptionType(OK_CANCEL_OPTION);
-        setMessageType(QUESTION_MESSAGE);
-        //    questionLabel.setVisible(true);
-    }
-
-    // protected String getSimpleInput(Object message) {
-    //     return JOptionPane.showInputDialog(this, message);
-    // }
-
-
-    public static void showInputDialog(SComponent parent, Object question,
-                                       String title, SComponent inputElement,
-                                       ActionListener al) {
-        SOptionPane p = new SOptionPane();
-
-        p.showInput(parent, question, inputElement, title);
-        p.addActionListener(al);
-    }
-
-    public static void showQuestionDialog(SComponent parent, Object question,
-                                          String title, ActionListener al) {
-        SOptionPane p = new SOptionPane();
-
-        p.showQuestion(parent, question, title);
-        p.addActionListener(al);
-    }
-
-    public static void showPlainQuestionDialog(SComponent parent, Object question,
-                                               String title, ActionListener al) {
-        SOptionPane p = new SOptionPane();
-
-        p.showQuestion(parent, question, title);
-        p.addActionListener(al);
-        p.setMessageType(PLAIN_MESSAGE);
-        //    p.questionLabel.setVisible(false);
-    }
-
-
-    public static void showConfirmDialog(SComponent parent, Object message,
-                                         String title) {
-        showConfirmDialog(parent, message, title, 0, null);
-    }
-
-    public static void showConfirmDialog(SComponent parent, Object message,
-                                         String title, ActionListener al) {
-        showConfirmDialog(parent, message, title, 0, al);
-    }
-
-    public static void showConfirmDialog(SComponent parent, Object message,
-                                         String title, int type) {
-        showConfirmDialog(parent, message, title, type, null);
-    }
-
-    public static void showConfirmDialog(SComponent parent, Object message,
-                                         String title, int type, ActionListener al) {
-        showConfirmDialog(parent, message, title, type, al, null);
-    }
-
-    public static void showConfirmDialog(SComponent parent, Object message,
-                                         String title, int type, ActionListener al,
-                                         SLayoutManager layout) {
-        SOptionPane p = new SOptionPane();
-        if (layout != null) {
-            p.optionButtons.setLayout(layout);
-        } // end of if ()
-
-        p.addActionListener(al);
-        p.showQuestion(parent, message, title, type);
+        setOptionType(SOptionPane.OK_CANCEL_OPTION);
+        setMessageType(SOptionPane.QUESTION_MESSAGE);
     }
 
     public void showYesNo(SComponent parent, Object question, String title) {
         showOption(parent, title, question);
         setOptionType(YES_NO_OPTION);
-        setMessageType(INFORMATION_MESSAGE);
-        //    yesnoLabel.setVisible(true);
+        setMessageType(SOptionPane.QUESTION_MESSAGE);
     }
 
     public void showQuestion(SComponent parent, Object question, String title, int type) {
         showOption(parent, title, question);
         setOptionType(type);
-        setMessageType(QUESTION_MESSAGE);
+        setMessageType(SOptionPane.QUESTION_MESSAGE);
     }
 
-    public static void showYesNoDialog(SComponent parent, Object question,
-                                       String title, ActionListener al) {
+    // -------------------------------------------------------------------
+    // MESSAGE DIALOGS
+    // -------------------------------------------------------------------
+
+    public static void showMessageDialog(SComponent parent, Object message) {
+        showMessageDialog(parent, message, null, SOptionPane.INFORMATION_MESSAGE, null);
+    }
+
+    public static void showMessageDialog(SComponent parent, Object message, String title) {
+        showMessageDialog(parent, message, title, SOptionPane.INFORMATION_MESSAGE, null);
+    }
+
+    public static void showMessageDialog(SComponent parent, Object message, ActionListener al) {
+        showMessageDialog(parent, message, null, SOptionPane.INFORMATION_MESSAGE, al);
+    }
+
+    public static void showMessageDialog(SComponent parent, Object message, String title, int messageType, ActionListener al) {
+        SOptionPane p = new SOptionPane();
+
+        p.showOption(parent, title, message);
+        p.setMessageType(messageType);
+        p.addActionListener(al);
+    }
+
+    // -------------------------------------------------------------------
+    // PLAIN MESSAGE DIALOGS
+    // -------------------------------------------------------------------
+
+    public static void showPlainMessageDialog(SComponent parent, Object message) {
+        showPlainMessageDialog(parent, message, null, null);
+    }
+
+    public static void showPlainMessageDialog(SComponent parent, Object message, String title) {
+        showPlainMessageDialog(parent, message, title, null);
+    }
+
+    public static void showPlainMessageDialog(SComponent parent, Object message, ActionListener al) {
+        showPlainMessageDialog(parent, message, null, al);
+    }
+
+    public static void showPlainMessageDialog(SComponent parent, Object message, String title, ActionListener al) {
+        SOptionPane p = new SOptionPane();
+
+        p.showOption(parent, title, message);
+        p.setMessageType(SOptionPane.PLAIN_MESSAGE);
+        p.addActionListener(al);
+    }
+
+    // -------------------------------------------------------------------
+    // INPUT DIALOGS
+    // -------------------------------------------------------------------
+
+    public static void showInputDialog(SComponent parent, Object question, String title, SComponent inputElement, ActionListener al) {
+        showInputDialog(parent, question, title, SOptionPane.QUESTION_MESSAGE, inputElement, al);
+    }
+
+    public static void showInputDialog(SComponent parent, Object question, String title, int messageType, SComponent inputElement, ActionListener al) {
+        SOptionPane p = new SOptionPane();
+
+        p.showInput(parent, question, inputElement, title);
+        p.setMessageType(messageType);
+        p.addActionListener(al);
+    }
+
+    // -------------------------------------------------------------------
+    // QUESTION DIALOGS
+    // -------------------------------------------------------------------
+
+    public static void showQuestionDialog(SComponent parent, Object question, String title, ActionListener al) {
+        SOptionPane p = new SOptionPane();
+
+        p.showQuestion(parent, question, title);
+        p.setMessageType(SOptionPane.QUESTION_MESSAGE);
+        p.addActionListener(al);
+    }
+
+    // -------------------------------------------------------------------
+    // PLAIN QUESTION DIALOGS
+    // -------------------------------------------------------------------
+
+    public static void showPlainQuestionDialog(SComponent parent, Object question, String title, ActionListener al) {
+        SOptionPane p = new SOptionPane();
+
+        p.showQuestion(parent, question, title);
+        p.setMessageType(SOptionPane.PLAIN_MESSAGE);
+        p.addActionListener(al);
+    }
+
+    // -------------------------------------------------------------------
+    // CONFIRM DIALOGS
+    // -------------------------------------------------------------------
+
+    public static void showConfirmDialog(SComponent parent, Object message, String title) {
+        showConfirmDialog(parent, message, title, 0, null);
+    }
+
+    public static void showConfirmDialog(SComponent parent, Object message, String title, ActionListener al) {
+        showConfirmDialog(parent, message, title, 0, al);
+    }
+
+    public static void showConfirmDialog(SComponent parent, Object message, String title, int type) {
+        showConfirmDialog(parent, message, title, type, null);
+    }
+
+    public static void showConfirmDialog(SComponent parent, Object message, String title, int type, ActionListener al) {
+        showConfirmDialog(parent, message, title, type, al, null);
+    }
+
+    public static void showConfirmDialog(SComponent parent, Object message, String title, int type, ActionListener al, SLayoutManager layout) {
+        SOptionPane p = new SOptionPane();
+
+        if (layout != null) {
+            p.optionButtons.setLayout(layout);
+        } // end of if ()
+
+        p.showQuestion(parent, message, title, type);
+        p.addActionListener(al);
+    }
+
+    // -------------------------------------------------------------------
+    // YES-NO DIALOGS
+    // -------------------------------------------------------------------
+
+    public static void showYesNoDialog(SComponent parent, Object question, String title, ActionListener al) {
         SOptionPane p = new SOptionPane();
         p.addActionListener(al);
 
         p.showYesNo(parent, question, title);
-    }
-
-    public void setCG(OptionPaneCG cg) {
-        super.setCG(cg);
     }
 }

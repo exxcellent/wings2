@@ -1,0 +1,22 @@
+<object name="frame"></object>
+<div style="position:absolute;top:0px;left:0px;bottom:0px;right:0px;width:100%;height:100%;"></div>
+<div id="my_dialog" style="z-index:1000;position:absolute;top:100px;left:50px;">
+    <object name="dialog"></object>
+</div>
+
+<script type="text/javascript">
+
+    function centerDialog() {
+        var pageX = (document.all) ? document.body.offsetWidth : window.innerWidth;
+        var pageY = (document.all) ? document.body.offsetHeight : window.innerHeight;
+
+        var objRef = document.getElementById('my_dialog');
+
+        var objW = objRef.offsetWidth;
+        var objH = objRef.offsetHeight;
+        objRef.style.left = ((pageX / 2) - (objW / 2)) + "px";
+        objRef.style.top = ((pageY / 2) - (objH / 2)) + "px";
+    }
+    window.onresize = centerDialog;
+    centerDialog();
+</script>
