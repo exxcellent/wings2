@@ -371,3 +371,34 @@ function wu_registerEvent(obj, eventType, func, useCaption) {
     return false;
   }
 }
+
+/* 
+    XCalendar JavaScript Code 
+*/
+function onFieldChange(key, name, value) {
+    xcalendar.onFieldChange( onFieldChangeCallback, key, name, value );
+}
+function onFieldChangeCallback(result) {
+    DWRUtil.setValue( result[0], result[1] );
+}
+function onCalUpdate(cal) {
+    xcalendar.onCalUpdate( onCalUpdateCallback, cal.params.formatter, cal.params.textField, cal.date );
+}
+function onCalUpdateCallback(result) {
+    DWRUtil.setValue( result[0], result[1] );
+}
+
+/* 
+    SFormattedTextField JavaScript Code
+*/
+function ftextFieldCallback(result) {
+    var elem = document.getElementById(result[0]);
+    var data = result[1];
+    if (!data && data != '') {
+        elem.style.color = '#ff0000';
+    } else {
+        elem.value = data;
+        elem.setAttribute("lastValid", data);
+    }
+}
+                                 

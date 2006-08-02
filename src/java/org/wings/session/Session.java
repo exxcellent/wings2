@@ -18,6 +18,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.DefaultReloadManager;
 import org.wings.ReloadManager;
+import org.wings.SComponent;
+import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
@@ -473,7 +475,36 @@ public class Session implements PropertyService, Serializable {
 
         return rootFrame;
     }
-
+    
+    
+    public SComponent getComponentByName( String name ) {
+        return getComponentByName( this.getRootFrame(), name );
+    }
+    
+    /**
+     * Search in the given SContainer for the SComponent with the given name.
+     * @param container The SContainer where you want to search for the SComponent with the given name.
+     * @param name The Name of the SComponent
+     * @return the SComponent with the given name
+     */
+    public SComponent getComponentByName( SContainer container, String name ) {
+       SComponent component = null; 
+       SComponent[] components = container.getComponents();
+       for ( int x = 0, y = components.length ; x < y ; x++ ) {
+           SComponent component_x = components[x];
+           if ( component_x.getName().equals(name) ) {
+               component = component_x;
+               break;
+           } else if ( component_x instanceof SContainer ) {
+               component = getComponentByName( (SContainer)component_x, name );
+               if ( component != null ) {
+                   break;
+               }
+           }
+       }
+       return component;   
+    }   
+    
     /**
      * Describe <code>getProperties</code> method here.
      *

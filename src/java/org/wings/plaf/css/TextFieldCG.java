@@ -19,6 +19,8 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SFormattedTextField;
 import org.wings.STextField;
+import org.wings.text.SAbstractFormatter;
+import org.wings.util.SessionLocal;
 import org.wings.event.SParentFrameListener;
 import org.wings.io.Device;
 import org.wings.plaf.css.dwr.CallableManager;
@@ -27,12 +29,16 @@ import org.wings.script.ScriptListener;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.*;
+
+import org.wings.session.SessionManager;
 
 public final class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG, SParentFrameListener {
-    private final static transient Log log = LogFactory.getLog(TextFieldCG.class);
 
     private static final long serialVersionUID = 1L;
+
+    private SessionLocal callableFormatter = new SessionLocal();
 
     public void installCG( SComponent comp ) {
         super.installCG( comp );
@@ -42,25 +48,27 @@ public final class TextFieldCG extends AbstractComponentCG implements
     }
     
     public void parentFrameAdded(org.wings.event.SParentFrameEvent e ) {
-        SComponent comp = e.getComponent();
-        SFormattedTextField formattedTextField = (SFormattedTextField)comp;
-        CallableFormatter cf = new CallableFormatter(formattedTextField);
-        String name = "formatter_" + System.identityHashCode(cf);
-        if (!CallableManager.getInstance().containsCallable(name)) {
-            CallableManager.getInstance().registerCallable(name, cf );
-        } 
-        formattedTextField.putClientProperty("callable", name);
-        // keep a reference to the name, otherwise the callable will get garbage collected/
+        if (!CallableManager.getInstance().containsCallable("ftextField"))
+            CallableManager.getInstance().registerCallable("ftextField", getCallableFormatter());
     }
     
-    public void parentFrameRemoved(org.wings.event.SParentFrameEvent e ) {
-        CallableManager.getInstance().unregisterCallable( (String)e.getComponent().getClientProperty("callable") );
-    }
+    public void parentFrameRemoved(org.wings.event.SParentFrameEvent e ) {}
     
+    protected CallableFormatter getCallableFormatter() {
+        CallableFormatter callableFormatter = (CallableFormatter)this.callableFormatter.get();
+        if (callableFormatter == null) {
+            callableFormatter = new CallableFormatter();
+            this.callableFormatter.set(callableFormatter);
+        }
+        return callableFormatter;
+    }
+
     public void componentChanged(SComponent component) {
         final STextField textField = (STextField) component;
         
         if (textField instanceof SFormattedTextField) {
+            SFormattedTextField formattedTextField = ((SFormattedTextField)textField);
+
             ScriptListener[] scriptListeners = textField.getScriptListeners();
             
             for (int i = 0; i < scriptListeners.length; i++) {
@@ -68,19 +76,16 @@ public final class TextFieldCG extends AbstractComponentCG implements
                 if (scriptListener instanceof DWRScriptListener)
                     textField.removeScriptListener(scriptListener);
             }
-            
+
+            SAbstractFormatter formatter = formattedTextField.getFormatter();
+            String key = getCallableFormatter().registerFormatter(formatter);
+
+            String lastValue = formattedTextField.getFocusLostBehavior() == SFormattedTextField.COMMIT_OR_REVERT ?
+                ", '" + textField.getText() + "'" : "";
             textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
-                    "document.getElementById('{0}').style.color = '';" +
-                    component.getClientProperty("callable") +
-                    ".validate(callback_{0}, document.getElementById('{0}').value)",
-                    "function callback_{0}(data) {\n" +
-                    "   if (!data && data != '') {\n" +
-                    "       document.getElementById('{0}').style.color = '#ff0000';\n" +
-                    "   }\n" +
-                    "   else\n" +
-                    "       document.getElementById('{0}').value = data;\n" +
-                    "}\n", new SComponent[] { textField }));
-            
+                                                              "this.style.color = '';ftextField.validate(ftextFieldCallback, '" + key + "', '"+textField.getName()+"', this.value" + lastValue + ")"," "
+                    , new SComponent[] { textField }));
+
         } else {
             super.componentChanged(component);
         }
@@ -118,33 +123,38 @@ public final class TextFieldCG extends AbstractComponentCG implements
     
     
     public static class CallableFormatter {
-        
-        private SFormattedTextField fTextField  = null;
-        /* Last valid value */
-        private String              lastValid   = null;
-        
-        public CallableFormatter(SFormattedTextField fTextField) {
-            this.fTextField = fTextField;
-        }
+        Map formatters = new WeakHashMap();
 
-        public String validate(String text) {
+        public List validate(String key, String name, String text, String lastValid) {
             String value = "";
-            try {
-                value = fTextField.getFormatter().valueToString( fTextField.getFormatter().stringToValue(text) );
-                lastValid = value; 
-            } catch (ParseException e) {
-                switch ( fTextField.getFocusLostBehavior() ) {
-                    case SFormattedTextField.COMMIT:
-                        value = null;
-                        break;
-                    case SFormattedTextField.COMMIT_OR_REVERT:
+            List list = new LinkedList();
+            SAbstractFormatter formatter = formatterByKey(key);
+            if ( formatter != null ) {
+                list.add( name );
+                try {
+                    value = formatter.valueToString( formatter.stringToValue(text) );
+                }
+                catch (ParseException e) {
+                    if (lastValid != null)
                         value = lastValid;
-                        break;
-                    default:
-                        break;
                 }
             }
-            return value;
+            list.add( value );
+            return list;
+        }
+
+        protected SAbstractFormatter formatterByKey(String key) {
+            for (Iterator iterator = formatters.keySet().iterator(); iterator.hasNext();) {
+                SAbstractFormatter formatter = (SAbstractFormatter)iterator.next();
+                if (key.equals("" + System.identityHashCode(formatter)))
+                    return formatter;
+            }
+            return null;
+        }
+
+        public String registerFormatter(SAbstractFormatter formatter) {
+            formatters.put(formatter, formatter);
+            return "" + System.identityHashCode(formatter);
         }
     }
 }

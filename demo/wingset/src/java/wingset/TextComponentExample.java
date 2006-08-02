@@ -34,6 +34,7 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.session.SessionManager;
 import org.wings.text.SAbstractFormatter;
+import org.wings.text.SDateFormatter;
 import org.wingx.XCalendar;
 
 import java.awt.*;
@@ -50,6 +51,7 @@ public class TextComponentExample extends WingSetPane {
     private final SLabel actionEvent = new SLabel("(no form or button event)");
     private final STextArea eventLog = new STextArea();
     private ComponentControls controls;
+    private SDateFormatter dateFormatter = new SDateFormatter(DateFormat.getDateInstance(DateFormat.SHORT));
 
 
     public SComponent createExample() {
@@ -61,7 +63,7 @@ public class TextComponentExample extends WingSetPane {
         SPanel p = new SPanel(gridLayout);
 
         p.add(new SLabel("XCalendar: "));
-        XCalendar calendar = new XCalendar();
+        XCalendar calendar = new XCalendar(dateFormatter);
         calendar.setName("calendar");
         calendar.setToolTipText("A Date Picker.");
         calendar.getFormattedTextField().addDocumentListener(new MyDocumentListener(calendar.getFormattedTextField()));
@@ -82,9 +84,9 @@ public class TextComponentExample extends WingSetPane {
                 "This uses code executed on server side in Java!");
         numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
         p.add(numberTextField);
-        
+
         p.add(new SLabel("SFormattedTextField (DateFormat): "));
-        SFormattedTextField dateTextField = new SFormattedTextField(new DateFormatter());
+        SFormattedTextField dateTextField = new SFormattedTextField(dateFormatter);
         dateTextField.setName("datefield");
         dateTextField.setToolTipText("Enter a valid/invalid date here.\n" +
                 "Dates will be parsed on server side and reformatted accordingly.");
@@ -97,7 +99,7 @@ public class TextComponentExample extends WingSetPane {
         passwordField.setToolTipText("Just a regular passsword input.");
         passwordField.addDocumentListener(new MyDocumentListener(passwordField));
         p.add(passwordField);
-        
+
         p.add(new SLabel("STextArea: "));
         STextArea textArea = new STextArea("");
         textArea.setName("textarea");
@@ -145,6 +147,7 @@ public class TextComponentExample extends WingSetPane {
         actionEvent.setBorder(new SLineBorder(1));
         actionEvent.setBackground(Color.LIGHT_GRAY);
 
+        controls.addControllable(calendar);
         controls.addControllable(textField);
         controls.addControllable(textArea);
         controls.addControllable(passwordField);
@@ -195,24 +198,6 @@ public class TextComponentExample extends WingSetPane {
 
         public void changedUpdate(SDocumentEvent e) {
         } // Never called for unstyled documents
-    }
-
-    private static class DateFormatter extends SAbstractFormatter {
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, SessionManager.getSession().getLocale());
-
-        public Object stringToValue(String text) throws ParseException {
-            if (text == null || text.trim().length() == 0)
-                return null;
-            else
-                return format.parse(text.trim());
-        }
-
-        public String valueToString(Object value) throws ParseException {
-            if (value == null)
-                return "";
-            else
-                return format.format(value);
-        }
     }
 
     private static class NumberFormatter extends SAbstractFormatter {

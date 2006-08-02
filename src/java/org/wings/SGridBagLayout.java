@@ -337,7 +337,7 @@ public class SGridBagLayout
             for (Iterator i = getContainer().getComponentList().iterator(); i.hasNext();) {
                 SComponent comp = (SComponent) i.next();
                 if (!comp.isVisible()) {
-                    continue;
+                    //continue;
                 }
 
                 GridBagConstraints c = (GridBagConstraints) components.get(comp);
@@ -447,7 +447,7 @@ public class SGridBagLayout
                  i.hasNext();) {
                 SComponent comp = (SComponent) i.next();
                 if (!comp.isVisible()) {
-                    continue;
+                    //continue;
                 }
                 GridBagConstraints c = (GridBagConstraints)
                         modifiedConstraints.get(comp);

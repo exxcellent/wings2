@@ -138,18 +138,11 @@ public class XCalendar extends SContainer {
      * @param dimension SDimension
      */
     public void setPreferredSize( SDimension dimension ) {
-        if ( dimension != null ) {
-            getFormattedTextField().setPreferredSize( dimension );
-        }
+        super.setPreferredSize(dimension);
+        if (dimension != null && dimension.getWidth() != null)
+            getFormattedTextField().setPreferredSize( SDimension.FULLWIDTH );
     }
-    /**
-     * Returns the preferred size of the component
-     * @return SDimension
-     */
-    public SDimension getPreferredSize() {
-        return getFormattedTextField().getPreferredSize();
-    }
-    
+
     /**
      * Fire an ActionEvent at each registered listener.
      *
