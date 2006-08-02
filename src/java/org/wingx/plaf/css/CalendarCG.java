@@ -156,12 +156,18 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
 
         /* Timestamt to Human readable */
         public List onCalUpdate(String key, String name, String value) {
+            System.out.println("key = " + key);
+            System.out.println("name = " + name);
+            System.out.println("value = " + value);
             List list = new LinkedList();
             SAbstractFormatter formatter = formatterByKey(key);
             if ( formatter != null ) {
                 list.add( name );
                 try {
                     Date newDate = new Date( Long.parseLong( value ) );
+                    System.out.println("newDate = " + newDate);
+                    System.out.println("newDate = " + newDate.getTime());
+                    System.out.println("formatter.valueToString( newDate ) = " + formatter.valueToString(newDate));
                     list.add( formatter.valueToString( newDate ) );
                 } catch ( ParseException e ) {
                     list.add( "" );
@@ -199,6 +205,7 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         }
 
         public String registerFormatter(SAbstractFormatter formatter) {
+            System.out.println("formatter = " + System.identityHashCode(formatter));
             formatters.put(formatter, formatter);
             return "" + System.identityHashCode(formatter);
         }

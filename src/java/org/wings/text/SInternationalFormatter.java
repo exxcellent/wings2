@@ -35,7 +35,7 @@ public class SInternationalFormatter extends SAbstractFormatter {
      * @return Object representation of text
      */
     public Object stringToValue(String text) throws java.text.ParseException {
-        Object value = null;
+        Object value;
         if ( format == null ) {
             value = text;
         } else {
@@ -50,6 +50,9 @@ public class SInternationalFormatter extends SAbstractFormatter {
      * @return String representation of value
      */
     public String valueToString(Object value) throws java.text.ParseException {
+        if (value == null) {
+            return "";
+        }
         String string = "";
         if ( format != null ) {
             string = format.format( value );
