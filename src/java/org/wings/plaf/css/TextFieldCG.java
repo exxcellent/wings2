@@ -80,8 +80,9 @@ public final class TextFieldCG extends AbstractComponentCG implements
             SAbstractFormatter formatter = formattedTextField.getFormatter();
             String key = getCallableFormatter().registerFormatter(formatter);
 
-            String lastValue = formattedTextField.getFocusLostBehavior() == SFormattedTextField.COMMIT_OR_REVERT ?
-                ", '" + textField.getText() + "'" : "";
+            String text = textField.getText();
+            text = text != null ? "'" + text + "'" : "''";
+            String lastValue = formattedTextField.getFocusLostBehavior() == SFormattedTextField.COMMIT_OR_REVERT ? ", " + text : "";
             textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
                                                               "this.style.color = '';ftextField.validate(ftextFieldCallback, '" + key + "', '"+textField.getName()+"', this.value" + lastValue + ")"," "
                     , new SComponent[] { textField }));
@@ -140,6 +141,7 @@ public final class TextFieldCG extends AbstractComponentCG implements
                 }
             }
             list.add( value );
+            System.out.println("validate list = " + list);
             return list;
         }
 

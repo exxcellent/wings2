@@ -34,7 +34,7 @@ public class XCalendar extends SContainer {
     public static final SIcon   DEFAULT_DATE_ICON   = new SResourceIcon("org/wingx/calendar/images/date.png");
     private             SIcon   icon                = DEFAULT_DATE_ICON;
 
-    private SFormattedTextField fTextField = new SFormattedTextField();
+    private SFormattedTextField fTextField;
     
     private TimeZone timeZone = TimeZone.getDefault();
     
@@ -139,8 +139,7 @@ public class XCalendar extends SContainer {
      */
     public void setPreferredSize( SDimension dimension ) {
         super.setPreferredSize(dimension);
-        if (dimension != null && dimension.getWidth() != null)
-            getFormattedTextField().setPreferredSize( SDimension.FULLWIDTH );
+        getFormattedTextField().setPreferredSize(dimension != null && dimension.getWidth() != null ? SDimension.FULLWIDTH : null);
     }
 
     /**
@@ -207,8 +206,8 @@ public class XCalendar extends SContainer {
     }
     
     public SFormattedTextField getFormattedTextField() {
-        return this.fTextField;
+        if (fTextField == null)
+            fTextField = new SFormattedTextField();
+        return fTextField;
     }
-    
 }
-

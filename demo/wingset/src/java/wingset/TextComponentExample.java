@@ -80,7 +80,7 @@ public class TextComponentExample extends WingSetPane {
         SFormattedTextField numberTextField = new SFormattedTextField(new NumberFormatter());
         numberTextField.setName("numberfield");
         numberTextField.setToolTipText("Text entered here will be formatted as number when you leave focus.\n" +
-                "If you entered an invalid number the text should become red and the textfield refocused.\n" +
+                "If you entered an invalid number the text should become red.\n" +
                 "This uses code executed on server side in Java!");
         numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
         p.add(numberTextField);

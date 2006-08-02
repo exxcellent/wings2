@@ -123,6 +123,8 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
     }
 
     private String format(Date date) {
+        if (date == null)
+            date = new Date();
         return date != null ? dateFormat.format( date ) : "";
     }
 
@@ -165,7 +167,7 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
                     list.add( "" );
                 }
             }
-            System.out.println("list = " + list);
+            System.out.println("onCalUpdate list = " + list);
             return list;
         }
 
@@ -180,9 +182,10 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
                     list.add( dateFormat.format( date ) );
                 } catch ( ParseException e ) {
                     System.err.println(e);
-                    list.add( dateFormat.format( new GregorianCalendar().getTime() ) );
+                    list.add( dateFormat.format( new Date() ) );
                 }
             }
+            System.out.println("onFieldChange list = " + list);
             return list;
         }
 

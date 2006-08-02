@@ -379,13 +379,18 @@ function onFieldChange(key, name, value) {
     xcalendar.onFieldChange( onFieldChangeCallback, key, name, value );
 }
 function onFieldChangeCallback(result) {
-    DWRUtil.setValue( result[0], result[1] );
+    var elem = document.getElementById(result[0]);
+    var data = result[1];
+    elem.value = data;
 }
 function onCalUpdate(cal) {
     xcalendar.onCalUpdate( onCalUpdateCallback, cal.params.formatter, cal.params.textField, cal.date );
 }
 function onCalUpdateCallback(result) {
-    DWRUtil.setValue( result[0], result[1] );
+    var elem = document.getElementById(result[0]);
+    var data = result[1];
+    elem.value = data;
+    elem.style.color = '';
 }
 
 /* 
@@ -394,9 +399,10 @@ function onCalUpdateCallback(result) {
 function ftextFieldCallback(result) {
     var elem = document.getElementById(result[0]);
     var data = result[1];
-    if (!data && data != '') {
+    if (!data) {
         elem.style.color = '#ff0000';
     } else {
+        elem.style.color = '';
         elem.value = data;
         elem.setAttribute("lastValid", data);
     }
