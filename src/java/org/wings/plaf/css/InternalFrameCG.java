@@ -85,7 +85,6 @@ public class InternalFrameCG extends AbstractComponentCG implements
 
         writeDivPrefix(device, frame);
         writeWindowBar(device, frame);
-
         // write the actual content
         if (!frame.isIconified()) {
             device.print("<div class=\"WindowContent\"");

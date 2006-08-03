@@ -380,6 +380,8 @@ function onFieldChange(key, name, value) {
 }
 function onFieldChangeCallback(result) {
     var elem = document.getElementById(result[0]);
+    if (!elem)
+        return; // dwr bug
     var data = result[1];
     elem.value = data;
 }
@@ -388,6 +390,8 @@ function onCalUpdate(cal) {
 }
 function onCalUpdateCallback(result) {
     var elem = document.getElementById(result[0]);
+    if (!elem)
+        return; // dwr bug
     var data = result[1];
     elem.value = data;
     elem.style.color = '';
@@ -398,6 +402,8 @@ function onCalUpdateCallback(result) {
 */
 function ftextFieldCallback(result) {
     var elem = document.getElementById(result[0]);
+    if (!elem)
+        return; // dwr bug
     var data = result[1];
     if (!data) {
         elem.style.color = '#ff0000';
