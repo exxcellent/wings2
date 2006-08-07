@@ -106,8 +106,4 @@ public class SScrollBar extends SAbstractAdjustable {
     public void setCG(ScrollBarCG cg) {
         super.setCG(cg);
     }
-
-    public String toString() {
-        return "SScrollBar[orientation=" + ((orientation == SConstants.HORIZONTAL) ? "horizontal" : "vertical") + "]";
-    }
 }

@@ -15,17 +15,7 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.LowLevelEventListener;
-import org.wings.Renderable;
-import org.wings.RequestURL;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SDimension;
-import org.wings.SFileChooser;
-import org.wings.SFont;
-import org.wings.SLayoutManager;
-import org.wings.STextComponent;
+import org.wings.*;
 import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
@@ -184,7 +174,10 @@ public final class Utils {
      * for outtimed requests ("Back Button")
      */
     public static String event(SComponent component) {
-        return component.getEncodedLowLevelEventId();
+        if (component instanceof SClickable)
+            return ((SClickable)component).getEventTarget().getEncodedLowLevelEventId();
+        else
+            return component.getEncodedLowLevelEventId();
     }
 
     /**
@@ -925,7 +918,7 @@ public final class Utils {
         printButtonStart(device, eventTarget, eventValue, b, showAsFormComponent, null);
     }
 
-    public static void printButtonStart(final Device device, final SComponent eventTarget, final String eventValue,
+    public static void printButtonStart(final Device device, final SComponent component, final String eventValue,
                                         final boolean enabled, final boolean formComponent, String cssClassName) throws IOException {
         if (formComponent) {
             if (!enabled) {
@@ -938,9 +931,9 @@ public final class Utils {
                 device.print(" onclick=\"sendEvent(event,'");
                 device.print(eventValue == null ? "" : eventValue);
                 device.print("','");
-                device.print(Utils.event(eventTarget));
+                device.print(Utils.event(component));
                 device.print("'");
-                device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_CLICK));
+                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
                 device.print(")\"");
 
                 // Render mouseup/down/out listeners.
@@ -950,15 +943,15 @@ public final class Utils {
                 // :active selector in the CSS (table.SButton A.formbutton:active ) to style the button
                 // Only the MSIE interprets the :active selector as focus. That's why we tune here.
                 device.print(" onmouseup=\"wu_blurComponent(this");
-                device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_UP));
+                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_MOUSE_UP));
                 device.print(")\" onmousedown=\"wu_focusComponent(this");
-                device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_DOWN));
+                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_MOUSE_DOWN));
                 device.print(")\" onmouseout=\"wu_blurComponent(this");
-                device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_MOUSE_OUT));
+                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_MOUSE_OUT));
                 device.print(")\"");
 
                 // Render remaining JS listeners
-                Utils.writeEvents(device, eventTarget, EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT);
+                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT);
 
                 Utils.optAttribute(device, "class", cssClassName);
             }
@@ -967,24 +960,24 @@ public final class Utils {
                 device.print("<span");
                 Utils.optAttribute(device, "class", cssClassName);
             } else {
-                final RequestURL requestURL = eventTarget.getRequestURL();
+                final RequestURL requestURL = component.getRequestURL();
                 if (eventValue != null) {
-                    requestURL.addParameter(Utils.event(eventTarget), eventValue);
+                    requestURL.addParameter(Utils.event(component), eventValue);
                 }
                 device.print("<a href=\"");
                 device.print(requestURL.toString());
                 device.print("\"");
                 Utils.optAttribute(device, "class", cssClassName);
 
-                if (isMSIE(eventTarget)) {
+                if (isMSIE(component)) {
                     // Render onclick JS listeners
                     device.print(" onclick=\"followLink('").print(requestURL.toString()).print("'");
-                    device.print(collectJavaScriptListenerCode(eventTarget, JavaScriptEvent.ON_CLICK));
+                    device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
                     device.print(")\"");
                     // Render remaining JS listeners
-                    Utils.writeEvents(device, eventTarget, EXCLUDE_ON_CLICK);
+                    Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
                 } else {
-                    Utils.writeEvents(device, eventTarget, null);
+                    Utils.writeEvents(device, component, null);
                 }
             }
         }

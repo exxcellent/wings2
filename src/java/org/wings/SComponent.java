@@ -1209,7 +1209,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return string representation of this component with all properties.
      */
     public String toString() {
-        return getClass().getName() + "[" + paramString() + "]";
+        return getClass().getName() + "[" + getName() + "]";
     }
 
 
