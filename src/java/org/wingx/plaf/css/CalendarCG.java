@@ -95,11 +95,14 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
 
         final XCalendar component = (org.wingx.XCalendar) _c;
 
+        String id_hidden = component.getName() + "_hidden";
+        String id_button = component.getName() + "_button"; 
+        
         SFormattedTextField fTextField = component.getFormattedTextField();
         String key = getCallableCalendar().registerFormatter(fTextField.getFormatter());
 
         fTextField.setEnabled( component.isEnabled() );
-        fTextField.addScriptListener( new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "onFieldChange('"+key+"', '"+ component.getName() + "', this.value )" ) );
+        fTextField.addScriptListener( new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "onFieldChange('"+key+"', '"+ id_hidden + "', this.value )" ) );
         
         dateFormat.setTimeZone( component.getTimeZone() );
 
@@ -108,15 +111,14 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
 
         device.print("\n</td><td>\n");
 
-        SLabel label = new SLabel();
-        device.print("<input type=\"hidden\" id=\""+component.getName()+"\" name=\""+component.getName()+"\" formatter=\""+key+"\" value=\""+format( component.getDate() )+"\">\n");
-        device.print("<input style=\"margin-left:2px;\" type=\"image\" id=\""+label.getName()+"\" src=\""+component.getIcon().getURL()+"\"");
+        device.print("<input type=\"hidden\" id=\""+id_hidden+"\" name=\""+id_hidden+"\" formatter=\""+key+"\" value=\""+format( component.getDate() )+"\">\n");
+        device.print("<input style=\"margin-left:2px;\" type=\"image\" id=\""+id_button+"\" src=\""+component.getIcon().getURL()+"\"");
         if ( !component.isEnabled() ) {
             device.print( " disabled");
         }
         device.print(">\n");
         device.print("<script type=\"text/javascript\">\n");
-        printCalendarSetup( device, component.getName(), fTextField.getName(), label.getName(), key );
+        printCalendarSetup( device, id_hidden, fTextField.getName(), id_button, key );
         device.print("</script>\n" );
 
         writeTableSuffix(device, component);
