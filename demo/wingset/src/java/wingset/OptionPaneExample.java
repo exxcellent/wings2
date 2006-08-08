@@ -26,16 +26,15 @@ import java.awt.event.ActionListener;
  * @version $Revision$
  */
 public class OptionPaneExample
-        extends WingSetPane
-{
+        extends WingSetPane {
     protected SComponent createExample() {
         SToolBar toolBar = new SToolBar();
         SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);
         toolBar.setBorder(border);
         toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        ((SBoxLayout)toolBar.getLayout()).setHgap(6);
-        ((SBoxLayout)toolBar.getLayout()).setVgap(4);
+        ((SBoxLayout) toolBar.getLayout()).setHgap(6);
+        ((SBoxLayout) toolBar.getLayout()).setVgap(4);
 
         final SComboBox combo = new SComboBox(new String[]{"Erstens", "Zweitens", "Drittens"});
 
@@ -76,7 +75,8 @@ public class OptionPaneExample
                     sendMail.add(new SLabel("Please send my why!"));
                     p.add(sendMail);
                     SOptionPane.showPlainMessageDialog(null, p);
-                } else {
+                }
+                else {
                     SOptionPane.showPlainMessageDialog(null, "Fine, so do we!");
                 }
             }
@@ -90,17 +90,6 @@ public class OptionPaneExample
 
         toolBar.add(yesno);
 
-        final SLabel label = new SLabel();
-        final ActionListener inputListener = new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand().equals(SOptionPane.OK_ACTION)) {
-                    SOptionPane optionPane = (SOptionPane) e.getSource();
-                    STextField inputValue = (STextField) optionPane.getInputValue();
-                    label.setText("" + inputValue.getText());
-                }
-            }
-        };
-
         SButton information = new SButton("show Information");
         information.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -108,6 +97,27 @@ public class OptionPaneExample
             }
         });
         toolBar.add(information);
+
+        final SLabel label = new SLabel();
+        final ActionListener inputListener = new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals(SOptionPane.OK_ACTION)) {
+                    final SOptionPane optionPane = (SOptionPane) e.getSource();
+                    STextField inputValue = (STextField) optionPane.getInputValue();
+
+                    if ("".equals(inputValue.getText().trim())) {
+                        SOptionPane.showMessageDialog(null, "The profession field is empty.", "Empty profession field", SOptionPane.ERROR_MESSAGE, new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                optionPane.show(null);
+                            }
+                        });
+                    }
+                    else {
+                        label.setText("" + inputValue.getText());
+                    }
+                }
+            }
+        };
 
         SButton input = new SButton("show Input");
         input.addActionListener(new java.awt.event.ActionListener() {

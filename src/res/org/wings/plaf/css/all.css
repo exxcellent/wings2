@@ -573,6 +573,12 @@ table.SPageScroller table.pages SPAN.disabled_linkbutton {
 
 /* ----------- SOPTIONPANE AND SDIALOG ----------- */
 
+.modalDialog {
+    background-color: gray;
+    -moz-opacity: .4;
+    filter:Alpha(opacity=40);
+}
+
 .SOptionPane,
 .SDialog {
     border: 1px solid #a6a6a6;

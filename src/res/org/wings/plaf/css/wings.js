@@ -8,36 +8,36 @@
 */
 
 function getEvent(event) {
-  if (window.event)
-    return window.event;
-  else
-    return event;
+    if (window.event)
+        return window.event;
+    else
+        return event;
 }
 
 function getTarget(event) {
-  if (event.srcElement)
-    return event.srcElement;
-  else
-    return event.target;
+    if (event.srcElement)
+        return event.srcElement;
+    else
+        return event.target;
 }
 
 function getElementByTagName(element, tag) {
-  while (element != null) {
-    if (tag == element.tagName)
-      return element;
-    element = element.parentNode;
-  }
-  return null;
+    while (element != null) {
+        if (tag == element.tagName)
+            return element;
+        element = element.parentNode;
+    }
+    return null;
 }
 
 function getElementWearingAttribute(element, attribute) {
-  while (element != null) {
-      if (element.getAttribute && element.getAttribute(attribute)) {
-          return element;
-      }
-    element = element.parentNode;
-  }
-  return null;
+    while (element != null) {
+        if (element.getAttribute && element.getAttribute(attribute)) {
+            return element;
+        }
+        element = element.parentNode;
+    }
+    return null;
 }
 
 function preventDefault(event) {
@@ -69,7 +69,7 @@ function sendEvent(event, eventValue, eventName, clientHandlers) {
     }
 
     if (doSubmit == undefined || doSubmit) {
-        if ( form != null ) {
+        if (form != null) {
             var eventNode = document.createElement("input");
             eventNode.setAttribute('type', 'hidden');
             eventNode.setAttribute('name', eventName);
@@ -152,9 +152,9 @@ function wu_focusComponent(component, clientHandlers) {
 function wu_findElement(id, tagname) {
     var div = document.getElementById(id);
     if (div) {
-       var elements = div.getElementsByTagName(tagname);
-       if (elements && elements.length > 0)
-       	  return elements[0];
+        var elements = div.getElementsByTagName(tagname);
+        if (elements && elements.length > 0)
+            return elements[0];
     }
 }
 
@@ -164,51 +164,51 @@ function wu_findElement(id, tagname) {
    but you want the focus to be the input element. Not the table element. */
 function requestFocus(id) {
     var div = document.getElementById(id);
-	if (div) {
+    if (div) {
         if (div.getAttribute("foc") == id) {
             div.focus();
             return;
         }
 
         var elements = div.getElementsByTagName("INPUT");
-	    for (var i = 0; i < elements.length; i++) {
-	        if (elements[i].getAttribute("foc") == id) {
-	            elements[i].focus();
-	            return;
-	        }
-	    }
-	    elements = div.getElementsByTagName("SELECT");
-	    for (var i = 0; i < elements.length; i++) {
-	        if (elements[i].getAttribute("foc") == id) {
-	            elements[i].focus();
-	            return;
-	        }
-	    }
-	    elements = div.getElementsByTagName("TEXTAREA");
-	    for (var i = 0; i < elements.length; i++) {
-	        if (elements[i].getAttribute("foc") == id) {
-	            elements[i].focus();
-	            return;
-	        }
-	    }
-	    elements = div.getElementsByTagName("A");
-	    for (var i = 0; i < elements.length; i++) {
-	        if (elements[i].getAttribute("foc") == id) {
-	            elements[i].focus();
-	            return;
-	        }
-	    }
-	    /* this produces javascript errors on konqueror, so hide (2005-03-11) */
-	    if (!(wu_konqueror)) {
-		    elements = div.getElementsByTagName("BUTTON");
-		    for (var i = 0; i < elements.length; i++) {
-		        if (elements[i].getAttribute("foc") == id) {
-		            elements[i].focus();
-		            return;
-		        }
-		    }
-		}
-	}
+        for (var i = 0; i < elements.length; i++) {
+            if (elements[i].getAttribute("foc") == id) {
+                elements[i].focus();
+                return;
+            }
+        }
+        elements = div.getElementsByTagName("SELECT");
+        for (var i = 0; i < elements.length; i++) {
+            if (elements[i].getAttribute("foc") == id) {
+                elements[i].focus();
+                return;
+            }
+        }
+        elements = div.getElementsByTagName("TEXTAREA");
+        for (var i = 0; i < elements.length; i++) {
+            if (elements[i].getAttribute("foc") == id) {
+                elements[i].focus();
+                return;
+            }
+        }
+        elements = div.getElementsByTagName("A");
+        for (var i = 0; i < elements.length; i++) {
+            if (elements[i].getAttribute("foc") == id) {
+                elements[i].focus();
+                return;
+            }
+        }
+        /* this produces javascript errors on konqueror, so hide (2005-03-11) */
+        if (!(wu_konqueror)) {
+            elements = div.getElementsByTagName("BUTTON");
+            for (var i = 0; i < elements.length; i++) {
+                if (elements[i].getAttribute("foc") == id) {
+                    elements[i].focus();
+                    return;
+                }
+            }
+        }
+    }
 }
 
 function getCookie(name)
@@ -218,28 +218,29 @@ function getCookie(name)
     var clen = document.cookie.length;
     while (i < clen)
     {
-         var endstr = document.cookie.indexOf (";", i);
-         if (endstr == -1) endstr = document.cookie.length;
+        var endstr = document.cookie.indexOf(";", i);
+        if (endstr == -1) endstr = document.cookie.length;
 
-         var v = unescape(document.cookie.substring(i, endstr));
-         var key = v.substring(0, v.indexOf("=", 0));
-         var val = v.substring(v.indexOf("=") + 1);
-         c[key] = val;
-         i = endstr + 2; // Leerzeichen nach ; �berspringen
+        var v = unescape(document.cookie.substring(i, endstr));
+        var key = v.substring(0, v.indexOf("=", 0));
+        var val = v.substring(v.indexOf("=") + 1);
+        c[key] = val;
+        i = endstr + 2;
+        // Leerzeichen nach ; �berspringen
     }
-    if(name) return c[name];
+    if (name) return c[name];
     return c;
 }
 
 function setCookie(name, value, days, path)
 {
-    if(!days) days = -1;
+    if (!days) days = -1;
     var expire = new Date();
     expire.setTime(expire.getTime() + 86400000 * days);
 
     document.cookie = name + "=" + escape(value)
-    +  "; expires=" + expire.toGMTString() + ";"
-    + (path ? 'path=' + path : '');
+            + "; expires=" + expire.toGMTString() + ";"
+            + (path ? 'path=' + path : '');
 }
 
 function storeScrollPosition(event) {
@@ -271,13 +272,14 @@ function getScrollableElement(el) {
     if (el.scrollTop > 0)
         return el;
 
-	var parent = el.parentNode;
-	if (null == parent) return null;
-	if (parent.scrollTop != 0) {
-		return parent;
-	} else {
-		return arguments.callee(parent);
-	}
+    var parent = el.parentNode;
+    if (null == parent) return null;
+    if (parent.scrollTop != 0) {
+        return parent;
+    }
+    else {
+        return arguments.callee(parent);
+    }
 }
 
 function storeFocus(event) {
@@ -302,7 +304,7 @@ var wu_opera = wu_checkUserAgent('opera')?1:0;
 var wu_safari = wu_checkUserAgent('safari')?1:0;
 
 function wu_checkUserAgent(string) {
-	return navigator.userAgent.toLowerCase().indexOf(string) + 1;
+    return navigator.userAgent.toLowerCase().indexOf(string) + 1;
 }
 
 /*
@@ -313,8 +315,8 @@ used in AnchorCG
 /*
 check if a target exists
 */
-function wu_checkTarget(target){
-    for (var i=0;i<parent.frames.length;i++) {
+function wu_checkTarget(target) {
+    for (var i = 0; i < parent.frames.length; i++) {
         if (parent.frames[i].name == target)
             return true;
     }
@@ -323,15 +325,15 @@ function wu_checkTarget(target){
 /*
 if the target exists => change URL, else => open URL in new window
 */
-function wu_openlink(target, url){
-    if(target==null){
+function wu_openlink(target, url) {
+    if (target == null) {
         location.href = url;
     }
-    else{
-        if(wu_checkTarget(target)){
+    else {
+        if (wu_checkTarget(target)) {
             parent.frames[target].location.href = url;
         }
-        else{
+        else {
             window.open(url, target);
         }
     }
@@ -342,15 +344,18 @@ function wu_openlink(target, url){
 function wu_framewidth() {
     if (self.innerHeight) // all except Explorer
     {
-    	return self.innerWidth;
-    } else if (document.documentElement && document.documentElement.clientHeight)
-	    // Explorer 6 Strict Mode
+        return self.innerWidth;
+    }
+    else if (document.documentElement && document.documentElement.clientHeight)
+    // Explorer 6 Strict Mode
     {
-	    return document.documentElement.clientWidth;
-    } else if (document.body) // other Explorers
+        return document.documentElement.clientWidth;
+    }
+    else if (document.body) // other Explorers
     {
-	    return document.body.clientWidth;
-    } else
+        return document.body.clientWidth;
+    }
+    else
         return -1;
 }
 
@@ -361,22 +366,24 @@ function wu_framewidth() {
   Example: wu_addEvent(document,'focus',storeFocus,false);
 */
 function wu_registerEvent(obj, eventType, func, useCaption) {
-  if (obj.addEventListener) {
-    obj.addEventListener(eventType, func, useCaption);
-    return true;
-  } else if (obj.attachEvent) {
-    var retVal = object.attachEvent("on"+eventType, func);
-    return retVal;
-  } else {
-    return false;
-  }
+    if (obj.addEventListener) {
+        obj.addEventListener(eventType, func, useCaption);
+        return true;
+    }
+    else if (obj.attachEvent) {
+        var retVal = object.attachEvent("on" + eventType, func);
+        return retVal;
+    }
+    else {
+        return false;
+    }
 }
 
 /* 
     XCalendar JavaScript Code 
 */
 function onFieldChange(key, name, value) {
-    xcalendar.onFieldChange( onFieldChangeCallback, key, name, value );
+    xcalendar.onFieldChange(onFieldChangeCallback, key, name, value);
 }
 function onFieldChangeCallback(result) {
     var elem = document.getElementById(result[0]);
@@ -386,7 +393,7 @@ function onFieldChangeCallback(result) {
     elem.value = data;
 }
 function onCalUpdate(cal) {
-    xcalendar.onCalUpdate( onCalUpdateCallback, cal.params.formatter, cal.params.textField, cal.date );
+    xcalendar.onCalUpdate(onCalUpdateCallback, cal.params.formatter, cal.params.textField, cal.date);
 }
 function onCalUpdateCallback(result) {
     var elem = document.getElementById(result[0]);
@@ -397,7 +404,7 @@ function onCalUpdateCallback(result) {
     elem.style.color = '';
 }
 
-/* 
+/*
     SFormattedTextField JavaScript Code
 */
 function ftextFieldCallback(result) {
@@ -407,10 +414,105 @@ function ftextFieldCallback(result) {
     var data = result[1];
     if (!data) {
         elem.style.color = '#ff0000';
-    } else {
+    }
+    else {
         elem.style.color = '';
         elem.value = data;
         elem.setAttribute("lastValid", data);
     }
+}
+
+/**
+ * Adds a function to the window.onresize functionality.
+ * This allows you to execute more than one function.
+ */
+windowOnResizes = new Array();
+function addWindowOnResizeFunction(func) {
+    windowOnResizes.push(func);
+}
+
+/**
+ * The execution of all added window.onresize functions.
+ */
+window.onresize = performWindowOnResize;
+function performWindowOnResize() {
+    for (i = 0; i < windowOnResizes.length; i++) {
+        eval(windowOnResizes[i]);
+    }
+}
+
+/**
+ * Adds a function to the window.onload functionality.
+ * This allows you to execute more than one function.
+ */
+windowOnLoads = new Array();
+function addWindowOnLoadFunction(func) {
+    windowOnLoads.push(func);
+}
+
+/**
+ * The execution of all added window.onload functions.
+ */
+window.onload = performWindowOnLoad;
+function performWindowOnLoad() {
+    for (i = 0; i < windowOnLoads.length; i++) {
+        eval(windowOnLoads[i]);
+    }
+}
+
+/**
+ * Shows the modal dialog at the center of the component.
+ * (SFrame or SInternalFrame)
+ */
+function showModalDialog(dialogId, modalId) {
+    var positionX = (document.all) ? document.body.offsetWidth : window.innerWidth;
+    var positionY = (document.all) ? document.body.offsetHeight : window.innerHeight;
+    positionX = positionX / 2;
+    positionY = positionY / 2;
+    var dialog = document.getElementById(dialogId);
+    var modalDialog = document.getElementById(modalId);
+    for (var parent = dialog.parentNode; parent != null; parent = parent.parentNode) {
+        if (parent.nodeType != 1) {
+            if (document.all) {
+                modalDialog.style.width = document.body.offsetWidth + 'px';
+                modalDialog.style.height = document.body.offsetHeight + 'px';
+            }
+            else {
+                modalDialog.style.width = window.innerWidth;
+                modalDialog.style.height = window.innerHeight;
+            }
+            break;
+        }
+        if (parent.getAttribute('SComponentClass') == 'org.wings.SInternalFrame') {
+            positionX = parent.offsetWidth / 2;
+            positionY = parent.offsetHeight / 2;
+            positionX += absLeft(parent);
+            positionY += absTop(parent);
+            modalDialog.style.left = absLeft(parent) + 'px';
+            modalDialog.style.top = absTop(parent) + 'px';
+            modalDialog.style.width = parent.offsetWidth + 'px';
+            modalDialog.style.height = parent.offsetHeight + 'px';
+            break;
+        }
+    }
+    var dialogWidth = dialog.offsetWidth;
+    var dialogHeight = dialog.offsetHeight;
+    dialog.style.left = (positionX - (dialogWidth / 2)) + 'px';
+    dialog.style.top = (positionY - (dialogHeight / 2)) + 'px';
+    dialog.style.zIndex = 1000;
+}
+
+/**
+ * Calculates the absolute position of the element to the left.
+ */
+function absLeft(el) {
+    return (el.offsetParent) ? el.offsetLeft + absLeft(el.offsetParent) : el.offsetLeft;
+}
+
+/**
+ * Calculates the absolute position of the element to the top.
+ */
+function absTop(el) {
+    return (el.offsetParent) ? el.offsetTop + absTop(el.offsetParent) : el.offsetTop;
 }
                                  

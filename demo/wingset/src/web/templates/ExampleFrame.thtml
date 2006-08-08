@@ -18,7 +18,8 @@
     </tr>
     <tr>
         <td colspan="2">
-            <object name="content">Here is the example Application</object>
+            <object name="frame">Here is the example Application</object>
+            <object name="dialog"></object>
         </td>
     </tr>
 </table>

@@ -15,13 +15,7 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.LowLevelEventListener;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SIcon;
-import org.wings.SPopupMenu;
-import org.wings.SResourceIcon;
+import org.wings.*;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.STitledBorder;
@@ -40,6 +34,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.
@@ -58,7 +53,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     protected void writeTablePrefix(Device device, SComponent component) throws IOException {
-        writePrefix(device, component, true);
+        writeTablePrefix(device, component, null);
+    }
+
+    protected void writeTablePrefix(Device device, SComponent component, Map optionalAttributes) throws IOException {
+        writePrefix(device, component, true, optionalAttributes);
     }
 
     protected void writeTableSuffix(Device device, SComponent component) throws IOException {
@@ -66,21 +65,26 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     protected void writeDivPrefix(Device device, SComponent component) throws IOException {
-        writePrefix(device, component, false);
+        writeDivPrefix(device, component, null);
+    }
+
+    protected void writeDivPrefix(Device device, SComponent component, Map optionalAttributes) throws IOException {
+        writePrefix(device, component, false, optionalAttributes);
     }
 
     protected void writeDivSuffix(Device device, SComponent component) throws IOException {
         writeSuffix(device, component, false);
     }
 
-    private void writePrefix(final Device device, final SComponent component, final boolean useTable) throws IOException {
+    private void writePrefix(final Device device, final SComponent component, final boolean useTable, Map optionalAttributes) throws IOException {
         SBorder border = component.getBorder();
         final boolean isTitleBorder = border instanceof STitledBorder;
         // This is the containing element of a component
         // it is responsible for styles, sizing...
         if (useTable) {
             device.print("<table"); // table
-        } else {
+        }
+        else {
             device.print("<div"); // div
         }
 
@@ -88,6 +92,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         //Utils.writeEvents(device, component, null);
 
         writeAllAttributes(device, component);
+
+        // Render the optional attributes.
+        Utils.optAttributes(device, optionalAttributes);
 
         if (useTable) {
             device.print("><tr><td"); // table
@@ -100,7 +107,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             Utils.optAttribute(device, "style", styleString);
 
             device.print(">"); // table
-        } else {
+        }
+        else {
             device.print(">"); // div
         }
 
@@ -116,12 +124,13 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     private void writeSuffix(Device device, SComponent component, boolean useTable) throws IOException {
         if (useTable) {
             device.print("</td></tr></table>");
-        } else {
+        }
+        else {
             device.print("</div>");
         }
     }
 
-    public static final void writeAllAttributes(Device device, SComponent component) throws IOException {
+    public static void writeAllAttributes(Device device, SComponent component) throws IOException {
         final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
 
         final String classname = component.getStyle();
@@ -203,7 +212,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
             // javascript needs even more & special quoting
             // FIXME: do this more efficiently
-            Utils.quote(device, toolTipText.replaceAll("'","\\'"), true, true, true);
+            Utils.quote(device, toolTipText.replaceAll("'", "\\'"), true, true, true);
             device.print("', 'predefined', 'default'));\"");
         }
     }
@@ -227,11 +236,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             int verticalOversize = 0;
             value = manager.getObject(style + ".verticalOversize", Integer.class);
             if (value != null)
-                verticalOversize = ((Integer)value).intValue();
+                verticalOversize = ((Integer) value).intValue();
             int horizontalOversize = 0;
             value = manager.getObject(style + ".horizontalOversize", Integer.class);
             if (value != null)
-                horizontalOversize = ((Integer)value).intValue();
+                horizontalOversize = ((Integer) value).intValue();
 
             if (verticalOversize != 0 || horizontalOversize != 0)
                 component.putClientProperty("oversize", new SEmptyBorder(verticalOversize, horizontalOversize, verticalOversize, horizontalOversize));
@@ -291,40 +300,40 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             final Integer scriptListenerListVersion = (Integer) component.getClientProperty("scriptListenerListVersion");
             if (scriptListenerListVersion == null || versionedList.getVersion() != scriptListenerListVersion.intValue())
             */if (true) // BSC ------------ END
-            {
-                /* TODO: this code destroys the dwr functionality
-                List removeCallables = new ArrayList();
-                // Remove all existing - and maybe unusable - DWR script listeners.
-                for (Iterator iter = CallableManager.getInstance().callableNames().iterator(); iter.hasNext();) {
-                    Object o = iter.next();
-                    if (o instanceof String) {
-                        removeCallables.add(o);
-                    }
+        {
+            /* TODO: this code destroys the dwr functionality
+            List removeCallables = new ArrayList();
+            // Remove all existing - and maybe unusable - DWR script listeners.
+            for (Iterator iter = CallableManager.getInstance().callableNames().iterator(); iter.hasNext();) {
+                Object o = iter.next();
+                if (o instanceof String) {
+                    removeCallables.add(o);
                 }
-
-                for (Iterator iter = removeCallables.iterator(); iter.hasNext(); ) {
-                    Object o = iter.next();
-                    if (o instanceof String) {
-                        CallableManager.getInstance().unregisterCallable((String) o);
-                    }
-                }
-                */
-
-                // Add DWR script listener support.
-                ScriptListener[] scriptListeners = component.getScriptListeners();
-                for (int i = 0; i < scriptListeners.length; i++) {
-                    if (scriptListeners[i] instanceof DWRScriptListener) {
-                        DWRScriptListener scriptListener = (DWRScriptListener) scriptListeners[i];
-                        CallableManager.getInstance().registerCallable(scriptListener.getCallableName(), scriptListener.getCallable());
-                    }
-                }
-
-                //component.putClientProperty("scriptListenerListVersion", new Integer(versionedList.getVersion()));
             }
+
+            for (Iterator iter = removeCallables.iterator(); iter.hasNext(); ) {
+                Object o = iter.next();
+                if (o instanceof String) {
+                    CallableManager.getInstance().unregisterCallable((String) o);
+                }
+            }
+            */
+
+            // Add DWR script listener support.
+            ScriptListener[] scriptListeners = component.getScriptListeners();
+            for (int i = 0; i < scriptListeners.length; i++) {
+                if (scriptListeners[i] instanceof DWRScriptListener) {
+                    DWRScriptListener scriptListener = (DWRScriptListener) scriptListeners[i];
+                    CallableManager.getInstance().registerCallable(scriptListener.getCallableName(), scriptListener.getCallable());
+                }
+            }
+
+            //component.putClientProperty("scriptListenerListVersion", new Integer(versionedList.getVersion()));
+        }
         }
     }
 
-    protected final  boolean hasDimension(SComponent component) {
+    protected final boolean hasDimension(SComponent component) {
         SDimension dim = component.getPreferredSize();
         if (dim == null) return false;
         return (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
@@ -339,7 +348,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             renderAndWrapComponent(device, component);
             return;
         }
-        String renderedCode = (String)component.getClientProperty("render-cache");
+        String renderedCode = (String) component.getClientProperty("render-cache");
         if (renderedCode == null) {
             try {
                 // TODO -- reuse and keep the string builder in the cache. Just check if empty.

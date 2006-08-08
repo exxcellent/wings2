@@ -56,7 +56,7 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
     }
 
     protected void writeWindowIcon(Device device, SDialog frame,
-            int event, SIcon icon, String cssClass) throws IOException {
+                                   int event, SIcon icon, String cssClass) throws IOException {
         Utils.printButtonStart(device, frame, Integer.toString(event), true, frame.getShowAsFormComponent());
         device.print(">");
         writeIcon(device, icon, null);
@@ -64,9 +64,15 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
         Utils.printButtonEnd(device, frame, Integer.toString(event), true);
     }
 
-    public void writeInternal(final Device device, final SComponent _c)
-            throws IOException {
-        SDialog frame = (SDialog)_c;
+    public void writeInternal(final Device device, final SComponent _c) throws IOException {
+        SDialog frame = (SDialog) _c;
+
+        String modalId = _c.getName() + "_modal";
+        String dialogId = _c.getName() + "_dialog";
+
+        device.print("<div id=\"" + modalId + "\" class=\"modalDialog\" style=\"position:absolute;top:0px;left:0px;bottom:0px;right:0px;width:100%;height:100%;\"></div>");
+        device.print("<div id=\"" + dialogId + "\" style=\"z-index:-1;position:absolute;\">");
+
         writeTablePrefix(device, frame);
         writeWindowBar(device, frame);
 
@@ -74,6 +80,19 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
         super.writeInternal(device, _c);
         device.print("</div>");
         writeTableSuffix(device, frame);
+
+        device.print("</div>");
+
+        device.print("<script type=\"text/javascript\">\n");
+
+        String function = "showModalDialog(\"" + dialogId + "\", \"" + modalId + "\")";
+
+        // Add the function for window.onresize and window.onload.
+        device.print("    addWindowOnResizeFunction('" + function + "');\n");
+        device.print("    addWindowOnLoadFunction('" + function + "');\n");
+        device.print("    " + function + ";\n");
+
+        device.print("</script>\n");
     }
 
 

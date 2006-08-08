@@ -28,7 +28,6 @@ import org.wings.SBorderLayout;
 import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
 import org.wings.resource.DefaultURLResource;
-import org.wings.session.BrowserType;
 import org.wings.style.CSSProperty;
 
 import java.io.Serializable;
@@ -104,6 +103,7 @@ public class WingSet implements Serializable {
         tab.add(new TextComponentExample(), "Text Component");
         tab.addTab("Tree", JAVA_CUP_ICON, new TreeExample(), "Tree Tool Tip");
         tab.add(new OptionPaneExample(), "OptionPane");
+        tab.add(new InternalFrameOptionPaneExample(), "SInternalFrame OptionPane");
         tab.add(new TableExample(), "Table");
         tab.add(new ListExample(), "List");
         tab.add(new ButtonExample(), "Button");
@@ -131,7 +131,9 @@ public class WingSet implements Serializable {
         tab.add(new ErrorPageExample(), "Error Page");
         tab.add(new TableNestingExample(), "Limited table nesting (DEVEL)");
         tab.add(new ListBugTest(), "BUG TODO: In IE List does not appear");
-        tab.add(new bookmarks.BookmarkManager(), "DND 2");
+
+        // TODO: fixme!!!
+        //tab.add(new bookmarks.BookmarkManager(), "DND 2");
 
         // Add component to content pane using a layout constraint (
         frame.getContentPane().add(tab);

@@ -60,6 +60,7 @@ public final class Utils {
      */
     public final static boolean PRINT_DEBUG;
     public final static boolean PRINT_PRETTY;
+
     static {
         Session session = SessionManager.getSession();
         // Respect settings from resource.properties
@@ -93,9 +94,9 @@ public final class Utils {
      * Default list of javascript events to exlcude in form case of
      * {@link #printButtonStart(org.wings.io.Device, org.wings.SComponent, String, boolean, boolean)}
      */
-    private final static String[] EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT= new String[]
+    private final static String[] EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT = new String[]
             {JavaScriptEvent.ON_CLICK, JavaScriptEvent.ON_MOUSE_DOWN,
-             JavaScriptEvent.ON_MOUSE_DOWN, JavaScriptEvent.ON_MOUSE_OUT};
+                    JavaScriptEvent.ON_MOUSE_DOWN, JavaScriptEvent.ON_MOUSE_OUT};
 
     /**
      * Renders a container using its Layout manager or fallback just one after another.
@@ -110,7 +111,8 @@ public final class Utils {
                 c.getComponent(i).write(d);
             }
             d.print("</td></tr></tbody>");
-        } else {
+        }
+        else {
             layout.write(d);
         }
     }
@@ -198,13 +200,17 @@ public final class Utils {
             throws IOException {
         if (align == SConstants.NO_ALIGN) {
             // d.print(" align=\"left\"");
-        } else if (align == SConstants.LEFT) {
+        }
+        else if (align == SConstants.LEFT) {
             d.print(" align=\"left\"");
-        } else if (align == SConstants.CENTER) {
+        }
+        else if (align == SConstants.CENTER) {
             d.print(" align=\"center\"");
-        } else if (align == SConstants.RIGHT) {
+        }
+        else if (align == SConstants.RIGHT) {
             d.print(" align=\"right\"");
-        } else if (align == SConstants.JUSTIFY) {
+        }
+        else if (align == SConstants.JUSTIFY) {
             d.print(" align=\"justify\"");
         }
     }
@@ -216,13 +222,17 @@ public final class Utils {
             throws IOException {
         if (align == SConstants.NO_ALIGN) {
             //d.print(" valign=\"center\"");
-        } else if (align == SConstants.CENTER) {
+        }
+        else if (align == SConstants.CENTER) {
             d.print(" valign=\"middle\"");
-        } else if (align == SConstants.TOP) {
+        }
+        else if (align == SConstants.TOP) {
             d.print(" valign=\"top\"");
-        } else if (align == SConstants.BOTTOM) {
+        }
+        else if (align == SConstants.BOTTOM) {
             d.print(" valign=\"bottom\"");
-        } else if (align == SConstants.BASELINE) {
+        }
+        else if (align == SConstants.BASELINE) {
             d.print(" valign=\"baseline\"");
         }
     }
@@ -251,7 +261,8 @@ public final class Utils {
         do {
             buf[--digits] = hexDigits[rgb & 15];
             rgb >>>= 4;
-        } while (digits != 0);
+        }
+        while (digits != 0);
 
         return new String(buf);
     }
@@ -359,12 +370,12 @@ public final class Utils {
 
         // IE puts an auto margin of 1px for top and bottom on input fields
         if ((component instanceof STextComponent || component instanceof SFileChooser))
-            oversize +=2;
+            oversize += 2;
 
         SAbstractBorder border = (SAbstractBorder) component.getBorder();
         // Respect oversize coming from (default) stylsheet padding and border
         if (border == null)
-            border = (SAbstractBorder)component.getClientProperty("oversize");
+            border = (SAbstractBorder) component.getClientProperty("oversize");
 
         if (border != null) {
             int thickness = border.getThickness(SConstants.TOP);
@@ -396,7 +407,7 @@ public final class Utils {
         SAbstractBorder border = (SAbstractBorder) component.getBorder();
         // Respect oversize coming from (default) stylsheet padding and border
         if (border == null)
-            border = (SAbstractBorder)component.getClientProperty("oversize");
+            border = (SAbstractBorder) component.getClientProperty("oversize");
 
         return oversize;
     }
@@ -404,7 +415,8 @@ public final class Utils {
     public static SStringBuilder generateCSSInlineBorder(SStringBuilder styles, int borderSize) {
         if (borderSize > 0) {
             styles.append("border:").append(borderSize).append("px solid black;");
-        } else {
+        }
+        else {
             //styleString.append("border:none;"); Not necessary. Default
         }
         return styles;
@@ -427,7 +439,8 @@ public final class Utils {
             // opera doesn't show height 100% when parent has no defined height
             if (preferredSize.getHeight() != SDimension.AUTO) {
                 device.print(" style=\"width:100%;height:100%\"");
-            } else {
+            }
+            else {
                 device.print(" style=\"width:100%\"");
             }
         }
@@ -479,13 +492,15 @@ public final class Utils {
                 d.print(chars, last, (pos - last));
                 if (c == '\n' && quoteNewline) {
                     d.print("<br>");
-                } else {
+                }
+                else {
                     d.print("&#");
                     d.print((int) c);
                     d.print(";");
                 } // end of if ()
                 last = pos + 1;
-            } else {
+            }
+            else {
                 switch (c) {
                     case '&':
                         d.print(chars, last, (pos - last));
@@ -586,7 +601,8 @@ public final class Utils {
         }
         if ((s.length() > 5) && (s.startsWith("<html>"))) {
             writeRaw(d, s.substring(6));
-        } else {
+        }
+        else {
             quote(d, s, quoteNewline, false, false);
         }
     }
@@ -676,6 +692,59 @@ public final class Utils {
     }
 
     /**
+     * Prints all optional attributes that are contained in the
+     * <code>Map</code>. The keys of the map should be instances
+     * of <code>String</code> and the values one of the following
+     * classes.<br/>
+     * <ul>
+     * <li>org.wings.util.SStringBuilder</li>
+     * <li>java.lang.String</li>
+     * <li>java.awt.Color</li>
+     * <li>org.wings.Renderable</li>
+     * <li>java.lang.Integer</li>
+     * <li>org.wings.SDimension</li>
+     * </ul>
+     *
+     * @param d          The device to print the optional attributes.
+     * @param attributes The optional attributes. The key is the attribute
+     *                   name and the value is the attribute value.
+     * @throws IOException The exception maybe thrown if an error occurs
+     *                     while trying to write to device.
+     */
+    public static void optAttributes(Device d, Map attributes) throws IOException {
+        if (attributes != null) {
+            for (Iterator iter = attributes.entrySet().iterator(); iter.hasNext();) {
+                Map.Entry entries = (Map.Entry) iter.next();
+
+                Object key = entries.getKey();
+                if (key instanceof String) {
+                    String attr = (String) key;
+
+                    Object value = entries.getValue();
+                    if (value instanceof SStringBuilder) {
+                        Utils.optAttribute(d, attr, (SStringBuilder) value);
+                    }
+                    else if (value instanceof String) {
+                        Utils.optAttribute(d, attr, (String) value);
+                    }
+                    else if (value instanceof Color) {
+                        Utils.optAttribute(d, attr, (Color) value);
+                    }
+                    else if (value instanceof Renderable) {
+                        Utils.optAttribute(d, attr, (Renderable) value);
+                    }
+                    else if (value instanceof Integer) {
+                        Utils.optAttribute(d, attr, ((Integer) value).intValue());
+                    }
+                    else if (value instanceof SDimension) {
+                        Utils.optAttribute(d, attr, (SDimension) value);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Prints an empty attribute. I.e. alt=""
      */
     public static void emptyAttribute(Device d, String attr)
@@ -742,7 +811,8 @@ public final class Utils {
     public static Device printDebug(Device d, String s) throws IOException {
         if (PRINT_DEBUG) {
             return d.print(s);
-        } else {
+        }
+        else {
             return NullDevice.DEFAULT;
         }
     }
@@ -754,7 +824,8 @@ public final class Utils {
     public static Device printDebugNewline(Device d, SComponent currentComponent) throws IOException {
         if (PRINT_DEBUG) {
             return printNewline(d, currentComponent);
-        } else {
+        }
+        else {
             return d;
         }
     }
@@ -823,17 +894,21 @@ public final class Utils {
             buffer.append("\n");
 
             return buffer.toString();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.warn("Unable to load script '" + path + "'", e);
             return "";
-        } finally {
+        }
+        finally {
             try {
                 in.close();
-            } catch (Exception ign) {
+            }
+            catch (Exception ign) {
             }
             try {
                 reader.close();
-            } catch (Exception ign1) {
+            }
+            catch (Exception ign1) {
             }
         }
     }
@@ -888,10 +963,12 @@ public final class Utils {
                 styleString.insert(0, " ");
                 styleString.insert(0, component.getStyle());
                 return styleString;
-            } else {
+            }
+            else {
                 return new SStringBuilder(component.getStyle());
             }
-        } else {
+        }
+        else {
             return styleString;
         }
     }
@@ -906,10 +983,12 @@ public final class Utils {
         if (component != null && component.getStyle() != null) {
             if (styleString != null) {
                 return component.getStyle() + " " + styleString;
-            } else {
+            }
+            else {
                 return component.getStyle();
             }
-        } else {
+        }
+        else {
             return styleString != null ? styleString : "";
         }
     }
@@ -924,7 +1003,8 @@ public final class Utils {
             if (!enabled) {
                 device.print("<span");
                 Utils.optAttribute(device, "class", cssClassName);
-            } else {
+            }
+            else {
                 device.print("<a href=\"#\"");
 
                 // Render onclick JS listeners
@@ -955,11 +1035,13 @@ public final class Utils {
 
                 Utils.optAttribute(device, "class", cssClassName);
             }
-        } else {
+        }
+        else {
             if (!enabled) {
                 device.print("<span");
                 Utils.optAttribute(device, "class", cssClassName);
-            } else {
+            }
+            else {
                 final RequestURL requestURL = component.getRequestURL();
                 if (eventValue != null) {
                     requestURL.addParameter(Utils.event(component), eventValue);
@@ -976,7 +1058,8 @@ public final class Utils {
                     device.print(")\"");
                     // Render remaining JS listeners
                     Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
-                } else {
+                }
+                else {
                     Utils.writeEvents(device, component, null);
                 }
             }
@@ -987,7 +1070,8 @@ public final class Utils {
                                       final String value, final boolean enabled) throws IOException {
         if (enabled) {
             device.print("</a>");
-        } else {
+        }
+        else {
             device.print("</span>");
         }
     }
@@ -998,10 +1082,11 @@ public final class Utils {
      * as well as by the application itself.
      * <p> For an example: See the <code>sendEvent</code> and <code>followLink</code>
      * method declared in <code>Wings.js</code>.
-     * @param component The component wearing the event handler
+     *
+     * @param component           The component wearing the event handler
      * @param javascriptEventType the event type declared in {@link JavaScriptEvent}
      * @return javascript code fragment n the form of <code>,new Array(function(){...},function(){...})</code>
-      */
+     */
     public static SStringBuilder collectJavaScriptListenerCode(final SComponent component, final String javascriptEventType) {
         final SStringBuilder script = new SStringBuilder();
         JavaScriptListener[] eventListeners = getOnClickListeners(component, javascriptEventType);
@@ -1013,7 +1098,8 @@ public final class Utils {
                 }
                 if (eventListeners[i].getScript() != null) {
                     script.append("function(){").append(eventListeners[i].getScript()).append("}");
-                } else {
+                }
+                else {
                     script.append("function(){").append(eventListeners[i].getCode()).append("}");
                 }
             }
@@ -1023,7 +1109,7 @@ public final class Utils {
     }
 
     /**
-     * @param button The component wearing the event handler
+     * @param button          The component wearing the event handler
      * @param javaScriptEvent the event type declared in {@link JavaScriptEvent}
      * @return The attached listeners to event type
      */
@@ -1046,7 +1132,8 @@ public final class Utils {
             SStringBuilder tabArea = new SStringBuilder();
             tabArea.append(tabAreaStyle.toString());
             return tabArea;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -1061,7 +1148,7 @@ public final class Utils {
     /**
      * @param device
      * @param component
-     * @throws IOException 
+     * @throws IOException
      */
     public static void optFullSize(Device device, SComponent component) throws IOException {
         SDimension dim = component.getPreferredSize();
@@ -1078,14 +1165,14 @@ public final class Utils {
                 style.append("height:100%;");
             }
             if (style.length() > 0)
-            Utils.optAttribute(device, "style", style.toString());
+                Utils.optAttribute(device, "style", style.toString());
         }
     }
 
     /**
      * Converts a hgap/vgap in according inline css padding style.
-     * @param styles
      *
+     * @param styles
      * @param insets The insets to generate CSS padding declaration
      * @return Empty or fille stringbuffer with padding declaration
      */
@@ -1093,9 +1180,11 @@ public final class Utils {
         if (insets != null && (insets.top > 0 || insets.left > 0 || insets.right > 0 || insets.bottom > 0)) {
             if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
                 styles.append("padding:").append(insets.top).append("px;");
-            } else if (insets.top == insets.bottom && insets.left == insets.right) {
+            }
+            else if (insets.top == insets.bottom && insets.left == insets.right) {
                 styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px;");
-            } else {
+            }
+            else {
                 styles.append("padding:").append(insets.top).append("px ").append(insets.right).append("px ")
                         .append(insets.bottom).append("px ").append(insets.left).append("px;");
             }
@@ -1112,7 +1201,7 @@ public final class Utils {
                     if (percentageUnitOnly && !"%".equals(widthUnit))
                         return 0;
 
-                    SAbstractBorder border = (SAbstractBorder)component.getBorder();
+                    SAbstractBorder border = (SAbstractBorder) component.getBorder();
                     if (border != null) {
                         int oversize = 0;
                         int thickness = border.getThickness(SConstants.LEFT);
@@ -1145,7 +1234,7 @@ public final class Utils {
                     if (percentageUnitOnly && !"%".equals(heightUnit))
                         return 0;
 
-                    SAbstractBorder border = (SAbstractBorder)component.getBorder();
+                    SAbstractBorder border = (SAbstractBorder) component.getBorder();
                     if (border != null) {
                         int oversize = 0;
                         int thickness = border.getThickness(SConstants.TOP);

@@ -25,6 +25,8 @@ import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
 
 public class InternalFrameCG extends AbstractComponentCG implements
         org.wings.plaf.InternalFrameCG {
@@ -65,7 +67,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
     }
 
     protected void writeWindowIcon(Device device, SInternalFrame frame,
-            int event, SIcon icon, String cssClass) throws IOException {
+                                   int event, SIcon icon, String cssClass) throws IOException {
         Utils.printButtonStart(device, frame, Integer.toString(event), true, frame.getShowAsFormComponent(), cssClass);
         device.print(">");
         writeIcon(device, icon, null);
@@ -73,7 +75,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
     }
 
     protected void writeWindowIcon(Device device, SInternalFrame frame,
-            int event, SIcon icon) throws IOException {
+                                   int event, SIcon icon) throws IOException {
         writeWindowIcon(device, frame, event, icon, null);
     }
 
@@ -83,7 +85,12 @@ public class InternalFrameCG extends AbstractComponentCG implements
 
         SInternalFrame frame = (SInternalFrame)_c;
 
-        writeDivPrefix(device, frame);
+        // Optional attribute to identify the internal frame for
+        // SDialog and SOptionPane usage.
+        Map optionalAttributes = new HashMap();
+        optionalAttributes.put("SComponentClass", "org.wings.SInternalFrame");
+
+        writeDivPrefix(device, frame, optionalAttributes);
         writeWindowBar(device, frame);
         // write the actual content
         if (!frame.isIconified()) {
@@ -98,7 +105,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
         writeDivSuffix(device, frame);
     }
 
-    /** 
+    /**
      * Convenience method to keep differences between default and msie
      * implementations small
      * @param device

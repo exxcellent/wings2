@@ -19,7 +19,6 @@ import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.plaf.OptionPaneCG;
 import org.wings.resource.ResourceManager;
-import org.wings.style.CSSProperty;
 
 
 import javax.swing.*;
@@ -190,22 +189,27 @@ public class SOptionPane extends SDialog implements ActionListener {
     /**
      * Icon for Inform Dialog
      */
-    private static final SIcon messageImage = (SIcon) ResourceManager.getObject("SOptionPane.messageIcon", SIcon.class);
+    private static final SIcon MESSAGE_IMAGE = (SIcon) ResourceManager.getObject("SOptionPane.messageIcon", SIcon.class);
 
     /**
      * Icon for Input Dialog
      */
-    private static final SIcon questionImage = (SIcon) ResourceManager.getObject("SOptionPane.questionIcon", SIcon.class);
+    private static final SIcon QUESTION_IMAGE = (SIcon) ResourceManager.getObject("SOptionPane.questionIcon", SIcon.class);
 
     /**
      * Icon for Show Confirm Dialog
      */
-    private static final SIcon yesnoImage = (SIcon) ResourceManager.getObject("SOptionPane.yesnoIcon", SIcon.class);
+    private static final SIcon YES_NO_IMAGE = (SIcon) ResourceManager.getObject("SOptionPane.yesnoIcon", SIcon.class);
+
+    /**
+     * Icon for Warning Dialog
+     */
+    public static final SIcon WARNING_IMAGE = (SIcon) ResourceManager.getObject("SOptionPane.warningIcon", SIcon.class);
 
     /**
      * Icon for Error Dialog
      */
-    private static final SIcon errorImage = (SIcon) ResourceManager.getObject("SOptionPane.errorIcon", SIcon.class);
+    private static final SIcon ERROR_IMAGE = (SIcon) ResourceManager.getObject("SOptionPane.errorIcon", SIcon.class);
 
     // The label that contains the option pane image.
     protected final SLabel imageLabel = new SLabel();
@@ -496,22 +500,22 @@ public class SOptionPane extends SDialog implements ActionListener {
     public void setMessageType(int newType) {
         switch (newType) {
             case ERROR_MESSAGE: {
-                imageLabel.setIcon(errorImage);
+                imageLabel.setIcon(ERROR_IMAGE);
                 imageLabel.setToolTipText("Error");
                 break;
             }
             case INFORMATION_MESSAGE: {
-                imageLabel.setIcon(messageImage);
+                imageLabel.setIcon(MESSAGE_IMAGE);
                 imageLabel.setToolTipText("Information");
                 break;
             }
             case WARNING_MESSAGE: {
-                imageLabel.setIcon(yesnoImage);
+                imageLabel.setIcon(WARNING_IMAGE);
                 imageLabel.setToolTipText("Warning");
                 break;
             }
             case QUESTION_MESSAGE: {
-                imageLabel.setIcon(questionImage);
+                imageLabel.setIcon(QUESTION_IMAGE);
                 imageLabel.setToolTipText("Question");
                 break;
             }
@@ -650,6 +654,10 @@ public class SOptionPane extends SDialog implements ActionListener {
 
     public static void showMessageDialog(SComponent parent, Object message, ActionListener al) {
         showMessageDialog(parent, message, null, SOptionPane.INFORMATION_MESSAGE, al);
+    }
+
+    public static void showMessageDialog(SComponent parent, Object message, String title, int messageType) {
+        showMessageDialog(parent, message, title, messageType, null);
     }
 
     public static void showMessageDialog(SComponent parent, Object message, String title, int messageType, ActionListener al) {
