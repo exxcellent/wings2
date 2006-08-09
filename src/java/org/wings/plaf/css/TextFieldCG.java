@@ -24,8 +24,7 @@ import org.wings.util.SessionLocal;
 import org.wings.event.SParentFrameListener;
 import org.wings.io.Device;
 import org.wings.plaf.css.dwr.CallableManager;
-import org.wings.script.JavaScriptEvent;
-import org.wings.script.ScriptListener;
+import org.wings.script.*;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -44,12 +43,15 @@ public final class TextFieldCG extends AbstractComponentCG implements
         super.installCG( comp );
         if ( comp instanceof SFormattedTextField ) {
             comp.addParentFrameListener( this );
+            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';CallableFormatter.validate(ftextFieldCallback, this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'))"));
         }
     }
     
     public void parentFrameAdded(org.wings.event.SParentFrameEvent e ) {
-        if (!CallableManager.getInstance().containsCallable("ftextField"))
-            CallableManager.getInstance().registerCallable("ftextField", getCallableFormatter());
+        CallableFormatter callableFormatter = getCallableFormatter();
+        if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
+            CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter);
+        }
     }
     
     public void parentFrameRemoved(org.wings.event.SParentFrameEvent e ) {}
@@ -61,35 +63,6 @@ public final class TextFieldCG extends AbstractComponentCG implements
             this.callableFormatter.set(callableFormatter);
         }
         return callableFormatter;
-    }
-
-    public void componentChanged(SComponent component) {
-        final STextField textField = (STextField) component;
-        
-        if (textField instanceof SFormattedTextField) {
-            SFormattedTextField formattedTextField = ((SFormattedTextField)textField);
-
-            ScriptListener[] scriptListeners = textField.getScriptListeners();
-            
-            for (int i = 0; i < scriptListeners.length; i++) {
-                ScriptListener scriptListener = scriptListeners[i];
-                if (scriptListener instanceof DWRScriptListener)
-                    textField.removeScriptListener(scriptListener);
-            }
-
-            SAbstractFormatter formatter = formattedTextField.getFormatter();
-            String key = getCallableFormatter().registerFormatter(formatter);
-
-            String text = textField.getText();
-            text = text != null ? "'" + text + "'" : "''";
-            String lastValue = formattedTextField.getFocusLostBehavior() == SFormattedTextField.COMMIT_OR_REVERT ? ", " + text : "";
-            textField.addScriptListener(new DWRScriptListener(JavaScriptEvent.ON_BLUR,
-                                                              "this.style.color = '';ftextField.validate(ftextFieldCallback, '" + key + "', '"+textField.getName()+"', this.value" + lastValue + ")"," "
-                    , new SComponent[] { textField }));
-
-        } else {
-            super.componentChanged(component);
-        }
     }
 
     public void writeInternal(final Device device,
@@ -118,6 +91,18 @@ public final class TextFieldCG extends AbstractComponentCG implements
             device.print(" disabled=\"true\"");
         }
 
+        if (textField instanceof SFormattedTextField) {
+            SFormattedTextField formattedTextField = (SFormattedTextField)textField;
+            String text = textField.getText();
+            if (text == null)
+                text = "";
+            String lastValue = formattedTextField.getFocusLostBehavior() == SFormattedTextField.COMMIT_OR_REVERT ? text : null;
+            Utils.optAttribute(device, "lastValue", lastValue);
+
+            SAbstractFormatter formatter = formattedTextField.getFormatter();
+            String key = getCallableFormatter().registerFormatter(formatter);
+            Utils.optAttribute(device, "formatter", key);
+        }
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
     }
@@ -125,6 +110,7 @@ public final class TextFieldCG extends AbstractComponentCG implements
     
     public static class CallableFormatter {
         Map formatters = new WeakHashMap();
+        private final String name = new String("CallableFormatter");
 
         public List validate(String key, String name, String text, String lastValid) {
             String value = "";
@@ -154,9 +140,13 @@ public final class TextFieldCG extends AbstractComponentCG implements
             return null;
         }
 
-        public String registerFormatter(SAbstractFormatter formatter) {
+        private String registerFormatter(SAbstractFormatter formatter) {
             formatters.put(formatter, formatter);
             return "" + System.identityHashCode(formatter);
+        }
+
+        private String getName() {
+            return name;
         }
     }
 }

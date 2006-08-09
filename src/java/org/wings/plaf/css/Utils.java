@@ -624,7 +624,7 @@ public final class Utils {
      */
     public static void optAttribute(Device d, String attr, String value)
             throws IOException {
-        if (value != null && value.trim().length() > 0) {
+        if (value != null) {
             d.print(" ").print(attr).print("=\"");
             quote(d, value, true, false, false);
             d.print("\"");
