@@ -403,7 +403,9 @@ public class SOptionPane extends SDialog implements ActionListener {
         optionButtons.setBorder(new SEmptyBorder(8, 0, 0, 0));
 
         imageLabel.setBorder(new SEmptyBorder(0, 0, 0, 8));
+        imageLabel.setVerticalAlignment(SConstants.TOP_ALIGN);
         images.add(imageLabel);
+        images.setVerticalAlignment(SConstants.TOP_ALIGN);
         imageLabel.setToolTipText(null);
 
         optionData.setPreferredSize(SDimension.FULLWIDTH);
