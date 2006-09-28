@@ -30,7 +30,7 @@ public class JavaScriptListener
      */
     // TODO: Implement handling of formless submits
     // TODO: Avoid triggering of enter key catchers
-    public final static String JS_FORM_SUBMIT_SCRIPT = "this.form.submit();";
+    public final static String JS_FORM_SUBMIT_SCRIPT = "doAjaxSubmit(this.form);";
 
     /**
      * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.
@@ -157,7 +157,7 @@ public class JavaScriptListener
             return false;
         }
         JavaScriptListener testObj = (JavaScriptListener) obj;
-        
+
         if (testObj.getEvent() == null) {
             if (getEvent() != null) {
                 return false;
@@ -167,7 +167,7 @@ public class JavaScriptListener
                 return false;
             }
         }
-        
+
         if (testObj.getCode() == null) {
             if (getCode() != null) {
                 return false;
@@ -177,7 +177,7 @@ public class JavaScriptListener
                 return false;
             }
         }
-        
+
         if (testObj.getComponents() == null) {
             if (getComponents() != null) {
                 return false;
@@ -187,7 +187,7 @@ public class JavaScriptListener
                 return false;
             }
         }
-        
+
         if (testObj.getScript() == null) {
             if (getScript() != null) {
                 return false;
@@ -211,7 +211,7 @@ public class JavaScriptListener
 
     /**
      * Modifies the scripting priority of this script.
-     * 
+     *
      * @param priority New priority as describe inn {@link org.wings.script.ScriptListener#getPriority()}
      */
     public void setPriority(int priority) {

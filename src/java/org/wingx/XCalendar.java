@@ -21,6 +21,7 @@ import org.wings.SDimension;
 import org.wings.SFormattedTextField;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
+import org.wings.text.SDefaultFormatterFactory;
 import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDateFormatter;
 import org.wings.text.SInternationalFormatter;
@@ -85,7 +86,7 @@ public class XCalendar extends SContainer {
      * @param formatter SAbstractFormatter
      */
     public void setFormatter( SDateFormatter formatter ) {
-        getFormattedTextField().setFormatter( formatter );
+        getFormattedTextField().setFormatterFactory( new SDefaultFormatterFactory( formatter ) );
     }
     
     /**

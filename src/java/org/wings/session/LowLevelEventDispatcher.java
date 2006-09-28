@@ -17,17 +17,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Registers session component instants which want to receive low level events.
- * The dispatcher holds a list of all known low level event dispatchers and is responsible
+ * The dispatcher holds a list of all known low level event listeners and is responsible
  * to dispatch the according part of an original HTTP request to the
  * {@link LowLevelEventListener#processLowLevelEvent(String, String[])} method of the registered
  * {@link LowLevelEventListener}s.
@@ -44,6 +40,8 @@ public final class LowLevelEventDispatcher
      * HashMap as key. The value is a Set (ArrayList) of {@link LowLevelEventListener}s
      */
     private final HashMap listeners = new HashMap();
+
+    private String eventEpoch;
 
     protected boolean namedEvents = true;
 
@@ -138,7 +136,9 @@ public final class LowLevelEventDispatcher
 
     /**
      * dispatch the events, encoded as [name/(multiple)values]
-     * in the HTTP request.
+     * in the HTTP request. the part in front of the UID_DIVIDER ('-') is removed, first.
+     * if the remainder contains an underscore ('_'), only the portion afore will be used
+     * to identify the target component.
      *
      * @param name
      * @param values
@@ -146,16 +146,8 @@ public final class LowLevelEventDispatcher
      */
     public boolean dispatch(String name, String[] values) {
         boolean result = false;
-        int dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
-        String epoch = null;
 
-        // no Alias
-        if (dividerIndex > 0) {
-            epoch = name.substring(0, dividerIndex);
-            name = name.substring(dividerIndex + 1);
-        }
-
-        // make ImageButtons work in Forms .. browsers return
+        // make ImageButtons work in Forms - browsers return
         // the click position as .x and .y suffix of the name
         if (name.endsWith(".x") || name.endsWith(".X")) {
             name = name.substring(0, name.length() - 2);
@@ -165,31 +157,32 @@ public final class LowLevelEventDispatcher
             return false;
         }
 
-        // does name contain underscores? Then use the part before the underscore for
-        // identification of the low level event listener
+        // does name contain underscores? Then use the part before the
+        // underscore for identification of the low level event listener
         String id;
-        dividerIndex = name.indexOf('_');
+        String suffix = null;
+        int dividerIndex = name.indexOf('_');
         if (dividerIndex > -1) {
             id = name.substring(0, dividerIndex);
+            suffix = name.substring(dividerIndex + 1);
         } else {
             id = name;
         }
 
-
         final List l = (List) listeners.get(id);
         if (l != null && l.size() > 0) {
-            if (log.isDebugEnabled()) {
-                log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
-            }
             for (int i = 0; i < l.size(); ++i) {
                 LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
                 if (gl.isEnabled()) {
-                    if (checkEpoch(epoch, name, gl)) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("process event '" + name + "' by " + gl.getClass() + "(" + gl.getLowLevelEventId() + ")");
+                    if (!gl.isEpochCheckEnabled() || isEventEpochValid(gl)) {
+                        if (!"focus".equals(suffix) || gl instanceof SFrame) {
+                        	if (log.isDebugEnabled()) {
+                                log.debug("processing event '" + name + "' by " +
+                                		gl.getClass() + "(" + gl.getLowLevelEventId() + ")");
+                            }
+                        	gl.processLowLevelEvent(name, values);
+                            result = true;
                         }
-                        gl.processLowLevelEvent(name, values);
-                        result = true;
                     }
                 }
             }
@@ -197,21 +190,21 @@ public final class LowLevelEventDispatcher
         return result;
     }
 
-    protected boolean checkEpoch(String epoch, String name,
-                                 LowLevelEventListener gl) {
-        if (epoch != null) {
+    protected boolean isEventEpochValid(LowLevelEventListener gl) {
+        if (eventEpoch != null) {
             SFrame frame = ((SComponent) gl).getParentFrame();
             if (frame == null) {
                 if (log.isDebugEnabled()) {
-                    log.debug("request for dangling component '" + epoch + SConstants.UID_DIVIDER + name);
+                    log.debug("request for dangling component '" + gl.getName() + "'");
                 }
                 unregister(gl);
                 return false;
             }
-            if (!epoch.equals(frame.getEventEpoch())) {
+            if (!eventEpoch.equals(frame.getEventEpoch())) {
                 if (log.isDebugEnabled()) {
-                    log.debug("### got outdated event '" + epoch + SConstants.UID_DIVIDER + name
-                            + "' from frame '" + frame.getName() + "'; expected epoch: " + frame.getEventEpoch());
+                    log.debug("### got outdated event '" + gl.getName() + "' from frame '" +
+                    		frame.getName() + "' --> received epoch: " + eventEpoch +
+                    		"| expected epoch: " + frame.getEventEpoch());
                 }
                 frame.fireInvalidLowLevelEventListener(gl);
                 return false;
@@ -223,6 +216,31 @@ public final class LowLevelEventDispatcher
     void clear() {
         listeners.clear();
     }
+
+    private List runnables = new LinkedList();
+
+    public void invokeLater(Runnable runnable) {
+        synchronized (this.runnables) {
+            runnables.add(runnable);
+        }
+    }
+
+    void invokeRunnables() {
+        synchronized (this.runnables) {
+            for (Iterator iterator = runnables.iterator(); iterator.hasNext();) {
+                Runnable runnable = (Runnable)iterator.next();
+                try {
+                    runnable.run();
+                }
+                catch (Throwable e) {
+                    log.error(runnable, e);
+                }
+                iterator.remove();
+            }
+        }
+    }
+
+	protected void setEventEpoch(String epoch) {
+		this.eventEpoch = epoch;
+	}
 }
-
-

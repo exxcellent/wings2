@@ -106,7 +106,7 @@ public class WingsSession
                     wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
                 }
 
-                wingsSession.getReloadManager().invalidateResources();
+                wingsSession.getReloadManager().invalidateFrames();
                 wingsSession.getReloadManager().notifyCGs();
             }
             finally {

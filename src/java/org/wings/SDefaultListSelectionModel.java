@@ -131,8 +131,8 @@ public class SDefaultListSelectionModel
             if (!onlyAdjusting || e.getValueIsAdjusting()) {
                 fireValueChanged(e.getFirstIndex(), e.getLastIndex(),
                         e.getValueIsAdjusting());
+                iter.remove();
             }
-            iter.remove();
         }
     }
 

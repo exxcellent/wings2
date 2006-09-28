@@ -49,6 +49,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      */
     private static SIcon BLIND_ICON;
 
+    private static int written = 0, cached = 0, reused = 0;
+
     protected AbstractComponentCG() {
     }
 
@@ -188,6 +190,20 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     /**
+     * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
+     */
+    protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
+        final String toolTipText = component != null ? component.getToolTipText() : null;
+        if (toolTipText != null) {
+            device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
+            // javascript needs even more & special quoting
+            // FIXME: do this more efficiently
+            Utils.quote(device, toolTipText.replaceAll("'", "\\'"), true, true, true);
+            device.print("', 'predefined', 'default'));\"");
+        }
+    }
+
+    /**
      * Write JS code for context menus. Common implementaton for MSIE and gecko.
      */
     protected static void writeContextMenu(Device device, SComponent component) throws IOException {
@@ -204,27 +220,13 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     /**
-     * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
-     */
-    protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
-        final String toolTipText = component != null ? component.getToolTipText() : null;
-        if (toolTipText != null) {
-            device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
-            // javascript needs even more & special quoting
-            // FIXME: do this more efficiently
-            Utils.quote(device, toolTipText.replaceAll("'", "\\'"), true, true, true);
-            device.print("', 'predefined', 'default'));\"");
-        }
-    }
-
-    /**
      * Install the appropriate CG for <code>component</code>.
      *
      * @param component the component
      */
     public void installCG(SComponent component) {
         Class clazz = component.getClass();
-        while (clazz.getPackage() == null || !"org.wings".equals(clazz.getPackage().getName()))
+        while (clazz.getPackage() == null || !("org.wings".equals(clazz.getPackage().getName()) || "org.wingx".equals(clazz.getPackage().getName())))
             clazz = clazz.getSuperclass();
         String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);
@@ -263,7 +265,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
     public void componentChanged(SComponent component) {
         component.putClientProperty("render-cache", null);
-        //log.debug("invalidating = " + component.getName());
+        // log.info("invalidating = " + component);
 
         InputMap inputMap = component.getInputMap();
         if (inputMap != null && inputMap.size() > 0) {
@@ -340,45 +342,52 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     /**
-     * Caching code disabled for all LowLevelEventListeners, because event epochs won't change.
-     */
-    public final void write(final Device device, final SComponent component) throws IOException {
-        if (!RenderHelper.getInstance(component).isCachingAllowed(component)) {
-            // log.debug("Rendering = " + component.getName());
-            renderAndWrapComponent(device, component);
-            return;
-        }
-        String renderedCode = (String) component.getClientProperty("render-cache");
-        if (renderedCode == null) {
-            try {
-                // TODO -- reuse and keep the string builder in the cache. Just check if empty.
-                StringBuilderDevice cacheDevice = new StringBuilderDevice();
-                renderAndWrapComponent(cacheDevice, component);
-                renderedCode = cacheDevice.toString();
-                component.putClientProperty("render-cache", renderedCode);
-                log.debug("caching = " + component.getName());
-            }
-            catch (RuntimeException e) {
-                log.fatal("Runtime exception during rendering", e);
-                device.print("<blink>" + e.getClass().getName() + " during code generation of " + component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
-            }
-        }
-        else {
-            log.debug("using cached code for = " + component.getName());
-        }
+	 * Caching code disabled for all LowLevelEventListeners, because event
+	 * epochs won't change.
+	 */
+	public final void write(final Device device, final SComponent component) throws IOException {
+		if (component.getParentFrame() != null && RenderHelper.getInstance(
+				component.getParentFrame()).isIncrementalUpdateMode()) {
+			log.info("writing = " + component);
+			++written;
+			renderComponent(device, component);
+		} else {
+			if (!RenderHelper.getInstance(component).isCachingAllowed(component)) {
+				log.info("writing = " + component);
+				++written;
+				renderComponent(device, component);
+				return;
+			}
+			String renderedCode = (String) component.getClientProperty("render-cache");
+			if (renderedCode == null) {
+				// TODO -- reuse and keep the string builder in the cache.
+				StringBuilderDevice cacheDevice = new StringBuilderDevice();
+				renderComponent(cacheDevice, component);
+				renderedCode = cacheDevice.toString();
+				component.putClientProperty("render-cache", renderedCode);
+				log.info("caching = " + component);
+				++cached;
+			} else {
+				log.info("reusing = " + component);
+				++reused;
+			}
+			device.print(renderedCode);
+		}
+	}
 
-        device.print(renderedCode);
-    }
-
-    private void renderAndWrapComponent(Device device, SComponent component) throws IOException {
+    private void renderComponent(Device device, SComponent component) throws IOException {
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         component.fireRenderEvent(SComponent.START_RENDERING);
 
-        writeInternal(device, component);
-
-        writeInlineScripts(device, component);
-
-        RenderHelper.getInstance(component).collectMenues(component);
+        try {
+        	writeInternal(device, component);
+            writeInlineScripts(device, component);
+            RenderHelper.getInstance(component).collectMenues(component);
+		} catch (RuntimeException e) {
+			log.fatal("Runtime exception during rendering", e);
+			device.print("<blink>" + e.getClass().getName() + " during code generation of "
+					+ component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
+		}
 
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
@@ -391,5 +400,13 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      */
     protected final boolean isMSIE(final SComponent component) {
         return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
+    }
+
+    public static String getCacheStatistics() {
+    	return "written: " + written + " | cached: " + cached + " | reused: " + reused;
+    }
+
+    public static void resetCacheStatistics() {
+    	written = 0; cached = 0; reused = 0;
     }
 }

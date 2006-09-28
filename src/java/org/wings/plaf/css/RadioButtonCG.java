@@ -38,25 +38,28 @@ public final class RadioButtonCG extends CheckBoxCG implements
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {
-        
+
         Object clientProperty = button.getClientProperty("onChangeSubmitListener");
         if ( button.getActionListeners().length > 0 ) {
             if ( clientProperty == null ) {
-                JavaScriptListener javaScriptListener = new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "this.form.submit()" );
+                JavaScriptListener javaScriptListener = new JavaScriptListener(
+                		JavaScriptEvent.ON_CHANGE,
+                		"submitForm(" + !button.isCompleteUpdateForced() + ",event);"
+                );
                 button.addScriptListener( javaScriptListener );
-                button.putClientProperty( "onChangeSubmitListener", javaScriptListener );                
+                button.putClientProperty( "onChangeSubmitListener", javaScriptListener );
             }
         } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
             button.removeScriptListener( (JavaScriptListener)clientProperty );
-            button.putClientProperty( "onChangeSubmitListener", null );         
-        } 
-        
+            button.putClientProperty( "onChangeSubmitListener", null );
+        }
+
         device.print("<input type=\"hidden\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"");
         Utils.write(device, button.getDeselectionParameter());
         device.print("\"/>");
-        
+
         device.print("<input type=\"radio\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"");
@@ -71,7 +74,7 @@ public final class RadioButtonCG extends CheckBoxCG implements
 
         if (button.isSelected())
             device.print(" checked=\"true\"");
-        
+
         device.print("/>");
     }
 }

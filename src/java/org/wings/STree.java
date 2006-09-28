@@ -13,8 +13,6 @@
  */
 package org.wings;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.TreeCG;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.tree.STreeCellRenderer;
@@ -25,6 +23,8 @@ import org.wings.event.SMouseListener;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.awt.*;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 
 /**
@@ -54,9 +54,6 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      * @see TreeSelectionModel#DISCONTIGUOUS_TREE_SELECTION
      */
     public static final int DISCONTIGUOUS_TREE_SELECTION = TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION;
-
-    private final transient static Log log = LogFactory.getLog(STree.class);
-
     
     /**
      * Indent depth in pixels
@@ -128,14 +125,14 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
 
 
     /**
-     * used to forward the selection to the selection Listeners of the tree
-     */
-    private final TreeSelectionListener forwardSelectionEvent =
-            new TreeSelectionListener() {
-                public void valueChanged(TreeSelectionEvent e) {
-                    fireTreeSelectionEvent(e);
-                }
-            };
+	 * used to forward selection events to selection listeners of the tree
+	 */
+	private final TreeSelectionListener fwdSelectionEvents = new TreeSelectionListener() {
+		public void valueChanged(TreeSelectionEvent e) {
+			fireTreeSelectionEvent(e);
+			reload(ReloadManager.STATE);
+		}
+	};
 
     public STree(TreeModel model) {
         super();
@@ -166,7 +163,6 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
                 ((TreeSelectionListener) listeners[i + 1]).valueChanged(e);
             }
         }
-        reload(ReloadManager.STATE);
     }
 
     /**
@@ -276,7 +272,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      * @param path the TreePath indicating the node that was expanded
      * @see EventListenerList
      */
-    protected void fireTreeExpanded(TreePath path) {
+    public void fireTreeExpanded(TreePath path) {
         fireTreeExpansionEvent(new TreeExpansionEvent(this, path), true);
     }
 
@@ -522,10 +518,10 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      */
     public void setSelectionModel(STreeSelectionModel selectionModel) {
         if (this.selectionModel != null)
-            this.selectionModel.removeTreeSelectionListener(forwardSelectionEvent);
+            this.selectionModel.removeTreeSelectionListener(fwdSelectionEvents);
 
         if (selectionModel != null)
-            selectionModel.addTreeSelectionListener(forwardSelectionEvent);
+            selectionModel.addTreeSelectionListener(fwdSelectionEvents);
 
         if (selectionModel == null)
             this.selectionModel = SDefaultTreeSelectionModel.NO_SELECTION_MODEL;
@@ -948,8 +944,6 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
         processKeyEvents(values);
         this.lowLevelEvents = values;
         SForm.addArmedComponent(this);
-
-        processKeyEvents(values);
     }
 
     /**

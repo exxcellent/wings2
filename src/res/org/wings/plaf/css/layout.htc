@@ -1,35 +1,38 @@
-<public:component>
+<public:component lightweight="true">
 <public:attach event="onload" for="window" onevent="resize()"/>
 <script language="JScript">
 
-if (!document.parentWindow.resizables)
-  document.parentWindow.resizables = new Array();
 
-var resizables = document.parentWindow.resizables;
+if (!window.resizables)
+  window.resizables = new Array();
 
-if (element.getAttribute("rule") == "fill") {
-  var consumedHeight = 0;
-  var rows = element.rows;
-  for (var i=0; i < rows.length; i++) {
-    var row = rows[i];
+window.resizables.push(element);
 
-    var yweight = row.getAttribute("yweight");
-    if (!yweight)
-      consumedHeight += row.offsetHeight;
-  }
-  element.setAttribute("consumedHeight", consumedHeight);
-}
-
-resizables.push(element);
 
 function resize() {
   if (resizables.length > 0) {
-    var element = resizables.splice(0, 1)[0];
-    
-    if (element.getAttribute("rule") == "fill")
-      layoutFill(element);
-    else
-      layoutScroll(element);
+    //window.sizes = new Array();
+    for (var i = 0; i < resizables.length; i++) {
+      var element = resizables[i];
+      var rule = element.getAttribute("rule");
+      if (rule == "fill")
+        layoutFill(element);
+      else if (rule == "scroll")
+        layoutScroll(element);
+      else
+        layoutWidth(element);
+
+        /*
+      if (rule != "width") {
+        window.sizes.push(element.id + ": " + element.style.pixelHeight);
+      }
+      */
+    }
+    resizables.length = 0;
+    if (window.focus)
+      requestFocus(window.focus);
+
+    //alert(window.sizes);
   }
 }
 
@@ -37,12 +40,30 @@ function layoutFill(table) {
   if (table.style.height == table.getAttribute("layoutHeight"))
     return;
 
-  table.style.height = table.getAttribute("layoutHeight");
+  var consumedHeight = 0;
+  var rows = table.rows;
+  for (var i=0; i < rows.length; i++) {
+    var row = rows[i];
 
-  var consumedHeight = table.getAttribute("consumedHeight");
+    var yweight = row.getAttribute("yweight");
+    if (!yweight)
+      consumedHeight += row.offsetHeight;
+  }
+
+  /*
+  if (table.getAttribute("layoutHeight") == "100%") {
+    var height = table.parentNode.clientHeight;
+    var oversize = table.parentNode.oversize;
+    if (oversize)
+      height -= oversize;
+    table.style.height = height + "px";
+  }
+  else
+  */
+    table.style.height = table.getAttribute("layoutHeight");
+
   var diff = table.clientHeight - consumedHeight;
 
-  var rows = table.rows;
   for (var i=0; i < rows.length; i++) {
     var row = rows[i];
     var yweight = row.getAttribute("yweight");
@@ -57,8 +78,25 @@ function layoutScroll(div) {
     var table = getParentByTagName(div, "TD");
     div.style.height = table.clientHeight + "px";
     div.style.width = table.clientWidth + "px";
+    div.style.position = 'absolute';
     div.style.display = 'block';
     div.style.overflow = 'auto';
+}
+
+function layoutWidth(element) {
+    var parent = element.parentNode;
+    if (parent.tagName == "SPAN")
+      parent = parent.parentNode;
+
+    var width = parent.clientWidth;
+    var oversize = parent.getAttribute("oversize");
+    if (oversize)
+        width -= oversize;
+
+    if (width > -1)
+        element.style.width = width + "px";
+    else
+        element.style.width = null;
 }
 
 function getParentByTagName(element, name) {

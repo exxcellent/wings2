@@ -95,8 +95,7 @@ public final class Utils {
      * {@link #printButtonStart(org.wings.io.Device, org.wings.SComponent, String, boolean, boolean)}
      */
     private final static String[] EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT = new String[]
-            {JavaScriptEvent.ON_CLICK, JavaScriptEvent.ON_MOUSE_DOWN,
-                    JavaScriptEvent.ON_MOUSE_DOWN, JavaScriptEvent.ON_MOUSE_OUT};
+            {JavaScriptEvent.ON_CLICK};
 
     /**
      * Renders a container using its Layout manager or fallback just one after another.
@@ -354,62 +353,6 @@ public final class Utils {
                 styleString.append("height:").append(preferredSize.getHeight()).append(';');
         }
         return styleString;
-    }
-
-    /**
-     * Helper method to calculate the difference between border-box and content-box mode
-     *
-     * @param component the component to investigate
-     * @return the horizontal oversize
-     */
-    private static int getVerticalOversize(SComponent component) {
-        RenderHelper renderHelper = RenderHelper.getInstance(component);
-        int oversize = renderHelper.getVerticalLayoutPadding();
-        if (oversize == -1)
-            oversize = 0;
-
-        // IE puts an auto margin of 1px for top and bottom on input fields
-        if ((component instanceof STextComponent || component instanceof SFileChooser))
-            oversize += 2;
-
-        SAbstractBorder border = (SAbstractBorder) component.getBorder();
-        // Respect oversize coming from (default) stylsheet padding and border
-        if (border == null)
-            border = (SAbstractBorder) component.getClientProperty("oversize");
-
-        if (border != null) {
-            int thickness = border.getThickness(SConstants.TOP);
-            if (thickness != -1)
-                oversize += thickness;
-            thickness = border.getThickness(SConstants.BOTTOM);
-            if (thickness != -1)
-                oversize += thickness;
-            final Insets insets = border.getInsets();
-            if (insets != null) {
-                oversize += insets.top + insets.bottom;
-            }
-        }
-        return oversize;
-    }
-
-    /**
-     * Helper method to calculate the difference between border-box and content-box mode
-     *
-     * @param component the component to investigate
-     * @return the vertical oversize
-     */
-    private static int getHorizontalOversize(SComponent component) {
-        RenderHelper renderHelper = RenderHelper.getInstance(component);
-        int oversize = renderHelper.getHorizontalLayoutPadding();
-        if (oversize == -1)
-            oversize = 0;
-
-        SAbstractBorder border = (SAbstractBorder) component.getBorder();
-        // Respect oversize coming from (default) stylsheet padding and border
-        if (border == null)
-            border = (SAbstractBorder) component.getClientProperty("oversize");
-
-        return oversize;
     }
 
     public static SStringBuilder generateCSSInlineBorder(SStringBuilder styles, int borderSize) {
@@ -999,6 +942,7 @@ public final class Utils {
 
     public static void printButtonStart(final Device device, final SComponent component, final String eventValue,
                                         final boolean enabled, final boolean formComponent, String cssClassName) throws IOException {
+    	boolean ajaxEnabled = !component.isCompleteUpdateForced();
         if (formComponent) {
             if (!enabled) {
                 device.print("<span");
@@ -1008,31 +952,17 @@ public final class Utils {
                 device.print("<a href=\"#\"");
 
                 // Render onclick JS listeners
-                device.print(" onclick=\"sendEvent(event,'");
-                device.print(eventValue == null ? "" : eventValue);
-                device.print("','");
+                device.print(" onclick=\"submitForm(" + ajaxEnabled);
+                device.print(",event,'");
                 device.print(Utils.event(component));
+                device.print("','");
+                device.print(eventValue == null ? "" : eventValue);
                 device.print("'");
                 device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
-                device.print(")\"");
-
-                // Render mouseup/down/out listeners.
-                // These add/remove the focus when clicked/released the button.
-                // This is due to fact that we render the "form" buttons as A href but want them to appear/behave
-                // like regular form buttons. To simulate the "appear pressed" when pressed behaviour we use the
-                // :active selector in the CSS (table.SButton A.formbutton:active ) to style the button
-                // Only the MSIE interprets the :active selector as focus. That's why we tune here.
-                device.print(" onmouseup=\"wu_blurComponent(this");
-                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_MOUSE_UP));
-                device.print(")\" onmousedown=\"wu_focusComponent(this");
-                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_MOUSE_DOWN));
-                device.print(")\" onmouseout=\"wu_blurComponent(this");
-                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_MOUSE_OUT));
-                device.print(")\"");
+                device.print("); return false;\"");
 
                 // Render remaining JS listeners
-                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT);
-
+                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
                 Utils.optAttribute(device, "class", cssClassName);
             }
         }
@@ -1042,26 +972,21 @@ public final class Utils {
                 Utils.optAttribute(device, "class", cssClassName);
             }
             else {
-                final RequestURL requestURL = component.getRequestURL();
-                if (eventValue != null) {
-                    requestURL.addParameter(Utils.event(component), eventValue);
-                }
-                device.print("<a href=\"");
-                device.print(requestURL.toString());
-                device.print("\"");
-                Utils.optAttribute(device, "class", cssClassName);
+                device.print("<a href=\"#\"");
 
-                if (isMSIE(component)) {
-                    // Render onclick JS listeners
-                    device.print(" onclick=\"followLink('").print(requestURL.toString()).print("'");
-                    device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
-                    device.print(")\"");
-                    // Render remaining JS listeners
-                    Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
-                }
-                else {
-                    Utils.writeEvents(device, component, null);
-                }
+                // Render onclick JS listeners
+                device.print(" onclick=\"followLink(" + ajaxEnabled);
+                device.print(",'");
+                device.print(Utils.event(component));
+                device.print("','");
+                device.print(eventValue == null ? "" : eventValue);
+                device.print("'");
+                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
+                device.print("); return false;\"");
+
+                // Render remaining JS listeners
+                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
+                Utils.optAttribute(device, "class", cssClassName);
             }
         }
     }
@@ -1080,8 +1005,8 @@ public final class Utils {
      * Renders inline the javascript code attached to the passed javascipt event type
      * on the component. Used to allow usage of javascript events by the framework
      * as well as by the application itself.
-     * <p> For an example: See the <code>sendEvent</code> and <code>followLink</code>
-     * method declared in <code>Wings.js</code>.
+     * <p> For an example: See the <code>submitForm</code> and <code>followLink</code>
+     * method declared in <code>wings.js</code>.
      *
      * @param component           The component wearing the event handler
      * @param javascriptEventType the event type declared in {@link JavaScriptEvent}
@@ -1217,7 +1142,7 @@ public final class Utils {
                         return oversize;
                     }
                     else {
-                        return 4;
+                        return ((Integer)component.getClientProperty("horizontalOversize")).intValue() * 2;
                     }
                 }
             }

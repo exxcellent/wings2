@@ -153,19 +153,10 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             d.print("<td");
 
         int oversizePadding = Utils.calculateHorizontalOversize(component, true);
-        if (oversizePadding != 0) {
-            SStringBuilder builder = new SStringBuilder();
-            if (style != null) {
-                builder.append(style);
-                builder.append("; padding-right:");
-            }
-            else
-                builder.append("padding-right:");
+        oversizePadding += (component != null ? RenderHelper.getInstance(component).getHorizontalLayoutPadding() : 0);
 
-            builder.append(oversizePadding * 2);
-            builder.append("px");
-            style = builder.toString();
-        }
+        if (oversizePadding != 0)
+            Utils.optAttribute(d, "oversize", oversizePadding);
 
         Utils.printTableCellAlignment(d, component, defaultHorizontalAlignment, defaultVerticalAlignment);
         Utils.optAttribute(d, "colspan", colspan);

@@ -14,6 +14,7 @@
 package org.wings;
 
 import java.awt.*;
+import java.awt.event.AdjustmentListener;
 
 /**
  * For scrollable components, ie components that can show only a part of it's content.
@@ -58,7 +59,6 @@ public interface Scrollable {
      * @return null if no preference
      */
     Dimension getPreferredExtent();
-
 }
 
 

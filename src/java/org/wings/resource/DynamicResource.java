@@ -13,6 +13,9 @@
  */
 package org.wings.resource;
 
+import java.util.Collection;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.RequestURL;
@@ -22,10 +25,6 @@ import org.wings.SimpleURL;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.session.PropertyService;
 import org.wings.session.SessionManager;
-import org.wings.util.StringUtil;
-
-import java.util.Collection;
-import java.util.Set;
 
 /**
  * Dynamic Resources are web resources representing rendered components
@@ -41,33 +40,19 @@ public abstract class DynamicResource
     private final transient static Log log = LogFactory.getLog(DynamicResource.class);
 
     /**
-     * The epoch of this resource. With each invalidation, this counter
-     * is incremented.
-     */
-    private int epoch = 0;
-
-    // byte[] ? Since we use this to write it to a stream ..
-    /**
-     * The epoch as string representation. The epoch is converted in a string
-     * that is as short as possible. This is done once whenever the epoch
-     * changes to do this conversion only once.
-     */
-    private String epochCache = "W" + StringUtil.toShortestAlphaNumericString(epoch);
-
-    /**
      * The frame, to which this resource belongs.
      */
     private SFrame frame;
+
+    private PropertyService propertyService;
 
     protected DynamicResource(String extension, String mimeType) {
         super(extension, mimeType);
     }
 
-
     public DynamicResource(SFrame frame) {
         this(frame, "", "");
     }
-
 
     public DynamicResource(SFrame frame, String extension, String mimeType) {
         super(extension, mimeType);
@@ -90,38 +75,15 @@ public abstract class DynamicResource
         return id;
     }
 
-    /**
-     * Mark this dynamic resource as to be re-rendered. This method is
-     * called, whenever some change took place in the frame, so that this
-     * dynamic resource is to be externalized with a new version-number.
-     */
-    public final void invalidate() {
-        epochCache = "W" + StringUtil.toShortestAlphaNumericString(++epoch);
-        if (log.isDebugEnabled()) {
-            String name = getClass().getName();
-            name = name.substring(name.lastIndexOf(".") + 1);
-            log.debug("[" + name + "] " +
-                    "invalidate - epoch: " + epochCache);
-        }
-
-    }
-
-
-    public final String getEpoch() {
-        return epochCache;
-    }
-
     public SimpleURL getURL() {
         RequestURL requestURL = (RequestURL) getPropertyService().getProperty("request.url");
         if (requestURL != null) {
             requestURL = (RequestURL) requestURL.clone();
-            requestURL.setEpoch(getEpoch());
+            requestURL.setEventEpoch(getFrame().getEventEpoch());
             requestURL.setResource(getId());
         }
         return requestURL;
     }
-
-    private PropertyService propertyService;
 
     protected PropertyService getPropertyService() {
         if (propertyService == null)
@@ -129,11 +91,9 @@ public abstract class DynamicResource
         return propertyService;
     }
 
-
     public String toString() {
-        return getId() + " " + getEpoch();
+        return getId() + " " + getFrame().getEventEpoch();
     }
-
 
     /**
      * Get additional http-headers.

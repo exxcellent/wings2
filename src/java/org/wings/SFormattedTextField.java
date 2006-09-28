@@ -23,6 +23,14 @@ import org.wings.text.SAbstractFormatter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import java.text.ParseException;
+import java.text.*;
+import org.wings.text.SDefaultFormatterFactory;
+import org.wings.text.SDateFormatter;
+import org.wings.text.SInternationalFormatter;
+import org.wings.text.SNumberFormatter;
+import java.util.Date;
+import org.wings.text.SDefaultFormatter;
+import org.wings.text.SAbstractFormatter;
 
 
 /**
@@ -44,21 +52,36 @@ public class SFormattedTextField extends STextField {
     
     private SAbstractFormatter formatter = null;
     
-    private static final SAbstractFormatter NO_FORMATTER = new SAbstractFormatter() {
-        public Object stringToValue(String text) throws ParseException {
-            return null;
-        }
-        public String valueToString(Object value) throws ParseException {
-            return null;
-        }
-    };
+    private SAbstractFormatterFactory factory = null;
 
+    /**
+     * Creates a SFormattedTextField 
+     */
     public SFormattedTextField() {
-        this(NO_FORMATTER);
     }
 
-    public SFormattedTextField(SAbstractFormatter formatter) {
-        setFormatter( formatter );
+    /**
+     * Creates a SFormattedTextField with the given value
+     * @param value 
+     */
+    public SFormattedTextField( Object value ) { 
+        setValue( value );
+    }
+    
+    /**
+     * Creates a SFormattedTextField with the given SAbstractFormatter
+     * @param formatter SAbstractFormatter
+     */
+    public SFormattedTextField( SAbstractFormatter formatter ) {
+        setFormatterFactory( new SDefaultFormatterFactory(formatter) );
+    }
+    
+    /**
+     * Creates a SFormattedTextField with the given AbstractFormatterFactory
+     * @param factory SAbstractFormatterFactory
+     */
+    public SFormattedTextField( SAbstractFormatterFactory factory ) {
+        setFormatterFactory( factory );
     }
 
     /**
@@ -66,36 +89,49 @@ public class SFormattedTextField extends STextField {
      * @param object value
      */
     public void setValue(Object object) {
+        
         String string = null;
-        if (formatter != null)
-            try {
-                string = this.formatter.valueToString(object);
-                this.value = object;
-            } catch (ParseException e) {
-                log.info("Unable to parse object" + e);
-            }
-        super.setText(string);
-    }
-
+        
+        SAbstractFormatterFactory aff = getFormatterFactory();
+        if ( aff == null ) {
+            aff = getDefaultFormatterFactory( object );
+            setFormatterFactory( aff );
+        }
+        setFormatter( aff.getFormatter(this) );
+        
+        try {
+            string = getFormatter().valueToString(object);
+            this.value = object;
+        } catch (ParseException e) {
+            log.info("Unable to parse object" + e);
+        }
+                
+        super.setText( string );
+        
+    }  
+    
     /**
      * Returns the last valid value
      * @return the last valid value
      */
-    public Object getValue() {
+    public Object getValue() {       
         Object returnValue = null;
-        try {
-            returnValue = this.formatter.stringToValue(this.getText());
-            value = returnValue;
-        } catch (ParseException e) {
-            log.debug("Unable to parse string" + e);
-            returnValue = value;
+        
+        SAbstractFormatter formatter = getFormatter();
+        
+        if ( formatter != null ) {
+            
+            try {
+                returnValue = formatter.stringToValue(this.getText());
+                value = returnValue;
+            } catch (ParseException e) {
+                log.debug("Unable to parse string" + e);
+                returnValue = value;
+            }
+            
         }
-        return returnValue;       
-    }
 
-    // brauch man das?? So wohl nicht...
-    public SFormattedTextField(Object value) {
-        setValue(value);
+        return returnValue;       
     }
     
     /**
@@ -131,7 +167,73 @@ public class SFormattedTextField extends STextField {
      * Sets the SAbstractFormatter
      * @param formatter SAbstactFormatter
      */
-    public void setFormatter(SAbstractFormatter formatter) {
+    protected void setFormatter(SAbstractFormatter formatter) {
         this.formatter = formatter;
     }
+    
+    /** 
+     * Sets the FormatterFactory
+     * @param ff AbstractFormatterFactory
+     */
+    public void setFormatterFactory ( SAbstractFormatterFactory ff ) {
+        this.factory = ff;
+        
+        SAbstractFormatter af = null;
+        if ( ff != null ) {
+            af = ff.getFormatter( this );
+        }
+        setFormatter( af );
+        setValue( value );
+        
+    }
+    
+    /**
+     * Returns the FormatterFactory
+     * @return SAbstractFormatterFactory
+     */
+    public SAbstractFormatterFactory getFormatterFactory () {
+        return this.factory;
+    }
+    
+    private SAbstractFormatterFactory getDefaultFormatterFactory(Object type) {
+        
+        SAbstractFormatterFactory factory = null;
+        
+        if (type instanceof DateFormat) {
+            factory = new SDefaultFormatterFactory(new SDateFormatter( (DateFormat)type ) );
+        }
+        if (type instanceof NumberFormat) {
+            factory = new SDefaultFormatterFactory(new SNumberFormatter( (NumberFormat)type ) );
+        }
+        if (type instanceof Format) {
+            factory = new SDefaultFormatterFactory(new SInternationalFormatter( (Format)type ) );
+        }
+        if (type instanceof Date) {
+            factory = new SDefaultFormatterFactory(new SDateFormatter( ) );
+        }
+        if (type instanceof Number) {
+            SAbstractFormatter displayFormatter = new SNumberFormatter();
+            SAbstractFormatter editFormatter = new SNumberFormatter( new DecimalFormat( "#.#" ) );
+
+            factory = new SDefaultFormatterFactory( displayFormatter, displayFormatter, editFormatter );
+        }
+        if ( factory == null ) {
+            factory = new SDefaultFormatterFactory(new SDefaultFormatter());
+        }
+        
+        return factory;
+        
+    }
+
+    
+    public static abstract class SAbstractFormatterFactory {
+        /**
+         * Returns an AbstractFormatter
+         *
+         * @return AbstractFormatter
+         * @param ftf SFormattedTextField
+         */
+        public abstract SAbstractFormatter getFormatter(SFormattedTextField ftf);
+    }
+    
 }

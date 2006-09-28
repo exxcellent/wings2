@@ -80,7 +80,7 @@ public class Session implements PropertyService, Serializable {
      * The property name of the sessions character encoding
      */
     public final static String CHARACTER_ENCODING_PROPERTY = "characterEncoding";
-    
+
     /**
      * The property name of the look&feel
      */
@@ -129,7 +129,7 @@ public class Session implements PropertyService, Serializable {
     private Locale locale = Locale.getDefault();
 
     private boolean localeFromHeader = true;
-    
+
     private DragAndDropManager dndManager;
 
     /**
@@ -273,7 +273,7 @@ public class Session implements PropertyService, Serializable {
      * Copy the init parameters.
      */
     protected void initProps(ServletConfig servletConfig) {
-        Enumeration params = servletConfig.getInitParameterNames(); 
+        Enumeration params = servletConfig.getInitParameterNames();
         while (params.hasMoreElements()) {
             String name = (String) params.nextElement();
             props.put(name, servletConfig.getInitParameter(name));
@@ -475,12 +475,12 @@ public class Session implements PropertyService, Serializable {
 
         return rootFrame;
     }
-    
-    
+
+
     public SComponent getComponentByName( String name ) {
         return getComponentByName( this.getRootFrame(), name );
     }
-    
+
     /**
      * Search in the given SContainer for the SComponent with the given name.
      * @param container The SContainer where you want to search for the SComponent with the given name.
@@ -488,7 +488,7 @@ public class Session implements PropertyService, Serializable {
      * @return the SComponent with the given name
      */
     public SComponent getComponentByName( SContainer container, String name ) {
-       SComponent component = null; 
+       SComponent component = null;
        SComponent[] components = container.getComponents();
        for ( int x = 0, y = components.length ; x < y ; x++ ) {
            SComponent component_x = components[x];
@@ -502,9 +502,9 @@ public class Session implements PropertyService, Serializable {
                }
            }
        }
-       return component;   
-    }   
-    
+       return component;
+    }
+
     /**
      * Describe <code>getProperties</code> method here.
      *
@@ -920,7 +920,7 @@ public class Session implements PropertyService, Serializable {
     public boolean hasDragAndDropManager() {
         return dndManager != null;
     }
-    
+
     public DragAndDropManager getDragAndDropManager() {
         if (dndManager == null) {
             dndManager = new DragAndDropManager();

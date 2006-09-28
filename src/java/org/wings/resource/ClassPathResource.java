@@ -28,7 +28,9 @@ import java.io.InputStream;
  * @version $Revision$
  */
 public class ClassPathResource
-        extends StaticResource {
+        extends StaticResource
+    implements NamedResource
+{
     /**
      * The class loader from which the resource is loaded
      */
@@ -128,5 +130,3 @@ public class ClassPathResource
         return resourceFileName;
     }
 }
-
-

@@ -13,7 +13,7 @@ package org.wings.text;
  *
  * @author erik
  */
-public class SInternationalFormatter extends SAbstractFormatter {
+public class SInternationalFormatter extends SDefaultFormatter {
     
     java.text.Format format = null;
     

@@ -14,7 +14,6 @@
 package org.wings.tree;
 
 import org.wings.SDelayedEventModel;
-import org.wings.SListSelectionModel;
 
 import javax.swing.tree.TreeSelectionModel;
 

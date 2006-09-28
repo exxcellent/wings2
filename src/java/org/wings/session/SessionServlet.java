@@ -17,7 +17,6 @@ package org.wings.session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
-import org.wings.util.SStringBuilder;
 import org.wings.event.ExitVetoException;
 import org.wings.event.SRequestEvent;
 import org.wings.externalizer.ExternalizeManager;
@@ -25,7 +24,8 @@ import org.wings.externalizer.ExternalizedResource;
 import org.wings.io.Device;
 import org.wings.io.DeviceFactory;
 import org.wings.io.ServletDevice;
-import org.wings.resource.DynamicCodeResource;
+import org.wings.plaf.css.AbstractComponentCG;
+import org.wings.resource.CompleteUpdateResource;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -34,11 +34,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * The servlet engine creates for each user a new HttpSession. This
@@ -66,11 +66,6 @@ final class SessionServlet
      * The parent {@link WingServlet}
      */
     protected transient HttpServlet parent = this;
-
-    /**
-     * This should be a resource ..
-     */
-    protected String errorTemplateFile;
 
     /**
      * The session.
@@ -200,24 +195,12 @@ final class SessionServlet
     // bis hierhin
 
     /**
-     * The error template which should be presented on any uncaught Exceptions can be set
-     * via a property <code>wings.error.template</code> in the web.xml file.
-     */
-    protected void initErrorTemplate(ServletConfig config) {
-        if (errorTemplateFile == null) {
-            errorTemplateFile = config.getInitParameter("wings.error.template");
-        }
-    }
-
-    /**
      * init
      */
     public final void init(ServletConfig config,
                            HttpServletRequest request,
                            HttpServletResponse response) throws ServletException {
         try {
-            initErrorTemplate(config);
-
             session = new Session();
             SessionManager.setSession(session);
 
@@ -292,6 +275,8 @@ final class SessionServlet
      */
     public final synchronized void doGet(HttpServletRequest req,
                                          HttpServletResponse response) {
+    	log.info("Path info of request: " + req.getPathInfo());
+
         // Special case: You double clicked i.e. a "logout button"
         // First request arrives, second is on hold. First invalidates session and sends redirect as response,
         // but browser ignores and expects response in second request. But second request has longer a valid session.
@@ -316,15 +301,15 @@ final class SessionServlet
         Device outputDevice = null;
 
         ReloadManager reloadManager = session.getReloadManager();
-        
+
         boolean isErrorHandling = false;
-        
+
         try {
             /*
              * The tomcat 3.x has a bug, in that it does not encode the URL
              * sometimes. It does so, when there is a cookie, containing some
              * tomcat sessionid but that is invalid (because, for instance,
-             * we restarted the tomcat in-between). 
+             * we restarted the tomcat in-between).
              * [I can't think of this being the correct behaviour, so I assume
              *  it is a bug. ]
              *
@@ -332,7 +317,7 @@ final class SessionServlet
              * session id from a cookie, but it is not valid, we don't do
              * the encodeURL() here: we just leave the requestURL as it is
              * in the properties .. and this is url-encoded, since
-             * we had set it up in the very beginning of this session 
+             * we had set it up in the very beginning of this session
              * with URL-encoding on  (see WingServlet::newSession()).
              *
              * Vice versa: if the requestedSessionId is valid, then we can
@@ -344,8 +329,7 @@ final class SessionServlet
             if (req.isRequestedSessionIdValid()) {
                 requestURL = new RequestURL("", getSessionEncoding(response));
                 // this will fire an event, if the encoding has changed ..
-                ((PropertyService) session).setProperty("request.url",
-                        requestURL);
+                ((PropertyService) session).setProperty("request.url", requestURL);
             }
 
             if (log.isDebugEnabled()) {
@@ -358,6 +342,12 @@ final class SessionServlet
             }
             handleLocale(req);
 
+            // Prior to dispatching the actual events we have to detect
+            // their epoch and inform the dispatcher which will then be
+            // able to check if the request is valid and processed.
+            session.getDispatcher().setEventEpoch(req.getParameter("event_epoch"));
+
+            Map debugParameterMap = req.getParameterMap();
             Enumeration en = req.getParameterNames();
             Cookie[] cookies = req.getCookies();
 
@@ -372,37 +362,53 @@ final class SessionServlet
                         Cookie cookie = cookies[i];
                         String paramName = cookie.getName();
                         String value = cookie.getValue();
-    
+
                         if (log.isDebugEnabled())
                             log.debug("dispatching cookie " + paramName + " = " + value);
-    
+
                         session.getDispatcher().dispatch(paramName, new String[] { value });
                     }
                 }
                 while (en.hasMoreElements()) {
                     String paramName = (String) en.nextElement();
-                    String[] value = req.getParameterValues(paramName);
+                    String[] values = req.getParameterValues(paramName);
+
+                    // We do not need to dispatch the event epoch
+                    if (paramName.equals("event_epoch")) continue;
+
+                    // Split the values of the event trigger
+                    if (paramName.equals("event_trigger")) {
+                    	String[] splittedValues = values[0].split("\\|");
+                    	paramName = splittedValues[0];
+                    	values = new String[] { splittedValues[1] };
+                    }
 
                     if (log.isDebugEnabled())
-                        log.debug("dispatching " + paramName + " = " + Arrays.asList(value));
+                        log.debug("dispatching " + paramName + " = " + Arrays.asList(values));
 
-                    session.getDispatcher().dispatch(paramName, value);
+                    if (paramName.equals("force_error")) {
+                    	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    	return;
+                    }
+
+                    session.getDispatcher().dispatch(paramName, values);
                 }
 
                 SForm.fireEvents();
-            
+
                 // only fire DISPATCH DONE if we have parameters to dispatch
                 session.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
             }
 
             session.fireRequestEvent(SRequestEvent.PROCESS_REQUEST);
-            
+            session.getDispatcher().invokeRunnables();
+
             // if the user chose to exit the session as a reaction on an
             // event, we got an URL to redirect after the session.
             /*
              * where is the right place?
-             * The right place is 
-             *    - _after_ we processed the events 
+             * The right place is
+             *    - _after_ we processed the events
              *        (e.g. the 'Pressed Exit-Button'-event or gave
              *         the user the chance to exit this session in the custom
              *         processRequest())
@@ -439,10 +445,14 @@ final class SessionServlet
                 session.setRedirectAddress(null);
                 return;
             }
-            
+
+            log.info("---> dirty components (" + reloadManager.getDirtyComponents().size() + "):");
+            for (Iterator it = reloadManager.getDirtyComponents().iterator(); it.hasNext();) {
+            	log.info(it.next());
+            }
             // invalidate frames and resources
             reloadManager.notifyCGs();
-            reloadManager.invalidateResources();
+            reloadManager.invalidateFrames();
 
             // deliver resource. The
             // externalizer is able to handle static and dynamic resources
@@ -462,7 +472,7 @@ final class SessionServlet
             } else {
                 externalizeIdentifier = pathInfo;
             }
-            
+
             // Retrieve externalized resource.
             ExternalizedResource extInfo = extManager.getExternalizedResource(externalizeIdentifier);
 
@@ -476,11 +486,17 @@ final class SessionServlet
 
             if (extInfo != null) {
                 outputDevice = DeviceFactory.createDevice(extInfo);
-
                 session.fireRequestEvent(SRequestEvent.DELIVER_START, extInfo);
-                extManager.deliver(extInfo, response, outputDevice);
-                session.fireRequestEvent(SRequestEvent.DELIVER_DONE, extInfo);
 
+                log.info("---> start rendering:");
+                long startTime = System.currentTimeMillis();
+                extManager.deliver(extInfo, response, outputDevice);
+                long endTime = System.currentTimeMillis();
+                log.info("---> " + AbstractComponentCG.getCacheStatistics() +
+                		" || duration: " + (endTime - startTime) + " ms\n");
+                AbstractComponentCG.resetCacheStatistics();
+
+                session.fireRequestEvent(SRequestEvent.DELIVER_DONE, extInfo);
             } else {
                 handleUnknownResourceRequested(req, response);
             }
@@ -526,7 +542,6 @@ final class SessionServlet
                 session.setServletResponse(null);
             }
 
-
             // make sure that the session association to the thread is removed
             // from the SessionManager
             SessionManager.removeSession();
@@ -554,73 +569,46 @@ final class SessionServlet
         while (defaultFrame.getParent() != null)
             defaultFrame = (SFrame) defaultFrame.getParent();
 
-        return defaultFrame.getDynamicResource(DynamicCodeResource.class);
+        return defaultFrame.getDynamicResource(CompleteUpdateResource.class);
     }
 
     /**
      * In case of an error, display an error page to the user. This is only
-     * done when there is a property <code>wings.error.template</code> present
-     * in the web.xml file. This property must contain a path relative to the
-     * webapp which leads to a wingS template. In this template, placeholders
-     * must be defined for wingS components named 
-     * <code>EXCEPTION_STACK_TRACE</code>, 
-     * <code>EXCEPTION_MESSAGE</code> and <code>WINGS_VERSION</code>. 
+     * done if there is a properties <code>wings.error.handler</code> defined
+     * in the web.xml file. If the property is present, the following steps
+     * are performed:
+     * <li> Load the class named by the value of that property, using the
+     *      current thread's context class loader,
+     * <li> Instantiate that class using its zero-argument constructor,
+     * <li> Cast the instance to ExceptionHandler,
+     * <li> Invoke the handler's <tt>handle</tt> method, passing it the
+     *      <tt>thrown</tt> argument that was passed to this method.
+     * </ol>
+     *
+     * @see DefaultExceptionHandler
      * @param res the HTTP Response to use
-     * @param e the Exception to report
+     * @param thrown the Exception to report
      */
-    protected void handleException(HttpServletResponse res, Throwable e) {
-        // Try to return HTTP status code 500.
-        // In many cases this will be too late (already stream output written)
-        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    protected void handleException(HttpServletResponse res, Throwable thrown) {
         try {
-            /*
-            * if we don't have an errorTemplateFile defined, then this
-            * will throw an Exception, so the StackTrace is NOT exposed
-            * to the user (may be security relevant)
-            */
-            STemplateLayout layout = new STemplateLayout(SessionManager.getSession()
-                    .getServletContext().getRealPath(errorTemplateFile));
-            final SFrame errorFrame = new SFrame();
-            errorFrame.getContentPane().setLayout(layout);
+            // Try to return HTTP status code 500.
+            // In many cases this will be too late (already stream output written)
+            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
-            final SLabel errorStackTraceLabel = new SLabel();
-            errorFrame.getContentPane().add(errorStackTraceLabel, "EXCEPTION_STACK_TRACE");
-
-            final SLabel errorMessageLabel = new SLabel();
-            errorFrame.getContentPane().add(errorMessageLabel, "EXCEPTION_MESSAGE");
-
-            final SLabel versionLabel = new SLabel();
-            errorFrame.getContentPane().add(versionLabel, "WINGS_VERSION");
-
-            versionLabel.setText("wingS " + Version.getVersion() + " / " + Version.getCompileTime());
-
-            res.setContentType("text/html");
             ServletOutputStream out = res.getOutputStream();
-            // build the stacktrace wrapped by pre's so line breaks are preserved
-            SStringBuilder stackTrace = new SStringBuilder("<html><pre>");
-            stackTrace.append(getStackTraceString(e));
-            stackTrace.append("</pre>");
-            errorStackTraceLabel.setText(stackTrace.toString());
-            // if there is a message, print it, otherwise print "none".
-            errorMessageLabel.setText(e.getMessage()!=null?e.getMessage():"none");
-            errorFrame.write(new ServletDevice(out));
-        } catch (Exception ex) {
-            log.warn("Exception handling failed. Unable to display custom error page. " +
-                    "Define wings.error.template in web.xml to see stacktrace online " +
-                    "and/or change this screen.");
-            try {
-                res.setContentType("text/html");
-                PrintWriter printWriter = res.getWriter();
-                printWriter.print("<html>" +
-                        "<head><meta http-equiv=\"expires\" content=\"0\"></head>" +
-                        "<body><h1>An internal application error occured</h1>If the problem " +
-                        "persists, please contact the administrator of this site." +
-                        "<p>Developers: Define wings.error.template in web.xml " +
-                        "to see stacktrace and/or change this screen</body></html>");
-                res.flushBuffer();
-            } catch (IOException e1) {
-                log.warn("Unable to send minimalistic error page to client" + e1);
-            }
+            ServletDevice device = new ServletDevice(out);
+
+            String className = (String)session.getProperty("wings.error.handler");
+            if (className == null)
+                className = DefaultExceptionHandler.class.getName();
+
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            Class clazz = classLoader.loadClass(className);
+            ExceptionHandler exceptionHandler = (ExceptionHandler)clazz.newInstance();
+            exceptionHandler.handle(device, thrown);
+        }
+        catch (Exception e) {
+            log.warn(e.getMessage(), thrown);
         }
     }
 
@@ -694,14 +682,6 @@ final class SessionServlet
      */
     public boolean isValid() {
         return session != null && parent != null;
-    }
-
-
-    private String getStackTraceString(Throwable e) {
-        final StringWriter stringWriter = new StringWriter();
-        final PrintWriter printWriter = new PrintWriter(stringWriter);
-        e.printStackTrace(printWriter);
-        return stringWriter.toString();
     }
 }
 

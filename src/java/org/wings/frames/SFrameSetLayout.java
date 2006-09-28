@@ -18,7 +18,7 @@ import org.wings.SAbstractLayoutManager;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.io.Device;
-import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.CompleteUpdateResource;
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
 import org.wings.util.SStringBuilder;
@@ -174,7 +174,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
             else if (component instanceof SFrame)
                 writeFrame(d, (SFrame) component, (Properties) constraints.get(i));
             else
-                break;
+                continue;
             i++;
         }
 
@@ -184,7 +184,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     protected void writeFrame(Device device, SFrame frame, Properties properties)
             throws IOException {
         device.print("<frame src=\"");
-        device.print(frame.getDynamicResource(DynamicCodeResource.class).getURL());
+        device.print(frame.getDynamicResource(CompleteUpdateResource.class).getURL());
         device.print("\"");
         device.print(" name=\"");
         device.print(SFrameSet.createBaseTargetName(frame));

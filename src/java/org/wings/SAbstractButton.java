@@ -255,6 +255,8 @@ public abstract class SAbstractButton
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        
+        delayEvents(true);
 
         boolean requestSelection = isSelected();
 
@@ -317,7 +319,6 @@ public abstract class SAbstractButton
         }
 
         if (isSelected() != requestSelection) {
-            delayEvents(true);
             if (buttonGroup != null) {
                 buttonGroup.setDelayEvents(true);
                 setSelected(requestSelection);
@@ -328,6 +329,8 @@ public abstract class SAbstractButton
 
             SForm.addArmedComponent(this);
         }
+        
+        delayEvents(false);
     }
 
     public void fireIntermediateEvents() {

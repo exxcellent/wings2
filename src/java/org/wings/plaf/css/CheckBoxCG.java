@@ -74,7 +74,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
         Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-        
+
         if (button.isSelected())
             device.print(" checked=\"true\"");
 
@@ -132,23 +132,26 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {
-        
+
         Object clientProperty = button.getClientProperty("onChangeSubmitListener");
         if ( button.getActionListeners().length > 0 ) {
             if ( clientProperty == null ) {
-                JavaScriptListener javaScriptListener = new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "this.form.submit()" );
+                JavaScriptListener javaScriptListener = new JavaScriptListener(
+                		JavaScriptEvent.ON_CHANGE,
+                		"submitForm(" + !button.isCompleteUpdateForced() + ",event);"
+                );
                 button.addScriptListener( javaScriptListener );
-                button.putClientProperty( "onChangeSubmitListener", javaScriptListener );                
+                button.putClientProperty( "onChangeSubmitListener", javaScriptListener );
             }
         } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
             button.removeScriptListener( (JavaScriptListener)clientProperty );
-            button.putClientProperty( "onChangeSubmitListener", null );         
+            button.putClientProperty( "onChangeSubmitListener", null );
         }
-        
+
         device.print("<input type=\"hidden\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"hidden_reset\"/>");
-        
+
         device.print("<input type=\"checkbox\" name=\"");
         Utils.write(device, Utils.event(button));
         device.print("\"");
@@ -161,7 +164,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             device.print(" checked=\"true\"");
         if (button.isFocusOwner())
             Utils.optAttribute(device, "foc", button.getName());
-        
+
         device.print("/>");
     }
 

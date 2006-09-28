@@ -32,7 +32,7 @@ public interface ReloadManager extends Serializable {
      */
     public static final int STYLE = 2;
     /**
-     * Dynamic (Java)Script represenation aspect 
+     * Dynamic (Java)Script represenation aspect
      */
     public static final int SCRIPT = 4;
 
@@ -52,10 +52,10 @@ public interface ReloadManager extends Serializable {
     Set getDirtyComponents();
 
     /**
-     * Return a set of all dynamic resources that are marked dirty.
-     * @return a set of all dynamic resource that have been marked dirty.
+     * Return a set of all frames that are marked dirty.
+     * @return a set of all frames that have been marked dirty.
      */
-    Set getDirtyResources();
+    Set getDirtyFrames();
 
     /**
      * Clear dirty components collection.
@@ -63,9 +63,9 @@ public interface ReloadManager extends Serializable {
     void clear();
 
     /**
-     * Invalidates the resources containining / depending on dirty components.
+     * Invalidates the frames containing / depending on dirty components.
      */
-    void invalidateResources();
+    void invalidateFrames();
 
     /**
      * Notify the CG's of the dirty components that those components were updated.

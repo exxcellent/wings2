@@ -13,19 +13,20 @@
  */
 package org.wings.resource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wings.Resource;
-import org.wings.SFrame;
-import org.wings.io.Device;
-
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.Resource;
+import org.wings.SFrame;
+import org.wings.io.Device;
+import org.wings.plaf.css.RenderHelper;
 
 /**
  * Traverses the component hierarchy of a frame and lets the CGs compose
@@ -34,8 +35,8 @@ import java.beans.PropertyChangeEvent;
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @version $Revision$
  */
-public class DynamicCodeResource extends DynamicResource {
-    private final transient static Log log = LogFactory.getLog(DynamicCodeResource.class);
+public class CompleteUpdateResource extends DynamicResource {
+    private final transient static Log log = LogFactory.getLog(CompleteUpdateResource.class);
 
     private static final ArrayList DEFAULT_CODE_HEADER = new ArrayList();
     private final PropertyChangeListener changeListener;
@@ -52,7 +53,7 @@ public class DynamicCodeResource extends DynamicResource {
      * Create a code resource for the specified frame.
      * <p>The MIME-type for this frame will be <code>text/html; charset=<i>current encoding</i></code>
      */
-    public DynamicCodeResource(final SFrame f) {
+    public CompleteUpdateResource(final SFrame f) {
         super(f, "html", provideMimeType(f));
         // update session encoding if manually updated in the session.
         changeListener = new PropertyChangeListener() {
@@ -71,11 +72,12 @@ public class DynamicCodeResource extends DynamicResource {
     }
 
     /**
-     * Renders and write the code of the {@link SFrame} attached to this <code>DynamicCodeResource</code>.
+     * Renders and writes the code of the {@link SFrame} attached to this <code>CompleteUpdateResource</code>.
      */
     public void write(Device out) throws IOException {
         try {
-            getFrame().write(out);
+        	RenderHelper.getInstance(getFrame()).setIncrementalUpdateMode(false);
+        	getFrame().write(out);
         } catch (IOException e) {
             throw e;
         } catch (Exception e) {

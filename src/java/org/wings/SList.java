@@ -24,10 +24,10 @@ import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
+import java.awt.event.AdjustmentListener;
 
 /**
  * Allows the user to select one or more objects from a list.
@@ -159,8 +159,6 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     private SListCellRenderer cellRenderer;
 
 
-    private ListSelectionHandler selectionHandler;
-
     /**
      * which extent of the component should be rendered
      */
@@ -185,10 +183,21 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
      * <li start="...">
      */
     protected int start = 0;
+    
+    
+    /**
+	 * used to forward selection events to selection listeners of the list
+	 */
+	private final ListSelectionListener fwdSelectionEvents = new ListSelectionListener() {
+		public void valueChanged(ListSelectionEvent e) {
+			fireSelectionValueChanged(e.getFirstIndex(), e.getLastIndex(), e.getValueIsAdjusting());
+			reload(ReloadManager.STATE);
+		}
+	};
 
     /**
-     * Construct a SList that displays the elements in the specified model.
-     */
+	 * Construct a SList that displays the elements in the specified model.
+	 */
     public SList(ListModel dataModel) {
         if (dataModel == null) {
             throw new IllegalArgumentException("dataModel must not be null");
@@ -196,7 +205,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
         if (this.dataModel != null) this.dataModel.removeListDataListener(this);
         this.dataModel = dataModel;
         this.dataModel.addListDataListener(this);
-        selectionModel = createSelectionModel();
+        setSelectionModel(createSelectionModel());
     }
 
 
@@ -431,7 +440,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
             }
         });
     }
-
+    
     /**
      * creates the default selection model. It uses the swing
      * DefaultListSelectionModel, and wraps some methods to support
@@ -483,22 +492,6 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
 
 
     /**
-     * A handler that forwards ListSelectionEvents from the selectionModel
-     * to the SList ListSelectionListeners.
-     */
-    private final class ListSelectionHandler
-            implements ListSelectionListener, Serializable {
-
-        public void valueChanged(ListSelectionEvent e) {
-            fireSelectionValueChanged(e.getFirstIndex(),
-                    e.getLastIndex(),
-                    e.getValueIsAdjusting());
-            reload(ReloadManager.STATE);
-        }
-    }
-
-
-    /**
      * Add a listener to the list that's notified each time a change
      * to the selection occurs.
      *
@@ -512,11 +505,6 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
      * @see #getSelectionModel
      */
     public void addListSelectionListener(ListSelectionListener listener) {
-        if (selectionHandler == null) {
-            selectionHandler = new ListSelectionHandler();
-            getSelectionModel().addListSelectionListener(selectionHandler);
-        }
-
         addEventListener(ListSelectionListener.class, listener);
     }
 
@@ -558,13 +546,12 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
         if (selectionModel == null) {
             throw new IllegalArgumentException("selectionModel must be non null");
         }
-
-        if (selectionHandler != null) {
-            this.selectionModel.removeListSelectionListener(selectionHandler);
-            selectionModel.addListSelectionListener(selectionHandler);
-        }
-
-        //SListSelectionModel oldValue = this.selectionModel;
+        
+        if (this.selectionModel != null)
+            this.selectionModel.removeListSelectionListener(fwdSelectionEvents);
+        
+        selectionModel.addListSelectionListener(fwdSelectionEvents);
+        
         this.selectionModel = selectionModel;
     }
 
@@ -1119,12 +1106,8 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public String getDeselectionParameter(int index) {
         return "r" + Integer.toString(index);
     }
-
-    /**
-     * *
-     * Changes of the List Model should reflect in a reload if possible
-     */
-
+    
+    // Changes to the model should force a reload.
     public void contentsChanged(javax.swing.event.ListDataEvent e) {
         reload(ReloadManager.STATE);
     }
@@ -1136,7 +1119,6 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
         reload(ReloadManager.STATE);
     }
-
 }
 
 

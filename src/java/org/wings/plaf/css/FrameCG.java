@@ -21,6 +21,7 @@ import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
 import org.wings.Version;
+import org.wings.util.SessionLocal;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Link;
@@ -30,7 +31,8 @@ import org.wings.plaf.CGManager;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.DefaultURLResource;
-import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.CompleteUpdateResource;
+import org.wings.resource.IncrementalUpdateResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
@@ -40,11 +42,7 @@ import org.wings.session.SessionManager;
 import javax.swing.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * PLAF renderer for SFrames.
@@ -89,6 +87,122 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
      */
     private Boolean renderXmlDeclaration = Boolean.FALSE;
 
+    public static final Headers HEADERS = new Headers();
+    private ClassPathResource layout;
+
+    public static class Headers
+        extends SessionLocal
+        implements List
+    {
+        protected Object initialValue() {
+            return new ArrayList();
+        }
+
+        List getList() {
+            return (List)get();
+        }
+
+        public int size() {
+            return getList().size();
+        }
+
+        public boolean isEmpty() {
+            return getList().isEmpty();
+        }
+
+        public boolean contains(Object o) {
+            return getList().contains(o);
+        }
+
+        public Iterator iterator() {
+            return getList().iterator();
+        }
+
+        public Object[] toArray() {
+            return getList().toArray();
+        }
+
+        public Object[] toArray(Object[] a) {
+            return getList().toArray(a);
+        }
+
+        public boolean add(Object o) {
+            return getList().add(o);
+        }
+
+        public boolean remove(Object o) {
+            return getList().remove(o);
+        }
+
+        public boolean containsAll(Collection c) {
+            return getList().containsAll(c);
+        }
+
+        public boolean addAll(Collection c) {
+            return getList().addAll(c);
+        }
+
+        public boolean addAll(int index, Collection c) {
+            return getList().addAll(index, c);
+        }
+
+        public boolean removeAll(Collection c) {
+            return getList().removeAll(c);
+        }
+
+        public boolean retainAll(Collection c) {
+            return getList().retainAll(c);
+        }
+
+        public void clear() {
+            getList().clear();
+        }
+
+        public boolean equals(Object o) {
+            return getList().equals(o);
+        }
+
+        public int hashCode() {
+            return getList().hashCode();
+        }
+
+        public Object get(int index) {
+            return getList().get(index);
+        }
+
+        public Object set(int index, Object element) {
+            return getList().set(index, element);
+        }
+
+        public void add(int index, Object element) {
+            getList().add(index, element);
+        }
+
+        public Object remove(int index) {
+            return getList().remove(index);
+        }
+
+        public int indexOf(Object o) {
+            return getList().indexOf(o);
+        }
+
+        public int lastIndexOf(Object o) {
+            return getList().lastIndexOf(o);
+        }
+
+        public ListIterator listIterator() {
+            return getList().listIterator();
+        }
+
+        public ListIterator listIterator(int index) {
+            return getList().listIterator(index);
+        }
+
+        public List subList(int fromIndex, int toIndex) {
+            return getList().subList(fromIndex, toIndex);
+        }
+    }
+
     /**
      * Initialize properties from config
      */
@@ -104,6 +218,19 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         if (userRenderXmlDecl != null) {
             setRenderXmlDeclaration(userRenderXmlDecl);
         }
+
+        // add JavaScript files to frame
+        Session session = SessionManager.getSession();
+        form = createExternalizedHeader(session, FORM_SCRIPT, "text/javascript");
+        ajax = createExternalizedHeader(session, AJAX_SCRIPT, "text/javascript");
+        domLib = createExternalizedHeader(session, DOMLIB_SCRIPT, "text/javascript");
+        domTT = createExternalizedHeader(session, DOMTT_SCRIPT, "text/javascript");
+
+        dwrEngine = new Script("text/javascript", new DefaultURLResource("../dwr/engine.js"));
+        dwrUtil = new Script("text/javascript", new DefaultURLResource("../dwr/util.js"));
+
+        layout = new ClassPathResource("org/wings/plaf/css/layout.htc", "text/x-component");
+        layout.getId(); // externalize ..
     }
 
     /**
@@ -113,19 +240,22 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private static final String BROWSER_DEFAULT = "default";
 
     public final String FORM_SCRIPT = (String) ResourceManager.getObject("JScripts.form", String.class);
+    public final String AJAX_SCRIPT = (String) ResourceManager.getObject("JScripts.ajax", String.class);
     public final String DOMLIB_SCRIPT = (String) ResourceManager.getObject("JScripts.domlib", String.class);
     public final String DOMTT_SCRIPT = (String) ResourceManager.getObject("JScripts.domtt", String.class);
 
-    public static final JavaScriptListener FOCUS_SCRIPT_MOZILLA =
-            new JavaScriptListener("onload", "wu_registerEvent(document,'focus',storeFocus,true)");
-    public static final JavaScriptListener FOCUS_SCRIPT_IE =
-            new JavaScriptListener("onactivate", "storeFocus(event)");
-    public static final JavaScriptListener SCROLL_POSITION_SCRIPT =
-            new JavaScriptListener("onscroll", "storeScrollPosition(event)");
-    public static final JavaScriptListener RESTORE_SCROLL_POSITION_SCRIPT =
-            new JavaScriptListener("onload", "restoreScrollPosition()");
-    public static final JavaScriptListener PERFORM_WINDOW_ONLOAD_SCRIPT=
-            new JavaScriptListener("onload", "performWindowOnLoad()");
+    public static final JavaScriptListener FOCUS_SCRIPT_MOZILLA = new JavaScriptListener("onload", "wu_registerEvent(document,'focus',storeFocus,true)");
+    public static final JavaScriptListener FOCUS_SCRIPT_IE = new JavaScriptListener("onactivate", "storeFocus(event)");
+    public static final JavaScriptListener SCROLL_POSITION_SCRIPT = new JavaScriptListener("onscroll", "storeScrollPosition(event)");
+    public static final JavaScriptListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptListener("onload", "restoreScrollPosition()");
+    public static final JavaScriptListener PERFORM_WINDOW_ONLOAD_SCRIPT = new JavaScriptListener("onload", "performWindowOnLoad()");
+
+    private Script domLib;
+    private Script domTT;
+    private Script form;
+    private Script ajax;
+    private Script dwrEngine;
+    private Script dwrUtil;
 
     /**
      * Externalizes the style sheet(s) for this session.
@@ -133,8 +263,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
      * The style sheet is loaded from the class path.
      * @return the URLs under which the css file(s) was externalized
      */
-    private List externalizeBrowserStylesheets(SFrame forFrame) {
-        Session session = forFrame.getSession();
+    private List externalizeBrowserStylesheets(Session session) {
         final ExternalizeManager extManager = session.getExternalizeManager();
         final CGManager manager = session.getCGManager();
         final String browserName = session.getUserAgent().getBrowserType().getShortName();
@@ -160,58 +289,19 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                         "(See Stylesheet.xxx entries in default.properties)");
             }
         }
-        if (Utils.isMSIE(forFrame)) {
-            ClassPathResource layout = new ClassPathResource("org/wings/plaf/css/layout.htc", "text/x-component");
-            layout.getId(); // externalize ..
-            forFrame.putClientProperty("layout.htc", layout);
-        }
 
         return cssUrls;
-    }
-
-
-    private String externalizeJavaScript(String jsResKey) {
-        final ExternalizeManager extManager = SessionManager.getSession().getExternalizeManager();
-        final CGManager manager = SessionManager.getSession().getCGManager();
-        String jsClassPath = (String)manager.getObject(jsResKey, String.class);
-        // catch missing script entry in properties file
-        if (jsClassPath != null) {
-            ClassPathResource res = new ClassPathResource(jsClassPath, "text/javascript");
-            return extManager.externalize(res, ExternalizeManager.GLOBAL);
-        }
-        return null;
     }
 
     public void installCG(final SComponent comp) {
         final SFrame component = (SFrame) comp;
 
-        DynamicCodeResource dynamicCodeRessource;
-        //Link stylesheetLink;
-
         // dynamic code resource.
         // This Resource externalized the HTML page
-        dynamicCodeRessource = new DynamicCodeResource(component);
+        CompleteUpdateResource dynamicCodeRessource = new CompleteUpdateResource(component);
         component.addDynamicResource(dynamicCodeRessource);
-
-        // dynamic stylesheet resource.
-        // This resource externalise the dynamically generated CSS styles
-        /*
-        styleSheetResource = new DynamicStyleSheetResource(component);
-        stylesheetLink = new Link("stylesheet", null, "text/css", null, styleSheetResource);
-        component.addDynamicResource(styleSheetResource);
-        component.addHeader(stylesheetLink);
-        */
-
-        // Retrieve list of static CSS files to be attached to this frame for this browser.
-        final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component);
-        for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
-            component.addHeader(i, new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
-        }
-
-        // add JavaScript files to frame
-        addExternalizedHeader(component, FORM_SCRIPT, "text/javascript");
-        addExternalizedHeader(component, DOMLIB_SCRIPT, "text/javascript");
-        addExternalizedHeader(component, DOMTT_SCRIPT, "text/javascript");
+        IncrementalUpdateResource dynamicAjaxRessource = new IncrementalUpdateResource(component);
+        component.addDynamicResource(dynamicAjaxRessource);
 
         component.addScriptListener(Utils.isMSIE(component) ? FOCUS_SCRIPT_IE : FOCUS_SCRIPT_MOZILLA);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
@@ -219,8 +309,20 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         component.addScriptListener(PERFORM_WINDOW_ONLOAD_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);
 
-        component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
-        component.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
+        if (!HEADERS.contains(form)) {
+            HEADERS.add(domLib);
+            HEADERS.add(domTT);
+            HEADERS.add(form);
+            HEADERS.add(ajax);
+            HEADERS.add(dwrEngine);
+            HEADERS.add(dwrUtil);
+        }
+
+        // Retrieve list of static CSS files to be attached to this frame for this browser.
+        final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component.getSession());
+        for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
+            component.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
+        }
     }
 
     /**
@@ -229,10 +331,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
      * @param classPath the classPath to look in for the file
      * @param mimeType the mimetype of the file
      */
-    private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
+    private Script createExternalizedHeader(Session session, String classPath, String mimeType) {
         ClassPathResource res = new ClassPathResource(classPath, mimeType);
-        String jScriptUrl = parentFrame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
+        String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        return new Script(mimeType, new DefaultURLResource(jScriptUrl));
     }
 
     /**
@@ -241,7 +343,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public void uninstallCG(final SComponent comp) {
         final SFrame component = (SFrame) comp;
 
-        component.removeDynamicResource(DynamicCodeResource.class);
+        component.removeDynamicResource(CompleteUpdateResource.class);
         component.clearHeaders();
     }
 
@@ -355,7 +457,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         // Register and render DWR callables
         Collection callableNames = CallableManager.getInstance().callableNames();
 
-        Collection allHeaders = new ArrayList(headers.size() + callableNames.size());
+        Collection allHeaders = new ArrayList(headers.size() + callableNames.size() + HEADERS.size());
+        allHeaders.addAll(HEADERS);
         allHeaders.addAll(headers);
         for (Iterator iterator = callableNames.iterator(); iterator.hasNext();) {
             String name = (String) iterator.next();
@@ -394,7 +497,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         SToolTipManager toolTipManager = frame.getSession().getToolTipManager();
         device
                 .print("<script type=\"text/javascript\">\n")
-                .print("domTT_addPredefined('default', 'caption', false");
+                .print("  domTT_addPredefined('default', 'caption', false");
         if (toolTipManager.isFollowMouse()) {
             device.print(", 'trail', true");
         }
@@ -480,28 +583,36 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 device.print("\"></script>\n");
             }
         }
+
         writeInlineScripts(device, frame);
-        device.print("\n</body>\n</html>\n");
+
+        device.print("</body>\n</html>\n");
+
         pComp.fireRenderEvent(SComponent.DONE_RENDERING);
         RenderHelper.getInstance(frame).reset();
     }
 
     protected void writeInlineScripts(Device device, SComponent component) throws IOException {
-        boolean scriptTagOpen = false;
+    	final SFrame frame = (SFrame) component;
+        device.print("<script type=\"text/javascript\">\n" +
+        		"  event_epoch = '" + frame.getEventEpoch() + "';\n" +
+        		"  completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
+        		"  incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
+        		"  incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
+        		"  incrementalUpdateCursor = " + frame.isIncrementalUpdateCursor() + ";\n" +
+        		"  incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
+        										" 'color':'" + frame.getIncrementalUpdateHighlight()[1] + "'," +
+        										" 'duration':" + frame.getIncrementalUpdateHighlight()[2] + " };\n");
+
         for (int i = 0; i < component.getScriptListeners().length; i++) {
             ScriptListener scriptListener = component.getScriptListeners()[i];
             String script = scriptListener.getScript();
             if (script != null) {
-                if (!scriptTagOpen) {
-                    device.print("\n  <script type=\"text/javascript\">");
-                    scriptTagOpen = true;
-                }
                 device.print(script);
             }
         }
-        if (scriptTagOpen) {
-            device.print("</script>");
-        }
+
+        device.print("</script>\n");
     }
 
     public String getDocumentType() {

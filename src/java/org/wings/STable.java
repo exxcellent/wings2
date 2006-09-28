@@ -37,9 +37,10 @@ package org.wings;
  import javax.swing.table.DefaultTableModel;
  import javax.swing.table.TableModel;
  import java.awt.*;
+import java.awt.event.AdjustmentListener;
  import java.util.EventObject;
  import java.util.HashMap;
- import java.util.Iterator;
+import java.util.Iterator;
 
 
  /**
@@ -219,10 +220,21 @@ package org.wings;
       * Helper variable for {@link #nameCellComponent(SComponent, int, int)}
       */
      private SStringBuilder nameBuffer = new SStringBuilder();
+     
+     /**
+      * changes in the selection model should force a reload if possible
+      */
+     protected final ListSelectionListener reloadOnSelectionChangeListener = new ListSelectionListener() {
+		public void valueChanged(ListSelectionEvent e) {
+			reload(ReloadManager.STATE);
+		}
+	 };
 
      /**
-      * <p>Creates a new <code>STable</code>.</p>
-      */
+		 * <p>
+		 * Creates a new <code>STable</code>.
+		 * </p>
+		 */
      public STable() {
          this(null);
      }
@@ -903,13 +915,14 @@ package org.wings;
       * @see #getSelectionModel
       */
      public void setSelectionModel(SListSelectionModel model) {
+    	 if (model == null) {
+             throw new IllegalArgumentException("cannot set a null SListSelectionModel");
+         }
+    	 
          if (getSelectionModel() != null) {
              removeSelectionListener(reloadOnSelectionChangeListener);
          }
-
-         if (model == null) {
-             throw new IllegalArgumentException("cannot set a null SListSelectionModel");
-         }
+         
          selectionModel = model;
 
          addSelectionListener(reloadOnSelectionChangeListener);
@@ -1444,16 +1457,10 @@ package org.wings;
      public Dimension getPreferredExtent() {
          return null;
      }
-
-     /**
-      * if selection changes, we have to reload code...
-      */
-     protected final ListSelectionListener reloadOnSelectionChangeListener =
-             new ListSelectionListener() {
-                 public void valueChanged(ListSelectionEvent e) {
-                     reload(ReloadManager.STATE);
-                 }
-             };
+     
+     public AdjustmentListener getAdjustmentListener() {
+     	return null;
+     }
 
      public void setSelectedRow(int selectedIndex) {
          getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);

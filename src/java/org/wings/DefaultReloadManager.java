@@ -13,8 +13,9 @@
  */
 package org.wings;
 
-import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.CompleteUpdateResource;
 import org.wings.resource.DynamicResource;
+import org.wings.resource.IncrementalUpdateResource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -57,20 +58,19 @@ public class DefaultReloadManager
         return dirtyComponents;
     }
 
-    public synchronized Set getDirtyResources() {
-        final HashSet dirtyDynamicResources = new HashSet(5);
+    public synchronized Set getDirtyFrames() {
+        final HashSet dirtyFrames = new HashSet(5);
 
-        SComponent component;
         SFrame parentFrame;
-        // collect dirty HTML resources
+        // collect dirty frames
         for (Iterator iterator = dirtyComponents.iterator(); iterator.hasNext();) {
-            component = (SComponent) iterator.next();
-            parentFrame = component.getParentFrame();
-            if (parentFrame != null)
-                dirtyDynamicResources.add(parentFrame.getDynamicResource(DynamicCodeResource.class));
+            parentFrame = ((SComponent) iterator.next()).getParentFrame();
+            if (parentFrame != null) {
+                dirtyFrames.add(parentFrame);
+            }
         }
 
-        return dirtyDynamicResources;
+        return dirtyFrames;
     }
 
     public synchronized void clear() {
@@ -78,12 +78,11 @@ public class DefaultReloadManager
         dirtyComponents.clear();
     }
 
-    public synchronized void invalidateResources() {
+    public synchronized void invalidateFrames() {
         //Set frames = new HashSet();
-        Iterator it = getDirtyResources().iterator();
+        Iterator it = getDirtyFrames().iterator();
         while (it.hasNext()) {
-            DynamicResource resource = (DynamicResource) it.next();
-            resource.invalidate();
+            ((SFrame) it.next()).invalidate();
             it.remove();
         }
         deliveryPhase = true;

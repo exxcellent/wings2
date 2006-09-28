@@ -71,7 +71,7 @@ public class SToolTipManager implements Serializable {
         this.followMouse = followMouse;
     }
     
-    static SToolTipManager sharedInstance() {
+    public static SToolTipManager sharedInstance() {
         return SessionManager.getSession().getToolTipManager();
     }
 }

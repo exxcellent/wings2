@@ -85,7 +85,9 @@ public class ImageExternalizer implements Externalizer {
     }
 
     public boolean isFinal(Object obj) {
-        return false;
+        return false; // images may dynamically change (i.e. status charts)
+                      // I guess the static case should cache the encoding results rather
+                      // then rerunning it
     }
 
     public Class[] getSupportedClasses() {

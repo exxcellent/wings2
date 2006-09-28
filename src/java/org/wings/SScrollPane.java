@@ -180,7 +180,7 @@ public class SScrollPane
 
         if (c instanceof Scrollable && c != null) {
             scrollable = (Scrollable) c;
-
+            
             // keep original value
             backupViewport = scrollable.getViewportSize();
 

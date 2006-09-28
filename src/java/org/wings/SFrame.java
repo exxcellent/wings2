@@ -22,16 +22,18 @@ import org.wings.event.SRequestListener;
 import org.wings.event.SRequestEvent;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
-import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.CompleteUpdateResource;
 import org.wings.resource.DynamicResource;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
+import org.wings.util.StringUtil;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +54,7 @@ import java.util.List;
 public class SFrame
         extends SRootContainer
         implements PropertyChangeListener, LowLevelEventListener {
-
-    private final transient static Log log = LogFactory.getLog(SFrame.class);
+	private final transient static Log log = LogFactory.getLog(SFrame.class);
 
     /**
      * The Title of the Frame.
@@ -76,12 +77,29 @@ public class SFrame
 
     protected String statusLine;
 
+    /**
+     * The event epoch of this frame which is incremented with each invalidation.
+     */
+    private int eventEpoch = 0;
+
+    /**
+     * The event epoch of this frame represented as a (preferably short) string.
+     */
+    private String epochCache = "W" + StringUtil.toShortestAlphaNumericString(eventEpoch);
+
     private RequestURL requestURL = null;
+
     private String targetResource;
 
     private HashMap dynamicResources;
 
-    private SComponent focusComponent = null;                //Component which requests the focus
+    private boolean incrementalUpdateEnabled = true;
+
+    private boolean incrementalUpdateCursor = false;
+
+    private Object[] incrementalUpdateHighlight = { new Boolean(true), "#FFFF99", new Integer(300) };
+
+    private SComponent focusComponent = null; // Component which requests the focus
 
     /**
      * @see #setBackButton(SButton)
@@ -162,7 +180,7 @@ public class SFrame
      * Severeral Dynamic code Ressources are attached to a <code>SFrame</code>.
      * <br>See <code>Frame.plaf</code> for details, but in general you wil find attached
      * to every <code>SFrame</code> a
-     * <ul><li>A {@link DynamicCodeResource} rendering the HTML-Code of all SComponents inside this frame.
+     * <ul><li>A {@link CompleteUpdateResource} rendering the HTML-Code of all SComponents inside this frame.
      * </ul>
      */
     public DynamicResource getDynamicResource(Class c) {
@@ -182,13 +200,20 @@ public class SFrame
     }
 
     /**
-     * A String with the current epoch of this SFrame. Provided by the
-     * {@link DynamicCodeResource} rendering this frame.
-     *
-     * @return A String with current epoch. Increased on every invalidation.
+     * Invalidate this frame by incrementing its event epoch. This method is called
+     * whenever a change took place inside this frame - that is whenever one of its
+     * child components has become dirty. In consequence each dynamic resource which
+     * is attached to this frame has to be externalized with a new "version-number".
      */
-    public String getEventEpoch() {
-        return getDynamicResource(DynamicCodeResource.class).getEpoch();
+    public final void invalidate() {
+        epochCache = "W" + StringUtil.toShortestAlphaNumericString(++eventEpoch);
+        if (log.isDebugEnabled()) {
+            log.debug("Event epoch of " + this + " has been invalidated: " + epochCache);
+        }
+    }
+
+    public final String getEventEpoch() {
+        return epochCache;
     }
 
     /**
@@ -211,6 +236,7 @@ public class SFrame
         }
         if (requestURL != null) {
             result = (RequestURL) requestURL.clone();
+            result.setEventEpoch(getEventEpoch());
             result.setResource(getTargetResource());
         }
         return result;
@@ -224,13 +250,13 @@ public class SFrame
     }
 
     /**
-     * Every externalized ressource has an id. A frame is a <code>DynamicCodeResource</code>.
+     * Every externalized ressource has an id. A frame is a <code>CompleteUpdateResource</code>.
      *
-     * @return The id of this <code>DynamicCodeResource</code>
+     * @return The id of this <code>CompleteUpdateResource</code>
      */
     public String getTargetResource() {
         if (targetResource == null) {
-            targetResource = getDynamicResource(DynamicCodeResource.class).getId();
+            targetResource = getDynamicResource(CompleteUpdateResource.class).getId();
         }
         return targetResource;
     }
@@ -330,7 +356,7 @@ public class SFrame
     /**
      * Typically you don't want any wings application to operate on old 'views' meaning
      * old pages. Hence all generated HTML pages (<code>SFrame</code> objects
-     * rendered through {@link DynamicCodeResource} are marked as <b>do not cache</b>
+     * rendered through {@link CompleteUpdateResource} are marked as <b>do not cache</b>
      * inside the HTTP response header and the generated HTML frame code.
      * <p>If for any purpose (i.e. you a writing a read only application) you want
      * th user to be able to work on old views then set this to <code>false</code>
@@ -429,8 +455,8 @@ public class SFrame
 
     public void processLowLevelEvent(String name, String[] values) {
         focusComponent = null;
-        if (values.length == 1 && values[0].startsWith("focus_")) {
-            String eventId = values[0].substring("focus_".length());
+        if (values.length == 1 && name.endsWith("_focus")) {
+            String eventId = values[0];
             List listeners = getSession().getDispatcher().getLowLevelEventListener(eventId);
             for (int i = 0; i < listeners.size() && focusComponent == null; i++) {
                 Object listener = listeners.get(i);
@@ -559,7 +585,7 @@ public class SFrame
 
     /**
      * custom error handling. If you want to catch application errors,
-     * return true here. 
+     * return true here.
      * @param e The throwable causing this.
      * @return does this frame handle errors...
      */
@@ -612,4 +638,34 @@ public class SFrame
                 lastDispatchingFinished = System.currentTimeMillis();
         }
     }
+
+	public boolean isIncrementalUpdateEnabled() {
+		return incrementalUpdateEnabled;
+	}
+
+	public void setIncrementalUpdateEnabled(boolean enabled) {
+		reloadIfChange(incrementalUpdateEnabled, enabled);
+		incrementalUpdateEnabled = enabled;
+	}
+
+	public boolean isIncrementalUpdateCursor() {
+		return incrementalUpdateCursor;
+	}
+
+	public void setIncrementalUpdateCursor(boolean enabled) {
+		reloadIfChange(incrementalUpdateCursor, enabled);
+		incrementalUpdateCursor = enabled;
+	}
+
+	public Object[] getIncrementalUpdateHighlight() {
+		return incrementalUpdateHighlight;
+	}
+
+	public void setIncrementalUpdateHighlight(boolean enabled, String color, int duration) {
+		Object[] highlight = { new Boolean(enabled), color, new Integer(duration) };
+		if (!Arrays.equals(incrementalUpdateHighlight, highlight)) {
+			incrementalUpdateHighlight = highlight;
+			reload(ReloadManager.STATE);
+		}
+	}
 }

@@ -14,11 +14,7 @@
 package org.wings.plaf.css;
 
 
-import org.wings.RequestURL;
-import org.wings.SAbstractButton;
-import org.wings.SComponent;
-import org.wings.SMenu;
-import org.wings.SMenuItem;
+import org.wings.*;
 import org.wings.io.Device;
 import java.io.IOException;
 
@@ -29,6 +25,10 @@ public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
      * 
      */
     private static final long serialVersionUID = 1L;
+    private SResourceIcon arrowIcon = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
+    {
+        arrowIcon.getId();
+    }
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -72,9 +72,9 @@ public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
                             }
                             if (menuItem instanceof SMenu) {
                                 if (menuItem.isEnabled()) {
-                                    device.print(" class=\"x\"");
+                                    device.print(" class=\"x sub\"");
                                 } else {
-                                    device.print(" class=\"y\"");
+                                    device.print(" class=\"y sub\"");
                                 }
                             }
                             device.print(">");

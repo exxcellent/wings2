@@ -97,9 +97,9 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                             }
                             if (menuItem instanceof SMenu) {
                                 if (menuItem.isEnabled()) {
-                                    device.print(" class=\"x\"");
+                                    device.print(" class=\"x sub\"");
                                 } else {
-                                    device.print(" class=\"y\"");
+                                    device.print(" class=\"y sub\"");
                                 }
                             }
                             device.print(">");

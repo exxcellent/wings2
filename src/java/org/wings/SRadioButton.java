@@ -67,6 +67,8 @@ public class SRadioButton
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        
+        delayEvents(true);
 
         boolean origSelected = isSelected();
 
@@ -103,6 +105,8 @@ public class SRadioButton
             // got an event, that is a select...
             SForm.addArmedComponent(this);
         } // end of if ()
+        
+        delayEvents(false);
     }
 
     /**

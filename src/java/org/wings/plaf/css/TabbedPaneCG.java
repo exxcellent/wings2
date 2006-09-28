@@ -215,12 +215,11 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 Utils.optAttribute(device, "src", icon.getURL());
                 Utils.optAttribute(device, "width", icon.getIconWidth());
                 Utils.optAttribute(device, "height", icon.getIconHeight());
-                device.print(" alt=\"");
-                device.print(icon.getIconTitle());
-                device.print("\" style=\"margin-left:0.2em;\"/>");
+                Utils.optAttribute(device, "alt", icon.getIconTitle());
+                device.print("/>");
             }
 
-            if (title != null && title.length() > 0) {
+            if (title != null) {
                 device.print("&nbsp;");
                 Utils.write(device, title);
                 device.print("&nbsp;");
@@ -231,9 +230,8 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 Utils.optAttribute(device, "src", icon.getURL());
                 Utils.optAttribute(device, "width", icon.getIconWidth());
                 Utils.optAttribute(device, "height", icon.getIconHeight());
-                device.print(" alt=\"");
-                device.print(icon.getIconTitle());
-                device.print("\" style=\"margin-right:0.2em;\"/>");
+                Utils.optAttribute(device, "alt", icon.getIconTitle());
+                device.print("/>");
             }
 
             Utils.printButtonEnd(device, tabbedPane, eventValue, enabledTab);

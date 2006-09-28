@@ -94,20 +94,31 @@ public class ResourceFactory
             return makeObject(property, type);
     }
 
+    private static Map instances = new HashMap();
+
+    private static Object sharedInstance(String className) {
+        Object cg = instances.get(className);
+        if (cg == null) {
+            try {
+                Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+                cg = cgClass.newInstance();
+                instances.put(className, cg);
+            }
+            catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        return cg;
+    }
+
     /**
      * Create a CG instance.
      *
      * @param className the full qualified class name of the CG
      * @return a new CG instance
      */
-    public static Object makeComponentCG(String className) {
-        try {
-            Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
-            return (ComponentCG)cgClass.newInstance();
-        }
-        catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+    public static ComponentCG makeComponentCG(String className) {
+        return (ComponentCG)sharedInstance(className);
     }
 
     /**
@@ -117,13 +128,7 @@ public class ResourceFactory
      * @return a new CG instance
      */
     public static LayoutCG makeLayoutCG(String className) {
-        try {
-            Class cgClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
-            return (LayoutCG) cgClass.newInstance();
-        }
-        catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        return (LayoutCG)sharedInstance(className);
     }
 
     /**

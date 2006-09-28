@@ -14,6 +14,8 @@
  */
 package org.wings.text;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.event.DocumentEvent;
@@ -32,6 +34,17 @@ import org.wings.util.EditTranscriptGenerator;
 public class DefaultDocument implements SDocument {
     private final SStringBuilder buffer = new SStringBuilder();
     private EventListenerList listeners = null;
+    
+    /**
+     * Indicates if we should fire event immediately when they arise,
+     * or if we should collect them for a later delivery
+     */
+    private boolean delayEvents = false;
+    
+    /**
+     * All delayed events are stored here
+     */
+    protected final ArrayList delayedEvents = new ArrayList(5);
 
     public DefaultDocument() {
     }
@@ -117,38 +130,78 @@ public class DefaultDocument implements SDocument {
     }
 
     protected void fireInsertUpdate(int offset, int length) {
-        if (listeners == null || listeners.getListenerCount() == 0)
-            return;
+    	SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.INSERT);
 
-        SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.INSERT);
+		if (delayEvents) {
+			delayedEvents.add(e);
+		} else {
+			if (listeners == null || listeners.getListenerCount() == 0)
+				return;
 
-        Object[] listeners = this.listeners.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            ((SDocumentListener) listeners[i + 1]).insertUpdate(e);
-        }
+			Object[] listeners = this.listeners.getListenerList();
+			for (int i = listeners.length - 2; i >= 0; i -= 2) {
+				((SDocumentListener) listeners[i + 1]).insertUpdate(e);
+			}
+		}
     }
 
     protected void fireRemoveUpdate(int offset, int length) {
-        if (listeners == null || listeners.getListenerCount() == 0)
-            return;
+    	SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.REMOVE);
 
-        SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.REMOVE);
+		if (delayEvents) {
+			delayedEvents.add(e);
+		} else {
+			if (listeners == null || listeners.getListenerCount() == 0)
+				return;
 
-        Object[] listeners = this.listeners.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            ((SDocumentListener) listeners[i + 1]).removeUpdate(e);
-        }
+			Object[] listeners = this.listeners.getListenerList();
+			for (int i = listeners.length - 2; i >= 0; i -= 2) {
+				((SDocumentListener) listeners[i + 1]).removeUpdate(e);
+			}
+		}
     }
 
     protected void fireChangeUpdate(int offset, int length) {
-        if (listeners == null || listeners.getListenerCount() == 0)
-            return;
+    	SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.CHANGE);
+    	
+    	if (delayEvents) {
+    		delayedEvents.add(e);
+		} else {
+			if (listeners == null || listeners.getListenerCount() == 0)
+				return;			
 
-        SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.CHANGE);
-
-        Object[] listeners = this.listeners.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            ((SDocumentListener) listeners[i + 1]).changedUpdate(e);
-        }
+			Object[] listeners = this.listeners.getListenerList();
+			for (int i = listeners.length - 2; i >= 0; i -= 2) {
+				((SDocumentListener) listeners[i + 1]).changedUpdate(e);
+			}
+		}
     }
+    
+	public boolean getDelayEvents() {
+		return delayEvents;
+	}
+
+	public void setDelayEvents(boolean b) {
+		delayEvents = b;		
+	}
+
+	public void fireDelayedIntermediateEvents() {
+		for (Iterator iter = delayedEvents.iterator(); iter.hasNext();) {
+			SDocumentEvent e = (SDocumentEvent) iter.next();
+
+			switch (e.getType()) {
+			case SDocumentEvent.INSERT:
+				fireInsertUpdate(e.getOffset(), e.getLength());
+			case SDocumentEvent.REMOVE:
+				fireRemoveUpdate(e.getOffset(), e.getLength());
+			case SDocumentEvent.CHANGE:
+				fireChangeUpdate(e.getOffset(), e.getLength());
+			}
+		}
+		delayedEvents.clear();
+	}
+	
+	public void fireDelayedFinalEvents() {
+		
+	}
 }

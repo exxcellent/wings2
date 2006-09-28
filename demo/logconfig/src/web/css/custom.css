@@ -1,0 +1,13 @@
+.la_header {
+	font-size: 18px;
+	color: #FFFFFF;
+}
+
+.la_title {
+	font-weight: bold;
+}
+
+.la_status {
+	color: #FF0000;
+	font-weight: bold;
+}

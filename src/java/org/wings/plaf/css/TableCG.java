@@ -37,7 +37,17 @@ public final class TableCG
     private static final long serialVersionUID = 1L;
     protected String fixedTableBorderWidth;
     protected SIcon editIcon;
-    protected String selectionColumnWidth = "22px";
+    protected String selectionColumnWidth = "22";
+
+    int horizontalOversize = 4;
+
+    public int getHorizontalOversize() {
+        return horizontalOversize;
+    }
+
+    public void setHorizontalOversize(int horizontalOversize) {
+        this.horizontalOversize = horizontalOversize;
+    }
 
     /**
      * Initialize properties from config
@@ -121,6 +131,7 @@ public final class TableCG
             table.setRowSelectionRenderer((org.wings.table.STableCellRenderer)value);
         }
 
+        /*
         InputMap inputMap = new InputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK, false), "left");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK, false), "right");
@@ -150,6 +161,10 @@ public final class TableCG
         actionMap.put("left", action);
         actionMap.put("right", action);
         table.setActionMap(actionMap);
+        */
+
+        if (isMSIE(table))
+            table.putClientProperty("horizontalOversize", new Integer(horizontalOversize));
     }
 
     public void uninstallCG(SComponent component) {
@@ -192,6 +207,7 @@ public final class TableCG
             return;
         }
         Utils.printTableCellAlignment(device, component, SConstants.LEFT, SConstants.TOP);
+        Utils.optAttribute(device, "oversize", horizontalOversize);
         device.print(">");
 
         String parameter = null;
@@ -287,9 +303,6 @@ public final class TableCG
                 device.print("<colgroup>");
                 if (needsSelectionRow)
                     writeCol(device, selectionColumnWidth);
-
-                int columnCount = columnModel.getColumnCount();
-                System.out.println("columnCount = " + columnCount);
 
                 for (int i = startCol; i < endCol; i++) {
                     STableColumn column = columnModel.getColumn(i);
@@ -400,16 +413,25 @@ public final class TableCG
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
         final String columnStyle = Utils.joinStyles((SComponent)rowSelectionRenderer, "numbering");
 
-        device.print("<td");
+        device.print("<td valign=\"top\"");
         Utils.optAttribute(device, "class", columnStyle);
         Utils.optAttribute(device, "width", selectionColumnWidth);
         device.print(">");
 
         String value = table.getToggleSelectionParameter(row, -1);
-        Utils.printButtonStart(device, table, value, true, table.getShowAsFormComponent());
-        device.print(">");
+        if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION) {
+            Utils.printButtonStart(device, table, value, true, table.getShowAsFormComponent());
+            device.print(">");
+        }
+        else
+            device.print("<span>");
+
         renderSelectionColumnContent(device, row, table, rendererPane);
-        Utils.printButtonEnd(device, table, value, true);
+
+        if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION)
+            Utils.printButtonEnd(device, table, value, true);
+        else
+            device.print("</span>");
         device.print("</td>");
     }
 

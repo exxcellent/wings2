@@ -36,6 +36,7 @@ public final class TreeCG extends AbstractComponentCG implements
     private SIcon expandControlIcon;
     private SIcon hashMark;
     private SIcon leafControlIcon;
+    private boolean renderSelectableCells = true;
 
     /**
      * Initialize properties from config
@@ -62,6 +63,14 @@ public final class TreeCG extends AbstractComponentCG implements
         if (value != null) {
             component.setNodeIndentDepth(((Integer) value).intValue());
         }
+    }
+
+    public boolean isRenderSelectableCells() {
+        return renderSelectableCells;
+    }
+
+    public void setRenderSelectableCells(boolean renderSelectableCells) {
+        this.renderSelectableCells = renderSelectableCells;
     }
 
     private boolean isLastChild(TreeModel model, TreePath path, int i) {
@@ -98,7 +107,7 @@ public final class TreeCG extends AbstractComponentCG implements
         final boolean isExpanded = component.isExpanded(path);
         final boolean isSelected = component.isPathSelected(path);
 
-        final boolean isSelectable = (component.getSelectionModel() != SDefaultTreeSelectionModel.NO_SELECTION_MODEL);
+        final boolean isSelectable = renderSelectableCells && (component.getSelectionModel() != SDefaultTreeSelectionModel.NO_SELECTION_MODEL);
 
         SComponent cellComp = cellRenderer.getTreeCellRendererComponent(component, node,
                 isSelected,

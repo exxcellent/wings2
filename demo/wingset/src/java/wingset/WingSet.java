@@ -127,10 +127,12 @@ public class WingSet implements Serializable {
         tab.add(new BackButtonExample(), "Browser Back");
         tab.add(new DesktopPaneExample(), "DesktopPane");
         tab.add(new DragAndDropExample(), "Drag and Drop");
+        tab.add(new SpinnerExample(), "Spinner" );
         tab.add(new RawTextComponentExample(), "Raw Text Component");
         tab.add(new ErrorPageExample(), "Error Page");
         tab.add(new TableNestingExample(), "Limited table nesting (DEVEL)");
         tab.add(new ListBugTest(), "BUG TODO: In IE List does not appear");
+        tab.add(new XDivisionExample(), "XDivision");
 
         // TODO: fixme!!!
         //tab.add(new bookmarks.BookmarkManager(), "DND 2");

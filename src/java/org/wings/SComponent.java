@@ -14,32 +14,8 @@
 package org.wings;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wings.border.SBorder;
-import org.wings.event.SComponentEvent;
-import org.wings.event.SComponentListener;
-import org.wings.event.SParentFrameEvent;
-import org.wings.event.SParentFrameListener;
-import org.wings.event.SRenderEvent;
-import org.wings.event.SRenderListener;
-import org.wings.io.Device;
-import org.wings.plaf.ComponentCG;
-import org.wings.script.ScriptListener;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
-import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSProperty;
-import org.wings.style.CSSStyle;
-import org.wings.style.CSSStyleSheet;
-import org.wings.style.Selector;
-import org.wings.style.Style;
-import org.wings.util.ComponentVisitor;
-import org.wings.util.SStringBuilder;
-
-import javax.swing.*;
-import javax.swing.event.EventListenerList;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -59,6 +35,37 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.event.EventListenerList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.border.SBorder;
+import org.wings.event.SComponentEvent;
+import org.wings.event.SComponentListener;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
+import org.wings.event.SRenderEvent;
+import org.wings.event.SRenderListener;
+import org.wings.io.Device;
+import org.wings.plaf.ComponentCG;
+import org.wings.plaf.css.AbstractComponentCG;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
+import org.wings.session.Session;
+import org.wings.session.SessionManager;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyle;
+import org.wings.style.CSSStyleSheet;
+import org.wings.style.Selector;
+import org.wings.style.Style;
+import org.wings.util.ComponentVisitor;
+import org.wings.util.SStringBuilder;
 
 /**
  * Object having a graphical representation that can be displayed on the
@@ -175,6 +182,8 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     private Boolean useNamedEvents;
 
     private boolean showAsFormComponent = true;
+
+    private boolean completeUpdateForced = false;
 
     private SPopupMenu popupMenu;
 
@@ -363,7 +372,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * The URL under which this component is accessible for the browser.
      * This is equivalent to the URL of the component's root frame, as this is the
-     * node externalized to the browser via the {@link org.wings.resource.DynamicCodeResource}
+     * node externalized to the browser via the {@link org.wings.resource.CompleteUpdateResource}
      * externalizer.
      *
      * @return The HTTP URL where this component can be accessed.
@@ -1257,13 +1266,13 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * for outtimed requests ("Back Button")
      */
     private String encodeLowLevelEventId(String lowLevelEventId) {
-        if (getParentFrame() != null)
-            if (!(this instanceof LowLevelEventListener) ||
-                    ((LowLevelEventListener) this).isEpochCheckEnabled()) {
-                return (getParentFrame().getEventEpoch()
-                        + SConstants.UID_DIVIDER
-                        + lowLevelEventId);
-            }
+//        if (getParentFrame() != null)
+//            if (!(this instanceof LowLevelEventListener) ||
+//                    ((LowLevelEventListener) this).isEpochCheckEnabled()) {
+//                return (getParentFrame().getEventEpoch()
+//                        + SConstants.UID_DIVIDER
+//                        + lowLevelEventId);
+//            }
         return lowLevelEventId;
     }
 
@@ -1307,6 +1316,17 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public SFrame getParentFrame() {
         return parentFrame;
+    }
+
+    public String getPathToParentFrame() {
+    	return getBuilderToParentFrame().toString();
+    }
+
+    SStringBuilder getBuilderToParentFrame() {
+    	if (parent == null) return new SStringBuilder("/").append(getName());
+    	else {
+    		return parent.getBuilderToParentFrame().append("/").append(getName());
+    	}
     }
 
     /**
@@ -1975,4 +1995,20 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                 e.getParentFrame().deregisterGlobalInputMapComponent(me);
         }
     }
+
+	public boolean isCompleteUpdateForced() {
+		return completeUpdateForced;
+	}
+
+	public void setCompleteUpdateForced(boolean forced) {
+		if (completeUpdateForced != forced) {
+			Object clientProperty = getClientProperty("onChangeSubmitListener");
+			if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+				removeScriptListener((JavaScriptListener) clientProperty);
+				putClientProperty("onChangeSubmitListener", null);
+			}
+			completeUpdateForced = forced;
+			reload(ReloadManager.STATE);
+		}
+	}
 }

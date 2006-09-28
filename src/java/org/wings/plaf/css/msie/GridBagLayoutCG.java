@@ -1,11 +1,9 @@
 package org.wings.plaf.css.msie;
 
-import org.wings.plaf.css.AbstractLayoutCG;
 import org.wings.plaf.css.RenderHelper;
 import org.wings.plaf.css.Utils;
 import org.wings.io.Device;
 import org.wings.*;
-import org.wings.border.SBorder;
 
 import java.io.IOException;
 import java.awt.*;
@@ -38,12 +36,10 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
         final boolean header = layout.getHeader();
         final SGridBagLayout.Grid grid = layout.getGrid();
         String styles = layoutStyles(layout);
-        int oversize = layoutOversize(layout);
+        int vertivalOversize = layoutOversize(layout);
         boolean useCellStyles = layout.getVgap() == -1 && layout.getHgap() == -1;
 
         RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(useCellStyles ? 0 : layout.getVgap());
-        renderHelper.setHorizontalLayoutPadding(useCellStyles ? 0 : layout.getHgap());
 
         if (grid.cols == 0)
             return;
@@ -55,18 +51,18 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
             d.print("<tr");
             Utils.optAttribute(d, "yweight", determineRowHeight(layout, row));
             if (useCellStyles) {
-                oversize = 0;
+                vertivalOversize = 0;
                 for (int col = grid.firstCol; col < grid.cols; col++) {
                     final SComponent comp = grid.grid[col][row];
                     if (comp != null) {
                         GridBagConstraints c = layout.getConstraints(comp);
                         Insets insets = c.insets;
                         if (insets != null)
-                            oversize = Math.max(oversize, cellOversize(layout, insets));
+                            vertivalOversize = Math.max(vertivalOversize, cellOversize(layout, insets));
                     }
                 }
             }
-            Utils.optAttribute(d, "oversize", oversize);
+            Utils.optAttribute(d, "oversize", vertivalOversize);
             d.print(">");
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 final SComponent comp = grid.grid[col][row];
@@ -104,10 +100,8 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
                             width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
 
                         String cellStyles = useCellStyles ? cellStyles(layout,  c.insets) : styles;
-                        if (useCellStyles) {
-                            renderHelper.setVerticalLayoutPadding(c.insets.top + c.insets.bottom);
-                            renderHelper.setHorizontalLayoutPadding(c.insets.left + c.insets.right);
-                        }
+                        renderHelper.setVerticalLayoutPadding(useCellStyles ? c.insets.top + c.insets.bottom : layout.getVgap());
+                        renderHelper.setHorizontalLayoutPadding(useCellStyles ? c.insets.left + c.insets.right : layout.getHgap());
                         openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER, cellStyles);
 
                         Utils.printNewline(d, comp);

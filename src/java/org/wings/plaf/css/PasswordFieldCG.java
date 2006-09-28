@@ -25,6 +25,22 @@ public final class PasswordFieldCG extends AbstractComponentCG implements
 
     private static final long serialVersionUID = 1L;
 
+    int horizontalOversize = 4;
+
+    public int getHorizontalOversize() {
+        return horizontalOversize;
+    }
+
+    public void setHorizontalOversize(int horizontalOversize) {
+        this.horizontalOversize = horizontalOversize;
+    }
+
+    public void installCG(SComponent component) {
+        super.installCG(component);
+        if (isMSIE(component))
+            component.putClientProperty("horizontalOversize", new Integer(horizontalOversize));
+    }
+
     public void writeInternal(final Device device,
                       final SComponent _c)
             throws IOException {
@@ -35,7 +51,6 @@ public final class PasswordFieldCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "size", component.getColumns());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());
-        Utils.optFullSize(device, component);
         Utils.writeEvents(device, component, null);
         if (component.isFocusOwner())
             Utils.optAttribute(device, "foc", component.getName());

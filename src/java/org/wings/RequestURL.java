@@ -39,7 +39,7 @@ public class RequestURL extends SimpleURL {
 
     private boolean hasQuestMark;
 
-    private String epoch;
+    private String eventEpoch;
 
     private String resource;
 
@@ -62,7 +62,7 @@ public class RequestURL extends SimpleURL {
         this.baseURL = other.baseURL;
         this.baseParameters = other.baseParameters;
         this.hasQuestMark = other.hasQuestMark;
-        this.epoch = other.epoch;
+        this.eventEpoch = other.eventEpoch;
         this.resource = other.resource;
         SStringBuilder params = other.parameters;
         parameters = (params == null) ? null : new SStringBuilder(params.toString());
@@ -75,13 +75,13 @@ public class RequestURL extends SimpleURL {
     }
 
 
-    public void setEpoch(String e) {
-        epoch = e;
+    public void setEventEpoch(String e) {
+        eventEpoch = e;
     }
 
 
-    public String getEpoch() {
-        return epoch;
+    public String getEventEpoch() {
+        return eventEpoch;
     }
 
 
@@ -175,7 +175,7 @@ public class RequestURL extends SimpleURL {
         if (parameters != null) {
             parameters.setLength(0);
         }
-        setEpoch(null);
+        setEventEpoch(null);
         setResource(null);
     }
 
@@ -191,8 +191,8 @@ public class RequestURL extends SimpleURL {
     public void write(Device d) throws IOException {
         super.write(d);
 
-        if (resource != null && epoch != null) {
-            d.print(epoch);
+        if (resource != null && eventEpoch != null) {
+            d.print(eventEpoch);
             d.print(SConstants.UID_DIVIDER);
         }
 
@@ -228,8 +228,8 @@ public class RequestURL extends SimpleURL {
             erg.append(baseURL);
         }
 
-        if (resource != null && epoch != null) {
-            erg.append(epoch);
+        if (resource != null && eventEpoch != null) {
+            erg.append(eventEpoch);
             erg.append(SConstants.UID_DIVIDER);
         }
 
@@ -257,7 +257,7 @@ public class RequestURL extends SimpleURL {
         RequestURL other = (RequestURL) o;
         return (hasQuestMark == other.hasQuestMark
                 && eq(baseParameters, other.baseParameters)
-                && eq(epoch, other.epoch)
+                && eq(eventEpoch, other.eventEpoch)
                 && eq(resource, other.resource)
                 && eq(parameters, other.parameters));
     }

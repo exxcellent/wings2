@@ -19,8 +19,6 @@ import org.wings.text.DefaultDocument;
 import org.wings.text.SDocument;
 
 import javax.swing.text.BadLocationException;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
 
 /**
  * Abstract base class of input text components like {@link STextArea} and {@link STextField}.
@@ -122,7 +120,9 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
 
         if (isEditable() && isEnabled()) {
             if (getText() == null || !getText().equals(values[0])) {
+                getDocument().setDelayEvents(true);
                 setText(values[0]);
+                getDocument().setDelayEvents(false);
                 SForm.addArmedComponent(this);
             }
         }
@@ -136,27 +136,13 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         getDocument().removeDocumentListener(listener);
     }
 
-    /**
-     * Fire a TextEvent at each registered listener.
-     */
-    protected void fireTextValueChanged() {
-        TextEvent event = null;
-        // Guaranteed to return a non-null array
-        Object[] listeners = getListenerList();
-        // Process the listeners last to first, notifying
-        // those that are interested in this event
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == TextListener.class) {
-                if (event == null) {
-                    event = new TextEvent(this, TextEvent.TEXT_VALUE_CHANGED);
-                } // end of if ()
-                ((TextListener) listeners[i + 1]).textValueChanged(event);
-            }
-        }
-    }
-
     public void fireIntermediateEvents() {
-        fireTextValueChanged();
+    	getDocument().fireDelayedIntermediateEvents();
+    }
+    
+    public void fireFinalEvents() {
+        super.fireFinalEvents();
+        getDocument().fireDelayedFinalEvents();
     }
 
     /**
@@ -173,19 +159,16 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         this.epochCheckEnabled = epochCheckEnabled;
     }
 
-    //-- implement SDocumentListener to notify TextListeners
+    // Changes to the document should force a reload.
     public void insertUpdate(SDocumentEvent e) {
-        fireTextValueChanged();
         reload(ReloadManager.STATE);
     }
 
     public void removeUpdate(SDocumentEvent e) {
-        fireTextValueChanged();
         reload(ReloadManager.STATE);
     }
 
     public void changedUpdate(SDocumentEvent e) {
-        fireTextValueChanged();
         reload(ReloadManager.STATE);
     }
 }

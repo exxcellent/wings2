@@ -13,12 +13,8 @@
  */
 package org.wings;
 
-import java.awt.Color;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.style.CSSProperty;
-import org.wings.style.Selector;
 
 
 /**
@@ -106,9 +102,15 @@ public abstract class SRootContainer extends SContainer {
         return contentPane;
     }
 
+    /**
+     * Sets the container for the contentPane.
+     *
+     * @param container the container for the contentPane.
+     */
     public void setContentPane(SContainer container) {
-        if (this.contentPane != null)
+        if (this.contentPane != null) {
             super.remove(contentPane);
+        }
         this.contentPane = container;
         super.addComponent(this.contentPane, null, 0);
     }
@@ -127,7 +129,8 @@ public abstract class SRootContainer extends SContainer {
         throw new IllegalArgumentException("use getContentPane().removeComponent()");
     }
 
-    public void setAttribute(Selector selector, CSSProperty property, String propertyValue) {
-        throw new IllegalArgumentException("use getContentPane().setAttribute()");
-    }
+    // allow frame.setBackground(Color.yellow);
+    //    public void setAttribute(Selector selector, CSSProperty property, String propertyValue) {
+    //        throw new IllegalArgumentException("use getContentPane().setAttribute()");
+    //    }
 }

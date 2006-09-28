@@ -14,6 +14,7 @@
  */
 package org.wings.text;
 
+import org.wings.SDelayedEventModel;
 import org.wings.event.SDocumentListener;
 
 import javax.swing.text.BadLocationException;
@@ -23,7 +24,7 @@ import java.io.Serializable;
  * @author hengels
  * @version $Revision$
  */
-public interface SDocument extends Serializable{
+public interface SDocument extends Serializable, SDelayedEventModel {
     /**
      * Returns number of characters of content currently
      * in the document.

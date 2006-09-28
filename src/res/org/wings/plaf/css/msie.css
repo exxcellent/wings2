@@ -58,6 +58,10 @@ div.domTT {
     filter:alpha(opacity=80);
 }
 
+table.STable {
+    table-layout: fixed;
+}
+
 /*
   Simulate and style FORM buttons for A HREF
 
@@ -107,3 +111,11 @@ table.SButton SPAN.disabled_formbutton:active {
 /*.selection {
    background-color: #AAAAFF;
 }*/
+
+.XCalendar td {
+    padding: 0px;
+}
+
+.XCalendar td input {
+    margin: 0px;
+}

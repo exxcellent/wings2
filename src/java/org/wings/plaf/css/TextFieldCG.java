@@ -16,9 +16,9 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.SComponent;
-import org.wings.SFormattedTextField;
-import org.wings.STextField;
+import org.wings.*;
+import org.wings.resource.ClassPathResource;
+import org.wings.style.CSSProperty;
 import org.wings.text.SAbstractFormatter;
 import org.wings.util.SessionLocal;
 import org.wings.event.SParentFrameListener;
@@ -31,38 +31,34 @@ import java.text.ParseException;
 import java.util.*;
 
 import org.wings.session.SessionManager;
+import org.wings.session.BrowserType;
 
 public final class TextFieldCG extends AbstractComponentCG implements
-        org.wings.plaf.TextFieldCG, SParentFrameListener {
+        org.wings.plaf.TextFieldCG {
 
     private static final long serialVersionUID = 1L;
 
-    private SessionLocal callableFormatter = new SessionLocal();
+    private CallableFormatter callableFormatter = new CallableFormatter();
+    int horizontalOversize = 4;
+
+    public int getHorizontalOversize() {
+        return horizontalOversize;
+    }
+
+    public void setHorizontalOversize(int horizontalOversize) {
+        this.horizontalOversize = horizontalOversize;
+    }
 
     public void installCG( SComponent comp ) {
         super.installCG( comp );
         if ( comp instanceof SFormattedTextField ) {
-            comp.addParentFrameListener( this );
+            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
+                CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter);
+            }
             comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';CallableFormatter.validate(ftextFieldCallback, this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'))"));
         }
-    }
-    
-    public void parentFrameAdded(org.wings.event.SParentFrameEvent e ) {
-        CallableFormatter callableFormatter = getCallableFormatter();
-        if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
-            CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter);
-        }
-    }
-    
-    public void parentFrameRemoved(org.wings.event.SParentFrameEvent e ) {}
-    
-    protected CallableFormatter getCallableFormatter() {
-        CallableFormatter callableFormatter = (CallableFormatter)this.callableFormatter.get();
-        if (callableFormatter == null) {
-            callableFormatter = new CallableFormatter();
-            this.callableFormatter.set(callableFormatter);
-        }
-        return callableFormatter;
+        if (isMSIE(comp))
+            comp.putClientProperty("horizontalOversize", new Integer(horizontalOversize));
     }
 
     public void writeInternal(final Device device,
@@ -71,11 +67,24 @@ public final class TextFieldCG extends AbstractComponentCG implements
         final STextField textField = (STextField) component;
 
         device.print("<input type=\"text\"");
+
+        SDimension preferredSize = component.getPreferredSize();
+        boolean behaviour = Utils.isMSIE(component) && preferredSize != null && "100%".equals(preferredSize.getWidth());
+        if (behaviour) {
+            component.setAttribute("behavior", "url('-org/wings/plaf/css/layout.htc')");
+            preferredSize.setWidth(Utils.calculateHorizontalOversize(component, false));
+            //component.setAttribute("display", "none");
+        }
         writeAllAttributes(device, component);
+        if (behaviour) {
+            preferredSize.setWidth("100%");
+            component.setAttribute("behavior", null);
+            Utils.optAttribute(device, "rule", "width");
+        }
+
         Utils.optAttribute(device, "tabindex", textField.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", textField.getColumns());
         Utils.optAttribute(device, "maxlength", textField.getMaxColumns());
-        Utils.optFullSize(device, component);
         Utils.writeEvents(device, textField, null);
         if (textField.isFocusOwner())
             Utils.optAttribute(device, "foc", textField.getName());
@@ -100,14 +109,14 @@ public final class TextFieldCG extends AbstractComponentCG implements
             Utils.optAttribute(device, "lastValue", lastValue);
 
             SAbstractFormatter formatter = formattedTextField.getFormatter();
-            String key = getCallableFormatter().registerFormatter(formatter);
+            String key = callableFormatter.registerFormatter(formatter);
             Utils.optAttribute(device, "formatter", key);
         }
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
     }
-    
-    
+
+
     public static class CallableFormatter {
         Map formatters = new WeakHashMap();
         private final String name = new String("CallableFormatter");
@@ -127,7 +136,6 @@ public final class TextFieldCG extends AbstractComponentCG implements
                 }
             }
             list.add( value );
-            System.out.println("validate list = " + list);
             return list;
         }
 

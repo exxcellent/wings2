@@ -56,8 +56,8 @@ public class DynamicResourceExternalizer implements Externalizer {
         return false;
     }
 
-    public String getEpoch(Object obj) {
-        return ((DynamicResource) obj).getEpoch();
+    public String getEventEpoch(Object obj) {
+        return ((DynamicResource) obj).getFrame().getEventEpoch();
     }
 
     public void write(Object obj, Device out)

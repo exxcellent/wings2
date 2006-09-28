@@ -122,7 +122,7 @@ public class InputMapScriptListener
             }
         }
     }
-    
+
     private static void appendMatchCode(SStringBuilder buffer, KeyStroke keyStroke) {
         buffer.append("if (event.keyCode == " + keyStroke.getKeyCode());
         if ((keyStroke.getModifiers() & InputEvent.SHIFT_DOWN_MASK) != 0)
@@ -141,9 +141,10 @@ public class InputMapScriptListener
     }
 
     private static void appendSendRequestCode(SStringBuilder buffer, Object binding, SComponent targetComponent) {
-        buffer.append(" { sendEvent(event, \"").append(binding).append("\"");
-        if (targetComponent != null)
-            buffer.append(", \"").append(targetComponent.getName());
+        buffer.append(" { submitForm(" + !targetComponent.isCompleteUpdateForced());
+        buffer.append(",event,\"");
+        buffer.append(targetComponent == null ? "" : targetComponent.getName());
+        buffer.append("\",\"").append(binding);
         buffer.append("\"); return false; }\n");
     }
 }

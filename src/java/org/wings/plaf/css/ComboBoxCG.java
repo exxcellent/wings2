@@ -14,10 +14,7 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SDefaultListCellRenderer;
-import org.wings.SListCellRenderer;
+import org.wings.*;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.util.SStringBuilder;
@@ -41,21 +38,38 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
     }
 
     protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
-        
+
         Object clientProperty = component.getClientProperty("onChangeSubmitListener");
         if ( ( component.getActionListeners().length > 0 || component.getItemListener().length > 0 ) ) {
             if ( clientProperty == null ) {
-                JavaScriptListener javaScriptListener = new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "this.form.submit()" );
+                JavaScriptListener javaScriptListener = new JavaScriptListener(
+                		JavaScriptEvent.ON_CHANGE,
+                		"submitForm(" + !component.isCompleteUpdateForced() + ",event);"
+                );
                 component.addScriptListener( javaScriptListener );
-                component.putClientProperty( "onChangeSubmitListener", javaScriptListener );                
+                component.putClientProperty( "onChangeSubmitListener", javaScriptListener );
             }
         } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
             component.removeScriptListener( (JavaScriptListener)clientProperty );
-            component.putClientProperty( "onChangeSubmitListener", null );         
-        }  
-        
+            component.putClientProperty( "onChangeSubmitListener", null );
+        }
+
         device.print("<select size=\"1\"");
+
+        SDimension preferredSize = component.getPreferredSize();
+        boolean behaviour = false && Utils.isMSIE(component) && preferredSize != null && "100%".equals(preferredSize.getWidth());
+        if (behaviour) {
+            component.setAttribute("behavior", "url('-org/wings/plaf/css/layout.htc')");
+            preferredSize.setWidth(Utils.calculateHorizontalOversize(component, false));
+            //component.setAttribute("display", "none");
+        }
         writeAllAttributes(device, component);
+        if (behaviour) {
+            preferredSize.setWidth("100%");
+            component.setAttribute("behavior", null);
+            Utils.optAttribute(device, "rule", "width");
+        }
+
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.writeEvents(device, component, null);

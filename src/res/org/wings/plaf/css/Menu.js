@@ -76,10 +76,11 @@ function wpm_findPosX(obj)
         curleft += obj.x;
 
     /* Workaround for right aligned menues:
-       Return the RIGHT X of the Menu as a negative number, not the left X */
+       Return the RIGHT X of the Menu as a negative number, not the left X
     if (wu_framewidth() < curleft + 200) {
         curleft = - (curleft + origobj.offsetWidth);
     }
+    */
 
     return curleft;
 }
@@ -218,9 +219,9 @@ function wpm_setVisible(element, visible) {
 
 
 function wpm_openMenu(event, id, parentId) {
-    var realEvent = getEvent(event);
+    var event = getEvent(event);
 
-    if (parentULId(realEvent) != parentId) {
+    if (parentULId(event) != parentId) {
         // don't bubble
         return;
     }
@@ -236,11 +237,26 @@ function wpm_openMenu(event, id, parentId) {
     }
     var node = document.getElementById(id);
     if (node) {
+        var pos = wpm_getMenuPosition(event)
+        var left = node.getAttribute("origLeft");
+        if (!left) {
+            left = pos.x;
+            node.setAttribute("origLeft", ""+ left);
+        }
+
         node.style.display = 'block';
+        var totalWidth = node.parentNode.offsetWidth + node.offsetWidth + parseInt(left);
+
+        if (totalWidth > document.body.clientWidth) {
+            node.style.left = -node.offsetWidth + "px";
+        } else {
+            node.style.left = (node.parentNode.offsetWidth - 2) + "px";
+        }
+
         wpm_openMenus[wpm_openMenus.length] = id;
     }
     wpm_toggleFormElements(wpm_buildBoundsArray(wpm_openMenus));
-    preventDefault(realEvent);
+    preventDefault(event);
     return false;
 }
 
@@ -256,8 +272,8 @@ function parentULId(event) {
 }
 
 function wpm_closeMenu(event, id, parentId) {
-    var realEvent = wpm_getEvent(event);
-    if (parentULId(realEvent) != parentId) {
+    var event = window.event;
+    if (parentULId(event) != parentId) {
         return;
     }
     document.getElementById(id).style.display = 'none';
@@ -300,6 +316,7 @@ function wpm_Bounds(object) {
     this.y = wpm_findPosY(object);
     this.width = object.offsetWidth;
     this.height = object.offsetHeight;
+    this.object = object;
 }
 
 wpm_Bounds.prototype.toString = function() {
@@ -307,14 +324,10 @@ wpm_Bounds.prototype.toString = function() {
 }
 
 wpm_Bounds.prototype.intersect = function(other) {
-    var y1 = Math.max(this.y, other.y);
-    var x1 = Math.max(this.x, other.x);
-    var x2 = Math.min(this.x + this.width, other.x + other.width);
-    var y2 = Math.min(this.y + this.height, other.y + other.height);
-    if (x1 >= x2 || y1 >= y2)
-        return false;
-    else
-        return true;
+    return other.x + other.width > (this.x - getScrolledExtendLeft(this.object)) &&
+        other.y + other.height > (this.y - getScrolledExtendTop(this.object)) &&
+        other.x <= (this.x - getScrolledExtendLeft(this.object)) + this.width &&
+        other.y <= (this.y - getScrolledExtendTop(this.object)) + this.height;
 }
 
 function wpm_buildBoundsArray(menuarray) {
@@ -324,3 +337,30 @@ function wpm_buildBoundsArray(menuarray) {
     }
     return bounds;
 }
+
+function getScrolledExtendLeft(o) {
+    while(true) {
+        o = o.parentNode;
+        if (o) {
+            if (o.scrollLeft && o.scrollLeft > 0)
+                return o.scrollLeft;
+        } else {
+            return 0;
+        }
+    }
+    return 0;
+}
+
+function getScrolledExtendTop(o) {
+    while(true) {
+        o = o.parentNode;
+        if (o) {
+            if (o.scrollTop && o.scrollTop > 0)
+                return o.scrollTop;
+        } else {
+            return 0;
+        }
+    }
+    return 0;
+}
+

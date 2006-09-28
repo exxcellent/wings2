@@ -37,6 +37,7 @@ public final class RenderHelper {
     private int horizontalLayoutPadding = 0;
     private int verticalLayoutPadding = 0;
     private boolean allowUsageOfCachedInstances = true;
+    private boolean incrementalUpdateMode = false;
 
     public void reset() {
         menus.clear();
@@ -85,7 +86,7 @@ public final class RenderHelper {
 
     public boolean isCachingAllowed(final SComponent component) {
         return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances &&
-                !(component instanceof LowLevelEventListener || component instanceof SContainer);
+                !(component instanceof SContainer);
     }
 
     public static RenderHelper getInstance(SComponent forComponent) {
@@ -112,4 +113,12 @@ public final class RenderHelper {
     public void setVerticalLayoutPadding(int verticalLayoutPadding) {
         this.verticalLayoutPadding = verticalLayoutPadding;
     }
+
+	public boolean isIncrementalUpdateMode() {
+		return incrementalUpdateMode;
+	}
+
+	public void setIncrementalUpdateMode(boolean enabled) {
+		this.incrementalUpdateMode = enabled;
+	}
 }

@@ -40,8 +40,6 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         boolean useCellStyles = layout.getVgap() == -1 && layout.getHgap() == -1;
 
         RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(useCellStyles ? 0 : layout.getVgap());
-        renderHelper.setHorizontalLayoutPadding(useCellStyles ? 0 : layout.getHgap());
 
         if (grid.cols == 0) {
             return;
@@ -91,10 +89,8 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         }
 
                         String cellStyles = useCellStyles ? cellStyles(layout, c.insets) : styles;
-                        if (useCellStyles) {
-                            renderHelper.setVerticalLayoutPadding(c.insets.top + c.insets.bottom);
-                            renderHelper.setHorizontalLayoutPadding(c.insets.left + c.insets.right);
-                        }
+                        renderHelper.setVerticalLayoutPadding(useCellStyles ? c.insets.top + c.insets.bottom : layout.getVgap());
+                        renderHelper.setHorizontalLayoutPadding(useCellStyles ? c.insets.left + c.insets.right : layout.getHgap());
                         openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER, cellStyles);
 
                         Utils.printNewline(d, comp);

@@ -10,14 +10,14 @@
 package org.wingx.plaf.css;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
+
 import org.wings.*;
 import org.wings.text.SAbstractFormatter;
 import org.wings.util.SessionLocal;
 import org.wings.event.SParentFrameListener;
 import java.util.*;
-import org.wings.plaf.css.AbstractComponentCG;
+import org.wings.plaf.css.*;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Link;
 import org.wings.header.Script;
@@ -27,50 +27,50 @@ import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
+import org.wings.session.Session;
 import org.wingx.XCalendar;
 
 /**
  *
  *  * @author <a href="mailto:e.habicht@thiesen.com">Erik Habicht</a>
  */
-public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.CalendarCG, SParentFrameListener {
-
-    private static final SimpleDateFormat dateFormat  = new SimpleDateFormat("yyyy.MM.dd");
+public class CalendarCG
+    extends AbstractComponentCG
+    implements org.wingx.plaf.CalendarCG
+{
     private SessionLocal callableCalendar = new SessionLocal();
+    private Link css;
+    private Script calendar;
+    private Script calendarLang;
+    private Script calendarSetup;
+
+    public CalendarCG() {
+        Session session = SessionManager.getSession();
+        ClassPathResource res = new ClassPathResource("org/wingx/calendar/calendar.css", "text/css");
+        String url = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        css = new Link("stylesheet", null, "text/css", null, new DefaultURLResource(url));
+        calendar = createExternalizedScriptHeader( session, "org/wingx/calendar/calendar.js", "text/javascript" );
+        calendarLang = createExternalizedScriptHeader( session, getLangScriptURL(), "text/javascript" );
+        calendarSetup = createExternalizedScriptHeader( session, "org/wingx/calendar/calendar-setup.js", "text/javascript" );
+    }
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        comp.addParentFrameListener( this );
-    }
+        if (!CallableManager.getInstance().containsCallable("xcalendar"))
+            CallableManager.getInstance().registerCallable("xcalendar", getCallableCalendar());
 
-    public void parentFrameAdded(org.wings.event.SParentFrameEvent e ) {
-        addHeaders( e.getParentFrame() );
-    }
-
-    public void parentFrameRemoved(org.wings.event.SParentFrameEvent e ) {}
-
-
-    private void addHeaders( SFrame parentFrame ) {
-        if (parentFrame.getClientProperty("calendarHeaders") == null) {
-            ClassPathResource res = new ClassPathResource("org/wingx/calendar/calendar.css", "text/css");
-            String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-            parentFrame.addHeader( new Link("stylesheet", null, "text/css", null, new DefaultURLResource(jScriptUrl)));
-
-            addExternalizedScriptHeader( parentFrame, "org/wingx/calendar/calendar.js", "text/javascript" );
-            addExternalizedScriptHeader( parentFrame, getLangScriptURL(), "text/javascript" );
-            addExternalizedScriptHeader( parentFrame, "org/wingx/calendar/calendar-setup.js", "text/javascript" );
-
-            parentFrame.putClientProperty("calendarHeaders", Boolean.TRUE);
-
-            if (!CallableManager.getInstance().containsCallable("xcalendar"))
-                CallableManager.getInstance().registerCallable( "xcalendar", getCallableCalendar());
+        if (!FrameCG.HEADERS.contains(css)) {
+            FrameCG.HEADERS.add(css);
+            FrameCG.HEADERS.add(calendar);
+            FrameCG.HEADERS.add(calendarLang);
+            FrameCG.HEADERS.add(calendarSetup);
         }
     }
-    
-    private void addExternalizedScriptHeader(SFrame parentFrame, String ClassPath, String mimeType) {
+
+    private Script createExternalizedScriptHeader(Session session, String ClassPath, String mimeType) {
         ClassPathResource res = new ClassPathResource(ClassPath, mimeType);
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
+        String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        return new Script(mimeType, new DefaultURLResource(jScriptUrl));
     }
 
     /**
@@ -87,7 +87,8 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
     }
 
     public Locale getLocale( ) {
-        return SessionManager.getSession().getLocale() != null ? SessionManager.getSession().getLocale() : Locale.getDefault();
+        Session session = SessionManager.getSession();
+        return session.getLocale() != null ? session.getLocale() : Locale.getDefault();
     }
 
     public void writeInternal(org.wings.io.Device device, org.wings.SComponent _c )
@@ -104,15 +105,26 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         fTextField.setEnabled( component.isEnabled() );
         fTextField.addScriptListener( new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "onFieldChange('"+key+"', '"+ id_hidden + "', this.value )" ) );
         
+        SimpleDateFormat dateFormat  = new SimpleDateFormat("yyyy.MM.dd");
         dateFormat.setTimeZone( component.getTimeZone() );
 
-        writeTablePrefix(device, component);
+        device.print("<table");
+        writeAllAttributes(device, component);
+        device.print("><tr><td class=\"tf\" width=\"100%\"");
+
+        int oversizePadding = Utils.calculateHorizontalOversize(fTextField, true);
+        //oversizePadding += RenderHelper.getInstance(component).getHorizontalLayoutPadding();
+
+        if (oversizePadding != 0)
+            Utils.optAttribute(device, "oversize", oversizePadding);
+        device.print(">");
+
         fTextField.write(device);
 
-        device.print("\n</td><td>\n");
+        device.print("\n</td><td class=\"b\" width=\"0%\">\n");
 
-        device.print("<input type=\"hidden\" id=\""+id_hidden+"\" name=\""+id_hidden+"\" formatter=\""+key+"\" value=\""+format( component.getDate() )+"\">\n");
-        device.print("<input style=\"margin-left:2px;\" type=\"image\" id=\""+id_button+"\" src=\""+component.getIcon().getURL()+"\"");
+        device.print("<input type=\"hidden\" id=\""+id_hidden+"\" name=\""+id_hidden+"\" formatter=\""+key+"\" value=\""+ format(dateFormat, component.getDate() )+"\">\n");
+        device.print("<input class=\"calendar_button\" type=\"image\" id=\""+id_button+"\" src=\""+component.getIcon().getURL()+"\"");
         if ( !component.isEnabled() ) {
             device.print( " disabled");
         }
@@ -124,7 +136,7 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         writeTableSuffix(device, component);
     }
 
-    private String format(Date date) {
+    private String format(DateFormat dateFormat, Date date) {
         if (date == null)
             date = new Date();
         return date != null ? dateFormat.format( date ) : "";
@@ -158,24 +170,17 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
 
         /* Timestamt to Human readable */
         public List onCalUpdate(String key, String name, String value) {
-            System.out.println("key = " + key);
-            System.out.println("name = " + name);
-            System.out.println("value = " + value);
             List list = new LinkedList();
             SAbstractFormatter formatter = formatterByKey(key);
             if ( formatter != null ) {
                 list.add( name );
                 try {
                     Date newDate = new Date( Long.parseLong( value ) );
-                    System.out.println("newDate = " + newDate);
-                    System.out.println("newDate = " + newDate.getTime());
-                    System.out.println("formatter.valueToString( newDate ) = " + formatter.valueToString(newDate));
                     list.add( formatter.valueToString( newDate ) );
                 } catch ( ParseException e ) {
                     list.add( "" );
                 }
             }
-            System.out.println("onCalUpdate list = " + list);
             return list;
         }
 
@@ -184,6 +189,7 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
             List list = new LinkedList();
             SAbstractFormatter formatter = formatterByKey(key);
             if ( formatter != null ) {
+                SimpleDateFormat dateFormat  = new SimpleDateFormat("yyyy.MM.dd");
                 list.add( name );
                 try {
                     Date date = (Date)formatter.stringToValue( value );
@@ -193,7 +199,6 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
                     list.add( dateFormat.format( new Date() ) );
                 }
             }
-            System.out.println("onFieldChange list = " + list);
             return list;
         }
 
@@ -207,7 +212,6 @@ public class CalendarCG extends AbstractComponentCG implements org.wingx.plaf.Ca
         }
 
         public String registerFormatter(SAbstractFormatter formatter) {
-            System.out.println("formatter = " + System.identityHashCode(formatter));
             formatters.put(formatter, formatter);
             return "" + System.identityHashCode(formatter);
         }

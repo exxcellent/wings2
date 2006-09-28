@@ -14,27 +14,27 @@
 
 package frameset;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.*;
-import java.util.Set;
-import java.util.HashSet;
+import org.wings.SButton;
+import org.wings.SCheckBox;
+import org.wings.SForm;
+import org.wings.SFrame;
+import org.wings.SLabel;
+import org.wings.event.SRequestEvent;
+import org.wings.event.SRequestListener;
 import org.wings.frames.SFrameSet;
 import org.wings.frames.SFrameSetLayout;
 import org.wings.frames.SReloadFrame;
-import org.wings.event.SRequestEvent;
-import org.wings.event.SRequestListener;
+import org.wings.resource.CompleteUpdateResource;
 import org.wings.resource.DynamicResource;
-import org.wings.resource.DynamicCodeResource;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
-import org.wings.SFrame;
-import org.wings.SButton;
-import org.wings.SLabel;
-import org.wings.SForm;
-import org.wings.SCheckBox;
-import org.wings.SFlowDownLayout;
 import org.wings.style.CSSProperty;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A simple application to demonstrate the features of the the experimental
@@ -85,8 +85,8 @@ public class FrameSet {
         session.addRequestListener(new SRequestListener() {
             public void processRequest(SRequestEvent e) {
                 if (SRequestEvent.DISPATCH_DONE == e.getType() && reloadFrame != null) {
-                    Set dirtyResources = new HashSet(session.getReloadManager().getDirtyResources());
-                    reloadFrame.setDirtyResources(dirtyResources);
+                    Set dirtyFrames = new HashSet(session.getReloadManager().getDirtyFrames());
+                    reloadFrame.setDirtyFrames(dirtyFrames);
                     session.getReloadManager().clear();
                 }
             }
@@ -174,6 +174,10 @@ public class FrameSet {
             }
         });
         toolbar.getContentPane().add(toggleReloadManager);
+
+        toolbarFrame.show();
+	    leftFrame.show();
+	    rightFrame.show();
     }
 
     SForm createDecrementerForm(ActionListener left, ActionListener right) {
@@ -202,7 +206,7 @@ public class FrameSet {
         SFrameSet.assignBaseTarget(leftFrame, SFrameSet.createBaseTargetName(reloadFrame));
         SFrameSet.assignBaseTarget(rightFrame, SFrameSet.createBaseTargetName(reloadFrame));
 
-        DynamicResource targetResource = reloadFrame.getDynamicResource(DynamicCodeResource.class);
+        DynamicResource targetResource = reloadFrame.getDynamicResource(CompleteUpdateResource.class);
         // set target resource
         toolbarFrame.setTargetResource(targetResource.getId());
         leftFrame.setTargetResource(targetResource.getId());
@@ -211,9 +215,9 @@ public class FrameSet {
 
     void uninstallReloadManagerFrame() {
         if (reloadFrame != null) {
-            Set dirtyResources = new HashSet();
-            dirtyResources.add(vertical.getDynamicResource(DynamicCodeResource.class));
-            reloadFrame.setDirtyResources(dirtyResources);
+            Set dirtyFrames = new HashSet();
+            dirtyFrames.add(vertical.getDynamicResource(CompleteUpdateResource.class));
+            reloadFrame.setDirtyFrames(dirtyFrames);
 
             vertical.remove(reloadFrame);
             vertical.setLayout(new SFrameSetLayout(null, VERTICAL_LAYOUT));
@@ -225,7 +229,7 @@ public class FrameSet {
         SFrameSet.assignBaseTarget(leftFrame, "_top");
         SFrameSet.assignBaseTarget(rightFrame, "_top");
 
-        DynamicResource targetResource = vertical.getDynamicResource(DynamicCodeResource.class);
+        DynamicResource targetResource = vertical.getDynamicResource(CompleteUpdateResource.class);
         toolbarFrame.setTargetResource(targetResource.getId());
         leftFrame.setTargetResource(targetResource.getId());
         rightFrame.setTargetResource(targetResource.getId());

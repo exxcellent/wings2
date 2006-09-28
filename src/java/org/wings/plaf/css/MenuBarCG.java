@@ -29,6 +29,7 @@ import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
+import org.wings.session.Session;
 
 import java.io.IOException;
 
@@ -48,12 +49,19 @@ public class MenuBarCG extends AbstractComponentCG implements
     /**
      * handler for clicks outside of menu. these clicks possibly close the menu.
      */
-    public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
-        new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
+    public static final JavaScriptListener BODY_ONCLICK_SCRIPT = new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
+
+    private Script script;
+
+    public MenuBarCG() {
+        ClassPathResource resource = new ClassPathResource(MENU_JS, "text/javascript");
+        String url = SessionManager.getSession().getExternalizeManager().externalize(resource, ExternalizeManager.GLOBAL);
+        script = new Script("text/javascript", new DefaultURLResource(url));
+    }
 
     /* (non-Javadoc)
-     * @see org.wings.plaf.ComponentCG#installCG(org.wings.SComponent)
-     */
+    * @see org.wings.plaf.ComponentCG#installCG(org.wings.SComponent)
+    */
     public void installCG(final SComponent comp) {
         super.installCG(comp);
         SFrame parentFrame = comp.getParentFrame();
@@ -61,6 +69,9 @@ public class MenuBarCG extends AbstractComponentCG implements
             addListenersToParentFrame(parentFrame);
         }
         comp.addParentFrameListener(this);
+
+        if (!FrameCG.HEADERS.contains(script))
+            FrameCG.HEADERS.add(script);
     }
 
     /* (non-Javadoc)
@@ -144,20 +155,6 @@ public class MenuBarCG extends AbstractComponentCG implements
      */
     private void addListenersToParentFrame(SFrame parentFrame) {
         parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
-        addExternalizedHeader(parentFrame, MENU_JS, "text/javascript");
-    }
-
-    /** 
-     * adds the file found at the classPath to the parentFrame header with
-     * the specified mimeType
-     * @param parentFrame the parent frame of the component
-     * @param classPath the classPath to look in for the file
-     * @param mimeType the mimetype of the file
-     */
-    private void addExternalizedHeader(SFrame parentFrame, String classPath, String mimeType) {
-        ClassPathResource res = new ClassPathResource(classPath, mimeType);
-        String jScriptUrl = SessionManager.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        parentFrame.addHeader(new Script(mimeType, new DefaultURLResource(jScriptUrl)));
     }
 
     /* (non-Javadoc)

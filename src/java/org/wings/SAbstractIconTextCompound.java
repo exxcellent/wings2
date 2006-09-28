@@ -90,6 +90,7 @@ public abstract class SAbstractIconTextCompound
     private int iconTextGap = 4;
 
     private boolean delayEvents = false;
+    private boolean delayedEvent = false;
 
     /**
      * Create a button with given text.
@@ -440,7 +441,16 @@ public abstract class SAbstractIconTextCompound
     public void setSelected(boolean selected) {
         if (model.isSelected() != selected) {
             model.setSelected(selected);
-            fireStateChanged();
+            
+            if (!delayEvents) {
+                fireStateChanged();
+                fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, this,
+    					model.isSelected() ? ItemEvent.SELECTED : ItemEvent.DESELECTED));
+                delayedEvent = false;
+            }
+            else
+                delayedEvent = true;
+            
             reload(ReloadManager.STATE);
         }
     }
@@ -457,9 +467,6 @@ public abstract class SAbstractIconTextCompound
         setPressedIcon(icons[PRESSED_ICON]);
         setSelectedIcon(icons[SELECTED_ICON]);
     }
-
-
-    private ItemEvent delayedItemEvent;
 
     protected final void delayEvents(boolean b) {
         delayEvents = b;
@@ -479,11 +486,6 @@ public abstract class SAbstractIconTextCompound
     protected void fireItemStateChanged(ItemEvent ie) {
         if (ie == null)
             return;
-
-        if (delayEvents) {
-            delayedItemEvent = ie;
-            return;
-        } // end of if ()
         
         // Guaranteed to return a non-null array
         Object[] listeners = getListenerList();
@@ -496,17 +498,15 @@ public abstract class SAbstractIconTextCompound
         }
     }
 
-    public void fireIntermediateEvents() {
-        if (delayEvents && delayedItemEvent != null) {
-            delayEvents = false;
-            fireItemStateChanged(delayedItemEvent);
-            delayEvents = true;
-        } // end of if ()
-
-    }
+    public void fireIntermediateEvents() {}
 
     public void fireFinalEvents() {
         super.fireFinalEvents();
-        delayEvents = false;
+        if (delayedEvent) {
+        	fireStateChanged();
+			fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, this,
+					model.isSelected() ? ItemEvent.SELECTED : ItemEvent.DESELECTED));
+			delayedEvent = false;
+		}
     }
 }
