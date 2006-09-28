@@ -149,15 +149,15 @@ function followLink(ajaxEnabled, eventName, eventValue, clientHandlers) {
     }
 
     if (doRequest == undefined || doRequest) {
-        if (ajaxEnabled) {
+        if (incrementalUpdateEnabled && ajaxEnabled) {
             // Send request via AJAX
             var args = {};
-            args["method"] = "GET";
+            args.method = "GET";
             if (eventName != null && eventValue != null) {
-                args["event_epoch"] = event_epoch;
-                args[eventName]     = eventValue;
+                args.event_epoch = event_epoch;
+                args[eventName] = eventValue;
             }
-            args["url"] = encodeUpdateId(incrementalUpdateId);
+            args.url = encodeUpdateId(incrementalUpdateId);
             doAjaxRequest(args);
         } else {
             // Send a default request
@@ -183,8 +183,8 @@ function enqueueThisRequest(send, args) {
 function dequeueNextRequest() {
     if (requestQueue.length > 0) {
         var request = requestQueue.shift();
-        var args = request["args"];
-        request["send"](args[0], args[1], args[2], args[3]);
+        var args = request.args;
+        request.send(args[0], args[1], args[2], args[3]);
     }
 }
 
@@ -193,7 +193,7 @@ function initAjaxCallbacks() {
         "onLoading" : function(request) { showAjaxActivityIndicator(); },
         "onSuccess" : function(request) { processAjaxRequest(request); },
         "onError"   : function(request) { handleRequestError(request); }
-    }
+    };
 }
 
 function doAjaxSubmit(form) {
@@ -809,7 +809,7 @@ function highlightComponentUpdates(componentIds) {
         component.style.backgroundColor = incrementalUpdateHighlight.color;
         var resetColor = function() {
             component.style.backgroundColor = initialBackgroundColor;
-        }
+        };
         setTimeout(resetColor, incrementalUpdateHighlight.duration);
     }
 }
