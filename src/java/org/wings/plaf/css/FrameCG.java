@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.Renderable;
 import org.wings.SComponent;
 import org.wings.SFrame;
+import org.wings.SResourceIcon;
 import org.wings.SToolTipManager;
 import org.wings.Version;
 import org.wings.util.SessionLocal;
@@ -534,6 +535,11 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                     device.print("\"></script>\n");
                 }
             }
+            if (frame.isIncrementalUpdateEnabled()) {
+	            device.print("<div style=\"position: absolute; z-index: 1000; display: none;\" id=\"ajaxActivityCursor\">\n");
+	            device.print("  <img src=\"" + new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif").getURL() + "\" width=\"15\" height=\"15\" />\n");
+	            device.print("</div>\n");
+            }
 
             frame.getLayout().write(device);
             device.print("\n");
@@ -599,7 +605,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         		"  completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
         		"  incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
         		"  incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
-        		"  incrementalUpdateCursor = " + frame.isIncrementalUpdateCursor() + ";\n" +
+        		"  incrementalUpdateCursor = { 'enabled':" + frame.getIncrementalUpdateCursor()[0] + "," +
+											 " 'image':'" + frame.getIncrementalUpdateCursor()[1] + "'," +
+											 " 'dx':" + frame.getIncrementalUpdateCursor()[2] + "," +
+											 " 'dy':" + frame.getIncrementalUpdateCursor()[3] + " };\n" +
         		"  incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
         										" 'color':'" + frame.getIncrementalUpdateHighlight()[1] + "'," +
         										" 'duration':" + frame.getIncrementalUpdateHighlight()[2] + " };\n");

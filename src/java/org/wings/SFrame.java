@@ -93,11 +93,11 @@ public class SFrame
 
     private HashMap dynamicResources;
 
-    private boolean incrementalUpdateEnabled = true;
+    private boolean incrementalUpdateEnabled;
 
-    private boolean incrementalUpdateCursor = false;
+    private Object[] incrementalUpdateCursor;
 
-    private Object[] incrementalUpdateHighlight = { new Boolean(true), "#FFFF99", new Integer(300) };
+    private Object[] incrementalUpdateHighlight;
 
     private SComponent focusComponent = null; // Component which requests the focus
 
@@ -140,6 +140,10 @@ public class SFrame
         getSession().addPropertyChangeListener("lookAndFeel", this);
         getSession().addPropertyChangeListener("request.url", this);
         this.visible = false; // Frames are invisible originally.
+
+        setIncrementalUpdateEnabled(true);
+        setIncrementalUpdateCursor(true, new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif"), 15, 0);
+        setIncrementalUpdateHighlight(true, "#FFFF99", 300);
     }
 
     /**
@@ -648,13 +652,16 @@ public class SFrame
 		incrementalUpdateEnabled = enabled;
 	}
 
-	public boolean isIncrementalUpdateCursor() {
+	public Object[] getIncrementalUpdateCursor() {
 		return incrementalUpdateCursor;
 	}
 
-	public void setIncrementalUpdateCursor(boolean enabled) {
-		reloadIfChange(incrementalUpdateCursor, enabled);
-		incrementalUpdateCursor = enabled;
+	public void setIncrementalUpdateCursor(boolean enabled, SIcon image, int dx, int dy) {
+		Object[] cursor = { new Boolean(enabled), image, new Integer(dx), new Integer(dy) };
+		if (!Arrays.equals(incrementalUpdateCursor, cursor)) {
+			incrementalUpdateCursor = cursor;
+			reload(ReloadManager.STATE);
+		}
 	}
 
 	public Object[] getIncrementalUpdateHighlight() {

@@ -11,7 +11,11 @@
  *         or private, without any further permission". VERSION: 2005/06/22
  *
  *         The following changes have been made to the original source code:
- *         - "req.generateUniqueUrl = false" instead of "true"
+ *         - updated the AjaxRequest.getXmlHttpRequest() method according to
+ *           http://jibbering.com/2002/4/httprequest.html (Version: Jan. 06)
+ *         - adopted the condition around line 187 in order to reflect the
+ *           new return type of the AjaxRequest.getXmlHttpRequest() method
+ *         - renamed "AjaxRequestUniqueId" parameter into "ajax_request_uid"
  *         - added ";" after closing "}" of AjaxRequest class
  */
 function AjaxRequest() {
@@ -28,12 +32,12 @@ function AjaxRequest() {
     req.timeout = null;
 
     /**
-     *  Since some browsers cache GET requests via XMLHttpRequest, an
+     * Since some browsers cache GET requests via XMLHttpRequest, an
      * additional parameter called AjaxRequestUniqueId will be added to
      * the request URI with a unique numeric value appended so that the requested
      * URL will not be cached.
      */
-    req.generateUniqueUrl = false;
+    req.generateUniqueUrl = true;
 
     /**
      * The url that the request will be made to, which defaults to the current
@@ -180,7 +184,7 @@ function AjaxRequest() {
 
     // Get the XMLHttpRequest object itself
     req.xmlHttpRequest = AjaxRequest.getXmlHttpRequest();
-    if (req.xmlHttpRequest==null) { return null; }
+    if (!req.xmlHttpRequest) { return null; }
 
     // -------------------------------------------------------
     // Attach the event handlers for the XMLHttpRequest object
@@ -313,7 +317,7 @@ function AjaxRequest() {
             if (req.xmlHttpRequest!=null) {
                 // Some logic to get the real request URL
                 if (req.generateUniqueUrl && req.method=="GET") {
-                    req.parameters["AjaxRequestUniqueId"] = new Date().getTime() + "" + req.requestIndex;
+                    req.parameters["ajax_request_uid"] = new Date().getTime() + "" + req.requestIndex;
                 }
                 var content = null; // For POST requests, to hold query string
                 for (var i in req.parameters) {
@@ -397,27 +401,37 @@ function AjaxRequest() {
  * implementation. If an object cannot be instantiated, it will return null;
  */
 AjaxRequest.getXmlHttpRequest = function() {
-    if (window.XMLHttpRequest) {
-        return new XMLHttpRequest();
+    var xmlhttp = false;
+    /*@cc_on @*/
+    /*@if (@_jscript_version >= 5)
+    try {
+    	xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+    } catch (e) {
+    	try {
+    		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    	} catch (E) {
+    		xmlhttp = false;
+    	}
     }
-    else if (window.ActiveXObject) {
-        // Based on http://jibbering.com/2002/4/httprequest.html
-        /*@cc_on @*/
-        /*@if (@_jscript_version >= 5)
-        try {
-            return new ActiveXObject("Msxml2.XMLHTTP");
-        } catch (e) {
-            try {
-                return new ActiveXObject("Microsoft.XMLHTTP");
-            } catch (E) {
-                return null;
-            }
-        }
-        @end @*/
+    @end @*/
+
+    if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+    	try {
+    		xmlhttp = new XMLHttpRequest();
+    	} catch (e) {
+    		xmlhttp = false;
+    	}
     }
-    else {
-        return null;
+
+    if (!xmlhttp && window.createRequest) {
+    	try {
+    		xmlhttp = window.createRequest();
+    	} catch (e) {
+    		xmlhttp = false;
+    	}
     }
+
+	return xmlhttp;
 };
 
 /**

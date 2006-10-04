@@ -373,8 +373,10 @@ final class SessionServlet
                     String paramName = (String) en.nextElement();
                     String[] values = req.getParameterValues(paramName);
 
-                    // We do not need to dispatch the event epoch
-                    if (paramName.equals("event_epoch")) continue;
+                    // We do not need to dispatch the event epoch and the unique AJAX request ID
+                    if (paramName.equals("event_epoch") || paramName.equals("ajax_request_uid")) {
+                    	continue;
+                    }
 
                     // Split the values of the event trigger
                     if (paramName.equals("event_trigger")) {

@@ -1,7 +1,5 @@
 package logconfig;
 
-import java.awt.Color;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -29,7 +27,6 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.wings.ReloadManager;
-import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SButtonGroup;
@@ -42,24 +39,22 @@ import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SFrame;
 import org.wings.SGridLayout;
+import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SList;
 import org.wings.SPanel;
 import org.wings.SRadioButton;
-import org.wings.SResourceIcon;
 import org.wings.SScrollPane;
 import org.wings.SScrollPaneLayout;
 import org.wings.SSpacer;
+import org.wings.STemplateLayout;
 import org.wings.STextField;
 import org.wings.STree;
 import org.wings.SURLIcon;
-import org.wings.border.SEmptyBorder;
-import org.wings.border.SLineBorder;
 import org.wings.header.Link;
 import org.wings.resource.DefaultURLResource;
-import org.wings.script.JavaScriptEvent;
-import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
+import org.wings.style.CSSProperty;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
@@ -68,7 +63,7 @@ public class LogConfig {
     private static final SDimension BU_DIM = new SDimension(100, SDimension.AUTO_INT);
     private static final SDimension IN_DIM = new SDimension(200, SDimension.AUTO_INT);
 
-    private SFrame mainFrame = new SFrame(":: Log4j - Configuration ::");
+    private SFrame fr_frame = new SFrame("Log4J - Configurator");
 
     private Document document;
     private DomModel treeModel;
@@ -113,7 +108,7 @@ public class LogConfig {
 
         tr_domTree = new STree(treeModel);
         tr_domTree.setCellRenderer(new DomRenderer());
-        tr_domTree.setPreferredSize(new SDimension(450, 510));
+        tr_domTree.setPreferredSize(new SDimension(455, 468));
         tr_domTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tr_domTree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent tse) {
@@ -135,12 +130,11 @@ public class LogConfig {
         });
 
         SScrollPane sp_tree = new SScrollPane(tr_domTree);
-        // sp_tree.setVerticalExtent(30);
-        sp_tree.setHorizontalExtent(1);
-        sp_tree.setBorder(new SLineBorder(1));
-        sp_tree.getVerticalScrollBar().setBlockIncrement(3);
-        sp_tree.getHorizontalScrollBar().setBlockIncrement(3);
-        sp_tree.setPreferredSize(new SDimension(470, 528));
+        sp_tree.setStyle(sp_tree.getStyle() + " sp_tree");
+        sp_tree.setPreferredSize(new SDimension(477, 486));
+        sp_tree.setVerticalAlignment(SConstants.TOP_ALIGN);
+        // sp_tree.getVerticalScrollBar().setBlockIncrement(3);
+        // sp_tree.getHorizontalScrollBar().setBlockIncrement(3);
         // (SScrollBar) sp_tree.getVerticalScrollBar()).setShowAsFormComponent(false);
         // ((SScrollBar) sp_tree.getHorizontalScrollBar()).setShowAsFormComponent(false);
         ((SScrollPaneLayout) sp_tree.getLayout()).setPaging(false);
@@ -169,15 +163,15 @@ public class LogConfig {
 
         tf_editCategoryName = new STextField();
         tf_editCategoryName.setPreferredSize(IN_DIM);
-        tf_editCategoryName.setHorizontalAlignment(SConstants.LEFT);
+        tf_editCategoryName.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         tf_editPriorityValue = new STextField();
         tf_editPriorityValue.setPreferredSize(IN_DIM);
-        tf_editPriorityValue.setHorizontalAlignment(SConstants.LEFT);
+        tf_editPriorityValue.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
         String[] additivityModel = {"true", "false"};
         cb_editAdditivityFlag = new SComboBox(additivityModel);
         cb_editAdditivityFlag.setPreferredSize(IN_DIM);
-        cb_editAdditivityFlag.setHorizontalAlignment(SConstants.LEFT);
+        cb_editAdditivityFlag.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
         listModel = new Vector();
         List appenderNames = rootNode.selectNodes("./appender/@name");
@@ -187,21 +181,21 @@ public class LogConfig {
         li_editAppenderRef = new SList(listModel);
         li_editAppenderRef.setVisibleRowCount(2);
         li_editAppenderRef.setPreferredSize(IN_DIM);
-        li_editAppenderRef.setHorizontalAlignment(SConstants.LEFT);
+        li_editAppenderRef.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
-        bu_saveNode = new SButton("Insert", new SURLIcon("../icons/insert.gif"));
+        bu_saveNode = new SButton("Insert", new SURLIcon("../images/insert.gif"));
         bu_saveNode.setPreferredSize(BU_DIM);
-        bu_saveNode.setHorizontalAlignment(SConstants.LEFT);
+        bu_saveNode.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         bu_saveNode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 saveEditFields();
             }
         });
 
-        bu_deleteNode = new SButton("Delete", new SURLIcon("../icons/delete.gif"));
-        bu_deleteNode.setDisabledIcon(new SURLIcon("../icons/deleteDisabled.gif"));
+        bu_deleteNode = new SButton("Delete", new SURLIcon("../images/delete.gif"));
+        bu_deleteNode.setDisabledIcon(new SURLIcon("../images/deleteDisabled.gif"));
         bu_deleteNode.setPreferredSize(BU_DIM);
-        bu_deleteNode.setHorizontalAlignment(SConstants.LEFT);
+        bu_deleteNode.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         bu_deleteNode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Element categoryNode = getSelectedCategory();
@@ -224,34 +218,32 @@ public class LogConfig {
         });
         bu_deleteNode.setEnabled(false);
 
-        bu_commitChanges = new SButton("Commit", new SURLIcon("../icons/commit.gif"));
+        bu_commitChanges = new SButton("Commit", new SURLIcon("../images/commit.gif"));
         bu_commitChanges.setPreferredSize(BU_DIM);
-        bu_commitChanges.setHorizontalAlignment(SConstants.LEFT);
+        bu_commitChanges.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         bu_commitChanges.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     XMLWriter writer = new XMLWriter(new FileWriter(configFile), OutputFormat.createPrettyPrint());
                     writer.write(document);
                     writer.close();
-                    la_status.setText("Your changes have been successfully written to 'log4j.xml'!");
+                    la_status.setText("  Your changes have been successfully written to 'log4j.xml'!");
                 } catch (IOException ex) {
                     log.error("Could not write file!", ex);
-                    la_status.setText("Couldn't write changes to 'log4j.xml'! See log for details.");
+                    la_status.setText("  Couldn't write changes to 'log4j.xml'! See log for details.");
                 }
             }
         });
 
-        SPanel pa_edit = new SPanel();
-        styleControlPanel(pa_edit, "Insert / update category nodes:");
-        pa_edit.add(new SSpacer(0, 5));
+        SPanel pa_edit = createControlPanel("Insert / update category nodes:");
         SPanel pa_mode = new SPanel(new SGridLayout(2));
+        pa_mode.setStyle(pa_mode.getStyle() + " pa_mode");
         pa_mode.setPreferredSize(SDimension.FULLWIDTH);
-        rb_insertNode.setHorizontalAlignment(SConstants.LEFT);
-        rb_updateNode.setHorizontalAlignment(SConstants.RIGHT);
+        rb_insertNode.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        rb_updateNode.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
         pa_mode.add(rb_insertNode);
         pa_mode.add(rb_updateNode);
         pa_edit.add(pa_mode);
-        pa_edit.add(new SSpacer(0, 5));
         pa_edit.add(new SLabel("Category name:"));
         pa_edit.add(tf_editCategoryName);
         pa_edit.add(new SLabel("Priority value:"));
@@ -260,77 +252,74 @@ public class LogConfig {
         pa_edit.add(cb_editAdditivityFlag);
         pa_edit.add(new SLabel("Appender reference:"));
         pa_edit.add(li_editAppenderRef);
+        pa_edit.add(verticalSpace(0));
         pa_edit.add(bu_saveNode);
 
-        SPanel pa_delete = new SPanel();
-        styleControlPanel(pa_delete, "Delete selected category node:");
-        pa_delete.add(new SSpacer(0, 5));
+        SPanel pa_delete = createControlPanel("Delete selected category node:");
         pa_delete.add(bu_deleteNode);
 
-        SPanel pa_commit = new SPanel();
-        styleControlPanel(pa_commit, "Commit changes to 'log4j.xml':");
-        pa_commit.add(new SSpacer(0, 5));
+        SPanel pa_commit = createControlPanel("Commit changes to 'log4j.xml':");
         pa_commit.add(bu_commitChanges);
 
-        SPanel pa_controls = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        pa_controls.add(new SSpacer(0, 25));
-        pa_controls.add(pa_edit);
-        pa_controls.add(new SSpacer(0, 25));
-        pa_controls.add(pa_delete);
-        pa_controls.add(new SSpacer(0, 25));
-        pa_controls.add(pa_commit);
-        pa_controls.add(new SSpacer(0, 25));
+        SLabel la_activityIndicator = new SLabel(" Loading data, wait!", new SURLIcon("../images/progress.gif"));
+        la_activityIndicator.setName("ajaxActivityIndicator");
 
-        fo_form = new SForm(new SGridLayout(1, 3, 25, 0));
-        fo_form.setBorder(new SLineBorder(1));
+        SPanel pa_controls = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        pa_controls.setVerticalAlignment(SConstants.TOP_ALIGN);
+        pa_controls.add(pa_edit);
+        pa_controls.add(verticalSpace(10));
+        pa_controls.add(pa_delete);
+        pa_controls.add(verticalSpace(10));
+        pa_controls.add(pa_commit);
+        pa_controls.add(verticalSpace(35));
+        pa_controls.add(la_activityIndicator);
+
+        fo_form = new SForm(new SGridLayout(1, 2, 10, 10));
+        fo_form.setStyle(fo_form.getStyle() + " fo_form");
         fo_form.add(sp_tree);
         fo_form.add(pa_controls);
-        fo_form.add(createDebugPanel());
 
-        SPanel pa_header = new SPanel(new SGridLayout());
-        pa_header.setBackground(new Color(60, 80, 100));
-        pa_header.setBorder(new SEmptyBorder(10, 15, 10, 0));
-        pa_header.setPreferredSize(SDimension.FULLWIDTH);
-        pa_header.setHorizontalAlignment(SConstants.LEFT);
-        SLabel la_header = new SLabel("Log4j - Configuration");
+        SLabel la_header = new SLabel(new SURLIcon("../images/header.jpg"));
         la_header.setStyle(la_header.getStyle() + " la_header");
-        la_header.setVerticalAlignment(SConstants.CENTER);
-        la_header.setHorizontalAlignment(SConstants.LEFT);
-        pa_header.add(la_header);
 
-        SPanel pa_footer = new SPanel();
-        pa_footer.setBorder(new SEmptyBorder(5, 15, 0, 0));
         la_status = new SLabel();
         la_status.setStyle(la_status.getStyle() + " la_status");
-        pa_footer.add(la_status);
+        la_status.setPreferredSize(SDimension.FULLWIDTH);
+        resetStatusLabel();
 
-        SContainer cp = mainFrame.getContentPane();
-        cp.add(pa_header, SBorderLayout.NORTH);
-        cp.add(fo_form, SBorderLayout.CENTER);
-        cp.add(pa_footer, SBorderLayout.SOUTH);
-        mainFrame.addHeader(new Link("stylesheet", null, "text/css", null,
-                new DefaultURLResource("../css/custom.css")));
-        mainFrame.setVisible(true);
+        SPanel pa_application = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        pa_application.setStyle(pa_application.getStyle() + " pa_application");
+        pa_application.add(la_header);
+        pa_application.add(fo_form);
+        pa_application.add(la_status);
 
-        // TESTING HISTORY
+        // TESTING BACK BUTTON & HISTORY
         if (false) {
-            mainFrame.setNoCaching(false);
+            fr_frame.setNoCaching(false);
             tr_domTree.setEpochCheckEnabled(false);
             // fo_form.setPostMethod(false);
         }
 
-//		try {
-//			java.net.URL templateURL = SessionManager.getSession()
-//				.getServletContext().getResource("/templates/main.thtml");
-//			if (templateURL == null) {
-//				mainFrame.getContentPane().add(new SLabel("Could not find" +
-//						"template file! Are you using a JAR-File?"));
-//				return;
-//			}
-//			mainFrame.getContentPane().setLayout(new STemplateLayout(templateURL));
-//		} catch (java.io.IOException ex) {
-//			log.error("Could not find template file!", ex);
-//		}
+        SContainer pa_content = fr_frame.getContentPane();
+        pa_content.setStyle(pa_content.getStyle() + " pa_content");
+
+		try {
+			java.net.URL templateURL = SessionManager.getSession()
+				.getServletContext().getResource("/templates/main.thtml");
+			if (templateURL == null) {
+				pa_content.add(new SLabel("Could not find template file!"));
+				return;
+			}
+			pa_content.setLayout(new STemplateLayout(templateURL));
+		} catch (java.io.IOException ex) {
+			log.error("Could not find template file!", ex);
+		}
+
+		pa_content.add(pa_application, "application");
+		pa_content.add(createAjaxDebuggingPanel(), "debugging");
+		fr_frame.addHeader(new Link("stylesheet", null, "text/css", null,
+                new DefaultURLResource("../css/custom.css")));
+		fr_frame.setVisible(true);
     }
 
 //	private Vector getExpandedPaths() {
@@ -357,7 +346,7 @@ public class LogConfig {
         Object[] appRefNames = li_editAppenderRef.getSelectedValues();
 
         if (catName.equals("") || priValue.equals("")) {
-            la_status.setText("You have to provide at least a category name and a priority value!");
+            la_status.setText("  You have to provide at least a category name and a priority value!");
             return;
         }
 
@@ -429,9 +418,9 @@ public class LogConfig {
         tf_editPriorityValue.setText("");
         cb_editAdditivityFlag.setSelectedItem("true");
         li_editAppenderRef.clearSelection();
-        la_status.setText("");
         bu_saveNode.setText("Insert");
-        bu_saveNode.setIcon(new SURLIcon("../icons/insert.gif"));
+        bu_saveNode.setIcon(new SURLIcon("../images/insert.gif"));
+        resetStatusLabel();
     }
 
     private void fillEditFields(Node categoryNode) {
@@ -444,9 +433,14 @@ public class LogConfig {
             selectedIndices[i] = listModel.indexOf(((Node) appenderRefs.get(i)).getText());
         }
         li_editAppenderRef.setSelectedIndices(selectedIndices);
-        la_status.setText("");
         bu_saveNode.setText("Update");
-        bu_saveNode.setIcon(new SURLIcon("../icons/update.gif"));
+        bu_saveNode.setIcon(new SURLIcon("../images/update.gif"));
+        resetStatusLabel();
+    }
+
+    private void resetStatusLabel() {
+    	la_status.setText("  Usage: Insert, update or delete category nodes by means of the" +
+    			" according widgets - then commit all changes to 'log4j.xml'.");
     }
 
     private Element getSelectedCategory() {
@@ -464,27 +458,38 @@ public class LogConfig {
         return null;
     }
 
-    private void styleControlPanel(SPanel panel, String title) {
-        SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.VERTICAL);
-        boxLayout.setVgap(5);
-        panel.setLayout(boxLayout);
-        panel.setVerticalAlignment(SConstants.TOP);
-        panel.setBackground(new Color(210, 230, 250));
-        panel.setBorder(new SLineBorder(1, new Insets(10, 10, 10, 10)));
-        panel.setPreferredSize(new SDimension(220, SDimension.AUTO_INT));
-        SLabel la_title = new SLabel(title);
-        la_title.setStyle(la_title.getStyle() + " la_title");
-        panel.add(la_title);
+    private SComponent verticalSpace(int height) {
+    	SLabel label = new SLabel();
+    	label.setAttribute(CSSProperty.HEIGHT, height + "px");
+    	return label;
     }
 
-    private SPanel createDebugPanel() {
+    private SPanel createControlPanel(String title) {
+    	SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.VERTICAL);
+        boxLayout.setHgap(20);
+        boxLayout.setVgap(5);
+
+        SPanel panel = new SPanel();
+        panel.setLayout(boxLayout);
+        panel.setStyle(panel.getStyle() + " pa_control");
+
+        SLabel la_title = new SLabel(title);
+        la_title.setStyle(la_title.getStyle() + " la_title");
+
+        panel.add(la_title);
+        panel.add(verticalSpace(0));
+        return panel;
+    }
+
+    private SPanel createAjaxDebuggingPanel() {
         SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.VERTICAL);
+        boxLayout.setHgap(20);
         boxLayout.setVgap(5);
 
         SPanel pa_debug = new SPanel(boxLayout);
-        pa_debug.setVerticalAlignment(SConstants.TOP);
-        pa_debug.setBorder(new SLineBorder(1, new Insets(10, 10, 10, 10)));
-        pa_debug.setPreferredSize(new SDimension(SDimension.AUTO_INT, 528));
+        pa_debug.setStyle(pa_debug.getStyle() + " pa_debug");
+        pa_debug.setVerticalAlignment(SConstants.TOP_ALIGN);
+
         SLabel la_title = new SLabel("Playground for debugging some AJAX stuff:");
         la_title.setStyle(la_title.getStyle() + " la_title");
         pa_debug.add(la_title);
@@ -492,43 +497,48 @@ public class LogConfig {
         boolean selected;
         final String[] cb_texts = {
                 "Frame: incrementalUpdateEnabled = ",
-                "Frame: incrementalUpdateHighlight = ",
                 "Frame: incrementalUpdateCursor = ",
+                "Frame: incrementalUpdateHighlight = ",
                 "Form: completeUpdateForced = ",
                 "Tree: completeUpdateForced = ",
                 "Link: completeUpdateForced = "
         };
 
-        selected = mainFrame.isIncrementalUpdateEnabled();
+        selected = fr_frame.isIncrementalUpdateEnabled();
         final SCheckBox cb_toggleFrameIncrementalUpdate =
             new SCheckBox(cb_texts[0] + selected, selected);
         cb_toggleFrameIncrementalUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = mainFrame.isIncrementalUpdateEnabled();
-                mainFrame.setIncrementalUpdateEnabled(!state);
+                boolean state = fr_frame.isIncrementalUpdateEnabled();
+                fr_frame.setIncrementalUpdateEnabled(!state);
                 cb_toggleFrameIncrementalUpdate.setText(cb_texts[0] + !state);
             }
         });
 
-        selected = ((Boolean) mainFrame.getIncrementalUpdateHighlight()[0]).booleanValue();
-        final SCheckBox cb_toggleFrameUpdateHighlight =
+        selected = ((Boolean) fr_frame.getIncrementalUpdateCursor()[0]).booleanValue();
+        final SCheckBox cb_toggleFrameUpdateCursor =
             new SCheckBox(cb_texts[1] + selected, selected);
-        cb_toggleFrameUpdateHighlight.addActionListener(new ActionListener() {
+        cb_toggleFrameUpdateCursor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = ((Boolean) mainFrame.getIncrementalUpdateHighlight()[0]).booleanValue();
-                mainFrame.setIncrementalUpdateHighlight(!state, "#FFFF99", 300);
-                cb_toggleFrameUpdateHighlight.setText(cb_texts[1] + !state);
+                boolean state = ((Boolean) fr_frame.getIncrementalUpdateCursor()[0]).booleanValue();
+                SIcon image = (SIcon) fr_frame.getIncrementalUpdateCursor()[1];
+                int dx = ((Integer) fr_frame.getIncrementalUpdateCursor()[2]).intValue();
+                int dy = ((Integer) fr_frame.getIncrementalUpdateCursor()[3]).intValue();
+                fr_frame.setIncrementalUpdateCursor(!state, image, dx, dy);
+                cb_toggleFrameUpdateCursor.setText(cb_texts[1] + !state);
             }
         });
 
-        selected = mainFrame.isIncrementalUpdateCursor();
-        final SCheckBox cb_toggleFrameUpdateCursor =
+        selected = ((Boolean) fr_frame.getIncrementalUpdateHighlight()[0]).booleanValue();
+        final SCheckBox cb_toggleFrameUpdateHighlight =
             new SCheckBox(cb_texts[2] + selected, selected);
-        cb_toggleFrameUpdateCursor.addActionListener(new ActionListener() {
+        cb_toggleFrameUpdateHighlight.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = mainFrame.isIncrementalUpdateCursor();
-                mainFrame.setIncrementalUpdateCursor(!state);
-                cb_toggleFrameUpdateCursor.setText(cb_texts[2] + !state);
+                boolean state = ((Boolean) fr_frame.getIncrementalUpdateHighlight()[0]).booleanValue();
+                String color = (String) fr_frame.getIncrementalUpdateHighlight()[1];
+                int duration = ((Integer) fr_frame.getIncrementalUpdateHighlight()[2]).intValue();
+                fr_frame.setIncrementalUpdateHighlight(!state, color, duration);
+                cb_toggleFrameUpdateHighlight.setText(cb_texts[2] + !state);
             }
         });
 
@@ -568,7 +578,7 @@ public class LogConfig {
         final SButton bu_markFrameDirty = new SButton("Reload the entire frame / mark it dirty!");
         bu_markFrameDirty.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mainFrame.reload(ReloadManager.STATE);
+                fr_frame.reload(ReloadManager.STATE);
             }
         });
 
@@ -581,53 +591,42 @@ public class LogConfig {
             }
         });
 
-        final SButton bu_forceServerError = new SButton("Force an \"Internal Server Error\"! (500)");
+        final SButton bu_forceServerError = new SButton("Force an \"Internal Server Error (500)\"!");
         bu_forceServerError.setName("force_error");
 
-        addToDebugPanel(pa_debug, new SSpacer(0, 10));
-        addToDebugPanel(pa_debug, cb_toggleFrameIncrementalUpdate);
-        addToDebugPanel(pa_debug, cb_toggleFrameUpdateHighlight);
-        addToDebugPanel(pa_debug, cb_toggleFrameUpdateCursor);
-        addToDebugPanel(pa_debug, cb_toggleFormCompleteUpdate);
-        addToDebugPanel(pa_debug, cb_toggleTreeCompleteUpdate);
-        addToDebugPanel(pa_debug, cb_toggleCheckboxTest);
+        addToAjaxDebuggingPanel(pa_debug, verticalSpace(0));
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameIncrementalUpdate);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameUpdateHighlight);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameUpdateCursor);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleFormCompleteUpdate);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleTreeCompleteUpdate);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleCheckboxTest);
 
-        addToDebugPanel(pa_debug, new SSpacer(0, 10));
-        addToDebugPanel(pa_debug, bu_markFrameDirty);
-        addToDebugPanel(pa_debug, bu_doSomethingSpecial);
-        addToDebugPanel(pa_debug, bu_forceServerError);
+        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+        addToAjaxDebuggingPanel(pa_debug, bu_markFrameDirty);
+        addToAjaxDebuggingPanel(pa_debug, bu_doSomethingSpecial);
+        addToAjaxDebuggingPanel(pa_debug, bu_forceServerError);
 
-        addToDebugPanel(pa_debug, new SSpacer(0, 10));
-        addToDebugPanel(pa_debug, createRandomLinkPanel());
+        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+        addToAjaxDebuggingPanel(pa_debug, createRandomResultPanel());
 
-        SLabel la_activityIndicator = new SLabel("<html><b>&nbsp;Loading...</b></html>",
-                new SResourceIcon("org/wings/icons/AjaxActivityIndicator.gif"));
-        la_activityIndicator.setName("ajaxActivityIndicator");
-        la_activityIndicator.setHorizontalAlignment(SConstants.CENTER);
-        pa_debug.add(new SSpacer(0, 25));
-        pa_debug.add(la_activityIndicator);
-
-        SPanel pa_wrapper = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        pa_wrapper.add(new SSpacer(0, 25));
-        pa_wrapper.add(pa_debug);
-        pa_wrapper.setVerticalAlignment(SConstants.TOP);
-
-        return pa_wrapper;
+        return pa_debug;
     }
 
-    private void addToDebugPanel(SPanel debug, SComponent button) {
-        button.setHorizontalAlignment(SConstants.LEFT);
-        debug.add(button);
+    private void addToAjaxDebuggingPanel(SPanel debug, SComponent component) {
+    	component.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    	component.setShowAsFormComponent(false);
+        debug.add(component);
     }
 
-    private SPanel createRandomLinkPanel() {
-        int rows = 6;
+    private SPanel createRandomResultPanel() {
+        int links = 6;
 
-        class RandomLinkGenerator implements ActionListener {
+        class RandomResultGenerator implements ActionListener {
             private SLabel label;
             private boolean sleep;
 
-            public RandomLinkGenerator(SLabel label, boolean sleep) {
+            public RandomResultGenerator(SLabel label, boolean sleep) {
                 this.label = label;
                 this.sleep = sleep;
             }
@@ -646,22 +645,24 @@ public class LogConfig {
             }
         }
 
-        SPanel panel = new SPanel(new SGridLayout(rows, 2, 5, 5));
-        for (int i = 0; i < rows; ++i) {
+        SPanel panel = new SPanel(new SGridLayout(links, 3));
+        for (int i = 0; i < links; ++i) {
             SLabel label = new SLabel();
             SButton button = new SButton();
             button.setShowAsFormComponent(false);
-            button.setHorizontalAlignment(SConstants.LEFT);
-            if (i < rows - 1) {
+            button.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+            if (i < links - 1) {
                 button.setText("Sleep for a while!  >>");
-                button.addActionListener(new RandomLinkGenerator(label, true));
+                button.addActionListener(new RandomResultGenerator(label, true));
             } else {
                 button.setText("Say any number!  >>");
-                button.addActionListener(new RandomLinkGenerator(label, false));
+                button.addActionListener(new RandomResultGenerator(label, false));
                 panel.add(new SSpacer(0, 10));
+                panel.add(new SSpacer(0, 5));
                 panel.add(new SSpacer(0, 10));
             }
             panel.add(button);
+            panel.add(new SSpacer(0, 5));
             panel.add(label);
         }
         return panel;

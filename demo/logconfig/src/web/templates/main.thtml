@@ -1,2 +1,6 @@
-<div>This templat isn't used at the moment!</div>
-<object name="center"></object>
+<table>
+  <tr>
+    <td width="100%" align="center"><object name="application"></object></td>
+    <td valign="top" style="padding-left:20px;"><object name="debugging"></object></td>
+  </tr>
+</table>

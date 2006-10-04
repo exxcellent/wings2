@@ -55,7 +55,8 @@ var event_epoch;                // Maintains the event epoch of this frame
 var completeUpdateId;           // Holds the ID of the CompleteUpdateResource
 var incrementalUpdateId;        // Holds the ID of the IncrementalUpdateResource
 var incrementalUpdateEnabled;   // True if this frame allows incremental updates
-var incrementalUpdateCursor;    // True if mouse cursor indicates loading status
+var incrementalUpdateCursor;    // An object whose properties "enabled", "image"
+                                // "dx" and "dy" hold the settings of the cursor
 var incrementalUpdateHighlight; // An object whose properties "enabled", "color"
                                 // and "duration" store the 3 highlight settings
 var requestQueue = new Array(); // A queue which stores requests to be processed
@@ -550,7 +551,9 @@ function addWindowOnLoadFunction(func) {
 /* The execution of all added window.onload functions. */
 window.onload = performWindowOnLoad;
 function performWindowOnLoad() {
-    AjaxActivityCursor.init();
+	if (incrementalUpdateCursor.enabled) {
+		AjaxActivityCursor.init();
+	}
     hideAjaxActivityIndicator();
     for (var i = 0; i < windowOnLoads.length; i++) {
         eval(windowOnLoads[i]);
@@ -639,15 +642,15 @@ function enableAjaxDebugging(request) {
     var debug = document.getElementById("ajaxDebugging");
     if (debug == null) {
         var debugHtmlCode =
-            '<p><strong>AJAX DEBUGGING:</strong> &nbsp;XML RESPONSE&nbsp;\n' +
-            '  <span style="color:#AAAAAA; font:11px monospace"></span></p>\n' +
-            '<textarea readonly="readonly" style="width:100%; height:175px;\n' +
-            '  border:1px dashed #CCCCCC; background-color:#FAFAFA; font:11px\n' +
-            '  monospace;"></textarea>\n';
+            '<div style="margin-top:50px; padding-bottom:3px;">\n' +
+			'  <strong>AJAX DEBUGGING:</strong> &nbsp;XML RESPONSE\n' +
+            '  &nbsp;<span style="font:11px monospace"></span></div>\n' +
+            '<textarea readonly="readonly" style="width:100%; height:200px;\n' +
+            '  border-top:1px dashed #000000; border-bottom:1px dashed #000000;\n' +
+            '  font:11px monospace;"></textarea>\n';
         debug = document.createElement("div");
         debug.id = "ajaxDebugging";
         debug.style.display = "block";
-        debug.style.textAlign = "center";
         debug.innerHTML = debugHtmlCode;
         document.body.appendChild(debug);
     }
@@ -680,7 +683,7 @@ function processAjaxRequest(request) {
 
     enableAjaxDebugging(request);
     var xmlDoc = request.responseXML;
-    var xmlRoot = xmlDoc.firstChild;
+	var xmlRoot = xmlDoc.getElementsByTagName("update")[0];
 
     function getFirstChildData(tagName) {
         return xmlDoc.getElementsByTagName(tagName)[0].firstChild.data;
@@ -817,7 +820,7 @@ function highlightComponentUpdates(componentIds) {
 /* Shows the AJAX activity cursor and makes a user-predefined element with the CSS
    ID "ajaxActivityIndicator" visible. The latter is typically an animated GIF. */
 function showAjaxActivityIndicator() {
-    if (incrementalUpdateCursor) AjaxActivityCursor.show();
+    if (incrementalUpdateCursor.enabled) AjaxActivityCursor.show();
     var indicator = document.getElementById("ajaxActivityIndicator");
     if (indicator != null) {
         indicator.style.visibility = "visible";
@@ -827,7 +830,7 @@ function showAjaxActivityIndicator() {
 /* Hides the AJAX activity cursor and makes a user-predefined element with the CSS
    ID "ajaxActivityIndicator" invisible. The latter is typically an animated GIF. */
 function hideAjaxActivityIndicator() {
-    if (incrementalUpdateCursor) AjaxActivityCursor.hide();
+    if (incrementalUpdateCursor.enabled) AjaxActivityCursor.hide();
     var indicator = document.getElementById("ajaxActivityIndicator");
     if (indicator != null && !AjaxRequest.isActive()) {
         indicator.style.visibility = "hidden";
@@ -837,20 +840,19 @@ function hideAjaxActivityIndicator() {
 /* An object that encapsulates functions to show and hide an animated GIF besides
    the mouse cursor. Such a cursor can be used to indicate an active AJAX request. */
 var AjaxActivityCursor = {
-    dx : 20,
-    dy : -6,
+    dx : 0,
+    dy : 15,
     div : false,
-    cssID : "ajaxActivityCursor",
 
     // Initialize cursor
     init : function () {
-        var img = "-org/wings/icons/AjaxActivityIndicator.gif";
+		AjaxActivityCursor.dx = incrementalUpdateCursor.dx;
+		AjaxActivityCursor.dy = incrementalUpdateCursor.dy;
         AjaxActivityCursor.div = document.createElement("div");
-        AjaxActivityCursor.div.id = AjaxActivityCursor.cssID;
         AjaxActivityCursor.div.style.position = "absolute";
         AjaxActivityCursor.div.style.zIndex = "1000";
         AjaxActivityCursor.div.style.display = "none";
-        AjaxActivityCursor.div.innerHTML = "<img src=\"" + img + "\" width=\"32\" height=\"32\"/>";
+        AjaxActivityCursor.div.innerHTML = "<img src=\"" + incrementalUpdateCursor.image + "\"/>";
         document.body.insertBefore(AjaxActivityCursor.div, document.body.firstChild);
         document.onmousemove = AjaxActivityCursor.followMouse;
     },
