@@ -34,6 +34,10 @@ import org.wings.session.SessionManager;
  *   <component id="[2nd component's ID]">[2nd component's HTML code (inside a CDATA section)]</component>
  *   ...
  *   <component id="[Nth component's ID]">[Nth component's HTML code (inside a CDATA section)]</component>
+ *   <script>[1st block of script code necessary for one of the updates (inside a CDATA section)]</script>
+ *   <script>[2nd block of script code necessary for one of the updates (inside a CDATA section)]</script>
+ *   ...
+ *   <script>[Nth block of script code necessary for one of the updates (inside a CDATA section)]</script>
  *   <event_epoch>[updated event epoch]</event_epoch>
  * </update>
  * </pre>
@@ -58,11 +62,13 @@ public class IncrementalUpdateResource extends DynamicResource {
 	public void write(Device out) throws IOException {
 		try {
 			SComponent component;
+			SFrame frame = getFrame();
 			Collection componentsToUpdate = new ArrayList();
+			RenderHelper helper = RenderHelper.getInstance(frame);
 
 			// Enable incremental updates.
 			String updateMode = "incremental";
-			RenderHelper.getInstance(getFrame()).setIncrementalUpdateMode(true);
+			helper.setIncrementalUpdateMode(true);
 
 			// ---> COLLECT COMPONENTS THAT NEED AN UPDATE
 
@@ -120,6 +126,7 @@ public class IncrementalUpdateResource extends DynamicResource {
 
         	// ---> WRITE COMPONENTS THAT NEED AN UPDATE
 
+        	helper.reset();
 			out.print(xmlHeader);
 			// open root element
 			out.print("\n<update mode=\"" + updateMode + "\">");
@@ -140,6 +147,10 @@ public class IncrementalUpdateResource extends DynamicResource {
 		        		component.write(out);
 		        		out.print("]]></component>");
 		        	}
+					// updates of scripts
+					for (Iterator i = helper.getCollectedScripts().iterator(); i.hasNext();) {
+		        		out.print("\n<script><![CDATA[" + i.next() + "]]></script>");
+		        	}
 					// update of event epoch
 					out.print("\n<event_epoch>" + getFrame().getEventEpoch() + "</event_epoch>");
 				} else {
@@ -152,6 +163,7 @@ public class IncrementalUpdateResource extends DynamicResource {
 			}
     		// close root element
     		out.print("\n</update>");
+    		helper.reset();
 
         } catch (IOException e) {
             throw e;

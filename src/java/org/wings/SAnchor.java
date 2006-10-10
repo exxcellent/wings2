@@ -43,7 +43,7 @@ public class SAnchor extends SContainer {
      * creates an anchor with emtpy URL and target.
      */
     public SAnchor() {
-        this((SimpleURL) null, null);
+        this(new SimpleURL("#"), null);
     }
 
     /**

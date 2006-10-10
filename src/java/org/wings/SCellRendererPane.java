@@ -74,14 +74,14 @@ public class SCellRendererPane
             return;
         }
 
-        if (c.getParent() != this) {
-            this.addComponent(c);
-        }
+        addComponent(c);
 
         RenderHelper renderHelper = RenderHelper.getInstance(c);
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);
         c.write(d);
+
+        remove(c);
     }
 }
 

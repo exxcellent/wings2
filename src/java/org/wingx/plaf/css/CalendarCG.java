@@ -14,6 +14,7 @@ import java.text.*;
 
 import org.wings.*;
 import org.wings.text.SAbstractFormatter;
+import org.wings.util.SStringBuilder;
 import org.wings.util.SessionLocal;
 import org.wings.event.SParentFrameListener;
 import java.util.*;
@@ -97,14 +98,14 @@ public class CalendarCG
         final XCalendar component = (org.wingx.XCalendar) _c;
 
         String id_hidden = component.getName() + "_hidden";
-        String id_button = component.getName() + "_button"; 
-        
+        String id_button = component.getName() + "_button";
+
         SFormattedTextField fTextField = component.getFormattedTextField();
         String key = getCallableCalendar().registerFormatter(fTextField.getFormatter());
 
         fTextField.setEnabled( component.isEnabled() );
         fTextField.addScriptListener( new JavaScriptListener( JavaScriptEvent.ON_CHANGE, "onFieldChange('"+key+"', '"+ id_hidden + "', this.value )" ) );
-        
+
         SimpleDateFormat dateFormat  = new SimpleDateFormat("yyyy.MM.dd");
         dateFormat.setTimeZone( component.getTimeZone() );
 
@@ -129,9 +130,9 @@ public class CalendarCG
             device.print( " disabled");
         }
         device.print(">\n");
-        device.print("<script type=\"text/javascript\">\n");
-        printCalendarSetup( device, id_hidden, fTextField.getName(), id_button, key );
-        device.print("</script>\n" );
+
+        String setupScript = getCalendarSetup(id_hidden, fTextField.getName(), id_button, key);
+        RenderHelper.getInstance(component).addScript(setupScript);
 
         writeTableSuffix(device, component);
     }
@@ -142,18 +143,19 @@ public class CalendarCG
         return date != null ? dateFormat.format( date ) : "";
     }
 
-    private void printCalendarSetup( org.wings.io.Device device, String hiddenName, String textFieldName, String buttonName, String key )
-    throws IOException {
-        device.print(" Calendar.setup({" );
-        device.print(" inputField  : \"" ).print(hiddenName).print("\"");
-        device.print(", textField  : \"" ).print(textFieldName).print("\"");
-        device.print(", ifFormat : \"%Y.%m.%d\"");
-        device.print(", button : \"").print(buttonName).print("\"");
-        device.print(", showOthers : true" );
-        device.print(", electric : false" );
-        device.print(", onUpdate : onCalUpdate" );
-        device.print(", formatter : \"" + key + "\"");
-        device.print(" });\n" );
+    private String getCalendarSetup(String hiddenName, String textFieldName, String buttonName, String key) throws IOException {
+		final SStringBuilder script = new SStringBuilder();
+		script.append(" Calendar.setup({" );
+        script.append(" inputField  : \"" ).append(hiddenName).append("\"");
+        script.append(", textField  : \"" ).append(textFieldName).append("\"");
+        script.append(", ifFormat : \"%Y.%m.%d\"");
+        script.append(", button : \"").append(buttonName).append("\"");
+        script.append(", showOthers : true" );
+        script.append(", electric : false" );
+        script.append(", onUpdate : onCalUpdate" );
+        script.append(", formatter : \"" + key + "\"");
+        script.append(" });\n" );
+        return script.toString();
     }
 
     protected CallableCalendar getCallableCalendar() {

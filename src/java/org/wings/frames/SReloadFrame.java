@@ -144,8 +144,6 @@ public class SReloadFrame extends SFrame {
                 while (it.hasNext()) {
                 	SFrame frame = (SFrame) it.next();
                 	frame.invalidate();
-                    //if (!(frame instanceof CompleteUpdateResource))
-                    //    continue;
 
                     d.print("parent.frame");
                     d.print(frame.getName());

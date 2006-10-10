@@ -43,20 +43,21 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
     }
 
     protected void writeFormList(final Device device, final SList list) throws IOException {
-
-        Object clientProperty = list.getClientProperty("onChangeSubmitListener");
-        if ( list.getListSelectionListeners().length > 0 ) {
-            if ( clientProperty == null ) {
-                JavaScriptListener javaScriptListener = new JavaScriptListener(
-                		JavaScriptEvent.ON_CHANGE,
-                		"submitForm(" + !list.isCompleteUpdateForced() + ",event);"
-                );
-                list.addScriptListener( javaScriptListener );
-                list.putClientProperty( "onChangeSubmitListener", javaScriptListener );
+    	Object clientProperty = list.getClientProperty("onChangeSubmitListener");
+    	// If the application developer attached any ListSelectionListeners to this
+    	// SList, the surrounding form gets submitted as soon as the state / the
+    	// selection of this SList changed.
+        if (list.getListSelectionListeners().length > 0) {
+            if (clientProperty == null) {
+            	String event = JavaScriptEvent.ON_CHANGE;
+            	String code = "submitForm(" + !list.isCompleteUpdateForced() + ",event);";
+                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
+                list.addScriptListener(javaScriptListener);
+                list.putClientProperty("onChangeSubmitListener", javaScriptListener);
             }
-        } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
-            list.removeScriptListener( (JavaScriptListener)clientProperty );
-            list.putClientProperty( "onChangeSubmitListener", null );
+        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+        	list.removeScriptListener((JavaScriptListener) clientProperty);
+        	list.putClientProperty("onChangeSubmitListener", null);
         }
 
         device.print("<select");

@@ -14,14 +14,8 @@
 package org.wings.plaf.css;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.*;
-import org.wings.resource.ClassPathResource;
-import org.wings.style.CSSProperty;
 import org.wings.text.SAbstractFormatter;
-import org.wings.util.SessionLocal;
-import org.wings.event.SParentFrameListener;
 import org.wings.io.Device;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.*;
@@ -29,9 +23,6 @@ import org.wings.script.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
-
-import org.wings.session.SessionManager;
-import org.wings.session.BrowserType;
 
 public final class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
@@ -66,21 +57,40 @@ public final class TextFieldCG extends AbstractComponentCG implements
             throws IOException {
         final STextField textField = (STextField) component;
 
-        device.print("<input type=\"text\"");
+        Object clientProperty = textField.getClientProperty("onChangeSubmitListener");
+        // If the application developer attached any SDocumentListeners to this
+    	// STextField, the surrounding form gets submitted as soon as the content
+        // of this STextField changed.
+        if (textField.getDocumentListeners().length > 1) {
+        	// We need to test if there are at least 2 document
+        	// listeners because each text component registers
+        	// itself as a listener of its document as well.
+            if (clientProperty == null) {
+            	String event = JavaScriptEvent.ON_CHANGE;
+            	String code = "submitForm(" + !textField.isCompleteUpdateForced() + ",event);";
+                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
+                textField.addScriptListener(javaScriptListener);
+                textField.putClientProperty("onChangeSubmitListener", javaScriptListener);
+            }
+        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+        	textField.removeScriptListener((JavaScriptListener) clientProperty);
+        	textField.putClientProperty("onChangeSubmitListener", null);
+        }
 
         SDimension preferredSize = component.getPreferredSize();
-        boolean behaviour = Utils.isMSIE(component) && preferredSize != null && "100%".equals(preferredSize.getWidth());
-        if (behaviour) {
-            component.setAttribute("behavior", "url('-org/wings/plaf/css/layout.htc')");
-            preferredSize.setWidth(Utils.calculateHorizontalOversize(component, false));
-            //component.setAttribute("display", "none");
-        }
-        writeAllAttributes(device, component);
-        if (behaviour) {
+        boolean tableWrapping = Utils.isMSIE(component) && preferredSize != null && "%".equals(preferredSize.getWidthUnit());
+        String actualWidth = null;
+        if (tableWrapping) {
+            actualWidth = preferredSize.getWidth();
             preferredSize.setWidth("100%");
-            component.setAttribute("behavior", null);
-            Utils.optAttribute(device, "rule", "width");
+            device.print("<table style=\"table-layout: fixed; width: " + actualWidth + "\"><tr>");
+            device.print("<td style=\"padding-right: " + Utils.calculateHorizontalOversize(textField, true) + "px\">");
         }
+
+        device.print("<input type=\"text\"");
+        writeAllAttributes(device, component);
+        if (tableWrapping)
+            device.print(" wrapping=\"4\"");
 
         Utils.optAttribute(device, "tabindex", textField.getFocusTraversalIndex());
         Utils.optAttribute(device, "size", textField.getColumns());
@@ -114,6 +124,11 @@ public final class TextFieldCG extends AbstractComponentCG implements
         }
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
+
+        if (tableWrapping) {
+            preferredSize.setWidth(actualWidth);
+            device.print("</td></tr></table>");
+        }
     }
 
 

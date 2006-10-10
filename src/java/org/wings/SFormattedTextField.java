@@ -167,7 +167,7 @@ public class SFormattedTextField extends STextField {
      * Sets the SAbstractFormatter
      * @param formatter SAbstactFormatter
      */
-    protected void setFormatter(SAbstractFormatter formatter) {
+    public void setFormatter(SAbstractFormatter formatter) {
         this.formatter = formatter;
     }
     

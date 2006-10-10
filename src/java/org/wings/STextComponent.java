@@ -128,6 +128,10 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         }
     }
 
+    public SDocumentListener[] getDocumentListeners() {
+    	return getDocument().getDocumentListeners();
+    }
+
     public void addDocumentListener(SDocumentListener listener) {
         getDocument().addDocumentListener(listener);
     }
@@ -139,7 +143,7 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
     public void fireIntermediateEvents() {
     	getDocument().fireDelayedIntermediateEvents();
     }
-    
+
     public void fireFinalEvents() {
         super.fireFinalEvents();
         getDocument().fireDelayedFinalEvents();

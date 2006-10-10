@@ -18,9 +18,11 @@ import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.EventListener;
 import java.util.Iterator;
 
 /**
@@ -108,7 +110,7 @@ public class SButtonGroup implements SDelayedEventModel, Serializable {
      */
     /**
      * adds a button to the group.
-     * 
+     *
      * @param button the button that is to be added
      */
     public void add(SAbstractButton button) {
@@ -123,7 +125,7 @@ public class SButtonGroup implements SDelayedEventModel, Serializable {
 
     /**
      * removes a button from the group.
-     * 
+     *
      * @param button the button that is to be removed
      */
     public void remove(SAbstractButton button) {
@@ -157,7 +159,7 @@ public class SButtonGroup implements SDelayedEventModel, Serializable {
 
     /**
      * Sets a button in the selected state. There can be only one button selected at a time.
-     * 
+     *
      * @param b the button.
      * @param selected true if this button is to be selected, otherwise false.
      */
@@ -168,13 +170,13 @@ public class SButtonGroup implements SDelayedEventModel, Serializable {
         // if button should be set to unselected, clear selection
         if (!selected && b != null && b.equals(selection)) {
             setSelection(null);
-            
+
         }
     }
-    
+
     /**
      * Returns the state of the button. True if the button is selected, false if not.
-     * 
+     *
      * @param button the button.
      * @return true if the button is selected, otherwise false.
      */
@@ -212,10 +214,27 @@ public class SButtonGroup implements SDelayedEventModel, Serializable {
         listenerList.add(ActionListener.class, listener);
     }
 
+    /**
+     * Removes the supplied Listener from the listener list
+     */
     public void removeActionListener(ActionListener listener) {
         listenerList.remove(ActionListener.class, listener);
     }
 
+    /**
+     * Returns an array of all the <code>ActionListener</code>s added
+     * to this group of buttons with addActionListener().
+     *
+     * @return all of the <code>ActionListener</code>s added or an empty
+     *         array if no listeners have been added
+     */
+    public ActionListener[] getActionListeners() {
+    	if (listenerList != null) {
+            return (ActionListener[]) listenerList.getListeners(ActionListener.class);
+        } else {
+            return (ActionListener[]) Array.newInstance(ActionListener.class, 0);
+        }
+    }
 
     /**
      * Fire an ActionEvent at each registered listener.

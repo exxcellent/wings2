@@ -30,7 +30,7 @@ public class JavaScriptListener
      */
     // TODO: Implement handling of formless submits
     // TODO: Avoid triggering of enter key catchers
-    public final static String JS_FORM_SUBMIT_SCRIPT = "doAjaxSubmit(this.form);";
+    public final static String JS_FORM_SUBMIT_SCRIPT = "submitForm(true, event);";
 
     /**
      * Use i.e. {@link SButton#addScriptListener(org.wings.script.ScriptListener)} to add this scripts.

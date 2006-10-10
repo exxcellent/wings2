@@ -1,115 +1,120 @@
 /** $Id$ */
-// {{{ docs <-- this is a VIM (text editor) text fold
+// {{{ license
+
+/*
+ * Copyright 2002-2005 Dan Allen, Mojavelinux.com (dan.allen@mojavelinux.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// }}}
+// {{{ intro
 
 /**
  * Title: DOM Tooltip Library
- * Version: 0.70
+ * Version: 0.7.3
  *
  * Summary:
  * Allows developers to add custom tooltips to the webpages.  Tooltips are
- * controlled through three style class definitions.  This library also detects
- * collisions against native widgets in the browser that cannot handle the
- * zIndex property.  But this library is even more than that...with all the
- * features it has, it has the potential to replace the need for popups
- * entirely as it can embed just about any html inside the tooltip, leading to
- * the possibility of having whole forms or iframes right inside the tip...even
- * other programs!!!
+ * generated using the domTT_activate() function and customized by setting
+ * a handful of options.
  *
  * Maintainer: Dan Allen <dan.allen@mojavelinux.com>
+ * Contributors:
+ * 		Josh Gross <josh@jportalhome.com>
+ *		Jason Rust <jason@rustyparts.com>
  *
- * License: LGPL
- * However, if you use this library, you become an official bug reporter :)
- * Please post to my forum where you use it so that I get a chance to see my
- * baby in action.  If you are doing this for commercial work perhaps you could
- * send me a few Starbucks Coffee gift dollars to encourage future developement
- * (NOT REQUIRED).  E-mail me for my address.
+ * License: Apache 2.0
+ * However, if you use this library, you earn the position of official bug
+ * reporter :) Please post questions or problem reports to the newsgroup:
  *
- * Homepage: http://www.mojavelinux.com/forum/viewtopic.php?t=127
+ *   http://groups-beta.google.com/group/dom-tooltip
+ *
+ * If you are doing this for commercial work, perhaps you could send me a few
+ * Starbucks Coffee gift dollars or PayPal bucks to encourage future
+ * developement (NOT REQUIRED).  E-mail me for my snail mail address.
+
+ *
+ * Homepage: http://www.mojavelinux.com/projects/domtooltip/
+ *
+ * Newsgroup: http://groups-beta.google.com/group/dom-tooltip
  *
  * Freshmeat Project: http://freshmeat.net/projects/domtt/?topic_id=92
  *
- * Updated: 2004/11/12
+ * Updated: 2005/07/16
  *
  * Supported Browsers:
  * Mozilla (Gecko), IE 5.5+, IE on Mac, Safari, Konqueror, Opera 7
  *
  * Usage:
- * All this is required is to put the function call in the event tag for an
- * html element. The status option (for changing the status bar text) is only
- * available through all events, but when used with 'onmouseover' you have to
- * return true so that the browser does not display the link text in the status
- * bar.  To do this, wrap the domTT_activate call in the function makeTrue(),
- * which will just return true, and then prefix it with a 'return'
- *
- * Example: <a href="index.html" onmouseover="return makeTrue(domTT_activate(this, event, 'caption', 'Help', 'content', 'This is a link with a tooltip', 'statusText', 'Link', 'trial', true));">click me</a>
- *
- * Options:
- * Each option is followed by the value for that option.  The variable event
- * must be the first parameter, as shown above.  The options avaiable are:
- *
- *	predefined (optional, must be first item if used, loads default values)
- *	caption (optional)
- *	content (required)
- *	closeLink (optional, defaults to domTT_closeLink global setting variable)
- *	statusText (optional, if used with mouseover must wrap call in 'return domTT_true()')
- *	type (optional, defaults to 'greasy' but can be 'sticky' or 'velcro')
- *	classPrefix (optional, defaults to 'domTT', for changing style class)
- *	delay (optional, defaults to global delay value domTT_activateDelay)
- *	parent (optional, defaults to document.body; switches to window.parent.document.body if inframe set)
- *	closeAction (optional, defaults to global domTT_closeAction, either 'hide' or 'remove')
- *	trail (optional, follow the mouse cursor while tooltip is active)
+ * Please see the HOWTO documentation.
 **/
 
 // }}}
-// {{{ Settings (editable)
+// {{{ settings (editable)
 
-/**
- * Settings (editable)
- */
-var domTT_offsetX = 0;
-var domTT_offsetY = 2;
+// IE mouse events seem to be off by 2 pixels
+var domTT_offsetX = (domLib_isIE ? -2 : 0);
+var domTT_offsetY = (domLib_isIE ? 4 : 2);
 var domTT_direction = 'southeast';
-var domTT_mouseHeight = 20;
+var domTT_mouseHeight = domLib_isIE ? 13 : 19;
 var domTT_closeLink = 'X';
-var domTT_screenEdgePadding = 5;
+var domTT_closeAction = 'hide';
 var domTT_activateDelay = 500;
-var domTT_maxWidth = 300;
-var domTT_useGlobalMousePosition = true;
-var domTT_classPrefix = 'domTT';
+var domTT_maxWidth = false;
+var domTT_styleClass = 'domTT';
 var domTT_fade = 'neither';
 var domTT_lifetime = 0;
 var domTT_grid = 0;
-var domTT_closeAction = 'hide';
-var domTT_dragStickyTips;
-if (typeof(domTT_dragStickyTips) == 'undefined')
+var domTT_trailDelay = 200;
+var domTT_useGlobalMousePosition = true;
+var domTT_postponeActivation = false;
+var domTT_tooltipIdPrefix = '[domTT]';
+var domTT_screenEdgeDetection = true;
+var domTT_screenEdgePadding = 4;
+var domTT_oneOnly = false;
+var domTT_cloneNodes = false;
+var domTT_detectCollisions = true;
+//var domTT_bannedTags = ['OPTION'];
+var domTT_bannedTags = [''];
+var domTT_draggable = false;
+if (typeof(domTT_dragEnabled) == 'undefined')
 {
-	var domTT_dragStickyTips = false;
+	domTT_dragEnabled = false;
 }
 
 // }}}
-// {{{ Global constants
+// {{{ globals (DO NOT EDIT)
 
-/**
- * Global constants (DO NOT EDIT)
- */
 var domTT_predefined = new Hash();
+// tooltips are keyed on both the tip id and the owner id,
+// since events can originate on either object
 var domTT_tooltips = new Hash();
+var domTT_lastOpened = 0;
+var domTT_documentLoaded = false;
+var domTT_mousePosition = null;
 
 // }}}
 // {{{ document.onmousemove
 
 if (domLib_useLibrary && domTT_useGlobalMousePosition)
 {
-	var domTT_mousePosition = new Hash();
 	document.onmousemove = function(in_event)
 	{
-		if (typeof(in_event) == 'undefined')
-		{
-			in_event = event;
-		}
+		if (typeof(in_event) == 'undefined') { in_event = window.event; }
 
 		domTT_mousePosition = domLib_getEventPosition(in_event);
-		if (domTT_dragStickyTips && domTT_dragMouseDown)
+		if (domTT_dragEnabled && domTT_dragMouseDown)
 		{
 			domTT_dragUpdate(in_event);
 		}
@@ -121,30 +126,38 @@ if (domLib_useLibrary && domTT_useGlobalMousePosition)
 
 function domTT_activate(in_this, in_event)
 {
-	if (!domLib_useLibrary) { return false; }
+	if (!domLib_useLibrary || (domTT_postponeActivation && !domTT_documentLoaded)) { return false; }
 
 	// make sure in_event is set (for IE, some cases we have to use window.event)
-	if (typeof(in_event) == 'undefined')
-	{
-		in_event = window.event;
+	if (typeof(in_event) == 'undefined') { in_event = window.event;	}
+
+	// don't allow tooltips on banned tags (such as OPTION)
+	if (in_event != null) {
+		var target = in_event.srcElement ? in_event.srcElement : in_event.target;
+		if (target != null && (',' + domTT_bannedTags.join(',') + ',').indexOf(',' + target.tagName + ',') != -1)
+		{
+			return false;
+		}
 	}
 
 	var owner = document.body;
 	// we have an active event so get the owner
-	if (in_event.type.match(/key|mouse|click|contextmenu/i))
+	if (in_event != null && in_event.type.match(/key|mouse|click|contextmenu/i))
 	{
 		// make sure we have nothing higher than the body element
-		if (in_this.nodeType && in_this.nodeType != 9)
+		if (in_this.nodeType && in_this.nodeType != document.DOCUMENT_NODE)
 		{
-			var owner = in_this;
+			owner = in_this;
 		}
 	}
 	// non active event (make sure we were passed a string id)
 	else
 	{
-		if (typeof(in_this) == 'string' && !(owner = document.getElementById(in_this)))
+		if (typeof(in_this) != 'object' && !(owner = domTT_tooltips.get(in_this)))
 		{
-			owner = document.body.appendChild(document.createElement('div'));
+			// NOTE: two steps to avoid "flashing" in gecko
+			var embryo = document.createElement('div');
+			owner = document.body.appendChild(embryo);
 			owner.style.display = 'none';
 			owner.id = in_this;
 		}
@@ -155,6 +168,16 @@ function domTT_activate(in_this, in_event)
 	{
 		owner.id = '__autoId' + domLib_autoId++;
 	}
+
+	// see if we should only be opening one tip at a time
+	// NOTE: this is not "perfect" yet since it really steps on any other
+	// tip working on fade out or delayed close, but it get's the job done
+	if (domTT_oneOnly && domTT_lastOpened)
+	{
+		domTT_deactivate(domTT_lastOpened);
+	}
+
+	domTT_lastOpened = owner.id;
 
 	var tooltip = domTT_tooltips.get(owner.id);
 	if (tooltip)
@@ -192,19 +215,26 @@ function domTT_activate(in_this, in_event)
 	var options = new Hash(
 		'caption',		'',
 		'content',		'',
+		'clearMouse',	true,
+		'closeAction',	domTT_closeAction,
 		'closeLink',	domTT_closeLink,
+		'delay',		domTT_activateDelay,
+		'direction',	domTT_direction,
+		'draggable',	domTT_draggable,
+		'fade',			domTT_fade,
+		'fadeMax',		100,
+		'grid',			domTT_grid,
+		'id',			domTT_tooltipIdPrefix + owner.id,
+		'inframe',		false,
+		'lifetime',		domTT_lifetime,
+		'offsetX',		domTT_offsetX,
+		'offsetY',		domTT_offsetY,
 		'parent',		document.body,
 		'position',		'absolute',
+		'styleClass',	domTT_styleClass,
 		'type',			'greasy',
-		'direction',	domTT_direction,
-		'delay',		domTT_activateDelay,
-		'classPrefix',	domTT_classPrefix,
-		'closeAction',	domTT_closeAction,
-		'lifetime',		domTT_lifetime,
-		'grid',			domTT_grid,
-		'fade',			domTT_fade,
 		'trail',		false,
-		'inframe',		false
+		'lazy',			false
 	);
 
 	// load in the options from the function call
@@ -226,7 +256,7 @@ function domTT_activate(in_this, in_event)
 		}
 	}
 
-	options.set('eventType', in_event.type);
+	options.set('eventType', in_event != null ? in_event.type : null);
 
 	// immediately set the status text if provided
 	if (options.has('statusText'))
@@ -235,7 +265,7 @@ function domTT_activate(in_this, in_event)
 	}
 
 	// if we didn't give content...assume we just wanted to change the status and return
-	if (!options.has('content') || options.get('content') == '')
+	if (!options.has('content') || options.get('content') == '' || options.get('content') == null)
 	{
 		if (typeof(owner.onmouseout) != 'function')
 		{
@@ -246,17 +276,13 @@ function domTT_activate(in_this, in_event)
 	}
 
 	options.set('owner', owner);
-	options.set('id', '[domTT]' + owner.id);
-	try
-	{
+
 	domTT_create(options);
-	} catch (e)
-	{
-	alert(e);
-	}
+
 	// determine the show delay
-	options.set('delay', in_event.type.match(/click|mousedown|contextmenu/i) ? 0 : parseInt(options.get('delay')));
+	options.set('delay', (in_event != null && in_event.type.match(/click|mousedown|contextmenu/i)) ? 0 : parseInt(options.get('delay')));
 	domTT_tooltips.set(owner.id, options);
+	domTT_tooltips.set(options.get('id'), options);
 	options.set('status', 'pending');
 	options.set('activateTimeout', domLib_setTimeout(domTT_runShow, options.get('delay'), [owner.id, in_event]));
 
@@ -270,27 +296,29 @@ function domTT_create(in_options)
 {
 	var tipOwner = in_options.get('owner');
 	var parentObj = in_options.get('parent');
-	var parentDoc = parentObj.ownerDocument;
+	var parentDoc = parentObj.ownerDocument || parentObj.document;
 
 	// create the tooltip and hide it
-	var tipObj = parentObj.appendChild(parentDoc.createElement('div'));
+	// NOTE: two steps to avoid "flashing" in gecko
+	var embryo = parentDoc.createElement('div');
+	var tipObj = parentObj.appendChild(embryo);
 	tipObj.style.position = 'absolute';
 	tipObj.style.left = '0px';
 	tipObj.style.top = '0px';
 	tipObj.style.visibility = 'hidden';
 	tipObj.id = in_options.get('id');
-	tipObj.className = in_options.get('classPrefix');
+	tipObj.className = in_options.get('styleClass');
 
-	// content of tip as object
-	var content;
+	var contentBlock;
+	var tableLayout = false;
 
 	if (in_options.get('caption') || (in_options.get('type') == 'sticky' && in_options.get('caption') !== false))
 	{
-
+		tableLayout = true;
 		// layout the tip with a hidden formatting table
 		var tipLayoutTable = tipObj.appendChild(parentDoc.createElement('table'));
 		tipLayoutTable.style.borderCollapse = 'collapse';
-		if (domLib_isKonq)
+		if (domLib_isKHTML)
 		{
 			tipLayoutTable.cellSpacing = 0;
 		}
@@ -302,9 +330,20 @@ function domTT_create(in_options)
 		var captionCell = captionRow.appendChild(parentDoc.createElement('td'));
 		captionCell.style.padding = '0px';
 		var caption = captionCell.appendChild(parentDoc.createElement('div'));
-		caption.className = in_options.get('classPrefix') + 'Caption';
-		caption.style.height = '100%';
-		caption.appendChild(parentDoc.createTextNode(in_options.get('caption')));
+		caption.className = 'caption';
+		if (domLib_isIE50)
+		{
+			caption.style.height = '100%';
+		}
+
+		if (in_options.get('caption').nodeType)
+		{
+			caption.appendChild(domTT_cloneNodes ? in_options.get('caption').cloneNode(1) : in_options.get('caption'));
+		}
+		else
+		{
+			caption.innerHTML = in_options.get('caption');
+		}
 
 		if (in_options.get('type') == 'sticky')
 		{
@@ -312,8 +351,12 @@ function domTT_create(in_options)
 			var closeLinkCell = captionRow.appendChild(parentDoc.createElement('td'));
 			closeLinkCell.style.padding = '0px';
 			var closeLink = closeLinkCell.appendChild(parentDoc.createElement('div'));
-			closeLink.className = in_options.get('classPrefix') + 'Caption';
-			closeLink.style.height = '100%';
+			closeLink.className = 'caption';
+			if (domLib_isIE50)
+			{
+				closeLink.style.height = '100%';
+			}
+
 			closeLink.style.textAlign = 'right';
 			closeLink.style.cursor = domLib_stylePointer;
 			// merge the styles of the two cells
@@ -329,25 +372,34 @@ function domTT_create(in_options)
 				closeLink.innerHTML = in_options.get('closeLink');
 			}
 
-			closeLink.onclick = function() { domTT_deactivate(tipOwner.id); };
-			closeLink.onmousedown = function(in_event) { if (typeof(in_event) == 'undefined') { in_event = event; } in_event.cancelBubble = true; };
-            // MacIE has to have a newline at the end and must be made with createTextNode()
-            if (domLib_isMacIE) {
-                closeLinkCell.appendChild(parentDoc.createTextNode("\n"));
-            }
+			closeLink.onclick = function()
+			{
+				domTT_deactivate(tipOwner.id);
+			};
+			closeLink.onmousedown = function(in_event)
+			{
+				if (typeof(in_event) == 'undefined') { in_event = window.event; }
+				in_event.cancelBubble = true;
+			};
+			// MacIE has to have a newline at the end and must be made with createTextNode()
+			if (domLib_isMacIE)
+			{
+				closeLinkCell.appendChild(parentDoc.createTextNode("\n"));
+			}
 		}
 
-        // MacIE has to have a newline at the end and must be made with createTextNode()
-        if (domLib_isMacIE) {
-            captionCell.appendChild(parentDoc.createTextNode("\n"));
-        }
+		// MacIE has to have a newline at the end and must be made with createTextNode()
+		if (domLib_isMacIE)
+		{
+			captionCell.appendChild(parentDoc.createTextNode("\n"));
+		}
 
 		var contentRow = tipLayoutTbody.appendChild(parentDoc.createElement('tr'));
 		var contentCell = contentRow.appendChild(parentDoc.createElement('td'));
 		contentCell.style.padding = '0px';
 		if (numCaptionCells)
 		{
-			if (domLib_isIE)
+			if (domLib_isIE || domLib_isOpera)
 			{
 				contentCell.colSpan = numCaptionCells;
 			}
@@ -357,26 +409,32 @@ function domTT_create(in_options)
 			}
 		}
 
-		content = contentCell.appendChild(parentDoc.createElement('div'));
+		contentBlock = contentCell.appendChild(parentDoc.createElement('div'));
 		if (domLib_isIE50)
 		{
-			content.style.height = '100%';
+			contentBlock.style.height = '100%';
 		}
 	}
 	else
 	{
-		content = tipObj.appendChild(parentDoc.createElement('div'));
+		contentBlock = tipObj.appendChild(parentDoc.createElement('div'));
 	}
 
-	content.className = in_options.get('classPrefix') + 'Content';
+	contentBlock.className = 'contents';
 
-	if (in_options.get('content').nodeType)
+	var content = in_options.get('content');
+	// allow content has a function to return the actual content
+	if (typeof(content) == 'function') {
+		content = content(in_options.get('id'));
+	}
+
+	if (content != null && content.nodeType)
 	{
-		content.appendChild(in_options.get('content').cloneNode(1));
+		contentBlock.appendChild(domTT_cloneNodes ? content.cloneNode(1) : content);
 	}
 	else
 	{
-		content.innerHTML = in_options.get('content');
+		contentBlock.innerHTML = content;
 	}
 
 	// adjust the width if specified
@@ -401,14 +459,44 @@ function domTT_create(in_options)
 		}
 	}
 
-	// :HACK: fix lack of maxWidth in CSS for Konq and IE
-	if (maxWidth !== false && (domLib_isIE || domLib_isKonq) && tipObj.offsetWidth > maxWidth)
+	// HACK: fix lack of maxWidth in CSS for KHTML and IE
+	if (maxWidth !== false && (domLib_isIE || domLib_isKHTML) && tipObj.offsetWidth > maxWidth)
 	{
 		tipObj.style.width = maxWidth + 'px';
 	}
 
+	in_options.set('offsetWidth', tipObj.offsetWidth);
+	in_options.set('offsetHeight', tipObj.offsetHeight);
+
+	// konqueror miscalcuates the width of the containing div when using the layout table based on the
+	// border size of the containing div
+	if (domLib_isKonq && tableLayout && !tipObj.style.width)
+	{
+		var left = document.defaultView.getComputedStyle(tipObj, '').getPropertyValue('border-left-width');
+		var right = document.defaultView.getComputedStyle(tipObj, '').getPropertyValue('border-right-width');
+		
+		left = left.substring(left.indexOf(':') + 2, left.indexOf(';'));
+		right = right.substring(right.indexOf(':') + 2, right.indexOf(';'));
+		var correction = 2 * ((left ? parseInt(left) : 0) + (right ? parseInt(right) : 0));
+		tipObj.style.width = (tipObj.offsetWidth - correction) + 'px';
+	}
+
+	// if a width is not set on an absolutely positioned object, both IE and Opera
+	// will attempt to wrap when it spills outside of body...we cannot have that
+	if (domLib_isIE || domLib_isOpera)
+	{
+		if (!tipObj.style.width)
+		{
+			// HACK: the correction here is for a border
+			tipObj.style.width = (tipObj.offsetWidth - 2) + 'px';
+		}
+
+		// HACK: the correction here is for a border
+		tipObj.style.height = (tipObj.offsetHeight - 2) + 'px';
+	}
+
 	// store placement offsets from event position
-	var offset_x, offset_y;
+	var offsetX, offsetY;
 
 	// tooltip floats
 	if (in_options.get('position') == 'absolute' && !(in_options.has('x') && in_options.has('y')))
@@ -417,20 +505,28 @@ function domTT_create(in_options)
 		switch (in_options.get('direction'))
 		{
 			case 'northeast':
-				offset_x = domTT_offsetX;
-				offset_y = 0 - tipObj.offsetHeight - domTT_offsetY;
+				offsetX = in_options.get('offsetX');
+				offsetY = 0 - tipObj.offsetHeight - in_options.get('offsetY');
 			break;
 			case 'northwest':
-				offset_x = 0 - tipObj.offsetWidth - domTT_offsetX;
-				offset_y = 0 - tipObj.offsetHeight - domTT_offsetY;
+				offsetX = 0 - tipObj.offsetWidth - in_options.get('offsetX');
+				offsetY = 0 - tipObj.offsetHeight - in_options.get('offsetY');
+			break;
+			case 'north':
+				offsetX = 0 - parseInt(tipObj.offsetWidth/2);
+				offsetY = 0 - tipObj.offsetHeight - in_options.get('offsetY');
 			break;
 			case 'southwest':
-				offset_x = 0 - tipObj.offsetWidth - domTT_offsetX;
-				offset_y = domTT_mouseHeight + domTT_offsetY;
+				offsetX = 0 - tipObj.offsetWidth - in_options.get('offsetX');
+				offsetY = in_options.get('offsetY');
 			break;
 			case 'southeast':
-				offset_x = domTT_offsetX;
-				offset_y = domTT_mouseHeight + domTT_offsetY;
+				offsetX = in_options.get('offsetX');
+				offsetY = in_options.get('offsetY');
+			break;
+			case 'south':
+				offsetX = 0 - parseInt(tipObj.offsetWidth/2);
+				offsetY = in_options.get('offsetY');
 			break;
 		}
 
@@ -441,29 +537,36 @@ function domTT_create(in_options)
 			if (iframeObj)
 			{
 				var frameOffsets = domLib_getOffsets(iframeObj);
-				offset_x += frameOffsets.get('left');
-				offset_y += frameOffsets.get('top');
+				offsetX += frameOffsets.get('left');
+				offsetY += frameOffsets.get('top');
 			}
 		}
 	}
 	// tooltip is fixed
 	else
 	{
-		offset_x = 0;
-		offset_y = 0;
+		offsetX = 0;
+		offsetY = 0;
 		in_options.set('trail', false);
 	}
 
-	in_options.set('offsetX', offset_x);
-	in_options.set('offsetY', offset_y);
-	in_options.set('offsetWidth', tipObj.offsetWidth);
-	in_options.set('offsetHeight', tipObj.offsetHeight);
-	if (domLib_canFade && typeof(alphaAPI) == 'function')
+	// set the direction-specific offsetX/Y
+	in_options.set('offsetX', offsetX);
+	in_options.set('offsetY', offsetY);
+	if (in_options.get('clearMouse') && in_options.get('direction').indexOf('south') != -1)
+	{
+		in_options.set('mouseOffset', domTT_mouseHeight);
+	}
+	else
+	{
+		in_options.set('mouseOffset', 0);
+	}
+
+	if (domLib_canFade && typeof(Fadomatic) == 'function')
 	{
 		if (in_options.get('fade') != 'neither')
 		{
-			var fadeHandler = new alphaAPI(tipObj, 50, 50, 100, 0, null, 10);
-			fadeHandler.setAlpha(0);
+			var fadeHandler = new Fadomatic(tipObj, 10, 0, 0, in_options.get('fadeMax'));
 			in_options.set('fadeHandler', fadeHandler);
 		}
 	}
@@ -485,7 +588,7 @@ function domTT_create(in_options)
 
 	if (in_options.get('type') == 'sticky')
 	{
-		if (in_options.get('position') == 'absolute' && domTT_dragStickyTips)
+		if (in_options.get('position') == 'absolute' && domTT_dragEnabled && in_options.get('draggable'))
 		{
 			if (domLib_isIE)
 			{
@@ -500,7 +603,28 @@ function domTT_create(in_options)
 	}
 	else if (in_options.get('type') == 'velcro')
 	{
-		tipObj.onmouseout = function(in_event) { if (typeof(in_event) == 'undefined') { in_event = event; } if (!domLib_isDescendantOf(in_event[domLib_eventTo], tipObj)) { domTT_deactivate(tipOwner.id); }};
+		/* can use once we have deactivateDelay
+		tipObj.onmouseover = function(in_event)
+		{
+			if (typeof(in_event) == 'undefined') { in_event = window.event; }
+			var tooltip = domTT_tooltips.get(tipObj.id);
+			if (in_options.get('lifetime')) {
+				domLib_clearTimeout(in_options.get('lifetimeTimeout');
+			}
+		};
+		*/
+		tipObj.onmouseout = function(in_event)
+		{
+			if (typeof(in_event) == 'undefined') { in_event = window.event; }
+			if (!domLib_isDescendantOf(in_event[domLib_eventTo], tipObj, domTT_bannedTags)) {
+				domTT_deactivate(tipOwner.id);
+			}
+		};
+		// NOTE: this might interfere with links in the tip
+		tipObj.onclick = function(in_event)
+		{
+			domTT_deactivate(tipOwner.id);
+		};
 	}
 
 	if (in_options.get('position') == 'relative')
@@ -515,42 +639,64 @@ function domTT_create(in_options)
 // }}}
 // {{{ domTT_show()
 
-function domTT_show(in_ownerId, in_event)
+// in_id is either tip id or the owner id
+function domTT_show(in_id, in_event)
 {
+
 	// should always find one since this call would be cancelled if tip was killed
-	var tooltip = domTT_tooltips.get(in_ownerId);
+	var tooltip = domTT_tooltips.get(in_id);
 	var status = tooltip.get('status');
 	var tipObj = tooltip.get('node');
 
 	if (tooltip.get('position') == 'absolute')
 	{
-		var mouse_x, mouse_y;
+		var mouseX, mouseY;
 
 		if (tooltip.has('x') && tooltip.has('y'))
 		{
-			mouse_x = tooltip.get('x');
-			mouse_y = tooltip.get('y');
+			mouseX = tooltip.get('x');
+			mouseY = tooltip.get('y');
 		}
-		else if (!domTT_useGlobalMousePosition || status == 'active' || tooltip.get('delay') == 0)
+		else if (!domTT_useGlobalMousePosition || domTT_mousePosition == null || status == 'active' || tooltip.get('delay') == 0)
 		{
 			var eventPosition = domLib_getEventPosition(in_event);
-			mouse_x = eventPosition.get('x');
-			mouse_y = eventPosition.get('y');
+			var eventX = eventPosition.get('x');
+			var eventY = eventPosition.get('y');
 			if (tooltip.get('inframe'))
 			{
-				mouse_x -= eventPosition.get('scroll_x');
-				mouse_y -= eventPosition.get('scroll_y');
+				eventX -= eventPosition.get('scrollX');
+				eventY -= eventPosition.get('scrollY');
+			}
+
+			// only move tip along requested trail axis when updating position
+			if (status == 'active' && tooltip.get('trail') !== true)
+			{
+				var trail = tooltip.get('trail');
+				if (trail == 'x')
+				{
+					mouseX = eventX;
+					mouseY = tooltip.get('mouseY');
+				}
+				else if (trail == 'y')
+				{
+					mouseX = tooltip.get('mouseX');
+					mouseY = eventY;
+				}
+			}
+			else
+			{
+				mouseX = eventX;
+				mouseY = eventY;
 			}
 		}
 		else
 		{
-			mouse_x = domTT_mousePosition.get('x');
-			mouse_y = domTT_mousePosition.get('y');
-			//window.status = 'x: ' + mouse_x + ', y: ' + mouse_y;
+			mouseX = domTT_mousePosition.get('x');
+			mouseY = domTT_mousePosition.get('y');
 			if (tooltip.get('inframe'))
 			{
-				mouse_x -= domTT_mousePosition.get('scroll_x');
-				mouse_y -= domTT_mousePosition.get('scroll_y');
+				mouseX -= domTT_mousePosition.get('scrollX');
+				mouseY -= domTT_mousePosition.get('scrollY');
 			}
 		}
 
@@ -559,10 +705,10 @@ function domTT_show(in_ownerId, in_event)
 		{
 			// if this is not a mousemove event or it is a mousemove event on an active tip and
 			// the movement is bigger than the grid
-			if (in_event.type != 'mousemove' || (status == 'active' && (Math.abs(tooltip.get('lastX') - mouse_x) > tooltip.get('grid') || Math.abs(tooltip.get('lastY') - mouse_y) > tooltip.get('grid'))))
+			if (in_event.type != 'mousemove' || (status == 'active' && (Math.abs(tooltip.get('lastX') - mouseX) > tooltip.get('grid') || Math.abs(tooltip.get('lastY') - mouseY) > tooltip.get('grid'))))
 			{
-				tooltip.set('lastX', mouse_x);
-				tooltip.set('lastY', mouse_y);
+				tooltip.set('lastX', mouseX);
+				tooltip.set('lastY', mouseY);
 			}
 			// did not satisfy the grid movement requirement
 			else
@@ -571,8 +717,32 @@ function domTT_show(in_ownerId, in_event)
 			}
 		}
 
-		var coordinates = {'x' : mouse_x + tooltip.get('offsetX'), 'y' : mouse_y + tooltip.get('offsetY')};
-		coordinates = domTT_correctEdgeBleed(tooltip.get('offsetWidth'), tooltip.get('offsetHeight'), coordinates.x, coordinates.y, domTT_offsetX, domTT_offsetY, tooltip.get('type'), tooltip.get('inframe') ? window.parent : window);
+		// mouseX and mouseY store the last acknowleged mouse position,
+		// good for trailing on one axis
+		tooltip.set('mouseX', mouseX);
+		tooltip.set('mouseY', mouseY);
+
+		var coordinates;
+		if (domTT_screenEdgeDetection)
+		{
+			coordinates = domTT_correctEdgeBleed(
+				tooltip.get('offsetWidth'),
+				tooltip.get('offsetHeight'),
+				mouseX,
+				mouseY,
+				tooltip.get('offsetX'),
+				tooltip.get('offsetY'),
+				tooltip.get('mouseOffset'),
+				tooltip.get('inframe') ? window.parent : window
+			);
+		}
+		else
+		{
+			coordinates = {
+				'x' : mouseX + tooltip.get('offsetX'),
+				'y' : mouseY + tooltip.get('offsetY') + tooltip.get('mouseOffset')
+			};
+		}
 
 		// update the position
 		tipObj.style.left = coordinates.x + 'px';
@@ -596,10 +766,10 @@ function domTT_show(in_ownerId, in_event)
 			var fadeHandler = tooltip.get('fadeHandler');
 			if (fade == 'out' || fade == 'both')
 			{
-				fadeHandler.pause();
+				fadeHandler.haltFade();
 				if (fade == 'out')
 				{
-					fadeHandler.reset();
+					fadeHandler.halt();
 				}
 			}
 
@@ -611,22 +781,63 @@ function domTT_show(in_ownerId, in_event)
 
 		if (tooltip.get('type') == 'greasy' && tooltip.get('lifetime') != 0)
 		{
-			tooltip.set('lifetimeTimeout', domLib_setTimeout(domTT_runDeactivate, tooltip.get('lifetime'), [in_ownerId]));
+			tooltip.set('lifetimeTimeout', domLib_setTimeout(domTT_runDeactivate, tooltip.get('lifetime'), [tipObj.id]));
 		}
 	}
 
-	if (tooltip.get('position') == 'absolute')
+	if (tooltip.get('position') == 'absolute' && domTT_detectCollisions)
 	{
-		domLib_detectCollisions(tipObj);
+		// utilize original collision element cache
+		domLib_detectCollisions(tipObj, false, true);
+	}
+}
+
+// }}}
+// {{{ domTT_close()
+
+// in_handle can either be an child object of the tip, the tip id or the owner id
+function domTT_close(in_handle)
+{
+	var id;
+	if (typeof(in_handle) == 'object' && in_handle.nodeType)
+	{
+		var obj = in_handle;
+		while (!obj.id || !domTT_tooltips.get(obj.id))
+		{
+			obj = obj.parentNode;
+	
+			if (obj.nodeType != document.ELEMENT_NODE) { return; }
+		}
+
+		id = obj.id;
+	}
+	else
+	{
+		id = in_handle;
+	}
+
+	domTT_deactivate(id);
+}
+
+// }}}
+// {{{ domTT_closeAll()
+
+// run through the tooltips and close them all
+function domTT_closeAll()
+{
+	// NOTE: this will iterate 2x # of tooltips
+	for (var id in domTT_tooltips.elementData) {
+		domTT_close(id);
 	}
 }
 
 // }}}
 // {{{ domTT_deactivate()
 
-function domTT_deactivate(in_ownerId)
+// in_id is either the tip id or the owner id
+function domTT_deactivate(in_id)
 {
-	var tooltip = domTT_tooltips.get(in_ownerId);
+	var tooltip = domTT_tooltips.get(in_id);
 	if (tooltip)
 	{
 		var status = tooltip.get('status');
@@ -652,12 +863,11 @@ function domTT_deactivate(in_ownerId)
 					var fadeHandler = tooltip.get('fadeHandler');
 					if (fade == 'out' || fade == 'both')
 					{
-						fadeHandler.pause();
 						fadeHandler.fadeOut();
 					}
 					else
 					{
-						fadeHandler.stop();
+						fadeHandler.hide();
 					}
 				}
 				else
@@ -668,12 +878,16 @@ function domTT_deactivate(in_ownerId)
 			else
 			{
 				tooltip.get('parent').removeChild(tipObj);
-				domTT_tooltips.remove(in_ownerId);
+				domTT_tooltips.remove(tooltip.get('owner').id);
+				domTT_tooltips.remove(tooltip.get('id'));
 			}
 
 			tooltip.set('status', 'inactive');
-			// unhide all of the selects that are owned by this object
-			domLib_detectCollisions(tipObj, true); 
+			if (domTT_detectCollisions) {
+				// unhide all of the selects that are owned by this object
+				// utilize original collision element cache
+				domLib_detectCollisions(tipObj, true, true); 
+			}
 		}
 	}
 }
@@ -685,12 +899,9 @@ function domTT_mouseout(in_owner, in_event)
 {
 	if (!domLib_useLibrary) { return false; }
 
-	if (typeof(in_event) == 'undefined')
-	{
-		in_event = event;
-	}
+	if (typeof(in_event) == 'undefined') { in_event = window.event;	}
 
-	var toChild = domLib_isDescendantOf(in_event[domLib_eventTo], in_owner);
+	var toChild = domLib_isDescendantOf(in_event[domLib_eventTo], in_owner, domTT_bannedTags);
 	var tooltip = domTT_tooltips.get(in_owner.id);
 	if (tooltip && (tooltip.get('type') == 'greasy' || tooltip.get('status') != 'active'))
 	{
@@ -698,6 +909,7 @@ function domTT_mouseout(in_owner, in_event)
 		if (!toChild)
 		{
 			domTT_deactivate(in_owner.id);
+			try { window.status = window.defaultStatus; } catch(e) {}
 		}
 	}
 	else if (!toChild)
@@ -713,15 +925,20 @@ function domTT_mousemove(in_owner, in_event)
 {
 	if (!domLib_useLibrary) { return false; }
 
-	if (typeof(in_event) == 'undefined')
-	{
-		in_event = event;
-	}
+	if (typeof(in_event) == 'undefined') { in_event = window.event;	}
 
 	var tooltip = domTT_tooltips.get(in_owner.id);
 	if (tooltip && tooltip.get('trail') && tooltip.get('status') == 'active')
 	{
-		domTT_show(in_owner.id, in_event);
+		// see if we are trailing lazy
+		if (tooltip.get('lazy'))
+		{
+			domLib_setTimeout(domTT_runShow, domTT_trailDelay, [in_owner.id, in_event]);
+		}
+		else
+		{
+			domTT_show(in_owner.id, in_event);
+		}
 	}
 }
 
@@ -742,26 +959,22 @@ function domTT_addPredefined(in_id)
 // }}}
 // {{{ domTT_correctEdgeBleed()
 
-function domTT_correctEdgeBleed(in_width, in_height, in_x, in_y, in_offsetX, in_offsetY, in_type, in_window)
+function domTT_correctEdgeBleed(in_width, in_height, in_x, in_y, in_offsetX, in_offsetY, in_mouseOffset, in_window)
 {
 	var win, doc;
 	var bleedRight, bleedBottom;
 	var pageHeight, pageWidth, pageYOffset, pageXOffset;
 
+	var x = in_x + in_offsetX;
+	var y = in_y + in_offsetY + in_mouseOffset;
+
 	win = (typeof(in_window) == 'undefined' ? window : in_window);
 
 	// Gecko and IE swaps values of clientHeight, clientWidth properties when
 	// in standards compliance mode from documentElement to document.body
-	if (domLib_standardsMode && (domLib_isIE || domLib_isGecko))
-	{
-		doc = win.document.documentElement;
-	}
-	else
-	{
-		doc = win.document.body;
-	}
+	doc = ((domLib_standardsMode && (domLib_isIE || domLib_isGecko)) ? win.document.documentElement : win.document.body);
 
-	// for IE in compliance mode, maybe others
+	// for IE in compliance mode
 	if (domLib_isIE)
 	{
 		pageHeight = doc.clientHeight;
@@ -774,7 +987,7 @@ function domTT_correctEdgeBleed(in_width, in_height, in_x, in_y, in_offsetX, in_
 		pageHeight = doc.clientHeight;
 		pageWidth = doc.clientWidth;
 
-		if (domLib_isKonq)
+		if (domLib_isKHTML)
 		{
 			pageHeight = win.innerHeight;
 		}
@@ -784,57 +997,45 @@ function domTT_correctEdgeBleed(in_width, in_height, in_x, in_y, in_offsetX, in_
 	}
 
 	// we are bleeding off the right, move tip over to stay on page
-	if ((bleedRight = (in_x - pageXOffset) + in_width - (pageWidth - domTT_screenEdgePadding)) > 0)
+	// logic: take x position, add width and subtract from effective page width
+	if ((bleedRight = (x - pageXOffset) + in_width - (pageWidth - domTT_screenEdgePadding)) > 0)
 	{
-		in_x -= bleedRight;
+		x -= bleedRight;
 	}
 
 	// we are bleeding to the left, move tip over to stay on page
-	// we don't want an 'else if' here, because if the tip just
-	// doesn't fit, we will go back to bleeding off the right
-	if ((in_x - pageXOffset) < domTT_screenEdgePadding)
+	// if tip doesn't fit, we will go back to bleeding off the right
+	// logic: take x position and check if less than edge padding
+	if ((x - pageXOffset) < domTT_screenEdgePadding)
 	{
-		in_x = domTT_screenEdgePadding + pageXOffset;
+		x = domTT_screenEdgePadding + pageXOffset;
 	}
 
-	// ** top/bottom corrections depends on type, because we can't end up with the mouse over
-	// the tip if this is a greasy **
 	// if we are bleeding off the bottom, flip to north
-	if ((bleedBottom = (in_y - pageYOffset) + in_height - (pageHeight - domTT_screenEdgePadding)) > 0) {
-		if (in_type == 'sticky')
-		{
-			in_y -= bleedBottom;
-		}
-		else
-		{
-			in_y -= in_height + (2 * in_offsetY) + domTT_mouseHeight;
-		}
+	// logic: take y position, add height and subtract from effective page height
+	if ((bleedBottom = (y - pageYOffset) + in_height - (pageHeight - domTT_screenEdgePadding)) > 0)
+	{
+		y = in_y - in_height - in_offsetY;
 	}
 
 	// if we are bleeding off the top, flip to south
-	// we don't want an 'else if' here, because if the tip just
-	// doesn't fit, we will go back to bleeding off the bottom
-	if ((in_y - pageYOffset) < domTT_screenEdgePadding)
+	// if tip doesn't fit, we will go back to bleeding off the bottom
+	// logic: take y position and check if less than edge padding
+	if ((y - pageYOffset) < domTT_screenEdgePadding)
 	{
-		if (in_type == 'sticky')
-		{
-			in_y = domTT_screenEdgePadding + pageYOffset;
-		}
-		else
-		{
-			in_y += in_height + (2 * in_offsetY) + domTT_mouseHeight;
-		}
+		y = in_y + domTT_mouseHeight + in_offsetY;
 	}
 
-	return {'x' : in_x, 'y' : in_y};
+	return {'x' : x, 'y' : y};
 }
 
 // }}}
 // {{{ domTT_isActive()
 
-function domTT_isActive(in_ownerId)
+// in_id is either the tip id or the owner id
+function domTT_isActive(in_id)
 {
-	var tooltip = domTT_tooltips.get(in_ownerId);
+	var tooltip = domTT_tooltips.get(in_id);
 	if (!tooltip || tooltip.get('status') != 'active')
 	{
 		return false;
@@ -852,5 +1053,81 @@ function domTT_isActive(in_ownerId)
 // avoid the circular memory leaks caused by inner functions
 function domTT_runDeactivate(args) { domTT_deactivate(args[0]); }
 function domTT_runShow(args) { domTT_show(args[0], args[1]); }
+
+// }}}
+// {{{ domTT_replaceTitles()
+
+function domTT_replaceTitles(in_decorator)
+{
+	var elements = domLib_getElementsByClass('tooltip');
+	for (var i = 0; i < elements.length; i++)
+	{
+		if (elements[i].title)
+		{
+			var content;
+			if (typeof(in_decorator) == 'function')
+			{
+				content = in_decorator(elements[i]);
+			}
+			else
+			{
+				content = elements[i].title;
+			}
+
+			content = content.replace(new RegExp('\'', 'g'), '\\\'');
+			elements[i].onmouseover = new Function('in_event', "domTT_activate(this, in_event, 'content', '" + content + "')");
+			elements[i].title = '';
+		}
+	}
+}
+
+// }}}
+// {{{ domTT_update()
+
+// Allow authors to update the contents of existing tips using the DOM
+// Unfortunately, the tip must already exist, or else no work is done.
+// TODO: make getting at content or caption cleaner
+function domTT_update(handle, content, type)
+{
+	// type defaults to 'content', can also be 'caption'
+	if (typeof(type) == 'undefined')
+	{
+		type = 'content';
+	}
+
+	var tip = domTT_tooltips.get(handle);
+	if (!tip)
+	{
+		return;
+	}
+
+	var tipObj = tip.get('node');
+	var updateNode;
+	if (type == 'content')
+	{
+		// <div class="contents">...
+		updateNode = tipObj.firstChild;
+		if (updateNode.className != 'contents')
+		{
+			// <table><tbody><tr>...</tr><tr><td><div class="contents">...
+			updateNode = updateNode.firstChild.firstChild.nextSibling.firstChild.firstChild;
+		}
+	}
+	else
+	{
+		updateNode = tipObj.firstChild;
+		if (updateNode.className == 'contents')
+		{
+			// missing caption
+			return;
+		}
+
+		// <table><tbody><tr><td><div class="caption">...
+		updateNode = updateNode.firstChild.firstChild.firstChild.firstChild;
+	}
+
+	// TODO: allow for a DOM node as content
+	updateNode.innerHTML = content;
+}
 
 // }}}

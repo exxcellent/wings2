@@ -18,6 +18,8 @@ import org.wings.SDelayedEventModel;
 import org.wings.event.SDocumentListener;
 
 import javax.swing.text.BadLocationException;
+
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 
 /**
@@ -32,6 +34,17 @@ public interface SDocument extends Serializable, SDelayedEventModel {
      * @return number of characters >= 0
      */
     public int getLength();
+
+    /**
+     * Returns an array of all the <code>SDocumentListener</code>s added
+     * to this SDocument via addDocumentListener().
+     *
+     * @return all of the <code>SDocumentListener</code>s added or an
+     *         empty array if no listeners are present
+     * @see SDocument#addDocumentListener
+     * @see SDocument#removeDocumentListener
+     */
+    public SDocumentListener[] getDocumentListeners();
 
     /**
      * Registers the given observer to begin receiving notifications

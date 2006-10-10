@@ -3,6 +3,7 @@ package org.wings.plaf.css.msie;
 import org.wings.*;
 import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
+import org.wings.plaf.css.RenderHelper;
 import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
@@ -72,7 +73,8 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
                 borderHeight += border.getThickness(SConstants.BOTTOM);
             }
 
-            device.print("<table style=\"behavior:url('-org/wings/plaf/css/layout.htc')\" rule=\"fill\"");
+            RenderHelper.getInstance(c).addScript("layoutAvailableSpaceIE('" + c.getName() + "');");
+            device.print("<table ");
             Utils.optAttribute(device, "layoutHeight", height);
             Utils.optAttribute(device, "borderHeight", borderHeight);
             preferredSize.setHeight(null);

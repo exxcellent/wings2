@@ -2,6 +2,8 @@ package logconfig;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +13,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -27,6 +31,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.wings.ReloadManager;
+import org.wings.SAnchor;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SButtonGroup;
@@ -48,11 +53,16 @@ import org.wings.SScrollPane;
 import org.wings.SScrollPaneLayout;
 import org.wings.SSpacer;
 import org.wings.STemplateLayout;
+import org.wings.STextArea;
 import org.wings.STextField;
 import org.wings.STree;
 import org.wings.SURLIcon;
+import org.wings.event.SDocumentEvent;
+import org.wings.event.SDocumentListener;
 import org.wings.header.Link;
 import org.wings.resource.DefaultURLResource;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 import org.xml.sax.EntityResolver;
@@ -61,7 +71,7 @@ import org.xml.sax.InputSource;
 public class LogConfig {
     private static final Log log = LogFactory.getLog(LogConfig.class);
     private static final SDimension BU_DIM = new SDimension(100, SDimension.AUTO_INT);
-    private static final SDimension IN_DIM = new SDimension(200, SDimension.AUTO_INT);
+    private static final SDimension IN_DIM = SDimension.FULLWIDTH;
 
     private SFrame fr_frame = new SFrame("Log4J - Configurator");
 
@@ -144,10 +154,10 @@ public class LogConfig {
         rb_insertNode.setSelected(true);
         rb_insertNode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (rb_insertNode.isSelected()) {
-                    clearEditFields();
-                }
-            }
+				if (rb_insertNode.isSelected()) {
+                  clearEditFields();
+              }
+			}
         });
         rb_updateNode = new SRadioButton("Update node");
         rb_updateNode.setEnabled(false);
@@ -297,7 +307,37 @@ public class LogConfig {
         if (false) {
             fr_frame.setNoCaching(false);
             tr_domTree.setEpochCheckEnabled(false);
-            // fo_form.setPostMethod(false);
+            fo_form.setPostMethod(false);
+        }
+
+        // TESTING ON-CHANGE-SUBMIT-LISTENERS
+        if (false) {
+        	bg_insertOrUpdate.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                	log.info("ActionListener of ButtonGroup!!!");
+                }
+            });
+        	cb_editAdditivityFlag.addItemListener(new ItemListener() {
+            	public void itemStateChanged(ItemEvent e) {
+            		log.info("ItemListener of ComboBox!!!");
+    			}
+            });
+        	li_editAppenderRef.addListSelectionListener(new ListSelectionListener() {
+    			public void valueChanged(ListSelectionEvent e) {
+    				log.info("ListSelectionListener of List!!!");
+    			}
+            });
+        	tf_editCategoryName.addDocumentListener(new SDocumentListener() {
+				public void changedUpdate(SDocumentEvent e) {
+					log.info("DocumentListener of TextField - changed!!!");
+				}
+				public void insertUpdate(SDocumentEvent e) {
+					log.info("DocumentListener of TextField - insert!!!");
+				}
+				public void removeUpdate(SDocumentEvent e) {
+					log.info("DocumentListener of TextField - remove!!!");
+				}
+        	});
         }
 
         SContainer pa_content = fr_frame.getContentPane();
@@ -564,7 +604,7 @@ public class LogConfig {
             }
         });
 
-        selected = tr_domTree.isCompleteUpdateForced();
+        selected = cb_toggleTreeCompleteUpdate.isCompleteUpdateForced();
         final SCheckBox cb_toggleCheckboxTest =
             new SCheckBox(cb_texts[5] + selected, selected);
         cb_toggleCheckboxTest.addActionListener(new ActionListener() {
@@ -594,6 +634,38 @@ public class LogConfig {
         final SButton bu_forceServerError = new SButton("Force an \"Internal Server Error (500)\"!");
         bu_forceServerError.setName("force_error");
 
+        String text = "This TextArea is just for debugging the 'onChangeSubmit'-behavior." +
+        		" If you want to test this behavior for other components too, you have to" +
+        		" enable the according switches within the source code of this application.";
+        STextArea ta_testTextArea = new STextArea(text);
+        ta_testTextArea.setRows(4);
+        ta_testTextArea.setPreferredSize(IN_DIM);
+        ta_testTextArea.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        ta_testTextArea.addDocumentListener(new SDocumentListener() {
+			public void changedUpdate(SDocumentEvent e) {
+				log.info("DocumentListener of TextArea - changed!!!");
+			}
+			public void insertUpdate(SDocumentEvent e) {
+				log.info("DocumentListener of TextArea - insert!!!");
+			}
+			public void removeUpdate(SDocumentEvent e) {
+				log.info("DocumentListener of TextArea - remove!!!");
+			}
+		});
+
+        final SAnchor an_toggleAjaxDebugging = new SAnchor();
+        an_toggleAjaxDebugging.addScriptListener(new JavaScriptListener(
+        		JavaScriptEvent.ON_CLICK,
+        		"var debug = document.getElementById('ajaxDebugging');" +
+        		"if (debug == null) alert('The AJAX debugging view has not been enabled yet!');" +
+        		"else {" +
+        		"  if (debug.style.display == 'block') hideAjaxDebugging();" +
+        		"  else showAjaxDebugging();" +
+        		"}" +
+        		"return false;"
+        ));
+        an_toggleAjaxDebugging.add(new SLabel("Show/hide the AJAX debugging view (if enabled)"));
+
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(0));
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameIncrementalUpdate);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameUpdateHighlight);
@@ -609,6 +681,12 @@ public class LogConfig {
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, createRandomResultPanel());
+
+        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+        addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
+
+        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+        addToAjaxDebuggingPanel(pa_debug, an_toggleAjaxDebugging);
 
         return pa_debug;
     }

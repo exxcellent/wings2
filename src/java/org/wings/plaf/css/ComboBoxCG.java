@@ -38,38 +38,26 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
     }
 
     protected void writeFormComboBox(Device device, SComboBox component) throws IOException {
-
-        Object clientProperty = component.getClientProperty("onChangeSubmitListener");
-        if ( ( component.getActionListeners().length > 0 || component.getItemListener().length > 0 ) ) {
-            if ( clientProperty == null ) {
-                JavaScriptListener javaScriptListener = new JavaScriptListener(
-                		JavaScriptEvent.ON_CHANGE,
-                		"submitForm(" + !component.isCompleteUpdateForced() + ",event);"
-                );
-                component.addScriptListener( javaScriptListener );
-                component.putClientProperty( "onChangeSubmitListener", javaScriptListener );
+    	Object clientProperty = component.getClientProperty("onChangeSubmitListener");
+    	// If the application developer attached any ActionListeners or ItemListeners to
+        // this SComboBox, the surrounding form gets submitted as soon as the state / the
+    	// selection of this SComboBox changed.
+        if (component.getActionListeners().length > 0 || component.getItemListeners().length > 0) {
+            if (clientProperty == null) {
+            	String event = JavaScriptEvent.ON_CHANGE;
+            	String code = "submitForm(" + !component.isCompleteUpdateForced() + ",event);";
+                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
+                component.addScriptListener(javaScriptListener);
+                component.putClientProperty("onChangeSubmitListener", javaScriptListener);
             }
-        } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
-            component.removeScriptListener( (JavaScriptListener)clientProperty );
-            component.putClientProperty( "onChangeSubmitListener", null );
+        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+        	component.removeScriptListener((JavaScriptListener) clientProperty);
+        	component.putClientProperty("onChangeSubmitListener", null);
         }
 
         device.print("<select size=\"1\"");
 
-        SDimension preferredSize = component.getPreferredSize();
-        boolean behaviour = false && Utils.isMSIE(component) && preferredSize != null && "100%".equals(preferredSize.getWidth());
-        if (behaviour) {
-            component.setAttribute("behavior", "url('-org/wings/plaf/css/layout.htc')");
-            preferredSize.setWidth(Utils.calculateHorizontalOversize(component, false));
-            //component.setAttribute("display", "none");
-        }
         writeAllAttributes(device, component);
-        if (behaviour) {
-            preferredSize.setWidth("100%");
-            component.setAttribute("behavior", null);
-            Utils.optAttribute(device, "rule", "width");
-        }
-
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.writeEvents(device, component, null);

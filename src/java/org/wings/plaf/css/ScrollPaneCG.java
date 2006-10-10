@@ -39,12 +39,8 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
             try {
                 scrollable.setViewportSize(scrollable.getScrollableViewportSize());
                 writeContent(device, component);
-                device.print("<script type=\"text/javascript\">\n" +
-                    "    var outer = document.getElementById(\"" + component.getName() + "\");\n" +
-                    "    var div = outer.getElementsByTagName(\"div\")[0];\n" +
-                    "    div.style.height = document.defaultView.getComputedStyle(outer, null).getPropertyValue(\"height\");\n" +
-                    "    div.style.display = \"block\";" +
-                    "</script>");
+                String script = "layoutScrollPane('" + component.getName() + "');";
+                RenderHelper.getInstance(component).addScript(script);
             } finally {
                 //component.setPreferredSize(center.getPreferredSize());
                 scrollable.setViewportSize(viewportSizeBackup);

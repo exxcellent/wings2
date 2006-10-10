@@ -439,7 +439,7 @@ ul.SPopupMenu a.x:hover{
 div.domTT {
     border: 1px solid #333333;
 }
-div.domTTCaption {
+div.domTT .caption {
     font-family: serif;
     font-size: 12px;
     font-weight: bold;
@@ -447,7 +447,7 @@ div.domTTCaption {
     color: #FFFFFF;
     background-color: #333333;
 }
-div.domTTContent {
+div.domTT .contents {
     font-size: 12px;
     font-family: sans-serif;
     padding: 3px 2px;

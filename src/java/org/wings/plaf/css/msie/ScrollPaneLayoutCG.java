@@ -2,6 +2,7 @@ package org.wings.plaf.css.msie;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.plaf.css.RenderHelper;
 import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
@@ -14,8 +15,8 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
     protected void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
         openLayouterBody(d, layout);
-        d.print("<tr><td valign=\"top\"><div style=\"display: none; behavior:url('-org/wings/plaf/css/layout.htc')\" rule=\"scroll\">");
-        
+        d.print("<tr><td valign=\"top\"><div style=\"display: none;\">");
+
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
         Scrollable scrollable = (Scrollable) center;
@@ -27,6 +28,8 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
         d.print("</div></td></tr>");
         closeLayouterBody(d, layout);
+
+        RenderHelper.getInstance(center).addScript("layoutScrollPaneIE('" + layout.getContainer().getName() + "');");
     }
 
     protected void writePaging(Device d, SScrollPaneLayout layout) throws IOException {

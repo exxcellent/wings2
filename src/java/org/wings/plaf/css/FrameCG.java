@@ -89,7 +89,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private Boolean renderXmlDeclaration = Boolean.FALSE;
 
     public static final Headers HEADERS = new Headers();
-    private ClassPathResource layout;
 
     public static class Headers
         extends SessionLocal
@@ -229,9 +228,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         dwrEngine = new Script("text/javascript", new DefaultURLResource("../dwr/engine.js"));
         dwrUtil = new Script("text/javascript", new DefaultURLResource("../dwr/util.js"));
-
-        layout = new ClassPathResource("org/wings/plaf/css/layout.htc", "text/x-component");
-        layout.getId(); // externalize ..
     }
 
     /**
@@ -494,20 +490,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
 
-        // TODO: move this to a dynamic script resource
-        SToolTipManager toolTipManager = frame.getSession().getToolTipManager();
-        device
-                .print("<script type=\"text/javascript\">\n")
-                .print("  domTT_addPredefined('default', 'caption', false");
-        if (toolTipManager.isFollowMouse()) {
-            device.print(", 'trail', true");
-        }
-        device.print(", 'delay', ").print(toolTipManager.getInitialDelay());
-        device.print(", 'lifetime', ").print(toolTipManager.getDismissDelay());
-        device
-                .print(");\n")
-                .print("</script>\n");
-
         device.print("</head>\n");
         device.print("<body");
         Utils.writeEvents(device, frame, null);
@@ -600,26 +582,41 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
     protected void writeInlineScripts(Device device, SComponent component) throws IOException {
     	final SFrame frame = (SFrame) component;
-        device.print("<script type=\"text/javascript\">\n" +
-        		"  event_epoch = '" + frame.getEventEpoch() + "';\n" +
-        		"  completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
-        		"  incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
-        		"  incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
-        		"  incrementalUpdateCursor = { 'enabled':" + frame.getIncrementalUpdateCursor()[0] + "," +
-											 " 'image':'" + frame.getIncrementalUpdateCursor()[1] + "'," +
-											 " 'dx':" + frame.getIncrementalUpdateCursor()[2] + "," +
-											 " 'dy':" + frame.getIncrementalUpdateCursor()[3] + " };\n" +
-        		"  incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
-        										" 'color':'" + frame.getIncrementalUpdateHighlight()[1] + "'," +
-        										" 'duration':" + frame.getIncrementalUpdateHighlight()[2] + " };\n");
+        device.print("<script type=\"text/javascript\">\n");
 
-        for (int i = 0; i < component.getScriptListeners().length; i++) {
+        device.print("// globally accessible script variables:\n" +
+        		"event_epoch = '" + frame.getEventEpoch() + "';\n" +
+        		"completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
+        		"incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
+        		"incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
+        		"incrementalUpdateCursor = { 'enabled':" + frame.getIncrementalUpdateCursor()[0] + "," +
+										   " 'image':'" + frame.getIncrementalUpdateCursor()[1] + "'," +
+										   " 'dx':" + frame.getIncrementalUpdateCursor()[2] + "," +
+										   " 'dy':" + frame.getIncrementalUpdateCursor()[3] + " };\n" +
+        		"incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
+        									  " 'color':'" + frame.getIncrementalUpdateHighlight()[1] + "'," +
+        									  " 'duration':" + frame.getIncrementalUpdateHighlight()[2] + " };\n");
+
+        device.print("// script code collected during rendering:\n");
+        for (Iterator i = RenderHelper.getInstance(frame).getCollectedScripts().iterator(); i.hasNext();) {
+    		device.print(i.next() + "\n");
+    	}
+        for (int i = 0; i < component.getScriptListeners().length; ++i) {
             ScriptListener scriptListener = component.getScriptListeners()[i];
             String script = scriptListener.getScript();
             if (script != null) {
                 device.print(script);
             }
         }
+
+        SToolTipManager toolTipManager = frame.getSession().getToolTipManager();
+        device.print("domTT_addPredefined('default', 'caption', false");
+        if (toolTipManager.isFollowMouse()) {
+            device.print(", 'trail', true");
+        }
+        device.print(", 'delay', ").print(toolTipManager.getInitialDelay());
+        device.print(", 'lifetime', ").print(toolTipManager.getDismissDelay());
+        device.print(");\n");
 
         device.print("</script>\n");
     }

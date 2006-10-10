@@ -11,6 +11,8 @@ import org.wings.SMenuItem;
 import org.wings.LowLevelEventListener;
 import org.wings.SContainer;
 import org.wings.resource.ResourceManager;
+import org.wings.script.ScriptListener;
+import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public final class RenderHelper {
             ((Boolean) ResourceManager.getObject("SComponent.renderCache", Boolean.class)).booleanValue();
 
     private final List menus = new ArrayList();
+    private final List scripts = new ArrayList();
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
     // TODO(he): never used
     private int horizontalLayoutPadding = 0;
@@ -40,8 +43,27 @@ public final class RenderHelper {
     private boolean incrementalUpdateMode = false;
 
     public void reset() {
+    	scripts.clear();
         menus.clear();
         menueRenderBuffer.reset();
+    }
+
+    public void addScript(String script) {
+    	scripts.add(script);
+    }
+
+    public List getCollectedScripts() {
+    	return scripts;
+    }
+
+    public void collectScripts(SComponent component) {
+        for (int i = 0; i < component.getScriptListeners().length; ++i) {
+            ScriptListener scriptListener = component.getScriptListeners()[i];
+            String script = scriptListener.getScript();
+            if (script != null) {
+            	addScript(script);
+            }
+        }
     }
 
     public List getCollectedMenues() {

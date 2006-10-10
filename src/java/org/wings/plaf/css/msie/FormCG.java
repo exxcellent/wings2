@@ -7,6 +7,7 @@ import org.wings.SForm;
 import org.wings.SLayoutManager;
 import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
+import org.wings.plaf.css.RenderHelper;
 import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
@@ -86,7 +87,8 @@ public class FormCG extends org.wings.plaf.css.FormCG {
                 borderHeight += border.getThickness(SConstants.BOTTOM);
             }
 
-            device.print("<table style=\"behavior:url('-org/wings/plaf/css/layout.htc')\" rule=\"fill\"");
+            RenderHelper.getInstance(c).addScript("layoutAvailableSpaceIE('" + c.getName() + "');");
+            device.print("<table ");
             Utils.optAttribute(device, "layoutHeight", height);
             Utils.optAttribute(device, "borderHeight", borderHeight);
             preferredSize.setHeight(null);

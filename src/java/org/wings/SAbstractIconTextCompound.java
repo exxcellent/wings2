@@ -28,7 +28,7 @@ import java.awt.event.ItemListener;
 
 /**
  * Base class for elements with icon and text like {@link SAbstractButton} and {@link SClickable}.
- * 
+ *
  * It supports 7 different icon states.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -112,7 +112,7 @@ public abstract class SAbstractIconTextCompound
     public SButtonModel getModel() {
         return model;
     }
-    
+
     public void setModel(SButtonModel model) {
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
@@ -125,6 +125,17 @@ public abstract class SAbstractIconTextCompound
      */
     public Object[] getSelectedObjects() {
         return model.isSelected() ? new Object[]{this} : null;
+    }
+
+    /**
+     * Returns an array of all the <code>ItemListener</code>s added
+     * to this SAbstractIconTextCompound with addItemListener().
+     *
+     * @return all of the <code>ItemListener</code>s added or an empty
+     *         array if no listeners have been added
+     */
+    public ItemListener[] getItemListeners() {
+        return (ItemListener[]) (getListeners(ItemListener.class));
     }
 
     /**
@@ -144,6 +155,17 @@ public abstract class SAbstractIconTextCompound
      */
     public void removeItemListener(ItemListener il) {
         removeEventListener(ItemListener.class, il);
+    }
+
+    /**
+     * Returns an array of all the <code>ChangeListener</code>s added
+     * to this SAbstractIconTextCompound with addChangeListener().
+     *
+     * @return all of the <code>ChangeListener</code>s added or an empty
+     *         array if no listeners have been added
+     */
+    public ChangeListener[] getChangeListeners() {
+        return (ChangeListener[]) (getListeners(ChangeListener.class));
     }
 
     /**
@@ -441,7 +463,7 @@ public abstract class SAbstractIconTextCompound
     public void setSelected(boolean selected) {
         if (model.isSelected() != selected) {
             model.setSelected(selected);
-            
+
             if (!delayEvents) {
                 fireStateChanged();
                 fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, this,
@@ -450,7 +472,7 @@ public abstract class SAbstractIconTextCompound
             }
             else
                 delayedEvent = true;
-            
+
             reload(ReloadManager.STATE);
         }
     }
@@ -486,7 +508,7 @@ public abstract class SAbstractIconTextCompound
     protected void fireItemStateChanged(ItemEvent ie) {
         if (ie == null)
             return;
-        
+
         // Guaranteed to return a non-null array
         Object[] listeners = getListenerList();
         // Process the listeners last to first, notifying

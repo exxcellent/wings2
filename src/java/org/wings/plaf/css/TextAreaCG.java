@@ -16,6 +16,8 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 
 import java.io.IOException;
 
@@ -45,6 +47,26 @@ public final class TextAreaCG extends AbstractComponentCG implements
             throws IOException {
         final STextArea component = (STextArea) _c;
 
+        Object clientProperty = component.getClientProperty("onChangeSubmitListener");
+        // If the application developer attached any SDocumentListeners to this
+    	// STextArea, the surrounding form gets submitted as soon as the content
+        // of this STextArea changed.
+        if (component.getDocumentListeners().length > 1) {
+        	// We need to test if there are at least 2 document
+        	// listeners because each text component registers
+        	// itself as a listener of its document as well.
+            if (clientProperty == null) {
+            	String event = JavaScriptEvent.ON_CHANGE;
+            	String code = "submitForm(" + !component.isCompleteUpdateForced() + ",event);";
+                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
+                component.addScriptListener(javaScriptListener);
+                component.putClientProperty("onChangeSubmitListener", javaScriptListener);
+            }
+        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+        	component.removeScriptListener((JavaScriptListener) clientProperty);
+        	component.putClientProperty("onChangeSubmitListener", null);
+        }
+
         /*
          * a swing like way to write multiline labels
          */
@@ -60,20 +82,8 @@ public final class TextAreaCG extends AbstractComponentCG implements
 
         } else {
             device.print("<textarea");
-            SDimension preferredSize = component.getPreferredSize();
-            boolean behaviour = Utils.isMSIE(component) && preferredSize != null && "100%".equals(preferredSize.getWidth());
-            if (behaviour) {
-                component.setAttribute("behavior", "url('-org/wings/plaf/css/layout.htc')");
-                preferredSize.setWidth(Utils.calculateHorizontalOversize(component, false));
-                //component.setAttribute("display", "none");
-            }
-            writeAllAttributes(device, component);
-            if (behaviour) {
-                preferredSize.setWidth("100%");
-                component.setAttribute("behavior", null);
-                Utils.optAttribute(device, "rule", "width");
-            }
 
+            writeAllAttributes(device, component);
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             Utils.optAttribute(device, "cols", component.getColumns());
             Utils.optAttribute(device, "rows", component.getRows());

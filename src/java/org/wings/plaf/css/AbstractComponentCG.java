@@ -172,37 +172,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         return builder.toString();
     }
 
-    protected void writeInlineScripts(Device device, SComponent component) throws IOException {
-        boolean scriptTagOpen = false;
-        for (int i = 0; i < component.getScriptListeners().length; i++) {
-            ScriptListener scriptListener = component.getScriptListeners()[i];
-            String script = scriptListener.getScript();
-            if (script != null) {
-                if (!scriptTagOpen) {
-                    device.print("<script type=\"text/javascript\">");
-                    scriptTagOpen = true;
-                }
-                device.print(script);
-            }
-        }
-        if (scriptTagOpen)
-            device.print("</script>");
-    }
-
-    /**
-     * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
-     */
-    protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
-        final String toolTipText = component != null ? component.getToolTipText() : null;
-        if (toolTipText != null) {
-            device.print(" onmouseover=\"return makeTrue(domTT_activate(this, event, 'content', '");
-            // javascript needs even more & special quoting
-            // FIXME: do this more efficiently
-            Utils.quote(device, toolTipText.replaceAll("'", "\\'"), true, true, true);
-            device.print("', 'predefined', 'default'));\"");
-        }
-    }
-
     /**
      * Write JS code for context menus. Common implementaton for MSIE and gecko.
      */
@@ -216,6 +185,17 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print("');\" onMouseDown=\"return wpm_menuPopup(event, '");
             device.print(popupId);
             device.print("');\"");
+        }
+    }
+
+    /**
+     * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
+     */
+    protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
+        final String toolTipText = component != null ? component.getToolTipText() : null;
+        if (toolTipText != null && toolTipText.length() > 0) {
+            device.print(" onmouseover=\"return wu_toolTip(event, this)\"");
+            Utils.optAttribute(device, "tip", toolTipText);
         }
     }
 
@@ -381,7 +361,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         try {
         	writeInternal(device, component);
-            writeInlineScripts(device, component);
+        	RenderHelper.getInstance(component).collectScripts(component);
             RenderHelper.getInstance(component).collectMenues(component);
 		} catch (RuntimeException e) {
 			log.fatal("Runtime exception during rendering", e);

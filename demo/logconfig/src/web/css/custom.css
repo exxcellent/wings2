@@ -71,3 +71,7 @@ ul.STree li.selected table.selected tr td.selected {
     background-color: #F7F7F7;
     border: 1px dotted black;
 }
+
+.STextArea {
+    font-size: 10pt;
+}

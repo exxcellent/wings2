@@ -83,16 +83,11 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
 
         device.print("</div>");
 
-        device.print("<script type=\"text/javascript\">\n");
-
-        String function = "showModalDialog(\"" + dialogId + "\", \"" + modalId + "\")";
-
         // Add the function for window.onresize and window.onload.
-        device.print("    addWindowOnResizeFunction('" + function + "');\n");
-        device.print("    addWindowOnLoadFunction('" + function + "');\n");
-        device.print("    " + function + ";\n");
-
-        device.print("</script>\n");
+        String function = "showModalDialog(\"" + dialogId + "\", \"" + modalId + "\")";
+        RenderHelper.getInstance(frame).addScript("addWindowOnResizeFunction('" + function + "');");
+        RenderHelper.getInstance(frame).addScript("addWindowOnLoadFunction('" + function + "');");
+        RenderHelper.getInstance(frame).addScript(function + ";");
     }
 
 

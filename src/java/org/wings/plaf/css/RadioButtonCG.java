@@ -13,7 +13,6 @@
  */
 package org.wings.plaf.css;
 
-
 import org.wings.SAbstractButton;
 import org.wings.SIcon;
 import org.wings.io.Device;
@@ -38,20 +37,31 @@ public final class RadioButtonCG extends CheckBoxCG implements
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {
-
         Object clientProperty = button.getClientProperty("onChangeSubmitListener");
-        if ( button.getActionListeners().length > 0 ) {
-            if ( clientProperty == null ) {
-                JavaScriptListener javaScriptListener = new JavaScriptListener(
-                		JavaScriptEvent.ON_CHANGE,
-                		"submitForm(" + !button.isCompleteUpdateForced() + ",event);"
-                );
-                button.addScriptListener( javaScriptListener );
-                button.putClientProperty( "onChangeSubmitListener", javaScriptListener );
+        // If the application developer attached any ActionListeners or ItemListeners to
+        // this SRadioButton or its ButtonGroup, the surrounding form gets submitted as
+        // soon as the state of this SRadioButton changed.
+        if (button.getActionListeners().length > 0 || button.getItemListeners().length > 0 ||
+        		(button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
+            if (clientProperty == null) {
+            	String event = JavaScriptEvent.ON_CHANGE;
+            	String code = "submitForm(" + !button.isCompleteUpdateForced() + ",event);";
+            	if (Utils.isMSIE(button)) {
+            		// In IE the "onchange"-event gets fired when a control loses the
+            		// input focus and its value has been modified since gaining focus.
+            		// Even though this is actually the correct behavior, we want the
+            		// event to get fired immediately - thats why we use a "filtered"
+            		// version of IE's proprietary "onpropertychange"-event.
+            		event = "onpropertychange";
+            		code = "if (event.srcElement.checked) " + code;
+            	}
+                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
+                button.addScriptListener(javaScriptListener);
+                button.putClientProperty("onChangeSubmitListener", javaScriptListener);
             }
-        } else if ( clientProperty != null && clientProperty instanceof JavaScriptListener ) {
-            button.removeScriptListener( (JavaScriptListener)clientProperty );
-            button.putClientProperty( "onChangeSubmitListener", null );
+        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+            button.removeScriptListener((JavaScriptListener) clientProperty);
+            button.putClientProperty("onChangeSubmitListener", null);
         }
 
         device.print("<input type=\"hidden\" name=\"");

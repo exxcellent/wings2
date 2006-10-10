@@ -158,7 +158,7 @@ public abstract class SAbstractButton
     }
 
     /**
-     * Removes the supplied Listener from teh listener list
+     * Removes the supplied Listener from the listener list
      */
     public void removeActionListener(ActionListener listener) {
         removeEventListener(ActionListener.class, listener);
@@ -255,7 +255,7 @@ public abstract class SAbstractButton
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
-        
+
         delayEvents(true);
 
         boolean requestSelection = isSelected();
@@ -271,16 +271,16 @@ public abstract class SAbstractButton
                 // this is because in a form the name of a parameter for
                 // buttons in a buttongroup must be the same...
                 String value = values[i];
-        
+
                 // illegal format
                 if (value.length() < 3) { continue;  }
-        
+
                 // no uid DIVIDER
                 // value.charAt(value.length()-2)!=UID_DIVIDER ) { break; }
-        
+
                 // not for me
                 if (!value.startsWith(super.getLowLevelEventId())) { continue; }
-        
+
                 // last character is indicator, if button should be
                 // selected or not
                 switch (value.charAt(value.length() - 1)) {
@@ -300,7 +300,7 @@ public abstract class SAbstractButton
                 ++eventCount;
             }
         }
-    
+
         /*
          * Checkboxes in HTML-forms write two form components:
          * one hidden input, containing the deselect-command (value='0'),
@@ -329,7 +329,7 @@ public abstract class SAbstractButton
 
             SForm.addArmedComponent(this);
         }
-        
+
         delayEvents(false);
     }
 
@@ -364,7 +364,7 @@ public abstract class SAbstractButton
             return true;
         else if ("0".equals(toggleParameter))
             return false;
-    
+
         // don't change...
         return isSelected();
     }
@@ -448,7 +448,7 @@ public abstract class SAbstractButton
         setEnabled((a != null ? a.isEnabled() : true));
         setToolTipText((a != null ? (String) a.getValue(Action.SHORT_DESCRIPTION) : null));
     }
-    
+
     protected PropertyChangeListener createActionPropertyChangeListener(Action a) {
         return new ButtonActionPropertyChangeListener(this, a);
     }

@@ -14,7 +14,9 @@
  */
 package org.wings.text;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,13 +36,13 @@ import org.wings.util.EditTranscriptGenerator;
 public class DefaultDocument implements SDocument {
     private final SStringBuilder buffer = new SStringBuilder();
     private EventListenerList listeners = null;
-    
+
     /**
      * Indicates if we should fire event immediately when they arise,
      * or if we should collect them for a later delivery
      */
     private boolean delayEvents = false;
-    
+
     /**
      * All delayed events are stored here
      */
@@ -117,7 +119,15 @@ public class DefaultDocument implements SDocument {
         }
     }
 
-    public void addDocumentListener(SDocumentListener listener) {
+    public SDocumentListener[] getDocumentListeners() {
+    	if (listeners != null) {
+            return (SDocumentListener[]) listeners.getListeners(SDocumentListener.class);
+        } else {
+            return (SDocumentListener[]) Array.newInstance(SDocumentListener.class, 0);
+        }
+	}
+
+	public void addDocumentListener(SDocumentListener listener) {
         if (listeners == null)
             listeners = new EventListenerList();
         listeners.add(SDocumentListener.class, listener);
@@ -163,12 +173,12 @@ public class DefaultDocument implements SDocument {
 
     protected void fireChangeUpdate(int offset, int length) {
     	SDocumentEvent e = new SDocumentEvent(this, offset, length, SDocumentEvent.CHANGE);
-    	
+
     	if (delayEvents) {
     		delayedEvents.add(e);
 		} else {
 			if (listeners == null || listeners.getListenerCount() == 0)
-				return;			
+				return;
 
 			Object[] listeners = this.listeners.getListenerList();
 			for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -176,13 +186,13 @@ public class DefaultDocument implements SDocument {
 			}
 		}
     }
-    
+
 	public boolean getDelayEvents() {
 		return delayEvents;
 	}
 
 	public void setDelayEvents(boolean b) {
-		delayEvents = b;		
+		delayEvents = b;
 	}
 
 	public void fireDelayedIntermediateEvents() {
@@ -200,8 +210,8 @@ public class DefaultDocument implements SDocument {
 		}
 		delayedEvents.clear();
 	}
-	
+
 	public void fireDelayedFinalEvents() {
-		
+
 	}
 }

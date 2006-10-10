@@ -22,7 +22,7 @@ function getTarget(event) {
         return event.target;
 }
 
-function getElementByTagName(element, tag) {
+function getParentByTagName(element, tag) {
     while (element != null) {
         if (tag == element.tagName)
             return element;
@@ -31,7 +31,7 @@ function getElementByTagName(element, tag) {
     return null;
 }
 
-function getElementWearingAttribute(element, attribute) {
+function getParentWearingAttribute(element, attribute) {
     while (element != null) {
         if (element.getAttribute && element.getAttribute(attribute)) {
             return element;
@@ -61,49 +61,50 @@ var incrementalUpdateHighlight; // An object whose properties "enabled", "color"
                                 // and "duration" store the 3 highlight settings
 var requestQueue = new Array(); // A queue which stores requests to be processed
 
-function submitForm(ajaxEnabled, event, eventName, eventValue, clientHandlers) {
+function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
     // Enqueue this request if another one hasn't been processed yet
     if (enqueueThisRequest(submitForm, submitForm.arguments)) return;
 
     // Needed preparations
     event = getEvent(event);
     var target = getTarget(event);
-    var form = getElementByTagName(target, "FORM");
+    var form = getParentByTagName(target, "FORM");
     if (eventName != null) {
-        eidprovider = getElementWearingAttribute(target, "eid");
+        eidprovider = getParentWearingAttribute(target, "eid");
         eventName = eidprovider.getAttribute("eid");
     }
 
-    var doSubmit = true;
-    if (clientHandlers) {
-        // Invoke any available client handlers
-        for (var i = 0; i < clientHandlers.length; i++) {
-            doSubmit = clientHandlers[i]();
-            if (doSubmit == false) break;
-        }
-    }
-
-    if (doSubmit == undefined || doSubmit) {
+    if (invokeScriptListeners(scriptCodes)) {
         if (form != null) {
+            // Generate unique IDs for the nodes we have to insert
+            // dynamically into the form (workaround because of IE)
+            var formId = form.getAttribute("id");
+            var epochNodeId = "event_epoch_" + formId;
+            var triggerNodeId = "event_trigger_" + formId;
+
+            var debug = "Elements before: " + form.elements.length;
+
             // Always encode current event epoch
-            var epochNode = form.event_epoch;
+            var epochNode = document.getElementById(epochNodeId);
             if (epochNode == null) {
                 // Append this node only once, then reuse it
                 epochNode = document.createElement("input");
                 epochNode.setAttribute("type", "hidden");
                 epochNode.setAttribute("name", "event_epoch");
+                epochNode.setAttribute("id", epochNodeId);
                 form.appendChild(epochNode);
             }
             epochNode.setAttribute("value", event_epoch);
 
             // Encode event trigger if available
-            var triggerNode = form.event_trigger;
+            var triggerNode = document.getElementById(triggerNodeId);
             if (eventName != null) {
                 if (triggerNode == null) {
                     // Append this node only once, then reuse it
                     triggerNode = document.createElement("input");
                     triggerNode.setAttribute("type", "hidden");
                     triggerNode.setAttribute("name", "event_trigger");
+                    triggerNode.setAttribute("id", triggerNodeId);
                     form.appendChild(triggerNode);
                 }
                 triggerNode.setAttribute("value", eventName + "|" + eventValue);
@@ -111,8 +112,15 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, clientHandlers) {
                 // If we don't need an event trigger we have to
                 // ensure that old event triggers (if existing)
                 // are deleted. Otherwise they get fired again!
-                form.removeChild(form.event_trigger);
-                form.event_trigger = null;
+                form.removeChild(triggerNode);
+            }
+
+            if (false) {
+                debug += "\nElements after: " + form.elements.length;
+                for (var i = 0; i < form.elements.length; i++) {
+                    debug += "\n - name: " + form.elements[i].name + " | value: " + form.elements[i].value;
+                }
+                alert(debug);
             }
 
             var submitted = false;
@@ -136,20 +144,11 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, clientHandlers) {
     }
 }
 
-function followLink(ajaxEnabled, eventName, eventValue, clientHandlers) {
+function followLink(ajaxEnabled, eventName, eventValue, scriptCodes) {
     // Enqueue this request if another one hasn't been processed yet
     if (enqueueThisRequest(followLink, followLink.arguments)) return;
 
-    var doRequest = true;
-    if (clientHandlers) {
-        // Invoke any available client handlers
-        for (var i = 0; i < clientHandlers.length; i++) {
-            doRequest = clientHandlers[i]();
-            if (doRequest == false) break;
-        }
-    }
-
-    if (doRequest == undefined || doRequest) {
+    if (invokeScriptListeners(scriptCodes)) {
         if (incrementalUpdateEnabled && ajaxEnabled) {
             // Send request via AJAX
             var args = {};
@@ -163,8 +162,8 @@ function followLink(ajaxEnabled, eventName, eventValue, clientHandlers) {
         } else {
             // Send a default request
             url = encodeUpdateId(completeUpdateId);
-            document.location = url + "?event_epoch=" + event_epoch +
-                                      "&" + eventName + "=" + eventValue;
+            window.location = url + "?event_epoch=" + event_epoch +
+                                    "&" + eventName + "=" + eventValue;
         }
     }
 }
@@ -187,6 +186,16 @@ function dequeueNextRequest() {
         var args = request.args;
         request.send(args[0], args[1], args[2], args[3]);
     }
+}
+
+function invokeScriptListeners(scriptCodes) {
+    if (scriptCodes) {
+        for (var i = 0; i < scriptCodes.length; i++) {
+            invokeNext = scriptCodes[i]();
+            if (invokeNext == false) return false;
+        }
+    }
+    return true;
 }
 
 function initAjaxCallbacks() {
@@ -282,8 +291,7 @@ function requestFocus(id) {
     window.focus = id;
     if (div) {
         if (div.getAttribute("foc") == id) {
-            if (!div.disabled && !div.style.display == "none")
-                div.focus();
+            if (!div.disabled && !div.style.display == "none") div.focus();
             return;
         }
 
@@ -384,8 +392,8 @@ function storeFocus(event) {
     event = getEvent(event);
     var target = getTarget(event);
 
-    var div = getElementWearingAttribute(target, "eid");
-    var body = getElementByTagName(target, "BODY");
+    var div = getParentWearingAttribute(target, "eid");
+    var body = getParentByTagName(target, "BODY");
     /* Avoid rembering FORM as focus component as this automatically gains
        focus on pressing Enter in MSIE. */
     if (div && body && div.tagName != "FORM") {
@@ -409,25 +417,24 @@ function wu_checkUserAgent(string) {
    right target/new window used in AnchorCG. */
 function wu_checkTarget(target) {
     for (var i = 0; i < parent.frames.length; i++) {
-        if (parent.frames[i].name == target)
-            return true;
+        if (parent.frames[i].name == target) return true;
     }
     return false;
 }
 
-function wu_openlink(target, url) {
-    // if the target exists => change URL, else => open URL in new window
-    if (target == null) {
-        window.location.href = url;
-    }
-    else {
-        if (wu_checkTarget(target)) {
-            parent.frames[target].location.href = url;
-        }
-        else {
-            window.open(url, target);
-        }
-    }
+function wu_openlink(target, url, scriptCodes) {
+  if (invokeScriptListeners(scriptCodes)) {
+      // if the target exists => change URL, else => open URL in new window
+      if (target == null) {
+          window.location.href = url;
+      } else {
+          if (wu_checkTarget(target)) {
+              parent.frames[target].location.href = url;
+          } else {
+              window.open(url, target);
+          }
+      }
+  }
 }
 
 /* Utility method to determine available inner space of the show window on
@@ -436,16 +443,13 @@ function wu_framewidth() {
     if (self.innerHeight) {
         // all except Explorer
         return self.innerWidth;
-    }
-    else if (document.documentElement && document.documentElement.clientHeight) {
-         // Explorer 6 Strict Mode
+    } else if (document.documentElement && document.documentElement.clientHeight) {
+        // Explorer 6 Strict Mode
         return document.documentElement.clientWidth;
-    }
-    else if (document.body) {
+    } else if (document.body) {
         // other Explorers
         return document.body.clientWidth;
-    }
-    else
+    } else
         return -1;
 }
 
@@ -456,14 +460,17 @@ function wu_registerEvent(obj, eventType, func, useCaption) {
     if (obj.addEventListener) {
         obj.addEventListener(eventType, func, useCaption);
         return true;
-    }
-    else if (obj.attachEvent) {
+    } else if (obj.attachEvent) {
         var retVal = object.attachEvent("on" + eventType, func);
         return retVal;
-    }
-    else {
+    } else {
         return false;
     }
+}
+
+function wu_toolTip(event, element) {
+    domTT_activate(element, event, "content", element.getAttribute("tip"), "predefined", "default");
+    return true;
 }
 
 // =============================================================================
@@ -475,8 +482,7 @@ function onFieldChange(key, name, value) {
 
 function onFieldChangeCallback(result) {
     var elem = document.getElementById(result[0]);
-    if (!elem)
-        return; // dwr bug
+    if (!elem) return; // dwr bug
     var data = result[1];
     elem.value = data;
 }
@@ -488,8 +494,7 @@ function onCalUpdate(cal) {
 
 function onCalUpdateCallback(result) {
     var elem = document.getElementById(result[0]);
-    if (!elem)
-        return; // dwr bug
+    if (!elem) return; // dwr bug
     var data = result[1];
     elem.value = data;
     elem.style.color = '';
@@ -500,13 +505,11 @@ function onCalUpdateCallback(result) {
 /* SFormattedTextField JavaScript Code */
 function ftextFieldCallback(result) {
     var elem = document.getElementById(result[0]);
-    if (!elem)
-        return; // dwr bug
+    if (!elem) return; // dwr bug
     var data = result[1];
     if (!data) {
         elem.style.color = '#ff0000';
-    }
-    else {
+    } else {
         elem.style.color = '';
         elem.value = data;
         elem.setAttribute("lastValid", data);
@@ -515,8 +518,7 @@ function ftextFieldCallback(result) {
 
 function spinnerCallback(result) {
     var elem = document.getElementById(result[0]);
-    if (!elem)
-        return; // dwr bug
+    if (!elem) return; // dwr bug
     var data = result[1];
     if (data) {
         elem.value = data;
@@ -551,9 +553,9 @@ function addWindowOnLoadFunction(func) {
 /* The execution of all added window.onload functions. */
 window.onload = performWindowOnLoad;
 function performWindowOnLoad() {
-	if (incrementalUpdateCursor.enabled) {
-		AjaxActivityCursor.init();
-	}
+    if (incrementalUpdateCursor.enabled) {
+      AjaxActivityCursor.init();
+    }
     hideAjaxActivityIndicator();
     for (var i = 0; i < windowOnLoads.length; i++) {
         eval(windowOnLoads[i]);
@@ -609,6 +611,42 @@ function layoutScrollPane(outerId) {
     div.style.display = "block";
 }
 
+function layoutScrollPaneIE(outerId) {
+    var outer = document.getElementById(outerId);
+    var div = outer.getElementsByTagName("div")[0];
+    var td = getParentByTagName(div, "TD");
+    div.style.height = td.clientHeight + "px";
+    div.style.width = td.clientWidth + "px";
+    div.style.position = "absolute";
+    div.style.display = "block";
+    div.style.overflow = "auto";
+}
+
+function layoutAvailableSpaceIE(tableId) {
+	var table = document.getElementById(tableId);
+    if (table.style.height == table.getAttribute("layoutHeight")) return;
+
+    var consumedHeight = 0;
+    var rows = table.rows;
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        var yweight = row.getAttribute("yweight");
+        if (!yweight) consumedHeight += row.offsetHeight;
+    }
+
+    table.style.height = table.getAttribute("layoutHeight");
+    var diff = table.clientHeight - consumedHeight;
+
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var yweight = row.getAttribute("yweight");
+      if (yweight) {
+          var oversize = row.getAttribute("oversize");
+          row.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
+      }
+    }
+}
+
 /* Calculates the absolute position of the element to the left. */
 function absLeft(el) {
     return (el.offsetParent) ? el.offsetLeft + absLeft(el.offsetParent) : el.offsetLeft;
@@ -636,21 +674,21 @@ for (var i = 0; i < filterOnAjaxRequest.length; i++) {
     // without escaping: /.*<FUNCTION NAME>\s*\(\s*('(.*)'|"(.*)")\s*\)\s*;.*/g
 }
 
-/* Prints some debugging information about the given AJAX request at the bottom
+/* Prints some hidden debugging infos about the given AJAX request at the bottom
    of the page. This is done by dynamically attaching a dedicated textarea. */
 function enableAjaxDebugging(request) {
     var debug = document.getElementById("ajaxDebugging");
     if (debug == null) {
         var debugHtmlCode =
             '<div style="margin-top:50px; padding-bottom:3px;">\n' +
-			'  <strong>AJAX DEBUGGING:</strong> &nbsp;XML RESPONSE\n' +
+            '  <strong>AJAX DEBUGGING:</strong> &nbsp;XML RESPONSE\n' +
             '  &nbsp;<span style="font:11px monospace"></span></div>\n' +
             '<textarea readonly="readonly" style="width:100%; height:200px;\n' +
             '  border-top:1px dashed #000000; border-bottom:1px dashed #000000;\n' +
             '  font:11px monospace;"></textarea>\n';
         debug = document.createElement("div");
         debug.id = "ajaxDebugging";
-        debug.style.display = "block";
+        debug.style.display = "none";
         debug.innerHTML = debugHtmlCode;
         document.body.appendChild(debug);
     }
@@ -659,10 +697,16 @@ function enableAjaxDebugging(request) {
     debug.getElementsByTagName("span")[0].innerHTML = "| " + txt.length + " chars";
 }
 
-/* If visible, this function hides the previously enabled AJAX debugging view. */
-function disableAjaxDebugging() {
+/* This function shows the previously enabled AJAX debugging view, if available. */
+function showAjaxDebugging() {
     var debug = document.getElementById("ajaxDebugging");
-    if (debug != null) debug.style.textAlign = "none";
+    if (debug != null) debug.style.display = "block";
+}
+
+/* This function hides the previously enabled AJAX debugging view, if available. */
+function hideAjaxDebugging() {
+    var debug = document.getElementById("ajaxDebugging");
+    if (debug != null) debug.style.display = "none";
 }
 
 function handleRequestError(request) {
@@ -675,20 +719,24 @@ function handleRequestError(request) {
 }
 
 function processAjaxRequest(request) {
-    if (request.responseXML == null) {
+    enableAjaxDebugging(request);
+
+    // Get the received XML response
+    var xmlDoc = request.responseXML;
+    // In case we do not get any XML
+    if (xmlDoc == null) {
         hideAjaxActivityIndicator();
         window.location.href = request.url;
         return;
     }
 
-    enableAjaxDebugging(request);
-    var xmlDoc = request.responseXML;
-	var xmlRoot = xmlDoc.getElementsByTagName("update")[0];
-
+    // Private convenience function
     function getFirstChildData(tagName) {
         return xmlDoc.getElementsByTagName(tagName)[0].firstChild.data;
     }
-
+    // Get the root element of the received XML response
+    var xmlRoot = xmlDoc.getElementsByTagName("update")[0];
+    // Process the response depending on the update mode
     var updateMode = xmlRoot.getAttribute("mode");
     if (updateMode == "complete") {
         window.location.href = getFirstChildData("redirect");
@@ -697,21 +745,37 @@ function processAjaxRequest(request) {
         var components = xmlRoot.getElementsByTagName("component");
         if (components.length > 0) {
             var componentIds = new Array();
+            // Replace HTML needed for component updates
             for (var i = 0; i < components.length; i++) {
                 var id = components[i].getAttribute("id");
                 var html = components[i].firstChild.data;
                 replaceComponentHtml(id, html);
-                executeComponentScript(id);
                 componentIds.push(id);
             }
+            // Execute scripts needed for component updates
+            var scripts = xmlRoot.getElementsByTagName("script");
+            for (var i = 0; i < scripts.length; i++) {
+                var code = scripts[i].firstChild.data;
+                try {
+                    for (var j = 0; j < filterOnAjaxRequest.length; j++) {
+                        // Either $2 or $3 will always be an empty string
+                        code = code.replace(filterOnAjaxRequest[j], "$2$3;");
+                    }
+                    eval(code);
+                } catch(e) {
+                    alert(e);
+                }
+            }
+            // Update the event epoch of this frame
             event_epoch = getFirstChildData("event_epoch");
-
+            // Hightlight the components updated above
             if (incrementalUpdateHighlight.enabled) {
                 highlightComponentUpdates(componentIds);
             }
         }
     }
     hideAjaxActivityIndicator();
+    // Send next queued request
     dequeueNextRequest();
 }
 
@@ -721,8 +785,16 @@ function replaceComponentHtml(id, html) {
     var component = document.getElementById(id);
     if (component == null) return;
 
+    // Handle layout workaround for IE (if necessary)
+    var wrapping = component.getAttribute("wrapping");
+    if (wrapping != null && !isNaN(wrapping)) {
+        for (var i = 0; i < parseInt(wrapping); i++) {
+            component = component.parentNode;
+        }
+    }
+
     if (typeof component.outerHTML != "undefined") {
-        // use outerHTML if available
+        // Use outerHTML if available
         component.outerHTML = html;
     } else {
         var parent = component.parentNode;
@@ -731,7 +803,7 @@ function replaceComponentHtml(id, html) {
         var nrOfChildElements = 0;
         var lastChildElementTag = null;
         for (var i = 0; i < parent.childNodes.length; i++) {
-            // we have to filter everything except element nodes
+            // We have to filter everything except element nodes
             // since browsers treat whitespace nodes differently
             if (parent.childNodes[i].nodeType == 1) {
                 nrOfChildElements++;
@@ -739,60 +811,18 @@ function replaceComponentHtml(id, html) {
             }
         }
 
-        if (nrOfChildElements == 1 || (nrOfChildElements == 2 &&
-            lastChildElementTag == "SCRIPT")) {
-            // - if there is only one child it must be our component
-            // - if there are two childs and the second is a script
-            //   tag, then we can also replace everything inside the
-            //   parent since the new HTML code will contain a script
-            //   tag as well (scripts are always rendered afterwards)
+        if (nrOfChildElements == 1) {
+            // If there is only one child it must be our component
             parent.innerHTML = html;
         } else {
             var range;
-            // if there is no other way we have to use proprietary methods
+            // If there is no other way we have to use proprietary methods
             if (document.createRange && (range = document.createRange()) &&
                 range.createContextualFragment) {
                 range.selectNode(component);
                 var newComponent = range.createContextualFragment(html);
                 parent.replaceChild(newComponent, component);
             }
-        }
-    }
-}
-
-/* This functions traverses the tag hierarchy starting from the parent of the
-   component with the given ID, extracts every available script and executes it. */
-function executeComponentScript(id) {
-    var component = document.getElementById(id);
-    if (component == null) return;
-    var entryNode = component.parentNode;
-    if (entryNode == null) entryNode = component;
-
-    var isSafari = (navigator.userAgent.indexOf("Safari") != -1);
-    var isOpera = (navigator.userAgent.indexOf("Opera") != -1);
-    var isMozilla = (navigator.appName == "Netscape");
-
-    var scriptNodes = entryNode.getElementsByTagName("SCRIPT");
-    var scriptCode;
-
-    for (var i = 0; i < scriptNodes.length; i++) {
-        if (isSafari) {
-            scriptCode = scriptNodes[i].innerHTML;
-        } else if (isOpera) {
-            scriptCode = scriptNodes[i].text;
-        } else if (isMozilla) {
-            scriptCode = scriptNodes[i].textContent;
-        } else {
-            scriptCode = scriptNodes[i].text;
-        }
-        try {
-            for (var j = 0; j < filterOnAjaxRequest.length; j++) {
-                // either $2 or $3 is always "" since they're concatenated with |
-                scriptCode = scriptCode.replace(filterOnAjaxRequest[j], "$2$3;");
-            }
-            eval(scriptCode);
-        } catch(e) {
-            alert(e);
         }
     }
 }
@@ -846,8 +876,8 @@ var AjaxActivityCursor = {
 
     // Initialize cursor
     init : function () {
-		AjaxActivityCursor.dx = incrementalUpdateCursor.dx;
-		AjaxActivityCursor.dy = incrementalUpdateCursor.dy;
+    AjaxActivityCursor.dx = incrementalUpdateCursor.dx;
+    AjaxActivityCursor.dy = incrementalUpdateCursor.dy;
         AjaxActivityCursor.div = document.createElement("div");
         AjaxActivityCursor.div.style.position = "absolute";
         AjaxActivityCursor.div.style.zIndex = "1000";

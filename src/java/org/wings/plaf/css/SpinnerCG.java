@@ -68,7 +68,7 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         device.print( "\n</td><td style=\"width:0px;\">\n" );
         device.print( "<img onclick=\"CallableSpinner.getValue(spinnerCallback,'"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'0')\" src=\"" + iconNext.getURL() + "\" style=\"display:block;vertical-align:bottom;\">\n");
         device.print( "<img onclick=\"CallableSpinner.getValue(spinnerCallback,'"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'1')\" src=\"" + iconPrev.getURL() + "\" style=\"display:block;vertical-align:top\">\n");
-        device.print( "</td></tr></table>\n" );        
+        device.print( "</td></tr></table>\n" );
     }
     
     protected CallableSpinner getCallableSpinner() {
@@ -98,14 +98,9 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
                     
                     SAbstractFormatter formatter = ((DefaultEditor)spinner.getEditor()).getTextField().getFormatter();
                     
-                    Object newValue = null;
-                    if ( spinner.getModel().getValue() instanceof Integer ) {
-                        newValue = new Integer( value );
-                    } else {
-                        newValue = formatter.stringToValue( value );
-                    }
-                    
-                    spinner.getModel().setValue( newValue );
+                    Object newValue = formatter.stringToValue( value );
+
+                    spinner.setValue( newValue );
                     
                     Object objValue = null;
                     switch ( type ) {
@@ -124,6 +119,10 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
                         spinner.getModel().setValue( objValue );
                     } else {
                         list.add( "" );
+                    }
+                    
+                    if ( spinner.getChangeListeners().length > 1 ) {
+                        list.add( String.valueOf( true ) );
                     }
   
                 } catch ( java.text.ParseException pe ) {

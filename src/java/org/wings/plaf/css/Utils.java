@@ -1016,19 +1016,18 @@ public final class Utils {
         final SStringBuilder script = new SStringBuilder();
         JavaScriptListener[] eventListeners = getOnClickListeners(component, javascriptEventType);
         if (eventListeners != null && eventListeners.length > 0) {
-            script.append(",new Array(");
-            for (int i = 0; i < eventListeners.length; i++) {
-                if (i > 0) {
-                    script.append(",");
-                }
-                if (eventListeners[i].getScript() != null) {
-                    script.append("function(){").append(eventListeners[i].getScript()).append("}");
-                }
-                else {
+            for (int i = 0; i < eventListeners.length; ++i) {
+                if (eventListeners[i].getCode() != null) {
+                	if (i > 0) {
+                        script.append(",");
+                    }
                     script.append("function(){").append(eventListeners[i].getCode()).append("}");
                 }
             }
-            script.append(")");
+            if (script.length() > 0) {
+            	script.insert(0, ",new Array(");
+                script.append(")");
+            }
         }
         return script;
     }

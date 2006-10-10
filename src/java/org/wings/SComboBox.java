@@ -125,7 +125,7 @@ public class SComboBox
             dataModel = model;
 
             dataModel.addListDataListener(this);
-        
+
             // set the current selected item.
             selectedItemReminder = dataModel.getSelectedItem();
 
@@ -329,17 +329,9 @@ public class SComboBox
             throw new RuntimeException("Cannot use this method with a non-Mutable data model.");
     }
 
-
-    /** Selection **/
-
     /**
-     * Adds an ItemListener. <code>listener</code> will receive an event when
-     * the selected item changes.
-     * <p>
-     * If you want to receive immedate an event when the user clicks a new item 
-     * on the client side you have to register additionally a Java script listener
-     * which triggers a form submit. <br>
-     * <code>combobox.addScriptListener(ComboBoxCG.JS_ON_CHANGE_SUBMIT)</code>
+     * Adds an ItemListener. The listener will receive an action event
+     * when the user changed the selection.
      *
      * @param listener the ItemListener that is to be notified
      */
@@ -357,11 +349,11 @@ public class SComboBox
     }
 
     /**
-     * Returns an array of all the ItemListener added to this SComboBox
+     * Returns an array of all the ItemListeners added to this SComboBox
      *
-     * @return all ItemListener added or an empty array if no listeners are there
+     * @return all ItemListeners added or an empty array if there are no such listeners
      */
-    public ItemListener[] getItemListener() {
+    public ItemListener[] getItemListeners() {
         return (ItemListener[]) getListeners(ItemListener.class);
     }
 
@@ -387,11 +379,9 @@ public class SComboBox
     }
 
     /**
-     * Returns an array of all the ActionListener added
-     * to this SComboBox
+     * Returns an array of all the ActionListeners added to this SComboBox
      *
-     * @return all ActionListeners added or an empty
-     *         array if no listeners are there
+     * @return all ActionListeners added or an empty array if there are no such listeners
      */
     public ActionListener[] getActionListeners() {
         return (ActionListener[]) getListeners(ActionListener.class);

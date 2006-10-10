@@ -6,6 +6,7 @@ import org.wings.STabbedPane;
 import org.wings.SDimension;
 import org.wings.border.SBorder;
 import org.wings.io.Device;
+import org.wings.plaf.css.RenderHelper;
 import org.wings.plaf.css.Utils;
 import org.wings.util.SStringBuilder;
 
@@ -35,7 +36,8 @@ public final class TabbedPaneCG extends org.wings.plaf.css.TabbedPaneCG {
             SStringBuilder tabArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_TABS));
             SStringBuilder contentArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_CONTENT));
 
-            device.print("<table style=\"behavior:url('-org/wings/plaf/css/layout.htc')\" rule=\"fill\"");
+            RenderHelper.getInstance(component).addScript("layoutAvailableSpaceIE('" + component.getName() + "');");
+            device.print("<table ");
             Utils.optAttribute(device, "layoutHeight", height);
 
             preferredSize.setHeight(null);
