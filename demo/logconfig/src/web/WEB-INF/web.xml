@@ -19,7 +19,7 @@
     </init-param>
     <init-param>
        <param-name>log4j.xml.path</param-name>
-       <param-value>C:/Development/JBoss/server/default/conf/log4j.xml</param-value>
+       <param-value>C:/Development/JBoss/wings/server/default/conf/log4j.xml</param-value>
     </init-param>
   </servlet>
 

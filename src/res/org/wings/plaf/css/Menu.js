@@ -77,7 +77,7 @@ function wpm_findPosX(obj)
 
     /* Workaround for right aligned menues:
        Return the RIGHT X of the Menu as a negative number, not the left X
-    if (wu_framewidth() < curleft + 200) {
+    if (wingS.util.framewidth() < curleft + 200) {
         curleft = - (curleft + origobj.offsetWidth);
     }
     */
@@ -219,7 +219,7 @@ function wpm_setVisible(element, visible) {
 
 
 function wpm_openMenu(event, id, parentId) {
-    var event = getEvent(event);
+    var event = wingS.util.getEvent(event);
 
     if (parentULId(event) != parentId) {
         // don't bubble
@@ -256,12 +256,12 @@ function wpm_openMenu(event, id, parentId) {
         wpm_openMenus[wpm_openMenus.length] = id;
     }
     wpm_toggleFormElements(wpm_buildBoundsArray(wpm_openMenus));
-    preventDefault(event);
+    wingS.util.preventDefault(event);
     return false;
 }
 
 function parentULId(event) {
-    var node = getTarget(event);
+    var node = wingS.util.getTarget(event);
     while (node) {
         if (node.tagName == "UL") {
             return node.id;

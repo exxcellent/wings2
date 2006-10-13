@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+	<welcome-file>
+            index.html
+        </welcome-file>
+    </welcome-file-list>
+        
+    <servlet>
+        <servlet-name>dwr-invoker</servlet-name>
+        <display-name>DWR Servlet</display-name>
+        <description>Direct Web Remoter Servlet</description>
+        <servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+            <description>Do we startup in debug/test mode?</description>
+        </init-param>
+        <init-param>
+            <param-name>logLevel</param-name>
+            <param-value>DEBUG</param-value>
+            <description>How verbose do we want logging to be?</description>
+        </init-param>
+        <init-param>
+            <param-name>org.directwebremoting.CreatorManager</param-name>
+            <param-value>org.wings.plaf.css.dwr.SessionCreatorManager</param-value>
+            <description>Install a session local CreatorManager</description>
+        </init-param>
+        <load-on-startup>-1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>dwr-invoker</servlet-name>
+        <url-pattern>/dwr/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Suggest</servlet-name>
+        <servlet-class>org.wings.session.WingServlet</servlet-class>
+        <init-param>
+            <param-name>wings.mainclass</param-name>
+            <param-value>components.Suggest</param-value>
+        </init-param>        
+    </servlet>
+        
+    <servlet-mapping>
+        <servlet-name>Suggest</servlet-name>
+        <url-pattern>/Suggest/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>InplaceEditor</servlet-name>
+        <servlet-class>org.wings.session.WingServlet</servlet-class>
+        <init-param>
+            <param-name>wings.mainclass</param-name>
+            <param-value>components.InplaceEditor</param-value>
+        </init-param>        
+    </servlet>
+        
+    <servlet-mapping>
+        <servlet-name>InplaceEditor</servlet-name>
+        <url-pattern>/InplaceEditor/*</url-pattern>
+    </servlet-mapping>
+     
+</web-app>

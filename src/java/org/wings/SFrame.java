@@ -274,6 +274,7 @@ public class SFrame
     public void addHeader(Object headerElement) {
         if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -288,6 +289,7 @@ public class SFrame
     public void addHeader(int index, Object headerElement) {
         if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -296,7 +298,11 @@ public class SFrame
      * @return <tt>true</tt> if this frame contained the specified header element.
      */
     public boolean removeHeader(Object m) {
-        return headers.remove(m);
+        boolean deleted = headers.remove(m);
+        if (deleted) {
+        	reload(ReloadManager.STATE);
+        }
+        return deleted;
     }
 
     /**
@@ -305,7 +311,11 @@ public class SFrame
      * @see #addHeader(Object)
      */
     public void clearHeaders() {
-        headers().clear();
+        List headers = headers();
+        if (!headers.isEmpty()) {
+        	headers.clear();
+        	reload(ReloadManager.STATE);
+        }
     }
 
     /**

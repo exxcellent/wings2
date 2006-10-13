@@ -1002,7 +1002,11 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                         ? SComponentEvent.COMPONENT_SHOWN
                         : SComponentEvent.COMPONENT_HIDDEN));
             }
-            reload(ReloadManager.STATE);
+            if (parent != null) {
+            	parent.reload(ReloadManager.STATE);
+            } else {
+            	reload(ReloadManager.STATE);
+            }
         }
     }
 

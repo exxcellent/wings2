@@ -98,6 +98,67 @@ public class Link implements Renderable, Serializable {
         }
         d.print("/>");
     }
+    
+    /*
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != Link.class) {
+            return false;
+        }
+        Link testObj = (Link) obj;
+        
+        if (testObj.getRel() == null) {
+            if (getRel() != null) {
+                return false;
+            }
+        } else {
+            if (!testObj.getRel().equals(getRel())) {
+                return false;
+            }
+        }
+        
+        if (testObj.getRev() == null) {
+            if (getRev() != null) {
+                return false;
+            }
+        } else {
+            if (!testObj.getRev().equals(getRev())) {
+                return false;
+            }
+        }
+        
+        if (testObj.getType() == null) {
+            if (getType() != null) {
+                return false;
+            }
+        } else {
+            if (!testObj.getType().equals(getType())) {
+                return false;
+            }
+        }
+        
+        if (testObj.getTarget() == null) {
+            if (getTarget() != null) {
+                return false;
+            }
+        } else {
+            if (!testObj.getTarget().equals(getTarget())) {
+                return false;
+            }
+        }
+        
+        if (testObj.getURL() == null) {
+            if (getURL() != null) {
+                return false;
+            }
+        } else {
+            if (!testObj.getURL().toString().equals(getURL().toString())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 

@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
-<!-- ant build file for wingS Demos-->
-<!-- $Id: build.xml 2468 2006-02-01 23:17:51Z blueshift $ -->
 
-<project name="logconfig" default="deploy2JBoss" basedir=".">
+<project name="logconfig" default="build" basedir=".">
 	<property environment="env"/>
 	<!-- read custom properties from file -->
 	<property file="../../etc/custom-build.properties"/>
@@ -27,7 +25,7 @@
 		<mkdir dir="${deploy.logconfig}"/>
 	</target>
 
-	<!-- ==================== Build wingS Demos ================ -->
+	<!-- ==================== Build LogConfig ================ -->
 	<target name="compile" depends="prepare">
 		<javac srcdir="src/java"
             destdir="build/class"
@@ -70,15 +68,11 @@
 		</war>
 	</target>
 
-	<target name="deploy2Tomcat" depends="build">
+	<target name="deploy" depends="build">
 		<mkdir dir="${deploy.logconfig}"/>
 		<copy todir="${deploy.logconfig}">
 			<fileset dir="build/web"/>
 		</copy>
-	</target>
-
-	<target name="deploy2JBoss" depends="war">
-		<copy file="build/logconfig.war" todir="${deploy2JBoss.default}"/>
 	</target>
 
 
@@ -86,7 +80,6 @@
 	<target name="clean">
 		<delete dir="build"/>
 		<delete dir="${deploy.logconfig}"/>
-		<delete dir="${deploy2JBoss.default}/logconfig.war"/>
 		<delete>
 			<fileset dir="src">
 				<include name="**/*.class"/>

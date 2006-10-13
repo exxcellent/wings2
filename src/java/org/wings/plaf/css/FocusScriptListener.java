@@ -27,7 +27,7 @@ class FocusScriptListener extends JavaScriptListener {
     private final SComponent focusComponent;
 
     public FocusScriptListener(SComponent setFocusOnLoadOntoComponent) {
-        super("onload", "requestFocus('" + setFocusOnLoadOntoComponent.getName() + "')");
+        super("onload", "wingS.util.requestFocus('" + setFocusOnLoadOntoComponent.getName() + "')");
         this.focusComponent = setFocusOnLoadOntoComponent;
     }
 

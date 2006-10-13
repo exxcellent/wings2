@@ -40,14 +40,14 @@ table, tbody, tr, td {
 </table>
 
 <script type="text/javascript">
-function layoutScrollPane(outerId) {
+wingS.util.layoutScrollPane = function(outerId) {
     var outer = document.getElementById(outerId);
     var div = outer.getElementsByTagName("div")[0];
     div.style.height =
         document.defaultView.getComputedStyle(outer, null).getPropertyValue("height");
     div.style.display = "block";
 }
-layoutScrollPane("outer");
+wingS.util.layoutScrollPane("outer");
 </script>
 
 </body>

@@ -3,26 +3,42 @@
    wingS - Utility JavaScript functions
 
    This file contains commonly used JavaScript which might also be useful for
-   wings users. In order to avoid typical namespace cluttering, all functions
-   and variables in this file should be prefixed by the string "wu_".
+   wings users.
 */
 // =============================================================================
 
-function getEvent(event) {
+// faking a namespace
+if (!wingS) {
+	var wingS = new Object();
+}
+else if (typeof wingS != "object") {
+	throw new Error("wingS already exists and is not an object");
+}
+
+if (!wingS.util) {
+	wingS.util = new Object();
+}
+else if (typeof wingS.util != "object") {
+	throw new Error("wingS.util already exists and is not an object");
+}
+
+// =============================================================================
+
+wingS.util.getEvent = function(event) {
     if (window.event)
         return window.event;
     else
         return event;
 }
 
-function getTarget(event) {
+wingS.util.getTarget = function(event) {
     if (event.srcElement)
         return event.srcElement;
     else
         return event.target;
 }
 
-function getParentByTagName(element, tag) {
+wingS.util.getParentByTagName = function(element, tag) {
     while (element != null) {
         if (tag == element.tagName)
             return element;
@@ -31,7 +47,7 @@ function getParentByTagName(element, tag) {
     return null;
 }
 
-function getParentWearingAttribute(element, attribute) {
+wingS.util.getParentWearingAttribute = function(element, attribute) {
     while (element != null) {
         if (element.getAttribute && element.getAttribute(attribute)) {
             return element;
@@ -41,12 +57,49 @@ function getParentWearingAttribute(element, attribute) {
     return null;
 }
 
-function preventDefault(event) {
+wingS.util.preventDefault = function(event) {
     if (event.preventDefault)
         event.preventDefault();
     if (event.returnValue)
         event.returnValue = false;
     event.cancelBubble = true;
+}
+
+/**
+ * Can be used to prevent a form submit.
+ * By calling 'return wingS.util.preventSubmit()' on the input event
+ * 'onkeypress', false will be returned when the return key was hit and
+ * by that avoiding a form submit.
+ */
+wingS.util.preventSubmit = function() {
+  return !(window.event && window.event.keyCode == 13);
+};
+
+/**
+ * Inserts a node into the childNodes array after the specified child node refChild.
+ * Note: Because there is no function insertAfter, it is done by raping insertBefore.
+ * @param {Object} newChild node to insert
+ * @param {Object} refChild node to insert after
+ */
+wingS.util.insertAfter = function(newChild, refChild) {
+	refChild.parentNode.insertBefore(newChild, refChild.nextSibling);
+};
+
+/**
+ * Moves the execution context of the function used upon to the given
+ * object. Usefull when using setTimeout or event handling.
+ * e.g.: setTimeout(func1.bind(someObject), 1);
+ * The function func1 will be called within the context of someObject.
+ * NB: Function object is extended by bind()!
+ * @param {Object} obj new execution context
+ */
+Function.prototype.bind = function(obj) {
+	var method = this;
+	temp = function() {
+		return method.apply(obj, arguments);
+   	};
+
+  	return temp;
 }
 
 // =============================================================================
@@ -66,11 +119,11 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
     if (enqueueThisRequest(submitForm, submitForm.arguments)) return;
 
     // Needed preparations
-    event = getEvent(event);
-    var target = getTarget(event);
-    var form = getParentByTagName(target, "FORM");
+    event = wingS.util.getEvent(event);
+    var target = wingS.util.getTarget(event);
+    var form = wingS.util.getParentByTagName(target, "FORM");
     if (eventName != null) {
-        eidprovider = getParentWearingAttribute(target, "eid");
+        eidprovider = wingS.util.getParentWearingAttribute(target, "eid");
         eventName = eidprovider.getAttribute("eid");
     }
 
@@ -233,7 +286,7 @@ function encodeUpdateId(id) {
 
 /* Remove focus from a component and respect  additonal custom script listeners
    attached by user. Core usage/doc see Utils.printButtonStart() */
-function wu_blurComponent(component, clientHandlers) {
+wingS.util.blurComponent = function(component, clientHandlers) {
     var success = true;
     if (clientHandlers) {
         for (var i = 0; i < clientHandlers.length; i++) {
@@ -251,7 +304,7 @@ function wu_blurComponent(component, clientHandlers) {
 
 /* Set focus to a component and respect additonal custom script listeners
    attached by user. Core usage/doc see Utils.printButtonStart() */
-function wu_focusComponent(component, clientHandlers) {
+wingS.util.focusComponent = function(component, clientHandlers) {
     var success = true;
     if (clientHandlers) {
         for (var i = 0; i < clientHandlers.length; i++) {
@@ -273,7 +326,7 @@ function wu_focusComponent(component, clientHandlers) {
    This function is i.e. helpful if you want to modify i.e. the INPUT element
    of a STextField which is probably wrapped into TABLE elements wearing the
    component ID generated by wingS for layouting purposes. */
-function wu_findElement(id, tagname) {
+wingS.util.findElement = function(id, tagname) {
     var div = document.getElementById(id);
     if (div) {
         var elements = div.getElementsByTagName(tagname);
@@ -286,7 +339,7 @@ function wu_findElement(id, tagname) {
    trace-down to the actual HTML element, i.e. a STextField renders as <table
    id=...><input...></table> but you want the focus to be the input element and
    not the table element. */
-function requestFocus(id) {
+wingS.util.requestFocus = function(id) {
     var div = document.getElementById(id);
     window.focus = id;
     if (div) {
@@ -318,7 +371,7 @@ function requestFocus(id) {
     }
 }
 
-function getCookie(name) {
+wingS.util.getCookie = function(name) {
     var c = new Object();
     var i = 0;
     var clen = document.cookie.length;
@@ -338,7 +391,7 @@ function getCookie(name) {
     return c;
 }
 
-function setCookie(name, value, days, path) {
+wingS.util.setCookie = function(name, value, days, path) {
     if (!days) days = -1;
     var expire = new Date();
     expire.setTime(expire.getTime() + 86400000 * days);
@@ -348,32 +401,32 @@ function setCookie(name, value, days, path) {
             + (path ? 'path=' + path : '');
 }
 
-function storeScrollPosition(event) {
-    event = getEvent(event);
+wingS.util.storeScrollPosition = function(event) {
+    event = wingS.util.getEvent(event);
 
-    var target = getTarget(event);
-    var scrollableElement = getScrollableElement(target);
+    var target = wingS.util.getTarget(event);
+    var scrollableElement = wingS.util.getScrollableElement(target);
     if (scrollableElement && target) {
         var pos = target.scrollTop;
         if (scrollableElement.nodeName == 'DIV' ||
             scrollableElement.nodeName == 'TBODY') {
             var targetId = scrollableElement.getAttribute("id");
-            setCookie("scroll_pos", "" + pos, 1);
-            setCookie("scroll_target", "" + targetId, 1);
+            wingS.util.getCookie("scroll_pos", "" + pos, 1);
+            wingS.util.getCookie("scroll_target", "" + targetId, 1);
         }
     }
 }
 
-function restoreScrollPosition() {
-    var pos = getCookie("scroll_pos");
-    var target = getCookie("scroll_target");
+wingS.util.restoreScrollPosition = function() {
+    var pos = wingS.util.getCookie("scroll_pos");
+    var target = wingS.util.getCookie("scroll_target");
     var el = document.getElementById(target);
     if (el) {
         el.scrollTop = pos;
     }
 }
 
-function getScrollableElement(el) {
+wingS.util.getScrollableElement = function(el) {
     if (!el) return;
     if (el.scrollTop > 0)
         return el;
@@ -388,41 +441,42 @@ function getScrollableElement(el) {
     }
 }
 
-function storeFocus(event) {
-    event = getEvent(event);
-    var target = getTarget(event);
+wingS.util.storeFocus = function(event) {
+    event = wingS.util.getEvent(event);
+    var target = wingS.util.getTarget(event);
 
-    var div = getParentWearingAttribute(target, "eid");
-    var body = getParentByTagName(target, "BODY");
+    var div = wingS.util.getParentWearingAttribute(target, "eid");
+    var body = wingS.util.getParentByTagName(target, "BODY");
     /* Avoid rembering FORM as focus component as this automatically gains
        focus on pressing Enter in MSIE. */
     if (div && body && div.tagName != "FORM") {
-        setCookie(body.getAttribute("id") + "_focus", div.getAttribute("id"), 1);
+        wingS.util.getCookie(body.getAttribute("id") + "_focus", div.getAttribute("id"), 1);
     }
+}
+
+wingS.util.checkUserAgent = function(string) {
+    return navigator.userAgent.toLowerCase().indexOf(string) + 1;
 }
 
 var wu_dom = document.getElementById?1:0;
 var wu_ns4 = (document.layers && !wu_dom)?1:0;
 var wu_ns6 = (wu_dom && !document.all)?1:0;
 var wu_ie5 = (wu_dom && document.all)?1:0;
-var wu_konqueror = wu_checkUserAgent('konqueror')?1:0;
-var wu_opera = wu_checkUserAgent('opera')?1:0;
-var wu_safari = wu_checkUserAgent('safari')?1:0;
+var wu_konqueror = wingS.util.checkUserAgent('konqueror')?1:0;
+var wu_opera = wingS.util.checkUserAgent('opera')?1:0;
+var wu_safari = wingS.util.checkUserAgent('safari')?1:0;
 
-function wu_checkUserAgent(string) {
-    return navigator.userAgent.toLowerCase().indexOf(string) + 1;
-}
 
 /* The following two functions are a workaround for IE to open a link in the
    right target/new window used in AnchorCG. */
-function wu_checkTarget(target) {
+wingS.util.checkTarget = function(target) {
     for (var i = 0; i < parent.frames.length; i++) {
         if (parent.frames[i].name == target) return true;
     }
     return false;
 }
 
-function wu_openlink(target, url, scriptCodes) {
+wingS.util.openlink = function(target, url, scriptCodes) {
   if (invokeScriptListeners(scriptCodes)) {
       // if the target exists => change URL, else => open URL in new window
       if (target == null) {
@@ -439,7 +493,7 @@ function wu_openlink(target, url, scriptCodes) {
 
 /* Utility method to determine available inner space of the show window on
    all browsers. Returns a numeric value of available pixel width. */
-function wu_framewidth() {
+wingS.util.framewidth = function() {
     if (self.innerHeight) {
         // all except Explorer
         return self.innerWidth;
@@ -455,8 +509,8 @@ function wu_framewidth() {
 
 /* Cross-browser method to register an event listener on the passed object. Only
    Mozilla will support captive mode of event handling. The 'eventType' is without
-   the 'on'-prefix. Example: wu_registerEvent(document,'focus',storeFocus,false); */
-function wu_registerEvent(obj, eventType, func, useCaption) {
+   the 'on'-prefix. Example: wingS.util.registerEvent(document,'focus',storeFocus,false); */
+wingS.util.registerEvent = function(obj, eventType, func, useCaption) {
     if (obj.addEventListener) {
         obj.addEventListener(eventType, func, useCaption);
         return true;
@@ -565,7 +619,7 @@ function performWindowOnLoad() {
 // =============================================================================
 
 /* Shows the modal dialog at the center of the component. (SFrame or SInternalFrame) */
-function showModalDialog(dialogId, modalId) {
+wingS.util.showModalDialog = function(dialogId, modalId) {
     var positionX = (document.all) ? document.body.offsetWidth : window.innerWidth;
     var positionY = (document.all) ? document.body.offsetHeight : window.innerHeight;
     positionX = positionX / 2;
@@ -588,9 +642,9 @@ function showModalDialog(dialogId, modalId) {
             positionX = parent.offsetWidth / 2;
             positionY = parent.offsetHeight / 2;
             positionX += absLeft(parent);
-            positionY += absTop(parent);
+            positionY += wingS.util.absTop(parent);
             modalDialog.style.left = absLeft(parent) + 'px';
-            modalDialog.style.top = absTop(parent) + 'px';
+            modalDialog.style.top = wingS.util.absTop(parent) + 'px';
             modalDialog.style.width = parent.offsetWidth + 'px';
             modalDialog.style.height = parent.offsetHeight + 'px';
             break;
@@ -603,7 +657,7 @@ function showModalDialog(dialogId, modalId) {
     dialog.style.zIndex = 1000;
 }
 
-function layoutScrollPane(outerId) {
+wingS.util.layoutScrollPane = function(outerId) {
     var outer = document.getElementById(outerId);
     var div = outer.getElementsByTagName("div")[0];
     div.style.height =
@@ -614,7 +668,7 @@ function layoutScrollPane(outerId) {
 function layoutScrollPaneIE(outerId) {
     var outer = document.getElementById(outerId);
     var div = outer.getElementsByTagName("div")[0];
-    var td = getParentByTagName(div, "TD");
+    var td = wingS.util.getParentByTagName(div, "TD");
     div.style.height = td.clientHeight + "px";
     div.style.width = td.clientWidth + "px";
     div.style.position = "absolute";
@@ -648,13 +702,13 @@ function layoutAvailableSpaceIE(tableId) {
 }
 
 /* Calculates the absolute position of the element to the left. */
-function absLeft(el) {
+wingS.util.absLeft = function(el) {
     return (el.offsetParent) ? el.offsetLeft + absLeft(el.offsetParent) : el.offsetLeft;
 }
 
 /* Calculates the absolute position of the element to the top. */
-function absTop(el) {
-    return (el.offsetParent) ? el.offsetTop + absTop(el.offsetParent) : el.offsetTop;
+wingS.util.absTop = function(el) {
+    return (el.offsetParent) ? el.offsetTop + wingS.util.absTop(el.offsetParent) : el.offsetTop;
 }
 
 // =============================================================================
@@ -876,8 +930,8 @@ var AjaxActivityCursor = {
 
     // Initialize cursor
     init : function () {
-    AjaxActivityCursor.dx = incrementalUpdateCursor.dx;
-    AjaxActivityCursor.dy = incrementalUpdateCursor.dy;
+        AjaxActivityCursor.dx = incrementalUpdateCursor.dx;
+        AjaxActivityCursor.dy = incrementalUpdateCursor.dy;
         AjaxActivityCursor.div = document.createElement("div");
         AjaxActivityCursor.div.style.position = "absolute";
         AjaxActivityCursor.div.style.zIndex = "1000";
@@ -890,7 +944,7 @@ var AjaxActivityCursor = {
     // Callback function
     followMouse : function (event) {
         var pos, isIE;
-        event = getEvent(event);
+        event = wingS.util.getEvent(event);
         pos = { left : event.clientX, top : event.clientY };
         isIE = (window.document.compatMode &&
                 window.document.compatMode == "CSS1Compat") ?

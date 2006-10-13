@@ -43,7 +43,7 @@ public interface ReloadManager extends Serializable {
      * @param component Component whoose representation modified.
      * @param aspect The respresentation aspect that changed.
      */
-    void reload(SComponent component, int aspect);
+     void reload(SComponent component, int aspect);
 
     /**
      * Return a set of all components that are marked dirty.

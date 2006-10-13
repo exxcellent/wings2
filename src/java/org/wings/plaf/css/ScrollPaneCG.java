@@ -39,7 +39,7 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
             try {
                 scrollable.setViewportSize(scrollable.getScrollableViewportSize());
                 writeContent(device, component);
-                String script = "layoutScrollPane('" + component.getName() + "');";
+                String script = "wingS.util.layoutScrollPane('" + component.getName() + "');";
                 RenderHelper.getInstance(component).addScript(script);
             } finally {
                 //component.setPreferredSize(center.getPreferredSize());

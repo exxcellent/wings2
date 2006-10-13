@@ -241,10 +241,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public final String DOMLIB_SCRIPT = (String) ResourceManager.getObject("JScripts.domlib", String.class);
     public final String DOMTT_SCRIPT = (String) ResourceManager.getObject("JScripts.domtt", String.class);
 
-    public static final JavaScriptListener FOCUS_SCRIPT_MOZILLA = new JavaScriptListener("onload", "wu_registerEvent(document,'focus',storeFocus,true)");
-    public static final JavaScriptListener FOCUS_SCRIPT_IE = new JavaScriptListener("onactivate", "storeFocus(event)");
-    public static final JavaScriptListener SCROLL_POSITION_SCRIPT = new JavaScriptListener("onscroll", "storeScrollPosition(event)");
-    public static final JavaScriptListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptListener("onload", "restoreScrollPosition()");
+    public static final JavaScriptListener FOCUS_SCRIPT_MOZILLA = new JavaScriptListener("onload", "wingS.util.registerEvent(document,'focus',wingS.util.storeFocus,true)");
+    public static final JavaScriptListener FOCUS_SCRIPT_IE = new JavaScriptListener("onactivate", "wingS.util.storeFocus(event)");
+    public static final JavaScriptListener SCROLL_POSITION_SCRIPT = new JavaScriptListener("onscroll", "wingS.util.storeScrollPosition(event)");
+    public static final JavaScriptListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptListener("onload", "wingS.util.restoreScrollPosition()");
     public static final JavaScriptListener PERFORM_WINDOW_ONLOAD_SCRIPT = new JavaScriptListener("onload", "performWindowOnLoad()");
 
     private Script domLib;
@@ -516,11 +516,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                     device.print(jScriptUrl);
                     device.print("\"></script>\n");
                 }
-            }
-            if (frame.isIncrementalUpdateEnabled()) {
-	            device.print("<div style=\"position: absolute; z-index: 1000; display: none;\" id=\"ajaxActivityCursor\">\n");
-	            device.print("  <img src=\"" + new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif").getURL() + "\" width=\"15\" height=\"15\" />\n");
-	            device.print("</div>\n");
             }
 
             frame.getLayout().write(device);
