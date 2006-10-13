@@ -20,9 +20,9 @@ tr {
 }
 
 
-/* Simulate and style FORM buttons for A HREF*/
-TABLE.SButton A.formbutton,
-TABLE.SButton SPAN.disabled_formbutton {
+/* Simulate and style FORM buttons for A HREF
+TABLE.SButton_disabled_form,
+TABLE.SButton_selected_form {
    -moz-appearance: button;
 }
 table.SButton A.formbutton:active:hover {
@@ -35,6 +35,7 @@ table.SButton SPAN.disabled_formbutton:active:hover {
    color: gray;
    cursor: default;
 }
+*/
 
 /* rounded corners for gecko */
 .STabbedPane_Tab_top {

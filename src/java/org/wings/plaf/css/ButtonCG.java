@@ -14,9 +14,7 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SAbstractButton;
-import org.wings.SComponent;
-import org.wings.SIcon;
+import org.wings.*;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
@@ -33,44 +31,23 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
-        // may be ommitted if no width, border and background table
-        writeTablePrefix(device, button);
-
-        String cssClass;
-        if (button.isEnabled())
-            cssClass = button.getShowAsFormComponent() ? "formbutton" : "linkbutton";
-        else
-            cssClass = button.getShowAsFormComponent() ? "disabled_formbutton" : "disabled_linkbutton";
-
-        Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent(), cssClass);
-        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
-        Utils.optAttribute(device, "accesskey", button.getMnemonic());
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
-
-        // use class attribute instead of single attributes for IE compatibility
-        final SStringBuilder className = new SStringBuilder();
-        if (!button.isEnabled()) {
-            className.append(component.getStyle());
-            className.append("_disabled ");
-        }
-        if (button.isSelected()) {
-            className.append(component.getStyle());
-            className.append("_selected ");
-        }
-        Utils.optAttribute(device, "class", className);
-
-        if (component.isFocusOwner())
-            Utils.optAttribute(device, "foc", component.getName());
-
-        device.print(">");
-
         final String text = button.getText();
         final SIcon icon = getIcon(button);
 
-        if (icon == null && text != null)
+        if (icon == null && text != null) {
+            device.print("<table");
+            tableAttributes(device, button);
+            device.print("><tr><td>");
             writeText(device, text, false);
-        else if (icon != null && text == null)
+            device.print("</td></tr></table>");
+        }
+        else if (icon != null && text == null) {
+            device.print("<table");
+            tableAttributes(device, button);
+            device.print("><tr><td>");
             writeIcon(device, icon, Utils.isMSIE(component));
+            device.print("</td></tr></table>");
+        }
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
@@ -82,14 +59,33 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
                 }
 
                 protected void tableAttributes(Device d) throws IOException {
-                    Utils.printCSSInlineFullSize(d, button.getPreferredSize());
+                    ButtonCG.this.tableAttributes(d, button);
                 }
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
         }
+    }
 
-        Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), button.isEnabled());
+    protected void tableAttributes(Device device, SAbstractButton button) throws IOException {
+        Utils.printClickability(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent());
 
-        writeTableSuffix(device, component);
+        String style = button.getStyle();
+        SStringBuilder className = new SStringBuilder(style);
+        if (button.getShowAsFormComponent())
+            className.append("_form");
+        if (!button.isEnabled())
+            className.append("_disabled");
+        if (button.isSelected())
+            className.append("_selected");
+
+        button.setStyle(className.toString());
+        writeAllAttributes(device, button);
+        button.setStyle(style);
+
+        if (button.isFocusOwner())
+            Utils.optAttribute(device, "foc", button.getName());
+
+        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
+        Utils.optAttribute(device, "accesskey", button.getMnemonic());
     }
 
     /* Retrieve according icon for a button. */

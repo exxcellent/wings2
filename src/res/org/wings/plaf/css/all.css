@@ -74,8 +74,10 @@ input, select, textarea {
 }
 
 /* Simulate and style FORM buttons for A HREF*/
-TABLE.SButton A.formbutton,
-TABLE.SButton SPAN.disabled_formbutton {
+TABLE.SButton_form,
+TABLE.SButton_form_disabled,
+TABLE.SToggleButton_form,
+TABLE.SToggleButton_form_selected {
    padding: 0px 6px 0px 6px;
    border: 2px outset #ddd;
    background-color: #ddd;
@@ -85,12 +87,39 @@ TABLE.SButton SPAN.disabled_formbutton {
    text-align: center;
    white-space: normal;
    text-indent: 0px;
-   display:block;
-   height: 100%;
 }
-table.SButton A.linkbutton {
-   color: inherit;  /* Inherit color from outer container. */
+
+TABLE.SButton_form:hover,
+TABLE.SToggleButton_form:hover,
+TABLE.SToggleButton_form_selected:hover {
+    background-color: #eee;
 }
+TABLE.SButton_form:active,
+TABLE.SToggleButton_form:active {
+    border: 2px inset #ddd;
+}
+TABLE.SToggleButton_form_selected {
+    border: 2px inset #ddd;
+}
+TABLE.SToggleButton_form_selected:active {
+    border: 2px outset #ddd;
+}
+
+TABLE.SCheckBox,
+TABLE.SCheckBox_form,
+TABLE.SCheckBox_selected,
+TABLE.SCheckBox_form_selected {
+    cursor: default;
+}
+
+TABLE.SRadioBox,
+TABLE.SRadioBox_form,
+TABLE.SRadioBox_selected,
+TABLE.SRadioBox_form_selected {
+    cursor: default;
+}
+
+
 IMG {
     /* keeps images inside tabs */
     /* vertical-align: middle;       bsc:

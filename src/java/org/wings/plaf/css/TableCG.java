@@ -208,7 +208,6 @@ public final class TableCG
         }
         Utils.printTableCellAlignment(device, component, SConstants.LEFT, SConstants.TOP);
         Utils.optAttribute(device, "oversize", horizontalOversize);
-        device.print(">");
 
         String parameter = null;
         if (table.isEditable() && !isEditingCell && editableCell)
@@ -217,19 +216,11 @@ public final class TableCG
             parameter = table.getToggleSelectionParameter(row, col);
 
         if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
-            Utils.printButtonStart(device, table, parameter, true, table.getShowAsFormComponent());
-            device.print(">");
+            Utils.printClickability(device, table, parameter, true, table.getShowAsFormComponent());
         }
-        else
-            device.print("<span>");
+        device.print(">");
 
         rendererPane.writeComponent(device, component, table);
-
-        if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
-            Utils.printButtonEnd(device, table, parameter, true);
-        }
-        else
-            device.print("</span>");
 
         device.print("</td>");
         Utils.printNewline(device, component);
@@ -416,22 +407,15 @@ public final class TableCG
         device.print("<td valign=\"top\"");
         Utils.optAttribute(device, "class", columnStyle);
         Utils.optAttribute(device, "width", selectionColumnWidth);
-        device.print(">");
 
         String value = table.getToggleSelectionParameter(row, -1);
         if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION) {
-            Utils.printButtonStart(device, table, value, true, table.getShowAsFormComponent());
-            device.print(">");
+            Utils.printClickability(device, table, value, true, table.getShowAsFormComponent());
         }
-        else
-            device.print("<span>");
+        device.print(">");
 
         renderSelectionColumnContent(device, row, table, rendererPane);
 
-        if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION)
-            Utils.printButtonEnd(device, table, value, true);
-        else
-            device.print("</span>");
         device.print("</td>");
     }
 

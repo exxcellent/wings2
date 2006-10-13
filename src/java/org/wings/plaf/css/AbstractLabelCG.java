@@ -27,8 +27,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
     public final void writeText(Device device, String text, boolean wordWrap) throws IOException {
         // white-space:nowrap seems to work in all major browser.
         // Except leading and trailing spaces!
-        device.print("<span").print(wordWrap ? "" : " style=\"white-space:nowrap\"");
-        device.print(">");
+        device.print("<span").print(wordWrap ? "" : " style=\"white-space:nowrap\">");
         if ((text.length() > 5) && (text.startsWith("<html>"))) {
             Utils.writeRaw(device, text.substring(6));
         } else {

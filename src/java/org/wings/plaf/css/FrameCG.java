@@ -89,6 +89,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private Boolean renderXmlDeclaration = Boolean.FALSE;
 
     public static final Headers HEADERS = new Headers();
+    private ClassPathResource formbutton;
 
     public static class Headers
         extends SessionLocal
@@ -228,6 +229,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         dwrEngine = new Script("text/javascript", new DefaultURLResource("../dwr/engine.js"));
         dwrUtil = new Script("text/javascript", new DefaultURLResource("../dwr/util.js"));
+
+        formbutton = new ClassPathResource("org/wings/plaf/css/formbutton.htc", "text/x-component");
+        formbutton.getId(); // externalize ..
     }
 
     /**
@@ -295,10 +299,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         // dynamic code resource.
         // This Resource externalized the HTML page
-        CompleteUpdateResource dynamicCodeRessource = new CompleteUpdateResource(component);
-        component.addDynamicResource(dynamicCodeRessource);
-        IncrementalUpdateResource dynamicAjaxRessource = new IncrementalUpdateResource(component);
-        component.addDynamicResource(dynamicAjaxRessource);
+        CompleteUpdateResource completeUpdateRessource = new CompleteUpdateResource(component);
+        component.addDynamicResource(completeUpdateRessource);
+        IncrementalUpdateResource incrementalUpdateRessource = new IncrementalUpdateResource(component);
+        component.addDynamicResource(incrementalUpdateRessource);
 
         component.addScriptListener(Utils.isMSIE(component) ? FOCUS_SCRIPT_IE : FOCUS_SCRIPT_MOZILLA);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);

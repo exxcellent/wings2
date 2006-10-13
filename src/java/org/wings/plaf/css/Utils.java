@@ -1001,6 +1001,41 @@ public final class Utils {
         }
     }
 
+    public static void printClickability(final Device device, final SComponent component, final String eventValue,
+                                        final boolean enabled, final boolean formComponent) throws IOException {
+        if (enabled) {
+        	boolean ajaxEnabled = !component.isCompleteUpdateForced();
+            if (formComponent) {
+            	// Render onclick JS listeners
+                device.print(" onclick=\"submitForm(" + ajaxEnabled);
+                device.print(",event,'");
+                device.print(Utils.event(component));
+                device.print("','");
+                device.print(eventValue == null ? "" : eventValue);
+                device.print("'");
+                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
+                device.print("); return false;\"");
+
+                // Render remaining JS listeners
+                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
+            }
+            else {
+            	// Render onclick JS listeners
+                device.print(" onclick=\"followLink(" + ajaxEnabled);
+                device.print(",'");
+                device.print(Utils.event(component));
+                device.print("','");
+                device.print(eventValue == null ? "" : eventValue);
+                device.print("'");
+                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
+                device.print("); return false;\"");
+
+                // Render remaining JS listeners
+                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
+            }
+        }
+    }
+
     /**
      * Renders inline the javascript code attached to the passed javascipt event type
      * on the component. Used to allow usage of javascript events by the framework

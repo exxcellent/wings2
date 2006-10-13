@@ -25,6 +25,7 @@ import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SURLIcon;
+import org.wings.plaf.css.CheckBoxCG;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -121,17 +122,7 @@ public class CheckBoxExample
                 public void actionPerformed(ActionEvent e) {
                     boolean use = useImages.isSelected();
 
-                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
-                        SAbstractButton component = (SAbstractButton) iterator.next();
-                        if (!"button5".equals(component.getName())) {
-                            component.setIcon(use ? nsel : null);
-                            component.setSelectedIcon(use ? sel : null);
-                            component.setDisabledIcon(use ? disnsel : null);
-                            component.setDisabledSelectedIcon(use ? dissel : null);
-                            component.setRolloverIcon(use ? rollnsel : null);
-                            component.setRolloverSelectedIcon(use ? rollsel : null);
-                        }
-                    }
+                    ((CheckBoxCG)getSession().getCGManager().getCG(SCheckBox.class)).setUseIconsInForm(use);
                 }
             });
             addControl(useImages);

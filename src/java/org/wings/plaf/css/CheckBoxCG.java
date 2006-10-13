@@ -14,9 +14,8 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SAbstractButton;
-import org.wings.SComponent;
-import org.wings.SIcon;
+import org.wings.*;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
 
@@ -61,74 +60,76 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         final String text = button.getText();
         final SIcon icon = getIcon(button);
 
-        writeTablePrefix(device, component);
+        /*
+        // text only
+        if (icon == null && text != null && (!showAsFormComponent || useIconsInForms && showAsFormComponent)) {
+            device.print("<table");
+            tableAttributes(device, button);
+            device.print("><tr><td>");
+            writeText(device, text, button.isWordWrap());
+            device.print("</td></tr></table>");
+        }
+        */
+        // icon or input only
+        if (text == null) {
+            if ((showAsFormComponent && !useIconsInForms) || icon == null)
+                writeInput(device, button);
+            else {
+                device.print("<table");
+                tableAttributes(device, button);
+                device.print("><tr><td>");
+                writeIcon(device, icon, Utils.isMSIE(component));
+                device.print("</td></tr></table>");
+            }
+        }
+        else {
+            new IconTextCompound() {
+                protected void text(Device device) throws IOException {
+                    writeText(device, text, button.isWordWrap());
+                }
 
-        if (showAsFormComponent && useIconsInForms) {
-            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true, button.getShowAsFormComponent());
+                protected void icon(Device device) throws IOException {
+                    if ((showAsFormComponent && !useIconsInForms) || icon == null)
+                        writeInput(device, button);
+                    else
+                        writeIcon(device, icon, Utils.isMSIE(component));
+                }
+
+                protected void tableAttributes(Device d) throws IOException {
+                    CheckBoxCG.this.tableAttributes(d, button);
+                }
+            }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
+        }
+    }
+
+    protected void tableAttributes(Device device, SAbstractButton button) throws IOException {
+        final boolean showAsFormComponent = button.getShowAsFormComponent();
+        // table is clickable
+        if (!showAsFormComponent || useIconsInForms) {
+            Utils.printClickability(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent());
+
+            if (button.isFocusOwner())
+                Utils.optAttribute(device, "foc", button.getName());
+
             Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
             Utils.optAttribute(device, "accesskey", button.getMnemonic());
-        } else if (showAsFormComponent && !useIconsInForms) {
-            device.print("<div");
-        } else {
-            Utils.printButtonStart(device, button, button.getToggleSelectionParameter(), true, button.getShowAsFormComponent());
-            Utils.optAttribute(device, "accesskey", button.getMnemonic());
         }
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
 
         if (button.isSelected())
             device.print(" checked=\"true\"");
 
-        device.print(">");
+        String style = button.getStyle();
+        SStringBuilder className = new SStringBuilder(style);
+        if (button.getShowAsFormComponent())
+            className.append("_form");
+        if (!button.isEnabled())
+            className.append("_disabled");
+        if (button.isSelected())
+            className.append("_selected");
 
-        if (showAsFormComponent && !useIconsInForms) {
-            if (text == null)
-                writeInput(device, button);
-            else {
-                new IconTextCompound() {
-                    protected void text(Device device) throws IOException {
-                        writeText(device, text, button.isWordWrap());
-                    }
-
-                    protected void icon(Device device) throws IOException {
-                        writeInput(device, button);
-                    }
-
-                    protected void tableAttributes(Device d) throws IOException {
-                        Utils.printCSSInlineFullSize(d, button.getPreferredSize());
-                    }
-                }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
-            }
-        }
-        else {
-            if (icon != null && text == null)
-                writeIcon(device, icon, Utils.isMSIE(component));
-            else if (text != null && icon == null)
-                writeText(device, text, false);
-            else if (text != null) {
-                new IconTextCompound() {
-                    protected void text(Device device) throws IOException {
-                        writeText(device, text, false);
-                    }
-
-                    protected void icon(Device device) throws IOException {
-                        writeIcon(device, icon, Utils.isMSIE(component));
-                    }
-
-                    protected void tableAttributes(Device d) throws IOException {
-                        Utils.printCSSInlineFullSize(d, button.getPreferredSize());
-                    }
-                }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
-            }
-        }
-
-        if (showAsFormComponent && useIconsInForms)
-            Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), true);
-        else if (showAsFormComponent && !useIconsInForms)
-            device.print("</div>");
-        else
-            Utils.printButtonEnd(device, button, button.getToggleSelectionParameter(), true);
-
-        writeTableSuffix(device, component);
+        button.setStyle(className.toString());
+        writeAllAttributes(device, button);
+        button.setStyle(style);
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {

@@ -29,20 +29,23 @@ public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf
             throws IOException {
         final SClickable button = (SClickable) component;
 
-        Utils.printButtonStart(device, button, button.getEvent(), true, button.getShowAsFormComponent());
-        writeAllAttributes(device, button);
-        // render javascript event handlers
-        Utils.writeEvents(device, component, Utils.EXCLUDE_ON_CLICK );
-        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
-        device.print(">");
-
         final String text = button.getText();
         final SIcon icon = getIcon(button);
 
-        if (icon == null && text != null)
+        if (icon == null && text != null) {
+            device.print("<table");
+            tableAttributes(device, button);
+            device.print("><tr><td>");
             writeText(device, text, false);
-        else if (icon != null && text == null)
+            device.print("</td></tr></table>");
+        }
+        else if (icon != null && text == null) {
+            device.print("<table");
+            tableAttributes(device, button);
+            device.print("><tr><td>");
             writeIcon(device, icon, Utils.isMSIE(component));
+            device.print("</td></tr></table>");
+        }
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
@@ -54,12 +57,20 @@ public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf
                 }
 
                 protected void tableAttributes(Device d) throws IOException {
-                    Utils.printCSSInlineFullSize(d, button.getPreferredSize());
+                    ClickableCG.this.tableAttributes(d, button);
                 }
             }.writeCompound(device, component, button.getHorizontalTextPosition(), button.getVerticalTextPosition(), false);
         }
+    }
 
-        Utils.printButtonEnd(device, button, button.getEvent(), true);
+    protected void tableAttributes(Device device, SClickable button) throws IOException {
+        Utils.printClickability(device, button, button.getEvent(), true, button.getShowAsFormComponent());
+        writeAllAttributes(device, button);
+
+        if (button.isFocusOwner())
+            Utils.optAttribute(device, "foc", button.getName());
+
+        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
     }
 
     protected SIcon getIcon(SClickable abstractButton) {
