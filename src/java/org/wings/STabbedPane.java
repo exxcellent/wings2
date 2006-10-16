@@ -402,6 +402,8 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
 
         if (pages.size() == 1) {
             setSelectedIndex(0);
+        } else if (index <= getSelectedIndex()) {
+            setSelectedIndex(getSelectedIndex() + 1);
         }
     }
 
