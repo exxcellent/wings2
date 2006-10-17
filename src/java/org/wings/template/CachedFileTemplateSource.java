@@ -71,6 +71,7 @@ public class CachedFileTemplateSource extends FileTemplateSource {
                     filebuffer = newFileBuf;
                 }
             } while (copyLen >= 0);
+            in.close();
         }
 
         public byte[] getBuffer() {
@@ -99,7 +100,7 @@ public class CachedFileTemplateSource extends FileTemplateSource {
                 } catch (IOException e) {
                     /* ignore currently, file might have been deleted, but is
                      * still in cache.
-                     */ 
+                     */
                     if (log.isErrorEnabled()) {
                         log.error(file.getAbsolutePath() + " not found. Maybe it has been deleted from the filesystem.");
                     }

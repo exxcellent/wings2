@@ -817,7 +817,8 @@ function processAjaxRequest(request) {
                     }
                     eval(code);
                 } catch(e) {
-                    alert(e);
+                    alert("Caught exception in processAjaxRequest(): " + e + "\n" +
+                          "\n\nThe following code could not be executed:\n" + code);
                 }
             }
             // Update the event epoch of this frame

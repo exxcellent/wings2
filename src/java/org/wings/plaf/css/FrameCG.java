@@ -16,7 +16,9 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.ReloadManager;
 import org.wings.Renderable;
+import org.wings.Resource;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.SResourceIcon;
@@ -40,6 +42,7 @@ import org.wings.script.ScriptListener;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
 
+import javax.servlet.ServletException;
 import javax.swing.*;
 
 import java.io.IOException;
@@ -128,11 +131,15 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         public boolean add(Object o) {
-            return getList().add(o);
+        	boolean changed = getList().add(o);
+        	if (changed) invalidateFrames();
+            return changed;
         }
 
         public boolean remove(Object o) {
-            return getList().remove(o);
+        	boolean changed = getList().remove(o);
+        	if (changed) invalidateFrames();
+            return changed;
         }
 
         public boolean containsAll(Collection c) {
@@ -140,22 +147,31 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         public boolean addAll(Collection c) {
-            return getList().addAll(c);
+        	boolean changed = getList().addAll(c);
+        	if (changed) invalidateFrames();
+            return changed;
         }
 
         public boolean addAll(int index, Collection c) {
-            return getList().addAll(index, c);
+        	boolean changed = getList().addAll(index, c);
+        	if (changed) invalidateFrames();
+            return changed;
         }
 
         public boolean removeAll(Collection c) {
-            return getList().removeAll(c);
+        	boolean changed = getList().removeAll(c);
+        	if (changed) invalidateFrames();
+            return changed;
         }
 
         public boolean retainAll(Collection c) {
-            return getList().retainAll(c);
+        	boolean changed = getList().retainAll(c);
+        	if (changed) invalidateFrames();
+            return changed;
         }
 
         public void clear() {
+        	if (!isEmpty()) invalidateFrames();
             getList().clear();
         }
 
@@ -172,14 +188,17 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         public Object set(int index, Object element) {
+        	invalidateFrames();
             return getList().set(index, element);
         }
 
         public void add(int index, Object element) {
+        	invalidateFrames();
             getList().add(index, element);
         }
 
         public Object remove(int index) {
+        	invalidateFrames();
             return getList().remove(index);
         }
 
@@ -201,6 +220,13 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         public List subList(int fromIndex, int toIndex) {
             return getList().subList(fromIndex, toIndex);
+        }
+
+        private void invalidateFrames() {
+            Set frames = SessionManager.getSession().getFrames();
+            for (Iterator it = frames.iterator(); it.hasNext();) {
+            	((SFrame) it.next()).reload(ReloadManager.STATE);
+            }
         }
     }
 
