@@ -7,7 +7,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.Device;
-import org.wings.session.SessionManager;
 
 import java.io.IOException;
 
@@ -103,11 +102,17 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
         d.print("><tbody><tr height=\"1%\">")
             .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum, !firstPage);
+        d.print("<tr><td");
+        boolean enabled2 = !firstPage;
+        Utils.printClickability(d, sb, "" + minimum, enabled2, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0]);
         d.print("</td></tr>");
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - extent), backEnabled);
+
+        d.print("<tr><td");
+        Utils.printClickability(d, sb, "" + (value - extent), backEnabled, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0]);
         d.print("</td></tr>");
 
         d.print("</tbody></table></td>")
@@ -124,8 +129,10 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
             d.print("<tr><td");
             boolean isCurrentPage = (sb.getCurrentPage() == page);
             Utils.optAttribute(d, "class", isCurrentPage ? "page_selected" : null);
+            boolean enabled = !isCurrentPage;
+            Utils.printClickability(d, sb, String.valueOf(page * sb.getExtent()), enabled, sb.getShowAsFormComponent());
             d.print(">");
-            writePage(d, sb, page, !isCurrentPage, firstDirectPage);
+            d.print(Integer.toString(page + 1));
             d.print("</td></tr>");
         }
 
@@ -134,11 +141,17 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
                 .print("<tr height=\"1%\">")
                 .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + extent), forwardEnabled);
+        d.print("<tr><td");
+        Utils.printClickability(d, sb, "" + (value + extent), forwardEnabled, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0]);
         d.print("</td></tr>");
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + (maximum + 1 - extent), !lastPage);
+
+        d.print("<tr><td");
+        boolean enabled1 = !lastPage;
+        Utils.printClickability(d, sb, "" + (maximum + 1 - extent), enabled1, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0]);
         d.print("</td></tr>");
 
         d.print("</tbody></table></td>")
@@ -170,11 +183,17 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
         d.print("><tbody><tr>")
             .print("<td><table class=\"buttons\"><tbody><tr>");
 
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum, !firstPage);
+        d.print("<td");
+        boolean enabled2 = !firstPage;
+        Utils.printClickability(d, sb, "" + minimum, enabled2, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0]);
         d.print("</td>");
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - extent), backEnabled);
+
+        d.print("<td");
+        Utils.printClickability(d, sb, "" + (value - extent), backEnabled, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0]);
         d.print("</td>");
 
         d.print("</tr></tbody></table></td>")
@@ -188,38 +207,35 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
             d.print("<td");
             boolean isCurrentPage = (sb.getCurrentPage() == page);
             Utils.optAttribute(d, "class", isCurrentPage ? "page_selected": null);
+            boolean enabled = !isCurrentPage;
+            Utils.printClickability(d, sb, String.valueOf(page * sb.getExtent()), enabled, sb.getShowAsFormComponent());
             d.print(">");
-            writePage(d, sb, page, !isCurrentPage, firstDirectPage);
+            d.print(Integer.toString(page + 1));
             d.print("</td>");
         }
 
         d.print("</tr></tbody></table></td>")
                 .print("<td><table class=\"buttons\"><tbody><tr>");
 
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + extent), forwardEnabled);
+        d.print("<td");
+        Utils.printClickability(d, sb, "" + (value + extent), forwardEnabled, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0]);
         d.print("</td>");
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + (sb.getPageCount() - 1) * extent, !lastPage);
+
+        d.print("<td");
+        boolean enabled1 = !lastPage;
+        Utils.printClickability(d, sb, "" + (sb.getPageCount() - 1) * extent, enabled1, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0]);
         d.print("</td>");
 
         d.print("</tr></tbody></table></td>")
                 .print("</tr></tbody></table>");
     }
 
-    private void writePage(Device device, SPageScroller pageScroller, int page, boolean enabled, int firstDirectPage) throws IOException {
-        Utils.printButtonStart(device, pageScroller, String.valueOf(page * pageScroller.getExtent()), enabled, pageScroller.getShowAsFormComponent());
-        device.print(">");
-
-        device.print(Integer.toString(page + 1));
-
-        Utils.printButtonEnd(device, pageScroller, String.valueOf(page * pageScroller.getExtent()), enabled);
-    }
-
-    private void writeButton(Device device, SPageScroller pageScroller, SIcon icon, String event, boolean enabled) throws IOException {
-        Utils.printButtonStart(device, pageScroller, event, enabled, pageScroller.getShowAsFormComponent());
-        device.print(">");
-
+    private void writeIcon(Device device, SIcon icon) throws IOException {
         device.print("<img");
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
@@ -228,7 +244,5 @@ public final class PageScrollerCG extends AbstractComponentCG implements org.win
         device.print(" alt=\"");
         device.print(icon.getIconTitle());
         device.print("\"/>");
-
-        Utils.printButtonEnd(device, pageScroller, event, enabled);
     }
 }

@@ -30,15 +30,14 @@ import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 import org.wings.text.SDateFormatter;
-import org.wingx.XCalendar;
-
-import org.wings.SFormattedTextField;
 
 /**
  *
  * @author erik
  */
-public class SpinnerExample extends WingSetPane {
+public class SpinnerExample
+    extends WingSetPane
+{
     
     /** Creates a new instance of SpinnerExample */
     public SpinnerExample() {
@@ -49,10 +48,10 @@ public class SpinnerExample extends WingSetPane {
         SGridLayout layout = new SGridLayout( 2 );
         SForm form = new SForm( layout );
         
-        form.add( new SLabel( "Fruits : ",      SConstants.RIGHT_ALIGN ) ); form.add( getListSpinner() );
-        form.add( new SLabel( "Month : ",       SConstants.RIGHT_ALIGN ) ); form.add( getDateSpinner() );
-        form.add( new SLabel( "Percent : ",     SConstants.RIGHT_ALIGN ) ); form.add( getNumberSpinner() );
-        form.add( new SLabel( "XCalendar : ",   SConstants.RIGHT_ALIGN ) );
+        form.add( new SLabel( "Fruits : ",     SConstants.RIGHT_ALIGN ) ); form.add( getListSpinner() );
+        form.add( new SLabel( "Month : ",      SConstants.RIGHT_ALIGN ) ); form.add( getDateSpinner() );
+        form.add( new SLabel( "Percent : ",    SConstants.RIGHT_ALIGN ) ); form.add( getNumberSpinner() );
+        form.add( new SLabel( "Calendar : ",   SConstants.RIGHT_ALIGN ) );
         
         Calendar calendar = new GregorianCalendar();
         Date initDate = calendar.getTime();
@@ -64,10 +63,6 @@ public class SpinnerExample extends WingSetPane {
         Date latestDate = calendar.getTime();
         
         SSpinner spinner = new SSpinner( new SpinnerDateModel( initDate, earliestDate, latestDate, Calendar.MONTH) );
-        SDateFormatter dateFormatter = new SDateFormatter( DateFormat.getDateInstance() );
-        
-        spinner.setEditor( new CalendarEditor( spinner, dateFormatter ) );
-        
         form.add( spinner );
         
         return form;
@@ -144,7 +139,8 @@ public class SpinnerExample extends WingSetPane {
         return textField;  
         
     }
-    
+
+    /*
     public static class CalendarEditor extends SSpinner.DefaultEditor {
         
         XCalendar calendar = null;
@@ -166,7 +162,7 @@ public class SpinnerExample extends WingSetPane {
         }
         
     }
-    
+    */
     
     
 }

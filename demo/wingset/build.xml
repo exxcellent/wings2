@@ -2,7 +2,7 @@
 <!-- ant build file for wingS Demos-->
 <!-- $Id$ -->
 
-<project name="wingSet" default="build" basedir=".">
+<project name="wingSet" default="deploy" basedir=".">
     <property environment="env"/>
     <!-- read custom properties from file -->
     <property file="../../etc/custom-build.properties"/>
@@ -72,7 +72,7 @@
         </war>
     </target>
 
-    <target name="deploy" depends="build">
+    <target name="deploy" depends="build" description="deploy">
         <mkdir dir="${deploy.wingset}"/>
         <copy todir="${deploy.wingset}">
             <fileset dir="build/web"/>

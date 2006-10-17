@@ -192,11 +192,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
      */
     protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
-        final String toolTipText = component != null ? component.getToolTipText() : null;
-        if (toolTipText != null && toolTipText.length() > 0) {
-            device.print(" onmouseover=\"return wu_toolTip(event, this)\"");
-            Utils.optAttribute(device, "tip", toolTipText);
-        }
+//        final String toolTipText = component != null ? component.getToolTipText() : null;
+//        if (toolTipText != null && toolTipText.length() > 0) {
+//            device.print(" onmouseover=\"return wu_toolTip(event, this)\"");
+//            Utils.optAttribute(device, "tip", toolTipText);
+//        }
     }
 
     /**

@@ -14,8 +14,6 @@
 package org.wings.plaf.css;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.CachingDevice;
 import org.wings.io.Device;
@@ -24,10 +22,7 @@ import org.wings.session.SessionManager;
 import org.wings.table.*;
 import org.wings.util.SStringBuilder;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public final class TableCG
@@ -73,7 +68,6 @@ public final class TableCG
         this.fixedTableBorderWidth = fixedTableBorderWidth;
     }
 
-
     /**
      * Sets the icon used to indicated an editable cell (if content is not direct clickable).
      */
@@ -103,7 +97,6 @@ public final class TableCG
     public void setSelectionColumnWidth(String selectionColumnWidth) {
         this.selectionColumnWidth = selectionColumnWidth;
     }
-
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -196,9 +189,9 @@ public final class TableCG
             component = table.prepareRenderer(table.getCellRenderer(row, col), row, col);
         }
 
-        final boolean contentContainsClickables = component instanceof SClickable;
+        final boolean isClickable = component instanceof SClickable;
 
-        device.print("<td class=\"cell\" col=\"");
+        device.print("<td col=\"");
         device.print(col);
         device.print("\"");
 
@@ -215,9 +208,11 @@ public final class TableCG
         else if (selectableCell)
             parameter = table.getToggleSelectionParameter(row, col);
 
-        if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !contentContainsClickables) {
+        if (parameter != null && !isEditingCell && (selectableCell || editableCell) && !isClickable) {
             Utils.printClickability(device, table, parameter, true, table.getShowAsFormComponent());
+            device.print(" class=\"cell clickable\"");
         }
+        device.print(" class=\"cell\"");
         device.print(">");
 
         rendererPane.writeComponent(device, component, table);
@@ -233,9 +228,9 @@ public final class TableCG
     {
         final SComponent comp = table.prepareHeaderRenderer(table.getHeaderRenderer(col), col);
 
-        device.print("<th class=\"cell\" col=\"");
+        device.print("<th col=\"");
         device.print(col);
-        device.print("\"");
+        device.print("\" class=\"head\"");
 
         Utils.printTableCellAlignment(device, comp, SConstants.CENTER, SConstants.CENTER);
         device.print(">");
@@ -244,16 +239,9 @@ public final class TableCG
         Utils.printNewline(device, comp);
     }
 
-
     public final void writeInternal(final Device _device, final SComponent _c) throws IOException {
         RenderHelper.getInstance(_c).forbidCaching();
         final STable table = (STable)_c;
-        final SDimension intercellPadding = table.getIntercellPadding();
-        final SDimension intercellSpacing = table.getIntercellSpacing();
-        final SListSelectionModel selectionModel = table.getSelectionModel();
-        final SCellRendererPane rendererPane = table.getCellRendererPane();
-        final boolean needsSelectionRow = selectionModel.getSelectionMode() != SListSelectionModel.NO_SELECTION && table.isEditable();
-        final boolean showAsFormComponent = table.getShowAsFormComponent();
 
         /*
          * Description: This is a FIREFOX bug workaround. Currently we render all components surrounded by a DIV/TABLE.
@@ -269,107 +257,31 @@ public final class TableCG
         try {
             device.print("<table");
             writeAllAttributes(device, table);
-            Utils.writeEvents(device, table, null);
-
-            // TODO: border="" should be obsolete
-            // TODO: cellspacing and cellpadding may be in conflict with border-collapse
-            /* Tweaking: CG configured to have a fixed border="xy" width */
-            Utils.optAttribute(device, "border", fixedTableBorderWidth);
-            Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? "" + intercellSpacing.getWidthInt() : null));
-            Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? "" + intercellPadding.getHeightInt() : null));
-            device.print(">");
+            writeTableAttributes(device, table);
+            device.print("><thead>");
             Utils.printNewline(device, table);
 
             Rectangle viewport = table.getViewportSize();
             if (viewport == null)
                 viewport = table.getScrollableViewportSize();
 
-            int startRow = viewport.y;
-            int startCol = viewport.x;
-            int endRow = Math.min(startRow + viewport.height, table.getRowCount());
-            int endCol = Math.min(startCol + viewport.width, table.getColumnCount());
+            // rectangle is somewhat missused here! the width and height are actually endy and endx
+            Rectangle renderViewPort = new Rectangle();
+            renderViewPort.y = viewport.y;
+            renderViewPort.x = viewport.x;
+            renderViewPort.height = Math.min(viewport.y + viewport.height, table.getRowCount());
+            renderViewPort.width = Math.min(viewport.x + viewport.width, table.getColumnCount());
 
-            STableColumnModel columnModel = table.getColumnModel();
-            if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
-                device.print("<colgroup>");
-                if (needsSelectionRow)
-                    writeCol(device, selectionColumnWidth);
+            writeColumnWidths(device, table, renderViewPort);
 
-                for (int i = startCol; i < endCol; i++) {
-                    STableColumn column = columnModel.getColumn(i);
-                    if (!column.isHidden())
-                        writeCol(device, column.getWidth());
-                    else
-                        endCol++;
-                }
-                device.print("</colgroup>");
-                Utils.printNewline(device, table);
-            }
+            writeHeader(device, table, renderViewPort);
 
-            /*
-            * render the header
-            */
-            if (table.isHeaderVisible()) {
-                SStringBuilder headerArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_HEADER));
-                device.print("<thead><tr class=\"header\"");
-                Utils.optAttribute(device, "style", headerArea);
-                device.print(">");
-
-                Utils.printNewline(device, table, 1);
-                if (needsSelectionRow)
-                    device.print("<th class=\"cell\" width=\"").print(selectionColumnWidth).print("\"></th>\n");
-
-                for (int i = startCol; i < endCol; i++) {
-                    STableColumn column = columnModel.getColumn(i);
-                    if (!column.isHidden())
-                        writeHeaderCell(device, table, rendererPane, i);
-                }
-
-                Utils.printNewline(device, table);
-                device.print("</tr></thead>");
-            }
-
-            SStringBuilder selectedArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_SELECTED));
-            SStringBuilder evenArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_EVEN_ROWS));
-            SStringBuilder oddArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_ODD_ROWS));
-
+            device.print("</thead>");
             Utils.printNewline(device, table);
             device.print("<tbody>");
-            for (int r = startRow; r < endRow; r++) {
-                device.print("<tr");
 
-                String rowStyle = table.getRowStyle(r);
-                SStringBuilder rowClass = new SStringBuilder(rowStyle != null ? rowStyle + " " : "");
+            writeBody(device, table, renderViewPort);
 
-                if (selectionModel.isSelectedIndex(r)) {
-                    Utils.optAttribute(device, "style", selectedArea);
-                    rowClass.append("selected");
-                }
-                else if (r % 2 != 0) {
-                    Utils.optAttribute(device, "style", oddArea);
-                    rowClass.append("odd");
-                }
-                else {
-                    Utils.optAttribute(device, "style", evenArea);
-                    rowClass.append("even");
-                }
-
-                Utils.optAttribute(device, "class", rowClass);
-                device.print(">");
-
-                if (needsSelectionRow) {
-                    renderSelectionColumn(device, table, rendererPane, r, showAsFormComponent);
-                }
-
-                for (int c = startCol; c < endCol; c++) {
-                    STableColumn column = columnModel.getColumn(c);
-                    if (!column.isHidden())
-                        renderCellContent(device, table, rendererPane, r, c);
-                }
-
-                device.print("</tr>");
-                Utils.printNewline(device, table);
-            }
             device.print("</tbody></table>");
         }
         finally {
@@ -378,6 +290,106 @@ public final class TableCG
             //device = null;
             RenderHelper.getInstance(_c).allowCaching();
         }
+    }
+
+    private void writeTableAttributes(CachingDevice device, STable table) throws IOException {
+        final SDimension intercellPadding = table.getIntercellPadding();
+        final SDimension intercellSpacing = table.getIntercellSpacing();
+        Utils.writeEvents(device, table, null);
+
+        // TODO: border="" should be obsolete
+        // TODO: cellspacing and cellpadding may be in conflict with border-collapse
+        /* Tweaking: CG configured to have a fixed border="xy" width */
+        Utils.optAttribute(device, "border", fixedTableBorderWidth);
+        Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? "" + intercellSpacing.getWidthInt() : null));
+        Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? "" + intercellPadding.getHeightInt() : null));
+    }
+
+    private void writeColumnWidths(CachingDevice device, STable table, Rectangle viewport) throws IOException {
+        STableColumnModel columnModel = table.getColumnModel();
+        if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
+            device.print("<colgroup>");
+            writeCol(device, selectionColumnWidth);
+
+            for (int i = viewport.x; i < viewport.width; i++) {
+                STableColumn column = columnModel.getColumn(i);
+                if (!column.isHidden())
+                    writeCol(device, column.getWidth());
+                else
+                    viewport.width++;
+            }
+            device.print("</colgroup>");
+            Utils.printNewline(device, table);
+        }
+    }
+
+    private void writeHeader(CachingDevice device, STable table, Rectangle viewport) throws IOException {
+        if (!table.isHeaderVisible())
+            return;
+
+        final SCellRendererPane rendererPane = table.getCellRendererPane();
+        STableColumnModel columnModel = table.getColumnModel();
+
+        SStringBuilder headerArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_HEADER));
+        device.print("<tr class=\"header\"");
+        Utils.optAttribute(device, "style", headerArea);
+        device.print(">");
+
+        Utils.printNewline(device, table, 1);
+        writeSelectionHeader(device, table);
+
+        for (int i = viewport.x; i < viewport.width; i++) {
+            STableColumn column = columnModel.getColumn(i);
+            if (!column.isHidden())
+                writeHeaderCell(device, table, rendererPane, i);
+        }
+        device.print("</tr>");
+        Utils.printNewline(device, table);
+    }
+
+    private void writeBody(CachingDevice device, STable table, Rectangle viewport) throws IOException {
+        final SListSelectionModel selectionModel = table.getSelectionModel();
+
+        SStringBuilder selectedArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_SELECTED));
+        SStringBuilder evenArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_EVEN_ROWS));
+        SStringBuilder oddArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_ODD_ROWS));
+        final SCellRendererPane rendererPane = table.getCellRendererPane();
+        STableColumnModel columnModel = table.getColumnModel();
+
+        for (int r = viewport.y; r < viewport.height; r++) {
+            String rowStyle = table.getRowStyle(r);
+            SStringBuilder rowClass = new SStringBuilder(rowStyle != null ? rowStyle + " " : "");
+            device.print("<tr");
+            if (selectionModel.isSelectedIndex(r)) {
+                Utils.optAttribute(device, "style", selectedArea);
+                rowClass.append("selected ");
+            }
+            else if (r % 2 != 0)
+                Utils.optAttribute(device, "style", oddArea);
+            else
+                Utils.optAttribute(device, "style", evenArea);
+
+            rowClass.append(r % 2 != 0 ? "odd" : "even");
+            Utils.optAttribute(device, "class", rowClass);
+            device.print(">");
+
+            writeSelectionBody(device, table, rendererPane, r);
+
+            for (int c = viewport.x; c < viewport.width; c++) {
+                STableColumn column = columnModel.getColumn(c);
+                if (!column.isHidden())
+                    renderCellContent(device, table, rendererPane, r, c);
+            }
+
+            device.print("</tr>");
+            Utils.printNewline(device, table);
+        }
+    }
+
+    private void writeSelectionHeader(Device device, STable table) throws IOException {
+        device.print("<th valign=\"middle\" class=\"num\"");
+        Utils.optAttribute(device, "width", selectionColumnWidth);
+        device.print("></th>");
     }
 
     private boolean atLeastOneColumnWidthIsNotNull(STableColumnModel columnModel) {
@@ -397,20 +409,27 @@ public final class TableCG
     /**
      * Renders the row sometimes needed to allow row selection.
      */
-    protected void renderSelectionColumn(final Device device, final STable table, final SCellRendererPane rendererPane,
-                                         final int row, final boolean showAsFormComponent)
+    protected void writeSelectionBody(final Device device, final STable table, final SCellRendererPane rendererPane,
+                                         final int row)
         throws IOException
     {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
-        final String columnStyle = Utils.joinStyles((SComponent)rowSelectionRenderer, "numbering");
+        final String columnStyle = Utils.joinStyles((SComponent)rowSelectionRenderer, "num");
 
-        device.print("<td valign=\"top\"");
-        Utils.optAttribute(device, "class", columnStyle);
+        device.print("<td valign=\"top\" align=\"right\"");
         Utils.optAttribute(device, "width", selectionColumnWidth);
 
         String value = table.getToggleSelectionParameter(row, -1);
         if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION) {
             Utils.printClickability(device, table, value, true, table.getShowAsFormComponent());
+            device.print(" class=\"clickable ");
+            device.print(columnStyle);
+            device.print("\"");
+        }
+        else {
+            device.print(" class=\"");
+            device.print(columnStyle);
+            device.print("\"");
         }
         device.print(">");
 

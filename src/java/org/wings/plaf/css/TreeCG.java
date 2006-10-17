@@ -127,7 +127,7 @@ public final class TreeCG extends AbstractComponentCG implements
         device.print(">");
 
         /*
-        * in most applications, the is no need to render a control icon for a
+        * in most applications, there is no need to render a control icon for a
         * leaf. So in that case, we can avoid writing the sourrounding
         * table, that will speed up things in browsers.
         */
@@ -144,34 +144,32 @@ public final class TreeCG extends AbstractComponentCG implements
             } else {
                 Utils.optAttribute(device, "class", "norm");
             }
-            device.print("><tr><td>");
+            device.print("><tr><td");
 
             final String expansionParameter = component.getExpansionParameter(row, false);
-            if (isLeaf) {
-                // render a disabled button around this. firefox position bugfix (ol)
-                Utils.printButtonStart(device, component, expansionParameter, true, component.getShowAsFormComponent());
-                device.print(">");
-                writeIcon(device, leafControlIcon, false);
-                Utils.printButtonEnd(device, component, expansionParameter, true);
-            } else {
-                Utils.printButtonStart(device, component, expansionParameter, true, component.getShowAsFormComponent());
-                device.print(">");
+            Utils.printClickability(device, component, expansionParameter, true, component.getShowAsFormComponent());
+            device.print(">");
 
-                if (isExpanded) {
-                    if (collapseControlIcon == null) {
-                        device.print("-");
-                    } else {
-                        writeIcon(device, collapseControlIcon, true);
-                    }
-                } else {
-                    if (expandControlIcon == null) {
-                        device.print("+");
-                    } else {
-                        writeIcon(device, expandControlIcon, true);
-                    }
-                }
-                Utils.printButtonEnd(device, component, expansionParameter, true);
+            if (isLeaf) {
+                writeIcon(device, leafControlIcon, false);
             }
+            else if (isExpanded) {
+                if (collapseControlIcon == null) {
+                    device.print("-");
+                }
+                else {
+                    writeIcon(device, collapseControlIcon, true);
+                }
+            }
+            else {
+                if (expandControlIcon == null) {
+                    device.print("+");
+                }
+                else {
+                    writeIcon(device, expandControlIcon, true);
+                }
+            }
+
             /*
              * closing layout td
              */

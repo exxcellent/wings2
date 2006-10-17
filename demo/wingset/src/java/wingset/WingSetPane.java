@@ -52,11 +52,15 @@ abstract public class WingSetPane
         anchor.setTarget("sourceWindow");
         anchor.add(new SLabel("view java source code", SOURCE_LABEL_ICON));
         anchor.setPreferredSize(SDimension.FULLWIDTH);
+
+        SPanel south = new SPanel();
+        south.setPreferredSize(SDimension.FULLWIDTH);
+        south.add(anchor);
         SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.TOP);
-        anchor.setBorder(border);
+        south.setBorder(border);
 
-        add(anchor);
+        add(south);
 
         // lazily initialize components when first shown
         addComponentListener(new SComponentAdapter() {
@@ -86,4 +90,11 @@ abstract public class WingSetPane
      * Override this.
      */
     protected abstract SComponent createExample();
+
+    public String getExampleName() {
+        String name = getClass().getName();
+        name = name.substring(name.lastIndexOf('.') + 1);
+        name = name.substring(0, name.length() - "Example".length());
+        return name;
+    }
 }

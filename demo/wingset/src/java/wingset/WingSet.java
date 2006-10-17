@@ -25,15 +25,17 @@ import org.wings.STabbedPane;
 import org.wings.SURLIcon;
 import org.wings.SButton;
 import org.wings.SBorderLayout;
+import org.wings.session.SessionManager;
 import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
 import org.wings.resource.DefaultURLResource;
 import org.wings.style.CSSProperty;
 
-import java.io.Serializable;
+import java.io.*;
 import java.net.URL;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 
 /**
  * The root of the WingSet demo application.
@@ -97,9 +99,33 @@ public class WingSet implements Serializable {
         // do some global styling of the wingSet application
         styleWingsetApp();
 
-        // Assemble wingSet
         tab.add(new WingsImage(), "wingS!");
-        tab.add(new LabelExample(), "Label");
+
+        String dirName = SessionManager.getSession().getServletContext().getRealPath("/WEB-INF/classes/wingset");
+        System.out.println("dirName = " + dirName);
+        File dir = new File(dirName);
+        String[] exampleClassFileNames = dir.list(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.endsWith("Example.class");
+            }
+        });
+        Arrays.sort(exampleClassFileNames);
+        System.out.println("exampleClassFileNames = " + Arrays.asList(exampleClassFileNames));
+        for (int i = 0; i < exampleClassFileNames.length; i++) {
+            String exampleClassFileName = exampleClassFileNames[i];
+            String exampleClassName = "wingset." + exampleClassFileName.substring(0, exampleClassFileName.length() - ".class".length());
+            try {
+                Class exampleClass = Thread.currentThread().getContextClassLoader().loadClass(exampleClassName);
+                addExample(exampleClass);
+            }
+            catch (Throwable e) {
+                System.err.println("Could not load example: " + exampleClassName);
+                e.printStackTrace();
+            }
+        }
+        // Assemble wingSet
+        /*
+        addExample(LabelExample.class);
         tab.add(new TextComponentExample(), "Text Component");
         tab.addTab("Tree", JAVA_CUP_ICON, new TreeExample(), "Tree Tool Tip");
         tab.add(new OptionPaneExample(), "OptionPane");
@@ -134,9 +160,7 @@ public class WingSet implements Serializable {
         tab.add(new ListBugTest(), "BUG TODO: In IE List does not appear");
         tab.add(new XDivisionExample(), "XDivision");
         tab.add(new YUIxGridExample(), "YUIxGrid" );
-
-        // TODO: fixme!!!
-        //tab.add(new bookmarks.BookmarkManager(), "DND 2");
+        */
 
         // Add component to content pane using a layout constraint (
         frame.getContentPane().add(tab);
@@ -155,6 +179,11 @@ public class WingSet implements Serializable {
         frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
 
         frame.show();
+    }
+
+    private void addExample(Class exampleClass) throws IllegalAccessException, InstantiationException {
+        WingSetPane example = (WingSetPane)exampleClass.newInstance();
+        tab.add(example, example.getExampleName());
     }
 
     /**
@@ -201,8 +230,4 @@ public class WingSet implements Serializable {
         tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, (SIcon) null);
         customStyleApplied = false;
     }
-
-
 }
-
-

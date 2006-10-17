@@ -177,24 +177,16 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             if (renderSelection && selected)
                 device.print("<li class=\"SList_selected\">");
             else
-                device.print("<li>");
+                device.print("<li");
 
             SComponent renderer = cellRenderer.getListCellRendererComponent(list, model.getElementAt(i), selected, i);
 
             if (renderSelection) {
-                Utils.printButtonStart(device, list, list.getToggleSelectionParameter(i), true, list.getShowAsFormComponent());
+                Utils.printClickability(device, list, list.getToggleSelectionParameter(i), true, list.getShowAsFormComponent());
                 Utils.optAttribute(device, "foc", renderer.getName());
-                device.print(">");
-            } else
-                device.print("<span>");
-
+            }
+            device.print(">");
             rendererPane.writeComponent(device, renderer, list);
-
-            if (renderSelection) {
-                Utils.printButtonEnd(device, list, list.getToggleSelectionParameter(i), true);
-            } else
-                device.print("</span>");
-
             device.print("</li>\n");
         }
 

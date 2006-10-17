@@ -63,27 +63,7 @@ public class TableExample
     public SComponent createExample() {
         controls = new TableControls();
 
-        table = new STable(new MyTableModel(7, 5)) {
-            public void processLowLevelEvent(String action, String[] values) {
-                int pos = action.indexOf('_');
-                if (pos == -1)
-                    super.processLowLevelEvent(action, values);
-                else {
-                    String coordinates = action.substring(pos + 1);
-                    pos = coordinates.indexOf('_');
-                    System.out.println("delegate " + Arrays.asList(values) + " to renderer at " + coordinates);
-                    int row = new Integer(coordinates.substring(0, pos)).intValue();
-                    int col = new Integer(coordinates.substring(pos +1)).intValue();
-                    STableCellEditor cellEditor = getCellEditor(row, col);
-                    SComponent editor = prepareEditor(cellEditor, row, col);
-                    if (editor instanceof LowLevelEventListener) {
-                        LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editor;
-                        lowLevelEventListener.processLowLevelEvent(action, values);
-                        setValueAt(cellEditor.getCellEditorValue(), row, col);
-                    }
-                }
-            }
-        };
+        table = new STable(new MyTableModel(7, 5));
         table.setName("table");
         table.setShowGrid(true);
         table.setSelectionMode(STable.NO_SELECTION);
@@ -141,11 +121,8 @@ public class TableExample
                 return this;
             }
             else if (value instanceof Boolean && row != -1) {
-                SCheckBox checkBox = new SCheckBox();
-                setHorizontalAlignment(SConstants.CENTER);
-                Boolean b = (Boolean) value;
-                checkBox.setSelected(b.booleanValue());
-                return checkBox;
+                setText("" + value);
+                return this;
             }
             else if (value instanceof Integer && row != -1) {
                 setHorizontalAlignment(SConstants.RIGHT);

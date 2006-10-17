@@ -117,14 +117,22 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
                 .print("<tr").print(rowHeightFlattened).print(">")
                 .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0], "" + minimum);
+        d.print("<tr><td");
+        Utils.printClickability(d, sb, "" + minimum, true, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0]);
         d.print("</td></tr>");
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD_BLOCK][0], "" + (Math.max(minimum, value - blockIncrement)));
+        d.print("<tr><td");
+        Utils.printClickability(d, sb, "" + (Math.max(minimum, value - blockIncrement)), true, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD_BLOCK][0]);
         d.print("</td></tr>");
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0], "" + (value - 1));
+        d.print("<tr><td");
+        Utils.printClickability(d, sb, "" + (value - 1), true, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0]);
         d.print("</td></tr>");
 
         d.print("</tbody></table></td>").print("</tr>");
@@ -144,14 +152,22 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         d.print("<tr").print(rowHeightFlattened).print(">")
                 .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0], "" + (value + 1));
+        d.print("<tr><td");
+        Utils.printClickability(d, sb, "" + (value + 1), true, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0]);
         d.print("</td></tr>");
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD_BLOCK][0], "" + (Math.min(last, value + blockIncrement)));
+        d.print("<tr><td");
+        Utils.printClickability(d, sb, "" + (Math.min(last, value + blockIncrement)), true, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD_BLOCK][0]);
         d.print("</td></tr>");
-        d.print("<tr><td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0], "" + last);
+        d.print("<tr><td");
+        Utils.printClickability(d, sb, "" + last, true, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0]);
         d.print("</td></tr>");
 
         d.print("</tbody></table></td>")
@@ -182,14 +198,22 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         d.print("><tbody><tr>")
                 .print("<td width=\"1%\"><table class=\"buttons\"><tbody><tr>");
 
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0], "" + minimum);
+        d.print("<td");
+        Utils.printClickability(d, sb, "" + minimum, true, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][FIRST][0]);
         d.print("</td>");
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD_BLOCK][0], "" + (Math.max(minimum, value - blockIncrement)));
+        d.print("<td");
+        Utils.printClickability(d, sb, "" + (Math.max(minimum, value - blockIncrement)), true, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD_BLOCK][0]);
         d.print("</td>");
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0], "" + (value - 1));
+        d.print("<td");
+        Utils.printClickability(d, sb, "" + (value - 1), true, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][BACKWARD][0]);
         d.print("</td>");
 
         d.print("</tr></tbody></table></td>")
@@ -204,14 +228,22 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         d.print("</tr></tbody></table></td>")
                 .print("<td width=\"1%\"><table class=\"buttons\"><tbody><tr>");
 
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0], "" + (value + 1));
+        d.print("<td");
+        Utils.printClickability(d, sb, "" + (value + 1), true, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD][0]);
         d.print("</td>");
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD_BLOCK][0], "" + (Math.min(last, value + blockIncrement)));
+        d.print("<td");
+        Utils.printClickability(d, sb, "" + (Math.min(last, value + blockIncrement)), true, sb.getShowAsFormComponent());
+        d.print(">");
+
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][FORWARD_BLOCK][0]);
         d.print("</td>");
-        d.print("<td>");
-        writeButton(d, sb, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0], "" + last);
+        d.print("<td");
+        Utils.printClickability(d, sb, "" + last, true, sb.getShowAsFormComponent());
+        d.print(">");
+        writeIcon(d, DEFAULT_ICONS[SConstants.HORIZONTAL][LAST][0]);
         d.print("</td>");
 
         d.print("</tr></tbody></table></td>")
@@ -228,10 +260,7 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         d.print("\"></td>");
     }
 
-    private void writeButton(Device device, SScrollBar scrollBar, SIcon icon, String event) throws IOException {
-        Utils.printButtonStart(device, scrollBar, event, true, scrollBar.getShowAsFormComponent());
-        device.print(">");
-
+    private void writeIcon(Device device, SIcon icon) throws IOException {
         device.print("<img");
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
@@ -240,7 +269,5 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         device.print(" alt=\"");
         device.print(icon.getIconTitle());
         device.print("\"/>");
-
-        Utils.printButtonEnd(device, scrollBar, event, true);
     }
 }

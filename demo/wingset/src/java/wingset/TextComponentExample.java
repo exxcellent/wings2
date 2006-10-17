@@ -35,7 +35,6 @@ import org.wings.event.SRenderListener;
 import org.wings.session.SessionManager;
 import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDateFormatter;
-import org.wingx.XCalendar;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -61,13 +60,6 @@ public class TextComponentExample extends WingSetPane {
         gridLayout.setHgap(10);
         gridLayout.setVgap(4);
         SPanel p = new SPanel(gridLayout);
-
-        p.add(new SLabel("XCalendar: "));
-        XCalendar calendar = new XCalendar(dateFormatter);
-        calendar.setName("calendar");
-        calendar.setToolTipText("A Date Picker.");
-        calendar.getFormattedTextField().addDocumentListener(new MyDocumentListener(calendar.getFormattedTextField()));
-        p.add(calendar);
 
         p.add(new SLabel("STextField: "));
         STextField textField = new STextField();
@@ -136,8 +128,6 @@ public class TextComponentExample extends WingSetPane {
             component.setVerticalAlignment(SConstants.TOP);
             if ((component instanceof STextComponent) /*&& (component != disabledTextArea)*/ && (component != textArea))
                 component.setPreferredSize(new SDimension("250px", null));
-            if ((component instanceof XCalendar))
-                component.setPreferredSize(new SDimension("250px", null));
         }
 
         eventLog.setEditable(false); // for multiline label
@@ -147,7 +137,6 @@ public class TextComponentExample extends WingSetPane {
         actionEvent.setBorder(new SLineBorder(1));
         actionEvent.setBackground(Color.LIGHT_GRAY);
 
-        controls.addControllable(calendar);
         controls.addControllable(textField);
         controls.addControllable(textArea);
         controls.addControllable(passwordField);

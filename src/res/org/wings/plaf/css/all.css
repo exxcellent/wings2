@@ -73,7 +73,6 @@ input, select, textarea {
     border: none;
 }
 
-/* Simulate and style FORM buttons for A HREF*/
 TABLE.SButton_form,
 TABLE.SButton_form_disabled,
 TABLE.SToggleButton_form,
@@ -82,7 +81,6 @@ TABLE.SToggleButton_form_selected {
    border: 2px outset #ddd;
    background-color: #ddd;
    color: #000;
-   line-height: normal !important;
    cursor: default;
    text-align: center;
    white-space: normal;
@@ -157,7 +155,7 @@ select.SList {
     vertical-align: top;
     text-align: left;
 }
-ul.STree{
+ul.STree {
 	list-style: none;
 	margin-left:0px;
 	padding-left:0px;
@@ -170,6 +168,10 @@ ul.STree > li > * {
     white-space: nowrap;
     padding-right: 2px;
     padding-bottom: 1px;
+}
+
+ul.STree td {
+   padding-right: 4px;
 }
 
 /* STabbedPane default style */
@@ -251,24 +253,6 @@ ul.STree li div.SSubTree {
 	background-position: 0px 100px;
 }
 
-/* Selection color of STrees */
-/*ul.STree > li.selected > table
- {
-    background-color: #ffbbbb;
-    border: 1px dotted black;
-}*/
-
-ul.STree li a {
-    border: none;
-    background-color: inherit;
-    padding: 0px;
-    text-decoration: none;
-    font-family: sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    color: #000000;
-}
-
 /* ---- Selection color of STrees ----------------------------------------------------------------------*/
 /* we need cascading styles here since else children get selected.
    if you need to select across more than 4 levels, you need to expand these rules.
@@ -281,7 +265,7 @@ ul.STree li.selected table.selected tr td.selected {
 ul.STree li.norm table.norm tr td.norm {
     background-color: none;
     border: none;
-	margin: 1px;
+	padding: 1px;
 }
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -420,41 +404,83 @@ ul.SPopupMenu a.x:hover{
 
 
 
-
-
-
 .STable {
     width: 100%;
-    border: 1px solid black;
-    border-collapse: collapse;
+    cursor: default;
 }
 
-.STable th.cell, th.numbering {
-    border: 1px solid black;
-    padding: 1px 8px;
-}
-.STable td.cell, td.numbering {
-    border-left: 1px solid black;
-    padding: 1px 8px;
-}
-/* let the link span the whole table */
-.STable tbody tr td a, .STable tbody tr td span {
-	display: block;
+.STable td.cell, .STable th.cell, .STable td.num, .STable th.num, .STable th.head {
+    padding: 2px 8px 2px 8px;
+    border-bottom: 1px solid #c0c0c0;
 }
 
-.STable tbody tr td.numbering {
+.STable td.clickable, .STable th.clickable {
+    cursor: pointer;
+}
+
+.STable td.cell, .STable th.head {
+    border-left: 1px solid #c0c0c0;
+}
+
+.STable td.num {
     text-align: right;
 }
 
-.STable tbody tr.odd {
-    background-color: #e5e5e5;
-}
-
-.STable tbody tr.even {
+.STable tr.header {
     background-color: #efefef;
 }
 
-.STable tbody tr.selected {
+.STable tr.odd {
+    background-color: #efefef;
+}
+
+.STable tr.even {
+    background-color: #ffffff;
+}
+
+.STable tr.selected {
+    background-color: #ffbbbb !important;
+}
+
+.XTable {
+    width: 100%;
+    cursor: default;
+}
+
+.XTable td.cell, .XTable th.cell, .XTable td.num, .XTable th.num, .XTable th.head, .XTable th.filter {
+    padding: 2px 8px 2px 8px;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+.XTable td.clickable, .XTable th.clickable {
+    cursor: pointer;
+}
+
+.XTable td.cell, .XTable th.head, .XTable th.filter {
+    border-left: 1px solid #c0c0c0;
+}
+
+.XTable td.num {
+    text-align: right;
+}
+
+.XTable tr.header {
+    background-color: #efefef;
+}
+
+.XTable tr.filter {
+    background-color: #efefef;
+}
+
+.XTable tr.odd {
+    background-color: #efefef;
+}
+
+.XTable tr.even {
+    background-color: #ffffff;
+}
+
+.XTable tr.selected {
     background-color: #ffbbbb !important;
 }
 
@@ -502,59 +528,67 @@ div.domTT .contents {
 */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-scroll arrows of PageScroller as form-components
-*/
 table.SPageScroller table.buttons td {
     border: 1px solid #cccccc;
     background-color: transparent;
     padding: 0px;
+    cursor: pointer;
 }
 
-/*
-paging numbers of PageScroller as form-components
-*/
-table.SPageScroller table.pages a,
-table.SPageScroller table.pages td.page_selected span {
-    margin:  6px;
-    padding: 0px;
+table.SPageScroller table.pages td {
+    padding-left: 8px;
+    padding-right: 8px;
     font-size: 12px;
+    cursor: pointer;
 }
 
-table.SPageScroller table.pages a:hover {
+table.SPageScroller table.pages td:hover {
 	background-color: #ECECEC;
 }
 
-table.SPageScroller table.pages SPAN.disabled_linkbutton {
-    margin: 1px;
-    font-weight: bold;
-    color: #000000;
+table.SPageScroller table.buttons td:hover {
+    border: 1px outset #cccccc;
 }
 
+table.XPageScroller table.buttons td {
+    cursor: pointer;
+}
+
+table.XPageScroller table.pages td {
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+table.XPageScroller table.pages td:hover {
+	background-color: #ECECEC;
+}
+
+table.SScrollBar {
+    height: 100%;
+    width: 100%;
+	font-size: 1px;
+	border-width: 0px;
+}
+
+table.SScrollBar_vertical {
+    height: 100%;
+}
+
+table.SScrollBar_horizontal {
+    height: auto;
+}
+
+table.SScrollBar table.buttons td {
+    border: 1px solid #cccccc;
+    background-color: transparent;
+    width: 20px;
+}
+
+table.SScrollBar table.buttons td:hover {
+    border: 1px outset #cccccc;
+}
 
 
 
@@ -654,32 +688,6 @@ form.SDialog {
 
 
 
-table.SScrollBar {
-    height: 100%;
-    width: 100%;
-	font-size: 1px;
-	border-width: 0px;
-}
-
-table.SScrollBar_vertical {
-    height: 100%;
-}
-
-table.SScrollBar_horizonta {
-    height: auto;
-}
-
-table.SScrollBar table.buttons a {
-    border: 1px solid #cccccc;
-    background-color: transparent;
-    width: 20px;
-}
-
-table.SScrollBar table.buttons a:hover {
-    border: 1px outset #cccccc;
-}
-
-
 .SSeparator {
     height: 0px; /* evtl. 2px für IE */
     white-space: nowrap;
@@ -689,11 +697,6 @@ table.SScrollBar table.buttons a:hover {
     border-width: 0px;
     border-top-width: 1px;
     border-color: #000;
-}
-
-/* soll das so sein?  */
-table.SButton {
-    color: #004;
 }
 
 td.DivisionControl {
@@ -710,4 +713,8 @@ td.DivisionTitle {
 td.DivisionContent {
     padding-top: 6px;
     padding-bottom: 6px;
+}
+
+table.DivisionContent {
+    width: 100%;
 }

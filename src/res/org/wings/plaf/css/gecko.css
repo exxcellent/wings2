@@ -19,24 +19,6 @@ tr {
     vertical-align: inherit;
 }
 
-
-/* Simulate and style FORM buttons for A HREF
-TABLE.SButton_disabled_form,
-TABLE.SButton_selected_form {
-   -moz-appearance: button;
-}
-table.SButton A.formbutton:active:hover {
-   padding: 0px 5px 0px 7px;
-   border-style: inset;
-}
-table.SButton SPAN.disabled_formbutton:active:hover {
-   padding: 1px 7px 1px 7px;
-   border: 1px outset #ddd;
-   color: gray;
-   cursor: default;
-}
-*/
-
 /* rounded corners for gecko */
 .STabbedPane_Tab_top {
     -moz-border-radius-topright: 4px;

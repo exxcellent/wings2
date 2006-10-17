@@ -1058,6 +1058,9 @@ import java.util.Iterator;
      }
 
      public void fireIntermediateEvents() {
+         if (lastReceivedLowLevelEvents == null)
+             return;
+
          // delay events...
          getSelectionModel().setDelayEvents(true);
          getSelectionModel().setValueIsAdjusting(true);
