@@ -1,0 +1,33 @@
+<public:component lightweight="true">
+<public:attach event="onmousedown" onevent="mousedown()"/>
+<public:attach event="onmouseup" onevent="mouseup()"/>
+<public:attach event="onmouseover" onevent="mouseover()"/>
+<public:attach event="onmouseout" onevent="mouseout()"/>
+<script language="JScript">
+
+function mousedown() {
+   if (element.className.indexOf(" formbutton_active") == -1)
+      element.className = element.className + " formbutton_active";
+}
+
+function mouseup() {
+   if (element.className.indexOf(" formbutton_active") != -1)
+      element.className = element.className.replace(/ formbutton_active/, "");
+}
+
+function mouseover() {
+   if (element.className.indexOf(" formbutton_hover") == -1)
+      element.className = element.className + " formbutton_hover";
+}
+
+function mouseout() {
+   if (element.className.indexOf(" formbutton_active") != -1)
+      element.className = element.className.replace(/ formbutton_active/, "");
+
+   if (element.className.indexOf(" formbutton_hover") != -1)
+      element.className = element.className.replace(/ formbutton_hover/, "");
+}
+
+</script>
+</public:component>
+    

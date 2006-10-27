@@ -1,0 +1,59 @@
+<table><tr><td>
+
+<h3>Memory Usage</h3>
+
+<p/>
+<table>
+<tr><td><object name="InfoBar"></object></td><td valign="top"><object name="TotalMemory"></object></td></tr>
+</table>
+<p/><object name="GC" text="Start garbage collection"></object>
+<p/><object name="refresh"></object>
+<p/><object name="exit"></object>
+<p/>
+</td>
+
+<td width="30">&nbsp;</td>
+
+<td  valign="top">
+<h3>Session Info</h3>
+
+<p/>
+
+<table>
+<tr>
+<td>
+Overall sessions:
+</td>
+<td>
+<object name="OverallSessions"></object>
+</td>
+</tr>
+<tr>
+<td>
+Active sessions:
+</td>
+<td>
+<object name="ActiveSessions"></object>
+</td>
+</tr>
+<tr>
+<td>
+Uptime:
+</td>
+<td>
+<object name="Uptime"></object>
+</td>
+</tr>
+<tr>
+<td>
+Request Count:
+</td>
+<td>
+<object name="RequestCount"></object>
+</td>
+</tr>
+</table>
+
+
+</td>
+</table>

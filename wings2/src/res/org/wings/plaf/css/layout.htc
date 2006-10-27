@@ -1,0 +1,91 @@
+<public:component lightweight="true">
+<public:attach event="onload" for="window" onevent="resize()"/>
+<script language="JScript">
+
+
+if (!window.resizables)
+  window.resizables = new Array();
+
+window.resizables.push(element);
+
+
+function resize() {
+  if (resizables.length > 0) {
+    //window.sizes = new Array();
+    for (var i = 0; i < resizables.length; i++) {
+      var element = resizables[i];
+      var rule = element.getAttribute("rule");
+      if (rule == "fill")
+        layoutFill(element);
+      else if (rule == "scroll")
+        layoutScroll(element);
+
+        /*
+      if (rule != "width") {
+        window.sizes.push(element.id + ": " + element.style.pixelHeight);
+      }
+      */
+    }
+    resizables.length = 0;
+    if (window.focus)
+      requestFocus(window.focus);
+
+    //alert(window.sizes);
+  }
+}
+
+function layoutFill(table) {
+  if (table.style.height == table.getAttribute("layoutHeight"))
+    return;
+
+  var consumedHeight = 0;
+  var rows = table.rows;
+  for (var i=0; i < rows.length; i++) {
+    var row = rows[i];
+
+    var yweight = row.getAttribute("yweight");
+    if (!yweight)
+      consumedHeight += row.offsetHeight;
+  }
+
+  /*
+  if (table.getAttribute("layoutHeight") == "100%") {
+    var height = table.parentNode.clientHeight;
+    var oversize = table.parentNode.oversize;
+    if (oversize)
+      height -= oversize;
+    table.style.height = height + "px";
+  }
+  else
+  */
+    table.style.height = table.getAttribute("layoutHeight");
+
+  var diff = table.clientHeight - consumedHeight;
+
+  for (var i=0; i < rows.length; i++) {
+    var row = rows[i];
+    var yweight = row.getAttribute("yweight");
+    if (yweight) {
+      var oversize = row.getAttribute("oversize");
+      row.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
+    }
+  }
+}
+
+function layoutScroll(div) {
+    var table = getParentByTagName(div, "TD");
+    div.style.height = table.clientHeight + "px";
+    div.style.width = table.clientWidth + "px";
+    div.style.position = 'absolute';
+    div.style.display = 'block';
+    div.style.overflow = 'auto';
+}
+
+function getParentByTagName(element, name) {
+   while (element.tagName != name)
+       element = element.parentNode;
+   return element;
+}
+
+</script>
+</public:component>

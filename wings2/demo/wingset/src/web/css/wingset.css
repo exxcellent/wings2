@@ -1,0 +1,46 @@
+/*
+    Demonstration of an application specific CSS style for wingS applications. (MS IE version)
+
+    $Id$
+*/
+
+.SRadioButton input {
+    background-color: #eee;
+}
+/*.SRadioButton input {
+    border: 1px solid #aaa;
+}*/
+input.STextField,
+input.SFormattedTextField,
+input.SPasswordField,
+textarea.STextArea,
+select.SComboBox,
+select.SList{
+	border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+
+/* ----- STable selection line: orange */
+.STable table tbody tr.selected {
+    background-color: #f6decc !important;
+}
+
+/* ---- Orange Selection color of STrees */
+/* Don't blame us for the following code, it's all IE's fault! */
+/*ul.STree li.selected table tr td a table,
+ul.STree li.selected table tr td button table,
+ul.STree li.selected li.selected table tr td a table,
+ul.STree li.selected li.selected table tr td button table,
+ul.STree li.selected li.selected li.selected table tr td a table,
+ul.STree li.selected li.selected li.selected table tr td button table,
+ul.STree li.selected li.selected li.selected li.selected table tr td a table,
+ul.STree li.selected li.selected li.selected li.selected table tr td button table {
+    background-color: #f6decc;
+    border: 1px dotted black;
+}*/
+
+/* ----- Background color of selected STabbedPane tabs */
+.STabbedPane_Tab_selected {
+    background-color: #f6decc;
+}

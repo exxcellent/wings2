@@ -1,0 +1,18 @@
+<p>
+date: <object name="dateTextField"></object>
+</p>
+<p>
+number: <object name="numberTextField"></object>
+</p>
+<p>
+country: <object name="countryInput"></object>
+</p>
+<p>
+<object name="countryBox"></object>
+</p>
+<p>
+<object name="submit"></object>
+</p>
+<p>
+<a href="../dwr">callables</a>
+</p>

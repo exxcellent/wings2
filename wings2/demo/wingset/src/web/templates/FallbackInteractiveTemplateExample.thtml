@@ -1,0 +1,35 @@
+<h3>A simple interactive example on how to use template layouts</h3>
+Three components are available:
+<ul>
+<li><it>TemplateInput</it> - the textarea input field</li>
+<li><it>Apply</it> - to apply the changes</li>
+<li><it>Label</it> - a simple label</li>
+</ul>
+Change the template and press the Apply button to see how it works.
+If you destroyed the template, press the Reset Button.
+<p>
+You can use every single parameter setter to change a component, 
+e.g. a label has the setter <it>setText(String text)</it>, 
+so use the attribute <it>text="my label"</it> to set the text of the label.
+ It is also possible to script (bean shell script) a component, 
+if you specify a script attribute the template layout executes 
+the script every time the component is rendered. E.g. to set the 
+render date as a label text, use the script 
+<it>component.setText(new java.util.Date().toString()</it>. 
+In a script the component is available via <em>component</em> 
+variable, the actual wings session via the <em>session</em> variable. 
+(<em>Scripting is disabled per default for security reasons</em>)
+<br>
+<table>
+<tr>
+  <td align="left"><input type=textarea cols="100" rows="20" name="TemplateInput"/>
+  </td>
+</tr>
+<tr>
+  <td align="center"><input type=submit text="Apply" name="Apply"/>
+  </td>
+</tr>
+</table>
+
+
+rendered at <object name="Label" script="component.setText(new java.util.Date().toString());"></object>
