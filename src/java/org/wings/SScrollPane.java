@@ -110,14 +110,14 @@ public class SScrollPane
     protected void adjustAdjustable(Adjustable adjustable, Rectangle viewport,
                                     Rectangle maxViewport) {
         if (adjustable.getOrientation() == Adjustable.HORIZONTAL) {
-            ((SAbstractAdjustable) adjustable).setVisible(isAdjustableVisible(
+            ((SComponent) adjustable).setVisible(isAdjustableVisible(
                     getHorizontalScrollBarPolicy(), maxViewport.width, viewport.width));
             adjustable.setValue(viewport.x);
             adjustable.setMaximum(maxViewport.x + Math.max(maxViewport.width, getHorizontalExtent()));
             adjustable.setMinimum(maxViewport.x);
             adjustable.setVisibleAmount(getHorizontalExtent());
         } else if (adjustable.getOrientation() == Adjustable.VERTICAL) {
-            ((SAbstractAdjustable) adjustable).setVisible(isAdjustableVisible(
+            ((SComponent) adjustable).setVisible(isAdjustableVisible(
                     getVerticalScrollBarPolicy(), maxViewport.height, viewport.height));
             adjustable.setValue(viewport.y);
             adjustable.setMaximum(maxViewport.y + Math.max(maxViewport.height, getVerticalExtent()));

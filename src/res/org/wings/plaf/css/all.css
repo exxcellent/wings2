@@ -73,6 +73,13 @@ input, select, textarea {
     border: none;
 }
 
+TABLE.SButton,
+TABLE.SButton_disabled,
+TABLE.SToggleButton,
+TABLE.SToggleButton_selected {
+    cursor: pointer;
+}
+
 TABLE.SButton_form,
 TABLE.SButton_form_disabled,
 TABLE.SToggleButton_form,
@@ -148,29 +155,6 @@ select.SList {
 	border: 1px solid #333333;
 }
 
-/* STree default style */
-.STree {
-    vertical-align: top;
-    text-align: left;
-}
-ul.STree {
-	list-style: none;
-	margin-left:0px;
-	padding-left:0px;
-}
-ul.STree li {
-	padding-left: 0px;
-	margin-left: 0px;
-}
-ul.STree > li > * {
-    white-space: nowrap;
-    padding-right: 2px;
-    padding-bottom: 1px;
-}
-
-ul.STree td {
-   padding-right: 4px;
-}
 
 /* STabbedPane default style */
 /* Default text alignments of labels in tabs. */
@@ -245,26 +229,33 @@ A.STabbedPane_Tab_top IMG {
 
 /* STree */
 
-ul.STree li div.SSubTree {
-	background-image: url('../../icons/TreeLine.gif');
-	background-repeat:repeat-y;
-	background-position: 0px 100px;
+.STree td.slash {
+    background: url('../../icons/lineslash.gif') no-repeat center center;
+}
+.STree td.plus {
+    background: url('../../icons/lineplus.gif') no-repeat center center;
+}
+.STree td.minus {
+    background: url('../../icons/lineminus.gif') no-repeat center center;
+}
+.STree td.selected {
+    background-color: #ffbbbb;
+    cursor: pointer;
+}
+.STree td.norm {
+    cursor: pointer;
 }
 
-/* ---- Selection color of STrees ----------------------------------------------------------------------*/
-/* we need cascading styles here since else children get selected.
-   if you need to select across more than 4 levels, you need to expand these rules.
-   and I don't take the blame, it's all IE's fault ;) (ol) */
-ul.STree li.selected table.selected tr td.selected {
-    background-color: #ffbbbb;
-    border: 1px dotted black;
+.STree img {
+    vertical-align: middle;
+    display: inline;
 }
-/* lift former style for children */
-ul.STree li.norm table.norm tr td.norm {
-    background-color: none;
-    border: none;
-	padding: 1px;
+
+.STree td {
+   text-align: center !important;
 }
+
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 /* ---------- Menus */
@@ -388,9 +379,12 @@ ul.SPopupMenu a.x:hover{
 }
 
 /* SList */
-.SList li.SList_selected {
+.SList li.selected {
     background-color: #f6decc !important;
     border: 1px dotted black;
+}
+
+.SList li.clickable {
     cursor: pointer
 }
 
@@ -554,14 +548,6 @@ div.domTT .contents {
 	line-height:0px; /* for konq */
     font-size: 1px; /* for konq */
 }
-
-/*
-.SScrollPane table.SList, table.SScrollPane table.STree, table.SScrollPane table.STable {
-    width: 100%;
-    height: 100%;
-    overflow: scroll;
-}
-*/
 
 
 table.SPageScroller table.buttons td {

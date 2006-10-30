@@ -44,6 +44,7 @@ public class TreeExample
     private static SIcon ARROW_DOWN = new SResourceIcon("org/wings/icons/ArrowDown.gif");
     private static SIcon ARROW_RIGHT = new SResourceIcon("org/wings/icons/ArrowRight.gif");
 
+    private static SIcon DOT = new SResourceIcon("org/wings/icons/leaficon.gif");
     private static SIcon PLUS = new SResourceIcon("org/wings/icons/plus.gif");
     private static SIcon MINUS = new SResourceIcon("org/wings/icons/minus.gif");
     private TreeControls controls;
@@ -133,9 +134,11 @@ public class TreeExample
                     if (plusButton.isSelected()) {
                         PropertyAccessor.setProperty(tree.getCG(), "collapseControlIcon", MINUS);
                         PropertyAccessor.setProperty(tree.getCG(), "expandControlIcon", PLUS);
+                        PropertyAccessor.setProperty(tree.getCG(), "leafControlIcon", DOT);
                     } else {
                         PropertyAccessor.setProperty(tree.getCG(), "collapseControlIcon", ARROW_DOWN);
                         PropertyAccessor.setProperty(tree.getCG(), "expandControlIcon", ARROW_RIGHT);
+                        PropertyAccessor.setProperty(tree.getCG(), "leafControlIcon", null);
                     }
                 }
             });
