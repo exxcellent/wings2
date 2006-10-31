@@ -58,6 +58,7 @@ import org.wings.STextArea;
 import org.wings.STextField;
 import org.wings.STree;
 import org.wings.SURLIcon;
+import org.wings.border.SLineBorder;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
 import org.wings.header.Link;
@@ -147,7 +148,7 @@ public class LogConfig {
         sp_tree.setStyle(sp_tree.getStyle() + " sp_tree");
         sp_tree.setVerticalAlignment(SConstants.TOP_ALIGN);
         sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
-        sp_tree.setVerticalExtent(25);
+        sp_tree.setVerticalExtent(30);
         sp_tree.getVerticalScrollBar().setBlockIncrement(3);
         //sp_tree.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         //sp_tree.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -284,7 +285,7 @@ public class LogConfig {
         pa_controls.add(pa_delete);
         pa_controls.add(verticalSpace(10));
         pa_controls.add(pa_commit);
-        pa_controls.add(verticalSpace(35));
+        pa_controls.add(verticalSpace(31));
         pa_controls.add(la_activityIndicator);
 
         fo_form = new SForm(new SGridLayout(1, 2, 10, 10));
@@ -629,7 +630,7 @@ public class LogConfig {
                 cb_toggleScrollPanePaging.setText(cb_texts[6]  + !state);
                 if (sp_tree.isPaging()) {
                 	sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
-                	sp_tree.setVerticalExtent(25);
+                	sp_tree.setVerticalExtent(30);
                 } else {
                 	sp_tree.setPreferredSize(new SDimension(477, 482));
                 }
@@ -675,6 +676,13 @@ public class LogConfig {
 			}
 		});
 
+        ArrayList listData = new ArrayList();
+        for (int i = 1; i <= 5; ++i) listData.add("This is list item number " + i);
+        SScrollPane sp_testList = new SScrollPane(new SList(new SDefaultListModel(listData)));
+        sp_testList.setVerticalExtent(10);
+        sp_testList.setPreferredSize(SDimension.FULLWIDTH);
+        sp_testList.setBorder(new SLineBorder(1));
+
         final SAnchor an_toggleAjaxDebugging = new SAnchor();
         an_toggleAjaxDebugging.addScriptListener(new JavaScriptListener(
         		JavaScriptEvent.ON_CLICK,
@@ -709,20 +717,10 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+        addToAjaxDebuggingPanel(pa_debug, sp_testList);
+
+        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, an_toggleAjaxDebugging);
-
-
-        ArrayList data = new ArrayList();
-        for (int i = 0; i < 50; ++i) {
-        	data.add("Item " + i);
-        }
-
-        SList list = new SList(new SDefaultListModel(data));
-        SScrollPane sp = new SScrollPane();
-        sp.setVerticalExtent(5);
-        sp.add(list);
-        sp.setVerticalExtent(10);
-        addToAjaxDebuggingPanel(pa_debug, sp);
 
         return pa_debug;
     }

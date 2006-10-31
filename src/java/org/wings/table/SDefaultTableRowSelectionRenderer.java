@@ -191,7 +191,4 @@ public class SDefaultTableRowSelectionRenderer extends SLabel implements STableC
     public void setUseIcons(boolean useIcons) {
         this.useIcons = useIcons;
     }
-
 }
-
-

@@ -40,11 +40,7 @@ tr {
 
 /* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
    Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
-img.spacer,
-.SLabel img,
-.SButton img,
-.SRadioButton img,
-.SCheckBox img {
+img.spacer, img.nopad {
   display: block;
 }
 
@@ -99,4 +95,6 @@ table.SGridLayout {
     margin-top: 1em;
 }
 
-
+.STree img {
+    margin-left: 0px;
+}

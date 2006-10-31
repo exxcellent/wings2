@@ -81,9 +81,20 @@ public final class TextAreaCG extends AbstractComponentCG implements
             }
 
         } else {
+            SDimension preferredSize = component.getPreferredSize();
+            boolean tableWrapping = Utils.isMSIE(component) && preferredSize != null && "%".equals(preferredSize.getWidthUnit());
+            String actualWidth = null;
+            if (tableWrapping) {
+                actualWidth = preferredSize.getWidth();
+                preferredSize.setWidth("100%");
+                device.print("<table style=\"table-layout: fixed; width: " + actualWidth + "\"><tr>");
+                device.print("<td style=\"padding-right: " + Utils.calculateHorizontalOversize(component, true) + "px\">");
+            }
             device.print("<textarea");
-
             writeAllAttributes(device, component);
+            if (tableWrapping)
+                device.print(" wrapping=\"4\"");
+
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             Utils.optAttribute(device, "cols", component.getColumns());
             Utils.optAttribute(device, "rows", component.getRows());
@@ -116,6 +127,10 @@ public final class TextAreaCG extends AbstractComponentCG implements
             device.print(">");
             Utils.quote(device, component.getText(), false, false, false);
             device.print("</textarea>\n");
+            if (tableWrapping) {
+                preferredSize.setWidth(actualWidth);
+                device.print("</td></tr></table>");
+            }
         }
     }
 }

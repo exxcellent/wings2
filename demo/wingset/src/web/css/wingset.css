@@ -26,20 +26,6 @@ select.SList{
     background-color: #f6decc !important;
 }
 
-/* ---- Orange Selection color of STrees */
-/* Don't blame us for the following code, it's all IE's fault! */
-/*ul.STree li.selected table tr td a table,
-ul.STree li.selected table tr td button table,
-ul.STree li.selected li.selected table tr td a table,
-ul.STree li.selected li.selected table tr td button table,
-ul.STree li.selected li.selected li.selected table tr td a table,
-ul.STree li.selected li.selected li.selected table tr td button table,
-ul.STree li.selected li.selected li.selected li.selected table tr td a table,
-ul.STree li.selected li.selected li.selected li.selected table tr td button table {
-    background-color: #f6decc;
-    border: 1px dotted black;
-}*/
-
 /* ----- Background color of selected STabbedPane tabs */
 .STabbedPane_Tab_selected {
     background-color: #f6decc;

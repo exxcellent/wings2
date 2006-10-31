@@ -73,7 +73,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         Utils.printClickability(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent());
 
         String style = button.getStyle();
-        SStringBuilder className = new SStringBuilder(style);
+        SStringBuilder className = new SStringBuilder(style != null ? style : "SButton");
         if (button.getShowAsFormComponent())
             className.append("_form");
         if (!button.isEnabled())

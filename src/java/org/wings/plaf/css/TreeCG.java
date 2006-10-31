@@ -14,10 +14,7 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SCellRendererPane;
-import org.wings.SComponent;
-import org.wings.SIcon;
-import org.wings.STree;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.resource.ResourceManager;
@@ -30,14 +27,16 @@ import javax.swing.tree.TreePath;
 import java.awt.Rectangle;
 import java.io.IOException;
 
-public final class TreeCG extends AbstractComponentCG implements
-        org.wings.plaf.TreeCG {
+public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.TreeCG {
     private static final long serialVersionUID = 1L;
     private SIcon collapseControlIcon;
     private SIcon emptyFillIcon;
     private SIcon expandControlIcon;
     private SIcon hashMark;
     private SIcon leafControlIcon;
+    private SResourceIcon lineslash;
+    private SResourceIcon lineplus;
+    private SResourceIcon lineminus;
     private boolean renderSelectableCells = true;
 
     /**
@@ -49,6 +48,12 @@ public final class TreeCG extends AbstractComponentCG implements
         setExpandControlIcon((SIcon) ResourceManager.getObject("TreeCG.expandControlIcon", SIcon.class));
         setHashMark((SIcon) ResourceManager.getObject("TreeCG.hashMark", SIcon.class));
         setLeafControlIcon((SIcon) ResourceManager.getObject("TreeCG.leafControlIcon", SIcon.class));
+        lineslash = new SResourceIcon("org/wings/icons/lineslash.gif");
+        lineslash.getId();
+        lineplus = new SResourceIcon("org/wings/icons/lineplus.gif");
+        lineplus.getId();
+        lineminus = new SResourceIcon("org/wings/icons/lineminus.gif");
+        lineminus.getId();
     }
 
 
@@ -75,15 +80,6 @@ public final class TreeCG extends AbstractComponentCG implements
         this.renderSelectableCells = renderSelectableCells;
     }
 
-    private boolean isLastChild(TreeModel model, TreePath path, int i) {
-        if (i == 0) {
-            return true;
-        }
-        Object node = path.getPathComponent(i);
-        Object parent = path.getPathComponent(i - 1);
-        return node.equals(model.getChild(parent, model.getChildCount(parent) - 1));
-    }
-
     private void writeIcon(Device device, SIcon icon) throws IOException {
         if (icon == null) {
             return;
@@ -105,7 +101,8 @@ public final class TreeCG extends AbstractComponentCG implements
         final Object node = path.getLastPathComponent();
         final STreeCellRenderer cellRenderer = component.getCellRenderer();
 
-        final boolean isLeaf = component.getModel().isLeaf(node);
+        TreeModel model = component.getModel();
+        final boolean isLeaf = model.isLeaf(node);
         final boolean isExpanded = component.isExpanded(path);
         final boolean isSelected = component.isPathSelected(path);
 
@@ -117,122 +114,98 @@ public final class TreeCG extends AbstractComponentCG implements
                 isLeaf, row,
                 false);
 
+        device.print("<tr>");
+
+        String[] images = new String[] {
+            " class=\"slash\"",
+            " class=\"plus\"",
+            "",
+            " class=\"minus\"",
+        };
+
+        Object[] pathElements = path.getPath();
+        Object parentElement = null;
+        for (int i = 0; i < pathElements.length; i++) {
+            Object element = pathElements[i];
+            boolean lastElement = i == pathElements.length - 1;
+            boolean lastChild = lastChild(model, parentElement, element);
+            int imageIndex = (lastElement ? 1 : 0) + (lastChild ? 2 : 0);
+
+            device.print("<td");
+            if (lastElement && !isLeaf) {
+                final String expansionParameter = component.getExpansionParameter(row, false);
+                Utils.printClickability(device, component, expansionParameter, true, component.getShowAsFormComponent());
+            }
+
+            device.print(images[imageIndex]);
+            Utils.optAttribute(device, "width", component.getNodeIndentDepth());
+            device.print(">");
+
+            if (lastElement && !(isLeaf && leafControlIcon == null))
+                renderControlIcon(device, isLeaf, isExpanded);
+
+            device.print("</td>");
+            parentElement = element;
+        }
+
         /*
          * now, write the component.
          */
-        device.print("<li");
+        device.print("<td colspan=\"");
+        device.print(depth - path.getPathCount() + 1);
+        device.print("\"");
+
         if (isSelected) {
             Utils.optAttribute(device, "class", "selected");
         } else {
             Utils.optAttribute(device, "class", "norm");
         }
-        device.print(">");
-
-        /*
-        * in most applications, there is no need to render a control icon for a
-        * leaf. So in that case, we can avoid writing the sourrounding
-        * table, that will speed up things in browsers.
-        */
-        final boolean renderControlIcon = !(isLeaf && leafControlIcon == null);
-
-        if (renderControlIcon) {
-            /*
-             * This table has to be here so that block level elements can be
-             * nodes. I just can't think around it. So it won...
-             */
-            device.print("<table");
-            if (isSelected) {
-                Utils.optAttribute(device, "class", "selected");
-            } else {
-                Utils.optAttribute(device, "class", "norm");
-            }
-            device.print("><tr><td");
-
-            final String expansionParameter = component.getExpansionParameter(row, false);
-            Utils.printClickability(device, component, expansionParameter, true, component.getShowAsFormComponent());
-            device.print(">");
-
-            if (isLeaf) {
-                writeIcon(device, leafControlIcon);
-            }
-            else if (isExpanded) {
-                if (collapseControlIcon == null) {
-                    device.print("-");
-                }
-                else {
-                    writeIcon(device, collapseControlIcon);
-                }
-            }
-            else {
-                if (expandControlIcon == null) {
-                    device.print("+");
-                }
-                else {
-                    writeIcon(device, expandControlIcon);
-                }
-            }
-
-            /*
-             * closing layout td
-             */
-            device.print("</td><td");
-            if (isSelected) {
-                Utils.optAttribute(device, "class", "selected");
-            } else {
-                Utils.optAttribute(device, "class", "norm");
-            }
-            device.print(">");
-        }
-
-        SCellRendererPane rendererPane = component.getCellRendererPane();
         if (isSelectable) {
             final String selectionParameter = component.getSelectionParameter(row, false);
-            Utils.printButtonStart(device, component, selectionParameter, true, component.getShowAsFormComponent());
-
+            Utils.printClickability(device, component, selectionParameter, true, component.getShowAsFormComponent());
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-            device.print(">");
-
-            rendererPane.writeComponent(device, cellComp, component);
-
-            Utils.printButtonEnd(device, component, selectionParameter, true);
-        } else {
-            rendererPane.writeComponent(device, cellComp, component);
         }
+        device.print(">");
 
-        if (renderControlIcon) {
-            /*
-             * we have to close the table
-             */
-            device.print("</td></tr></table>");
-        }
+        SCellRendererPane rendererPane = component.getCellRendererPane();
+        rendererPane.writeComponent(device, cellComp, component);
 
-        //handle the depth level of the tree
-        int nextPathCount = 1;
-        int pathCount = path.getPathCount();
-        TreePath nextPath = component.getPathForRow(row + 1);
-        // is there a next element? else use initialized level.
-        if (nextPath != null) {
-            nextPathCount = nextPath.getPathCount();
-        }
-        if (pathCount < nextPathCount) {
-            indentOnce(device, component, path);
-        } else if (pathCount > nextPathCount) {
-            device.print("</li>");
-            for (int i = nextPathCount; i < pathCount; i++) {
-                device.print("</ul></div></li>");
-            }
-        } else if (path.getPathCount() == nextPathCount) {
-            device.print("</li>");
-        }
+        device.print("</td></tr>");
         Utils.printNewline(device, component);
     }
 
+    private void renderControlIcon(Device device, boolean leaf, boolean expanded) throws IOException {
+        if (leaf) {
+            writeIcon(device, leafControlIcon);
+        }
+        else if (expanded) {
+            if (collapseControlIcon == null) {
+                device.print("-");
+            }
+            else {
+                writeIcon(device, collapseControlIcon);
+            }
+        }
+        else {
+            if (expandControlIcon == null) {
+                device.print("+");
+            }
+            else {
+                writeIcon(device, expandControlIcon);
+            }
+        }
+    }
+
+    private boolean lastChild(TreeModel model, Object parentElement, Object element) {
+        return parentElement == null || model.getIndexOfChild(parentElement, element) == model.getChildCount(parentElement) - 1;
+    }
+
     public void writeInternal(final Device device, final SComponent _c) throws IOException {
-		RenderHelper.getInstance(_c).forbidCaching();
+        RenderHelper.getInstance(_c).forbidCaching();
 
-		final STree tree = (STree) _c;
+        final STree tree = (STree) _c;
 
-		Rectangle currentViewport = tree.getViewportSize();
+        Rectangle currentViewport = tree.getViewportSize();
         Rectangle maximalViewport = tree.getScrollableViewportSize();
 		int start = 0;
 		int end = tree.getRowCount();
@@ -243,18 +216,15 @@ public final class TreeCG extends AbstractComponentCG implements
             end = start + currentViewport.height;
         }
 
-		final int depth = tree.getMaximumExpandedDepth();
+        final int depth = tree.getMaximumExpandedDepth();
 
-		writeTablePrefix(device, tree);
-		device.print("<ul class=\"STree\">");
-		if (start != 0) {
-			TreePath path = tree.getPathForRow(start);
-			indentRecursive(device, tree, path.getParentPath());
-		}
+        device.print("<table");
+        writeAllAttributes(device, tree);
+        device.print(">");
 
-		for (int i = start; i < end; ++i) {
+        for (int i = start; i < end; ++i) {
 			if (i >= fill) {
-        		device.print("<li>---</li>");
+        		device.print("<tr><td>---</td></tr>");
 //        		device.print("<li class=\"norm\"><div style=\"height:19px;\" class=\"empty\">&nbsp;");
 //	        	if (leafControlIcon != null) {
 //		        	device.print("<img");
@@ -268,38 +238,10 @@ public final class TreeCG extends AbstractComponentCG implements
         	}
 			writeTreeNode(tree, device, i, depth);
 		}
-		device.print("</ul>");
-		writeTableSuffix(device, tree);
 
-		RenderHelper.getInstance(_c).allowCaching();
-	}
+        device.print("</table>");
 
-    /**
-	 * Recursively indents the Tree in case it isn't displayed from the root
-	 * node. reversely traverses the {@link TreePath} and renders afterwards.
-	 */
-    private void indentRecursive(Device device, STree component, TreePath path) throws IOException {
-        if (path == null) {
-            return;
-        }
-        indentRecursive(device, component, path.getParentPath());
-        device.print("<li>");
-        indentOnce(device, component, path);
-    }
-
-
-    /**
-     * Helper method for code reuse
-     */
-    private void indentOnce(Device device, STree component, TreePath path) throws IOException {
-        device.print("<div");
-        if (!isLastChild(component.getModel(), path, path.getPathCount() - 1)) {
-            device.print(" class=\"SSubTree\"");
-        }
-        device.print("><ul class=\"STree\"");
-        device.print(" style=\"margin-left:");
-        device.print(component.getNodeIndentDepth());
-        device.print("px;\">");
+        RenderHelper.getInstance(_c).allowCaching();
     }
 
     //--- setters and getters for the properties.
