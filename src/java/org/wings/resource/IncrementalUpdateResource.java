@@ -1,13 +1,19 @@
 package org.wings.resource;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SFrame;
-import org.wings.SScrollPane;
 import org.wings.io.Device;
 import org.wings.plaf.css.RenderHelper;
 import org.wings.session.SessionManager;
@@ -41,7 +47,6 @@ import org.wings.session.SessionManager;
  *   <event_epoch>[updated event epoch]</event_epoch>
  * </update>
  * </pre>
- *
  *
  * @author Stephan Schuster
  */
@@ -89,14 +94,7 @@ public class IncrementalUpdateResource extends DynamicResource {
 				Map candidatesToUpdate = new HashMap(dirtyComponents.size());
 				for (Iterator i = dirtyComponents.iterator(); i.hasNext();) {
 					component = (SComponent) i.next();
-					if (component.getParent() instanceof SScrollPane) {
-						// If the component is placed inside a scroll pane we
-						// have to update not only the component but also its
-						// parent which implicitly updates our component. This
-						// is because scroll panes use some JavaScript that has
-						// to be executed after its scrollable has been changed.
-						component = component.getParent();
-					}
+					if (component.getParentFrame() == null) continue;
 					candidatesToUpdate.put(component.getPathToParentFrame(), component);
 				}
 				// Sort paths in list according to their depth in the component hierarchy.

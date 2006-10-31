@@ -18,7 +18,7 @@ import org.wings.plaf.ScrollBarCG;
 /**
  * Represents a scroll bar as used in a {@link SScrollPane}.
  * In contrast to {@link SPageScroller} this class is a graphical scroller component.
- * 
+ *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  * @see SScrollPane
@@ -29,10 +29,8 @@ public class SScrollBar extends SAbstractAdjustable {
     boolean blockVisisble;
 
     /**
-     * Creates a scrollbar with the specified orientation,
-     * value, extent, mimimum, and maximum.
-     * The "extent" is the size of the viewable area. It is also known
-     * as the "visible amount".
+     * Creates a scrollbar with the specified orientation, value, extent, mimimum, and maximum.
+     * The "extent" is the size of the viewable area. It is also known as the "visible amount".
      * <p/>
      * Note: Use <code>setBlockIncrement</code> to set the block
      * increment to a size slightly smaller than the view's extent.
@@ -64,7 +62,6 @@ public class SScrollBar extends SAbstractAdjustable {
     public SScrollBar(int orientation) {
         this(orientation, 0, 10, 0, 100);
     }
-
 
     /**
      * Creates a vertical scrollbar with the following initial values:

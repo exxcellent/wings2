@@ -26,6 +26,8 @@ import org.wings.tree.STreeCellRenderer;
 
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+
+import java.awt.Rectangle;
 import java.io.IOException;
 
 public final class TreeCG extends AbstractComponentCG implements
@@ -82,7 +84,7 @@ public final class TreeCG extends AbstractComponentCG implements
         return node.equals(model.getChild(parent, model.getChildCount(parent) - 1));
     }
 
-    private void writeIcon(Device device, SIcon icon, boolean nullBorder) throws IOException {
+    private void writeIcon(Device device, SIcon icon) throws IOException {
         if (icon == null) {
             return;
         }
@@ -151,14 +153,14 @@ public final class TreeCG extends AbstractComponentCG implements
             device.print(">");
 
             if (isLeaf) {
-                writeIcon(device, leafControlIcon, false);
+                writeIcon(device, leafControlIcon);
             }
             else if (isExpanded) {
                 if (collapseControlIcon == null) {
                     device.print("-");
                 }
                 else {
-                    writeIcon(device, collapseControlIcon, true);
+                    writeIcon(device, collapseControlIcon);
                 }
             }
             else {
@@ -166,7 +168,7 @@ public final class TreeCG extends AbstractComponentCG implements
                     device.print("+");
                 }
                 else {
-                    writeIcon(device, expandControlIcon, true);
+                    writeIcon(device, expandControlIcon);
                 }
             }
 
@@ -180,7 +182,6 @@ public final class TreeCG extends AbstractComponentCG implements
                 Utils.optAttribute(device, "class", "norm");
             }
             device.print(">");
-
         }
 
         SCellRendererPane rendererPane = component.getCellRendererPane();
@@ -226,46 +227,57 @@ public final class TreeCG extends AbstractComponentCG implements
         Utils.printNewline(device, component);
     }
 
-    public void writeInternal(final Device device, final SComponent _c)
-            throws IOException
-    {
-        RenderHelper.getInstance(_c).forbidCaching();
+    public void writeInternal(final Device device, final SComponent _c) throws IOException {
+		RenderHelper.getInstance(_c).forbidCaching();
 
-        //try {             try finally are expensive. Rerender once after ex not
-            final STree component = (STree) _c;
-            int start = 0;
-            int count = component.getRowCount();
+		final STree tree = (STree) _c;
 
-            java.awt.Rectangle viewport = component.getViewportSize();
-            if (viewport != null) {
-                start = viewport.y;
-                count = viewport.height;
-            }
+		Rectangle currentViewport = tree.getViewportSize();
+        Rectangle maximalViewport = tree.getScrollableViewportSize();
+		int start = 0;
+		int end = tree.getRowCount();
+		int fill = maximalViewport != null ? maximalViewport.height : end;
 
-            final int depth = component.getMaximumExpandedDepth();
+        if (currentViewport != null) {
+            start = currentViewport.y;
+            end = start + currentViewport.height;
+        }
 
-            writeTablePrefix(device, component);
-            device.print("<ul class=\"STree\">");
-            if (start != 0) {
-                TreePath path = component.getPathForRow(start);
-                indentRecursive(device, component, path.getParentPath());
-            }
+		final int depth = tree.getMaximumExpandedDepth();
 
-            for (int i = start; i < start + count; ++i) {
-                writeTreeNode(component, device, i, depth);
-            }
-            device.print("</ul>");
-            writeTableSuffix(device, component);
-        //}
-        //finally {
-        RenderHelper.getInstance(_c).allowCaching();
-        //}
-    }
+		writeTablePrefix(device, tree);
+		device.print("<ul class=\"STree\">");
+		if (start != 0) {
+			TreePath path = tree.getPathForRow(start);
+			indentRecursive(device, tree, path.getParentPath());
+		}
+
+		for (int i = start; i < end; ++i) {
+			if (i >= fill) {
+        		device.print("<li>---</li>");
+//        		device.print("<li class=\"norm\"><div style=\"height:19px;\" class=\"empty\">&nbsp;");
+//	        	if (leafControlIcon != null) {
+//		        	device.print("<img");
+//		            Utils.optAttribute(device, "src", emptyFillIcon.getURL());
+//		            Utils.optAttribute(device, "width", emptyFillIcon.getIconWidth());
+//		            Utils.optAttribute(device, "height", leafControlIcon.getIconHeight());
+//		            device.print("/>");
+//	        	}
+//	        	device.print("</div></li>");
+        		continue;
+        	}
+			writeTreeNode(tree, device, i, depth);
+		}
+		device.print("</ul>");
+		writeTableSuffix(device, tree);
+
+		RenderHelper.getInstance(_c).allowCaching();
+	}
 
     /**
-     * Recursively indents the Tree in case it isn't displayed from the root
-     * node. reversely traverses the {@link TreePath} and renders afterwards.
-     */
+	 * Recursively indents the Tree in case it isn't displayed from the root
+	 * node. reversely traverses the {@link TreePath} and renders afterwards.
+	 */
     private void indentRecursive(Device device, STree component, TreePath path) throws IOException {
         if (path == null) {
             return;

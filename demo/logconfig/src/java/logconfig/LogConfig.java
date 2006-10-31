@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -40,6 +41,7 @@ import org.wings.SComboBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
+import org.wings.SDefaultListModel;
 import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SFrame;
@@ -50,7 +52,6 @@ import org.wings.SList;
 import org.wings.SPanel;
 import org.wings.SRadioButton;
 import org.wings.SScrollPane;
-import org.wings.SScrollPaneLayout;
 import org.wings.SSpacer;
 import org.wings.STemplateLayout;
 import org.wings.STextArea;
@@ -70,6 +71,8 @@ import org.xml.sax.InputSource;
 
 public class LogConfig {
     private static final Log log = LogFactory.getLog(LogConfig.class);
+    private static final SURLIcon INSERT_IMG = new SURLIcon("../images/insert.gif");
+    private static final SURLIcon UPDATE_IMG = new SURLIcon("../images/update.gif");
     private static final SDimension BU_DIM = new SDimension(100, SDimension.AUTO_INT);
     private static final SDimension IN_DIM = SDimension.FULLWIDTH;
 
@@ -83,6 +86,7 @@ public class LogConfig {
 
     private SForm fo_form;
     private STree tr_domTree;
+    private SScrollPane sp_tree;
     private SRadioButton rb_insertNode;
     private SRadioButton rb_updateNode;
     private STextField tf_editCategoryName;
@@ -118,7 +122,7 @@ public class LogConfig {
 
         tr_domTree = new STree(treeModel);
         tr_domTree.setCellRenderer(new DomRenderer());
-        tr_domTree.setPreferredSize(new SDimension(455, 468));
+        tr_domTree.setPreferredSize(SDimension.FULLAREA);
         tr_domTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tr_domTree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent tse) {
@@ -139,15 +143,14 @@ public class LogConfig {
             }
         });
 
-        SScrollPane sp_tree = new SScrollPane(tr_domTree);
+        sp_tree = new SScrollPane(tr_domTree);
         sp_tree.setStyle(sp_tree.getStyle() + " sp_tree");
-        sp_tree.setPreferredSize(new SDimension(477, 486));
         sp_tree.setVerticalAlignment(SConstants.TOP_ALIGN);
-        // sp_tree.getVerticalScrollBar().setBlockIncrement(3);
-        // sp_tree.getHorizontalScrollBar().setBlockIncrement(3);
-        // (SScrollBar) sp_tree.getVerticalScrollBar()).setShowAsFormComponent(false);
-        // ((SScrollBar) sp_tree.getHorizontalScrollBar()).setShowAsFormComponent(false);
-        ((SScrollPaneLayout) sp_tree.getLayout()).setPaging(false);
+        sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
+        sp_tree.setVerticalExtent(25);
+        sp_tree.getVerticalScrollBar().setBlockIncrement(3);
+        //sp_tree.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        //sp_tree.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         SButtonGroup bg_insertOrUpdate = new SButtonGroup();
         rb_insertNode = new SRadioButton("Insert node");
@@ -459,7 +462,7 @@ public class LogConfig {
         cb_editAdditivityFlag.setSelectedItem("true");
         li_editAppenderRef.clearSelection();
         bu_saveNode.setText("Insert");
-        bu_saveNode.setIcon(new SURLIcon("../images/insert.gif"));
+        bu_saveNode.setIcon(INSERT_IMG);
         resetStatusLabel();
     }
 
@@ -474,7 +477,7 @@ public class LogConfig {
         }
         li_editAppenderRef.setSelectedIndices(selectedIndices);
         bu_saveNode.setText("Update");
-        bu_saveNode.setIcon(new SURLIcon("../images/update.gif"));
+        bu_saveNode.setIcon(UPDATE_IMG);
         resetStatusLabel();
     }
 
@@ -541,7 +544,8 @@ public class LogConfig {
                 "Frame: incrementalUpdateHighlight = ",
                 "Form: completeUpdateForced = ",
                 "Tree: completeUpdateForced = ",
-                "Link: completeUpdateForced = "
+                "Link: completeUpdateForced = ",
+                "ScrollPane: paging = "
         };
 
         selected = fr_frame.isIncrementalUpdateEnabled();
@@ -615,6 +619,24 @@ public class LogConfig {
             }
         });
 
+        selected = sp_tree.isPaging();
+        final SCheckBox cb_toggleScrollPanePaging =
+            new SCheckBox(cb_texts[6] + selected, selected);
+        cb_toggleScrollPanePaging.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                boolean state = sp_tree.isPaging();
+                sp_tree.setPaging(!state);
+                cb_toggleScrollPanePaging.setText(cb_texts[6]  + !state);
+                if (sp_tree.isPaging()) {
+                	sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
+                	sp_tree.setVerticalExtent(25);
+                } else {
+                	sp_tree.setPreferredSize(new SDimension(477, 482));
+                }
+
+            }
+        });
+
         final SButton bu_markFrameDirty = new SButton("Reload the entire frame / mark it dirty!");
         bu_markFrameDirty.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -673,6 +695,7 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFormCompleteUpdate);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleTreeCompleteUpdate);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleCheckboxTest);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleScrollPanePaging);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, bu_markFrameDirty);
@@ -687,6 +710,19 @@ public class LogConfig {
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, an_toggleAjaxDebugging);
+
+
+        ArrayList data = new ArrayList();
+        for (int i = 0; i < 50; ++i) {
+        	data.add("Item " + i);
+        }
+
+        SList list = new SList(new SDefaultListModel(data));
+        SScrollPane sp = new SScrollPane();
+        sp.setVerticalExtent(5);
+        sp.add(list);
+        sp.setVerticalExtent(10);
+        addToAjaxDebuggingPanel(pa_debug, sp);
 
         return pa_debug;
     }

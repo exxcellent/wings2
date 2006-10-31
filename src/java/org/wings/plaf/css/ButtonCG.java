@@ -31,8 +31,12 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             throws IOException {
         final SAbstractButton button = (SAbstractButton) component;
 
-        final String text = button.getText();
+        String text = button.getText();
         final SIcon icon = getIcon(button);
+
+        if (icon == null && text == null)
+            text = "";
+        final String ftext = text;
 
         if (icon == null && text != null) {
             device.print("<table");
@@ -51,7 +55,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         else if (icon != null && text != null) {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
-                    writeText(d, text, false);
+                    writeText(d, ftext, false);
                 }
 
                 protected void icon(Device d) throws IOException {

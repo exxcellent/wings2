@@ -13,16 +13,23 @@
  */
 package org.wings;
 
-import org.wings.plaf.ScrollPaneCG;
+import java.awt.Adjustable;
+import java.awt.LayoutManager;
+import java.awt.Rectangle;
 
-import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
+import javax.swing.BoundedRangeModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
+
+import org.wings.event.SViewportChangeEvent;
+import org.wings.event.SViewportChangeListener;
+import org.wings.plaf.ScrollPaneCG;
 
 /**
  * A pane which allows to add {@link Scrollable} components on this pane
- * and display only a viewport of it. Can be used to scroll graphically (default)
- * or pages (using {@link SPageScroller} components.). 
+ * and display only a viewport of it. Can be used to scroll graphically
+ * (default) or pages (using {@link SPageScroller} components.).
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
@@ -35,28 +42,35 @@ public class SScrollPane
      * The element which should be scrolled.
      */
     protected Scrollable scrollable;
-    protected Adjustable verticalScrollBar = null;
-    protected Adjustable horizontalScrollBar = null;
 
-    /**
-     * store the scrollables viewport. Scrollable is reset to this value, if it
-     * is removed from the this scrollpane
-     */
-    protected Rectangle backupViewport;
+    protected Adjustable verticalScrollBar = null;
+
+    protected Adjustable horizontalScrollBar = null;
 
     protected int horizontalScrollBarPolicy = HORIZONTAL_SCROLLBAR_AS_NEEDED;
 
     protected int verticalScrollBarPolicy = VERTICAL_SCROLLBAR_AS_NEEDED;
 
-    protected AdjustmentListener adjustmentListener;
-
     protected int horizontalExtent = 10;
 
     protected int verticalExtent = 10;
 
+    protected boolean paging = true;
+
+    /**
+     * Holds the viewport that the scrollable had before adding it to this
+     * scrollpane. The scrollable's viewport is reset to this value, if it
+     * is removed from the this scrollpane.
+     */
+    protected Rectangle backupViewport;
+
+    private SViewportSynchronizationModel horizontalModel = new SViewportSynchronizationModel(true);
+
+    private SViewportSynchronizationModel verticalModel = new SViewportSynchronizationModel(false);
+
+
     public SScrollPane() {
         super(new SScrollPaneLayout());
-
         setHorizontalScrollBar(new SScrollBar(SConstants.HORIZONTAL));
         setVerticalScrollBar(new SScrollBar(SConstants.VERTICAL));
     }
@@ -66,125 +80,29 @@ public class SScrollPane
         setViewportView(c);
     }
 
-    public AdjustmentListener getAdjustmentListener() {
-        if (adjustmentListener == null) {
-            adjustmentListener = new AdjustmentListener() {
-                public void adjustmentValueChanged(AdjustmentEvent e) {
-                    if (scrollable != null) {
-                        synchronizeViewport();
-                    }
-                }
-            };
-        }
-        return adjustmentListener;
-    }
-
     /**
-     * synchronize viewport of scrollable with settings of adjustables
+     * Sets the element which should be scrolled.
+     *
+     * @param c the element which should be scrolled.
      */
-    public void synchronizeAdjustables() {
-        if (scrollable == null) return;
-
-        Rectangle viewport = scrollable.getViewportSize();
-        Rectangle maxViewport = scrollable.getScrollableViewportSize();
-
-        if (viewport == null)
-            viewport = maxViewport;
-        else if (viewport.width > maxViewport.width)
-            viewport.width = maxViewport.width;
-        else if (viewport.height > maxViewport.height)
-            viewport.height = maxViewport.height;
-
-        if (getHorizontalScrollBar() != null &&
-                getHorizontalScrollBarPolicy() != HORIZONTAL_SCROLLBAR_NEVER) {
-            adjustAdjustable(getHorizontalScrollBar(), viewport,
-                    maxViewport);
-        }
-
-        if (getVerticalScrollBar() != null &&
-                getVerticalScrollBarPolicy() != VERTICAL_SCROLLBAR_NEVER) {
-            adjustAdjustable(getVerticalScrollBar(), viewport,
-                    maxViewport);
-        }
-
-    }
-
-    protected void adjustAdjustable(Adjustable adjustable, Rectangle viewport,
-                                    Rectangle maxViewport) {
-        if (adjustable.getOrientation() == Adjustable.HORIZONTAL) {
-            adjustable.setValue(viewport.x);
-            adjustable.setMaximum(maxViewport.x + maxViewport.width);
-            adjustable.setMinimum(maxViewport.x);
-            adjustable.setVisibleAmount(getHorizontalExtent());
-        } else if (adjustable.getOrientation() == Adjustable.VERTICAL) {
-            adjustable.setValue(viewport.y);
-            adjustable.setMaximum(maxViewport.y + maxViewport.height);
-            adjustable.setMinimum(maxViewport.y);
-            adjustable.setVisibleAmount(getVerticalExtent());
-        }
-    }
-
-    /**
-     * synchronize viewport of scrollable with settings of adjustables
-     */
-    public void synchronizeViewport() {
-        Rectangle viewport = scrollable.getScrollableViewportSize();
-        
-        // should never happen. If it happens we got a serious problem, because
-        // we cannot determine what to scroll...
-        if (viewport == null) viewport = new Rectangle();
-
-        if (getHorizontalScrollBar() != null &&
-                getHorizontalScrollBarPolicy() != HORIZONTAL_SCROLLBAR_NEVER) {
-            adjustViewport(viewport, getHorizontalScrollBar());
-        }
-
-        if (getVerticalScrollBar() != null &&
-                getVerticalScrollBarPolicy() != VERTICAL_SCROLLBAR_NEVER) {
-            adjustViewport(viewport, getVerticalScrollBar());
-        }
-
-        scrollable.setViewportSize(viewport);
-    }
-
-    protected void adjustViewport(Rectangle viewport, Adjustable adjustable) {
-        if (adjustable.getOrientation() == Adjustable.HORIZONTAL) {
-            int extent = adjustable.getVisibleAmount();
-
-            viewport.x = Math.min(adjustable.getMaximum(),
-                    adjustable.getValue());
-            viewport.x = Math.max(adjustable.getMinimum(),
-                    viewport.x);
-            viewport.width = Math.min(adjustable.getMaximum() - viewport.x,
-                    extent);
-            viewport.width = Math.max(0, viewport.width);
-        } else {
-            int extent = adjustable.getVisibleAmount();
-
-            viewport.y = Math.min(adjustable.getMaximum(),
-                    adjustable.getValue());
-            viewport.y = Math.max(adjustable.getMinimum(),
-                    viewport.y);
-            viewport.height = Math.min(adjustable.getMaximum() - viewport.y,
-                    extent);
-            viewport.height = Math.max(0, viewport.height);
-        }
-
-    }
-
     protected void setScrollable(SComponent c) {
         if (scrollable != null) {
-            // reset to original value
+            // reset the scrollable's viewport to the one
+        	// it had before adding it to this scrollpane
             scrollable.setViewportSize(backupViewport);
         }
 
-        if (c instanceof Scrollable && c != null) {
+        if (c instanceof Scrollable) {
             scrollable = (Scrollable) c;
-            
-            // keep original value
+            horizontalModel.setScrollable(scrollable);
+            verticalModel.setScrollable(scrollable);
+
+            // keep the scrollable's original viewport - the
+            // one it had before adding it to this scrollpane
             backupViewport = scrollable.getViewportSize();
 
-            synchronizeViewport();
+            // apply new viewport to scrollable
+            setInitialViewportSize();
         } else {
             scrollable = null;
         }
@@ -192,6 +110,11 @@ public class SScrollPane
         reload(ReloadManager.STATE);
     }
 
+    /**
+     * Returns the element which should be scrolled.
+     *
+     * @return the element which should be scrolled.
+     */
     public final Scrollable getScrollable() {
         return scrollable;
     }
@@ -207,7 +130,7 @@ public class SScrollPane
     }
 
     /**
-     * only {@link Scrollable scrollables} are allowed here!
+     * Only {@link Scrollable scrollables} are allowed here!
      */
     public SComponent addComponent(SComponent c, Object constraint, int index) {
         if (c instanceof Scrollable) {
@@ -215,8 +138,18 @@ public class SScrollPane
             setScrollable(c);
             return c;
         } else {
-            throw new IllegalArgumentException("Only Scrollables are allowed");
+            throw new IllegalArgumentException("Only Scrollables are allowed!");
         }
+    }
+
+    public boolean isPaging() {
+        return paging;
+    }
+
+    public void setPaging(boolean paging) {
+    	reloadIfChange(this.paging, paging);
+        this.paging = paging;
+        setInitialViewportSize();
     }
 
     public void setCG(ScrollPaneCG cg) {
@@ -233,7 +166,7 @@ public class SScrollPane
     }
 
     /**
-     * Set the horizontal scroll bar.
+     * Sets the horizontal scroll bar.
      *
      * @param sb the scrollbar that controls the viewports horizontal view position
      */
@@ -242,7 +175,7 @@ public class SScrollPane
     }
 
     /**
-     * Set the horizontal scroll bar.
+     * Sets the horizontal scroll bar.
      *
      * @param constraint the constraint for the {@link LayoutManager} of this
      *                   {@link SContainer}. The {@link LayoutManager} is per default
@@ -250,19 +183,19 @@ public class SScrollPane
      */
     public void setHorizontalScrollBar(Adjustable sb, String constraint) {
         if (horizontalScrollBar != null) {
-            horizontalScrollBar.removeAdjustmentListener(getAdjustmentListener());
-            if (horizontalScrollBar instanceof SComponent)
+        	((SAbstractAdjustable) horizontalScrollBar).setModel(new SDefaultBoundedRangeModel());
+            if (horizontalScrollBar instanceof SComponent) {
                 super.remove((SComponent) horizontalScrollBar);
+            }
         }
 
         horizontalScrollBar = sb;
 
         if (horizontalScrollBar != null) {
-            if (horizontalScrollBar instanceof SComponent)
+            if (horizontalScrollBar instanceof SComponent) {
                 super.addComponent((SComponent) horizontalScrollBar, constraint, getComponentCount());
-
-            synchronizeAdjustables();
-            horizontalScrollBar.addAdjustmentListener(getAdjustmentListener());
+            }
+            ((SAbstractAdjustable) horizontalScrollBar).setModel(horizontalModel);
         }
 
         reload(ReloadManager.STATE);
@@ -288,7 +221,7 @@ public class SScrollPane
     }
 
     /**
-     * Set the vertical scroll bar.
+     * Sets the vertical scroll bar.
      *
      * @param sb the scrollbar that controls the viewports vertical view position
      */
@@ -297,7 +230,7 @@ public class SScrollPane
     }
 
     /**
-     * Set the vertical scroll bar.
+     * Sets the vertical scroll bar.
      *
      * @param sb         the scrollbar that controls the viewports vertical view position
      * @param constraint the constraint for the {@link LayoutManager} of this
@@ -306,19 +239,19 @@ public class SScrollPane
      */
     public void setVerticalScrollBar(Adjustable sb, String constraint) {
         if (verticalScrollBar != null) {
-            verticalScrollBar.removeAdjustmentListener(getAdjustmentListener());
-            if (verticalScrollBar instanceof SComponent)
+        	((SAbstractAdjustable) verticalScrollBar).setModel(new SDefaultBoundedRangeModel());
+            if (verticalScrollBar instanceof SComponent) {
                 super.remove((SComponent) verticalScrollBar);
+            }
         }
 
         verticalScrollBar = sb;
 
         if (verticalScrollBar != null) {
-            if (verticalScrollBar instanceof SComponent)
+            if (verticalScrollBar instanceof SComponent) {
                 super.addComponent((SComponent) verticalScrollBar, constraint, getComponentCount());
-
-            synchronizeAdjustables();
-            verticalScrollBar.addAdjustmentListener(getAdjustmentListener());
+            }
+            ((SAbstractAdjustable) verticalScrollBar).setModel(verticalModel);
         }
 
         reload(ReloadManager.STATE);
@@ -343,7 +276,15 @@ public class SScrollPane
      */
     public void setHorizontalScrollBarPolicy(int policy) {
         if (policy != horizontalScrollBarPolicy) {
-            horizontalScrollBarPolicy = policy;
+        	horizontalScrollBarPolicy = policy;
+        	if (scrollable != null) {
+        		Rectangle maxVp = scrollable.getScrollableViewportSize();
+        		Rectangle curVp = scrollable.getViewportSize();
+        		if (maxVp != null && curVp != null) {
+        			boolean newVisibility = isAdjustableVisible(policy, maxVp.width, curVp.width);
+        			((SComponent) horizontalScrollBar).setVisible(newVisibility);
+        		}
+        	}
             reload(ReloadManager.STATE);
         }
     }
@@ -356,53 +297,48 @@ public class SScrollPane
      * <li><code>SScrollPane.VERTICAL_SCROLLBAR_ALWAYS</code></li>
      */
     public void setVerticalScrollBarPolicy(int policy) {
-        if (policy != verticalScrollBarPolicy) {
-            verticalScrollBarPolicy = policy;
+    	if (policy != verticalScrollBarPolicy) {
+    		verticalScrollBarPolicy = policy;
+        	if (scrollable != null) {
+        		Rectangle maxVp = scrollable.getScrollableViewportSize();
+        		Rectangle curVp = scrollable.getViewportSize();
+        		if (maxVp != null && curVp != null) {
+        			boolean newVisibility = isAdjustableVisible(policy, maxVp.height, curVp.height);
+        			((SComponent) verticalScrollBar).setVisible(newVisibility);
+        		}
+        	}
             reload(ReloadManager.STATE);
         }
     }
 
-
     public void setHorizontalExtent(int horizontalExtent) {
+        reloadIfChange(this.horizontalExtent, horizontalExtent);
         this.horizontalExtent = horizontalExtent;
+        horizontalModel.setExtent(horizontalExtent);
     }
 
-
     public final int getHorizontalExtent() {
-        if (scrollable != null) {
-            Dimension preferredExtent = scrollable.getPreferredExtent();
-            if (preferredExtent != null && preferredExtent.width > 0 &&
-                    preferredExtent.width < horizontalExtent) {
-                return preferredExtent.width;
-            }
-        }
         return horizontalExtent;
     }
 
-
     public void setVerticalExtent(int verticalExtent) {
+    	reloadIfChange(this.verticalExtent, verticalExtent);
         this.verticalExtent = verticalExtent;
+        verticalModel.setExtent(verticalExtent);
     }
 
-
     public final int getVerticalExtent() {
-        if (scrollable != null) {
-            Dimension preferredExtent = scrollable.getPreferredExtent();
-            if (preferredExtent != null && preferredExtent.height > 0 &&
-                    preferredExtent.height < verticalExtent) {
-                return preferredExtent.height;
-            }
-        }
-
         return verticalExtent;
     }
 
     public void scrollRectToVisible(Rectangle aRect) {
         Rectangle viewport = scrollable.getScrollableViewportSize();
-        
-        // should never happen. If it happen we got a serious problem, because
-        // we cannot determine what to scroll...
-        if (viewport == null) return;
+
+        // This should never happen. If it happen we got a serious
+        // problem, because we cannot determine what to scroll...
+        if (viewport == null) {
+            return;
+        }
 
         Adjustable hbar = getHorizontalScrollBar();
         if (hbar != null &&
@@ -453,11 +389,298 @@ public class SScrollPane
             }
         } else {
             // scroll forward
-            while ((pos + size) < (rpos + rsize) &&
-                    (pos + inc) <= rpos) {
+            while ((pos + size) < (rpos + rsize) && (pos + inc) <= rpos) {
                 pos += inc;
             }
         }
         return pos;
+    }
+
+    private void setInitialViewportSize() {
+    	if (scrollable == null) return;
+
+    	if (paging) {
+	    	if (scrollable.getPreferredExtent() != null) {
+	        	setHorizontalExtent(scrollable.getPreferredExtent().width);
+	        	setVerticalExtent(scrollable.getPreferredExtent().height);
+	        }
+	        scrollable.setViewportSize(new Rectangle(0, 0, horizontalExtent, verticalExtent));
+    	} else {
+    		scrollable.setViewportSize(scrollable.getScrollableViewportSize());
+    	}
+    }
+
+    private boolean isAdjustableVisible(int policy, int maxRecords, int maxDisplayed) {
+        return isPolicyAlways(policy) || (isPolicyAsNeeded(policy) && maxRecords > maxDisplayed);
+    }
+
+    private boolean isPolicyAlways(int policy) {
+        return policy == HORIZONTAL_SCROLLBAR_ALWAYS || policy == VERTICAL_SCROLLBAR_ALWAYS;
+    }
+
+    private boolean isPolicyAsNeeded(int policy) {
+        return policy == HORIZONTAL_SCROLLBAR_AS_NEEDED || policy == VERTICAL_SCROLLBAR_AS_NEEDED;
+    }
+
+    /**
+     * A model synchronizing the scrollbar settings with the viewport of the given scrollable.
+     */
+    class SViewportSynchronizationModel implements SBoundedRangeModel, SViewportChangeListener {
+
+    	private boolean horizontal;
+    	private Scrollable scrollable;
+    	private boolean isAdjusting = false;
+        private boolean delayEvents = false;
+
+        /**
+         * Indicates if we have got a delayed Event
+         */
+        protected boolean gotDelayedEvent = false;
+
+        /**
+         * Only one <code>ChangeEvent</code> is needed per model instance
+         * since the event's only (read-only) state is the source property.
+         */
+        protected transient ChangeEvent changeEvent = null;
+
+    	/**
+    	 * The listeners waiting for model or viewport changes respectively.
+    	 */
+        protected EventListenerList listenerList = new EventListenerList();
+
+
+        /**
+    	 * Constructs a SViewportSynchronizationModel for either a horizontal or
+    	 * vertical scrollbar that has to be synchronized with the scrollable.
+    	 */
+		public SViewportSynchronizationModel(boolean horizontal) {
+    		this.horizontal = horizontal;
+    	}
+
+		public Scrollable getScrollable() {
+			return scrollable;
+		}
+
+		public void setScrollable(Scrollable scrollable) {
+			if (this.scrollable != null)
+                this.scrollable.removeViewportChangeListener(this);
+
+			this.scrollable = scrollable;
+
+			if (this.scrollable != null)
+    		    this.scrollable.addViewportChangeListener(this);
+		}
+
+		public int getValue() {
+			if (!isViewportAvailable())	return 0;
+			Rectangle curVp = scrollable.getViewportSize();
+
+			if (horizontal)	return curVp.x;
+			else return curVp.y;
+		}
+
+		public void setValue(int newValue) {
+			if (!isViewportAvailable()) return;
+			Rectangle curVp = scrollable.getViewportSize();
+			Rectangle maxVp = scrollable.getScrollableViewportSize();
+
+			if (horizontal) {
+				newValue = Math.min(maxVp.width - curVp.width, newValue);
+				newValue = Math.max(maxVp.x, newValue);
+				if (curVp.x != newValue) {
+					curVp.x = newValue;
+					updateViews();
+				}
+			} else {
+				newValue = Math.min(maxVp.height - curVp.height, newValue);
+				newValue = Math.max(maxVp.y, newValue);
+				if (curVp.y != newValue) {
+					curVp.y = newValue;
+					updateViews();
+				}
+			}
+		}
+
+		public int getExtent() {
+			if (!isViewportAvailable()) return horizontal ? horizontalExtent : verticalExtent;
+			Rectangle curVp = scrollable.getViewportSize();
+
+			if (horizontal)	return curVp.width;
+			else return curVp.height;
+		}
+
+		public void setExtent(int newExtent) {
+			if (!isViewportAvailable()) return;
+			Rectangle curVp = scrollable.getViewportSize();
+
+			if (horizontal && curVp.width != newExtent) {
+				curVp.width = newExtent;
+				updateViews();
+			} else if (curVp.height != newExtent) {
+				curVp.height = newExtent;
+				updateViews();
+			}
+		}
+
+		public int getMinimum() {
+			return 0;
+		}
+
+		public void setMinimum(int newMinimum) {
+			// minimum should always be zero
+		}
+
+		public int getMaximum() {
+			if (!isScrollableViewportAvailable()) return 100;
+			Rectangle maxVp = scrollable.getScrollableViewportSize();
+
+			if (horizontal)	return maxVp.width;
+			else return maxVp.height;
+		}
+
+		public void setMaximum(int newMaximum) {
+			if (!isScrollableViewportAvailable()) return;
+			Rectangle maxVp = scrollable.getScrollableViewportSize();
+
+			if (horizontal && maxVp.width != newMaximum) {
+				maxVp.width = newMaximum;
+				updateViews();
+			} else if (maxVp.height != newMaximum) {
+				maxVp.height = newMaximum;
+				updateViews();
+			}
+		}
+
+		public boolean getValueIsAdjusting() {
+			return isAdjusting;
+		}
+
+		public void setValueIsAdjusting(boolean b) {
+			isAdjusting = b;
+		}
+
+		public void setRangeProperties(int value, int extent, int min, int max, boolean adjusting) {
+			setValue(value);
+			setExtent(extent);
+			setMaximum(max);
+			setValueIsAdjusting(adjusting);
+		}
+
+		public boolean getDelayEvents() {
+	        return delayEvents;
+	    }
+
+	    public void setDelayEvents(boolean b) {
+	        delayEvents = b;
+	    }
+
+	    public void fireDelayedIntermediateEvents() {
+	    	// there are no intermediate events to fire
+	    }
+
+	    public void fireDelayedFinalEvents() {
+	    	if (!delayEvents && gotDelayedEvent) {
+	            fireStateChanged();
+	            gotDelayedEvent = false;
+	        }
+	    }
+
+		public void viewportChanged(SViewportChangeEvent e) {
+			if (!paging) {
+				scrollable.setViewportSize(scrollable.getScrollableViewportSize());
+			} else if (horizontal == e.isHorizontalChange()) {
+				Rectangle maxVp = scrollable.getScrollableViewportSize();
+				Rectangle curVp = scrollable.getViewportSize();
+
+				if (maxVp != null && curVp != null) {
+					// If our scrollable is a tree that has been expanded or collapsed
+					// we might have to optimize the y-offset of the current viewport.
+					if (!horizontal && scrollable instanceof STree) {
+						int maxRecordNr = maxVp.y + maxVp.height;
+						int curRecordNr = curVp.y + curVp.height;
+						if (curRecordNr > maxRecordNr && curVp.y > 0) {
+							curVp.y -= Math.min(curRecordNr - maxRecordNr, curVp.y);
+						}
+					}
+
+					// Detect visibility
+					SComponent scrollbar;
+					boolean newVisibility;
+					if (horizontal) {
+						scrollbar = (SComponent) horizontalScrollBar;
+						newVisibility = isAdjustableVisible(horizontalScrollBarPolicy, maxVp.width, curVp.width);
+					} else {
+						scrollbar = (SComponent) verticalScrollBar;
+						newVisibility = isAdjustableVisible(verticalScrollBarPolicy, maxVp.height, curVp.height);
+					}
+					// Apply visibility
+					if (scrollbar != null) {
+						// Prevent reload of scrollbar if it is invisible anyway
+						if (!scrollbar.isVisible() && newVisibility == false) return;
+						scrollbar.setVisible(newVisibility);
+					}
+				}
+
+				if (delayEvents) {
+		            gotDelayedEvent = true;
+		        } else {
+		        	fireStateChanged();
+		        }
+			}
+    	}
+
+		/**
+         * Adds a <code>ChangeListener</code>.
+         *
+         * @param l the <code>ChangeListener</code> to add
+         * @see #removeChangeListener
+         * @see BoundedRangeModel#addChangeListener
+         */
+        public void addChangeListener(ChangeListener l) {
+            listenerList.add(ChangeListener.class, l);
+        }
+
+        /**
+         * Removes a <code>ChangeListener</code>.
+         *
+         * @param l the <code>ChangeListener</code> to remove
+         * @see #addChangeListener
+         * @see BoundedRangeModel#removeChangeListener
+         */
+        public void removeChangeListener(ChangeListener l) {
+            listenerList.remove(ChangeListener.class, l);
+        }
+
+		/**
+         * Runs each <code>ChangeListener</code>'s <code>stateChanged</code> method.
+         *
+         * @see #setRangeProperties
+         * @see EventListenerList
+         */
+        protected void fireStateChanged() {
+            Object[] listeners = listenerList.getListenerList();
+            for (int i = listeners.length - 2; i >= 0; i -=2) {
+                if (listeners[i] == ChangeListener.class) {
+                    if (changeEvent == null) {
+                        changeEvent = new ChangeEvent(scrollable);
+                    }
+                    ((ChangeListener) listeners[i+1]).stateChanged(changeEvent);
+                }
+            }
+        }
+
+		private void updateViews() {
+			// Reload scrollbar and scrollable in order to display the changes
+			viewportChanged(new SViewportChangeEvent(scrollable, horizontal));
+			((SComponent) scrollable).reload(ReloadManager.STATE);
+		}
+
+		private boolean isViewportAvailable() {
+			return scrollable != null && scrollable.getViewportSize() != null;
+		}
+
+		private boolean isScrollableViewportAvailable() {
+			return scrollable != null && scrollable.getScrollableViewportSize() != null;
+		}
     }
 }

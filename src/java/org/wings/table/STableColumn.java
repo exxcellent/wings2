@@ -260,16 +260,16 @@ public class STableColumn implements Serializable {
     }
 
     /**
-     * Indicates if this columns should be hidden
+     * Indicates if this column is hidden
      *
-     * @return <code>true</code> if this column should be invisible
+     * @return <code>true</code> if this column is invisible
      */
     public boolean isHidden() {
         return hidden;
     }
 
     /**
-     * Indicates if this columns should be hidden
+     * Indicates if this column should be hidden
      *
      * @param hidden <code>true</code> if this column should be invisible
      */

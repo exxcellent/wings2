@@ -551,15 +551,6 @@ public class HelloWingS {
               </row>
 
               <row>
-                <entry>jakarta-regexp-x.x.jar</entry>
-
-                <entry>yes</entry>
-
-                <entry>Regular Expression support for JDK 1.3 (Browser
-                identification)</entry>
-              </row>
-
-              <row>
                 <entry>kdeclassic-lfgr.jar</entry>
 
                 <entry>optional</entry>
@@ -605,6 +596,21 @@ public class HelloWingS {
                 compiling as implementation is provided by the used servlet
                 container</entry>
               </row>
+
+                <row>
+                  <entry>wingx.jar</entry>
+
+                  <entry>optional</entry>
+
+                  <entry>Additional highlevel components.</entry>
+                </row>
+                <row>
+                  <entry>cxx.jar</entry>
+
+                  <entry>optional</entry>
+
+                  <entry>PLAF for the additional highlevel components.</entry>
+                </row>
             </tbody>
           </tgroup>
         </table>
@@ -1614,7 +1620,7 @@ submit.addActionListener(al);</programlisting></para>
           In this case you would add the listener callback to the form instead
           of the button:<programlisting>form.addActionListener(al);</programlisting></para>
 
-          <para>The ActionEvent.getSource() will determine whether the event
+          <para>The ActionEvent.getSourctree() will determine whether the event
           comes from the button or the form so you can use the following tests
           in your callback:<programlisting>public void actionPerformed(ActionEvent e) {
   if(submit == e.getSource())
@@ -1625,6 +1631,12 @@ submit.addActionListener(al);</programlisting></para>
 
           <para>You can extract data from the text field as shown above with a
           call to STextField.getText().</para>
+
+          <para>Whenever a listener is attached to a component or its model,
+          wingS assures, that the listener is invoked immediately after the user
+          modifies the component. For example, if you add a DocumentListener to
+          a textfield's document, wingS will add a form submission javascript
+          listener (onchange) to the respective input field.</para>
         </sect3>
       </sect2>
 
@@ -1768,10 +1780,7 @@ multiSelectionList.setListData(new String[] {"Item 1", "Item 2", "Item 3"});</pr
           <para>You can attach <code>ListSelectionListener</code> to
           <code>SList</code> instances and <code>ItemListener</code> to
           <code>SComboBox</code> instances to receive events on selection
-          changes. To receive these events immediately when the user clicks
-          and modifies the selection you can optionally add a Javascript
-          listener which triggers a form submit to the server on any
-          change</para>
+          changes.</para>
 
           <programlisting>comboBox.addScriptListener(ComboBoxCG.JS_ON_CHANGE_SUBMIT);</programlisting>
         </sect3>
@@ -4332,18 +4341,6 @@ public MyFoo getSessionHelper(HttpServletRequest request)
               allows wingS to check that a request is for the most current
               representation of a resource, which is also an important
               security feature.<itemizedlist>
-                  <listitem>
-                    <para><ulink
-                    url="http://www.j-wings.org/javadoc/org/wings/script/DynamicScriptResource.html"><code>script.DynamicScriptResource</code></ulink>
-                    - implements externalisation for dynamic javascript</para>
-                  </listitem>
-
-                  <listitem>
-                    <para><ulink
-                    url="http://www.j-wings.org/javadoc/org/wings/style/DynamicStyleSheetResource.html"><code>style.DynamicStyleSheetResource</code></ulink>
-                    - implements externalisation for dynamic stylesheet</para>
-                  </listitem>
-
                   <listitem>
                     <para><ulink
                     url="http://www.j-wings.org/javadoc/org/wings/DynamicCodeResource.html"><code>DynamicCodeResource</code></ulink>

@@ -7,7 +7,6 @@ import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
 import java.util.Map;
-import java.awt.*;
 
 public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
@@ -19,12 +18,8 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
 
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
-        Scrollable scrollable = (Scrollable) center;
-        Rectangle viewportSize = scrollable.getViewportSize();
-        Rectangle scrollableViewportSize = scrollable.getScrollableViewportSize();
-        scrollable.setViewportSize(scrollableViewportSize);
+
         writeComponent(d, center);
-        scrollable.setViewportSize(viewportSize);
 
         d.print("</div></td></tr>");
         closeLayouterBody(d, layout);
@@ -40,8 +35,8 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
             return;
         }
 
-        // special implementation with expressions is only required, if the center component
-        // shall consume the remaining height
+        // special implementation with expressions is only required, if the center
+        // component shall consume the remaining height
 
         Map components = layout.getComponents();
         SComponent north = (SComponent) components.get(SScrollPaneLayout.NORTH);

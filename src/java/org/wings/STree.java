@@ -13,27 +13,43 @@
  */
 package org.wings;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+
+import javax.swing.event.EventListenerList;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeWillExpandListener;
+import javax.swing.tree.AbstractLayoutCache;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.ExpandVetoException;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.VariableHeightLayoutCache;
+
+import org.wings.event.SMouseEvent;
+import org.wings.event.SMouseListener;
+import org.wings.event.SViewportChangeEvent;
+import org.wings.event.SViewportChangeListener;
 import org.wings.plaf.TreeCG;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.tree.STreeCellRenderer;
 import org.wings.tree.STreeSelectionModel;
-import org.wings.event.SMouseEvent;
-import org.wings.event.SMouseListener;
-
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
-import java.util.ArrayList;
 
 /**
- * Swing-like tree widget. 
+ * Swing-like tree widget.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class STree extends SComponent implements LowLevelEventListener, Scrollable {
+public class STree extends SComponent implements Scrollable, LowLevelEventListener {
     /**
      * Tree selection model.
      * @see STreeSelectionModel#setSelectionMode(int)
@@ -47,14 +63,14 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      * @see TreeSelectionModel#CONTIGUOUS_TREE_SELECTION
      */
     public static final int CONTIGUOUS_TREE_SELECTION = TreeSelectionModel.CONTIGUOUS_TREE_SELECTION;
-    
+
     /**
      * Tree selection model.
      * @see STreeSelectionModel#setSelectionMode(int)
      * @see TreeSelectionModel#DISCONTIGUOUS_TREE_SELECTION
      */
     public static final int DISCONTIGUOUS_TREE_SELECTION = TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION;
-    
+
     /**
      * Indent depth in pixels
      */
@@ -292,6 +308,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
                         ((TreeExpansionListener) listeners[i + 1]).treeCollapsed(e);
                 }
             }
+            fireViewportChanged(false);
         }
     }
 
@@ -482,7 +499,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
 
 
     protected int fillPathForAbsoluteRow(int row, Object node, ArrayList path) {
-        // and check if it is the 
+        // and check if it is the
         if (row == 0) {
             return 0;
         } // end of if ()
@@ -853,18 +870,16 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      */
     public void expandRow(TreePath p) {
         treeState.setExpandedState(p, true);
-        /*
-          if ( viewport != null )
-          {
-          int ccount = model.getChildCount( p.getLastPathComponent() );
-          if ( ccount + 1 <= viewport.height )
-          viewport.y += ccount;
-          else
-          viewport.y = treeState.getRowForPath( p );
-			
-          }
-        */
-        fireTreeExpanded(p);
+
+        int childCount = model.getChildCount(p.getLastPathComponent());
+		getScrollableViewportSize().height += childCount;
+
+		Rectangle area = new Rectangle(getViewportSize());
+		area.y = treeState.getRowForPath(p);
+		area.height = childCount + 1;
+		scrollRectToVisible(area);
+
+		fireTreeExpanded(p);
         reload(ReloadManager.STATE);
     }
 
@@ -874,6 +889,10 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
 
     public void collapseRow(TreePath p) {
         treeState.setExpandedState(p, false);
+
+        int childCount = model.getChildCount(p.getLastPathComponent());
+		getScrollableViewportSize().height -= childCount;
+
         fireTreeCollapsed(p);
         reload(ReloadManager.STATE);
     }
@@ -994,6 +1013,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
             if (e == null)
                 return;
             treeState.treeNodesInserted(e);
+            fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
 
@@ -1001,6 +1021,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
             if (e == null)
                 return;
             treeState.treeStructureChanged(e);
+            fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
 
@@ -1008,6 +1029,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
             if (e == null)
                 return;
             treeState.treeNodesRemoved(e);
+            fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
     }
@@ -1033,37 +1055,87 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
         return cellRendererPane;
     }
 
+    public void setCG(TreeCG cg) {
+        super.setCG(cg);
+    }
+
     /**
-     * Returns the maximum size of this tree.
-     *
-     * @return maximum size
+     * The size of the component in respect to scrollable units.
      */
     public Rectangle getScrollableViewportSize() {
         return new Rectangle(0, 0, 1, getRowCount());
     }
 
-    /*
-     * Setzt den anzuzeigenden Teil
+    /**
+     * Returns the actual visible part of a scrollable.
      */
-    public void setViewportSize(Rectangle d) {
-        Rectangle oldViewport = viewport;
-        viewport = d;
-        if ((viewport == null && oldViewport != null) ||
-                (viewport != null && !viewport.equals(oldViewport)))
-            reload(ReloadManager.STATE);
-    }
-
     public Rectangle getViewportSize() {
         return viewport;
     }
 
-    public Dimension getPreferredExtent() {
-        return null;
+    /**
+     * Sets the actual visible part of a scrollable.
+     */
+    public void setViewportSize(Rectangle newViewport) {
+    	Rectangle oldViewport = viewport;
+        viewport = newViewport;
+
+        if (isDifferent(oldViewport, newViewport)) {
+        	if (oldViewport == null || newViewport == null) {
+        		fireViewportChanged(true);
+        		fireViewportChanged(false);
+        	} else {
+				if (newViewport.x != oldViewport.x ||
+						newViewport.width != oldViewport.width) {
+					fireViewportChanged(true);
+				}
+				if (newViewport.y != oldViewport.y ||
+						newViewport.height != oldViewport.height) {
+					fireViewportChanged(false);
+				}
+			}
+            reload(ReloadManager.STATE);
+        }
     }
 
-    public void setCG(TreeCG cg) {
-        super.setCG(cg);
+    /**
+     * If scrolling is activated, the component can suggest it's extent.
+     */
+    public Dimension getPreferredExtent() {
+        return new Dimension(1, 20);
+    }
+
+    /**
+     * Adds the given <code>SViewportChangeListener</code> to the scrollable.
+     *
+     * @param l the listener to be added
+     */
+    public void addViewportChangeListener(SViewportChangeListener l) {
+        addEventListener(SViewportChangeListener.class, l);
+    }
+
+    /**
+     * Removes the given <code>SViewportChangeListener</code> from the scrollable.
+     *
+     * @param l the listener to be removed
+     */
+    public void removeViewportChangeListener(SViewportChangeListener l) {
+        removeEventListener(SViewportChangeListener.class, l);
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for notification
+     * on changes to this scrollable's viewport in the specified direction.
+     *
+     * @see EventListenerList
+     */
+    protected void fireViewportChanged(boolean horizontal) {
+        Object[] listeners = getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == SViewportChangeListener.class) {
+                SViewportChangeEvent event = new SViewportChangeEvent(this, horizontal);
+                ((SViewportChangeListener) listeners[i + 1]).viewportChanged(event);
+            }
+        }
     }
 }
-
-

@@ -25,6 +25,7 @@ import org.wings.plaf.CGManager;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 
 public final class ListCG extends AbstractComponentCG implements  org.wings.plaf.ListCG {
@@ -147,8 +148,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         return stringBufferDevice;
     }
 
-    public void writeAnchorList(Device device, SList list)
-            throws IOException {
+    public void writeAnchorList(Device device, SList list) throws IOException {
         boolean renderSelection = list.getSelectionMode() != SList.NO_SELECTION;
 
         device.print("<");
@@ -162,20 +162,27 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         SListCellRenderer cellRenderer = list.getCellRenderer();
         SCellRendererPane rendererPane = list.getCellRendererPane();
 
+        Rectangle currentViewport = list.getViewportSize();
+        Rectangle maximalViewport = list.getScrollableViewportSize();
         int start = 0;
         int end = model.getSize();
+        int fill = maximalViewport != null ? maximalViewport.height : end;
 
-        java.awt.Rectangle viewport = list.getViewportSize();
-        if (viewport != null) {
-            start = viewport.y;
-            end = start + viewport.height;
+        if (currentViewport != null) {
+            start = currentViewport.y;
+            end = start + currentViewport.height;
         }
 
-        for (int i = start; i < end; i++) {
+        for (int i = start; i < end; ++i) {
+        	if (i >= fill) {
+        		device.print("<li>---</li>");
+        		continue;
+        	}
+
             boolean selected = list.isSelectedIndex(i);
 
             if (renderSelection && selected)
-                device.print("<li class=\"SList_selected\">");
+                device.print("<li class=\"SList_selected\"");
             else
                 device.print("<li");
 
@@ -195,22 +202,16 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         device.print(">");
     }
 
-    public void writeInternal(final Device device,
-                      final SComponent _c)
-            throws IOException
-    {
-        RenderHelper.getInstance(_c).forbidCaching();
+    public void writeInternal(final Device device, final SComponent _c) throws IOException {
+		RenderHelper.getInstance(_c).forbidCaching();
 
-        //try {             try finally are expensive. Rerender once after ex not
-            SList list = (SList) _c;
-            if (list.getShowAsFormComponent()) {
-                writeFormList(device, list);
-            } else {
-                writeAnchorList(device, list);
-            }
-        //}
-        //finally {
-        RenderHelper.getInstance(_c).allowCaching();
-        //}
-    }
+		SList list = (SList) _c;
+		if (list.getShowAsFormComponent()) {
+			writeFormList(device, list);
+		} else {
+			writeAnchorList(device, list);
+		}
+
+		RenderHelper.getInstance(_c).allowCaching();
+	}
 }

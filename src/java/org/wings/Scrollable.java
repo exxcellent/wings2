@@ -13,11 +13,13 @@
  */
 package org.wings;
 
-import java.awt.*;
-import java.awt.event.AdjustmentListener;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+
+import org.wings.event.SViewportChangeListener;
 
 /**
- * For scrollable components, ie components that can show only a part of it's content.
+ * For scrollable components, i.e. components that can show only a part of it's content.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
@@ -25,9 +27,8 @@ import java.awt.event.AdjustmentListener;
 public interface Scrollable {
 
     /**
-     * is the size of the component in respect to scrollable units. e.g. a
-     * {@link STable}
-     * has the scrollable viewport size:
+     * The size of the component in respect to scrollable units.
+     * E.g. a {@link STable} has the scrollable viewport size:
      * <pre>
      * new Dimension(table.getColumnCount(), table.getRowCount())
      * </pre>
@@ -39,26 +40,31 @@ public interface Scrollable {
     Rectangle getScrollableViewportSize();
 
     /**
-     * set the visible part of a scrollable.
-     */
-    void setViewportSize(Rectangle d);
-
-    /**
-     * get the actual visible part of a scrollable. This may be valid only at
-     * rendering time. In fact, inside a {@link SScrollPane}
-     * synchronization with the adjustables is done
-     * short before component it rendered...
-     * You should never rely this values. This method is mainly needed to backup
-     * viewports...
+     * Returns the actual visible part of a scrollable.
      */
     Rectangle getViewportSize();
 
     /**
-     * if scrolling is activated, the component can suggest it's extent.
-     *
-     * @return null if no preference
+     * Sets the actual visible part of a scrollable.
+     */
+    void setViewportSize(Rectangle d);
+
+    /**
+     * If scrolling is activated, the component can suggest it's extent.
      */
     Dimension getPreferredExtent();
+
+    /**
+     * Adds the given <code>SViewportChangeListener</code> to the scrollable.
+     *
+     * @param l the listener to be added
+     */
+    void addViewportChangeListener(SViewportChangeListener l);
+
+    /**
+     * Removes the given <code>SViewportChangeListener</code> from the scrollable.
+     *
+     * @param l the listener to be removed
+     */
+    void removeViewportChangeListener(SViewportChangeListener l);
 }
-
-

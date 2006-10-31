@@ -215,8 +215,8 @@ function followLink(ajaxEnabled, eventName, eventValue, scriptCodes) {
         } else {
             // Send a default request
             url = encodeUpdateId(completeUpdateId);
-            window.location = url + "?event_epoch=" + event_epoch +
-                                    "&" + eventName + "=" + eventValue;
+            window.location.href = url + "?event_epoch=" + event_epoch +
+                                         "&" + eventName + "=" + eventValue;
         }
     }
 }
@@ -466,7 +466,6 @@ var wu_konqueror = wingS.util.checkUserAgent('konqueror')?1:0;
 var wu_opera = wingS.util.checkUserAgent('opera')?1:0;
 var wu_safari = wingS.util.checkUserAgent('safari')?1:0;
 
-
 /* The following two functions are a workaround for IE to open a link in the
    right target/new window used in AnchorCG. */
 wingS.util.checkTarget = function(target) {
@@ -659,7 +658,7 @@ wingS.util.showModalDialog = function(dialogId, modalId) {
 
 wingS.util.layoutScrollPane = function(outerId) {
     var outer = document.getElementById(outerId);
-    var div = outer.getElementsByTagName("div")[0];
+    var div = outer.getElementsByTagName("DIV")[0];
     div.style.height =
         document.defaultView.getComputedStyle(outer, null).getPropertyValue("height");
     div.style.display = "block";
@@ -667,7 +666,7 @@ wingS.util.layoutScrollPane = function(outerId) {
 
 function layoutScrollPaneIE(outerId) {
     var outer = document.getElementById(outerId);
-    var div = outer.getElementsByTagName("div")[0];
+    var div = outer.getElementsByTagName("DIV")[0];
     var td = wingS.util.getParentByTagName(div, "TD");
     div.style.height = td.clientHeight + "px";
     div.style.width = td.clientWidth + "px";
@@ -678,7 +677,7 @@ function layoutScrollPaneIE(outerId) {
 
 function layoutAvailableSpaceIE(tableId) {
 	var table = document.getElementById(tableId);
-    if (table.style.height == table.getAttribute("layoutHeight")) return;
+    if (table == null || table.style.height == table.getAttribute("layoutHeight")) return;
 
     var consumedHeight = 0;
     var rows = table.rows;
@@ -747,8 +746,8 @@ function enableAjaxDebugging(request) {
         document.body.appendChild(debug);
     }
     var txt = request.responseText;
-    debug.getElementsByTagName("textarea")[0].value = txt;
-    debug.getElementsByTagName("span")[0].innerHTML = "| " + txt.length + " chars";
+    debug.getElementsByTagName("TEXTAREA")[0].value = txt;
+    debug.getElementsByTagName("SPAN")[0].innerHTML = "| " + txt.length + " chars";
 }
 
 /* This function shows the previously enabled AJAX debugging view, if available. */
@@ -764,12 +763,12 @@ function hideAjaxDebugging() {
 }
 
 function handleRequestError(request) {
-    var errorMsg = "An error occured while processing an AJAX request!  -->  " +
-                   "Status code: " + request.status + " | " + request.statusText +
-                   "\n\n\nResponse from the server:\n" + request.responseText;
+    var errorMsg = "An error occured while processing an AJAX request!\n  -->  " +
+                   "Status code: " + request.status + " | " + request.statusText;
     hideAjaxActivityIndicator();
     alert(errorMsg);
-    dequeueNextRequest();
+    window.location.href = encodeUpdateId(completeUpdateId);
+    //dequeueNextRequest();
 }
 
 function processAjaxRequest(request) {
@@ -780,7 +779,18 @@ function processAjaxRequest(request) {
     // In case we do not get any XML
     if (xmlDoc == null) {
         hideAjaxActivityIndicator();
+        alert("DEBUG: WHAT SHALL WE DO HERE?");
         window.location.href = request.url;
+        return;
+    }
+
+    // Get the root element of the received XML response
+    var xmlRoot = xmlDoc.getElementsByTagName("update")[0];
+    // Workaround to prevent IE from showing JS errors when
+    // session has meanwhile timed out -> try a full reload
+    if (xmlRoot == null) {
+        hideAjaxActivityIndicator();
+        window.location.href = encodeUpdateId(completeUpdateId);
         return;
     }
 
@@ -788,12 +798,12 @@ function processAjaxRequest(request) {
     function getFirstChildData(tagName) {
         return xmlDoc.getElementsByTagName(tagName)[0].firstChild.data;
     }
-    // Get the root element of the received XML response
-    var xmlRoot = xmlDoc.getElementsByTagName("update")[0];
+
     // Process the response depending on the update mode
     var updateMode = xmlRoot.getAttribute("mode");
     if (updateMode == "complete") {
         window.location.href = getFirstChildData("redirect");
+        return;
     }
     else if (updateMode == "incremental") {
         var components = xmlRoot.getElementsByTagName("component");
@@ -817,7 +827,8 @@ function processAjaxRequest(request) {
                     }
                     eval(code);
                 } catch(e) {
-                    alert("Caught exception in processAjaxRequest(): " + e + "\n" +
+                    alert("An error occured in processAjaxRequest():" +
+                          "\nName: " + e.name() + "\nMessage: " + e.message + "\n" +
                           "\n\nThe following code could not be executed:\n" + code);
                 }
             }
@@ -856,13 +867,11 @@ function replaceComponentHtml(id, html) {
         if (parent == null) return;
 
         var nrOfChildElements = 0;
-        var lastChildElementTag = null;
         for (var i = 0; i < parent.childNodes.length; i++) {
             // We have to filter everything except element nodes
             // since browsers treat whitespace nodes differently
             if (parent.childNodes[i].nodeType == 1) {
                 nrOfChildElements++;
-                lastChildElementTag = parent.childNodes[i].tagName;
             }
         }
 
@@ -944,16 +953,20 @@ var AjaxActivityCursor = {
 
     // Callback function
     followMouse : function (event) {
-        var pos, isIE;
         event = wingS.util.getEvent(event);
-        pos = { left : event.clientX, top : event.clientY };
-        isIE = (window.document.compatMode &&
-                window.document.compatMode == "CSS1Compat") ?
-                    window.document.documentElement : window.document.body || null;
-        if (isIE) {
-            pos.left += isIE.scrollLeft;
-            pos.top += isIE.scrollTop;
+        var target = wingS.util.getTarget(event);
+        var pos = { left : event.clientX, top : event.clientY };
+        var doc = (window.document.compatMode && window.document.compatMode == "CSS1Compat") ?
+            window.document.documentElement : window.document.body || null;
+        if (doc) {
+            pos.left += doc.scrollLeft;
+            pos.top += doc.scrollTop;
         }
+        if (target.nodeName == "OPTION" && !wingS.util.checkUserAgent('msie')) {
+            pos.left += document.defaultView.getComputedStyle(target, null).getPropertyValue("left");
+            pos.top += document.defaultView.getComputedStyle(target, null).getPropertyValue("top");
+        }
+
         AjaxActivityCursor.div.style.left = pos.left + AjaxActivityCursor.dx + "px";
         AjaxActivityCursor.div.style.top = pos.top + AjaxActivityCursor.dy + "px";
     },

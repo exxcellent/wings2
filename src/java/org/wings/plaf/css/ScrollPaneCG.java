@@ -13,48 +13,42 @@
  */
 package org.wings.plaf.css;
 
+import java.io.IOException;
+
 import org.wings.SComponent;
 import org.wings.SDimension;
 import org.wings.SScrollPane;
-import org.wings.SScrollPaneLayout;
-import org.wings.Scrollable;
 import org.wings.io.Device;
-
-import java.awt.*;
-import java.io.IOException;
 
 public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
 
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(Device device, SComponent component) throws IOException {
-        SScrollPane scrollPane = (SScrollPane) component;
-        Scrollable scrollable = scrollPane.getScrollable();
-        SScrollPaneLayout layout = (SScrollPaneLayout) scrollPane.getLayout();
+        SScrollPane scrollpane = (SScrollPane) component;
 
-        if (!layout.isPaging() && scrollable instanceof SComponent) {
-            SComponent center = (SComponent) scrollable;
-            Rectangle viewportSizeBackup = scrollable.getViewportSize();
-            SDimension preferredSizeBackup = center.getPreferredSize();
-            try {
-                scrollable.setViewportSize(scrollable.getScrollableViewportSize());
-                writeContent(device, component);
-                String script = "wingS.util.layoutScrollPane('" + component.getName() + "');";
-                RenderHelper.getInstance(component).addScript(script);
-            } finally {
-                //component.setPreferredSize(center.getPreferredSize());
-                scrollable.setViewportSize(viewportSizeBackup);
-                center.setPreferredSize(preferredSizeBackup);
-            }
-        }
-        else {
-            scrollPane.synchronizeAdjustables();
+        if (scrollpane.isPaging()) {
             writeContent(device, component);
+        } else {
+            SDimension preferredSize = scrollpane.getPreferredSize();
+            if (preferredSize == null) {
+            	scrollpane.setPreferredSize(new SDimension("100%", "300px"));
+            } else {
+	            if (preferredSize.getWidthInt() < 0) preferredSize.setWidth("100%");
+	            if (preferredSize.getHeightInt() < 0) preferredSize.setHeight("300px");
+            }
+
+            SDimension preferredSizeBackup = scrollpane.getPreferredSize();
+            writeContent(device, component);
+            scrollpane.setPreferredSize(preferredSizeBackup);
+
+
+            String script = "wingS.util.layoutScrollPane('" + component.getName() + "');";
+            RenderHelper.getInstance(component).addScript(script);
         }
     }
 
-    public void writeContent(Device device, SComponent c)
-            throws IOException {
+    public void writeContent(Device device, SComponent c) throws IOException {
         SScrollPane scrollPane = (SScrollPane) c;
         device.print("<table");
         writeAllAttributes(device, scrollPane);

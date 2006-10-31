@@ -13,34 +13,41 @@
  */
 package org.wings;
 
- import org.apache.commons.logging.Log;
- import org.apache.commons.logging.LogFactory;
- import org.wings.event.SMouseEvent;
- import org.wings.event.SMouseListener;
- import org.wings.style.CSSAttributeSet;
- import org.wings.style.CSSProperty;
- import org.wings.style.CSSStyleSheet;
- import org.wings.style.Selector;
- import org.wings.table.SDefaultTableColumnModel;
- import org.wings.table.STableCellEditor;
- import org.wings.table.STableCellRenderer;
- import org.wings.table.STableColumn;
- import org.wings.table.STableColumnModel;
- import org.wings.util.SStringBuilder;
-
- import javax.swing.event.CellEditorListener;
- import javax.swing.event.ChangeEvent;
- import javax.swing.event.ListSelectionEvent;
- import javax.swing.event.ListSelectionListener;
- import javax.swing.event.TableModelEvent;
- import javax.swing.event.TableModelListener;
- import javax.swing.table.DefaultTableModel;
- import javax.swing.table.TableModel;
- import java.awt.*;
-import java.awt.event.AdjustmentListener;
- import java.util.EventObject;
- import java.util.HashMap;
+ import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.util.EventObject;
+import java.util.HashMap;
 import java.util.Iterator;
+
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.event.SMouseEvent;
+import org.wings.event.SMouseListener;
+import org.wings.event.STableColumnModelEvent;
+import org.wings.event.STableColumnModelListener;
+import org.wings.event.SViewportChangeEvent;
+import org.wings.event.SViewportChangeListener;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyleSheet;
+import org.wings.style.Selector;
+import org.wings.table.SDefaultTableColumnModel;
+import org.wings.table.STableCellEditor;
+import org.wings.table.STableCellRenderer;
+import org.wings.table.STableColumn;
+import org.wings.table.STableColumnModel;
+import org.wings.util.SStringBuilder;
 
 
  /**
@@ -181,6 +188,8 @@ import java.util.Iterator;
       */
      protected STableColumnModel columnModel;
 
+     transient protected STableColumnModelListener tableColumnModelListener;
+
      /**
       * If true, the column model is autorebuild from the table model.
       */
@@ -220,7 +229,7 @@ import java.util.Iterator;
       * Helper variable for {@link #nameCellComponent(SComponent, int, int)}
       */
      private SStringBuilder nameBuffer = new SStringBuilder();
-     
+
      /**
       * changes in the selection model should force a reload if possible
       */
@@ -918,11 +927,11 @@ import java.util.Iterator;
     	 if (model == null) {
              throw new IllegalArgumentException("cannot set a null SListSelectionModel");
          }
-    	 
+
          if (getSelectionModel() != null) {
              removeSelectionListener(reloadOnSelectionChangeListener);
          }
-         
+
          selectionModel = model;
 
          addSelectionListener(reloadOnSelectionChangeListener);
@@ -1157,26 +1166,31 @@ import java.util.Iterator;
          if (e == null || e.getFirstRow() == TableModelEvent.HEADER_ROW) {
              // The whole thing changed
              clearSelection();
+             fireViewportChanged(false);
              if (getAutoCreateColumnsFromModel())
                  createDefaultColumnsFromModel();
          } else {
              switch (e.getType()) {
                  case TableModelEvent.INSERT:
-                     if (e.getFirstRow() >= 0)
+                     if (e.getFirstRow() >= 0) {
                          getSelectionModel().insertIndexInterval(e.getFirstRow(),
                                  e.getLastRow(), true);
+                         fireViewportChanged(false);
+                     }
                      break;
 
                  case TableModelEvent.DELETE:
-                     if (e.getFirstRow() >= 0)
+                     if (e.getFirstRow() >= 0) {
                          getSelectionModel().removeIndexInterval(e.getFirstRow(),
                                  e.getLastRow());
+                         fireViewportChanged(false);
+                     }
                      break;
                 case TableModelEvent.UPDATE:
                     /* event fire on javax.swing.table.AbstractTableModel.fireTableDataChanged() */
                     if (e.getLastRow() == Integer.MAX_VALUE)
                         clearSelection();
-                    break;                 
+                    break;
              }
          }
          reload(ReloadManager.STATE);
@@ -1435,34 +1449,83 @@ import java.util.Iterator;
      }
 
      /**
-      * Returns the maximum size of this table.
-      *
-      * @return maximum size
+      * The size of the component in respect to scrollable units.
       */
      public Rectangle getScrollableViewportSize() {
          return new Rectangle(0, 0, getVisibleColumnCount(), getRowCount());
      }
 
-     /*
-     * Setzt den anzuzeigenden Teil
-     */
-     public void setViewportSize(Rectangle d) {
-         if (isDifferent(viewport, d)) {
-             viewport = d;
-             reload(ReloadManager.STATE);
-         }
-     }
-
+     /**
+      * Returns the actual visible part of a scrollable.
+      */
      public Rectangle getViewportSize() {
          return viewport;
      }
 
-     public Dimension getPreferredExtent() {
-         return null;
+     /**
+      * Sets the actual visible part of a scrollable.
+      */
+     public void setViewportSize(Rectangle newViewport) {
+     	Rectangle oldViewport = viewport;
+         viewport = newViewport;
+
+         if (isDifferent(oldViewport, newViewport)) {
+         	if (oldViewport == null || newViewport == null) {
+         		fireViewportChanged(true);
+         		fireViewportChanged(false);
+         	} else {
+ 				if (newViewport.x != oldViewport.x ||
+ 						newViewport.width != oldViewport.width) {
+ 					fireViewportChanged(true);
+ 				}
+ 				if (newViewport.y != oldViewport.y ||
+ 						newViewport.height != oldViewport.height) {
+ 					fireViewportChanged(false);
+ 				}
+ 			}
+             reload(ReloadManager.STATE);
+         }
      }
-     
-     public AdjustmentListener getAdjustmentListener() {
-     	return null;
+
+     /**
+      * If scrolling is activated, the component can suggest it's extent.
+      */
+     public Dimension getPreferredExtent() {
+         return new Dimension(getVisibleColumnCount(), getRowCount());
+     }
+
+     /**
+      * Adds the given <code>SViewportChangeListener</code> to the scrollable.
+      *
+      * @param l the listener to be added
+      */
+     public void addViewportChangeListener(SViewportChangeListener l) {
+         addEventListener(SViewportChangeListener.class, l);
+     }
+
+     /**
+      * Removes the given <code>SViewportChangeListener</code> from the scrollable.
+      *
+      * @param l the listener to be removed
+      */
+     public void removeViewportChangeListener(SViewportChangeListener l) {
+         removeEventListener(SViewportChangeListener.class, l);
+     }
+
+     /**
+      * Notifies all listeners that have registered interest for notification
+      * on changes to this scrollable's viewport in the specified direction.
+      *
+      * @see EventListenerList
+      */
+     protected void fireViewportChanged(boolean horizontal) {
+         Object[] listeners = getListenerList();
+         for (int i = listeners.length - 2; i >= 0; i -= 2) {
+             if (listeners[i] == SViewportChangeListener.class) {
+                 SViewportChangeEvent event = new SViewportChangeEvent(this, horizontal);
+                 ((SViewportChangeListener) listeners[i + 1]).viewportChanged(event);
+             }
+         }
      }
 
      public void setSelectedRow(int selectedIndex) {
@@ -1527,7 +1590,14 @@ import java.util.Iterator;
              throw new IllegalArgumentException("Column model must not be null");
 
          if (columnModel != newColumnModel) {
-             this.columnModel = newColumnModel;
+        	 if (tableColumnModelListener == null)
+        		 tableColumnModelListener = createTableColumnModelListener();
+
+        	 if (columnModel != null)
+        		 columnModel.removeColumnModelListener(tableColumnModelListener);
+        	 columnModel = newColumnModel;
+        	 columnModel.addColumnModelListener(tableColumnModelListener);
+
              reload(ReloadManager.STATE);
          }
      }
@@ -1595,5 +1665,47 @@ import java.util.Iterator;
             nameBuffer.append(row);
         nameBuffer.append('_').append(col);
         component.setNameRaw(nameBuffer.toString());
+    }
+
+    /**
+     * Creates an instance of TableColumnModelHandler.
+     */
+    protected TableColumnModelHandler createTableColumnModelListener() {
+        return new TableColumnModelHandler();
+    }
+
+    /**
+     * Handler that listens to the table's column model.
+     */
+    protected class TableColumnModelHandler implements STableColumnModelListener {
+
+		public void columnAdded(STableColumnModelEvent e) {
+			fireViewportChanged(true);
+			reload(ReloadManager.STATE);
+		}
+
+		public void columnHidden(ChangeEvent e) {
+			fireViewportChanged(true);
+			reload(ReloadManager.STATE);
+		}
+
+		public void columnMarginChanged(ChangeEvent e) {
+			fireViewportChanged(true);
+			reload(ReloadManager.STATE);
+		}
+
+		public void columnMoved(STableColumnModelEvent e) {
+			reload(ReloadManager.STATE);
+		}
+
+		public void columnRemoved(STableColumnModelEvent e) {
+			fireViewportChanged(true);
+			reload(ReloadManager.STATE);
+		}
+
+		public void columnShown(ChangeEvent e) {
+			fireViewportChanged(true);
+			reload(ReloadManager.STATE);
+		}
     }
 }

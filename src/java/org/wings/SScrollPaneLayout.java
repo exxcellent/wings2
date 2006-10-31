@@ -13,8 +13,7 @@ import java.util.Map;
  * @author hengels
  * @version $Revision$
  */
-public class SScrollPaneLayout
-        extends SAbstractLayoutManager {
+public class SScrollPaneLayout extends SAbstractLayoutManager {
     public static final String VIEWPORT = "Viewport";
     public static final String NORTH = SBorderLayout.NORTH;
     public static final String WEST = SBorderLayout.WEST;
@@ -28,17 +27,22 @@ public class SScrollPaneLayout
     private SComponent south;
 
     Map components = new HashMap(5);
-    private boolean paging = true;
 
     public SScrollPaneLayout() {
     }
 
+    /**
+     * @deprecated Use {@link org.wings.SScrollPane#isPaging()}
+     */
     public boolean isPaging() {
-        return paging;
+    	return ((SScrollPane) container).isPaging();
     }
 
+    /**
+     * @deprecated Use {@link org.wings.SScrollPane#setPaging(boolean)}
+     */
     public void setPaging(boolean paging) {
-        this.paging = paging;
+    	((SScrollPane) container).setPaging(paging);
     }
 
     public void addSingletonComponent(SComponent component, Object constraint) {
@@ -74,7 +78,7 @@ public class SScrollPaneLayout
         addSingletonComponent(component, constraint);
         components.put(constraint, component);
     }
-    
+
     /**
      * Removes the component from the layout manager
      * @param c the component to be removed
