@@ -81,20 +81,19 @@ public final class TextAreaCG extends AbstractComponentCG implements
             }
 
         } else {
-            device.print("<textarea");
             SDimension preferredSize = component.getPreferredSize();
-            boolean behaviour = Utils.isMSIE(component) && preferredSize != null && "100%".equals(preferredSize.getWidth());
-            if (behaviour) {
-                component.setAttribute("behavior", "url('-org/wings/plaf/css/layout.htc')");
-                preferredSize.setWidth(Utils.calculateHorizontalOversize(component, false));
-                //component.setAttribute("display", "none");
-            }
-            writeAllAttributes(device, component);
-            if (behaviour) {
+            boolean tableWrapping = Utils.isMSIE(component) && preferredSize != null && "%".equals(preferredSize.getWidthUnit());
+            String actualWidth = null;
+            if (tableWrapping) {
+                actualWidth = preferredSize.getWidth();
                 preferredSize.setWidth("100%");
-                component.setAttribute("behavior", null);
-                Utils.optAttribute(device, "rule", "width");
+                device.print("<table style=\"table-layout: fixed; width: " + actualWidth + "\"><tr>");
+                device.print("<td style=\"padding-right: " + Utils.calculateHorizontalOversize(component, true) + "px\">");
             }
+            device.print("<textarea");
+            writeAllAttributes(device, component);
+            if (tableWrapping)
+                device.print(" wrapping=\"4\"");
 
             Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
             Utils.optAttribute(device, "cols", component.getColumns());
@@ -128,6 +127,10 @@ public final class TextAreaCG extends AbstractComponentCG implements
             device.print(">");
             Utils.quote(device, component.getText(), false, false, false);
             device.print("</textarea>\n");
+            if (tableWrapping) {
+                preferredSize.setWidth(actualWidth);
+                device.print("</td></tr></table>");
+            }
         }
     }
 }

@@ -14,8 +14,7 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SComponent;
-import org.wings.SPasswordField;
+import org.wings.*;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -46,8 +45,21 @@ public final class PasswordFieldCG extends AbstractComponentCG implements
             throws IOException {
         final SPasswordField component = (SPasswordField) _c;
         
+        SDimension preferredSize = component.getPreferredSize();
+        boolean tableWrapping = Utils.isMSIE(component) && preferredSize != null && "%".equals(preferredSize.getWidthUnit());
+        String actualWidth = null;
+        if (tableWrapping) {
+            actualWidth = preferredSize.getWidth();
+            preferredSize.setWidth("100%");
+            device.print("<table style=\"table-layout: fixed; width: " + actualWidth + "\"><tr>");
+            device.print("<td style=\"padding-right: " + Utils.calculateHorizontalOversize(component, true) + "px\">");
+        }
+
         device.print("<input type=\"password\"");
         writeAllAttributes(device, component);
+        if (tableWrapping)
+            device.print(" wrapping=\"4\"");
+
         Utils.optAttribute(device, "size", component.getColumns());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.optAttribute(device, "maxlength", component.getMaxColumns());
@@ -69,5 +81,9 @@ public final class PasswordFieldCG extends AbstractComponentCG implements
 
         Utils.optAttribute(device, "value", component.getText());
         device.print("/>");
+        if (tableWrapping) {
+            preferredSize.setWidth(actualWidth);
+            device.print("</td></tr></table>");
+        }
     }
 }
