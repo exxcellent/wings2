@@ -1634,7 +1634,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return an array of the specified type with all listeners of the specified type
      * @see EventListenerList
      */
-    protected final EventListener[] getListeners(Class type) {
+    public final EventListener[] getListeners(Class type) {
         if (listeners != null) {
             return listeners.getListeners(type);
         } else {

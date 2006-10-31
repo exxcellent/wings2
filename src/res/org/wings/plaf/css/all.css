@@ -229,6 +229,9 @@ A.STabbedPane_Tab_top IMG {
 
 /* STree */
 
+.STree td {
+   text-align: center !important;
+}
 .STree td.slash {
     background: url('../../icons/lineslash.gif') no-repeat center center;
 }
@@ -241,18 +244,16 @@ A.STabbedPane_Tab_top IMG {
 .STree td.selected {
     background-color: #ffbbbb;
     cursor: pointer;
+    text-align: left !important;
 }
 .STree td.norm {
     cursor: pointer;
+    text-align: left !important;
 }
 
 .STree img {
     vertical-align: middle;
     display: inline;
-}
-
-.STree td {
-   text-align: center !important;
 }
 
 
