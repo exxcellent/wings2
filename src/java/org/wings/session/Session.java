@@ -132,6 +132,8 @@ public class Session implements PropertyService, Serializable {
     
     private DragAndDropManager dndManager;
 
+    private ScriptManager scriptManager;
+
     /**
      * Which locales are supported by this servlet. If null, every locale from
      * the userAgent is accepted. If not null only locales listed in this array
@@ -362,6 +364,18 @@ public class Session implements PropertyService, Serializable {
         if (externalizeManager == null)
             externalizeManager = new ExternalizeManager();
         return externalizeManager;
+    }
+
+    /**
+     * The Script manager collects scripts 
+     *
+     * @return The script manager responsible to script all sort
+     * of resources contained in this session.
+     */
+    public ScriptManager getScriptManager() {
+        if (scriptManager == null)
+            scriptManager = new ScriptManager();
+        return scriptManager;
     }
 
     /**

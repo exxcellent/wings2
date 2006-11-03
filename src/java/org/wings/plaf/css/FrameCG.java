@@ -35,8 +35,7 @@ import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
+import org.wings.session.*;
 
 import javax.swing.*;
 
@@ -586,17 +585,34 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
     protected void writeInlineScripts(Device device, SComponent component) throws IOException {
         boolean scriptTagOpen = false;
-        for (int i = 0; i < component.getScriptListeners().length; i++) {
-            ScriptListener scriptListener = component.getScriptListeners()[i];
+        ScriptListener[] scriptListeners = component.getScriptListeners();
+        for (int i = 0; i < scriptListeners.length; i++) {
+            ScriptListener scriptListener = scriptListeners[i];
             String script = scriptListener.getScript();
             if (script != null) {
                 if (!scriptTagOpen) {
-                    device.print("\n  <script type=\"text/javascript\">");
+                    device.print("\n<script type=\"text/javascript\">");
                     scriptTagOpen = true;
                 }
                 device.print(script);
             }
         }
+
+        ScriptManager scriptManager = component.getSession().getScriptManager();
+        scriptListeners = scriptManager.getScriptListeners();
+
+        for (int i = 0; i < scriptListeners.length; i++) {
+            ScriptListener scriptListener = scriptListeners[i];
+            String script = scriptListener.getScript();
+            if (!scriptTagOpen) {
+                device.print("\n<script type=\"text/javascript\">");
+                scriptTagOpen = true;
+            }
+            device.print(script);
+        }
+
+        scriptManager.clearScriptListeners();
+        
         if (scriptTagOpen) {
             device.print("</script>");
         }
