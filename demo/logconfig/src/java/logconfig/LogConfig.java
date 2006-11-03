@@ -620,23 +620,23 @@ public class LogConfig {
             }
         });
 
-        selected = sp_tree.isPaging();
-        final SCheckBox cb_toggleScrollPanePaging =
-            new SCheckBox(cb_texts[6] + selected, selected);
-        cb_toggleScrollPanePaging.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                boolean state = sp_tree.isPaging();
-                sp_tree.setPaging(!state);
-                cb_toggleScrollPanePaging.setText(cb_texts[6]  + !state);
-                if (sp_tree.isPaging()) {
-                	sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
-                	sp_tree.setVerticalExtent(30);
-                } else {
-                	sp_tree.setPreferredSize(new SDimension(477, 482));
-                }
-
-            }
-        });
+//        selected = sp_tree.isPaging();
+//        final SCheckBox cb_toggleScrollPanePaging =
+//            new SCheckBox(cb_texts[6] + selected, selected);
+//        cb_toggleScrollPanePaging.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                boolean state = sp_tree.isPaging();
+//                sp_tree.setPaging(!state);
+//                cb_toggleScrollPanePaging.setText(cb_texts[6]  + !state);
+//                if (sp_tree.isPaging()) {
+//                	sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
+//                	sp_tree.setVerticalExtent(30);
+//                } else {
+//                	sp_tree.setPreferredSize(new SDimension(477, 482));
+//                }
+//
+//            }
+//        });
 
         final SButton bu_markFrameDirty = new SButton("Reload the entire frame / mark it dirty!");
         bu_markFrameDirty.addActionListener(new ActionListener() {
@@ -680,8 +680,7 @@ public class LogConfig {
         for (int i = 1; i <= 5; ++i) listData.add("This is list item number " + i);
         SScrollPane sp_testList = new SScrollPane(new SList(new SDefaultListModel(listData)));
         sp_testList.setVerticalExtent(10);
-        sp_testList.setPreferredSize(SDimension.FULLWIDTH);
-        sp_testList.setBorder(new SLineBorder(1));
+        sp_testList.setPreferredSize(IN_DIM);
 
         final SAnchor an_toggleAjaxDebugging = new SAnchor();
         an_toggleAjaxDebugging.addScriptListener(new JavaScriptListener(
@@ -703,7 +702,7 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFormCompleteUpdate);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleTreeCompleteUpdate);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleCheckboxTest);
-        addToAjaxDebuggingPanel(pa_debug, cb_toggleScrollPanePaging);
+//        addToAjaxDebuggingPanel(pa_debug, cb_toggleScrollPanePaging);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, bu_markFrameDirty);

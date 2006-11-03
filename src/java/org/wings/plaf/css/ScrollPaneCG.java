@@ -27,7 +27,7 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
     public void writeInternal(Device device, SComponent component) throws IOException {
         SScrollPane scrollpane = (SScrollPane) component;
 
-        if (scrollpane.isPaging()) {
+        if (scrollpane.getMode() != SScrollPane.MODE_COMPLETE) {
             writeContent(device, component);
         } else {
             SDimension preferredSize = scrollpane.getPreferredSize();
@@ -38,10 +38,7 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
 	            if (preferredSize.getHeightInt() < 0) preferredSize.setHeight("300px");
             }
 
-            SDimension preferredSizeBackup = scrollpane.getPreferredSize();
             writeContent(device, component);
-            scrollpane.setPreferredSize(preferredSizeBackup);
-
 
             String script = "wingS.util.layoutScrollPane('" + component.getName() + "');";
             RenderHelper.getInstance(component).addScript(script);

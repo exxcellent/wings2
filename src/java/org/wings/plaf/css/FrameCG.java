@@ -18,10 +18,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.ReloadManager;
 import org.wings.Renderable;
-import org.wings.Resource;
 import org.wings.SComponent;
 import org.wings.SFrame;
-import org.wings.SResourceIcon;
 import org.wings.SToolTipManager;
 import org.wings.Version;
 import org.wings.util.SessionLocal;
@@ -39,10 +37,8 @@ import org.wings.resource.IncrementalUpdateResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
+import org.wings.session.*;
 
-import javax.servlet.ServletException;
 import javax.swing.*;
 
 import java.io.IOException;
@@ -626,13 +622,25 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         for (Iterator i = RenderHelper.getInstance(frame).getCollectedScripts().iterator(); i.hasNext();) {
     		device.print(i.next() + "\n");
     	}
-        for (int i = 0; i < component.getScriptListeners().length; ++i) {
-            ScriptListener scriptListener = component.getScriptListeners()[i];
+    	ScriptListener[] scriptListeners = component.getScriptListeners();
+        for (int i = 0; i < scriptListeners.length; ++i) {
+            ScriptListener scriptListener = scriptListeners[i];
             String script = scriptListener.getScript();
             if (script != null) {
                 device.print(script);
             }
         }
+
+		ScriptManager scriptManager = component.getSession().getScriptManager();
+        scriptListeners = scriptManager.getScriptListeners();
+        for (int i = 0; i < scriptListeners.length; i++) {
+            ScriptListener scriptListener = scriptListeners[i];
+            String script = scriptListener.getScript();
+            if (script != null) {
+            	device.print(script);
+            }
+        }
+        scriptManager.clearScriptListeners();
 
         SToolTipManager toolTipManager = frame.getSession().getToolTipManager();
         device.print("domTT_addPredefined('default', 'caption', false");

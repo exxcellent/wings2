@@ -402,6 +402,8 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
             clearSelection();
             dataModel = model;
             dataModel.addListDataListener(this);
+            fireViewportChanged(true);
+            fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
     }

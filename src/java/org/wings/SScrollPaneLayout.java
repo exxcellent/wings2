@@ -35,14 +35,18 @@ public class SScrollPaneLayout extends SAbstractLayoutManager {
      * @deprecated Use {@link org.wings.SScrollPane#isPaging()}
      */
     public boolean isPaging() {
-    	return ((SScrollPane) container).isPaging();
+    	return ((SScrollPane) container).getMode() == SScrollPane.MODE_SCROLLING;
     }
 
     /**
      * @deprecated Use {@link org.wings.SScrollPane#setPaging(boolean)}
      */
     public void setPaging(boolean paging) {
-    	((SScrollPane) container).setPaging(paging);
+    	if (paging) {
+    		((SScrollPane) container).setMode(SScrollPane.MODE_SCROLLING);
+    	} else {
+    		((SScrollPane) container).setMode(SScrollPane.MODE_COMPLETE);
+    	}
     }
 
     public void addSingletonComponent(SComponent component, Object constraint) {

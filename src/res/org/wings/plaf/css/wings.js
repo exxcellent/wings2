@@ -779,7 +779,7 @@ function processAjaxRequest(request) {
     // In case we do not get any XML
     if (xmlDoc == null) {
         hideAjaxActivityIndicator();
-        alert("DEBUG: WHAT SHALL WE DO HERE?");
+        //alert("DEBUG: WHAT SHALL WE DO HERE?");
         window.location.href = request.url;
         return;
     }

@@ -479,6 +479,9 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
             // Mark the root as expanded, if it isn't a leaf.
             if (!model.isLeaf(model.getRoot()))
                 treeState.setExpandedState(new TreePath(model.getRoot()), true);
+
+            fireViewportChanged(true);
+            fireViewportChanged(false);
         }
     }
 
@@ -872,12 +875,15 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         treeState.setExpandedState(p, true);
 
         int childCount = model.getChildCount(p.getLastPathComponent());
-		getScrollableViewportSize().height += childCount;
+//		if (getScrollableViewportSize() != null)
+//			getScrollableViewportSize().height += childCount;
 
-		Rectangle area = new Rectangle(getViewportSize());
-		area.y = treeState.getRowForPath(p);
-		area.height = childCount + 1;
-		scrollRectToVisible(area);
+		if (getViewportSize() != null) {
+			Rectangle area = new Rectangle(getViewportSize());
+			area.y = treeState.getRowForPath(p);
+			area.height = childCount + 1;
+			scrollRectToVisible(area);
+		}
 
 		fireTreeExpanded(p);
         reload(ReloadManager.STATE);
@@ -890,8 +896,9 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
     public void collapseRow(TreePath p) {
         treeState.setExpandedState(p, false);
 
-        int childCount = model.getChildCount(p.getLastPathComponent());
-		getScrollableViewportSize().height -= childCount;
+//        int childCount = model.getChildCount(p.getLastPathComponent());
+//        if (getScrollableViewportSize() != null)
+//			getScrollableViewportSize().height -= childCount;
 
         fireTreeCollapsed(p);
         reload(ReloadManager.STATE);

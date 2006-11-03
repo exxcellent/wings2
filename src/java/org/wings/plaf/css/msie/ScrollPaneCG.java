@@ -26,7 +26,7 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
             return;
         }
 
-        if (scrollpane.isPaging()) {
+        if (scrollpane.getMode() != SScrollPane.MODE_COMPLETE) {
             writeContent(device, component);
         } else {
             if (preferredSize == null) {

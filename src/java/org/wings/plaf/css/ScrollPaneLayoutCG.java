@@ -25,7 +25,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);
 
-        if (scrollpane.isPaging()) {
+        if (scrollpane.getMode() != SScrollPane.MODE_COMPLETE) {
             writePaging(d, layout);
         } else {
             writeNonePaging(d, layout);

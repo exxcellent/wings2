@@ -266,10 +266,9 @@ public final class TableCG
             Rectangle maximalViewport = table.getScrollableViewportSize();
     		int startX = 0;
     		int endX = table.getVisibleColumnCount();
-    		int fillX = maximalViewport != null ? maximalViewport.width : endX;
     		int startY = 0;
     		int endY = table.getRowCount();
-    		int fillY = maximalViewport != null ? maximalViewport.height : endY;
+    		int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
 
             if (currentViewport != null) {
                 startX = currentViewport.x;
@@ -277,17 +276,6 @@ public final class TableCG
                 startY = currentViewport.y;
                 endY = startY + currentViewport.height;
             }
-
-//            Rectangle viewport = table.getViewportSize();
-//            if (viewport == null)
-//                viewport = table.getScrollableViewportSize();
-//
-//            // Rectangle is somewhat missused here! the width and height are actually endy and endx
-//            Rectangle renderViewPort = new Rectangle();
-//            renderViewPort.y = viewport.y;
-//            renderViewPort.x = viewport.x;
-//            renderViewPort.height = Math.min(viewport.y + viewport.height, table.getRowCount());
-//            renderViewPort.width = Math.min(viewport.x + viewport.width, table.getColumnCount());
 
             writeColumnWidths(device, table, startX, endX);
 
@@ -297,7 +285,7 @@ public final class TableCG
             Utils.printNewline(device, table);
             device.print("<tbody>");
 
-            writeBody(device, table, startX, endX, fillX, startY, endY, fillY);
+            writeBody(device, table, startX, endX, startY, endY, emptyIndex);
 
             device.print("</tbody></table>");
         }
@@ -355,7 +343,7 @@ public final class TableCG
         Utils.printNewline(device, table, 1);
         writeSelectionHeader(device, table);
 
-        for (int i = startX; i < endX; i++) {
+        for (int i = startX; i < endX; ++i) {
             STableColumn column = columnModel.getColumn(i);
             if (!column.isHidden())
                 writeHeaderCell(device, table, rendererPane, i);
@@ -365,7 +353,7 @@ public final class TableCG
     }
 
     private void writeBody(CachingDevice device, STable table,
-    		int startX, int endX, int fillX, int startY, int endY, int fillY) throws IOException {
+    		int startX, int endX, int startY, int endY, int emptyIndex) throws IOException {
         final SListSelectionModel selectionModel = table.getSelectionModel();
 
         SStringBuilder selectedArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_SELECTED));
@@ -374,9 +362,9 @@ public final class TableCG
         final SCellRendererPane rendererPane = table.getCellRendererPane();
         STableColumnModel columnModel = table.getColumnModel();
 
-        for (int r = startY; r < endY; r++) {
-        	if (r >= fillY) {
-        		device.print("<tr>");
+        for (int r = startY; r < endY; ++r) {
+        	if (r >= emptyIndex) {
+        		device.print("<tr class=\"empty\">");
         	} else {
 	            String rowStyle = table.getRowStyle(r);
 	            SStringBuilder rowClass = new SStringBuilder(rowStyle != null ? rowStyle + " " : "");
@@ -397,11 +385,13 @@ public final class TableCG
 	            writeSelectionBody(device, table, rendererPane, r);
         	}
 
-            for (int c = startX; c < endX; c++) {
-            	if (c >= fillX) {
-            		device.print("<td>---</td>");
+            for (int c = startX; c < endX; ++c) {
+            	if (r >= emptyIndex) {
+            		String placeholder = c == 0? "nbsp;" : "";
+            		device.print("<td col=\"" + c + "\" class=\"cell empty\">" + placeholder + "</td>");
             		continue;
             	}
+
                 STableColumn column = columnModel.getColumn(c);
                 if (!column.isHidden())
                     renderCellContent(device, table, rendererPane, r, c);

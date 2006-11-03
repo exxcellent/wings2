@@ -32,11 +32,7 @@ import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * The root component of every component hierarchy.
@@ -192,6 +188,16 @@ public class SFrame
             dynamicResources = new HashMap();
         }
         return (DynamicResource) dynamicResources.get(c);
+    }
+
+    /**
+     * @return all dynamic script resources
+     */
+    public Collection getDynamicResources() {
+        if (dynamicResources == null) {
+            dynamicResources = new HashMap();
+        }
+        return dynamicResources.values();
     }
 
     /**

@@ -1166,6 +1166,7 @@ import org.wings.util.SStringBuilder;
          if (e == null || e.getFirstRow() == TableModelEvent.HEADER_ROW) {
              // The whole thing changed
              clearSelection();
+             fireViewportChanged(true);
              fireViewportChanged(false);
              if (getAutoCreateColumnsFromModel())
                  createDefaultColumnsFromModel();
@@ -1175,21 +1176,25 @@ import org.wings.util.SStringBuilder;
                      if (e.getFirstRow() >= 0) {
                          getSelectionModel().insertIndexInterval(e.getFirstRow(),
                                  e.getLastRow(), true);
-                         fireViewportChanged(false);
                      }
+                     fireViewportChanged(true);
+                     fireViewportChanged(false);
                      break;
 
                  case TableModelEvent.DELETE:
                      if (e.getFirstRow() >= 0) {
                          getSelectionModel().removeIndexInterval(e.getFirstRow(),
                                  e.getLastRow());
-                         fireViewportChanged(false);
                      }
+                     fireViewportChanged(true);
+                     fireViewportChanged(false);
                      break;
                 case TableModelEvent.UPDATE:
                     /* event fire on javax.swing.table.AbstractTableModel.fireTableDataChanged() */
                     if (e.getLastRow() == Integer.MAX_VALUE)
                         clearSelection();
+                    fireViewportChanged(true);
+                    fireViewportChanged(false);
                     break;
              }
          }
