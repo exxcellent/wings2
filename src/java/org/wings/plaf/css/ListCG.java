@@ -184,7 +184,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             if (renderSelection && selected)
                 device.print("<li class=\"selected clickable\"");
             else
-                device.print("<li");
+                device.print("<li class=\"clickable\"");
 
             SComponent renderer = cellRenderer.getListCellRendererComponent(list, model.getElementAt(i), selected, i);
 

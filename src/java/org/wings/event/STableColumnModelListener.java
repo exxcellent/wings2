@@ -4,13 +4,6 @@ import java.util.EventListener;
 
 import javax.swing.event.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: hengels
- * Date: Jul 14, 2006
- * Time: 12:08:21 PM
- * To change this template use File | Settings | File Templates.
- */
 public interface STableColumnModelListener extends EventListener {
     /** Tells listeners that a column was added to the model. */
     public void columnAdded(STableColumnModelEvent e);

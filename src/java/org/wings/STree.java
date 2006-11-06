@@ -46,7 +46,6 @@ import org.wings.tree.STreeSelectionModel;
  * Swing-like tree widget.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class STree extends SComponent implements Scrollable, LowLevelEventListener {
     /**

@@ -58,7 +58,6 @@ import org.wings.style.Selector;
  *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  * @see javax.swing.ListModel
  * @see SDefaultListModel
  * @see javax.swing.ListSelectionModel

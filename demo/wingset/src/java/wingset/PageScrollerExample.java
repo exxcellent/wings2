@@ -32,7 +32,6 @@ import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class PageScrollerExample
         extends WingSetPane {
@@ -57,8 +56,9 @@ public class PageScrollerExample
         scrollPane = new SScrollPane(list);
         scrollPane.setHorizontalScrollBar(null);
         scrollPane.setVerticalScrollBar(null);
-        scrollPane.setVerticalExtent(50);
-        
+        scrollPane.setVerticalExtent(10);
+        scrollPane.setMode(SScrollPane.MODE_PAGING);
+
         controls = new PageScrollerControls();
         controls.addControllable(scrollPane);
 
@@ -105,7 +105,7 @@ public class PageScrollerExample
             final SComboBox visRows = new SComboBox(visRowsValues);
             visRows.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
-                    list.setVisibleRowCount(((Integer) visRows.getSelectedItem()).intValue());
+                    scrollPane.setVerticalExtent(((Integer) visRows.getSelectedItem()).intValue());
                 }
             });
             list.setVisibleRowCount(visRowsValues[1].intValue());
