@@ -241,6 +241,7 @@ public final class TableCG
 
     public final void writeInternal(final Device _device, final SComponent _c) throws IOException {
         RenderHelper.getInstance(_c).forbidCaching();
+
         final STable table = (STable)_c;
 
         /*
@@ -249,7 +250,7 @@ public final class TableCG
          * to have an bug.
          * Refer to http://jira.j-wings.org/browse/WGS-139 for screenshots
          *
-         * THis workaround tries to deliver the HTML code of a table at once.
+         * This workaround tries to deliver the HTML code of a table at once.
          * This seems to resolve this issue to 99%.
          */
         final CachingDevice device = new CachingDevice(_device);
@@ -261,26 +262,30 @@ public final class TableCG
             device.print("><thead>");
             Utils.printNewline(device, table);
 
-            Rectangle viewport = table.getViewportSize();
-            if (viewport == null)
-                viewport = table.getScrollableViewportSize();
+            Rectangle currentViewport = table.getViewportSize();
+            Rectangle maximalViewport = table.getScrollableViewportSize();
+            int startX = 0;
+            int endX = table.getVisibleColumnCount();
+            int startY = 0;
+            int endY = table.getRowCount();
+            int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
 
-            // rectangle is somewhat missused here! the width and height are actually endy and endx
-            Rectangle renderViewPort = new Rectangle();
-            renderViewPort.y = viewport.y;
-            renderViewPort.x = viewport.x;
-            renderViewPort.height = Math.min(viewport.y + viewport.height, table.getRowCount());
-            renderViewPort.width = Math.min(viewport.x + viewport.width, table.getColumnCount());
+            if (currentViewport != null) {
+                startX = currentViewport.x;
+                endX = startX + currentViewport.width;
+                startY = currentViewport.y;
+                endY = startY + currentViewport.height;
+            }
 
-            writeColumnWidths(device, table, renderViewPort);
+            writeColumnWidths(device, table, startX, endX);
 
-            writeHeader(device, table, renderViewPort);
+            writeHeader(device, table, startX, endX);
 
             device.print("</thead>");
             Utils.printNewline(device, table);
             device.print("<tbody>");
 
-            writeBody(device, table, renderViewPort);
+            writeBody(device, table, startX, endX, startY, endY, emptyIndex);
 
             device.print("</tbody></table>");
         }
@@ -305,25 +310,25 @@ public final class TableCG
         Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? "" + intercellPadding.getHeightInt() : null));
     }
 
-    private void writeColumnWidths(CachingDevice device, STable table, Rectangle viewport) throws IOException {
+    private void writeColumnWidths(CachingDevice device, STable table, int startX, int endX) throws IOException {
         STableColumnModel columnModel = table.getColumnModel();
         if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
             device.print("<colgroup>");
             writeCol(device, selectionColumnWidth);
 
-            for (int i = viewport.x; i < viewport.width; i++) {
+            for (int i = startX; i < endX; ++i) {
                 STableColumn column = columnModel.getColumn(i);
                 if (!column.isHidden())
                     writeCol(device, column.getWidth());
                 else
-                    viewport.width++;
+                    ++endX;
             }
             device.print("</colgroup>");
             Utils.printNewline(device, table);
         }
     }
 
-    private void writeHeader(CachingDevice device, STable table, Rectangle viewport) throws IOException {
+    private void writeHeader(CachingDevice device, STable table, int startX, int endX) throws IOException {
         if (!table.isHeaderVisible())
             return;
 
@@ -338,7 +343,7 @@ public final class TableCG
         Utils.printNewline(device, table, 1);
         writeSelectionHeader(device, table);
 
-        for (int i = viewport.x; i < viewport.width; i++) {
+        for (int i = startX; i < endX; ++i) {
             STableColumn column = columnModel.getColumn(i);
             if (!column.isHidden())
                 writeHeaderCell(device, table, rendererPane, i);
@@ -347,7 +352,8 @@ public final class TableCG
         Utils.printNewline(device, table);
     }
 
-    private void writeBody(CachingDevice device, STable table, Rectangle viewport) throws IOException {
+    private void writeBody(CachingDevice device, STable table,
+            int startX, int endX, int startY, int endY, int emptyIndex) throws IOException {
         final SListSelectionModel selectionModel = table.getSelectionModel();
 
         SStringBuilder selectedArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_SELECTED));
@@ -356,7 +362,16 @@ public final class TableCG
         final SCellRendererPane rendererPane = table.getCellRendererPane();
         STableColumnModel columnModel = table.getColumnModel();
 
-        for (int r = viewport.y; r < viewport.height; r++) {
+        for (int r = startY; r < endY; ++r) {
+            if (r >= emptyIndex) {
+                int colspan = endX - startX;
+                device.print("<tr>\n");
+                device.print("  <td class=\"empty\"></td>\n");
+                device.print("  <td class=\"empty\" colspan=\"" + colspan + "\">&nbsp;</td>\n");
+                device.print("</tr>\n");
+                continue;
+            }
+
             String rowStyle = table.getRowStyle(r);
             SStringBuilder rowClass = new SStringBuilder(rowStyle != null ? rowStyle + " " : "");
             device.print("<tr");
@@ -375,7 +390,7 @@ public final class TableCG
 
             writeSelectionBody(device, table, rendererPane, r);
 
-            for (int c = viewport.x; c < viewport.width; c++) {
+            for (int c = startX; c < endX; ++c) {
                 STableColumn column = columnModel.getColumn(c);
                 if (!column.isHidden())
                     renderCellContent(device, table, rendererPane, r, c);

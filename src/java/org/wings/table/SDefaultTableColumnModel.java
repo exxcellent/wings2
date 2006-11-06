@@ -13,38 +13,52 @@
  */
 package org.wings.table;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.Serializable;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.EventListenerList;
+
+import org.wings.event.STableColumnModelEvent;
+import org.wings.event.STableColumnModelListener;
 
 /*
  * @see STableColumnModel
  */
 public class SDefaultTableColumnModel implements STableColumnModel, Serializable {
-    /**
-     * Apache jakarta commons logger
-     */
-    private final static Log log = LogFactory.getLog(SDefaultTableColumnModel.class);
+
     private List columns = new LinkedList();
     private int columnMargin;
     private String totalColumnWidth;
+
+    /** Change event (only one instance needed) */
+    transient protected ChangeEvent changeEvent = null;
+
+    /** List of STableColumnModelListener */
+    protected EventListenerList listenerList = new EventListenerList();
 
     public void addColumn(STableColumn column) {
         if (column == null)
             throw new IllegalArgumentException("Column is null");
 
         columns.add(column);
+
+        fireColumnAdded(new STableColumnModelEvent(this, 0, getColumnCount() - 1));
     }
 
     public void removeColumn(STableColumn column) {
         if (column == null)
             throw new IllegalArgumentException("Column is null");
 
-        columns.remove(column);
+        int columnIndex = columns.indexOf(column);
+
+    	if (columnIndex != -1) {
+    		columns.remove(columnIndex);
+        	fireColumnRemoved(new STableColumnModelEvent(this, columnIndex, 0));
+    	}
     }
 
     public void moveColumn(int columnIndex, int newIndex) {
@@ -54,10 +68,15 @@ public class SDefaultTableColumnModel implements STableColumnModel, Serializable
 
         STableColumn column = (STableColumn) columns.remove(columnIndex);
         columns.add(newIndex, column);
+
+        fireColumnMoved(new STableColumnModelEvent(this, columnIndex, newIndex));
     }
 
     public void setColumnMargin(int newMargin) {
-        this.columnMargin = newMargin;
+    	if (columnMargin != newMargin) {
+    		columnMargin = newMargin;
+    		fireColumnMarginChanged();
+    	}
     }
 
     public int getColumnCount() {
@@ -98,5 +117,133 @@ public class SDefaultTableColumnModel implements STableColumnModel, Serializable
 
     public void setTotalColumnWidth(String totalColumnWidth) {
         this.totalColumnWidth = totalColumnWidth;
+    }
+
+    /**
+     * Indicates if the given column is hidden.
+     *
+     *
+     * @return <code>true</code> if the given column is invisible
+     */
+    public boolean isColumnHidden(STableColumn column) {
+        return column.isHidden();
+    }
+
+    /**
+     * Indicates if the given column should be hidden.
+     *
+     * @param hidden <code>true</code> if the given column should be invisible
+     */
+    public void setColumnHidden(STableColumn column, boolean hidden) {
+    	if (column.isHidden() != hidden) {
+    		column.setHidden(hidden);
+    		if (hidden) fireColumnHidden(column);
+    		else fireColumnShown(column);
+    	}
+    }
+
+    /**
+     * Adds a listener for table column model events.
+     * @param x  a <code>STableColumnModelListener</code> object
+     */
+    public void addColumnModelListener(STableColumnModelListener x) {
+    	listenerList.add(STableColumnModelListener.class, x);
+    }
+
+    /**
+     * Removes a listener for table column model events.
+     * @param x  a <code>STableColumnModelListener</code> object
+     */
+    public void removeColumnModelListener(STableColumnModelListener x) {
+    	listenerList.remove(STableColumnModelListener.class, x);
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for
+     * notification on this event type.
+     * @param e  the event received
+     * @see EventListenerList
+     */
+    protected void fireColumnAdded(STableColumnModelEvent e) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = listeners.length-2; i>=0; i-=2) {
+		    if (listeners[i] == STableColumnModelListener.class) {
+		    	((STableColumnModelListener) listeners[i+1]).columnAdded(e);
+		    }
+		}
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for
+     * notification on this event type.
+     * @param e  the event received
+     * @see EventListenerList
+     */
+    protected void fireColumnRemoved(STableColumnModelEvent e) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = listeners.length-2; i>=0; i-=2) {
+		    if (listeners[i] == STableColumnModelListener.class) {
+		    	((STableColumnModelListener) listeners[i+1]).columnRemoved(e);
+		    }
+		}
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for
+     * notification on this event type.
+     * @param e  the event received
+     * @see EventListenerList
+     */
+    protected void fireColumnMoved(STableColumnModelEvent e) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = listeners.length-2; i>=0; i-=2) {
+		    if (listeners[i] == STableColumnModelListener.class) {
+		    	((STableColumnModelListener) listeners[i+1]).columnMoved(e);
+		    }
+		}
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for
+     * notification on this event type.
+     * @see EventListenerList
+     */
+    protected void fireColumnMarginChanged() {
+    	Object[] listeners = listenerList.getListenerList();
+    	for (int i = listeners.length-2; i>=0; i-=2) {
+    	    if (listeners[i] == STableColumnModelListener.class) {
+	    		// Lazily create the event:
+	    		if (changeEvent == null) changeEvent = new ChangeEvent(this);
+	    		((STableColumnModelListener) listeners[i+1]).columnMarginChanged(changeEvent);
+    	    }
+    	}
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for
+     * notification on this event type.
+     * @see EventListenerList
+     */
+    protected void fireColumnShown(STableColumn column) {
+    	Object[] listeners = listenerList.getListenerList();
+    	for (int i = listeners.length-2; i>=0; i-=2) {
+    	    if (listeners[i] == STableColumnModelListener.class) {
+	    		((STableColumnModelListener) listeners[i+1]).columnShown(new ChangeEvent(column));
+    	    }
+    	}
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for
+     * notification on this event type.
+     * @see EventListenerList
+     */
+    protected void fireColumnHidden(STableColumn column) {
+    	Object[] listeners = listenerList.getListenerList();
+    	for (int i = listeners.length-2; i>=0; i-=2) {
+    	    if (listeners[i] == STableColumnModelListener.class) {
+	    		((STableColumnModelListener) listeners[i+1]).columnHidden(new ChangeEvent(column));
+    	    }
+    	}
     }
 }

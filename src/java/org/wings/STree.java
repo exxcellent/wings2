@@ -13,27 +13,41 @@
  */
 package org.wings;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+
+import javax.swing.event.EventListenerList;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeWillExpandListener;
+import javax.swing.tree.AbstractLayoutCache;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.ExpandVetoException;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.VariableHeightLayoutCache;
+
+import org.wings.event.SMouseEvent;
+import org.wings.event.SMouseListener;
+import org.wings.event.SViewportChangeEvent;
+import org.wings.event.SViewportChangeListener;
 import org.wings.plaf.TreeCG;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.tree.STreeCellRenderer;
 import org.wings.tree.STreeSelectionModel;
-import org.wings.event.SMouseEvent;
-import org.wings.event.SMouseListener;
-
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import java.awt.*;
-import java.util.ArrayList;
 
 /**
- * Swing-like tree widget. 
+ * Swing-like tree widget.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
-public class STree extends SComponent implements LowLevelEventListener, Scrollable {
+public class STree extends SComponent implements Scrollable, LowLevelEventListener {
     /**
      * Tree selection model.
      * @see STreeSelectionModel#setSelectionMode(int)
@@ -47,7 +61,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      * @see TreeSelectionModel#CONTIGUOUS_TREE_SELECTION
      */
     public static final int CONTIGUOUS_TREE_SELECTION = TreeSelectionModel.CONTIGUOUS_TREE_SELECTION;
-    
+
     /**
      * Tree selection model.
      * @see STreeSelectionModel#setSelectionMode(int)
@@ -55,9 +69,6 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      */
     public static final int DISCONTIGUOUS_TREE_SELECTION = TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION;
 
-    private final transient static Log log = LogFactory.getLog(STree.class);
-
-    
     /**
      * Indent depth in pixels
      */
@@ -119,7 +130,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
     protected transient AbstractLayoutCache treeState = new VariableHeightLayoutCache();
 
     /**
-     * Implementation of the  {@link Scrollable} interface.
+     * Implementation of the {@link Scrollable} interface.
      */
     protected Rectangle viewport;
 
@@ -128,14 +139,14 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
 
 
     /**
-     * used to forward the selection to the selection Listeners of the tree
+     * used to forward selection events to selection listeners of the tree
      */
-    private final TreeSelectionListener forwardSelectionEvent =
-            new TreeSelectionListener() {
-                public void valueChanged(TreeSelectionEvent e) {
-                    fireTreeSelectionEvent(e);
-                }
-            };
+    private final TreeSelectionListener fwdSelectionEvents = new TreeSelectionListener() {
+        public void valueChanged(TreeSelectionEvent e) {
+            fireTreeSelectionEvent(e);
+            reload(ReloadManager.STATE);
+        }
+    };
 
     public STree(TreeModel model) {
         super();
@@ -166,7 +177,6 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
                 ((TreeSelectionListener) listeners[i + 1]).valueChanged(e);
             }
         }
-        reload(ReloadManager.STATE);
     }
 
     /**
@@ -276,7 +286,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      * @param path the TreePath indicating the node that was expanded
      * @see EventListenerList
      */
-    protected void fireTreeExpanded(TreePath path) {
+    public void fireTreeExpanded(TreePath path) {
         fireTreeExpansionEvent(new TreeExpansionEvent(this, path), true);
     }
 
@@ -296,6 +306,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
                         ((TreeExpansionListener) listeners[i + 1]).treeCollapsed(e);
                 }
             }
+            fireViewportChanged(false);
         }
     }
 
@@ -466,6 +477,9 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
             // Mark the root as expanded, if it isn't a leaf.
             if (!model.isLeaf(model.getRoot()))
                 treeState.setExpandedState(new TreePath(model.getRoot()), true);
+
+            fireViewportChanged(false);
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -486,7 +500,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
 
 
     protected int fillPathForAbsoluteRow(int row, Object node, ArrayList path) {
-        // and check if it is the 
+        // and check if it is the
         if (row == 0) {
             return 0;
         } // end of if ()
@@ -522,10 +536,10 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      */
     public void setSelectionModel(STreeSelectionModel selectionModel) {
         if (this.selectionModel != null)
-            this.selectionModel.removeTreeSelectionListener(forwardSelectionEvent);
+            this.selectionModel.removeTreeSelectionListener(fwdSelectionEvents);
 
         if (selectionModel != null)
-            selectionModel.addTreeSelectionListener(forwardSelectionEvent);
+            selectionModel.addTreeSelectionListener(fwdSelectionEvents);
 
         if (selectionModel == null)
             this.selectionModel = SDefaultTreeSelectionModel.NO_SELECTION_MODEL;
@@ -857,17 +871,14 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
      */
     public void expandRow(TreePath p) {
         treeState.setExpandedState(p, true);
-        /*
-          if ( viewport != null )
-          {
-          int ccount = model.getChildCount( p.getLastPathComponent() );
-          if ( ccount + 1 <= viewport.height )
-          viewport.y += ccount;
-          else
-          viewport.y = treeState.getRowForPath( p );
-			
-          }
-        */
+
+        if (getViewportSize() != null) {
+            Rectangle area = new Rectangle(getViewportSize());
+            area.y = treeState.getRowForPath(p);
+            area.height = model.getChildCount(p.getLastPathComponent()) + 1;
+            scrollRectToVisible(area);
+        }
+
         fireTreeExpanded(p);
         reload(ReloadManager.STATE);
     }
@@ -878,6 +889,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
 
     public void collapseRow(TreePath p) {
         treeState.setExpandedState(p, false);
+
         fireTreeCollapsed(p);
         reload(ReloadManager.STATE);
     }
@@ -948,8 +960,6 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
         processKeyEvents(values);
         this.lowLevelEvents = values;
         SForm.addArmedComponent(this);
-
-        processKeyEvents(values);
     }
 
     /**
@@ -1000,6 +1010,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
             if (e == null)
                 return;
             treeState.treeNodesInserted(e);
+            fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
 
@@ -1007,6 +1018,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
             if (e == null)
                 return;
             treeState.treeStructureChanged(e);
+            fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
 
@@ -1014,6 +1026,7 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
             if (e == null)
                 return;
             treeState.treeNodesRemoved(e);
+            fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
     }
@@ -1039,37 +1052,78 @@ public class STree extends SComponent implements LowLevelEventListener, Scrollab
         return cellRendererPane;
     }
 
+    public void setCG(TreeCG cg) {
+        super.setCG(cg);
+    }
+
     /**
-     * Returns the maximum size of this tree.
-     *
-     * @return maximum size
+     * The size of the component in respect to scrollable units.
      */
     public Rectangle getScrollableViewportSize() {
         return new Rectangle(0, 0, 1, getRowCount());
     }
 
-    /*
-     * Setzt den anzuzeigenden Teil
+    /**
+     * Returns the actual visible part of a scrollable.
      */
-    public void setViewportSize(Rectangle d) {
-        Rectangle oldViewport = viewport;
-        viewport = d;
-        if ((viewport == null && oldViewport != null) ||
-                (viewport != null && !viewport.equals(oldViewport)))
-            reload(ReloadManager.STATE);
-    }
-
     public Rectangle getViewportSize() {
         return viewport;
     }
 
-    public Dimension getPreferredExtent() {
-        return null;
+    /**
+     * Sets the actual visible part of a scrollable.
+     */
+    public void setViewportSize(Rectangle newViewport) {
+        Rectangle oldViewport = viewport;
+        viewport = newViewport;
+
+        if (isDifferent(oldViewport, newViewport)) {
+            if (oldViewport == null || newViewport == null) {
+                fireViewportChanged(true);
+                fireViewportChanged(false);
+            } else {
+                if (newViewport.x != oldViewport.x || newViewport.width != oldViewport.width) {
+                    fireViewportChanged(true);
+                }
+                if (newViewport.y != oldViewport.y || newViewport.height != oldViewport.height) {
+                    fireViewportChanged(false);
+                }
+            }
+            reload(ReloadManager.STATE);
+        }
     }
 
-    public void setCG(TreeCG cg) {
-        super.setCG(cg);
+    /**
+     * Adds the given <code>SViewportChangeListener</code> to the scrollable.
+     *
+     * @param l the listener to be added
+     */
+    public void addViewportChangeListener(SViewportChangeListener l) {
+        addEventListener(SViewportChangeListener.class, l);
+    }
+
+    /**
+     * Removes the given <code>SViewportChangeListener</code> from the scrollable.
+     *
+     * @param l the listener to be removed
+     */
+    public void removeViewportChangeListener(SViewportChangeListener l) {
+        removeEventListener(SViewportChangeListener.class, l);
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for notification
+     * on changes to this scrollable's viewport in the specified direction.
+     *
+     * @see EventListenerList
+     */
+    protected void fireViewportChanged(boolean horizontal) {
+        Object[] listeners = getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == SViewportChangeListener.class) {
+                SViewportChangeEvent event = new SViewportChangeEvent(this, horizontal);
+                ((SViewportChangeListener) listeners[i + 1]).viewportChanged(event);
+            }
+        }
     }
 }
-
-

@@ -6,12 +6,10 @@ package org.wings.plaf.css;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SLayoutManager;
+import org.wings.SScrollPane;
 import org.wings.SScrollPaneLayout;
-import org.wings.Scrollable;
-import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.Map;
 
@@ -19,15 +17,15 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
 
     private static final long serialVersionUID = 1L;
 
-    public void write(Device d, SLayoutManager l)
-            throws IOException {
+    public void write(Device d, SLayoutManager l) throws IOException {
         SScrollPaneLayout layout = (SScrollPaneLayout) l;
+        SScrollPane scrollpane = (SScrollPane) layout.getContainer();
 
         RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);
 
-        if (layout.isPaging()) {
+        if (scrollpane.getMode() != SScrollPane.MODE_COMPLETE) {
             writePaging(d, layout);
         } else {
             writeNonePaging(d, layout);
@@ -37,15 +35,11 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
     protected void writeNonePaging(Device d, SScrollPaneLayout layout) throws IOException {
         openLayouterBody(d, layout);
         d.print("<tr><td valign=\"top\"><div style=\"overflow: auto; display: none\">");
-        
+
         Map components = layout.getComponents();
         SComponent center = (SComponent) components.get(SScrollPaneLayout.VIEWPORT);
-        Scrollable scrollable = (Scrollable) center;
-        Rectangle viewportSize = scrollable.getViewportSize();
-        Rectangle scrollableViewportSize = scrollable.getScrollableViewportSize();
-        scrollable.setViewportSize(scrollableViewportSize);
+
         writeComponent(d, center);
-        scrollable.setViewportSize(viewportSize);
 
         d.print("</div></td></tr>");
         closeLayouterBody(d, layout);
@@ -142,7 +136,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
     }
 
     public int getDefaultLayoutCellVAlignment() {
-        return SConstants.NO_ALIGN;  
+        return SConstants.NO_ALIGN;
     }
 
 }

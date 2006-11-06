@@ -13,21 +13,27 @@
  */
 package org.wings;
 
-import org.wings.plaf.ListCG;
-import org.wings.style.Selector;
-import org.wings.style.CSSStyleSheet;
-import org.wings.style.CSSProperty;
-import org.wings.style.CSSAttributeSet;
+import java.awt.Color;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.Serializable;
 
+import javax.swing.AbstractListModel;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.*;
+
+import org.wings.event.SViewportChangeEvent;
+import org.wings.event.SViewportChangeListener;
+import org.wings.plaf.ListCG;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyleSheet;
+import org.wings.style.Selector;
 
 /**
  * Allows the user to select one or more objects from a list.
@@ -53,7 +59,6 @@ import java.awt.*;
  *
  * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  * @see javax.swing.ListModel
  * @see SDefaultListModel
  * @see javax.swing.ListSelectionModel
@@ -162,9 +167,9 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     private ListSelectionHandler selectionHandler;
 
     /**
-     * which extent of the component should be rendered
+     * Implementation of the {@link Scrollable} interface.
      */
-    private Rectangle viewport = null;
+    protected Rectangle viewport;
 
     /**
      * @see LowLevelEventListener#isEpochCheckEnabled()
@@ -185,6 +190,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
      * <li start="...">
      */
     protected int start = 0;
+
 
     /**
      * Construct a SList that displays the elements in the specified model.
@@ -387,6 +393,8 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
             clearSelection();
             dataModel = model;
             dataModel.addListDataListener(this);
+
+            fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
     }
@@ -487,7 +495,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
      * to the SList ListSelectionListeners.
      */
     private final class ListSelectionHandler
-            implements ListSelectionListener, Serializable {
+            implements ListSelectionListener {
 
         public void valueChanged(ListSelectionEvent e) {
             fireSelectionValueChanged(e.getFirstIndex(),
@@ -993,7 +1001,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
                 String indexString = values[i].substring(1);
                 try {
                     int index = Integer.parseInt(indexString);
-                    
+
                     // in a form all parameters are select parameters...
                     if (values[i].charAt(0) == 'a') {
                         selectedIndices.add(new Integer(index));
@@ -1040,41 +1048,76 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
         SForm.addArmedComponent(this);
     }
 
-    //-- Scrollable interface
     /**
-     * Return the scrollable viewport size.
-     *
-     * @return the scrollable viewport dimension
+     * The size of the component in respect to scrollable units.
      */
     public Rectangle getScrollableViewportSize() {
         return new Rectangle(0, 0, 1, dataModel.getSize());
     }
 
     /**
-     * Set the visible viewport size.
-     *
-     * @param d the visible viewport size
+     * Returns the actual visible part of a scrollable.
      */
-    public void setViewportSize(Rectangle d) {
-        if (isDifferent(viewport, d)) {
-            viewport = d;
+    public Rectangle getViewportSize() {
+        return viewport;
+    }
+
+    /**
+     * Sets the actual visible part of a scrollable.
+     */
+    public void setViewportSize(Rectangle newViewport) {
+        Rectangle oldViewport = viewport;
+        viewport = newViewport;
+
+        if (isDifferent(oldViewport, newViewport)) {
+            if (oldViewport == null || newViewport == null) {
+                fireViewportChanged(true);
+                fireViewportChanged(false);
+            } else {
+                if (newViewport.x != oldViewport.x || newViewport.width != oldViewport.width) {
+                    fireViewportChanged(true);
+                }
+                if (newViewport.y != oldViewport.y || newViewport.height != oldViewport.height) {
+                    fireViewportChanged(false);
+                }
+            }
             reload(ReloadManager.STATE);
         }
     }
 
     /**
-     * Return the visible viewport size.
+     * Adds the given <code>SViewportChangeListener</code> to the scrollable.
      *
-     * @return the visible viewport size
+     * @param l the listener to be added
      */
-    public final Rectangle getViewportSize() {
-        return viewport;
+    public void addViewportChangeListener(SViewportChangeListener l) {
+        addEventListener(SViewportChangeListener.class, l);
     }
 
-    public Dimension getPreferredExtent() {
-        return new Dimension(1, Math.min(getVisibleRowCount(), getModel().getSize()));
+    /**
+     * Removes the given <code>SViewportChangeListener</code> from the scrollable.
+     *
+     * @param l the listener to be removed
+     */
+    public void removeViewportChangeListener(SViewportChangeListener l) {
+        removeEventListener(SViewportChangeListener.class, l);
     }
-    //--- /Scrollable Interface
+
+    /**
+     * Notifies all listeners that have registered interest for notification
+     * on changes to this scrollable's viewport in the specified direction.
+     *
+     * @see EventListenerList
+     */
+    protected void fireViewportChanged(boolean horizontal) {
+        Object[] listeners = getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == SViewportChangeListener.class) {
+                SViewportChangeEvent event = new SViewportChangeEvent(this, horizontal);
+                ((SViewportChangeListener) listeners[i + 1]).viewportChanged(event);
+            }
+        }
+    }
 
     public void setParent(SContainer p) {
         super.setParent(p);
@@ -1120,23 +1163,21 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
         return "r" + Integer.toString(index);
     }
 
-    /**
-     * *
-     * Changes of the List Model should reflect in a reload if possible
-     */
-
+    // Changes to the model should force a reload.
     public void contentsChanged(javax.swing.event.ListDataEvent e) {
+        fireViewportChanged(false);
         reload(ReloadManager.STATE);
     }
 
     public void intervalAdded(javax.swing.event.ListDataEvent e) {
+        fireViewportChanged(false);
         reload(ReloadManager.STATE);
     }
 
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
+        fireViewportChanged(false);
         reload(ReloadManager.STATE);
     }
-
 }
 
 

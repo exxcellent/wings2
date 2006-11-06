@@ -11,7 +11,6 @@ import java.util.Map;
  * Internal layout manager used by {@link SScrollPane}
  *
  * @author hengels
- * @version $Revision$
  */
 public class SScrollPaneLayout
         extends SAbstractLayoutManager {
@@ -28,17 +27,26 @@ public class SScrollPaneLayout
     private SComponent south;
 
     Map components = new HashMap(5);
-    private boolean paging = true;
 
     public SScrollPaneLayout() {
     }
 
+    /**
+     * @deprecated Use {@link org.wings.SScrollPane#getMode()}
+     */
     public boolean isPaging() {
-        return paging;
+    	return ((SScrollPane) container).getMode() == SScrollPane.MODE_SCROLLING;
     }
 
+    /**
+     * @deprecated Use {@link org.wings.SScrollPane#setMode(int)}
+     */
     public void setPaging(boolean paging) {
-        this.paging = paging;
+    	if (paging) {
+    		((SScrollPane) container).setMode(SScrollPane.MODE_SCROLLING);
+    	} else {
+    		((SScrollPane) container).setMode(SScrollPane.MODE_COMPLETE);
+    	}
     }
 
     public void addSingletonComponent(SComponent component, Object constraint) {
@@ -74,7 +82,7 @@ public class SScrollPaneLayout
         addSingletonComponent(component, constraint);
         components.put(constraint, component);
     }
-    
+
     /**
      * Removes the component from the layout manager
      * @param c the component to be removed

@@ -45,7 +45,6 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
             }
         }
         else {
-            scrollPane.synchronizeAdjustables();
             writeContent(device, component);
         }
     }

@@ -25,6 +25,7 @@ import org.wings.plaf.CGManager;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 
 public final class ListCG extends AbstractComponentCG implements  org.wings.plaf.ListCG {
@@ -43,21 +44,21 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
     }
 
     protected void writeFormList(final Device device, final SList list) throws IOException {
-    	Object clientProperty = list.getClientProperty("onChangeSubmitListener");
-    	// If the application developer attached any ListSelectionListeners to this
-    	// SList, the surrounding form gets submitted as soon as the state / the
-    	// selection of this SList changed.
+        Object clientProperty = list.getClientProperty("onChangeSubmitListener");
+        // If the application developer attached any ListSelectionListeners to this
+        // SList, the surrounding form gets submitted as soon as the state / the
+        // selection of this SList changed.
         if (list.getListSelectionListeners().length > 0) {
             if (clientProperty == null) {
-            	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "this.form.submit();";
+                String event = JavaScriptEvent.ON_CHANGE;
+                String code = "this.form.submit();";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 list.addScriptListener(javaScriptListener);
                 list.putClientProperty("onChangeSubmitListener", javaScriptListener);
             }
         } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
-        	list.removeScriptListener((JavaScriptListener) clientProperty);
-        	list.putClientProperty("onChangeSubmitListener", null);
+            list.removeScriptListener((JavaScriptListener) clientProperty);
+            list.putClientProperty("onChangeSubmitListener", null);
         }
 
         device.print("<select");
@@ -147,8 +148,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         return stringBufferDevice;
     }
 
-    public void writeAnchorList(Device device, SList list)
-            throws IOException {
+    public void writeAnchorList(Device device, SList list) throws IOException {
         boolean renderSelection = list.getSelectionMode() != SList.NO_SELECTION;
 
         device.print("<");
@@ -162,16 +162,23 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         SListCellRenderer cellRenderer = list.getCellRenderer();
         SCellRendererPane rendererPane = list.getCellRendererPane();
 
+        Rectangle currentViewport = list.getViewportSize();
+        Rectangle maximalViewport = list.getScrollableViewportSize();
         int start = 0;
         int end = model.getSize();
+        int empty = maximalViewport != null ? maximalViewport.height : end;
 
-        java.awt.Rectangle viewport = list.getViewportSize();
-        if (viewport != null) {
-            start = viewport.y;
-            end = start + viewport.height;
+        if (currentViewport != null) {
+            start = currentViewport.y;
+            end = start + currentViewport.height;
         }
 
-        for (int i = start; i < end; i++) {
+        for (int i = start; i < end; ++i) {
+            if (i >= empty) {
+                device.print("<li class=\"empty\">&nbsp;</li>");
+                continue;
+            }
+
             boolean selected = list.isSelectedIndex(i);
 
             if (renderSelection && selected)
@@ -195,22 +202,16 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         device.print(">");
     }
 
-    public void writeInternal(final Device device,
-                      final SComponent _c)
-            throws IOException
-    {
+    public void writeInternal(final Device device, final SComponent _c) throws IOException {
         RenderHelper.getInstance(_c).forbidCaching();
 
-        //try {             try finally are expensive. Rerender once after ex not
-            SList list = (SList) _c;
-            if (list.getShowAsFormComponent()) {
-                writeFormList(device, list);
-            } else {
-                writeAnchorList(device, list);
-            }
-        //}
-        //finally {
+        SList list = (SList) _c;
+        if (list.getShowAsFormComponent()) {
+            writeFormList(device, list);
+        } else {
+            writeAnchorList(device, list);
+        }
+
         RenderHelper.getInstance(_c).allowCaching();
-        //}
     }
 }

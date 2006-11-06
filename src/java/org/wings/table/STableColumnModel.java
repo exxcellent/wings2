@@ -13,10 +13,9 @@
  */
 package org.wings.table;
 
-import org.wings.event.STableColumnModelListener;
-
-import javax.swing.event.TableColumnModelListener;
 import java.util.Collection;
+
+import org.wings.event.STableColumnModelListener;
 
 /**
  * @see  javax.swing.table.TableColumnModel
@@ -44,4 +43,18 @@ public interface STableColumnModel {
      * @return The total width of this table including the unit
      */
     String getTotalColumnWidth();
+
+    /**
+     * Adds a listener for table column model events.
+     *
+     * @param x  a <code>STableColumnModelListener</code> object
+     */
+    void addColumnModelListener(STableColumnModelListener x);
+
+    /**
+     * Removes a listener for table column model events.
+     *
+     * @param x  a <code>STableColumnModelListener</code> object
+     */
+    void removeColumnModelListener(STableColumnModelListener x);
 }

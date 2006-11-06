@@ -23,10 +23,11 @@ import org.wings.tree.STreeCellRenderer;
 
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+
+import java.awt.Rectangle;
 import java.io.IOException;
 
-public final class TreeCG extends AbstractComponentCG implements
-        org.wings.plaf.TreeCG {
+public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.TreeCG {
     private static final long serialVersionUID = 1L;
     private SIcon collapseControlIcon;
     private SIcon emptyFillIcon;
@@ -79,7 +80,7 @@ public final class TreeCG extends AbstractComponentCG implements
         this.renderSelectableCells = renderSelectableCells;
     }
 
-    private void writeIcon(Device device, SIcon icon, boolean nullBorder) throws IOException {
+    private void writeIcon(Device device, SIcon icon) throws IOException {
         if (icon == null) {
             return;
         }
@@ -175,14 +176,14 @@ public final class TreeCG extends AbstractComponentCG implements
 
     private void renderControlIcon(Device device, boolean leaf, boolean expanded) throws IOException {
         if (leaf) {
-            writeIcon(device, leafControlIcon, false);
+            writeIcon(device, leafControlIcon);
         }
         else if (expanded) {
             if (collapseControlIcon == null) {
                 device.print("-");
             }
             else {
-                writeIcon(device, collapseControlIcon, true);
+                writeIcon(device, collapseControlIcon);
             }
         }
         else {
@@ -190,7 +191,7 @@ public final class TreeCG extends AbstractComponentCG implements
                 device.print("+");
             }
             else {
-                writeIcon(device, expandControlIcon, true);
+                writeIcon(device, expandControlIcon);
             }
         }
     }
@@ -199,30 +200,36 @@ public final class TreeCG extends AbstractComponentCG implements
         return parentElement == null || model.getIndexOfChild(parentElement, element) == model.getChildCount(parentElement) - 1;
     }
 
-    public void writeInternal(final Device device, final SComponent _c)
-            throws IOException
-    {
+    public void writeInternal(final Device device, final SComponent _c) throws IOException {
         RenderHelper.getInstance(_c).forbidCaching();
 
-        final STree component = (STree) _c;
-        int start = 0;
-        int count = component.getRowCount();
+        final STree tree = (STree) _c;
 
-        java.awt.Rectangle viewport = component.getViewportSize();
-        if (viewport != null) {
-            start = viewport.y;
-            count = viewport.height;
+        Rectangle currentViewport = tree.getViewportSize();
+        Rectangle maximalViewport = tree.getScrollableViewportSize();
+        int start = 0;
+        int end = tree.getRowCount();
+        int empty = maximalViewport != null ? maximalViewport.height : end;
+
+        if (currentViewport != null) {
+            start = currentViewport.y;
+            end = start + currentViewport.height;
         }
 
-        final int depth = component.getMaximumExpandedDepth();
+        final int depth = tree.getMaximumExpandedDepth();
 
         device.print("<table");
-        writeAllAttributes(device, component);
+        writeAllAttributes(device, tree);
         device.print(">");
 
-        for (int i = start; i < start + count; ++i) {
-            writeTreeNode(component, device, i, depth);
+        for (int i = start; i < end; ++i) {
+            if (i >= empty) {
+                device.print("<tr><td class=\"empty\">&nbsp;</td></tr>");
+                continue;
+            }
+            writeTreeNode(tree, device, i, depth);
         }
+
         device.print("</table>");
 
         RenderHelper.getInstance(_c).allowCaching();
