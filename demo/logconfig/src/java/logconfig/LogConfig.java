@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -19,6 +18,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -49,16 +49,18 @@ import org.wings.SGridLayout;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SList;
+import org.wings.SPageScroller;
 import org.wings.SPanel;
 import org.wings.SRadioButton;
+import org.wings.SScrollBar;
 import org.wings.SScrollPane;
 import org.wings.SSpacer;
+import org.wings.STable;
 import org.wings.STemplateLayout;
 import org.wings.STextArea;
 import org.wings.STextField;
 import org.wings.STree;
 import org.wings.SURLIcon;
-import org.wings.border.SLineBorder;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
 import org.wings.header.Link;
@@ -100,7 +102,7 @@ public class LogConfig {
     private SButton bu_commitChanges;
 
     public LogConfig() {
-    	final String configFile = SessionManager.getSession().getProperty("log4j.xml.path").toString();
+        final String configFile = SessionManager.getSession().getProperty("log4j.xml.path").toString();
         try {
             SAXReader reader = new SAXReader(false);
             reader.setEntityResolver(new EntityResolver() {
@@ -123,7 +125,7 @@ public class LogConfig {
 
         tr_domTree = new STree(treeModel);
         tr_domTree.setCellRenderer(new DomRenderer());
-        tr_domTree.setPreferredSize(SDimension.FULLAREA);
+        tr_domTree.setPreferredSize(SDimension.FULLWIDTH);
         tr_domTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tr_domTree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent tse) {
@@ -146,22 +148,21 @@ public class LogConfig {
 
         sp_tree = new SScrollPane(tr_domTree);
         sp_tree.setStyle(sp_tree.getStyle() + " sp_tree");
-        sp_tree.setVerticalAlignment(SConstants.TOP_ALIGN);
         sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
-        sp_tree.setVerticalExtent(30);
+        sp_tree.setVerticalAlignment(SConstants.TOP_ALIGN);
         sp_tree.getVerticalScrollBar().setBlockIncrement(3);
-        //sp_tree.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        //sp_tree.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        sp_tree.setVerticalExtent(30);
+        sp_tree.setHorizontalExtent(5);
 
         SButtonGroup bg_insertOrUpdate = new SButtonGroup();
         rb_insertNode = new SRadioButton("Insert node");
         rb_insertNode.setSelected(true);
         rb_insertNode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-				if (rb_insertNode.isSelected()) {
+                if (rb_insertNode.isSelected()) {
                   clearEditFields();
               }
-			}
+            }
         });
         rb_updateNode = new SRadioButton("Update node");
         rb_updateNode.setEnabled(false);
@@ -316,54 +317,54 @@ public class LogConfig {
 
         // TESTING ON-CHANGE-SUBMIT-LISTENERS
         if (false) {
-        	bg_insertOrUpdate.addActionListener(new ActionListener() {
+            bg_insertOrUpdate.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                	log.info("ActionListener of ButtonGroup!!!");
+                    log.info("ActionListener of ButtonGroup!!!");
                 }
             });
-        	cb_editAdditivityFlag.addItemListener(new ItemListener() {
-            	public void itemStateChanged(ItemEvent e) {
-            		log.info("ItemListener of ComboBox!!!");
-    			}
+            cb_editAdditivityFlag.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    log.info("ItemListener of ComboBox!!!");
+                }
             });
-        	li_editAppenderRef.addListSelectionListener(new ListSelectionListener() {
-    			public void valueChanged(ListSelectionEvent e) {
-    				log.info("ListSelectionListener of List!!!");
-    			}
+            li_editAppenderRef.addListSelectionListener(new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e) {
+                    log.info("ListSelectionListener of List!!!");
+                }
             });
-        	tf_editCategoryName.addDocumentListener(new SDocumentListener() {
-				public void changedUpdate(SDocumentEvent e) {
-					log.info("DocumentListener of TextField - changed!!!");
-				}
-				public void insertUpdate(SDocumentEvent e) {
-					log.info("DocumentListener of TextField - insert!!!");
-				}
-				public void removeUpdate(SDocumentEvent e) {
-					log.info("DocumentListener of TextField - remove!!!");
-				}
-        	});
+            tf_editCategoryName.addDocumentListener(new SDocumentListener() {
+                public void changedUpdate(SDocumentEvent e) {
+                    log.info("DocumentListener of TextField - changed!!!");
+                }
+                public void insertUpdate(SDocumentEvent e) {
+                    log.info("DocumentListener of TextField - insert!!!");
+                }
+                public void removeUpdate(SDocumentEvent e) {
+                    log.info("DocumentListener of TextField - remove!!!");
+                }
+            });
         }
 
         SContainer pa_content = fr_frame.getContentPane();
         pa_content.setStyle(pa_content.getStyle() + " pa_content");
 
-		try {
-			java.net.URL templateURL = SessionManager.getSession()
-				.getServletContext().getResource("/templates/main.thtml");
-			if (templateURL == null) {
-				pa_content.add(new SLabel("Could not find template file!"));
-				return;
-			}
-			pa_content.setLayout(new STemplateLayout(templateURL));
-		} catch (java.io.IOException ex) {
-			log.error("Could not find template file!", ex);
-		}
+        try {
+            java.net.URL templateURL = SessionManager.getSession()
+                .getServletContext().getResource("/templates/main.thtml");
+            if (templateURL == null) {
+                pa_content.add(new SLabel("Could not find template file!"));
+                return;
+            }
+            pa_content.setLayout(new STemplateLayout(templateURL));
+        } catch (java.io.IOException ex) {
+            log.error("Could not find template file!", ex);
+        }
 
-		pa_content.add(pa_application, "application");
-		pa_content.add(createAjaxDebuggingPanel(), "debugging");
-		fr_frame.addHeader(new Link("stylesheet", null, "text/css", null,
+        pa_content.add(pa_application, "application");
+        pa_content.add(createAjaxDebuggingPanel(), "debugging");
+        fr_frame.addHeader(new Link("stylesheet", null, "text/css", null,
                 new DefaultURLResource("../css/custom.css")));
-		fr_frame.setVisible(true);
+        fr_frame.setVisible(true);
     }
 
 //	private Vector getExpandedPaths() {
@@ -483,8 +484,8 @@ public class LogConfig {
     }
 
     private void resetStatusLabel() {
-    	la_status.setText("  Usage: Insert, update or delete category nodes by means of the" +
-    			" according widgets - then commit all changes to 'log4j.xml'.");
+        la_status.setText("  Usage: Insert, update or delete category nodes by means of the" +
+                " according widgets - then commit all changes to 'log4j.xml'.");
     }
 
     private Element getSelectedCategory() {
@@ -503,13 +504,13 @@ public class LogConfig {
     }
 
     private SComponent verticalSpace(int height) {
-    	SLabel label = new SLabel();
-    	label.setAttribute(CSSProperty.HEIGHT, height + "px");
-    	return label;
+        SLabel label = new SLabel();
+        label.setAttribute(CSSProperty.HEIGHT, height + "px");
+        return label;
     }
 
     private SPanel createControlPanel(String title) {
-    	SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.VERTICAL);
+        SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.VERTICAL);
         boxLayout.setHgap(20);
         boxLayout.setVgap(5);
 
@@ -545,8 +546,7 @@ public class LogConfig {
                 "Frame: incrementalUpdateHighlight = ",
                 "Form: completeUpdateForced = ",
                 "Tree: completeUpdateForced = ",
-                "Link: completeUpdateForced = ",
-                "ScrollPane: paging = "
+                "Link: completeUpdateForced = "
         };
 
         selected = fr_frame.isIncrementalUpdateEnabled();
@@ -620,23 +620,138 @@ public class LogConfig {
             }
         });
 
-//        selected = sp_tree.isPaging();
-//        final SCheckBox cb_toggleScrollPanePaging =
-//            new SCheckBox(cb_texts[6] + selected, selected);
-//        cb_toggleScrollPanePaging.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                boolean state = sp_tree.isPaging();
-//                sp_tree.setPaging(!state);
-//                cb_toggleScrollPanePaging.setText(cb_texts[6]  + !state);
-//                if (sp_tree.isPaging()) {
-//                	sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
-//                	sp_tree.setVerticalExtent(30);
-//                } else {
-//                	sp_tree.setPreferredSize(new SDimension(477, 482));
-//                }
-//
-//            }
-//        });
+        String[] scrollables = {"Scrollable: tree of log4j.xml",
+                "Scrollable: table of random items", "Scrollable: list of random items"};
+        final SComboBox cb_changeScrollable = new SComboBox(scrollables);
+        cb_changeScrollable.setPreferredSize(IN_DIM);
+        cb_changeScrollable.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newPolicy = cb_changeScrollable.getSelectedIndex();
+                switch (newPolicy) {
+                case 0:
+                    sp_tree.setViewportView(tr_domTree);
+                    break;
+                case 1:
+                    sp_tree.setViewportView(createTestTable());
+                    break;
+                case 2:
+                    sp_tree.setViewportView(createTestList());
+                    break;
+                }
+            }
+        });
+
+        String[] scrollpaneModes = {"ScrollPane Mode: scrolling",
+                "ScrollPane Mode: complete", "ScrollPane Mode: paging"};
+        final SComboBox cb_changeScrollPaneMode = new SComboBox(scrollpaneModes);
+        cb_changeScrollPaneMode.setPreferredSize(IN_DIM);
+        cb_changeScrollPaneMode.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newMode = cb_changeScrollPaneMode.getSelectedIndex();
+                switch (newMode) {
+                case 0:
+                    sp_tree.setMode(SScrollPane.MODE_SCROLLING);
+                    sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
+                    break;
+                case 1:
+                    sp_tree.setMode(SScrollPane.MODE_COMPLETE);
+                    sp_tree.setPreferredSize(new SDimension(477, 482));
+                    break;
+                case 2:
+                    sp_tree.setMode(SScrollPane.MODE_PAGING);
+                    sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
+                    break;
+                }
+            }
+        });
+
+        final SPageScroller horizontalPageScroller = new SPageScroller(SPageScroller.VERTICAL);
+        horizontalPageScroller.setLayoutMode(SPageScroller.HORIZONTAL);
+        String[] horizontalScrollbars = {"H-ScrollBar: scrollbar",
+                "H-ScrollBar: pagescroller", "H-ScrollBar: null"};
+        final SComboBox cb_changeHScrollBar = new SComboBox(horizontalScrollbars);
+        cb_changeHScrollBar.setPreferredSize(IN_DIM);
+        cb_changeHScrollBar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newScrollbar = cb_changeHScrollBar.getSelectedIndex();
+                switch (newScrollbar) {
+                case 0:
+                    sp_tree.setHorizontalScrollBar(new SScrollBar(SScrollBar.HORIZONTAL));
+                    break;
+                case 1:
+                    sp_tree.setHorizontalScrollBar(horizontalPageScroller);
+                    break;
+                case 2:
+                    sp_tree.setHorizontalScrollBar(null);
+                    break;
+                }
+            }
+        });
+
+        final SPageScroller verticalPageScroller = new SPageScroller(SPageScroller.HORIZONTAL);
+        verticalPageScroller.setLayoutMode(SPageScroller.VERTICAL);
+        String[] verticalScrollbars = {"V-ScrollBar: scrollbar",
+                "V-ScrollBar: pagescroller", "V-ScrollBar: null"};
+        final SComboBox cb_changeVScrollBar = new SComboBox(verticalScrollbars);
+        cb_changeVScrollBar.setPreferredSize(IN_DIM);
+        cb_changeVScrollBar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newScrollbar = cb_changeVScrollBar.getSelectedIndex();
+                switch (newScrollbar) {
+                case 0:
+                    sp_tree.setVerticalScrollBar(new SScrollBar(SScrollBar.VERTICAL));
+                    break;
+                case 1:
+                    sp_tree.setVerticalScrollBar(verticalPageScroller);
+                    break;
+                case 2:
+                    sp_tree.setVerticalScrollBar(null);
+                    break;
+                }
+            }
+        });
+
+        String[] horizontalPolicies = {"H-ScrollBar Policy: as needed",
+                "H-ScrollBar Policy: always", "H-ScrollBar Policy: never"};
+        final SComboBox cb_changeHScrollBarPolicy = new SComboBox(horizontalPolicies);
+        cb_changeHScrollBarPolicy.setPreferredSize(IN_DIM);
+        cb_changeHScrollBarPolicy.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newPolicy = cb_changeHScrollBarPolicy.getSelectedIndex();
+                switch (newPolicy) {
+                case 0:
+                    sp_tree.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    break;
+                case 1:
+                    sp_tree.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                    break;
+                case 2:
+                    sp_tree.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                    break;
+                }
+            }
+        });
+
+        String[] verticalPolicies = {"V-ScrollBar Policy: as needed",
+                "V-ScrollBar Policy: always", "V-ScrollBar Policy: never"};
+        final SComboBox cb_changeVScrollBarPolicy = new SComboBox(verticalPolicies);
+        cb_changeVScrollBarPolicy.setPreferredSize(IN_DIM);
+        cb_changeVScrollBarPolicy.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newPolicy = cb_changeVScrollBarPolicy.getSelectedIndex();
+                switch (newPolicy) {
+                case 0:
+                    sp_tree.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                    break;
+                case 1:
+                    sp_tree.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                    break;
+                case 2:
+                    sp_tree.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_NEVER);
+                    break;
+                }
+            }
+        });
 
         final SButton bu_markFrameDirty = new SButton("Reload the entire frame / mark it dirty!");
         bu_markFrameDirty.addActionListener(new ActionListener() {
@@ -658,40 +773,34 @@ public class LogConfig {
         bu_forceServerError.setName("force_error");
 
         String text = "This TextArea is just for debugging the 'onChangeSubmit'-behavior." +
-        		" If you want to test this behavior for other components too, you have to" +
-        		" enable the according switches within the source code of this application.";
+                " If you want to test this behavior for other components too, you have to" +
+                " enable the according switches within the source code of this application.";
         STextArea ta_testTextArea = new STextArea(text);
         ta_testTextArea.setRows(4);
         ta_testTextArea.setPreferredSize(IN_DIM);
         ta_testTextArea.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ta_testTextArea.addDocumentListener(new SDocumentListener() {
-			public void changedUpdate(SDocumentEvent e) {
-				log.info("DocumentListener of TextArea - changed!!!");
-			}
-			public void insertUpdate(SDocumentEvent e) {
-				log.info("DocumentListener of TextArea - insert!!!");
-			}
-			public void removeUpdate(SDocumentEvent e) {
-				log.info("DocumentListener of TextArea - remove!!!");
-			}
-		});
-
-        ArrayList listData = new ArrayList();
-        for (int i = 1; i <= 5; ++i) listData.add("This is list item number " + i);
-        SScrollPane sp_testList = new SScrollPane(new SList(new SDefaultListModel(listData)));
-        sp_testList.setVerticalExtent(10);
-        sp_testList.setPreferredSize(IN_DIM);
+            public void changedUpdate(SDocumentEvent e) {
+                log.info("DocumentListener of TextArea - changed!!!");
+            }
+            public void insertUpdate(SDocumentEvent e) {
+                log.info("DocumentListener of TextArea - insert!!!");
+            }
+            public void removeUpdate(SDocumentEvent e) {
+                log.info("DocumentListener of TextArea - remove!!!");
+            }
+        });
 
         final SAnchor an_toggleAjaxDebugging = new SAnchor();
         an_toggleAjaxDebugging.addScriptListener(new JavaScriptListener(
-        		JavaScriptEvent.ON_CLICK,
-        		"var debug = document.getElementById('ajaxDebugging');" +
-        		"if (debug == null) alert('The AJAX debugging view has not been enabled yet!');" +
-        		"else {" +
-        		"  if (debug.style.display == 'block') hideAjaxDebugging();" +
-        		"  else showAjaxDebugging();" +
-        		"}" +
-        		"return false;"
+                JavaScriptEvent.ON_CLICK,
+                "var debug = document.getElementById('ajaxDebugging');" +
+                "if (debug == null) alert('The AJAX debugging view has not been enabled yet!');" +
+                "else {" +
+                "  if (debug.style.display == 'block') hideAjaxDebugging();" +
+                "  else showAjaxDebugging();" +
+                "}" +
+                "return false;"
         ));
         an_toggleAjaxDebugging.add(new SLabel("Show/hide the AJAX debugging view (if enabled)"));
 
@@ -702,7 +811,6 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFormCompleteUpdate);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleTreeCompleteUpdate);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleCheckboxTest);
-//        addToAjaxDebuggingPanel(pa_debug, cb_toggleScrollPanePaging);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, bu_markFrameDirty);
@@ -713,10 +821,15 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, createRandomResultPanel());
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollable);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollPaneMode);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBar);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBar);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBarPolicy);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBarPolicy);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, sp_testList);
+        addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, an_toggleAjaxDebugging);
@@ -725,8 +838,8 @@ public class LogConfig {
     }
 
     private void addToAjaxDebuggingPanel(SPanel debug, SComponent component) {
-    	component.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    	component.setShowAsFormComponent(false);
+        component.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        component.setShowAsFormComponent(false);
         debug.add(component);
     }
 
@@ -777,6 +890,39 @@ public class LogConfig {
             panel.add(label);
         }
         return panel;
+    }
+
+    private STable createTestTable() {
+        final int rows = 50;
+        final int cols = new Random().nextInt(15);
+
+        String[] colNames = new String[cols];
+        for (int c = 0; c < cols; ++c) {
+            colNames[c] = "Column " + (c + 1);
+        }
+
+        String[][] modelData = new String[rows][cols];
+        for (int r = 0; r < rows; ++r) {
+            for (int c = 0; c < cols; ++c) {
+                modelData[r][c] = "Item " + (r + 1) + "/" + (c + 1);
+            }
+        }
+
+        return new STable(new DefaultTableModel(modelData, colNames));
+    }
+
+    private SList createTestList() {
+        final int rows = 50;
+
+        String[] modelData = new String[rows];
+        for (int i = 0; i < rows; ++i) {
+            modelData[i] = "This is list item number " + (i + 1);
+        }
+
+        SList li_testList = new SList(new SDefaultListModel(modelData));
+        li_testList.setShowAsFormComponent(false);
+
+        return li_testList;
     }
 
 }

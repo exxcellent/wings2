@@ -264,11 +264,11 @@ public final class TableCG
 
             Rectangle currentViewport = table.getViewportSize();
             Rectangle maximalViewport = table.getScrollableViewportSize();
-    		int startX = 0;
-    		int endX = table.getVisibleColumnCount();
-    		int startY = 0;
-    		int endY = table.getRowCount();
-    		int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
+            int startX = 0;
+            int endX = table.getVisibleColumnCount();
+            int startY = 0;
+            int endY = table.getRowCount();
+            int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
 
             if (currentViewport != null) {
                 startX = currentViewport.x;
@@ -321,7 +321,7 @@ public final class TableCG
                 if (!column.isHidden())
                     writeCol(device, column.getWidth());
                 else
-                	++endX;
+                    ++endX;
             }
             device.print("</colgroup>");
             Utils.printNewline(device, table);
@@ -353,7 +353,7 @@ public final class TableCG
     }
 
     private void writeBody(CachingDevice device, STable table,
-    		int startX, int endX, int startY, int endY, int emptyIndex) throws IOException {
+            int startX, int endX, int startY, int endY, int emptyIndex) throws IOException {
         final SListSelectionModel selectionModel = table.getSelectionModel();
 
         SStringBuilder selectedArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_SELECTED));
@@ -363,35 +363,34 @@ public final class TableCG
         STableColumnModel columnModel = table.getColumnModel();
 
         for (int r = startY; r < endY; ++r) {
-        	if (r >= emptyIndex) {
-        		device.print("<tr class=\"empty\">");
-        	} else {
-	            String rowStyle = table.getRowStyle(r);
-	            SStringBuilder rowClass = new SStringBuilder(rowStyle != null ? rowStyle + " " : "");
-	            device.print("<tr");
-	            if (selectionModel.isSelectedIndex(r)) {
-	                Utils.optAttribute(device, "style", selectedArea);
-	                rowClass.append("selected ");
-	            }
-	            else if (r % 2 != 0)
-	                Utils.optAttribute(device, "style", oddArea);
-	            else
-	                Utils.optAttribute(device, "style", evenArea);
+            if (r >= emptyIndex) {
+                int colspan = endX - startX;
+                device.print("<tr>\n");
+                device.print("  <td class=\"empty\"></td>\n");
+                device.print("  <td class=\"empty\" colspan=\"" + colspan + "\">&nbsp;</td>\n");
+                device.print("</tr>\n");
+                continue;
+            }
 
-	            rowClass.append(r % 2 != 0 ? "odd" : "even");
-	            Utils.optAttribute(device, "class", rowClass);
-	            device.print(">");
+            String rowStyle = table.getRowStyle(r);
+            SStringBuilder rowClass = new SStringBuilder(rowStyle != null ? rowStyle + " " : "");
+            device.print("<tr");
+            if (selectionModel.isSelectedIndex(r)) {
+                Utils.optAttribute(device, "style", selectedArea);
+                rowClass.append("selected ");
+            }
+            else if (r % 2 != 0)
+                Utils.optAttribute(device, "style", oddArea);
+            else
+                Utils.optAttribute(device, "style", evenArea);
 
-	            writeSelectionBody(device, table, rendererPane, r);
-        	}
+            rowClass.append(r % 2 != 0 ? "odd" : "even");
+            Utils.optAttribute(device, "class", rowClass);
+            device.print(">");
+
+            writeSelectionBody(device, table, rendererPane, r);
 
             for (int c = startX; c < endX; ++c) {
-            	if (r >= emptyIndex) {
-            		String placeholder = c == 0? "nbsp;" : "";
-            		device.print("<td col=\"" + c + "\" class=\"cell empty\">" + placeholder + "</td>");
-            		continue;
-            	}
-
                 STableColumn column = columnModel.getColumn(c);
                 if (!column.isHidden())
                     renderCellContent(device, table, rendererPane, r, c);

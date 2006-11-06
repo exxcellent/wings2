@@ -13,7 +13,6 @@
  */
 package org.wings;
 
-import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import org.wings.event.SViewportChangeListener;
@@ -48,11 +47,6 @@ public interface Scrollable {
      * Sets the actual visible part of a scrollable.
      */
     void setViewportSize(Rectangle d);
-
-    /**
-     * If scrolling is activated, the component can suggest it's extent.
-     */
-    Dimension getPreferredExtent();
 
     /**
      * Adds the given <code>SViewportChangeListener</code> to the scrollable.

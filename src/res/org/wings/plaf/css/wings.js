@@ -9,17 +9,17 @@
 
 // faking a namespace
 if (!wingS) {
-	var wingS = new Object();
+    var wingS = new Object();
 }
 else if (typeof wingS != "object") {
-	throw new Error("wingS already exists and is not an object");
+    throw new Error("wingS already exists and is not an object");
 }
 
 if (!wingS.util) {
-	wingS.util = new Object();
+    wingS.util = new Object();
 }
 else if (typeof wingS.util != "object") {
-	throw new Error("wingS.util already exists and is not an object");
+    throw new Error("wingS.util already exists and is not an object");
 }
 
 // =============================================================================
@@ -82,7 +82,7 @@ wingS.util.preventSubmit = function() {
  * @param {Object} refChild node to insert after
  */
 wingS.util.insertAfter = function(newChild, refChild) {
-	refChild.parentNode.insertBefore(newChild, refChild.nextSibling);
+    refChild.parentNode.insertBefore(newChild, refChild.nextSibling);
 };
 
 /**
@@ -94,12 +94,12 @@ wingS.util.insertAfter = function(newChild, refChild) {
  * @param {Object} obj new execution context
  */
 Function.prototype.bind = function(obj) {
-	var method = this;
-	temp = function() {
-		return method.apply(obj, arguments);
-   	};
+    var method = this;
+    temp = function() {
+        return method.apply(obj, arguments);
+    };
 
-  	return temp;
+    return temp;
 }
 
 // =============================================================================
@@ -128,6 +128,7 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
     }
 
     if (invokeScriptListeners(scriptCodes)) {
+
         if (form != null) {
             // Generate unique IDs for the nodes we have to insert
             // dynamically into the form (workaround because of IE)
@@ -191,7 +192,18 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
             // Default form submit (fallback mechanism)
             if (!submitted) form.submit();
         } else {
-            // If there's no form we can't submit it...
+            // If we've got a form, it might be alright to submit it
+            // without having an "eventName" or "eventValue". This is
+            // because all form components are automatically in their
+            // "correct" state BEFORE the submit takes place - this is
+            // the way HTML functions. However, if we've got no form,
+            // we need to send the name and the value of the component
+            // which generated the event we want to process. Let's go!
+            if (eventName == null) {
+                eventName = target.getAttribute("id");
+                var eventNode = document.getElementById(eventName);
+                if (eventNode.value) eventValue = eventNode.value;
+            }
             followLink(ajaxEnabled, eventName, eventValue);
         }
     }
@@ -213,7 +225,7 @@ function followLink(ajaxEnabled, eventName, eventValue, scriptCodes) {
             args.url = encodeUpdateId(incrementalUpdateId);
             doAjaxRequest(args);
         } else {
-            // Send a default request
+            // Send a default HTTP request
             url = encodeUpdateId(completeUpdateId);
             window.location.href = url + "?event_epoch=" + event_epoch +
                                          "&" + eventName + "=" + eventValue;
@@ -676,7 +688,7 @@ function layoutScrollPaneIE(outerId) {
 }
 
 function layoutAvailableSpaceIE(tableId) {
-	var table = document.getElementById(tableId);
+    var table = document.getElementById(tableId);
     if (table == null || table.style.height == table.getAttribute("layoutHeight")) return;
 
     var consumedHeight = 0;

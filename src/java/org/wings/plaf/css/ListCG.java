@@ -44,21 +44,21 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
     }
 
     protected void writeFormList(final Device device, final SList list) throws IOException {
-    	Object clientProperty = list.getClientProperty("onChangeSubmitListener");
-    	// If the application developer attached any ListSelectionListeners to this
-    	// SList, the surrounding form gets submitted as soon as the state / the
-    	// selection of this SList changed.
+        Object clientProperty = list.getClientProperty("onChangeSubmitListener");
+        // If the application developer attached any ListSelectionListeners to this
+        // SList, the surrounding form gets submitted as soon as the state / the
+        // selection of this SList changed.
         if (list.getListSelectionListeners().length > 0) {
             if (clientProperty == null) {
-            	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "submitForm(" + !list.isCompleteUpdateForced() + ",event);";
+                String event = JavaScriptEvent.ON_CHANGE;
+                String code = "submitForm(" + !list.isCompleteUpdateForced() + ",event);";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 list.addScriptListener(javaScriptListener);
                 list.putClientProperty("onChangeSubmitListener", javaScriptListener);
             }
         } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
-        	list.removeScriptListener((JavaScriptListener) clientProperty);
-        	list.putClientProperty("onChangeSubmitListener", null);
+            list.removeScriptListener((JavaScriptListener) clientProperty);
+            list.putClientProperty("onChangeSubmitListener", null);
         }
 
         device.print("<select");
@@ -166,7 +166,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         Rectangle maximalViewport = list.getScrollableViewportSize();
         int start = 0;
         int end = model.getSize();
-        int fill = maximalViewport != null ? maximalViewport.height : end;
+        int empty = maximalViewport != null ? maximalViewport.height : end;
 
         if (currentViewport != null) {
             start = currentViewport.y;
@@ -174,10 +174,10 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         }
 
         for (int i = start; i < end; ++i) {
-        	if (i >= fill) {
-        		device.print("<li>---</li>");
-        		continue;
-        	}
+            if (i >= empty) {
+                device.print("<li class=\"empty\">&nbsp;</li>");
+                continue;
+            }
 
             boolean selected = list.isSelectedIndex(i);
 
@@ -203,15 +203,15 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
     }
 
     public void writeInternal(final Device device, final SComponent _c) throws IOException {
-		RenderHelper.getInstance(_c).forbidCaching();
+        RenderHelper.getInstance(_c).forbidCaching();
 
-		SList list = (SList) _c;
-		if (list.getShowAsFormComponent()) {
-			writeFormList(device, list);
-		} else {
-			writeAnchorList(device, list);
-		}
+        SList list = (SList) _c;
+        if (list.getShowAsFormComponent()) {
+            writeFormList(device, list);
+        } else {
+            writeAnchorList(device, list);
+        }
 
-		RenderHelper.getInstance(_c).allowCaching();
-	}
+        RenderHelper.getInstance(_c).allowCaching();
+    }
 }

@@ -13,12 +13,12 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(Device device, SComponent component) throws IOException {
-    	SScrollPane scrollpane = (SScrollPane) component;
+        SScrollPane scrollpane = (SScrollPane) component;
 
         boolean requiresFillBehaviour = false;
         SDimension preferredSize = scrollpane.getPreferredSize();
         if (preferredSize != null) {
-        	String height = preferredSize.getHeight();
+            String height = preferredSize.getHeight();
             if (height != null) requiresFillBehaviour = true;
         }
         if (!requiresFillBehaviour) {
@@ -26,16 +26,16 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
             return;
         }
 
-        if (scrollpane.getMode() != SScrollPane.MODE_COMPLETE) {
-            writeContent(device, component);
-        } else {
+        if (scrollpane.getMode() == SScrollPane.MODE_COMPLETE) {
             if (preferredSize == null) {
-            	scrollpane.setPreferredSize(new SDimension("100%", "300px"));
+                scrollpane.setPreferredSize(new SDimension(200, 400));
             } else {
-	            if (preferredSize.getWidthInt() < 0) preferredSize.setWidth("100%");
-	            if (preferredSize.getHeightInt() < 0) preferredSize.setHeight("300px");
+                if (preferredSize.getWidthInt() < 0) preferredSize.setWidth(200);
+                if (preferredSize.getHeightInt() < 0) preferredSize.setHeight(400);
             }
 
+            writeContent(device, component);
+        } else {
             writeContent(device, component);
         }
     }
@@ -47,7 +47,7 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
         SDimension preferredSize = scrollpane.getPreferredSize();
         String height = null;
         if (preferredSize != null) {
-        	height = preferredSize.getHeight();
+            height = preferredSize.getHeight();
             if (height != null) requiresFillBehaviour = true;
         }
 

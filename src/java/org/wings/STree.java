@@ -13,7 +13,6 @@
  */
 package org.wings;
 
-import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -132,7 +131,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
     protected transient AbstractLayoutCache treeState = new VariableHeightLayoutCache();
 
     /**
-     * Implementation of the  {@link Scrollable} interface.
+     * Implementation of the {@link Scrollable} interface.
      */
     protected Rectangle viewport;
 
@@ -141,14 +140,14 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
 
 
     /**
-	 * used to forward selection events to selection listeners of the tree
-	 */
-	private final TreeSelectionListener fwdSelectionEvents = new TreeSelectionListener() {
-		public void valueChanged(TreeSelectionEvent e) {
-			fireTreeSelectionEvent(e);
-			reload(ReloadManager.STATE);
-		}
-	};
+     * used to forward selection events to selection listeners of the tree
+     */
+    private final TreeSelectionListener fwdSelectionEvents = new TreeSelectionListener() {
+        public void valueChanged(TreeSelectionEvent e) {
+            fireTreeSelectionEvent(e);
+            reload(ReloadManager.STATE);
+        }
+    };
 
     public STree(TreeModel model) {
         super();
@@ -480,8 +479,8 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
             if (!model.isLeaf(model.getRoot()))
                 treeState.setExpandedState(new TreePath(model.getRoot()), true);
 
-            fireViewportChanged(true);
             fireViewportChanged(false);
+            reload(ReloadManager.STATE);
         }
     }
 
@@ -874,18 +873,14 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
     public void expandRow(TreePath p) {
         treeState.setExpandedState(p, true);
 
-        int childCount = model.getChildCount(p.getLastPathComponent());
-//		if (getScrollableViewportSize() != null)
-//			getScrollableViewportSize().height += childCount;
+        if (getViewportSize() != null) {
+            Rectangle area = new Rectangle(getViewportSize());
+            area.y = treeState.getRowForPath(p);
+            area.height = model.getChildCount(p.getLastPathComponent()) + 1;
+            scrollRectToVisible(area);
+        }
 
-		if (getViewportSize() != null) {
-			Rectangle area = new Rectangle(getViewportSize());
-			area.y = treeState.getRowForPath(p);
-			area.height = childCount + 1;
-			scrollRectToVisible(area);
-		}
-
-		fireTreeExpanded(p);
+        fireTreeExpanded(p);
         reload(ReloadManager.STATE);
     }
 
@@ -895,10 +890,6 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
 
     public void collapseRow(TreePath p) {
         treeState.setExpandedState(p, false);
-
-//        int childCount = model.getChildCount(p.getLastPathComponent());
-//        if (getScrollableViewportSize() != null)
-//			getScrollableViewportSize().height -= childCount;
 
         fireTreeCollapsed(p);
         reload(ReloadManager.STATE);
@@ -1084,32 +1075,23 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
      * Sets the actual visible part of a scrollable.
      */
     public void setViewportSize(Rectangle newViewport) {
-    	Rectangle oldViewport = viewport;
+        Rectangle oldViewport = viewport;
         viewport = newViewport;
 
         if (isDifferent(oldViewport, newViewport)) {
-        	if (oldViewport == null || newViewport == null) {
-        		fireViewportChanged(true);
-        		fireViewportChanged(false);
-        	} else {
-				if (newViewport.x != oldViewport.x ||
-						newViewport.width != oldViewport.width) {
-					fireViewportChanged(true);
-				}
-				if (newViewport.y != oldViewport.y ||
-						newViewport.height != oldViewport.height) {
-					fireViewportChanged(false);
-				}
-			}
+            if (oldViewport == null || newViewport == null) {
+                fireViewportChanged(true);
+                fireViewportChanged(false);
+            } else {
+                if (newViewport.x != oldViewport.x || newViewport.width != oldViewport.width) {
+                    fireViewportChanged(true);
+                }
+                if (newViewport.y != oldViewport.y || newViewport.height != oldViewport.height) {
+                    fireViewportChanged(false);
+                }
+            }
             reload(ReloadManager.STATE);
         }
-    }
-
-    /**
-     * If scrolling is activated, the component can suggest it's extent.
-     */
-    public Dimension getPreferredExtent() {
-        return new Dimension(1, 20);
     }
 
     /**

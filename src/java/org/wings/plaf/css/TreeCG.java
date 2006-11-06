@@ -207,9 +207,9 @@ public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.
 
         Rectangle currentViewport = tree.getViewportSize();
         Rectangle maximalViewport = tree.getScrollableViewportSize();
-		int start = 0;
-		int end = tree.getRowCount();
-		int fill = maximalViewport != null ? maximalViewport.height : end;
+        int start = 0;
+        int end = tree.getRowCount();
+        int empty = maximalViewport != null ? maximalViewport.height : end;
 
         if (currentViewport != null) {
             start = currentViewport.y;
@@ -223,21 +223,12 @@ public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.
         device.print(">");
 
         for (int i = start; i < end; ++i) {
-			if (i >= fill) {
-        		device.print("<tr><td>---</td></tr>");
-//        		device.print("<li class=\"norm\"><div style=\"height:19px;\" class=\"empty\">&nbsp;");
-//	        	if (leafControlIcon != null) {
-//		        	device.print("<img");
-//		            Utils.optAttribute(device, "src", emptyFillIcon.getURL());
-//		            Utils.optAttribute(device, "width", emptyFillIcon.getIconWidth());
-//		            Utils.optAttribute(device, "height", leafControlIcon.getIconHeight());
-//		            device.print("/>");
-//	        	}
-//	        	device.print("</div></li>");
-        		continue;
-        	}
-			writeTreeNode(tree, device, i, depth);
-		}
+            if (i >= empty) {
+                device.print("<tr><td class=\"empty\">&nbsp;</td></tr>");
+                continue;
+            }
+            writeTreeNode(tree, device, i, depth);
+        }
 
         device.print("</table>");
 

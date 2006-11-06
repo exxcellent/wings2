@@ -38,23 +38,25 @@ public final class RadioButtonCG extends CheckBoxCG implements
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {
         Object clientProperty = button.getClientProperty("onChangeSubmitListener");
-        // If the application developer attached any ActionListeners or ItemListeners to
-        // this SRadioButton or its ButtonGroup, the surrounding form gets submitted as
-        // soon as the state of this SRadioButton changed.
-        if (button.getActionListeners().length > 0 || button.getItemListeners().length > 0 ||
-        		(button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
+        // If the application developer attached any ActionListeners, ItemListeners or
+        // ChangeListeners to this SRadioButton or its ButtonGroup, the surrounding form
+        // gets submitted as soon as the state of this SRadioButton changed.
+        if (button.getActionListeners().length > 0 ||
+                button.getItemListeners().length > 0 ||
+                button.getChangeListeners().length > 0 ||
+                (button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
             if (clientProperty == null) {
-            	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "submitForm(" + !button.isCompleteUpdateForced() + ",event);";
-            	if (Utils.isMSIE(button)) {
-            		// In IE the "onchange"-event gets fired when a control loses the
-            		// input focus and its value has been modified since gaining focus.
-            		// Even though this is actually the correct behavior, we want the
-            		// event to get fired immediately - thats why we use a "filtered"
-            		// version of IE's proprietary "onpropertychange"-event.
-            		event = "onpropertychange";
-            		code = "if (event.srcElement.checked) " + code;
-            	}
+                String event = JavaScriptEvent.ON_CHANGE;
+                String code = "submitForm(" + !button.isCompleteUpdateForced() + ",event);";
+                if (Utils.isMSIE(button)) {
+                    // In IE the "onchange"-event gets fired when a control loses the
+                    // input focus and its value has been modified since gaining focus.
+                    // Even though this is actually the correct behavior, we want the
+                    // event to get fired immediately - thats why we use a "filtered"
+                    // version of IE's proprietary "onpropertychange"-event.
+                    event = "onpropertychange";
+                    code = "if (event.srcElement.checked) " + code;
+                }
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 button.addScriptListener(javaScriptListener);
                 button.putClientProperty("onChangeSubmitListener", javaScriptListener);

@@ -154,7 +154,7 @@ input.SPasswordField,
 textarea.STextArea,
 select.SComboBox,
 select.SList {
-	border: 1px solid #333333;
+    border: 1px solid #333333;
 }
 
 
@@ -352,8 +352,8 @@ ul.SPopupMenu ul{
 }
 
 ul.SMenu a span.accelerator {
-	font-size: .7em;
-	margin-left: 1.5em;
+    font-size: .7em;
+    margin-left: 1.5em;
 }
 
 /* Begin non-anchor hover selectors */
@@ -389,6 +389,10 @@ ul.SPopupMenu a.x:hover{
 
 .SList li.clickable {
     cursor: pointer
+}
+
+.SList li.empty  {
+    list-style-type: none;
 }
 
 /* No vertical distance on writing down many labels. */
@@ -437,6 +441,11 @@ ul.SPopupMenu a.x:hover{
     background-color: #ffbbbb !important;
 }
 
+.STable td.empty  {
+    padding-top: 2px;
+    padding-bottom: 3px;
+}
+
 .XTable {
     width: 100%;
     cursor: default;
@@ -479,6 +488,11 @@ ul.SPopupMenu a.x:hover{
     background-color: #ffbbbb !important;
 }
 
+.XTable td.empty  {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
 .XTreeTable {
     width: 100%;
     cursor: default;
@@ -517,7 +531,6 @@ ul.SPopupMenu a.x:hover{
     background-color: #ffbbbb !important;
 }
 
-
 /* -------untested --------- */
 
 
@@ -548,7 +561,7 @@ div.domTT .contents {
 .SDesktopPane div.spacer, .SFlowLayout div.spacer {
     height:0px;
     clear: both;
-	line-height:0px; /* for konq */
+    line-height:0px; /* for konq */
     font-size: 1px; /* for konq */
 }
 
@@ -568,7 +581,7 @@ table.SPageScroller table.pages td {
 }
 
 table.SPageScroller table.pages td:hover {
-	background-color: #ECECEC;
+    background-color: #ECECEC;
 }
 
 table.SPageScroller table.buttons td:hover {
@@ -587,14 +600,14 @@ table.XPageScroller table.pages td {
 }
 
 table.XPageScroller table.pages td:hover {
-	background-color: #ECECEC;
+    background-color: #ECECEC;
 }
 
 table.SScrollBar {
     height: 100%;
     width: 100%;
-	font-size: 1px;
-	border-width: 0px;
+    font-size: 1px;
+    border-width: 0px;
 }
 
 table.SScrollBar_vertical {
@@ -638,25 +651,25 @@ table.SScrollBar table.buttons td:hover {
 }
 
 .SInternalFrame div.WindowBar {
-	padding:.2em;
-	background-color: #aaf;
+    padding:.2em;
+    background-color: #aaf;
 }
 
 .SInternalFrame div.WindowBar div.WindowBar_title {
-	padding-right:4em;
-	white-space:pre;
+    padding-right:4em;
+    white-space:pre;
 }
 
 .SInternalFrame div.WindowBar a.WindowButton {
-	float: right;
+    float: right;
 }
 
 .SInternalFrame div.WindowBar a.DeiconifyButton {
-	display: inline;
+    display: inline;
 }
 
 .SInternalFrame div.WindowContent {
-	padding: .2em;
+    padding: .2em;
 }
 
 
@@ -682,8 +695,8 @@ form.SDialog {
 
 .SOptionPane div.WindowBar,
 .SDialog div.WindowBar {
-	padding:.2em;
-	background-color: #1f1faa;
+    padding:.2em;
+    background-color: #1f1faa;
     border-bottom: 1px solid #a6a6a6;
 }
 
@@ -695,12 +708,12 @@ form.SDialog {
 
 .SOptionPane div.WindowBar a.WindowButton,
 .SDialog div.WindowBar a.WindowButton {
-	float: right;
+    float: right;
 }
 
 .SOptionPane div.WindowBar a.DeiconifyButton,
 .SDialog div.WindowBar a.DeiconifyButton {
-	display: inline;
+    display: inline;
 }
 
 .SOptionPane div.WindowContent,

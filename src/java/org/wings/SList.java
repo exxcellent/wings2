@@ -14,7 +14,6 @@
 package org.wings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -164,11 +163,10 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
 
     private SListCellRenderer cellRenderer;
 
-
     /**
-     * which extent of the component should be rendered
+     * Implementation of the {@link Scrollable} interface.
      */
-    private Rectangle viewport = null;
+    protected Rectangle viewport;
 
     /**
      * @see LowLevelEventListener#isEpochCheckEnabled()
@@ -192,18 +190,18 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
 
 
     /**
-	 * used to forward selection events to selection listeners of the list
-	 */
-	private final ListSelectionListener fwdSelectionEvents = new ListSelectionListener() {
-		public void valueChanged(ListSelectionEvent e) {
-			fireSelectionValueChanged(e.getFirstIndex(), e.getLastIndex(), e.getValueIsAdjusting());
-			reload(ReloadManager.STATE);
-		}
-	};
+     * used to forward selection events to selection listeners of the list
+     */
+    private final ListSelectionListener fwdSelectionEvents = new ListSelectionListener() {
+        public void valueChanged(ListSelectionEvent e) {
+            fireSelectionValueChanged(e.getFirstIndex(), e.getLastIndex(), e.getValueIsAdjusting());
+            reload(ReloadManager.STATE);
+        }
+    };
 
     /**
-	 * Construct a SList that displays the elements in the specified model.
-	 */
+     * Construct a SList that displays the elements in the specified model.
+     */
     public SList(ListModel dataModel) {
         if (dataModel == null) {
             throw new IllegalArgumentException("dataModel must not be null");
@@ -402,7 +400,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
             clearSelection();
             dataModel = model;
             dataModel.addListDataListener(this);
-            fireViewportChanged(true);
+
             fireViewportChanged(false);
             reload(ReloadManager.STATE);
         }
@@ -1053,32 +1051,23 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
      * Sets the actual visible part of a scrollable.
      */
     public void setViewportSize(Rectangle newViewport) {
-    	Rectangle oldViewport = viewport;
+        Rectangle oldViewport = viewport;
         viewport = newViewport;
 
         if (isDifferent(oldViewport, newViewport)) {
-        	if (oldViewport == null || newViewport == null) {
-        		fireViewportChanged(true);
-        		fireViewportChanged(false);
-        	} else {
-				if (newViewport.x != oldViewport.x ||
-						newViewport.width != oldViewport.width) {
-					fireViewportChanged(true);
-				}
-				if (newViewport.y != oldViewport.y ||
-						newViewport.height != oldViewport.height) {
-					fireViewportChanged(false);
-				}
-			}
+            if (oldViewport == null || newViewport == null) {
+                fireViewportChanged(true);
+                fireViewportChanged(false);
+            } else {
+                if (newViewport.x != oldViewport.x || newViewport.width != oldViewport.width) {
+                    fireViewportChanged(true);
+                }
+                if (newViewport.y != oldViewport.y || newViewport.height != oldViewport.height) {
+                    fireViewportChanged(false);
+                }
+            }
             reload(ReloadManager.STATE);
         }
-    }
-
-    /**
-     * If scrolling is activated, the component can suggest it's extent.
-     */
-    public Dimension getPreferredExtent() {
-        return new Dimension(1, Math.min(getVisibleRowCount(), getModel().getSize()));
     }
 
     /**
@@ -1161,17 +1150,17 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
 
     // Changes to the model should force a reload.
     public void contentsChanged(javax.swing.event.ListDataEvent e) {
-    	fireViewportChanged(false);
+        fireViewportChanged(false);
         reload(ReloadManager.STATE);
     }
 
     public void intervalAdded(javax.swing.event.ListDataEvent e) {
-    	fireViewportChanged(false);
+        fireViewportChanged(false);
         reload(ReloadManager.STATE);
     }
 
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
-    	fireViewportChanged(false);
+        fireViewportChanged(false);
         reload(ReloadManager.STATE);
     }
 }
