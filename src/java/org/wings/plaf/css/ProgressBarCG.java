@@ -58,13 +58,15 @@ public final class ProgressBarCG extends AbstractComponentCG implements  org.win
          * size for the progressbar. If text is rendered below
          * (isStringPainted), then that text is out of the component box. So
          * either create a distinct ProgressBar size or subtract some height.
-         * OL: created distinct height. other solution is removing string 
+         * OL: created distinct height. other solution is removing string
          * completely.
          */
         final SDimension size = component.getProgressBarDimension();
         final int minSize = component.isBorderPainted() ? 3 : 1;
         int width = (size != null && size.getWidthInt() >= minSize) ? size.getWidthInt() : 200;
         int height = (size != null && size.getHeightInt() >= minSize) ? size.getHeightInt() : 10;
+
+        writeDivPrefix(device, component);
 
         if (component.isBorderPainted()) {
             if (isMSIE(component)) {
@@ -121,6 +123,8 @@ public final class ProgressBarCG extends AbstractComponentCG implements  org.win
             Utils.write(device, component.getString());
             device.print("</div>");
         }
+
+        writeDivSuffix(device, component);
     }
 
     private void printSpacerIcon(final Device device, final int width, int height) throws IOException {

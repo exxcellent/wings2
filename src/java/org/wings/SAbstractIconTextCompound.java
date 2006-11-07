@@ -116,8 +116,8 @@ public abstract class SAbstractIconTextCompound
     public void setModel(SButtonModel model) {
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
-        this.model = model;
         reloadIfChange(this.model, model, ReloadManager.STATE);
+        this.model = model;
     }
 
     /**
@@ -210,8 +210,8 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setHorizontalTextPosition(int textPosition) {
-        horizontalTextPosition = textPosition;
         reloadIfChange(this.horizontalTextPosition, textPosition);
+        horizontalTextPosition = textPosition;
 
     }
 
@@ -220,8 +220,8 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setVerticalTextPosition(int textPosition) {
-        verticalTextPosition = textPosition;
         reloadIfChange(this.verticalTextPosition, textPosition);
+        verticalTextPosition = textPosition;
     }
 
     public int getVerticalTextPosition() {
@@ -229,8 +229,8 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setIconTextGap(int gap) {
-        iconTextGap = gap;
         reloadIfChange(this.iconTextGap, gap);
+        iconTextGap = gap;
     }
 
     public int getIconTextGap() {
@@ -371,7 +371,7 @@ public abstract class SAbstractIconTextCompound
      */
     public SIcon getDisabledIcon() {
        // Creates disabled icon only for SImageIcons not for SURLIcons
-    	/*
+        /*
          if(disabledIcon == null) {
            if(icon != null && icon instanceof SImageIcon)
              disabledIcon = new SImageIcon(GrayFilter.createDisabledImage(((SImageIcon)icon).getImage()));
@@ -467,7 +467,7 @@ public abstract class SAbstractIconTextCompound
             if (!delayEvents) {
                 fireStateChanged();
                 fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, this,
-    					model.isSelected() ? ItemEvent.SELECTED : ItemEvent.DESELECTED));
+                        model.isSelected() ? ItemEvent.SELECTED : ItemEvent.DESELECTED));
                 delayedEvent = false;
             }
             else
@@ -525,10 +525,10 @@ public abstract class SAbstractIconTextCompound
     public void fireFinalEvents() {
         super.fireFinalEvents();
         if (delayedEvent) {
-        	fireStateChanged();
-			fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, this,
-					model.isSelected() ? ItemEvent.SELECTED : ItemEvent.DESELECTED));
-			delayedEvent = false;
-		}
+            fireStateChanged();
+            fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, this,
+                    model.isSelected() ? ItemEvent.SELECTED : ItemEvent.DESELECTED));
+            delayedEvent = false;
+        }
     }
 }

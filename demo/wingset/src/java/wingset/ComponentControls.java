@@ -13,6 +13,8 @@
  */
 package wingset;
 
+import org.wings.ReloadManager;
+import org.wings.SAnchor;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SCheckBox;
@@ -22,12 +24,17 @@ import org.wings.SConstants;
 import org.wings.SDefaultListCellRenderer;
 import org.wings.SDimension;
 import org.wings.SFont;
+import org.wings.SFrame;
 import org.wings.SGridBagLayout;
+import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.STextField;
 import org.wings.SToolBar;
 import org.wings.border.*;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
+import org.wings.session.SessionManager;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -73,6 +80,7 @@ public class ComponentControls  extends SPanel {
     protected final List components = new LinkedList();
 
     protected final SToolBar globalControls = new SToolBar();
+    protected final SToolBar ajaxControls = new SToolBar();
     protected final SToolBar localControls = new SToolBar();
 
     protected final SButton applyButton;
@@ -88,7 +96,17 @@ public class ComponentControls  extends SPanel {
     protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
     protected final SComboBox foregroundComboBox = new SComboBox(COLORS);
     protected final SComboBox fontComboBox = new SComboBox(FONTS);
-    protected final SCheckBox formComponentCheckBox = new SCheckBox("Form components");
+    protected final SCheckBox formComponentCheckBox = new SCheckBox("form components");
+
+    protected final SCheckBox ajaxEnabledCheckBox = new SCheckBox("Enable incremental updates");
+    protected final SCheckBox ajaxHighlightEnabledCheckBox = new SCheckBox("Enable update highlight");
+    protected final STextField ajaxHighlightColorTextField = new STextField();
+    protected final SCheckBox ajaxCursorEnabledCheckBox = new SCheckBox("Enable update cursor");
+    protected final SButton ajaxForceCompleteUpdate = new SButton("Force complete update");
+    protected final SAnchor ajaxDebuggingViewAnchor = new SAnchor();
+
+
+    protected final SFrame frame = SessionManager.getSession().getRootFrame();
 
     public ComponentControls() {
         super(new SGridBagLayout());
@@ -109,6 +127,15 @@ public class ComponentControls  extends SPanel {
         globalControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout)globalControls.getLayout()).setHgap(6);
         ((SBoxLayout)globalControls.getLayout()).setVgap(4);
+
+        border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        border.setThickness(1, SConstants.LEFT);
+        border.setThickness(1, SConstants.TOP);
+        ajaxControls.setBorder(border);
+        ajaxControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        ((SBoxLayout)ajaxControls.getLayout()).setHgap(6);
+        ((SBoxLayout)ajaxControls.getLayout()).setVgap(4);
+
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
         border.setThickness(1, SConstants.TOP);
@@ -120,11 +147,12 @@ public class ComponentControls  extends SPanel {
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;
-        c.gridheight = 2;
+        c.gridheight = 3;
         add(applyButton, c);
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.gridheight = 1;
         add(globalControls, c);
+        add(ajaxControls, c);
         add(localControls, c);
 
         widthTextField.setColumns(3);
@@ -159,6 +187,20 @@ public class ComponentControls  extends SPanel {
         globalControls.add(fontComboBox);
         globalControls.add(new SLabel(""));
         globalControls.add(formComponentCheckBox);
+
+        ajaxControls.add(new SLabel("AJAX settings:"));
+        ajaxControls.add(ajaxEnabledCheckBox);
+        ajaxControls.add(new SLabel("  |  "));
+        ajaxControls.add(ajaxHighlightEnabledCheckBox);
+        ajaxControls.add(ajaxHighlightColorTextField);
+        ajaxControls.add(new SLabel("  |  "));
+        ajaxControls.add(ajaxCursorEnabledCheckBox);
+        ajaxControls.add(new SLabel("  |  "));
+        ajaxControls.add(ajaxForceCompleteUpdate);
+        ajaxControls.add(new SLabel("  |  "));
+        ajaxControls.add(ajaxDebuggingViewAnchor);
+        initAjaxSettings();
+
 
         addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -200,6 +242,8 @@ public class ComponentControls  extends SPanel {
                     if (fontComboBox.isVisible())
                         component.setFont((SFont) getSelectedObject(fontComboBox));
                 }
+
+                applyAjaxSettings();
             }
         });
     }
@@ -242,5 +286,45 @@ public class ComponentControls  extends SPanel {
             value = objects[0];
             return super.getListCellRendererComponent(list, value, selected, row);
         }
+    }
+
+    private void initAjaxSettings() {
+        ajaxEnabledCheckBox.setSelected(frame.isIncrementalUpdateEnabled());
+        boolean highlightEnabled = ((Boolean) frame.getIncrementalUpdateHighlight()[0]).booleanValue();
+        ajaxHighlightEnabledCheckBox.setSelected(highlightEnabled);
+        String color = (String) frame.getIncrementalUpdateHighlight()[1];
+        ajaxHighlightColorTextField.setText(color);
+        ajaxHighlightColorTextField.setColumns(4);
+        boolean cursorEnabled = ((Boolean) frame.getIncrementalUpdateCursor()[0]).booleanValue();
+        ajaxCursorEnabledCheckBox.setSelected(cursorEnabled);
+        ajaxDebuggingViewAnchor.addScriptListener(new JavaScriptListener(
+                JavaScriptEvent.ON_CLICK,
+                "var debug = document.getElementById('ajaxDebugging');" +
+                "if (debug == null) alert('The AJAX debugging view has not been enabled yet!');" +
+                "else {" +
+                "  if (debug.style.display == 'block') hideAjaxDebugging();" +
+                "  else showAjaxDebugging();" +
+                "}" +
+                "return false;"
+        ));
+        ajaxForceCompleteUpdate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.reload(ReloadManager.STATE);
+            }
+        });
+        ajaxForceCompleteUpdate.setShowAsFormComponent(false);
+        ajaxDebuggingViewAnchor.add(new SLabel("Toggle debugging view"));
+    }
+
+    private void applyAjaxSettings() {
+        frame.setIncrementalUpdateEnabled(ajaxEnabledCheckBox.isSelected());
+        boolean highlightEnabled = ajaxHighlightEnabledCheckBox.isSelected();
+        String highlightColor = ajaxHighlightColorTextField.getText();
+        frame.setIncrementalUpdateHighlight(highlightEnabled, highlightColor, 300);
+        boolean cursorEnabled = ajaxCursorEnabledCheckBox.isSelected();
+        SIcon image = (SIcon) frame.getIncrementalUpdateCursor()[1];
+        int dx = ((Integer) frame.getIncrementalUpdateCursor()[2]).intValue();
+        int dy = ((Integer) frame.getIncrementalUpdateCursor()[3]).intValue();
+        frame.setIncrementalUpdateCursor(cursorEnabled, image, dx, dy);
     }
 }

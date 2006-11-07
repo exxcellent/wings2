@@ -50,7 +50,7 @@ abstract public class WingSetPane
 
         SAnchor anchor = new SAnchor("../" + getClass().getName().substring(getClass().getName().indexOf('.') + 1) + ".java");
         anchor.setTarget("sourceWindow");
-        anchor.add(new SLabel("view java source code", SOURCE_LABEL_ICON));
+        anchor.add(new SLabel("View Java Source Code", SOURCE_LABEL_ICON));
         anchor.setPreferredSize(SDimension.FULLWIDTH);
 
         SPanel south = new SPanel();

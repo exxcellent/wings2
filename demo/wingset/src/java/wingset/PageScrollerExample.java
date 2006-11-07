@@ -47,12 +47,12 @@ public class PageScrollerExample
 
         scrollbar = new SPageScroller(Adjustable.VERTICAL);
         scrollbar.setName("scrollbar");
-        
+
         // its a horizontal scrollbar, but scrolls vertical...
         scrollbar.setLayoutMode(Adjustable.HORIZONTAL);
         scrollbar.setDirectPages(10);
         scrollbar.setShowAsFormComponent(false);
-        
+
         scrollPane = new SScrollPane(list);
         scrollPane.setHorizontalScrollBar(null);
         scrollPane.setVerticalScrollBar(null);
@@ -108,7 +108,7 @@ public class PageScrollerExample
                     scrollPane.setVerticalExtent(((Integer) visRows.getSelectedItem()).intValue());
                 }
             });
-            list.setVisibleRowCount(visRowsValues[1].intValue());
+            scrollPane.setVerticalExtent(visRowsValues[1].intValue());
             visRows.setSelectedItem(visRowsValues[1]);
             addControl(visRows);
 

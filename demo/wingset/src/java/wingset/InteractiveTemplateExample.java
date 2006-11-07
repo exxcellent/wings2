@@ -13,6 +13,7 @@
  */
 package wingset;
 
+import org.wings.ReloadManager;
 import org.wings.SBorderLayout;
 import org.wings.SButton;
 import org.wings.SComponent;
@@ -77,6 +78,7 @@ public class InteractiveTemplateExample
         applyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 templateSource.setTemplate(templateInput.getText());
+                reload(ReloadManager.STATE);
             }
         });
 
@@ -104,6 +106,7 @@ public class InteractiveTemplateExample
                 public void actionPerformed(ActionEvent e) {
                     templateSource.setTemplate(templateString);
                     templateInput.setText(templateString);
+                    InteractiveTemplateExample.this.reload(ReloadManager.STATE);
                 }
             });
 

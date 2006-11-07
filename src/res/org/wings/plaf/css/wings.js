@@ -123,8 +123,8 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
     var target = wingS.util.getTarget(event);
     var form = wingS.util.getParentByTagName(target, "FORM");
     if (eventName != null) {
-        eidprovider = wingS.util.getParentWearingAttribute(target, "eid");
-        eventName = eidprovider.getAttribute("eid");
+        var eidProvider = wingS.util.getParentWearingAttribute(target, "eid");
+        eventName = eidProvider.getAttribute("eid");
     }
 
     if (invokeScriptListeners(scriptCodes)) {
@@ -493,7 +493,7 @@ wingS.util.openlink = function(target, url, scriptCodes) {
       if (target == null) {
           window.location.href = url;
       } else {
-          if (wu_checkTarget(target)) {
+          if (wingS.util.checkTarget(target)) {
               parent.frames[target].location.href = url;
           } else {
               window.open(url, target);
@@ -775,12 +775,18 @@ function hideAjaxDebugging() {
 }
 
 function handleRequestError(request) {
-    var errorMsg = "An error occured while processing an AJAX request!\n  -->  " +
-                   "Status code: " + request.status + " | " + request.statusText;
-    hideAjaxActivityIndicator();
-    alert(errorMsg);
-    window.location.href = encodeUpdateId(completeUpdateId);
+    //var errorMsg = "An error occured while processing an AJAX request!\n  -->  " +
+    //               "Status code: " + request.status + " | " + request.statusText;
+    //hideAjaxActivityIndicator();
+    //alert(errorMsg);
+    //window.location.href = encodeUpdateId(completeUpdateId);
     //dequeueNextRequest();
+
+    document.close();
+    document.open("text/html");
+    document.write(request.responseText);
+    //document.write('<a href="' + encodeUpdateId(completeUpdateId) + '">Go back to previous page</a>');
+    document.close();
 }
 
 function processAjaxRequest(request) {
