@@ -23,7 +23,6 @@ import org.wings.SProgressBar;
 import org.wings.STemplateLayout;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
-import org.wings.session.SessionManager;
 import org.wings.session.WingsStatistics;
 import org.wings.util.SStringBuilder;
 

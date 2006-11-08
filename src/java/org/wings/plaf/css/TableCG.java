@@ -347,6 +347,8 @@ public final class TableCG
             STableColumn column = columnModel.getColumn(i);
             if (!column.isHidden())
                 writeHeaderCell(device, table, rendererPane, i);
+            else
+                ++endX;
         }
         device.print("</tr>");
         Utils.printNewline(device, table);
@@ -361,6 +363,8 @@ public final class TableCG
         SStringBuilder oddArea = Utils.inlineStyles(table.getDynamicStyle(STable.SELECTOR_ODD_ROWS));
         final SCellRendererPane rendererPane = table.getCellRendererPane();
         STableColumnModel columnModel = table.getColumnModel();
+
+        int backupEndX = endX; // Backup endX because we have to restore it after each inner loop.
 
         for (int r = startY; r < endY; ++r) {
             if (r >= emptyIndex) {
@@ -394,7 +398,10 @@ public final class TableCG
                 STableColumn column = columnModel.getColumn(c);
                 if (!column.isHidden())
                     renderCellContent(device, table, rendererPane, r, c);
+                else
+                    ++endX;
             }
+            endX = backupEndX;
 
             device.print("</tr>");
             Utils.printNewline(device, table);

@@ -18,7 +18,6 @@ import org.wings.session.SessionManager;
 import org.wings.SComponent;
 import org.wings.SLabel;
 import org.wings.SIcon;
-import org.wings.SDimension;
 import org.wings.io.Device;
 import java.io.IOException;
 
@@ -51,7 +50,7 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
         final int horizontalTextPosition = label.getHorizontalTextPosition();
         final int verticalTextPosition = label.getVerticalTextPosition();
         final boolean wordWrap = label.isWordWrap();
-        
+
         if (icon == null && text != null) {
             writeTablePrefix(device, component);
             writeText(device, text, wordWrap);

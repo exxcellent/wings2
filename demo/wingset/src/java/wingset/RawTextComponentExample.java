@@ -1,8 +1,6 @@
 package wingset;
 
-import org.wings.SBoxLayout;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SDimension;
 import org.wings.SLabel;
 import org.wings.SPanel;
@@ -27,12 +25,12 @@ public class RawTextComponentExample extends WingSetPane {
         } catch (java.io.IOException except) {
             except.printStackTrace();
         }
-        
+
         examplePanel.add(new SRawTextComponent("This is a Raw Text. Other than an SLabel, it does break and has no div's wrapping it."), "contentText");
         examplePanel.add(new SRawTextComponent("javascript:alert('This is a text put inside the href of the link');"), "linkText");
-        
+
         return examplePanel;
-        
+
     }
 
 }

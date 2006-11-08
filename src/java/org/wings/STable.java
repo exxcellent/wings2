@@ -589,6 +589,7 @@ public class STable extends SComponent
     }
 
     public void setEditable(boolean editable) {
+        reloadIfChange(this.editable, editable);
         this.editable = editable;
     }
 
@@ -1007,6 +1008,7 @@ public class STable extends SComponent
      * </UL>
      */
     public void setSelectionMode(int s) {
+        reloadIfChange(getSelectionModel().getSelectionMode(), s);
         getSelectionModel().setSelectionMode(s);
     }
 
