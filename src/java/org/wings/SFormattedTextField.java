@@ -138,6 +138,15 @@ public class SFormattedTextField extends STextField {
         return returnValue;
     }
 
+    public void setText(String text) {
+        try {
+            SAbstractFormatter formatter = getFormatter();
+            super.setText(formatter.valueToString(formatter.stringToValue(text)));
+        }
+        catch (ParseException e) {
+        }
+    }
+
     /**
      * Sets the focus lost behavior
      * <code>COMMIT</code>
