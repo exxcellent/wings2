@@ -22,6 +22,8 @@ import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
 
 import java.io.IOException;
+import org.wings.script.JavaScriptDOMEvent;
+import org.wings.script.JavaScriptDOMListener;
 
 public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
     /**
@@ -84,10 +86,9 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
         device.print("</div>");
 
         // Add the function for window.onresize and window.onload.
-        String function = "wingS.util.showModalDialog(\"" + dialogId + "\", \"" + modalId + "\")";
-        RenderHelper.getInstance(frame).addScript("addWindowOnResizeFunction('" + function + "');");
-        RenderHelper.getInstance(frame).addScript("addWindowOnLoadFunction('" + function + "');");
-        RenderHelper.getInstance(frame).addScript(function + ";");
+        String function = "function() {wingS.util.showModalDialog(\"" + dialogId + "\", \"" + modalId + "\")}";                
+        _c.addScriptListener(new JavaScriptDOMListener(JavaScriptDOMEvent.ON_RESIZE, function));
+        _c.addScriptListener(new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, function));
     }
 
 

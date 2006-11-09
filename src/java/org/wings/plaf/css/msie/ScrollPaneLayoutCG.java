@@ -24,7 +24,7 @@ public class ScrollPaneLayoutCG extends org.wings.plaf.css.ScrollPaneLayoutCG {
         d.print("</div></td></tr>");
         closeLayouterBody(d, layout);
 
-        RenderHelper.getInstance(center).addScript("layoutScrollPaneIE('" + layout.getContainer().getName() + "');");
+        RenderHelper.getInstance(center).addScript("wingS.layout.layoutScrollPaneIE('" + layout.getContainer().getName() + "');");
     }
 
     protected void writePaging(Device d, SScrollPaneLayout layout) throws IOException {

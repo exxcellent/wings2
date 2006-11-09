@@ -57,7 +57,7 @@ public final class TextAreaCG extends AbstractComponentCG implements
         	// itself as a listener of its document as well.
             if (clientProperty == null) {
             	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "submitForm(" + !component.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !component.isCompleteUpdateForced() + ",event);";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 component.addScriptListener(javaScriptListener);
                 component.putClientProperty("onChangeSubmitListener", javaScriptListener);

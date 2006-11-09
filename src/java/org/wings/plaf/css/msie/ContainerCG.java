@@ -41,7 +41,7 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
                 borderHeight += border.getThickness(SConstants.BOTTOM);
             }
 
-            RenderHelper.getInstance(component).addScript("layoutAvailableSpaceIE('" + component.getName() + "');");
+            RenderHelper.getInstance(component).addScript("wingS.layout.layoutAvailableSpaceIE('" + component.getName() + "');");
             device.print("<table ");
             Utils.optAttribute(device, "layoutHeight", height);
             Utils.optAttribute(device, "borderHeight", borderHeight);

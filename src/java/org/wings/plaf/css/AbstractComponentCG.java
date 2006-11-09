@@ -145,9 +145,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             Utils.optAttribute(device, "eid", component.getEncodedLowLevelEventId());
         }
 
-        // Tooltip handling
-        writeTooltipMouseOver(device, component);
-
         // Component popup menu
         writeContextMenu(device, component);
     }
@@ -186,17 +183,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print(popupId);
             device.print("');\"");
         }
-    }
-
-    /**
-     * Write DomTT Tooltip code. Common handler for MSIE and Gecko PLAF.
-     */
-    protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
-//        final String toolTipText = component != null ? component.getToolTipText() : null;
-//        if (toolTipText != null && toolTipText.length() > 0) {
-//            device.print(" onmouseover=\"return wu_toolTip(event, this)\"");
-//            Utils.optAttribute(device, "tip", toolTipText);
-//        }
     }
 
     /**

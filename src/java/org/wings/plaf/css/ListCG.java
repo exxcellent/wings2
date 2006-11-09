@@ -51,7 +51,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         if (list.getListSelectionListeners().length > 0) {
             if (clientProperty == null) {
                 String event = JavaScriptEvent.ON_CHANGE;
-                String code = "submitForm(" + !list.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !list.isCompleteUpdateForced() + ",event);";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 list.addScriptListener(javaScriptListener);
                 list.putClientProperty("onChangeSubmitListener", javaScriptListener);
@@ -95,8 +95,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
                 //Utils.optAttribute(device, "class", "selected");
             }
 
-            if (renderer != null) {
-                writeTooltipMouseOver( device, renderer );
+            if (renderer != null) {                
                 Utils.optAttribute(device, "style", Utils.generateCSSComponentInlineStyle(renderer));
             }
             device.print(">");

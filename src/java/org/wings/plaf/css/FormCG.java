@@ -60,7 +60,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         * no-margin, no-whatever (HZ).
         */
         final String defaultButtonName = component.getDefaultButton() != null ? Utils.event(component.getDefaultButton()) : "capture_enter";
-        device.print(" onSubmit=\"submitForm(" + !component.isCompleteUpdateForced() + ", event); return false;\">");
+        device.print(" onSubmit=\"wingS.request.submitForm(" + !component.isCompleteUpdateForced() + ", event); return false;\">");
         device.print("<input type=\"image\" name=\"").print(defaultButtonName).print("\" border=\"0\" ");
         Utils.optAttribute(device, "src", getBlindIcon().getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\" style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");

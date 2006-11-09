@@ -53,7 +53,7 @@ div, input, select, textarea, table {
 }
 
 /* tooltips opacity */
-div.domTT {
+.tt {
     -moz-opacity: 0.8;
 }
 

@@ -25,7 +25,7 @@ import java.io.Serializable;
 public class SToolTipManager implements Serializable {
     private int initialDelay = 1000;
     private int dismissDelay = 3000;
-    private boolean followMouse = true;
+    private boolean followMouse = false;
 
     /**
      * @return The initial delay in ms the mouse pointer has to rest over a component
@@ -59,6 +59,8 @@ public class SToolTipManager implements Serializable {
 
     /**
      * @return <code>true</code> if the tooltip popup should follow the mouse movements.
+     * @deprecated no function (reason: JavaScript library was changed from domTT to Yahoo YUI, 
+     * which does not have this functionality; also even Swing does not support it)
      */
     public boolean isFollowMouse() {
         return followMouse;
@@ -66,6 +68,8 @@ public class SToolTipManager implements Serializable {
 
     /**
      * @param followMouse <code>true</code> if the tooltip popup should follow the mouse movements.
+     * @deprecated no function (reason: JavaScript library was changed from domTT to Yahoo YUI, 
+     * which does not have this functionality; also even Swing does not support it)
      */
     public void setFollowMouse(boolean followMouse) {
         this.followMouse = followMouse;

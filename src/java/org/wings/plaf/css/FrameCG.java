@@ -20,8 +20,9 @@ import org.wings.ReloadManager;
 import org.wings.Renderable;
 import org.wings.SComponent;
 import org.wings.SFrame;
-import org.wings.SToolTipManager;
 import org.wings.Version;
+import org.wings.script.JavaScriptDOMEvent;
+import org.wings.script.JavaScriptDOMListener;
 import org.wings.util.SessionLocal;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.externalizer.ExternalizeManager;
@@ -35,7 +36,6 @@ import org.wings.resource.DefaultURLResource;
 import org.wings.resource.CompleteUpdateResource;
 import org.wings.resource.IncrementalUpdateResource;
 import org.wings.resource.ResourceManager;
-import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.*;
 
@@ -127,14 +127,14 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         public boolean add(Object o) {
-        	boolean changed = getList().add(o);
-        	if (changed) invalidateFrames();
+            boolean changed = getList().add(o);
+            if (changed) invalidateFrames();
             return changed;
         }
 
         public boolean remove(Object o) {
-        	boolean changed = getList().remove(o);
-        	if (changed) invalidateFrames();
+            boolean changed = getList().remove(o);
+            if (changed) invalidateFrames();
             return changed;
         }
 
@@ -143,31 +143,31 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         public boolean addAll(Collection c) {
-        	boolean changed = getList().addAll(c);
-        	if (changed) invalidateFrames();
+            boolean changed = getList().addAll(c);
+            if (changed) invalidateFrames();
             return changed;
         }
 
         public boolean addAll(int index, Collection c) {
-        	boolean changed = getList().addAll(index, c);
-        	if (changed) invalidateFrames();
+            boolean changed = getList().addAll(index, c);
+            if (changed) invalidateFrames();
             return changed;
         }
 
         public boolean removeAll(Collection c) {
-        	boolean changed = getList().removeAll(c);
-        	if (changed) invalidateFrames();
+            boolean changed = getList().removeAll(c);
+            if (changed) invalidateFrames();
             return changed;
         }
 
         public boolean retainAll(Collection c) {
-        	boolean changed = getList().retainAll(c);
-        	if (changed) invalidateFrames();
+            boolean changed = getList().retainAll(c);
+            if (changed) invalidateFrames();
             return changed;
         }
 
         public void clear() {
-        	if (!isEmpty()) invalidateFrames();
+            if (!isEmpty()) invalidateFrames();
             getList().clear();
         }
 
@@ -184,17 +184,17 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         public Object set(int index, Object element) {
-        	invalidateFrames();
+            invalidateFrames();
             return getList().set(index, element);
         }
 
         public void add(int index, Object element) {
-        	invalidateFrames();
+            invalidateFrames();
             getList().add(index, element);
         }
 
         public Object remove(int index) {
-        	invalidateFrames();
+            invalidateFrames();
             return getList().remove(index);
         }
 
@@ -221,7 +221,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         private void invalidateFrames() {
             Set frames = SessionManager.getSession().getFrames();
             for (Iterator it = frames.iterator(); it.hasNext();) {
-            	((SFrame) it.next()).reload(ReloadManager.STATE);
+                ((SFrame) it.next()).reload(ReloadManager.STATE);
             }
         }
     }
@@ -246,8 +246,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         Session session = SessionManager.getSession();
         form = createExternalizedHeader(session, FORM_SCRIPT, "text/javascript");
         ajax = createExternalizedHeader(session, AJAX_SCRIPT, "text/javascript");
-        domLib = createExternalizedHeader(session, DOMLIB_SCRIPT, "text/javascript");
-        domTT = createExternalizedHeader(session, DOMTT_SCRIPT, "text/javascript");
+        yahoo = createExternalizedHeader(session, YAHOO_SCRIPT, "text/javascript");
+        yahooDom = createExternalizedHeader(session, YAHOO_DOM_SCRIPT, "text/javascript");
+        yahooEvent = createExternalizedHeader(session, YAHOO_EVENT_SCRIPT, "text/javascript");
+        yahooContainer = createExternalizedHeader(session, YAHOO_CONTAINER_SCRIPT, "text/javascript");
 
         dwrEngine = new Script("text/javascript", new DefaultURLResource("../dwr/engine.js"));
         dwrUtil = new Script("text/javascript", new DefaultURLResource("../dwr/util.js"));
@@ -264,21 +266,25 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
     public final String FORM_SCRIPT = (String) ResourceManager.getObject("JScripts.form", String.class);
     public final String AJAX_SCRIPT = (String) ResourceManager.getObject("JScripts.ajax", String.class);
-    public final String DOMLIB_SCRIPT = (String) ResourceManager.getObject("JScripts.domlib", String.class);
-    public final String DOMTT_SCRIPT = (String) ResourceManager.getObject("JScripts.domtt", String.class);
+    public final String YAHOO_SCRIPT = (String) ResourceManager.getObject("JScripts.Yahoo", String.class);
+    public final String YAHOO_DOM_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooDom", String.class);
+    public final String YAHOO_EVENT_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooEvent", String.class);
+    public final String YAHOO_CONTAINER_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooContainer", String.class);
 
-    public static final JavaScriptListener FOCUS_SCRIPT_MOZILLA = new JavaScriptListener("onload", "wingS.util.registerEvent(document,'focus',wingS.util.storeFocus,true)");
-    public static final JavaScriptListener FOCUS_SCRIPT_IE = new JavaScriptListener("onactivate", "wingS.util.storeFocus(event)");
-    public static final JavaScriptListener SCROLL_POSITION_SCRIPT = new JavaScriptListener("onscroll", "wingS.util.storeScrollPosition(event)");
-    public static final JavaScriptListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptListener("onload", "wingS.util.restoreScrollPosition()");
-    public static final JavaScriptListener PERFORM_WINDOW_ONLOAD_SCRIPT = new JavaScriptListener("onload", "performWindowOnLoad()");
+    public static final JavaScriptDOMListener FOCUS_SCRIPT_MOZILLA = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_FOCUS, "wingS.util.storeFocus");
+    public static final JavaScriptDOMListener FOCUS_SCRIPT_IE = new JavaScriptDOMListener("onactivate", "wingS.util.storeFocus");
+    public static final JavaScriptDOMListener SCROLL_POSITION_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_SCROLL, "wingS.util.storeScrollPosition");
+    public static final JavaScriptDOMListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, "wingS.util.restoreScrollPosition");
+    public static final JavaScriptDOMListener PERFORM_WINDOW_ONLOAD_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, "performWindowOnLoad");
 
-    private Script domLib;
-    private Script domTT;
     private Script form;
     private Script ajax;
     private Script dwrEngine;
     private Script dwrUtil;
+    private Script yahoo;
+    private Script yahooDom;
+    private Script yahooEvent;
+    private Script yahooContainer;
 
     /**
      * Externalizes the style sheet(s) for this session.
@@ -333,12 +339,14 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         CaptureDefaultBindingsScriptListener.install(component);
 
         if (!HEADERS.contains(form)) {
-            HEADERS.add(domLib);
-            HEADERS.add(domTT);
             HEADERS.add(form);
             HEADERS.add(ajax);
             HEADERS.add(dwrEngine);
             HEADERS.add(dwrUtil);
+            HEADERS.add(yahoo);
+            HEADERS.add(yahooDom);
+            HEADERS.add(yahooEvent);
+            HEADERS.add(yahooContainer);
         }
 
         // Retrieve list of static CSS files to be attached to this frame for this browser.
@@ -602,27 +610,42 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     protected void writeInlineScripts(Device device, SComponent component) throws IOException {
-    	final SFrame frame = (SFrame) component;
+        final SFrame frame = (SFrame) component;
         device.print("<script type=\"text/javascript\">\n");
 
         device.print("// globally accessible script variables:\n" +
-        		"event_epoch = '" + frame.getEventEpoch() + "';\n" +
-        		"completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
-        		"incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
-        		"incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
-        		"incrementalUpdateCursor = { 'enabled':" + frame.getIncrementalUpdateCursor()[0] + "," +
-										   " 'image':'" + frame.getIncrementalUpdateCursor()[1] + "'," +
-										   " 'dx':" + frame.getIncrementalUpdateCursor()[2] + "," +
-										   " 'dy':" + frame.getIncrementalUpdateCursor()[3] + " };\n" +
-        		"incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
-        									  " 'color':'" + frame.getIncrementalUpdateHighlight()[1] + "'," +
-        									  " 'duration':" + frame.getIncrementalUpdateHighlight()[2] + " };\n");
+                "wingS.globals.event_epoch = '" + frame.getEventEpoch() + "';\n" +
+                "wingS.globals.completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
+                "wingS.globals.incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
+                "wingS.globals.incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
+                "wingS.globals.incrementalUpdateCursor = { 'enabled':" + frame.getIncrementalUpdateCursor()[0] + "," +
+                                           " 'image':'" + frame.getIncrementalUpdateCursor()[1] + "'," +
+                                           " 'dx':" + frame.getIncrementalUpdateCursor()[2] + "," +
+                                           " 'dy':" + frame.getIncrementalUpdateCursor()[3] + " };\n" +
+                "wingS.globals.incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
+                                              " 'color':'" + frame.getIncrementalUpdateHighlight()[1] + "'," +
+                                              " 'duration':" + frame.getIncrementalUpdateHighlight()[2] + " };\n");
 
         device.print("// script code collected during rendering:\n");
         for (Iterator i = RenderHelper.getInstance(frame).getCollectedScripts().iterator(); i.hasNext();) {
-    		device.print(i.next() + "\n");
-    	}
-    	ScriptListener[] scriptListeners = component.getScriptListeners();
+            device.print(i.next() + "\n");
+        }
+        ScriptListener[] scriptListeners = component.getScriptListeners();
+        for (int i = 0; i < scriptListeners.length; ++i) {
+            ScriptListener scriptListener = scriptListeners[i];
+            String script = scriptListener.getScript();
+            if (script != null) {
+                device.print(script);
+            }
+            if (scriptListener instanceof JavaScriptDOMListener) {
+                script = ((JavaScriptDOMListener) scriptListener).getInitCode(component);
+                if (script != null) {
+                    device.print(script + "\n");
+                }
+            }
+        }
+        ScriptManager scriptManager = component.getSession().getScriptManager();
+        scriptListeners = scriptManager.getScriptListeners();
         for (int i = 0; i < scriptListeners.length; ++i) {
             ScriptListener scriptListener = scriptListeners[i];
             String script = scriptListener.getScript();
@@ -630,26 +653,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 device.print(script);
             }
         }
-
-		ScriptManager scriptManager = component.getSession().getScriptManager();
-        scriptListeners = scriptManager.getScriptListeners();
-        for (int i = 0; i < scriptListeners.length; i++) {
-            ScriptListener scriptListener = scriptListeners[i];
-            String script = scriptListener.getScript();
-            if (script != null) {
-            	device.print(script);
-            }
-        }
         scriptManager.clearScriptListeners();
-
-        SToolTipManager toolTipManager = frame.getSession().getToolTipManager();
-        device.print("domTT_addPredefined('default', 'caption', false");
-        if (toolTipManager.isFollowMouse()) {
-            device.print(", 'trail', true");
-        }
-        device.print(", 'delay', ").print(toolTipManager.getInitialDelay());
-        device.print(", 'lifetime', ").print(toolTipManager.getDismissDelay());
-        device.print(");\n");
 
         device.print("</script>\n");
     }

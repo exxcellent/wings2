@@ -71,8 +71,8 @@ public class TextComponentExample extends WingSetPane {
         p.add(new SLabel("SFormattedTextField (NumberFormat): "));
         SFormattedTextField numberTextField = new SFormattedTextField(new NumberFormatter());
         numberTextField.setName("numberfield");
-        numberTextField.setToolTipText("Text entered here will be formatted as number when you leave focus.\n" +
-                "If you entered an invalid number the text should become red.\n" +
+        numberTextField.setToolTipText("Text entered here will be formatted as number when you leave focus.<br>" +
+                "If you entered an invalid number the text should become red.<br>" +
                 "This uses code executed on server side in Java!");
         numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
         p.add(numberTextField);
@@ -80,7 +80,7 @@ public class TextComponentExample extends WingSetPane {
         p.add(new SLabel("SFormattedTextField (DateFormat): "));
         SFormattedTextField dateTextField = new SFormattedTextField(dateFormatter);
         dateTextField.setName("datefield");
-        dateTextField.setToolTipText("Enter a valid/invalid date here.\n" +
+        dateTextField.setToolTipText("Enter a valid/invalid date here.<br>" +
                 "Dates will be parsed on server side and reformatted accordingly.");
         dateTextField.addDocumentListener(new MyDocumentListener(dateTextField));
         p.add(dateTextField);

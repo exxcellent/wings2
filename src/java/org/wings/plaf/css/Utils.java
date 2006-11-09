@@ -17,9 +17,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.border.SAbstractBorder;
+import org.wings.externalizer.ExternalizeManager;
+import org.wings.header.Link;
+import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
+import org.wings.resource.ClassPathResource;
+import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
+import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
@@ -117,7 +123,7 @@ public final class Utils {
     }
 
     /**
-     * Render event listeners attached to the passed component exlucding types of supressed listeners
+     * Render inline event listeners attached to the passed component exlucding types of supressed listeners
      *
      * @param device                      output device
      * @param c                           component to retrieve listeners from
@@ -135,11 +141,14 @@ public final class Utils {
         if (listeners.length > 0) {
             Map eventScripts = new HashMap();
             for (int i = 0; i < listeners.length; i++) {
-                final ScriptListener script = listeners[i];
+                final ScriptListener script = listeners[i];                
                 if (types.contains(script.getEvent().toLowerCase())) {
                     continue;
                 }
-
+                // if its a DOM event we are finished here
+                if (script instanceof JavaScriptDOMListener) {                
+                    continue;
+                }                                
                 final String event = script.getEvent();
                 String eventScriptCode = script.getCode();
 
@@ -952,7 +961,7 @@ public final class Utils {
                 device.print("<a href=\"#\"");
 
                 // Render onclick JS listeners
-                device.print(" onclick=\"submitForm(" + ajaxEnabled);
+                device.print(" onclick=\"wingS.request.submitForm(" + ajaxEnabled);
                 device.print(",event,'");
                 device.print(Utils.event(component));
                 device.print("','");
@@ -975,15 +984,15 @@ public final class Utils {
                 device.print("<a href=\"#\"");
 
                 // Render onclick JS listeners
-                device.print(" onclick=\"followLink(" + ajaxEnabled);
+                device.print(" onclick=\"wingS.request.followLink(" + ajaxEnabled);
                 device.print(",'");
                 device.print(Utils.event(component));
                 device.print("','");
                 device.print(eventValue == null ? "" : eventValue);
                 device.print("'");
                 device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
-                device.print("); return false;\"");
-
+                device.print("); return false;\"");                            
+                    
                 // Render remaining JS listeners
                 Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
                 Utils.optAttribute(device, "class", cssClassName);
@@ -1007,7 +1016,7 @@ public final class Utils {
         	boolean ajaxEnabled = !component.isCompleteUpdateForced();
             if (formComponent) {
             	// Render onclick JS listeners
-                device.print(" onclick=\"submitForm(" + ajaxEnabled);
+                device.print(" onclick=\"wingS.request.submitForm(" + ajaxEnabled);
                 device.print(",event,'");
                 device.print(Utils.event(component));
                 device.print("','");
@@ -1021,7 +1030,7 @@ public final class Utils {
             }
             else {
             	// Render onclick JS listeners
-                device.print(" onclick=\"followLink(" + ajaxEnabled);
+                device.print(" onclick=\"wingS.request.followLink(" + ajaxEnabled);
                 device.print(",'");
                 device.print(Utils.event(component));
                 device.print("','");
@@ -1040,7 +1049,7 @@ public final class Utils {
      * Renders inline the javascript code attached to the passed javascipt event type
      * on the component. Used to allow usage of javascript events by the framework
      * as well as by the application itself.
-     * <p> For an example: See the <code>submitForm</code> and <code>followLink</code>
+     * <p> For an example: See the <code>wingS.request.submitForm</code> and <code>wingS.request.followLink</code>
      * method declared in <code>wings.js</code>.
      *
      * @param component           The component wearing the event handler
@@ -1215,5 +1224,17 @@ public final class Utils {
             }
         }
         return 0;
+    }
+    
+    public static Script createExternalizedJavaScriptHeader(Session session, String classPath) {
+        ClassPathResource res = new ClassPathResource(classPath, "text/javascript");
+        String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        return new Script("text/javascript", new DefaultURLResource(jScriptUrl));
+    }
+    
+    public static Link createExternalizedCSSHeader(Session session, String classPath) {
+        ClassPathResource res = new ClassPathResource(classPath, "text/css");
+        String cssUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        return new Link("stylesheet", null, "text/css", null, new DefaultURLResource(cssUrl));
     }
 }

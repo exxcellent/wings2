@@ -47,7 +47,7 @@ public final class RadioButtonCG extends CheckBoxCG implements
                 (button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
             if (clientProperty == null) {
                 String event = JavaScriptEvent.ON_CHANGE;
-                String code = "submitForm(" + !button.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !button.isCompleteUpdateForced() + ",event);";
                 if (Utils.isMSIE(button)) {
                     // In IE the "onchange"-event gets fired when a control loses the
                     // input focus and its value has been modified since gaining focus.

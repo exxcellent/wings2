@@ -53,7 +53,8 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
-import org.wings.plaf.css.AbstractComponentCG;
+import org.wings.script.JavaScriptDOMEvent;
+import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Session;
@@ -1350,13 +1351,30 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Set the tooltip text.
+     * Set the tooltip text. To style use HTML tags.
      *
      * @param t the new tooltip text
      */
-    public void setToolTipText(String t) {
+    public void setToolTipText(String t) {                                       
         reloadIfChange(this.tooltip, t);
-        tooltip = t;
+        if (t != null)
+            tooltip = t;                
+        else
+            return;
+               
+        SToolTipManager ttManager = SToolTipManager.sharedInstance();        
+        if (tooltip.length() > 0) {                                    
+            String code = "new YAHOO.widget.Tooltip('"+ this.getName() +"_tooltip', {" +
+                    "context: '"+ this.getName() +"', " +
+                    "text: \""+ tooltip +"\"," +
+                    "showdelay: "+ ttManager.getInitialDelay() +"," +
+                    "autodismissdelay: "+ ttManager.getDismissDelay() + 
+                    "});";
+            String function = "function() {"+ code + "}";
+                        
+            this.addScriptListener(new JavaScriptDOMListener(JavaScriptDOMEvent.ON_AVAILABLE, function));
+        }                
+        
     }
 
     /**
@@ -1978,7 +1996,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             throw e;
         }
     }
-
+    
     /**
      * Listener registering/deregistering this component on the parent frame.
      */

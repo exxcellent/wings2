@@ -22,20 +22,56 @@ else if (typeof wingS.util != "object") {
     throw new Error("wingS.util already exists and is not an object");
 }
 
+if (!wingS.request) {
+    wingS.request = new Object();
+}
+else if (typeof wingS.request != "object") {
+    throw new Error("wingS.request already exists and is not an object");
+}
+
+if (!wingS.ajax) {
+    wingS.ajax = new Object();
+}
+else if (typeof wingS.ajax != "object") {
+    throw new Error("wingS.ajax already exists and is not an object");
+}
+
+if (!wingS.layout) {
+    wingS.layout = new Object();
+}
+else if (typeof wingS.layout != "object") {
+    throw new Error("wingS.layout already exists and is not an object");
+}
+
+if (!wingS.globals) {
+    wingS.globals = new Object();
+}
+else if (typeof wingS.globals != "object") {
+    throw new Error("wingS.globals already exists and is not an object");
+}
+
+if (!wingS.events) {
+    wingS.events = new Object();
+}
+else if (typeof wingS.events != "object") {
+    throw new Error("wingS.events already exists and is not an object");
+}
+
+
 // =============================================================================
 
-wingS.util.getEvent = function(event) {
+wingS.events.getEvent = function(event) {
     if (window.event)
         return window.event;
     else
         return event;
 }
 
-wingS.util.getTarget = function(event) {
+wingS.events.getTarget = function(event) {
     if (event.srcElement)
-        return event.srcElement;
+        return event.srcElement; // IE
     else
-        return event.target;
+        return event.target; // W3C
 }
 
 wingS.util.getParentByTagName = function(element, tag) {
@@ -57,6 +93,7 @@ wingS.util.getParentWearingAttribute = function(element, attribute) {
     return null;
 }
 
+// TODO document + event.stopPropagation()
 wingS.util.preventDefault = function(event) {
     if (event.preventDefault)
         event.preventDefault();
@@ -104,30 +141,30 @@ Function.prototype.bind = function(obj) {
 
 // =============================================================================
 
-var event_epoch;                // Maintains the event epoch of this frame
-var completeUpdateId;           // Holds the ID of the CompleteUpdateResource
-var incrementalUpdateId;        // Holds the ID of the IncrementalUpdateResource
-var incrementalUpdateEnabled;   // True if this frame allows incremental updates
-var incrementalUpdateCursor;    // An object whose properties "enabled", "image"
+wingS.globals.event_epoch;                // Maintains the event epoch of this frame
+wingS.globals.completeUpdateId;           // Holds the ID of the CompleteUpdateResource
+wingS.globals.incrementalUpdateId;        // Holds the ID of the IncrementalUpdateResource
+wingS.globals.incrementalUpdateEnabled;   // True if this frame allows incremental updates
+wingS.globals.incrementalUpdateCursor;    // An object whose properties "enabled", "image"
                                 // "dx" and "dy" hold the settings of the cursor
-var incrementalUpdateHighlight; // An object whose properties "enabled", "color"
+wingS.globals.incrementalUpdateHighlight; // An object whose properties "enabled", "color"
                                 // and "duration" store the 3 highlight settings
-var requestQueue = new Array(); // A queue which stores requests to be processed
+wingS.globals.requestQueue = new Array(); // A queue which stores requests to be processed
 
-function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
+wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
     // Enqueue this request if another one hasn't been processed yet
-    if (enqueueThisRequest(submitForm, submitForm.arguments)) return;
+    if (wingS.request.enqueueThisRequest(wingS.request.submitForm, wingS.request.submitForm.arguments)) return;
 
     // Needed preparations
-    event = wingS.util.getEvent(event);
-    var target = wingS.util.getTarget(event);
+    event = wingS.events.getEvent(event);
+    var target = wingS.events.getTarget(event);
     var form = wingS.util.getParentByTagName(target, "FORM");
     if (eventName != null) {
         var eidProvider = wingS.util.getParentWearingAttribute(target, "eid");
         eventName = eidProvider.getAttribute("eid");
     }
 
-    if (invokeScriptListeners(scriptCodes)) {
+    if (wingS.request.invokeScriptListeners(scriptCodes)) {
 
         if (form != null) {
             // Generate unique IDs for the nodes we have to insert
@@ -148,7 +185,7 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
                 epochNode.setAttribute("id", epochNodeId);
                 form.appendChild(epochNode);
             }
-            epochNode.setAttribute("value", event_epoch);
+            epochNode.setAttribute("value", wingS.globals.event_epoch);
 
             // Encode event trigger if available
             var triggerNode = document.getElementById(triggerNodeId);
@@ -179,16 +216,16 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
 
             var submitted = false;
             // Form submit by means of AJAX
-            if (incrementalUpdateEnabled && ajaxEnabled) {
-                form.action = encodeUpdateId(incrementalUpdateId);
-                submitted = doAjaxSubmit(form);
+            if (wingS.globals.incrementalUpdateEnabled && ajaxEnabled) {
+                form.action = wingS.util.encodeUpdateId(wingS.globals.incrementalUpdateId);
+                submitted = wingS.ajax.doAjaxSubmit(form);
             }
             // Always (re-)set the form's action to the
             // URL of the CompleteUpdateResource, since
             // this should remain the default that will
             // be used whenever a form is NOT submitted
             // via this method - even though it should!
-            form.action = encodeUpdateId(completeUpdateId);
+            form.action = wingS.util.encodeUpdateId(wingS.globals.completeUpdateId);
             // Default form submit (fallback mechanism)
             if (!submitted) form.submit();
         } else {
@@ -204,56 +241,56 @@ function submitForm(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
                 var eventNode = document.getElementById(eventName);
                 if (eventNode.value) eventValue = eventNode.value;
             }
-            followLink(ajaxEnabled, eventName, eventValue);
+            wingS.request.followLink(ajaxEnabled, eventName, eventValue);
         }
     }
 }
 
-function followLink(ajaxEnabled, eventName, eventValue, scriptCodes) {
+wingS.request.followLink = function(ajaxEnabled, eventName, eventValue, scriptCodes) {
     // Enqueue this request if another one hasn't been processed yet
-    if (enqueueThisRequest(followLink, followLink.arguments)) return;
+    if (wingS.request.enqueueThisRequest(wingS.request.followLink, wingS.request.followLink.arguments)) return;
 
-    if (invokeScriptListeners(scriptCodes)) {
-        if (incrementalUpdateEnabled && ajaxEnabled) {
+    if (wingS.request.invokeScriptListeners(scriptCodes)) {
+        if (wingS.globals.incrementalUpdateEnabled && ajaxEnabled) {
             // Send request via AJAX
             var args = {};
             args.method = "GET";
             if (eventName != null && eventValue != null) {
-                args.event_epoch = event_epoch;
+                args.event_epoch = wingS.globals.event_epoch;
                 args[eventName] = eventValue;
             }
-            args.url = encodeUpdateId(incrementalUpdateId);
-            doAjaxRequest(args);
+            args.url = wingS.util.encodeUpdateId(wingS.globals.incrementalUpdateId);
+            wingS.ajax.doAjaxRequest(args);
         } else {
             // Send a default HTTP request
-            url = encodeUpdateId(completeUpdateId);
-            window.location.href = url + "?event_epoch=" + event_epoch +
-                                         "&" + eventName + "=" + eventValue;
+            url = wingS.util.encodeUpdateId(wingS.globals.completeUpdateId);
+            window.location.href = url + "?event_epoch=" + wingS.globals.event_epoch +
+                                   "&" + eventName + "=" + eventValue;
         }
     }
 }
 
-function getUpdates() {
-    followLink(true);
+wingS.ajax.getUpdates = function() {
+    wingS.request.followLink(true);
 }
 
-function enqueueThisRequest(send, args) {
+wingS.request.enqueueThisRequest = function(send, args) {
     if (AjaxRequest.isActive()) {
-        requestQueue.push( {"send" : send, "args" : args} );
+        wingS.globals.requestQueue.push( {"send" : send, "args" : args} );
         return true;
     }
     return false;
 }
 
-function dequeueNextRequest() {
-    if (requestQueue.length > 0) {
-        var request = requestQueue.shift();
+wingS.request.dequeueNextRequest = function() {
+    if (wingS.globals.requestQueue.length > 0) {
+        var request = wingS.globals.requestQueue.shift();
         var args = request.args;
         request.send(args[0], args[1], args[2], args[3]);
     }
 }
 
-function invokeScriptListeners(scriptCodes) {
+wingS.request.invokeScriptListeners = function(scriptCodes) {
     if (scriptCodes) {
         for (var i = 0; i < scriptCodes.length; i++) {
             invokeNext = scriptCodes[i]();
@@ -263,21 +300,21 @@ function invokeScriptListeners(scriptCodes) {
     return true;
 }
 
-function initAjaxCallbacks() {
+wingS.ajax.initAjaxCallbacks = function() {
     return {
-        "onLoading" : function(request) { showAjaxActivityIndicator(); },
-        "onSuccess" : function(request) { processAjaxRequest(request); },
-        "onError"   : function(request) { handleRequestError(request); }
+        "onLoading" : function(request) { wingS.ajax.showAjaxActivityIndicator(); },
+        "onSuccess" : function(request) { wingS.ajax.processAjaxRequest(request); },
+        "onError"   : function(request) { wingS.ajax.handleRequestError(request); }
     };
 }
 
-function doAjaxSubmit(form) {
-    var requestObject = initAjaxCallbacks();
+wingS.ajax.doAjaxSubmit = function(form) {
+    var requestObject = wingS.ajax.initAjaxCallbacks();
     return AjaxRequest.submit(form, requestObject);
 }
 
-function doAjaxRequest(args) {
-    var requestObject = initAjaxCallbacks();
+wingS.ajax.doAjaxRequest = function(args) {
+    var requestObject = wingS.ajax.initAjaxCallbacks();
     // Extend basic request object with arguments
     for (var i in args) requestObject[i] = args[i];
 
@@ -290,8 +327,8 @@ function doAjaxRequest(args) {
     }
 }
 
-function encodeUpdateId(id) {
-    return event_epoch + "-" + id;
+wingS.util.encodeUpdateId = function(id) {
+    return wingS.globals.event_epoch + "-" + id;
 }
 
 // =============================================================================
@@ -414,9 +451,7 @@ wingS.util.setCookie = function(name, value, days, path) {
 }
 
 wingS.util.storeScrollPosition = function(event) {
-    event = wingS.util.getEvent(event);
-
-    var target = wingS.util.getTarget(event);
+    var target = wingS.events.getTarget(event);
     var scrollableElement = wingS.util.getScrollableElement(target);
     if (scrollableElement && target) {
         var pos = target.scrollTop;
@@ -454,9 +489,7 @@ wingS.util.getScrollableElement = function(el) {
 }
 
 wingS.util.storeFocus = function(event) {
-    event = wingS.util.getEvent(event);
-    var target = wingS.util.getTarget(event);
-
+    var target = wingS.events.getTarget(event);
     var div = wingS.util.getParentWearingAttribute(target, "eid");
     var body = wingS.util.getParentByTagName(target, "BODY");
     /* Avoid rembering FORM as focus component as this automatically gains
@@ -466,17 +499,21 @@ wingS.util.storeFocus = function(event) {
     }
 }
 
+/**
+ * Alerts all fields/elements of a given object. NB: you will also get
+ * object methods (which are function valued properties).
+ * helper function to debug
+ * @param {Object} obj
+ */
+wingS.util.printAllFields = function(obj) {
+    for(var i in obj) {
+        logDebug(obj[i], obj);
+    }
+}
+
 wingS.util.checkUserAgent = function(string) {
     return navigator.userAgent.toLowerCase().indexOf(string) + 1;
 }
-
-var wu_dom = document.getElementById?1:0;
-var wu_ns4 = (document.layers && !wu_dom)?1:0;
-var wu_ns6 = (wu_dom && !document.all)?1:0;
-var wu_ie5 = (wu_dom && document.all)?1:0;
-var wu_konqueror = wingS.util.checkUserAgent('konqueror')?1:0;
-var wu_opera = wingS.util.checkUserAgent('opera')?1:0;
-var wu_safari = wingS.util.checkUserAgent('safari')?1:0;
 
 /* The following two functions are a workaround for IE to open a link in the
    right target/new window used in AnchorCG. */
@@ -488,7 +525,7 @@ wingS.util.checkTarget = function(target) {
 }
 
 wingS.util.openlink = function(target, url, scriptCodes) {
-  if (invokeScriptListeners(scriptCodes)) {
+  if (wingS.request.invokeScriptListeners(scriptCodes)) {
       // if the target exists => change URL, else => open URL in new window
       if (target == null) {
           window.location.href = url;
@@ -520,8 +557,9 @@ wingS.util.framewidth = function() {
 
 /* Cross-browser method to register an event listener on the passed object. Only
    Mozilla will support captive mode of event handling. The 'eventType' is without
-   the 'on'-prefix. Example: wingS.util.registerEvent(document,'focus',storeFocus,false); */
-wingS.util.registerEvent = function(obj, eventType, func, useCaption) {
+   the 'on'-prefix. Example: wingS.events.registerEvent(document,'focus',storeFocus,false); */
+// Deprecated! Use YAHOO.util.Event.addListener() instead of this function.
+wingS.events.registerEvent = function(obj, eventType, func, useCaption) {
     if (obj.addEventListener) {
         obj.addEventListener(eventType, func, useCaption);
         return true;
@@ -531,11 +569,6 @@ wingS.util.registerEvent = function(obj, eventType, func, useCaption) {
     } else {
         return false;
     }
-}
-
-function wu_toolTip(event, element) {
-    domTT_activate(element, event, "content", element.getAttribute("tip"), "predefined", "default");
-    return true;
 }
 
 // =============================================================================
@@ -593,6 +626,8 @@ function spinnerCallback(result) {
 
 // =============================================================================
 
+// DEPRECATED functions to handle onresize and onload
+
 /* Adds a function to the window.onresize functionality.
    This allows you to execute more than one function. */
 var windowOnResizes = new Array();
@@ -618,10 +653,10 @@ function addWindowOnLoadFunction(func) {
 /* The execution of all added window.onload functions. */
 window.onload = performWindowOnLoad;
 function performWindowOnLoad() {
-    if (incrementalUpdateCursor.enabled) {
-      AjaxActivityCursor.init();
+    if (wingS.globals.incrementalUpdateCursor.enabled) {
+      wingS.ajax.AjaxActivityCursor.init();
     }
-    hideAjaxActivityIndicator();
+    wingS.ajax.hideAjaxActivityIndicator();
     for (var i = 0; i < windowOnLoads.length; i++) {
         eval(windowOnLoads[i]);
     }
@@ -652,9 +687,9 @@ wingS.util.showModalDialog = function(dialogId, modalId) {
         if (parent.getAttribute('SComponentClass') == 'org.wings.SInternalFrame') {
             positionX = parent.offsetWidth / 2;
             positionY = parent.offsetHeight / 2;
-            positionX += absLeft(parent);
+            positionX += wingS.util.absLeft(parent);
             positionY += wingS.util.absTop(parent);
-            modalDialog.style.left = absLeft(parent) + 'px';
+            modalDialog.style.left = wingS.util.absLeft(parent) + 'px';
             modalDialog.style.top = wingS.util.absTop(parent) + 'px';
             modalDialog.style.width = parent.offsetWidth + 'px';
             modalDialog.style.height = parent.offsetHeight + 'px';
@@ -668,7 +703,7 @@ wingS.util.showModalDialog = function(dialogId, modalId) {
     dialog.style.zIndex = 1000;
 }
 
-wingS.util.layoutScrollPane = function(outerId) {
+wingS.layout.layoutScrollPaneFF = function(outerId) {
     var outer = document.getElementById(outerId);
     var div = outer.getElementsByTagName("DIV")[0];
     div.style.height =
@@ -676,7 +711,7 @@ wingS.util.layoutScrollPane = function(outerId) {
     div.style.display = "block";
 }
 
-function layoutScrollPaneIE(outerId) {
+wingS.layout.layoutScrollPaneIE = function(outerId) {
     var outer = document.getElementById(outerId);
     var div = outer.getElementsByTagName("DIV")[0];
     var td = wingS.util.getParentByTagName(div, "TD");
@@ -687,7 +722,7 @@ function layoutScrollPaneIE(outerId) {
     div.style.overflow = "auto";
 }
 
-function layoutAvailableSpaceIE(tableId) {
+wingS.layout.layoutAvailableSpaceIE = function(tableId) {
     var table = document.getElementById(tableId);
     if (table == null || table.style.height == table.getAttribute("layoutHeight")) return;
 
@@ -714,7 +749,7 @@ function layoutAvailableSpaceIE(tableId) {
 
 /* Calculates the absolute position of the element to the left. */
 wingS.util.absLeft = function(el) {
-    return (el.offsetParent) ? el.offsetLeft + absLeft(el.offsetParent) : el.offsetLeft;
+    return (el.offsetParent) ? el.offsetLeft + wingS.util.absLeft(el.offsetParent) : el.offsetLeft;
 }
 
 /* Calculates the absolute position of the element to the top. */
@@ -724,7 +759,7 @@ wingS.util.absTop = function(el) {
 
 // =============================================================================
 
-var filterOnAjaxRequest = new Array("addWindowOnLoadFunction"); // AJAX filters
+wingS.ajax.filterOnAjaxRequest = new Array("wingS.events.addWindowOnLoadFunction"); // AJAX filters
 
 /* At some points wingS uses functions to dynamically add callback methods which
    will be executed when special events occur, i.e. addWindowOnLoadFunction().
@@ -733,15 +768,15 @@ var filterOnAjaxRequest = new Array("addWindowOnLoadFunction"); // AJAX filters
    incremental updates. So in this case we have to invoke the desired callback
    function directly. In order to indicate that a funtion has to be filtered on
    an AJAX request, you simply have to add it to the "filterOnAjaxRequest" array. */
-for (var i = 0; i < filterOnAjaxRequest.length; i++) {
-    filterOnAjaxRequest[i] = new RegExp().compile(".*" + filterOnAjaxRequest[i] +
+for (var i = 0; i < wingS.ajax.filterOnAjaxRequest.length; i++) {
+    wingS.ajax.filterOnAjaxRequest[i] = new RegExp().compile(".*" + wingS.ajax.filterOnAjaxRequest[i] +
                              "\\s*\\(\\s*('(.*)'|\"(.*)\")\\s*\\)\\s*;.*", "g");
     // without escaping: /.*<FUNCTION NAME>\s*\(\s*('(.*)'|"(.*)")\s*\)\s*;.*/g
 }
 
 /* Prints some hidden debugging infos about the given AJAX request at the bottom
    of the page. This is done by dynamically attaching a dedicated textarea. */
-function enableAjaxDebugging(request) {
+wingS.ajax.enableAjaxDebugging = function(request) {
     var debug = document.getElementById("ajaxDebugging");
     if (debug == null) {
         var debugHtmlCode =
@@ -763,40 +798,40 @@ function enableAjaxDebugging(request) {
 }
 
 /* This function shows the previously enabled AJAX debugging view, if available. */
-function showAjaxDebugging() {
+wingS.ajax.showAjaxDebugging = function() {
     var debug = document.getElementById("ajaxDebugging");
     if (debug != null) debug.style.display = "block";
 }
 
 /* This function hides the previously enabled AJAX debugging view, if available. */
-function hideAjaxDebugging() {
+wingS.ajax.hideAjaxDebugging = function() {
     var debug = document.getElementById("ajaxDebugging");
     if (debug != null) debug.style.display = "none";
 }
 
-function handleRequestError(request) {
+wingS.ajax.handleRequestError = function(request) {
     //var errorMsg = "An error occured while processing an AJAX request!\n  -->  " +
     //               "Status code: " + request.status + " | " + request.statusText;
-    //hideAjaxActivityIndicator();
+    //wingS.ajax.hideAjaxActivityIndicator();
     //alert(errorMsg);
-    //window.location.href = encodeUpdateId(completeUpdateId);
+    //window.location.href = wingS.util.encodeUpdateId(wingS.globals.completeUpdateId);
     //dequeueNextRequest();
 
     document.close();
     document.open("text/html");
     document.write(request.responseText);
-    //document.write('<a href="' + encodeUpdateId(completeUpdateId) + '">Go back to previous page</a>');
+    //document.write('<a href="' + wingS.util.encodeUpdateId(wingS.globals.completeUpdateId) + '">Go back to previous page</a>');
     document.close();
 }
 
-function processAjaxRequest(request) {
-    enableAjaxDebugging(request);
+wingS.ajax.processAjaxRequest = function(request) {
+    wingS.ajax.enableAjaxDebugging(request);
 
     // Get the received XML response
     var xmlDoc = request.responseXML;
     // In case we do not get any XML
     if (xmlDoc == null) {
-        hideAjaxActivityIndicator();
+        wingS.ajax.hideAjaxActivityIndicator();
         //alert("DEBUG: WHAT SHALL WE DO HERE?");
         window.location.href = request.url;
         return;
@@ -831,7 +866,7 @@ function processAjaxRequest(request) {
             for (var i = 0; i < components.length; i++) {
                 var id = components[i].getAttribute("id");
                 var html = components[i].firstChild.data;
-                replaceComponentHtml(id, html);
+                wingS.util.replaceComponentHtml(id, html);
                 componentIds.push(id);
             }
             // Execute scripts needed for component updates
@@ -839,9 +874,9 @@ function processAjaxRequest(request) {
             for (var i = 0; i < scripts.length; i++) {
                 var code = scripts[i].firstChild.data;
                 try {
-                    for (var j = 0; j < filterOnAjaxRequest.length; j++) {
+                    for (var j = 0; j < wingS.ajax.filterOnAjaxRequest.length; j++) {
                         // Either $2 or $3 will always be an empty string
-                        code = code.replace(filterOnAjaxRequest[j], "$2$3;");
+                        code = code.replace(wingS.ajax.filterOnAjaxRequest[j], "$2$3;");
                     }
                     eval(code);
                 } catch(e) {
@@ -851,21 +886,21 @@ function processAjaxRequest(request) {
                 }
             }
             // Update the event epoch of this frame
-            event_epoch = getFirstChildData("event_epoch");
+            wingS.globals.event_epoch = getFirstChildData("event_epoch");
             // Hightlight the components updated above
-            if (incrementalUpdateHighlight.enabled) {
-                highlightComponentUpdates(componentIds);
+            if (wingS.globals.incrementalUpdateHighlight.enabled) {
+                wingS.ajax.highlightComponentUpdates(componentIds);
             }
         }
     }
-    hideAjaxActivityIndicator();
+    wingS.ajax.hideAjaxActivityIndicator();
     // Send next queued request
-    dequeueNextRequest();
+    wingS.request.dequeueNextRequest();
 }
 
 /* Replaces the old HTML code of the component with the given ID by the new one.
    In other words, this methods acts like a cross-browser "outerHTML"-method. */
-function replaceComponentHtml(id, html) {
+wingS.util.replaceComponentHtml = function(id, html) {
     var component = document.getElementById(id);
     if (component == null) return;
 
@@ -911,8 +946,8 @@ function replaceComponentHtml(id, html) {
 
 /* Highlights the components with the given IDs for a certain time interval with a
    specific background color. The duration and color that will be used is defined by
-   the properties with the same name of the "incrementalUpdateHighlight"-object. */
-function highlightComponentUpdates(componentIds) {
+   the properties with the same name of the "wingS.globals.incrementalUpdateHighlight"-object. */
+wingS.ajax.highlightComponentUpdates = function(componentIds) {
     for (var i = 0; i < componentIds.length; i++) {
         var component = document.getElementById(componentIds[i]);
         if (component == null) return;
@@ -921,18 +956,18 @@ function highlightComponentUpdates(componentIds) {
 
     function highlightComponent(component) {
         var initialBackgroundColor = component.style.backgroundColor;
-        component.style.backgroundColor = incrementalUpdateHighlight.color;
+        component.style.backgroundColor = wingS.globals.incrementalUpdateHighlight.color;
         var resetColor = function() {
             component.style.backgroundColor = initialBackgroundColor;
         };
-        setTimeout(resetColor, incrementalUpdateHighlight.duration);
+        setTimeout(resetColor, wingS.globals.incrementalUpdateHighlight.duration);
     }
 }
 
 /* Shows the AJAX activity cursor and makes a user-predefined element with the CSS
    ID "ajaxActivityIndicator" visible. The latter is typically an animated GIF. */
-function showAjaxActivityIndicator() {
-    if (incrementalUpdateCursor.enabled) AjaxActivityCursor.show();
+wingS.ajax.showAjaxActivityIndicator = function() {
+    if (wingS.globals.incrementalUpdateCursor.enabled) wingS.ajax.AjaxActivityCursor.show();
     var indicator = document.getElementById("ajaxActivityIndicator");
     if (indicator != null) {
         indicator.style.visibility = "visible";
@@ -941,8 +976,8 @@ function showAjaxActivityIndicator() {
 
 /* Hides the AJAX activity cursor and makes a user-predefined element with the CSS
    ID "ajaxActivityIndicator" invisible. The latter is typically an animated GIF. */
-function hideAjaxActivityIndicator() {
-    if (incrementalUpdateCursor.enabled) AjaxActivityCursor.hide();
+wingS.ajax.hideAjaxActivityIndicator = function() {
+    if (wingS.globals.incrementalUpdateCursor.enabled) wingS.ajax.AjaxActivityCursor.hide();
     var indicator = document.getElementById("ajaxActivityIndicator");
     if (indicator != null && !AjaxRequest.isActive()) {
         indicator.style.visibility = "hidden";
@@ -951,28 +986,28 @@ function hideAjaxActivityIndicator() {
 
 /* An object that encapsulates functions to show and hide an animated GIF besides
    the mouse cursor. Such a cursor can be used to indicate an active AJAX request. */
-var AjaxActivityCursor = {
+wingS.ajax.AjaxActivityCursor = {
     dx : 0,
     dy : 15,
     div : false,
 
     // Initialize cursor
     init : function () {
-        AjaxActivityCursor.dx = incrementalUpdateCursor.dx;
-        AjaxActivityCursor.dy = incrementalUpdateCursor.dy;
-        AjaxActivityCursor.div = document.createElement("div");
-        AjaxActivityCursor.div.style.position = "absolute";
-        AjaxActivityCursor.div.style.zIndex = "1000";
-        AjaxActivityCursor.div.style.display = "none";
-        AjaxActivityCursor.div.innerHTML = "<img src=\"" + incrementalUpdateCursor.image + "\"/>";
-        document.body.insertBefore(AjaxActivityCursor.div, document.body.firstChild);
-        document.onmousemove = AjaxActivityCursor.followMouse;
+        this.dx = wingS.globals.incrementalUpdateCursor.dx;
+        this.dy = wingS.globals.incrementalUpdateCursor.dy;
+        this.div = document.createElement("div");
+        this.div.style.position = "absolute";
+        this.div.style.zIndex = "1000";
+        this.div.style.display = "none";
+        this.div.innerHTML = "<img src=\"" + wingS.globals.incrementalUpdateCursor.image + "\"/>";
+        document.body.insertBefore(this.div, document.body.firstChild);
+        document.onmousemove = this.followMouse.bind(this);
     },
 
     // Callback function
     followMouse : function (event) {
-        event = wingS.util.getEvent(event);
-        var target = wingS.util.getTarget(event);
+        event = wingS.events.getEvent(event);
+        var target = wingS.events.getTarget(event);
         var pos = { left : event.clientX, top : event.clientY };
         var doc = (window.document.compatMode && window.document.compatMode == "CSS1Compat") ?
             window.document.documentElement : window.document.body || null;
@@ -984,20 +1019,19 @@ var AjaxActivityCursor = {
             pos.left += document.defaultView.getComputedStyle(target, null).getPropertyValue("left");
             pos.top += document.defaultView.getComputedStyle(target, null).getPropertyValue("top");
         }
-
-        AjaxActivityCursor.div.style.left = pos.left + AjaxActivityCursor.dx + "px";
-        AjaxActivityCursor.div.style.top = pos.top + AjaxActivityCursor.dy + "px";
+        this.div.style.left = pos.left + this.dx + "px";
+        this.div.style.top = pos.top + this.dy + "px";
     },
 
     // Show cursor
     show : function () {
-        AjaxActivityCursor.div.style.display = "block";
+        this.div.style.display = "block";
         return false;
     },
 
     // Hide cursor
     hide : function () {
-        AjaxActivityCursor.div.style.display = "none";
+        this.div.style.display = "none";
         return false;
     }
 };

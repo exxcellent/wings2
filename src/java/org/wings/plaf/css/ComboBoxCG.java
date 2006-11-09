@@ -45,7 +45,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         if (component.getActionListeners().length > 0 || component.getItemListeners().length > 0) {
             if (clientProperty == null) {
             	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "submitForm(" + !component.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !component.isCompleteUpdateForced() + ",event);";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 component.addScriptListener(javaScriptListener);
                 component.putClientProperty("onChangeSubmitListener", javaScriptListener);

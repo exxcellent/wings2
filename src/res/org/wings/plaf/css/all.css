@@ -538,23 +538,17 @@ ul.SPopupMenu a.x:hover{
     color: #004;
 }
 
-/* ---------- DOM ToolTips */
-div.domTT {
-    border: 1px solid #333333;
-}
-div.domTT .caption {
-    font-family: serif;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 1px 2px;
-    color: #FFFFFF;
-    background-color: #333333;
-}
-div.domTT .contents {
-    font-size: 12px;
-    font-family: sans-serif;
-    padding: 3px 2px;
+/* tooltips */
+.tt {
+    visibility: hidden;
+    position: absolute;
+    color: #000000;
     background-color: #F1F1FF;
+    font-family: arial,helvetica,verdana,sans-serif;
+    padding: 1px 2px;
+    border: 1px solid #333333;
+    font: 100% sans-serif;
+    width: auto;    
 }
 
 /* clears the windows */

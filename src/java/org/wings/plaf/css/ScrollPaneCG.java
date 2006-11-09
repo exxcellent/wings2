@@ -38,7 +38,7 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
 
             writeContent(device, component);
 
-            String script = "wingS.util.layoutScrollPane('" + component.getName() + "');";
+            String script = "wingS.layout.layoutScrollPane('" + component.getName() + "');";
             RenderHelper.getInstance(component).addScript(script);
         } else {
             writeContent(device, component);

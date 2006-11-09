@@ -37,7 +37,8 @@ public interface JavaScriptEvent {
     public static final String ON_MOUSE_UP = "onmouseup";
     public static final String ON_RESET = "onreset";
     public static final String ON_RESIZE = "onresize";
+    public static final String ON_SCROLL = "onscroll";
     public static final String ON_SELECT = "onselect";
     public static final String ON_SUBMIT = "onsubmit";
-    public static final String ON_UNLOAD = "onunload";
+    public static final String ON_UNLOAD = "onunload";        
 }

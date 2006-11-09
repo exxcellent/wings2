@@ -54,7 +54,7 @@ ul.SMenu li a
 }
 
 /* tooltips opacity */
-div.domTT {
+.tt {
     filter:alpha(opacity=80);
 }
 

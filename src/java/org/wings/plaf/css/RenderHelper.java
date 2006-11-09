@@ -8,11 +8,10 @@ import org.wings.SComponent;
 import org.wings.SPopupMenu;
 import org.wings.SMenuBar;
 import org.wings.SMenuItem;
-import org.wings.LowLevelEventListener;
 import org.wings.SContainer;
 import org.wings.resource.ResourceManager;
+import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.ScriptListener;
-import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 
 import java.util.ArrayList;
@@ -43,25 +42,32 @@ public final class RenderHelper {
     private boolean incrementalUpdateMode = false;
 
     public void reset() {
-    	scripts.clear();
+        scripts.clear();
         menus.clear();
         menueRenderBuffer.reset();
     }
 
     public void addScript(String script) {
-    	scripts.add(script);
+        scripts.add(script);
     }
 
     public List getCollectedScripts() {
-    	return scripts;
+        return scripts;
     }
 
     public void collectScripts(SComponent component) {
-        for (int i = 0; i < component.getScriptListeners().length; ++i) {
-            ScriptListener scriptListener = component.getScriptListeners()[i];
+        ScriptListener[] scriptListeners = component.getScriptListeners();
+        for (int i = 0; i < scriptListeners.length; ++i) {
+            ScriptListener scriptListener = scriptListeners[i];
             String script = scriptListener.getScript();
             if (script != null) {
-            	addScript(script);
+                addScript(script);
+            }
+            if (scriptListener instanceof JavaScriptDOMListener) {
+                script = ((JavaScriptDOMListener) scriptListener).getInitCode(component);
+                if (script != null) {
+                    addScript(script);
+                }
             }
         }
     }
@@ -136,11 +142,11 @@ public final class RenderHelper {
         this.verticalLayoutPadding = verticalLayoutPadding;
     }
 
-	public boolean isIncrementalUpdateMode() {
-		return incrementalUpdateMode;
-	}
+    public boolean isIncrementalUpdateMode() {
+        return incrementalUpdateMode;
+    }
 
-	public void setIncrementalUpdateMode(boolean enabled) {
-		this.incrementalUpdateMode = enabled;
-	}
+    public void setIncrementalUpdateMode(boolean enabled) {
+        this.incrementalUpdateMode = enabled;
+    }
 }

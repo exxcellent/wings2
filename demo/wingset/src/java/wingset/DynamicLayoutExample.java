@@ -68,7 +68,7 @@ public class DynamicLayoutExample extends WingSetPane {
                 panel.add(demoPanels[selectLayoutManager.getSelectedIndex()]);
             }
         });
-        selectLayoutManager.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submitForm(true, event);"));
+        selectLayoutManager.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "wingS.request.submitForm(true, event);"));
 
         controls.add(selectLayoutManager);
 

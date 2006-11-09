@@ -3,6 +3,14 @@
    typical js namespace clutter.
 */
 
+var wu_dom = document.getElementById?1:0;
+var wu_ns4 = (document.layers && !wu_dom)?1:0;
+var wu_ns6 = (wu_dom && !document.all)?1:0;
+var wu_ie5 = (wu_dom && document.all)?1:0;
+var wu_konqueror = wingS.util.checkUserAgent('konqueror')?1:0;
+var wu_opera = wingS.util.checkUserAgent('opera')?1:0;
+var wu_safari = wingS.util.checkUserAgent('safari')?1:0;
+
 var wpm_menuOpen = 0;
 // is a menu open
 var wpm_activeMenu;
@@ -219,7 +227,7 @@ function wpm_setVisible(element, visible) {
 
 
 function wpm_openMenu(event, id, parentId) {
-    var event = wingS.util.getEvent(event);
+    var event = wingS.events.getEvent(event);
 
     if (parentULId(event) != parentId) {
         // don't bubble
@@ -261,7 +269,7 @@ function wpm_openMenu(event, id, parentId) {
 }
 
 function parentULId(event) {
-    var node = wingS.util.getTarget(event);
+    var node = wingS.events.getTarget(event);
     while (node) {
         if (node.tagName == "UL") {
             return node.id;

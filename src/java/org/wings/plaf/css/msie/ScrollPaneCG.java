@@ -59,7 +59,7 @@ public final class ScrollPaneCG extends org.wings.plaf.css.ScrollPaneCG {
                 borderHeight += border.getThickness(SConstants.BOTTOM);
             }
 
-            RenderHelper.getInstance(c).addScript("layoutAvailableSpaceIE('" + c.getName() + "');");
+            RenderHelper.getInstance(c).addScript("wingS.layout.layoutAvailableSpaceIE('" + c.getName() + "');");
 
             device.print("<table ");
             Utils.optAttribute(device, "layoutHeight", height);

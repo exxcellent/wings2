@@ -61,7 +61,7 @@ class CaptureDefaultBindingsScriptListener extends JavaScriptListener
         if (typed.length() > 0)
             component.addScriptListener(new CaptureDefaultBindingsScriptListener("onkeydown", "return keydown_" + component.getName() + "(event)",
                     "function keydown_" + component.getName() + "(event) {\n  " +
-                    "event = wingS.util.getEvent(event);\n  " +
+                    "event = wingS.events.getEvent(event);\n  " +
                     typed.toString() + "  return true;\n}\n"));
     }
 
