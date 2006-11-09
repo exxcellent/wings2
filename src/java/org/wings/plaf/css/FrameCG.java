@@ -628,7 +628,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         device.print("// script code collected during rendering:\n");
         for (Iterator i = RenderHelper.getInstance(frame).getCollectedScripts().iterator(); i.hasNext();) {
-            device.print(i.next() + "\n");
+            device.print(i.next()).print("\n");
         }
         ScriptListener[] scriptListeners = component.getScriptListeners();
         for (int i = 0; i < scriptListeners.length; ++i) {
@@ -640,7 +640,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             if (scriptListener instanceof JavaScriptDOMListener) {
                 script = ((JavaScriptDOMListener) scriptListener).getInitCode(component);
                 if (script != null) {
-                    device.print(script + "\n");
+                    device.print(script).print("\n");
                 }
             }
         }

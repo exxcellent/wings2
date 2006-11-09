@@ -57,9 +57,10 @@ public final class RenderHelper {
 
     public void collectScripts(SComponent component) {
         ScriptListener[] scriptListeners = component.getScriptListeners();
+        String script = null;
         for (int i = 0; i < scriptListeners.length; ++i) {
             ScriptListener scriptListener = scriptListeners[i];
-            String script = scriptListener.getScript();
+            script = scriptListener.getScript();
             if (script != null) {
                 addScript(script);
             }
@@ -70,6 +71,12 @@ public final class RenderHelper {
                 }
             }
         }
+        
+        // add tooltip script
+        script = ToolTipCG.generateTooltipInitScript(component);                
+        if (script != null) {
+            addScript(script);
+        }   
     }
 
     public List getCollectedMenues() {

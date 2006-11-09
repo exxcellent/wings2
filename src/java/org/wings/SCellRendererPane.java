@@ -76,6 +76,8 @@ public class SCellRendererPane
 
         addComponent(c);
 
+       
+        // bsc: FIXME. This creates an uplink into CG layer!
         RenderHelper renderHelper = RenderHelper.getInstance(c);
         renderHelper.setVerticalLayoutPadding(0);
         renderHelper.setHorizontalLayoutPadding(0);

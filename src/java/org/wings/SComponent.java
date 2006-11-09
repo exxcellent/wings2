@@ -53,8 +53,6 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
-import org.wings.script.JavaScriptDOMEvent;
-import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Session;
@@ -1357,24 +1355,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public void setToolTipText(String t) {                                       
         reloadIfChange(this.tooltip, t);
-        if (t != null)
-            tooltip = t;                
-        else
-            return;
-               
-        SToolTipManager ttManager = SToolTipManager.sharedInstance();        
-        if (tooltip.length() > 0) {                                    
-            String code = "new YAHOO.widget.Tooltip('"+ this.getName() +"_tooltip', {" +
-                    "context: '"+ this.getName() +"', " +
-                    "text: \""+ tooltip +"\"," +
-                    "showdelay: "+ ttManager.getInitialDelay() +"," +
-                    "autodismissdelay: "+ ttManager.getDismissDelay() + 
-                    "});";
-            String function = "function() {"+ code + "}";
-                        
-            this.addScriptListener(new JavaScriptDOMListener(JavaScriptDOMEvent.ON_AVAILABLE, function));
-        }                
-        
+        this.tooltip = t;                
     }
 
     /**
