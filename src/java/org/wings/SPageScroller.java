@@ -156,8 +156,8 @@ public class SPageScroller extends SAbstractAdjustable {
      * @param count : New amount of page clickables.
      */
     public void setDirectPages(int count) {
-        if (directPages != count)
-            directPages = count;
+        reloadIfChange(directPages, count);
+        directPages = count;
     }
 
     public final int getPageCount() {

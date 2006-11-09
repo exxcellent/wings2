@@ -14,40 +14,39 @@
 package wingset;
 
 import org.wings.*;
-import org.wings.table.STableColumnModel;
+import org.wings.table.SDefaultTableColumnModel;
 import org.wings.table.STableColumn;
 
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */
-public class ScrollPaneExample
-        extends WingSetPane
+public class ScrollPaneExample extends WingSetPane
 {
     private ScrollPaneControls controls;
     private STable table;
     private STree tree;
+    private SList list;
     private SScrollPane scrollPane;
 
     public SComponent createExample() {
-        table = new STable(new TableExample.ROTableModel(15, 15));
-        table.setShowAsFormComponent(true);
+        table = new STable(new TableExample.ROTableModel(15, 42));
         table.setDefaultRenderer(new TableExample.MyCellRenderer());
 
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
-        tree.setName("tree");
-        tree.setShowAsFormComponent(false);
+
+        list = createTestList(42);
 
         scrollPane = new SScrollPane(table);
+        scrollPane.setHorizontalExtent(10);
+        scrollPane.setVerticalExtent(20);
         scrollPane.getHorizontalScrollBar().setBlockIncrement(3);
         scrollPane.getVerticalScrollBar().setBlockIncrement(3);
-
-        ((SScrollBar) scrollPane.getHorizontalScrollBar()).setShowAsFormComponent(false);
-        ((SScrollBar) scrollPane.getVerticalScrollBar()).setShowAsFormComponent(false);
 
         controls = new ScrollPaneControls();
         controls.addControllable(scrollPane);
@@ -64,51 +63,164 @@ public class ScrollPaneExample
 
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
-            final SCheckBox paging = new SCheckBox("Paged Scrolling");
-            paging.addActionListener(new java.awt.event.ActionListener() {
+            String[] scrollables = {"table", "tree", "list"};
+            final SComboBox scrollable = new SComboBox(scrollables);
+            scrollable.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    boolean selected = paging.isSelected();
-                    ((SScrollPaneLayout)scrollPane.getLayout()).setPaging(selected);
-                }
-            });
-            paging.setSelected(true);
-            addControl(paging);
-
-            final SRadioButton tableButton = new SRadioButton("table");
-            final SRadioButton treeButton = new SRadioButton("tree");
-            final SButtonGroup group = new SButtonGroup();
-            group.add(tableButton);
-            group.add(treeButton);
-            tableButton.setSelected(true);
-
-            group.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (tableButton.isSelected()) {
+                    int newScrollable = scrollable.getSelectedIndex();
+                    switch (newScrollable) {
+                    case 0:
                         showInPane(table);
-                    } else {
+                        break;
+                    case 1:
                         showInPane(tree);
+                        break;
+                    case 2:
+                        showInPane(list);
+                        break;
                     }
                 }
-
             });
 
-            final SCheckBox hideSomeColumns = new SCheckBox("Hide some columns");
+            String[] scrollpaneModes = {"scrolling", "complete", "paging"};
+            final SComboBox mode = new SComboBox(scrollpaneModes);
+            mode.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int newMode = mode.getSelectedIndex();
+                    switch (newMode) {
+                    case 0:
+                        scrollPane.setMode(SScrollPane.MODE_SCROLLING);
+                        scrollPane.setPreferredSize(new SDimension("100%", SDimension.AUTO));
+                        break;
+                    case 1:
+                        scrollPane.setMode(SScrollPane.MODE_COMPLETE);
+                        scrollPane.setPreferredSize(new SDimension("100%", "457"));
+                        break;
+                    case 2:
+                        scrollPane.setMode(SScrollPane.MODE_PAGING);
+                        scrollPane.setPreferredSize(new SDimension("100%", SDimension.AUTO));
+                        break;
+                    }
+                }
+            });
+
+            final SPageScroller horizontalPageScroller = new SPageScroller(SPageScroller.VERTICAL);
+            horizontalPageScroller.setLayoutMode(SPageScroller.HORIZONTAL);
+            String[] horizontalScrollBars = {"scrollbar", "pagescroller", "null"};
+            final SComboBox hScrollBar = new SComboBox(horizontalScrollBars);
+            hScrollBar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int newScrollbar = hScrollBar.getSelectedIndex();
+                    switch (newScrollbar) {
+                    case 0:
+                        scrollPane.setHorizontalScrollBar(new SScrollBar(SScrollBar.HORIZONTAL));
+                        break;
+                    case 1:
+                        scrollPane.setHorizontalScrollBar(horizontalPageScroller);
+                        break;
+                    case 2:
+                        scrollPane.setHorizontalScrollBar(null);
+                        break;
+                    }
+                }
+            });
+
+            final SPageScroller verticalPageScroller = new SPageScroller(SPageScroller.HORIZONTAL);
+            verticalPageScroller.setLayoutMode(SPageScroller.VERTICAL);
+            String[] verticalScrollBars = {"scrollbar", "pagescroller", "null"};
+            final SComboBox vScrollBar = new SComboBox(verticalScrollBars);
+            vScrollBar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int newScrollbar = vScrollBar.getSelectedIndex();
+                    switch (newScrollbar) {
+                    case 0:
+                        scrollPane.setVerticalScrollBar(new SScrollBar(SScrollBar.VERTICAL));
+                        break;
+                    case 1:
+                        scrollPane.setVerticalScrollBar(verticalPageScroller);
+                        break;
+                    case 2:
+                        scrollPane.setVerticalScrollBar(null);
+                        break;
+                    }
+                }
+            });
+
+            String[] horizontalPolicies = {"as needed", "always", "never"};
+            final SComboBox hScrollBarPolicy = new SComboBox(horizontalPolicies);
+            hScrollBarPolicy.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int newPolicy = hScrollBarPolicy.getSelectedIndex();
+                    switch (newPolicy) {
+                    case 0:
+                        scrollPane.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                        break;
+                    case 1:
+                        scrollPane.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                        break;
+                    case 2:
+                        scrollPane.setHorizontalScrollBarPolicy(SScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                        break;
+                    }
+                }
+            });
+
+            String[] verticalPolicies = {"as needed", "always", "never"};
+            final SComboBox vScrollBarPolicy = new SComboBox(verticalPolicies);
+            vScrollBarPolicy.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int newPolicy = vScrollBarPolicy.getSelectedIndex();
+                    switch (newPolicy) {
+                    case 0:
+                        scrollPane.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                        break;
+                    case 1:
+                        scrollPane.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                        break;
+                    case 2:
+                        scrollPane.setVerticalScrollBarPolicy(SScrollPane.VERTICAL_SCROLLBAR_NEVER);
+                        break;
+                    }
+                }
+            });
+
+            final SCheckBox hideSomeColumns = new SCheckBox("Hide some table columns");
             hideSomeColumns.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    STableColumnModel columnModel = table.getColumnModel();
-                    for (int i=0; i < columnModel.getColumnCount(); i++) {
+                    SDefaultTableColumnModel columnModel = (SDefaultTableColumnModel) table.getColumnModel();
+                    for (int i = 0; i < columnModel.getColumnCount(); ++i) {
                         if (i % 3 == 0) {
                             STableColumn column = columnModel.getColumn(i);
-                            column.setHidden(hideSomeColumns.isSelected());
+                            columnModel.setColumnHidden(column, hideSomeColumns.isSelected());
                         }
                     }
                 }
             });
 
-            addControl(new SLabel(""));
-            addControl(tableButton);
-            addControl(treeButton);
+            addControl(new SLabel("Scrollable: "));
+            addControl(scrollable);
+            addControl(new SLabel("Mode: "));
+            addControl(mode);
+            addControl(new SLabel("Scrollbar (H/V): "));
+            addControl(hScrollBar);
+            addControl(vScrollBar);
+            addControl(new SLabel("Scrollbar policy (H/V): "));
+            addControl(hScrollBarPolicy);
+            addControl(vScrollBarPolicy);
             addControl(hideSomeColumns);
         }
     }
+
+    private SList createTestList(int rows) {
+        String[] modelData = new String[rows];
+        for (int i = 0; i < rows; ++i) {
+            modelData[i] = "This is list item number " + (i + 1);
+        }
+
+        SList testList = new SList(new SDefaultListModel(modelData));
+        testList.setShowAsFormComponent(false);
+
+        return testList;
+    }
+
 }

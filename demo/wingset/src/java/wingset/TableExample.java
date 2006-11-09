@@ -305,6 +305,9 @@ public class TableExample
             final SCheckBox editable = new SCheckBox("editable");
             editable.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    if (!editable.isSelected()) {
+                        table.removeEditor();
+                    }
                     table.setEditable(editable.isSelected());
                 }
             });
@@ -374,6 +377,7 @@ public class TableExample
                 public void actionPerformed(ActionEvent e) {
                     STableColumnModel columnModel = table.getColumnModel();
                     Collections.reverse((java.util.List)columnModel.getColumns());
+                    table.reload(ReloadManager.STATE);
                 }
             });
             addControl(reverseColumnOrder);
@@ -381,10 +385,12 @@ public class TableExample
             final SCheckBox hideSomeColumns = new SCheckBox("Hide some Columns");
             hideSomeColumns.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    boolean hide = hideSomeColumns.isSelected();
-                    STableColumnModel columnModel = table.getColumnModel();
-                    for (int i=0; i < columnModel.getColumnCount(); i++) {
-                        columnModel.getColumn(i).setHidden(hide && i %3 == 0);
+                    SDefaultTableColumnModel columnModel = (SDefaultTableColumnModel) table.getColumnModel();
+                    for (int i = 0; i < columnModel.getColumnCount(); ++i) {
+                        if (i % 3 == 0) {
+                            STableColumn column = columnModel.getColumn(i);
+                            columnModel.setColumnHidden(column, hideSomeColumns.isSelected());
+                        }
                     }
                 }
             });

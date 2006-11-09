@@ -13,10 +13,6 @@
  */
 package org.wings.session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-
 
 /**
  * A global way to access the current session.

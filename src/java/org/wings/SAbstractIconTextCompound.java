@@ -28,7 +28,7 @@ import java.awt.event.ItemListener;
 
 /**
  * Base class for elements with icon and text like {@link SAbstractButton} and {@link SClickable}.
- * 
+ *
  * It supports 7 different icon states.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -90,6 +90,7 @@ public abstract class SAbstractIconTextCompound
     private int iconTextGap = 4;
 
     private boolean delayEvents = false;
+    private boolean delayedEvent = false;
 
     /**
      * Create a button with given text.
@@ -111,12 +112,13 @@ public abstract class SAbstractIconTextCompound
     public SButtonModel getModel() {
         return model;
     }
-    
+
     public void setModel(SButtonModel model) {
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
         this.model = model;
         reloadIfChange(this.model, model, ReloadManager.STATE);
+        this.model = model;
     }
 
     /**
@@ -209,8 +211,8 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setHorizontalTextPosition(int textPosition) {
-        horizontalTextPosition = textPosition;
         reloadIfChange(this.horizontalTextPosition, textPosition);
+        horizontalTextPosition = textPosition;
 
     }
 
@@ -219,8 +221,8 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setVerticalTextPosition(int textPosition) {
-        verticalTextPosition = textPosition;
         reloadIfChange(this.verticalTextPosition, textPosition);
+        verticalTextPosition = textPosition;
     }
 
     public int getVerticalTextPosition() {
@@ -228,8 +230,8 @@ public abstract class SAbstractIconTextCompound
     }
 
     public void setIconTextGap(int gap) {
-        iconTextGap = gap;
         reloadIfChange(this.iconTextGap, gap);
+        iconTextGap = gap;
     }
 
     public int getIconTextGap() {
@@ -370,7 +372,7 @@ public abstract class SAbstractIconTextCompound
      */
     public SIcon getDisabledIcon() {
        // Creates disabled icon only for SImageIcons not for SURLIcons
-    	/*
+        /*
          if(disabledIcon == null) {
            if(icon != null && icon instanceof SImageIcon)
              disabledIcon = new SImageIcon(GrayFilter.createDisabledImage(((SImageIcon)icon).getImage()));
@@ -462,7 +464,16 @@ public abstract class SAbstractIconTextCompound
     public void setSelected(boolean selected) {
         if (model.isSelected() != selected) {
             model.setSelected(selected);
-            fireStateChanged();
+
+            if (!delayEvents) {
+                fireStateChanged();
+                fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, this,
+                        model.isSelected() ? ItemEvent.SELECTED : ItemEvent.DESELECTED));
+                delayedEvent = false;
+            }
+            else
+                delayedEvent = true;
+
             reload(ReloadManager.STATE);
         }
     }
@@ -479,9 +490,6 @@ public abstract class SAbstractIconTextCompound
         setPressedIcon(icons[PRESSED_ICON]);
         setSelectedIcon(icons[SELECTED_ICON]);
     }
-
-
-    private ItemEvent delayedItemEvent;
 
     protected final void delayEvents(boolean b) {
         delayEvents = b;
@@ -502,11 +510,6 @@ public abstract class SAbstractIconTextCompound
         if (ie == null)
             return;
 
-        if (delayEvents) {
-            delayedItemEvent = ie;
-            return;
-        } // end of if ()
-        
         // Guaranteed to return a non-null array
         Object[] listeners = getListenerList();
         // Process the listeners last to first, notifying
@@ -518,17 +521,15 @@ public abstract class SAbstractIconTextCompound
         }
     }
 
-    public void fireIntermediateEvents() {
-        if (delayEvents && delayedItemEvent != null) {
-            delayEvents = false;
-            fireItemStateChanged(delayedItemEvent);
-            delayEvents = true;
-        } // end of if ()
-
-    }
+    public void fireIntermediateEvents() {}
 
     public void fireFinalEvents() {
         super.fireFinalEvents();
-        delayEvents = false;
+        if (delayedEvent) {
+            fireStateChanged();
+            fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, this,
+                    model.isSelected() ? ItemEvent.SELECTED : ItemEvent.DESELECTED));
+            delayedEvent = false;
+        }
     }
 }

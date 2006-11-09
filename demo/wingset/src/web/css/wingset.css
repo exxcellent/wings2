@@ -5,21 +5,18 @@
 */
 
 .SRadioButton input {
-    background-color: #eee;
+    background-color: #eeeeee;
 }
-/*.SRadioButton input {
-    border: 1px solid #aaa;
-}*/
+
 input.STextField,
 input.SFormattedTextField,
 input.SPasswordField,
 textarea.STextArea,
 select.SComboBox,
-select.SList{
-	border: 1px solid #ddd;
+select.SList {
+    border: 1px solid #dddddd;
     background-color: #f8f8f8;
 }
-
 
 /* ----- STable selection line: orange */
 .STable table tbody tr.selected {

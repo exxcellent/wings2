@@ -13,6 +13,7 @@
  */
 package wingset;
 
+import org.wings.ReloadManager;
 import org.wings.SAbstractButton;
 import org.wings.SBorderLayout;
 import org.wings.SCheckBox;
@@ -116,13 +117,13 @@ public class CheckBoxExample
 
     class ButtonControls extends ComponentControls {
         public ButtonControls() {
-            final SCheckBox useImages = new SCheckBox("Use Icons");
-            useImages.setSelected(true);
+            final SCheckBox useImages = new SCheckBox("Show icons in form");
+            final CheckBoxCG cg = (CheckBoxCG) getSession().getCGManager().getCG(SCheckBox.class);
+            useImages.setSelected(cg.isUseIconsInForm());
             useImages.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    boolean use = useImages.isSelected();
-
-                    ((CheckBoxCG)getSession().getCGManager().getCG(SCheckBox.class)).setUseIconsInForm(use);
+                    cg.setUseIconsInForm(useImages.isSelected());
+                    reload(ReloadManager.STATE);
                 }
             });
             addControl(useImages);

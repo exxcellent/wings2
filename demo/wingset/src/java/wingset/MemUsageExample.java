@@ -13,6 +13,7 @@
  */
 package wingset;
 
+import org.wings.ReloadManager;
 import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SDimension;
@@ -22,7 +23,6 @@ import org.wings.SProgressBar;
 import org.wings.STemplateLayout;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
-import org.wings.session.SessionManager;
 import org.wings.session.WingsStatistics;
 import org.wings.util.SStringBuilder;
 
@@ -54,6 +54,13 @@ public class MemUsageExample extends WingSetPane {
         gc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.gc();
+                panel.reload(ReloadManager.STATE);
+            }
+        });
+        // Action listener for refresh button trigger
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                panel.reload(ReloadManager.STATE);
             }
         });
         // Action listener for exit button trigger

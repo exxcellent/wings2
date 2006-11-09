@@ -30,6 +30,7 @@ import org.wings.SPanel;
 import org.wings.SToolBar;
 import org.wings.border.SBorder;
 import org.wings.border.SLineBorder;
+import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
 import java.awt.*;
@@ -67,7 +68,7 @@ public class DynamicLayoutExample extends WingSetPane {
                 panel.add(demoPanels[selectLayoutManager.getSelectedIndex()]);
             }
         });
-        selectLayoutManager.addScriptListener(new JavaScriptListener("onChange", "this.form.submit()"));
+        selectLayoutManager.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submitForm(true, event);"));
 
         controls.add(selectLayoutManager);
 
