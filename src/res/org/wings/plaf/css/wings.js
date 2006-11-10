@@ -657,10 +657,6 @@ function addWindowOnLoadFunction(func) {
 /* The execution of all added window.onload functions. */
 window.onload = performWindowOnLoad;
 function performWindowOnLoad() {
-    if (wingS.globals.incrementalUpdateCursor.enabled) {
-        AjaxActivityCursor.init();
-    }
-    wingS.ajax.hideAjaxActivityIndicator();
     for (var i = 0; i < windowOnLoads.length; i++) {
         eval(windowOnLoads[i]);
     }
@@ -999,6 +995,7 @@ wingS.ajax.AjaxActivityCursor = function() {
 
 // Initialize cursor
 wingS.ajax.AjaxActivityCursor.prototype.init = function() {
+    alert("INIT CALLED!!!");
     this.dx = wingS.globals.incrementalUpdateCursor.dx;
     this.dy = wingS.globals.incrementalUpdateCursor.dy;
     this.div = document.createElement("div");

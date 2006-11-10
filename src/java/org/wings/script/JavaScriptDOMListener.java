@@ -23,17 +23,17 @@ import org.wings.util.SStringBuilder;
  * @author Christian Schyma
  */
 public class JavaScriptDOMListener extends JavaScriptListener {
-            
+
     /**
      * object to override default event scope
      */
     private String customObject = null;
-    
+
     /**
      * the component this listener is associated with
      */
     private SComponent component;
-    
+
     /**
      * @param event one of JavaScriptDOMEvent (e.g. JavaScriptDOMEvent.ON_CLICK) to act on
      * @param code callback function fired on event
@@ -43,12 +43,12 @@ public class JavaScriptDOMListener extends JavaScriptListener {
         super(event, code);
         this.component = component;
     }
-    
+
     /**
      * @param event one of JavaScriptDOMEvent (e.g. JavaScriptDOMEvent.ON_CLICK) to act on
      * @param code callback function fired on event
-     * @param customObject object that is used for the execution scope (so it becomes "this" in the callback) instead of 
-     * the default execution scope of the element the event was fired upon     
+     * @param customObject object that is used for the execution scope (so it becomes "this" in the callback) instead of
+     * the default execution scope of the element the event was fired upon
      * @param component the component this listener is associated with
      */
     public JavaScriptDOMListener(String event, String code, String customObject, SComponent component) {
@@ -56,10 +56,10 @@ public class JavaScriptDOMListener extends JavaScriptListener {
         this.customObject = customObject;
         this.component = component;
     }
-            
+
     /**
      * Returns executable code to initialize the JavaScript listener for the
-     * given component.     
+     * given component.
      * @return init code
      */
     public String getScript() {
@@ -68,28 +68,28 @@ public class JavaScriptDOMListener extends JavaScriptListener {
                 .append("'")
                 .append(component.getName())
                 .append("'");
-        
-        // special Yahoo UI event, see JavaScriptDOMEvent.ON_AVAILABLE docu for more        
-        if (this.getEvent().compareTo(JavaScriptDOMEvent.ON_AVAILABLE) == 0) {
-            
+
+        // special Yahoo UI event, see JavaScriptDOMEvent.ON_AVAILABLE docu for more
+        if (this.getEvent().compareTo(JavaScriptEvent.ON_AVAILABLE) == 0) {
+
             SStringBuilder initCode = new SStringBuilder();
             initCode
                     .append("YAHOO.util.Event.onAvailable(")
                     .append(elementId).append(", ")
                     .append(this.getCode()).append("); ");
             return initCode.toString();
-            
+
         } else {
-            
+
             // the 'on' has to be removed for W3C DOM Event Handling
             // e.g. 'onload' becomes 'load''
             String modifiedEventName = this.getEvent();
             if (modifiedEventName.startsWith("on")) {
                 modifiedEventName = modifiedEventName.substring(2);
             }
-            
+
             // some events are only registerable to special browser objects
-            if (modifiedEventName.compareTo("load") == 0)                
+            if (modifiedEventName.compareTo("load") == 0)
                 elementId.delete(0, elementId.length()).append("window");
             else if (modifiedEventName.compareTo("resize") == 0)
                 elementId.delete(0, elementId.length()).append("window");
@@ -97,26 +97,26 @@ public class JavaScriptDOMListener extends JavaScriptListener {
                 elementId.delete(0, elementId.length()).append("window");
             else if (modifiedEventName.compareTo("focus") == 0)
                 elementId.delete(0, elementId.length()).append("document");
-            
+
             SStringBuilder initCode = new SStringBuilder();
             initCode
                     .append("YAHOO.util.Event.addListener(")
                     .append(elementId).append(", ")
                     .append("'").append(modifiedEventName).append("', ")
                     .append(this.getCode());
-            
+
             // modifies the scope of the callback function
             if (this.customObject != null) {
                 initCode
                     .append(", ").append(customObject)
                     .append(", true");
             }
-            
+
             initCode.append(");");
-            
+
             return initCode.toString();
-            
+
         }
-    }    
-    
+    }
+
 }

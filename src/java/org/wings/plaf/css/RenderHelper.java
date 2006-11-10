@@ -10,7 +10,6 @@ import org.wings.SMenuBar;
 import org.wings.SMenuItem;
 import org.wings.SContainer;
 import org.wings.resource.ResourceManager;
-import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.ScriptListener;
 import org.wings.io.StringBuilderDevice;
 
@@ -63,14 +62,14 @@ public final class RenderHelper {
             script = scriptListener.getScript();
             if (script != null) {
                 addScript(script);
-            }            
+            }
         }
-        
+
         // add tooltip script
-        script = ToolTipCG.generateTooltipInitScript(component);                
+        script = ToolTipCG.generateTooltipInitScript(component);
         if (script != null) {
             addScript(script);
-        }   
+        }
     }
 
     public List getCollectedMenues() {

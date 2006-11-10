@@ -21,8 +21,8 @@ import org.wings.Renderable;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.Version;
-import org.wings.script.JavaScriptDOMEvent;
 import org.wings.script.JavaScriptDOMListener;
+import org.wings.script.JavaScriptEvent;
 import org.wings.util.SessionLocal;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.externalizer.ExternalizeManager;
@@ -269,7 +269,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public final String YAHOO_SCRIPT = (String) ResourceManager.getObject("JScripts.Yahoo", String.class);
     public final String YAHOO_DOM_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooDom", String.class);
     public final String YAHOO_EVENT_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooEvent", String.class);
-    public final String YAHOO_CONTAINER_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooContainer", String.class);   
+    public final String YAHOO_CONTAINER_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooContainer", String.class);
 
     private Script form;
     private Script ajax;
@@ -326,18 +326,34 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         IncrementalUpdateResource incrementalUpdateRessource = new IncrementalUpdateResource(component);
         component.addDynamicResource(incrementalUpdateRessource);
 
-        final JavaScriptDOMListener FOCUS_SCRIPT_MOZILLA = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_FOCUS, "wingS.util.storeFocus", comp);
-        final JavaScriptDOMListener FOCUS_SCRIPT_IE = new JavaScriptDOMListener("onactivate", "wingS.util.storeFocus", comp);
-        final JavaScriptDOMListener SCROLL_POSITION_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_SCROLL, "wingS.util.storeScrollPosition", comp);
-        final JavaScriptDOMListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, "wingS.util.restoreScrollPosition", comp);        
-        final JavaScriptDOMListener PERFORM_WINDOW_ONLOAD_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, "performWindowOnLoad", comp);
-        
-        component.addScriptListener(Utils.isMSIE(component) ? FOCUS_SCRIPT_IE : FOCUS_SCRIPT_MOZILLA);
-        component.addScriptListener(SCROLL_POSITION_SCRIPT);
-        component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);        
-        component.addScriptListener(PERFORM_WINDOW_ONLOAD_SCRIPT);
-//        component.addScriptListener(INIT_AJAX_ACTIVITY_CURSOR);
-//        component.addScriptListener(HIDE_AJAX_ACTIVITY_INDICATOR);
+        final JavaScriptDOMListener storeFocusFF = new JavaScriptDOMListener(
+                JavaScriptEvent.ON_FOCUS,
+                "wingS.util.storeFocus", comp);
+        final JavaScriptDOMListener storeFocusIE = new JavaScriptDOMListener(
+                JavaScriptEvent.ON_ACTIVATE,
+                "wingS.util.storeFocus", comp);
+        final JavaScriptDOMListener storeScrollPosition = new JavaScriptDOMListener(
+                JavaScriptEvent.ON_SCROLL,
+                "wingS.util.storeScrollPosition", comp);
+        final JavaScriptDOMListener restoreScrollPosition = new JavaScriptDOMListener(
+                JavaScriptEvent.ON_LOAD,
+                "wingS.util.restoreScrollPosition", comp);
+        final JavaScriptDOMListener performOnLoad = new JavaScriptDOMListener(
+                JavaScriptEvent.ON_LOAD,
+                "performWindowOnLoad", comp);
+        final JavaScriptDOMListener initAjaxActivityCursor = new JavaScriptDOMListener(
+                JavaScriptEvent.ON_LOAD,
+                "wingS.ajax.AjaxActivityCursor.init", "wingS.ajax.AjaxActivityCursor", comp);
+        final JavaScriptDOMListener hideAjaxActivityIndicator = new JavaScriptDOMListener(
+                JavaScriptEvent.ON_LOAD,
+                "wingS.ajax.hideAjaxActivityIndicator", comp);
+
+        component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
+        component.addScriptListener(storeScrollPosition);
+        component.addScriptListener(restoreScrollPosition);
+        component.addScriptListener(performOnLoad);
+        component.addScriptListener(initAjaxActivityCursor);
+        component.addScriptListener(hideAjaxActivityIndicator);
         CaptureDefaultBindingsScriptListener.install(component);
 
         if (!HEADERS.contains(form)) {
@@ -350,7 +366,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             HEADERS.add(yahooEvent);
             HEADERS.add(yahooContainer);
         }
-        
+
         // Retrieve list of static CSS files to be attached to this frame for this browser.
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component.getSession());
         for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
@@ -638,7 +654,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             String script = scriptListener.getScript();
             if (script != null) {
                 device.print(script);
-            }            
+            }
         }
         ScriptManager scriptManager = component.getSession().getScriptManager();
         scriptListeners = scriptManager.getScriptListeners();
