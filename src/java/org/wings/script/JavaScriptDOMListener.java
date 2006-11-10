@@ -14,6 +14,7 @@
 package org.wings.script;
 
 import org.wings.SComponent;
+import org.wings.util.SStringBuilder;
 
 /**
  * Specialized ScriptListener for DOM events. The original JavaScriptListener
@@ -21,61 +22,62 @@ import org.wings.SComponent;
  * the DOM.
  * @author Christian Schyma
  */
-public class JavaScriptDOMListener implements ScriptListener {
-    
-    private String event;
-    private String code;    
-    private int priority = DEFAULT_PRIORITY;
+public class JavaScriptDOMListener extends JavaScriptListener {
+            
+    /**
+     * object to override default event scope
+     */
+    private String customObject = null;
     
     /**
-     * @param event one of JavaScriptDOMEvent (e.g. JavaScriptDOMEvent.ON_CLICK)
-     * @param code the code that is written as a value of the event attribute
+     * the component this listener is associated with
      */
-    public JavaScriptDOMListener(String event, String code) {
-        this.event = event;
-        this.code = code;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getScript() {
-        return null;
-    }
-
-    public int getPriority() {        
-        return priority;
-    }
-
+    private SComponent component;
+    
     /**
-     * Modifies the scripting priority of this script.
-     *
-     * @param priority New priority as describe inn {@link org.wings.script.ScriptListener#getPriority()}
+     * @param event one of JavaScriptDOMEvent (e.g. JavaScriptDOMEvent.ON_CLICK) to act on
+     * @param code callback function fired on event
+     * @param component the component this listener is associated with
      */
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public JavaScriptDOMListener(String event, String code, SComponent component) {
+        super(event, code);
+        this.component = component;
     }
     
+    /**
+     * @param event one of JavaScriptDOMEvent (e.g. JavaScriptDOMEvent.ON_CLICK) to act on
+     * @param code callback function fired on event
+     * @param customObject object that is used for the execution scope (so it becomes "this" in the callback) instead of 
+     * the default execution scope of the element the event was fired upon     
+     * @param component the component this listener is associated with
+     */
+    public JavaScriptDOMListener(String event, String code, String customObject, SComponent component) {
+        super(event, code);
+        this.customObject = customObject;
+        this.component = component;
+    }
+            
     /**
      * Returns executable code to initialize the JavaScript listener for the
-     * given component.
-     * @param component component to initialze listener for
+     * given component.     
      * @return init code
-     */        
-    public String getInitCode(SComponent component) {
-        String elementId = "'"+ component.getName() +"'";
+     */
+    public String getScript() {
+        SStringBuilder elementId = new SStringBuilder();
+        elementId
+                .append("'")
+                .append(component.getName())
+                .append("'");
         
-        if (this.event.compareTo(JavaScriptDOMEvent.ON_AVAILABLE) == 0) {
+        // special Yahoo UI event, see JavaScriptDOMEvent.ON_AVAILABLE docu for more        
+        if (this.getEvent().compareTo(JavaScriptDOMEvent.ON_AVAILABLE) == 0) {
             
-            String initCode = "YAHOO.util.Event.onAvailable("+
-                    elementId +", "+
-                    this.getCode() +"); ";
-            return initCode;
+            SStringBuilder initCode = new SStringBuilder();
+            initCode
+                    .append("YAHOO.util.Event.onAvailable(")
+                    .append(elementId).append(", ")
+                    .append(this.getCode()).append("); ");
+            return initCode.toString();
             
         } else {
             
@@ -87,72 +89,34 @@ public class JavaScriptDOMListener implements ScriptListener {
             }
             
             // some events are only registerable to special browser objects
-            if (modifiedEventName.compareTo("load") == 0)
-                elementId = "window";
+            if (modifiedEventName.compareTo("load") == 0)                
+                elementId.delete(0, elementId.length()).append("window");
             else if (modifiedEventName.compareTo("resize") == 0)
-                elementId = "window";
+                elementId.delete(0, elementId.length()).append("window");
             else if (modifiedEventName.compareTo("scroll") == 0)
-                elementId = "window";
+                elementId.delete(0, elementId.length()).append("window");
             else if (modifiedEventName.compareTo("focus") == 0)
-                elementId = "document";
+                elementId.delete(0, elementId.length()).append("document");
             
-            String initCode = "YAHOO.util.Event.addListener("+
-                    elementId +", "+
-                    "'"+ modifiedEventName +"', "+
-                    this.getCode() +");";
+            SStringBuilder initCode = new SStringBuilder();
+            initCode
+                    .append("YAHOO.util.Event.addListener(")
+                    .append(elementId).append(", ")
+                    .append("'").append(modifiedEventName).append("', ")
+                    .append(this.getCode());
             
-            return initCode;
+            // modifies the scope of the callback function
+            if (this.customObject != null) {
+                initCode
+                    .append(", ").append(customObject)
+                    .append(", true");
+            }
+            
+            initCode.append(");");
+            
+            return initCode.toString();
             
         }
-    }   
+    }    
     
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        /* only checking for instanceof, not exact class, so we don't
-         * need to implement this in inherited classes
-         */
-        if (!(obj instanceof JavaScriptDOMListener)) {
-            return false;
-        }
-        JavaScriptDOMListener testObj = (JavaScriptDOMListener) obj;
-
-        if (testObj.getEvent() == null) {
-            if (getEvent() != null) {
-                return false;
-            }
-        } else {
-            if (!testObj.getEvent().equals(getEvent())) {
-                return false;
-            }
-        }
-
-        if (testObj.getCode() == null) {
-            if (getCode() != null) {
-                return false;
-            }
-        } else {
-            if (!testObj.getCode().equals(getCode())) {
-                return false;
-            }
-        }        
-
-        if (testObj.getScript() == null) {
-            if (getScript() != null) {
-                return false;
-            }
-        } else {
-            if (!testObj.getScript().equals(getScript())) {
-                return false;
-            }
-        }                
-
-        return true;
-    }
-
-    public int hashCode() {
-        return code != null ? code.hashCode() : super.hashCode();
-    }
- 
 }

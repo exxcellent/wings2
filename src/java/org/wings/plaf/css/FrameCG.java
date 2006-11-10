@@ -269,22 +269,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public final String YAHOO_SCRIPT = (String) ResourceManager.getObject("JScripts.Yahoo", String.class);
     public final String YAHOO_DOM_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooDom", String.class);
     public final String YAHOO_EVENT_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooEvent", String.class);
-    public final String YAHOO_CONTAINER_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooContainer", String.class);
-
-    public static final JavaScriptDOMListener FOCUS_SCRIPT_MOZILLA = new JavaScriptDOMListener(
-            JavaScriptDOMEvent.ON_FOCUS, "wingS.util.storeFocus");
-    public static final JavaScriptDOMListener FOCUS_SCRIPT_IE = new JavaScriptDOMListener(
-            "onactivate", "wingS.util.storeFocus");
-    public static final JavaScriptDOMListener SCROLL_POSITION_SCRIPT = new JavaScriptDOMListener(
-            JavaScriptDOMEvent.ON_SCROLL, "wingS.util.storeScrollPosition");
-    public static final JavaScriptDOMListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptDOMListener(
-            JavaScriptDOMEvent.ON_LOAD, "wingS.util.restoreScrollPosition");
-    public static final JavaScriptDOMListener PERFORM_WINDOW_ONLOAD_SCRIPT = new JavaScriptDOMListener(
-            JavaScriptDOMEvent.ON_LOAD, "performWindowOnLoad");
-    public static final JavaScriptDOMListener INIT_AJAX_ACTIVITY_CURSOR = new JavaScriptDOMListener(
-            JavaScriptDOMEvent.ON_LOAD, "AjaxActivityCursor.init");
-    public static final JavaScriptDOMListener HIDE_AJAX_ACTIVITY_INDICATOR = new JavaScriptDOMListener(
-            JavaScriptDOMEvent.ON_LOAD, "wingS.ajax.hideAjaxActivityIndicator");
+    public final String YAHOO_CONTAINER_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooContainer", String.class);   
 
     private Script form;
     private Script ajax;
@@ -341,9 +326,15 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         IncrementalUpdateResource incrementalUpdateRessource = new IncrementalUpdateResource(component);
         component.addDynamicResource(incrementalUpdateRessource);
 
+        final JavaScriptDOMListener FOCUS_SCRIPT_MOZILLA = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_FOCUS, "wingS.util.storeFocus", comp);
+        final JavaScriptDOMListener FOCUS_SCRIPT_IE = new JavaScriptDOMListener("onactivate", "wingS.util.storeFocus", comp);
+        final JavaScriptDOMListener SCROLL_POSITION_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_SCROLL, "wingS.util.storeScrollPosition", comp);
+        final JavaScriptDOMListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, "wingS.util.restoreScrollPosition", comp);        
+        final JavaScriptDOMListener PERFORM_WINDOW_ONLOAD_SCRIPT = new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, "performWindowOnLoad", comp);
+        
         component.addScriptListener(Utils.isMSIE(component) ? FOCUS_SCRIPT_IE : FOCUS_SCRIPT_MOZILLA);
         component.addScriptListener(SCROLL_POSITION_SCRIPT);
-        component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);
+        component.addScriptListener(RESTORE_SCROLL_POSITION_SCRIPT);        
         component.addScriptListener(PERFORM_WINDOW_ONLOAD_SCRIPT);
 //        component.addScriptListener(INIT_AJAX_ACTIVITY_CURSOR);
 //        component.addScriptListener(HIDE_AJAX_ACTIVITY_INDICATOR);
@@ -359,7 +350,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             HEADERS.add(yahooEvent);
             HEADERS.add(yahooContainer);
         }
-
+        
         // Retrieve list of static CSS files to be attached to this frame for this browser.
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component.getSession());
         for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
@@ -647,13 +638,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             String script = scriptListener.getScript();
             if (script != null) {
                 device.print(script);
-            }
-            if (scriptListener instanceof JavaScriptDOMListener) {
-                script = ((JavaScriptDOMListener) scriptListener).getInitCode(component);
-                if (script != null) {
-                    device.print(script).print("\n");
-                }
-            }
+            }            
         }
         ScriptManager scriptManager = component.getSession().getScriptManager();
         scriptListeners = scriptManager.getScriptListeners();

@@ -63,13 +63,7 @@ public final class RenderHelper {
             script = scriptListener.getScript();
             if (script != null) {
                 addScript(script);
-            }
-            if (scriptListener instanceof JavaScriptDOMListener) {
-                script = ((JavaScriptDOMListener) scriptListener).getInitCode(component);
-                if (script != null) {
-                    addScript(script);
-                }
-            }
+            }            
         }
         
         // add tooltip script

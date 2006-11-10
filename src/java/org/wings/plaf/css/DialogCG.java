@@ -87,8 +87,8 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
 
         // Add the function for window.onresize and window.onload.
         String function = "function() {wingS.util.showModalDialog(\"" + dialogId + "\", \"" + modalId + "\")}";                
-        _c.addScriptListener(new JavaScriptDOMListener(JavaScriptDOMEvent.ON_RESIZE, function));
-        _c.addScriptListener(new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, function));
+        _c.addScriptListener(new JavaScriptDOMListener(JavaScriptDOMEvent.ON_RESIZE, function, _c));
+        _c.addScriptListener(new JavaScriptDOMListener(JavaScriptDOMEvent.ON_LOAD, function, _c));
     }
 
 
