@@ -343,7 +343,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 "performWindowOnLoad", comp);
         final JavaScriptDOMListener initAjaxActivityCursor = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
-                "wingS.ajax.AjaxActivityCursor.init", "wingS.ajax.AjaxActivityCursor", comp);
+                "AjaxActivityCursor.init", "AjaxActivityCursor", comp);
         final JavaScriptDOMListener hideAjaxActivityIndicator = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
                 "wingS.ajax.hideAjaxActivityIndicator", comp);

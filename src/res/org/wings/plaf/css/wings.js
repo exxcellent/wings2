@@ -994,8 +994,7 @@ wingS.ajax.AjaxActivityCursor = function() {
 };
 
 // Initialize cursor
-wingS.ajax.AjaxActivityCursor.prototype.init = function() {
-    alert("INIT CALLED!!!");
+wingS.ajax.AjaxActivityCursor.prototype.init = function() {    
     this.dx = wingS.globals.incrementalUpdateCursor.dx;
     this.dy = wingS.globals.incrementalUpdateCursor.dy;
     this.div = document.createElement("div");
