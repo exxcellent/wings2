@@ -230,6 +230,8 @@ public class SScrollPane
                 else
                     scrollbar.setModel(verticalModel);
             }
+
+            adoptScrollBarVisibility(horizontalScrollBar, horizontalScrollBarPolicy);
         }
 
         reload(ReloadManager.STATE);
@@ -292,6 +294,8 @@ public class SScrollPane
                 else
                     scrollbar.setModel(verticalModel);
             }
+
+            adoptScrollBarVisibility(verticalScrollBar, verticalScrollBarPolicy);
         }
 
         reload(ReloadManager.STATE);
@@ -317,14 +321,7 @@ public class SScrollPane
     public void setHorizontalScrollBarPolicy(int policy) {
         if (policy != horizontalScrollBarPolicy) {
             horizontalScrollBarPolicy = policy;
-            if (horizontalScrollBar != null && scrollable != null) {
-                Rectangle maxVp = scrollable.getScrollableViewportSize();
-                Rectangle curVp = scrollable.getViewportSize();
-                if (maxVp != null && curVp != null) {
-                    boolean newVisibility = isAdjustableVisible(policy, maxVp.width, curVp.width);
-                    ((SComponent) horizontalScrollBar).setVisible(newVisibility);
-                }
-            }
+            adoptScrollBarVisibility(horizontalScrollBar, policy);
             reload(ReloadManager.STATE);
         }
     }
@@ -339,14 +336,7 @@ public class SScrollPane
     public void setVerticalScrollBarPolicy(int policy) {
         if (policy != verticalScrollBarPolicy) {
             verticalScrollBarPolicy = policy;
-            if (verticalScrollBar != null && scrollable != null) {
-                Rectangle maxVp = scrollable.getScrollableViewportSize();
-                Rectangle curVp = scrollable.getViewportSize();
-                if (maxVp != null && curVp != null) {
-                    boolean newVisibility = isAdjustableVisible(policy, maxVp.height, curVp.height);
-                    ((SComponent) verticalScrollBar).setVisible(newVisibility);
-                }
-            }
+            adoptScrollBarVisibility(verticalScrollBar, policy);
             reload(ReloadManager.STATE);
         }
     }
@@ -443,10 +433,28 @@ public class SScrollPane
             scrollable.setViewportSize(scrollable.getScrollableViewportSize());
         } else {
             scrollable.setViewportSize(new Rectangle(0, 0, horizontalExtent, verticalExtent));
+            adoptScrollBarVisibility(horizontalScrollBar, horizontalScrollBarPolicy);
+            adoptScrollBarVisibility(verticalScrollBar, verticalScrollBarPolicy);
         }
     }
 
-    private boolean isAdjustableVisible(int policy, int maxRecords, int maxDisplayed) {
+    protected void adoptScrollBarVisibility(Adjustable scrollbar, int policy) {
+        if (scrollbar != null && scrollable != null) {
+            Rectangle maxVp = scrollable.getScrollableViewportSize();
+            Rectangle curVp = scrollable.getViewportSize();
+            if (maxVp != null && curVp != null) {
+                boolean newVisibility;
+                if (scrollbar.getOrientation() == SConstants.HORIZONTAL) {
+                    newVisibility = isScrollBarVisible(policy, maxVp.width, curVp.width);
+                } else {
+                    newVisibility = isScrollBarVisible(policy, maxVp.height, curVp.height);
+                }
+                ((SComponent) scrollbar).setVisible(newVisibility);
+            }
+        }
+    }
+
+    private boolean isScrollBarVisible(int policy, int maxRecords, int maxDisplayed) {
         return isPolicyAlways(policy) || (isPolicyAsNeeded(policy) && maxRecords > maxDisplayed);
     }
 
@@ -672,7 +680,7 @@ public class SScrollPane
 
                         // Determine the new visibility of the horizontal scrollbar
                         scrollbar = (SComponent) horizontalScrollBar;
-                        newVisibility = isAdjustableVisible(horizontalScrollBarPolicy, maxVp.width, curVp.width);
+                        newVisibility = isScrollBarVisible(horizontalScrollBarPolicy, maxVp.width, curVp.width);
                     } else {
                         // Set the "virtualViewportHeight"
                         if (mode == MODE_PAGING) {
@@ -691,7 +699,7 @@ public class SScrollPane
 
                         // Determine the new visibility of the vertical scrollbar
                         scrollbar = (SComponent) verticalScrollBar;
-                        newVisibility = isAdjustableVisible(verticalScrollBarPolicy, maxVp.height, curVp.height);
+                        newVisibility = isScrollBarVisible(verticalScrollBarPolicy, maxVp.height, curVp.height);
                     }
 
                     if (scrollbar != null) {

@@ -104,9 +104,11 @@ public class ScrollPaneExample extends WingSetPane
                 }
             });
 
-            final SPageScroller horizontalPageScroller = new SPageScroller(SPageScroller.VERTICAL);
-            horizontalPageScroller.setLayoutMode(SPageScroller.HORIZONTAL);
-            String[] horizontalScrollBars = {"scrollbar", "pagescroller", "null"};
+            final SPageScroller horizontalPageScrollerH = new SPageScroller(SPageScroller.HORIZONTAL);
+            horizontalPageScrollerH.setLayoutMode(SPageScroller.HORIZONTAL);
+            final SPageScroller horizontalPageScrollerV = new SPageScroller(SPageScroller.VERTICAL);
+            horizontalPageScrollerV.setLayoutMode(SPageScroller.HORIZONTAL);
+            String[] horizontalScrollBars = {"scrollbar", "pagescroller (H)", "pagescroller (V)", "null"};
             final SComboBox hScrollBar = new SComboBox(horizontalScrollBars);
             hScrollBar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -116,18 +118,23 @@ public class ScrollPaneExample extends WingSetPane
                         scrollPane.setHorizontalScrollBar(new SScrollBar(SScrollBar.HORIZONTAL));
                         break;
                     case 1:
-                        scrollPane.setHorizontalScrollBar(horizontalPageScroller);
+                        scrollPane.setHorizontalScrollBar(horizontalPageScrollerH);
                         break;
                     case 2:
+                        scrollPane.setHorizontalScrollBar(horizontalPageScrollerV);
+                        break;
+                    case 3:
                         scrollPane.setHorizontalScrollBar(null);
                         break;
                     }
                 }
             });
 
-            final SPageScroller verticalPageScroller = new SPageScroller(SPageScroller.HORIZONTAL);
-            verticalPageScroller.setLayoutMode(SPageScroller.VERTICAL);
-            String[] verticalScrollBars = {"scrollbar", "pagescroller", "null"};
+            final SPageScroller verticalPageScrollerH = new SPageScroller(SPageScroller.HORIZONTAL);
+            verticalPageScrollerH.setLayoutMode(SPageScroller.VERTICAL);
+            final SPageScroller verticalPageScrollerV = new SPageScroller(SPageScroller.VERTICAL);
+            verticalPageScrollerV.setLayoutMode(SPageScroller.VERTICAL);
+            String[] verticalScrollBars = {"scrollbar", "pagescroller (H)", "pagescroller (V)", "null"};
             final SComboBox vScrollBar = new SComboBox(verticalScrollBars);
             vScrollBar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -137,9 +144,12 @@ public class ScrollPaneExample extends WingSetPane
                         scrollPane.setVerticalScrollBar(new SScrollBar(SScrollBar.VERTICAL));
                         break;
                     case 1:
-                        scrollPane.setVerticalScrollBar(verticalPageScroller);
+                        scrollPane.setVerticalScrollBar(verticalPageScrollerH);
                         break;
                     case 2:
+                        scrollPane.setVerticalScrollBar(verticalPageScrollerV);
+                        break;
+                    case 3:
                         scrollPane.setVerticalScrollBar(null);
                         break;
                     }
@@ -197,14 +207,14 @@ public class ScrollPaneExample extends WingSetPane
                 }
             });
 
-            addControl(new SLabel("Scrollable: "));
+            addControl(new SLabel("Scrollable:"));
             addControl(scrollable);
-            addControl(new SLabel("Mode: "));
+            addControl(new SLabel(" Mode:"));
             addControl(mode);
-            addControl(new SLabel("Scrollbar (H/V): "));
+            addControl(new SLabel(" Scrollbar (H/V):"));
             addControl(hScrollBar);
             addControl(vScrollBar);
-            addControl(new SLabel("Scrollbar policy (H/V): "));
+            addControl(new SLabel(" Scrollbar policy (H/V):"));
             addControl(hScrollBarPolicy);
             addControl(vScrollBarPolicy);
             addControl(hideSomeColumns);
