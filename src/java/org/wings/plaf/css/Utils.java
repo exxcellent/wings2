@@ -42,9 +42,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -123,7 +124,7 @@ public final class Utils {
     }
 
     /**
-     * Render inline event listeners attached to the passed component exlucding types of supressed listeners
+     * Render inline event listeners attached to the passed component exlucding types of suppressed listeners
      *
      * @param device                      output device
      * @param c                           component to retrieve listeners from
@@ -131,7 +132,8 @@ public final class Utils {
      */
     public static void writeEvents(final Device device, final SComponent c, final String[] suppressScriptListenerTypes)
             throws IOException {
-        List types = new ArrayList();
+        Set types = new HashSet();
+        // Create set of strings (in lower case) defining the event types to be suppressed
         if (suppressScriptListenerTypes != null && suppressScriptListenerTypes.length > 0) {
             for (int i = 0; i < suppressScriptListenerTypes.length; i++) {
                 types.add(suppressScriptListenerTypes[i].toLowerCase());
@@ -140,15 +142,16 @@ public final class Utils {
         ScriptListener[] listeners = c.getScriptListeners();
         if (listeners.length > 0) {
             Map eventScripts = new HashMap();
+            // Fill map with script codes grouped by event type (key)
             for (int i = 0; i < listeners.length; i++) {
-                final ScriptListener script = listeners[i];                
+                final ScriptListener script = listeners[i];
                 if (types.contains(script.getEvent().toLowerCase())) {
                     continue;
                 }
-                // if its a DOM event we are finished here
-                if (script instanceof JavaScriptDOMListener) {                
+                // If its a DOM event we are finished here
+                if (script instanceof JavaScriptDOMListener) {
                     continue;
-                }                                
+                }
                 final String event = script.getEvent();
                 String eventScriptCode = script.getCode();
 
@@ -168,6 +171,7 @@ public final class Utils {
                 eventScripts.put(event, eventScriptCode);
             }
 
+            // Print map of script codes grouped by event type (key)
             Iterator it = eventScripts.keySet().iterator();
             while (it.hasNext()) {
                 final String event = (String) it.next();
@@ -945,103 +949,53 @@ public final class Utils {
         }
     }
 
-    public static void printButtonStart(Device device, SComponent eventTarget, String eventValue, boolean b, boolean showAsFormComponent) throws IOException {
+    public static void printButtonStart(Device device, SComponent eventTarget, String eventValue,
+            boolean b, boolean showAsFormComponent) throws IOException {
         printButtonStart(device, eventTarget, eventValue, b, showAsFormComponent, null);
     }
 
     public static void printButtonStart(final Device device, final SComponent component, final String eventValue,
-                                        final boolean enabled, final boolean formComponent, String cssClassName) throws IOException {
-    	boolean ajaxEnabled = !component.isCompleteUpdateForced();
-        if (formComponent) {
-            if (!enabled) {
-                device.print("<span");
-                Utils.optAttribute(device, "class", cssClassName);
-            }
-            else {
-                device.print("<a href=\"#\"");
+            final boolean enabled, final boolean formComponent, String cssClassName) throws IOException {
+        if (enabled)
+            device.print("<a href=\"#\"");
+        else
+            device.print("<span");
 
-                // Render onclick JS listeners
-                device.print(" onclick=\"wingS.request.submitForm(" + ajaxEnabled);
-                device.print(",event,'");
-                device.print(Utils.event(component));
-                device.print("','");
-                device.print(eventValue == null ? "" : eventValue);
-                device.print("'");
-                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
-                device.print("); return false;\"");
-
-                // Render remaining JS listeners
-                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
-                Utils.optAttribute(device, "class", cssClassName);
-            }
-        }
-        else {
-            if (!enabled) {
-                device.print("<span");
-                Utils.optAttribute(device, "class", cssClassName);
-            }
-            else {
-                device.print("<a href=\"#\"");
-
-                // Render onclick JS listeners
-                device.print(" onclick=\"wingS.request.followLink(" + ajaxEnabled);
-                device.print(",'");
-                device.print(Utils.event(component));
-                device.print("','");
-                device.print(eventValue == null ? "" : eventValue);
-                device.print("'");
-                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
-                device.print("); return false;\"");                            
-                    
-                // Render remaining JS listeners
-                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
-                Utils.optAttribute(device, "class", cssClassName);
-            }
-        }
+        printClickability(device, component, eventValue, enabled, formComponent);
+        Utils.optAttribute(device, "class", cssClassName);
     }
 
-    public static void printButtonEnd(final Device device, final SComponent button,
-                                      final String value, final boolean enabled) throws IOException {
-        if (enabled) {
+    public static void printButtonEnd(final Device device, final SComponent button, final String value,
+            final boolean enabled) throws IOException {
+        if (enabled)
             device.print("</a>");
-        }
-        else {
+        else
             device.print("</span>");
-        }
     }
 
     public static void printClickability(final Device device, final SComponent component, final String eventValue,
-                                        final boolean enabled, final boolean formComponent) throws IOException {
+            final boolean enabled, final boolean formComponent) throws IOException {
         if (enabled) {
-        	boolean ajaxEnabled = !component.isCompleteUpdateForced();
+            boolean ajaxEnabled = !component.isCompleteUpdateForced();
+
+            // Render onclick JS listeners
             if (formComponent) {
-            	// Render onclick JS listeners
                 device.print(" onclick=\"wingS.request.submitForm(" + ajaxEnabled);
                 device.print(",event,'");
-                device.print(Utils.event(component));
-                device.print("','");
-                device.print(eventValue == null ? "" : eventValue);
-                device.print("'");
-                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
-                device.print("); return false;\"");
-
-                // Render remaining JS listeners
-                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
-            }
-            else {
-            	// Render onclick JS listeners
+            } else {
                 device.print(" onclick=\"wingS.request.followLink(" + ajaxEnabled);
                 device.print(",'");
-                device.print(Utils.event(component));
-                device.print("','");
-                device.print(eventValue == null ? "" : eventValue);
-                device.print("'");
-                device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
-                device.print("); return false;\"");
-
-                // Render remaining JS listeners
-                Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
             }
+
+            device.print(Utils.event(component));
+            device.print("','");
+            device.print(eventValue == null ? "" : eventValue);
+            device.print("'");
+            device.print(collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK));
+            device.print("); return false;\"");
+
+            // Render remaining JS listeners
+            Utils.writeEvents(device, component, EXCLUDE_ON_CLICK);
         }
     }
 
@@ -1058,18 +1012,18 @@ public final class Utils {
      */
     public static SStringBuilder collectJavaScriptListenerCode(final SComponent component, final String javascriptEventType) {
         final SStringBuilder script = new SStringBuilder();
-        JavaScriptListener[] eventListeners = getOnClickListeners(component, javascriptEventType);
+        JavaScriptListener[] eventListeners = getEventTypeListeners(component, javascriptEventType);
         if (eventListeners != null && eventListeners.length > 0) {
             for (int i = 0; i < eventListeners.length; ++i) {
                 if (eventListeners[i].getCode() != null) {
-                	if (i > 0) {
+                    if (i > 0) {
                         script.append(",");
                     }
                     script.append("function(){").append(eventListeners[i].getCode()).append("}");
                 }
             }
             if (script.length() > 0) {
-            	script.insert(0, ",new Array(");
+                script.insert(0, ",new Array(");
                 script.append(")");
             }
         }
@@ -1081,7 +1035,7 @@ public final class Utils {
      * @param javaScriptEvent the event type declared in {@link JavaScriptEvent}
      * @return The attached listeners to event type
      */
-    private static JavaScriptListener[] getOnClickListeners(final SComponent button, final String javaScriptEvent) {
+    private static JavaScriptListener[] getEventTypeListeners(final SComponent button, final String javaScriptEvent) {
         ArrayList result = new ArrayList();
         ScriptListener[] listeners = button.getScriptListeners();
         for (int i = 0; i < listeners.length; i++) {
@@ -1225,13 +1179,13 @@ public final class Utils {
         }
         return 0;
     }
-    
+
     public static Script createExternalizedJavaScriptHeader(Session session, String classPath) {
         ClassPathResource res = new ClassPathResource(classPath, "text/javascript");
         String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
         return new Script("text/javascript", new DefaultURLResource(jScriptUrl));
     }
-    
+
     public static Link createExternalizedCSSHeader(Session session, String classPath) {
         ClassPathResource res = new ClassPathResource(classPath, "text/css");
         String cssUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);

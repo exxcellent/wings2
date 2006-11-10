@@ -23,11 +23,11 @@ table, tbody, tr, td {
           <td style="background-color: yellow">
             <div style="overflow: auto; display: none">
 
-			  <table id="inner" style="height: 400px; width: 400px; border: 10px solid green">
-				<tr><td style="background-color: orange">top</td></tr>
-				<tr><td style="background-color: red">center</td></tr>
-				<tr><td style="background-color: orange">bottom</td></tr>
-			  </table>
+              <table id="inner" style="height: 400px; width: 400px; border: 10px solid green">
+                <tr><td style="background-color: orange">top</td></tr>
+                <tr><td style="background-color: red">center</td></tr>
+                <tr><td style="background-color: orange">bottom</td></tr>
+              </table>
 
             </div>
           </td>
@@ -40,14 +40,14 @@ table, tbody, tr, td {
 </table>
 
 <script type="text/javascript">
-wingS.util.layoutScrollPane = function(outerId) {
+wingS.layout.layoutScrollPaneFF = function(outerId) {
     var outer = document.getElementById(outerId);
     var div = outer.getElementsByTagName("div")[0];
     div.style.height =
         document.defaultView.getComputedStyle(outer, null).getPropertyValue("height");
     div.style.display = "block";
 }
-wingS.util.layoutScrollPane("outer");
+wingS.layout.layoutScrollPaneFF("outer");
 </script>
 
 </body>

@@ -2,13 +2,10 @@ package logconfig;
 
 import org.dom4j.Node;
 import org.wings.SComponent;
-import org.wings.SLabel;
 import org.wings.STree;
 import org.wings.tree.SDefaultTreeCellRenderer;
 
 public class DomRenderer extends SDefaultTreeCellRenderer {
-
-    private SLabel nodeLabel = new SLabel();
 
     public SComponent getTreeCellRendererComponent(STree tree, Object value, boolean selected,
             boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -18,8 +15,8 @@ public class DomRenderer extends SDefaultTreeCellRenderer {
         if (domNode.getNodeType() == Node.ATTRIBUTE_NODE) {
             output.append("=\"" + domNode.getText() + "\"");
         }
-        nodeLabel.setText(output.toString());
-        return nodeLabel;
+        setText(output.toString());
+        return this;
     }
 
 }

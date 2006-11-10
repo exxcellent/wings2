@@ -797,8 +797,8 @@ public class LogConfig {
                 "var debug = document.getElementById('ajaxDebugging');" +
                 "if (debug == null) alert('The AJAX debugging view has not been enabled yet!');" +
                 "else {" +
-                "  if (debug.style.display == 'block') hideAjaxDebugging();" +
-                "  else showAjaxDebugging();" +
+                "  if (debug.style.display == 'block') wingS.ajax.hideAjaxDebugging();" +
+                "  else wingS.ajax.showAjaxDebugging();" +
                 "}" +
                 "return false;"
         ));

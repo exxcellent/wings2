@@ -65,14 +65,14 @@ wingS.events.getEvent = function(event) {
         return window.event;
     else
         return event;
-}
+};
 
 wingS.events.getTarget = function(event) {
     if (event.srcElement)
         return event.srcElement; // IE
     else
         return event.target; // W3C
-}
+};
 
 wingS.util.getParentByTagName = function(element, tag) {
     while (element != null) {
@@ -81,7 +81,7 @@ wingS.util.getParentByTagName = function(element, tag) {
         element = element.parentNode;
     }
     return null;
-}
+};
 
 wingS.util.getParentWearingAttribute = function(element, attribute) {
     while (element != null) {
@@ -91,7 +91,7 @@ wingS.util.getParentWearingAttribute = function(element, attribute) {
         element = element.parentNode;
     }
     return null;
-}
+};
 
 // TODO document + event.stopPropagation()
 wingS.util.preventDefault = function(event) {
@@ -100,7 +100,7 @@ wingS.util.preventDefault = function(event) {
     if (event.returnValue)
         event.returnValue = false;
     event.cancelBubble = true;
-}
+};
 
 /**
  * Can be used to prevent a form submit.
@@ -137,7 +137,7 @@ Function.prototype.bind = function(obj) {
     };
 
     return temp;
-}
+};
 
 // =============================================================================
 
@@ -146,9 +146,9 @@ wingS.globals.completeUpdateId;           // Holds the ID of the CompleteUpdateR
 wingS.globals.incrementalUpdateId;        // Holds the ID of the IncrementalUpdateResource
 wingS.globals.incrementalUpdateEnabled;   // True if this frame allows incremental updates
 wingS.globals.incrementalUpdateCursor;    // An object whose properties "enabled", "image"
-                                // "dx" and "dy" hold the settings of the cursor
+                                          // "dx" and "dy" hold the settings of the cursor
 wingS.globals.incrementalUpdateHighlight; // An object whose properties "enabled", "color"
-                                // and "duration" store the 3 highlight settings
+                                          // and "duration" store the 3 highlight settings
 wingS.globals.requestQueue = new Array(); // A queue which stores requests to be processed
 
 wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, scriptCodes) {
@@ -161,6 +161,10 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
     var form = wingS.util.getParentByTagName(target, "FORM");
     if (eventName != null) {
         var eidProvider = wingS.util.getParentWearingAttribute(target, "eid");
+        if (eidProvider == null) {
+            alert("DEBUG:\n target: " + target + "\nform: " + form);
+            return;
+        }
         eventName = eidProvider.getAttribute("eid");
     }
 
@@ -244,7 +248,7 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             wingS.request.followLink(ajaxEnabled, eventName, eventValue);
         }
     }
-}
+};
 
 wingS.request.followLink = function(ajaxEnabled, eventName, eventValue, scriptCodes) {
     // Enqueue this request if another one hasn't been processed yet
@@ -268,11 +272,11 @@ wingS.request.followLink = function(ajaxEnabled, eventName, eventValue, scriptCo
                                    "&" + eventName + "=" + eventValue;
         }
     }
-}
+};
 
 wingS.ajax.getUpdates = function() {
     wingS.request.followLink(true);
-}
+};
 
 wingS.request.enqueueThisRequest = function(send, args) {
     if (AjaxRequest.isActive()) {
@@ -280,7 +284,7 @@ wingS.request.enqueueThisRequest = function(send, args) {
         return true;
     }
     return false;
-}
+};
 
 wingS.request.dequeueNextRequest = function() {
     if (wingS.globals.requestQueue.length > 0) {
@@ -288,7 +292,7 @@ wingS.request.dequeueNextRequest = function() {
         var args = request.args;
         request.send(args[0], args[1], args[2], args[3]);
     }
-}
+};
 
 wingS.request.invokeScriptListeners = function(scriptCodes) {
     if (scriptCodes) {
@@ -298,7 +302,7 @@ wingS.request.invokeScriptListeners = function(scriptCodes) {
         }
     }
     return true;
-}
+};
 
 wingS.ajax.initAjaxCallbacks = function() {
     return {
@@ -306,12 +310,12 @@ wingS.ajax.initAjaxCallbacks = function() {
         "onSuccess" : function(request) { wingS.ajax.processAjaxRequest(request); },
         "onError"   : function(request) { wingS.ajax.handleRequestError(request); }
     };
-}
+};
 
 wingS.ajax.doAjaxSubmit = function(form) {
     var requestObject = wingS.ajax.initAjaxCallbacks();
     return AjaxRequest.submit(form, requestObject);
-}
+};
 
 wingS.ajax.doAjaxRequest = function(args) {
     var requestObject = wingS.ajax.initAjaxCallbacks();
@@ -325,11 +329,11 @@ wingS.ajax.doAjaxRequest = function(args) {
     } else {
         AjaxRequest.post(requestObject);
     }
-}
+};
 
 wingS.util.encodeUpdateId = function(id) {
     return wingS.globals.event_epoch + "-" + id;
-}
+};
 
 // =============================================================================
 
@@ -349,7 +353,7 @@ wingS.util.blurComponent = function(component, clientHandlers) {
     }
 
     return true;
-}
+};
 
 /* Set focus to a component and respect additonal custom script listeners
    attached by user. Core usage/doc see Utils.printButtonStart() */
@@ -367,7 +371,7 @@ wingS.util.focusComponent = function(component, clientHandlers) {
     }
 
     return true;
-}
+};
 
 /* Search and return the first HTML element with the given tag name inside
    the HTML code generated by wings for the passed component id.
@@ -382,7 +386,7 @@ wingS.util.findElement = function(id, tagname) {
         if (elements && elements.length > 0)
             return elements[0];
     }
-}
+};
 
 /* Set the focus to a component identified by a wingS id. Also do some heuristic
    trace-down to the actual HTML element, i.e. a STextField renders as <table
@@ -418,7 +422,7 @@ wingS.util.requestFocus = function(id) {
             }
         }
     }
-}
+};
 
 wingS.util.getCookie = function(name) {
     var c = new Object();
@@ -438,7 +442,7 @@ wingS.util.getCookie = function(name) {
     }
     if (name) return c[name];
     return c;
-}
+};
 
 wingS.util.setCookie = function(name, value, days, path) {
     if (!days) days = -1;
@@ -448,7 +452,7 @@ wingS.util.setCookie = function(name, value, days, path) {
     document.cookie = name + "=" + escape(value)
             + "; expires=" + expire.toGMTString() + ";"
             + (path ? 'path=' + path : '');
-}
+};
 
 wingS.util.storeScrollPosition = function(event) {
     var target = wingS.events.getTarget(event);
@@ -462,7 +466,7 @@ wingS.util.storeScrollPosition = function(event) {
             wingS.util.getCookie("scroll_target", "" + targetId, 1);
         }
     }
-}
+};
 
 wingS.util.restoreScrollPosition = function() {
     var pos = wingS.util.getCookie("scroll_pos");
@@ -471,7 +475,7 @@ wingS.util.restoreScrollPosition = function() {
     if (el) {
         el.scrollTop = pos;
     }
-}
+};
 
 wingS.util.getScrollableElement = function(el) {
     if (!el) return;
@@ -486,7 +490,7 @@ wingS.util.getScrollableElement = function(el) {
     else {
         return arguments.callee(parent);
     }
-}
+};
 
 wingS.util.storeFocus = function(event) {
     var target = wingS.events.getTarget(event);
@@ -497,7 +501,7 @@ wingS.util.storeFocus = function(event) {
     if (div && body && div.tagName != "FORM") {
         wingS.util.getCookie(body.getAttribute("id") + "_focus", div.getAttribute("id"), 1);
     }
-}
+};
 
 /**
  * Alerts all fields/elements of a given object. NB: you will also get
@@ -509,11 +513,11 @@ wingS.util.printAllFields = function(obj) {
     for(var i in obj) {
         logDebug(obj[i], obj);
     }
-}
+};
 
 wingS.util.checkUserAgent = function(string) {
     return navigator.userAgent.toLowerCase().indexOf(string) + 1;
-}
+};
 
 /* The following two functions are a workaround for IE to open a link in the
    right target/new window used in AnchorCG. */
@@ -522,7 +526,7 @@ wingS.util.checkTarget = function(target) {
         if (parent.frames[i].name == target) return true;
     }
     return false;
-}
+};
 
 wingS.util.openlink = function(target, url, scriptCodes) {
   if (wingS.request.invokeScriptListeners(scriptCodes)) {
@@ -537,7 +541,7 @@ wingS.util.openlink = function(target, url, scriptCodes) {
           }
       }
   }
-}
+};
 
 /* Utility method to determine available inner space of the show window on
    all browsers. Returns a numeric value of available pixel width. */
@@ -553,7 +557,7 @@ wingS.util.framewidth = function() {
         return document.body.clientWidth;
     } else
         return -1;
-}
+};
 
 /* Cross-browser method to register an event listener on the passed object. Only
    Mozilla will support captive mode of event handling. The 'eventType' is without
@@ -569,7 +573,7 @@ wingS.events.registerEvent = function(obj, eventType, func, useCaption) {
     } else {
         return false;
     }
-}
+};
 
 // =============================================================================
 
@@ -654,7 +658,7 @@ function addWindowOnLoadFunction(func) {
 window.onload = performWindowOnLoad;
 function performWindowOnLoad() {
     if (wingS.globals.incrementalUpdateCursor.enabled) {
-      wingS.ajax.AjaxActivityCursor.init();
+        AjaxActivityCursor.init();
     }
     wingS.ajax.hideAjaxActivityIndicator();
     for (var i = 0; i < windowOnLoads.length; i++) {
@@ -701,7 +705,7 @@ wingS.util.showModalDialog = function(dialogId, modalId) {
     dialog.style.left = (positionX - (dialogWidth / 2)) + 'px';
     dialog.style.top = (positionY - (dialogHeight / 2)) + 'px';
     dialog.style.zIndex = 1000;
-}
+};
 
 wingS.layout.layoutScrollPaneFF = function(outerId) {
     var outer = document.getElementById(outerId);
@@ -709,7 +713,7 @@ wingS.layout.layoutScrollPaneFF = function(outerId) {
     div.style.height =
         document.defaultView.getComputedStyle(outer, null).getPropertyValue("height");
     div.style.display = "block";
-}
+};
 
 wingS.layout.layoutScrollPaneIE = function(outerId) {
     var outer = document.getElementById(outerId);
@@ -720,7 +724,7 @@ wingS.layout.layoutScrollPaneIE = function(outerId) {
     div.style.position = "absolute";
     div.style.display = "block";
     div.style.overflow = "auto";
-}
+};
 
 wingS.layout.layoutAvailableSpaceIE = function(tableId) {
     var table = document.getElementById(tableId);
@@ -745,21 +749,21 @@ wingS.layout.layoutAvailableSpaceIE = function(tableId) {
           row.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
       }
     }
-}
+};
 
 /* Calculates the absolute position of the element to the left. */
 wingS.util.absLeft = function(el) {
     return (el.offsetParent) ? el.offsetLeft + wingS.util.absLeft(el.offsetParent) : el.offsetLeft;
-}
+};
 
 /* Calculates the absolute position of the element to the top. */
 wingS.util.absTop = function(el) {
     return (el.offsetParent) ? el.offsetTop + wingS.util.absTop(el.offsetParent) : el.offsetTop;
-}
+};
 
 // =============================================================================
 
-wingS.ajax.filterOnAjaxRequest = new Array("wingS.events.addWindowOnLoadFunction"); // AJAX filters
+wingS.ajax.filterOnAjaxRequest = new Array("addWindowOnLoadFunction"); // AJAX filters
 
 /* At some points wingS uses functions to dynamically add callback methods which
    will be executed when special events occur, i.e. addWindowOnLoadFunction().
@@ -795,34 +799,34 @@ wingS.ajax.enableAjaxDebugging = function(request) {
     var txt = request.responseText;
     debug.getElementsByTagName("TEXTAREA")[0].value = txt;
     debug.getElementsByTagName("SPAN")[0].innerHTML = "| " + txt.length + " chars";
-}
+};
 
 /* This function shows the previously enabled AJAX debugging view, if available. */
 wingS.ajax.showAjaxDebugging = function() {
     var debug = document.getElementById("ajaxDebugging");
     if (debug != null) debug.style.display = "block";
-}
+};
 
 /* This function hides the previously enabled AJAX debugging view, if available. */
 wingS.ajax.hideAjaxDebugging = function() {
     var debug = document.getElementById("ajaxDebugging");
     if (debug != null) debug.style.display = "none";
-}
+};
 
 wingS.ajax.handleRequestError = function(request) {
-    //var errorMsg = "An error occured while processing an AJAX request!\n  -->  " +
-    //               "Status code: " + request.status + " | " + request.statusText;
+    //var errorMsg = "An error occured while processing an AJAX request!\n" +
+    //               ">> " + request.statusText + " (" + request.status + ")";
     //wingS.ajax.hideAjaxActivityIndicator();
     //alert(errorMsg);
     //window.location.href = wingS.util.encodeUpdateId(wingS.globals.completeUpdateId);
     //dequeueNextRequest();
 
+    wingS.ajax.hideAjaxActivityIndicator();
     document.close();
     document.open("text/html");
     document.write(request.responseText);
-    //document.write('<a href="' + wingS.util.encodeUpdateId(wingS.globals.completeUpdateId) + '">Go back to previous page</a>');
     document.close();
-}
+};
 
 wingS.ajax.processAjaxRequest = function(request) {
     wingS.ajax.enableAjaxDebugging(request);
@@ -880,9 +884,10 @@ wingS.ajax.processAjaxRequest = function(request) {
                     }
                     eval(code);
                 } catch(e) {
-                    alert("An error occured in processAjaxRequest():" +
-                          "\nName: " + e.name() + "\nMessage: " + e.message + "\n" +
-                          "\n\nThe following code could not be executed:\n" + code);
+                    var errorMsg = "An error occured while processing an AJAX request!\n" +
+                                   ">> " + e.message + "\n\n\n The following JavaScript " +
+                                   "code could not be executed:\n" + code;
+                    alert(errorMsg);
                 }
             }
             // Update the event epoch of this frame
@@ -896,7 +901,7 @@ wingS.ajax.processAjaxRequest = function(request) {
     wingS.ajax.hideAjaxActivityIndicator();
     // Send next queued request
     wingS.request.dequeueNextRequest();
-}
+};
 
 /* Replaces the old HTML code of the component with the given ID by the new one.
    In other words, this methods acts like a cross-browser "outerHTML"-method. */
@@ -942,7 +947,7 @@ wingS.util.replaceComponentHtml = function(id, html) {
             }
         }
     }
-}
+};
 
 /* Highlights the components with the given IDs for a certain time interval with a
    specific background color. The duration and color that will be used is defined by
@@ -962,76 +967,78 @@ wingS.ajax.highlightComponentUpdates = function(componentIds) {
         };
         setTimeout(resetColor, wingS.globals.incrementalUpdateHighlight.duration);
     }
-}
+};
 
 /* Shows the AJAX activity cursor and makes a user-predefined element with the CSS
    ID "ajaxActivityIndicator" visible. The latter is typically an animated GIF. */
 wingS.ajax.showAjaxActivityIndicator = function() {
-    if (wingS.globals.incrementalUpdateCursor.enabled) wingS.ajax.AjaxActivityCursor.show();
+    if (wingS.globals.incrementalUpdateCursor.enabled) AjaxActivityCursor.show();
     var indicator = document.getElementById("ajaxActivityIndicator");
     if (indicator != null) {
         indicator.style.visibility = "visible";
     }
-}
+};
 
 /* Hides the AJAX activity cursor and makes a user-predefined element with the CSS
    ID "ajaxActivityIndicator" invisible. The latter is typically an animated GIF. */
 wingS.ajax.hideAjaxActivityIndicator = function() {
-    if (wingS.globals.incrementalUpdateCursor.enabled) wingS.ajax.AjaxActivityCursor.hide();
+    if (wingS.globals.incrementalUpdateCursor.enabled) AjaxActivityCursor.hide();
     var indicator = document.getElementById("ajaxActivityIndicator");
     if (indicator != null && !AjaxRequest.isActive()) {
         indicator.style.visibility = "hidden";
     }
-}
+};
 
 /* An object that encapsulates functions to show and hide an animated GIF besides
    the mouse cursor. Such a cursor can be used to indicate an active AJAX request. */
-wingS.ajax.AjaxActivityCursor = {
-    dx : 0,
-    dy : 15,
-    div : false,
-
-    // Initialize cursor
-    init : function () {
-        this.dx = wingS.globals.incrementalUpdateCursor.dx;
-        this.dy = wingS.globals.incrementalUpdateCursor.dy;
-        this.div = document.createElement("div");
-        this.div.style.position = "absolute";
-        this.div.style.zIndex = "1000";
-        this.div.style.display = "none";
-        this.div.innerHTML = "<img src=\"" + wingS.globals.incrementalUpdateCursor.image + "\"/>";
-        document.body.insertBefore(this.div, document.body.firstChild);
-        document.onmousemove = this.followMouse.bind(this);
-    },
-
-    // Callback function
-    followMouse : function (event) {
-        event = wingS.events.getEvent(event);
-        var target = wingS.events.getTarget(event);
-        var pos = { left : event.clientX, top : event.clientY };
-        var doc = (window.document.compatMode && window.document.compatMode == "CSS1Compat") ?
-            window.document.documentElement : window.document.body || null;
-        if (doc) {
-            pos.left += doc.scrollLeft;
-            pos.top += doc.scrollTop;
-        }
-        if (target.nodeName == "OPTION" && !wingS.util.checkUserAgent('msie')) {
-            pos.left += document.defaultView.getComputedStyle(target, null).getPropertyValue("left");
-            pos.top += document.defaultView.getComputedStyle(target, null).getPropertyValue("top");
-        }
-        this.div.style.left = pos.left + this.dx + "px";
-        this.div.style.top = pos.top + this.dy + "px";
-    },
-
-    // Show cursor
-    show : function () {
-        this.div.style.display = "block";
-        return false;
-    },
-
-    // Hide cursor
-    hide : function () {
-        this.div.style.display = "none";
-        return false;
-    }
+wingS.ajax.AjaxActivityCursor = function() {
+    this.dx  = 0;
+    this.dy  = 15;
+    this.div = false;
 };
+
+// Initialize cursor
+wingS.ajax.AjaxActivityCursor.prototype.init = function() {
+    this.dx = wingS.globals.incrementalUpdateCursor.dx;
+    this.dy = wingS.globals.incrementalUpdateCursor.dy;
+    this.div = document.createElement("div");
+    this.div.style.position = "absolute";
+    this.div.style.zIndex = "1000";
+    this.div.style.display = "none";
+    this.div.innerHTML = "<img src=\"" + wingS.globals.incrementalUpdateCursor.image + "\"/>";
+    document.body.insertBefore(this.div, document.body.firstChild);
+    document.onmousemove = this.followMouse.bind(this);
+};
+
+// Callback function
+wingS.ajax.AjaxActivityCursor.prototype.followMouse = function(event) {
+    event = wingS.events.getEvent(event);
+    var target = wingS.events.getTarget(event);
+    var pos = { left : event.clientX, top : event.clientY };
+    var doc = (window.document.compatMode && window.document.compatMode == "CSS1Compat") ?
+        window.document.documentElement : window.document.body || null;
+    if (doc) {
+        pos.left += doc.scrollLeft;
+        pos.top += doc.scrollTop;
+    }
+    if (target.nodeName == "OPTION" && !wingS.util.checkUserAgent('msie')) {
+        pos.left += document.defaultView.getComputedStyle(target, null).getPropertyValue("left");
+        pos.top += document.defaultView.getComputedStyle(target, null).getPropertyValue("top");
+    }
+    this.div.style.left = pos.left + this.dx + "px";
+    this.div.style.top = pos.top + this.dy + "px";
+};
+
+// Show cursor
+wingS.ajax.AjaxActivityCursor.prototype.show = function() {
+    this.div.style.display = "block";
+    return false;
+};
+
+// Hide cursor
+wingS.ajax.AjaxActivityCursor.prototype.hide = function() {
+    this.div.style.display = "none";
+    return false;
+};
+
+var AjaxActivityCursor = new wingS.ajax.AjaxActivityCursor();
