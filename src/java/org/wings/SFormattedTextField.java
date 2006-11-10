@@ -29,8 +29,8 @@ import org.wings.text.SDateFormatter;
 import org.wings.text.SInternationalFormatter;
 import org.wings.text.SNumberFormatter;
 import java.util.Date;
-import org.wings.text.SDefaultFormatter;
 import org.wings.text.SAbstractFormatter;
+import org.wings.text.SDefaultFormatter;
 
 
 /**
@@ -39,43 +39,43 @@ import org.wings.text.SAbstractFormatter;
  * @author theresia
  */
 public class SFormattedTextField extends STextField {
-    
+
     private final static Log log = LogFactory.getLog(SFormattedTextField.class);
- 
+
     public final static int COMMIT = 0;
     public final static int COMMIT_OR_REVERT = 1;
-    
+
     private int focusLostBehavior = COMMIT_OR_REVERT;
-    
+
     /* The last valid value */
     private Object value = null;
-    
+
     private SAbstractFormatter formatter = null;
-    
+
     private SAbstractFormatterFactory factory = null;
 
     /**
-     * Creates a SFormattedTextField 
+     * Creates a SFormattedTextField
      */
     public SFormattedTextField() {
     }
 
     /**
      * Creates a SFormattedTextField with the given value
-     * @param value 
+     * @param value
      */
-    public SFormattedTextField( Object value ) { 
+    public SFormattedTextField( Object value ) {
         setValue( value );
     }
-    
+
     /**
      * Creates a SFormattedTextField with the given SAbstractFormatter
      * @param formatter SAbstractFormatter
      */
     public SFormattedTextField( SAbstractFormatter formatter ) {
-        setFormatterFactory( new SDefaultFormatterFactory(formatter) );
+        setFormatter(formatter);
     }
-    
+
     /**
      * Creates a SFormattedTextField with the given AbstractFormatterFactory
      * @param factory SAbstractFormatterFactory
@@ -89,51 +89,64 @@ public class SFormattedTextField extends STextField {
      * @param object value
      */
     public void setValue(Object object) {
-        
         String string = null;
-        
-        SAbstractFormatterFactory aff = getFormatterFactory();
-        if ( aff == null ) {
-            aff = getDefaultFormatterFactory( object );
-            setFormatterFactory( aff );
+
+        SAbstractFormatter formatter = this.formatter;
+        if (formatter == null) {
+            SAbstractFormatterFactory aff = getFormatterFactory();
+            if ( aff == null ) {
+                aff = getDefaultFormatterFactory( object );
+            }
+            formatter = aff.getFormatter(this);
         }
-        setFormatter( aff.getFormatter(this) );
-        
+
         try {
-            string = getFormatter().valueToString(object);
+            string = formatter.valueToString(object);
             this.value = object;
         } catch (ParseException e) {
             log.info("Unable to parse object" + e);
         }
-                
+
         super.setText( string );
-        
-    }  
-    
+
+    }
+
     /**
      * Returns the last valid value
      * @return the last valid value
      */
-    public Object getValue() {       
-        Object returnValue = null;
-        
-        SAbstractFormatter formatter = getFormatter();
-        
-        if ( formatter != null ) {
-            
-            try {
-                returnValue = formatter.stringToValue(this.getText());
-                value = returnValue;
-            } catch (ParseException e) {
-                log.debug("Unable to parse string" + e);
-                returnValue = value;
+    public Object getValue() {
+        Object returnValue;
+
+        SAbstractFormatter formatter = this.formatter;
+        if (formatter == null) {
+            SAbstractFormatterFactory aff = getFormatterFactory();
+            if ( aff == null ) {
+                aff = getDefaultFormatterFactory( value );
             }
-            
+            formatter = aff.getFormatter(this);
         }
 
-        return returnValue;       
+        try {
+            returnValue = formatter.stringToValue(this.getText());
+            value = returnValue;
+        } catch (ParseException e) {
+            log.debug("Unable to parse string" + e);
+            returnValue = value;
+        }
+
+        return returnValue;
     }
-    
+
+    public void setText(String text) {
+        try {
+            SAbstractFormatter formatter = getFormatter();
+            super.setText(formatter.valueToString(formatter.stringToValue(text)));
+        }
+        catch (ParseException e) {
+        }
+    }
+
     /**
      * Sets the focus lost behavior
      * <code>COMMIT</code>
@@ -146,7 +159,7 @@ public class SFormattedTextField extends STextField {
         }
         focusLostBehavior = behavior;
     }
-    
+
     /**
      * Returns the focus lost behavior
      * @return focus lost behavior
@@ -160,6 +173,9 @@ public class SFormattedTextField extends STextField {
      * @return SAbstractFormatter
      */
     public SAbstractFormatter getFormatter() {
+        if (formatter == null) {
+            formatter = getFormatterFactory().getFormatter(this);
+        }
         return formatter;
     }
 
@@ -170,19 +186,13 @@ public class SFormattedTextField extends STextField {
     public void setFormatter(SAbstractFormatter formatter) {
         this.formatter = formatter;
     }
-    
-    /** 
+
+    /**
      * Sets the FormatterFactory
      * @param ff AbstractFormatterFactory
      */
     public void setFormatterFactory ( SAbstractFormatterFactory ff ) {
         this.factory = ff;
-        
-        SAbstractFormatter af = null;
-        if ( ff != null ) {
-            af = ff.getFormatter( this );
-        }
-        setFormatter( af );
         setValue( value );
         
     }

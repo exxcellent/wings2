@@ -64,7 +64,7 @@ public class TableExample
         controls = new TableControls();
 
         table = new STable(new MyTableModel(7, 5));
-        table.setName("table");
+        table.setName("tableExample");
         table.setShowGrid(true);
         table.setSelectionMode(STable.NO_SELECTION);
         table.setDefaultRenderer(cellRenderer);
