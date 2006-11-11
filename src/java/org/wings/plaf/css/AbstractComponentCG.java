@@ -231,7 +231,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
     public void componentChanged(SComponent component) {
         component.putClientProperty("render-cache", null);
-        // log.info("invalidating = " + component);
+        // log.debug("invalidating = " + component);
 
         InputMap inputMap = component.getInputMap();
         if (inputMap != null && inputMap.size() > 0) {
@@ -314,12 +314,12 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 	public final void write(final Device device, final SComponent component) throws IOException {
 		if (component.getParentFrame() != null && RenderHelper.getInstance(
 				component.getParentFrame()).isIncrementalUpdateMode()) {
-			log.info("writing = " + component);
+			log.debug("writing = " + component);
 			++written;
 			renderComponent(device, component);
 		} else {
 			if (!RenderHelper.getInstance(component).isCachingAllowed(component)) {
-				log.info("writing = " + component);
+				log.debug("writing = " + component);
 				++written;
 				renderComponent(device, component);
 				return;
@@ -331,10 +331,10 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 				renderComponent(cacheDevice, component);
 				renderedCode = cacheDevice.toString();
 				component.putClientProperty("render-cache", renderedCode);
-				log.info("caching = " + component);
+				log.debug("caching = " + component);
 				++cached;
 			} else {
-				log.info("reusing = " + component);
+				log.debug("reusing = " + component);
 				++reused;
 			}
 			device.print(renderedCode);

@@ -45,7 +45,7 @@ public class MenuBarCG extends AbstractComponentCG implements
     /**
      * javascript with the menu magic
      */
-    private static final String MENU_JS = (String) ResourceManager.getObject("JScripts.menu", String.class);
+    private static final String MENU_JS = (String) ResourceManager.getObject("JS.menu", String.class);
     /**
      * handler for clicks outside of menu. these clicks possibly close the menu.
      */

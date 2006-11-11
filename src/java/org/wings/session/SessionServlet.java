@@ -490,7 +490,7 @@ final class SessionServlet
                 outputDevice = DeviceFactory.createDevice(extInfo);
                 session.fireRequestEvent(SRequestEvent.DELIVER_START, extInfo);
 
-                log.info("---> start rendering:");
+                log.debug("---> start rendering:");
                 long startTime = System.currentTimeMillis();
                 extManager.deliver(extInfo, response, outputDevice);
                 long endTime = System.currentTimeMillis();

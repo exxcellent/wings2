@@ -49,35 +49,66 @@ import java.util.*;
  * Does quite many abritriray things i.e. registering diverse service scripts, etc.
  */
 public final class FrameCG implements org.wings.plaf.FrameCG {
+
     private static final long serialVersionUID = 1L;
 
     private final transient static Log log = LogFactory.getLog(FrameCG.class);
 
     /**
-     * The default DOCTYPE enforcing standard (non-quirks mode) in all current browsers.
-     * Please be aware, that changing the DOCTYPE may change the way how browser renders the generate
-     * document i.e. esp. the CSS attribute inheritance does not work correctly on <code>table</code> elements.
+     * The default DOCTYPE enforcing standard (non-quirks mode) in all current browsers. Please be aware, that
+     * changing the DOCTYPE may change the way how browser renders the generate document i.e. esp. the CSS
+     * attribute inheritance does not work correctly on <code>table</code> elements.
      * See i.e. http://www.ericmeyeroncss.com/bonus/render-mode.html
      */
     public final static String STRICT_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" " +
             "\"http://www.w3.org/TR/REC-html40/strict.dtd\">";
 
     /**
-     * The HTML DOCTYPE setting all browsers to Quirks mode.
-     * We need this to force IE to use the correct box rendering model. It's the only browser
-     * you cannot reconfigure via a CSS tag.
+     * The HTML DOCTYPE setting all browsers to Quirks mode. We need this to force IE to use the correct box
+     * rendering model. It's the only browser you cannot reconfigure via a CSS tag.
      */
     public final static String QUIRKS_DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
 
     /**
-     * javascript needed for Drag and Drop support
+     * Lookup for a property Stylesheet.BROWSERNAME to know fitting stylesheets
      */
-    private final String DND_JS = (String) ResourceManager.getObject("JScripts.dnd", String.class);
+    private static final String PROPERTY_STYLESHEET = "Stylesheet.";
+    private static final String BROWSER_DEFAULT = "default";
+
+    public static final String WINGS_GLOBALS = (String) ResourceManager.getObject("JS.wingsGlobal", String.class);
+    public static final String WINGS_EVENT = (String) ResourceManager.getObject("JS.wingsEvent", String.class);
+    public static final String WINGS_UTIL = (String) ResourceManager.getObject("JS.wingsUtil", String.class);
+    public static final String WINGS_LAYOUT = (String) ResourceManager.getObject("JS.wingsLayout", String.class);
+    public static final String WINGS_REQUEST = (String) ResourceManager.getObject("JS.wingsRequest", String.class);
+    public static final String WINGS_AJAX = (String) ResourceManager.getObject("JS.wingsAjax", String.class);
+    public static final String WINGS_COMPONENT = (String) ResourceManager.getObject("JS.wingsComponent", String.class);
+    public static final String YAHOO_GLOBAL = (String) ResourceManager.getObject("JS.yahooGlobal", String.class);
+    public static final String YAHOO_DOM = (String) ResourceManager.getObject("JS.yahooDom", String.class);
+    public static final String YAHOO_EVENT = (String) ResourceManager.getObject("JS.yahooEvent", String.class);
+    public static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
+
+    private Script wingsGlobal;
+    private Script wingsEvent;
+    private Script wingsUtil;
+    private Script wingsLayout;
+    private Script wingsRequest;
+    private Script wingsAjax;
+    private Script wingsComponent;
+    private Script yahooGlobal;
+    private Script yahooDom;
+    private Script yahooEvent;
+    private Script yahooContainer;
+    private Script dwrEngine;
+    private Script dwrUtil;
 
     /**
-     * javascript needed for Drag and Drop support
+     * JavaScript needed for Drag and Drop support
      */
-    private final String WZ_DND_JS = (String) ResourceManager.getObject("JScripts.wzdragdrop", String.class);
+    private final String DND_JS = (String) ResourceManager.getObject("JS.dnd", String.class);
+
+    private final String WZ_DND_JS = (String) ResourceManager.getObject("JS.wzdragdrop", String.class);
+
+    private ClassPathResource formbutton;
 
     private String documentType = STRICT_DOCTYPE;
 
@@ -88,12 +119,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private Boolean renderXmlDeclaration = Boolean.FALSE;
 
     public static final Headers HEADERS = new Headers();
-    private ClassPathResource formbutton;
 
-    public static class Headers
-        extends SessionLocal
-        implements List
-    {
+    public static class Headers extends SessionLocal implements List {
+
         protected Object initialValue() {
             return new ArrayList();
         }
@@ -242,48 +270,31 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             setRenderXmlDeclaration(userRenderXmlDecl);
         }
 
-        // add JavaScript files to frame
+        // Externalize JavaScript headers
         Session session = SessionManager.getSession();
-        form = createExternalizedHeader(session, FORM_SCRIPT, "text/javascript");
-        ajax = createExternalizedHeader(session, AJAX_SCRIPT, "text/javascript");
-        yahoo = createExternalizedHeader(session, YAHOO_SCRIPT, "text/javascript");
-        yahooDom = createExternalizedHeader(session, YAHOO_DOM_SCRIPT, "text/javascript");
-        yahooEvent = createExternalizedHeader(session, YAHOO_EVENT_SCRIPT, "text/javascript");
-        yahooContainer = createExternalizedHeader(session, YAHOO_CONTAINER_SCRIPT, "text/javascript");
+        wingsGlobal = createExternalizedHeader(session, WINGS_GLOBALS, "text/javascript");
+        wingsEvent = createExternalizedHeader(session, WINGS_EVENT, "text/javascript");
+        wingsUtil = createExternalizedHeader(session, WINGS_UTIL, "text/javascript");
+        wingsLayout = createExternalizedHeader(session, WINGS_LAYOUT, "text/javascript");
+        wingsRequest = createExternalizedHeader(session, WINGS_REQUEST, "text/javascript");
+        wingsAjax = createExternalizedHeader(session, WINGS_AJAX, "text/javascript");
+        wingsComponent = createExternalizedHeader(session, WINGS_COMPONENT, "text/javascript");
+        yahooGlobal = createExternalizedHeader(session, YAHOO_GLOBAL, "text/javascript");
+        yahooDom = createExternalizedHeader(session, YAHOO_DOM, "text/javascript");
+        yahooEvent = createExternalizedHeader(session, YAHOO_EVENT, "text/javascript");
+        yahooContainer = createExternalizedHeader(session, YAHOO_CONTAINER, "text/javascript");
 
         dwrEngine = new Script("text/javascript", new DefaultURLResource("../dwr/engine.js"));
         dwrUtil = new Script("text/javascript", new DefaultURLResource("../dwr/util.js"));
 
         formbutton = new ClassPathResource("org/wings/plaf/css/formbutton.htc", "text/x-component");
-        formbutton.getId(); // externalize ..
+        formbutton.getId(); // externalize
     }
 
     /**
-     * Lookup for a property Stylesheet.BROWSERNAME to know fitting stylesheets
-     */
-    private static final String PROPERTY_STYLESHEET = "Stylesheet.";
-    private static final String BROWSER_DEFAULT = "default";
-
-    public final String FORM_SCRIPT = (String) ResourceManager.getObject("JScripts.form", String.class);
-    public final String AJAX_SCRIPT = (String) ResourceManager.getObject("JScripts.ajax", String.class);
-    public final String YAHOO_SCRIPT = (String) ResourceManager.getObject("JScripts.Yahoo", String.class);
-    public final String YAHOO_DOM_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooDom", String.class);
-    public final String YAHOO_EVENT_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooEvent", String.class);
-    public final String YAHOO_CONTAINER_SCRIPT = (String) ResourceManager.getObject("JScripts.YahooContainer", String.class);
-
-    private Script form;
-    private Script ajax;
-    private Script dwrEngine;
-    private Script dwrUtil;
-    private Script yahoo;
-    private Script yahooDom;
-    private Script yahooEvent;
-    private Script yahooContainer;
-
-    /**
-     * Externalizes the style sheet(s) for this session.
-     * Look up according style sheet file name in org.wings.plaf.css.properties file under Stylesheet.BROWSERNAME.
-     * The style sheet is loaded from the class path.
+     * Externalizes the style sheet(s) for this session. Look up according style sheet file name in
+     * org.wings.plaf.css.properties file under Stylesheet.BROWSERNAME. The style sheet is loaded from
+     * the class path.
      * @return the URLs under which the css file(s) was externalized
      */
     private List externalizeBrowserStylesheets(Session session) {
@@ -292,7 +303,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         final String browserName = session.getUserAgent().getBrowserType().getShortName();
         final String cssResource = PROPERTY_STYLESHEET + browserName;
         String cssClassPaths = (String)manager.getObject(cssResource, String.class);
-        // catch missing browser entry in properties file
+        // Catch missing browser entry in properties file
         if (cssClassPaths == null) {
             cssClassPaths = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
         }
@@ -304,12 +315,12 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             ClassPathResource res = new ClassPathResource(cssClassPath, "text/css");
             String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
             if (cssUrl != null) {
-                log.info("Attaching CSS Stylesheet "+cssClassPath+" found for browser "+browserName+" to frame. " +
-                        "(See Stylesheet.xxx entries in default.properties)");
+                log.info("Attaching CSS Stylesheet " + cssClassPath + " found for browser " + browserName +
+                		" to frame. (See Stylesheet.xxx entries in default.properties)");
                 cssUrls.add(cssUrl);
             } else {
-                log.warn("Did not attach CSS Stylesheet "+cssClassPath+" for browser "+browserName+" to frame. " +
-                        "(See Stylesheet.xxx entries in default.properties)");
+                log.warn("Did not attach CSS Stylesheet " + cssClassPath + " for browser " + browserName +
+                		" to frame. (See Stylesheet.xxx entries in default.properties)");
             }
         }
 
@@ -319,8 +330,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public void installCG(final SComponent comp) {
         final SFrame component = (SFrame) comp;
 
-        // dynamic code resource.
-        // This Resource externalized the HTML page
+        // Add dynamic resources to the frame
         CompleteUpdateResource completeUpdateRessource = new CompleteUpdateResource(component);
         component.addDynamicResource(completeUpdateRessource);
         IncrementalUpdateResource incrementalUpdateRessource = new IncrementalUpdateResource(component);
@@ -338,9 +348,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         final JavaScriptDOMListener restoreScrollPosition = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
                 "wingS.util.restoreScrollPosition", comp);
-        final JavaScriptDOMListener performOnLoad = new JavaScriptDOMListener(
-                JavaScriptEvent.ON_LOAD,
-                "performWindowOnLoad", comp);
         final JavaScriptDOMListener initAjaxActivityCursor = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
                 "AjaxActivityCursor.init", "AjaxActivityCursor", comp);
@@ -348,35 +355,42 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 JavaScriptEvent.ON_LOAD,
                 "wingS.ajax.hideAjaxActivityIndicator", comp);
 
+        // Add script listeners to the frame
         component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
         component.addScriptListener(storeScrollPosition);
         component.addScriptListener(restoreScrollPosition);
-        component.addScriptListener(performOnLoad);
         component.addScriptListener(initAjaxActivityCursor);
         component.addScriptListener(hideAjaxActivityIndicator);
+
         CaptureDefaultBindingsScriptListener.install(component);
 
-        if (!HEADERS.contains(form)) {
-            HEADERS.add(form);
-            HEADERS.add(ajax);
-            HEADERS.add(dwrEngine);
-            HEADERS.add(dwrUtil);
-            HEADERS.add(yahoo);
+        // Add necessary headers to the frame
+        if (!HEADERS.contains(wingsGlobal)) {
+        	HEADERS.add(wingsGlobal);
+            HEADERS.add(wingsEvent);
+            HEADERS.add(wingsUtil);
+            HEADERS.add(wingsLayout);
+            HEADERS.add(wingsRequest);
+            HEADERS.add(wingsAjax);
+            HEADERS.add(wingsComponent);
+        	HEADERS.add(yahooGlobal);
             HEADERS.add(yahooDom);
             HEADERS.add(yahooEvent);
             HEADERS.add(yahooContainer);
+            HEADERS.add(dwrEngine);
+            HEADERS.add(dwrUtil);
         }
 
         // Retrieve list of static CSS files to be attached to this frame for this browser.
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component.getSession());
         for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
-            component.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
+            component.addHeader(new Link("stylesheet", null, "text/css", null,
+            		new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
         }
     }
 
     /**
-     * adds the file found at the classPath to the parentFrame header with
-     * the specified mimeType
+     * Adds the file found at the classPath to the parentFrame header with the specified mimeType
      * @param classPath the classPath to look in for the file
      * @param mimeType the mimetype of the file
      */
@@ -397,26 +411,19 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     public void componentChanged(SComponent c) {
-        /*
-         * the update of the input maps happens on every write,
-         * so here it's unnecessary.
-         */
-        //updateGlobalInputMaps(frame);
+        // The update of the input maps happens on every write, so here it's unnecessary.
+        // updateGlobalInputMaps(frame);
     }
 
-
-    /**
-     * @param frame
-     */
     private void updateGlobalInputMaps(SFrame frame) {
-        // here it goes, global input maps
+        // Here it goes, global input maps
         ScriptListener[] scriptListeners = frame.getScriptListeners();
-        // first, delete all of them, they are from the last request...
+        // First, delete all of them, they are from the last request...
         for (int i = 0; i < scriptListeners.length; i++) {
             ScriptListener scriptListener = scriptListeners[i];
             if (scriptListener instanceof InputMapScriptListener) {
                 /*
-                 * one could collect this as a list and only add/remove
+                 * One could collect this as a list and only add/remove
                  * the changes. But the listeners are added as anonymous
                  * classes, which makes identifying them expensive. That
                  * would have to be changed.
@@ -424,7 +431,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 frame.removeScriptListener(scriptListener);
             }
         }
-        // then install the ones we need for the request going on...
+        // Then install the ones we need for the request going on...
         List inputMapComponents = frame.getGlobalInputMapComponents();
         if (inputMapComponents != null) {
             Iterator iter = inputMapComponents.iterator();
@@ -440,22 +447,22 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
     }
 
-    public void write(final Device device, final SComponent pComp)
-            throws IOException {
+    public void write(final Device device, final SComponent pComp) throws IOException {
         final SFrame frame = (SFrame) pComp;
         /*
-         * the input maps must be updated on every rendering of the SFrame, since
+         * The input maps must be updated on every rendering of the SFrame, since
          * some components could be invisible in this request that registered an
          * input map before. To avoid too much code sent to the client, this update
          * is calles.
          */
         updateGlobalInputMaps(frame);
+
         RenderHelper.getInstance(frame).reset();
-        if (!frame.isVisible()) {
+
+        if (!frame.isVisible())
             return;
-        } else {
+        else
             frame.fireRenderEvent(SComponent.START_RENDERING);
-        }
 
         Session session = SessionManager.getSession();
         final String language = session.getLocale().getLanguage();
@@ -481,6 +488,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         Utils.write(device, language);
         device.print("\">\n");
 
+        // <head> tag
         device.print("<head>");
         if (title != null) {
             device.print("<title>");
@@ -488,14 +496,13 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             device.print("</title>\n");
         }
 
-        // Character set encoding. default typically utf-8
+        // Character set encoding, the default is typically utf-8.
         device.print("<meta http-equiv=\"Content-type\" content=\"text/html; charset=");
         Utils.write(device, encoding);
         device.print("\"/>\n");
 
-        /* Insert version and compile time.
-         * Since the Version Class is generated on compile time, build errors
-         * in SDK's are quite normal. Just run the Version.java ant task.
+        /* Insert version and compile time. Since the Version Class is generated on compile time,
+         * build errors in SDK's are quite normal. Just run the Version.java ant task.
          */
         device.print("<meta http-equiv=\"Generator\" content=\"wingS (http://www.j-wings.org) v");
         device.print(Version.getVersion());
@@ -535,7 +542,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 frame.putClientProperty("gain-focus-script", null);
             }
             if (focus != null) {
-                // add new focus gain script
+                // Add new focus gain script
                 gainFocusScript = new FocusScriptListener(focus);
                 frame.addScriptListener(gainFocusScript);
                 frame.putClientProperty("gain-focus-script", gainFocusScript);
@@ -547,13 +554,17 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         Utils.writeEvents(device, frame, null);
         AbstractComponentCG.writeAllAttributes(device, frame);
         device.print(">\n");
+
+        // Write contents of the frame
         if (frame.isVisible()) {
-            // now add JS for DnD if neccessary.
+
+            // Setup DnD
             DragAndDropManager dndManager = frame.getSession().getDragAndDropManager();
             List dragComponents = null;
             List dropComponents = null;
             Iterator dragIter = null;
             Iterator dropIter = null;
+            // Add initial JS for DnD if neccessary
             if (dndManager.isVisible()) {
                 dragComponents = dndManager.getDragSources();
                 dropComponents = dndManager.getDropTargets();
@@ -570,13 +581,15 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 }
             }
 
+            // Write components
             frame.getLayout().write(device);
-            device.print("\n");
-            // now add all menus
-            device.print(RenderHelper.getInstance(frame).getMenueRenderBuffer().toString());
 
-            // now add final JS for DnD if neccessary.
-            if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) { // initialize only if dragSources are present
+            // Write menus
+            device.print("\n").print(RenderHelper.getInstance(frame).getMenueRenderBuffer().toString());
+
+            // Write final JS for DnD if neccessary
+            if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) {
+            	// initialize only if dragSources are present
                 device.print("<script type=\"text/javascript\">\n<!--\n");
                 device.print("SET_DHTML();\n");
                 while (dragIter.hasNext()) {
@@ -632,15 +645,15 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         device.print("<script type=\"text/javascript\">\n");
 
         device.print("// globally accessible script variables:\n" +
-                "wingS.globals.event_epoch = '" + frame.getEventEpoch() + "';\n" +
-                "wingS.globals.completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
-                "wingS.globals.incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
-                "wingS.globals.incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
-                "wingS.globals.incrementalUpdateCursor = { 'enabled':" + frame.getIncrementalUpdateCursor()[0] + "," +
+                "wingS.global.event_epoch = '" + frame.getEventEpoch() + "';\n" +
+                "wingS.global.completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
+                "wingS.global.incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
+                "wingS.global.incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
+                "wingS.global.incrementalUpdateCursor = { 'enabled':" + frame.getIncrementalUpdateCursor()[0] + "," +
                                            " 'image':'" + frame.getIncrementalUpdateCursor()[1] + "'," +
                                            " 'dx':" + frame.getIncrementalUpdateCursor()[2] + "," +
                                            " 'dy':" + frame.getIncrementalUpdateCursor()[3] + " };\n" +
-                "wingS.globals.incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
+                "wingS.global.incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
                                               " 'color':'" + frame.getIncrementalUpdateHighlight()[1] + "'," +
                                               " 'duration':" + frame.getIncrementalUpdateHighlight()[2] + " };\n");
 

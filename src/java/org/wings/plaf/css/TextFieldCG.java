@@ -46,7 +46,7 @@ public final class TextFieldCG extends AbstractComponentCG implements
             if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
                 CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter);
             }
-            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';CallableFormatter.validate(ftextFieldCallback, this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'))"));
+            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';CallableFormatter.validate(wingS.component.ftextFieldCallback, this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'))"));
         }
         if (isMSIE(comp))
             comp.putClientProperty("horizontalOversize", new Integer(horizontalOversize));

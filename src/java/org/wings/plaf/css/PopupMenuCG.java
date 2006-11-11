@@ -52,7 +52,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
     public void uninstallCG(final SComponent comp) {
     }
 
-    private static final String MENU_JS = (String) ResourceManager.getObject("JScripts.menu", String.class);
+    private static final String MENU_JS = (String) ResourceManager.getObject("JS.menu", String.class);
     private static final JavaScriptListener BODY_ONCLICK_SCRIPT =
         new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
 
@@ -69,7 +69,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
             device.print("\">");
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
                 SComponent menuItem = menu.getMenuComponent(i);
-    
+
                 if (menuItem.isVisible()) {
                     device.print("<li");
                     if (menuItem instanceof SMenu) {
@@ -83,7 +83,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenuItem\"");
                         } else {
-    
+
                             device.print(" class=\"SMenuItem_Disabled\"");
                         }
                     }
@@ -182,7 +182,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
         addExternalizedHeader(parentFrame, MENU_JS, "text/javascript");
     }
 
-    /** 
+    /**
      * adds the file found at the classPath to the parentFrame header with
      * the specified mimeType
      * @param parentFrame the parent frame of the component

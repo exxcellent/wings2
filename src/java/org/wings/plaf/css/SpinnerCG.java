@@ -38,17 +38,17 @@ import org.wings.util.SessionLocal;
 public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.SpinnerCG {
 
     private static final Log log = LogFactory.getLog( SpinnerCG.class );
-    
+
     private static final SResourceIcon iconNext = new SResourceIcon("org/wings/icons/SpinnerNext.gif");
     private static final SResourceIcon iconPrev = new SResourceIcon("org/wings/icons/SpinnerPrev.gif");
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private SessionLocal sessionLocal = new SessionLocal();
 
     public void installCG(SComponent component) {
         super.installCG(component);
-        
+
         if (!CallableManager.getInstance().containsCallable("CallableSpinner")) {
             CallableManager.getInstance().registerCallable("CallableSpinner", getCallableSpinner());
         }
@@ -66,11 +66,11 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         device.print( "><tr><td>\n" );
         spinner.getEditor().write( device );
         device.print( "\n</td><td style=\"width:0px;\">\n" );
-        device.print( "<img onclick=\"CallableSpinner.getValue(spinnerCallback,'"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'0')\" src=\"" + iconNext.getURL() + "\" style=\"display:block;vertical-align:bottom;\">\n");
-        device.print( "<img onclick=\"CallableSpinner.getValue(spinnerCallback,'"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'1')\" src=\"" + iconPrev.getURL() + "\" style=\"display:block;vertical-align:top\">\n");
+        device.print( "<img onclick=\"CallableSpinner.getValue(wingS.component.spinnerCallback,'"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'0')\" src=\"" + iconNext.getURL() + "\" style=\"display:block;vertical-align:bottom;\">\n");
+        device.print( "<img onclick=\"CallableSpinner.getValue(wingS.component.spinnerCallback,'"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'1')\" src=\"" + iconPrev.getURL() + "\" style=\"display:block;vertical-align:top\">\n");
         device.print( "</td></tr></table>\n" );
     }
-    
+
     protected CallableSpinner getCallableSpinner() {
         CallableSpinner callableSpinner = (CallableSpinner)this.sessionLocal.get();
         if (callableSpinner == null) {
@@ -79,29 +79,29 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         }
         return callableSpinner;
     }
-    
+
     public final static class CallableSpinner {
         Map weakHashMap = new WeakHashMap();
-        
+
         public static final int PREV = 1;
         public static final int NEXT = 0;
-        
+
         public List getValue( String key, String name, String value, int type ) {
             log.debug( "getValue( " + key + ", " + name + ", " + value + ", " + type + " )" );
-            
+
             List list = new LinkedList();
-            
+
             SSpinner spinner = spinnerByKey(key);
             if ( spinner != null ) {
                 list.add( name );
                 try {
-                    
+
                     SAbstractFormatter formatter = ((DefaultEditor)spinner.getEditor()).getTextField().getFormatter();
-                    
+
                     Object newValue = formatter.stringToValue( value );
 
                     spinner.setValue( newValue );
-                    
+
                     Object objValue = null;
                     switch ( type ) {
                         case PREV:
@@ -113,25 +113,25 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
                         default:
                             objValue = spinner.getModel().getValue();
                     }
-                    
+
                     if ( objValue != null ) {
                         list.add( formatter.valueToString( objValue ) );
                         spinner.getModel().setValue( objValue );
                     } else {
                         list.add( "" );
                     }
-                    
+
                     if ( spinner.getChangeListeners().length > 1 ) {
                         list.add( String.valueOf( true ) );
                     }
-  
+
                 } catch ( java.text.ParseException pe ) {
                     pe.printStackTrace();
                 } catch ( java.lang.IllegalArgumentException iae ) {
                     iae.printStackTrace();
                 }
             }
-            
+
             return list;
         }
 

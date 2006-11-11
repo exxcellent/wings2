@@ -1,3 +1,315 @@
+/***************************************************************************************************
+ * WINGS.AJAX  --  contains: functions used to process ajax requests
+ **************************************************************************************************/
+
+wingS.ajax.getUpdates = function() {
+    wingS.request.followLink(true);
+};
+
+wingS.ajax.initAjaxCallbacks = function() {
+    return {
+        "onLoading" : function(request) { wingS.ajax.showAjaxActivityIndicator(); },
+        "onSuccess" : function(request) { wingS.ajax.processAjaxRequest(request); },
+        "onError"   : function(request) { wingS.ajax.handleRequestError(request); }
+    };
+};
+
+wingS.ajax.doAjaxSubmit = function(form) {
+    var requestObject = wingS.ajax.initAjaxCallbacks();
+    return AjaxRequest.submit(form, requestObject);
+};
+
+wingS.ajax.doAjaxRequest = function(args) {
+    var requestObject = wingS.ajax.initAjaxCallbacks();
+    // Extend basic request object with arguments
+    for (var i in args) requestObject[i] = args[i];
+
+    // Use POST unless the request object defines GET
+    if (typeof requestObject.method == "string" &&
+        requestObject.method.toUpperCase() == "GET") {
+        AjaxRequest.get(requestObject);
+    } else {
+        AjaxRequest.post(requestObject);
+    }
+};
+
+/**
+ * Prints some hidden debugging infos about the given AJAX request at the bottom of the page.
+ */
+wingS.ajax.enableAjaxDebugging = function(request) {
+    var debug = document.getElementById("ajaxDebugging");
+    if (debug == null) {
+        var debugHtmlCode =
+            '<div style="margin-top:50px; padding-bottom:3px;">\n' +
+            '  <strong>AJAX DEBUGGING:</strong> &nbsp;XML RESPONSE\n' +
+            '  &nbsp;<span style="font:11px monospace"></span></div>\n' +
+            '<textarea readonly="readonly" style="width:100%; height:200px;\n' +
+            '  border-top:1px dashed #000000; border-bottom:1px dashed #000000;\n' +
+            '  font:11px monospace;"></textarea>\n';
+        debug = document.createElement("div");
+        debug.id = "ajaxDebugging";
+        debug.style.display = "none";
+        debug.innerHTML = debugHtmlCode;
+        document.body.appendChild(debug);
+    }
+    var txt = request.responseText;
+    debug.getElementsByTagName("TEXTAREA")[0].value = txt;
+    debug.getElementsByTagName("SPAN")[0].innerHTML = "| " + txt.length + " chars";
+};
+
+/**
+ * This function shows the previously enabled AJAX debugging view, if available.
+ */
+wingS.ajax.showAjaxDebugging = function() {
+    var debug = document.getElementById("ajaxDebugging");
+    if (debug != null) debug.style.display = "block";
+};
+
+/**
+ * This function hides the previously enabled AJAX debugging view, if available.
+ */
+wingS.ajax.hideAjaxDebugging = function() {
+    var debug = document.getElementById("ajaxDebugging");
+    if (debug != null) debug.style.display = "none";
+};
+
+wingS.ajax.handleRequestError = function(request) {
+    //var errorMsg = "An error occured while processing an AJAX request!\n" +
+    //               ">> " + request.statusText + " (" + request.status + ")";
+    //wingS.ajax.hideAjaxActivityIndicator();
+    //alert(errorMsg);
+    //window.location.href = wingS.util.encodeUpdateId(wingS.global.completeUpdateId);
+    //dequeueNextRequest();
+
+    wingS.ajax.hideAjaxActivityIndicator();
+    document.close();
+    document.open("text/html");
+    document.write(request.responseText);
+    document.close();
+};
+
+wingS.ajax.processAjaxRequest = function(request) {
+    wingS.ajax.enableAjaxDebugging(request);
+
+    // Get the received XML response
+    var xmlDoc = request.responseXML;
+    // In case we do not get any XML
+    if (xmlDoc == null) {
+        wingS.ajax.hideAjaxActivityIndicator();
+        //alert("DEBUG: WHAT SHALL WE DO HERE?");
+        window.location.href = request.url;
+        return;
+    }
+
+    // Get the root element of the received XML response
+    var xmlRoot = xmlDoc.getElementsByTagName("update")[0];
+    // Workaround to prevent IE from showing JS errors when
+    // session has meanwhile timed out -> try a full reload
+    if (xmlRoot == null) {
+        hideAjaxActivityIndicator();
+        window.location.href = wingS.util.encodeUpdateId(completeUpdateId);
+        return;
+    }
+
+    // Private convenience function
+    function getFirstChildData(tagName) {
+        return xmlDoc.getElementsByTagName(tagName)[0].firstChild.data;
+    }
+
+    // Process the response depending on the update mode
+    var updateMode = xmlRoot.getAttribute("mode");
+    if (updateMode == "complete") {
+        window.location.href = getFirstChildData("redirect");
+        return;
+    }
+    else if (updateMode == "incremental") {
+        var components = xmlRoot.getElementsByTagName("component");
+        if (components.length > 0) {
+            var componentIds = new Array();
+            // Replace HTML needed for component updates
+            for (var i = 0; i < components.length; i++) {
+                var id = components[i].getAttribute("id");
+                var html = components[i].firstChild.data;
+                wingS.util.replaceComponentHtml(id, html);
+                componentIds.push(id);
+            }
+            // Execute scripts needed for component updates
+            var scripts = xmlRoot.getElementsByTagName("script");
+            for (var i = 0; i < scripts.length; i++) {
+                var code = scripts[i].firstChild.data;
+                try {
+                    eval(code);
+                } catch(e) {
+                    var errorMsg = "An error occured while processing an AJAX request!\n" +
+                                   ">> " + e.message + "\n\n\n The following JavaScript " +
+                                   "code could not be executed:\n" + code;
+                    alert(errorMsg);
+                }
+            }
+            // Update the event epoch of this frame
+            wingS.global.event_epoch = getFirstChildData("event_epoch");
+            // Hightlight the components updated above
+            if (wingS.global.incrementalUpdateHighlight.enabled) {
+                wingS.ajax.highlightComponentUpdates(componentIds);
+            }
+        }
+    }
+    wingS.ajax.hideAjaxActivityIndicator();
+    // Send next queued request
+    wingS.request.dequeueNextRequest();
+};
+
+/**
+ * Replaces the old HTML code of the component with the given ID by the new one. In other words,
+ * this methods acts like a cross-browser "outerHTML"-method.
+ */
+wingS.util.replaceComponentHtml = function(id, html) {
+    var component = document.getElementById(id);
+    if (component == null) return;
+
+    // Handle layout workaround for IE (if necessary)
+    var wrapping = component.getAttribute("wrapping");
+    if (wrapping != null && !isNaN(wrapping)) {
+        for (var i = 0; i < parseInt(wrapping); i++) {
+            component = component.parentNode;
+        }
+    }
+
+    if (typeof component.outerHTML != "undefined") {
+        // Use outerHTML if available
+        component.outerHTML = html;
+    } else {
+        var parent = component.parentNode;
+        if (parent == null) return;
+
+        var nrOfChildElements = 0;
+        for (var i = 0; i < parent.childNodes.length; i++) {
+            // We have to filter everything except element nodes
+            // since browsers treat whitespace nodes differently
+            if (parent.childNodes[i].nodeType == 1) {
+                nrOfChildElements++;
+            }
+        }
+
+        if (nrOfChildElements == 1) {
+            // If there is only one child it must be our component
+            parent.innerHTML = html;
+        } else {
+            var range;
+            // If there is no other way we have to use proprietary methods
+            if (document.createRange && (range = document.createRange()) &&
+                range.createContextualFragment) {
+                range.selectNode(component);
+                var newComponent = range.createContextualFragment(html);
+                parent.replaceChild(newComponent, component);
+            }
+        }
+    }
+};
+
+/**
+ * Highlights the components with the given IDs for a certain time interval with a specific back-
+ * ground color. The duration and color that will be used is defined by the properties with the
+ * same name of the "wingS.global.incrementalUpdateHighlight"-object.
+ */
+wingS.ajax.highlightComponentUpdates = function(componentIds) {
+    for (var i = 0; i < componentIds.length; i++) {
+        var component = document.getElementById(componentIds[i]);
+        if (component == null) return;
+        highlightComponent(component);
+    }
+
+    function highlightComponent(component) {
+        var initialBackgroundColor = component.style.backgroundColor;
+        component.style.backgroundColor = wingS.global.incrementalUpdateHighlight.color;
+        var resetColor = function() {
+            component.style.backgroundColor = initialBackgroundColor;
+        };
+        setTimeout(resetColor, wingS.global.incrementalUpdateHighlight.duration);
+    }
+};
+
+/**
+ * Shows the AJAX activity cursor and makes a user-predefined element with the CSS ID
+ * "ajaxActivityIndicator" visible. The latter is typically an animated GIF.
+ */
+wingS.ajax.showAjaxActivityIndicator = function() {
+    if (wingS.global.incrementalUpdateCursor.enabled) AjaxActivityCursor.show();
+    var indicator = document.getElementById("ajaxActivityIndicator");
+    if (indicator != null) {
+        indicator.style.visibility = "visible";
+    }
+};
+
+/**
+ * Hides the AJAX activity cursor and makes a user-predefined element with the CSS ID
+ * "ajaxActivityIndicator" invisible. The latter is typically an animated GIF.
+ */
+wingS.ajax.hideAjaxActivityIndicator = function() {
+    if (wingS.global.incrementalUpdateCursor.enabled) AjaxActivityCursor.hide();
+    var indicator = document.getElementById("ajaxActivityIndicator");
+    if (indicator != null && !AjaxRequest.isActive()) {
+        indicator.style.visibility = "hidden";
+    }
+};
+
+/**
+ * An object that encapsulates functions to show and hide an animated GIF besides the mouse cursor.
+ * Such a cursor can be used to indicate an active AJAX request.
+ */
+wingS.ajax.AjaxActivityCursor = function() {
+    this.dx  = 0;
+    this.dy  = 15;
+    this.div = false;
+};
+
+// Initialize cursor
+wingS.ajax.AjaxActivityCursor.prototype.init = function() {
+    this.dx = wingS.global.incrementalUpdateCursor.dx;
+    this.dy = wingS.global.incrementalUpdateCursor.dy;
+    this.div = document.createElement("div");
+    this.div.style.position = "absolute";
+    this.div.style.zIndex = "1000";
+    this.div.style.display = "none";
+    this.div.innerHTML = "<img src=\"" + wingS.global.incrementalUpdateCursor.image + "\"/>";
+    document.body.insertBefore(this.div, document.body.firstChild);
+    document.onmousemove = this.followMouse.bind(this);
+};
+
+// Callback function
+wingS.ajax.AjaxActivityCursor.prototype.followMouse = function(event) {
+    event = wingS.events.getEvent(event);
+    var target = wingS.events.getTarget(event);
+    var pos = { left : event.clientX, top : event.clientY };
+    var doc = (window.document.compatMode && window.document.compatMode == "CSS1Compat") ?
+        window.document.documentElement : window.document.body || null;
+    if (doc) {
+        pos.left += doc.scrollLeft;
+        pos.top += doc.scrollTop;
+    }
+    if (target.nodeName == "OPTION" && !wingS.util.checkUserAgent('msie')) {
+        pos.left += document.defaultView.getComputedStyle(target, null).getPropertyValue("left");
+        pos.top += document.defaultView.getComputedStyle(target, null).getPropertyValue("top");
+    }
+    this.div.style.left = pos.left + this.dx + "px";
+    this.div.style.top = pos.top + this.dy + "px";
+};
+
+// Show cursor
+wingS.ajax.AjaxActivityCursor.prototype.show = function() {
+    this.div.style.display = "block";
+    return false;
+};
+
+// Hide cursor
+wingS.ajax.AjaxActivityCursor.prototype.hide = function() {
+    this.div.style.display = "none";
+    return false;
+};
+
+// Instantiate cursor
+var AjaxActivityCursor = new wingS.ajax.AjaxActivityCursor();
+
 /**
  * The AjaxRequest class is a wrapper for the XMLHttpRequest objects which
  * are available in most modern browsers. It simplifies the interfaces for
@@ -405,33 +717,33 @@ AjaxRequest.getXmlHttpRequest = function() {
     /*@cc_on @*/
     /*@if (@_jscript_version >= 5)
     try {
-    	xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
     } catch (e) {
-    	try {
-    		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    	} catch (E) {
-    		xmlhttp = false;
-    	}
+        try {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (E) {
+            xmlhttp = false;
+        }
     }
     @end @*/
 
     if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
-    	try {
-    		xmlhttp = new XMLHttpRequest();
-    	} catch (e) {
-    		xmlhttp = false;
-    	}
+        try {
+            xmlhttp = new XMLHttpRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
     }
 
     if (!xmlhttp && window.createRequest) {
-    	try {
-    		xmlhttp = window.createRequest();
-    	} catch (e) {
-    		xmlhttp = false;
-    	}
+        try {
+            xmlhttp = window.createRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
     }
 
-	return xmlhttp;
+    return xmlhttp;
 };
 
 /**
