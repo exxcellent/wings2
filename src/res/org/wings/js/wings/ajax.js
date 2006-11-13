@@ -106,8 +106,8 @@ wingS.ajax.processAjaxRequest = function(request) {
     // Workaround to prevent IE from showing JS errors when
     // session has meanwhile timed out -> try a full reload
     if (xmlRoot == null) {
-        hideAjaxActivityIndicator();
-        window.location.href = wingS.util.encodeUpdateId(completeUpdateId);
+        wingS.ajax.hideAjaxActivityIndicator();
+        window.location.href = wingS.util.encodeUpdateId(wingS.global.completeUpdateId);
         return;
     }
 
