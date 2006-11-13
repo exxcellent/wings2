@@ -155,7 +155,7 @@ public class IncrementalUpdateResource extends DynamicResource {
                     // update of event epoch
                     out.print("\n<event_epoch>" + getFrame().getEventEpoch() + "</event_epoch>");
                 } else {
-                    out.print("\nThere are no updates available!");
+                    out.print("\nThere are no components to update!");
                 }
             } else if (updateMode.equals("complete")) {
                 out.print("\n<redirect>");

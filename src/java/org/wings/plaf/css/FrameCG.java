@@ -86,6 +86,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public static final String YAHOO_DOM = (String) ResourceManager.getObject("JS.yahooDom", String.class);
     public static final String YAHOO_EVENT = (String) ResourceManager.getObject("JS.yahooEvent", String.class);
     public static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
+    public static final String YAHOO_CONNECTION = (String) ResourceManager.getObject("JS.yahooConnection", String.class);
 
     private Script wingsGlobal;
     private Script wingsEvent;
@@ -98,6 +99,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private Script yahooDom;
     private Script yahooEvent;
     private Script yahooContainer;
+    private Script yahooConnection;
     private Script dwrEngine;
     private Script dwrUtil;
 
@@ -283,6 +285,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         yahooDom = createExternalizedHeader(session, YAHOO_DOM, "text/javascript");
         yahooEvent = createExternalizedHeader(session, YAHOO_EVENT, "text/javascript");
         yahooContainer = createExternalizedHeader(session, YAHOO_CONTAINER, "text/javascript");
+        yahooConnection = createExternalizedHeader(session, YAHOO_CONNECTION, "text/javascript");
 
         dwrEngine = new Script("text/javascript", new DefaultURLResource("../dwr/engine.js"));
         dwrUtil = new Script("text/javascript", new DefaultURLResource("../dwr/util.js"));
@@ -348,19 +351,15 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         final JavaScriptDOMListener restoreScrollPosition = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
                 "wingS.util.restoreScrollPosition", comp);
-        final JavaScriptDOMListener initAjaxActivityCursor = new JavaScriptDOMListener(
+        final JavaScriptDOMListener initializeAjax = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
-                "AjaxActivityCursor.init", "AjaxActivityCursor", comp);
-        final JavaScriptDOMListener hideAjaxActivityIndicator = new JavaScriptDOMListener(
-                JavaScriptEvent.ON_LOAD,
-                "wingS.ajax.hideAjaxActivityIndicator", comp);
+                "wingS.ajax.initializeFrame", comp);
 
         // Add script listeners to the frame
         component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
         component.addScriptListener(storeScrollPosition);
         component.addScriptListener(restoreScrollPosition);
-        component.addScriptListener(initAjaxActivityCursor);
-        component.addScriptListener(hideAjaxActivityIndicator);
+        component.addScriptListener(initializeAjax);
 
         CaptureDefaultBindingsScriptListener.install(component);
 
@@ -377,6 +376,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             HEADERS.add(yahooDom);
             HEADERS.add(yahooEvent);
             HEADERS.add(yahooContainer);
+            HEADERS.add(yahooConnection);
             HEADERS.add(dwrEngine);
             HEADERS.add(dwrUtil);
         }

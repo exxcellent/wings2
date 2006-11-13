@@ -299,12 +299,8 @@ public class ComponentControls  extends SPanel {
         ajaxCursorEnabledCheckBox.setSelected(cursorEnabled);
         ajaxDebuggingViewAnchor.addScriptListener(new JavaScriptListener(
                 JavaScriptEvent.ON_CLICK,
-                "var debug = document.getElementById('ajaxDebugging');" +
-                "if (debug == null) alert('The AJAX debugging view has not been enabled yet!');" +
-                "else {" +
-                "  if (debug.style.display == 'block') wingS.ajax.hideAjaxDebugging();" +
-                "  else wingS.ajax.showAjaxDebugging();" +
-                "}" +
+                "if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);" +
+                "else wingS.ajax.setDebugViewVisible(true);" +
                 "return false;"
         ));
         ajaxForceCompleteUpdate.addActionListener(new ActionListener() {

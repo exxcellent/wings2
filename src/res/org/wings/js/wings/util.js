@@ -3,8 +3,22 @@
  **************************************************************************************************/
 
 
-wingS.util.encodeUpdateId = function(id) {
-    return wingS.global.event_epoch + "-" + id;
+wingS.util.getCompleteUpdateResource = function() {
+    return wingS.global.event_epoch + "-" + wingS.global.completeUpdateId;
+};
+
+wingS.util.getIncrementalUpdateResource = function() {
+    return wingS.global.event_epoch + "-" + wingS.global.incrementalUpdateId;
+};
+
+wingS.util.invokeScriptCodeArray = function(scriptCodeArray) {
+    if (scriptCodeArray) {
+        for (var i = 0; i < scriptCodeArray.length; i++) {
+            invokeNext = scriptCodeArray[i]();
+            if (invokeNext == false) return false;
+        }
+    }
+    return true;
 };
 
 wingS.util.getParentByTagName = function(element, tag) {
@@ -24,6 +38,32 @@ wingS.util.getParentWearingAttribute = function(element, attribute) {
         element = element.parentNode;
     }
     return null;
+};
+
+wingS.util.openlink = function(target, url, scriptCodeArray) {
+  if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
+      // if the target exists => change URL, else => open URL in new window
+      if (target == null) {
+          window.location.href = url;
+      } else {
+          if (wingS.util.checkTarget(target)) {
+              parent.frames[target].location.href = url;
+          } else {
+              window.open(url, target);
+          }
+      }
+  }
+};
+
+/**
+ * The following two functions are a workaround for IE to open a link in the right target/new window
+ * used in AnchorCG.
+ */
+wingS.util.checkTarget = function(target) {
+    for (var i = 0; i < parent.frames.length; i++) {
+        if (parent.frames[i].name == target) return true;
+    }
+    return false;
 };
 
 // TODO document + event.stopPropagation()
@@ -55,25 +95,6 @@ wingS.util.insertAfter = function(newChild, refChild) {
 };
 
 /**
- * Remove focus from a component and respect additonal custom script listeners attached by user.
- */
-wingS.util.blurComponent = function(component, clientHandlers) {
-    var success = true;
-    if (clientHandlers) {
-        for (var i = 0; i < clientHandlers.length; i++) {
-            success = clientHandlers[i]();
-            if (success == false) break;
-        }
-    }
-
-    if (success == undefined || success && component.blur()) {
-        component.blur();
-    }
-
-    return true;
-};
-
-/**
  * Search and return the first HTML element with the given tag name inside the HTML code generated
  * by wings for the passed component id. This function is i.e. helpful if you want to modify i.e.
  * the INPUT element of a STextField which is probably wrapped into TABLE elements wearing the
@@ -89,6 +110,23 @@ wingS.util.findElement = function(id, tagname) {
 };
 
 /**
+ * Remove focus from a component and respect additonal custom script listeners attached by user.
+ */
+wingS.util.blurComponent = function(component, clientHandlers) {
+    var success = true;
+    if (clientHandlers) {
+        for (var i = 0; i < clientHandlers.length; i++) {
+            success = clientHandlers[i]();
+            if (success == false) break;
+        }
+    }
+    if (success == undefined || success && component.blur()) {
+        component.blur();
+    }
+    return true;
+};
+
+/**
  * Set focus to a component and respect additonal custom script listeners attached by user.
  */
 wingS.util.focusComponent = function(component, clientHandlers) {
@@ -99,11 +137,9 @@ wingS.util.focusComponent = function(component, clientHandlers) {
             if (success == false) break;
         }
     }
-
     if (success == undefined || success && component.focus()) {
         component.focus();
     }
-
     return true;
 };
 
@@ -141,6 +177,17 @@ wingS.util.requestFocus = function(id) {
                 return;
             }
         }
+    }
+};
+
+wingS.util.storeFocus = function(event) {
+    var target = wingS.events.getTarget(event);
+    var div = wingS.util.getParentWearingAttribute(target, "eid");
+    var body = wingS.util.getParentByTagName(target, "BODY");
+    // Avoid rembering FORM as focus component as this automatically
+    // gains focus on pressing Enter in MSIE.
+    if (div && body && div.tagName != "FORM") {
+        wingS.util.getCookie(body.getAttribute("id") + "_focus", div.getAttribute("id"), 1);
     }
 };
 
@@ -211,56 +258,8 @@ wingS.util.getScrollableElement = function(el) {
     }
 };
 
-wingS.util.storeFocus = function(event) {
-    var target = wingS.events.getTarget(event);
-    var div = wingS.util.getParentWearingAttribute(target, "eid");
-    var body = wingS.util.getParentByTagName(target, "BODY");
-    // Avoid rembering FORM as focus component as this automatically
-    // gains focus on pressing Enter in MSIE.
-    if (div && body && div.tagName != "FORM") {
-        wingS.util.getCookie(body.getAttribute("id") + "_focus", div.getAttribute("id"), 1);
-    }
-};
-
-/**
- * Alerts all fields/elements of a given object. NB: you will also get object methods (which are
- * function valued properties). helper function to debug
- * @param {Object} obj
- */
-wingS.util.printAllFields = function(obj) {
-    for(var i in obj) {
-        logDebug(obj[i], obj);
-    }
-};
-
 wingS.util.checkUserAgent = function(string) {
     return navigator.userAgent.toLowerCase().indexOf(string) + 1;
-};
-
-/**
- * The following two functions are a workaround for IE to open a link in the right target/new window
- * used in AnchorCG.
- */
-wingS.util.checkTarget = function(target) {
-    for (var i = 0; i < parent.frames.length; i++) {
-        if (parent.frames[i].name == target) return true;
-    }
-    return false;
-};
-
-wingS.util.openlink = function(target, url, scriptCodes) {
-  if (wingS.request.invokeScriptListeners(scriptCodes)) {
-      // if the target exists => change URL, else => open URL in new window
-      if (target == null) {
-          window.location.href = url;
-      } else {
-          if (wingS.util.checkTarget(target)) {
-              parent.frames[target].location.href = url;
-          } else {
-              window.open(url, target);
-          }
-      }
-  }
 };
 
 /**
@@ -335,4 +334,15 @@ wingS.util.absLeft = function(el) {
  */
 wingS.util.absTop = function(el) {
     return (el.offsetParent) ? el.offsetTop + wingS.util.absTop(el.offsetParent) : el.offsetTop;
+};
+
+/**
+ * Alerts all fields/elements of a given object. NB: you will also get object methods (which are
+ * function valued properties). helper function to debug
+ * @param {Object} obj
+ */
+wingS.util.printAllFields = function(obj) {
+    for(var i in obj) {
+        logDebug(obj[i], obj);
+    }
 };

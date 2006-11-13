@@ -275,7 +275,7 @@ final class SessionServlet
      */
     public final synchronized void doGet(HttpServletRequest req,
                                          HttpServletResponse response) {
-    	log.info("Path info of request: " + req.getPathInfo());
+        log.info("Path info of request: " + req.getPathInfo());
 
         // Special case: You double clicked i.e. a "logout button"
         // First request arrives, second is on hold. First invalidates session and sends redirect as response,
@@ -374,23 +374,23 @@ final class SessionServlet
                     String[] values = req.getParameterValues(paramName);
 
                     // We do not need to dispatch the event epoch and the unique AJAX request ID
-                    if (paramName.equals("event_epoch") || paramName.equals("ajax_request_uid")) {
-                    	continue;
+                    if (paramName.equals("event_epoch") || paramName.equals("_xhrID")) {
+                        continue;
                     }
 
                     // Split the values of the event trigger
                     if (paramName.equals("event_trigger")) {
-                    	String[] splittedValues = values[0].split("\\|");
-                    	paramName = splittedValues[0];
-                    	values = new String[] { splittedValues[1] };
+                        String[] splittedValues = values[0].split("\\|");
+                        paramName = splittedValues[0];
+                        values = new String[] { splittedValues[1] };
                     }
 
                     if (log.isDebugEnabled())
                         log.debug("dispatching " + paramName + " = " + Arrays.asList(values));
 
                     if (paramName.equals("force_error")) {
-                    	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    	return;
+                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                        return;
                     }
 
                     session.getDispatcher().dispatch(paramName, values);
@@ -450,7 +450,7 @@ final class SessionServlet
 
             log.info("---> dirty components (" + reloadManager.getDirtyComponents().size() + "):");
             for (Iterator it = reloadManager.getDirtyComponents().iterator(); it.hasNext();) {
-            	log.info(it.next());
+                log.info(it.next());
             }
             // invalidate frames and resources
             reloadManager.notifyCGs();
@@ -495,7 +495,7 @@ final class SessionServlet
                 extManager.deliver(extInfo, response, outputDevice);
                 long endTime = System.currentTimeMillis();
                 log.info("---> " + AbstractComponentCG.getCacheStatistics() +
-                		" || duration: " + (endTime - startTime) + " ms\n");
+                        " || duration: " + (endTime - startTime) + " ms\n");
                 AbstractComponentCG.resetCacheStatistics();
 
                 session.fireRequestEvent(SRequestEvent.DELIVER_DONE, extInfo);

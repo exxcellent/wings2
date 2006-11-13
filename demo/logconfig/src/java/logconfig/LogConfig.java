@@ -309,7 +309,7 @@ public class LogConfig {
         pa_application.add(la_status);
 
         // TESTING BACK BUTTON & HISTORY
-        if (false) {
+        if (true) {
             fr_frame.setNoCaching(false);
             tr_domTree.setEpochCheckEnabled(false);
             fo_form.setPostMethod(false);
@@ -772,6 +772,14 @@ public class LogConfig {
         final SButton bu_forceServerError = new SButton("Force an \"Internal Server Error (500)\"!");
         bu_forceServerError.setName("force_error");
 
+        final SAnchor an_abortCurrentAjaxRequest = new SAnchor();
+        an_abortCurrentAjaxRequest.addScriptListener(new JavaScriptListener(
+                JavaScriptEvent.ON_CLICK,
+                "wingS.ajax.abortRequest();" +
+                "return false;"
+        ));
+        an_abortCurrentAjaxRequest.add(new SLabel("Abort the current AJAX request!"));
+
         String text = "This TextArea is just for debugging the 'onChangeSubmit'-behavior." +
                 " If you want to test this behavior for other components too, you have to" +
                 " enable the according switches within the source code of this application.";
@@ -791,18 +799,14 @@ public class LogConfig {
             }
         });
 
-        final SAnchor an_toggleAjaxDebugging = new SAnchor();
-        an_toggleAjaxDebugging.addScriptListener(new JavaScriptListener(
+        final SAnchor an_toggleAjaxDebugView = new SAnchor();
+        an_toggleAjaxDebugView.addScriptListener(new JavaScriptListener(
                 JavaScriptEvent.ON_CLICK,
-                "var debug = document.getElementById('ajaxDebugging');" +
-                "if (debug == null) alert('The AJAX debugging view has not been enabled yet!');" +
-                "else {" +
-                "  if (debug.style.display == 'block') wingS.ajax.hideAjaxDebugging();" +
-                "  else wingS.ajax.showAjaxDebugging();" +
-                "}" +
+                "if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);" +
+                "else wingS.ajax.setDebugViewVisible(true);" +
                 "return false;"
         ));
-        an_toggleAjaxDebugging.add(new SLabel("Show/hide the AJAX debugging view (if enabled)"));
+        an_toggleAjaxDebugView.add(new SLabel("Show/hide the AJAX debugging view (if enabled)"));
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(0));
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameIncrementalUpdate);
@@ -816,6 +820,7 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, bu_markFrameDirty);
         addToAjaxDebuggingPanel(pa_debug, bu_doSomethingSpecial);
         addToAjaxDebuggingPanel(pa_debug, bu_forceServerError);
+        addToAjaxDebuggingPanel(pa_debug, an_abortCurrentAjaxRequest);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, createRandomResultPanel());
@@ -832,7 +837,7 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, an_toggleAjaxDebugging);
+        addToAjaxDebuggingPanel(pa_debug, an_toggleAjaxDebugView);
 
         return pa_debug;
     }

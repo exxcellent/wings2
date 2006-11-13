@@ -82,4 +82,3 @@ wingS.global.incrementalUpdateCursor;        // An object whose properties "enab
                                              // "dx" and "dy" hold the settings of the cursor
 wingS.global.incrementalUpdateHighlight;     // An object whose properties "enabled", "color"
                                              // and "duration" store the 3 highlight settings
-wingS.global.requestQueue = new Array();     // A queue which stores requests to be processed
