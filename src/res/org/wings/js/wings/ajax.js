@@ -261,16 +261,16 @@ wingS.ajax.AjaxActivityCursor = function() {
     this.dx  = 0;
     this.dy  = 15;
     this.div = false;
+	this.div = document.createElement("div");
+    this.div.style.position = "absolute";
+    this.div.style.zIndex = "1000";
+    this.div.style.display = "none";
 };
 
 // Initialize cursor
 wingS.ajax.AjaxActivityCursor.prototype.init = function() {
     this.dx = wingS.global.incrementalUpdateCursor.dx;
-    this.dy = wingS.global.incrementalUpdateCursor.dy;
-    this.div = document.createElement("div");
-    this.div.style.position = "absolute";
-    this.div.style.zIndex = "1000";
-    this.div.style.display = "none";
+    this.dy = wingS.global.incrementalUpdateCursor.dy;    
     this.div.innerHTML = "<img src=\"" + wingS.global.incrementalUpdateCursor.image + "\"/>";
     document.body.insertBefore(this.div, document.body.firstChild);
     document.onmousemove = this.followMouse.bind(this);
