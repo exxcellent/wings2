@@ -78,7 +78,7 @@ import java.util.Hashtable;
  * to the {@link SForm} ({@link SForm#addActionListener(java.awt.event.ActionListener)}),
  * <em>not</em> the submit button.
  *
- * @author <a href="mailto:HEngels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @version $Revision$
  */

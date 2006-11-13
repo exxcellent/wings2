@@ -26,7 +26,7 @@ import java.util.HashMap;
  *
  * You can use UploadFilters to inspect the stream or rewrite it to some own format.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class UploadFilterManager {

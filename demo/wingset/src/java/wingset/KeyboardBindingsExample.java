@@ -28,7 +28,7 @@ import java.awt.event.KeyEvent;
 import java.awt.*;
 
 /**
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class KeyboardBindingsExample extends WingSetPane {

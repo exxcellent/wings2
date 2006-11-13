@@ -32,7 +32,7 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringWriter;
 /**
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class Desktop

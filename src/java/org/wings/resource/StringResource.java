@@ -26,7 +26,7 @@ import java.io.IOException;
 /**
  * For externalizing a string as a resource.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class StringResource extends Resource {

@@ -51,7 +51,7 @@ import java.util.Map;
  * It is rendered as a href outside the form. Changes to text area don't take
  * effect. We could use javascript again, to trigger the required form submit.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class Editor

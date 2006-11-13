@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  * visible then. This emulates the behaviour of modal dialogs in a windowing
  * system.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
  * @author <a href="mailto:Haaf@mercatis.de">Armin Haaf</a>
  */

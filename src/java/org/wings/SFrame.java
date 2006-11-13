@@ -42,7 +42,7 @@ import java.util.*;
  * the contentPane. When dialogs are to be shown, they are stacked on top of
  * it.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>,
+ * @author Holger Engels,
  *         <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @version $Revision$
  */

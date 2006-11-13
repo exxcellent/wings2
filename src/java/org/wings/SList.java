@@ -57,7 +57,7 @@ import org.wings.style.Selector;
  * problem, just use the selection events from the list itself, register your
  * listener at SList rather than at the ListSelectionModel...
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  * @see javax.swing.ListModel
  * @see SDefaultListModel

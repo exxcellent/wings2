@@ -23,7 +23,7 @@ import java.io.InputStream;
 /**
  * For externalizing a file as resource.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class FileResource extends StaticResource {

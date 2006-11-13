@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * Include a <code>&lt;SCRIPT&gt;</code>-element inside the HTML header of rendered page.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class Script implements Renderable, Serializable {

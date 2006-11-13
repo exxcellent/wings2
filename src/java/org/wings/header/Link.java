@@ -27,7 +27,7 @@ import java.io.Serializable;
  * <p>Example usage to include a customer stylesheet.<br/>
  * <code>frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/appstyles.css")));</code>
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class Link implements Renderable, Serializable {

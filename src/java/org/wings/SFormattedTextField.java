@@ -91,17 +91,8 @@ public class SFormattedTextField extends STextField {
     public void setValue(Object object) {
         String string = null;
 
-        SAbstractFormatter formatter = this.formatter;
-        if (formatter == null) {
-            SAbstractFormatterFactory aff = getFormatterFactory();
-            if ( aff == null ) {
-                aff = getDefaultFormatterFactory( object );
-            }
-            formatter = aff.getFormatter(this);
-        }
-
         try {
-            string = formatter.valueToString(object);
+            string = getFormatter().valueToString(object);
             this.value = object;
         } catch (ParseException e) {
             log.info("Unable to parse object" + e);
@@ -118,17 +109,8 @@ public class SFormattedTextField extends STextField {
     public Object getValue() {
         Object returnValue;
 
-        SAbstractFormatter formatter = this.formatter;
-        if (formatter == null) {
-            SAbstractFormatterFactory aff = getFormatterFactory();
-            if ( aff == null ) {
-                aff = getDefaultFormatterFactory( value );
-            }
-            formatter = aff.getFormatter(this);
-        }
-
         try {
-            returnValue = formatter.stringToValue(this.getText());
+            returnValue = getFormatter().stringToValue(this.getText());
             value = returnValue;
         } catch (ParseException e) {
             log.debug("Unable to parse string" + e);
@@ -138,12 +120,20 @@ public class SFormattedTextField extends STextField {
         return returnValue;
     }
 
-    public void setText(String text) {
-        try {
-            SAbstractFormatter formatter = getFormatter();
-            super.setText(formatter.valueToString(formatter.stringToValue(text)));
-        }
-        catch (ParseException e) {
+    public void processLowLevelEvent(String action, String[] values) {
+        processKeyEvents(values);
+
+        if (isEditable() && isEnabled()) {
+            if (getText() == null || !getText().equals(values[0])) {
+                try {
+                    SAbstractFormatter formatter = getFormatter();
+                    setText(formatter.valueToString(formatter.stringToValue(values[0])));
+                }
+                catch (ParseException e) {
+                    setText(values[0]);
+                }
+                SForm.addArmedComponent(this);
+            }
         }
     }
 
@@ -173,8 +163,13 @@ public class SFormattedTextField extends STextField {
      * @return SAbstractFormatter
      */
     public SAbstractFormatter getFormatter() {
+        SAbstractFormatter formatter = this.formatter;
         if (formatter == null) {
-            formatter = getFormatterFactory().getFormatter(this);
+            SAbstractFormatterFactory aff = getFormatterFactory();
+            if ( aff == null ) {
+                aff = getDefaultFormatterFactory( value );
+            }
+            formatter = aff.getFormatter(this);
         }
         return formatter;
     }
@@ -193,6 +188,7 @@ public class SFormattedTextField extends STextField {
      */
     public void setFormatterFactory ( SAbstractFormatterFactory ff ) {
         this.factory = ff;
+        this.formatter = null;
         setValue( value );
         
     }

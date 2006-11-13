@@ -22,7 +22,7 @@ import java.io.Serializable;
 /**
  * Include a <code>&lt;META&gt;</code>-element inside the HTML header of rendered page.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class Meta implements Renderable, Serializable {
