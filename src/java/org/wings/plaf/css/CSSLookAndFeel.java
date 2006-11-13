@@ -28,8 +28,10 @@ public class CSSLookAndFeel
     private static final long serialVersionUID = 1L;
     private final transient static Log log = LogFactory.getLog(CSSLookAndFeel.class);
     private static final String PROPERTIES_FILENAME_DEFAULT = "default";
+    private static final String PROPERTIES_FILENAME_XCOMPONENT = "xcomponents";
     private static final String PROPERTIES_FILENAME_END = ".properties";
     private static final String PROPERTIES_CLASSPATH = CSSLookAndFeel.class.getPackage().getName().replace('.','/').concat("/");
+    private static final String PROPERTIES_CLASSPATH_XCOMPONENT = "org/wingx/plaf/css/";
 
     public CSSLookAndFeel() throws IOException {
         super(loadProperties());
@@ -46,12 +48,22 @@ public class CSSLookAndFeel
         SStringBuilder browserPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH);
         browserPropertiesFilename.append(browserType);
         browserPropertiesFilename.append(PROPERTIES_FILENAME_END);
+        
+        SStringBuilder xcomponentsPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH_XCOMPONENT);
+        xcomponentsPropertiesFilename
+                .append(PROPERTIES_FILENAME_XCOMPONENT)
+                .append(PROPERTIES_FILENAME_END);        
 
         Properties properties = PropertyUtils.loadProperties(propertiesFilename.toString());
         try {
             properties.putAll(PropertyUtils.loadProperties(browserPropertiesFilename.toString()));
         } catch (IOException e) {
             log.info("Unable to open browser specific properties file '"+browserPropertiesFilename.toString()+"'. This is OK.");
+        }
+        try {
+            properties.putAll(PropertyUtils.loadProperties(xcomponentsPropertiesFilename.toString()));            
+        } catch (IOException e) {
+            log.info("Unable to open xcomponents specific properties file '"+ xcomponentsPropertiesFilename.toString()+"'. This is OK if you are not using wingX.");
         }
         return properties;
     }
