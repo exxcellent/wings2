@@ -94,6 +94,7 @@ public class SFormattedTextField extends STextField {
         try {
             string = getFormatter().valueToString(object);
             this.value = object;
+            putClientProperty("lastValid", string );
         } catch (ParseException e) {
             log.info("Unable to parse object" + e);
         }
@@ -135,6 +136,16 @@ public class SFormattedTextField extends STextField {
                 SForm.addArmedComponent(this);
             }
         }
+    }
+    
+    public boolean isEditValid() {
+        boolean isEditValid = true;
+        try {
+            getFormatter().valueToString( getFormatter().stringToValue(getText()) );
+        } catch ( ParseException e ) {
+            isEditValid = false;
+        }
+        return isEditValid;
     }
 
     /**

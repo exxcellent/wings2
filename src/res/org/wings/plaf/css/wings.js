@@ -388,18 +388,17 @@ function onCalUpdateCallback(result) {
     SFormattedTextField JavaScript Code
 */
 function ftextFieldCallback(result) {
-    var elem = document.getElementById(result[0]);
+    var elem    = document.getElementById(result[0]);
+    var data    = result[1];
+    var isvalid = result[2];
     if (!elem)
         return; // dwr bug
-    var data = result[1];
-    if (!data) {
+    if (!isvalid) {
         elem.style.color = '#ff0000';
-    }
-    else {
+    } else {
         elem.style.color = '';
-        elem.value = data;
-        elem.setAttribute("lastValid", data);
     }
+    elem.value = data;
 }
 
 function spinnerCallback(result) {
