@@ -40,7 +40,7 @@ wingS.util.getParentWearingAttribute = function(element, attribute) {
     return null;
 };
 
-wingS.util.openlink = function(target, url, scriptCodeArray) {
+wingS.util.openLink = function(target, url, scriptCodeArray) {
   if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
       // if the target exists => change URL, else => open URL in new window
       if (target == null) {

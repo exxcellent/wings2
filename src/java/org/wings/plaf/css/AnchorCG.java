@@ -46,8 +46,8 @@ public final class AnchorCG extends AbstractComponentCG implements org.wings.pla
         */
 
         final String target = component.getTarget() != null ? "'" + component.getTarget() + "'" : "null";
-        device.print("<a href=\"#\" onclick=\"wingS.util.openlink(" + target + ",'" + component.getURL() + "'" +
-        		Utils.collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK) + "); return false;\"");
+        device.print("<a href=\"#\" onclick=\"wingS.util.openLink(" + target + ",'" + component.getURL() + "'" +
+                Utils.collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK) + "); return false;\"");
         writeAllAttributes(device, component);
 
         // spezielle anchor attributes

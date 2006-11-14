@@ -298,10 +298,12 @@ public class ComponentControls  extends SPanel {
         boolean cursorEnabled = ((Boolean) frame.getIncrementalUpdateCursor()[0]).booleanValue();
         ajaxCursorEnabledCheckBox.setSelected(cursorEnabled);
         ajaxDebuggingViewAnchor.addScriptListener(new JavaScriptListener(
-                JavaScriptEvent.ON_CLICK,
-                "if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);" +
-                "else wingS.ajax.setDebugViewVisible(true);" +
-                "return false;"
+                JavaScriptEvent.ON_CLICK, "toggleAjaxDebugView()",
+                "function toggleAjaxDebugView() {\n" +
+                "  if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);\n" +
+                "  else wingS.ajax.setDebugViewVisible(true);\n" +
+                "  return false;\n" +
+                "}\n"
         ));
         ajaxForceCompleteUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

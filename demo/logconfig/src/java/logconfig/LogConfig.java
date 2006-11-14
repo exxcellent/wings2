@@ -309,7 +309,7 @@ public class LogConfig {
         pa_application.add(la_status);
 
         // TESTING BACK BUTTON & HISTORY
-        if (true) {
+        if (false) {
             fr_frame.setNoCaching(false);
             tr_domTree.setEpochCheckEnabled(false);
             fo_form.setPostMethod(false);
@@ -801,10 +801,12 @@ public class LogConfig {
 
         final SAnchor an_toggleAjaxDebugView = new SAnchor();
         an_toggleAjaxDebugView.addScriptListener(new JavaScriptListener(
-                JavaScriptEvent.ON_CLICK,
-                "if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);" +
-                "else wingS.ajax.setDebugViewVisible(true);" +
-                "return false;"
+                JavaScriptEvent.ON_CLICK, "toggleAjaxDebugView()",
+                "function toggleAjaxDebugView() {\n" +
+                "  if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);\n" +
+                "  else wingS.ajax.setDebugViewVisible(true);\n" +
+                "  return false;\n" +
+                "}\n"
         ));
         an_toggleAjaxDebugView.add(new SLabel("Show/hide the AJAX debugging view (if enabled)"));
 

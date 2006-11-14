@@ -52,7 +52,7 @@ public class JavaScriptListenerExample
      * SComponent argument.
      */
     private final static String JS_ADD_SCRIPT =
-            "function add() { " +
+            "self.add = function() { " +
             "  document.getElementById('{2}').value" +
             "  = ((1.0 * document.getElementById('{0}').value)" +
             "  + (1.0 * document.getElementById('{1}').value));" +
@@ -121,7 +121,7 @@ public class JavaScriptListenerExample
         // insert a new JS into the frame's script area without completely reloading the frame.
         // This might be possible as soon as we make the step from componentwise updates to more
         // fine grained updates...
-        SessionManager.getSession().getRootFrame().reload(ReloadManager.STATE);
+        // SessionManager.getSession().getRootFrame().reload(ReloadManager.STATE);
 
         p.add(form);
         return p;
