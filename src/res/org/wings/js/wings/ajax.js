@@ -15,7 +15,9 @@ var connectionObject;   // Holds the active connection object
 wingS.ajax.initializeFrame = function() {
     requestIsActive = false;
     requestQueue = new Array();
-    activityCursor = new wingS.ajax.ActivityCursor();
+    if (wingS.global.incrementalUpdateCursor.enabled) {
+        activityCursor = new wingS.ajax.ActivityCursor();
+    }
     callbackObject = {
         success : function(request) { wingS.ajax.processRequestSuccess(request); },
         failure : function(request) { wingS.ajax.processRequestFailure(request); }
@@ -84,13 +86,17 @@ wingS.ajax.processRequestFailure = function(request) {
     requestQueue = new Array();
 
     if (request.status == -1) {
-        alert("Transaction aborted!");
+        alert("Transaction has been aborted!");
         return;
     } else if (request.status == 0) {
-        alert("Communication failure!");
+        // Happens in case of a communication failure, i.e if the
+        // server has meanwhile been shut down -> try a full reload
+        window.location.href = wingS.util.getCompleteUpdateResource();
         return;
     }
 
+    // Write error message (maybe it is a wingS
+    // error template) received from the server
     document.close();
     document.open("text/html");
     document.write(request.responseText);
@@ -109,7 +115,7 @@ wingS.ajax.processRequestSuccess = function(request) {
     // In case we do not get any XML
     if (xmlDoc == null) {
         window.location.href = wingS.util.getCompleteUpdateResource();
-        // Alternative? --> wingS.ajax.processRequestFailure(request);
+        // Alternatively ?: wingS.ajax.processRequestFailure(request);
         return;
     }
 
@@ -119,7 +125,7 @@ wingS.ajax.processRequestSuccess = function(request) {
     // session has meanwhile timed out -> try a full reload
     if (xmlRoot == null) {
         window.location.href = wingS.util.getCompleteUpdateResource();
-        // Alternative? --> wingS.ajax.processRequestFailure(request);
+        // Alternatively ?: wingS.ajax.processRequestFailure(request);
         return;
     }
 
@@ -258,6 +264,9 @@ wingS.ajax.dequeueNextRequest = function() {
 wingS.ajax.setActivityIndicatorsVisible = function(visible) {
     if (wingS.global.incrementalUpdateCursor.enabled) {
         activityCursor.setVisible(visible);
+        // An alternative to the cursor might be something like
+        // if (visible) document.body.style.cursor = "progress";
+        // else document.body.style.cursor = "default";
     }
     var indicator = document.getElementById("ajaxActivityIndicator");
     if (indicator != null) {
@@ -309,19 +318,23 @@ wingS.ajax.ActivityCursor = function() {
 wingS.ajax.ActivityCursor.prototype.followMouse = function(event) {
     event = wingS.events.getEvent(event);
     var target = wingS.events.getTarget(event);
-    var pos = { left : event.clientX, top : event.clientY };
-    var doc = (window.document.compatMode && window.document.compatMode == "CSS1Compat") ?
-        window.document.documentElement : window.document.body || null;
-    if (doc) {
-        pos.left += doc.scrollLeft;
-        pos.top += doc.scrollTop;
+
+    var posX = 0;
+    var posY = 0;
+    if (event.pageX || event.pageY) {
+        posX = event.pageX;
+        posY = event.pageY;
+    } else if (event.clientX || event.clientY) {
+        posX = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        posY = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
     }
     if (target.nodeName == "OPTION" && !wingS.util.checkUserAgent('msie')) {
-        pos.left += document.defaultView.getComputedStyle(target, null).getPropertyValue("left");
-        pos.top += document.defaultView.getComputedStyle(target, null).getPropertyValue("top");
+        posX += wingS.util.absLeft(target);
+        posY += wingS.util.absTop(target.parentNode) + 18;
     }
-    this.div.style.left = pos.left + this.dx + "px";
-    this.div.style.top = pos.top + this.dy + "px";
+
+    this.div.style.left = posX + this.dx + "px";
+    this.div.style.top = posY + this.dy + "px";
 };
 
 /**

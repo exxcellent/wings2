@@ -11,10 +11,17 @@ wingS.events.getEvent = function(event) {
 };
 
 wingS.events.getTarget = function(event) {
+    var target;
     if (event.srcElement)
-        return event.srcElement; // IE
-    else
-        return event.target; // W3C
+        // according to IE
+        target = event.srcElement;
+    else if (event.target)
+        // according to W3C
+        target = event.target;
+    if (target.nodeType == 3)
+        // defeat Safari bug
+        target = target.parentNode;
+    return target;
 };
 
 /**
