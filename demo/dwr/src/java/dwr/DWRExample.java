@@ -27,7 +27,6 @@ import dwr.domain.AutoCompletionDummy;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class DWRExample
 {

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -19,7 +18,6 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 
 /**
- * @version $Revision$
  */
 abstract class AbstractActionPropertyChangeListener implements PropertyChangeListener {
     private static ReferenceQueue queue;

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -35,7 +34,6 @@ import java.util.*;
  * placed inside a <code>SForm</code>.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SForm  extends SContainer implements LowLevelEventListener {
     private final transient static Log log = LogFactory.getLog(SForm.class);

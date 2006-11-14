@@ -63,12 +63,10 @@
  * without parameters and can then be added with
  * <code>addTagHandler()</code> to a PageParser servlet.
  *
- * @version $Revision$ $Date$
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
  */
 
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).

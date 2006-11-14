@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -46,108 +45,48 @@ public class CSSProperty implements Serializable {
 
     public final static CSSProperty BACKGROUND_REPEAT = new CSSProperty("background-repeat");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER = new CSSProperty("border");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_BOTTOM = new CSSProperty("border-bottom");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_BOTTOM_COLOR = new CSSProperty("border-bottom-color");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_BOTTOM_STYLE = new CSSProperty("border-bottom-style");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_BOTTOM_WIDTH = new CSSProperty("border-bottom-width");
 
     public final static CSSProperty BORDER_COLLAPSE = new CSSProperty("border-collapse");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_COLOR = new CSSProperty("border-color");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_LEFT = new CSSProperty("border-left");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_LEFT_COLOR = new CSSProperty("border-left-color");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_LEFT_STYLE = new CSSProperty("border-left-style");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_LEFT_WIDTH = new CSSProperty("border-left-width");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_RIGHT = new CSSProperty("border-right");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_RIGHT_COLOR = new CSSProperty("border-right-color");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_RIGHT_STYLE = new CSSProperty("border-right-style");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_RIGHT_WIDTH = new CSSProperty("border-right-width");
 
     public final static CSSProperty BORDER_SPACING = new CSSProperty("border-spacing");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_STYLE = new CSSProperty("border-style");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_TOP = new CSSProperty("border-top");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_TOP_COLOR = new CSSProperty("border-top-color");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_TOP_STYLE = new CSSProperty("border-top-style");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_TOP_WIDTH = new CSSProperty("border-top-width");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty BORDER_WIDTH = new CSSProperty("border-width");
 
     public final static CSSProperty BOTTOM = new CSSProperty("bottom");
@@ -242,29 +181,14 @@ public class CSSProperty implements Serializable {
 
     public final static CSSProperty OVERFLOW = new CSSProperty("overflow");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty PADDING = new CSSProperty("padding");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty PADDING_BOTTOM = new CSSProperty("padding-bottom");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty PADDING_LEFT = new CSSProperty("padding-left");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty PADDING_RIGHT = new CSSProperty("padding-right");
 
-    /**
-     * @deprecated use SBorder instead
-     */
     public final static CSSProperty PADDING_TOP = new CSSProperty("padding-top");
 
     // only for paged output mediums, we don't need it at the moment
@@ -318,7 +242,7 @@ public class CSSProperty implements Serializable {
 
     public final static CSSProperty Z_INDEX = new CSSProperty("z-index");
 
-    public static final Set borderProperties = Collections.unmodifiableSet(new HashSet(Arrays.asList(new CSSProperty[] {
+    public static final Set BORDER_PROPERTIES = Collections.unmodifiableSet(new HashSet(Arrays.asList(new CSSProperty[] {
             CSSProperty.BORDER,
             //CSSProperty.BORDER_COLLAPSE,
             CSSProperty.BORDER_COLOR,

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -25,7 +24,6 @@ import java.lang.ref.WeakReference;
  * listener.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public final class WeakRequestListenerProxy extends WeakReference implements SRequestListener {
 

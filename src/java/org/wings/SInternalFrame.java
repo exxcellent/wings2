@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -22,7 +21,6 @@ import org.wings.style.Selector;
  * A root container repesenting an iconifyable and minimizable internal window. 
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class SInternalFrame
         extends SRootContainer

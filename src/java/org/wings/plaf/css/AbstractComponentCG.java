@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -40,7 +39,6 @@ import java.util.*;
  * Partial CG implementation that is common to all ComponentCGs.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public abstract class AbstractComponentCG implements ComponentCG, SConstants, Serializable {
     private static final Log log = LogFactory.getLog(AbstractComponentCG.class);
@@ -330,10 +328,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
-    protected final boolean hasDimension(SComponent component) {
+    protected final boolean hasDimension(final SComponent component) {
         SDimension dim = component.getPreferredSize();
-        if (dim == null) return false;
-        return (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
+        return dim != null && (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
     }
 
     /**

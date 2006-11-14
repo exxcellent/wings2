@@ -5,7 +5,6 @@ import org.wings.SComponent;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class SMouseEvent
 {

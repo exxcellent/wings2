@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -20,7 +19,6 @@ import java.io.OutputStream;
  * An OutputStream, that writes to an Device.
  *
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
- * @version $Revision$
  */
 public final class DeviceOutputStream extends OutputStream {
     final Device sink;

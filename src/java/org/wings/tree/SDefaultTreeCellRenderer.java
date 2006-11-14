@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -24,7 +23,6 @@ import org.wings.resource.ResourceManager;
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SDefaultTreeCellRenderer
         extends SLabel

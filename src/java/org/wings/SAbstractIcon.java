@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -17,7 +16,6 @@ package org.wings;
  * Base class for icons.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public abstract class SAbstractIcon implements SIcon {
 

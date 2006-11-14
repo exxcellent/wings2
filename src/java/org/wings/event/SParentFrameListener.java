@@ -11,7 +11,6 @@ import java.util.EventListener;
  * {@link org.wings.SComponent#getParentFrame()} will return <code>null</code> during construction time.
 
  * @author ole
- * @version $Revision$
  */
 public interface SParentFrameListener extends EventListener {
     /**

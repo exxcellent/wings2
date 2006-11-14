@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -29,7 +28,6 @@ import java.io.Serializable;
  * non-serializable listeners will be skipped during serialization.
  *
  * @author <a href="mailto:haaf@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class WeakPropertyChangeSupport implements Serializable {
     /**

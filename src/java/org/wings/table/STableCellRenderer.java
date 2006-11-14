@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -21,7 +20,6 @@ import org.wings.STable;
  * to the renderer approach in swing.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public interface STableCellRenderer {
     SComponent getTableCellRendererComponent(STable table,

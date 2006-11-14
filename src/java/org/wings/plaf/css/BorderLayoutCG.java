@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,10 +33,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         final SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
-        String styles = layoutStyles(layout);
-        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(layout.getVgap());
-        renderHelper.setHorizontalLayoutPadding(layout.getHgap());
+        final TableCellStyle cellStyle = cellLayoutStyle(layout);
 
         int cols = 1;
         if (west != null) {
@@ -50,9 +46,15 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         openLayouterBody(d, layout);
 
         if (north != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.TOP;
+            cellStyle.width = null;
+            cellStyle.colspan = cols;
+            cellStyle.rowspan = -1;
+
             openLayouterRow(d, "0%");
             Utils.printNewline(d, north);
-            openLayouterCell(d, north, false, cols, -1, null, SConstants.LEFT, SConstants.TOP, styles);
+            openLayouterCell(d, north, cellStyle);
             north.write(d);
             closeLayouterCell(d, north, false);
             Utils.printNewline(d, layout.getContainer());
@@ -63,15 +65,27 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         openLayouterRow(d, "100%");
 
         if (west != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.CENTER;
+            cellStyle.width = "0%";
+            cellStyle.colspan = -1;
+            cellStyle.rowspan = -1;
+
             Utils.printNewline(d, west);
-            openLayouterCell(d, west, false, -1, -1, "0%", SConstants.LEFT, SConstants.CENTER, styles);
+            openLayouterCell(d, west, cellStyle);
             west.write(d);
             closeLayouterCell(d, west, false);
         }
 
         if (center != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.CENTER;
+            cellStyle.width = "100%";
+            cellStyle.colspan = -1;
+            cellStyle.rowspan = -1;
+
             Utils.printNewline(d, center);
-            openLayouterCell(d, center, false, -1, -1, "100%", SConstants.LEFT, SConstants.CENTER, styles);
+            openLayouterCell(d, center, cellStyle);
             center.write(d);
             closeLayouterCell(d, center, false);
         } else {
@@ -79,8 +93,14 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         }
 
         if (east != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.RIGHT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.CENTER;
+            cellStyle.width = "0%";
+            cellStyle.colspan = -1;
+            cellStyle.rowspan = -1;
+
             Utils.printNewline(d, east);
-            openLayouterCell(d, east, false, -1, -1, "0%", SConstants.RIGHT, SConstants.CENTER, styles);
+            openLayouterCell(d, east, cellStyle);
             east.write(d);
             closeLayouterCell(d, east, false);
         }
@@ -89,10 +109,16 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         closeLayouterRow(d);
 
         if (south != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.BOTTOM;
+            cellStyle.width = "0%";
+            cellStyle.colspan = cols;
+            cellStyle.rowspan = -1;
+
             Utils.printNewline(d, layout.getContainer());
             openLayouterRow(d, "0%");
             Utils.printNewline(d, south);
-            openLayouterCell(d, south, false, cols, -1, "0%", SConstants.LEFT, SConstants.BOTTOM, styles);
+            openLayouterCell(d, south, cellStyle);
             south.write(d);
             closeLayouterCell(d, south, false);
             Utils.printNewline(d, layout.getContainer());
@@ -101,9 +127,6 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         }
 
         closeLayouterBody(d, layout);
-
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
     }
 
     protected int getLayoutHGap(SLayoutManager layout) {

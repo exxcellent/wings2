@@ -53,7 +53,6 @@
  */
 
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -75,7 +74,6 @@ import java.io.Reader;
  * current position in the stream.
  *
  * @author <a href="mailto:zeller@think.de">Henner Zeller</a>
- * @version $Revision$ $Date$
  */
 public class PositionReader
         extends Reader {

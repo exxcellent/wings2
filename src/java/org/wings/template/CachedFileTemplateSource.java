@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -28,7 +27,6 @@ import java.util.Hashtable;
  * for a file, but caches small ones.
  *
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
- * @version $Revision$
  */
 public class CachedFileTemplateSource extends FileTemplateSource {
     private final  static Log log = LogFactory.getLog(CachedFileTemplateSource.class);

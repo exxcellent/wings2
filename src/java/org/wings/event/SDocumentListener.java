@@ -1,6 +1,4 @@
-/* $Id $ */
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -20,7 +18,6 @@ import java.util.EventListener;
  * Listener on {@link org.wings.STextComponent}s to be notified on updates on the components text (document).
  *
  * @author hengels
- * @version $Revision$
  */
 public interface SDocumentListener extends EventListener {
     /**

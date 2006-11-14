@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,7 +33,6 @@ import java.util.Properties;
  * A special layout manager for the root frame of a frameset layout.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class SFrameSetLayout extends SAbstractLayoutManager {
     private List components = new LinkedList();

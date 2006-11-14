@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -29,7 +28,6 @@ import java.util.*;
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
- * @version $Revision$
  */
 public interface Style extends Renderable, Serializable, Cloneable {
 

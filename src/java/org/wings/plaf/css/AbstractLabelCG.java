@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,11 +13,11 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
 import org.wings.io.Device;
+
+import java.io.IOException;
 
 public abstract class AbstractLabelCG extends AbstractComponentCG {
 

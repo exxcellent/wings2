@@ -21,10 +21,6 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
         SScrollPaneLayout layout = (SScrollPaneLayout) l;
         SScrollPane scrollpane = (SScrollPane) layout.getContainer();
 
-        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
-
         if (scrollpane.getMode() != SScrollPane.MODE_COMPLETE) {
             writePaging(d, layout);
         } else {

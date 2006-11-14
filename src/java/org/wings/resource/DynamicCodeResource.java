@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -32,7 +31,6 @@ import java.beans.PropertyChangeEvent;
  * the document.
  *
  * @author Holger Engels
- * @version $Revision$
  */
 public class DynamicCodeResource extends DynamicResource {
     private final transient static Log log = LogFactory.getLog(DynamicCodeResource.class);

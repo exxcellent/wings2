@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -48,7 +47,6 @@ import java.util.Iterator;
  * their actual name. So a bit of dispatching is already done here.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  * @see javax.swing.ButtonGroup
  */
 public class SButtonGroup implements SDelayedEventModel, Serializable {

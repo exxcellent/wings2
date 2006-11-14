@@ -7,7 +7,6 @@ import java.util.EventListener;
  * to add new methods to the SMouseListener interface.
  *
  * @author hengels
- * @version $Revision$
  */
 public interface SMouseListener extends EventListener
 {

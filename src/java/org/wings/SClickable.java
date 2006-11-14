@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -20,7 +19,6 @@ package org.wings;
  * used as a base class to extend from.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SClickable
         extends SAbstractClickable {

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -19,7 +18,6 @@ import org.wings.plaf.PasswordFieldCG;
  * A text input field widget which hides it's input. 
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SPasswordField
         extends STextField {

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,7 +33,6 @@ import java.util.Collection;
  *
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public interface Externalizer {
     /**

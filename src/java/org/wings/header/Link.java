@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -28,7 +27,6 @@ import java.io.Serializable;
  * <code>frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/appstyles.css")));</code>
  *
  * @author Holger Engels
- * @version $Revision$
  */
 public class Link implements Renderable, Serializable {
     protected String rel = null;

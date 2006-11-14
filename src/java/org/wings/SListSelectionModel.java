@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -19,7 +18,6 @@ import javax.swing.*;
  * For the current selection state of any component that display a list of values. 
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public interface SListSelectionModel extends ListSelectionModel, SDelayedEventModel {
     /**

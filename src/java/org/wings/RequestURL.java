@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -28,7 +27,6 @@ import java.net.URLEncoder;
  * Handles a HTTP GET Address that can be updated with additional parameters.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class RequestURL extends SimpleURL {
     private static final Log log = LogFactory.getLog(RequestURL.class);

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -25,7 +24,6 @@ import java.io.Serializable;
  * Base class for adjustable elements like {@link SScrollBar} and {@link SPageScroller} 
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public abstract class SAbstractAdjustable extends SComponent implements Adjustable, LowLevelEventListener {
     public static final int UNIT = 0;

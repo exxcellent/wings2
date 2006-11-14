@@ -1,5 +1,4 @@
 /*
- * $Id: BorderLayoutCG.java 2686 2006-05-17 11:59:07 +0200 (Wed, 17 May 2006) hengels $
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,10 +12,14 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.wings.plaf.css.RenderHelper;
-import org.wings.plaf.css.Utils;
+import org.wings.SBorderLayout;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.*;
+import org.wings.plaf.css.TableCellStyle;
+import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
 
@@ -48,11 +51,8 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         final SComponent west = (SComponent) layout.getComponents().get(SBorderLayout.WEST);
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
-        String styles = layoutStyles(layout);
+        final TableCellStyle cellStyle = cellLayoutStyle(layout);
         int oversize = layoutOversize(layout);
-        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(layout.getVgap());
-        renderHelper.setHorizontalLayoutPadding(layout.getHgap());
 
         int cols = 1;
         if (west != null) {
@@ -65,11 +65,17 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         openLayouterBody(d, layout);
 
         if (north != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.TOP;
+            cellStyle.width = null;
+            cellStyle.colspan = cols;
+            cellStyle.rowspan = -1;
+
             d.print("<tr");
             Utils.optAttribute(d, "oversize", oversize);
             d.print(">");
             Utils.printNewline(d, north);
-            openLayouterCell(d, north, false, cols, -1, null, SConstants.LEFT, SConstants.TOP, styles);
+            openLayouterCell(d, north, cellStyle);
             north.write(d);
             closeLayouterCell(d, north, false);
             Utils.printNewline(d, layout.getContainer());
@@ -82,15 +88,27 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         d.print(">");
 
         if (west != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.CENTER;
+            cellStyle.width = "0%";
+            cellStyle.colspan = -1;
+            cellStyle.rowspan = -1;
+
             Utils.printNewline(d, west);
-            openLayouterCell(d, west, false, -1, -1, "0%", SConstants.LEFT, SConstants.CENTER, styles);
+            openLayouterCell(d, west, cellStyle);
             west.write(d);
             closeLayouterCell(d, west, false);
         }
 
         if (center != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.CENTER;
+            cellStyle.width = "100%";
+            cellStyle.colspan = -1;
+            cellStyle.rowspan = -1;
+
             Utils.printNewline(d, center);
-            openLayouterCell(d, center, false, -1, -1, "100%", SConstants.LEFT, SConstants.CENTER, styles);
+            openLayouterCell(d, center, cellStyle);
             center.write(d);
             closeLayouterCell(d, center, false);
         } else {
@@ -98,8 +116,14 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         }
 
         if (east != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.RIGHT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.CENTER;
+            cellStyle.width = "0%";
+            cellStyle.colspan = -1;
+            cellStyle.rowspan = -1;
+
             Utils.printNewline(d, east);
-            openLayouterCell(d, east, false, -1, -1, "0%", SConstants.RIGHT, SConstants.CENTER, styles);
+            openLayouterCell(d, east, cellStyle);
             east.write(d);
             closeLayouterCell(d, east, false);
         }
@@ -108,12 +132,18 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         closeLayouterRow(d);
 
         if (south != null) {
+            cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
+            cellStyle.defaultLayoutCellVAlignment = SConstants.BOTTOM;
+            cellStyle.width = "0%";
+            cellStyle.colspan = cols;
+            cellStyle.rowspan = -1;
+
             Utils.printNewline(d, layout.getContainer());
             d.print("<tr");
             Utils.optAttribute(d, "oversize", oversize);
             d.print(">");
             Utils.printNewline(d, south);
-            openLayouterCell(d, south, false, cols, -1, "0%", SConstants.LEFT, SConstants.BOTTOM, styles);
+            openLayouterCell(d, south, cellStyle);
             south.write(d);
             closeLayouterCell(d, south, false);
             Utils.printNewline(d, layout.getContainer());
@@ -122,24 +152,6 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         }
 
         closeLayouterBody(d, layout);
-
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
-    }
-
-    protected int getLayoutHGap(SLayoutManager layout) {
-        SBorderLayout borderLayout = (SBorderLayout) layout;
-        return borderLayout.getHgap();
-    }
-
-    protected int getLayoutVGap(SLayoutManager layout) {
-        SBorderLayout borderLayout = (SBorderLayout) layout;
-        return borderLayout.getVgap();
-    }
-
-    protected int getLayoutBorder(SLayoutManager layout) {
-        SBorderLayout borderLayout = (SBorderLayout) layout;
-        return borderLayout.getBorder(); 
     }
 
     protected int layoutOversize(SLayoutManager layout) {

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -27,7 +26,6 @@ import java.io.ObjectOutputStream;
  * Base class for layout managers.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public abstract class SAbstractLayoutManager
         implements SLayoutManager {

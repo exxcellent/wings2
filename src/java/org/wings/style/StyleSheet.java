@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -22,7 +21,6 @@ import java.io.Serializable;
  * Known instance are of type {@link CSSStyleSheet}.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public interface StyleSheet extends Renderable, Serializable {
     /**

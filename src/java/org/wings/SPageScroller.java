@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -24,7 +23,6 @@ package org.wings;
  * </code>
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SPageScroller extends SAbstractAdjustable {
     private static final int DEFAULT_DIRECT_PAGES = 10;

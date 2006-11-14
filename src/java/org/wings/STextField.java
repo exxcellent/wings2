@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -23,7 +22,6 @@ import java.awt.event.ActionListener;
  * Single-lined input component for text input which requires a surrounding {@link SForm} element.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class STextField
         extends STextComponent {

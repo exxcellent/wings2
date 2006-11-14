@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -40,12 +39,11 @@ import java.io.IOException;
 
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class FileChooserExample
         extends WingSetPane
 {
-    final static Color WARN_COLOR = new Color(255, 255, 127);
+    static final Color WARN_COLOR = new Color(255, 255, 127);
 
     /**
      * the file chooser that gets the files.
@@ -121,16 +119,16 @@ public class FileChooserExample
         }
         try {
             if (chooser.getFileType().startsWith("text/")) {
-                textArea.setText(getText(chooser.getFile()));
+                textArea.setText(getText(chooser.getSelectedFile()));
                 contentSwitcher.show(textForm);
             } else if (chooser.getFileType().startsWith("image/")) {
-                iconLabel.setIcon(new SFileIcon(chooser.getFile(), null,
+                iconLabel.setIcon(new SFileIcon(chooser.getSelectedFile(), null,
                         chooser.getFileType()));
                 contentSwitcher.show(iconLabel);
             } else {
                 contentSwitcher.show(unknownLabel);
             }
-            previousFile = chooser.getFile();
+            previousFile = chooser.getSelectedFile();
         } catch (Exception ex) {
             contentSwitcher.show(unknownLabel);
         }
@@ -214,13 +212,13 @@ public class FileChooserExample
         submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (chooser.getFile() != null) {
+                    if (chooser.getSelectedFile() != null) {
                         message.setText("OK");
                         message.setBackground(null);
                         filename.setText(chooser.getFileName());
                         fileid.setText(chooser.getFileId());
                         filetype.setText(chooser.getFileType());
-                        size.setText("" + chooser.getFile().length());
+                        size.setText("" + chooser.getSelectedFile().length());
                         adaptPreview();
                     } else {
                         message.setText("No file chosen");

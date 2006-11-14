@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -19,15 +18,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.awt.*;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public abstract class IconTextCompound {
-    protected final static transient Log log = LogFactory.getLog(IconTextCompound.class);
+    protected static final Log log = LogFactory.getLog(IconTextCompound.class);
 
-    public void writeCompound(Device device, SComponent component, int horizontalTextPosition, int verticalTextPosition, boolean writeAllAttributes) throws IOException {
+    public void writeCompound(Device device, SComponent component, int horizontalTextPosition,
+                              int verticalTextPosition, boolean writeAllAttributes) throws IOException {
         RenderHelper.getInstance(component).collectMenues(component);
 
         if (horizontalTextPosition == SConstants.NO_ALIGN)
@@ -47,11 +47,10 @@ public abstract class IconTextCompound {
 
         if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.LEFT ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.RIGHT) {
-            device.print("<tr><td align=\"left\" valign=\"top\" style=\"padding-right:");
-            device.print(iconTextGap);
-            device.print("px; padding-bottom:");
-            device.print(iconTextGap);
-            device.print("px\">");
+            final Insets insets = new Insets(0, 0, iconTextGap, iconTextGap);
+            device.print("<tr><td align=\"left\" valign=\"top\"");
+            Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
+            device.print(">");
             first(device, renderTextFirst);
             device.print("</td><td></td></tr>");
             device.print("<tr><td></td><td align=\"right\" valign=\"bottom\">");
@@ -59,29 +58,30 @@ public abstract class IconTextCompound {
             device.print("</td></tr>");
         } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.RIGHT ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.LEFT) {
-            device.print("<tr><td></td><td align=\"right\" valign=\"top\" style=\"padding-left:");
-            device.print(iconTextGap);
-            device.print("px; padding-bottom:");
-            device.print(iconTextGap);
-            device.print("px\">");
+            final Insets insets = new Insets(0, iconTextGap, iconTextGap, 0);
+            device.print("<tr><td></td><td align=\"right\" valign=\"top\"");
+            Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
+            device.print(">");
             first(device, renderTextFirst);
             device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\">");
             last(device, renderTextFirst);
             device.print("</td><td></td></tr>");
         } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.CENTER ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.CENTER) {
-            device.print("<tr><td align=\"center\" valign=\"top\" style=\"padding-bottom:");
-            device.print(iconTextGap);
-            device.print("px\">");
+            final Insets insets = new Insets(0, 0, iconTextGap, 0);
+            device.print("<tr><td align=\"center\" valign=\"top\"");
+            Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
+            device.print(">");
             first(device, renderTextFirst);
             device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\">");
             last(device, renderTextFirst);
             device.print("</td></tr>");
         } else if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT ||
                 verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.RIGHT) {
-            device.print("<tr><td align=\"left\" style=\"padding-right:");
-            device.print(iconTextGap);
-            device.print("px\">");
+            final Insets insets = new Insets(0, 0, 0, iconTextGap);
+            device.print("<tr><td align=\"left\"");
+            Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
+            device.print(">");
             first(device, renderTextFirst);
             device.print("</td><td align=\"right\">");
             last(device, renderTextFirst);

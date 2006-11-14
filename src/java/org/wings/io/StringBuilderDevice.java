@@ -1,5 +1,4 @@
 /*
- * $Id: StringBufferDevice.java 2429 2006-01-25 16:08:48Z blueshift $
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -23,7 +22,6 @@ import java.io.Serializable;
  * A Device encapsulating a StringBuilder
  *
  * @author <a href="mailto:ole@freiheit.com">Ole Langbehn</a>
- * @version $Revision: 2429 $
  */
 public final class StringBuilderDevice implements Device, Serializable {
     private SStringBuilder builder;

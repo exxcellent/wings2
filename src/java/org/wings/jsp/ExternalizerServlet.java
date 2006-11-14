@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -28,7 +27,6 @@ import java.io.IOException;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class ExternalizerServlet extends HttpServlet {
     /**

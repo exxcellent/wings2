@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -37,7 +36,6 @@ import java.util.*;
  * enclosed in comments ("&lt;!-- ... --&gt;"), in the HTML output.
  *
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
- * @version $Revision$ $Date$
  * @see javax.servlet.http.HttpServlet
  */
 

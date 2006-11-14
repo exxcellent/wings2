@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -47,7 +46,7 @@ import java.util.*;
 public final class FrameCG implements org.wings.plaf.FrameCG {
     private static final long serialVersionUID = 1L;
 
-    private final transient static Log log = LogFactory.getLog(FrameCG.class);
+    private final static Log log = LogFactory.getLog(FrameCG.class);
 
     /**
      * The default DOCTYPE enforcing standard (non-quirks mode) in all current browsers.

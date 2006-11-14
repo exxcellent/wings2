@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -69,7 +68,6 @@ import java.util.Iterator;
  * above, but the current implementation can't use them.
  *
  * @author <a href="mailto:js@trollhead.net">Jochen Scharrlach</a>
- * @version $Revision $
  */
 public class SGridBagLayout
         extends SAbstractLayoutManager implements SComponentListener {

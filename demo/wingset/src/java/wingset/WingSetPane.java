@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,7 +33,6 @@ import java.awt.*;
  * A basic WingSet Pane, which implements some often needed functions.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 abstract public class WingSetPane
         extends SPanel

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -19,7 +18,6 @@ import org.wings.SimpleURL;
  * This is a thread save global stack.
  *
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
- * @version $Revision$
  */
 public class AnchorRenderStack {
     /**

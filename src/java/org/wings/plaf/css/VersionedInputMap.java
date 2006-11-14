@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -18,7 +17,6 @@ import javax.swing.KeyStroke;
 
 /**
  * @author hengels
- * @version $Revision$
  *
  * @deprecated Hohoho....better try sth. like ComponentCG.componentChanged(ASPECT.InputMap) and use this wrapping INTERNALLY!.
  * What about MyClientInputMap ????

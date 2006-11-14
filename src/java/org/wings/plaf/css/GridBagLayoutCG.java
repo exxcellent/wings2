@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -35,11 +34,9 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
             throws IOException {
         final SGridBagLayout layout = (SGridBagLayout) l;
         final boolean header = layout.getHeader();
+        final boolean useCellInsets = layout.getVgap() == -1 && layout.getHgap() == -1;
         final SGridBagLayout.Grid grid = layout.getGrid();
-        String styles = layoutStyles(layout);
-        boolean useCellStyles = layout.getVgap() == -1 && layout.getHgap() == -1;
-
-        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
+        final TableCellStyle cellStyle = cellLayoutStyle(layout);
 
         if (grid.cols == 0) {
             return;
@@ -53,10 +50,18 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 final SComponent comp = grid.grid[col][row];
                 Utils.printNewline(d, layout.getContainer());
-                final boolean headerCell = row == grid.firstRow && header;
+
+                cellStyle.renderAsTH = row == grid.firstRow && header;
+                cellStyle.defaultLayoutCellHAlignment = SConstants.CENTER;
+                cellStyle.defaultLayoutCellVAlignment = SConstants.CENTER;
+
                 if (comp == null) {
-                    openLayouterCell(d, null, headerCell, -1, -1, null, SConstants.CENTER, SConstants.CENTER, styles);
-                    closeLayouterCell(d, null, headerCell);
+                    cellStyle.colspan = -1;
+                    cellStyle.rowspan = -1;
+                    cellStyle.width = null;
+
+                    openLayouterCell(d, null, cellStyle);
+                    closeLayouterCell(d, null, cellStyle.renderAsTH);
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
 
@@ -83,20 +88,23 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                             gridheight = -1;
                         }
 
-                        String width = null;
+                        cellStyle.width = null;
                         if (c.weightx > 0 && grid.colweight[row] > 0) {
-                            width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
+                            cellStyle.width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
                         }
 
-                        String cellStyles = useCellStyles ? cellStyles(layout, c.insets) : styles;
-                        renderHelper.setVerticalLayoutPadding(useCellStyles ? c.insets.top + c.insets.bottom : layout.getVgap());
-                        renderHelper.setHorizontalLayoutPadding(useCellStyles ? c.insets.left + c.insets.right : layout.getHgap());
-                        openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER, cellStyles);
+                        if (useCellInsets) {
+                            cellStyle.setInsets((Insets) c.insets.clone());
+                        }
+                        cellStyle.colspan = gridwidth;
+                        cellStyle.rowspan = gridheight;
+
+                        openLayouterCell(d, comp, cellStyle);
 
                         Utils.printNewline(d, comp);
                         comp.write(d); // Render component
 
-                        closeLayouterCell(d, comp, headerCell);
+                        closeLayouterCell(d, comp, cellStyle.renderAsTH);
                     }
                 }
             }
@@ -104,9 +112,6 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
             closeLayouterRow(d);
         }
         closeLayouterBody(d, layout);
-
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
     }
 
     /**

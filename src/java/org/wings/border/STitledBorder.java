@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -23,7 +22,6 @@ import java.awt.*;
 /**
  * Adds a border with a title to a component.
  *
- * @version $Revision$
  */
 public class STitledBorder extends SAbstractBorder {
     private SBorder border;

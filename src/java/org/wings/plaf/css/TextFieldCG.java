@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -110,7 +109,7 @@ public final class TextFieldCG extends AbstractComponentCG implements
         }
 
         java.awt.Color orgColor = textField.getForeground();
-        
+
         if (textField instanceof SFormattedTextField) {
             SFormattedTextField formattedTextField = (SFormattedTextField)textField;
             String text = textField.getText();
@@ -122,11 +121,11 @@ public final class TextFieldCG extends AbstractComponentCG implements
 
             String key = callableFormatter.registerTextfield(formattedTextField);
         }
-        
+
         writeAllAttributes(device, component);
-        
+
         textField.setForeground( orgColor );
-        
+
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
 

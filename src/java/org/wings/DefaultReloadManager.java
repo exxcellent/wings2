@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -15,8 +14,6 @@ package org.wings;
 
 import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.DynamicResource;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,32 +24,29 @@ import java.util.Set;
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
- * @version $Revision$
  */
-public class DefaultReloadManager
+public final class DefaultReloadManager
         implements ReloadManager {
-
-    private final transient static Log log = LogFactory.getLog(DefaultReloadManager.class);
-
     /**
      * a set of all components, manged by this ReloadManager, that are marked
      * dirty.
      */
     protected final Set dirtyComponents = new HashSet();
 
-    private boolean deliveryPhase = false;
-
     public DefaultReloadManager() {
     }
 
     public synchronized void reload(SComponent component, int aspect) {
-        if (deliveryPhase && log.isDebugEnabled())
-            log.debug("Component " + component.getName() + " changed during delivery phase");
-
         if (component != null)
             dirtyComponents.add(component);
     }
 
+    /**
+     * Returns a set of all components, manged by this ReloadManager, that are marked
+     * dirty.
+     *
+     * @return a set of all components, manged by this ReloadManager, that are marked
+     */
     public Set getDirtyComponents() {
         return dirtyComponents;
     }
@@ -74,7 +68,6 @@ public class DefaultReloadManager
     }
 
     public synchronized void clear() {
-        deliveryPhase = false;
         dirtyComponents.clear();
     }
 
@@ -86,7 +79,6 @@ public class DefaultReloadManager
             resource.invalidate();
             it.remove();
         }
-        deliveryPhase = true;
     }
 
     public void notifyCGs() {

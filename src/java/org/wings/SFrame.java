@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -44,7 +43,6 @@ import java.util.*;
  *
  * @author Holger Engels,
  *         <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SFrame
         extends SRootContainer

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -32,7 +31,6 @@ import org.wings.table.STableCellEditor;
  * you need the Java look and feel graphics (jlfgr*.jar)
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class SDefaultCellEditor
         implements STableCellEditor {

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -22,7 +21,6 @@ import java.util.StringTokenizer;
  * Provides util methods for {@link org.wings.STemplateLayout} related implementation. 
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class TemplateUtil {
 

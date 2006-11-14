@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -25,10 +24,10 @@ import java.util.*;
  * A straightforward implementation of CSSPropertySet using a hash map.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
-public class CSSAttributeSet
-        implements Renderable, Serializable, Cloneable {
+public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
+
+    /** Empty immutable attribute set. */
     public static final CSSAttributeSet EMPTY_ATTRIBUTESET =
             new CSSAttributeSet() {
                 private UnsupportedOperationException  doThrow() {
@@ -44,7 +43,11 @@ public class CSSAttributeSet
                 }
             };
 
-    private Map map;
+    /** The map holding <code>CSSProperty</code> to <code>String</code>  */
+    private HashMap map;
+
+    /** Cached String representation of this attribute set. */
+    private String cachedStringRepresentation;
 
     /**
      * create a CSSPropertySet from the given HashMap.
@@ -103,7 +106,7 @@ public class CSSAttributeSet
      * @return true if the attribute is defined
      */
     public final boolean contains(CSSProperty name) {
-        return map == null ? false : map.containsKey(name);
+        return map != null && map.containsKey(name);
     }
 
     /**
@@ -112,7 +115,7 @@ public class CSSAttributeSet
      * @return A set of {@link CSSProperty} for which this <code>CSSAttributeSet</code> contains a value.
      */
     public final Map properties() {
-        return map != null ? map : Collections.EMPTY_MAP;
+        return map != null ? Collections.unmodifiableMap(map) : Collections.EMPTY_MAP;
     }
 
     /**
@@ -132,6 +135,7 @@ public class CSSAttributeSet
      * @param value the attribute value
      */
     public String put(CSSProperty name, String value) {
+        cachedStringRepresentation = null;
         if (map == null) {
             map = new HashMap(8);
         }
@@ -147,6 +151,7 @@ public class CSSAttributeSet
      * @param attributes the set of attributes to add
      */
     public boolean putAll(CSSAttributeSet attributes) {
+        cachedStringRepresentation = null;
         if (map == null)
             map = new HashMap(8);
 
@@ -166,6 +171,7 @@ public class CSSAttributeSet
      * @return The previous value for this CSS property
      */
     public String remove(CSSProperty name) {
+        cachedStringRepresentation = null;
         return map == null ? null : (String) map.remove(name);
     }
 
@@ -177,19 +183,10 @@ public class CSSAttributeSet
      * @return the new set of attributes
      */
     public Object clone() {
-        /*
-        try {
-            attr = (CSSPropertySet)super.clone();
-            attr.putAll(this);
-        } catch (CloneNotSupportedException cnse) {
-            attr = null;
-        }
-        */
-
         if (isEmpty()) {
             return new CSSAttributeSet();
         } else {
-            return new CSSAttributeSet((HashMap) ((HashMap) map).clone());
+            return new CSSAttributeSet((HashMap) map.clone());
         }
     }
 
@@ -208,58 +205,50 @@ public class CSSAttributeSet
         return (map != null ? map.hashCode() : 0);
     }
 
-    /**
-     * Write style definition to the device. If include is true, write those
-     * contained in the {@link java.util.List}. If include is false, write those not contained
-     * in the {@link java.util.List}.
-     * Basically this is a filter on the styles, so we can separate styles for
-     * one logical component onto multiple real html elements.  
-     */
-    private static void writeFiltered(Device d, Map map, Set l, boolean include) throws IOException {
-        if (l == null) l = Collections.EMPTY_SET;
-        if (map != null) {
-            Iterator names = map.entrySet().iterator();
-            while (names.hasNext()) {
-                Map.Entry next = (Map.Entry) names.next();
-                if ( !(l.contains(next.getKey()) ^ include) ) {
-                    d.print(next.getKey()).print(':')
-                            .print(next.getValue())
-                            .print(';');
-                }
-            }
-        }
-    }
-    
-    /**
-     * Write style definition to the device. Write only those not contained
-     * in the set.
-     */
-    public static void writeExcluding(Device d, Map map, Set l) throws IOException {
-        writeFiltered(d, map, l, false);
-    }
-
-    /**
-     * Write style definition to the device. Write only those  contained
-     * in the set.
-     */
-    public static void writeIncluding(Device d, Map map, Set l) throws IOException {
-        writeFiltered(d, map, l, true);
-    }
+//    /**
+//     * Write style definition to the device. If include is true, write those
+//     * contained in the {@link java.util.List}. If include is false, write those not contained
+//     * in the {@link java.util.List}.
+//     * Basically this is a filter on the styles, so we can separate styles for
+//     * one logical component onto multiple real html elements.
+//     */
+//    private static void writeFiltered(Device d, Map map, Set l, boolean include) throws IOException {
+//        if (l == null) l = Collections.EMPTY_SET;
+//        if (map != null) {
+//            Iterator names = map.entrySet().iterator();
+//            while (names.hasNext()) {
+//                Map.Entry next = (Map.Entry) names.next();
+//                if ( !(l.contains(next.getKey()) ^ include) ) {
+//                    d.print(next.getKey()).print(':')
+//                            .print(next.getValue())
+//                            .print(';');
+//                }
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Write style definition to the device. Write only those not contained
+//     * in the set.
+//     */
+//    public static void writeExcluding(Device d, Map map, Set l) throws IOException {
+//        writeFiltered(d, map, l, false);
+//    }
+//
+//    /**
+//     * Write style definition to the device. Write only those  contained
+//     * in the set.
+//     */
+//    public static void writeIncluding(Device d, Map map, Set l) throws IOException {
+//        writeFiltered(d, map, l, true);
+//    }
 
     /**
      * Write style definition to the device
      */
     public void write(Device d)
             throws IOException {
-        if (map != null) {
-            Iterator names = map.entrySet().iterator();
-            while (names.hasNext()) {
-                Map.Entry next = (Map.Entry) names.next();
-                d.print(next.getKey()).print(':')
-                        .print(next.getValue())
-                        .print(';');
-            }
-        }
+        d.print(toString());
     }
 
     /**
@@ -268,19 +257,21 @@ public class CSSAttributeSet
      * @return the string
      */
     public String toString() {
-        SStringBuilder b = new SStringBuilder();
-
-        if (map != null) {
-            Iterator names = map.entrySet().iterator();
-            while (names.hasNext()) {
-                Map.Entry next = (Map.Entry) names.next();
-                b.append(next.getKey());
-                b.append(':');
-                b.append(next.getValue());
-                b.append(';');
+        if (cachedStringRepresentation == null) {
+            final SStringBuilder builder = new SStringBuilder();
+            if (map != null) {
+                Iterator names = map.entrySet().iterator();
+                while (names.hasNext()) {
+                    Map.Entry next = (Map.Entry) names.next();
+                    builder.append(next.getKey());
+                    builder.append(':');
+                    builder.append(next.getValue());
+                    builder.append(';');
+                }
             }
+            cachedStringRepresentation = builder.toString();
         }
-        return b.toString();
+        return cachedStringRepresentation;
     }
 }
 

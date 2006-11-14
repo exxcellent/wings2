@@ -12,7 +12,6 @@ import java.util.Map;
 /**
  * @author hengels
  * @author raedler
- * @version $Revision$
  */
 public class SessionCreator implements Creator
 {

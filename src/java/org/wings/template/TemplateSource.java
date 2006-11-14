@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -26,7 +25,6 @@ import java.io.InputStream;
  * from. You can think of Files, URLs, Database-BLOBS ..
  *
  * @author <A href="mailto:H.Zeller@acm.org">Henner Zeller</A>
- * @version $Revision$ $Date$
  */
 public interface TemplateSource {
     /**

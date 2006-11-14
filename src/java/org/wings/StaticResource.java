@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -30,7 +29,6 @@ import java.io.InputStream;
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
- * @version $Revision$
  */
 public abstract class StaticResource extends Resource {
     private final transient static Log log = LogFactory.getLog(StaticResource.class);

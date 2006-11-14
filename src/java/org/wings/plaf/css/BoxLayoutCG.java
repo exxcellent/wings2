@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -35,19 +34,13 @@ public class BoxLayoutCG extends AbstractLayoutCG {
         final SBoxLayout layout = (SBoxLayout) l;
         final List components = layout.getComponents();
         final int cols = layout.getOrientation() == SBoxLayout.HORIZONTAL ? components.size() : 1;
-        String styles = layoutStyles(layout);
-        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(layout.getVgap());
-        renderHelper.setHorizontalLayoutPadding(layout.getHgap());
+        final TableCellStyle styles = cellLayoutStyle(layout);
 
         openLayouterBody(d, layout);
 
-        printLayouterTableBody(d, cols, false, components, styles);
+        printLayouterTableBody(d, layout.getContainer(), cols, components, styles);
 
         closeLayouterBody(d, layout);
-
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
     }
 
     protected int getLayoutHGap(SLayoutManager layout) {

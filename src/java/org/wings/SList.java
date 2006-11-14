@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,20 +12,6 @@
  */
 package org.wings;
 
-import java.awt.Color;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.Serializable;
-
-import javax.swing.AbstractListModel;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.EventListenerList;
-import javax.swing.event.ListDataListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import org.wings.event.SViewportChangeEvent;
 import org.wings.event.SViewportChangeListener;
 import org.wings.plaf.ListCG;
@@ -34,6 +19,15 @@ import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.Selector;
+
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Allows the user to select one or more objects from a list.

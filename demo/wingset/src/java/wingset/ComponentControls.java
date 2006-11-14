@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -41,7 +40,6 @@ import java.util.Arrays;
  * A visual control used in many WingSet demos.
  *
  * @author hengels
- * @version $Revision$
  */
 public class ComponentControls  extends SPanel {
     protected static final Object[] BORDERS = new Object[] {

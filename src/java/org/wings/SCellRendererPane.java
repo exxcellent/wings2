@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,7 +13,6 @@
 package org.wings;
 
 import org.wings.io.Device;
-import org.wings.plaf.css.RenderHelper;
 
 import java.io.IOException;
 
@@ -23,7 +21,6 @@ import java.io.IOException;
  * like {@link STree} and {@link STable}s.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class SCellRendererPane
         extends SContainer {
@@ -76,9 +73,6 @@ public class SCellRendererPane
 
         addComponent(c);
 
-        RenderHelper renderHelper = RenderHelper.getInstance(c);
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
         c.write(d);
 
         remove(c);

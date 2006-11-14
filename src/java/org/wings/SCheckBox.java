@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,7 +33,6 @@ import java.util.Arrays;
  * May be displayed as a HTML form element or as a clickable icon.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SCheckBox extends SAbstractButton {
     public SCheckBox() {

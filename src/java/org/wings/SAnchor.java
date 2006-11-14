@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -25,7 +24,6 @@ import java.net.URL;
  * HTML link around some components that are stored in the container.
  *
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
- * @version $Revision$
  */
 public class SAnchor extends SContainer {
 

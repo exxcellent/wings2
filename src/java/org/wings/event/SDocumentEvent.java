@@ -1,6 +1,4 @@
-/* $Id$ */
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -22,7 +20,6 @@ import java.awt.*;
  * A document event fire on any document change (i.e. change of a text in a {@link org.wings.STextField}).
  *
  * @author hengels
- * @version $Revision$
  */
 public class SDocumentEvent extends AWTEvent {
     /**

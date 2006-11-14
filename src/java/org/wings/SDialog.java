@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -27,7 +26,6 @@ import org.wings.session.SessionManager;
  * event tells, what kind of user activity caused the dialog to dismiss.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class SDialog extends SForm {
     private final transient static Log log = LogFactory.getLog(SDialog.class);

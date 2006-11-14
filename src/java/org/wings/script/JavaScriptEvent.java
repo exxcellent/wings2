@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -18,7 +17,6 @@ package org.wings.script;
  * Some widely implemented javascript events.
  *
  * @author Holger Engels
- * @version $Revision$
  */
 public interface JavaScriptEvent {
     public static final String ON_BLUR = "onblur";

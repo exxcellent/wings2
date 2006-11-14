@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -29,7 +28,6 @@ import java.awt.*;
 
 /**
  * @author Holger Engels
- * @version $Revision$
  */
 public class KeyboardBindingsExample extends WingSetPane {
     private final SLabel actionEventLabel = new SLabel();

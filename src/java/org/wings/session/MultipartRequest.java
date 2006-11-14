@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -49,7 +48,6 @@ import java.util.*;
  * http://ds.internic.net/rfc/rfc1867.txt</a>.
  *
  * @author Holger Engels
- * @version $Revision$
  */
 public class MultipartRequest
         extends HttpServletRequestWrapper {

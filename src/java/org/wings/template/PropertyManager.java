@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -31,7 +30,6 @@ import org.wings.SComponent;
  * <p/><code>&lt;object name="aConstraintName" background="#ff0000" text="new text"&gt;&lt;/object&gt;</code><p/>
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public interface PropertyManager {
 

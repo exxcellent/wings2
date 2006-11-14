@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -18,7 +17,6 @@ import javax.swing.tree.TreeNode;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class HugeTreeModel {
     public static final TreeNode ROOT_NODE = generateTree();

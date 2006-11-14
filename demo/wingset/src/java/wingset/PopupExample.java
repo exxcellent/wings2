@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -30,7 +29,6 @@ import java.awt.event.ActionListener;
 
 /**
  * @author Holger Engels
- * @version $Revision$
  */
 public class PopupExample extends WingSetPane {
 

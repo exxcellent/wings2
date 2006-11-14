@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -28,6 +27,7 @@ import org.wings.SLabel;
 import org.wings.SLayoutManager;
 import org.wings.SPanel;
 import org.wings.SToolBar;
+import org.wings.SButton;
 import org.wings.border.SBorder;
 import org.wings.border.SLineBorder;
 import org.wings.script.JavaScriptEvent;
@@ -71,6 +71,7 @@ public class DynamicLayoutExample extends WingSetPane {
         selectLayoutManager.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submitForm(true, event);"));
 
         controls.add(selectLayoutManager);
+        controls.add(new SButton("Ok"));
 
         panel = new SForm(new SBorderLayout());
         panel.add(controls, SBorderLayout.NORTH);

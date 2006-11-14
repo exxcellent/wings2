@@ -17,7 +17,6 @@ import java.io.IOException;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class BirdTitleBarCG
         extends AbstractComponentCG

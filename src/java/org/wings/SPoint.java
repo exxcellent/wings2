@@ -2,7 +2,6 @@ package org.wings;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class SPoint {
     private String coordinates;

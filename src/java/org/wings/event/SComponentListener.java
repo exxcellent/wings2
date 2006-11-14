@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -33,7 +32,6 @@ package org.wings.event;
  * whether a program registers a ComponentListener or not.
  *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
- * @version $Revision$, $Date$
  * @see org.wings.event.SComponentAdapter
  * @see org.wings.event.SComponentEvent
  */

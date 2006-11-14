@@ -28,7 +28,6 @@ import java.util.Map;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class WingsSession
         extends Session

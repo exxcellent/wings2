@@ -6,7 +6,6 @@
 #
 # Importiert in wingS: Ole Langbehn <ole@freiheit.com>
 # Datum: 05/12/2005
-# Version: $Revision$
 #
 
 if [ $# -eq 0 ] ; then

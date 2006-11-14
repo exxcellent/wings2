@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -44,7 +43,6 @@ import java.text.ParseException;
 
 /**
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
- * @version $Revision$
  */
 public class TextComponentExample extends WingSetPane {
     private final SLabel actionEvent = new SLabel("(no form or button event)");

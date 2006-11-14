@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -25,7 +24,6 @@ import org.wings.util.PropertyUtils;
  * For accessing static resources
  *
  * @author <a href="mailto:ole@freiheit.com">Ole Langbehn</a>
- * @version $Revision$
  */
 public class ResourceManager {
     private final transient static Log log = LogFactory.getLog(ResourceManager.class);

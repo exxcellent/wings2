@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class Bird
     extends SInternalFrame

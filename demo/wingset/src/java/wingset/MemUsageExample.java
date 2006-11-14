@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -31,7 +30,6 @@ import java.text.DecimalFormat;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class MemUsageExample extends WingSetPane {
     private static final DecimalFormat megaByteFormatter = new DecimalFormat("#.###");

@@ -8,7 +8,6 @@ import org.wings.SComponent;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class DWRScriptListener extends JavaScriptListener {
 

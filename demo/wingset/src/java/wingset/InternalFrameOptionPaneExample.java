@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -26,7 +25,6 @@ import java.awt.event.ActionEvent;
  * Time: 08:50:48
  *
  * @author Roman R&auml;dle
- * @version $Revision$
  */
 public class InternalFrameOptionPaneExample extends WingSetPane {
 

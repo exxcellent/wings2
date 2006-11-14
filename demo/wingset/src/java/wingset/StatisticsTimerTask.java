@@ -1,4 +1,3 @@
-// $Id$
 package wingset;
 
 import org.apache.commons.logging.Log;

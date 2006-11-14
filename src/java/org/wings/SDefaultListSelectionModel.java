@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -24,7 +23,6 @@ import java.util.Iterator;
  * Default implementation of a list selection model.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  * @see javax.swing.ListSelectionModel
  * @see SList
  * @see STable

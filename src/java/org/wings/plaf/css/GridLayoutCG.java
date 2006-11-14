@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,27 +33,20 @@ public class GridLayoutCG extends AbstractLayoutCG {
         final SGridLayout layout = (SGridLayout) l;
         final List components = layout.getComponents();
         final int rows = layout.getRows();
-        //final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
 
-        String styles = layoutStyles(layout);
-        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-        renderHelper.setVerticalLayoutPadding(layout.getVgap());
-        renderHelper.setHorizontalLayoutPadding(layout.getHgap());
+        final TableCellStyle styles = cellLayoutStyle(layout);
+        styles.renderAsTH = layout.getRenderFirstLineAsHeader();
 
         int cols = layout.getColumns();
         if (cols <= 0) {
             cols = components.size() / rows;
         }
-        //final int border = layout.getBorder();
 
         openLayouterBody(d, layout);
 
-        printLayouterTableBody(d, cols, layout.getRenderFirstLineAsHeader(), components, styles);
+        printLayouterTableBody(d, layout.getContainer(), cols, layout.getComponents(), styles);
 
         closeLayouterBody(d, layout);
-
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
     }
 
     protected int getLayoutHGap(SLayoutManager layout) {

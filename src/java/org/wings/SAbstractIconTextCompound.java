@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -32,7 +31,6 @@ import java.awt.event.ItemListener;
  * It supports 7 different icon states.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public abstract class SAbstractIconTextCompound
         extends SComponent

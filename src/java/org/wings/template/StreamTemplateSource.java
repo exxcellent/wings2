@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -21,7 +20,6 @@ import java.io.InputStream;
  * as a wrapper around a Stream.
  *
  * @author <A href="mailto:joachim.karrer@mercatis.de">Joachim Karrer</A>
- * @version $Revision$
  */
 public class StreamTemplateSource implements TemplateSource {
     /**

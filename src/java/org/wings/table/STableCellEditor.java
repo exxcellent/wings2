@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -21,7 +20,6 @@ import java.io.Serializable;
 
 /**
  * @author <a href="mailto:holger.engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public interface STableCellEditor extends CellEditor, Serializable {
     SComponent getTableCellEditorComponent(STable table,

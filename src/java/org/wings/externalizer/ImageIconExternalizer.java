@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -20,7 +19,6 @@ import javax.swing.*;
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
- * @version $Revision$
  */
 public class ImageIconExternalizer extends ImageExternalizer {
     private static final Class[] SUPPORTED_CLASSES = {ImageIcon.class};

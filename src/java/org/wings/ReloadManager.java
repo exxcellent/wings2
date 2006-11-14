@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -20,7 +19,6 @@ import java.io.Serializable;
  * Responsible for registering and invalidating modified components.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public interface ReloadManager extends Serializable {
     /**

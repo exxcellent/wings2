@@ -1,12 +1,16 @@
 package org.wings.plaf.css.msie;
 
-import org.wings.plaf.css.RenderHelper;
-import org.wings.plaf.css.Utils;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SGridBagLayout;
+import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.*;
+import org.wings.plaf.css.TableCellStyle;
+import org.wings.plaf.css.Utils;
 
-import java.io.IOException;
 import java.awt.*;
+import java.io.IOException;
 
 public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
     private static final long serialVersionUID = 1L;
@@ -34,15 +38,14 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
 
 
         final boolean header = layout.getHeader();
+        final boolean useCellInsets = layout.getVgap() == -1 && layout.getHgap() == -1;
         final SGridBagLayout.Grid grid = layout.getGrid();
-        String styles = layoutStyles(layout);
+        final TableCellStyle cellStyle = cellLayoutStyle(layout);
         int vertivalOversize = layoutOversize(layout);
-        boolean useCellStyles = layout.getVgap() == -1 && layout.getHgap() == -1;
 
-        RenderHelper renderHelper = RenderHelper.getInstance(l.getContainer());
-
-        if (grid.cols == 0)
+        if (grid.cols == 0) {
             return;
+        }
 
         openLayouterBody(d, layout);
 
@@ -50,7 +53,7 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
             Utils.printNewline(d, layout.getContainer());
             d.print("<tr");
             Utils.optAttribute(d, "yweight", determineRowHeight(layout, row));
-            if (useCellStyles) {
+            if (useCellInsets) {
                 vertivalOversize = 0;
                 for (int col = grid.firstCol; col < grid.cols; col++) {
                     final SComponent comp = grid.grid[col][row];
@@ -67,10 +70,18 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 final SComponent comp = grid.grid[col][row];
                 Utils.printNewline(d, layout.getContainer());
-                final boolean headerCell = row == grid.firstRow && header;
+
+                cellStyle.renderAsTH = row == grid.firstRow && header;
+                cellStyle.defaultLayoutCellHAlignment = SConstants.CENTER;
+                cellStyle.defaultLayoutCellVAlignment = SConstants.CENTER;
+
                 if (comp == null) {
-                    openLayouterCell(d, null, headerCell, -1, -1, null, SConstants.CENTER, SConstants.CENTER, styles);
-                    closeLayouterCell(d, null, headerCell);
+                    cellStyle.colspan = -1;
+                    cellStyle.rowspan = -1;
+                    cellStyle.width = null;
+
+                    openLayouterCell(d, null, cellStyle);
+                    closeLayouterCell(d, null, cellStyle.renderAsTH);
                 } else {
                     GridBagConstraints c = layout.getConstraints(comp);
 
@@ -83,8 +94,9 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
                         } else if (gridwidth == GridBagConstraints.REMAINDER) {
                             gridwidth = grid.cols - col;
                         }
-                        if (gridwidth < 2)
+                        if (gridwidth < 2) {
                             gridwidth = -1;
+                        }
 
                         int gridheight = c.gridheight;
                         if (gridheight == GridBagConstraints.RELATIVE) {
@@ -92,22 +104,27 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
                         } else if (gridheight == GridBagConstraints.REMAINDER) {
                             gridheight = grid.cols - col;
                         }
-                        if (gridheight < 2)
+                        if (gridheight < 2) {
                             gridheight = -1;
+                        }
 
-                        String width = null;
-                        if (c.weightx > 0 && grid.colweight[row] > 0)
-                            width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
+                        cellStyle.width = null;
+                        if (c.weightx > 0 && grid.colweight[row] > 0) {
+                            cellStyle.width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
+                        }
 
-                        String cellStyles = useCellStyles ? cellStyles(layout,  c.insets) : styles;
-                        renderHelper.setVerticalLayoutPadding(useCellStyles ? c.insets.top + c.insets.bottom : layout.getVgap());
-                        renderHelper.setHorizontalLayoutPadding(useCellStyles ? c.insets.left + c.insets.right : layout.getHgap());
-                        openLayouterCell(d, comp, headerCell, gridwidth, gridheight, width, SConstants.CENTER, SConstants.CENTER, cellStyles);
+                        if (useCellInsets) {
+                            cellStyle.setInsets((Insets) c.insets.clone());
+                        }
+                        cellStyle.colspan = gridwidth;
+                        cellStyle.rowspan = gridheight;
+
+                        openLayouterCell(d, comp, cellStyle);
 
                         Utils.printNewline(d, comp);
                         comp.write(d); // Render component
 
-                        closeLayouterCell(d, comp, headerCell);
+                        closeLayouterCell(d, comp, cellStyle.renderAsTH);
                     }
                 }
             }
@@ -115,8 +132,5 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
             closeLayouterRow(d);
         }
         closeLayouterBody(d, layout);
-
-        renderHelper.setVerticalLayoutPadding(0);
-        renderHelper.setHorizontalLayoutPadding(0);
     }
 }

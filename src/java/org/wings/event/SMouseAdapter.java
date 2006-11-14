@@ -5,7 +5,6 @@ package org.wings.event;
  * to add new methods to the SMouseListener interface.
  *
  * @author hengels
- * @version $Revision$
  */
 public abstract class SMouseAdapter
     implements SMouseListener
