@@ -21,11 +21,9 @@ import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
 import org.wings.Version;
-import org.wings.util.SessionLocal;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.externalizer.ExternalizeManager;
-import org.wings.header.Link;
-import org.wings.header.Script;
+import org.wings.header.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.css.dwr.CallableManager;
@@ -85,122 +83,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
      */
     private Boolean renderXmlDeclaration = Boolean.FALSE;
 
-    public static final Headers HEADERS = new Headers();
     private ClassPathResource layout;
     private ClassPathResource formbutton;
 
-    public static class Headers
-        extends SessionLocal
-        implements List
-    {
-        protected Object initialValue() {
-            return new ArrayList();
-        }
-
-        List getList() {
-            return (List)get();
-        }
-
-        public int size() {
-            return getList().size();
-        }
-
-        public boolean isEmpty() {
-            return getList().isEmpty();
-        }
-
-        public boolean contains(Object o) {
-            return getList().contains(o);
-        }
-
-        public Iterator iterator() {
-            return getList().iterator();
-        }
-
-        public Object[] toArray() {
-            return getList().toArray();
-        }
-
-        public Object[] toArray(Object[] a) {
-            return getList().toArray(a);
-        }
-
-        public boolean add(Object o) {
-            return getList().add(o);
-        }
-
-        public boolean remove(Object o) {
-            return getList().remove(o);
-        }
-
-        public boolean containsAll(Collection c) {
-            return getList().containsAll(c);
-        }
-
-        public boolean addAll(Collection c) {
-            return getList().addAll(c);
-        }
-
-        public boolean addAll(int index, Collection c) {
-            return getList().addAll(index, c);
-        }
-
-        public boolean removeAll(Collection c) {
-            return getList().removeAll(c);
-        }
-
-        public boolean retainAll(Collection c) {
-            return getList().retainAll(c);
-        }
-
-        public void clear() {
-            getList().clear();
-        }
-
-        public boolean equals(Object o) {
-            return getList().equals(o);
-        }
-
-        public int hashCode() {
-            return getList().hashCode();
-        }
-
-        public Object get(int index) {
-            return getList().get(index);
-        }
-
-        public Object set(int index, Object element) {
-            return getList().set(index, element);
-        }
-
-        public void add(int index, Object element) {
-            getList().add(index, element);
-        }
-
-        public Object remove(int index) {
-            return getList().remove(index);
-        }
-
-        public int indexOf(Object o) {
-            return getList().indexOf(o);
-        }
-
-        public int lastIndexOf(Object o) {
-            return getList().lastIndexOf(o);
-        }
-
-        public ListIterator listIterator() {
-            return getList().listIterator();
-        }
-
-        public ListIterator listIterator(int index) {
-            return getList().listIterator(index);
-        }
-
-        public List subList(int fromIndex, int toIndex) {
-            return getList().subList(fromIndex, toIndex);
-        }
-    }
+    private HeaderUtil headerUtil = new HeaderUtil();
 
     /**
      * Initialize properties from config
@@ -220,12 +106,12 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         // add JavaScript files to frame
         Session session = SessionManager.getSession();
-        form = createExternalizedHeader(session, FORM_SCRIPT, "text/javascript");
-        domLib = createExternalizedHeader(session, DOMLIB_SCRIPT, "text/javascript");
-        domTT = createExternalizedHeader(session, DOMTT_SCRIPT, "text/javascript");
+        headerUtil.addHeader(createExternalizedHeader(session, FORM_SCRIPT, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, DOMLIB_SCRIPT, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, DOMTT_SCRIPT, "text/javascript"));
 
-        dwrEngine = new Script("text/javascript", new DefaultURLResource("../dwr/engine.js"));
-        dwrUtil = new Script("text/javascript", new DefaultURLResource("../dwr/util.js"));
+        headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
+        headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
 
         layout = new ClassPathResource("org/wings/plaf/css/layout.htc", "text/x-component");
         layout.getId(); // externalize ..
@@ -248,12 +134,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public static final JavaScriptListener SCROLL_POSITION_SCRIPT = new JavaScriptListener("onscroll", "storeScrollPosition(event)");
     public static final JavaScriptListener RESTORE_SCROLL_POSITION_SCRIPT = new JavaScriptListener("onload", "restoreScrollPosition()");
     public static final JavaScriptListener PERFORM_WINDOW_ONLOAD_SCRIPT = new JavaScriptListener("onload", "performWindowOnLoad()");
-
-    private Script domLib;
-    private Script domTT;
-    private Script form;
-    private Script dwrEngine;
-    private Script dwrUtil;
 
     /**
      * Externalizes the style sheet(s) for this session.
@@ -304,13 +184,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         component.addScriptListener(PERFORM_WINDOW_ONLOAD_SCRIPT);
         CaptureDefaultBindingsScriptListener.install(component);
 
-        if (!HEADERS.contains(form)) {
-            HEADERS.add(domLib);
-            HEADERS.add(domTT);
-            HEADERS.add(form);
-            HEADERS.add(dwrEngine);
-            HEADERS.add(dwrUtil);
-        }
+        headerUtil.installHeaders();
 
         // Retrieve list of static CSS files to be attached to this frame for this browser.
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component.getSession());
@@ -451,8 +325,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         // Register and render DWR callables
         Collection callableNames = CallableManager.getInstance().callableNames();
 
-        Collection allHeaders = new ArrayList(headers.size() + callableNames.size() + HEADERS.size());
-        allHeaders.addAll(HEADERS);
+        Collection allHeaders = new ArrayList(headers.size() + callableNames.size() + Headers.INSTANCE.size());
+        allHeaders.addAll(Headers.INSTANCE);
         allHeaders.addAll(headers);
         for (Iterator iterator = callableNames.iterator(); iterator.hasNext();) {
             String name = (String) iterator.next();

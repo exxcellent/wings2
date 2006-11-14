@@ -29,7 +29,6 @@ import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
-import org.wings.session.Session;
 
 import java.io.IOException;
 
@@ -51,12 +50,12 @@ public class MenuBarCG extends AbstractComponentCG implements
      */
     public static final JavaScriptListener BODY_ONCLICK_SCRIPT = new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
 
-    private Script script;
+    private HeaderUtil headerUtil = new HeaderUtil();
 
     public MenuBarCG() {
         ClassPathResource resource = new ClassPathResource(MENU_JS, "text/javascript");
         String url = SessionManager.getSession().getExternalizeManager().externalize(resource, ExternalizeManager.GLOBAL);
-        script = new Script("text/javascript", new DefaultURLResource(url));
+        headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource(url)));
     }
 
     /* (non-Javadoc)
@@ -70,8 +69,7 @@ public class MenuBarCG extends AbstractComponentCG implements
         }
         comp.addParentFrameListener(this);
 
-        if (!FrameCG.HEADERS.contains(script))
-            FrameCG.HEADERS.add(script);
+        headerUtil.installHeaders();
     }
 
     /* (non-Javadoc)

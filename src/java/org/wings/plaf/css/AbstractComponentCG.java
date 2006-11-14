@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.header.Headers;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.STitledBorder;
@@ -33,8 +34,7 @@ import org.wings.util.SStringBuilder;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.
