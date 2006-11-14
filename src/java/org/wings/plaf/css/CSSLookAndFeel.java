@@ -15,6 +15,8 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.session.Browser;
+import org.wings.session.BrowserType;
 import org.wings.util.SStringBuilder;
 import org.wings.session.SessionManager;
 import org.wings.util.PropertyUtils;
@@ -38,33 +40,60 @@ public class CSSLookAndFeel
     }
 
     private static Properties loadProperties() throws IOException {
+        
         // default properties
         SStringBuilder propertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH);
         propertiesFilename.append(PROPERTIES_FILENAME_DEFAULT);
         propertiesFilename.append(PROPERTIES_FILENAME_END);
+                
+        SStringBuilder xcomponentsPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH_XCOMPONENT);
+        xcomponentsPropertiesFilename
+                .append(PROPERTIES_FILENAME_XCOMPONENT)
+                .append(PROPERTIES_FILENAME_END);                        
+        
+        Properties properties = PropertyUtils.loadProperties(propertiesFilename.toString());
+        
+        try {
+            properties.putAll(PropertyUtils.loadProperties(xcomponentsPropertiesFilename.toString()));
+            log.debug(xcomponentsPropertiesFilename.toString()+" attached");
+        } catch (IOException e) {
+            log.info("Unable to open xcomponents specific properties file '"+ xcomponentsPropertiesFilename.toString()+"'. This is OK if you are not using wingX.");
+        }
+        
         // browser dependent properties
-        String browserType = SessionManager.getSession().getUserAgent().getBrowserType().getShortName();
+        Browser userAgent = SessionManager.getSession().getUserAgent();
+        String browserType = userAgent.getBrowserType().getShortName();
 
         SStringBuilder browserPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH);
         browserPropertiesFilename.append(browserType);
         browserPropertiesFilename.append(PROPERTIES_FILENAME_END);
-        
-        SStringBuilder xcomponentsPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH_XCOMPONENT);
-        xcomponentsPropertiesFilename
+            
+        SStringBuilder browserXcomponentsPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH_XCOMPONENT);
+            browserXcomponentsPropertiesFilename
                 .append(PROPERTIES_FILENAME_XCOMPONENT)
+                .append("_").append(browserType)
                 .append(PROPERTIES_FILENAME_END);        
-
-        Properties properties = PropertyUtils.loadProperties(propertiesFilename.toString());
+        
         try {
             properties.putAll(PropertyUtils.loadProperties(browserPropertiesFilename.toString()));
         } catch (IOException e) {
             log.info("Unable to open browser specific properties file '"+browserPropertiesFilename.toString()+"'. This is OK.");
         }
-        try {
-            properties.putAll(PropertyUtils.loadProperties(xcomponentsPropertiesFilename.toString()));            
-        } catch (IOException e) {
-            log.info("Unable to open xcomponents specific properties file '"+ xcomponentsPropertiesFilename.toString()+"'. This is OK if you are not using wingX.");
-        }
+                                
+        // only load ie specific cgs for the xcomponents when ie < 7                    
+        if ((userAgent.getBrowserType().getId() == BrowserType.IE.getId()) &&
+            (userAgent.getMajorVersion() < 7)) {                                 
+
+            log.info("xcomponents cgs for ie 6 will be loaded");
+                
+            try {
+                properties.putAll(PropertyUtils.loadProperties(browserXcomponentsPropertiesFilename.toString()));                
+            } catch (IOException e) {
+                log.info("Unable to open xcomponents specific properties file '"+ browserXcomponentsPropertiesFilename.toString()+"'. This is OK if you are not using wingX.");                
+            }
+            
+        }        
+                
         return properties;
     }
 }
