@@ -21,7 +21,7 @@ import java.util.EventListener;
  *
  * <p>Typical instance is {@link JavaScriptListener}
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public interface ScriptListener extends EventListener {

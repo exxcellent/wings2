@@ -46,7 +46,8 @@ public final class TextFieldCG extends AbstractComponentCG implements
             if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
                 CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter);
             }
-            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';CallableFormatter.validate(wingS.component.ftextFieldCallback, this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'))"));
+            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR,
+            		"CallableFormatter.validate(wingS.component.ftextFieldCallback, this.id, this.value)"));
         }
         if (isMSIE(comp))
             comp.putClientProperty("horizontalOversize", new Integer(horizontalOversize));
@@ -88,7 +89,6 @@ public final class TextFieldCG extends AbstractComponentCG implements
         }
 
         device.print("<input type=\"text\"");
-        writeAllAttributes(device, component);
         if (tableWrapping)
             device.print(" wrapping=\"4\"");
 
@@ -110,18 +110,24 @@ public final class TextFieldCG extends AbstractComponentCG implements
             device.print(" disabled=\"true\"");
         }
 
+        java.awt.Color orgColor = textField.getForeground();
+
         if (textField instanceof SFormattedTextField) {
             SFormattedTextField formattedTextField = (SFormattedTextField)textField;
             String text = textField.getText();
             if (text == null)
                 text = "";
-            String lastValue = formattedTextField.getFocusLostBehavior() == SFormattedTextField.COMMIT_OR_REVERT ? text : null;
-            Utils.optAttribute(device, "lastValue", lastValue);
+            if ( !formattedTextField.isEditValid() ) {
+                textField.setForeground( java.awt.Color.RED );
+            }
 
-            SAbstractFormatter formatter = formattedTextField.getFormatter();
-            String key = callableFormatter.registerFormatter(formatter);
-            Utils.optAttribute(device, "formatter", key);
+            String key = callableFormatter.registerTextfield(formattedTextField);
         }
+
+        writeAllAttributes(device, component);
+
+        textField.setForeground( orgColor );
+
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
 
@@ -133,39 +139,47 @@ public final class TextFieldCG extends AbstractComponentCG implements
 
 
     public static class CallableFormatter {
-        Map formatters = new WeakHashMap();
-        private final String name = new String("CallableFormatter");
+        Map textfields = new WeakHashMap();
+        private final String name = "CallableFormatter";
 
-        public List validate(String key, String name, String text, String lastValid) {
+        public List validate(String name, String text) {
             String value = "";
-            List list = new LinkedList();
-            SAbstractFormatter formatter = formatterByKey(key);
+            Boolean isEditValid = new Boolean(true);
+            SFormattedTextField fTextfield = textfieldByName( name );
+            SAbstractFormatter  formatter  = fTextfield.getFormatter();
             if ( formatter != null ) {
-                list.add( name );
                 try {
                     value = formatter.valueToString( formatter.stringToValue(text) );
+                    fTextfield.putClientProperty( "lastValid", value );
                 }
                 catch (ParseException e) {
-                    if (lastValid != null)
-                        value = lastValid;
+                    if ( fTextfield.getFocusLostBehavior() == SFormattedTextField.COMMIT_OR_REVERT ) {
+                        String lastValid = (String)fTextfield.getClientProperty( "lastValid" );
+                        if ( lastValid != null ) {
+                            value = lastValid;
+                        } else {
+                            isEditValid = new Boolean(false);
+                        }
+                    } else {
+                        value = text;
+                        isEditValid = new Boolean(false);
+                    }
                 }
             }
-            list.add( value );
+            List list = new LinkedList();
+                list.add( name );
+                list.add( value );
+                list.add( isEditValid );
             return list;
         }
 
-        protected SAbstractFormatter formatterByKey(String key) {
-            for (Iterator iterator = formatters.keySet().iterator(); iterator.hasNext();) {
-                SAbstractFormatter formatter = (SAbstractFormatter)iterator.next();
-                if (key.equals("" + System.identityHashCode(formatter)))
-                    return formatter;
-            }
-            return null;
+        protected SFormattedTextField textfieldByName(String name) {
+            return (SFormattedTextField)textfields.get( name );
         }
 
-        private String registerFormatter(SAbstractFormatter formatter) {
-            formatters.put(formatter, formatter);
-            return "" + System.identityHashCode(formatter);
+        private String registerTextfield(SFormattedTextField fTextfield) {
+            textfields.put(fTextfield.getName(), fTextfield);
+            return "" + System.identityHashCode(fTextfield);
         }
 
         private String getName() {

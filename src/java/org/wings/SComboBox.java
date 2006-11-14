@@ -29,7 +29,7 @@ import java.util.Vector;
 /**
  * Combobox widget to be used inside {@link SForm} elements.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  * @see javax.swing.ComboBoxModel
  * @see SListCellRenderer

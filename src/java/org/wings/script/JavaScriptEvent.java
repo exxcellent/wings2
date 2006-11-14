@@ -16,7 +16,7 @@ package org.wings.script;
 /**
  * Some widely implemented JavaScript events.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public interface JavaScriptEvent {

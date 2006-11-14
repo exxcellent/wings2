@@ -16,18 +16,15 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.ReloadManager;
 import org.wings.Renderable;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.Version;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
-import org.wings.util.SessionLocal;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.externalizer.ExternalizeManager;
-import org.wings.header.Link;
-import org.wings.header.Script;
+import org.wings.header.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.css.dwr.CallableManager;
@@ -88,21 +85,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
     public static final String YAHOO_CONNECTION = (String) ResourceManager.getObject("JS.yahooConnection", String.class);
 
-    private Script wingsGlobal;
-    private Script wingsEvent;
-    private Script wingsUtil;
-    private Script wingsLayout;
-    private Script wingsRequest;
-    private Script wingsAjax;
-    private Script wingsComponent;
-    private Script yahooGlobal;
-    private Script yahooDom;
-    private Script yahooEvent;
-    private Script yahooContainer;
-    private Script yahooConnection;
-    private Script dwrEngine;
-    private Script dwrUtil;
-
     /**
      * JavaScript needed for Drag and Drop support
      */
@@ -120,141 +102,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
      */
     private Boolean renderXmlDeclaration = Boolean.FALSE;
 
-    public static final Headers HEADERS = new Headers();
-
-    public static class Headers extends SessionLocal implements List {
-
-        protected Object initialValue() {
-            return new ArrayList();
-        }
-
-        List getList() {
-            return (List)get();
-        }
-
-        public int size() {
-            return getList().size();
-        }
-
-        public boolean isEmpty() {
-            return getList().isEmpty();
-        }
-
-        public boolean contains(Object o) {
-            return getList().contains(o);
-        }
-
-        public Iterator iterator() {
-            return getList().iterator();
-        }
-
-        public Object[] toArray() {
-            return getList().toArray();
-        }
-
-        public Object[] toArray(Object[] a) {
-            return getList().toArray(a);
-        }
-
-        public boolean add(Object o) {
-            boolean changed = getList().add(o);
-            if (changed) invalidateFrames();
-            return changed;
-        }
-
-        public boolean remove(Object o) {
-            boolean changed = getList().remove(o);
-            if (changed) invalidateFrames();
-            return changed;
-        }
-
-        public boolean containsAll(Collection c) {
-            return getList().containsAll(c);
-        }
-
-        public boolean addAll(Collection c) {
-            boolean changed = getList().addAll(c);
-            if (changed) invalidateFrames();
-            return changed;
-        }
-
-        public boolean addAll(int index, Collection c) {
-            boolean changed = getList().addAll(index, c);
-            if (changed) invalidateFrames();
-            return changed;
-        }
-
-        public boolean removeAll(Collection c) {
-            boolean changed = getList().removeAll(c);
-            if (changed) invalidateFrames();
-            return changed;
-        }
-
-        public boolean retainAll(Collection c) {
-            boolean changed = getList().retainAll(c);
-            if (changed) invalidateFrames();
-            return changed;
-        }
-
-        public void clear() {
-            if (!isEmpty()) invalidateFrames();
-            getList().clear();
-        }
-
-        public boolean equals(Object o) {
-            return getList().equals(o);
-        }
-
-        public int hashCode() {
-            return getList().hashCode();
-        }
-
-        public Object get(int index) {
-            return getList().get(index);
-        }
-
-        public Object set(int index, Object element) {
-            invalidateFrames();
-            return getList().set(index, element);
-        }
-
-        public void add(int index, Object element) {
-            invalidateFrames();
-            getList().add(index, element);
-        }
-
-        public Object remove(int index) {
-            invalidateFrames();
-            return getList().remove(index);
-        }
-
-        public int indexOf(Object o) {
-            return getList().indexOf(o);
-        }
-
-        public int lastIndexOf(Object o) {
-            return getList().lastIndexOf(o);
-        }
-
-        public ListIterator listIterator() {
-            return getList().listIterator();
-        }
-
-        public ListIterator listIterator(int index) {
-            return getList().listIterator(index);
-        }
-
-        public List subList(int fromIndex, int toIndex) {
-            return getList().subList(fromIndex, toIndex);
-        }
-
-        private void invalidateFrames() {
-            Set frames = SessionManager.getSession().getFrames();
-            for (Iterator it = frames.iterator(); it.hasNext();) {
-                ((SFrame) it.next()).reload(ReloadManager.STATE);
-            }
-        }
-    }
+    private HeaderUtil headerUtil = new HeaderUtil();
 
     /**
      * Initialize properties from config
@@ -274,21 +122,21 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         // Externalize JavaScript headers
         Session session = SessionManager.getSession();
-        wingsGlobal = createExternalizedHeader(session, WINGS_GLOBALS, "text/javascript");
-        wingsEvent = createExternalizedHeader(session, WINGS_EVENT, "text/javascript");
-        wingsUtil = createExternalizedHeader(session, WINGS_UTIL, "text/javascript");
-        wingsLayout = createExternalizedHeader(session, WINGS_LAYOUT, "text/javascript");
-        wingsRequest = createExternalizedHeader(session, WINGS_REQUEST, "text/javascript");
-        wingsAjax = createExternalizedHeader(session, WINGS_AJAX, "text/javascript");
-        wingsComponent = createExternalizedHeader(session, WINGS_COMPONENT, "text/javascript");
-        yahooGlobal = createExternalizedHeader(session, YAHOO_GLOBAL, "text/javascript");
-        yahooDom = createExternalizedHeader(session, YAHOO_DOM, "text/javascript");
-        yahooEvent = createExternalizedHeader(session, YAHOO_EVENT, "text/javascript");
-        yahooContainer = createExternalizedHeader(session, YAHOO_CONTAINER, "text/javascript");
-        yahooConnection = createExternalizedHeader(session, YAHOO_CONNECTION, "text/javascript");
+        headerUtil.addHeader(createExternalizedHeader(session, WINGS_GLOBALS, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, WINGS_EVENT, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, WINGS_UTIL, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, WINGS_LAYOUT, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, WINGS_REQUEST, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, WINGS_AJAX, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, WINGS_COMPONENT, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_GLOBAL, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_DOM, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_EVENT, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_CONTAINER, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_CONNECTION, "text/javascript"));
 
-        dwrEngine = new Script("text/javascript", new DefaultURLResource("../dwr/engine.js"));
-        dwrUtil = new Script("text/javascript", new DefaultURLResource("../dwr/util.js"));
+        headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
+        headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
 
         formbutton = new ClassPathResource("org/wings/plaf/css/formbutton.htc", "text/x-component");
         formbutton.getId(); // externalize
@@ -319,11 +167,11 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
             if (cssUrl != null) {
                 log.info("Attaching CSS Stylesheet " + cssClassPath + " found for browser " + browserName +
-                		" to frame. (See Stylesheet.xxx entries in default.properties)");
+                        " to frame. (See Stylesheet.xxx entries in default.properties)");
                 cssUrls.add(cssUrl);
             } else {
                 log.warn("Did not attach CSS Stylesheet " + cssClassPath + " for browser " + browserName +
-                		" to frame. (See Stylesheet.xxx entries in default.properties)");
+                        " to frame. (See Stylesheet.xxx entries in default.properties)");
             }
         }
 
@@ -351,7 +199,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         final JavaScriptDOMListener restoreScrollPosition = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
                 "wingS.util.restoreScrollPosition", comp);
-        final JavaScriptDOMListener initializeAjax = new JavaScriptDOMListener(
+        final JavaScriptDOMListener initializeAjaxFrame = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
                 "wingS.ajax.initializeFrame", comp);
 
@@ -359,33 +207,17 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
         component.addScriptListener(storeScrollPosition);
         component.addScriptListener(restoreScrollPosition);
-        component.addScriptListener(initializeAjax);
+        component.addScriptListener(initializeAjaxFrame);
 
         CaptureDefaultBindingsScriptListener.install(component);
 
-        // Add necessary headers to the frame
-        if (!HEADERS.contains(wingsGlobal)) {
-        	HEADERS.add(wingsGlobal);
-            HEADERS.add(wingsEvent);
-            HEADERS.add(wingsUtil);
-            HEADERS.add(wingsLayout);
-            HEADERS.add(wingsRequest);
-            HEADERS.add(wingsAjax);
-            HEADERS.add(wingsComponent);
-        	HEADERS.add(yahooGlobal);
-            HEADERS.add(yahooDom);
-            HEADERS.add(yahooEvent);
-            HEADERS.add(yahooContainer);
-            HEADERS.add(yahooConnection);
-            HEADERS.add(dwrEngine);
-            HEADERS.add(dwrUtil);
-        }
+        headerUtil.installHeaders();
 
         // Retrieve list of static CSS files to be attached to this frame for this browser.
         final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component.getSession());
         for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
             component.addHeader(new Link("stylesheet", null, "text/css", null,
-            		new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
+                    new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
         }
     }
 
@@ -513,8 +345,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         // Register and render DWR callables
         Collection callableNames = CallableManager.getInstance().callableNames();
 
-        Collection allHeaders = new ArrayList(headers.size() + callableNames.size() + HEADERS.size());
-        allHeaders.addAll(HEADERS);
+        Collection allHeaders = new ArrayList(headers.size() + callableNames.size() + Headers.INSTANCE.size());
+        allHeaders.addAll(Headers.INSTANCE);
         allHeaders.addAll(headers);
         for (Iterator iterator = callableNames.iterator(); iterator.hasNext();) {
             String name = (String) iterator.next();
@@ -589,7 +421,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
             // Write final JS for DnD if neccessary
             if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) {
-            	// initialize only if dragSources are present
+                // initialize only if dragSources are present
                 device.print("<script type=\"text/javascript\">\n<!--\n");
                 device.print("SET_DHTML();\n");
                 while (dragIter.hasNext()) {

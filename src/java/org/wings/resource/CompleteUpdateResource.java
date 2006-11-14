@@ -32,7 +32,7 @@ import org.wings.plaf.css.RenderHelper;
  * Traverses the component hierarchy of a frame and lets the CGs compose
  * the document.
  *
- * @author <a href="mailto:hengels@mercatis.de">Holger Engels</a>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class CompleteUpdateResource extends DynamicResource {

@@ -26,7 +26,7 @@ import java.io.Reader;
 /**
  * A TemplateTagHandler
  *
- * @author <A href="mailto:hengels@mercatis.de">Holger Engels</A>
+ * @author Holger Engels
  * @version $Revision$
  */
 public class LabelTagHandler
