@@ -88,6 +88,7 @@ public class CSSLookAndFeel
                 
             try {
                 properties.putAll(PropertyUtils.loadProperties(browserXcomponentsPropertiesFilename.toString()));                
+                log.debug(browserXcomponentsPropertiesFilename.toString()+" attached");
             } catch (IOException e) {
                 log.info("Unable to open xcomponents specific properties file '"+ browserXcomponentsPropertiesFilename.toString()+"'. This is OK if you are not using wingX.");                
             }
