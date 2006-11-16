@@ -25,11 +25,11 @@ public class DesktopPaneExample extends WingSetPane {
             SInternalFrame iFrame = new SInternalFrame();
             iFrame.getContentPane().setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
             iFrame.setTitle("A Long Title of Frame " + (i+1));
+            iFrame.setIcon(windowIcon);
             desktopPane.add(iFrame);
             fillFrame(iFrame);
             // set some special contents & icons
             if ((i % 2) == 0) {
-                iFrame.setIcon(windowIcon);
                 SStringBuilder labelText = new SStringBuilder("some extra label...");
                 for (int j = 0; j <= i; j++) {
                     labelText.append("extra-");
@@ -48,7 +48,9 @@ public class DesktopPaneExample extends WingSetPane {
     }
 
     private void fillFrame(SInternalFrame frame) {
-        frame.getContentPane().add(new STextField());
+        STextField c = new STextField();
+        c.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        frame.getContentPane().add(c);
         frame.getContentPane().add(new SLabel("This is a label"));
     }
 

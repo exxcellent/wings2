@@ -50,16 +50,7 @@ public final class DesktopPaneCG extends AbstractComponentCG implements org.wing
         if (!maximized) {
             for (int i = 0; i < componentCount; i++) {
                 SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
-                if (!frame.isClosed() && !frame.isIconified()) {
-                    frame.write(device);
-                }
-            }
-        }
-        device.print("<div class=\"spacer\">&nbsp;</div>");
-        if (!maximized) {
-            for (int i = 0; i < componentCount; i++) {
-                SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
-                if (!frame.isClosed() && frame.isIconified()) {
+                if (!frame.isClosed()) {
                     frame.write(device);
                 }
             }

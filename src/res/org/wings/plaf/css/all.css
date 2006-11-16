@@ -663,10 +663,6 @@ table.SScrollBar table.buttons td:hover {
 	float: right;
 }
 
-.SInternalFrame div.WindowBar a.DeiconifyButton {
-	display: inline;
-}
-
 .SInternalFrame div.WindowContent {
 	padding: .2em;
 }

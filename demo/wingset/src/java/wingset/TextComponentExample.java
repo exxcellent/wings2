@@ -12,20 +12,7 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SButton;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SForm;
-import org.wings.SFormattedTextField;
-import org.wings.SGridLayout;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SPasswordField;
-import org.wings.STextArea;
-import org.wings.STextComponent;
-import org.wings.STextField;
+import org.wings.*;
 import org.wings.border.SLineBorder;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
@@ -64,6 +51,7 @@ public class TextComponentExample extends WingSetPane {
         textField.setName("textfield");
         textField.setToolTipText("Here you can enter any abritriary text.");
         textField.addDocumentListener(new MyDocumentListener(textField));
+        textField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         p.add(textField);
 
         p.add(new SLabel("SFormattedTextField (NumberFormat): "));
@@ -73,6 +61,7 @@ public class TextComponentExample extends WingSetPane {
                 "If you entered an invalid number the text should become red.\n" +
                 "This uses code executed on server side in Java!");
         numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
+        numberTextField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         p.add(numberTextField);
 
         p.add(new SLabel("SFormattedTextField (DateFormat): "));
@@ -81,6 +70,7 @@ public class TextComponentExample extends WingSetPane {
         dateTextField.setToolTipText("Enter a valid/invalid date here.\n" +
                 "Dates will be parsed on server side and reformatted accordingly.");
         dateTextField.addDocumentListener(new MyDocumentListener(dateTextField));
+        dateTextField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         p.add(dateTextField);
 
         p.add(new SLabel("SPasswordField: "));
@@ -88,6 +78,7 @@ public class TextComponentExample extends WingSetPane {
         passwordField.setName("passwordfield");
         passwordField.setToolTipText("Just a regular passsword input.");
         passwordField.addDocumentListener(new MyDocumentListener(passwordField));
+        passwordField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         p.add(passwordField);
 
         p.add(new SLabel("STextArea: "));
@@ -96,6 +87,7 @@ public class TextComponentExample extends WingSetPane {
         textArea.setPreferredSize(new SDimension(250, 50));
         textArea.setToolTipText("Okay - but don't start writing books now ;-)");
         textArea.addDocumentListener(new MyDocumentListener(textArea));
+        textArea.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         p.add(textArea);
 
         p.add(new SLabel("SDocumentEvents: "));
@@ -105,12 +97,14 @@ public class TextComponentExample extends WingSetPane {
         p.add(actionEventsLabel);
         p.add(actionEvent);
 
+        p.add(new SLabel());
         SButton button = new SButton("Submit");
         button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 actionEvent.setText("Button clicked + ");
             }
         });
+        button.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         p.add(button);
 
         SForm frame = new SForm(new SBorderLayout());
@@ -131,9 +125,11 @@ public class TextComponentExample extends WingSetPane {
         eventLog.setEditable(false); // for multiline label
         eventLog.setBorder(new SLineBorder(1));
         eventLog.setBackground(Color.LIGHT_GRAY);
+        eventLog.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
         actionEvent.setBorder(new SLineBorder(1));
         actionEvent.setBackground(Color.LIGHT_GRAY);
+        actionEvent.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
         controls.addControllable(textField);
         controls.addControllable(textArea);
