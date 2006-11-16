@@ -297,13 +297,18 @@ public class ComponentControls  extends SPanel {
         ajaxHighlightColorTextField.setColumns(4);
         boolean cursorEnabled = ((Boolean) frame.getIncrementalUpdateCursor()[0]).booleanValue();
         ajaxCursorEnabledCheckBox.setSelected(cursorEnabled);
+        ajaxCursorEnabledCheckBox.setName("xy");
         ajaxDebuggingViewAnchor.addScriptListener(new JavaScriptListener(
                 JavaScriptEvent.ON_CLICK, "toggleAjaxDebugView()",
-                "function toggleAjaxDebugView() {\n" +
+                // "document.getElementById('xy').abc = function() {\n" +
+                "self.toggleAjaxDebugView = function() {" +
+                // "function toggleAjaxDebugView() {" +
                 "  if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);\n" +
                 "  else wingS.ajax.setDebugViewVisible(true);\n" +
                 "  return false;\n" +
-                "}\n"
+                "};"
+                //+ "alert('sxsx');"
+                //+ "}\n"
         ));
         ajaxForceCompleteUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
