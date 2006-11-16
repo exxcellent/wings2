@@ -1200,7 +1200,7 @@ public final class Utils {
                         return oversize;
                     }
                     else {
-                        return ((Integer)component.getClientProperty("horizontalOversize")).intValue() * 2;
+                        return ((Integer)component.getClientProperty("horizontalOversize")).intValue();
                     }
                 }
             }

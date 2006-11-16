@@ -101,11 +101,3 @@ TABLE.formbutton_hover {
 /*.selection {
    background-color: #AAAAFF;
 }*/
-
-.XCalendar td {
-    padding: 0px;
-}
-
-.XCalendar td input {
-    margin: 0px;
-}

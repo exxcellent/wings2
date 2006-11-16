@@ -13,6 +13,8 @@
 package org.wings.plaf.css;
 
 import org.wings.*;
+import org.wings.border.SBorder;
+import org.wings.plaf.css.msie.MSIEVoodoo;
 import org.wings.io.Device;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,45 +47,75 @@ public abstract class IconTextCompound {
         tableAttributes(device);
         device.print(">");
 
+        // []
+        //   []
         if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.LEFT ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.RIGHT) {
             final Insets insets = new Insets(0, 0, iconTextGap, iconTextGap);
             device.print("<tr><td align=\"left\" valign=\"top\"");
+            doBorderPaddingsWorkaround(component, insets, true, true, false, false);
             Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
             device.print(">");
             first(device, renderTextFirst);
             device.print("</td><td></td></tr>");
-            device.print("<tr><td></td><td align=\"right\" valign=\"bottom\">");
+            device.print("<tr><td></td><td align=\"right\" valign=\"bottom\"");
+            insets.left = 0; insets.top = 0; insets.right = 0 ; insets.bottom = 0;
+            doBorderPaddingsWorkaround(component, insets, false, false, true, true);
+            Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
+            device.print(">");
             last(device, renderTextFirst);
             device.print("</td></tr>");
-        } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.RIGHT ||
+        }
+        //   []
+        // []
+        else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.RIGHT ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.LEFT) {
             final Insets insets = new Insets(0, iconTextGap, iconTextGap, 0);
             device.print("<tr><td></td><td align=\"right\" valign=\"top\"");
+            doBorderPaddingsWorkaround(component, insets, true, false, true, false);
             Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
             device.print(">");
             first(device, renderTextFirst);
-            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\">");
+            device.print("</td></tr><tr><td align=\"left\" valign=\"bottom\"");
+            insets.left = 0; insets.top = 0; insets.right = 0 ; insets.bottom = 0;
+            doBorderPaddingsWorkaround(component, insets, false, true, false, true);
+            Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
+            device.print(">");
             last(device, renderTextFirst);
             device.print("</td><td></td></tr>");
-        } else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.CENTER ||
+        }
+        // []
+        // []
+        else if (verticalTextPosition == SConstants.TOP && horizontalTextPosition == SConstants.CENTER ||
                 verticalTextPosition == SConstants.BOTTOM && horizontalTextPosition == SConstants.CENTER) {
             final Insets insets = new Insets(0, 0, iconTextGap, 0);
             device.print("<tr><td align=\"center\" valign=\"top\"");
+            doBorderPaddingsWorkaround(component, insets, true, true, true, false);
             Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
             device.print(">");
             first(device, renderTextFirst);
-            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\">");
+            device.print("</td></tr><tr><td align=\"center\" valign=\"bottom\"");
+            insets.left = 0; insets.top = 0; insets.right = 0 ; insets.bottom = 0;
+            doBorderPaddingsWorkaround(component, insets, false, true, true, true);
+            Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
+            device.print(">");
             last(device, renderTextFirst);
             device.print("</td></tr>");
-        } else if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT ||
+        }
+        // [][]
+        else if (verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.LEFT ||
                 verticalTextPosition == SConstants.CENTER && horizontalTextPosition == SConstants.RIGHT) {
             final Insets insets = new Insets(0, 0, 0, iconTextGap);
             device.print("<tr><td align=\"left\"");
+            doBorderPaddingsWorkaround(component, insets, true, true, false, true);
             Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
             device.print(">");
             first(device, renderTextFirst);
-            device.print("</td><td align=\"right\">");
+            device.print("</td><td align=\"right\"");
+            insets.left = 0; insets.top = 0; insets.right = 0 ; insets.bottom = 0;
+            doBorderPaddingsWorkaround(component, insets, true, false, true, true);
+            Utils.optAttribute(device, "style", Utils.createInlineStylesForInsets(insets));
+            device.print(">");
             last(device, renderTextFirst);
             device.print("</td></tr>");
         } else {
@@ -91,6 +123,12 @@ public abstract class IconTextCompound {
             log.warn("vertical = " + verticalTextPosition);
         }
         device.print("</table>");
+    }
+
+    private void doBorderPaddingsWorkaround(SComponent component, final Insets targetInsets,
+                                            boolean firstRow, boolean firstCol, boolean lastCol, boolean lastRow) {
+        if (component.getBorder() != null && Utils.isMSIE(component))
+            MSIEVoodoo.doBorderPaddingsWorkaround(component.getBorder(), targetInsets, firstRow, firstCol, lastCol, lastRow);
     }
 
     protected int getIconTextGap(SComponent component) {

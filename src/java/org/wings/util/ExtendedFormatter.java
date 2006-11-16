@@ -24,7 +24,7 @@ public class ExtendedFormatter
     private DateFormat dateFormatter;
 
     public ExtendedFormatter() {
-        dateFormatter = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
+        dateFormatter = new SimpleDateFormat("yyyyMMdd hh:mm:ss,S");
     }
 
     public String format(LogRecord record) {
