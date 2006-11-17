@@ -838,10 +838,12 @@ public class STable extends SComponent
      * @param col    the column of the cell to edit, where 0 is the first
      */
     protected SComponent prepareEditor(STableCellEditor editor, int row, int col) {
-        return editor.getTableCellEditorComponent(this,
-                getValueAt(row, col),
-                isRowSelected(row), // true?
-                row, col);
+        SComponent component = editor.getTableCellEditorComponent(this,
+                                                                  getValueAt(row, col),
+                                                                  isRowSelected(row), // true?
+                                                                  row, col);
+        //nameCellComponent(component, row, col);
+        return component;
     }
 
     /**

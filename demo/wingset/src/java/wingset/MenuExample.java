@@ -197,6 +197,7 @@ public class MenuExample extends WingSetPane {
 
     class MenuControls extends ComponentControls {
         public MenuControls() {
+            widthTextField.setText("100%");
             removeGlobalControl(fontComboBox);
             removeGlobalControl(foregroundComboBox);
             removeGlobalControl(backgroundComboBox);

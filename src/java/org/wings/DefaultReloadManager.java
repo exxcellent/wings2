@@ -14,6 +14,7 @@ package org.wings;
 
 import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.DynamicResource;
+import org.wings.plaf.ComponentCG;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -84,7 +85,9 @@ public final class DefaultReloadManager
     public void notifyCGs() {
         for (Iterator iterator = dirtyComponents.iterator(); iterator.hasNext();) {
             SComponent component = (SComponent) iterator.next();
-            component.getCG().componentChanged(component);
+            ComponentCG componentCG = component.getCG();
+            if (componentCG != null)
+                componentCG.componentChanged(component);
         }
     }
 }

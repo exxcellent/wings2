@@ -44,27 +44,14 @@ public final class AnchorCG extends AbstractComponentCG implements org.wings.pla
         */
 
         final String target = component.getTarget() != null ? "'" + component.getTarget() + "'" : "null";
-        device.print("<a href=\"#\" onclick=\"wu_openlink(" + target + ",'"+component.getURL()+"');return false;\"");
+        device.print("<table onclick=\"wu_openlink(" + target + ",'"+component.getURL()+"');return false;\"");
         writeAllAttributes(device, component);
-
-        // spezielle anchor attributes
         if (component.isFocusOwner())
             Utils.optAttribute(device, "foc", component.getName());
         //Utils.optAttribute(device, "target", component.getTarget());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-        Utils.optAttribute(device, "name", component.getName());
-        
         device.print(">");
-        device.print("<table>"); // renderContainer expects table
         Utils.renderContainer(device, component);
         device.print("</table>");
-        //Utils.printButtonEnd(device, component, null, true);
-        /*if (useTable) {
-            writeTableSuffix(device, component);
-        }*/
-
-        device.print("</a>");
     }
-
-
 }
