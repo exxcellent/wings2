@@ -44,7 +44,7 @@ import java.awt.event.ActionEvent;
  * @author bschmid
  */
 public class BackButtonExample extends WingSetPane {
-    private final SForm mainPanel = new SForm();
+    private final SPanel mainPanel = new SPanel();
     private final SLabel epochLabel = new SLabel();
     private final SButton newEpochButton = new SButton("After changing mode, click here SEVERAL times generate browser history entries");
 
@@ -56,6 +56,11 @@ public class BackButtonExample extends WingSetPane {
 
     private final SButton nonEpochedButton = new SButton("Non epoch-checked button");
     private final SLabel nonEpochedButtonSignal = new SLabel("Non epoch-checked button accepted");
+
+
+    protected SComponent createControls() {
+        return null;
+    }
 
     protected SComponent createExample() {
         mainPanel.setLayout(new SFlowDownLayout());
@@ -148,13 +153,13 @@ public class BackButtonExample extends WingSetPane {
                 nonEpochedButton.setVisible(false);
 
                 if (buttonGroup.getSelection() == postMode) {
-                    mainPanel.setPostMethod(true);
+                    setPostMethod(true);
                     mainPanel.getParentFrame().setNoCaching(true);
                 } else if (buttonGroup.getSelection() == getMode) {
-                    mainPanel.setPostMethod(false);
+                    setPostMethod(false);
                     mainPanel.getParentFrame().setNoCaching(true);
                 } else if (buttonGroup.getSelection() == getMode2) {
-                    mainPanel.setPostMethod(false);
+                    setPostMethod(false);
                     mainPanel.getParentFrame().setNoCaching(false);
                     // Allow events on this button from old views
                     nonEpochedButton.setEpochCheckEnabled(false);
@@ -163,7 +168,7 @@ public class BackButtonExample extends WingSetPane {
                     postMode.setEpochCheckEnabled(false);
                     getMode.setEpochCheckEnabled(false);
                     getMode2.setEpochCheckEnabled(false);
-                    mainPanel.setEpochCheckEnabled(false);
+                    setEpochCheckEnabled(false);
                     regularButton.setVisible(true);
                     nonEpochedButton.setVisible(true);
                 }

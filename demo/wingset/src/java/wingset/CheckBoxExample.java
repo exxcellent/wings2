@@ -55,14 +55,13 @@ public class CheckBoxExample
         }
     };
 
-    public SComponent createExample() {
+    protected SComponent createControls() {
         controls = new ButtonControls();
-        SContainer p = createCheckBoxExample();
+        return controls;
+    }
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(p, SBorderLayout.CENTER);
-        return form;
+    public SComponent createExample() {
+        return createCheckBoxExample();
     }
 
     SContainer createCheckBoxExample() {

@@ -12,16 +12,7 @@
  */
 package wingset;
 
-import org.wings.SButton;
-import org.wings.SButtonGroup;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SForm;
-import org.wings.SLabel;
-import org.wings.SRadioButton;
-import org.wings.STemplateLayout;
-import org.wings.STextField;
-import org.wings.STree;
+import org.wings.*;
 import org.wings.template.propertymanagers.DefaultPropertyManager;
 
 import javax.swing.tree.DefaultTreeModel;
@@ -33,8 +24,13 @@ public class TemplateExample
         extends WingSetPane
         implements SConstants {
 
+
+    protected SComponent createControls() {
+        return null;
+    }
+
     protected SComponent createExample() {
-        SForm c = new SForm();
+        SPanel c = new SPanel();
 
         try {
             java.net.URL templateURL =
@@ -66,6 +62,7 @@ public class TemplateExample
 
         STree tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
         c.add(tree, "TREE");
+        c.setVerticalAlignment(SConstants.TOP_ALIGN);
         return c;
     }
 }

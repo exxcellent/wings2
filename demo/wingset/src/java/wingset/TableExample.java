@@ -13,6 +13,8 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.border.SBorder;
+import org.wings.border.SLineBorder;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
 import org.wings.event.SMouseEvent;
@@ -58,8 +60,13 @@ public class TableExample
     private TableControls controls;
     private boolean consume = false;
 
-    public SComponent createExample() {
+
+    protected SComponent createControls() {
         controls = new TableControls();
+        return controls;
+    }
+
+    public SComponent createExample() {
 
         table = new STable(new MyTableModel(7, 5));
         table.setName("tableExample");
@@ -68,6 +75,7 @@ public class TableExample
         table.setDefaultRenderer(cellRenderer);
         table.setShowAsFormComponent(false);
         table.setEditable(false);
+        table.setBorder(new SLineBorder(Color.LIGHT_GRAY, 1));
         controls.addControllable(table);
 
         table.getColumnModel().getColumn(0).setWidth("200px");
@@ -86,10 +94,10 @@ public class TableExample
             }
         });
 
-        SForm panel = new SForm(new SBorderLayout());
-        panel.add(controls, SBorderLayout.NORTH);
+        SPanel panel = new SPanel(new SBorderLayout());
         panel.add(table, SBorderLayout.CENTER);
         panel.add(clicks, SBorderLayout.SOUTH);
+        panel.setVerticalAlignment(SConstants.TOP_ALIGN);
         return panel;
     }
 

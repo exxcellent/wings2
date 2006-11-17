@@ -27,3 +27,11 @@ select.SList {
 .STabbedPane_Tab_selected {
     background-color: #f6decc;
 }
+
+.ComponentControls {
+    border-collapse: collapse;
+}
+
+.ComponentControls td {
+    border-color: #dddddd;
+}

@@ -796,9 +796,13 @@ public final class Utils {
             return d;
         }
         d.print("\n");
-        while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
-            d.print("\t");
-            currentComponent = currentComponent.getParent();
+
+        if (PRINT_PRETTY) {
+            SContainer current = currentComponent.getParent();
+            while (current != null) {
+                d.print("\t");
+                current = current.getParent();
+            }
         }
         return d;
     }
@@ -807,17 +811,19 @@ public final class Utils {
      * Prints a hierarchical idented newline. For each surrounding container of the passed component one ident level.
      */
     public static Device printNewline(final Device d, SComponent currentComponent, int offset) throws IOException {
-        if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
-        {
+        if (currentComponent == null) // special we save every ms handling for holger ;-)
             return d;
-        }
+
         d.print("\n");
+
         if (PRINT_PRETTY) {
-            while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
+            SContainer current = currentComponent.getParent();
+            while (current != null) {
                 d.print("\t");
-                currentComponent = currentComponent.getParent();
+                current = current.getParent();
             }
         }
+
         while (offset > 0) {
             d.print("\t");
             offset--;

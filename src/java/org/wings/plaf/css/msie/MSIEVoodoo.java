@@ -70,7 +70,7 @@ public final class MSIEVoodoo {
      * @param component source component
      */
     public static void doSimpleTablePaddingWorkaround(final Device d, final SComponent component) throws IOException {
-        if (component == null || !Utils.isMSIE(component))
+        if (component == null)
             return;
         if (component.getBorder() != null && Utils.hasInsets(component.getBorder().getInsets())) {
             final SStringBuilder stringBuilder = new SStringBuilder();

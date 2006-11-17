@@ -12,17 +12,8 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SButtonGroup;
-import org.wings.SCheckBox;
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SForm;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SRadioButton;
-import org.wings.SResourceIcon;
-import org.wings.STree;
+import org.wings.*;
+import org.wings.border.SLineBorder;
 import org.wings.event.SMouseEvent;
 import org.wings.event.SMouseListener;
 import org.wings.util.PropertyAccessor;
@@ -32,6 +23,7 @@ import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.*;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -49,11 +41,17 @@ public class TreeExample
     private SLabel clicks = new SLabel();
     private boolean consume;
 
+
+    protected SComponent createControls() {
+        controls = new TreeControls();
+        return controls;
+    }
+
     public SComponent createExample() {
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
-        controls = new TreeControls();
         tree.setName("tree");
         tree.setShowAsFormComponent(false);
+        tree.setBorder(new SLineBorder(Color.GRAY, 1));
 
         tree.addMouseListener(new SMouseListener() {
             public void mouseClicked(SMouseEvent e) {
@@ -64,11 +62,15 @@ public class TreeExample
                 clicks.setText("clicked " + e.getPoint().getCoordinates());
             }
         });
+        tree.getSelectionModel().setSelectionMode(STree.SINGLE_TREE_SELECTION);
+        tree.setNodeIndentDepth(12);
+        tree.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+
+        clicks.setHorizontalAlignment(SConstants.CENTER_ALIGN);
 
         controls.addControllable(tree);
 
-        SForm panel = new SForm(new SBorderLayout());
-        panel.add(controls, SBorderLayout.NORTH);
+        SPanel panel = new SPanel(new SBorderLayout());
         panel.add(tree, SBorderLayout.CENTER);
         panel.add(clicks, SBorderLayout.SOUTH);
         return panel;
@@ -90,7 +92,6 @@ public class TreeExample
 
             final SComboBox selectionMode = new SComboBox(SELECTION_MODES);
             //sync selectionMode with tree
-            tree.getSelectionModel().setSelectionMode(STree.SINGLE_TREE_SELECTION);
             selectionMode.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     if (SELECTION_MODES[0].equals(selectionMode.getSelectedItem())) {
@@ -108,7 +109,6 @@ public class TreeExample
             final SComboBox indentationWidth = new SComboBox(WIDTHS);
             // sync indentation width of tree with controller
             indentationWidth.setSelectedIndex(3); // set to 24px indent
-            tree.setNodeIndentDepth(WIDTHS[3].intValue());
             // now add the listener
             indentationWidth.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {

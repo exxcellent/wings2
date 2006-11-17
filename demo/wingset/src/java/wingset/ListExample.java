@@ -40,20 +40,20 @@ public class ListExample
     private final ListModel listModel = createListModel();
     private ComponentControls controls;
 
-    public SComponent createExample() {
+
+    protected SComponent createControls() {
         controls = new ListControls();
+        return controls;
+    }
 
-        SPanel p = new SPanel(new SGridLayout(2, 2));
-        p.add(createListSingleSelExample());
-        p.add(createListMultSelExample());
-        p.add(createComboBoxExample());
-        p.add(createAnchorListExample());
+    public SComponent createExample() {
+        SPanel panel = new SPanel(new SGridLayout(2, 2));
+        panel.add(createListSingleSelExample());
+        panel.add(createListMultSelExample());
+        panel.add(createComboBoxExample());
+        panel.add(createAnchorListExample());
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(p, SBorderLayout.CENTER);
-        form.add(new SButton("SUBMIT"), SBorderLayout.SOUTH);
-        return form;
+        return panel;
     }
 
     public SContainer createListSingleSelExample() {

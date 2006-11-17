@@ -19,13 +19,6 @@ HTML {
 a {
     cursor: pointer;
 }
-/** 
- * Class for all invisible HTML tables used for layouting purposes. 
- * without border-collapse, ie keeps borders, even if we set no border
- */
-table, td, th {
-    border-collapse: collapse;
-}
 
 /* please comment on these...are they needed? */
 td, th {
@@ -56,6 +49,10 @@ ul.SMenu li a
 /* tooltips opacity */
 div.domTT {
     filter:alpha(opacity=80);
+}
+
+TABLE {
+    border-collapse: collapse;
 }
 
 table.STable {

@@ -57,14 +57,13 @@ public class RadioButtonExample
     };
 
 
-    public SComponent createExample() {
+    protected SComponent createControls() {
         controls = new ButtonControls();
-        SContainer p = createRadioButtonExample();
+        return controls;
+    }
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(p, SBorderLayout.CENTER);
-        return form;
+    public SComponent createExample() {
+        return createRadioButtonExample();
     }
 
     SContainer createRadioButtonExample() {

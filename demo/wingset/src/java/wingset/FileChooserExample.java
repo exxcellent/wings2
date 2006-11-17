@@ -12,19 +12,7 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SButton;
-import org.wings.SCardLayout;
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SFileChooser;
-import org.wings.SFileIcon;
-import org.wings.SFlowDownLayout;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.STextArea;
+import org.wings.*;
 import org.wings.border.SEmptyBorder;
 import org.wings.util.SStringBuilder;
 
@@ -82,17 +70,20 @@ public class FileChooserExample
     File previousFile;
     private FileChooserControls controls;
 
-    public SComponent createExample() {
+
+    protected SComponent createControls() {
         controls = new FileChooserControls();
+        return controls;
+    }
 
-        SForm p = new SForm(new SBorderLayout());
-
-        p.add(controls, SBorderLayout.NORTH);
-        p.add(createUpload(), SBorderLayout.WEST);
-        p.add(createPreview(), SBorderLayout.CENTER);
+    public SComponent createExample() {
+        SPanel panel = new SPanel(new SBorderLayout());
+        panel.add(createUpload(), SBorderLayout.WEST);
+        panel.add(createPreview(), SBorderLayout.CENTER);
+        panel.setVerticalAlignment(SConstants.TOP_ALIGN);
 
         controls.addControllable(chooser);
-        return p;
+        return panel;
     }
 
     protected String getText(File f) {

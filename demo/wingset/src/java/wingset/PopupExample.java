@@ -40,6 +40,11 @@ public class PopupExample extends WingSetPane {
         }
     };
 
+
+    protected SComponent createControls() {
+        return null;
+    }
+
     public SComponent createExample() {
 
         SPopupMenu menu = new SPopupMenu();

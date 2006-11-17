@@ -59,11 +59,16 @@ public class JavaScriptListenerExample
     private final static DecimalFormatSymbols DSYM
             = new DecimalFormatSymbols(Locale.US); // '.' as fraction separator
 
+
+    protected SComponent createControls() {
+        return null;
+    }
+
     public SComponent createExample() {
         SPanel p = new SPanel(new SBoxLayout(SConstants.VERTICAL));
         p.setPreferredSize(SDimension.FULLWIDTH);
-        p.add(new SLabel("The client side can handle simple events by JavaScript listeners. " +
-                "In this example, numbers are added locally inside the browser."));
+        p.add(new SLabel("The client side can handle simple events by JavaScript listeners.\n" +
+                "In this example, numbers are added locally inside the browser.\n", SConstants.CENTER_ALIGN));
 
         final STextField firstField = createNumberField();
         final STextField secondField = createNumberField();
@@ -77,15 +82,15 @@ public class JavaScriptListenerExample
         gridLayout.setHgap(4);
         gridLayout.setVgap(4);
 
-        SForm form = new SForm(gridLayout);
-        form.add(new SLabel("Value #1"));
-        form.add(firstField);
-        form.add(new SLabel("Value #2"));
-        form.add(secondField);
-        form.add(new SLabel("Sum"));
-        form.add(sumField);
-        form.add(new SLabel("Server calculation"));
-        form.add(serverCalcButton);
+        SPanel panel = new SPanel(gridLayout);
+        panel.add(new SLabel("Value #1"));
+        panel.add(firstField);
+        panel.add(new SLabel("Value #2"));
+        panel.add(secondField);
+        panel.add(new SLabel("Sum"));
+        panel.add(sumField);
+        panel.add(new SLabel("Server calculation"));
+        panel.add(serverCalcButton);
 
         /*
          * The server side listener
@@ -121,7 +126,7 @@ public class JavaScriptListenerExample
         // fine grained updates...
         SessionManager.getSession().getRootFrame().reload(ReloadManager.STATE);
 
-        p.add(form);
+        p.add(panel);
         return p;
     }
 

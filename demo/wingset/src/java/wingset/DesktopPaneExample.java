@@ -13,13 +13,17 @@ public class DesktopPaneExample extends WingSetPane {
 
     private SIcon windowIcon;
 
-    private static final int FRAME_COUNT = 8;
+    private static final int FRAME_COUNT = 5;
     private ComponentControls controls;
     private SDesktopPane desktopPane = new SDesktopPane();
 
-    protected SComponent createExample() {
-        controls = new DesktopPaneControls();
 
+    protected SComponent createControls() {
+        controls = new DesktopPaneControls();
+        return controls;
+    }
+
+    protected SComponent createExample() {
         windowIcon = (SIcon)getSession().getCGManager().getObject("TableCG.editIcon", SIcon.class);
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
@@ -40,11 +44,7 @@ public class DesktopPaneExample extends WingSetPane {
             }
         }
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(desktopPane, SBorderLayout.CENTER);
-
-        return form;
+        return desktopPane;
     }
 
     private void fillFrame(SInternalFrame frame) {

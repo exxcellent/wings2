@@ -57,22 +57,16 @@ div.domTT {
     -moz-opacity: 0.8;
 }
 
-/* reworked tag */
-
-
+TABLE.SPanel {
+    border-collapse: collapse;
+    margin-left: 1px;
+    margin-top: 1px;
+}
 
 /*pre.label {
     font-family: inherit;
     margin: 0px;
     padding: 0px;
-}*/
-
-/*table.SPanel {
-    border-collapse: collapse;
-}
-
-table.SGridLayout {
-    border-collapse: collapse;
 }*/
 
 /* Style of the Legend label for STitledBorder */

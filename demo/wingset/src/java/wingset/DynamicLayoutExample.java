@@ -54,29 +54,23 @@ public class DynamicLayoutExample extends WingSetPane {
                                                       "SGridLayout",
                                                       "SBoxLayout"};
     private final SComboBox selectLayoutManager = new SComboBox(demoManagerNames);
-    protected SForm panel;
+    protected SPanel panel;
 
-    protected SComponent createExample() {
-        SToolBar controls = new SToolBar();
-        SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
-        border.setThickness(1, SConstants.BOTTOM);
-        controls.setBorder(border);
 
+    protected SComponent createControls() {
         selectLayoutManager.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                panel.remove(1);
+                panel.remove(0);
                 panel.add(demoPanels[selectLayoutManager.getSelectedIndex()]);
             }
         });
-        selectLayoutManager.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_CHANGE, "submitForm(true, event);"));
+        selectLayoutManager.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        return selectLayoutManager;
+    }
 
-        controls.add(selectLayoutManager);
-        controls.add(new SButton("Ok"));
-
-        panel = new SForm(new SBorderLayout());
-        panel.add(controls, SBorderLayout.NORTH);
+    protected SComponent createExample() {
+        panel = new SPanel(new SBorderLayout());
         panel.add(demoPanels[0], SBorderLayout.CENTER);
-
         return panel;
     }
 

@@ -11,13 +11,8 @@ package wingset;
 
 import java.text.DateFormat;
 import java.text.FieldPosition;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SSpinner;
-import org.wings.SLabel;
-import org.wings.STextField;
+
+import org.wings.*;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -38,15 +33,14 @@ import org.wings.text.SDateFormatter;
 public class SpinnerExample
     extends WingSetPane
 {
-    
-    /** Creates a new instance of SpinnerExample */
-    public SpinnerExample() {
+    protected SComponent createControls() {
+        return null;
     }
-    
+
     public SComponent createExample() {
              
         SGridLayout layout = new SGridLayout( 2 );
-        SForm form = new SForm( layout );
+        SPanel form = new SPanel( layout );
         
         form.add( new SLabel( "Fruits : ",     SConstants.RIGHT_ALIGN ) ); form.add( getListSpinner() );
         form.add( new SLabel( "Month : ",      SConstants.RIGHT_ALIGN ) ); form.add( getDateSpinner() );

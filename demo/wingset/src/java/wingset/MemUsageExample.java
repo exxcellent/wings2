@@ -12,14 +12,7 @@
  */
 package wingset;
 
-import org.wings.ReloadManager;
-import org.wings.SButton;
-import org.wings.SComponent;
-import org.wings.SDimension;
-import org.wings.SForm;
-import org.wings.SLabel;
-import org.wings.SProgressBar;
-import org.wings.STemplateLayout;
+import org.wings.*;
 import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.session.WingsStatistics;
@@ -34,6 +27,11 @@ import java.text.DecimalFormat;
 public class MemUsageExample extends WingSetPane {
     private static final DecimalFormat megaByteFormatter = new DecimalFormat("#.###");
 
+
+    protected SComponent createControls() {
+        return null;
+    }
+
     public SComponent createExample() {
         final SButton gc = new SButton("gc"); // label overwritten via attribute in template
         final SButton refresh = new SButton("Refresh");
@@ -46,7 +44,7 @@ public class MemUsageExample extends WingSetPane {
         final SLabel activeSessions = new SLabel();
         final SLabel uptime = new SLabel();
         final SLabel requestCount = new SLabel();
-        final SForm panel = new SForm();
+        final SPanel panel = new SPanel();
 
         // Action listener for GC button trigger
         gc.addActionListener(new java.awt.event.ActionListener() {

@@ -15,15 +15,7 @@ package wingset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.SConstants;
-import org.wings.SFrame;
-import org.wings.SIcon;
-import org.wings.SResourceIcon;
-import org.wings.SRootLayout;
-import org.wings.STabbedPane;
-import org.wings.SURLIcon;
-import org.wings.SButton;
-import org.wings.SBorderLayout;
+import org.wings.*;
 import org.wings.session.SessionManager;
 import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
@@ -93,6 +85,7 @@ public class WingSet implements Serializable {
         // Create the tabbed pane containing all the wingset example tabs
         tab = new STabbedPane(SConstants.TOP);
         tab.setName("examples");
+        tab.setPreferredSize(new SDimension("100%", "580px"));
 
         // do some global styling of the wingSet application
         styleWingsetApp();
@@ -121,44 +114,6 @@ public class WingSet implements Serializable {
                 e.printStackTrace();
             }
         }
-        // Assemble wingSet
-        /*
-        addExample(LabelExample.class);
-        tab.add(new TextComponentExample(), "Text Component");
-        tab.addTab("Tree", JAVA_CUP_ICON, new TreeExample(), "Tree Tool Tip");
-        tab.add(new OptionPaneExample(), "OptionPane");
-        tab.add(new InternalFrameOptionPaneExample(), "SInternalFrame OptionPane");
-        tab.add(new TableExample(), "Table");
-        tab.add(new ListExample(), "List");
-        tab.add(new ButtonExample(), "Button");
-        tab.add(new ToggleButtonExample(), "ToggleButton");
-        tab.add(new CheckBoxExample(), "CheckBox");
-        tab.add(new RadioButtonExample(), "RadioButton");
-        tab.add(new Faces(), "Faces");
-        tab.add(new FileChooserExample(), "FileChooser");
-        tab.add(new ScrollPaneExample(), "ScrollPane");
-        tab.add(new PageScrollerExample(), "PageScroller");
-        tab.add(new MenuExample(), "Menu");
-        tab.add(new TabbedPaneExample(), "Tabbed Pane");
-        tab.addTab("Template Layout", SMALL_COW_ICON, new TemplateExample(), "Template Layout Manager");
-        tab.add(new InteractiveTemplateExample(), "Interactive Template");
-        tab.add(new ProgressBarExample(), "ProgressBar");
-        tab.add(new MemUsageExample(), "Memory Usage");
-        tab.add(new JavaScriptListenerExample(), "Script Listener");
-        tab.add(new PopupExample(), "Popup Menu");
-        tab.add(new KeyboardBindingsExample(), "Keyboard Bindings");
-        tab.add(new DynamicLayoutExample(), "Dynamic Layouts");
-        tab.add(new BackButtonExample(), "Browser Back");
-        tab.add(new DesktopPaneExample(), "DesktopPane");
-        tab.add(new DragAndDropExample(), "Drag and Drop");
-        tab.add(new SpinnerExample(), "Spinner" );
-        tab.add(new RawTextComponentExample(), "Raw Text Component");
-        tab.add(new ErrorPageExample(), "Error Page");
-        tab.add(new TableNestingExample(), "Limited table nesting (DEVEL)");
-        tab.add(new ListBugTest(), "BUG TODO: In IE List does not appear");
-        tab.add(new XDivisionExample(), "XDivision");
-        tab.add(new YUIxGridExample(), "YUIxGrid" );
-        */
 
         // Add component to content pane using a layout constraint (
         frame.getContentPane().add(tab);
@@ -175,6 +130,7 @@ public class WingSet implements Serializable {
         });
         switchStyleButton.setBorder(new SEmptyBorder(5, 0, 5, 0));
         frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
+        frame.getContentPane().setPreferredSize(SDimension.FULLAREA);
 
         frame.show();
     }

@@ -62,9 +62,9 @@ public class ComponentControls  extends SPanel {
     };
 
     protected static final Object[] FONTS = new Object[] {
-        new Object[] { "default font",   null },
-        new Object[] { "16pt sans-serif bold & italic", new SFont("Arial,sans-serif",SFont.BOLD+SFont.ITALIC, 16)},
-        new Object[] { "default serif plain",    new SFont("Times, Times New Roman,serif",SFont.DEFAULT_SIZE, SFont.PLAIN) },
+        new Object[] { "default font",           null },
+        new Object[] { "16pt sans bold",         new SFont("Arial,sans-serif",SFont.BOLD, 16)},
+        new Object[] { "default serif plain",    new SFont("Times,Times New Roman,serif",SFont.DEFAULT_SIZE, SFont.PLAIN) },
         new Object[] { "24pt fantasy italic",    new SFont("Comic,Comic Sans MS,fantasy",SFont.ITALIC, 24) }
     };
 
@@ -86,10 +86,12 @@ public class ComponentControls  extends SPanel {
     protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
     protected final SComboBox foregroundComboBox = new SComboBox(COLORS);
     protected final SComboBox fontComboBox = new SComboBox(FONTS);
-    protected final SCheckBox formComponentCheckBox = new SCheckBox("Form components");
+    protected final SCheckBox formComponentCheckBox = new SCheckBox("form");
+    private SLabel placeHolder = new SLabel("<html>&nbsp;");
 
     public ComponentControls() {
         super(new SGridBagLayout());
+        setStyle("ComponentControls");
         setPreferredSize(SDimension.FULLWIDTH);
         SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);
@@ -109,9 +111,7 @@ public class ComponentControls  extends SPanel {
         ((SBoxLayout)globalControls.getLayout()).setVgap(4);
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
-        border.setThickness(1, SConstants.TOP);
         localControls.setBorder(border);
-        localControls.setVisible(false);
         localControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout)localControls.getLayout()).setHgap(6);
         ((SBoxLayout)localControls.getLayout()).setVgap(4);
@@ -119,9 +119,15 @@ public class ComponentControls  extends SPanel {
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;
         c.gridheight = 2;
+        c.insets.left = 10;
+        c.insets.right = 10;
+        c.weightx = 0.01;
         add(applyButton, c);
+        c.insets.left = 0;
+        c.insets.right = 0;
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.gridheight = 1;
+        c.weightx = 0.99;
         add(globalControls, c);
         add(localControls, c);
 
@@ -130,7 +136,7 @@ public class ComponentControls  extends SPanel {
         heightTextField.setColumns(3);
         heightTextField.setToolTipText("length with unit (example: '200px')");
         insetsTextField.setColumns(1);
-        insetsTextField.setToolTipText("length only (example: '8')");
+        insetsTextField.setToolTipText("length only (example: '8')\n(applies to the border!)");
         borderThicknessTextField.setColumns(1);
         borderThicknessTextField.setToolTipText("length only (example: '2')");
         borderStyleComboBox.setRenderer(new ObjectPairCellRenderer());
@@ -138,6 +144,7 @@ public class ComponentControls  extends SPanel {
         backgroundComboBox.setRenderer(new ObjectPairCellRenderer());
         foregroundComboBox.setRenderer(new ObjectPairCellRenderer());
         fontComboBox.setRenderer(new ObjectPairCellRenderer());
+        formComponentCheckBox.setToolTipText("show as form component .. i.e. trigger form submission");
 
         globalControls.add(new SLabel("width"));
         globalControls.add(widthTextField);
@@ -147,7 +154,7 @@ public class ComponentControls  extends SPanel {
         globalControls.add(borderThicknessTextField);
         globalControls.add(borderStyleComboBox);
         globalControls.add(borderColorComboBox);
-        globalControls.add(new SLabel(" border insets"));
+        globalControls.add(new SLabel("insets"));
         globalControls.add(insetsTextField);
         globalControls.add(new SLabel(" foreground"));
         globalControls.add(foregroundComboBox);
@@ -157,6 +164,8 @@ public class ComponentControls  extends SPanel {
         globalControls.add(fontComboBox);
         globalControls.add(new SLabel(""));
         globalControls.add(formComponentCheckBox);
+
+        localControls.add(placeHolder);
 
         addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -215,8 +224,9 @@ public class ComponentControls  extends SPanel {
     }
 
     public void addControl(SComponent component) {
+        if (localControls.getComponent(0) == placeHolder)
+            localControls.removeAll();
         localControls.add(component);
-        localControls.setVisible(true);
     }
 
     public void addControllable(SComponent component) {

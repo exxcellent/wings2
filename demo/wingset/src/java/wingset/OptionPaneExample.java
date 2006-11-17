@@ -25,16 +25,15 @@ import java.awt.event.ActionListener;
  */
 public class OptionPaneExample
         extends WingSetPane {
-    protected SComponent createExample() {
+
+    protected SComponent createControls() {
         SToolBar toolBar = new SToolBar();
         SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);
-        toolBar.setBorder(border);
+        //toolBar.setBorder(border);
         toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout) toolBar.getLayout()).setHgap(6);
         ((SBoxLayout) toolBar.getLayout()).setVgap(4);
-
-        final SComboBox combo = new SComboBox(new String[]{"Erstens", "Zweitens", "Drittens"});
 
         SButton msg = new SButton("show Message");
         msg.addActionListener(new java.awt.event.ActionListener() {
@@ -125,10 +124,11 @@ public class OptionPaneExample
         });
         toolBar.add(input);
         toolBar.add(label);
+        toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        return toolBar;
+    }
 
-        SForm c = new SForm(new SBorderLayout());
-        c.add(toolBar, SBorderLayout.NORTH);
-        c.add(combo, SBorderLayout.SOUTH);
-        return c;
+    protected SComponent createExample() {
+        return new SComboBox(new String[] { "Erstens", "Zweitens", "Drittens" });
     }
 }

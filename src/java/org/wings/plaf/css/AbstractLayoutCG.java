@@ -106,7 +106,7 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             // Again do some MSIE Vooodooo. MSIE does not respect PADDING on TABLE elements.
             // SEmptyBorders on components ARE PADDINGs on TABLE elements.
             // Hence to get things working we do a workaround: add the BORDER insets in the inner cells INSETS.
-            if (isMSIE && MSIEVoodoo.hasPaddingInsets(renderedContainer)) {
+            if (MSIEVoodoo.hasPaddingInsets(renderedContainer)) {
                 final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
                 final boolean isFirstRow = row == 0;
                 final boolean isLastRow = ((componentCount - (idx+1))+col < cols);

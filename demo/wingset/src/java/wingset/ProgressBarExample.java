@@ -29,6 +29,10 @@ import java.awt.event.ActionListener;
  */
 public class ProgressBarExample extends WingSetPane {
 
+    protected SComponent createControls() {
+        return null;
+    }
+
     public SComponent createExample() {
         final SButton forward1Percent = new SButton("+1");
         final SButton forward10Percent = new SButton("+10");

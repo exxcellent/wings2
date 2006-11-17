@@ -45,21 +45,19 @@ public class ButtonExample extends WingSetPane {
     private ButtonControls controls;
     private SButton[] buttons;
 
-    public SComponent createExample() {
+    protected SComponent createControls() {
         controls = new ButtonControls();
-        SContainer p = createButtonExample();
-
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(p, SBorderLayout.CENTER);
-
         controls.addActionListener(action);
+        return controls;
+    }
+
+    public SComponent createExample() {
+        SContainer example = createButtonExample();
+
         final SButton defaultButton = new SButton();
         defaultButton.addActionListener(action);
         defaultButton.setActionCommand("Default Button (Enter key)");
-        form.setDefaultButton(defaultButton);
-
-        return form;
+        return example;
     }
 
     private SContainer createButtonExample() {

@@ -60,7 +60,13 @@ public class Faces extends WingSetPane {
 
     SButtonGroup hairGroup;
     SButtonGroup eyeGroup;
+
     SButtonGroup mouthGroup;
+
+
+    protected SComponent createControls() {
+        return null;
+    }
 
     public SComponent createExample() {
         SPanel panel = new SPanel();
@@ -78,7 +84,7 @@ public class Faces extends WingSetPane {
         final SLabel eye = new SLabel();
         final SLabel mouth = new SLabel();
 
-        SForm shuffleForm = new SForm();
+        SPanel shuffleForm = new SPanel();
         SButton shuffleButton = new SButton("Shuffle");
         shuffleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {

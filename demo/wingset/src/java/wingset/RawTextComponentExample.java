@@ -9,6 +9,11 @@ import org.wings.STemplateLayout;
 
 public class RawTextComponentExample extends WingSetPane {
 
+
+    protected SComponent createControls() {
+        return null;
+    }
+
     protected SComponent createExample() {
         final SPanel examplePanel = new SPanel();
         examplePanel.setPreferredSize(SDimension.FULLWIDTH);
@@ -26,7 +31,7 @@ public class RawTextComponentExample extends WingSetPane {
             except.printStackTrace();
         }
 
-        examplePanel.add(new SRawTextComponent("This is a Raw Text. Other than an SLabel, it does break and has no div's wrapping it."), "contentText");
+        examplePanel.add(new SRawTextComponent("This is a Raw Text. It does not break and has no div's wrapping it."), "contentText");
         examplePanel.add(new SRawTextComponent("javascript:alert('This is a text put inside the href of the link');"), "linkText");
 
         return examplePanel;
