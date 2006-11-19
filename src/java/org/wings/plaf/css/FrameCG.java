@@ -84,6 +84,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public static final String YAHOO_EVENT = (String) ResourceManager.getObject("JS.yahooEvent", String.class);
     public static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
     public static final String YAHOO_CONNECTION = (String) ResourceManager.getObject("JS.yahooConnection", String.class);
+    public static final String YAHOO_SLIDER = (String) ResourceManager.getObject("JS.yahooSlider", String.class);
+    public static final String YAHOO_DND = (String) ResourceManager.getObject("JS.yahooDnD", String.class);            
 
     /**
      * JavaScript needed for Drag and Drop support
@@ -134,6 +136,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         headerUtil.addHeader(createExternalizedHeader(session, YAHOO_EVENT, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, YAHOO_CONTAINER, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, YAHOO_CONNECTION, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_DND, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_SLIDER, "text/javascript"));        
 
         headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
         headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));

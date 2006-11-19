@@ -750,3 +750,27 @@ td.DivisionContent {
 table.DivisionContent {
     width: 100%;
 }
+
+.SSliderBg {
+	position:relative;
+	background-image: url(../../icons/SliderHoriz.png);
+	background-repeat: no-repeat;
+	height:26px;
+	width:218px;	
+}
+
+.SSliderThumb {
+	text-align: left;
+}
+
+.SSliderBgVert {
+	position:relative;
+	background-image: url(../../icons/SliderVert.png);
+	background-repeat: no-repeat;
+	height:218px;
+	width:26px;	
+}
+
+
+
+
