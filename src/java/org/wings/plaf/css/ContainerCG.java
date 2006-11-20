@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SContainer;
+import org.wings.SLayoutManager;
 import org.wings.STemplateLayout;
 import org.wings.io.Device;
 
@@ -23,15 +24,18 @@ public class ContainerCG extends AbstractComponentCG implements org.wings.plaf.P
     private static final long serialVersionUID = 1L;
 
     public void writeInternal(final Device device, final SComponent component) throws java.io.IOException {
-        SContainer container = (SContainer) component;
+        final SContainer container = (SContainer) component;
+        final SLayoutManager manager = container.getLayout();
+
+        BorderCG.writeComponentBorderPrefix(device, component);
+
         device.print("<table");
         writeAllAttributes(device, component);
         Utils.writeEvents(device, component, null);
         device.print(">");
 
-        // special case templateLayout, open cell
-        boolean writeTableData = container.getLayout() instanceof STemplateLayout
-            || container.getLayout() instanceof SCardLayout;
+        // special case templateLayout and card layout. We open TABLE cell for them.
+        final boolean writeTableData = manager instanceof STemplateLayout || manager instanceof SCardLayout;
         if (writeTableData) {
             device.print("<tr><td>");
         }
@@ -41,6 +45,9 @@ public class ContainerCG extends AbstractComponentCG implements org.wings.plaf.P
         if (writeTableData) {
             device.print("</td></tr>");
         }
+
         device.print("</table>");
+
+        BorderCG.writeComponentBorderSufix(device, component);
     }
 }

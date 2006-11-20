@@ -14,11 +14,15 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
-import org.wings.header.Headers;
+import org.wings.LowLevelEventListener;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SIcon;
+import org.wings.SPopupMenu;
+import org.wings.SResourceIcon;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
-import org.wings.border.STitledBorder;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
@@ -33,7 +37,8 @@ import org.wings.util.SStringBuilder;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.
@@ -75,8 +80,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     private void writePrefix(final Device device, final SComponent component, final boolean useTable, Map optionalAttributes) throws IOException {
-        SBorder border = component.getBorder();
-        final boolean isTitleBorder = border instanceof STitledBorder;
         // This is the containing element of a component
         // it is responsible for styles, sizing...
         if (useTable) {
@@ -97,8 +100,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         if (useTable) {
             device.print("><tr><td"); // table
             final SStringBuilder styleString = new SStringBuilder();
-            if (border != null) {
-                Utils.createInlineStylesForInsets(styleString, border.getInsets());
+            if (component.getBorder() != null) {
+                Utils.createInlineStylesForInsets(styleString, component.getBorder().getInsets());
             }
             // das hier für height 100% der inneren Komponenten, funzt im Firefox, nicht im IE
             styleString.append("width:100%;height:100%;vertical-align:top");
@@ -108,14 +111,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
         else {
             device.print(">"); // div
-        }
-
-        // Special handling: Render title of STitledBorder
-        if (isTitleBorder) {
-            STitledBorder titledBorder = (STitledBorder) border;
-            device.print("<div class=\"STitledBorderLegend\">");
-            device.print(titledBorder.getTitle());
-            device.print("</div>");
         }
     }
 
@@ -129,10 +124,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     public static void writeAllAttributes(Device device, SComponent component) throws IOException {
-        final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
-
-        final String classname = component.getStyle();
-        Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
+        Utils.optAttribute(device, "class", component.getStyle());
         Utils.optAttribute(device, "id", component.getName());
 
         Utils.optAttribute(device, "style", getInlineStyles(component));
@@ -368,11 +360,15 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         component.fireRenderEvent(SComponent.START_RENDERING);
 
+        BorderCG.writeComponentBorderPrefix(device, component);
+
         writeInternal(device, component);
 
         writeInlineScripts(device, component);
 
         RenderHelper.getInstance(component).collectMenues(component);
+
+        BorderCG.writeComponentBorderSufix(device, component);
 
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");

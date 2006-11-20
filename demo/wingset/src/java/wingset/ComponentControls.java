@@ -49,7 +49,7 @@ public class ComponentControls  extends SPanel {
         new Object[] { "line",    new SLineBorder(2) },
         new Object[] { "grooved", new SEtchedBorder(SEtchedBorder.LOWERED) },
         new Object[] { "ridged",  new SEtchedBorder(SEtchedBorder.RAISED) },
-        new Object[] { "titled",  new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED), "Border Title") },
+        new Object[] { "titled",  new STitledBorder("Border Title") },
         new Object[] { "empty",   new SEmptyBorder(5,5,5,5)}
     };
 

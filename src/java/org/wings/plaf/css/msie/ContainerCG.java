@@ -11,6 +11,7 @@ import org.wings.SLayoutManager;
 import org.wings.STemplateLayout;
 import org.wings.border.SAbstractBorder;
 import org.wings.io.Device;
+import org.wings.plaf.css.BorderCG;
 import org.wings.plaf.css.Utils;
 
 public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
@@ -31,6 +32,8 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
                     requiresFillBehaviour = true;
             }
         }
+
+        BorderCG.writeComponentBorderPrefix(device, component);
 
         if (requiresFillBehaviour) {
             int borderHeight = 0;
@@ -68,5 +71,7 @@ public final class ContainerCG extends org.wings.plaf.css.ContainerCG {
             device.print("</td></tr>");
         }
         device.print("</table>");
+
+        BorderCG.writeComponentBorderSufix(device, component);
     }
 }

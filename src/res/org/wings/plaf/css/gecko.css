@@ -69,26 +69,6 @@ TABLE.SPanel {
     padding: 0px;
 }*/
 
-/* Style of the Legend label for STitledBorder */
-.STitledBorderLegend {
-    position: relative;
-    top:-1.8em;
-	margin-bottom:-1em;
-    margin-right: 1.0em;
-    margin-left: 1.0em;
-    margin-right: 1.0em;
-    padding-left: 0.4em;
-    padding-right: 0.4em;
-    background-color: inherit;
-    border-left: inherit;
-    border-right: inherit;
-}
-
-/* Style of the surrounding border for a STitledBorder */
-.STitledBorder {
-    margin-top: 1em;
-}
-
 .STree img {
     margin-left: 0px;
 }

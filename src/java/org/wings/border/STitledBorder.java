@@ -12,13 +12,6 @@
  */
 package org.wings.border;
 
-import org.wings.SFont;
-import org.wings.style.CSSProperty;
-import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSStyleSheet;
-
-import java.awt.*;
-
 /**
  * Adds a border with a title to a component.
  *
@@ -51,8 +44,7 @@ public class STitledBorder extends SAbstractBorder {
      * type is {@link SEtchedBorder}, thickness 2
      */
     public STitledBorder(String title) {
-        this(new SEtchedBorder(SEtchedBorder.LOWERED));
-        border.setThickness(2);
+        this(new SEmptyBorder(0,0,0,0));
         setTitle(title);
     }
 
