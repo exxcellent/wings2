@@ -1,10 +1,6 @@
 package org.wings.plaf.css.msie;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SGridBagLayout;
-import org.wings.SLayoutManager;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.css.TableCellStyle;
 import org.wings.plaf.css.Utils;
@@ -24,6 +20,7 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
     public void write(Device d, SLayoutManager l)
             throws IOException {
         final SGridBagLayout layout = (SGridBagLayout) l;
+        final SContainer container = layout.getContainer();
 
         SDimension preferredSize = layout.getContainer().getPreferredSize();
         if (preferredSize == null) {
@@ -41,6 +38,7 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
         final boolean useCellInsets = layout.getVgap() == -1 && layout.getHgap() == -1;
         final SGridBagLayout.Grid grid = layout.getGrid();
         final TableCellStyle cellStyle = cellLayoutStyle(layout);
+        final TableCellStyle origCellStyle = cellStyle.makeACopy();
         int vertivalOversize = layoutOversize(layout);
 
         if (grid.cols == 0) {
@@ -50,7 +48,7 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
         openLayouterBody(d, layout);
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
-            Utils.printNewline(d, layout.getContainer());
+            Utils.printNewline(d, container);
             d.print("<tr");
             Utils.optAttribute(d, "yweight", determineRowHeight(layout, row));
             if (useCellInsets) {
@@ -69,7 +67,7 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
             d.print(">");
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 final SComponent comp = grid.grid[col][row];
-                Utils.printNewline(d, layout.getContainer());
+                Utils.printNewline(d, container);
 
                 cellStyle.renderAsTH = row == grid.firstRow && header;
                 cellStyle.defaultLayoutCellHAlignment = SConstants.CENTER;
@@ -119,6 +117,16 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
                         cellStyle.colspan = gridwidth;
                         cellStyle.rowspan = gridheight;
 
+                        if (PaddingVoodoo.hasPaddingInsets(container)) {
+                            final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                            final boolean isFirstRow = row == grid.firstRow;
+                            final boolean isLastRow = row == grid.rows - 1;
+                            final boolean isFirstCol = col == grid.firstCol;
+                            final boolean isLastCol = col == grid.cols - 1;
+                            PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                            cellStyle.setInsets(patchedInsets);
+                        }
+
                         openLayouterCell(d, comp, cellStyle);
 
                         Utils.printNewline(d, comp);
@@ -128,7 +136,7 @@ public class GridBagLayoutCG extends org.wings.plaf.css.GridBagLayoutCG {
                     }
                 }
             }
-            Utils.printNewline(d, layout.getContainer());
+            Utils.printNewline(d, container);
             closeLayouterRow(d);
         }
         closeLayouterBody(d, layout);
