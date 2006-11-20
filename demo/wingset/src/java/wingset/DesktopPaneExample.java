@@ -27,7 +27,9 @@ public class DesktopPaneExample extends WingSetPane {
         windowIcon = (SIcon)getSession().getCGManager().getObject("TableCG.editIcon", SIcon.class);
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
-            iFrame.getContentPane().setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
+            iFrame.getContentPane().setLayout(new SBoxLayout(SConstants.VERTICAL));
+            iFrame.getContentPane().setHorizontalAlignment(SConstants.LEFT_ALIGN);
+            iFrame.getContentPane().setPreferredSize(SDimension.FULLWIDTH);
             iFrame.setTitle("A Long Title of Frame " + (i+1));
             iFrame.setIcon(windowIcon);
             desktopPane.add(iFrame);

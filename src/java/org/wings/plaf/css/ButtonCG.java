@@ -14,7 +14,7 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
-import org.wings.plaf.css.msie.MSIEVoodoo;
+import org.wings.plaf.css.msie.PaddingVoodoo;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
@@ -42,7 +42,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             device.print("<table");
             tableAttributes(device, button);
             device.print("><tr><td");
-            MSIEVoodoo.doSimpleTablePaddingWorkaround(device, button);
+            PaddingVoodoo.doSimpleTablePaddingWorkaround(device, button);
             device.print(">");
             writeText(device, text, false);
             device.print("</td></tr></table>");
@@ -51,7 +51,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             device.print("<table");
             tableAttributes(device, button);
             device.print("><tr><td");
-            MSIEVoodoo.doSimpleTablePaddingWorkaround(device, button);
+            PaddingVoodoo.doSimpleTablePaddingWorkaround(device, button);
             device.print(">");
             writeIcon(device, icon, Utils.isMSIE(component));
             device.print("</td></tr></table>");

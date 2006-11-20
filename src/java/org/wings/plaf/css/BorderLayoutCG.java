@@ -12,13 +12,12 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SBorderLayout;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SLayoutManager;
+import org.wings.*;
+import org.wings.plaf.css.msie.PaddingVoodoo;
 import org.wings.io.Device;
 
 import java.io.IOException;
+import java.awt.*;
 
 public class BorderLayoutCG extends AbstractLayoutCG {
 
@@ -27,6 +26,8 @@ public class BorderLayoutCG extends AbstractLayoutCG {
     public void write(Device d, SLayoutManager l)
             throws IOException {
         final SBorderLayout layout = (SBorderLayout) l;
+        SContainer container = l.getContainer();
+
         final SComponent north = (SComponent) layout.getComponents().get(SBorderLayout.NORTH);
         final SComponent east = (SComponent) layout.getComponents().get(SBorderLayout.EAST);
         final SComponent center = (SComponent) layout.getComponents().get(SBorderLayout.CENTER);
@@ -34,6 +35,7 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
         final TableCellStyle cellStyle = cellLayoutStyle(layout);
+        final TableCellStyle origCellStyle = cellStyle.makeACopy();
 
         int cols = 1;
         if (west != null) {
@@ -54,6 +56,17 @@ public class BorderLayoutCG extends AbstractLayoutCG {
 
             openLayouterRow(d, "0%");
             Utils.printNewline(d, north);
+
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = true;
+                final boolean isLastRow = west == null && center == null && east == null && south == null;
+                final boolean isFirstCol = true;
+                final boolean isLastCol = true;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
+
             openLayouterCell(d, north, cellStyle);
             north.write(d);
             closeLayouterCell(d, north, false);
@@ -71,6 +84,16 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             cellStyle.colspan = -1;
             cellStyle.rowspan = -1;
 
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = north == null;
+                final boolean isLastRow = south == null;
+                final boolean isFirstCol = true;
+                final boolean isLastCol = center == null && east == null;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
+
             Utils.printNewline(d, west);
             openLayouterCell(d, west, cellStyle);
             west.write(d);
@@ -83,6 +106,16 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             cellStyle.width = "100%";
             cellStyle.colspan = -1;
             cellStyle.rowspan = -1;
+
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = north == null;
+                final boolean isLastRow = south == null;
+                final boolean isFirstCol = west == null;
+                final boolean isLastCol = east == null;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
 
             Utils.printNewline(d, center);
             openLayouterCell(d, center, cellStyle);
@@ -99,6 +132,16 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             cellStyle.colspan = -1;
             cellStyle.rowspan = -1;
 
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = north == null;
+                final boolean isLastRow = south == null;
+                final boolean isFirstCol = west == null && center == null;
+                final boolean isLastCol = true;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
+
             Utils.printNewline(d, east);
             openLayouterCell(d, east, cellStyle);
             east.write(d);
@@ -114,6 +157,16 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             cellStyle.width = "0%";
             cellStyle.colspan = cols;
             cellStyle.rowspan = -1;
+
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = north == null && west == null && center == null && east == null;
+                final boolean isLastRow = true;
+                final boolean isFirstCol = true;
+                final boolean isLastCol = true;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
 
             Utils.printNewline(d, layout.getContainer());
             openLayouterRow(d, "0%");

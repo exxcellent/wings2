@@ -18,7 +18,7 @@ import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
-import org.wings.plaf.css.msie.MSIEVoodoo;
+import org.wings.plaf.css.msie.PaddingVoodoo;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
@@ -103,16 +103,13 @@ public abstract class AbstractLayoutCG implements LayoutCG {
             cellStyle.defaultLayoutCellHAlignment = getDefaultLayoutCellHAlignment();
             cellStyle.defaultLayoutCellVAlignment = getDefaultLayoutCellVAlignment();
 
-            // Again do some MSIE Vooodooo. MSIE does not respect PADDING on TABLE elements.
-            // SEmptyBorders on components ARE PADDINGs on TABLE elements.
-            // Hence to get things working we do a workaround: add the BORDER insets in the inner cells INSETS.
-            if (MSIEVoodoo.hasPaddingInsets(renderedContainer)) {
+            if (PaddingVoodoo.hasPaddingInsets(renderedContainer)) {
                 final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
                 final boolean isFirstRow = row == 0;
                 final boolean isLastRow = ((componentCount - (idx+1))+col < cols);
                 final boolean isFirstCol = (col == 0);
                 final boolean isLastCol = ((col % cols) == 0);
-                MSIEVoodoo.doBorderPaddingsWorkaround(renderedContainer.getBorder(), patchedInsets,
+                PaddingVoodoo.doBorderPaddingsWorkaround(renderedContainer.getBorder(), patchedInsets,
                         isFirstRow, isFirstCol, isLastCol, isLastRow);
                 cellStyle.setInsets(patchedInsets);
             }

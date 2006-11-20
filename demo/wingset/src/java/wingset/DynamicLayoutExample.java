@@ -70,6 +70,7 @@ public class DynamicLayoutExample extends WingSetPane {
 
     protected SComponent createExample() {
         panel = new SPanel(new SBorderLayout());
+        panel.setPreferredSize(SDimension.FULLWIDTH);
         panel.add(demoPanels[0], SBorderLayout.CENTER);
         return panel;
     }

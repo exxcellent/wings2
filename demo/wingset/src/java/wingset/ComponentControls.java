@@ -91,7 +91,7 @@ public class ComponentControls  extends SPanel {
 
     public ComponentControls() {
         super(new SGridBagLayout());
-        setStyle("ComponentControls");
+        setBackground(new Color(240,240,240));
         setPreferredSize(SDimension.FULLWIDTH);
         SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);

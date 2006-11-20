@@ -12,16 +12,13 @@
  */
 package org.wings.plaf.css.msie;
 
-import org.wings.SBorderLayout;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SLayoutManager;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.css.TableCellStyle;
 import org.wings.plaf.css.Utils;
 
 import java.io.IOException;
+import java.awt.*;
 
 public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
 
@@ -45,6 +42,7 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         // special implementation with expressions is only required, if the center component
         // shall consume the remaining height
 
+        final SContainer container = layout.getContainer();
         final SComponent north = (SComponent) layout.getComponents().get(SBorderLayout.NORTH);
         final SComponent east = (SComponent) layout.getComponents().get(SBorderLayout.EAST);
         final SComponent center = (SComponent) layout.getComponents().get(SBorderLayout.CENTER);
@@ -52,6 +50,7 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
         final SComponent south = (SComponent) layout.getComponents().get(SBorderLayout.SOUTH);
 
         final TableCellStyle cellStyle = cellLayoutStyle(layout);
+        final TableCellStyle origCellStyle = cellStyle.makeACopy();
         int oversize = layoutOversize(layout);
 
         int cols = 1;
@@ -75,6 +74,17 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
             Utils.optAttribute(d, "oversize", oversize);
             d.print(">");
             Utils.printNewline(d, north);
+
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = true;
+                final boolean isLastRow = west == null && center == null && east == null && south == null;
+                final boolean isFirstCol = true;
+                final boolean isLastCol = true;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
+
             openLayouterCell(d, north, cellStyle);
             north.write(d);
             closeLayouterCell(d, north, false);
@@ -94,6 +104,16 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
             cellStyle.colspan = -1;
             cellStyle.rowspan = -1;
 
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = north == null;
+                final boolean isLastRow = south == null;
+                final boolean isFirstCol = true;
+                final boolean isLastCol = center == null && east == null;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
+
             Utils.printNewline(d, west);
             openLayouterCell(d, west, cellStyle);
             west.write(d);
@@ -106,6 +126,16 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
             cellStyle.width = "100%";
             cellStyle.colspan = -1;
             cellStyle.rowspan = -1;
+
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = north == null;
+                final boolean isLastRow = south == null;
+                final boolean isFirstCol = west == null;
+                final boolean isLastCol = east == null;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
 
             Utils.printNewline(d, center);
             openLayouterCell(d, center, cellStyle);
@@ -122,6 +152,16 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
             cellStyle.colspan = -1;
             cellStyle.rowspan = -1;
 
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = north == null;
+                final boolean isLastRow = south == null;
+                final boolean isFirstCol = west == null && center == null;
+                final boolean isLastCol = true;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
+
             Utils.printNewline(d, east);
             openLayouterCell(d, east, cellStyle);
             east.write(d);
@@ -137,6 +177,16 @@ public final class BorderLayoutCG extends org.wings.plaf.css.BorderLayoutCG {
             cellStyle.width = "0%";
             cellStyle.colspan = cols;
             cellStyle.rowspan = -1;
+
+            if (PaddingVoodoo.hasPaddingInsets(container)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = north == null && west == null && center == null && east == null;
+                final boolean isLastRow = true;
+                final boolean isFirstCol = true;
+                final boolean isLastCol = true;
+                PaddingVoodoo.doBorderPaddingsWorkaround(container.getBorder(), patchedInsets, isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
 
             Utils.printNewline(d, layout.getContainer());
             d.print("<tr");

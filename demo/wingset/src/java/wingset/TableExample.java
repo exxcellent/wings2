@@ -13,8 +13,7 @@
 package wingset;
 
 import org.wings.*;
-import org.wings.border.SBorder;
-import org.wings.border.SLineBorder;
+import org.wings.border.*;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
 import org.wings.event.SMouseEvent;
@@ -75,7 +74,6 @@ public class TableExample
         table.setDefaultRenderer(cellRenderer);
         table.setShowAsFormComponent(false);
         table.setEditable(false);
-        table.setBorder(new SLineBorder(Color.LIGHT_GRAY, 1));
         controls.addControllable(table);
 
         table.getColumnModel().getColumn(0).setWidth("200px");
@@ -93,6 +91,8 @@ public class TableExample
                 clicks.setText("clicked " + e.getPoint().getCoordinates());
             }
         });
+
+        table.setVerticalAlignment(SConstants.TOP_ALIGN);
 
         SPanel panel = new SPanel(new SBorderLayout());
         panel.add(table, SBorderLayout.CENTER);
@@ -308,6 +308,8 @@ public class TableExample
         private final String[] SELECTION_MODES = new String[]{"no", "single", "multiple"};
 
         public TableControls() {
+            widthTextField.setText("100%");
+            
             final SCheckBox editable = new SCheckBox("editable");
             editable.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -318,7 +320,7 @@ public class TableExample
                 }
             });
 
-            final SCheckBox consume = new SCheckBox("Consume events on 'col 1'");
+            final SCheckBox consume = new SCheckBox("consume events on col 1");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the table anymore");
             consume.addActionListener(new java.awt.event.ActionListener() {
@@ -364,7 +366,7 @@ public class TableExample
                 }
             });
             oddColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel(" odd row"));
+            addControl(new SLabel(" odd"));
             addControl(oddColor);
 
             final SComboBox evenColor = new SComboBox(COLORS);
@@ -375,10 +377,10 @@ public class TableExample
                 }
             });
             evenColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel(" even row"));
+            addControl(new SLabel(" even"));
             addControl(evenColor);
 
-            final SCheckBox reverseColumnOrder = new SCheckBox("Reverse column order");
+            final SCheckBox reverseColumnOrder = new SCheckBox("reverse columns");
             reverseColumnOrder.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     STableColumnModel columnModel = table.getColumnModel();
@@ -388,7 +390,7 @@ public class TableExample
             });
             addControl(reverseColumnOrder);
 
-            final SCheckBox hideSomeColumns = new SCheckBox("Hide some Columns");
+            final SCheckBox hideSomeColumns = new SCheckBox("hide some columns");
             hideSomeColumns.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     SDefaultTableColumnModel columnModel = (SDefaultTableColumnModel) table.getColumnModel();

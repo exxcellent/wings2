@@ -19,8 +19,9 @@ import java.awt.*;
  *
  * @author Benjamin Schmid <B.Schmid@exxcellent.de>
  */
-public final class MSIEVoodoo {
-    private MSIEVoodoo() {
+public final class PaddingVoodoo
+{
+    private PaddingVoodoo() {
     }
 
     //

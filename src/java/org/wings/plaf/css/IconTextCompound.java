@@ -13,7 +13,7 @@
 package org.wings.plaf.css;
 
 import org.wings.*;
-import org.wings.plaf.css.msie.MSIEVoodoo;
+import org.wings.plaf.css.msie.PaddingVoodoo;
 import org.wings.io.Device;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -127,7 +127,7 @@ public abstract class IconTextCompound {
     private void doBorderPaddingsWorkaround(SComponent component, final Insets targetInsets,
                                             boolean firstRow, boolean firstCol, boolean lastCol, boolean lastRow) {
         if (component.getBorder() != null)
-            MSIEVoodoo.doBorderPaddingsWorkaround(component.getBorder(), targetInsets, firstRow, firstCol, lastCol, lastRow);
+            PaddingVoodoo.doBorderPaddingsWorkaround(component.getBorder(), targetInsets, firstRow, firstCol, lastCol, lastRow);
     }
 
     protected int getIconTextGap(SComponent component) {

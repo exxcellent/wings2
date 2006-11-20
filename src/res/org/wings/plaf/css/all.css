@@ -139,6 +139,7 @@ input.STextField,
 input.XSuggest,
 input.SFormattedTextField,
 input.SPasswordField,
+.SFileChooser input,
 textarea.STextArea,
 select.SComboBox {
     font-family: sans-serif;
@@ -151,6 +152,7 @@ input.STextField,
 input.XSuggest,
 input.SFormattedTextField,
 input.SPasswordField,
+.SFileChooser input,
 textarea.STextArea,
 select.SComboBox,
 select.SList {

@@ -14,9 +14,7 @@ package org.wings;
 
 import java.awt.Color;
 import java.awt.Rectangle;
-import java.util.EventObject;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -132,6 +130,7 @@ public class STable extends SComponent
      */
     transient protected STableCellEditor cellEditor;
 
+    transient protected LowLevelEventListener cellEditorComponent;
     /**
      * <p>Identifies the column of the cell being edited.</p>
      */
@@ -237,7 +236,7 @@ public class STable extends SComponent
     private String[] lastReceivedLowLevelEvents;
 
     /**
-     * Helper variable for {@link #nameCellComponent(SComponent, int, int)}
+     * Helper variable for {@link #nameRendererComponent(SComponent, int, int)}
      */
     private SStringBuilder nameBuffer = new SStringBuilder();
 
@@ -441,9 +440,16 @@ public class STable extends SComponent
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
-        this.lastReceivedLowLevelEvents = values;
+        if (isEditing() && action.indexOf("_e_") != -1 && cellEditorComponent != null) {
+            if (cellEditorComponent != null)
+                cellEditorComponent.processLowLevelEvent(action, values);
+        }
+        else
+            this.lastReceivedLowLevelEvents = values;
+
         SForm.addArmedComponent(this);
     }
+
 
     private SCellRendererPane cellRendererPane = new SCellRendererPane();
 
@@ -567,8 +573,31 @@ public class STable extends SComponent
                 getValueAt(row, col),
                 isRowSelected(row),
                 row, col);
-        nameCellComponent(tableCellRendererComponent, row, col);
+        nameRendererComponent(tableCellRendererComponent, row, col);
         return tableCellRendererComponent;
+    }
+
+    /**
+     * Generates the name (= id) of the editing component so that
+     * the STable implementation knows to associate the input
+     * value with the correct data row/columns
+     *
+     * Applies the unqique id/name for a component of the rows/column
+     * to the cell component.
+     *
+     * @param component The edit component to rename
+     * @param row Data row of this edit component
+     * @param col Data column of this edit component
+     */
+    protected void nameRendererComponent(final SComponent component, final int row, final int col) {
+        nameBuffer.setLength(0);
+        nameBuffer.append(this.getName()).append('_');
+        if (row == -1)
+            nameBuffer.append('h');
+        else
+            nameBuffer.append(row);
+        nameBuffer.append('_').append(col);
+        component.setNameRaw(nameBuffer.toString());
     }
 
     /**
@@ -842,8 +871,30 @@ public class STable extends SComponent
                                                                   getValueAt(row, col),
                                                                   isRowSelected(row), // true?
                                                                   row, col);
-        //nameCellComponent(component, row, col);
+        nameEditorComponent(component, row, col);
+        cellEditorComponent = (component instanceof LowLevelEventListener) ? (LowLevelEventListener)component : null;
+
         return component;
+    }
+
+    /**
+     * Generates the name (= id) of the editing component so that
+     * the STable implementation knows to associate the input
+     * value with the correct data row/columns
+     *
+     * Applies the unqique id/name for a component of the rows/column
+     * to the cell component.
+     *
+     * @param component The edit component to rename
+     * @param row Data row of this edit component
+     * @param col Data column of this edit component
+     */
+    protected void nameEditorComponent(final SComponent component, final int row, final int col) {
+        nameBuffer.setLength(0);
+        nameBuffer.append(this.getName()).append("_e_");
+        nameBuffer.append(row);
+        nameBuffer.append('_').append(col);
+        component.setNameRaw(nameBuffer.toString());
     }
 
     /**
@@ -1651,29 +1702,6 @@ public class STable extends SComponent
      */
     protected TableModel createDefaultDataModel() {
         return new DefaultTableModel();
-    }
-
-    /**
-     * Generates the name (= id) of the editing component so that
-     * the STable implementation knows to associate the input
-     * value with the correct data row/columns
-     *
-     * Applies the unqique id/name for a component of the rows/column
-     * to the cell component.
-     *
-     * @param component The edit component to rename
-     * @param row Data row of this edit component
-     * @param col Data column of this edit component
-     */
-    protected void nameCellComponent(final SComponent component, final int row, final int col) {
-        nameBuffer.setLength(0);
-        nameBuffer.append(this.getName()).append('_');
-        if (row == -1)
-            nameBuffer.append('h');
-        else
-            nameBuffer.append(row);
-        nameBuffer.append('_').append(col);
-        component.setNameRaw(nameBuffer.toString());
     }
 
     /**

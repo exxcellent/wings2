@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.border.SLineBorder;
+import org.wings.border.SEmptyBorder;
 import org.wings.event.SComponentAdapter;
 import org.wings.event.SComponentEvent;
 
@@ -50,6 +51,7 @@ abstract public class WingSetPane
         SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.TOP);
         south.setBorder(border);
+        south.setBackground(new Color(240,240,240));
 
         add(south, SBorderLayout.SOUTH);
 

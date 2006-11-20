@@ -28,10 +28,6 @@ public class OptionPaneExample
 
     protected SComponent createControls() {
         SToolBar toolBar = new SToolBar();
-        SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
-        border.setThickness(1, SConstants.BOTTOM);
-        //toolBar.setBorder(border);
-        toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout) toolBar.getLayout()).setHgap(6);
         ((SBoxLayout) toolBar.getLayout()).setVgap(4);
 
@@ -124,7 +120,11 @@ public class OptionPaneExample
         });
         toolBar.add(input);
         toolBar.add(label);
-        toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        toolBar.setBackground(new Color(240,240,240));
+        toolBar.setPreferredSize(SDimension.FULLWIDTH);
+        SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
+        border.setThickness(1, SConstants.BOTTOM);
+        toolBar.setBorder(border);
         return toolBar;
     }
 
