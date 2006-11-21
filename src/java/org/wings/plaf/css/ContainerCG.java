@@ -23,8 +23,6 @@ public class ContainerCG extends AbstractComponentCG implements org.wings.plaf.P
         final SContainer container = (SContainer) component;
         final SLayoutManager layout = container.getLayout();
 
-        BorderCG.writeComponentBorderPrefix(device, component);
-
         SDimension preferredSize = container.getPreferredSize();
         String height = preferredSize != null ? preferredSize.getHeight() : null;
         boolean clientLayout = isMSIE(container) && height != null && !"auto".equals(height)
@@ -60,7 +58,5 @@ public class ContainerCG extends AbstractComponentCG implements org.wings.plaf.P
         }
 
         device.print("</table>");
-
-        BorderCG.writeComponentBorderSufix(device, component);
     }
 }

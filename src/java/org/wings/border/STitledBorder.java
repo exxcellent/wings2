@@ -17,12 +17,12 @@ package org.wings.border;
  *
  */
 public class STitledBorder extends SAbstractBorder {
-    private SBorder border;
-
+    //private SBorder border;
     private String title;
 
     /**
      * Constructor for STitledBorder.
+     * @deprecated Nested border in STitledBorder is deprecated
      */
     public STitledBorder(SBorder border) {
         setBorder(border);
@@ -44,7 +44,7 @@ public class STitledBorder extends SAbstractBorder {
      * type is {@link SEtchedBorder}, thickness 2
      */
     public STitledBorder(String title) {
-        this(new SEmptyBorder(0,0,0,0));
+        this(/*new SEmptyBorder(0,0,0,0)*/ (SBorder) null);
         setTitle(title);
     }
 
@@ -52,19 +52,21 @@ public class STitledBorder extends SAbstractBorder {
      * Gets the border.
      *
      * @return Returns a SBorder
+     * @deprecated Nested border in STitledBorder is deprecated
      */
     public SBorder getBorder() {
-        return border;
+        return null;//border;
     }
 
     /**
      * Sets the border.
      *
      * @param border The border to set
+     * @deprecated Nested border in STitledBorder is deprecated
      */
     public void setBorder(SBorder border) {
-        this.border = border;
-        specs = ((SAbstractBorder)border).specs;
+        //this.border = border;
+        //specs = ((SAbstractBorder)border).specs;
     }
 
     /**
