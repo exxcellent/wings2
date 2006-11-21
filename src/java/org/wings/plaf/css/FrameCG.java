@@ -82,7 +82,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
      */
     private Boolean renderXmlDeclaration = Boolean.FALSE;
 
-    private ClassPathResource layout;
     private ClassPathResource formbutton;
 
     private HeaderUtil headerUtil = new HeaderUtil();
@@ -112,8 +111,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
         headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
 
-        layout = new ClassPathResource("org/wings/plaf/css/layout.htc", "text/x-component");
-        layout.getId(); // externalize ..
         formbutton = new ClassPathResource("org/wings/plaf/css/formbutton.htc", "text/x-component");
         formbutton.getId(); // externalize ..
     }

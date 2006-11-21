@@ -26,7 +26,7 @@ import java.io.*;
 import java.net.URL;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * The root of the WingSet demo application.
@@ -87,30 +87,41 @@ public class WingSet implements Serializable {
         tab.setName("examples");
         tab.setPreferredSize(new SDimension("100%", "580px"));
 
-        // do some global styling of the wingSet application
-        styleWingsetApp();
-
         tab.add(new WingsImage(), "wingS!");
 
         String dirName = SessionManager.getSession().getServletContext().getRealPath("/WEB-INF/classes/wingset");
-        System.out.println("dirName = " + dirName);
         File dir = new File(dirName);
+
+        List classFileNames = new ArrayList();
+
         String[] exampleClassFileNames = dir.list(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.endsWith("Example.class");
             }
         });
         Arrays.sort(exampleClassFileNames);
-        System.out.println("exampleClassFileNames = " + Arrays.asList(exampleClassFileNames));
-        for (int i = 0; i < exampleClassFileNames.length; i++) {
-            String exampleClassFileName = exampleClassFileNames[i];
-            String exampleClassName = "wingset." + exampleClassFileName.substring(0, exampleClassFileName.length() - ".class".length());
+        classFileNames.addAll(Arrays.asList(exampleClassFileNames));
+
+        if ("TRUE".equals(SessionManager.getSession().getProperty("wingset.include.tests"))) {
+            String[] testClassFileNames = dir.list(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.endsWith("Test.class");
+                }
+            });
+            Arrays.sort(testClassFileNames);
+            classFileNames.addAll(Arrays.asList(testClassFileNames));
+        }
+
+        for (Iterator iterator = classFileNames.iterator(); iterator.hasNext();) {
+            String classFileName = (String)iterator.next();
+            String className = "wingset." + classFileName.substring(0, classFileName.length() - ".class".length());
             try {
-                Class exampleClass = Thread.currentThread().getContextClassLoader().loadClass(exampleClassName);
-                addExample(exampleClass);
+                Class clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+                WingSetPane example = (WingSetPane)clazz.newInstance();
+                tab.add(example, example.getExampleName());
             }
             catch (Throwable e) {
-                System.err.println("Could not load example: " + exampleClassName);
+                System.err.println("Could not load plugin: " + className);
                 e.printStackTrace();
             }
         }
@@ -129,15 +140,13 @@ public class WingSet implements Serializable {
             }
         });
         switchStyleButton.setBorder(new SEmptyBorder(5, 0, 5, 0));
+
+        styleWingsetApp();
+
         frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
         frame.getContentPane().setPreferredSize(SDimension.FULLAREA);
 
         frame.show();
-    }
-
-    private void addExample(Class exampleClass) throws IllegalAccessException, InstantiationException {
-        WingSetPane example = (WingSetPane)exampleClass.newInstance();
-        tab.add(example, example.getExampleName());
     }
 
     /**

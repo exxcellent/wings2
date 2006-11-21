@@ -13,7 +13,7 @@
 package org.wings.plaf.css;
 
 import org.wings.*;
-import org.wings.plaf.css.msie.PaddingVoodoo;
+import org.wings.plaf.css.PaddingVoodoo;
 import org.wings.io.Device;
 
 import java.awt.*;
@@ -38,6 +38,11 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         final TableCellStyle cellStyle = cellLayoutStyle(layout);
         final TableCellStyle origCellStyle = cellStyle.makeACopy();
 
+        SDimension preferredSize = container.getPreferredSize();
+        String height = preferredSize != null ? preferredSize.getHeight() : null;
+        boolean clientLayout = isMSIE(container) && height != null && !"auto".equals(height);
+        int vertivalOversize = layoutOversize(layout);
+
         if (grid.cols == 0) {
             return;
         }
@@ -46,7 +51,26 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
 
         for (int row = grid.firstRow; row < grid.rows; row++) {
             Utils.printNewline(d, container);
-            openLayouterRow(d, determineRowHeight(layout, row) + "%");
+            if (clientLayout) {
+                d.print("<tr");
+                Utils.optAttribute(d, "yweight", determineRowHeight(layout, row));
+                if (useCellInsets) {
+                    vertivalOversize = 0;
+                    for (int col = grid.firstCol; col < grid.cols; col++) {
+                        final SComponent comp = grid.grid[col][row];
+                        if (comp != null) {
+                            GridBagConstraints c = layout.getConstraints(comp);
+                            Insets insets = c.insets;
+                            if (insets != null)
+                                vertivalOversize = Math.max(vertivalOversize, cellOversize(layout, insets));
+                        }
+                    }
+                }
+                Utils.optAttribute(d, "oversize", vertivalOversize);
+                d.print(">");
+            }
+            else
+                openLayouterRow(d, determineRowHeight(layout, row) + "%");
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 final SComponent comp = grid.grid[col][row];
                 Utils.printNewline(d, container);

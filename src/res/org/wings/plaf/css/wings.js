@@ -21,7 +21,7 @@ function getTarget(event) {
         return event.target;
 }
 
-function getElementByTagName(element, tag) {
+function getParentByTagName(element, tag) {
     while (element != null) {
         if (tag == element.tagName)
             return element;
@@ -30,7 +30,7 @@ function getElementByTagName(element, tag) {
     return null;
 }
 
-function getElementWearingAttribute(element, attribute) {
+function getParentWithAttribute(element, attribute) {
     while (element != null) {
         if (element.getAttribute && element.getAttribute(attribute)) {
             return element;
@@ -53,10 +53,10 @@ function preventDefault(event) {
 function sendEvent(event, eventValue, eventName, clientHandlers) {
     event = getEvent(event);
     var target = getTarget(event)
-    var form = getElementByTagName(target, "FORM");
+    var form = getParentByTagName(target, "FORM");
     var eidprovider = target;
     if (!eventName) {
-        eidprovider = getElementWearingAttribute(target, "eid");
+        eidprovider = getParentWithAttribute(target, "eid");
         eventName = eidprovider.getAttribute("eid");
     }
 
@@ -266,8 +266,8 @@ function storeFocus(event) {
     event = getEvent(event);
     var target = getTarget(event);
 
-    var div = getElementWearingAttribute(target, "eid");
-    var body = getElementByTagName(target, "BODY");
+    var div = getParentWithAttribute(target, "eid");
+    var body = getParentByTagName(target, "BODY");
     /* Avoid rembering FORM as focus component as this automatically gains
        focus on pressing Enter in MSIE. */
     if (div && body && div.tagName != "FORM") {
@@ -492,11 +492,59 @@ function showModalDialog(dialogId, modalId) {
     dialog.style.zIndex = 1000;
 }
 
-function layoutScrollPane(outerId) {
-    var outer = document.getElementById(outerId);
-    var div = outer.getElementsByTagName("div")[0];
-    div.style.height = document.defaultView.getComputedStyle(outer, null).getPropertyValue("height");
-    div.style.display = "block";
+function layoutFill(table) {
+  if (table.style.height == table.getAttribute("layoutHeight"))
+    return;
+
+  var consumedHeight = 0;
+  var rows = table.rows;
+  for (var i=0; i < rows.length; i++) {
+    var row = rows[i];
+
+    var yweight = row.getAttribute("yweight");
+    if (!yweight)
+      consumedHeight += row.offsetHeight;
+  }
+
+  /*
+  if (table.getAttribute("layoutHeight") == "100%") {
+    var height = table.parentNode.clientHeight;
+    var oversize = table.parentNode.oversize;
+    if (oversize)
+      height -= oversize;
+    table.style.height = height + "px";
+  }
+  else
+  */
+    table.style.height = table.getAttribute("layoutHeight");
+
+  var diff = table.clientHeight - consumedHeight;
+
+  for (var i=0; i < rows.length; i++) {
+    var row = rows[i];
+    var yweight = row.getAttribute("yweight");
+    if (yweight) {
+      var oversize = row.getAttribute("oversize");
+      row.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
+    }
+  }
+}
+
+function layoutScrollPane(table) {
+    var div = table.getElementsByTagName("div")[0];
+
+    if (document.defaultView) {
+        div.style.height = document.defaultView.getComputedStyle(table, null).getPropertyValue("height");
+        div.style.display = "block";
+    }
+    else {
+        var parent_td = getParentByTagName(div, "TD");
+        div.style.height = parent_td.clientHeight + "px";
+        div.style.width = parent_td.clientWidth + "px";
+        div.style.position = 'absolute';
+        div.style.display = 'block';
+        //div.style.overflow = 'auto';
+    }
 }
 
 /**

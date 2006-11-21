@@ -73,6 +73,23 @@ TABLE.formbutton_hover {
     background-color: #eeeeee !important;
 }
 
-/*.selection {
-   background-color: #AAAAFF;
-}*/
+/* Style of the Legend label for STitledBorder */
+.STitledBorderLegend {
+    position: relative;
+    top:-1.7em;
+	margin-bottom:-1em;
+    margin-left: 1.0em;
+    margin-right: 1.0em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    /*background-color: inherit;*/     /* IE doesnt understand inherit */
+    border-left:  #333333 2px groove;  /* IE doesnt understand inherit, so need to guess :-( */
+    border-right: #333333 2px groove;  /* IE doesnt understand inherit, so need to guess :-( */
+    background: #ccc;                  /* IE doesnt understand inherit, so need to guess :-( */
+}
+
+/* Style of the surrounding border for a STitledBorder */
+.STitledBorder {
+    margin-top: 1em;
+    padding-top: 1em;
+}

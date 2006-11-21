@@ -89,21 +89,10 @@ public class ScrollPaneExample extends WingSetPane
             final SComboBox mode = new SComboBox(scrollpaneModes);
             mode.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    int newMode = mode.getSelectedIndex();
-                    switch (newMode) {
-                    case 0:
-                        scrollPane.setMode(SScrollPane.MODE_SCROLLING);
-                        scrollPane.setPreferredSize(new SDimension("100%", SDimension.AUTO));
-                        break;
-                    case 1:
-                        scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-                        scrollPane.setPreferredSize(new SDimension("100%", "457"));
-                        break;
-                    case 2:
-                        scrollPane.setMode(SScrollPane.MODE_PAGING);
-                        scrollPane.setPreferredSize(new SDimension("100%", SDimension.AUTO));
-                        break;
-                    }
+                    scrollPane.setMode(mode.getSelectedIndex());
+                    scrollPane.setPreferredSize(SDimension.FULLAREA);
+                    widthTextField.setText("100%");
+                    heightTextField.setText("100%");
                 }
             });
 

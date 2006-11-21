@@ -56,19 +56,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
 
         device.print("<select size=\"1\"");
 
-        SDimension preferredSize = component.getPreferredSize();
-        boolean behaviour = false && Utils.isMSIE(component) && preferredSize != null && "100%".equals(preferredSize.getWidth());
-        if (behaviour) {
-            component.setAttribute("behavior", "url('-org/wings/plaf/css/layout.htc')");
-            preferredSize.setWidth(Utils.calculateHorizontalOversize(component, false));
-            //component.setAttribute("display", "none");
-        }
         writeAllAttributes(device, component);
-        if (behaviour) {
-            preferredSize.setWidth("100%");
-            component.setAttribute("behavior", null);
-            Utils.optAttribute(device, "rule", "width");
-        }
 
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());

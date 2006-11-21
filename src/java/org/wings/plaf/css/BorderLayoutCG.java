@@ -13,7 +13,7 @@
 package org.wings.plaf.css;
 
 import org.wings.*;
-import org.wings.plaf.css.msie.PaddingVoodoo;
+import org.wings.plaf.css.PaddingVoodoo;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -37,6 +37,11 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         final TableCellStyle cellStyle = cellLayoutStyle(layout);
         final TableCellStyle origCellStyle = cellStyle.makeACopy();
 
+        SDimension preferredSize = container.getPreferredSize();
+        String height = preferredSize != null ? preferredSize.getHeight() : null;
+        boolean clientLayout = isMSIE(container) && height != null && !"auto".equals(height);
+        int oversize = layoutOversize(l);
+
         int cols = 1;
         if (west != null) {
             cols++;
@@ -54,7 +59,13 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             cellStyle.colspan = cols;
             cellStyle.rowspan = -1;
 
-            openLayouterRow(d, "0%");
+            if (clientLayout) {
+                d.print("<tr");
+                Utils.optAttribute(d, "oversize", oversize);
+                d.print(">");
+            }
+            else
+                openLayouterRow(d, "0%");
             Utils.printNewline(d, north);
 
             if (PaddingVoodoo.hasPaddingInsets(container)) {
@@ -75,7 +86,13 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             Utils.printNewline(d, layout.getContainer());
         }
 
-        openLayouterRow(d, "100%");
+        if (clientLayout) {
+            d.print("<tr yweight=\"100\"");
+            Utils.optAttribute(d, "oversize", oversize);
+            d.print(">");
+        }
+        else
+            openLayouterRow(d, "100%");
 
         if (west != null) {
             cellStyle.defaultLayoutCellHAlignment = SConstants.LEFT;
@@ -169,7 +186,13 @@ public class BorderLayoutCG extends AbstractLayoutCG {
             }
 
             Utils.printNewline(d, layout.getContainer());
-            openLayouterRow(d, "0%");
+            if (clientLayout) {
+                d.print("<tr");
+                Utils.optAttribute(d, "oversize", oversize);
+                d.print(">");
+            }
+            else
+                openLayouterRow(d, "0%");
             Utils.printNewline(d, south);
             openLayouterCell(d, south, cellStyle);
             south.write(d);
@@ -180,6 +203,11 @@ public class BorderLayoutCG extends AbstractLayoutCG {
         }
 
         closeLayouterBody(d, layout);
+    }
+
+    protected int layoutOversize(SLayoutManager layout) {
+        SBorderLayout borderLayout = (SBorderLayout) layout;
+        return borderLayout.getVgap() + borderLayout.getBorder();
     }
 
     protected int getLayoutHGap(SLayoutManager layout) {
@@ -195,10 +223,6 @@ public class BorderLayoutCG extends AbstractLayoutCG {
     protected int getLayoutBorder(SLayoutManager layout) {
         SBorderLayout borderLayout = (SBorderLayout) layout;
         return borderLayout.getBorder();
-    }
-
-    protected int layoutOversize(SLayoutManager layout) {
-        return 0;
     }
 
     public int getDefaultLayoutCellHAlignment() {

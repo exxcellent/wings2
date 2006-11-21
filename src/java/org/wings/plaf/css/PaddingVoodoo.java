@@ -1,6 +1,6 @@
 // (c) copyright 2006 by eXXcellent solutions, Ulm. Author: bschmid
 
-package org.wings.plaf.css.msie;
+package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.border.SBorder;

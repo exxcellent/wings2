@@ -13,7 +13,7 @@
 package org.wings.plaf.css;
 
 import org.wings.*;
-import org.wings.plaf.css.msie.PaddingVoodoo;
+import org.wings.plaf.css.PaddingVoodoo;
 import org.wings.io.Device;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

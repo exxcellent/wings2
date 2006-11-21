@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 /**
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
  */
-public class NestingExample
+public class NestingTest
     extends WingSetPane
 {
     private final SComboBox selectComboBox = new SComboBox();

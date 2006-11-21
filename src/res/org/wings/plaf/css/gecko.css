@@ -38,6 +38,10 @@ tr {
     -moz-border-radius-bottomleft: 4px;
 }
 
+td.STabbedPane_pane {
+    height: 100%;
+}
+
 /* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
    Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
 img.spacer, img.nopad {
@@ -59,8 +63,10 @@ div.domTT {
 
 TABLE.SPanel {
     border-collapse: collapse;
+    /*
     margin-left: 1px;
     margin-top: 1px;
+    */
 }
 
 /*pre.label {

@@ -18,7 +18,7 @@ import org.wings.SGridBagLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
-import org.wings.plaf.css.msie.PaddingVoodoo;
+import org.wings.plaf.css.PaddingVoodoo;
 import org.wings.session.BrowserType;
 import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
@@ -239,5 +239,12 @@ public abstract class AbstractLayoutCG implements LayoutCG {
 
     protected final int cellOversize(SGridBagLayout layout, Insets insets) {
         return insets.top + insets.bottom + layout.getBorder();
+    }
+
+    /**
+     * @return true if current browser is microsoft exploder
+     */
+    protected final boolean isMSIE(final SComponent component) {
+        return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
 }

@@ -14,7 +14,7 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
-import org.wings.plaf.css.msie.PaddingVoodoo;
+import org.wings.plaf.css.PaddingVoodoo;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
