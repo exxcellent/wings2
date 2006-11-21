@@ -57,6 +57,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
                 d.print("<tr>");
             else
                 d.print("<tr height=\"0%\">");
+
             if (west != null) {
                 d.print("<td width=\"0%\"></td>");
             }
@@ -75,6 +76,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
             d.print("<tr yweight=\"100\">");
         else
             d.print("<tr height=\"100%\">");
+
         if (west != null) {
             d.print("<td width=\"0%\">");
             writeComponent(d, west);
@@ -99,6 +101,7 @@ public class ScrollPaneLayoutCG extends AbstractLayoutCG {
                 d.print("<tr>");
             else
                 d.print("<tr height=\"0%\">");
+
             if (west != null) {
                 d.print("<td width=\"0%\"></td>");
             }

@@ -12,11 +12,7 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SIcon;
-import org.wings.SResourceIcon;
-import org.wings.SScrollBar;
+import org.wings.*;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -92,7 +88,7 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         sb.setStyle(style);
     }
 
-    private void writeVerticalScrollbar(Device d, SScrollBar sb) throws IOException {
+    private void writeVerticalScrollbar(Device device, SScrollBar sb) throws IOException {
         final int value = sb.getValue();
         final int blockIncrement = sb.getBlockIncrement();
         final int extent = sb.getExtent();
@@ -100,76 +96,87 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         final int maximum = sb.getMaximum();
         final int last = maximum - extent;
 
-        // Workaround -- enable this renderer for the MSIE.
-        // MSIE stretches the rows to the length of the universe if we advise the rows to be 100%/1% height
-        // Gecko fails to stretch if we do not advise the preffered sizes.
         final boolean isMsIEBrowser = Utils.isMSIE(sb);
         final String rowHeightExpanded = isMsIEBrowser ? "" : " height=\"100%\"";
-        final String rowHeightFlattened = isMsIEBrowser ? "" : " height=\"1%\"";
-        // Regarding table height it is totally inveser. I love 'em.
-        final String tableHeight = isMsIEBrowser ? " height=\"100%\"" : "";
+        final String rowHeightFlattened = isMsIEBrowser ? "" : " height=\"0%\"";
 
-        Utils.printNewline(d, sb);
-        d.print("<table").print(tableHeight);
-        writeAllAttributes(d, sb);
-        d.print("><tbody>")
+        SDimension preferredSize = sb.getPreferredSize();
+        String height = preferredSize != null ? preferredSize.getHeight() : null;
+        boolean clientLayout = isMSIE(sb) && height != null && !"auto".equals(height);
+
+        Utils.printNewline(device, sb);
+        device.print("<table");
+
+        if (clientLayout) {
+            Utils.optAttribute(device, "layoutHeight", height);
+            preferredSize.setHeight(null);
+        }
+
+        writeAllAttributes(device, sb);
+
+        if (clientLayout) {
+            preferredSize.setHeight(height);
+            sb.getSession().getScriptManager().addScriptListener(new LayoutFillScript(sb.getName()));
+        }
+
+        device.print("><tbody>")
                 .print("<tr").print(rowHeightFlattened).print(">")
                 .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
-        d.print("<tr><td");
-        Utils.printClickability(d, sb, "" + minimum, true, sb.getShowAsFormComponent());
-        d.print(">");
+        device.print("<tr><td");
+        Utils.printClickability(device, sb, "" + minimum, true, sb.getShowAsFormComponent());
+        device.print(">");
 
-        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0]);
-        d.print("</td></tr>");
-        d.print("<tr><td");
-        Utils.printClickability(d, sb, "" + (Math.max(minimum, value - blockIncrement)), true, sb.getShowAsFormComponent());
-        d.print(">");
+        writeIcon(device, DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0]);
+        device.print("</td></tr>");
+        device.print("<tr><td");
+        Utils.printClickability(device, sb, "" + (Math.max(minimum, value - blockIncrement)), true, sb.getShowAsFormComponent());
+        device.print(">");
 
-        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD_BLOCK][0]);
-        d.print("</td></tr>");
-        d.print("<tr><td");
-        Utils.printClickability(d, sb, "" + (value - 1), true, sb.getShowAsFormComponent());
-        d.print(">");
-        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0]);
-        d.print("</td></tr>");
+        writeIcon(device, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD_BLOCK][0]);
+        device.print("</td></tr>");
+        device.print("<tr><td");
+        Utils.printClickability(device, sb, "" + (value - 1), true, sb.getShowAsFormComponent());
+        device.print(">");
+        writeIcon(device, DEFAULT_ICONS[SConstants.VERTICAL][BACKWARD][0]);
+        device.print("</td></tr>");
 
-        d.print("</tbody></table></td>").print("</tr>");
-        Utils.printNewline(d, sb);
-        d.print("<tr").print(rowHeightExpanded).print(">")
+        device.print("</tbody></table></td>").print("</tr>");
+        Utils.printNewline(device, sb);
+        device.print("<tr yweight=\"100\"").print(rowHeightExpanded).print(">")
                 .print("<td><table class=\"slider\" height=\"100%\"><tbody>");
 
         int range = maximum - minimum;
         int iconWidth = DEFAULT_ICONS[SConstants.VERTICAL][FIRST][0].getIconWidth();
-        verticalArea(d, "#eeeeff", value * 100 / range, iconWidth);
-        verticalArea(d, "#cccccc", extent * 100 / range, iconWidth);
-        verticalArea(d, "#eeeeff", (range - value - extent) * 100 / range, iconWidth);
+        verticalArea(device, "#eeeeff", value * 100 / range, iconWidth);
+        verticalArea(device, "#cccccc", extent * 100 / range, iconWidth);
+        verticalArea(device, "#eeeeff", (range - value - extent) * 100 / range, iconWidth);
 
-        d.print("</tbody></table></td>")
+        device.print("</tbody></table></td>")
                 .print("</tr>");
-        Utils.printNewline(d, sb);
-        d.print("<tr").print(rowHeightFlattened).print(">")
+        Utils.printNewline(device, sb);
+        device.print("<tr").print(rowHeightFlattened).print(">")
                 .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
 
-        d.print("<tr><td");
-        Utils.printClickability(d, sb, "" + (value + 1), true, sb.getShowAsFormComponent());
-        d.print(">");
+        device.print("<tr><td");
+        Utils.printClickability(device, sb, "" + (value + 1), true, sb.getShowAsFormComponent());
+        device.print(">");
 
-        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0]);
-        d.print("</td></tr>");
-        d.print("<tr><td");
-        Utils.printClickability(d, sb, "" + (Math.min(last, value + blockIncrement)), true, sb.getShowAsFormComponent());
-        d.print(">");
+        writeIcon(device, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD][0]);
+        device.print("</td></tr>");
+        device.print("<tr><td");
+        Utils.printClickability(device, sb, "" + (Math.min(last, value + blockIncrement)), true, sb.getShowAsFormComponent());
+        device.print(">");
 
-        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD_BLOCK][0]);
-        d.print("</td></tr>");
-        d.print("<tr><td");
-        Utils.printClickability(d, sb, "" + last, true, sb.getShowAsFormComponent());
-        d.print(">");
-        writeIcon(d, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0]);
-        d.print("</td></tr>");
+        writeIcon(device, DEFAULT_ICONS[SConstants.VERTICAL][FORWARD_BLOCK][0]);
+        device.print("</td></tr>");
+        device.print("<tr><td");
+        Utils.printClickability(device, sb, "" + last, true, sb.getShowAsFormComponent());
+        device.print(">");
+        writeIcon(device, DEFAULT_ICONS[SConstants.VERTICAL][LAST][0]);
+        device.print("</td></tr>");
 
-        d.print("</tbody></table></td>")
+        device.print("</tbody></table></td>")
                 .print("</tr>")
                 .print("</tbody></table>");
     }

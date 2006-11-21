@@ -50,11 +50,12 @@ public class ScrollPaneExample extends WingSetPane
 
         scrollPane = new SScrollPane(table);
         scrollPane.setHorizontalExtent(10);
-        scrollPane.setVerticalExtent(18);
+        scrollPane.setVerticalExtent(16);
         scrollPane.getHorizontalScrollBar().setBlockIncrement(3);
         scrollPane.getVerticalScrollBar().setBlockIncrement(3);
         scrollPane.setBorder(new SLineBorder(Color.GRAY, 1));
         scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
+        scrollPane.setPreferredSize(SDimension.FULLAREA);
 
         controls.addControllable(scrollPane);
         return scrollPane;

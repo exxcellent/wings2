@@ -530,6 +530,17 @@ function layoutFill(table) {
   }
 }
 
+function layoutFix(table) {
+  var consumedHeight = 0;
+  var rows = table.rows;
+  for (var i=0; i < rows.length; i++) {
+    var row = rows[i];
+    consumedHeight += row.offsetHeight;
+  }
+
+  table.style.height = consumedHeight + "px";
+}
+
 function layoutScrollPane(table) {
     var div = table.getElementsByTagName("div")[0];
 
