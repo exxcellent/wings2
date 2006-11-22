@@ -14,6 +14,7 @@
 
 package org.wings.plaf.css;
 
+import java.util.List;
 import org.wings.SComponent;
 import org.wings.SToolTipManager;
 import org.wings.util.SStringBuilder;
@@ -22,35 +23,34 @@ import org.wings.util.SStringBuilder;
  * PLAF renderer for Tooltips. 
  * @author Christian Schyma
  */
-final class ToolTipCG {
+public final class ToolTipCG {
     
     private ToolTipCG() {
         // nothing to do
     }
-    
+       
     /**
-     * Generates and returns a JavaScript to initialize the tooltip of the given component.
-     * @param component component of tooltip
-     * @return JavaScript; returns null when the component has no tooltip
+     * Generates and returns JavaScript to initialize the tooltip for the given components.
+     * @param componentIds
+     * @return JavaScript
      */
-    public static String generateTooltipInitScript(SComponent component) {            
-        final String tooltip = component.getToolTipText();           
-        if ((tooltip != null) && (tooltip.length() > 0)) {
-            SToolTipManager ttManager = SToolTipManager.sharedInstance();            
-            final SStringBuilder script = 
-                    new SStringBuilder("new YAHOO.widget.Tooltip('");
-                    script.append(component.getName())
-                    .append("_tooltip', {")
-                    .append("context: '").append(component.getName()).append("', ")
-                    .append("text: \"").append(tooltip).append("\",")
-                    .append("showdelay: ").append(ttManager.getInitialDelay())
-                    .append(",").append("autodismissdelay: ").append(ttManager.getDismissDelay())
-                    .append("});");                                        
-            return script.toString();
+    public static String generateTooltipInitScript(List componentIds) {        
+        SToolTipManager ttManager = SToolTipManager.sharedInstance();
+        
+        SStringBuilder ids = new SStringBuilder("[");
+        for (int i = 0; i < componentIds.size(); i++) {
+            ids.append("'").append(componentIds.get(i)).append("',");            
         }
-        else {
-            return null;
-        }                
+        ids.append("]");        
+                        
+        final SStringBuilder tooltipsInitScript = new SStringBuilder("new YAHOO.widget.Tooltip('tt',");
+        tooltipsInitScript
+                .append("{context:").append(ids).append(", ")
+                .append("showdelay: ").append(ttManager.getInitialDelay()).append(", ")
+                .append("autodismissdelay: ").append(ttManager.getDismissDelay())
+                .append("});");
+        
+        return tooltipsInitScript.toString();                
     }
     
 }

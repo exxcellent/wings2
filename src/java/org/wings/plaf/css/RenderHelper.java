@@ -64,12 +64,6 @@ public final class RenderHelper {
                 addScript(script);
             }
         }
-
-        // add tooltip script
-        script = ToolTipCG.generateTooltipInitScript(component);
-        if (script != null) {
-            addScript(script);
-        }
     }
 
     public List getCollectedMenues() {

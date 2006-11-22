@@ -137,7 +137,10 @@ public class MenuExample extends WingSetPane {
 
     SMenuItem createMenuItem(TreeNode node) {
         SMenuItem item = new SMenuItem(node.toString());
-        item.setToolTipText(node.toString());
+        /* setToolTipText() cannot be used due to JavaScript performance problems,
+         * only occurs when using incremental updates and menu         
+         */
+        //item.setToolTipText(node.toString()); 
         item.addActionListener(menuItemListener);
         if (shortcutKey != 0) {
             item.setAccelerator(KeyStroke.getKeyStroke(shortcutKey,

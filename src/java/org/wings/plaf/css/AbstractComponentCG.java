@@ -145,6 +145,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             Utils.optAttribute(device, "eid", component.getEncodedLowLevelEventId());
         }
 
+        // Tooltip handling
+        writeTooltipMouseOver(device, component);
+        
         // Component popup menu
         writeContextMenu(device, component);
     }
@@ -185,6 +188,16 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
+    /**
+     * Write Tooltip code.
+     */
+    protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
+        final String toolTipText = component != null ? component.getToolTipText() : null;
+        if (toolTipText != null && toolTipText.length() > 0) {            
+            Utils.optAttribute(device, "title", toolTipText);
+        }
+    }
+    
     /**
      * Install the appropriate CG for <code>component</code>.
      *
@@ -348,12 +361,13 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         try {
         	writeInternal(device, component);
         	RenderHelper.getInstance(component).collectScripts(component);
-            RenderHelper.getInstance(component).collectMenues(component);
-		} catch (RuntimeException e) {
-			log.fatal("Runtime exception during rendering", e);
-			device.print("<blink>" + e.getClass().getName() + " during code generation of "
-					+ component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
-		}
+                RenderHelper.getInstance(component).collectMenues(component);                
+                SToolTipManager.sharedInstance().registerComponent(component);
+	} catch (RuntimeException e) {
+		log.fatal("Runtime exception during rendering", e);
+		device.print("<blink>" + e.getClass().getName() + " during code generation of "
+                	+ component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
+	}
 
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");

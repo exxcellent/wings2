@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.Renderable;
 import org.wings.SComponent;
 import org.wings.SFrame;
+import org.wings.SToolTipManager;
 import org.wings.Version;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
@@ -516,6 +517,13 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
         scriptManager.clearScriptListeners();
 
+        List tooltipComponentIds = SToolTipManager.sharedInstance().getRegisteredComponent();
+        if (tooltipComponentIds.size() != 0) {
+            String tooltipsInit = ToolTipCG.generateTooltipInitScript(tooltipComponentIds);        
+            device.print(tooltipsInit);
+            SToolTipManager.sharedInstance().clearRegisteredComponents();    
+        }
+        
         device.print("</script>\n");
     }
 

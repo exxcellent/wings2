@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,8 +15,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
 import org.wings.SFrame;
+import org.wings.SToolTipManager;
 import org.wings.io.Device;
 import org.wings.plaf.css.RenderHelper;
+import org.wings.plaf.css.ToolTipCG;
 import org.wings.session.SessionManager;
 
 /**
@@ -152,6 +155,14 @@ public class IncrementalUpdateResource extends DynamicResource {
                     for (Iterator i = helper.getCollectedScripts().iterator(); i.hasNext();) {
                         out.print("\n<script><![CDATA[" + i.next() + "]]></script>");
                     }
+                    // updates of tooltips
+                    final List tooltipComponentIds = SToolTipManager.sharedInstance().getRegisteredComponent();
+                    if (tooltipComponentIds.size() != 0) {
+                        String tooltipsInit = ToolTipCG.generateTooltipInitScript(tooltipComponentIds);        
+                        out.print("\n<script><![CDATA[" + tooltipsInit + "]]></script>");                                            
+                        SToolTipManager.sharedInstance().clearRegisteredComponents();                        
+                    }
+                    
                     // update of event epoch
                     out.print("\n<event_epoch>" + getFrame().getEventEpoch() + "</event_epoch>");
                 } else {
