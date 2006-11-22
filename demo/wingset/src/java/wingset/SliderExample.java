@@ -1,5 +1,10 @@
 package wingset;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SForm;
 import org.wings.SGridLayout;
@@ -18,7 +23,12 @@ public class SliderExample
     
     public SComponent createExample() {
         
-        SGridLayout layout = new SGridLayout( 2 );
+        final SLabel label = new SLabel("");
+        
+        SGridLayout layout = new SGridLayout(2);
+        layout.setHgap(10);
+        layout.setVgap(40);
+        
         SForm form = new SForm(layout);
         
         SSlider horizSlider1 = new SSlider(0, 200, 150);
@@ -29,21 +39,36 @@ public class SliderExample
         horizSlider3.setMajorTickSpacing(25);
         horizSlider3.setSnapToTicks(true);
         
-        SSlider vertSlider = new SSlider(SSlider.VERTICAL, -50, 50, 20);
-        vertSlider.setMajorTickSpacing(5);
+        SSlider vertSlider = new SSlider(SSlider.VERTICAL, 0, 300, 0);
+        vertSlider.setMajorTickSpacing(30);
         vertSlider.setSnapToTicks(true);
+        vertSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                label.setText("value of slider 4 is "+ String.valueOf(((SSlider)e.getSource()).getValue()));
+            }
+        });                
         
-        form.add(new SLabel("slider 1 [0,200], initial value = 150")); 
+        final SButton button = new SButton("store slider positions");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // just to simulate a POST
+            }
+        });
+        
+        form.add(new SLabel("slider 1 [0,200]"));
         form.add(horizSlider1);
         
-        form.add(new SLabel("slider 2 [-100, 100, initial value = 50")); 
+        form.add(new SLabel("slider 2 [-100, 100]"));
         form.add(horizSlider2);
         
-        form.add(new SLabel("slider 3 [-400, -200, initial value = -300, snaps to every 25 ticks")); 
+        form.add(new SLabel("slider 3 [-400, -200], snaps to every 25 ticks"));
         form.add(horizSlider3);
         
-        form.add(new SLabel("slider 4 [-50, 50] initial value = 20, snaps to every 5 ticks")); 
+        form.add(new SLabel("slider 4 [0, 300], snaps to every 30 ticks"));
         form.add(vertSlider);
+        
+        form.add(button);
+        form.add(label);
         
         return form;
     }

@@ -17,12 +17,10 @@ package org.wings.plaf.css;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
 import org.wings.SSlider;
-import org.wings.plaf.CGManager;
+import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
-import org.wings.session.SessionManager;
 import org.wings.SComponent;
-
 import org.wings.io.Device;
 import java.io.IOException;
 import org.wings.util.SStringBuilder;
@@ -31,14 +29,15 @@ import org.wings.util.SStringBuilder;
  * CG for SSlider instances.
  * @author Christian Schyma
  */
-public class SliderCG  extends AbstractComponentCG implements org.wings.plaf.SliderCG {
+public class SliderCG extends AbstractComponentCG implements org.wings.plaf.SliderCG {
+     
+    private SIcon horizontalThumb;
+    private SIcon verticalThumb;
     
-    // these graphics are needed for hsvcolorpicker.css
+    // used by .SSliderBgHoriz and SSliderBgVert in all.css
     static {
-        String[] images = new String [] {
-            "org/wings/icons/SliderHorizThumb.png",
-            "org/wings/icons/SliderHoriz.png",
-            "org/wings/icons/SliderVertThumb.png",
+        String[] images = new String [] {            
+            "org/wings/icons/SliderHoriz.png",            
             "org/wings/icons/SliderVert.png"
         };
         
@@ -48,31 +47,31 @@ public class SliderCG  extends AbstractComponentCG implements org.wings.plaf.Sli
         }
     }
     
-    private String horizontalSliderUrl = "-org/wings/icons/SliderHorizThumb.png";
-    private String verticalSliderUrl = "-org/wings/icons/SliderVertThumb.png";
+    /**
+     * the maximum number of pixels the slider thumb can be moved
+     */    
+    private final Integer defaultMaxPixelConstraint = new Integer(200); // slider bar width - slider thumb width        
     
     public SliderCG() {
-    }
-    
-    public void installCG(SComponent c) {
-    }
-    
-    public void uninstallCG(SComponent c) {
-    }
-    
-    public void componentChanged(SComponent c) {
+        setHorizontalThumbIcon((SIcon) ResourceManager.getObject("SliderCG.horizontalThumbIcon", SIcon.class));
+        setVerticalThumbIcon((SIcon) ResourceManager.getObject("SliderCG.verticalThumbIcon", SIcon.class));
     }
     
     public void writeInternal(final Device device, final SComponent component) throws IOException {
         String id = component.getName();
         String thumbId = id + "_sliderthumb";
-        SSlider c = (SSlider) component;
+        SSlider c = (SSlider) component;                
+        Integer maxPixelConstraint = (Integer)component.getClientProperty("maxPixelConstraint");
+        if (maxPixelConstraint == null) maxPixelConstraint = defaultMaxPixelConstraint;
+        
+        // scale factor for converting the pixel offset into a real value
+        double factor = (c.getMaximum() - c.getMinimum()) / maxPixelConstraint.floatValue(); 
         
         // render HTML
         device.print("<div");
         Utils.optAttribute(device, "id", id);
         if (SSlider.HORIZONTAL == c.getOrientation()) {
-            Utils.optAttribute(device, "class", "SSliderBg");
+            Utils.optAttribute(device, "class", "SSliderBgHoriz");
         } else if (SSlider.VERTICAL == c.getOrientation()) {
             Utils.optAttribute(device, "class", "SSliderBgVert");
         }
@@ -86,28 +85,36 @@ public class SliderCG  extends AbstractComponentCG implements org.wings.plaf.Sli
         
         device.print("<img");
         if (SSlider.HORIZONTAL == c.getOrientation()) {
-            Utils.optAttribute(device, "src", horizontalSliderUrl);
+            Utils.optAttribute(device, "src", horizontalThumb.getURL());
         } else if (SSlider.VERTICAL == c.getOrientation()) {
-            Utils.optAttribute(device, "src", verticalSliderUrl);
-        }
+
+            Utils.optAttribute(device, "src", verticalThumb.getURL());
+        }        
         device.print(" />");
-        
-        device.print("</div></div>");
+                
+        device.print("</div>");                
         
         String valId = (new SStringBuilder(id).append("_val")).toString();
-        device.print("<input ");
+        device.print("<div");
+        if (c.getOrientation() == SSlider.VERTICAL) {
+            Utils.optAttribute(device, "class", "SSliderValueRight");    
+        } else if (c.getOrientation() == SSlider.HORIZONTAL) {
+            Utils.optAttribute(device, "class", "SSliderValueBottom");    
+        }            
+        device.print("><input ");
         Utils.optAttribute(device, "autocomplete", "off");
         Utils.optAttribute(device, "name", valId);
         Utils.optAttribute(device, "id", valId);
         Utils.optAttribute(device, "value", 0);
         Utils.optAttribute(device, "size", 4);
-        Utils.optAttribute(device, "type", "text");
-        device.print(" readonly>");
+        Utils.optAttribute(device, "type", "text");        
+        device.print(" readonly></div>");
+        
+        device.print("</div></div>");
         
         // prepare script
         String slider = (new SStringBuilder(id).append("_").append("slider")).toString();
-        double factor = (c.getMaximum() - c.getMinimum()) / 200.;
-        //int pixelsToTheRight = c.getMaximum() - c.getMinimum();
+        
         SStringBuilder code = new SStringBuilder("function() {");
         code.append("var ").append(slider).append(" = YAHOO.widget.Slider.");
         if (SSlider.HORIZONTAL == c.getOrientation()) {
@@ -115,45 +122,36 @@ public class SliderCG  extends AbstractComponentCG implements org.wings.plaf.Sli
         } else if (SSlider.VERTICAL == c.getOrientation()) {
             code.append("getVertSlider(");
         }
-        
+                
         code.append("'"+ id +"', ")
         .append("'"+ thumbId +"', ")
         .append("0, ")
-        .append("200");
-        
+        .append(maxPixelConstraint.intValue());
         if (c.getSnapToTicks()) {
             code.append(", ").append(c.getMajorTickSpacing() / factor);
         }
+        code.append("); ");
         
-        code.append("); ")
-        //.append(slider).append(".setValue(").append(c.getValue() - c.getMinimum()).append(");")
-        .append(slider).append(".setValue(").append((c.getValue() - c.getMinimum()) / factor).append(");")
-        //.append(slider).append(".onChange = function(offset) {document.getElementById('").append(valId).append("').value = offset + ").append(c.getMinimum()).append("};")
+        code.append(slider).append(".setValue(").append((c.getValue() - c.getMinimum()) / factor).append(");")
         .append(slider).append(".onChange = function(offset) {document.getElementById('").append(valId).append("').value = offset * ").append(factor).append("+ ").append(c.getMinimum()).append("};")
         .append("}");
         
-        
-//        System.out.println("## factor = "+ factor);
-//        System.out.println("## c.getValue = "+ c.getValue());
-//        System.out.println("## c.getMinimum = "+ c.getMinimum());
-//        System.out.println("## setValue = "+ (c.getValue() - c.getMinimum()) / factor);
-        
-        // attach script
-        JavaScriptDOMListener listener = new JavaScriptDOMListener(JavaScriptEvent.ON_AVAILABLE, code.toString(), component);
+        // remove old and attach new script
+        JavaScriptDOMListener listener;
+        if ((listener = (JavaScriptDOMListener)component.getClientProperty("initScript")) != null) {
+            component.removeScriptListener(listener);
+        }
+        listener = new JavaScriptDOMListener(JavaScriptEvent.ON_AVAILABLE, code.toString(), component);
         component.addScriptListener(listener);
+        component.putClientProperty("initScript", listener);
+    }
+      
+    public void setHorizontalThumbIcon(SIcon icon) {
+        this.horizontalThumb = icon;
+    }
+    
+    public void setVerticalThumbIcon(SIcon icon) {
+        this.verticalThumb = icon;
     }
     
 }
-
-
-
-//public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
-//
-//
-//    public void installCG(SComponent component) {
-//        super.installCG(component);
-//        ((SLabel)component).setWordWrap(wordWrapDefault);
-//    }
-
-
-
