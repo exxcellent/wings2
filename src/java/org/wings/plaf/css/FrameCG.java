@@ -448,7 +448,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
         writeInlineScripts(device, frame);
-        device.print("\n</body>\n</html>\n");
+        device.print("</body>\n</html>\n");
         pComp.fireRenderEvent(SComponent.DONE_RENDERING);
         RenderHelper.getInstance(frame).reset();
     }
@@ -475,7 +475,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             ScriptListener scriptListener = scriptListeners[i];
             String script = scriptListener.getScript();
             if (!scriptTagOpen) {
-                device.print("\n<script type=\"text/javascript\">");
+                device.print("\n<script type=\"text/javascript\">\n");
                 scriptTagOpen = true;
             }
             device.print(script);
@@ -484,7 +484,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         scriptManager.clearScriptListeners();
         
         if (scriptTagOpen) {
-            device.print("</script>");
+            device.print("</script>\n");
         }
     }
 
