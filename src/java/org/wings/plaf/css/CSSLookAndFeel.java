@@ -44,14 +44,14 @@ public class CSSLookAndFeel
         // default properties
         SStringBuilder propertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH);
         propertiesFilename.append(PROPERTIES_FILENAME_DEFAULT);
-        propertiesFilename.append(PROPERTIES_FILENAME_END);
+        propertiesFilename.append(PROPERTIES_FILENAME_END);                        
+        
+        Properties properties = PropertyUtils.loadProperties(propertiesFilename.toString());
                 
         SStringBuilder xcomponentsPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH_XCOMPONENT);
         xcomponentsPropertiesFilename
                 .append(PROPERTIES_FILENAME_XCOMPONENT)
                 .append(PROPERTIES_FILENAME_END);                        
-        
-        Properties properties = PropertyUtils.loadProperties(propertiesFilename.toString());
         
         try {
             properties.putAll(PropertyUtils.loadProperties(xcomponentsPropertiesFilename.toString()));
@@ -59,7 +59,7 @@ public class CSSLookAndFeel
         } catch (IOException e) {
             log.info("Unable to open xcomponents specific properties file '"+ xcomponentsPropertiesFilename.toString()+"'. This is OK if you are not using wingX.");
         }
-        
+                
         // browser dependent properties
         Browser userAgent = SessionManager.getSession().getUserAgent();
         String browserType = userAgent.getBrowserType().getShortName();
@@ -67,7 +67,13 @@ public class CSSLookAndFeel
         SStringBuilder browserPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH);
         browserPropertiesFilename.append(browserType);
         browserPropertiesFilename.append(PROPERTIES_FILENAME_END);
-            
+                            
+        try {
+            properties.putAll(PropertyUtils.loadProperties(browserPropertiesFilename.toString()));
+        } catch (IOException e) {
+            log.info("Unable to open browser specific properties file '"+browserPropertiesFilename.toString()+"'. This is OK.");
+        }
+        
         SStringBuilder browserXcomponentsPropertiesFilename = new SStringBuilder(PROPERTIES_CLASSPATH_XCOMPONENT);
             browserXcomponentsPropertiesFilename
                 .append(PROPERTIES_FILENAME_XCOMPONENT)
@@ -75,22 +81,26 @@ public class CSSLookAndFeel
                 .append(PROPERTIES_FILENAME_END);        
         
         try {
-            properties.putAll(PropertyUtils.loadProperties(browserPropertiesFilename.toString()));
+            properties.putAll(PropertyUtils.loadProperties(browserXcomponentsPropertiesFilename.toString()));                                
         } catch (IOException e) {
-            log.info("Unable to open browser specific properties file '"+browserPropertiesFilename.toString()+"'. This is OK.");
+            log.info("Unable to open xcomponents specific properties file '"+ browserXcomponentsPropertiesFilename.toString()+"'. This is OK if you are not using wingX.");                
         }
-                                
-        // only load ie specific cgs for the xcomponents when ie < 7                    
+                                        
+        // special properties for IE 7    
         if ((userAgent.getBrowserType().getId() == BrowserType.IE.getId()) &&
-            (userAgent.getMajorVersion() < 7)) {                                 
+            (userAgent.getMajorVersion() == 7)) {                                 
 
-            log.info("xcomponents cgs for ie 6 will be loaded");
-                
+            log.info("xcomponents cgs for ie 7 will be loaded");
+            SStringBuilder ie7Properties = new SStringBuilder(PROPERTIES_CLASSPATH_XCOMPONENT);
+            ie7Properties
+                    .append(PROPERTIES_FILENAME_XCOMPONENT)
+                    .append("_").append(browserType).append("7")
+                    .append(PROPERTIES_FILENAME_END);
+            
             try {
-                properties.putAll(PropertyUtils.loadProperties(browserXcomponentsPropertiesFilename.toString()));                
-                log.debug(browserXcomponentsPropertiesFilename.toString()+" attached");
+                properties.putAll(PropertyUtils.loadProperties(ie7Properties.toString()));                                
             } catch (IOException e) {
-                log.info("Unable to open xcomponents specific properties file '"+ browserXcomponentsPropertiesFilename.toString()+"'. This is OK if you are not using wingX.");                
+                log.info("Unable to open xcomponents specific properties file '"+ ie7Properties.toString()+"'.");                
             }
             
         }        
