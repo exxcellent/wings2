@@ -156,7 +156,7 @@ public class IncrementalUpdateResource extends DynamicResource {
                         out.print("\n<script><![CDATA[" + i.next() + "]]></script>");
                     }
                     // updates of tooltips
-                    final List tooltipComponentIds = SToolTipManager.sharedInstance().getRegisteredComponent();
+                    final List tooltipComponentIds = SToolTipManager.sharedInstance().getRegisteredComponents();
                     if (tooltipComponentIds.size() != 0) {
                         String tooltipsInit = ToolTipCG.generateTooltipInitScript(tooltipComponentIds);        
                         out.print("\n<script><![CDATA[" + tooltipsInit + "]]></script>");                                            

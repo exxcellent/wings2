@@ -517,7 +517,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
         scriptManager.clearScriptListeners();
 
-        List tooltipComponentIds = SToolTipManager.sharedInstance().getRegisteredComponent();
+        List tooltipComponentIds = SToolTipManager.sharedInstance().getRegisteredComponents();
         if (tooltipComponentIds.size() != 0) {
             String tooltipsInit = ToolTipCG.generateTooltipInitScript(tooltipComponentIds);        
             device.print(tooltipsInit);

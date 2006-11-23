@@ -78,7 +78,7 @@ public class SToolTipManager implements Serializable {
     /**
      * @see org.wings.SToolTipManager#registerComponent
      */
-    public List getRegisteredComponent() {
+    public List getRegisteredComponents() {
         return componentIds;
     }
     
