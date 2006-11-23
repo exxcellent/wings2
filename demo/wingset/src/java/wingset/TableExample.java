@@ -86,9 +86,9 @@ public class TableExample
 
         table.addMouseListener(new SMouseListener() {
             public void mouseClicked(SMouseEvent e) {
-                if (consume && table.getColumnForLocation(e.getPoint()) == 1)
+                if (consume && table.columnAtPoint(e.getPoint()) == 1)
                     e.consume();
-                clicks.setText("clicked " + e.getPoint().getCoordinates());
+                clicks.setText("clicked " + e.getPoint());
             }
         });
 

@@ -441,8 +441,7 @@ public class STable extends SComponent
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
         if (isEditing() && action.indexOf("_e_") != -1 && cellEditorComponent != null) {
-            if (cellEditorComponent != null)
-                cellEditorComponent.processLowLevelEvent(action, values);
+            cellEditorComponent.processLowLevelEvent(action, values);
         }
         else
             this.lastReceivedLowLevelEvents = values;
@@ -1150,8 +1149,8 @@ public class STable extends SComponent
 
                 try {
                     SPoint point = new SPoint(value);
-                    int row = getRowForLocation(point);
-                    int col = getColumnForLocation(point);
+                    int row = rowAtPoint(point);
+                    int col = columnAtPoint(point);
 
                     SMouseEvent event = new SMouseEvent(this, 0, point);
                     fireMouseClickedEvent(event);
@@ -1189,7 +1188,14 @@ public class STable extends SComponent
         getSelectionModel().fireDelayedIntermediateEvents();
     }
 
-    public int getRowForLocation(SPoint point) {
+
+    /**
+     * Returns the table row for the passed <code>SPoint</code>
+     * instance received via {@link #addMouseListener(org.wings.event.SMouseListener)}.
+     * @param point The pointed retuned by the mouse event.
+     * @return The row index
+     */
+    public int rowAtPoint(SPoint point) {
         String coordinates = point.getCoordinates();
         int colonIndex = coordinates.indexOf(':');
         if (colonIndex < 0)
@@ -1197,7 +1203,14 @@ public class STable extends SComponent
         return Integer.parseInt(coordinates.substring(0, colonIndex));
     }
 
-    public int getColumnForLocation(SPoint point) {
+    /**
+     * Returns the table column for the passed <code>SPoint</code>
+     * instance received via {@link #addMouseListener(org.wings.event.SMouseListener)}.
+     * @param point The pointed retuned by the mouse event.
+     * @return The column index
+     * @see #rowAtPoint(SPoint)
+     */
+    public int columnAtPoint(SPoint point) {
         String coordinates = point.getCoordinates();
         int colonIndex = coordinates.indexOf(':');
         if (colonIndex < 0)

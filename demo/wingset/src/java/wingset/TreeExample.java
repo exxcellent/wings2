@@ -59,7 +59,7 @@ public class TreeExample
                 TreeNode node = (TreeNode)object;
                 if (consume && node.isLeaf())
                     e.consume();
-                clicks.setText("clicked " + e.getPoint().getCoordinates());
+                clicks.setText("clicked " + e.getPoint());
             }
         });
         tree.getSelectionModel().setSelectionMode(STree.SINGLE_TREE_SELECTION);
