@@ -120,10 +120,15 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
 
         if (isEditable() && isEnabled()) {
             String newValue = values[0];
-            if (newValue != null && newValue.length() == 0)
+            if (newValue != null && newValue.length() == 0) {
                 newValue = null;
-
-            if (isDifferent(newValue, getText())) {
+            }
+            String text = getText();
+            if (text != null && text.length() == 0) {
+                text = null;
+            }
+            
+            if (isDifferent(newValue, text)) {
                 setText(newValue);
                 SForm.addArmedComponent(this);
             }
