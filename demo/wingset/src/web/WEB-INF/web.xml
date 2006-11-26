@@ -85,6 +85,11 @@
             <param-value>org.wings.plaf.css.dwr.SessionCreatorManager</param-value>
             <description>Install a session local CreatorManager</description>
         </init-param>
+        <init-param>
+            <param-name>org.directwebremoting.AccessControl</param-name>
+            <param-value>org.wings.plaf.css.dwr.SessionAccessControl</param-value>
+            <description>Install a session local AccessControl</description>
+        </init-param>
         <load-on-startup>-1</load-on-startup>
     </servlet>
 

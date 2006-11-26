@@ -29,9 +29,13 @@ public class SessionCreatorManager implements CreatorManager {
         // empty
     }
 
-    public boolean isDebug() {
+    /* (non-Javadoc)
+     * @see org.directwebremoting.CreatorManager#isDebug()
+     */
+    public boolean isDebug()
+    {
         return false;
-    }
+    }        
 
     public void addCreatorType(String typename, String clazz) {
     }

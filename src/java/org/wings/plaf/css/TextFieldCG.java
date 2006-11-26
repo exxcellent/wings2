@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
-public final class TextFieldCG extends AbstractComponentCG implements
+public class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
 
     private static final long serialVersionUID = 1L;
