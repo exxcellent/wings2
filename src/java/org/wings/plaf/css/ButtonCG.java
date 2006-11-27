@@ -108,7 +108,7 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         final String origStyle = button.getStyle();
         final boolean hasStandardBorder = (border == SDefaultBorder.DEFAULT || border instanceof SEmptyBorder || border instanceof SDefaultBorder);
         // is this a wingS border-styled button? If yes, then we need to do some css logic
-        if (origStyle != null && origStyle.contains("SButton") && hasStandardBorder) {
+        if (origStyle != null && origStyle.indexOf("SButton") >= 0 && hasStandardBorder) {
             // create a cleaned copy without any SButton_xxx stuff
             SStringBuilder className = new SStringBuilder(origStyle.replaceAll("SButton[a-z_A-Z]*",""));
             className.append(" SButton");
