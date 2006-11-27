@@ -50,15 +50,17 @@ public final class PaddingVoodoo
      */
     public static void doBorderPaddingsWorkaround(final SBorder border, final Insets targetInsets,
                                             boolean firstRow, boolean firstCol, boolean lastCol, boolean lastRow) {
-        final Insets paddingInset = border.getInsets();
-        if (firstRow)
-            targetInsets.top += paddingInset.top;
-        if (firstCol)
-            targetInsets.left += paddingInset.left;
-        if (lastCol)
-            targetInsets.right+= paddingInset.right;
-        if (lastRow)
-            targetInsets.bottom+= paddingInset.bottom;
+        if (border != null && border.getInsets() != null) {
+            final Insets paddingInset = border.getInsets();
+            if (firstRow)
+                targetInsets.top += paddingInset.top;
+            if (firstCol)
+                targetInsets.left += paddingInset.left;
+            if (lastCol)
+                targetInsets.right+= paddingInset.right;
+            if (lastRow)
+                targetInsets.bottom+= paddingInset.bottom;
+        }
     }
 
 

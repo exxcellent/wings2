@@ -43,7 +43,8 @@ import java.util.Arrays;
  */
 public class ComponentControls  extends SPanel {
     protected static final Object[] BORDERS = new Object[] {
-        new Object[] { "none",    null },
+        new Object[] { "CG default",  new SDefaultBorder() },
+        new Object[] { "null",    null },
         new Object[] { "raised",  new SBevelBorder(SBevelBorder.RAISED) },
         new Object[] { "lowered", new SBevelBorder(SBevelBorder.LOWERED) },
         new Object[] { "line",    new SLineBorder(2) },
