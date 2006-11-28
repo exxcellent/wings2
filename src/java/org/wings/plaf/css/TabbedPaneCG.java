@@ -206,9 +206,6 @@ public class TabbedPaneCG extends AbstractComponentCG {
             }
 
             final SStringBuilder cssClassName = new SStringBuilder("STabbedPane_Tab_");
-            if (tabbedPane.getShowAsFormComponent()) {
-                cssClassName.append("button_");
-            }
             cssClassName.append(placements.get(new Integer(tabbedPane.getTabPlacement())));
             if (i == tabbedPane.getSelectedIndex()) {
                 cssClassName.append(" STabbedPane_Tab_selected");
