@@ -13,22 +13,15 @@
 package org.wings.plaf.css;
 
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
-
-import org.wings.SComponent;
-import org.wings.SDimension;
-import org.wings.SFormattedTextField;
-import org.wings.STextField;
+import org.wings.*;
+import org.wings.text.SAbstractFormatter;
 import org.wings.io.Device;
 import org.wings.plaf.css.dwr.CallableManager;
-import org.wings.script.JavaScriptEvent;
-import org.wings.script.JavaScriptListener;
-import org.wings.text.SAbstractFormatter;
+import org.wings.script.*;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
 
 public final class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
