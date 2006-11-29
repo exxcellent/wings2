@@ -63,7 +63,7 @@ public class DefaultDocument implements SDocument {
         buffer.setLength(0);
         if (text != null){
             buffer.append(text);
-            if(listeners.getListenerCount() > 0){
+            if((listeners == null) || (listeners.getListenerCount() > 0)){
                 // If there are any document listeners: Generate document change events!
             	List actions = EditTranscriptGenerator.generateEvents(origText, text);
                 // and fire them!
