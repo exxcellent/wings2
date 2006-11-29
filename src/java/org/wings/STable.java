@@ -117,7 +117,18 @@ public class STable extends SComponent
      */
     protected final HashMap renderer = new HashMap();
 
+    /**
+     * If this table is editable, clicks on table cells will be catched and interpreted as 
+     * editor calls. Otherwise they may result in a selection event if {@link #isSelectable()}
+     */
     protected boolean editable = true;
+
+    /**
+     * If this table is marked as selectable, clicks on non-editable table cells will
+     * be catched and interpreted as selection calls.
+     */
+    protected boolean selectable = true;
+
 
     /**
      * <p>If editing, this is the <code>SComponent</code> that is handling the editing.
@@ -438,6 +449,7 @@ public class STable extends SComponent
         }
     }
 
+    // check fireIntermediateEvents !
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
         if (isEditing() && action.indexOf("_e_") != -1 && cellEditorComponent != null) {
@@ -515,7 +527,8 @@ public class STable extends SComponent
     /**
      * The cell renderer used to render a special selection column needed in cases clicks on table
      * cell cannot be distinguished as 'edit' or 'selection' click.
-     * @return The table cell renderer used to render the selection column
+     * @return The table cell renderer used to render the selection column, or <code>null</code>
+     * if no selection row should be rendered.
      */
     public STableCellRenderer getRowSelectionRenderer() {
         return rowSelectionRenderer;
@@ -524,7 +537,8 @@ public class STable extends SComponent
     /**
      * The cell renderer used to render a special selection column needed in cases clicks on table
      * cell cannot be distinguished as 'edit' or 'selection' click.
-     * @param rowSelectionRenderer The table cell renderer used to render the selection column
+     * @param rowSelectionRenderer The table cell renderer used to render the selection column.
+     *  Set this to <code>null</code> if you don't want to have a selection row in any case
      */
     public void setRowSelectionRenderer(STableCellRenderer rowSelectionRenderer) {
         this.rowSelectionRenderer = rowSelectionRenderer;
@@ -611,13 +625,61 @@ public class STable extends SComponent
         return headerRenderer.getTableCellRendererComponent( this, headerValue, false, -1, col );
     }
 
+    /**
+     * If this table is editable, clicks on table cells will be catched and interpreted as
+     * editor calls. Otherwise they may result in a selection event if {@link #isSelectable()}
+     * <p>Defaults to <code>true</code>
+     *
+     * @return <code>true</code> if clicks on editable cell should trigger the cell editor,
+     * <code>false</code> if never.
+     */
     public boolean isEditable() {
         return editable;
     }
 
+    /**
+     * If this table is editable, clicks on table cells will be catched
+     * as {@link org.wings.event.SMouseEvent}s and interpreted as
+     * editor calls. Otherwise they may result in a selection event if {@link #isSelectable()}.
+     * <p>Defaults to <code>true</code>
+     *
+     * @param editable <code>true</code> if clicks on editable cell should trigger the cell editor,
+     * <code>false</code> if never.
+     * @see #isEditable()
+     * @see #processLowLevelEvent(String, String[])
+     * @see #fireIntermediateEvents()
+     */
     public void setEditable(boolean editable) {
         reloadIfChange(this.editable, editable);
         this.editable = editable;
+    }
+
+    /**
+     * If this table is marked as selectable, clicks on a non-editable table cells
+     * {@link #setEditable(boolean)} must be <code>false</code>) will be catched
+     * as {@link org.wings.event.SMouseEvent}s and interpreted as selection calls.
+     * <p>Defaults to <code>true</code>
+     *
+     * @return <code>true</code> if table cell should catch clicks on non-editable tables.
+     */
+    public boolean isSelectable() {
+        return selectable;
+    }
+
+    /**
+     * If this table is marked as selectable, clicks on a non-editable table cells
+     * {@link #setEditable(boolean)} must be <code>false</code>) will be catched
+     * as {@link org.wings.event.SMouseEvent}s and interpreted as selection calls.
+     * <p>Defaults to <code>true</code>
+     *
+     * @param selectable <code>true</code> if table cell should catch clicks on non-editable tables.
+     * @see #isEditable()
+     * @see #processLowLevelEvent(String, String[])
+     * @see #fireIntermediateEvents() 
+     */
+    public void setSelectable(boolean selectable) {
+        reloadIfChange(this.selectable, selectable);
+        this.selectable = selectable;
     }
 
     /**

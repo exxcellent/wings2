@@ -36,12 +36,11 @@ import java.util.*;
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  */
 public class SForm  extends SContainer implements LowLevelEventListener {
-    private final transient static Log log = LogFactory.getLog(SForm.class);
+    private final static Log log = LogFactory.getLog(SForm.class);
 
     /**
      * Default Form encoding type. See {@link #setEncodingType(String)}.
      */
-    // TODO check this encoding type!
     public final static String ENC_TYPE_TEXT_PLAIN = "text/plain";
     /**
      * Multipart form encoding. Needed for file uploads. See {@link #setEncodingType(String)}.
@@ -63,8 +62,7 @@ public class SForm  extends SContainer implements LowLevelEventListener {
     private String encType;
 
     /**
-     * URL to which data
-     * should be sent to
+     * Target URL to which data should be sent to
      */
     private URL action;
 
@@ -202,7 +200,17 @@ public class SForm  extends SContainer implements LowLevelEventListener {
         }
     }
 
-    public final static void addArmedComponent(LowLevelEventListener component) {
+    /**
+     * Register a components to be subject to fire component events in a later phase of
+     * the request processing. <code>SForm</code> will call
+     * {@link org.wings.LowLevelEventListener#fireIntermediateEvents()} and later
+     * {@link org.wings.LowLevelEventListener#fireFinalEvents()} in a later phase of
+     * the request. The calls on the components will be ordered dependend on their type.
+     *
+     * @param component The component to callback for event firing in a later phase of the request
+     * @see #fireEvents() 
+     */
+    public static void addArmedComponent(LowLevelEventListener component) {
         Set armedComponents = (Set) threadArmedComponents.get();
         armedComponents.add(component);
     }
@@ -395,7 +403,6 @@ public class SForm  extends SContainer implements LowLevelEventListener {
 
     /**
      * Detects if the Container contains a component that needs a certain encoding type
-     * @param pContainer
      * @return <code>null</code> or {@link #ENC_TYPE_MULTIPART_FORM}   
      */
     protected String detectEncodingType(SContainer pContainer) {
