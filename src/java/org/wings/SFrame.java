@@ -280,7 +280,8 @@ public class SFrame
      * @see #addHeader(Object)
      */
     public void clearHeaders() {
-        headers().clear();
+        if (headers != null)
+            headers.clear();
     }
 
     /**
