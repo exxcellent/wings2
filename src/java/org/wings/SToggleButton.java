@@ -23,10 +23,20 @@ import javax.swing.*;
  */
 public class SToggleButton extends SAbstractButton {
 
-    public SToggleButton(String text) {
-        super(text);
+	 /**
+     * Creates a toggle button with an initial text.
+     * 
+     * @param label Text to display
+     */
+    public SToggleButton(String label) {
+        super(label);
     }
 
+    /**
+     * Creates a toggle button with an icon.
+     * 
+     * @param icon Icon to display
+     */
     public SToggleButton(SIcon icon) {
         super();
         setIcon(icon);
@@ -42,6 +52,10 @@ public class SToggleButton extends SAbstractButton {
         super(action);
     }
 
+    /**
+     * Creates a toggle button.
+     * 
+     */
     public SToggleButton() {
     }
 
