@@ -29,7 +29,7 @@ public final class ToggleButtonCG extends ButtonCG implements
     protected void updateAssignedCssClass(SAbstractButton button) {
         final SBorder border = button.getBorder();
         final String origStyle = button.getStyle();
-        final boolean hasStandardBorder = (border == SDefaultBorder.DEFAULT || border instanceof SEmptyBorder || border instanceof SDefaultBorder);
+        final boolean hasStandardBorder = (border == SDefaultBorder.DEFAULT || border instanceof SDefaultBorder);
         // is this a wingS border-styled button? If yes, then we need to do some css logic
         if (origStyle != null && origStyle.indexOf("SToggleButton") >= 0 && hasStandardBorder) {
             // create a cleaned copy without any SButton_xxx stuff
