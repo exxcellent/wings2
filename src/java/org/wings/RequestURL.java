@@ -148,7 +148,7 @@ public class RequestURL extends SimpleURL {
      * @return a reference to <code>this</code> to simplify 'call chaining'
      */
     public RequestURL addParameter(LowLevelEventListener comp, String value) {
-        addParameter(comp.getEncodedLowLevelEventId(), recode(value));
+        addParameter(comp.getEncodedLowLevelEventId(), value);
         return this;
     }
 
