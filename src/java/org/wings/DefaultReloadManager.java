@@ -94,4 +94,8 @@ public class DefaultReloadManager
             component.getCG().componentChanged(component);
         }
     }
+        
+    public boolean hasDirtyComponents() {
+        return (dirtyComponents.size() > 0) ? true : false;
+    }
 }

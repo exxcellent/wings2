@@ -71,4 +71,10 @@ public interface ReloadManager extends Serializable {
      * Notify the CG's of the dirty components that those components were updated.
      */
     void notifyCGs();
+
+    /**
+     * are there any dirty components?
+     */
+    public boolean hasDirtyComponents();
+        
 }
