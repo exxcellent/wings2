@@ -78,6 +78,8 @@ TABLE.SButton_disabled,
 TABLE.SToggleButton,
 TABLE.SToggleButton_selected {
     cursor: pointer;
+    border-collapse:collapse;   /* Merges TABLE and TD paddings. (PaddingVoodoo and SEmptyBorder) */
+    border-style: none;
 }
 
 TABLE.SButton_form,
@@ -407,19 +409,16 @@ ul.SPopupMenu a.x:hover{
 .STable {
     width: 100%;
     cursor: default;
+    border-collapse:collapse;
 }
 
 .STable td.cell, .STable th.cell, .STable td.num, .STable th.num, .STable th.head {
     padding: 2px 8px 2px 8px;
-    border-bottom: 1px solid #c0c0c0;
+    border: 1px solid red; /*#c0c0c0;*/
 }
 
 .STable td.clickable, .STable th.clickable {
     cursor: pointer;
-}
-
-.STable td.cell, .STable th.head {
-    border-left: 1px solid #c0c0c0;
 }
 
 .STable td.num {
