@@ -43,8 +43,8 @@ import java.util.Arrays;
  */
 public class ComponentControls  extends SPanel {
     protected static final Object[] BORDERS = new Object[] {
-        new Object[] { "CG default",  new SDefaultBorder() },
-        new Object[] { "null",    null },
+        new Object[] { "default", SDefaultBorder.INSTANCE },
+        new Object[] { "none",    null },
         new Object[] { "raised",  new SBevelBorder(SBevelBorder.RAISED) },
         new Object[] { "lowered", new SBevelBorder(SBevelBorder.LOWERED) },
         new Object[] { "line",    new SLineBorder(2) },
@@ -187,7 +187,7 @@ public class ComponentControls  extends SPanel {
                 catch (NumberFormatException e) {}
 
                 SAbstractBorder border = (SAbstractBorder) getSelectedObject(borderStyleComboBox);
-                if (border != null) {
+                if (border != null && border != SDefaultBorder.INSTANCE) {
                     border.setColor((Color)getSelectedObject(borderColorComboBox));
                     border.setInsets(new Insets(insets, insets, insets, insets));
                     border.setThickness(borderThickness);

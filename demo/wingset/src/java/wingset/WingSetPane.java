@@ -98,7 +98,10 @@ abstract public class WingSetPane
     public String getExampleName() {
         String name = getClass().getName();
         name = name.substring(name.lastIndexOf('.') + 1);
-        name = name.substring(0, name.length() - "Example".length());
+        if (name.endsWith("Example"))
+            name = name.substring(0, name.length() - "Example".length());
+        else if (name.endsWith("Test"))
+            name = name.substring(0, name.length() - "Test".length());
         return name;
     }
 }

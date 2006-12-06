@@ -390,10 +390,10 @@ function onCalUpdateCallback(result) {
 function ftextFieldCallback(result) {
     var elem    = document.getElementById(result[0]);
     var data    = result[1];
-    var isvalid = result[2];
+    var invalid = result[2];
     if (!elem)
         return; // dwr bug
-    if (!isvalid) {
+    if (invalid) {
         elem.style.color = '#ff0000';
     } else {
         elem.style.color = '';

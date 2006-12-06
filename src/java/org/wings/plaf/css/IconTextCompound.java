@@ -126,7 +126,8 @@ public abstract class IconTextCompound {
 
     private void doBorderPaddingsWorkaround(SComponent component, final Insets targetInsets,
                                             boolean firstRow, boolean firstCol, boolean lastCol, boolean lastRow) {
-        PaddingVoodoo.doBorderPaddingsWorkaround(component.getBorder(), targetInsets, firstRow, firstCol, lastCol, lastRow);
+        if (component.getBorder() != null)
+            PaddingVoodoo.doBorderPaddingsWorkaround(component.getBorder(), targetInsets, firstRow, firstCol, lastCol, lastRow);
     }
 
     protected int getIconTextGap(SComponent component) {

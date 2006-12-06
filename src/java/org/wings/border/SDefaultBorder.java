@@ -5,81 +5,55 @@ package org.wings.border;
 import java.awt.*;
 
 import org.wings.SComponent;
+import org.wings.style.CSSAttributeSet;
 
 /**
- * This is a place-holder for the 'default' border of an CG for selected components.
- * <p>
- * For example {@link org.wings.SButton} typically render by default as bevelled clickables (via default CSS).
- * If you want to have a button with only an icon and any default border just set the border to <code>null</code>.
- * The CG will ommit any default rendered borders.
- *
+ * If a default border is set, CGs will omit inline borders and paddings.
  * @author Benjamin Schmid <B.Schmid@exxcellent.de>
  */
-public class SDefaultBorder extends SAbstractBorder {
+public class SDefaultBorder
+    extends SAbstractBorder
+{
+    public static final SDefaultBorder INSTANCE = new SDefaultBorder();
 
-    /**
-     * Shared immutable instance.
-     */
-    public static final SDefaultBorder DEFAULT = new ImmutableSDefaultBorder(); 
+    private boolean locked = false;
 
-    public SDefaultBorder() {
+    private SDefaultBorder() {
+        locked = true;
     }
 
     /**
-     * Constructs a new default border
-     * @param insets The desired insets / paddings.
-     * @see #setInsets(java.awt.Insets)
+     * The default border is not modifyable, thus no component needs to be informed.
+     * @param newComponent
      */
-    public SDefaultBorder(Insets insets) {
-        super(insets);
+    public void setComponent(SComponent newComponent) {
     }
 
     /**
-     * Constructs a new default border
-     * @param top top padding in px
-     * @param left left padding in px
-     * @param bottom bottom padding in px
-     * @param right right padding in px
+     * Return no attributes.
+     * @return
      */
-    public SDefaultBorder(int top, int left, int bottom, int right) {
-        this(new Insets(top, left, bottom, right));
+    public CSSAttributeSet getAttributes() {
+        return null;
     }
 
-    private static class ImmutableSDefaultBorder extends SDefaultBorder {
-        private boolean locked;
-
-        public ImmutableSDefaultBorder() {
-            super();
-            locked = true;
-        }
-
-        public void setComponent(SComponent newComponent) {
-            // super.setComponent(newComponent); ommit as this can be shared!
-        }
-
-        public void setInsets(Insets insets) {
-            if (locked)
-                throw new IllegalStateException("Immutable border. Please use your own instance");
-            super.setInsets(insets);
-        }
-
-        public void setColor(Color color, int position) {
-            if (locked)
-                throw new IllegalStateException("Immutable border. Please use your own instance");
-            super.setColor(color, position);
-        }
-
-        public void setThickness(int thickness, int position) {
-            if (locked)
-                throw new IllegalStateException("Immutable border. Please use your own instance");
-            super.setThickness(thickness, position);
-        }
-
-        public void setStyle(String style, int position) {
-            if (locked)
-                throw new IllegalStateException("Immutable border. Please use your own instance");
-            super.setStyle(style, position);
-        }
+    public void setInsets(Insets insets) {
+        if (locked)
+            throw new IllegalStateException("DefaultBorder is not configurable");
     }
 
+    public void setColor(Color color, int position) {
+        if (locked)
+            throw new IllegalStateException("DefaultBorder is not configurable");
+    }
+
+    public void setThickness(int thickness, int position) {
+        if (locked)
+            throw new IllegalStateException("DefaultBorder is not configurable");
+    }
+
+    public void setStyle(String style, int position) {
+        if (locked)
+            throw new IllegalStateException("DefaultBorder is not configurable");
+    }
 }

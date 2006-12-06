@@ -21,8 +21,7 @@ import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SPopupMenu;
 import org.wings.SResourceIcon;
-import org.wings.border.SBorder;
-import org.wings.border.SEmptyBorder;
+import org.wings.border.*;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
@@ -32,6 +31,7 @@ import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
 import org.wings.style.Style;
+import org.wings.style.CSSAttributeSet;
 import org.wings.util.SStringBuilder;
 
 import javax.swing.*;
@@ -154,8 +154,12 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             builder.append(allStyle.toString());
 
         final SBorder border = component.getBorder();
-        if (border != null && border.getAttributes() != null)
-            builder.append(border.getAttributes().toString());
+        if (border != null) {
+            if (border.getAttributes() != null)
+                builder.append(border.getAttributes().toString());
+        }
+        else
+            builder.append("border:none;padding:0px");
 
         return builder.toString();
     }
@@ -216,6 +220,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);
         component.setStyle(style); // set default style name to component class (ie. SLabel).
+        component.setBorder(SDefaultBorder.INSTANCE);
 
         if (Utils.isMSIE(component)) {
             final CGManager manager = component.getSession().getCGManager();

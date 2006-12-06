@@ -61,14 +61,6 @@ div.domTT {
     -moz-opacity: 0.8;
 }
 
-TABLE.SPanel {
-    border-collapse: collapse;
-    /*
-    margin-left: 1px;
-    margin-top: 1px;
-    */
-}
-
 /*pre.label {
     font-family: inherit;
     margin: 0px;
