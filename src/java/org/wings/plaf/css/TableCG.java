@@ -313,7 +313,8 @@ public final class TableCG
         STableColumnModel columnModel = table.getColumnModel();
         if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
             device.print("<colgroup>");
-            writeCol(device, selectionColumnWidth);
+            if (table.getRowSelectionRenderer() != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION)
+                writeCol(device, selectionColumnWidth);
 
             for (int i = startX; i < endX; ++i) {
                 STableColumn column = columnModel.getColumn(i);
