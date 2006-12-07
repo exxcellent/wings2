@@ -14,7 +14,7 @@
     <subtitle>Writing and understanding wingS applications</subtitle>
 
     <copyright>
-      <year>2005</year>
+      <year>2005 - 2006</year>
 
       <holder>wingS Project Team</holder>
     </copyright>
@@ -942,7 +942,8 @@ frameset.setVisible(true);</programlisting>
                 of this component. It is initially set on demand but can be
                 overwritten with custom values. This name will also appear
                 inside the generated HTML code, hence it must contain only a
-                restricted set of characters.</entry>
+                restricted set of characters. The name must be unique throughout
+                the session! Otherwise event dispatching won't work consistently.</entry>
               </row>
 
               <row>
@@ -982,12 +983,13 @@ frameset.setVisible(true);</programlisting>
               <row>
                 <entry><code>get/setBorder()</code></entry>
 
-                <entry>Apply a border. Besides <emphasis role="bold">outlining
-                components</emphasis> using <code>SLineBorder</code> this
-                method is mostly helpful to <emphasis role="bold">apply
-                spacings</emphasis> on a component by applying a
-                <code>SEmptyBorder</code> with the desired padding
-                values.</entry>
+                <entry>Apply a border. Gives components a border and/ or applies
+                insets. Besides the well known types <code>SLineBorder</code>,
+                <code>SEtchedBorder</code>, etc. there is the <code>SDefaultBorder</code>,
+                that components have attached by default. It makes the component appear,
+                as defined in the stylesheet (see <xref linkend="css-styles" />). If the
+                border property is set to null, there will be no border and no insets and
+                the rules in the stylesheet have no affect.</entry>
               </row>
 
               <row>
@@ -1021,8 +1023,8 @@ frameset.setVisible(true);</programlisting>
                 panel or similar component: This achieves that the component
                 is stretched by the browser as far as possible to take up the
                 full available width. Please be aware that the rendering
-                result may vary depending on the clients browser. This is
-                especially an issue on using relative dimensions.</entry>
+                result may vary depending on the browser. This is especially the
+                case for relative vertical dimensions (FULLHEIGHT).</entry>
               </row>
 
               <row>
@@ -1055,17 +1057,19 @@ frameset.setVisible(true);</programlisting>
                 <entry><code>get/setShowAsFormComponent()</code></entry>
 
                 <entry>The value of this property influences the <emphasis
-                role="bold">appearance of special input components</emphasis>
-                which may be used inside HTML forms or not. Think of check
-                boxes. Check boxes are only rendered in browsers if you nest
-                them inside a HTML <code>&lt;FORM&gt;</code> element.
-                Therefore wingS will render them as clickable images if you
-                don't wrap a <code>SCheckBox</code> with a <code>SForm</code>
-                element. You can achieve the same behaviour inside forms on
-                setting this value to <code>false</code>. A very common usage
+                role="bold">technical representation of some components</emphasis>
+                and the <emphasis role="bold">submit behaviour of most
+                components</emphasis>. For example, an SList is either rendered
+                as a select tag or as an unordered list (ul) of links. For most
+                components, this decides only, if the whole form will be sumbitted
+                on click or if the form content gets lost and a GET request will be
+                sent. HTML Check boxes are only rendered in browsers if you nest
+                them inside a HTML <code>&lt;FORM&gt;</code> element. Therefore
+                wingS will render them as clickable images if it is not contained
+                in an <code>SForm</code>. You can achieve the same behaviour inside
+                forms on setting this value to <code>false</code>. A very common usage
                 of this property is to force <code>SButton</code> to appear as
-                text links and not browser submit buttons inside
-                forms.</entry>
+                text links and not browser submit buttons inside forms.</entry>
               </row>
 
               <row>
@@ -1074,7 +1078,7 @@ frameset.setVisible(true);</programlisting>
                 <entry>Dynamically set a <emphasis role="bold">CSS property
                 value</emphasis> for a component. You can use this method to
                 define any arbitrary CSS property/value pair on the current
-                component.</entry>
+                component. It will be rendered as an inline style.</entry>
               </row>
 
               <row>
@@ -2092,7 +2096,6 @@ public Class getColumnClass(int column) {
     public SComponent getTableCellRendererComponent(
             STable table, Object value, boolean selected, int row, int col) {
         if (value instanceof Boolean &amp;&amp; row != -1) {
-            checkBox.setNameRaw(name(table, row, col));
             checkBox.setSelected(((Boolean)value).booleanValue());
             return checkBox;
         }
@@ -2117,6 +2120,11 @@ public Class getColumnClass(int column) {
                 </imageobject>
               </mediaobject>
             </screenshot>
+
+              <para>Beware that the checkbox is readonly. Clicking it will not update
+              the table model. Making cells editable is the job of a cell editor.
+              Look at the wingSet Table example and XTable example to learn more
+              about editable tables.</para>
           </sect4>
 
           <sect4>
@@ -2436,6 +2444,12 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
                 never.</entry>
               </row>
 
+                <row>
+                  <entry><code>mode</code></entry>
+
+                  <entry>Sets the scroll mode. See below for supported options.</entry>
+                </row>
+
               <row>
                 <entry nameend="col2" namest="col1"><code>SAdjustable</code>
                 properties</entry>
@@ -2471,6 +2485,53 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
           </tgroup>
         </table>
 
+          <para>The scrollpane distinguishes three different scroll modes:</para>
+
+            <table frame="topbot" pgwide="0">
+              <title>Scroll modes</title>
+
+              <tgroup cols="3">
+                <colspec colwidth="1*" />
+
+                <colspec colwidth="2*" />
+
+                <thead>
+                  <row>
+                    <entry>Mode</entry>
+
+                    <entry>Behaviour</entry>
+                  </row>
+                </thead>
+
+                <tbody>
+                  <row>
+                    <entry>COMPLETE</entry>
+
+                    <entry>The whole scrollable viewport of the scrollable is rendered.
+                    Give it a preferred size! It will be rendered as a scrollable div
+                    (overflow: auto), that requires a defined size.</entry>
+                  </row>
+
+                  <row>
+                    <entry>SCROLLING</entry>
+
+                    <entry>Only the portion defined by the extents will be rendered. The
+                    scrollbar's extent spans exactly the scrollable's scrollable viewport.
+                    Use it in combination with the standard <code>SScrollBar</code>.</entry>
+                  </row>
+                    <row>
+                      <entry>PAGING</entry>
+
+                      <entry>Only the portion defined by the extents will be rendered. The
+                      scrollbar's extent is the first multiple of the respective scrollpane extent,
+                      that covers the scrollable viewport. Use it in combination with the
+                      <code>SPageScroller</code>.</entry>
+                    </row>
+                </tbody>
+
+            </tgroup>
+          </table>
+
         <para>Using these properties we know how to modify our scroller in the
         previous example to achieve a paged view as i.e. known from popular
         search engines or other websites.</para>
@@ -2480,6 +2541,7 @@ SPageScroller pageScroller = new SPageScroller(SPageScroller.VERTICAL);
 pageScroller.setLayoutMode(SPageScroller.HORIZONTAL);
 scrollPane.setHorizontalScrollBar(pageScroller);
 scrollPane.setVerticalScrollBar(null);
+scrollPane.setMode(SScrollPane.PAGING);
 pageScroller.setExtent(5);
 form.add(scrollPane);</programlisting>
 
@@ -2718,6 +2780,14 @@ form.add(testLabel);</programlisting>
       declare the resulting layout positions already during development
       time.</para>
 
+      <para>If using relative preferred sizes, please understand, how layout
+      calculations are performed in the browser. If you give an element 100% width
+      or height, this is 100% of the <emphasis>available</emphasis> space. A
+      typical desktop layout, that spans the whole browser window requires, that
+      all containers, starting from the frame's content pane, have a preferred size
+      of <code>SDimension.FULLAREA</code>.
+      </para>
+
       <sect2 id="SwingLayoutManager">
         <title>Swing-like Layout Managers</title>
 
@@ -2888,9 +2958,7 @@ flowPanel.add(new SLabel("Component 3"));
           inside a flow layout you'll notice that your components won't flow
           anymore. This is just because in this case the sized component will
           adapt the available width rather than the flow layout being able to
-          know that it should use the available space.</para>
-
-          <para>A similar effect can happen on put a flow layout managed
+          know that it should use the available space. A similar effect can happen on put a flow layout managed
           container together with other components inside a parent container.
           Some components will take up a minimum width though it may
           visibility not be apparent.</para>
@@ -3308,21 +3376,15 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
         on generic HTML attributes (i.e. <code>IMG</code>) as well as on the
         default CSS class names (i.e. <code>SButton).</code></para>
 
-        <para>As next style sheet the browser sees the dynamically generated
-        one. On every page rendering wingS traverses the hierarchy of wingS
-        components and collects the dynamic styles attached to them (e.g.
-        implicitly declared by calling <code>setForeground()</code> on a
-        label). The resulting, dynamically generated CSS file mainly uses the
-        component ids as base for the CSS selectors. As the IDs are the most
-        selective way to select an element, these dynamically applied
-        properties will always take effect unless some values have been
-        previously finalized using the CSS
-        <code>!important</code>statement.</para>
-
-        <para>And as last the static style sheets you optionally attached to
+        <para>As next the static style sheets you optionally attached to
         the root frame are declared. As this CSS file is declared as last one,
         your customized value will win by default against equal-prioritized
         declarations from the default style sheet.</para>
+
+        <para>Last, the dynamic styles of the components (<code>setAttribute()</code>
+        but also <code>setForground()</code>, <code>setBorder()</code>, etc.) are
+        rendered as inline styles in the page. They will override the definitions of
+        all attached stylesheets.</para>
       </sect2>
 
       <sect2>
