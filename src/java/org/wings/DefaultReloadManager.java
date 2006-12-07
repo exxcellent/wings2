@@ -95,7 +95,7 @@ public class DefaultReloadManager
         }
     }
         
-    public boolean hasDirtyComponents() {
-        return (dirtyComponents.size() > 0) ? true : false;
+    public boolean hasDirtyComponents(SFrame inFrame) {
+        return getDirtyFrames().contains(inFrame);
     }
 }

@@ -761,6 +761,11 @@ table.DivisionContent {
 
 .SSliderThumb {
 	text-align: left;
+        cursor:default;
+        width:18px; 
+        height:18px; 
+        z-index: 9;
+        position:absolute; 
 }
 
 .SSliderBgVert {
@@ -779,7 +784,7 @@ table.DivisionContent {
 
 .SSliderValueBottom {
 	position:relative;
-	top: 10px
+	top: 30px
 }
 
 

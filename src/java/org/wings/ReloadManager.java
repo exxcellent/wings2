@@ -75,6 +75,6 @@ public interface ReloadManager extends Serializable {
     /**
      * are there any dirty components?
      */
-    public boolean hasDirtyComponents();
+    public boolean hasDirtyComponents(SFrame inFrame);
         
 }
