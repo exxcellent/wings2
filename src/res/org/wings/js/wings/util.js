@@ -3,12 +3,21 @@
  **************************************************************************************************/
 
 
-wingS.util.getCompleteUpdateResource = function() {
-    return wingS.global.event_epoch + "-" + wingS.global.completeUpdateId;
+/**
+ * Create according namespace
+ */
+if (!wingS.util) {
+    wingS.util = new Object();
+} else if (typeof wingS.util != "object") {
+    throw new Error("wingS.util already exists and is not an object");
+}
+
+wingS.util.getReloadResource = function() {
+    return wingS.global.eventEpoch + "-" + wingS.global.reloadResource;
 };
 
-wingS.util.getIncrementalUpdateResource = function() {
-    return wingS.global.event_epoch + "-" + wingS.global.incrementalUpdateId;
+wingS.util.getUpdateResource = function() {
+    return wingS.global.eventEpoch + "-" + wingS.global.updateResource;
 };
 
 wingS.util.invokeScriptCodeArray = function(scriptCodeArray) {
@@ -19,6 +28,33 @@ wingS.util.invokeScriptCodeArray = function(scriptCodeArray) {
         }
     }
     return true;
+};
+
+/**
+ * Returns an array of elements with the specified properties.
+ * @param {Object} parent - the element whose children will be processed
+ * @param {String} tagName - the tag name of the elements to look in (use * for all)
+ * @param {String} attributeName - the name of the attribute to look for
+ * @param {String} attributeValue - the value of the attribute to look for (optional)
+ */
+wingS.util.getElementsByAttribute = function(parent, tagName, attributeName, attributeValue) {
+    var elements = (tagName == "*" && parent.all) ?
+                   parent.all : parent.getElementsByTagName(tagName);
+    var value = (typeof attributeValue != "undefined") ?
+                new RegExp("(^|\\s)" + attributeValue + "(\\s|$)") : null;
+    var element;
+    var attribute;
+    var result = new Array();
+    for (var i = 0; i < elements.length; i++) {
+        element = elements[i];
+        attribute = element.getAttribute && element.getAttribute(attributeName);
+        if (typeof attribute == "string" && attribute.length > 0) {
+            if (typeof attributeValue == "undefined" || (value && value.test(attribute))) {
+                result.push(element);
+            }
+        }
+    }
+    return result;
 };
 
 wingS.util.getParentByTagName = function(element, tag) {
@@ -107,6 +143,20 @@ wingS.util.findElement = function(id, tagname) {
         if (elements && elements.length > 0)
             return elements[0];
     }
+};
+
+/**
+ * Highlights the element with the given ID for a certain time span.
+ * @param {String} id - the ID of the element to highlight
+ * @param {String} color - the color to highlight with
+ * @param {int} duration - the highlight duration in ms
+ */
+wingS.util.highlightElement = function(id, color, duration) {
+    var initialColor = document.getElementById(id).style.backgroundColor;
+    document.getElementById(id).style.backgroundColor = color;
+    var resetColor = "document.getElementById('" + id + "').style." +
+                     "backgroundColor = '" + initialColor + "';";
+    setTimeout(resetColor, duration);
 };
 
 /**

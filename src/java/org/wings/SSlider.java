@@ -22,25 +22,25 @@ import javax.swing.event.ChangeListener;
 
 /**
  * A component that lets the user graphically select a value by sliding
- * a knob within a bounded interval. 
+ * a knob within a bounded interval.
  * The displayed slider is highly dependent on the graphics used,
  * see http://developer.yahoo.com/yui/slider/.
  *
  * @author Christian Schyma
  */
 public class SSlider extends SComponent implements SConstants, LowLevelEventListener  {
-    
+
     /**
      * The data model that handles the numeric maximum value,
      * minimum value, and current-position value for the slider.
      */
     protected BoundedRangeModel sliderModel;
-    
+
     /**
      * The number of values between the major tick marks.
      */
     protected int majorTickSpacing = 1;
-    
+
     /**
      * If true, the knob (and the data value it represents)
      * resolve to the closest tick mark next to where the user
@@ -48,12 +48,12 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
      * @see #setSnapToTicks
      */
     protected boolean snapToTicks = false;
-    
+
     /**
      * @see #setOrientation
      */
     protected int orientation;
-    
+
     /**
      * The changeListener (no suffix) is the listener we add to the
      * Sliders model.  By default this listener just forwards events
@@ -63,7 +63,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
      * @see #createChangeListener
      */
     protected ChangeListener changeListener = createChangeListener();
-    
+
     /**
      * Creates a horizontal slider with the range 0 to 100 and
      * an initial value of 50.
@@ -71,7 +71,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public SSlider() {
         this(HORIZONTAL, 0, 100, 50);
     }
-    
+
     /**
      * Creates a slider using the specified orientation with the
      * range 0 to 100 and an initial value of 50.
@@ -79,7 +79,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public SSlider(int orientation) {
         this(orientation, 0, 100, 50);
     }
-    
+
     /**
      * Creates a horizontal slider using the specified min and max
      * with an initial value equal to the average of the min plus max.
@@ -87,14 +87,14 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public SSlider(int min, int max) {
         this(HORIZONTAL, min, max, (min + max) / 2);
     }
-    
+
     /**
      * Creates a horizontal slider using the specified min, max and value.
      */
     public SSlider(int min, int max, int value) {
         this(HORIZONTAL, min, max, value);
     }
-    
+
     /**
      * Creates a slider with the specified orientation and the
      * specified minimum, maximum, and initial values.
@@ -112,7 +112,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
         sliderModel = new DefaultBoundedRangeModel(value, 0, min, max);
         sliderModel.addChangeListener(changeListener);
     }
-    
+
     private void checkOrientation(int orientation) {
         switch (orientation) {
             case VERTICAL:
@@ -122,7 +122,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
                 throw new IllegalArgumentException("orientation must be one of: VERTICAL, HORIZONTAL");
         }
     }
-    
+
     /**
      * Return this slider's vertical or horizontal orientation.
      * @return VERTICAL or HORIZONTAL
@@ -131,7 +131,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public int getOrientation() {
         return orientation;
     }
-    
+
     /**
      * Set the scrollbars orientation to either VERTICAL or HORIZONTAL.
      *
@@ -144,7 +144,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
         this.orientation = orientation;
         reloadIfChange(orientation, oldValue);
     }
-    
+
     /**
      * We pass Change events along to the listeners with the
      * the slider (instead of the model itself) as the event source.
@@ -154,7 +154,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
             fireStateChanged();
         }
     }
-    
+
     /**
      * Subclasses that want to handle model ChangeEvents differently
      * can override this method to return their own ChangeListener
@@ -166,7 +166,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     protected ChangeListener createChangeListener() {
         return new ModelListener();
     }
-    
+
     /**
      * Adds a ChangeListener to the slider.
      *
@@ -176,7 +176,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public void addChangeListener(ChangeListener l) {
         addEventListener(ChangeListener.class, l);
     }
-    
+
     /**
      * Removes a ChangeListener from the slider.
      *
@@ -187,7 +187,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public void removeChangeListener(ChangeListener l) {
         removeEventListener(ChangeListener.class, l);
     }
-    
+
     /**
      * Returns an array of all the <code>ChangeListener</code>s added
      * to this slider with <code>addChangeListener</code>.
@@ -198,7 +198,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public ChangeListener[] getChangeListeners() {
         return (ChangeListener[]) getListeners(ChangeListener.class);
     }
-    
+
     /**
      * Notifies all listeners that have registered interest in
      * <code>ChangeEvent</code>s.
@@ -210,7 +210,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
             listener.stateChanged(new ChangeEvent(this));
         }
     }
-    
+
     /**
      * Returns data model that handles the sliders three
      * fundamental properties: minimum, maximum, value.
@@ -220,7 +220,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public BoundedRangeModel getModel() {
         return sliderModel;
     }
-    
+
     /**
      * Sets the model that handles the sliders three
      * fundamental properties: minimum, maximum, value.
@@ -229,22 +229,22 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
      */
     public void setModel(BoundedRangeModel newModel) {
         BoundedRangeModel oldModel = getModel();
-        
+
         if (oldModel != null) {
             oldModel.removeChangeListener(changeListener);
         }
-        
+
         sliderModel = newModel;
-        
+
         if (newModel != null) {
             newModel.addChangeListener(changeListener);
-            
-            
+
+
         }
-        
-        reloadIfChange(newModel, oldModel, ReloadManager.STATE);
+
+        reloadIfChange(newModel, oldModel);
     }
-    
+
     /**
      * Returns the sliders value.
      * @return the models value property
@@ -253,7 +253,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public int getValue() {
         return getModel().getValue();
     }
-    
+
     /**
      * Sets the sliders current value.  This method just forwards
      * the value to the model.
@@ -262,12 +262,12 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
      */
     public void setValue(int n) {
         BoundedRangeModel m = getModel();
-        int oldValue = m.getValue();        
+        int oldValue = m.getValue();
         m.setValue(n);
         reloadIfChange(n, oldValue);
     }
-    
-    
+
+
     /**
      * Returns the minimum value supported by the slider.
      *
@@ -277,8 +277,8 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public int getMinimum() {
         return getModel().getMinimum();
     }
-    
-    
+
+
     /**
      * Sets the models minimum property.
      *
@@ -290,8 +290,8 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
         getModel().setMinimum(minimum);
         reloadIfChange(minimum, oldMin);
     }
-    
-    
+
+
     /**
      * Returns the maximum value supported by the slider.
      *
@@ -301,7 +301,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public int getMaximum() {
         return getModel().getMaximum();
     }
-    
+
     /**
      * Sets the models maximum property.
      *
@@ -313,28 +313,28 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
         getModel().setMaximum(maximum);
         reloadIfChange(maximum, oldMax);
     }
-    
+
     public void fireFinalEvents() {
         fireStateChanged();
     }
-    
+
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
-        
+
         if (action.compareTo(getName()+"_val") == 0) {
             setValue(Integer.parseInt(values[0]));
             SForm.addArmedComponent(this);
-        }        
+        }
     }
-    
+
     public boolean isEpochCheckEnabled() {
         return true;
     }
-    
+
     public void fireIntermediateEvents() {
         // nothing to do
     }
-    
+
     /**
      * This method returns the major tick spacing.  The number that is returned
      * represents the distance, measured in values, between each major tick mark.
@@ -348,8 +348,8 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public int getMajorTickSpacing() {
         return majorTickSpacing;
     }
-    
-    
+
+
     /**
      * This method sets the major tick spacing.  The number that is passed-in
      * represents the distance, measured in values, between each major tick mark.
@@ -364,7 +364,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
         majorTickSpacing = n;
         reloadIfChange(n, oldValue);
     }
-    
+
     /**
      * Returns true if the knob (and the data value it represents)
      * resolve to the closest tick mark next to where the user
@@ -376,7 +376,7 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
     public boolean getSnapToTicks() {
         return snapToTicks;
     }
-    
+
     /**
      * Specifying true makes the knob (and the data value it represents)
      * resolve to the closest tick mark next to where the user
@@ -390,14 +390,14 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
         snapToTicks = b;
         reloadIfChange(b, oldValue);
     }
-            
+
     /**
      * The maximum number of pixels the slider thumb can be moved. Usefull when
      * using different slider thumb or bar graphics.
      * @param max pixels
      */
-    public void setMaxPixelConstraint(int max) {        
+    public void setMaxPixelConstraint(int max) {
         this.putClientProperty("maxPixelConstraint", new Integer(max));
     }
-            
+
 }

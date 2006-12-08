@@ -24,8 +24,8 @@ import org.wings.externalizer.ExternalizedResource;
 import org.wings.io.Device;
 import org.wings.io.DeviceFactory;
 import org.wings.io.ServletDevice;
-import org.wings.plaf.css.AbstractComponentCG;
-import org.wings.resource.CompleteUpdateResource;
+import org.wings.resource.ReloadResource;
+import org.wings.resource.UpdateResource;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -35,7 +35,6 @@ import javax.servlet.http.*;
 
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Arrays;
 import java.util.Map;
@@ -226,7 +225,7 @@ final class SessionServlet
                     // context class loader.
                     mainClass = Class.forName(mainClassName);
                 }
-                Object main = mainClass.newInstance();
+                mainClass.newInstance();
             } catch (Exception ex) {
                 log.fatal("could not load wings.mainclass: " +
                         config.getInitParameter("wings.mainclass"), ex);
@@ -275,8 +274,6 @@ final class SessionServlet
      */
     public final synchronized void doGet(HttpServletRequest req,
                                          HttpServletResponse response) {
-        log.info("Path info of request: " + req.getPathInfo());
-
         // Special case: You double clicked i.e. a "logout button"
         // First request arrives, second is on hold. First invalidates session and sends redirect as response,
         // but browser ignores and expects response in second request. But second request has longer a valid session.
@@ -333,7 +330,7 @@ final class SessionServlet
             }
 
             if (log.isDebugEnabled()) {
-                log.debug("request URL: " + requestURL);
+                log.debug("Request URL: " + requestURL);
                 log.debug("HTTP header:");
                 for (Enumeration en = req.getHeaderNames(); en.hasMoreElements();) {
                     String header = (String) en.nextElement();
@@ -341,6 +338,38 @@ final class SessionServlet
                 }
             }
             handleLocale(req);
+
+            // The externalizer is able to handle static and dynamic resources
+            ExternalizeManager extManager = getSession().getExternalizeManager();
+            String pathInfo = req.getPathInfo().substring(1);
+            log.debug("PathInfo: " + pathInfo);
+
+            // If we have no path info, or the special '_' path info (that should be explained
+            // somewhere, Holger), then we deliver the top-level frame of this application.
+            String externalizeIdentifier = null;
+            if (pathInfo == null || pathInfo.length() == 0 || "_".equals(pathInfo) || firstRequest) {
+                externalizeIdentifier = retrieveCurrentRootFrameResource().getId();
+                firstRequest = false;
+            } else {
+                externalizeIdentifier = pathInfo;
+            }
+
+            // Retrieve externalized resource
+            ExternalizedResource extInfo = extManager.getExternalizedResource(externalizeIdentifier);
+
+            // Special case handling: We request a .html resource of a session which is not accessible.
+            // This happens some times and leads to a 404, though it should not be possible.
+            if (extInfo == null && pathInfo != null && pathInfo.length() > 0 && pathInfo.endsWith(".html")) {
+                log.info("Found a request to an invalid .html during a valid session. Redirecting to root frame.");
+                response.sendRedirect(retrieveCurrentRootFrameResource().getURL().toString());
+                return;
+            }
+
+            if (extInfo != null && extInfo.getObject() instanceof UpdateResource) {
+                reloadManager.setUpdateMode(true);
+            } else {
+                reloadManager.setUpdateMode(false);
+            }
 
             // Prior to dispatching the actual events we have to detect
             // their epoch and inform the dispatcher which will then be
@@ -373,7 +402,7 @@ final class SessionServlet
                     String paramName = (String) en.nextElement();
                     String[] values = req.getParameterValues(paramName);
 
-                    // We do not need to dispatch the event epoch and the unique AJAX request ID
+                    // We do not need to dispatch the event epoch and the XHR request ID
                     if (paramName.equals("event_epoch") || paramName.equals("_xhrID")) {
                         continue;
                     }
@@ -448,55 +477,51 @@ final class SessionServlet
                 return;
             }
 
-            log.info("---> dirty components (" + reloadManager.getDirtyComponents().size() + "):");
-            for (Iterator it = reloadManager.getDirtyComponents().iterator(); it.hasNext();) {
-                log.info(it.next());
-            }
-            // invalidate frames and resources
             reloadManager.notifyCGs();
             reloadManager.invalidateFrames();
 
-            // deliver resource. The
-            // externalizer is able to handle static and dynamic resources
-            ExternalizeManager extManager = getSession().getExternalizeManager();
-            String pathInfo = req.getPathInfo().substring(1);
-            log.debug("pathInfo: " + pathInfo);
+            // THE FOLLOWING COMMENTED CODE BLOCK HAS BEEN MOVED FURTHER UP
+            // This is because we need to detect which resource (Reload- or
+            // UpdateResource) has been requested PRIOR to event handling.
 
-            /*
-             * if we have no path info, or the special '_' path info
-             * (that should be explained somewhere, Holger), then we
-             * deliver the toplevel Frame of this application.
-             */
-            String externalizeIdentifier = null;
-            if (pathInfo == null || pathInfo.length() == 0 || "_".equals(pathInfo) || firstRequest) {
-                externalizeIdentifier = retrieveCurrentRootFrameResource().getId();
-                firstRequest = false;
-            } else {
-                externalizeIdentifier = pathInfo;
-            }
-
-            // Retrieve externalized resource.
-            ExternalizedResource extInfo = extManager.getExternalizedResource(externalizeIdentifier);
-
-            // Special case handling: We request a .html resource of a session which is not accessible.
-            // This happens some times and leads to a 404, though it should not be possible.
-            if (extInfo == null && pathInfo != null && pathInfo.length() > 0 && pathInfo.endsWith(".html")) {
-                log.info("Found a request to an invalid .html during a valid session. Redirecting to root frame.");
-                response.sendRedirect(retrieveCurrentRootFrameResource().getURL().toString());
-                return;
-            }
+//            // Deliver resource, the externalizer is able to handle static and dynamic resources
+//            ExternalizeManager extManager = getSession().getExternalizeManager();
+//            String pathInfo = req.getPathInfo().substring(1);
+//            log.debug("pathInfo: " + pathInfo);
+//
+//            /*
+//             * if we have no path info, or the special '_' path info
+//             * (that should be explained somewhere, Holger), then we
+//             * deliver the toplevel Frame of this application.
+//             */
+//            String externalizeIdentifier = null;
+//            if (pathInfo == null || pathInfo.length() == 0 || "_".equals(pathInfo) || firstRequest) {
+//                externalizeIdentifier = retrieveCurrentRootFrameResource().getId();
+//                firstRequest = false;
+//            } else {
+//                externalizeIdentifier = pathInfo;
+//            }
+//
+//            // Retrieve externalized resource.
+//            ExternalizedResource extInfo = extManager.getExternalizedResource(externalizeIdentifier);
+//
+//            // Special case handling: We request a .html resource of a session which is not accessible.
+//            // This happens some times and leads to a 404, though it should not be possible.
+//            if (extInfo == null && pathInfo != null && pathInfo.length() > 0 && pathInfo.endsWith(".html")) {
+//                log.info("Found a request to an invalid .html during a valid session. Redirecting to root frame.");
+//                response.sendRedirect(retrieveCurrentRootFrameResource().getURL().toString());
+//                return;
+//            }
 
             if (extInfo != null) {
                 outputDevice = DeviceFactory.createDevice(extInfo);
                 session.fireRequestEvent(SRequestEvent.DELIVER_START, extInfo);
 
-                log.debug("---> start rendering:");
                 long startTime = System.currentTimeMillis();
                 extManager.deliver(extInfo, response, outputDevice);
                 long endTime = System.currentTimeMillis();
-                log.info("---> " + AbstractComponentCG.getCacheStatistics() +
-                        " || duration: " + (endTime - startTime) + " ms\n");
-                AbstractComponentCG.resetCacheStatistics();
+                log.debug("------------------------- Time needed for rendering: " +
+                        (endTime - startTime) + " ms -------------------------\n");
 
                 session.fireRequestEvent(SRequestEvent.DELIVER_DONE, extInfo);
             } else {
@@ -571,7 +596,7 @@ final class SessionServlet
         while (defaultFrame.getParent() != null)
             defaultFrame = (SFrame) defaultFrame.getParent();
 
-        return defaultFrame.getDynamicResource(CompleteUpdateResource.class);
+        return defaultFrame.getDynamicResource(ReloadResource.class);
     }
 
     /**

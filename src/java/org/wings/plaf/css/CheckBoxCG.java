@@ -17,6 +17,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 import org.wings.resource.ResourceManager;
 
 import java.io.IOException;
@@ -143,7 +144,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
                 (button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
             if (clientProperty == null) {
                 String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.submitForm(" + !button.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !button.isReloadForced() + ",event);";
                 if (Utils.isMSIE(button)) {
                     // In IE the "onchange"-event gets fired when a control loses the
                     // input focus and its value has been modified since gaining focus.
@@ -179,6 +180,14 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             Utils.optAttribute(device, "foc", button.getName());
 
         device.print("/>");
+    }
+
+    public Update updateText(SCheckBox checkBox, String text) {
+        return new TextUpdate(checkBox, text);
+    }
+
+    public Update updateIcon(SCheckBox checkBox, SIcon icon) {
+        return new IconUpdate(checkBox, icon);
     }
 
 }

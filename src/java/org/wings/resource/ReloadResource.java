@@ -35,8 +35,8 @@ import org.wings.plaf.css.RenderHelper;
  * @author Holger Engels
  * @version $Revision$
  */
-public class CompleteUpdateResource extends DynamicResource {
-    private final transient static Log log = LogFactory.getLog(CompleteUpdateResource.class);
+public class ReloadResource extends DynamicResource {
+    private final transient static Log log = LogFactory.getLog(ReloadResource.class);
 
     private static final ArrayList DEFAULT_CODE_HEADER = new ArrayList();
     private final PropertyChangeListener changeListener;
@@ -53,7 +53,7 @@ public class CompleteUpdateResource extends DynamicResource {
      * Create a code resource for the specified frame.
      * <p>The MIME-type for this frame will be <code>text/html; charset=<i>current encoding</i></code>
      */
-    public CompleteUpdateResource(final SFrame f) {
+    public ReloadResource(final SFrame f) {
         super(f, "html", provideMimeType(f));
         // update session encoding if manually updated in the session.
         changeListener = new PropertyChangeListener() {
@@ -72,11 +72,10 @@ public class CompleteUpdateResource extends DynamicResource {
     }
 
     /**
-     * Renders and writes the code of the {@link SFrame} attached to this <code>CompleteUpdateResource</code>.
+     * Renders and writes the code of the {@link SFrame} attached to this <code>ReloadResource</code>.
      */
     public void write(Device out) throws IOException {
         try {
-        	RenderHelper.getInstance(getFrame()).setIncrementalUpdateMode(false);
         	getFrame().write(out);
         } catch (IOException e) {
             throw e;

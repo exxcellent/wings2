@@ -15,6 +15,7 @@ package org.wings;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeExpansionEvent;
@@ -142,9 +143,27 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
      * used to forward selection events to selection listeners of the tree
      */
     private final TreeSelectionListener fwdSelectionEvents = new TreeSelectionListener() {
+
         public void valueChanged(TreeSelectionEvent e) {
             fireTreeSelectionEvent(e);
-            reload(ReloadManager.STATE);
+
+            if (isUpdatePossible()) {
+                TreePath[] affectedPaths = e.getPaths();
+                List deselectedRows = new ArrayList();
+                List selectedRows = new ArrayList();
+                for (int i = 0; i < affectedPaths.length; ++i) {
+                    int row = treeState.getRowForPath(affectedPaths[i]);
+                    int offset = getViewportSize() == null ? 0 : getViewportSize().y;
+                    if (e.isAddedPath(affectedPaths[i])) {
+                        selectedRows.add(new Integer(row - offset));
+                    } else {
+                        deselectedRows.add(new Integer(row - offset));
+                    }
+                }
+                update(((TreeCG) getCG()).updateSelection(STree.this, deselectedRows, selectedRows));
+            } else {
+                reload();
+            }
         }
     };
 
@@ -479,7 +498,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 treeState.setExpandedState(new TreePath(model.getRoot()), true);
 
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -629,7 +648,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
 
         TreePath paths[] = new TreePath[rows.length];
         for (int i = 0; i < rows.length; i++) {
-            paths[i] = getPathForRow(i);
+            paths[i] = getPathForRow(rows[i]);
         }
 
         setSelectionPaths(paths);
@@ -880,7 +899,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         }
 
         fireTreeExpanded(p);
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     public void expandRow(int row) {
@@ -891,7 +910,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         treeState.setExpandedState(p, false);
 
         fireTreeCollapsed(p);
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     public void collapseRow(int row) {
@@ -1003,7 +1022,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
             if (e == null)
                 return;
             treeState.treeNodesChanged(e);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void treeNodesInserted(TreeModelEvent e) {
@@ -1011,7 +1030,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 return;
             treeState.treeNodesInserted(e);
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void treeStructureChanged(TreeModelEvent e) {
@@ -1019,7 +1038,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 return;
             treeState.treeStructureChanged(e);
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void treeNodesRemoved(TreeModelEvent e) {
@@ -1027,7 +1046,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 return;
             treeState.treeNodesRemoved(e);
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1089,7 +1108,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                     fireViewportChanged(false);
                 }
             }
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 

@@ -3,6 +3,18 @@
  **************************************************************************************************/
 
 
+/**
+ * Create according namespace
+ */
+if (!wingS.ajax) {
+    wingS.ajax = new Object();
+} else if (typeof wingS.ajax != "object") {
+    throw new Error("wingS.ajax already exists and is not an object");
+}
+
+/**
+ * AJAX related global variables according namespace
+ */
 var requestIsActive;    // Indicates if a request is active
 var requestQueue;       // A queue of requests to be invoked
 var activityCursor;     // The activity cursor (animated GIF)
@@ -15,7 +27,7 @@ var connectionObject;   // Holds the active connection object
 wingS.ajax.initializeFrame = function() {
     requestIsActive = false;
     requestQueue = new Array();
-    if (wingS.global.incrementalUpdateCursor.enabled) {
+    if (wingS.global.updateCursor.enabled) {
         activityCursor = new wingS.ajax.ActivityCursor();
     }
     callbackObject = {
@@ -29,7 +41,7 @@ wingS.ajax.initializeFrame = function() {
  * Requests any available component updates from the server.
  */
 wingS.ajax.requestUpdates = function() {
-    wingS.ajax.doRequest("GET", wingS.util.getIncrementalUpdateResource());
+    wingS.ajax.doRequest("GET", wingS.util.getUpdateResource());
 };
 
 /**
@@ -38,7 +50,7 @@ wingS.ajax.requestUpdates = function() {
  */
 wingS.ajax.doSubmit = function(form) {
     YAHOO.util.Connect.setForm(form);
-    wingS.ajax.doRequest(form.method.toUpperCase(), wingS.util.getIncrementalUpdateResource());
+    wingS.ajax.doRequest(form.method.toUpperCase(), wingS.util.getUpdateResource());
 };
 
 /**
@@ -89,9 +101,10 @@ wingS.ajax.processRequestFailure = function(request) {
         alert("Transaction has been aborted!");
         return;
     } else if (request.status == 0) {
-        // Happens in case of a communication failure, i.e if the
-        // server has meanwhile been shut down -> try a full reload
-        window.location.href = wingS.util.getCompleteUpdateResource();
+        // Happens in case of a communication
+        // failure, i.e if the server has mean-
+        // while been shut down --> do reload!
+        wingS.request.reloadFrame();
         return;
     }
 
@@ -112,65 +125,40 @@ wingS.ajax.processRequestSuccess = function(request) {
 
     // Get the received XML response
     var xmlDoc = request.responseXML;
-    // In case we do not get any XML
     if (xmlDoc == null) {
-        window.location.href = wingS.util.getCompleteUpdateResource();
-        // Alternatively ?: wingS.ajax.processRequestFailure(request);
+        // In case we don't get any XML there is nothing more
+        // what we can do here; the only thing --> do reload!
+        wingS.request.reloadFrame();
+        // Better?: wingS.ajax.processRequestFailure(request);
         return;
     }
 
-    // Get the root element of the received XML response
-    var xmlRoot = xmlDoc.getElementsByTagName("update")[0];
-    // Workaround to prevent IE from showing JS errors when
-    // session has meanwhile timed out -> try a full reload
+    // Get the document's root element
+    var xmlRoot = xmlDoc.getElementsByTagName("updates")[0];
     if (xmlRoot == null) {
-        window.location.href = wingS.util.getCompleteUpdateResource();
-        // Alternatively ?: wingS.ajax.processRequestFailure(request);
+        // Workaround to prevent IE from showing JS errors
+        // if session has meanwhile timed out --> do reload!
+        wingS.request.reloadFrame();
+        // Better?: wingS.ajax.processRequestFailure(request);
         return;
     }
 
-    // Private convenience function
-    function getFirstChildData(tagName) {
-        return xmlDoc.getElementsByTagName(tagName)[0].firstChild.data;
-    }
-
-    // Process the response depending on the update mode
-    var updateMode = xmlRoot.getAttribute("mode");
-    if (updateMode == "complete") {
-        window.location.href = getFirstChildData("redirect");
-        return;
-    }
-    else if (updateMode == "incremental") {
-        var components = xmlRoot.getElementsByTagName("component");
-        if (components.length > 0) {
-            var componentIds = new Array();
-            // Replace HTML needed for component updates
-            for (var i = 0; i < components.length; i++) {
-                var id = components[i].getAttribute("id");
-                var html = components[i].firstChild.data;
-                wingS.util.replaceComponentHtml(id, html);
-                componentIds.push(id);
+    // Process each incremental update
+    var updates = xmlRoot.getElementsByTagName("update");
+    if (updates.length > 0) {
+        for (var i = 0; i < updates.length; i++) {
+            try {
+                // Dispatch update to the corresponding
+                // handler function simply by evaluation
+                window.eval(updates[i].firstChild.data);
+            } catch(e) {
+                var errorMsg = "Failure while processing the reponse of an AJAX request!\n" +
+                               "**********************************************\n\n" +
+                               "Error Message: " + e.message + "!\n\n" +
+                               "The error occurred while evaluating the following JS code:\n" +
+                               updates[i].firstChild.data;
+                alert(errorMsg);
             }
-            // Execute scripts needed for component updates
-            var scripts = xmlRoot.getElementsByTagName("script");
-            for (var i = 0; i < scripts.length; i++) {
-                var code = scripts[i].firstChild.data;
-                try {
-                    eval(code);
-                } catch(e) {
-                    var errorMsg = "An error occured while processing an AJAX request!\n" +
-                                   ">> " + e.message + "\n\n\n The following JavaScript " +
-                                   "code could not be executed:\n" + code;
-                    alert(errorMsg);
-                }
-            }
-            // Hightlight the components updated above
-            if (wingS.global.incrementalUpdateHighlight.enabled) {
-                wingS.ajax.highlightComponentUpdates(componentIds);
-            }
-
-            // Update the event epoch of this frame
-            wingS.global.event_epoch = getFirstChildData("event_epoch");
         }
     }
 
@@ -184,11 +172,20 @@ wingS.ajax.processRequestSuccess = function(request) {
 
 /**
  * Replaces the HTML code of the component with the given ID.
- * @param {String} id - the ID of the component to replace
+ * @param {String} componentId - the ID of the component
  * @param {String} html - the new HTML code of the component
+ * @param {String} exception - the server exception (optional)
  */
-wingS.util.replaceComponentHtml = function(id, html) {
-    var component = document.getElementById(id);
+wingS.ajax.updateComponent = function(componentId, html, exception) {
+    // Exception handling
+    if (exception != null) {
+        var update = "ComponentUpdate for '" + componentId + "'";
+        wingS.ajax.alertException(exception, update);
+        return;
+    }
+
+    // Search DOM for according component
+    var component = document.getElementById(componentId);
     if (component == null) return;
 
     // Handle layout workaround for IE (if necessary)
@@ -232,6 +229,132 @@ wingS.util.replaceComponentHtml = function(id, html) {
 };
 
 /**
+ * Updates the current event epoch of this frame.
+ * @param {String} epoch - the current event epoch
+ */
+wingS.ajax.updateEpoch = function(epoch) {
+    wingS.global.eventEpoch = epoch;
+};
+
+/**
+ * Enables or disabled incremental updates for this frame.
+ * @param {boolean} enabled - true, if updates are allowed
+ */
+wingS.ajax.updateEnabled = function(enabled) {
+    wingS.global.updateEnabled = enabled;
+};
+
+/**
+ * Adds or removes a script header with the given parameters.
+ * @param {String} type - the type of the script header
+ * @param {String} source - the source of the script header
+ * @param {boolean} add - true, if header should be added
+ */
+wingS.ajax.updateScriptHeader = function(type, source, add) {
+    var head = document.getElementsByTagName("HEAD")[0];
+    if (add) {
+        script = document.createElement("script");
+        script.type = type;
+        script.src = source;
+        head.appendChild(script);
+    } else {
+        var scripts = head.getElementsByTagName("SCRIPT");
+        for (var i = 0; i < scripts.length; i++) {
+            if (scripts[i].getAttribute("src") == source &&
+                scripts[i].getAttribute("type") == type) {
+                head.removeChild(scripts[i]);
+            }
+        }
+    }
+};
+
+/**
+ * Updates the value of the component with the given ID.
+ * @param {String} componentId - the ID of the component
+ * @param {String} value - the new value of the component
+ */
+wingS.ajax.updateValue = function(componentId, value) {
+    document.getElementById(componentId).value = value;
+};
+
+/**
+ * Updates the text of the component with the given ID.
+ * @param {String} componentId - the ID of the component
+ * @param {String} text - the new text of the component
+ */
+wingS.ajax.updateText = function(componentId, text) {
+    var component = document.getElementById(componentId);
+    var textNode = component.getElementsByTagName("SPAN")[0];
+    textNode.innerHTML = text;
+};
+
+/**
+ * Updates the icon of the component with the given ID.
+ * @param {String} componentId - the ID of the component
+ * @param {String} icon - the new icon of the component
+ */
+wingS.ajax.updateIcon = function(componentId, icon) {
+    var component = document.getElementById(componentId);
+    var iconNode = component.getElementsByTagName("IMG")[0];
+    iconNode.parentNode.innerHTML = icon;
+};
+
+/**
+ * Updates the selection of the combobox with the given ID.
+ * @param {String} comboBoxId - the ID of the combobox to update
+ * @param {int} selectedIndex - the index of the entry to select
+ */
+wingS.ajax.updateComboBoxSelection = function(comboBoxId, selectedIndex) {
+    var comboBox = document.getElementById(comboBoxId);
+    comboBox.selectedIndex = selectedIndex;
+};
+
+/**
+ * Updates the selection of the list with the given ID.
+ * @param {String} listId - the ID of the list to update
+ * @param {Array} deselectedIndices - the indices to deselect
+ * @param {Array} selectedIndices - the indices to select
+ */
+wingS.ajax.updateListSelection = function(listId, deselectedIndices, selectedIndices) {
+    var list = document.getElementById(listId);
+
+    if (list.options) {
+        for (var i = 0; i < deselectedIndices.length; i++) {
+            list.options[deselectedIndices[i]].selected = false;
+        }
+        for (var i = 0; i < selectedIndices.length; i++) {
+            list.options[selectedIndices[i]].selected = true;
+        }
+    } else {
+        var listItems = list.getElementsByTagName("LI");
+        for (var i = 0; i < deselectedIndices.length; i++) {
+            listItems[deselectedIndices[i]].setAttribute("class", "clickable");
+        }
+        for (var i = 0; i < selectedIndices.length; i++) {
+            listItems[selectedIndices[i]].setAttribute("class", "selected clickable");
+        }
+    }
+};
+
+/**
+ * Updates the selection of the tree with the given ID.
+ * @param {String} treeId - the ID of the tree to update
+ * @param {Array} deselectedRows - the rows to deselect
+ * @param {Array} selectedRows - the rows to select
+ */
+wingS.ajax.updateTreeSelection = function(treeId, deselectedRows, selectedRows) {
+    var tree = document.getElementById(treeId);
+    var rows = wingS.util.getElementsByAttribute(tree, 'td', 'row');
+
+    for (var i = 0; i < deselectedRows.length; i++) {
+        rows[deselectedRows[i]].setAttribute('class', 'norm');
+    }
+    for (var i = 0; i < selectedRows.length; i++) {
+        rows[selectedRows[i]].setAttribute('class', 'selected');
+    }
+};
+
+/**
  * Enqueues the given request if another one is still in action.
  * @param {Function} send - the function to send the request with
  * @param {Array} args - the arguments needed by the send function
@@ -262,7 +385,7 @@ wingS.ajax.dequeueNextRequest = function() {
  * @param {boolean} visible - true to set indicators visible
  */
 wingS.ajax.setActivityIndicatorsVisible = function(visible) {
-    if (wingS.global.incrementalUpdateCursor.enabled) {
+    if (wingS.global.updateCursor.enabled) {
         activityCursor.setVisible(visible);
         // An alternative to the cursor might be something like
         // if (visible) document.body.style.cursor = "progress";
@@ -276,37 +399,16 @@ wingS.ajax.setActivityIndicatorsVisible = function(visible) {
 };
 
 /**
- * Briefly highlights the components with the given IDs.
- * @param {Array} componentIds - the IDs of the components
- */
-wingS.ajax.highlightComponentUpdates = function(componentIds) {
-    for (var i = 0; i < componentIds.length; i++) {
-        var component = document.getElementById(componentIds[i]);
-        if (component == null) return;
-        highlightComponent(component);
-    }
-
-    function highlightComponent(component) {
-        var initialBackgroundColor = component.style.backgroundColor;
-        component.style.backgroundColor = wingS.global.incrementalUpdateHighlight.color;
-        var resetColor = function() {
-            component.style.backgroundColor = initialBackgroundColor;
-        };
-        setTimeout(resetColor, wingS.global.incrementalUpdateHighlight.duration);
-    }
-};
-
-/**
  * Initializes the appearance of the activity cursor.
  */
 wingS.ajax.ActivityCursor = function() {
-    this.dx = wingS.global.incrementalUpdateCursor.dx;
-    this.dy = wingS.global.incrementalUpdateCursor.dy;
+    this.dx = wingS.global.updateCursor.dx;
+    this.dy = wingS.global.updateCursor.dy;
     this.div = document.createElement("div");
     this.div.style.position = "absolute";
     this.div.style.zIndex = "1000";
     this.div.style.display = "none";
-    this.div.innerHTML = "<img src=\"" + wingS.global.incrementalUpdateCursor.image + "\"/>";
+    this.div.innerHTML = "<img src=\"" + wingS.global.updateCursor.image + "\"/>";
     document.body.insertBefore(this.div, document.body.firstChild);
     document.onmousemove = this.followMouse.bind(this);
 };
@@ -347,6 +449,20 @@ wingS.ajax.ActivityCursor.prototype.setVisible = function(visible) {
 };
 
 /**
+ * Alerts an error message containing the exception name.
+ * @param {String} exception - the exception name to alert
+ * @param {String} update - details about the failed update
+ */
+wingS.ajax.alertException = function(exception, update) {
+    var errorMsg = "Couldn't apply update due to an exception on server side!\n" +
+                   "**********************************************\n\n" +
+                   "Exception: " + exception + "\n" +
+                   "Failed Update: " + update + "\n\n" +
+                   "Please examine your server's log file for further details...";
+    alert(errorMsg);
+};
+
+/**
  * Prints some debug information about the given AJAX request.
  * @param {Object} request - the request to debug
  */
@@ -372,6 +488,18 @@ wingS.ajax.updateDebugView = function(request) {
 };
 
 /**
+ * Returns the current visibility state of the debug view.
+ * @return {boolean} true if view is visible, false otherwise
+ */
+wingS.ajax.isDebugViewVisible = function() {
+    var debugArea = document.getElementById("ajaxDebugView");
+    if (debugArea != null && debugArea.style.display != "none") {
+        return true;
+    }
+    return false;
+};
+
+/**
  * Makes the enabled debug view either visible or invisible.
  * @param {boolean} visible - true to set debug view visible
  */
@@ -383,16 +511,4 @@ wingS.ajax.setDebugViewVisible = function(visible) {
     } else {
         alert("The AJAX debug view has not been enabled yet!");
     }
-};
-
-/**
- * Returns the current visibility state of the debug view.
- * @return {boolean} true if view is visible, false otherwise
- */
-wingS.ajax.isDebugViewVisible = function() {
-    var debugArea = document.getElementById("ajaxDebugView");
-    if (debugArea != null && debugArea.style.display != "none") {
-        return true;
-    }
-    return false;
 };

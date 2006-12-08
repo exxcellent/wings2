@@ -13,68 +13,89 @@
  */
 package org.wings;
 
+import java.util.List;
 import java.util.Set;
 import java.io.Serializable;
 
+import org.wings.plaf.Update;
+
 /**
- * Responsible for registering and invalidating modified components.
+ * A reload manger is responsible for managing reloads and updates of components as
+ * well as for invalidating the epoch of frames whose contained components changed.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
+ * @author Stephan Schuster
  * @version $Revision$
  */
 public interface ReloadManager extends Serializable {
-    /**
-     * HTML represenation aspect
-     */
-    public static final int STATE = 1;
-    /**
-     * CSS StyleSheet represenation aspect
-     */
-    public static final int STYLE = 2;
-    /**
-     * Dynamic (Java)Script represenation aspect
-     */
-    public static final int SCRIPT = 4;
 
     /**
-     * Mark an aspect of an component as dirty. Valid aspects are {@link #STATE},
-     * {@link #STYLE}, {@link #SCRIPT}
-     *
-     * @param component Component whoose representation modified.
-     * @param aspect The respresentation aspect that changed.
+     * Reloads the entire component.
+     * @param component  the component that changed
      */
-     void reload(SComponent component, int aspect);
+    public void reload(SComponent component);
 
     /**
-     * Return a set of all components that are marked dirty.
-     * @return a set of all components that have been marked dirty.
+     * Adds an update (for a specific component).
+     * @param update  the update to add
      */
-    Set getDirtyComponents();
+    public void addUpdate(Update update);
 
     /**
-     * Return a set of all frames that are marked dirty.
-     * @return a set of all frames that have been marked dirty.
+     * Returns a (filtered) list of all available updates.
+     * @return a list of updates
      */
-    Set getDirtyFrames();
+    public List getUpdates();
 
     /**
-     * Clear dirty components collection.
+     * Returns a set of all components that were marked dirty.
+     * @return a set of all dirty components
      */
-    void clear();
+    public Set getDirtyComponents();
 
     /**
-     * Invalidates the frames containing / depending on dirty components.
+     * Return a set of all frames that were marked dirty.
+     * @return a set of all dirty frames
      */
-    void invalidateFrames();
+    public Set getDirtyFrames();
 
     /**
-     * Notify the CG's of the dirty components that those components were updated.
+     * Invalidates the frames containing dirty components.
      */
-    void notifyCGs();
+    public void invalidateFrames();
 
     /**
-     * are there any dirty components?
+     * Notifies the CG's of dirty components about the change.
      */
-    public boolean hasDirtyComponents(SFrame inFrame);
-        
+    public void notifyCGs();
+
+    /**
+     * Clears all requested reloads and updates for cmponents.
+     */
+    public void clear();
+
+    /**
+     * Returns true if the given component requested a reload.
+     * @return true if a reload was requested
+     */
+    public boolean componentRequestedReload(SComponent component);
+
+    /**
+     * Returns true if the given component requested an update.
+     * @return true if an update was requested
+     */
+    public boolean componentRequestedUpdate(SComponent component);
+
+    /**
+     * Returns true if this ReloadManager is in update mode.
+     * @return true if in update mode
+     */
+    public boolean isUpdateMode();
+
+    /**
+     * Enabled or disabled the update mode of this ReloadManager.
+     * @param enabled  true to enable update mode
+     */
+    public void setUpdateMode(boolean enabled);
+
 }

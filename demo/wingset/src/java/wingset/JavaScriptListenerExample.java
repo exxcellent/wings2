@@ -121,7 +121,7 @@ public class JavaScriptListenerExample
         // insert a new JS into the frame's script area without completely reloading the frame.
         // This might be possible as soon as we make the step from componentwise updates to more
         // fine grained updates...
-        // SessionManager.getSession().getRootFrame().reload(ReloadManager.STATE);
+        // SessionManager.getSession().getRootFrame().reload();
 
         p.add(form);
         return p;

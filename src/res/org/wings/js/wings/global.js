@@ -1,10 +1,10 @@
 /***************************************************************************************************
- * WINGS.GLOBAL  --  contains: namespaces, global variables, etc.
+ * WINGS.GLOBAL  --  contains: global variables, function shortcuts and extensions, etc.
  **************************************************************************************************/
 
 
 /**
- * JavaScript namespaces
+ * Create according namespace
  */
 if (!wingS) {
     var wingS = new Object();
@@ -18,41 +18,14 @@ if (!wingS.global) {
     throw new Error("wingS.global already exists and is not an object");
 }
 
-if (!wingS.events) {
-    wingS.events = new Object();
-} else if (typeof wingS.events != "object") {
-    throw new Error("wingS.events already exists and is not an object");
-}
-
-if (!wingS.util) {
-    wingS.util = new Object();
-} else if (typeof wingS.util != "object") {
-    throw new Error("wingS.util already exists and is not an object");
-}
-
-if (!wingS.layout) {
-    wingS.layout = new Object();
-} else if (typeof wingS.layout != "object") {
-    throw new Error("wingS.layout already exists and is not an object");
-}
-
-if (!wingS.request) {
-    wingS.request = new Object();
-} else if (typeof wingS.request != "object") {
-    throw new Error("wingS.request already exists and is not an object");
-}
-
-if (!wingS.ajax) {
-    wingS.ajax = new Object();
-} else if (typeof wingS.ajax != "object") {
-    throw new Error("wingS.ajax already exists and is not an object");
-}
-
-if (!wingS.component) {
-    wingS.component = new Object();
-} else if (typeof wingS.component != "object") {
-    throw new Error("wingS.component already exists and is not an object");
-}
+/**
+ * Global variables
+ */
+wingS.global.eventEpoch;          // Keeps the event epoch of this frame (needed for all events)
+wingS.global.reloadResource;      // Stores the URI of the ReloadResource (without event epoch)
+wingS.global.updateResource;      // Stores the URI of the UpdateResource (without event epoch)
+wingS.global.updateEnabled;       // A flag indicating if this frame allows incremental updates
+wingS.global.updateCursor;        // An object holding necessary settings of the update cursor
 
 /**
  * Moves the execution context of the function used upon to the given object. Useful when using
@@ -69,16 +42,3 @@ Function.prototype.bind = function(obj) {
 
     return temp;
 };
-
-
-/**
- * Global variables
- */
-wingS.global.event_epoch;                    // Maintains the event epoch of this frame
-wingS.global.completeUpdateId;               // Holds the ID of the CompleteUpdateResource
-wingS.global.incrementalUpdateId;            // Holds the ID of the IncrementalUpdateResource
-wingS.global.incrementalUpdateEnabled;       // True if this frame allows incremental updates
-wingS.global.incrementalUpdateCursor;        // An object whose properties "enabled", "image"
-                                             // "dx" and "dy" hold the settings of the cursor
-wingS.global.incrementalUpdateHighlight;     // An object whose properties "enabled", "color"
-                                             // and "duration" store the 3 highlight settings

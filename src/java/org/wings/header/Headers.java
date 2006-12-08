@@ -1,6 +1,5 @@
 package org.wings.header;
 
-import org.wings.ReloadManager;
 import org.wings.SFrame;
 import org.wings.session.SessionManager;
 import org.wings.util.SessionLocal;
@@ -254,7 +253,7 @@ public class Headers
     private void invalidateFrames() {
         Set frames = SessionManager.getSession().getFrames();
         for (Iterator it = frames.iterator(); it.hasNext();) {
-            ((SFrame) it.next()).reload(ReloadManager.STATE);
+            ((SFrame) it.next()).reload();
         }
     }
 }

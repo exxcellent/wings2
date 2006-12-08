@@ -17,6 +17,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.text.SAbstractFormatter;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.*;
 
@@ -68,7 +69,7 @@ public class TextFieldCG extends AbstractComponentCG implements
         	// itself as a listener of its document as well.
             if (clientProperty == null) {
             	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.submitForm(" + !textField.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !textField.isReloadForced() + ",event);";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 textField.addScriptListener(javaScriptListener);
                 textField.putClientProperty("onChangeSubmitListener", javaScriptListener);
@@ -137,6 +138,9 @@ public class TextFieldCG extends AbstractComponentCG implements
         }
     }
 
+    public Update updateText(STextField textfield, String text) {
+    	return new ValueUpdate(textfield, text);
+    }
 
     public static class CallableFormatter {
         Map textfields = new WeakHashMap();

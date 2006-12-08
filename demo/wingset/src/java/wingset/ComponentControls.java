@@ -13,7 +13,6 @@
  */
 package wingset;
 
-import org.wings.ReloadManager;
 import org.wings.SAnchor;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
@@ -99,11 +98,9 @@ public class ComponentControls  extends SPanel {
     protected final SCheckBox formComponentCheckBox = new SCheckBox("form components");
 
     protected final SCheckBox ajaxEnabledCheckBox = new SCheckBox("Enable incremental updates");
-    protected final SCheckBox ajaxHighlightEnabledCheckBox = new SCheckBox("Enable update highlight");
-    protected final STextField ajaxHighlightColorTextField = new STextField();
     protected final SCheckBox ajaxCursorEnabledCheckBox = new SCheckBox("Enable update cursor");
-    protected final SButton ajaxForceCompleteUpdate = new SButton("Force complete update");
-    protected final SAnchor ajaxDebuggingViewAnchor = new SAnchor();
+    protected final SButton ajaxForceFrameReload = new SButton("Force reload of frame");
+    protected final SAnchor ajaxDebugViewAnchor = new SAnchor();
 
 
     protected final SFrame frame = SessionManager.getSession().getRootFrame();
@@ -191,14 +188,11 @@ public class ComponentControls  extends SPanel {
         ajaxControls.add(new SLabel("AJAX settings:"));
         ajaxControls.add(ajaxEnabledCheckBox);
         ajaxControls.add(new SLabel("  |  "));
-        ajaxControls.add(ajaxHighlightEnabledCheckBox);
-        ajaxControls.add(ajaxHighlightColorTextField);
-        ajaxControls.add(new SLabel("  |  "));
         ajaxControls.add(ajaxCursorEnabledCheckBox);
         ajaxControls.add(new SLabel("  |  "));
-        ajaxControls.add(ajaxForceCompleteUpdate);
+        ajaxControls.add(ajaxForceFrameReload);
         ajaxControls.add(new SLabel("  |  "));
-        ajaxControls.add(ajaxDebuggingViewAnchor);
+        ajaxControls.add(ajaxDebugViewAnchor);
         initAjaxSettings();
 
 
@@ -289,45 +283,32 @@ public class ComponentControls  extends SPanel {
     }
 
     private void initAjaxSettings() {
-        ajaxEnabledCheckBox.setSelected(frame.isIncrementalUpdateEnabled());
-        boolean highlightEnabled = ((Boolean) frame.getIncrementalUpdateHighlight()[0]).booleanValue();
-        ajaxHighlightEnabledCheckBox.setSelected(highlightEnabled);
-        String color = (String) frame.getIncrementalUpdateHighlight()[1];
-        ajaxHighlightColorTextField.setText(color);
-        ajaxHighlightColorTextField.setColumns(4);
-        boolean cursorEnabled = ((Boolean) frame.getIncrementalUpdateCursor()[0]).booleanValue();
+        ajaxEnabledCheckBox.setSelected(frame.isUpdateEnabled());
+        boolean cursorEnabled = ((Boolean) frame.getUpdateCursor()[0]).booleanValue();
         ajaxCursorEnabledCheckBox.setSelected(cursorEnabled);
-        ajaxCursorEnabledCheckBox.setName("xy");
-        ajaxDebuggingViewAnchor.addScriptListener(new JavaScriptListener(
+        ajaxDebugViewAnchor.addScriptListener(new JavaScriptListener(
                 JavaScriptEvent.ON_CLICK, "toggleAjaxDebugView()",
-                // "document.getElementById('xy').abc = function() {\n" +
-                "self.toggleAjaxDebugView = function() {" +
-                // "function toggleAjaxDebugView() {" +
+                "toggleAjaxDebugView = function() {\n" +
                 "  if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);\n" +
                 "  else wingS.ajax.setDebugViewVisible(true);\n" +
                 "  return false;\n" +
                 "};"
-                //+ "alert('sxsx');"
-                //+ "}\n"
         ));
-        ajaxForceCompleteUpdate.addActionListener(new ActionListener() {
+        ajaxForceFrameReload.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.reload(ReloadManager.STATE);
+                frame.reload();
             }
         });
-        ajaxForceCompleteUpdate.setShowAsFormComponent(false);
-        ajaxDebuggingViewAnchor.add(new SLabel("Toggle debugging view"));
+        ajaxForceFrameReload.setShowAsFormComponent(false);
+        ajaxDebugViewAnchor.add(new SLabel("Toggle AJAX debug view"));
     }
 
     private void applyAjaxSettings() {
-        frame.setIncrementalUpdateEnabled(ajaxEnabledCheckBox.isSelected());
-        boolean highlightEnabled = ajaxHighlightEnabledCheckBox.isSelected();
-        String highlightColor = ajaxHighlightColorTextField.getText();
-        frame.setIncrementalUpdateHighlight(highlightEnabled, highlightColor, 300);
+        frame.setUpdateEnabled(ajaxEnabledCheckBox.isSelected());
         boolean cursorEnabled = ajaxCursorEnabledCheckBox.isSelected();
-        SIcon image = (SIcon) frame.getIncrementalUpdateCursor()[1];
-        int dx = ((Integer) frame.getIncrementalUpdateCursor()[2]).intValue();
-        int dy = ((Integer) frame.getIncrementalUpdateCursor()[3]).intValue();
-        frame.setIncrementalUpdateCursor(cursorEnabled, image, dx, dy);
+        SIcon image = (SIcon) frame.getUpdateCursor()[1];
+        int dx = ((Integer) frame.getUpdateCursor()[2]).intValue();
+        int dy = ((Integer) frame.getUpdateCursor()[3]).intValue();
+        frame.setUpdateCursor(cursorEnabled, image, dx, dy);
     }
 }

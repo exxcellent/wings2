@@ -54,13 +54,13 @@ public class MemUsageExample extends WingSetPane {
         gc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.gc();
-                panel.reload(ReloadManager.STATE);
+                panel.reload();
             }
         });
         // Action listener for refresh button trigger
         refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                panel.reload(ReloadManager.STATE);
+                panel.reload();
             }
         });
         // Action listener for exit button trigger

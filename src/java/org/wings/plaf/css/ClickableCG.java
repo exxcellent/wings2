@@ -18,10 +18,11 @@ import org.wings.SClickable;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 
 import java.io.IOException;
 
-public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG {
+public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf.ClickableCG {
 
     private static final long serialVersionUID = 1L;
 
@@ -84,4 +85,13 @@ public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf
                     : abstractButton.getDisabledIcon();
         }
     }
+
+    public Update updateText(SClickable clickable, String text) {
+        return new TextUpdate(clickable, text);
+    }
+
+    public Update updateIcon(SClickable clickable, SIcon icon) {
+        return new IconUpdate(clickable, icon);
+    }
+
 }

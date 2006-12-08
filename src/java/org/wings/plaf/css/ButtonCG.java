@@ -15,6 +15,7 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
+import org.wings.plaf.Update;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
@@ -104,4 +105,15 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
                     : abstractButton.getDisabledIcon();
         }
     }
+
+    public Update updateText(SButton button, String text) {
+        return new TextUpdate(button, text);
+    }
+
+    public Update updateIcon(SButton button, SIcon icon) {
+        return new IconUpdate(button, icon);
+    }
+
+
+
 }

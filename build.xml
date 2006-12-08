@@ -103,7 +103,7 @@
                  doctitle="wingS ${wings.version}"
                  windowtitle="wingS ${wings.version}"
                  bottom="wingS Swings ;-)" >
-            <excludepackage name="org.wings.plaf.css.*" /> 
+            <excludepackage name="org.wings.plaf.css.*" />
         </javadoc>
     </target>
 

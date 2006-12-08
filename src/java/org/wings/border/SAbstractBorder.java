@@ -89,7 +89,7 @@ public abstract class SAbstractBorder
         this.insets = insets;
         attributes = null;
         if (component != null)
-            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
+            component.getSession().getReloadManager().reload(component);
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class SAbstractBorder
         specs[position].color = color;
         attributes = null;
         if (component != null)
-            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
+            component.getSession().getReloadManager().reload(component);
     }
 
     /**
@@ -142,7 +142,7 @@ public abstract class SAbstractBorder
         specs[position].thickness = thickness;
         attributes = null;
         if (component != null)
-            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
+            component.getSession().getReloadManager().reload(component);
     }
 
     /**
@@ -171,7 +171,7 @@ public abstract class SAbstractBorder
         specs[position].style = style;
         attributes = null;
         if (component != null)
-            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
+            component.getSession().getReloadManager().reload(component);
     }
 
     /**

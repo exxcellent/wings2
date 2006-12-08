@@ -80,7 +80,7 @@ public class ToggleButtonExample
                 buttons[i].setSelectedIcon(pressedIcon);
             }
             buttons[i].setToolTipText("ToggleButton " + (i+1));
-            buttons[i].setName("button" + (i+1));
+            buttons[i].setName("tb" + (i+1));
             buttons[i].setShowAsFormComponent(false);
             buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
             buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
@@ -116,7 +116,7 @@ public class ToggleButtonExample
 
                     for (Iterator iterator = components.iterator(); iterator.hasNext();) {
                         SAbstractButton component = (SAbstractButton) iterator.next();
-                        if (!"button5".equals(component.getName())) {
+                        if (!"tb5".equals(component.getName())) {
                             component.setIcon(use ? icon : null);
                             component.setDisabledIcon(use ? disabledIcon : null);
                             component.setRolloverIcon(use ? rolloverIcon : null);

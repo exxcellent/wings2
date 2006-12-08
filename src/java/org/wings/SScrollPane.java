@@ -130,7 +130,7 @@ public class SScrollPane
             scrollable = null;
         }
 
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     /**
@@ -234,7 +234,7 @@ public class SScrollPane
             adoptScrollBarVisibility(horizontalScrollBar, horizontalScrollBarPolicy);
         }
 
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     /**
@@ -298,7 +298,7 @@ public class SScrollPane
             adoptScrollBarVisibility(verticalScrollBar, verticalScrollBarPolicy);
         }
 
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     /**
@@ -322,7 +322,7 @@ public class SScrollPane
         if (policy != horizontalScrollBarPolicy) {
             horizontalScrollBarPolicy = policy;
             adoptScrollBarVisibility(horizontalScrollBar, policy);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -337,7 +337,7 @@ public class SScrollPane
         if (policy != verticalScrollBarPolicy) {
             verticalScrollBarPolicy = policy;
             adoptScrollBarVisibility(verticalScrollBar, policy);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -566,7 +566,7 @@ public class SScrollPane
                 // Keep extent in sync with scrollpane
                 if (horizontalExtent != newExtent) {
                     horizontalExtent = newExtent;
-                    SScrollPane.this.reload(ReloadManager.STATE);
+                    SScrollPane.this.reload();
                 }
                 curVp.width = newExtent;
                 updateViews();
@@ -574,7 +574,7 @@ public class SScrollPane
                 // Keep extent in sync with scrollpane
                 if (verticalExtent != newExtent) {
                     verticalExtent = newExtent;
-                    SScrollPane.this.reload(ReloadManager.STATE);
+                    SScrollPane.this.reload();
                 }
                 curVp.height = newExtent;
                 updateViews();
@@ -764,7 +764,7 @@ public class SScrollPane
         private void updateViews() {
             // Reload scrollbar and scrollable in order to display the changes
             viewportChanged(new SViewportChangeEvent(scrollable, horizontal));
-            ((SComponent) scrollable).reload(ReloadManager.STATE);
+            ((SComponent) scrollable).reload();
         }
 
         private boolean isViewportAvailable() {

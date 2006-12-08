@@ -15,6 +15,8 @@ package org.wings;
 
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
+import org.wings.plaf.TextAreaCG;
+import org.wings.plaf.TextFieldCG;
 import org.wings.text.DefaultDocument;
 import org.wings.text.SDocument;
 
@@ -68,7 +70,7 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         if (oldDocument != null)
             oldDocument.removeDocumentListener(this);
         document.addDocumentListener(this);
-        reloadIfChange(oldDocument, document, ReloadManager.STATE);
+        reloadIfChange(oldDocument, document);
     }
 
     /**
@@ -80,7 +82,7 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         boolean oldEditable = editable;
         editable = ed;
         if (editable != oldEditable)
-            reload(ReloadManager.STATE);
+            reload();
     }
 
 
@@ -163,17 +165,26 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         this.epochCheckEnabled = epochCheckEnabled;
     }
 
-    // Changes to the document should force a reload.
     public void insertUpdate(SDocumentEvent e) {
-        reload(ReloadManager.STATE);
+        //reload();
     }
 
     public void removeUpdate(SDocumentEvent e) {
-        reload(ReloadManager.STATE);
+        //reload();
     }
 
     public void changedUpdate(SDocumentEvent e) {
-        reload(ReloadManager.STATE);
+        if (isUpdatePossible()) {
+            String text = e.getDocument().getText();
+            if (this instanceof STextField)
+                update(((TextFieldCG) getCG()).updateText((STextField) this, text));
+            else if (this instanceof STextArea)
+                update(((TextAreaCG) getCG()).updateText((STextArea) this, text));
+            else
+                reload();
+        } else {
+            reload();
+        }
     }
 }
 

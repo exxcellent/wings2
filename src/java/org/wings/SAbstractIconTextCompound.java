@@ -14,6 +14,11 @@
 package org.wings;
 
 
+import org.wings.plaf.ButtonCG;
+import org.wings.plaf.CheckBoxCG;
+import org.wings.plaf.ClickableCG;
+import org.wings.plaf.RadioButtonCG;
+import org.wings.plaf.ToggleButtonCG;
 import org.wings.style.Selector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.CSSAttributeSet;
@@ -116,7 +121,7 @@ public abstract class SAbstractIconTextCompound
     public void setModel(SButtonModel model) {
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
-        reloadIfChange(this.model, model, ReloadManager.STATE);
+        reloadIfChange(this.model, model);
         this.model = model;
     }
 
@@ -243,8 +248,27 @@ public abstract class SAbstractIconTextCompound
      * @param i the icon.
      */
     public void setIcon(SIcon i) {
-        reloadIfChange(icon, i, ReloadManager.STATE);
-        icon = i;
+        if (isDifferent(icon, i)) {
+            // do reload if previous icon was null
+            if (isUpdatePossible() && icon != null) {
+                if (getClass() == SButton.class)
+                    update(((ButtonCG) getCG()).updateIcon((SButton) this, i));
+                else if (getClass() == SCheckBox.class)
+                    update(((CheckBoxCG) getCG()).updateIcon((SCheckBox) this, i));
+                else if (getClass() == SRadioButton.class)
+                    update(((RadioButtonCG) getCG()).updateIcon((SRadioButton) this, i));
+                else if (getClass() == SToggleButton.class)
+                    update(((ToggleButtonCG) getCG()).updateIcon((SToggleButton) this, i));
+                else if (getClass() == SClickable.class)
+                    update(((ClickableCG) getCG()).updateIcon((SClickable) this, i));
+                else
+                    reload();
+            }
+            else {
+                reload();
+            }
+            icon = i;
+        }
     }
 
     /**
@@ -262,7 +286,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown when mouse button is pressed.
      */
     public void setPressedIcon(SIcon icon) {
-        reloadIfChange(pressedIcon, icon, ReloadManager.STATE);
+        reloadIfChange(pressedIcon, icon);
         pressedIcon = icon;
     }
 
@@ -282,7 +306,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon rollOver icon for unselected compound.
      */
     public void setRolloverIcon(SIcon icon) {
-        reloadIfChange(rolloverIcon, icon, ReloadManager.STATE);
+        reloadIfChange(rolloverIcon, icon);
         rolloverIcon = icon;
     }
 
@@ -303,7 +327,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon rollOver icon for selected compound.
      */
     public void setRolloverSelectedIcon(SIcon icon) {
-        reloadIfChange(rolloverSelectedIcon, icon, ReloadManager.STATE);
+        reloadIfChange(rolloverSelectedIcon, icon);
         rolloverSelectedIcon = icon;
     }
 
@@ -322,7 +346,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown for a selected compound.
      */
     public void setSelectedIcon(SIcon icon) {
-        reloadIfChange(selectedIcon, icon, ReloadManager.STATE);
+        reloadIfChange(selectedIcon, icon);
         selectedIcon = icon;
     }
 
@@ -341,7 +365,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown for a selected compound that is disabled.
      */
     public void setDisabledSelectedIcon(SIcon icon) {
-        reloadIfChange(disabledSelectedIcon, icon, ReloadManager.STATE);
+        reloadIfChange(disabledSelectedIcon, icon);
         disabledSelectedIcon = icon;
     }
 
@@ -360,7 +384,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown for a disabled compound.
      */
     public void setDisabledIcon(SIcon icon) {
-        reloadIfChange(disabledIcon, icon, ReloadManager.STATE);
+        reloadIfChange(disabledIcon, icon);
         disabledIcon = icon;
     }
 
@@ -438,8 +462,27 @@ public abstract class SAbstractIconTextCompound
      * Sets the label of the button.
      */
     public void setText(String t) {
-        reloadIfChange(text, t, ReloadManager.STATE);
-        text = t;
+        if (isDifferent(text, t)) {
+            // do reload if previous text was null
+            if (isUpdatePossible() && text != null) {
+                if (getClass() == SButton.class)
+                    update(((ButtonCG) getCG()).updateText((SButton) this, t));
+                else if (getClass() == SCheckBox.class)
+                    update(((CheckBoxCG) getCG()).updateText((SCheckBox) this, t));
+                else if (getClass() == SRadioButton.class)
+                    update(((RadioButtonCG) getCG()).updateText((SRadioButton) this, t));
+                else if (getClass() == SToggleButton.class)
+                    update(((ToggleButtonCG) getCG()).updateText((SToggleButton) this, t));
+                else if (getClass() == SClickable.class)
+                    update(((ClickableCG) getCG()).updateText((SClickable) this, t));
+                else
+                    reload();
+            }
+            else {
+                reload();
+            }
+            text = t;
+        }
     }
 
     /**
@@ -473,7 +516,7 @@ public abstract class SAbstractIconTextCompound
             else
                 delayedEvent = true;
 
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 

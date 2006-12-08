@@ -78,7 +78,7 @@ public class InteractiveTemplateExample
         applyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 templateSource.setTemplate(templateInput.getText());
-                reload(ReloadManager.STATE);
+                reload();
             }
         });
 
@@ -106,7 +106,7 @@ public class InteractiveTemplateExample
                 public void actionPerformed(ActionEvent e) {
                     templateSource.setTemplate(templateString);
                     templateInput.setText(templateString);
-                    InteractiveTemplateExample.this.reload(ReloadManager.STATE);
+                    InteractiveTemplateExample.this.reload();
                 }
             });
 

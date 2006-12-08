@@ -21,7 +21,7 @@ import org.wings.SContainer;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.resource.CompleteUpdateResource;
+import org.wings.resource.ReloadResource;
 import org.wings.resource.DynamicResource;
 import java.io.IOException;
 import java.util.Iterator;

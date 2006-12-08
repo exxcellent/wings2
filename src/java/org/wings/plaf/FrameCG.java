@@ -13,9 +13,14 @@
  */
 package org.wings.plaf;
 
+import org.wings.SFrame;
+import org.wings.header.Script;
 
 
 public interface FrameCG extends ComponentCG {
+
+	public Update updateScriptHeader(SFrame frame, Script script, boolean add);
+
+    public Update updateEnabled(SFrame frame, boolean enabled);
+
 }
-
-

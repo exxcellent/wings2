@@ -14,6 +14,7 @@
 package org.wings.plaf.css;
 
 import org.wings.plaf.CGManager;
+import org.wings.plaf.Update;
 import org.wings.session.SessionManager;
 import org.wings.SComponent;
 import org.wings.SLabel;
@@ -97,6 +98,10 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
      */
     public void setWordWrapDefault(boolean wordWrapDefault) {
         this.wordWrapDefault = wordWrapDefault;
+    }
+
+    public Update updateText(SLabel label, String text) {
+        return new TextUpdate(label, text);
     }
 
 }

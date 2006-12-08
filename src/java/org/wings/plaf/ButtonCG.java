@@ -13,7 +13,14 @@
  */
 package org.wings.plaf;
 
+import org.wings.SButton;
+import org.wings.SIcon;
+
+
 public interface ButtonCG extends ComponentCG {
+
+    public Update updateText(SButton button, String text);
+
+    public Update updateIcon(SButton button, SIcon icon);
+
 }
-
-

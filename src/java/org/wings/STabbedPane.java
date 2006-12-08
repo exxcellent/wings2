@@ -122,7 +122,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
 	        card.show(((Page) pages.get(index)).component);
 
 	        fireStateChanged();
-	        reload(ReloadManager.STATE);
+	        reload();
 	    }
 	};
 

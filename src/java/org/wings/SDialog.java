@@ -95,7 +95,7 @@ public class SDialog extends SForm {
         title = t;
         if ((title == null && oldTitle != null) ||
                 (title != null && !title.equals(oldTitle)))
-            reload(ReloadManager.STATE);
+            reload();
     }
 
     /**
@@ -111,7 +111,7 @@ public class SDialog extends SForm {
     public void setIcon(SIcon i) {
         if (i != icon || i != null && !i.equals(icon)) {
             icon = i;
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -124,7 +124,7 @@ public class SDialog extends SForm {
         boolean old = closable;
         closable = v;
         if (old != closable)
-            reload(ReloadManager.STATE);
+            reload();
     }
 
     public boolean isClosable() {
@@ -136,7 +136,7 @@ public class SDialog extends SForm {
         boolean old = closed;
         closed = v;
         if (old != closed)
-            reload(ReloadManager.STATE);
+            reload();
     }
 
     public boolean isClosed() {

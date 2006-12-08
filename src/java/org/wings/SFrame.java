@@ -20,9 +20,10 @@ import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderListener;
 import org.wings.event.SRequestListener;
 import org.wings.event.SRequestEvent;
+import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
-import org.wings.resource.CompleteUpdateResource;
+import org.wings.resource.ReloadResource;
 import org.wings.resource.DynamicResource;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
@@ -89,11 +90,9 @@ public class SFrame
 
     private HashMap dynamicResources;
 
-    private boolean incrementalUpdateEnabled;
+    private boolean updateEnabled;
 
-    private Object[] incrementalUpdateCursor;
-
-    private Object[] incrementalUpdateHighlight;
+    private Object[] updateCursor;
 
     private SComponent focusComponent = null; // Component which requests the focus
 
@@ -137,9 +136,8 @@ public class SFrame
         getSession().addPropertyChangeListener("request.url", this);
         this.visible = false; // Frames are invisible originally.
 
-        setIncrementalUpdateEnabled(true);
-        setIncrementalUpdateCursor(true, new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif"), 15, 0);
-        setIncrementalUpdateHighlight(true, "#FFFF99", 300);
+        setUpdateEnabled(true);
+        setUpdateCursor(true, new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif"), 15, 0);
     }
 
     /**
@@ -180,7 +178,7 @@ public class SFrame
      * Severeral Dynamic code Ressources are attached to a <code>SFrame</code>.
      * <br>See <code>Frame.plaf</code> for details, but in general you wil find attached
      * to every <code>SFrame</code> a
-     * <ul><li>A {@link CompleteUpdateResource} rendering the HTML-Code of all SComponents inside this frame.
+     * <ul><li>A {@link ReloadResource} rendering the HTML-Code of all SComponents inside this frame.
      * </ul>
      */
     public DynamicResource getDynamicResource(Class c) {
@@ -260,13 +258,13 @@ public class SFrame
     }
 
     /**
-     * Every externalized ressource has an id. A frame is a <code>CompleteUpdateResource</code>.
+     * Every externalized ressource has an id. A frame is a <code>ReloadResource</code>.
      *
-     * @return The id of this <code>CompleteUpdateResource</code>
+     * @return The id of this <code>ReloadResource</code>
      */
     public String getTargetResource() {
         if (targetResource == null) {
-            targetResource = getDynamicResource(CompleteUpdateResource.class).getId();
+            targetResource = getDynamicResource(ReloadResource.class).getId();
         }
         return targetResource;
     }
@@ -280,7 +278,10 @@ public class SFrame
     public void addHeader(Object headerElement) {
         if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
-            reload(ReloadManager.STATE);
+            if (isUpdatePossible() && headerElement instanceof Script)
+                update(((FrameCG) getCG()).updateScriptHeader(this, (Script) headerElement, true));
+            else
+                reload();
         }
     }
 
@@ -295,7 +296,10 @@ public class SFrame
     public void addHeader(int index, Object headerElement) {
         if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
-            reload(ReloadManager.STATE);
+            if (isUpdatePossible() && headerElement instanceof Script)
+                update(((FrameCG) getCG()).updateScriptHeader(this, (Script) headerElement, true));
+            else
+                reload();
         }
     }
 
@@ -303,10 +307,10 @@ public class SFrame
      * @see #addHeader(Object)
      * @return <tt>true</tt> if this frame contained the specified header element.
      */
-    public boolean removeHeader(Object m) {
-        boolean deleted = headers.remove(m);
+    public boolean removeHeader(Object headerElement) {
+        boolean deleted = headers.remove(headerElement);
         if (deleted) {
-        	reload(ReloadManager.STATE);
+        	reload();
         }
         return deleted;
     }
@@ -320,7 +324,7 @@ public class SFrame
         List headers = headers();
         if (!headers.isEmpty()) {
         	headers.clear();
-        	reload(ReloadManager.STATE);
+        	reload();
         }
     }
 
@@ -368,7 +372,7 @@ public class SFrame
 
     public void write(Device s) throws IOException {
         if (isNoCaching()) {
-            reload(ReloadManager.STATE); // invalidate frame on each rendering!
+            reload(); // invalidate frame on each rendering!
         }
         super.write(s);
     }
@@ -376,7 +380,7 @@ public class SFrame
     /**
      * Typically you don't want any wings application to operate on old 'views' meaning
      * old pages. Hence all generated HTML pages (<code>SFrame</code> objects
-     * rendered through {@link CompleteUpdateResource} are marked as <b>do not cache</b>
+     * rendered through {@link ReloadResource} are marked as <b>do not cache</b>
      * inside the HTTP response header and the generated HTML frame code.
      * <p>If for any purpose (i.e. you a writing a read only application) you want
      * th user to be able to work on old views then set this to <code>false</code>
@@ -659,36 +663,30 @@ public class SFrame
         }
     }
 
-	public boolean isIncrementalUpdateEnabled() {
-		return incrementalUpdateEnabled;
+	public boolean isUpdateEnabled() {
+		return updateEnabled;
 	}
 
-	public void setIncrementalUpdateEnabled(boolean enabled) {
-		reloadIfChange(incrementalUpdateEnabled, enabled);
-		incrementalUpdateEnabled = enabled;
+	public void setUpdateEnabled(boolean enabled) {
+        if (updateEnabled != enabled) {
+            if (isUpdatePossible())
+                update(((FrameCG) getCG()).updateEnabled(this, enabled));
+            else
+                reload();
+            updateEnabled = enabled;
+        }
 	}
 
-	public Object[] getIncrementalUpdateCursor() {
-		return incrementalUpdateCursor;
+	public Object[] getUpdateCursor() {
+		return updateCursor;
 	}
 
-	public void setIncrementalUpdateCursor(boolean enabled, SIcon image, int dx, int dy) {
+	public void setUpdateCursor(boolean enabled, SIcon image, int dx, int dy) {
 		Object[] cursor = { new Boolean(enabled), image, new Integer(dx), new Integer(dy) };
-		if (!Arrays.equals(incrementalUpdateCursor, cursor)) {
-			incrementalUpdateCursor = cursor;
-			reload(ReloadManager.STATE);
+		if (!Arrays.equals(updateCursor, cursor)) {
+			updateCursor = cursor;
+			reload();
 		}
 	}
 
-	public Object[] getIncrementalUpdateHighlight() {
-		return incrementalUpdateHighlight;
-	}
-
-	public void setIncrementalUpdateHighlight(boolean enabled, String color, int duration) {
-		Object[] highlight = { new Boolean(enabled), color, new Integer(duration) };
-		if (!Arrays.equals(incrementalUpdateHighlight, highlight)) {
-			incrementalUpdateHighlight = highlight;
-			reload(ReloadManager.STATE);
-		}
-	}
 }

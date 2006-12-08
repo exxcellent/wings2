@@ -19,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.DefaultReloadManager;
 import org.wings.ReloadManager;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
@@ -367,7 +366,7 @@ public class Session implements PropertyService, Serializable {
     }
 
     /**
-     * The Script manager collects scripts 
+     * The Script manager collects scripts
      *
      * @return The script manager responsible to script all sort
      * of resources contained in this session.

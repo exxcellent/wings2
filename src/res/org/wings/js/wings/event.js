@@ -3,6 +3,15 @@
  **************************************************************************************************/
 
 
+/**
+ * Create according namespace
+ */
+if (!wingS.events) {
+    wingS.events = new Object();
+} else if (typeof wingS.events != "object") {
+    throw new Error("wingS.events already exists and is not an object");
+}
+
 wingS.events.getEvent = function(event) {
     if (window.event)
         return window.event;

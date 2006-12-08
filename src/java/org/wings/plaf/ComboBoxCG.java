@@ -13,7 +13,11 @@
  */
 package org.wings.plaf;
 
+import org.wings.SComboBox;
+
+
 public interface ComboBoxCG extends ComponentCG {
+
+    public Update updateSelection(SComboBox comboBox, int selectedIndex);
+
 }
-
-

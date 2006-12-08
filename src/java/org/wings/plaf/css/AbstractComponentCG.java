@@ -16,7 +16,6 @@ package org.wings.plaf.css;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
-import org.wings.header.Headers;
 import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.STitledBorder;
@@ -25,6 +24,7 @@ import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.ComponentCG;
+import org.wings.plaf.Update;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
@@ -43,13 +43,13 @@ import java.util.*;
  * @version $Revision$
  */
 public abstract class AbstractComponentCG implements ComponentCG, SConstants, Serializable {
+
     private static final Log log = LogFactory.getLog(AbstractComponentCG.class);
+
     /**
      * An invisible icon / graphic (spacer graphic)
      */
     private static SIcon BLIND_ICON;
-
-    private static int written = 0, cached = 0, reused = 0;
 
     protected AbstractComponentCG() {
     }
@@ -90,8 +90,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             device.print("<div"); // div
         }
 
-        // we cant render this here.
-        //Utils.writeEvents(device, component, null);
+        // We cant render this here.
+        // Utils.writeEvents(device, component, null);
 
         writeAllAttributes(device, component);
 
@@ -104,7 +104,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             if (border != null && Utils.isMSIE(component)) {
                 Utils.createInlineStylesForInsets(styleString, border.getInsets());
             }
-            // das hier für height 100% der inneren Komponenten, funzt im Firefox, nicht im IE
+            // This is used for 100% height of inner components - works in FF, not in IE
             styleString.append("width:100%;height:100%;vertical-align:top");
             Utils.optAttribute(device, "style", styleString);
 
@@ -147,7 +147,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         // Tooltip handling
         writeTooltipMouseOver(device, component);
-        
+
         // Component popup menu
         writeContextMenu(device, component);
     }
@@ -193,11 +193,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      */
     protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
         final String toolTipText = component != null ? component.getToolTipText() : null;
-        if (toolTipText != null && toolTipText.length() > 0) {            
+        if (toolTipText != null && toolTipText.length() > 0) {
             Utils.optAttribute(device, "title", toolTipText);
         }
     }
-    
+
     /**
      * Install the appropriate CG for <code>component</code>.
      *
@@ -244,7 +244,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
     public void componentChanged(SComponent component) {
         component.putClientProperty("render-cache", null);
-        // log.debug("invalidating = " + component);
+        // log.debug("*** clearing cache  = " + component);
 
         InputMap inputMap = component.getInputMap();
         if (inputMap != null && inputMap.size() > 0) {
@@ -314,55 +314,43 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
-    protected final boolean hasDimension(SComponent component) {
-        SDimension dim = component.getPreferredSize();
-        if (dim == null) return false;
-        return (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
-    }
-
     /**
-	 * Caching code disabled for all LowLevelEventListeners, because event
-	 * epochs won't change.
-	 */
+     * This method renders the component (and all of its subcomponents) to the given device. Depending on
+     * the settings for server side caching the rendered code is newly generated or taken from the cache.
+     */
 	public final void write(final Device device, final SComponent component) throws IOException {
-		if (component.getParentFrame() != null && RenderHelper.getInstance(
-				component.getParentFrame()).isIncrementalUpdateMode()) {
-			log.debug("writing = " + component);
-			++written;
-			renderComponent(device, component);
-		} else {
+	        // Render component and return if caching for this one is disabled.
 			if (!RenderHelper.getInstance(component).isCachingAllowed(component)) {
-				log.debug("writing = " + component);
-				++written;
-				renderComponent(device, component);
+				log.debug("-> writing (not caching) = " + component);
+				writeCode(device, component);
 				return;
 			}
-			String renderedCode = (String) component.getClientProperty("render-cache");
-			if (renderedCode == null) {
-				// TODO -- reuse and keep the string builder in the cache.
+			// Look if there is already some code in the cache for this component.
+			String cachedCode = (String) component.getClientProperty("render-cache");
+			if (cachedCode == null) {
+				// If not, we render the complete component to the cache.
 				StringBuilderDevice cacheDevice = new StringBuilderDevice();
-				renderComponent(cacheDevice, component);
-				renderedCode = cacheDevice.toString();
-				component.putClientProperty("render-cache", renderedCode);
-				log.debug("caching = " + component);
-				++cached;
+				writeCode(cacheDevice, component);
+				cachedCode = cacheDevice.toString();
+				component.putClientProperty("render-cache", cachedCode);
+				log.debug("--> writing (and caching) = " + component);
 			} else {
-				log.debug("reusing = " + component);
-				++reused;
+				// Otherwise we'll reuse the code previously cached.
+				log.debug("---> reusing (from cache) = " + component);
 			}
-			device.print(renderedCode);
-		}
+			// Reuse the cached code.
+			device.print(cachedCode);
 	}
 
-    private void renderComponent(Device device, SComponent component) throws IOException {
+    private void writeCode(Device device, SComponent component) throws IOException {
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
         component.fireRenderEvent(SComponent.START_RENDERING);
 
         try {
         	writeInternal(device, component);
         	RenderHelper.getInstance(component).collectScripts(component);
-                RenderHelper.getInstance(component).collectMenues(component);                
-                SToolTipManager.sharedInstance().registerComponent(component);
+            RenderHelper.getInstance(component).collectMenues(component);
+            SToolTipManager.sharedInstance().registerComponent(component);
 	} catch (RuntimeException e) {
 		log.fatal("Runtime exception during rendering", e);
 		device.print("<blink>" + e.getClass().getName() + " during code generation of "
@@ -376,17 +364,62 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     public abstract void writeInternal(Device device, SComponent component) throws IOException;
 
     /**
-     * @return true if current browser is microsoft exploder
+     * @return true if current browser is Microsoft Internet Explorer
      */
     protected final boolean isMSIE(final SComponent component) {
         return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
 
-    public static String getCacheStatistics() {
-    	return "written: " + written + " | cached: " + cached + " | reused: " + reused;
+	public Update update(SComponent component) {
+		return new ComponentUpdate(component);
+	}
+
+	protected class ComponentUpdate extends AbstractUpdate {
+
+		public ComponentUpdate(SComponent component) {
+			super(component);
+		}
+
+		public Handler getHandler() {
+            String htmlCode = "";
+            String exception = null;
+
+            try {
+                StringBuilderDevice htmlDevice = new StringBuilderDevice();
+                write(htmlDevice, component);
+                htmlCode = htmlDevice.toString();
+            } catch (Throwable t) {
+                log.fatal("An error occured during rendering", t);
+                exception = t.getClass().getName();
+            }
+
+            UpdateHandler handler = new UpdateHandler("updateComponent");
+            handler.addParameter(component.getName());
+            handler.addParameter(htmlCode);
+            if (exception != null) {
+                handler.addParameter(exception);
+            }
+			return handler;
+		}
+
+	}
+
+    protected class ValueUpdate extends AbstractUpdate {
+
+        private String value;
+
+        public ValueUpdate(SComponent component, String value) {
+            super(component);
+            this.value = value;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("updateValue");
+            handler.addParameter(component.getName());
+            handler.addParameter(value);
+            return handler;
+        }
+
     }
 
-    public static void resetCacheStatistics() {
-    	written = 0; cached = 0; reused = 0;
-    }
 }

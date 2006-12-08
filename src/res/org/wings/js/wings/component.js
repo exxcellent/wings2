@@ -4,6 +4,15 @@
 
 
 /**
+ * Create according namespace
+ */
+if (!wingS.component) {
+    wingS.component = new Object();
+} else if (typeof wingS.component != "object") {
+    throw new Error("wingS.component already exists and is not an object");
+}
+
+/**
  * SFormattedTextField JavaScript Code
  */
 function ftextFieldCallback(result) {

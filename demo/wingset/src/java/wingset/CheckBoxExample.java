@@ -90,7 +90,7 @@ public class CheckBoxExample
                 buttons[i].setRolloverSelectedIcon(null);
             }
             buttons[i].setToolTipText("CheckBox " + (i+1));
-            buttons[i].setName("button" + (i+1));
+            buttons[i].setName("cb" + (i+1));
             buttons[i].setShowAsFormComponent(false);
             buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
             buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
@@ -123,7 +123,7 @@ public class CheckBoxExample
             useImages.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     cg.setUseIconsInForm(useImages.isSelected());
-                    reload(ReloadManager.STATE);
+                    reload();
                 }
             });
             addControl(useImages);

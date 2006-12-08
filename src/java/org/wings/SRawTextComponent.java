@@ -59,7 +59,7 @@ public class SRawTextComponent extends SComponent {
      * @param t The new text
      */
     public void setText(String t) {
-        reloadIfChange(text, t, ReloadManager.STATE);
+        reloadIfChange(text, t);
         text = t;
     }
 }

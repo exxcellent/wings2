@@ -141,7 +141,7 @@ public class InputMapScriptListener
     }
 
     private static void appendSendRequestCode(SStringBuilder buffer, Object binding, SComponent targetComponent) {
-        buffer.append(" { wingS.request.submitForm(" + !targetComponent.isCompleteUpdateForced());
+        buffer.append(" { wingS.request.submitForm(" + !targetComponent.isReloadForced());
         buffer.append(",event,\"");
         buffer.append(targetComponent == null ? "" : targetComponent.getName());
         buffer.append("\",\"").append(binding);

@@ -66,6 +66,9 @@ public class DefaultDocument implements SDocument {
             if((listeners == null) || (listeners.getListenerCount() > 0)){
                 // If there are any document listeners: Generate document change events!
             	List actions = EditTranscriptGenerator.generateEvents(origText, text);
+
+            	fireChangeUpdate(0, buffer.length());
+
                 // and fire them!
             	for(int i = 0; i < actions.size(); i++){
             		DocumentEvent de = (DocumentEvent) actions.get(i);

@@ -4,6 +4,22 @@
 
 
 /**
+ * Create according namespace
+ */
+if (!wingS.request) {
+    wingS.request = new Object();
+} else if (typeof wingS.request != "object") {
+    throw new Error("wingS.request already exists and is not an object");
+}
+
+/**
+ * Sends a request to the ReloadResource attached to this frame thereby forcing a complete reload.
+ */
+wingS.request.reloadFrame = function() {
+    window.location.href = wingS.util.getReloadResource();
+};
+
+/**
  * Each and every form submit that occurs within a wingS application is done through this method.
  * @param {boolean} ajaxEnabled - true if the form should be submitted by an asynchronous request
  * @param {Object} event - the event object
@@ -49,7 +65,7 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
                 epochNode.setAttribute("id", epochNodeId);
                 form.appendChild(epochNode);
             }
-            epochNode.setAttribute("value", wingS.global.event_epoch);
+            epochNode.setAttribute("value", wingS.global.eventEpoch);
 
             // Encode the event trigger if available
             var triggerNode = document.getElementById(triggerNodeId);
@@ -78,7 +94,7 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             // alert(debug);
 
             // Submit the from, either via AJAX or the traditional way
-            if (wingS.global.incrementalUpdateEnabled && ajaxEnabled) {
+            if (wingS.global.updateEnabled && ajaxEnabled) {
                 wingS.ajax.doSubmit(form);
             } else {
                 form.submit();
@@ -102,10 +118,10 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             var data = wingS.request.encodeEvent(eventName, eventValue);
 
             // Send the event, either via AJAX or the traditional way
-            if (wingS.global.incrementalUpdateEnabled && ajaxEnabled) {
-                wingS.ajax.doRequest("POST", wingS.util.getIncrementalUpdateResource(), data);
+            if (wingS.global.updateEnabled && ajaxEnabled) {
+                wingS.ajax.doRequest("POST", wingS.util.getUpdateResource(), data);
             } else {
-                window.location.href = wingS.util.getCompleteUpdateResource() + "?" + data;
+                window.location.href = wingS.util.getReloadResource() + "?" + data;
             }
         }
     }
@@ -127,10 +143,10 @@ wingS.request.followLink = function(ajaxEnabled, eventName, eventValue, scriptCo
         var data = wingS.request.encodeEvent(eventName, eventValue, "?");
 
         // Send the event, either via AJAX or the traditional way
-        if (wingS.global.incrementalUpdateEnabled && ajaxEnabled) {
-            wingS.ajax.doRequest("GET", wingS.util.getIncrementalUpdateResource() + data);
+        if (wingS.global.updateEnabled && ajaxEnabled) {
+            wingS.ajax.doRequest("GET", wingS.util.getUpdateResource() + data);
         } else {
-            window.location.href = wingS.util.getCompleteUpdateResource() + data;
+            window.location.href = wingS.util.getReloadResource() + data;
         }
     }
 };
@@ -146,7 +162,7 @@ wingS.request.encodeEvent = function(eventName, eventValue, prefix) {
     if (eventName != null && eventValue != null) {
         if (prefix != null) data += prefix;
         // We don't need to encode the stuff we send since this is already done on server side
-        data += "event_epoch=" + wingS.global.event_epoch + "&" + eventName + "=" + eventValue;
+        data += "event_epoch=" + wingS.global.eventEpoch + "&" + eventName + "=" + eventValue;
     }
     return data;
 };

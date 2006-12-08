@@ -13,9 +13,11 @@
  */
 package org.wings.plaf;
 
+import org.wings.SLabel;
 
 
 public interface LabelCG extends ComponentCG {
+
+    public Update updateText(SLabel label, String text);
+
 }
-
-

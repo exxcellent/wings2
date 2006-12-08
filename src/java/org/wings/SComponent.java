@@ -53,6 +53,7 @@ import org.wings.event.SRenderEvent;
 import org.wings.event.SRenderListener;
 import org.wings.io.Device;
 import org.wings.plaf.ComponentCG;
+import org.wings.plaf.Update;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.Session;
@@ -182,7 +183,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     private boolean showAsFormComponent = true;
 
-    private boolean completeUpdateForced = false;
+    private boolean reloadForced = false;
 
     private SPopupMenu popupMenu;
 
@@ -258,7 +259,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param border the border to be set for the component
      */
     public void setBorder(SBorder border) {
-        reloadIfChange(this.border, border, ReloadManager.STATE + ReloadManager.STYLE);
+        reloadIfChange(this.border, border);
         if (this.border != null)
             this.border.setComponent(null);
         this.border = border;
@@ -315,11 +316,11 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             popupMenu.setParentFrame(parentFrame);
         }
 
-        //reload(ReloadManager.STATE);
+        //reload();
         if (getScriptListeners().length > 0)
-            reload(ReloadManager.SCRIPT);
+            reload();
         if (dynamicStyles != null && dynamicStyles.size() > 0)
-            reload(ReloadManager.STYLE);
+            reload();
     }
 
     /*public void setInheritsPopupMenu(boolean inheritsPopupMenu) {
@@ -332,7 +333,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }*/
 
     public void setComponentPopupMenu(SPopupMenu popupMenu) {
-        reloadIfChange(this.popupMenu, popupMenu, ReloadManager.STATE);
+        reloadIfChange(this.popupMenu, popupMenu);
         if (this.popupMenu != null)
             this.popupMenu.setParentFrame(null);
         this.popupMenu = popupMenu;
@@ -371,7 +372,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * The URL under which this component is accessible for the browser.
      * This is equivalent to the URL of the component's root frame, as this is the
-     * node externalized to the browser via the {@link org.wings.resource.CompleteUpdateResource}
+     * node externalized to the browser via the {@link org.wings.resource.ReloadResource}
      * externalizer.
      *
      * @return The HTTP URL where this component can be accessed.
@@ -394,7 +395,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @see org.wings.SComponent#getPreferredSize
      */
     public void setPreferredSize(SDimension preferredSize) {
-        reloadIfChange(this.preferredSize, preferredSize, ReloadManager.STATE);
+        reloadIfChange(this.preferredSize, preferredSize);
         this.preferredSize = preferredSize;
     }
 
@@ -595,7 +596,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             if (existingListener.getPriority() < listener.getPriority())
                 placingPosition = i;
         }
-        reload(ReloadManager.STATE | ReloadManager.SCRIPT);
+        reload();
         if (placingPosition >= 0)
             scriptListenerList.add(placingPosition, listener);
         else
@@ -617,7 +618,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public final void removeScriptListener(ScriptListener listener) {
         scriptListenerList.remove(listener);
-        reload(ReloadManager.SCRIPT);
+        reload();
     }
 
     /**
@@ -674,7 +675,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param uncheckedName String to use as componentn name/identifier.
      */
     public void setNameRaw(String uncheckedName) {
-        reloadIfChange(this.name, uncheckedName, ReloadManager.STATE);
+        reloadIfChange(this.name, uncheckedName);
         this.name = uncheckedName;
     }
 
@@ -742,7 +743,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     // <p>Please consider using {@link #addStyle(String)} to avoid disabling of default wingS stylesheet set.
     public void setStyle(String cssClassName) {
-        reloadIfChange(style, cssClassName, ReloadManager.STATE);
+        reloadIfChange(style, cssClassName);
         this.style = cssClassName;
     }
 
@@ -766,7 +767,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         if (dynamicStyles == null)
             dynamicStyles = new HashMap(4);
         dynamicStyles.put(style.getSelector(), style);
-        reload(ReloadManager.STYLE);
+        reload();
     }
 
     /**
@@ -778,7 +779,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         if (dynamicStyles == null)
             return;
         dynamicStyles.remove(selector);
-        reload(ReloadManager.STYLE);
+        reload();
     }
 
     /**
@@ -809,7 +810,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             Style style = (Style) iterator.next();
             this.dynamicStyles.put(style.getSelector(), style);
         }
-        reload(ReloadManager.STYLE);
+        reload();
     }
 
     /**
@@ -872,7 +873,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             addDynamicStyle(new CSSStyle(selector, property, propertyValue));
         } else {
             String old = style.put(property, propertyValue);
-            reloadIfChange(old, propertyValue, ReloadManager.STYLE);
+            reloadIfChange(old, propertyValue);
         }
     }
 
@@ -917,7 +918,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         } else {
             boolean changed = style.putAll(attributes);
             if (changed)
-                reload(ReloadManager.STYLE);
+                reload();
         }
     }
 
@@ -1002,9 +1003,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                         : SComponentEvent.COMPONENT_HIDDEN));
             }
             if (parent != null) {
-            	parent.reload(ReloadManager.STATE);
+            	parent.reload();
             } else {
-            	reload(ReloadManager.STATE);
+            	reload();
             }
         }
     }
@@ -1049,154 +1050,149 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Mark the component as subject to reload.
+     * Marks this component as subject to reload.
      * The component will be registered with the ReloadManager.
-     *
-     * @param aspect
      */
-    public final void reload(int aspect) {
-        getSession().getReloadManager().reload(this, aspect);
-    }
-
-    protected final void reloadIfChange(Object oldVal, Object newVal) {
-        reloadIfChange(oldVal, newVal, ReloadManager.STATE);
+    public final void reload() {
+        getSession().getReloadManager().reload(this);
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
-     *
-     * @param oldVal the old value of some property
-     * @param newVal the new value of some property
-     * @param aspect
+     * Hands the given update to the Reload Manager.
+     * @param update  the update for this component
      */
-    protected final void reloadIfChange(Object oldVal, Object newVal, int aspect) {
-        if (!((oldVal == newVal) || (oldVal != null && oldVal.equals(newVal)))) {
-            //System.err.println(getClass().getDescription() + ": reload. old:" + oldVal + "; new: "+ newVal);
-            reload(aspect);
+    public final void update(Update update) {
+        if (update == null)
+            reload();
+        else
+            getSession().getReloadManager().addUpdate(update);
+    }
+
+    protected boolean isUpdatePossible() {
+        return getSession().getReloadManager().isUpdateMode();
+    }
+
+    public boolean isReloadForced() {
+        return reloadForced;
+    }
+
+    public void setReloadForced(boolean forced) {
+        if (reloadForced != forced) {
+            Object clientProperty = getClientProperty("onChangeSubmitListener");
+            if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+                removeScriptListener((JavaScriptListener) clientProperty);
+                putClientProperty("onChangeSubmitListener", null);
+            }
+            reloadForced = forced;
+            reload();
         }
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(Object oldVal, Object newVal) {
+        if (isDifferent(oldVal, newVal)) reload();
+    }
+
+    /**
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(int oldVal, int newVal) {
-        if (oldVal != newVal) {
-            reload(ReloadManager.STATE);
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(boolean oldVal, boolean newVal) {
-        if (oldVal != newVal) {
-            reload(ReloadManager.STATE);
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(byte oldVal, byte newVal) {
-        if (oldVal != newVal) {
-            reload(ReloadManager.STATE);
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(short oldVal, short newVal) {
-        if (oldVal != newVal) {
-            reload(ReloadManager.STATE);
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(long oldVal, long newVal) {
-        if (oldVal != newVal) {
-            reload(ReloadManager.STATE);
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(float oldVal, float newVal) {
-        if (oldVal != newVal) {
-            reload(ReloadManager.STATE);
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(double oldVal, double newVal) {
-        if (oldVal != newVal) {
-            reload(ReloadManager.STATE);
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload(int)}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(char oldVal, char newVal) {
-        if (oldVal != newVal) {
-            reload(ReloadManager.STATE);
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Let the code generator delegate write the component's code
-     * to the device. The code generator is the actual 'plaf'.
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
-     * @param s the Device to write into
-     * @throws IOException Thrown if the connection to the client gets broken,
-     *                     for example when the user stops loading
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
      */
     public void write(Device s) throws IOException {
         try {
@@ -1321,17 +1317,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         return parentFrame;
     }
 
-    public String getPathToParentFrame() {
-    	return getBuilderToParentFrame().toString();
-    }
-
-    SStringBuilder getBuilderToParentFrame() {
-    	if (parent == null) return new SStringBuilder("/").append(getName());
-    	else {
-    		return parent.getBuilderToParentFrame().append("/").append(getName());
-    	}
-    }
-
     /**
      * Return true, if this component is contained in a form.
      *
@@ -1353,9 +1338,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      *
      * @param t the new tooltip text
      */
-    public void setToolTipText(String t) {                                       
+    public void setToolTipText(String t) {
         reloadIfChange(this.tooltip, t);
-        this.tooltip = t;                
+        this.tooltip = t;
     }
 
     /**
@@ -1540,7 +1525,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         if (cg != null) {
             cg.installCG(this);
         }
-        reloadIfChange(cg, oldCG, ReloadManager.STATE);
+        reloadIfChange(cg, oldCG);
     }
 
     /**
@@ -1771,7 +1756,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     public void setShowAsFormComponent(boolean showAsFormComponent) {
         if (this.showAsFormComponent != showAsFormComponent) {
             this.showAsFormComponent = showAsFormComponent;
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1977,7 +1962,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             throw e;
         }
     }
-    
+
     /**
      * Listener registering/deregistering this component on the parent frame.
      */
@@ -1999,19 +1984,4 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         }
     }
 
-	public boolean isCompleteUpdateForced() {
-		return completeUpdateForced;
-	}
-
-	public void setCompleteUpdateForced(boolean forced) {
-		if (completeUpdateForced != forced) {
-			Object clientProperty = getClientProperty("onChangeSubmitListener");
-			if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
-				removeScriptListener((JavaScriptListener) clientProperty);
-				putClientProperty("onChangeSubmitListener", null);
-			}
-			completeUpdateForced = forced;
-			reload(ReloadManager.STATE);
-		}
-	}
 }

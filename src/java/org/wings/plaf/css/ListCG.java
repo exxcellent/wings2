@@ -22,11 +22,13 @@ import org.wings.SListCellRenderer;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
+import org.wings.plaf.Update;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
 import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.List;
 
 public final class ListCG extends AbstractComponentCG implements  org.wings.plaf.ListCG {
 
@@ -51,7 +53,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         if (list.getListSelectionListeners().length > 0) {
             if (clientProperty == null) {
                 String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.submitForm(" + !list.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !list.isReloadForced() + ",event);";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 list.addScriptListener(javaScriptListener);
                 list.putClientProperty("onChangeSubmitListener", javaScriptListener);
@@ -61,7 +63,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             list.putClientProperty("onChangeSubmitListener", null);
         }
 
-        device.print("<select");
+        device.print("<span><select wrapping=\"1\"");
         writeAllAttributes(device, list);
 
         Utils.optAttribute(device, "name", Utils.event(list));
@@ -95,7 +97,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
                 //Utils.optAttribute(device, "class", "selected");
             }
 
-            if (renderer != null) {                
+            if (renderer != null) {
                 Utils.optAttribute(device, "style", Utils.generateCSSComponentInlineStyle(renderer));
             }
             device.print(">");
@@ -134,7 +136,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         device.print("<input type=\"hidden\"");
         Utils.optAttribute(device, "name", Utils.event(list));
         Utils.optAttribute(device, "value", -1);
-        device.print("/>");
+        device.print("/></span>");
     }
 
     private StringBuilderDevice stringBufferDevice = null;
@@ -212,5 +214,30 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         }
 
         RenderHelper.getInstance(_c).allowCaching();
+    }
+
+    public Update updateSelection(SList list, List deselectedIndices, List selectedIndices) {
+        return new ListSelectionUpdate(list, deselectedIndices, selectedIndices);
+    }
+
+    protected class ListSelectionUpdate extends AbstractUpdate {
+
+        private List deselectedIndices;
+        private List selectedIndices;
+
+        public ListSelectionUpdate(SComponent component, List deselectedIndices, List selectedIndices) {
+            super(component);
+            this.deselectedIndices = deselectedIndices;
+            this.selectedIndices = selectedIndices;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("updateListSelection");
+            handler.addParameter(component.getName());
+            handler.addParameter(handler.listToJsArray(deselectedIndices));
+            handler.addParameter(handler.listToJsArray(selectedIndices));
+            return handler;
+        }
+
     }
 }

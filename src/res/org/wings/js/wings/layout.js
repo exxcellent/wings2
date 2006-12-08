@@ -3,6 +3,15 @@
  **************************************************************************************************/
 
 
+/**
+ * Create according namespace
+ */
+if (!wingS.layout) {
+    wingS.layout = new Object();
+} else if (typeof wingS.layout != "object") {
+    throw new Error("wingS.layout already exists and is not an object");
+}
+
 wingS.layout.layoutScrollPaneFF = function(outerId) {
     var outer = document.getElementById(outerId);
     var div = outer.getElementsByTagName("DIV")[0];

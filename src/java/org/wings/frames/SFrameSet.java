@@ -60,7 +60,7 @@ public class SFrameSet extends SFrame {
             // fireContainerEvent(org.wings.event.SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
-            reload(org.wings.ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -215,7 +215,7 @@ public class SFrameSet extends SFrame {
 
     /**
      * Retrieve attached <code>BaseTarget</code> of a frame.
-     * @return The found base target header element or <code>null</code>  
+     * @return The found base target header element or <code>null</code>
      */
     public static BaseTarget retrieveBaseTarget(SFrame frame) {
         List headers = frame.headers();
@@ -249,9 +249,9 @@ public class SFrameSet extends SFrame {
     public void setFrameborderVisible ( boolean bool ) {
         this.frameborderVisible = bool;
     }
-    
+
     /**
-     * 
+     *
      * @see #setFrameborderVisible(boolean)
      * @return true if the FrameBorder is visible otherwise false
      */

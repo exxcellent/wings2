@@ -17,6 +17,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+import org.wings.plaf.Update;
 import org.wings.resource.ResourceManager;
 import org.wings.tree.SDefaultTreeSelectionModel;
 import org.wings.tree.STreeCellRenderer;
@@ -26,6 +27,7 @@ import javax.swing.tree.TreePath;
 
 import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.List;
 
 public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.TreeCG {
     private static final long serialVersionUID = 1L;
@@ -154,6 +156,7 @@ public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.
         device.print("<td colspan=\"");
         device.print(depth - path.getPathCount() + 1);
         device.print("\"");
+        Utils.optAttribute(device, "row", "" + row);
 
         if (isSelected) {
             Utils.optAttribute(device, "class", "selected");
@@ -275,6 +278,31 @@ public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.
 
     public void setLeafControlIcon(SIcon leafControlIcon) {
         this.leafControlIcon = leafControlIcon;
+    }
+
+    public Update updateSelection(STree tree, List deselectedRows, List selectedRows) {
+        return new TreeSelectionUpdate(tree, deselectedRows, selectedRows);
+    }
+
+    protected class TreeSelectionUpdate extends AbstractUpdate {
+
+        private List deselectedRows;
+        private List selectedRows;
+
+        public TreeSelectionUpdate(SComponent component, List deselectedRows, List selectedRows) {
+            super(component);
+            this.deselectedRows = deselectedRows;
+            this.selectedRows = selectedRows;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("updateTreeSelection");
+            handler.addParameter(component.getName());
+            handler.addParameter(handler.listToJsArray(deselectedRows));
+            handler.addParameter(handler.listToJsArray(selectedRows));
+            return handler;
+        }
+
     }
 
 }

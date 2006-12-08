@@ -132,6 +132,9 @@ public final class Utils {
      */
     public static void writeEvents(final Device device, final SComponent c, final String[] suppressScriptListenerTypes)
             throws IOException {
+        if (!c.isEnabled())
+            return;
+
         Set types = new HashSet();
         // Create set of strings (in lower case) defining the event types to be suppressed
         if (suppressScriptListenerTypes != null && suppressScriptListenerTypes.length > 0) {
@@ -976,7 +979,7 @@ public final class Utils {
     public static void printClickability(final Device device, final SComponent component, final String eventValue,
             final boolean enabled, final boolean formComponent) throws IOException {
         if (enabled) {
-            boolean ajaxEnabled = !component.isCompleteUpdateForced();
+            boolean ajaxEnabled = !component.isReloadForced();
 
             // Render onclick JS listeners
             if (formComponent) {

@@ -16,11 +16,18 @@ package org.wings.plaf.css;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.SComponent;
 import org.wings.SIcon;
+import org.wings.SLabel;
 import org.wings.SResourceIcon;
 import org.wings.io.Device;
+import org.wings.io.StringBuilderDevice;
 
 public abstract class AbstractLabelCG extends AbstractComponentCG {
+
+    private static final Log log = LogFactory.getLog(AbstractLabelCG.class);
 
     public static SIcon TRANSPARENT_ICON = new SResourceIcon("org/wings/icons/transdot.gif");
 
@@ -53,6 +60,75 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
         device.print(" alt=\"");
         device.print(icon.getIconTitle());
         device.print("\"/>");
+    }
+
+    protected class TextUpdate extends AbstractUpdate {
+
+        private String text;
+
+        public TextUpdate(SComponent component, String text) {
+            super(component);
+            this.text = text;
+        }
+
+        public Handler getHandler() {
+            String textCode = "";
+            String exception = null;
+
+            try {
+                StringBuilderDevice textDevice = new StringBuilderDevice();
+                boolean wordWrap = false;
+                if (component instanceof SLabel)
+                    wordWrap = ((SLabel) component).isWordWrap();
+                writeText(textDevice, text, wordWrap);
+                textCode = textDevice.toString();
+            } catch (Throwable t) {
+                log.fatal("An error occured during rendering", t);
+                exception = t.getClass().getName();
+            }
+
+            UpdateHandler handler = new UpdateHandler("updateText");
+            handler.addParameter(component.getName());
+            handler.addParameter(textCode);
+            if (exception != null) {
+                handler.addParameter(exception);
+            }
+            return handler;
+        }
+
+    }
+
+    protected class IconUpdate extends AbstractUpdate {
+
+        private SIcon icon;
+
+        public IconUpdate(SComponent component, SIcon icon) {
+            super(component);
+            this.icon = icon;
+        }
+
+        public Handler getHandler() {
+            String iconCode = "";
+            String exception = null;
+
+            try {
+                StringBuilderDevice iconDevice = new StringBuilderDevice();
+                writeIcon(iconDevice, icon, Utils.isMSIE(component));
+                iconCode = iconDevice.toString();
+            } catch (Throwable t) {
+                log.fatal("An error occured during rendering", t);
+                exception = t.getClass().getName();
+            }
+
+            UpdateHandler handler = new UpdateHandler("updateIcon");
+            handler.addParameter(component.getName());
+            handler.addParameter(iconCode);
+            if (exception != null) {
+                handler.addParameter(exception);
+            }
+            return handler;
+        }
+
     }
 
 }

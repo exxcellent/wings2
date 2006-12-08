@@ -31,7 +31,6 @@ import org.dom4j.Node;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.wings.ReloadManager;
 import org.wings.SAnchor;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
@@ -64,6 +63,7 @@ import org.wings.SURLIcon;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
 import org.wings.header.Link;
+import org.wings.header.Script;
 import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
@@ -316,7 +316,7 @@ public class LogConfig {
         }
 
         // TESTING ON-CHANGE-SUBMIT-LISTENERS
-        if (false) {
+        if (true) {
             bg_insertOrUpdate.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     log.info("ActionListener of ButtonGroup!!!");
@@ -541,82 +541,68 @@ public class LogConfig {
 
         boolean selected;
         final String[] cb_texts = {
-                "Frame: incrementalUpdateEnabled = ",
-                "Frame: incrementalUpdateCursor = ",
-                "Frame: incrementalUpdateHighlight = ",
-                "Form: completeUpdateForced = ",
-                "Tree: completeUpdateForced = ",
-                "Link: completeUpdateForced = "
+                "Frame: updates enabled -> ",
+                "Frame: cursor enabled -> ",
+                "Form: reload forced -> ",
+                "Tree: reload forced -> ",
+                "Link: reload forced -> "
         };
 
-        selected = fr_frame.isIncrementalUpdateEnabled();
-        final SCheckBox cb_toggleFrameIncrementalUpdate =
+        selected = fr_frame.isUpdateEnabled();
+        final SCheckBox cb_toggleFrameUpdateEnabled =
             new SCheckBox(cb_texts[0] + selected, selected);
-        cb_toggleFrameIncrementalUpdate.addActionListener(new ActionListener() {
+        cb_toggleFrameUpdateEnabled.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = fr_frame.isIncrementalUpdateEnabled();
-                fr_frame.setIncrementalUpdateEnabled(!state);
-                cb_toggleFrameIncrementalUpdate.setText(cb_texts[0] + !state);
+                boolean state = fr_frame.isUpdateEnabled();
+                fr_frame.setUpdateEnabled(!state);
+                cb_toggleFrameUpdateEnabled.setText(cb_texts[0] + !state);
             }
         });
 
-        selected = ((Boolean) fr_frame.getIncrementalUpdateCursor()[0]).booleanValue();
+        selected = ((Boolean) fr_frame.getUpdateCursor()[0]).booleanValue();
         final SCheckBox cb_toggleFrameUpdateCursor =
             new SCheckBox(cb_texts[1] + selected, selected);
         cb_toggleFrameUpdateCursor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = ((Boolean) fr_frame.getIncrementalUpdateCursor()[0]).booleanValue();
-                SIcon image = (SIcon) fr_frame.getIncrementalUpdateCursor()[1];
-                int dx = ((Integer) fr_frame.getIncrementalUpdateCursor()[2]).intValue();
-                int dy = ((Integer) fr_frame.getIncrementalUpdateCursor()[3]).intValue();
-                fr_frame.setIncrementalUpdateCursor(!state, image, dx, dy);
+                boolean state = ((Boolean) fr_frame.getUpdateCursor()[0]).booleanValue();
+                SIcon image = (SIcon) fr_frame.getUpdateCursor()[1];
+                int dx = ((Integer) fr_frame.getUpdateCursor()[2]).intValue();
+                int dy = ((Integer) fr_frame.getUpdateCursor()[3]).intValue();
+                fr_frame.setUpdateCursor(!state, image, dx, dy);
                 cb_toggleFrameUpdateCursor.setText(cb_texts[1] + !state);
             }
         });
 
-        selected = ((Boolean) fr_frame.getIncrementalUpdateHighlight()[0]).booleanValue();
-        final SCheckBox cb_toggleFrameUpdateHighlight =
+        selected = fo_form.isReloadForced();
+        final SCheckBox cb_toggleFormReloadForced =
             new SCheckBox(cb_texts[2] + selected, selected);
-        cb_toggleFrameUpdateHighlight.addActionListener(new ActionListener() {
+        cb_toggleFormReloadForced.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = ((Boolean) fr_frame.getIncrementalUpdateHighlight()[0]).booleanValue();
-                String color = (String) fr_frame.getIncrementalUpdateHighlight()[1];
-                int duration = ((Integer) fr_frame.getIncrementalUpdateHighlight()[2]).intValue();
-                fr_frame.setIncrementalUpdateHighlight(!state, color, duration);
-                cb_toggleFrameUpdateHighlight.setText(cb_texts[2] + !state);
+                boolean state = fo_form.isReloadForced();
+                fo_form.setReloadForced(!state);
+                cb_toggleFormReloadForced.setText(cb_texts[2]  + !state);
             }
         });
 
-        selected = fo_form.isCompleteUpdateForced();
-        final SCheckBox cb_toggleFormCompleteUpdate =
+        selected = tr_domTree.isReloadForced();
+        final SCheckBox cb_toggleTreeReloadForced =
             new SCheckBox(cb_texts[3] + selected, selected);
-        cb_toggleFormCompleteUpdate.addActionListener(new ActionListener() {
+        cb_toggleTreeReloadForced.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = fo_form.isCompleteUpdateForced();
-                fo_form.setCompleteUpdateForced(!state);
-                cb_toggleFormCompleteUpdate.setText(cb_texts[3]  + !state);
+                boolean state = tr_domTree.isReloadForced();
+                tr_domTree.setReloadForced(!state);
+                cb_toggleTreeReloadForced.setText(cb_texts[3]  + !state);
             }
         });
 
-        selected = tr_domTree.isCompleteUpdateForced();
-        final SCheckBox cb_toggleTreeCompleteUpdate =
-            new SCheckBox(cb_texts[4] + selected, selected);
-        cb_toggleTreeCompleteUpdate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                boolean state = tr_domTree.isCompleteUpdateForced();
-                tr_domTree.setCompleteUpdateForced(!state);
-                cb_toggleTreeCompleteUpdate.setText(cb_texts[4]  + !state);
-            }
-        });
-
-        selected = cb_toggleTreeCompleteUpdate.isCompleteUpdateForced();
+        selected = cb_toggleTreeReloadForced.isReloadForced();
         final SCheckBox cb_toggleCheckboxTest =
-            new SCheckBox(cb_texts[5] + selected, selected);
+            new SCheckBox(cb_texts[4] + selected, selected);
         cb_toggleCheckboxTest.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = cb_toggleTreeCompleteUpdate.isCompleteUpdateForced();
-                cb_toggleTreeCompleteUpdate.setCompleteUpdateForced(!state);
-                cb_toggleCheckboxTest.setText(cb_texts[5]  + !state);
+                boolean state = cb_toggleTreeReloadForced.isReloadForced();
+                cb_toggleTreeReloadForced.setReloadForced(!state);
+                cb_toggleCheckboxTest.setText(cb_texts[4]  + !state);
             }
         });
 
@@ -756,7 +742,7 @@ public class LogConfig {
         final SButton bu_markFrameDirty = new SButton("Reload the entire frame / mark it dirty!");
         bu_markFrameDirty.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fr_frame.reload(ReloadManager.STATE);
+                fr_frame.reload();
             }
         });
 
@@ -780,10 +766,32 @@ public class LogConfig {
         ));
         an_abortCurrentAjaxRequest.add(new SLabel("Abort the current AJAX request!"));
 
+        final Script customJs = new Script("text/javascript", new DefaultURLResource("../js/custom.js"));
+        final SButton bu_addScriptHeader = new SButton("Add a new script header: '../js/custom.js'");
+        bu_addScriptHeader.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fr_frame.addHeader(customJs);
+            }
+        });
+
+        final SButton bu_removeScriptHeader = new SButton("Remove a script header: '../js/custom.js'");
+        bu_removeScriptHeader.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fr_frame.removeHeader(customJs);
+            }
+        });
+
+        final SAnchor an_alertHello = new SAnchor();
+        an_alertHello.addScriptListener(new JavaScriptListener(
+                JavaScriptEvent.ON_CLICK,
+                "alertHello();"
+        ));
+        an_alertHello.add(new SLabel("Call 'alertHello();' placed in '../js/custom.js'"));
+
         String text = "This TextArea is just for debugging the 'onChangeSubmit'-behavior." +
                 " If you want to test this behavior for other components too, you have to" +
                 " enable the according switches within the source code of this application.";
-        STextArea ta_testTextArea = new STextArea(text);
+        final STextArea ta_testTextArea = new STextArea(text);
         ta_testTextArea.setRows(4);
         ta_testTextArea.setPreferredSize(IN_DIM);
         ta_testTextArea.setHorizontalAlignment(SConstants.LEFT_ALIGN);
@@ -799,6 +807,23 @@ public class LogConfig {
             }
         });
 
+        final SButton bu_testWhatever = new SButton("TEST WHATEVER!");
+        bu_testWhatever.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int[] rows = {1,5,2,4,7};
+                tr_domTree.setSelectionRows(rows);
+                la_status.setText("1");
+                la_status.setText("4");
+                la_status.setText("32");
+                tr_domTree.setSelectionRow(0);
+                tr_domTree.setSelectionRow(0);
+                tr_domTree.setSelectionRow(8);
+                ta_testTextArea.setEnabled(false);
+                li_editAppenderRef.setEnabled(false);
+                tf_editCategoryName.setEnabled(false);
+            }
+        });
+
         final SAnchor an_toggleAjaxDebugView = new SAnchor();
         an_toggleAjaxDebugView.addScriptListener(new JavaScriptListener(
                 JavaScriptEvent.ON_CLICK, "toggleAjaxDebugView()",
@@ -806,16 +831,15 @@ public class LogConfig {
                 "  if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);\n" +
                 "  else wingS.ajax.setDebugViewVisible(true);\n" +
                 "  return false;\n" +
-                "}\n"
+                "}"
         ));
         an_toggleAjaxDebugView.add(new SLabel("Show/hide the AJAX debugging view (if enabled)"));
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(0));
-        addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameIncrementalUpdate);
-        addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameUpdateHighlight);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameUpdateEnabled);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameUpdateCursor);
-        addToAjaxDebuggingPanel(pa_debug, cb_toggleFormCompleteUpdate);
-        addToAjaxDebuggingPanel(pa_debug, cb_toggleTreeCompleteUpdate);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleFormReloadForced);
+        addToAjaxDebuggingPanel(pa_debug, cb_toggleTreeReloadForced);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleCheckboxTest);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
@@ -823,6 +847,9 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, bu_doSomethingSpecial);
         addToAjaxDebuggingPanel(pa_debug, bu_forceServerError);
         addToAjaxDebuggingPanel(pa_debug, an_abortCurrentAjaxRequest);
+        addToAjaxDebuggingPanel(pa_debug, bu_addScriptHeader);
+        addToAjaxDebuggingPanel(pa_debug, bu_removeScriptHeader);
+        addToAjaxDebuggingPanel(pa_debug, an_alertHello);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, createRandomResultPanel());
@@ -837,6 +864,9 @@ public class LogConfig {
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
+
+        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+        addToAjaxDebuggingPanel(pa_debug, bu_testWhatever);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, an_toggleAjaxDebugView);

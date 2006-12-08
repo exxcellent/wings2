@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.plaf.Update;
 import org.wings.Renderable;
 import org.wings.SComponent;
 import org.wings.SFrame;
@@ -27,12 +28,13 @@ import org.wings.dnd.DragAndDropManager;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.*;
 import org.wings.io.Device;
+import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.DefaultURLResource;
-import org.wings.resource.CompleteUpdateResource;
-import org.wings.resource.IncrementalUpdateResource;
+import org.wings.resource.ReloadResource;
+import org.wings.resource.UpdateResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.ScriptListener;
 import org.wings.session.*;
@@ -148,49 +150,27 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     /**
-     * Externalizes the style sheet(s) for this session. Look up according style sheet file name in
-     * org.wings.plaf.css.properties file under Stylesheet.BROWSERNAME. The style sheet is loaded from
-     * the class path.
-     * @return the URLs under which the css file(s) was externalized
+     * Adds the file found at the classPath to the parentFrame header with the specified mimeType
+     * @param classPath the classPath to look in for the file
+     * @param mimeType the mimetype of the file
      */
-    private List externalizeBrowserStylesheets(Session session) {
-        final ExternalizeManager extManager = session.getExternalizeManager();
-        final CGManager manager = session.getCGManager();
-        final String browserName = session.getUserAgent().getBrowserType().getShortName();
-        final String cssResource = PROPERTY_STYLESHEET + browserName;
-        String cssClassPaths = (String)manager.getObject(cssResource, String.class);
-        // Catch missing browser entry in properties file
-        if (cssClassPaths == null) {
-            cssClassPaths = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(cssClassPaths,",");
-        ArrayList cssUrls = new ArrayList();
-        while (tokenizer.hasMoreTokens()) {
-            String cssClassPath = tokenizer.nextToken();
-            ClassPathResource res = new ClassPathResource(cssClassPath, "text/css");
-            String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
-            if (cssUrl != null) {
-                log.info("Attaching CSS Stylesheet " + cssClassPath + " found for browser " + browserName +
-                        " to frame. (See Stylesheet.xxx entries in default.properties)");
-                cssUrls.add(cssUrl);
-            } else {
-                log.warn("Did not attach CSS Stylesheet " + cssClassPath + " for browser " + browserName +
-                        " to frame. (See Stylesheet.xxx entries in default.properties)");
-            }
-        }
-
-        return cssUrls;
+    private Script createExternalizedHeader(Session session, String classPath, String mimeType) {
+        ClassPathResource res = new ClassPathResource(classPath, mimeType);
+        String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
+        return new Script(mimeType, new DefaultURLResource(jScriptUrl));
     }
 
     public void installCG(final SComponent comp) {
         final SFrame component = (SFrame) comp;
 
         // Add dynamic resources to the frame
-        CompleteUpdateResource completeUpdateRessource = new CompleteUpdateResource(component);
-        component.addDynamicResource(completeUpdateRessource);
-        IncrementalUpdateResource incrementalUpdateRessource = new IncrementalUpdateResource(component);
-        component.addDynamicResource(incrementalUpdateRessource);
+        ReloadResource reloadResource = new ReloadResource(component);
+        component.addDynamicResource(reloadResource);
+        UpdateResource updateResource = new UpdateResource(component);
+        component.addDynamicResource(updateResource);
+
+        // Externalize update resource
+        component.getDynamicResource(UpdateResource.class).getId();
 
         final JavaScriptDOMListener storeFocusFF = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_FOCUS,
@@ -227,14 +207,39 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     /**
-     * Adds the file found at the classPath to the parentFrame header with the specified mimeType
-     * @param classPath the classPath to look in for the file
-     * @param mimeType the mimetype of the file
+     * Externalizes the style sheet(s) for this session. Look up according style sheet file name in
+     * org.wings.plaf.css.properties file under Stylesheet.BROWSERNAME. The style sheet is loaded from
+     * the class path.
+     * @return the URLs under which the css file(s) was externalized
      */
-    private Script createExternalizedHeader(Session session, String classPath, String mimeType) {
-        ClassPathResource res = new ClassPathResource(classPath, mimeType);
-        String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        return new Script(mimeType, new DefaultURLResource(jScriptUrl));
+    private List externalizeBrowserStylesheets(Session session) {
+        final ExternalizeManager extManager = session.getExternalizeManager();
+        final CGManager manager = session.getCGManager();
+        final String browserName = session.getUserAgent().getBrowserType().getShortName();
+        final String cssResource = PROPERTY_STYLESHEET + browserName;
+        String cssClassPaths = (String)manager.getObject(cssResource, String.class);
+        // Catch missing browser entry in properties file
+        if (cssClassPaths == null) {
+            cssClassPaths = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
+        }
+
+        StringTokenizer tokenizer = new StringTokenizer(cssClassPaths,",");
+        ArrayList cssUrls = new ArrayList();
+        while (tokenizer.hasMoreTokens()) {
+            String cssClassPath = tokenizer.nextToken();
+            ClassPathResource res = new ClassPathResource(cssClassPath, "text/css");
+            String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
+            if (cssUrl != null) {
+                log.info("Attaching CSS Stylesheet " + cssClassPath + " found for browser " + browserName +
+                        " to frame. (See Stylesheet.xxx entries in default.properties)");
+                cssUrls.add(cssUrl);
+            } else {
+                log.warn("Did not attach CSS Stylesheet " + cssClassPath + " for browser " + browserName +
+                        " to frame. (See Stylesheet.xxx entries in default.properties)");
+            }
+        }
+
+        return cssUrls;
     }
 
     /**
@@ -243,7 +248,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public void uninstallCG(final SComponent comp) {
         final SFrame component = (SFrame) comp;
 
-        component.removeDynamicResource(CompleteUpdateResource.class);
+        component.removeDynamicResource(ReloadResource.class);
+        component.removeDynamicResource(UpdateResource.class);
         component.clearHeaders();
     }
 
@@ -284,8 +290,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
     }
 
-    public void write(final Device device, final SComponent pComp) throws IOException {
-        final SFrame frame = (SFrame) pComp;
+    public void write(final Device device, final SComponent component) throws IOException {
+        final SFrame frame = (SFrame) component;
+
         /*
          * The input maps must be updated on every rendering of the SFrame, since
          * some components could be invisible in this request that registered an
@@ -469,45 +476,44 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
 
-        writeInlineScripts(device, frame);
+        writeScriptBlock(device, frame);
 
         device.print("</body>\n</html>\n");
 
-        pComp.fireRenderEvent(SComponent.DONE_RENDERING);
+        component.fireRenderEvent(SComponent.DONE_RENDERING);
         RenderHelper.getInstance(frame).reset();
     }
 
-    protected void writeInlineScripts(Device device, SComponent component) throws IOException {
+    protected void writeScriptBlock(Device device, SComponent component) throws IOException {
         final SFrame frame = (SFrame) component;
+        final RenderHelper helper = RenderHelper.getInstance(frame);
+
         device.print("<script type=\"text/javascript\">\n");
 
+        final String eventEpoch = frame.getEventEpoch();
+        final String reloadResource = frame.getDynamicResource(ReloadResource.class).getId();
+        final String updateResource = frame.getDynamicResource(UpdateResource.class).getId();
+        final boolean updateEnabled = frame.isUpdateEnabled();
+        final Object[] updateCursor = frame.getUpdateCursor();
+
         device.print("// globally accessible script variables:\n" +
-                "wingS.global.event_epoch = '" + frame.getEventEpoch() + "';\n" +
-                "wingS.global.completeUpdateId = '" + frame.getDynamicResource(CompleteUpdateResource.class).getId() + "';\n" +
-                "wingS.global.incrementalUpdateId = '" + frame.getDynamicResource(IncrementalUpdateResource.class).getId() + "';\n" +
-                "wingS.global.incrementalUpdateEnabled = " + frame.isIncrementalUpdateEnabled() + ";\n" +
-                "wingS.global.incrementalUpdateCursor = { 'enabled':" + frame.getIncrementalUpdateCursor()[0] + "," +
-                                           " 'image':'" + frame.getIncrementalUpdateCursor()[1] + "'," +
-                                           " 'dx':" + frame.getIncrementalUpdateCursor()[2] + "," +
-                                           " 'dy':" + frame.getIncrementalUpdateCursor()[3] + " };\n" +
-                "wingS.global.incrementalUpdateHighlight = { 'enabled':" + frame.getIncrementalUpdateHighlight()[0] + "," +
-                                              " 'color':'" + frame.getIncrementalUpdateHighlight()[1] + "'," +
-                                              " 'duration':" + frame.getIncrementalUpdateHighlight()[2] + " };\n");
+                "wingS.global.eventEpoch = '" + eventEpoch + "';\n" +
+                "wingS.global.reloadResource = '" + reloadResource + "';\n" +
+                "wingS.global.updateResource = '" + updateResource + "';\n" +
+                "wingS.global.updateEnabled = " + updateEnabled + ";\n" +
+                "wingS.global.updateCursor = " +
+                	"{ 'enabled':" + updateCursor[0] + ", 'image':'" + updateCursor[1] +
+                	"', 'dx':" + updateCursor[2] + ", 'dy':" + updateCursor[3] + " };\n");
+
+        helper.collectScripts(frame);
 
         device.print("// script code collected during rendering:\n");
-        for (Iterator i = RenderHelper.getInstance(frame).getCollectedScripts().iterator(); i.hasNext();) {
+        for (Iterator i = helper.getCollectedScripts().iterator(); i.hasNext();) {
             device.print(i.next()).print("\n");
         }
-        ScriptListener[] scriptListeners = component.getScriptListeners();
-        for (int i = 0; i < scriptListeners.length; ++i) {
-            ScriptListener scriptListener = scriptListeners[i];
-            String script = scriptListener.getScript();
-            if (script != null) {
-                device.print(script);
-            }
-        }
+
         ScriptManager scriptManager = component.getSession().getScriptManager();
-        scriptListeners = scriptManager.getScriptListeners();
+        ScriptListener[] scriptListeners = scriptManager.getScriptListeners();
         for (int i = 0; i < scriptListeners.length; ++i) {
             ScriptListener scriptListener = scriptListeners[i];
             String script = scriptListener.getScript();
@@ -551,4 +557,85 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public void setRenderXmlDeclaration(Boolean renderXmlDeclaration) {
         this.renderXmlDeclaration = renderXmlDeclaration;
     }
+
+	public Update update(SComponent component) {
+		return new ComponentUpdate(component);
+	}
+
+    public Update updateEnabled(SFrame frame, boolean enabled) {
+        return new EnabledUpdate(frame, enabled);
+    }
+
+    public Update updateScriptHeader(SFrame frame, Script script, boolean add) {
+        return new ScriptHeaderUpdate(frame, script, add);
+    }
+
+    protected class ComponentUpdate extends AbstractUpdate {
+
+        public ComponentUpdate(SComponent component) {
+            super(component);
+        }
+
+        public Handler getHandler() {
+            String htmlCode = "";
+            String exception = null;
+
+            try {
+                StringBuilderDevice htmlDevice = new StringBuilderDevice();
+                write(htmlDevice, component);
+                htmlCode = htmlDevice.toString();
+            } catch (Throwable t) {
+                log.fatal("An error occured during rendering", t);
+                exception = t.getClass().getName();
+            }
+
+            UpdateHandler handler = new UpdateHandler("updateComponent");
+            handler.addParameter(component.getName());
+            handler.addParameter(htmlCode);
+            if (exception != null) {
+                handler.addParameter(exception);
+            }
+            return handler;
+        }
+
+    }
+
+    protected class ScriptHeaderUpdate extends AbstractUpdate {
+
+        private Script script;
+        private Boolean add;
+
+        public ScriptHeaderUpdate(SComponent component, Script script, boolean add) {
+            super(component);
+            this.script = script;
+            this.add = new Boolean(add);
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("updateScriptHeader");
+            handler.addParameter(script.getType());
+            handler.addParameter(script.getURL().toString());
+            handler.addParameter(add);
+            return handler;
+        }
+
+    }
+
+    protected class EnabledUpdate extends AbstractUpdate {
+
+        private Boolean enabled;
+
+        public EnabledUpdate(SComponent component, boolean enabled) {
+            super(component);
+            this.enabled = new Boolean(enabled);
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("updateEnabled");
+            handler.addParameter(enabled);
+            return handler;
+        }
+
+    }
+
 }

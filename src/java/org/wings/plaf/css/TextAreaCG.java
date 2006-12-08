@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
@@ -57,7 +58,7 @@ public final class TextAreaCG extends AbstractComponentCG implements
         	// itself as a listener of its document as well.
             if (clientProperty == null) {
             	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.submitForm(" + !component.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !component.isReloadForced() + ",event);";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 component.addScriptListener(javaScriptListener);
                 component.putClientProperty("onChangeSubmitListener", javaScriptListener);
@@ -133,4 +134,9 @@ public final class TextAreaCG extends AbstractComponentCG implements
             }
         }
     }
+
+    public Update updateText(STextArea textarea, String text) {
+    	return new ValueUpdate(textarea, text);
+    }
+
 }

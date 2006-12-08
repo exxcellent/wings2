@@ -19,26 +19,39 @@ import java.util.Iterator;
 import java.io.IOException;
 
 /**
- * A tiny helper class whic collects information gained during rendering process and
+ * A tiny helper class which collects information gained during rendering process and
  * needed later on during render. Cleared by <code>FrameCG</code> at start and end
  * of rendering.
  */
 public final class RenderHelper {
-    /**
-     * Apache jakarta commons logger
-     */
+
     private static final Log log = LogFactory.getLog(RenderHelper.class);
+
     private final static boolean ALLOW_COMPONENT_CACHING =  // modify in resource.properties
             ((Boolean) ResourceManager.getObject("SComponent.renderCache", Boolean.class)).booleanValue();
 
-    private final List menus = new ArrayList();
     private final List scripts = new ArrayList();
+
+    private final List menus = new ArrayList();
+
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
+
     // TODO(he): never used
     private int horizontalLayoutPadding = 0;
+
     private int verticalLayoutPadding = 0;
+
     private boolean allowUsageOfCachedInstances = true;
-    private boolean incrementalUpdateMode = false;
+
+    public static RenderHelper getInstance(SComponent forComponent) {
+        RenderHelper renderHelper =
+        	(RenderHelper) forComponent.getSession().getProperty("css_plaf-render-helper");
+        if (renderHelper == null) {
+            renderHelper = new RenderHelper();
+            forComponent.getSession().setProperty("css_plaf-render-helper", renderHelper);
+        }
+        return renderHelper;
+    }
 
     public void reset() {
         scripts.clear();
@@ -66,6 +79,16 @@ public final class RenderHelper {
         }
     }
 
+    private void addMenu(SComponent menuItem) {
+        try {
+            menus.add(menuItem);
+            menuItem.putClientProperty("popup", Boolean.TRUE);
+            menuItem.write(menueRenderBuffer);
+        } catch (IOException e) {
+            log.error("IO Exception during writing into StringBuffer?!?", e);
+        }
+    }
+
     public List getCollectedMenues() {
         return menus;
     }
@@ -89,16 +112,6 @@ public final class RenderHelper {
         }
     }
 
-    private void addMenu(SComponent menuItem) {
-        try {
-            menus.add(menuItem);
-            menuItem.putClientProperty("popup", Boolean.TRUE);
-            menuItem.write(menueRenderBuffer);
-        } catch (IOException e) {
-            log.error("IO Exception during writing into StringBuffer?!?", e);
-        }
-    }
-
     public void allowCaching() {
         this.allowUsageOfCachedInstances = true;
     }
@@ -107,17 +120,7 @@ public final class RenderHelper {
     }
 
     public boolean isCachingAllowed(final SComponent component) {
-        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances &&
-                !(component instanceof SContainer);
-    }
-
-    public static RenderHelper getInstance(SComponent forComponent) {
-        RenderHelper renderHelper = (RenderHelper) forComponent.getSession().getProperty("css_plaf-render-helper");
-        if (renderHelper == null) {
-            renderHelper = new RenderHelper();
-            forComponent.getSession().setProperty("css_plaf-render-helper", renderHelper);
-        }
-        return renderHelper;
+        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances && !(component instanceof SContainer);
     }
 
     public int getHorizontalLayoutPadding() {
@@ -134,13 +137,5 @@ public final class RenderHelper {
 
     public void setVerticalLayoutPadding(int verticalLayoutPadding) {
         this.verticalLayoutPadding = verticalLayoutPadding;
-    }
-
-    public boolean isIncrementalUpdateMode() {
-        return incrementalUpdateMode;
-    }
-
-    public void setIncrementalUpdateMode(boolean enabled) {
-        this.incrementalUpdateMode = enabled;
     }
 }

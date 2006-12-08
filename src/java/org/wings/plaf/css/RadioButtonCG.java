@@ -15,7 +15,9 @@ package org.wings.plaf.css;
 
 import org.wings.SAbstractButton;
 import org.wings.SIcon;
+import org.wings.SRadioButton;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 import org.wings.resource.ResourceManager;
 
 import java.io.IOException;
@@ -47,7 +49,7 @@ public final class RadioButtonCG extends CheckBoxCG implements
                 (button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
             if (clientProperty == null) {
                 String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.submitForm(" + !button.isCompleteUpdateForced() + ",event);";
+            	String code = "wingS.request.submitForm(" + !button.isReloadForced() + ",event);";
                 if (Utils.isMSIE(button)) {
                     // In IE the "onchange"-event gets fired when a control loses the
                     // input focus and its value has been modified since gaining focus.
@@ -89,4 +91,13 @@ public final class RadioButtonCG extends CheckBoxCG implements
 
         device.print("/>");
     }
+
+    public Update updateText(SRadioButton radioButton, String text) {
+        return new TextUpdate(radioButton, text);
+    }
+
+    public Update updateIcon(SRadioButton radioButton, SIcon icon) {
+        return new IconUpdate(radioButton, icon);
+    }
+
 }

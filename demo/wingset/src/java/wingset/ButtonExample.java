@@ -73,7 +73,7 @@ public class ButtonExample extends WingSetPane {
             buttons[i].setActionCommand(buttons[i].getText());
 
             buttons[i].setToolTipText("Button " + (i + 1));
-            buttons[i].setName("button" + (i + 1));
+            buttons[i].setName("bu" + (i + 1));
             buttons[i].setShowAsFormComponent(false);
             buttons[i].setVerticalTextPosition(textVPos[(i / 3) % 3]);
             buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
@@ -105,7 +105,7 @@ public class ButtonExample extends WingSetPane {
 
     /**
      * Register and use some <code>JavaScriptEvent.ON_CLICK</code> listeners to react on button click.
-     * This tests the feature that return false aborts the button submit. 
+     * This tests the feature that return false aborts the button submit.
       */
     private void addSomeConfirmDialogues() {
         for (int i = 0; i < 3; i++) {

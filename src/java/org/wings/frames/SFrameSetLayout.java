@@ -18,7 +18,7 @@ import org.wings.SAbstractLayoutManager;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.io.Device;
-import org.wings.resource.CompleteUpdateResource;
+import org.wings.resource.ReloadResource;
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
 import org.wings.util.SStringBuilder;
@@ -65,7 +65,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     public void setColumns(String columns) {
         this.columns = columns;
         if (getContainer() != null)
-            getContainer().reload(org.wings.ReloadManager.STATE);
+            getContainer().reload();
     }
 
     public String getColumns() {
@@ -84,7 +84,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     public void setRows(String rows) {
         this.rows = rows;
         if (getContainer() != null)
-            getContainer().reload(org.wings.ReloadManager.STATE);
+            getContainer().reload();
     }
 
     public String getRows() {
@@ -184,7 +184,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     protected void writeFrame(Device device, SFrame frame, Properties properties)
             throws IOException {
         device.print("<frame src=\"");
-        device.print(frame.getDynamicResource(CompleteUpdateResource.class).getURL());
+        device.print(frame.getDynamicResource(ReloadResource.class).getURL());
         device.print("\"");
         device.print(" name=\"");
         device.print(SFrameSet.createBaseTargetName(frame));

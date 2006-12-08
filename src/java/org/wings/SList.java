@@ -194,7 +194,22 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     private final ListSelectionListener fwdSelectionEvents = new ListSelectionListener() {
         public void valueChanged(ListSelectionEvent e) {
             fireSelectionValueChanged(e.getFirstIndex(), e.getLastIndex(), e.getValueIsAdjusting());
-            reload(ReloadManager.STATE);
+
+            if (isUpdatePossible()) {
+                List deselectedIndices = new ArrayList();
+                List selectedIndices = new ArrayList();
+                for (int i = e.getFirstIndex(); i <= e.getLastIndex(); ++i) {
+                    int offset = getViewportSize() == null ? 0 : getViewportSize().y;
+                    if (isSelectedIndex(i)) {
+                        selectedIndices.add(new Integer(i - offset));
+                    } else {
+                        deselectedIndices.add(new Integer(i - offset));
+                    }
+                }
+                update(((ListCG) getCG()).updateSelection(SList.this, deselectedIndices, selectedIndices));
+            } else {
+                reload();
+            }
         }
     };
 
@@ -281,7 +296,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public void setCellRenderer(SListCellRenderer cellRenderer) {
         SListCellRenderer oldValue = this.cellRenderer;
         this.cellRenderer = cellRenderer;
-        reloadIfChange(oldValue, cellRenderer, ReloadManager.STATE);
+        reloadIfChange(oldValue, cellRenderer);
     }
 
 
@@ -363,7 +378,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public void setVisibleRowCount(int visibleRowCount) {
         if (this.visibleRowCount != visibleRowCount) {
             this.visibleRowCount = Math.max(0, visibleRowCount);
-            reload(ReloadManager.STATE);
+            reload();
             //firePropertyChange("visibleRowCount", oldValue, visibleRowCount);
         }
     }
@@ -401,7 +416,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
             dataModel.addListDataListener(this);
 
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -664,7 +679,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     public void clearSelection() {
         if (!getSelectionModel().isSelectionEmpty()) {
             getSelectionModel().clearSelection();
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1065,7 +1080,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
                     fireViewportChanged(false);
                 }
             }
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1150,17 +1165,17 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     // Changes to the model should force a reload.
     public void contentsChanged(javax.swing.event.ListDataEvent e) {
         fireViewportChanged(false);
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     public void intervalAdded(javax.swing.event.ListDataEvent e) {
         fireViewportChanged(false);
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
         fireViewportChanged(false);
-        reload(ReloadManager.STATE);
+        reload();
     }
 }
 
