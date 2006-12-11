@@ -305,7 +305,11 @@ A.STabbedPane_Tab_top IMG {
     cursor: pointer;
 }
 
-.SMenuBar div.SMenu_Disabled {
+.SMenuBar div.SMenu_Disabled,
+.SMenu li.SMenu_Disabled a,
+.SMenu li.SMenu_Disabled a:hover,
+.SMenu li.SMenuItem_Disabled a,
+.SMenu li.SMenuItem_Disabled a:hover {
     color: #666;
 }
 
