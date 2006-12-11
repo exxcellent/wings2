@@ -12,13 +12,13 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButtonGroup;
 import org.wings.SComponent;
+import org.wings.SConstants;
 import org.wings.SContainer;
+import org.wings.SDimension;
 import org.wings.SFont;
-import org.wings.SForm;
 import org.wings.SGridLayout;
 import org.wings.SIcon;
 import org.wings.SLabel;
@@ -65,15 +65,22 @@ public class LabelExample extends WingSetPane {
         testLabel.setFont(new SFont("serif", SFont.ITALIC | SFont.BOLD, 10));
         controls.addControllable(testLabel);
 
+        SPanel testPanel = new SPanel();
+        testPanel.setPreferredSize(new SDimension(250, SDimension.AUTO_INT));
+        testPanel.add(testLabel);
+
+        SLabel titleResult = new SLabel("Result");
+        titleResult.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+
         SGridLayout layout = new SGridLayout(3);
         layout.setRenderFirstLineAsHeader(true);
         SPanel panel = new SPanel(layout);
         panel.add(new SLabel("Control the label's text position"));
-        panel.add(new SSpacer(100,1));
-        panel.add(new SLabel("Result"));
+        panel.add(new SSpacer(50,1));
+        panel.add(titleResult);
         panel.add(createRoundRadio(testLabel));
         panel.add(new SLabel());
-        panel.add(testLabel);
+        panel.add(testPanel);
 
         return panel;
     }

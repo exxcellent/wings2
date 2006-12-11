@@ -25,6 +25,7 @@ import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -980,8 +981,8 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
 
         // delay events...
         getSelectionModel().setDelayEvents(true);
-
         getSelectionModel().setValueIsAdjusting(true);
+
         // in a form, we only get events for selected items, so for every
         // selected item, which is not in values, deselect it...
         if (getShowAsFormComponent()) {
@@ -989,54 +990,44 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
             ArrayList selectedIndices = new ArrayList();
             for (int i = 0; i < values.length; i++) {
 
+                String indexString = values[i];
+                if (indexString.length() < 1) continue; // false format
 
-                if (values[i].length() < 2) continue; // false format
-
-                String indexString = values[i].substring(1);
                 try {
                     int index = Integer.parseInt(indexString);
 
                     // in a form all parameters are select parameters...
-                    if (values[i].charAt(0) == 'a') {
-                        selectedIndices.add(new Integer(index));
-                        addSelectionInterval(index, index);
-                    }
+                    selectedIndices.add(new Integer(index));
+                    addSelectionInterval(index, index);
                 } catch (Exception ex) {
-                    // ignore, this is not the correct format...
                 }
             }
-            // remove all selected indices, which are not explicitely selected
-            // by a parameter
-            for (int i = 0; i < getModel().getSize(); i++) {
-                if (isSelectedIndex(i) &&
-                        !selectedIndices.contains(new Integer(i))) {
+            // remove all selected indices, which are not explicitely selected by a parameter
+            for (int i = 0; i < getModel().getSize(); ++i) {
+                if (isSelectedIndex(i) && !selectedIndices.contains(new Integer(i))) {
                     removeSelectionInterval(i, i);
                 }
             }
         } else {
-
             for (int i = 0; i < values.length; i++) {
 
-                if (values[i].length() < 2) continue; // false format
+                String indexString = values[i];
+                if (indexString.length() < 1) continue; // false format
 
-                // first char is select/deselect operator
-                String indexString = values[i].substring(1);
                 try {
                     int index = Integer.parseInt(indexString);
 
-                    if (values[i].charAt(0) == 'a') {
-                        addSelectionInterval(index, index);
-                    } else if (values[i].charAt(0) == 'r') {
+                    // toggle selection for given index
+                    if (isSelectedIndex(index))
                         removeSelectionInterval(index, index);
-                    } // else ignore, this is not the correct format...
+                    else
+                        addSelectionInterval(index, index);
                 } catch (Exception ex) {
                 }
 
             }
         }
         getSelectionModel().setValueIsAdjusting(false);
-
-
         getSelectionModel().setDelayEvents(false);
 
         SForm.addArmedComponent(this);
@@ -1150,11 +1141,11 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
     }
 
     public String getSelectionParameter(int index) {
-        return "a" + Integer.toString(index);
+        return Integer.toString(index);
     }
 
     public String getDeselectionParameter(int index) {
-        return "r" + Integer.toString(index);
+        return Integer.toString(index);
     }
 
     // Changes to the model should force a reload.

@@ -145,12 +145,7 @@ public class WingSet implements Serializable {
         SButton switchDebugViewButton = new SButton("Toggle AJAX debug view");
         switchStyleButton.setShowAsFormComponent(false);
         switchDebugViewButton.addScriptListener(new JavaScriptListener(
-                JavaScriptEvent.ON_CLICK, "toggleDebugView()",
-                "self.toggleDebugView = function() {\n" +
-                "  if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);\n" +
-                "  else wingS.ajax.setDebugViewVisible(true);\n" +
-                "  return false;\n" +
-                "};"
+                JavaScriptEvent.ON_CLICK, "wingS.ajax.toggleDebugView(); return false;"
         ));
 
         SPanel south = new SPanel();

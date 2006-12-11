@@ -512,3 +512,12 @@ wingS.ajax.setDebugViewVisible = function(visible) {
         alert("The AJAX debug view has not been enabled yet!");
     }
 };
+
+/**
+ * Toggles the visibility of the previously enabled debug view.
+ */
+wingS.ajax.toggleDebugView = function() {
+    if (wingS.ajax.isDebugViewVisible())
+        wingS.ajax.setDebugViewVisible(false);
+    else wingS.ajax.setDebugViewVisible(true);
+};
