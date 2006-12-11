@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -450,6 +449,22 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         getSelectionModel().fireDelayedIntermediateEvents();
     }
 
+    /**
+     * Returns the table row for the passed <code>SPoint</code>
+     * instance received via {@link #addMouseListener(org.wings.event.SMouseListener)}.
+     * @param point The pointed retuned by the mouse event.
+     * @return The row index
+     */
+    public int rowAtPoint(SPoint point) {
+        return getRowForLocation(point);
+    }
+
+    /**
+     * Returns the tree row for the passed <code>SPoint</code>.
+     * instance received via {@link #addMouseListener(org.wings.event.SMouseListener)}.
+     * @param point The pointed returned by the mouse event.
+     * @return The tree row index
+     */
     public int getRowForLocation(SPoint point) {
         return Integer.parseInt(point.getCoordinates());
     }

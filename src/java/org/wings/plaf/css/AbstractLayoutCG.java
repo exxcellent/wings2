@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,15 +12,22 @@
  */
 package org.wings.plaf.css;
 
-import java.awt.Insets;
+import org.wings.SComponent;
+import org.wings.SContainer;
+import org.wings.SGridBagLayout;
+import org.wings.SLayoutManager;
+import org.wings.io.Device;
+import org.wings.plaf.LayoutCG;
+import org.wings.plaf.css.PaddingVoodoo;
+import org.wings.session.BrowserType;
+import org.wings.session.SessionManager;
+import org.wings.style.CSSProperty;
+import org.wings.util.SStringBuilder;
+
+import java.awt.*;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-
-import org.wings.*;
-import org.wings.util.SStringBuilder;
-import org.wings.io.Device;
-import org.wings.plaf.LayoutCG;
 
 /**
  * Abstract super class for layout CGs using invisible tables to arrange their contained components.
@@ -42,8 +48,9 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     private String name(SLayoutManager layout) {
         String name = layout.getClass().getName();
         int pos = name.lastIndexOf('.');
-        if (pos != -1)
+        if (pos != -1) {
             name = name.substring(pos + 1);
+        }
         return name;
     }
 
@@ -62,16 +69,22 @@ public abstract class AbstractLayoutCG implements LayoutCG {
      * and {@link #closeLayouterBody(org.wings.io.Device,org.wings.SLayoutManager)} afterwards!
      *
      * @param d                       The device to write to
+     * @param renderedContainer       The (container) component rendered
      * @param cols                    Wrap after this amount of columns
-     * @param renderFirstLineAsHeader Render cells in first line as TH-Element or regular TD.
-     * @param components              The components to layout
-     * @param style
+     * @param components              The components to layout in this table
+     * @param cellStyle               Style attributes for the table cells.
      */
-    protected void printLayouterTableBody(Device d, int cols, final boolean renderFirstLineAsHeader,
-                                          final List components, String style)
+    protected void printLayouterTableBody(final Device d, final SContainer renderedContainer,
+                                          int cols, final List components, final TableCellStyle cellStyle)
             throws IOException {
-        boolean firstRow = true;
+        final int componentCount = components.size();
+        final boolean isMSIE = SessionManager.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
+        final TableCellStyle origCellStyle = cellStyle.makeACopy();
+
         int col = 0;
+        int row = 0;
+        int idx = 0;
+
         for (Iterator iter = components.iterator(); iter.hasNext();) {
             final SComponent c = (SComponent) iter.next();
 
@@ -79,20 +92,36 @@ public abstract class AbstractLayoutCG implements LayoutCG {
                 Utils.printNewline(d, c.getParent());
                 d.print("<tr>");
             } else if (col % cols == 0) {
+                row += 1;
+                col = 0;
                 d.print("</tr>");
                 Utils.printNewline(d, c.getParent());
                 d.print("<tr>");
-                firstRow = false;
             }
 
-            openLayouterCell(d, c, firstRow && renderFirstLineAsHeader, -1, -1, null,
-                    getDefaultLayoutCellHAlignment(), getDefaultLayoutCellVAlignment(), style);
+            cellStyle.renderAsTH = row == 0 && cellStyle.renderAsTH;
+            cellStyle.defaultLayoutCellHAlignment = getDefaultLayoutCellHAlignment();
+            cellStyle.defaultLayoutCellVAlignment = getDefaultLayoutCellVAlignment();
+
+            if (PaddingVoodoo.hasPaddingInsets(renderedContainer)) {
+                final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                final boolean isFirstRow = row == 0;
+                final boolean isLastRow = ((componentCount - (idx+1))+col < cols);
+                final boolean isFirstCol = (col == 0);
+                final boolean isLastCol = ((col % cols) == 0);
+                PaddingVoodoo.doBorderPaddingsWorkaround(renderedContainer.getBorder(), patchedInsets,
+                        isFirstRow, isFirstCol, isLastCol, isLastRow);
+                cellStyle.setInsets(patchedInsets);
+            }
+
+            openLayouterCell(d, c, cellStyle);
 
             c.write(d); // Render component
 
-            closeLayouterCell(d, c, firstRow && renderFirstLineAsHeader);
+            closeLayouterCell(d, c, row == 0 && cellStyle.renderAsTH);
 
             col++;
+            idx++;
 
             if (!iter.hasNext()) {
                 d.print("</tr>");
@@ -101,9 +130,14 @@ public abstract class AbstractLayoutCG implements LayoutCG {
         }
     }
 
-    /** The default horizontal alignment for components inside a layout cell. */
+    /**
+     * The default horizontal alignment for components inside a layout cell.
+     */
     public abstract int getDefaultLayoutCellHAlignment();
-    /** The default vertical alignment for components inside a layout cell. */
+
+    /**
+     * The default vertical alignment for components inside a layout cell.
+     */
     public abstract int getDefaultLayoutCellVAlignment();
 
     /**
@@ -143,26 +177,33 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     /**
      * Opens a TD or TH cell of an invisible layouter table. This method also does component alignment.
      * <b>Attention:</b> As you want to attach more attributes you need to close the tag with &gt; on your own!
-     * @param renderAsHeader Print TH instead of TD
      */
-    public static void openLayouterCell(final Device d, final SComponent component, final boolean renderAsHeader, int colspan, int rowspan, String width, int defaultHorizontalAlignment, int defaultVerticalAlignment, String style) throws IOException {
+    public static void openLayouterCell(final Device d, final SComponent component, final TableCellStyle cellStyle)
+            throws IOException {
         Utils.printNewline(d, component);
-        if (renderAsHeader)
+        if (cellStyle.renderAsTH) {
             d.print("<th");
-        else
+        } else {
             d.print("<td");
+        }
 
         int oversizePadding = Utils.calculateHorizontalOversize(component, true);
-        oversizePadding += (component != null ? RenderHelper.getInstance(component).getHorizontalLayoutPadding() : 0);
+        oversizePadding += cellStyle.getInsets().left;
+        oversizePadding += cellStyle.getInsets().right;
+        Utils.optAttribute(d, "oversize", oversizePadding);
 
-        if (oversizePadding != 0)
-            Utils.optAttribute(d, "oversize", oversizePadding);
-
-        Utils.printTableCellAlignment(d, component, defaultHorizontalAlignment, defaultVerticalAlignment);
-        Utils.optAttribute(d, "colspan", colspan);
-        Utils.optAttribute(d, "rowspan", rowspan);
-        Utils.optAttribute(d, "width", width);
-        Utils.optAttribute(d, "style", style);
+        Utils.printTableCellAlignment(d, component, cellStyle.defaultLayoutCellHAlignment, cellStyle.defaultLayoutCellVAlignment);
+        Utils.optAttribute(d, "colspan", cellStyle.colspan);
+        Utils.optAttribute(d, "rowspan", cellStyle.rowspan);
+        Utils.optAttribute(d, "width", cellStyle.width);
+        Utils.optAttribute(d, "class", cellStyle.optionalStyleClass);
+        // render optional style attribute
+        if (cellStyle.hasAdditionalCellStyles() || cellStyle.hasInsets()) {
+            SStringBuilder styleString = new SStringBuilder();
+            Utils.createInlineStylesForInsets(styleString, cellStyle.getInsets());
+            styleString.append(cellStyle.getAdditionalCellStyles().toString());
+            Utils.optAttribute(d, "style", styleString);
+        }
         d.print(">");
     }
 
@@ -177,30 +218,33 @@ public abstract class AbstractLayoutCG implements LayoutCG {
     }
 
     protected abstract int getLayoutHGap(SLayoutManager layout);
+
     protected abstract int getLayoutVGap(SLayoutManager layout);
+
     protected abstract int getLayoutBorder(SLayoutManager layout);
 
-    protected String layoutStyles(SLayoutManager layout) {
-        SStringBuilder styles = new SStringBuilder();
-        Insets insets = convertGapsToInset(getLayoutHGap(layout), getLayoutVGap(layout));
-        Utils.createInlineStylesForInsets(styles, insets);
-        if (getLayoutBorder(layout) > 0)
-            styles.append("border:").append(getLayoutBorder(layout)).append("px solid black");
+    protected final TableCellStyle cellLayoutStyle(SLayoutManager layout) {
+        final Insets insets = convertGapsToInset(getLayoutHGap(layout), getLayoutVGap(layout));
+        final int layoutBorder = getLayoutBorder(layout);
+        final TableCellStyle cellStyle = new TableCellStyle();
 
-        return styles.length() > 0 ? styles.toString() : null;
-    }
-
-    protected static String cellStyles(SGridBagLayout layout, Insets insets) {
-        SStringBuilder styles = new SStringBuilder();
-        Utils.createInlineStylesForInsets(styles, insets);
-        if (layout.getBorder() > 0)
-            styles.append("border:").append(layout.getBorder()).append("px solid black");
-        return styles.length() > 0 ? styles.toString() : null;
+        cellStyle.setInsets(insets);
+        if (layoutBorder > 0) {
+            cellStyle.getAdditionalCellStyles().put(CSSProperty.BORDER, layoutBorder + "px solid black");
+        }
+        return cellStyle;
     }
 
     protected abstract int layoutOversize(SLayoutManager layout);
 
-    protected static int cellOversize(SGridBagLayout layout, Insets insets) {
+    protected final int cellOversize(SGridBagLayout layout, Insets insets) {
         return insets.top + insets.bottom + layout.getBorder();
+    }
+
+    /**
+     * @return true if current browser is microsoft exploder
+     */
+    protected final boolean isMSIE(final SComponent component) {
+        return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
 }

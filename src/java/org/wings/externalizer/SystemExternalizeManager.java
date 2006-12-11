@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -26,7 +25,6 @@ import java.util.Map;
  * Created: Sat Nov 10 15:49:15 2001
  *
  * @author <a href="mailto:armin@hyperion.intranet.mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 
 public class SystemExternalizeManager extends AbstractExternalizeManager {

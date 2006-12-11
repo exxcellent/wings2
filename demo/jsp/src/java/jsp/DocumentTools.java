@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class DocumentTools
         extends SToolBar

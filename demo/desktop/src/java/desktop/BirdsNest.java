@@ -8,7 +8,6 @@ import org.wings.SDesktopPane;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class BirdsNest
         extends SDesktopPane

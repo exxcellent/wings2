@@ -19,13 +19,6 @@ HTML {
 a {
     cursor: pointer;
 }
-/** 
- * Class for all invisible HTML tables used for layouting purposes. 
- * without border-collapse, ie keeps borders, even if we set no border
- */
-table, td, th {
-    border-collapse: collapse;
-}
 
 /* please comment on these...are they needed? */
 td, th {
@@ -58,6 +51,10 @@ ul.SMenu li a
     filter:alpha(opacity=80);
 }
 
+TABLE {
+    border-collapse: collapse;
+}
+
 table.STable {
     table-layout: fixed;
 }
@@ -75,7 +72,6 @@ TABLE.formbutton_active {
 TABLE.formbutton_hover {
     background-color: #eeeeee !important;
 }
-
 
 /* Style of the Legend label for STitledBorder */
 .STitledBorderLegend {
@@ -96,16 +92,4 @@ TABLE.formbutton_hover {
 .STitledBorder {
     margin-top: 1em;
     padding-top: 1em;
-}
-
-/*.selection {
-   background-color: #AAAAFF;
-}*/
-
-.XCalendar td {
-    padding: 0px;
-}
-
-.XCalendar td input {
-    margin: 0px;
 }

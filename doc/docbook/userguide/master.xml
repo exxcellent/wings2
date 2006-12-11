@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
 "../support/docbook-dtd/docbookx.dtd">
 <book lang="en">
   <title>wingS User Guide</title>
@@ -14,7 +14,7 @@
     <subtitle>Writing and understanding wingS applications</subtitle>
 
     <copyright>
-      <year>2005</year>
+      <year>2005 - 2006</year>
 
       <holder>wingS Project Team</holder>
     </copyright>
@@ -38,7 +38,8 @@
       Free Documentation License</link>" .</para>
     </legalnotice>
 
-    <releaseinfo>1.0RC1 $Date$</releaseinfo>
+    <releaseinfo>1.0RC1 $Date: 2006-10-23 14:41:01 +0200 (må, 23 okt 2006)
+    $</releaseinfo>
   </bookinfo>
 
   <preface>
@@ -274,11 +275,11 @@
     application.</para>
 
     <para>The following sections will demonstrate all the tasks needed to set
-    up a simple "Hello Word" example from scratch using the wingS
-    framework.<note>
-        <para>Please refer to the <filename>doc/tutorial/hellowings</filename>
-        folder in the wingS distribution for the sources of this quickstart
-        How-To.</para>
+    up a simple "Hello Word" example from scratch using the wingS framework.
+    <note>
+        <para>Please refer to the <filename>
+        doc/tutorial/hellowings</filename> folder in the wingS distribution
+        for the sources of this quickstart How-To.</para>
       </note></para>
 
     <section>
@@ -287,11 +288,11 @@
       <para>First we need to set up your development environment. Just create
       a new directory <filename>helloworld</filename> and
       <filename>helloword/src</filename> and copy the contents of the two
-      directories <filename>web</filename> and <filename>lib</filename> of the
-      wingS distribution. Start your preferred IDE and create a new project
-      using the directory you just generated . Include all the <filename>*.jar
-      </filename>files in the copied <filename>lib</filename> and
-      <filename>web/WEB-INF/lib </filename>directories in the classpath of
+      directories <filename>web</filename> and <filename> lib</filename> of
+      the wingS distribution. Start your preferred IDE and create a new
+      project using the directory you just generated . Include all the
+      <filename>*.jar</filename>files in the copied <filename>lib</filename>
+      and <filename> web/WEB-INF/lib</filename>directories in the classpath of
       your newly created project.</para>
 
       <para>Let's start writing our first wingS application. In general the
@@ -303,8 +304,8 @@
 
       <tip>
         <para>Most IDEs support quick JavaDoc and parameter name lookup if you
-        attach the <filename>src/java directory </filename>of the wingS
-        distribution as Java source and the <filename>dist/doc/api</filename>
+        attach the <filename>src/java directory</filename>of the wingS
+        distribution as Java source and the <filename> dist/doc/api</filename>
         directory as JavaDoc source at the two main wingS libraries
         <filename>wings.jar</filename> and
         <filename>css.jar</filename>.</para>
@@ -313,8 +314,8 @@
       <para>We don't have any special layout desires, so we won't use a
       template layout file. For simplicity we'll just use one of the very
       powerful dynamic layout managers to arrange our components. So let's
-      create a <filename>HelloWingS.java class in the <filename>src</filename>
-      directory</filename>:</para>
+      create a <filename> HelloWingS.java class in the
+      <filename>src</filename> directory</filename>:</para>
 
       <programlisting>import org.wings.*;
 import java.util.*;
@@ -362,12 +363,12 @@ public class HelloWingS {
     <section>
       <title id="web_xml_file">Set - Preparing the web.xml File</title>
 
-      <para>In the next step we need to set up a <filename>web.xml</filename>
+      <para>In the next step we need to set up a <filename> web.xml</filename>
       file in the web/WEB-INF directory. This step is only needed once per
       application and it's only intention is to register the wingS servlet
       inside the servlet container and point wingS to our newly created
       application root class <code>HelloWingS</code>. A very minimalist
-      <filename>web.xml</filename> file would look like this:</para>
+      <filename> web.xml</filename> file would look like this:</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;!DOCTYPE web-app
@@ -401,7 +402,7 @@ public class HelloWingS {
       reccurring task it's better to let a tool do this task. Apache
       Ant<footnote>
           <para>You can download the latest version of Apache Ant at <ulink
-          url="http://ant.apache.org/">http://ant.apache.org/</ulink></para>
+          url="http://ant.apache.org/"> http://ant.apache.org/</ulink></para>
         </footnote> is a very popular Java based build tool. We'll create a
       very simple Ant build file which will instruct Apache Ant to package our
       files as needed into our application <filename>WAR</filename> file. So
@@ -447,25 +448,27 @@ public class HelloWingS {
       <para><userinput>&lt;path to your ant installation&gt;\bin\ant
       war</userinput></para>
 
-      <para>Apache Ant will automatically look for a
-      <filename>build.xml</filename> file in the current directory and try to
-      execute the named target. If Ant fails to compile and complains that it
-      does not know where to find the Java compiler you may need to specify
-      the path to your JDK installation in the <envar>JAVA_HOME</envar>
-      environment variable.</para>
+      <para>Apache Ant will automatically look for a <filename>
+      build.xml</filename> file in the current directory and try to execute
+      the named target. If Ant fails to compile and complains that it does not
+      know where to find the Java compiler you may need to specify the path to
+      your JDK installation in the <envar>JAVA_HOME</envar> environment
+      variable.</para>
 
       <para>If everything went well you should find a file named
-      <filename>hellowings.war</filename> in the <filename>build</filename>
+      <filename>hellowings.war</filename> in the <filename> build</filename>
       directory of your project. So we're almost done. The only thing we need
       to do is to deploy this <code>WAR</code> file in your servlet container.
       If you use Jakarta Tomcat<footnote>
           <para>Jakarta Tomcat is available at <ulink
-          url="http://tomcat.apache.org/">http://tomcat.apache.org/</ulink></para>
-        </footnote>the only thing you need to do is to copy your
-      <filename>hellowings.war</filename> file into the
-      <filename>webapps</filename> directory, start Tomcat by calling
-      <filename>bin/startup.bat</filename> and point your browser to <ulink
-      url="http://localhost:8080/hellowings/HelloWingS">http://localhost:8080/hellowings/HelloWingS</ulink></para>
+          url="http://tomcat.apache.org/">
+          http://tomcat.apache.org/</ulink></para>
+        </footnote>the only thing you need to do is to copy your <filename>
+      hellowings.war</filename> file into the <filename> webapps</filename>
+      directory, start Tomcat by calling <filename> bin/startup.bat</filename>
+      and point your browser to <ulink
+      url="http://localhost:8080/hellowings/HelloWingS">
+      http://localhost:8080/hellowings/HelloWingS</ulink></para>
 
       <para><inlinemediaobject>
           <imageobject>
@@ -597,20 +600,21 @@ public class HelloWingS {
                 container</entry>
               </row>
 
-                <row>
-                  <entry>wingx.jar</entry>
+              <row>
+                <entry>wingx.jar</entry>
 
-                  <entry>optional</entry>
+                <entry>optional</entry>
 
-                  <entry>Additional highlevel components.</entry>
-                </row>
-                <row>
-                  <entry>cxx.jar</entry>
+                <entry>Additional highlevel components.</entry>
+              </row>
 
-                  <entry>optional</entry>
+              <row>
+                <entry>cxx.jar</entry>
 
-                  <entry>PLAF for the additional highlevel components.</entry>
-                </row>
+                <entry>optional</entry>
+
+                <entry>PLAF for the additional highlevel components.</entry>
+              </row>
             </tbody>
           </tgroup>
         </table>
@@ -629,7 +633,7 @@ public class HelloWingS {
             <listitem>
               <para>The latest version of the wingS framework can be always
               obtained from its website at <ulink
-              url="http://www.j-wings.org/">http://www.j-wings.org/</ulink>.
+              url="http://www.j-wings.org/"> http://www.j-wings.org/</ulink>.
               If you want to be in touch with the latest development you can
               also retrieve a development snapshot by anonymous CVS
               access.</para>
@@ -658,12 +662,12 @@ public class HelloWingS {
               <para>Though choosing a browser is somehow a matter of personal
               taste and preferences, we heavily encourage to try out the
               Mozilla FireFox browser available via <ulink
-              url="http://www.getfirefox.com/">http://www.getfirefox.com/</ulink>.
-              Beneath being a great browser, there are also some great plugins
-              freely available which can be a great help during developing web
-              applications. Since this is favoured by the core wingS
-              development team, new features tend to work first with FireFox
-              !</para>
+              url="http://www.getfirefox.com/">
+              http://www.getfirefox.com/</ulink>. Beneath being a great
+              browser, there are also some great plugins freely available
+              which can be a great help during developing web applications.
+              Since this is favoured by the core wingS development team, new
+              features tend to work first with FireFox !</para>
             </listitem>
           </varlistentry>
 
@@ -675,8 +679,8 @@ public class HelloWingS {
               <para>Chris Pederick donated these really two great plugins for
               the FireFox. They will be valuable tools when you are about to
               style your web application in detail. You can install them via
-              <ulink
-              url="http://chrispederick.com/work/">http://chrispederick.com/work/</ulink>.</para>
+              <ulink url="http://chrispederick.com/work/">
+              http://chrispederick.com/work/</ulink>.</para>
 
               <para>Refer to <xref linkend="live-css-editing" /> to learn how
               these plugins can help you.</para>
@@ -938,7 +942,8 @@ frameset.setVisible(true);</programlisting>
                 of this component. It is initially set on demand but can be
                 overwritten with custom values. This name will also appear
                 inside the generated HTML code, hence it must contain only a
-                restricted set of characters.</entry>
+                restricted set of characters. The name must be unique throughout
+                the session! Otherwise event dispatching won't work consistently.</entry>
               </row>
 
               <row>
@@ -978,12 +983,13 @@ frameset.setVisible(true);</programlisting>
               <row>
                 <entry><code>get/setBorder()</code></entry>
 
-                <entry>Apply a border. Besides <emphasis role="bold">outlining
-                components</emphasis> using <code>SLineBorder</code> this
-                method is mostly helpful to <emphasis role="bold">apply
-                spacings</emphasis> on a component by applying a
-                <code>SEmptyBorder</code> with the desired padding
-                values.</entry>
+                <entry>Apply a border. Gives components a border and/ or applies
+                insets. Besides the well known types <code>SLineBorder</code>,
+                <code>SEtchedBorder</code>, etc. there is the <code>SDefaultBorder</code>,
+                that components have attached by default. It makes the component appear,
+                as defined in the stylesheet (see <xref linkend="css-styles" />). If the
+                border property is set to null, there will be no border and no insets and
+                the rules in the stylesheet have no affect.</entry>
               </row>
 
               <row>
@@ -991,7 +997,7 @@ frameset.setVisible(true);</programlisting>
 
                 <entry>Sets the <emphasis role="bold">horizontal
                 alignment</emphasis> of this component inside the parent
-                container (<code>LEFT</code>, <code>RIGHT </code>or
+                container (<code>LEFT</code>, <code>RIGHT</code>or
                 <code>CENTER</code>). The effect of this value depends on the
                 layout manager assigned the parent container.</entry>
               </row>
@@ -1017,8 +1023,8 @@ frameset.setVisible(true);</programlisting>
                 panel or similar component: This achieves that the component
                 is stretched by the browser as far as possible to take up the
                 full available width. Please be aware that the rendering
-                result may vary depending on the clients browser. This is
-                especially an issue on using relative dimensions.</entry>
+                result may vary depending on the browser. This is especially the
+                case for relative vertical dimensions (FULLHEIGHT).</entry>
               </row>
 
               <row>
@@ -1040,8 +1046,8 @@ frameset.setVisible(true);</programlisting>
               <row>
                 <entry><code>get/setToolTipText()</code></entry>
 
-                <entry>Apply a <emphasis role="bold">tool tip text
-                </emphasis>which will pop up after a short delay when the
+                <entry>Apply a <emphasis role="bold">tool tip
+                text</emphasis>which will pop up after a short delay when the
                 mouse pointer is over the component. The behaviour of tools
                 tips can be defined more in detail via the
                 <code>SToolTipManager</code>.</entry>
@@ -1051,17 +1057,19 @@ frameset.setVisible(true);</programlisting>
                 <entry><code>get/setShowAsFormComponent()</code></entry>
 
                 <entry>The value of this property influences the <emphasis
-                role="bold">appearance of special input components</emphasis>
-                which may be used inside HTML forms or not. Think of check
-                boxes. Check boxes are only rendered in browsers if you nest
-                them inside a HTML <code>&lt;FORM&gt;</code> element.
-                Therefore wingS will render them as clickable images if you
-                don't wrap a <code>SCheckBox</code> with a <code>SForm</code>
-                element. You can achieve the same behaviour inside forms on
-                setting this value to <code>false</code>. A very common usage
+                role="bold">technical representation of some components</emphasis>
+                and the <emphasis role="bold">submit behaviour of most
+                components</emphasis>. For example, an SList is either rendered
+                as a select tag or as an unordered list (ul) of links. For most
+                components, this decides only, if the whole form will be sumbitted
+                on click or if the form content gets lost and a GET request will be
+                sent. HTML Check boxes are only rendered in browsers if you nest
+                them inside a HTML <code>&lt;FORM&gt;</code> element. Therefore
+                wingS will render them as clickable images if it is not contained
+                in an <code>SForm</code>. You can achieve the same behaviour inside
+                forms on setting this value to <code>false</code>. A very common usage
                 of this property is to force <code>SButton</code> to appear as
-                text links and not browser submit buttons inside
-                forms.</entry>
+                text links and not browser submit buttons inside forms.</entry>
               </row>
 
               <row>
@@ -1070,33 +1078,33 @@ frameset.setVisible(true);</programlisting>
                 <entry>Dynamically set a <emphasis role="bold">CSS property
                 value</emphasis> for a component. You can use this method to
                 define any arbitrary CSS property/value pair on the current
-                component.</entry>
+                component. It will be rendered as an inline style.</entry>
               </row>
 
               <row>
                 <entry><code>is/setVisible()</code></entry>
 
                 <entry>By default being <code>true</code> you can use this
-                property to <emphasis role="bold">hide any component
-                </emphasis>from the current view.</entry>
+                property to <emphasis role="bold">hide any
+                component</emphasis>from the current view.</entry>
               </row>
 
               <row>
                 <entry><code>is/setEnabled()</code></entry>
 
                 <entry>This property has a different meaning on different
-                components. Mainly it is used to define<emphasis role="bold">
-                input elements as inactive</emphasis> respectively read
-                only.</entry>
+                components. Mainly it is used to define<emphasis
+                role="bold">input elements as inactive</emphasis> respectively
+                read only.</entry>
               </row>
             </tbody>
           </tgroup>
         </table>
 
         <para>Besides the explained methods <code>SComponent</code> declares
-        further methods for:<itemizedlist>
+        further methods for: <itemizedlist>
             <listitem>
-              <para>Adding and removing various <emphasis role="bold">event
+              <para>Adding and removing various <emphasis role="bold"> event
               listeners</emphasis></para>
             </listitem>
 
@@ -1182,9 +1190,9 @@ frameset.setVisible(true);</programlisting>
           times during you every-day writing of wingS application i<code>s
           SPanel</code>. This is the simplest form a container and like every
           <code>SContainer</code> it will be initialized with a default layout
-          manager (<code>SFlowLayout</code>, can be overridden via
-          <filename>default.properties</filename>) but you probably will
-          prefer to define your own layout manager.</para>
+          manager (<code>SFlowLayout</code>, can be overridden via <filename>
+          default.properties</filename>) but you probably will prefer to
+          define your own layout manager.</para>
 
           <programlisting>SPanel panel = new SPanel();
 SGridLayout gridLayout = new SGridLayout(2);
@@ -1391,10 +1399,10 @@ fancyLabel.setWordWrap(true); // allow word wrapping</programlisting>
 
           <para>As in the Swing <code>JLabel</code>, the <code>SLabel</code>
           component in wingS also accepts HTML formatting directives like
-          <code>&lt;b&gt;...&lt;/b&gt; or <code>&lt;i&gt;...&lt;/i&gt;</code>
-          </code>inside the text if you prefix the text with an
-          <code>&lt;HTML&gt;</code> tag. You should use this carefully to
-          avoid mixing of view and logic.</para>
+          <code>&lt;b&gt;...&lt;/b&gt; or
+          <code>&lt;i&gt;...&lt;/i&gt;</code></code>inside the text if you
+          prefix the text with an <code>&lt;HTML&gt;</code> tag. You should
+          use this carefully to avoid mixing of view and logic.</para>
 
           <para>If you assign specific styles on a regular basis to a
           component like a label, you should consider to declare a static new
@@ -1571,7 +1579,7 @@ panel.setBackgroundImage(background);</programlisting>
           inside a <code>SForm</code> container, otherwise they will appear as
           simple text links due to constraints of the browser. Please refer to
           <xref linkend="SForm" /> to learn more about the role of the
-          <code>SForm</code> container. You can force <code>SButton </code>to
+          <code>SForm</code> container. You can force <code>SButton</code>to
           render as text links even if contained inside a form using a
           <code>setShowAsFormComponent(false)</code> method call.
           Alternatively you can use images as clickable buttons (perhaps
@@ -1602,8 +1610,8 @@ SButton graphicalButton = new SButton(
           can supply your own callbacks in order to handle these. Here we
           create a push button and register a callback to receive notification
           when the button is pushed. Note that the button is declared final so
-          that we can access it within the anonymous callback
-          class<programlisting>final SButton submit = new SButton("Search");
+          that we can access it within the anonymous callback class
+          <programlisting>final SButton submit = new SButton("Search");
 form.add(submit);
 ActionListener al = new ActionListener() {
   public void actionPerformed(ActionEvent e) {
@@ -1618,11 +1626,11 @@ submit.addActionListener(al);</programlisting></para>
           listener, since if the form is to have a "default" button (when the
           user hits the enter key) then it is the form which will be notified.
           In this case you would add the listener callback to the form instead
-          of the button:<programlisting>form.addActionListener(al);</programlisting></para>
+          of the button: <programlisting>form.addActionListener(al);</programlisting></para>
 
-          <para>The ActionEvent.getSourctree() will determine whether the event
-          comes from the button or the form so you can use the following tests
-          in your callback:<programlisting>public void actionPerformed(ActionEvent e) {
+          <para>The ActionEvent.getSourctree() will determine whether the
+          event comes from the button or the form so you can use the following
+          tests in your callback: <programlisting>public void actionPerformed(ActionEvent e) {
   if(submit == e.getSource())
   // submit button pushed
   if(form == e.getSource())
@@ -1633,10 +1641,11 @@ submit.addActionListener(al);</programlisting></para>
           call to STextField.getText().</para>
 
           <para>Whenever a listener is attached to a component or its model,
-          wingS assures, that the listener is invoked immediately after the user
-          modifies the component. For example, if you add a DocumentListener to
-          a textfield's document, wingS will add a form submission javascript
-          listener (onchange) to the respective input field.</para>
+          wingS assures, that the listener is invoked immediately after the
+          user modifies the component. For example, if you add a
+          DocumentListener to a textfield's document, wingS will add a form
+          submission javascript listener (onchange) to the respective input
+          field.</para>
         </sect3>
       </sect2>
 
@@ -1649,8 +1658,8 @@ submit.addActionListener(al);</programlisting></para>
         case of a form which contains an entry field and a button.</para>
 
         <para>Recall that user input for entry fields must be contained in a
-        <code>SForm</code>. The first task is to create the form and entry
-        field (layout details omitted):<programlisting>SForm form = new SForm(new STemplateLayout(...));
+        <code>SForm</code> . The first task is to create the form and entry
+        field (layout details omitted): <programlisting>SForm form = new SForm(new STemplateLayout(...));
 // ... add to top pane, add layout
 // The following assumes a template layout, the names "W1", "W2"
 // identify layout components
@@ -2087,7 +2096,6 @@ public Class getColumnClass(int column) {
     public SComponent getTableCellRendererComponent(
             STable table, Object value, boolean selected, int row, int col) {
         if (value instanceof Boolean &amp;&amp; row != -1) {
-            checkBox.setNameRaw(name(table, row, col));
             checkBox.setSelected(((Boolean)value).booleanValue());
             return checkBox;
         }
@@ -2112,6 +2120,11 @@ public Class getColumnClass(int column) {
                 </imageobject>
               </mediaobject>
             </screenshot>
+
+              <para>Beware that the checkbox is readonly. Clicking it will not update
+              the table model. Making cells editable is the job of a cell editor.
+              Look at the wingSet Table example and XTable example to learn more
+              about editable tables.</para>
           </sect4>
 
           <sect4>
@@ -2431,6 +2444,12 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
                 never.</entry>
               </row>
 
+                <row>
+                  <entry><code>mode</code></entry>
+
+                  <entry>Sets the scroll mode. See below for supported options.</entry>
+                </row>
+
               <row>
                 <entry nameend="col2" namest="col1"><code>SAdjustable</code>
                 properties</entry>
@@ -2466,6 +2485,53 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
           </tgroup>
         </table>
 
+          <para>The scrollpane distinguishes three different scroll modes:</para>
+
+            <table frame="topbot" pgwide="0">
+              <title>Scroll modes</title>
+
+              <tgroup cols="3">
+                <colspec colwidth="1*" />
+
+                <colspec colwidth="2*" />
+
+                <thead>
+                  <row>
+                    <entry>Mode</entry>
+
+                    <entry>Behaviour</entry>
+                  </row>
+                </thead>
+
+                <tbody>
+                  <row>
+                    <entry>COMPLETE</entry>
+
+                    <entry>The whole scrollable viewport of the scrollable is rendered.
+                    Give it a preferred size! It will be rendered as a scrollable div
+                    (overflow: auto), that requires a defined size.</entry>
+                  </row>
+
+                  <row>
+                    <entry>SCROLLING</entry>
+
+                    <entry>Only the portion defined by the extents will be rendered. The
+                    scrollbar's extent spans exactly the scrollable's scrollable viewport.
+                    Use it in combination with the standard <code>SScrollBar</code>.</entry>
+                  </row>
+                    <row>
+                      <entry>PAGING</entry>
+
+                      <entry>Only the portion defined by the extents will be rendered. The
+                      scrollbar's extent is the first multiple of the respective scrollpane extent,
+                      that covers the scrollable viewport. Use it in combination with the
+                      <code>SPageScroller</code>.</entry>
+                    </row>
+                </tbody>
+
+            </tgroup>
+          </table>
+
         <para>Using these properties we know how to modify our scroller in the
         previous example to achieve a paged view as i.e. known from popular
         search engines or other websites.</para>
@@ -2475,6 +2541,7 @@ SPageScroller pageScroller = new SPageScroller(SPageScroller.VERTICAL);
 pageScroller.setLayoutMode(SPageScroller.HORIZONTAL);
 scrollPane.setHorizontalScrollBar(pageScroller);
 scrollPane.setVerticalScrollBar(null);
+scrollPane.setMode(SScrollPane.PAGING);
 pageScroller.setExtent(5);
 form.add(scrollPane);</programlisting>
 
@@ -2713,6 +2780,14 @@ form.add(testLabel);</programlisting>
       declare the resulting layout positions already during development
       time.</para>
 
+      <para>If using relative preferred sizes, please understand, how layout
+      calculations are performed in the browser. If you give an element 100% width
+      or height, this is 100% of the <emphasis>available</emphasis> space. A
+      typical desktop layout, that spans the whole browser window requires, that
+      all containers, starting from the frame's content pane, have a preferred size
+      of <code>SDimension.FULLAREA</code>.
+      </para>
+
       <sect2 id="SwingLayoutManager">
         <title>Swing-like Layout Managers</title>
 
@@ -2883,9 +2958,7 @@ flowPanel.add(new SLabel("Component 3"));
           inside a flow layout you'll notice that your components won't flow
           anymore. This is just because in this case the sized component will
           adapt the available width rather than the flow layout being able to
-          know that it should use the available space.</para>
-
-          <para>A similar effect can happen on put a flow layout managed
+          know that it should use the available space. A similar effect can happen on put a flow layout managed
           container together with other components inside a parent container.
           Some components will take up a minimum width though it may
           visibility not be apparent.</para>
@@ -2936,9 +3009,9 @@ flowPanel.add(new SLabel("Component 3"));
           ways that we won't describe them in detail but present some
           commented usage examples. Please refer to the WingSet demo or the
           <ulink
-          url="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/GridBagLayout.html">documentation
-          of the Swing</ulink> variant for an in-depth explanation of it
-          usage.</para>
+          url="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/GridBagLayout.html">
+          documentation of the Swing</ulink> variant for an in-depth
+          explanation of it usage.</para>
 
           <mediaobject>
             <imageobject>
@@ -3091,7 +3164,7 @@ cardLayout.last(stackedPanel);
           <code>SRootLayout</code> here. Actually it is a derived variant of
           STemplateLayout which actually expects only one component named
           <code>content</code>. By default it uses a very simple default
-          template file <filename>template/default.thtml</filename> which is
+          template file <filename> template/default.thtml</filename> which is
           provided in the default libraries with wingS. Use this layout for a
           quickstart of the layout of the root frame of your application if
           you intend to replace it later on with a more complex
@@ -3108,8 +3181,8 @@ cardLayout.last(stackedPanel);
           file. Just add an attribute <code>SCRIPT</code> on the
           <code>OBJECT</code> tag with the desired, arbitrary Java code
           parseable by bean shell<footnote>
-              <para>Refer to <ulink
-              url="http://www.beanshell.org/">http://www.beanshell.org/</ulink></para>
+              <para>Refer to <ulink url="http://www.beanshell.org/">
+              http://www.beanshell.org/</ulink></para>
             </footnote>. For security reasons bean scripting support is
           disabled by default and you have to enable it explicitly by setting
           a property in your web.xml</para>
@@ -3303,21 +3376,15 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
         on generic HTML attributes (i.e. <code>IMG</code>) as well as on the
         default CSS class names (i.e. <code>SButton).</code></para>
 
-        <para>As next style sheet the browser sees the dynamically generated
-        one. On every page rendering wingS traverses the hierarchy of wingS
-        components and collects the dynamic styles attached to them (e.g.
-        implicitly declared by calling <code>setForeground()</code> on a
-        label). The resulting, dynamically generated CSS file mainly uses the
-        component ids as base for the CSS selectors. As the IDs are the most
-        selective way to select an element, these dynamically applied
-        properties will always take effect unless some values have been
-        previously finalized using the CSS <code>!important
-        </code>statement.</para>
-
-        <para>And as last the static style sheets you optionally attached to
+        <para>As next the static style sheets you optionally attached to
         the root frame are declared. As this CSS file is declared as last one,
         your customized value will win by default against equal-prioritized
         declarations from the default style sheet.</para>
+
+        <para>Last, the dynamic styles of the components (<code>setAttribute()</code>
+        but also <code>setForground()</code>, <code>setBorder()</code>, etc.) are
+        rendered as inline styles in the page. They will override the definitions of
+        all attached stylesheets.</para>
       </sect2>
 
       <sect2>
@@ -3334,10 +3401,10 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
         workaround for all the curious effects it 'features'.</para>
 
         <para>You can find those default CSS style sheets in the wingS
-        <filename>css.jar</filename> library as
-        <filename>org/wings/plaf/css/browsername.css</filename>. These default
-        style sheets declare the CSS declarations needed for correct operation
-        of wingS as well as the values for the wingS default application
+        <filename>css.jar</filename> library as <filename>
+        org/wings/plaf/css/browsername.css</filename>. These default style
+        sheets declare the CSS declarations needed for correct operation of
+        wingS as well as the values for the wingS default application
         style.</para>
 
         <para>During session initialization the <code>FrameCG</code>
@@ -3352,13 +3419,13 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
         style sheet file in your wingS application. In the case shown, the new
         styles are held in a global, static style sheet file. Hence the style
         sheet is added to the main frame to ensure it can apply to all
-        components.<programlisting>frame = new SFrame();
+        components. <programlisting>frame = new SFrame();
 frame.addHeader(new Link("stylesheet",
       null, "text/css", null,
       new ClasspathResource("../css/myapp.css", "text/css")));</programlisting></para>
 
         <para>The style sheet contains various customised styles, in this case
-        a custom table header:<programlisting>.STable TH  {
+        a custom table header: <programlisting>.STable TH  {
   background-color: #FFCC99
 }</programlisting></para>
 
@@ -3488,9 +3555,9 @@ if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
         <para>The session objects also holds various informations like the
         current used <emphasis role="bold">character encoding</emphasis> for
         the communication with the browser (Default: UTF-8), the current
-        session <emphasis role="bold">Locale</emphasis>, informations about
-        the <emphasis role="bold">client browser</emphasis>, an object
-        describing some<emphasis role="bold"> session statistics</emphasis>
+        session <emphasis role="bold"> Locale</emphasis>, informations about
+        the <emphasis role="bold"> client browser</emphasis>, an object
+        describing some <emphasis role="bold">session statistics</emphasis>
         like request count and average response time and the current <emphasis
         role="bold">servlet context, HTTP request</emphasis> and <emphasis
         role="bold">HTTP response</emphasis> objects.</para>
@@ -3524,7 +3591,7 @@ if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
       String fileType = chooser.getFileType();
       // ...
     }
-  });          </programlisting>Of course there can be multiple file choosers
+  });          </programlisting> Of course there can be multiple file choosers
         per form. You can limit the size of files to be uploaded in order to
         avoid denial-of-service (harddisk, bandwidth) attacks You can modify
         the maximum content length to be posted with the maxContentLength
@@ -3574,8 +3641,8 @@ if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
   }
 } </programlisting></para>
 
-        <para>Then you can externalize it via the
-        ExternalizeManager.<programlisting>Map/*&lt;String,String&gt;*/ headers = new HashMap/*&lt;String,String&gt;*/();
+        <para>Then you can externalize it via the ExternalizeManager.
+        <programlisting>Map/*&lt;String,String&gt;*/ headers = new HashMap/*&lt;String,String&gt;*/();
 headers.put("Content-Disposition", "attachment; filename=" + getFilename() );
 String url = SessionManager.getSession().getExternalizeManager().externalize(pdfDownload, headers);  </programlisting></para>
       </sect2>
@@ -3607,7 +3674,7 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
         this error is logged via the logging mechanism. No other action is
         triggered. However, you can provide the user with an error page. For
         this, you need to provide a parameter in your application's web.xml
-        file, like this:<programlisting>&lt;init-param&gt;
+        file, like this: <programlisting>&lt;init-param&gt;
   &lt;param-name&gt;<emphasis role="bold">wings.error.template</emphasis>&lt;/param-name&gt;
   &lt;param-value&gt;<emphasis role="bold">/templates/ErrorTemplate.thtml</emphasis>&lt;/param-value&gt;
 &lt;/init-param&gt;</programlisting></para>
@@ -3653,20 +3720,21 @@ String url = SessionManager.getSession().getExternalizeManager().externalize(pdf
         </listitem>
 
         <listitem>
-          <para>SRootLayout - Set a <code>SFrame</code>'s layout to a custom
+          <para>SRootLayout - Set a <code>SFrame</code> 's layout to a custom
           <code>SRootLayout</code> referencing a template file. The source
           code looks like this. <programlisting>URL url = Thread.currentThread().getContextClassLoader().getResource("layout.thtml");
 frame.setLayout(new SRootLayout(url));</programlisting></para>
 
           <para>Ensure that the template contains the element
-          <code>object</code> with attribute <code>content</code>. This
+          <code>object</code> with attribute <code>content</code> . This
           element will be replaced with the frame's content. <programlisting>&lt;div id="title"&gt;Application Title&lt;/div&gt;
 &lt;hr /&gt;
 <emphasis role="bold">&lt;object name="content"&gt;&lt;/object&gt;</emphasis>
 &lt;hr /&gt;
-&lt;div id="footer"&gt;company, copyright, license notice&lt;/div&gt;</programlisting>This
-          is a convenient way to define XHTML like a border or title appearing
-          on every page, no matter what the content will be like.</para>
+&lt;div id="footer"&gt;company, copyright, license notice&lt;/div&gt;</programlisting>
+          This is a convenient way to define XHTML like a border or title
+          appearing on every page, no matter what the content will be
+          like.</para>
         </listitem>
 
         <listitem>
@@ -3696,12 +3764,12 @@ frame.setLayout(new SRootLayout(url));</programlisting></para>
           <para>Beginning with Tomcat version 5.0 a new default session
           manager was introduced, called
           <code>SimpleTcpReplicationManager</code> (a subclass of
-          <code>StandardManager</code>). It attempts to load the persistence
+          <code>StandardManager</code> ). It attempts to load the persistence
           storage on application startup and produces a warning-level
-          exception looking like this:<programlisting>SEVERE: Exception loading sessions from persistent storage
+          exception looking like this: <programlisting>SEVERE: Exception loading sessions from persistent storage
 java.io.WriteAbortedException: writing aborted;
 java.io.NotSerializableException:
-org.apache.catalina.loader.WebappClassLoader</programlisting>To use the the
+org.apache.catalina.loader.WebappClassLoader</programlisting> To use the the
           non-clustered session manager use the following section in your web
           application's context definition in /META-INF/context.xml.</para>
 
@@ -3758,7 +3826,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the the
       <para>Therefore wingS gives you the power to detect and control the
       behaviour of back button events. The approach relies on our epoch
       checking mechanism. It enables you to handle the browsers back button
-      navigation in three different ways:<orderedlist>
+      navigation in three different ways: <orderedlist>
           <listitem>
             <para><emphasis role="bold">Default behaviour</emphasis> - ignore
             requests from old views and redisplay just the current view</para>
@@ -3810,7 +3878,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the the
 
         <para>Another approach supported by wingS is to allow back navigation
         and support operations on hand-selected components. In this case three
-        things must be triggered.<itemizedlist>
+        things must be triggered. <itemizedlist>
             <listitem>
               <para>Firstly, SForm needs to use HTTP GET to avoid the nagging
               confirmation dialog of the browsers on back navigations.</para>
@@ -3832,7 +3900,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the the
 
               <para><code>anAlwaysValidComponent.setEpochCheckEnabled(false);</code></para>
             </listitem>
-          </itemizedlist>On disabling the epoch check on a component you
+          </itemizedlist> On disabling the epoch check on a component you
         should be aware that consequently this component might receive input
         events at any time from developer's perspective. You must ensure that
         the action triggered will always lead to valid actions in your
@@ -3850,7 +3918,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the the
         a quick look behind the scenes.</para>
 
         <para>As mentioned wingS uses the epoch check feature to detect back
-        operations. For this operation mode we do the following:<itemizedlist>
+        operations. For this operation mode we do the following: <itemizedlist>
             <listitem>
               <para>Advise the browser to reload every page immediately
               (default).</para>
@@ -3897,7 +3965,7 @@ org.apache.catalina.loader.WebappClassLoader</programlisting>To use the the
       <para>Is that acceptance by the user an excuse for not trying to improve
       this? No. In fact, there are several fascinating initiatives<footnote>
           <para>Currently the wingS team is integrating the <ulink
-          url="http://www.getahead.ltd.uk/dwr/">DWR</ulink> framework into
+          url="http://www.getahead.ltd.uk/dwr/"> DWR</ulink> framework into
           wingS. Have a look at the WingSet demo.</para>
         </footnote> determined to improve the latency of web
       applications.</para>
@@ -3992,7 +4060,7 @@ private class SDropLabel extends SLabel implements DropTarget {
   public List getComponentDropListeners() {
     return componentDropListeners;
   }
-}</programlisting>The wingSet demo contains a comlete example exploring the
+}</programlisting> The wingSet demo contains a comlete example exploring the
       drag and drop feature.</para>
     </sect1>
 
@@ -4013,7 +4081,7 @@ private class SDropLabel extends SLabel implements DropTarget {
 
         <para>The code should be generated with the components' names (if
         available) instead of the generated IDs. This makes it easier to
-        identify events in the recording:<programlisting>&lt;init-param&gt;
+        identify events in the recording: <programlisting>&lt;init-param&gt;
   &lt;param-name&gt;wings.event.usenames&lt;/param-name&gt;
   &lt;param-value&gt;true&lt;/param-value&gt;
 &lt;/init-param&gt;
@@ -4025,7 +4093,7 @@ private class SDropLabel extends SLabel implements DropTarget {
         <para>If a component has a name (name property of SComponent), the
         component receives events for this name as well (so-called named
         events). Therefore you must set an application-wide unique name for
-        every component you want to click or modify.<programlisting>SButton button = new SButton("click");
+        every component you want to click or modify. <programlisting>SButton button = new SButton("click");
 button.setName("UniqueName1");</programlisting></para>
       </sect2>
 
@@ -4035,8 +4103,8 @@ button.setName("UniqueName1");</programlisting></para>
         <para>For session recording, you can use any available test tool (for
         example JMeter). Alternatively, there is a servlet filter
         (org.wings.recorder.Recorder), that can be used to generate java
-        sources for a client, that performs the recorded
-        requests:<programlisting>&lt;filter&gt;
+        sources for a client, that performs the recorded requests:
+        <programlisting>&lt;filter&gt;
   &lt;filter-name&gt;Recorder&lt;/filter-name&gt;
   &lt;filter-class&gt;org.wings.recorder.Recorder&lt;/filter-class&gt;
   &lt;init-param&gt;
@@ -4067,7 +4135,7 @@ button.setName("UniqueName1");</programlisting></para>
 
         <para>The playback tool (replay.sh) compiles the source and runs it in
         single-client mode (regression test / functional test) or with n
-        clients in parallel (load test):<programlisting>replay.sh -d 1.0 http://localhost:8080/wingset/WingSet Recording 20</programlisting></para>
+        clients in parallel (load test): <programlisting>replay.sh -d 1.0 http://localhost:8080/wingset/WingSet Recording 20</programlisting></para>
 
         <para>The playback tool supports slow/fast motion, load ramp, i
         iterations, n parallel clients.</para>
@@ -4089,11 +4157,11 @@ button.setName("UniqueName1");</programlisting></para>
         attributes.</para>
 
         <para>To make a resource (any Java object) available across servlets
-        use the setAttribute() method:<programlisting>ServletContext context = SessionManager.getSession().getServletContext();
+        use the setAttribute() method: <programlisting>ServletContext context = SessionManager.getSession().getServletContext();
 context.setAttribute("app.resource", new SharedResource());</programlisting></para>
 
         <para>Within a second servlet use getAttribute() to retrieve a
-        reference to the resource:<programlisting>ServletContext context = SessionManager.getSession().getServletContext();
+        reference to the resource: <programlisting>ServletContext context = SessionManager.getSession().getServletContext();
 SharedResource resource = context.getAttribute("app.resource");</programlisting></para>
 
         <para>Attention has to be paid to the attribute's namespace, as it
@@ -4135,6 +4203,180 @@ SharedResource resource = context.getAttribute("app.resource");</programlisting>
         ISO-8859-1 encoding. So you need to escape special characters. This
         issue might have been resolved meanwhile.</para>
       </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Spring Integration</title>
+
+      <para>The <ulink url="http://www.springframework.org">Spring
+      Framework</ulink> is used as a way to wire components together, using
+      <ulink url="http://martinfowler.com/articles/injection.html">Inversion
+      of Control and the Dependency Injection</ulink> pattern, while providing
+      many useful features for enterprise application development.</para>
+
+      <para>It could also be used in wingS to hook service objects, data
+      access objects, security, localization and transactional management and
+      so on, transparantly, into the UI framework using a simple XML
+      configuration file. You can also use it to actually assemble the entire
+      user interface part of your application, if you carefully design the UI
+      component object model (i.e assemble panels and forms and so forth into
+      frames).</para>
+
+      <para>As there is no direct support (yet) for bootstrapping and inject
+      components into a wingS application, one has to resort to standard
+      servlet session techniques as described here.</para>
+
+      <para>The first thing you have to do is of course to have a Spring
+      context, and initialize that in the same webapp context as your wingS
+      application.</para>
+
+      <para>Create a default Spring context in
+      <filename>web.xml</filename>:</para>
+
+      <para><programlisting>&lt;listener&gt;
+    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+&lt;/listener&gt;</programlisting></para>
+
+      <para>That context is by default configured by a file named
+      <filename>applicationContext.xml</filename>:</para>
+
+      <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"&gt;
+
+ &lt;bean id="dataSource"
+  class="org.apache.commons.dbcp.BasicDataSource"
+  destroy-method="close"&gt;
+  ...
+ &lt;/bean&gt;
+
+ &lt;bean id="sessionFactory"
+  class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"&gt;
+  &lt;property name="dataSource" ref="dataSource" /&gt;
+  ...
+ &lt;/bean&gt;
+
+ &lt;bean id="transactionManager"
+   class="org.springframework.orm.hibernate3.HibernateTransactionManager"&gt;
+   &lt;property name="sessionFactory" ref="sessionFactory" /&gt;
+ &lt;/bean&gt;
+
+ ...
+
+ &lt;bean name="categoryDao"
+  class="se.curalia.pics.CategoryDao"&gt;
+  &lt;property name="sessionFactory" ref="sessionFactory" /&gt;
+ &lt;/bean&gt;
+
+ &lt;bean name="pictureDao"
+  class="se.curalia.pics.PictureDao"&gt;
+  &lt;property name="sessionFactory" ref="sessionFactory" /&gt;
+ &lt;/bean&gt;
+
+&lt;/beans&gt;</programlisting>Since neither our <code>WingServlet</code>, nor
+      our main wingS class is configured and created by Spring, we need
+      support code in our main class to get to these DAOs. True IoC is
+      therefore never achieved.</para>
+
+      <para>Lets use this snippet of code in our main class:</para>
+
+      <para><programlisting>public class MainApplication {
+ public WebApplicationContext spring;
+
+ public MainApplication() {
+
+   // get the Spring context from one of Springs util classes
+   Session session = SessionManager.getSession();
+   ServletContext ctx = session.getServletContext();
+   spring = WebApplicationContextUtils.getWebApplicationContext(ctx);
+
+   // give the SFrame a reference to our main class
+   MainFrame mainFrame = new MainFrame(this);
+   mainFrame.setVisible(true);
+
+ }
+
+}</programlisting>Where <code>WebApplicationContext</code> is a Spring class
+      repesenting our newly created context. The main class is then passed
+      down the hierachy via reference so that our UI components can use the
+      following code to fetch Spring configured beans like this:</para>
+
+      <para><programlisting>PictureDao pictureDao = (PictureDao)app.spring.getBean("pictureDao");</programlisting>This
+      approach is not very satisfying beacuase of the need to pass around a
+      reference to this main class (or the "spring" property). Another idea is
+      that the main class fetches the relevant Spring beans and it itself
+      "injects" those beans into the SFrame and the other components. This way
+      the components are luckily unaware where the services and daos etc, came
+      from (again, the idea of IoC and DI). However, this may lead to another
+      problem; the main class must know about every bean, component and
+      service it has to wire together, something that our Spring configuration
+      is best at. One could also argue that it is also a violation of the
+      <ulink
+      url="http://en.wikipedia.org/wiki/Separation_of_concerns">Separation of
+      Concern</ulink> paradigm and leads to problems with beans of different
+      scopes (request, session, application etc)</para>
+
+      <para>On the other hand, if we perhaps could let every component
+      themselves decide where, and when, they wanted our Spring beans, we
+      could provide them with a little utility class like this one:</para>
+
+      <para><programlisting>public class Spring {
+
+ private static Object getBean(String name) {
+  Session session = SessionManager.getSession();
+  ServletContext ctx = session.getServletContext();
+
+  WebApplicationContext spring = WebApplicationContextUtils.getWebApplicationContext(ctx);
+
+  return spring.getBean(name);
+ }
+
+ public static CategoryDao getCategoryDao() {
+  return (CategoryDao)getBean("categoryDao");
+ }
+ 
+ public static PictureDao getPictureDao() {
+  return (PictureDao)getBean("pictureDao");
+ }
+}</programlisting>That way, every component can use a simple call like in this
+      example to fetch a Spring bean:</para>
+
+      <para><programlisting>public class PictureTableModel extends AbstractTableModel {
+  PictureDao pictureDao;
+
+  public PictureTableModel() {
+    // get our Spring bean
+    this.pictureDao = Spring.getPictureDao();
+  }
+
+  public int getRowCount() {
+    this.pictureDao.count();
+  }
+
+  ...
+
+}</programlisting>Again, this leads to potential problems. First, the UI
+      component (or <code>the Spring</code> class) must know the name of the
+      bean as configured by Spring and it can't easily be changed. Second, it
+      is not very IoC/DI. your Spring configuration and application
+      development need to be much more integrated than otherwise whould have
+      been needed.</para>
+
+      <para>However, regardless of these problems the benefits of using any of
+      these methods can be, and is, leveraged the more you get into
+      Spring.</para>
+
+      <para>We dont cover the possibilites when combining wingS
+      <code>WingServlet</code> with Springs servlet support here, suffice it
+      to say that then your wingS application can be bootstrapped and
+      configured by Spring and each application can have its own Spring
+      context in addition to this shared context.</para>
+
+      <para>Of course, it doesn't solve all of our problems if not every
+      component is created by Spring. Thats where <ulink
+      url="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</ulink>
+      can could help...</para>
     </sect1>
   </chapter>
 
@@ -4276,20 +4518,21 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       </itemizedlist>
 
       <para>URLs can be entirely arbitrary, in which case use a <ulink
-      url="http://www.j-wings.org/javadoc/org/wings/SimpleURL.html"><code>SimpleURL</code></ulink>
-      (e.g. to refer to another web application), or they can be relative to
-      your web application context in which case use a <code>RequestURL</code>
-      (e.g. for a resource deployed under your web application deployment
-      directory). For further options see <ulink
-      url="http://www.j-wings.org/javadoc/org/wings/externalizer/AbstractExternalizeManager.html"><code>AbstractExternalizeManager</code></ulink>
-      flags. Resources will choose the type which is most suitable for
-      themselves.</para>
+      url="http://www.j-wings.org/javadoc/org/wings/SimpleURL.html">
+      <code>SimpleURL</code></ulink> (e.g. to refer to another web
+      application), or they can be relative to your web application context in
+      which case use a <code>RequestURL</code> (e.g. for a resource deployed
+      under your web application deployment directory). For further options
+      see <ulink
+      url="http://www.j-wings.org/javadoc/org/wings/externalizer/AbstractExternalizeManager.html">
+      <code>AbstractExternalizeManager</code></ulink> flags. Resources will
+      choose the type which is most suitable for themselves.</para>
 
       <section>
         <title>Resource Types</title>
 
-        <para>The following resource classes are provided by
-        wingS:<itemizedlist>
+        <para>The following resource classes are provided by wingS:
+        <itemizedlist>
             <listitem>
               <para><ulink
               url="http://www.j-wings.org/javadoc/org/wings/StaticResource.html"><code>StaticResource</code></ulink>
@@ -4333,14 +4576,14 @@ public MyFoo getSessionHelper(HttpServletRequest request)
 
             <listitem>
               <para><ulink
-              url="http://www.j-wings.org/javadoc/org/wings/DynamicResource.html"><code>DynamicResource</code></ulink>
-              - base class for components whose representation changes, i.e.
-              most user interface widgets. Because of the dynamic nature the
-              URL of these resources is not constant, it is forced to a unique
-              value on each subsequent request by an "epoch counter". This
-              allows wingS to check that a request is for the most current
-              representation of a resource, which is also an important
-              security feature.<itemizedlist>
+              url="http://www.j-wings.org/javadoc/org/wings/DynamicResource.html">
+              <code>DynamicResource</code></ulink> - base class for components
+              whose representation changes, i.e. most user interface widgets.
+              Because of the dynamic nature the URL of these resources is not
+              constant, it is forced to a unique value on each subsequent
+              request by an "epoch counter". This allows wingS to check that a
+              request is for the most current representation of a resource,
+              which is also an important security feature. <itemizedlist>
                   <listitem>
                     <para><ulink
                     url="http://www.j-wings.org/javadoc/org/wings/DynamicCodeResource.html"><code>DynamicCodeResource</code></ulink>
@@ -4412,11 +4655,11 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       parameters, for example, an additional value may be encoded into the
       HTTP request parameter name using a "_" separator. It then passes the
       events on to the listeners using
-      <code>LowLevelEventListener.processLowLevelEvent()</code>. The specific
+      <code>LowLevelEventListener.processLowLevelEvent()</code> . The specific
       widget will then turn this "low level" event into something semantically
       meaningful like a button selection. Widget implementors have to go to
       some trouble to ensure that events fire in the correct order so events
-      are categorised as<itemizedlist>
+      are categorised as <itemizedlist>
           <listitem>
             <para>Low level - the raw events from HTTP request</para>
           </listitem>
@@ -4505,9 +4748,9 @@ public MyFoo getSessionHelper(HttpServletRequest request)
     <title>Resources</title>
 
     <para>The wingS project is hosted by SourceForge at <ulink
-    url="http://sourceforge.net/projects/j-wings">http://sourceforge.net/projects/j-wings</ulink>.
-    Here you find the latest releases, the CVS repository, and our mailing
-    lists.</para>
+    url="http://sourceforge.net/projects/j-wings">
+    http://sourceforge.net/projects/j-wings</ulink>. Here you find the latest
+    releases, the CVS repository, and our mailing lists.</para>
 
     <para>Project members on the mailing lists wingS-users and
     wingS-developers provide fast and thorough answers to your
@@ -4543,9 +4786,12 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       </copyright>
 
       <legalnotice id="gfdl-legalnotice">
-        <para><address>Free Software Foundation, Inc., <street>51 Franklin St, Fifth Floor</street><city>Boston</city>, <state>MA</state>, <postcode>02110-1301, </postcode><country>USA</country></address>Everyone
-        is permitted to copy and distribute verbatim copies of this license
-        document, but changing it is not allowed.</para>
+        <para><address>Free Software Foundation, Inc., <street>51 Franklin 
+          St, Fifth Floor</street><city>Boston</city>, 
+          <state>MA</state>, 
+          <postcode>02110-1301,</postcode><country>USA</country></address>
+        Everyone is permitted to copy and distribute verbatim copies of this
+        license document, but changing it is not allowed.</para>
       </legalnotice>
 
       <releaseinfo>Version 1.2, November 2002</releaseinfo>

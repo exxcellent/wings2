@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,23 +12,7 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SBoxLayout;
-import org.wings.SCheckBox;
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SDimension;
-import org.wings.SFont;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SLabel;
-import org.wings.SList;
-import org.wings.SMenu;
-import org.wings.SMenuBar;
-import org.wings.SMenuItem;
-import org.wings.SPanel;
-import org.wings.STextArea;
-import org.wings.STextField;
+import org.wings.*;
 import org.wings.border.SEmptyBorder;
 
 import javax.swing.*;
@@ -41,7 +24,6 @@ import java.awt.event.ActionListener;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class MenuExample extends WingSetPane {
 
@@ -56,11 +38,16 @@ public class MenuExample extends WingSetPane {
     };
     private ComponentControls controls;
 
+
+    protected SComponent createControls() {
+        controls = new MenuControls();
+        return controls;
+    }
+
     public SComponent createExample() {
 
         menuBar = createMenuBar(HugeTreeModel.ROOT_NODE);
 
-        controls = new MenuControls();
         controls.addControllable(menuBar);
 
         SPanel formPanel = new SPanel();
@@ -103,10 +90,10 @@ public class MenuExample extends WingSetPane {
         mainPanel.add(formPanel);
         mainPanel.add(messagePanel);
 
-        SForm panel = new SForm(new SBorderLayout());
-        panel.add(controls, SBorderLayout.NORTH);
-        panel.add(menuBar, SBorderLayout.CENTER);
-        panel.add(mainPanel, SBorderLayout.SOUTH);
+        SPanel panel = new SPanel(new SBorderLayout());
+        panel.add(menuBar, SBorderLayout.NORTH);
+        panel.add(mainPanel, SBorderLayout.CENTER);
+        panel.setVerticalAlignment(SConstants.TOP_ALIGN);
 
         return panel;
     }
@@ -202,6 +189,7 @@ public class MenuExample extends WingSetPane {
 
     class MenuControls extends ComponentControls {
         public MenuControls() {
+            widthTextField.setText("100%");
             removeGlobalControl(fontComboBox);
             removeGlobalControl(foregroundComboBox);
             removeGlobalControl(backgroundComboBox);

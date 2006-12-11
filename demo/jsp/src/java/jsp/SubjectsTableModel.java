@@ -10,7 +10,6 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class SubjectsTableModel {
     public static final TableModel MODEL = generateTable();

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -21,7 +20,6 @@ import org.wings.text.SDocument;
  * Can be also used as linebreaking label in disabled forms.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class STextArea extends STextComponent {
 

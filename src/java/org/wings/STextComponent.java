@@ -121,9 +121,18 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         processKeyEvents(values);
 
         if (isEditable() && isEnabled()) {
-            if (getText() == null || !getText().equals(values[0])) {
+            String newValue = values[0];
+            if (newValue != null && newValue.length() == 0) {
+                newValue = null;
+            }
+            String text = getText();
+            if (text != null && text.length() == 0) {
+                text = null;
+            }
+
+            if (isDifferent(newValue, text)) {
                 getDocument().setDelayEvents(true);
-                setText(values[0]);
+                setText(newValue);
                 getDocument().setDelayEvents(false);
                 SForm.addArmedComponent(this);
             }

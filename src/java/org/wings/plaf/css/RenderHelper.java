@@ -2,21 +2,19 @@
 
 package org.wings.plaf.css;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.SComponent;
-import org.wings.SPopupMenu;
+import org.wings.SContainer;
 import org.wings.SMenuBar;
 import org.wings.SMenuItem;
-import org.wings.SContainer;
+import org.wings.SPopupMenu;
 import org.wings.resource.ResourceManager;
 import org.wings.script.ScriptListener;
 import org.wings.io.StringBuilderDevice;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A tiny helper class which collects information gained during rendering process and
@@ -25,9 +23,7 @@ import java.io.IOException;
  */
 public final class RenderHelper {
 
-    private static final Log log = LogFactory.getLog(RenderHelper.class);
-
-    private final static boolean ALLOW_COMPONENT_CACHING =  // modify in resource.properties
+    private static final boolean ALLOW_COMPONENT_CACHING =  // modify in resource.properties
             ((Boolean) ResourceManager.getObject("SComponent.renderCache", Boolean.class)).booleanValue();
 
     private final List scripts = new ArrayList();
@@ -35,11 +31,6 @@ public final class RenderHelper {
     private final List menus = new ArrayList();
 
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
-
-    // TODO(he): never used
-    private int horizontalLayoutPadding = 0;
-
-    private int verticalLayoutPadding = 0;
 
     private boolean allowUsageOfCachedInstances = true;
 
@@ -85,7 +76,7 @@ public final class RenderHelper {
             menuItem.putClientProperty("popup", Boolean.TRUE);
             menuItem.write(menueRenderBuffer);
         } catch (IOException e) {
-            log.error("IO Exception during writing into StringBuffer?!?", e);
+            throw new RuntimeException(e); // IMHO can not happen !
         }
     }
 
@@ -123,19 +114,4 @@ public final class RenderHelper {
         return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances && !(component instanceof SContainer);
     }
 
-    public int getHorizontalLayoutPadding() {
-        return horizontalLayoutPadding;
-    }
-
-    public void setHorizontalLayoutPadding(int horizontalLayoutPadding) {
-        this.horizontalLayoutPadding = horizontalLayoutPadding;
-    }
-
-    public int getVerticalLayoutPadding() {
-        return verticalLayoutPadding;
-    }
-
-    public void setVerticalLayoutPadding(int verticalLayoutPadding) {
-        this.verticalLayoutPadding = verticalLayoutPadding;
-    }
 }

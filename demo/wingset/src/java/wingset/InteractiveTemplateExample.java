@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,16 +12,7 @@
  */
 package wingset;
 
-import org.wings.ReloadManager;
-import org.wings.SBorderLayout;
-import org.wings.SButton;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SForm;
-import org.wings.SLabel;
-import org.wings.STemplateLayout;
-import org.wings.STextArea;
-import org.wings.SToolBar;
+import org.wings.*;
 import org.wings.border.SLineBorder;
 import org.wings.template.StringTemplateSource;
 import org.wings.util.SStringBuilder;
@@ -34,7 +24,6 @@ import java.io.InputStreamReader;
 
 /**
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class InteractiveTemplateExample
         extends WingSetPane
@@ -48,8 +37,13 @@ public class InteractiveTemplateExample
     protected Controls controls;
 
 
-    protected SComponent createExample() {
+    protected SComponent createControls() {
         controls = new Controls();
+        controls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        return controls;
+    }
+
+    protected SComponent createExample() {
 
         try {
             java.net.URL templateURL = getSession().getServletContext().getResource(TEMPLATE);
@@ -66,7 +60,7 @@ public class InteractiveTemplateExample
         catch (Exception ex) {
             templateString =
                     "A simple interactive example how to use template layouts:<br/>\n" +
-                    "<input type=textarea column=\"100\" rows=\"20\" name=\"TemplateInput\"/> <br/>\n" +
+                    "<input type=textarea column=\"100\" rows=\"10\" name=\"TemplateInput\"/> <br/>\n" +
                     "<input type=submit text=\"Apply\" name=\"Apply\"/>";
             ex.printStackTrace();
         }
@@ -84,15 +78,13 @@ public class InteractiveTemplateExample
 
         SLabel label = new SLabel("Simple Label");
 
-        SForm form = new SForm();
-        form.setLayout(new STemplateLayout(templateSource));
-        form.add(templateInput, "TemplateInput");
-        form.add(applyButton, "Apply");
-        form.add(label, "Label");
+        SPanel panel = new SPanel();
+        panel.setLayout(new STemplateLayout(templateSource));
+        panel.add(templateInput, "TemplateInput");
+        panel.add(applyButton, "Apply");
+        panel.add(label, "Label");
+        panel.setVerticalAlignment(SConstants.TOP_ALIGN);
 
-        SForm panel = new SForm(new SBorderLayout());
-        panel.add(controls, SBorderLayout.NORTH);
-        panel.add(form, SBorderLayout.CENTER);
         return panel;
     }
 

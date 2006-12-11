@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,15 +13,18 @@
 package org.wings.plaf.css;
 
 
-import org.wings.*;
-import org.wings.util.SStringBuilder;
+import org.wings.SAbstractButton;
+import org.wings.SCheckBox;
+import org.wings.SComponent;
+import org.wings.SIcon;
 import org.wings.io.Device;
 import org.wings.plaf.Update;
 import org.wings.resource.ResourceManager;
-
-import java.io.IOException;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
+import org.wings.util.SStringBuilder;
+
+import java.io.IOException;
 
 public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
 

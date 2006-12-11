@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.plaf.ComponentCG;
 import org.wings.plaf.Update;
 import org.wings.util.SStringBuilder;
 
@@ -108,7 +109,9 @@ public class DefaultReloadManager implements ReloadManager {
     public void notifyCGs() {
         for (Iterator iterator = getDirtyComponents().iterator(); iterator.hasNext();) {
             SComponent component = (SComponent) iterator.next();
-            component.getCG().componentChanged(component);
+            ComponentCG componentCG = component.getCG();
+            if (componentCG != null)
+                componentCG.componentChanged(component);
         }
     }
 

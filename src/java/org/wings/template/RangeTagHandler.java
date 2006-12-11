@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -25,7 +24,6 @@ import java.io.InputStream;
  * A TemplateTagHandler
  *
  * @author <A href="mailto:zeller@think.de">Henner Zeller</A>
- * @version $Revision$
  */
 public class RangeTagHandler extends TemplateTagHandler {
     boolean close_is_missing = false;

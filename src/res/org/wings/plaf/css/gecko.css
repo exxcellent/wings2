@@ -38,6 +38,10 @@ tr {
     -moz-border-radius-bottomleft: 4px;
 }
 
+td.STabbedPane_pane {
+    height: 100%;
+}
+
 /* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
    Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
 img.spacer, img.nopad {
@@ -57,43 +61,11 @@ div, input, select, textarea, table {
     -moz-opacity: 0.8;
 }
 
-/* reworked tag */
-
-
-
 /*pre.label {
     font-family: inherit;
     margin: 0px;
     padding: 0px;
 }*/
-
-/*table.SPanel {
-    border-collapse: collapse;
-}
-
-table.SGridLayout {
-    border-collapse: collapse;
-}*/
-
-/* Style of the Legend label for STitledBorder */
-.STitledBorderLegend {
-    position: relative;
-    top:-1.8em;
-	margin-bottom:-1em;
-    margin-right: 1.0em;
-    margin-left: 1.0em;
-    margin-right: 1.0em;
-    padding-left: 0.4em;
-    padding-right: 0.4em;
-    background-color: inherit;
-    border-left: inherit;
-    border-right: inherit;
-}
-
-/* Style of the surrounding border for a STitledBorder */
-.STitledBorder {
-    margin-top: 1em;
-}
 
 .STree img {
     margin-left: 0px;

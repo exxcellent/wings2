@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -54,7 +53,6 @@ import java.util.StringTokenizer;
  * Helper class that collects static methods usable from CGs.
  *
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
- * @version $Revision$
  */
 public final class Utils {
     /**
@@ -567,7 +565,7 @@ public final class Utils {
     }
 
     /**
-     * Prints an optional attribute. If the String value has a content
+     * Prints an <b>optional</b> attribute. If the String value has a content
      * (value != null && value.length > 0), the attrib is added otherwise
      * it is left out
      */
@@ -577,13 +575,13 @@ public final class Utils {
     }
 
     /**
-     * Prints an optional attribute. If the String value has a content
+     * Prints an <b>optional</b> attribute. If the String value has a content
      * (value != null && value.length > 0), the attrib is added otherwise
      * it is left out
      */
     public static void optAttribute(Device d, String attr, String value)
             throws IOException {
-        if (value != null) {
+        if (value != null && value.length() > 0) {
             d.print(" ").print(attr).print("=\"");
             quote(d, value, true, false, false);
             d.print("\"");
@@ -591,7 +589,19 @@ public final class Utils {
     }
 
     /**
-     * Prints an optional attribute. If the String value has a content
+     * Prints an <b>mandatory</b> attribute. If the String value has a content
+     * (value != null && value.length > 0), the attrib is added otherwise
+     * it is left out
+     */
+    public static void attribute(Device d, String attr, String value) throws IOException {
+            d.print(" ").print(attr).print("=\"");
+            if (value != null)
+               quote(d, value, true, false, false);
+            d.print("\"");
+    }
+
+    /**
+     * Prints an <b>optional</b> attribute. If the String value has a content
      * (value != null && value.length > 0), the attrib is added otherwise
      * it is left out
      */
@@ -621,7 +631,7 @@ public final class Utils {
     }
 
     /**
-     * Prints an optional attribute. If the integer value is greater than 0,
+     * Prints an <b>optional</b> attribute. If the integer value is greater than 0,
      * the attrib is added otherwise it is left out
      */
     public static void optAttribute(Device d, String attr, int value)
@@ -636,7 +646,7 @@ public final class Utils {
     }
 
     /**
-     * Prints an optional attribute. If the dimension value not equals <i>null</i>
+     * Prints an <b>optional</b> attribute. If the dimension value not equals <i>null</i>
      * the attrib is added otherwise it is left out
      */
     public static void optAttribute(Device d, String attr, SDimension value)
@@ -651,7 +661,7 @@ public final class Utils {
     }
 
     /**
-     * Prints all optional attributes that are contained in the
+     * Prints all <b>optional</b> attributes that are contained in the
      * <code>Map</code>. The keys of the map should be instances
      * of <code>String</code> and the values one of the following
      * classes.<br/>
@@ -664,8 +674,8 @@ public final class Utils {
      * <li>org.wings.SDimension</li>
      * </ul>
      *
-     * @param d          The device to print the optional attributes.
-     * @param attributes The optional attributes. The key is the attribute
+     * @param d          The device to print the <b>optional</b> attributes.
+     * @param attributes The <b>optional</b> attributes. The key is the attribute
      *                   name and the value is the attribute value.
      * @throws IOException The exception maybe thrown if an error occurs
      *                     while trying to write to device.
@@ -802,9 +812,13 @@ public final class Utils {
             return d;
         }
         d.print("\n");
-        while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
-            d.print("\t");
-            currentComponent = currentComponent.getParent();
+
+        if (PRINT_PRETTY) {
+            SContainer current = currentComponent.getParent();
+            while (current != null) {
+                d.print("\t");
+                current = current.getParent();
+            }
         }
         return d;
     }
@@ -813,17 +827,19 @@ public final class Utils {
      * Prints a hierarchical idented newline. For each surrounding container of the passed component one ident level.
      */
     public static Device printNewline(final Device d, SComponent currentComponent, int offset) throws IOException {
-        if (currentComponent == null || PRINT_DEBUG == false) // special we save every ms handling for holger ;-)
-        {
+        if (currentComponent == null) // special we save every ms handling for holger ;-)
             return d;
-        }
+
         d.print("\n");
+
         if (PRINT_PRETTY) {
-            while (currentComponent.getParent() != null && currentComponent.getParent().getParent() != null) {
+            SContainer current = currentComponent.getParent();
+            while (current != null) {
                 d.print("\t");
-                currentComponent = currentComponent.getParent();
+                current = current.getParent();
             }
         }
+
         while (offset > 0) {
             d.print("\t");
             offset--;
@@ -1071,10 +1087,13 @@ public final class Utils {
     }
 
     /**
-     * @param device
-     * @param component
-     * @throws IOException
+     * @param insets The inset param to test
+     * @return <code>true</code> if any valid inset greater zero is set
      */
+    public static boolean hasInsets(Insets insets) {
+        return insets != null && (insets.top > 0 || insets.left >0 || insets.right > 0 || insets.bottom > 0);
+    }
+
     public static void optFullSize(Device device, SComponent component) throws IOException {
         SDimension dim = component.getPreferredSize();
         if (dim != null) {
@@ -1097,11 +1116,21 @@ public final class Utils {
     /**
      * Converts a hgap/vgap in according inline css padding style.
      *
-     * @param styles
      * @param insets The insets to generate CSS padding declaration
-     * @return Empty or fille stringbuffer with padding declaration
+     * @return Empty or filled stringbuffer with padding declaration
      */
-    static SStringBuilder createInlineStylesForInsets(SStringBuilder styles, Insets insets) {
+    public static SStringBuilder createInlineStylesForInsets(Insets insets) {
+        return createInlineStylesForInsets(new SStringBuilder(), insets);
+    }
+
+    /**
+     * Converts a hgap/vgap in according inline css padding style.
+     *
+     * @param styles Appender to append inset style.
+     * @param insets The insets to generate CSS padding declaration
+     * @return Empty or filled stringbuffer with padding declaration
+     */
+    public static SStringBuilder createInlineStylesForInsets(SStringBuilder styles, Insets insets) {
         if (insets != null && (insets.top > 0 || insets.left > 0 || insets.right > 0 || insets.bottom > 0)) {
             if (insets.top == insets.left && insets.left == insets.right && insets.right == insets.bottom) {
                 styles.append("padding:").append(insets.top).append("px;");
@@ -1142,7 +1171,7 @@ public final class Utils {
                         return oversize;
                     }
                     else {
-                        return ((Integer)component.getClientProperty("horizontalOversize")).intValue() * 2;
+                        return ((Integer)component.getClientProperty("horizontalOversize")).intValue();
                     }
                 }
             }

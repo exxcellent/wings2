@@ -19,7 +19,6 @@ import java.util.StringTokenizer;
  * by <code>wings.prevent.default.keybindings</code> property.
  *
  * @author hengels
- * @version $Revision$
  */
 class CaptureDefaultBindingsScriptListener extends JavaScriptListener
 {

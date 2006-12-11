@@ -20,6 +20,10 @@ import java.awt.event.ActionListener;
 public class ListBugTest extends WingSetPane {
     public ListBugTest() {    }
 
+    protected SComponent createControls() {
+        return null;
+    }
+
     protected SComponent createExample() {
         SLabel title = new SLabel("Search");
         SButton populate = new SButton("Search");
@@ -38,7 +42,7 @@ public class ListBugTest extends WingSetPane {
         });
 
         SGridLayout gridLayout = new SGridLayout(1);
-        SForm panel = new SForm(gridLayout);
+        SPanel panel = new SPanel(gridLayout);
         panel.setPreferredSize(new SDimension(200, -1));
         gridLayout.setVgap(5);
 

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -51,16 +50,7 @@ public final class DesktopPaneCG extends AbstractComponentCG implements org.wing
         if (!maximized) {
             for (int i = 0; i < componentCount; i++) {
                 SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
-                if (!frame.isClosed() && !frame.isIconified()) {
-                    frame.write(device);
-                }
-            }
-        }
-        device.print("<div class=\"spacer\">&nbsp;</div>");
-        if (!maximized) {
-            for (int i = 0; i < componentCount; i++) {
-                SInternalFrame frame = (SInternalFrame) desktop.getComponent(i);
-                if (!frame.isClosed() && frame.isIconified()) {
+                if (!frame.isClosed()) {
                     frame.write(device);
                 }
             }

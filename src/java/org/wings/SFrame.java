@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,27 +12,33 @@
  */
 package org.wings;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.InputMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.event.InvalidLowLevelEvent;
 import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderListener;
-import org.wings.event.SRequestListener;
 import org.wings.event.SRequestEvent;
+import org.wings.event.SRequestListener;
 import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
-import org.wings.resource.ReloadResource;
 import org.wings.resource.DynamicResource;
+import org.wings.resource.ReloadResource;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
 import org.wings.util.StringUtil;
-
-import javax.swing.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.util.*;
 
 /**
  * The root component of every component hierarchy.
@@ -46,7 +51,6 @@ import java.util.*;
  *
  * @author Holger Engels,
  *         <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SFrame
         extends SRootContainer
@@ -321,8 +325,7 @@ public class SFrame
      * @see #addHeader(Object)
      */
     public void clearHeaders() {
-        List headers = headers();
-        if (!headers.isEmpty()) {
+        if (headers != null) {
         	headers.clear();
         	reload();
         }

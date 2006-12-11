@@ -13,7 +13,6 @@ import java.io.IOException;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class BirdsNestCG
         extends AbstractComponentCG

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -33,7 +32,6 @@ import java.util.Set;
  * that reloads all dirty frames.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class SReloadFrame extends SFrame {
     private final static Log logger = LogFactory.getLog("org.wings");

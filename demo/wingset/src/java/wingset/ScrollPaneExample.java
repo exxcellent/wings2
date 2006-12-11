@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,17 +13,18 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.border.SLineBorder;
 import org.wings.table.SDefaultTableColumnModel;
 import org.wings.table.STableColumn;
 
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class ScrollPaneExample extends WingSetPane
 {
@@ -33,6 +33,12 @@ public class ScrollPaneExample extends WingSetPane
     private STree tree;
     private SList list;
     private SScrollPane scrollPane;
+
+
+    protected SComponent createControls() {
+        controls = new ScrollPaneControls();
+        return controls;
+    }
 
     public SComponent createExample() {
         table = new STable(new TableExample.ROTableModel(15, 42));
@@ -44,17 +50,15 @@ public class ScrollPaneExample extends WingSetPane
 
         scrollPane = new SScrollPane(table);
         scrollPane.setHorizontalExtent(10);
-        scrollPane.setVerticalExtent(20);
+        scrollPane.setVerticalExtent(16);
         scrollPane.getHorizontalScrollBar().setBlockIncrement(3);
         scrollPane.getVerticalScrollBar().setBlockIncrement(3);
+        scrollPane.setBorder(new SLineBorder(Color.GRAY, 1));
+        scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
+        scrollPane.setPreferredSize(SDimension.FULLAREA);
 
-        controls = new ScrollPaneControls();
         controls.addControllable(scrollPane);
-
-        SForm p = new SForm(new SBorderLayout());
-        p.add(controls, SBorderLayout.NORTH);
-        p.add(scrollPane, SBorderLayout.CENTER);
-        return p;
+        return scrollPane;
     }
 
     protected void showInPane(SComponent comp) {
@@ -86,21 +90,10 @@ public class ScrollPaneExample extends WingSetPane
             final SComboBox mode = new SComboBox(scrollpaneModes);
             mode.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    int newMode = mode.getSelectedIndex();
-                    switch (newMode) {
-                    case 0:
-                        scrollPane.setMode(SScrollPane.MODE_SCROLLING);
-                        scrollPane.setPreferredSize(new SDimension("100%", SDimension.AUTO));
-                        break;
-                    case 1:
-                        scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-                        scrollPane.setPreferredSize(new SDimension("100%", "457"));
-                        break;
-                    case 2:
-                        scrollPane.setMode(SScrollPane.MODE_PAGING);
-                        scrollPane.setPreferredSize(new SDimension("100%", SDimension.AUTO));
-                        break;
-                    }
+                    scrollPane.setMode(mode.getSelectedIndex());
+                    scrollPane.setPreferredSize(SDimension.FULLAREA);
+                    widthTextField.setText("100%");
+                    heightTextField.setText("100%");
                 }
             });
 
@@ -194,7 +187,7 @@ public class ScrollPaneExample extends WingSetPane
                 }
             });
 
-            final SCheckBox hideSomeColumns = new SCheckBox("Hide some table columns");
+            final SCheckBox hideSomeColumns = new SCheckBox("Hide some columns");
             hideSomeColumns.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     SDefaultTableColumnModel columnModel = (SDefaultTableColumnModel) table.getColumnModel();

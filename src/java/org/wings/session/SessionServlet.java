@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -54,7 +53,6 @@ import java.util.Map;
  * provides access to the all containing HttpSession.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 final class SessionServlet
         extends HttpServlet
@@ -620,7 +618,8 @@ final class SessionServlet
         try {
             // Try to return HTTP status code 500.
             // In many cases this will be too late (already stream output written)
-            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            if (session.getUserAgent().getBrowserType() != BrowserType.IE)
+                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
             ServletOutputStream out = res.getOutputStream();
             ServletDevice device = new ServletDevice(out);

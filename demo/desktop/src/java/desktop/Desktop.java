@@ -1,5 +1,4 @@
 /*
- * $Id$
  * (c) Copyright 2000 wingS development team.
  *
  * This file is part of the wingS demo (http://j-wings.org).
@@ -33,7 +32,6 @@ import java.io.Reader;
 import java.io.StringWriter;
 /**
  * @author Holger Engels
- * @version $Revision$
  */
 public class Desktop
     implements SConstants

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,29 +33,32 @@ import java.util.Arrays;
  * May be displayed as a HTML form element or as a clickable icon.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SCheckBox extends SAbstractButton {
+	
+	
+	/**
+     * Creates an initially unselected checkbox.
+     */
     public SCheckBox() {
         this(false);
     }
 
     /**
-     * create an initially unselected checkbox with a text-label.
+     * Creates an initially unselected checkbox with a text-label.
+     * 
+     * @param label Text to display
      */
-    public SCheckBox(String text) {
+    public SCheckBox(String label) {
         this(false);
-        setText(text);
+        setText(label);
     }
-
+    
     /**
-     * create a checkbox with a text-label and a state.
+     * Creates a checkbox with a certain state.
+     * 
+     * @param selected Whether the checkbox is initially selected or not.
      */
-    public SCheckBox(String text, boolean selected) {
-        this(selected);
-        setText(text);
-    }
-
     public SCheckBox(boolean selected) {
         setSelected(selected);
 
@@ -66,12 +68,29 @@ public class SCheckBox extends SAbstractButton {
         super.setType(CHECKBOX);
     }
 
+    /**
+     * Creates a checkbox with a text-label and a state.
+     * 
+     * @param label Text to display
+     * @param selected Whether the checkbox is initially selected or not.
+     */
+    public SCheckBox(String label, boolean selected) {
+        this(selected);
+        setText(label);
+    }
+
+    
+
     protected void setGroup(SButtonGroup g) {
         if (g != null) {
             throw new IllegalArgumentException("SCheckBox don`t support button groups, use SRadioButton");
         } // end of if ()
     }
 
+    /**
+     * You cannot change type of checkbox. <p>
+     * Accepts only {@link SAbstractButton#CHECKBOX}
+     */
     public final void setType(String t) {
         if (!CHECKBOX.equals(t))
             throw new IllegalArgumentException("type change not supported, type is fix: checkbox");

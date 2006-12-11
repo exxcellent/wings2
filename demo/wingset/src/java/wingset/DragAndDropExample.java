@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -86,22 +85,26 @@ public class DragAndDropExample extends WingSetPane {
     private int piecesRight;
     private final SLabel statusLabel = new SLabel();
 
-    protected SComponent createExample() {
-        final SForm container = new SForm();
-        final SPanel puzzleContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        final SPanel controlContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        container.setLayout(new SBoxLayout(SBoxLayout.HORIZONTAL));
-        controlContainer.setPreferredSize(new SDimension(150, SDimension.AUTO_INT));
-        controlContainer.setBorder(new SEmptyBorder(0, 20,0,0));
-        controlContainer.setVerticalAlignment(SConstants.CENTER);
 
-        // control components
+    protected SComponent createControls() {
         final SButton resetButton = new SButton("Reset");
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 resetPuzzle();
             }
         });
+        resetButton.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        return resetButton;
+    }
+
+    protected SComponent createExample() {
+        final SPanel container = new SPanel();
+        final SPanel puzzleContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        final SPanel controlContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        container.setLayout(new SBoxLayout(SBoxLayout.HORIZONTAL));
+        controlContainer.setPreferredSize(new SDimension(150, SDimension.AUTO_INT));
+        controlContainer.setBorder(new SEmptyBorder(0, 20,0,0));
+        controlContainer.setVerticalAlignment(SConstants.CENTER);
 
         // initialize the drag components
         for (int i = 0; i < dragIcons.length; i++) {
@@ -172,7 +175,6 @@ public class DragAndDropExample extends WingSetPane {
         puzzleContainer.add(pieces);
         
         controlContainer.add(statusLabel);
-        controlContainer.add(resetButton);
         
         container.add(puzzleContainer);
         container.add(controlContainer);

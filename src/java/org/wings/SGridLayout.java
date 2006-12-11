@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -20,7 +19,6 @@ import java.util.List;
  * Swing-like grid layout.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SGridLayout extends SAbstractLayoutManager {
     protected ArrayList components = new ArrayList(2);

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,6 +13,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.border.*;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
 import org.wings.event.SMouseEvent;
@@ -31,7 +31,6 @@ import java.util.*;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class TableExample
         extends WingSetPane {
@@ -60,8 +59,13 @@ public class TableExample
     private TableControls controls;
     private boolean consume = false;
 
-    public SComponent createExample() {
+
+    protected SComponent createControls() {
         controls = new TableControls();
+        return controls;
+    }
+
+    public SComponent createExample() {
 
         table = new STable(new MyTableModel(7, 5));
         table.setName("tableExample");
@@ -82,16 +86,18 @@ public class TableExample
 
         table.addMouseListener(new SMouseListener() {
             public void mouseClicked(SMouseEvent e) {
-                if (consume && table.getColumnForLocation(e.getPoint()) == 1)
+                if (consume && table.columnAtPoint(e.getPoint()) == 1)
                     e.consume();
-                clicks.setText("clicked " + e.getPoint().getCoordinates());
+                clicks.setText("clicked " + e.getPoint());
             }
         });
 
-        SForm panel = new SForm(new SBorderLayout());
-        panel.add(controls, SBorderLayout.NORTH);
+        table.setVerticalAlignment(SConstants.TOP_ALIGN);
+
+        SPanel panel = new SPanel(new SBorderLayout());
         panel.add(table, SBorderLayout.CENTER);
         panel.add(clicks, SBorderLayout.SOUTH);
+        panel.setVerticalAlignment(SConstants.TOP_ALIGN);
         return panel;
     }
 
@@ -302,6 +308,8 @@ public class TableExample
         private final String[] SELECTION_MODES = new String[]{"no", "single", "multiple"};
 
         public TableControls() {
+            widthTextField.setText("100%");
+            
             final SCheckBox editable = new SCheckBox("editable");
             editable.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -312,7 +320,7 @@ public class TableExample
                 }
             });
 
-            final SCheckBox consume = new SCheckBox("Consume events on 'col 1'");
+            final SCheckBox consume = new SCheckBox("consume events on col 1");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the table anymore");
             consume.addActionListener(new java.awt.event.ActionListener() {
@@ -358,7 +366,7 @@ public class TableExample
                 }
             });
             oddColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel(" odd row"));
+            addControl(new SLabel(" odd"));
             addControl(oddColor);
 
             final SComboBox evenColor = new SComboBox(COLORS);
@@ -369,10 +377,10 @@ public class TableExample
                 }
             });
             evenColor.setRenderer(new ObjectPairCellRenderer());
-            addControl(new SLabel(" even row"));
+            addControl(new SLabel(" even"));
             addControl(evenColor);
 
-            final SCheckBox reverseColumnOrder = new SCheckBox("Reverse column order");
+            final SCheckBox reverseColumnOrder = new SCheckBox("reverse columns");
             reverseColumnOrder.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     STableColumnModel columnModel = table.getColumnModel();
@@ -382,7 +390,7 @@ public class TableExample
             });
             addControl(reverseColumnOrder);
 
-            final SCheckBox hideSomeColumns = new SCheckBox("Hide some Columns");
+            final SCheckBox hideSomeColumns = new SCheckBox("hide some columns");
             hideSomeColumns.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     SDefaultTableColumnModel columnModel = (SDefaultTableColumnModel) table.getColumnModel();

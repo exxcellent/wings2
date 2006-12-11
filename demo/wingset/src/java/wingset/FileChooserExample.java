@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,19 +12,7 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SButton;
-import org.wings.SCardLayout;
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SFileChooser;
-import org.wings.SFileIcon;
-import org.wings.SFlowDownLayout;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.STextArea;
+import org.wings.*;
 import org.wings.border.SEmptyBorder;
 import org.wings.util.SStringBuilder;
 
@@ -40,12 +27,11 @@ import java.io.IOException;
 
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class FileChooserExample
         extends WingSetPane
 {
-    final static Color WARN_COLOR = new Color(255, 255, 127);
+    static final Color WARN_COLOR = new Color(255, 255, 127);
 
     /**
      * the file chooser that gets the files.
@@ -84,17 +70,20 @@ public class FileChooserExample
     File previousFile;
     private FileChooserControls controls;
 
-    public SComponent createExample() {
+
+    protected SComponent createControls() {
         controls = new FileChooserControls();
+        return controls;
+    }
 
-        SForm p = new SForm(new SBorderLayout());
-
-        p.add(controls, SBorderLayout.NORTH);
-        p.add(createUpload(), SBorderLayout.WEST);
-        p.add(createPreview(), SBorderLayout.CENTER);
+    public SComponent createExample() {
+        SPanel panel = new SPanel(new SBorderLayout());
+        panel.add(createUpload(), SBorderLayout.WEST);
+        panel.add(createPreview(), SBorderLayout.CENTER);
+        panel.setVerticalAlignment(SConstants.TOP_ALIGN);
 
         controls.addControllable(chooser);
-        return p;
+        return panel;
     }
 
     protected String getText(File f) {
@@ -121,16 +110,16 @@ public class FileChooserExample
         }
         try {
             if (chooser.getFileType().startsWith("text/")) {
-                textArea.setText(getText(chooser.getFile()));
+                textArea.setText(getText(chooser.getSelectedFile()));
                 contentSwitcher.show(textForm);
             } else if (chooser.getFileType().startsWith("image/")) {
-                iconLabel.setIcon(new SFileIcon(chooser.getFile(), null,
+                iconLabel.setIcon(new SFileIcon(chooser.getSelectedFile(), null,
                         chooser.getFileType()));
                 contentSwitcher.show(iconLabel);
             } else {
                 contentSwitcher.show(unknownLabel);
             }
-            previousFile = chooser.getFile();
+            previousFile = chooser.getSelectedFile();
         } catch (Exception ex) {
             contentSwitcher.show(unknownLabel);
         }
@@ -214,13 +203,13 @@ public class FileChooserExample
         submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (chooser.getFile() != null) {
+                    if (chooser.getSelectedFile() != null) {
                         message.setText("OK");
                         message.setBackground(null);
                         filename.setText(chooser.getFileName());
                         fileid.setText(chooser.getFileId());
                         filetype.setText(chooser.getFileType());
-                        size.setText("" + chooser.getFile().length());
+                        size.setText("" + chooser.getSelectedFile().length());
                         adaptPreview();
                     } else {
                         message.setText("No file chosen");

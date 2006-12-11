@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -60,6 +59,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         device.print("<span><select size=\"1\" wrapping=\"1\"");
 
         writeAllAttributes(device, component);
+
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
         Utils.writeEvents(device, component, null);

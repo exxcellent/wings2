@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -16,8 +15,6 @@ package org.wings.border;
 import org.wings.ReloadManager;
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.session.BrowserType;
-import org.wings.session.SessionManager;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
@@ -29,7 +26,6 @@ import java.awt.*;
  * interface.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public abstract class SAbstractBorder
     implements SBorder
@@ -83,7 +79,10 @@ public abstract class SAbstractBorder
     }
 
     /**
-     * set the insets of the border
+     * Set the insets/padding of the border.
+     * <p>
+     * <b>NOTE:</b> Some platforms (namely: Microsoft Internet Explorer) do not support padding in
+     * rare components as they require a workaround.
      */
     public void setInsets(Insets insets) {
         this.insets = insets;
@@ -193,10 +192,14 @@ public abstract class SAbstractBorder
                     attributes.put(CSSProperty.PADDING, insets.top + "px");
                 }
                 else {
-                    attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
-                    attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
-                    attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
-                    attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
+                    if (insets.top > 0)
+                        attributes.put(CSSProperty.PADDING_TOP, insets.top + "px");
+                    if (insets.left > 0)
+                        attributes.put(CSSProperty.PADDING_LEFT, insets.left + "px");
+                    if (insets.right > 0)
+                        attributes.put(CSSProperty.PADDING_RIGHT, insets.right + "px");
+                    if (insets.bottom > 0)
+                        attributes.put(CSSProperty.PADDING_BOTTOM, insets.bottom + "px");
                 }
             }
 

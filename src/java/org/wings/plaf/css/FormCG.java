@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,9 +13,7 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SForm;
+import org.wings.*;
 import org.wings.io.Device;
 import java.io.IOException;
 
@@ -24,21 +21,22 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
 
     private static final long serialVersionUID = 1L;
 
-    public void writeInternal(final Device device, final SComponent c) throws IOException {
-        final SForm component = (SForm) c;
+    public void writeInternal(final Device device, final SComponent component) throws IOException {
+        final SForm container = (SForm) component;
+        SLayoutManager layout = container.getLayout();
 
         device.print("<form method=\"");
-        if (component.isPostMethod()) {
+        if (container.isPostMethod()) {
             device.print("post");
         } else {
             device.print("get");
         }
         device.print("\"");
-        writeAllAttributes(device, component);
-        Utils.optAttribute(device, "name", component.getName());
-        Utils.optAttribute(device, "enctype", component.getEncodingType());
-        Utils.optAttribute(device, "action", component.getRequestURL());
-        Utils.writeEvents(device, component, null);
+        writeAllAttributes(device, container);
+        Utils.optAttribute(device, "name", container.getName());
+        Utils.optAttribute(device, "enctype", container.getEncodingType());
+        Utils.optAttribute(device, "action", container.getRequestURL());
+        Utils.writeEvents(device, container, null);
 
         /*
         * we render two icons into the page that captures pressing simple 'return'
@@ -59,7 +57,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         * so it fell back to the old behaviour. So changed that style to no-padding,
         * no-margin, no-whatever (HZ).
         */
-        final String defaultButtonName = component.getDefaultButton() != null ? Utils.event(component.getDefaultButton()) : "capture_enter";
+        final String defaultButtonName = container.getDefaultButton() != null ? Utils.event(container.getDefaultButton()) : "capture_enter";
         device.print(" onSubmit=\"wingS.request.submitForm(" + !component.isReloadForced() + ", event); return false;\">");
         device.print("<input type=\"image\" name=\"").print(defaultButtonName).print("\" border=\"0\" ");
         Utils.optAttribute(device, "src", getBlindIcon().getURL());
@@ -67,18 +65,34 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
 
         // Not sure: Think this was for optionally expiring old GET views?!
         device.print("<input type=\"hidden\" name=\"");
-        Utils.write(device, Utils.event(component));
+        Utils.write(device, Utils.event(container));
         device.print("\" value=\"");
-        Utils.write(device, component.getName());
+        Utils.write(device, container.getName());
         device.print(SConstants.UID_DIVIDER);
         device.print("\" />");
 
-        device.print("<table");
-        Utils.printCSSInlineFullSize(device, component.getPreferredSize());
+        SDimension preferredSize = container.getPreferredSize();
+        String height = preferredSize != null ? preferredSize.getHeight() : null;
+        boolean clientLayout = isMSIE(container) && height != null && !"auto".equals(height)
+            && (layout instanceof SBorderLayout || layout instanceof SGridBagLayout);
+
+        String tableName = container.getName() + "_table";
+        device.print("<table id=\"");
+        device.print(tableName);
+        device.print("\"");
+
+        if (clientLayout) {
+            device.print(" style=\"width:100%\"");
+            Utils.optAttribute(device, "layoutHeight", height);
+            container.getSession().getScriptManager().addScriptListener(new LayoutFillScript(tableName));
+        }
+        else
+            Utils.printCSSInlineFullSize(device, container.getPreferredSize());
+
         device.print(">");
 
         // Render the container itself
-        Utils.renderContainer(device, component);
+        Utils.renderContainer(device, container);
 
         device.print("</table>");
 

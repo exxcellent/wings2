@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,10 +13,7 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SIcon;
-import org.wings.STabbedPane;
+import org.wings.*;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.session.Browser;
@@ -69,6 +65,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
     public void writeInternal(final Device device, final SComponent component)
             throws java.io.IOException {
+
         final STabbedPane tabbedPane = (STabbedPane) component;
         if (tabbedPane.getTabCount() > 0) {
             final int placement = tabbedPane.getTabPlacement();
@@ -76,17 +73,38 @@ public class TabbedPaneCG extends AbstractComponentCG {
             SStringBuilder tabArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_TABS));
             SStringBuilder contentArea = Utils.inlineStyles(component.getDynamicStyle(STabbedPane.SELECTOR_CONTENT));
 
+            SDimension preferredSize = component.getPreferredSize();
+            String height = preferredSize != null ? preferredSize.getHeight() : null;
+            boolean clientLayout = isMSIE(component) && height != null && !"auto".equals(height)
+                && (placement == SConstants.TOP || placement == SConstants.BOTTOM);
+
             device.print("<table");
+
+            if (clientLayout) {
+                Utils.optAttribute(device, "layoutHeight", height);
+                preferredSize.setHeight(null);
+            }
+
             writeAllAttributes(device, component);
             Utils.writeEvents(device, tabbedPane, null);
+
+            if (clientLayout) {
+                preferredSize.setHeight(height);
+                component.getSession().getScriptManager().addScriptListener(new LayoutFillScript(component.getName()));
+            }
+
             device.print(">");
 
             if (placement == SConstants.TOP) {
                 device.print("<tr><th");
             } else if (placement == SConstants.LEFT) {
                 device.print("<tr><th");
-            } else {
+            } else if (placement == SConstants.RIGHT) {
                 device.print("<tr><td");
+                Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
+            } else if (placement == SConstants.BOTTOM) {
+                device.print("<tr yweight=\"100\" oversize=\"2\"");
+                device.print("><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
             }
 
@@ -109,7 +127,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
             }
 
             if (placement == SConstants.TOP) {
-                device.print("</th></tr><tr><td");
+                device.print("</th></tr>\n<tr yweight=\"100\" oversize=\"2\"><td");
                 Utils.printTableCellAlignment(device, tabbedPane.getSelectedComponent(), SConstants.LEFT, SConstants.TOP);
                 Utils.optAttribute(device, "style", contentArea);
             } else if (placement == SConstants.LEFT) {
@@ -120,7 +138,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("</td><th");
                 Utils.optAttribute(device, "style", tabArea);
             } else if (placement == SConstants.BOTTOM) {
-                device.print("</td></tr><tr><th");
+                device.print("</td></tr>\n<tr><th");
                 Utils.optAttribute(device, "style", tabArea);
             }
 
@@ -188,9 +206,6 @@ public class TabbedPaneCG extends AbstractComponentCG {
             }
 
             final SStringBuilder cssClassName = new SStringBuilder("STabbedPane_Tab_");
-            if (tabbedPane.getShowAsFormComponent()) {
-                cssClassName.append("button_");
-            }
             cssClassName.append(placements.get(new Integer(tabbedPane.getTabPlacement())));
             if (i == tabbedPane.getSelectedIndex()) {
                 cssClassName.append(" STabbedPane_Tab_selected");

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -29,23 +28,49 @@ import org.wings.plaf.RadioButtonCG;
  * </form>
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SRadioButton
         extends SAbstractButton {
+	
+	/**
+     * Creates an unselected radio button.
+     * 
+     */
     public SRadioButton() {
-        setType(RADIOBUTTON);
+        setType(RADIOBUTTON);        
     }
 
+    /**
+     * Creates a unselected radio button with an initial text.
+     * 
+     * @param label Text to display
+     */
     public SRadioButton(String label) {
         super(label, RADIOBUTTON);
     }
 
+    /**
+     * Creates a radio button with a certain state.
+     * 
+     * @param selected Whether the radio button is initially selected or not.
+     */
     public SRadioButton(boolean selected) {
         this();
         setSelected(selected);
     }
 
+    /**
+     * Creates a radio button with a text-label and a state.
+     * 
+     * @param label Text to display
+     * @param selected Whether the radio button is initially selected or not.
+     */
+    public SRadioButton(String label, boolean selected) {
+        this(selected);
+        setText(label);
+    }
+
+    
     public String getLowLevelEventId() {
         if (getGroup() != null && getShowAsFormComponent()) {
             return getGroup().getComponentId();
@@ -54,6 +79,10 @@ public class SRadioButton
         } // end of if ()
     }
 
+    /**
+     * You cannot change type of radio button. <p>
+     * Accepts only {@link SAbstractButton#RADIOBUTTON}
+     */
     public void setType(String t) {
         if (!RADIOBUTTON.equals(t))
             throw new IllegalArgumentException("type change not supported, type is fix: radiobutton");

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * (c) Copyright 2000 wingS development team.
  *
  * This file is part of the wingS demo (http://j-wings.org).
@@ -52,7 +51,6 @@ import java.util.Map;
  * effect. We could use javascript again, to trigger the required form submit.
  *
  * @author Holger Engels
- * @version $Revision$
  */
 public class Editor
     extends Bird

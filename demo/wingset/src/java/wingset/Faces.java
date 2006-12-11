@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,7 +33,6 @@ import java.util.Random;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class Faces extends WingSetPane {
     static final SIcon sel = new SURLIcon("../icons/RadioButtonSelectedIcon.gif");
@@ -62,7 +60,13 @@ public class Faces extends WingSetPane {
 
     SButtonGroup hairGroup;
     SButtonGroup eyeGroup;
+
     SButtonGroup mouthGroup;
+
+
+    protected SComponent createControls() {
+        return null;
+    }
 
     public SComponent createExample() {
         SPanel panel = new SPanel();
@@ -80,7 +84,7 @@ public class Faces extends WingSetPane {
         final SLabel eye = new SLabel();
         final SLabel mouth = new SLabel();
 
-        SForm shuffleForm = new SForm();
+        SPanel shuffleForm = new SPanel();
         SButton shuffleButton = new SButton("Shuffle");
         shuffleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {

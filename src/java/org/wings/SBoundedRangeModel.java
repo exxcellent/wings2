@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -19,7 +18,6 @@ import javax.swing.*;
  * For slider based, bounded components like {@link SScrollBar} and {@link SPageScroller}  
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public interface SBoundedRangeModel extends BoundedRangeModel, SDelayedEventModel {
 }

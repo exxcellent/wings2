@@ -9,7 +9,6 @@ import org.wings.SFrame;
  *
  * @author ole
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
- * @version $Revision$
  */
 public class SParentFrameEvent extends SComponentEvent {
     /**

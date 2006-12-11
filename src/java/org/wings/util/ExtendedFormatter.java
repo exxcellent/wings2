@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -25,7 +24,7 @@ public class ExtendedFormatter
     private DateFormat dateFormatter;
 
     public ExtendedFormatter() {
-        dateFormatter = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
+        dateFormatter = new SimpleDateFormat("yyyyMMdd hh:mm:ss,S");
     }
 
     public String format(LogRecord record) {

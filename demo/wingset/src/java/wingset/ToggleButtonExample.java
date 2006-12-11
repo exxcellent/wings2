@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,7 +33,6 @@ import java.util.Iterator;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class ToggleButtonExample
         extends WingSetPane
@@ -55,14 +53,14 @@ public class ToggleButtonExample
         }
     };
 
-    public SComponent createExample() {
-        controls = new ButtonControls();
-        SContainer p = createButtonExample();
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(p, SBorderLayout.CENTER);
-        return form;
+    protected SComponent createControls() {
+        controls = new ButtonControls();
+        return controls;
+    }
+
+    public SComponent createExample() {
+        return createButtonExample();
     }
 
     SContainer createButtonExample() {

@@ -1,5 +1,4 @@
  /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -15,9 +14,7 @@ package org.wings;
 
 import java.awt.Color;
 import java.awt.Rectangle;
-import java.util.EventObject;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -120,7 +117,18 @@ public class STable extends SComponent
      */
     protected final HashMap renderer = new HashMap();
 
+    /**
+     * If this table is editable, clicks on table cells will be catched and interpreted as 
+     * editor calls. Otherwise they may result in a selection event if {@link #isSelectable()}
+     */
     protected boolean editable = true;
+
+    /**
+     * If this table is marked as selectable, clicks on non-editable table cells will
+     * be catched and interpreted as selection calls.
+     */
+    protected boolean selectable = true;
+
 
     /**
      * <p>If editing, this is the <code>SComponent</code> that is handling the editing.
@@ -133,6 +141,7 @@ public class STable extends SComponent
      */
     transient protected STableCellEditor cellEditor;
 
+    transient protected LowLevelEventListener cellEditorComponent;
     /**
      * <p>Identifies the column of the cell being edited.</p>
      */
@@ -238,7 +247,7 @@ public class STable extends SComponent
     private String[] lastReceivedLowLevelEvents;
 
     /**
-     * Helper variable for {@link #nameCellComponent(SComponent, int, int)}
+     * Helper variable for {@link #nameRendererComponent(SComponent, int, int)}
      */
     private SStringBuilder nameBuffer = new SStringBuilder();
 
@@ -440,11 +449,18 @@ public class STable extends SComponent
         }
     }
 
+    // check fireIntermediateEvents !
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
-        this.lastReceivedLowLevelEvents = values;
+        if (isEditing() && action.indexOf("_e_") != -1 && cellEditorComponent != null) {
+            cellEditorComponent.processLowLevelEvent(action, values);
+        }
+        else
+            this.lastReceivedLowLevelEvents = values;
+
         SForm.addArmedComponent(this);
     }
+
 
     private SCellRendererPane cellRendererPane = new SCellRendererPane();
 
@@ -511,7 +527,8 @@ public class STable extends SComponent
     /**
      * The cell renderer used to render a special selection column needed in cases clicks on table
      * cell cannot be distinguished as 'edit' or 'selection' click.
-     * @return The table cell renderer used to render the selection column
+     * @return The table cell renderer used to render the selection column, or <code>null</code>
+     * if no selection row should be rendered.
      */
     public STableCellRenderer getRowSelectionRenderer() {
         return rowSelectionRenderer;
@@ -520,7 +537,8 @@ public class STable extends SComponent
     /**
      * The cell renderer used to render a special selection column needed in cases clicks on table
      * cell cannot be distinguished as 'edit' or 'selection' click.
-     * @param rowSelectionRenderer The table cell renderer used to render the selection column
+     * @param rowSelectionRenderer The table cell renderer used to render the selection column.
+     *  Set this to <code>null</code> if you don't want to have a selection row in any case
      */
     public void setRowSelectionRenderer(STableCellRenderer rowSelectionRenderer) {
         this.rowSelectionRenderer = rowSelectionRenderer;
@@ -568,8 +586,31 @@ public class STable extends SComponent
                 getValueAt(row, col),
                 isRowSelected(row),
                 row, col);
-        nameCellComponent(tableCellRendererComponent, row, col);
+        nameRendererComponent(tableCellRendererComponent, row, col);
         return tableCellRendererComponent;
+    }
+
+    /**
+     * Generates the name (= id) of the editing component so that
+     * the STable implementation knows to associate the input
+     * value with the correct data row/columns
+     *
+     * Applies the unqique id/name for a component of the rows/column
+     * to the cell component.
+     *
+     * @param component The edit component to rename
+     * @param row Data row of this edit component
+     * @param col Data column of this edit component
+     */
+    protected void nameRendererComponent(final SComponent component, final int row, final int col) {
+        nameBuffer.setLength(0);
+        nameBuffer.append(this.getName()).append('_');
+        if (row == -1)
+            nameBuffer.append('h');
+        else
+            nameBuffer.append(row);
+        nameBuffer.append('_').append(col);
+        component.setNameRaw(nameBuffer.toString());
     }
 
     /**
@@ -584,13 +625,61 @@ public class STable extends SComponent
         return headerRenderer.getTableCellRendererComponent( this, headerValue, false, -1, col );
     }
 
+    /**
+     * If this table is editable, clicks on table cells will be catched and interpreted as
+     * editor calls. Otherwise they may result in a selection event if {@link #isSelectable()}
+     * <p>Defaults to <code>true</code>
+     *
+     * @return <code>true</code> if clicks on editable cell should trigger the cell editor,
+     * <code>false</code> if never.
+     */
     public boolean isEditable() {
         return editable;
     }
 
+    /**
+     * If this table is editable, clicks on table cells will be catched
+     * as {@link org.wings.event.SMouseEvent}s and interpreted as
+     * editor calls. Otherwise they may result in a selection event if {@link #isSelectable()}.
+     * <p>Defaults to <code>true</code>
+     *
+     * @param editable <code>true</code> if clicks on editable cell should trigger the cell editor,
+     * <code>false</code> if never.
+     * @see #isEditable()
+     * @see #processLowLevelEvent(String, String[])
+     * @see #fireIntermediateEvents()
+     */
     public void setEditable(boolean editable) {
         reloadIfChange(this.editable, editable);
         this.editable = editable;
+    }
+
+    /**
+     * If this table is marked as selectable, clicks on a non-editable table cells
+     * {@link #setEditable(boolean)} must be <code>false</code>) will be catched
+     * as {@link org.wings.event.SMouseEvent}s and interpreted as selection calls.
+     * <p>Defaults to <code>true</code>
+     *
+     * @return <code>true</code> if table cell should catch clicks on non-editable tables.
+     */
+    public boolean isSelectable() {
+        return selectable;
+    }
+
+    /**
+     * If this table is marked as selectable, clicks on a non-editable table cells
+     * {@link #setEditable(boolean)} must be <code>false</code>) will be catched
+     * as {@link org.wings.event.SMouseEvent}s and interpreted as selection calls.
+     * <p>Defaults to <code>true</code>
+     *
+     * @param selectable <code>true</code> if table cell should catch clicks on non-editable tables.
+     * @see #isEditable()
+     * @see #processLowLevelEvent(String, String[])
+     * @see #fireIntermediateEvents() 
+     */
+    public void setSelectable(boolean selectable) {
+        reloadIfChange(this.selectable, selectable);
+        this.selectable = selectable;
     }
 
     /**
@@ -839,10 +928,34 @@ public class STable extends SComponent
      * @param col    the column of the cell to edit, where 0 is the first
      */
     protected SComponent prepareEditor(STableCellEditor editor, int row, int col) {
-        return editor.getTableCellEditorComponent(this,
-                getValueAt(row, col),
-                isRowSelected(row), // true?
-                row, col);
+        SComponent component = editor.getTableCellEditorComponent(this,
+                                                                  getValueAt(row, col),
+                                                                  isRowSelected(row), // true?
+                                                                  row, col);
+        nameEditorComponent(component, row, col);
+        cellEditorComponent = (component instanceof LowLevelEventListener) ? (LowLevelEventListener)component : null;
+
+        return component;
+    }
+
+    /**
+     * Generates the name (= id) of the editing component so that
+     * the STable implementation knows to associate the input
+     * value with the correct data row/columns
+     *
+     * Applies the unqique id/name for a component of the rows/column
+     * to the cell component.
+     *
+     * @param component The edit component to rename
+     * @param row Data row of this edit component
+     * @param col Data column of this edit component
+     */
+    protected void nameEditorComponent(final SComponent component, final int row, final int col) {
+        nameBuffer.setLength(0);
+        nameBuffer.append(this.getName()).append("_e_");
+        nameBuffer.append(row);
+        nameBuffer.append('_').append(col);
+        component.setNameRaw(nameBuffer.toString());
     }
 
     /**
@@ -1098,8 +1211,8 @@ public class STable extends SComponent
 
                 try {
                     SPoint point = new SPoint(value);
-                    int row = getRowForLocation(point);
-                    int col = getColumnForLocation(point);
+                    int row = rowAtPoint(point);
+                    int col = columnAtPoint(point);
 
                     SMouseEvent event = new SMouseEvent(this, 0, point);
                     fireMouseClickedEvent(event);
@@ -1137,7 +1250,14 @@ public class STable extends SComponent
         getSelectionModel().fireDelayedIntermediateEvents();
     }
 
-    public int getRowForLocation(SPoint point) {
+
+    /**
+     * Returns the table row for the passed <code>SPoint</code>
+     * instance received via {@link #addMouseListener(org.wings.event.SMouseListener)}.
+     * @param point The pointed retuned by the mouse event.
+     * @return The row index
+     */
+    public int rowAtPoint(SPoint point) {
         String coordinates = point.getCoordinates();
         int colonIndex = coordinates.indexOf(':');
         if (colonIndex < 0)
@@ -1145,7 +1265,14 @@ public class STable extends SComponent
         return Integer.parseInt(coordinates.substring(0, colonIndex));
     }
 
-    public int getColumnForLocation(SPoint point) {
+    /**
+     * Returns the table column for the passed <code>SPoint</code>
+     * instance received via {@link #addMouseListener(org.wings.event.SMouseListener)}.
+     * @param point The pointed retuned by the mouse event.
+     * @return The column index
+     * @see #rowAtPoint(SPoint)
+     */
+    public int columnAtPoint(SPoint point) {
         String coordinates = point.getCoordinates();
         int colonIndex = coordinates.indexOf(':');
         if (colonIndex < 0)
@@ -1650,29 +1777,6 @@ public class STable extends SComponent
      */
     protected TableModel createDefaultDataModel() {
         return new DefaultTableModel();
-    }
-
-    /**
-     * Generates the name (= id) of the editing component so that
-     * the STable implementation knows to associate the input
-     * value with the correct data row/columns
-     *
-     * Applies the unqique id/name for a component of the rows/column
-     * to the cell component.
-     *
-     * @param component The edit component to rename
-     * @param row Data row of this edit component
-     * @param col Data column of this edit component
-     */
-    protected void nameCellComponent(final SComponent component, final int row, final int col) {
-        nameBuffer.setLength(0);
-        nameBuffer.append(this.getName()).append('_');
-        if (row == -1)
-            nameBuffer.append('h');
-        else
-            nameBuffer.append(row);
-        nameBuffer.append('_').append(col);
-        component.setNameRaw(nameBuffer.toString());
     }
 
     /**

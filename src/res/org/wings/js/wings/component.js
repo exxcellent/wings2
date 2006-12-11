@@ -15,19 +15,18 @@ if (!wingS.component) {
 /**
  * SFormattedTextField JavaScript Code
  */
-function ftextFieldCallback(result) {
+wingS.component.ftextFieldCallback = function(result) {
     var elem = document.getElementById(result[0]);
-    if (!elem) return; // dwr bug
     var data = result[1];
-    if (!data) {
+    var invalid = result[2];
+    if (!elem) return; // dwr bug
+    if (invalid) {
         elem.style.color = '#ff0000';
-    }
-    else {
+    } else {
         elem.style.color = '';
-        elem.value = data;
-        elem.setAttribute("lastValid", data);
     }
-}
+    elem.value = data;
+};
 
 wingS.component.spinnerCallback = function(result) {
     var elem = document.getElementById(result[0]);
@@ -37,4 +36,4 @@ wingS.component.spinnerCallback = function(result) {
         elem.value = data;
         elem.setAttribute("lastValid", data);
     }
-}
+};

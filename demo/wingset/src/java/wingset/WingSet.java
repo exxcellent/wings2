@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -16,15 +15,9 @@ package wingset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.SConstants;
-import org.wings.SFrame;
-import org.wings.SIcon;
-import org.wings.SResourceIcon;
-import org.wings.SRootLayout;
-import org.wings.STabbedPane;
-import org.wings.SURLIcon;
-import org.wings.SButton;
-import org.wings.SBorderLayout;
+import org.wings.*;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
@@ -35,14 +28,13 @@ import java.io.*;
 import java.net.URL;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * The root of the WingSet demo application.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:B.Schmid@eXXcellent.de">Benjamin Schmid</a>
- * @version $Revision$
  */
 public class WingSet implements Serializable {
     /**
@@ -95,72 +87,46 @@ public class WingSet implements Serializable {
         // Create the tabbed pane containing all the wingset example tabs
         tab = new STabbedPane(SConstants.TOP);
         tab.setName("examples");
-
-        // do some global styling of the wingSet application
-        styleWingsetApp();
+        tab.setPreferredSize(new SDimension("100%", "580px"));
 
         tab.add(new WingsImage(), "wingS!");
 
         String dirName = SessionManager.getSession().getServletContext().getRealPath("/WEB-INF/classes/wingset");
-        System.out.println("dirName = " + dirName);
         File dir = new File(dirName);
+
+        List classFileNames = new ArrayList();
+
         String[] exampleClassFileNames = dir.list(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.endsWith("Example.class");
             }
         });
         Arrays.sort(exampleClassFileNames);
-        System.out.println("exampleClassFileNames = " + Arrays.asList(exampleClassFileNames));
-        for (int i = 0; i < exampleClassFileNames.length; i++) {
-            String exampleClassFileName = exampleClassFileNames[i];
-            String exampleClassName = "wingset." + exampleClassFileName.substring(0, exampleClassFileName.length() - ".class".length());
+        classFileNames.addAll(Arrays.asList(exampleClassFileNames));
+
+        if ("TRUE".equals(SessionManager.getSession().getProperty("wingset.include.tests"))) {
+            String[] testClassFileNames = dir.list(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.endsWith("Test.class");
+                }
+            });
+            Arrays.sort(testClassFileNames);
+            classFileNames.addAll(Arrays.asList(testClassFileNames));
+        }
+
+        for (Iterator iterator = classFileNames.iterator(); iterator.hasNext();) {
+            String classFileName = (String)iterator.next();
+            String className = "wingset." + classFileName.substring(0, classFileName.length() - ".class".length());
             try {
-                Class exampleClass = Thread.currentThread().getContextClassLoader().loadClass(exampleClassName);
-                addExample(exampleClass);
+                Class clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+                WingSetPane example = (WingSetPane)clazz.newInstance();
+                tab.add(example, example.getExampleName());
             }
             catch (Throwable e) {
-                System.err.println("Could not load example: " + exampleClassName);
+                System.err.println("Could not load plugin: " + className);
                 e.printStackTrace();
             }
         }
-        // Assemble wingSet
-        /*
-        addExample(LabelExample.class);
-        tab.add(new TextComponentExample(), "Text Component");
-        tab.addTab("Tree", JAVA_CUP_ICON, new TreeExample(), "Tree Tool Tip");
-        tab.add(new OptionPaneExample(), "OptionPane");
-        tab.add(new InternalFrameOptionPaneExample(), "SInternalFrame OptionPane");
-        tab.add(new TableExample(), "Table");
-        tab.add(new ListExample(), "List");
-        tab.add(new ButtonExample(), "Button");
-        tab.add(new ToggleButtonExample(), "ToggleButton");
-        tab.add(new CheckBoxExample(), "CheckBox");
-        tab.add(new RadioButtonExample(), "RadioButton");
-        tab.add(new Faces(), "Faces");
-        tab.add(new FileChooserExample(), "FileChooser");
-        tab.add(new ScrollPaneExample(), "ScrollPane");
-        tab.add(new PageScrollerExample(), "PageScroller");
-        tab.add(new MenuExample(), "Menu");
-        tab.add(new TabbedPaneExample(), "Tabbed Pane");
-        tab.addTab("Template Layout", SMALL_COW_ICON, new TemplateExample(), "Template Layout Manager");
-        tab.add(new InteractiveTemplateExample(), "Interactive Template");
-        tab.add(new ProgressBarExample(), "ProgressBar");
-        tab.add(new MemUsageExample(), "Memory Usage");
-        tab.add(new JavaScriptListenerExample(), "Script Listener");
-        tab.add(new PopupExample(), "Popup Menu");
-        tab.add(new KeyboardBindingsExample(), "Keyboard Bindings");
-        tab.add(new DynamicLayoutExample(), "Dynamic Layouts");
-        tab.add(new BackButtonExample(), "Browser Back");
-        tab.add(new DesktopPaneExample(), "DesktopPane");
-        tab.add(new DragAndDropExample(), "Drag and Drop");
-        tab.add(new SpinnerExample(), "Spinner" );
-        tab.add(new RawTextComponentExample(), "Raw Text Component");
-        tab.add(new ErrorPageExample(), "Error Page");
-        tab.add(new TableNestingExample(), "Limited table nesting (DEVEL)");
-        tab.add(new ListBugTest(), "BUG TODO: In IE List does not appear");
-        tab.add(new XDivisionExample(), "XDivision");
-        tab.add(new YUIxGridExample(), "YUIxGrid" );
-        */
 
         // Add component to content pane using a layout constraint (
         frame.getContentPane().add(tab);
@@ -175,15 +141,30 @@ public class WingSet implements Serializable {
                     styleWingsetApp();
             }
         });
-        switchStyleButton.setBorder(new SEmptyBorder(5, 0, 5, 0));
-        frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
+
+        SButton switchDebugViewButton = new SButton("Toggle AJAX debug view");
+        switchStyleButton.setShowAsFormComponent(false);
+        switchDebugViewButton.addScriptListener(new JavaScriptListener(
+                JavaScriptEvent.ON_CLICK, "toggleDebugView()",
+                "self.toggleDebugView = function() {\n" +
+                "  if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);\n" +
+                "  else wingS.ajax.setDebugViewVisible(true);\n" +
+                "  return false;\n" +
+                "};"
+        ));
+
+        SPanel south = new SPanel();
+        south.setBorder(new SEmptyBorder(5, 0, 5, 0));
+        south.add(switchStyleButton);
+        south.add(new SLabel("  |  "));
+        south.add(switchDebugViewButton);
+
+        styleWingsetApp();
+
+        frame.getContentPane().add(south, SBorderLayout.SOUTH);
+        frame.getContentPane().setPreferredSize(SDimension.FULLAREA);
 
         frame.show();
-    }
-
-    private void addExample(Class exampleClass) throws IllegalAccessException, InstantiationException {
-        WingSetPane example = (WingSetPane)exampleClass.newInstance();
-        tab.add(example, example.getExampleName());
     }
 
     /**

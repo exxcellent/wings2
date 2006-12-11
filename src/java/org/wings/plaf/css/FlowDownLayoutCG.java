@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -37,7 +36,7 @@ public class FlowDownLayoutCG extends FlowLayoutCG {
 
         openLayouterBody(d, layout);
 
-        printLayouterTableBody(d, 1, false, layout.getComponents(), null);
+        printLayouterTableBody(d, layout.getContainer(), 1, layout.getComponents(), new TableCellStyle());
 
         closeLayouterBody(d, layout);
     }

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,25 +12,17 @@
  */
 package org.wings.border;
 
-import org.wings.SFont;
-import org.wings.style.CSSProperty;
-import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSStyleSheet;
-
-import java.awt.*;
-
 /**
  * Adds a border with a title to a component.
  *
- * @version $Revision$
  */
 public class STitledBorder extends SAbstractBorder {
-    private SBorder border;
-
+    //private SBorder border;
     private String title;
 
     /**
      * Constructor for STitledBorder.
+     * @deprecated Nested border in STitledBorder is deprecated
      */
     public STitledBorder(SBorder border) {
         setBorder(border);
@@ -53,8 +44,7 @@ public class STitledBorder extends SAbstractBorder {
      * type is {@link SEtchedBorder}, thickness 2
      */
     public STitledBorder(String title) {
-        this(new SEtchedBorder(SEtchedBorder.LOWERED));
-        border.setThickness(2);
+        this(/*new SEmptyBorder(0,0,0,0)*/ (SBorder) null);
         setTitle(title);
     }
 
@@ -62,19 +52,21 @@ public class STitledBorder extends SAbstractBorder {
      * Gets the border.
      *
      * @return Returns a SBorder
+     * @deprecated Nested border in STitledBorder is deprecated
      */
     public SBorder getBorder() {
-        return border;
+        return null;//border;
     }
 
     /**
      * Sets the border.
      *
      * @param border The border to set
+     * @deprecated Nested border in STitledBorder is deprecated
      */
     public void setBorder(SBorder border) {
-        this.border = border;
-        specs = ((SAbstractBorder)border).specs;
+        //this.border = border;
+        //specs = ((SAbstractBorder)border).specs;
     }
 
     /**

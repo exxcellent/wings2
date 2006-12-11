@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -20,7 +19,6 @@ package org.wings;
  * Use for inserting raw text or even html snipplets.
  * 
  * @author <a href="mailto:ole@freiheit.com">Ole Langbehn</a>
- * @version $Revision$
  */
 public class SRawTextComponent extends SComponent {
 

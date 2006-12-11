@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -17,7 +16,6 @@ package org.wings.event;
  * Empty default implementation of {@link SInternalFrameListener}.
  *
  * @author Holger Engels
- * @version $Revision$
  * @see SInternalFrameEvent
  * @see SInternalFrameListener
  */

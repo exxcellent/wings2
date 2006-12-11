@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -15,7 +14,6 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.SContainer;
 import org.wings.SFlowLayout;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
@@ -39,7 +37,6 @@ public class FlowLayoutCG extends AbstractLayoutCG {
         final Insets insets = convertGapsToInset(layout.getHgap(), layout.getVgap());
         final List components = layout.getComponents();
         final int alignment = layout.getAlignment();
-        final SContainer container = layout.getContainer();
 
         openLayouterBody(d, layout);
         d.print("<tr><td");

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,20 +12,7 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SButton;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SDimension;
-import org.wings.SForm;
-import org.wings.SFormattedTextField;
-import org.wings.SGridLayout;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SPasswordField;
-import org.wings.STextArea;
-import org.wings.STextComponent;
-import org.wings.STextField;
+import org.wings.*;
 import org.wings.border.SLineBorder;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
@@ -44,7 +30,6 @@ import java.text.ParseException;
 
 /**
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
- * @version $Revision$
  */
 public class TextComponentExample extends WingSetPane {
     private final SLabel actionEvent = new SLabel("(no form or button event)");
@@ -53,78 +38,82 @@ public class TextComponentExample extends WingSetPane {
     private SDateFormatter dateFormatter = new SDateFormatter(DateFormat.getDateInstance(DateFormat.SHORT));
 
 
-    public SComponent createExample() {
+    protected SComponent createControls() {
         controls = new TextComponentControls();
+        return controls;
+    }
+
+    public SComponent createExample() {
 
         SGridLayout gridLayout = new SGridLayout(2);
         gridLayout.setHgap(10);
         gridLayout.setVgap(4);
-        SPanel p = new SPanel(gridLayout);
+        SPanel panel = new SPanel(gridLayout);
 
-        p.add(new SLabel("STextField: "));
+        panel.add(new SLabel("STextField: "));
         STextField textField = new STextField();
         textField.setName("textfield");
         textField.setToolTipText("Here you can enter any abritriary text.");
         textField.addDocumentListener(new MyDocumentListener(textField));
-        p.add(textField);
+        textField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(textField);
 
-        p.add(new SLabel("SFormattedTextField (NumberFormat): "));
+        panel.add(new SLabel("SFormattedTextField (NumberFormat): "));
         SFormattedTextField numberTextField = new SFormattedTextField(new NumberFormatter());
         numberTextField.setName("numberfield");
         numberTextField.setToolTipText("Text entered here will be formatted as number when you leave focus.<br>" +
                 "If you entered an invalid number the text should become red.<br>" +
                 "This uses code executed on server side in Java!");
         numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
-        p.add(numberTextField);
+        numberTextField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(numberTextField);
 
-        p.add(new SLabel("SFormattedTextField (DateFormat): "));
+        panel.add(new SLabel("SFormattedTextField (DateFormat): "));
         SFormattedTextField dateTextField = new SFormattedTextField(dateFormatter);
         dateTextField.setName("datefield");
         dateTextField.setToolTipText("Enter a valid/invalid date here.<br>" +
                 "Dates will be parsed on server side and reformatted accordingly.");
         dateTextField.addDocumentListener(new MyDocumentListener(dateTextField));
-        p.add(dateTextField);
+        dateTextField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(dateTextField);
 
-        p.add(new SLabel("SPasswordField: "));
+        panel.add(new SLabel("SPasswordField: "));
         SPasswordField passwordField = new SPasswordField();
         passwordField.setName("passwordfield");
         passwordField.setToolTipText("Just a regular passsword input.");
         passwordField.addDocumentListener(new MyDocumentListener(passwordField));
-        p.add(passwordField);
+        passwordField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(passwordField);
 
-        p.add(new SLabel("STextArea: "));
+        panel.add(new SLabel("STextArea: "));
         STextArea textArea = new STextArea("");
         textArea.setName("textarea");
         textArea.setPreferredSize(new SDimension(250, 50));
         textArea.setToolTipText("Okay - but don't start writing books now ;-)");
         textArea.addDocumentListener(new MyDocumentListener(textArea));
-        p.add(textArea);
+        textArea.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(textArea);
 
-        p.add(new SLabel("SDocumentEvents: "));
-        p.add(eventLog);
+        panel.add(new SLabel("SDocumentEvents: "));
+        panel.add(eventLog);
 
         SLabel actionEventsLabel = new SLabel("ActionEvents (try Submit vs. Enter):");
-        p.add(actionEventsLabel);
-        p.add(actionEvent);
+        panel.add(actionEventsLabel);
+        panel.add(actionEvent);
 
+        panel.add(new SLabel());
         SButton button = new SButton("Submit");
         button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 actionEvent.setText("Button clicked + ");
             }
         });
-        p.add(button);
-
-        SForm frame = new SForm(new SBorderLayout());
-        frame.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                actionEvent.setText(actionEvent.getText() + " Form event");
-            }
-        });
+        button.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(button);
 
         // Styling of all components.
-        for (int i = 0; i < p.getComponents().length; i++) {
-            SComponent component = p.getComponents()[i];
+        for (int i = 0; i < panel.getComponents().length; i++) {
+            SComponent component = panel.getComponents()[i];
             component.setVerticalAlignment(SConstants.TOP);
             if ((component instanceof STextComponent) /*&& (component != disabledTextArea)*/ && (component != textArea))
                 component.setPreferredSize(new SDimension("250px", null));
@@ -133,9 +122,11 @@ public class TextComponentExample extends WingSetPane {
         eventLog.setEditable(false); // for multiline label
         eventLog.setBorder(new SLineBorder(1));
         eventLog.setBackground(Color.LIGHT_GRAY);
+        eventLog.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
         actionEvent.setBorder(new SLineBorder(1));
         actionEvent.setBackground(Color.LIGHT_GRAY);
+        actionEvent.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
         controls.addControllable(textField);
         controls.addControllable(textArea);
@@ -143,11 +134,14 @@ public class TextComponentExample extends WingSetPane {
         controls.addControllable(numberTextField);
         controls.addControllable(dateTextField);
 
-        frame.add(controls, SBorderLayout.NORTH);
-        frame.add(p, SBorderLayout.CENTER);
+        addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                actionEvent.setText(actionEvent.getText() + " Form event");
+            }
+        });
 
         // Clear event log on rendering page
-        frame.addRenderListener(new SRenderListener() {
+        panel.addRenderListener(new SRenderListener() {
             public void doneRendering(SRenderEvent e) {
                 eventLog.setText("");
                 actionEvent.setText("");
@@ -159,7 +153,7 @@ public class TextComponentExample extends WingSetPane {
             }
         });
 
-        return frame;
+        return panel;
     }
 
     /**

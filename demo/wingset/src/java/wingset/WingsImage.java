@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -25,7 +24,6 @@ import org.wings.SURLIcon;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class WingsImage
         extends SPanel {
@@ -34,15 +32,12 @@ public class WingsImage
     public WingsImage() {
         setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
         add(createExample());
-        setPreferredSize(SDimension.FULLWIDTH);
+        setPreferredSize(SDimension.FULLAREA);
+        setVerticalAlignment(SConstants.CENTER_ALIGN);
     }
 
     public SComponent createExample() {
-        SPanel p = new SPanel();
-        final SBorderLayout layout = new SBorderLayout();
-
-        setHorizontalAlignment(SConstants.CENTER);
-        p.setLayout(layout);
+        SPanel p = new SPanel(new SBorderLayout());
 
         SLabel label = new SLabel(WINGS_IMAGE);
         label.setHorizontalAlignment(SConstants.CENTER);
@@ -51,7 +46,6 @@ public class WingsImage
         label = new SLabel("Welcome to");
         label.setHorizontalAlignment(SConstants.CENTER);
         p.add(label, SBorderLayout.NORTH);
-
 
         label = new SLabel("Have fun!");
         label.setHorizontalAlignment(SConstants.CENTER);

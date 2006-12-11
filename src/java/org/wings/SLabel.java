@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -23,7 +22,6 @@ import org.wings.plaf.LabelCG;
  * You can also specify the position of the text relative to the image.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SLabel extends SComponent {
 

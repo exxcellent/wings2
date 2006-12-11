@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -72,7 +71,6 @@ import org.wings.util.SStringBuilder;
  * screen and that can interact with the user.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public abstract class SComponent implements Cloneable, Serializable, Renderable {
 
@@ -832,7 +830,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public void setAttribute(String cssPropertyName, String value) {
         CSSProperty property = new CSSProperty(cssPropertyName);
-        if (CSSProperty.borderProperties.contains(property))
+        if (CSSProperty.BORDER_PROPERTIES.contains(property))
             throw new IllegalArgumentException("Border properties have to be applied to the border!");
         setAttribute(SELECTOR_ALL, property, value);
     }
@@ -846,7 +844,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param propertyValue A valid string value for this CSS property (i.e. <code>red</code> or <code>#fff</code> in our example).
      */
     public void setAttribute(CSSProperty property, String propertyValue) {
-        if (CSSProperty.borderProperties.contains(property))
+        if (CSSProperty.BORDER_PROPERTIES.contains(property))
             throw new IllegalArgumentException("Border properties have to be applied to the border!");
         setAttribute(SELECTOR_ALL, property, propertyValue);
     }

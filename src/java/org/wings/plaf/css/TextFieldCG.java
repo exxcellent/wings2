@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -47,8 +46,8 @@ public class TextFieldCG extends AbstractComponentCG implements
             if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
                 CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter);
             }
-            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR,
-            		"CallableFormatter.validate(wingS.component.ftextFieldCallback, this.id, this.value)"));
+            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';" +
+                    "CallableFormatter.validate(wingS.component.ftextFieldCallback, this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'))"));
         }
         if (isMSIE(comp))
             comp.putClientProperty("horizontalOversize", new Integer(horizontalOversize));
@@ -122,7 +121,9 @@ public class TextFieldCG extends AbstractComponentCG implements
                 textField.setForeground( java.awt.Color.RED );
             }
 
-            String key = callableFormatter.registerTextfield(formattedTextField);
+            SAbstractFormatter formatter = formattedTextField.getFormatter();
+            String key = callableFormatter.registerFormatter(formatter);
+            Utils.optAttribute(device, "formatter", key);
         }
 
         writeAllAttributes(device, component);
@@ -143,47 +144,39 @@ public class TextFieldCG extends AbstractComponentCG implements
     }
 
     public static class CallableFormatter {
-        Map textfields = new WeakHashMap();
-        private final String name = "CallableFormatter";
+        Map formatters = new WeakHashMap();
+        private final String name = new String("CallableFormatter");
 
-        public List validate(String name, String text) {
+        public List validate(String key, String name, String text, String lastValid) {
             String value = "";
-            Boolean isEditValid = new Boolean(true);
-            SFormattedTextField fTextfield = textfieldByName( name );
-            SAbstractFormatter  formatter  = fTextfield.getFormatter();
+            List list = new LinkedList();
+            SAbstractFormatter formatter = formatterByKey(key);
             if ( formatter != null ) {
+                list.add( name );
                 try {
                     value = formatter.valueToString( formatter.stringToValue(text) );
-                    fTextfield.putClientProperty( "lastValid", value );
                 }
                 catch (ParseException e) {
-                    if ( fTextfield.getFocusLostBehavior() == SFormattedTextField.COMMIT_OR_REVERT ) {
-                        String lastValid = (String)fTextfield.getClientProperty( "lastValid" );
-                        if ( lastValid != null ) {
-                            value = lastValid;
-                        } else {
-                            isEditValid = new Boolean(false);
-                        }
-                    } else {
-                        value = text;
-                        isEditValid = new Boolean(false);
-                    }
+                    if (lastValid != null)
+                        value = lastValid;
                 }
             }
-            List list = new LinkedList();
-                list.add( name );
-                list.add( value );
-                list.add( isEditValid );
+            list.add( value );
             return list;
         }
 
-        protected SFormattedTextField textfieldByName(String name) {
-            return (SFormattedTextField)textfields.get( name );
+        protected SAbstractFormatter formatterByKey(String key) {
+            for (Iterator iterator = formatters.keySet().iterator(); iterator.hasNext();) {
+                SAbstractFormatter formatter = (SAbstractFormatter)iterator.next();
+                if (key.equals("" + System.identityHashCode(formatter)))
+                    return formatter;
+            }
+            return null;
         }
 
-        private String registerTextfield(SFormattedTextField fTextfield) {
-            textfields.put(fTextfield.getName(), fTextfield);
-            return "" + System.identityHashCode(fTextfield);
+        private String registerFormatter(SAbstractFormatter formatter) {
+            formatters.put(formatter, formatter);
+            return "" + System.identityHashCode(formatter);
         }
 
         private String getName() {

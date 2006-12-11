@@ -10,7 +10,6 @@ import org.wings.style.CSSProperty;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class NavigationTreeCellRenderer
         extends SDefaultTreeCellRenderer

@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -41,7 +40,6 @@ import org.wings.SDimension;
  * gets this ComponentEvent when the event occurs.
  *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
- * @version $Revision$, $Date$
  * @see org.wings.event.SComponentAdapter
  * @see org.wings.event.SComponentListener
  */

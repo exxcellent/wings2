@@ -470,7 +470,7 @@ wingS.ajax.updateDebugView = function(request) {
     var debugArea = document.getElementById("ajaxDebugView");
     if (debugArea == null) {
         var debugHtmlCode =
-            '<div style="margin-top:50px; padding-bottom:3px;">\n' +
+            '<div align="center" style="margin-top:50px; padding-bottom:3px;">\n' +
             '  <strong>AJAX DEBUG VIEW:</strong> &nbsp;XML RESPONSE\n' +
             '  &nbsp;<span style="font:11px monospace"></span></div>\n' +
             '<textarea readonly="readonly" style="width:100%; height:200px;\n' +

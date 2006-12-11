@@ -8,7 +8,6 @@ import javax.swing.tree.TreeNode;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class NavigationTreeModel {
     public static final TreeNode ROOT_NODE = generateTree();
@@ -47,7 +46,7 @@ public class NavigationTreeModel {
         process.add(activity = new DefaultMutableTreeNode("regulieren"));
 
 
-        // Vorgänge
+        // Vorgï¿½nge
         category = new DefaultMutableTreeNode("<html>Vorg&auml;nge");
         top.add(category);
 

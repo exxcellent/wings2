@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -21,7 +20,6 @@ import java.io.Serializable;
 /**
  * Simple URL representation.
  *
- * @version $Revision$
  */
 public class SimpleURL implements Serializable, Renderable {
     protected String baseURL;

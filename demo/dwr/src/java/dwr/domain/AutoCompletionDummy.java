@@ -14,7 +14,6 @@ import java.util.Iterator;
  * Time: 6:32:02 PM
  *
  * @author Roman R&auml;dle
- * @version $Revision$
  */
 public class AutoCompletionDummy {
 

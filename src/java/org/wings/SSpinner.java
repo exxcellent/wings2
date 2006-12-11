@@ -21,12 +21,6 @@ import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SFormattedTextField;
-import org.wings.SFrame;
-import org.wings.SPanel;
-
 import org.wings.text.SDefaultFormatter;
 import org.wings.text.SNumberFormatter;
 import org.wings.text.SDateFormatter;
@@ -185,12 +179,15 @@ public class SSpinner extends SComponent {
             
             this.spinner = spinner;
 
-	    ftf = new SFormattedTextField( spinner.getValue() ) {
+            ftf = new SFormattedTextField( spinner.getValue() ) {
                 public void processLowLevelEvent(String action, String[] values) {
+                    String text = getText();
                     super.processLowLevelEvent( action, values );
                     SSpinner spinner = getSpinner();
                     if (isEditable() && isEnabled() && spinner != null ) {
-                        spinner.setValue( getValue() );
+                        if ( text == null || !text.equals( values[0] ) ) {
+                            spinner.setValue( getValue() );
+                        }
                     }
                 }
             };

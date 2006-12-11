@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -34,7 +33,6 @@ import java.awt.event.ActionEvent;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class LabelExample extends WingSetPane {
     private static final SIcon WAIT_ICON = new SResourceIcon("org/wings/icons/Wait.gif");
@@ -53,9 +51,13 @@ public class LabelExample extends WingSetPane {
         }
     }
 
-    public SComponent createExample() {
-        controls = new ComponentControls();
 
+    protected SComponent createControls() {
+        controls = new ComponentControls();
+        return controls;
+    }
+
+    public SComponent createExample() {
         final SLabel testLabel = new SLabel("A styled SLabel with an icon");
         testLabel.setHorizontalAlignment(LEFT);
         testLabel.setIcon(WAIT_ICON);
@@ -73,11 +75,7 @@ public class LabelExample extends WingSetPane {
         panel.add(new SLabel());
         panel.add(testLabel);
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(panel, SBorderLayout.CENTER);
-
-        return form;
+        return panel;
     }
 
     private SRadioButton createRadio(SPanel p, String constraint,

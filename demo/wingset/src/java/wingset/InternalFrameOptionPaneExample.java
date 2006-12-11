@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -26,9 +25,13 @@ import java.awt.event.ActionEvent;
  * Time: 08:50:48
  *
  * @author Roman R&auml;dle
- * @version $Revision$
  */
 public class InternalFrameOptionPaneExample extends WingSetPane {
+
+
+    protected SComponent createControls() {
+        return null;
+    }
 
     /**
      * Creates the internal frame option pane content.
@@ -47,7 +50,7 @@ public class InternalFrameOptionPaneExample extends WingSetPane {
         });
         iFrame1.getContentPane().add(button1);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 12; i++) {
             iFrame1.getContentPane().add(new SLabel("Label " + i));
         }
 
@@ -64,7 +67,7 @@ public class InternalFrameOptionPaneExample extends WingSetPane {
         });
         iFrame2.getContentPane().add(button2);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 12; i++) {
             iFrame2.getContentPane().add(new SLabel("Label " + i));
         }
 

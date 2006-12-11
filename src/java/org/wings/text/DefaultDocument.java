@@ -1,6 +1,4 @@
-/* $Id $ */
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,24 +12,21 @@
  */
 package org.wings.text;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.Iterator;
-import java.util.List;
+import org.wings.event.SDocumentEvent;
+import org.wings.event.SDocumentListener;
+import org.wings.util.EditTranscriptGenerator;
+import org.wings.util.SStringBuilder;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.EventListenerList;
 import javax.swing.text.BadLocationException;
-
-import org.wings.event.SDocumentEvent;
-import org.wings.event.SDocumentListener;
-import org.wings.util.SStringBuilder;
-import org.wings.util.EditTranscriptGenerator;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class DefaultDocument implements SDocument {
     private final SStringBuilder buffer = new SStringBuilder();
@@ -67,9 +62,8 @@ public class DefaultDocument implements SDocument {
                 // If there are any document listeners: Generate document change events!
             	List actions = EditTranscriptGenerator.generateEvents(origText, text);
 
-            	fireChangeUpdate(0, buffer.length());
-
                 // and fire them!
+                fireChangeUpdate(0, buffer.length());
             	for(int i = 0; i < actions.size(); i++){
             		DocumentEvent de = (DocumentEvent) actions.get(i);
             		if(de.getType().equals(DocumentEvent.EventType.INSERT)){

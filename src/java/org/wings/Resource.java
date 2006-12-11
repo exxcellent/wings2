@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -35,7 +34,6 @@ import java.util.Map;
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:H.Zeller@acm.org">Henner Zeller</a>
- * @version $Revision$
  */
 public abstract class Resource implements Serializable, URLResource, Renderable {
     /**

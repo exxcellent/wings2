@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -21,7 +20,6 @@ import java.io.PrintStream;
  * A Device encapsulating a ServletOutputStream
  *
  * @author <a href="mailto:hengels@to.com">Holger Engels</a>
- * @version $Revision$
  */
 public final class OutputStreamDevice implements Device {
     private PrintStream out;

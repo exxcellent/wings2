@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -19,7 +18,6 @@ import java.net.URL;
  * SIcon which is backed by an URL to get the image.
  *
  * @author <a href="mailto:armin@hyperion.intranet.mercatis.de">Armin Haaf</a>
- * @version $Revision
  */
 public class SURLIcon extends SAbstractIcon {
 

@@ -53,7 +53,6 @@
  */
 
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -110,7 +109,6 @@ import org.wings.util.SStringBuilder;
  *
  * @author <a href="mailto:williams@ugsolutions.com">Tim Williams</a>
  * @author <a href="mailto:zeller@think.de">Henner Zeller</a>
- * @version $Revision$ $Date$
  */
 
 /*

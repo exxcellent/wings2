@@ -21,7 +21,6 @@ import java.io.PrintStream;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class RSSPortlet
         extends Bird

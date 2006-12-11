@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -15,10 +14,15 @@ package org.wings.plaf.css;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.*;
-import org.wings.border.SBorder;
-import org.wings.border.SEmptyBorder;
-import org.wings.border.STitledBorder;
+import org.wings.LowLevelEventListener;
+import org.wings.SComponent;
+import org.wings.SConstants;
+import org.wings.SDimension;
+import org.wings.SIcon;
+import org.wings.SPopupMenu;
+import org.wings.SResourceIcon;
+import org.wings.SToolTipManager;
+import org.wings.border.*;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
@@ -34,13 +38,13 @@ import org.wings.util.SStringBuilder;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Partial CG implementation that is common to all ComponentCGs.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public abstract class AbstractComponentCG implements ComponentCG, SConstants, Serializable {
 
@@ -79,8 +83,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     private void writePrefix(final Device device, final SComponent component, final boolean useTable, Map optionalAttributes) throws IOException {
-        SBorder border = component.getBorder();
-        final boolean isTitleBorder = border instanceof STitledBorder;
         // This is the containing element of a component
         // it is responsible for styles, sizing...
         if (useTable) {
@@ -101,25 +103,17 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         if (useTable) {
             device.print("><tr><td"); // table
             final SStringBuilder styleString = new SStringBuilder();
-            if (border != null && Utils.isMSIE(component)) {
-                Utils.createInlineStylesForInsets(styleString, border.getInsets());
+            if (component.getBorder() != null) {
+                Utils.createInlineStylesForInsets(styleString, component.getBorder().getInsets());
             }
             // This is used for 100% height of inner components - works in FF, not in IE
-            styleString.append("width:100%;height:100%;vertical-align:top");
+            //styleString.append("width:100%;height:100%;vertical-align:top");
             Utils.optAttribute(device, "style", styleString);
 
             device.print(">"); // table
         }
         else {
             device.print(">"); // div
-        }
-
-        // Special handling: Render title of STitledBorder
-        if (isTitleBorder) {
-            STitledBorder titledBorder = (STitledBorder) border;
-            device.print("<div class=\"STitledBorderLegend\">");
-            device.print(titledBorder.getTitle());
-            device.print("</div>");
         }
     }
 
@@ -133,10 +127,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     public static void writeAllAttributes(Device device, SComponent component) throws IOException {
-        final boolean isTitleBorder = component.getBorder() instanceof STitledBorder;
-
-        final String classname = component.getStyle();
-        Utils.optAttribute(device, "class", isTitleBorder ? classname + " STitledBorder" : classname);
+        Utils.optAttribute(device, "class", component.getStyle());
         Utils.optAttribute(device, "id", component.getName());
 
         Utils.optAttribute(device, "style", getInlineStyles(component));
@@ -166,8 +157,12 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             builder.append(allStyle.toString());
 
         final SBorder border = component.getBorder();
-        if (border != null && border.getAttributes() != null)
-            builder.append(border.getAttributes().toString());
+        if (border != null) {
+            if (border.getAttributes() != null)
+                builder.append(border.getAttributes().toString());
+        }
+        else
+            builder.append("border:none;padding:0px");
 
         return builder.toString();
     }
@@ -210,6 +205,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);
         component.setStyle(style); // set default style name to component class (ie. SLabel).
+        component.setBorder(SDefaultBorder.INSTANCE);
 
         if (Utils.isMSIE(component)) {
             final CGManager manager = component.getSession().getCGManager();
@@ -314,6 +310,11 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
     }
 
+    protected final boolean hasDimension(final SComponent component) {
+        SDimension dim = component.getPreferredSize();
+        return dim != null && (dim.getHeightInt() != SDimension.AUTO_INT || dim.getWidthInt() != SDimension.AUTO_INT);
+    }
+
     /**
      * This method renders the component (and all of its subcomponents) to the given device. Depending on
      * the settings for server side caching the rendered code is newly generated or taken from the cache.
@@ -347,15 +348,17 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         component.fireRenderEvent(SComponent.START_RENDERING);
 
         try {
-        	writeInternal(device, component);
-        	RenderHelper.getInstance(component).collectScripts(component);
+            BorderCG.writeComponentBorderPrefix(device, component);
+            writeInternal(device, component);
+            RenderHelper.getInstance(component).collectScripts(component);
             RenderHelper.getInstance(component).collectMenues(component);
             SToolTipManager.sharedInstance().registerComponent(component);
-	} catch (RuntimeException e) {
-		log.fatal("Runtime exception during rendering", e);
-		device.print("<blink>" + e.getClass().getName() + " during code generation of "
-                	+ component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
-	}
+            BorderCG.writeComponentBorderSufix(device, component);
+        } catch (RuntimeException e) {
+            log.fatal("Runtime exception during rendering", e);
+            device.print("<blink>" + e.getClass().getName() + " during code generation of "
+                    + component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
+        }
 
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");

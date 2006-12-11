@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -31,7 +30,6 @@ import java.util.StringTokenizer;
  * An immodal dialog component offering several options for selection (like Yes/No, etc.)
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SOptionPane extends SDialog implements ActionListener {
     private final transient static Log log = LogFactory.getLog(SOptionPane.class);

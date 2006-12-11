@@ -21,7 +21,6 @@ import java.io.Serializable;
 
 /**
  * @author hengels
- * @version $Revision$
  */
 public class CallableManager implements Serializable {
     

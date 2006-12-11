@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -20,7 +19,6 @@ import javax.swing.*;
  * Default implementation of {@link SBoundedRangeModel}
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  * @see javax.swing.BoundedRangeModel
  * @see SList
  * @see STable

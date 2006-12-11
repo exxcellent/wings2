@@ -21,7 +21,6 @@ import org.directwebremoting.WebContextFactory;
  *
  * @author hengels
  * @author raedler
- * @version $Revision$
  */
 public class SessionCreatorManager implements CreatorManager {
 

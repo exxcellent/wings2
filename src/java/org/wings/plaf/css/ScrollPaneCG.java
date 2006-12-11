@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -15,9 +14,7 @@ package org.wings.plaf.css;
 
 import java.io.IOException;
 
-import org.wings.SComponent;
-import org.wings.SDimension;
-import org.wings.SScrollPane;
+import org.wings.*;
 import org.wings.io.Device;
 
 public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
@@ -37,9 +34,7 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
             }
 
             writeContent(device, component);
-
-            String script = "wingS.layout.layoutScrollPaneFF('" + component.getName() + "');";
-            RenderHelper.getInstance(component).addScript(script);
+            component.getSession().getScriptManager().addScriptListener(new LayoutScrollPaneScript(component.getName()));
         } else {
             writeContent(device, component);
         }
@@ -47,9 +42,32 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
 
     public void writeContent(Device device, SComponent c) throws IOException {
         SScrollPane scrollPane = (SScrollPane) c;
+
+        SDimension preferredSize = scrollPane.getPreferredSize();
+        String height = preferredSize != null ? preferredSize.getHeight() : null;
+        boolean clientLayout = isMSIE(scrollPane) && height != null && !"auto".equals(height)
+            && scrollPane.getMode() != SScrollPane.MODE_COMPLETE;
+        boolean clientFix = isMSIE(scrollPane) && (height == null || "auto".equals(height))
+            && scrollPane.getMode() != SScrollPane.MODE_COMPLETE;
+
         device.print("<table");
+
+        if (clientLayout) {
+            Utils.optAttribute(device, "layoutHeight", height);
+            preferredSize.setHeight(null);
+        }
+
         writeAllAttributes(device, scrollPane);
+
+        if (clientLayout) {
+            preferredSize.setHeight(height);
+            scrollPane.getSession().getScriptManager().addScriptListener(new LayoutFillScript(scrollPane.getName()));
+        }
+        else if (clientFix)
+            scrollPane.getSession().getScriptManager().addScriptListener(new LayoutFixScript(scrollPane.getName()));
+
         device.print(">");
+
         Utils.renderContainer(device, scrollPane);
         device.print("</table>");
     }

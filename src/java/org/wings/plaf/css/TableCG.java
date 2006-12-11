@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -179,7 +178,7 @@ public final class TableCG
     {
         final boolean isEditingCell = table.isEditing() && row == table.getEditingRow() && col == table.getEditingColumn();
         final boolean editableCell = table.isCellEditable(row, col);
-        final boolean selectableCell = table.getSelectionMode() != SListSelectionModel.NO_SELECTION && !table.isEditable();
+        final boolean selectableCell = table.getSelectionMode() != SListSelectionModel.NO_SELECTION && !table.isEditable() && table.isSelectable();
 
         final SComponent component;
         if (isEditingCell) {
@@ -314,7 +313,8 @@ public final class TableCG
         STableColumnModel columnModel = table.getColumnModel();
         if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
             device.print("<colgroup>");
-            writeCol(device, selectionColumnWidth);
+            if (table.getRowSelectionRenderer() != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION)
+                writeCol(device, selectionColumnWidth);
 
             for (int i = startX; i < endX; ++i) {
                 STableColumn column = columnModel.getColumn(i);
@@ -408,10 +408,12 @@ public final class TableCG
         }
     }
 
-    private void writeSelectionHeader(Device device, STable table) throws IOException {
-        device.print("<th valign=\"middle\" class=\"num\"");
-        Utils.optAttribute(device, "width", selectionColumnWidth);
-        device.print("></th>");
+    protected void writeSelectionHeader(Device device, STable table) throws IOException {
+        if (table.getRowSelectionRenderer() != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION) {
+            device.print("<th valign=\"middle\" class=\"num\"");
+            Utils.optAttribute(device, "width", selectionColumnWidth);
+            device.print("></th>");
+        }
     }
 
     private boolean atLeastOneColumnWidthIsNotNull(STableColumnModel columnModel) {
@@ -436,28 +438,30 @@ public final class TableCG
         throws IOException
     {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
-        final String columnStyle = Utils.joinStyles((SComponent)rowSelectionRenderer, "num");
+        if (rowSelectionRenderer != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION) {
+            final String columnStyle = Utils.joinStyles((SComponent)rowSelectionRenderer, "num");
 
-        device.print("<td valign=\"top\" align=\"right\"");
-        Utils.optAttribute(device, "width", selectionColumnWidth);
+            device.print("<td valign=\"top\" align=\"right\"");
+            Utils.optAttribute(device, "width", selectionColumnWidth);
 
-        String value = table.getToggleSelectionParameter(row, -1);
-        if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION) {
-            Utils.printClickability(device, table, value, true, table.getShowAsFormComponent());
-            device.print(" class=\"clickable ");
-            device.print(columnStyle);
-            device.print("\"");
+            String value = table.getToggleSelectionParameter(row, -1);
+            if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION) {
+                Utils.printClickability(device, table, value, true, table.getShowAsFormComponent());
+                device.print(" class=\"clickable ");
+                device.print(columnStyle);
+                device.print("\"");
+            }
+            else {
+                device.print(" class=\"");
+                device.print(columnStyle);
+                device.print("\"");
+            }
+            device.print(">");
+
+            renderSelectionColumnContent(device, row, table, rendererPane);
+
+            device.print("</td>");
         }
-        else {
-            device.print(" class=\"");
-            device.print(columnStyle);
-            device.print("\"");
-        }
-        device.print(">");
-
-        renderSelectionColumnContent(device, row, table, rendererPane);
-
-        device.print("</td>");
     }
 
     /**

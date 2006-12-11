@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -46,28 +45,15 @@ public final class AnchorCG extends AbstractComponentCG implements org.wings.pla
         */
 
         final String target = component.getTarget() != null ? "'" + component.getTarget() + "'" : "null";
-        device.print("<a href=\"#\" onclick=\"wingS.util.openLink(" + target + ",'" + component.getURL() + "'" +
+        device.print("<table onclick=\"wingS.util.openLink(" + target + ",'" + component.getURL() + "'" +
                 Utils.collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK) + "); return false;\"");
         writeAllAttributes(device, component);
-        Utils.writeEvents(device, component, null);
-        // spezielle anchor attributes
         if (component.isFocusOwner())
             Utils.optAttribute(device, "foc", component.getName());
         //Utils.optAttribute(device, "target", component.getTarget());
         Utils.optAttribute(device, "tabindex", component.getFocusTraversalIndex());
-        Utils.optAttribute(device, "name", component.getName());
-
         device.print(">");
-        device.print("<table>"); // renderContainer expects table
         Utils.renderContainer(device, component);
         device.print("</table>");
-        //Utils.printButtonEnd(device, component, null, true);
-        /*if (useTable) {
-            writeTableSuffix(device, component);
-        }*/
-
-        device.print("</a>");
     }
-
-
 }

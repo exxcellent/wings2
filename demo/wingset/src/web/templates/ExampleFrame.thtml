@@ -1,6 +1,7 @@
 <!--Example Application Template                                        -->
 <!--$Id$  -->
-<table align="center" style="margin:8px;">
+<div align="center">
+<table width="90%" align="center" style="margin:8px;">
     <tr>
         <td>
             <h2 style="margin-top:0;">wingS Example</h2>
@@ -17,9 +18,10 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td height="600px" colspan="2">
             <object name="frame">Here is the example Application</object>
             <object name="dialog"></object>
         </td>
     </tr>
 </table>
+</div>

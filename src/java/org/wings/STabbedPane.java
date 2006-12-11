@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -32,7 +31,6 @@ import java.util.ArrayList;
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>,
  *         <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
- * @version $Revision$
  */
 public class STabbedPane extends SContainer implements LowLevelEventListener {
     /**

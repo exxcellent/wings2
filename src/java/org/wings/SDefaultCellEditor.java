@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -17,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.EventObject;
+import java.util.Arrays;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -32,7 +32,6 @@ import org.wings.table.STableCellEditor;
  * you need the Java look and feel graphics (jlfgr*.jar)
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public class SDefaultCellEditor
         implements STableCellEditor {
@@ -60,18 +59,18 @@ public class SDefaultCellEditor
     /**
      * Panel for edit fields.
      */
-    protected final SPanel editorPanel;
+    protected final EditorPanel editorPanel;
 
     /**
      * If this button is pressed, editing is tried to stop. If input validation
      * found no error, editing is stopped, else an error message is displayed
      */
-    protected final SButton ok;
+    protected final SClickable ok;
 
     /**
      * If this button is pressed, editing is canceled.
      */
-    protected final SButton cancel;
+    protected final SClickable cancel;
 
     /**
      * Store here the CellEditorListener
@@ -80,8 +79,7 @@ public class SDefaultCellEditor
 
     /**
      * Event listener, which set the fire... indicators. This event listener is
-     * added to the three buttons {@link #ok}, {@link #cancel} and {@link #undo}
-     * and the {@link #editorFrom form}
+     * added to the buttons {@link #ok} and {@link #cancel}
      */
     private final ActionListener fireEventListener = new FireEventListener();
 
@@ -110,8 +108,8 @@ public class SDefaultCellEditor
                                  boolean initializeButtons) {
         this.messageLabel = new SLabel();
         this.editorPanel = new EditorPanel();
-        this.ok = new SButton();
-        this.cancel = new SButton();
+        this.ok = new SClickable();
+        this.cancel = new SClickable();
         this.listenerList = new EventListenerList();
         this.editorComponent = editorComponent;
 
@@ -138,10 +136,6 @@ public class SDefaultCellEditor
             public Object getCellEditorValue() {
                 String text = ((STextField) editorComponent).getText();
                 return "".equals(text) ? null : text;
-            }
-
-            public boolean stopCellEditing() {
-                return true;
             }
 
             public boolean shouldSelectCell(EventObject anEvent) {
@@ -182,10 +176,6 @@ public class SDefaultCellEditor
                 return Boolean.valueOf(((SCheckBox) editorComponent).isSelected());
             }
 
-            public boolean stopCellEditing() {
-                return true;
-            }
-
             public boolean shouldSelectCell(EventObject anEvent) {
                 return false;
             }
@@ -196,13 +186,15 @@ public class SDefaultCellEditor
      * Intializes the buttons with default icons, tooltip text and listener.
      */
     protected void initButtons() {
-        ok.addActionListener(fireEventListener);
+        ok.setEvent("ok");
         ok.setIcon(OK_BUTTON_ICON);
         ok.setToolTipText("ok");
+        ok.setEventTarget(editorPanel);
 
-        cancel.addActionListener(fireEventListener);
+        cancel.setEvent("cancel");
         cancel.setIcon(CANCEL_BUTTON_ICON);
         cancel.setToolTipText("cancel");
+        cancel.setEventTarget(editorPanel);
 
         editorPanel.add(ok);
         editorPanel.add(cancel);
@@ -217,11 +209,11 @@ public class SDefaultCellEditor
         return editorComponent;
     }
 
-    public final SButton getOKButton() {
+    public final SClickable getOKButton() {
         return ok;
     }
 
-    public final SButton getCancelButton() {
+    public final SClickable getCancelButton() {
         return cancel;
     }
 
@@ -404,22 +396,38 @@ public class SDefaultCellEditor
     private class EditorPanel extends SPanel
         implements LowLevelEventListener
     {
+        boolean okFinalEvents;
+        boolean cancelFinalEvents;
+
         public EditorPanel() {
             super(new SBoxLayout(SBoxLayout.HORIZONTAL));
         }
 
         public void processLowLevelEvent(String name, String[] values) {
-            if (editorComponent instanceof LowLevelEventListener) {
+            System.out.println(name + " = " + Arrays.asList(values));
+
+            if (name.endsWith("_panel")) {
+                if ("ok".equals(values[0]))
+                    okFinalEvents = true;
+                else if ("cancel".equals(values[0]))
+                    cancelFinalEvents = true;
+            }
+            else if (name.endsWith("_ed") && editorComponent instanceof LowLevelEventListener) {
+                System.out.println("editorValues = " + Arrays.asList(values));
                 LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editorComponent;
                 lowLevelEventListener.processLowLevelEvent(name, values);
             }
+
+            SForm.addArmedComponent(this);
         }
 
         public void fireIntermediateEvents() {
-            if (editorComponent instanceof LowLevelEventListener) {
-                LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editorComponent;
-                lowLevelEventListener.fireIntermediateEvents();
-            }
+            if (okFinalEvents)
+                stopCellEditing();
+            if (cancelFinalEvents)
+                cancelCellEditing();
+            okFinalEvents = false;
+            cancelFinalEvents = false;
         }
 
         public void fireFinalEvents() {
@@ -427,6 +435,13 @@ public class SDefaultCellEditor
                 LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editorComponent;
                 lowLevelEventListener.fireFinalEvents();
             }
+        }
+
+        public void setNameRaw(String uncheckedName) {
+            super.setNameRaw(uncheckedName + "_panel");
+            editorComponent.setNameRaw(uncheckedName + "_ed");
+            ok.setNameRaw(uncheckedName + "_ok");
+            cancel.setNameRaw(uncheckedName + "_cl");
         }
 
         public boolean isEpochCheckEnabled() {

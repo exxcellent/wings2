@@ -1,5 +1,4 @@
 /*
- * $Id$
  * (c) Copyright 2000 wingS development team.
  *
  * This file is part of the wingS demo (http://j-wings.org).
@@ -43,7 +42,6 @@ import java.util.Set;
  * With SReloadFrame only the frames, whose code actually changed will get reloaded.
  *
  * @author Holger Engels
- * @version $Revision$
  */
 public class FrameSet {
     private SFrameSet vertical;

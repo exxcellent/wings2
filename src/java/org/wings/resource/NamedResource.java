@@ -1,5 +1,4 @@
 /*
- * $Id: FileResource.java 2342 2005-11-28 23:53:49Z blueshift $
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).

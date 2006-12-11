@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,14 +12,7 @@
  */
 package wingset;
 
-import org.wings.SComponent;
-import org.wings.SFlowDownLayout;
-import org.wings.SForm;
-import org.wings.SLabel;
-import org.wings.STextField;
-import org.wings.SFont;
-import org.wings.SCheckBox;
-import org.wings.SDimension;
+import org.wings.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -29,12 +21,11 @@ import java.awt.*;
 
 /**
  * @author Holger Engels
- * @version $Revision$
  */
 public class KeyboardBindingsExample extends WingSetPane {
     private final SLabel actionEventLabel = new SLabel();
     private final STextField textField = new STextField();
-    private final SForm form = new SForm(new SFlowDownLayout());
+    private final SPanel panel = new SPanel(new SFlowDownLayout());
 
     public KeyboardBindingsExample() {
 
@@ -129,13 +120,13 @@ public class KeyboardBindingsExample extends WingSetPane {
         textField.setInputMap(WHEN_IN_FOCUSED_FRAME, pageInputMap);
 
         // Define key bindinings if focus inside the containing SForm
-        form.setInputMap(formInputMap);
-             // equal to :  form.setInputMap(formInputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
-        form.setActionMap(actionMap);
+        panel.setInputMap(formInputMap);
+             // equal to :  panel.setInputMap(formInputMap, WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
+        panel.setActionMap(actionMap);
 
         final SLabel titleLabel = new SLabel("wingS key binding feature demonstration\n ");
         titleLabel.setFont(new SFont("sans-serif", SFont.PLAIN, 16));
-        form.add(titleLabel);
+        panel.add(titleLabel);
 
         final SLabel instructions = new SLabel(
                 "This page demonstrates the feature of attaching key binbding to specific component. " +
@@ -152,19 +143,24 @@ public class KeyboardBindingsExample extends WingSetPane {
                         "captured by the whole page, then routed back to the STextField. These shortcuts will work " +
                         "everythere on the page.\n\n");
         instructions.setWordWrap(true);
-        form.add(instructions);
+        panel.add(instructions);
 
-        form.add(textField);
-        form.add(new SCheckBox("Checkbox: Use as alternative focus point"));
+        panel.add(textField);
+        panel.add(new SCheckBox("Checkbox: Use as alternative focus point"));
 
-        form.add(actionEventLabel);
+        panel.add(actionEventLabel);
         actionEventLabel.setForeground(Color.RED);
 
-        form.setHorizontalAlignment(CENTER);
-        form.setPreferredSize(new SDimension(550, SDimension.AUTO_INT));
+        panel.setHorizontalAlignment(CENTER);
+        panel.setPreferredSize(new SDimension(550, SDimension.AUTO_INT));
+    }
+
+
+    protected SComponent createControls() {
+        return null;
     }
 
     public SComponent createExample() {
-        return form;
+        return panel;
     }
 }

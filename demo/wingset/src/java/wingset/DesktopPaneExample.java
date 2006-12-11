@@ -13,23 +13,29 @@ public class DesktopPaneExample extends WingSetPane {
 
     private SIcon windowIcon;
 
-    private static final int FRAME_COUNT = 8;
+    private static final int FRAME_COUNT = 5;
     private ComponentControls controls;
     private SDesktopPane desktopPane = new SDesktopPane();
 
-    protected SComponent createExample() {
-        controls = new DesktopPaneControls();
 
+    protected SComponent createControls() {
+        controls = new DesktopPaneControls();
+        return controls;
+    }
+
+    protected SComponent createExample() {
         windowIcon = (SIcon)getSession().getCGManager().getObject("TableCG.editIcon", SIcon.class);
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
-            iFrame.getContentPane().setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
+            iFrame.getContentPane().setLayout(new SBoxLayout(SConstants.VERTICAL));
+            iFrame.getContentPane().setHorizontalAlignment(SConstants.LEFT_ALIGN);
+            iFrame.getContentPane().setPreferredSize(SDimension.FULLWIDTH);
             iFrame.setTitle("A Long Title of Frame " + (i+1));
+            iFrame.setIcon(windowIcon);
             desktopPane.add(iFrame);
             fillFrame(iFrame);
             // set some special contents & icons
             if ((i % 2) == 0) {
-                iFrame.setIcon(windowIcon);
                 SStringBuilder labelText = new SStringBuilder("some extra label...");
                 for (int j = 0; j <= i; j++) {
                     labelText.append("extra-");
@@ -40,15 +46,13 @@ public class DesktopPaneExample extends WingSetPane {
             }
         }
 
-        SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(desktopPane, SBorderLayout.CENTER);
-
-        return form;
+        return desktopPane;
     }
 
     private void fillFrame(SInternalFrame frame) {
-        frame.getContentPane().add(new STextField());
+        STextField c = new STextField();
+        c.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        frame.getContentPane().add(c);
         frame.getContentPane().add(new SLabel("This is a label"));
     }
 

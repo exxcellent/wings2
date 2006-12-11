@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -22,7 +21,6 @@ import java.io.Serializable;
  * Defines the behaviour of component tooltips.
  *
  * @author hengels
- * @version $Revision$
  */
 public class SToolTipManager implements Serializable {
     private int initialDelay = 1000;

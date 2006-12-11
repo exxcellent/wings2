@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -26,7 +25,6 @@ import java.util.Map;
  * <code>WEST</code> and <code>CENTER</code>.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SBorderLayout
         extends SAbstractLayoutManager {

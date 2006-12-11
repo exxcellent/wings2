@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -22,7 +21,6 @@ import java.util.List;
  * A popup or context menu that can be attached to abitrary components.
  *
  * @author hengels
- * @version $Revision$
  */
 public class SPopupMenu
         extends SComponent {

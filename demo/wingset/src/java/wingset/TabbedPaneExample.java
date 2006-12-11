@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -58,11 +57,17 @@ public class TabbedPaneExample extends WingSetPane {
     private STabbedPane tabbedPane;
     private SDocument logText = new DefaultDocument();
 
-    protected SComponent createExample() {
+
+    protected SComponent createControls() {
         controls = new TabbedPaneControls();
+        return controls;
+    }
+
+    protected SComponent createExample() {
 
         // Create tabbed pane and tabulators
         tabbedPane = new STabbedPane();
+        tabbedPane.setPreferredSize(new SDimension("700px", null));
         for (int i = 0; i < INITIAL_TAB_COUNT; ++i) {
             addTab();
         }
@@ -77,10 +82,7 @@ public class TabbedPaneExample extends WingSetPane {
         });
         controls.addControllable(tabbedPane);
 
-        final SForm form = new SForm(new SBorderLayout());
-        form.add(controls, SBorderLayout.NORTH);
-        form.add(tabbedPane, SBorderLayout.CENTER);
-        return form;
+        return tabbedPane;
     }
 
 

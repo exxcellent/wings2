@@ -73,25 +73,37 @@ input, select, textarea {
     border: none;
 }
 
+.SAnchor, .SClickable {
+    cursor: pointer;
+}
+
 TABLE.SButton,
 TABLE.SButton_disabled,
 TABLE.SToggleButton,
 TABLE.SToggleButton_selected {
     cursor: pointer;
+    color: #000066;
 }
 
 TABLE.SButton_form,
 TABLE.SButton_form_disabled,
 TABLE.SToggleButton_form,
 TABLE.SToggleButton_form_selected {
-   padding: 0px 6px 0px 6px;
-   border: 2px outset #ddd;
-   background-color: #ddd;
-   color: #000;
-   cursor: default;
-   text-align: center;
-   white-space: normal;
-   text-indent: 0px;
+    border: 2px outset #ddd;
+    background-color: #ddd;
+    color: #000;
+    cursor: default;
+    text-align: center;
+    white-space: normal;
+    text-indent: 0px;
+    border-collapse: collapse;   /* Merges TABLE and TD paddings. (PaddingVoodoo and SEmptyBorder) */
+}
+
+TABLE.SButton_form td,
+TABLE.SButton_form_disabled td,
+TABLE.SToggleButton_form td,
+TABLE.SToggleButton_form_selected td {
+    padding: 2px 6px;
 }
 
 TABLE.SButton_form:hover,
@@ -139,6 +151,7 @@ input.STextField,
 input.XSuggest,
 input.SFormattedTextField,
 input.SPasswordField,
+.SFileChooser input,
 textarea.STextArea,
 select.SComboBox {
     font-family: sans-serif;
@@ -151,6 +164,7 @@ input.STextField,
 input.XSuggest,
 input.SFormattedTextField,
 input.SPasswordField,
+.SFileChooser input,
 textarea.STextArea,
 select.SComboBox,
 select.SList {
@@ -401,7 +415,13 @@ ul.SPopupMenu a.x:hover{
     margin-bottom:0px;
 }
 
+.SLabel {
+    border-collapse: collapse;
+}
 
+.SPanel {
+    border-collapse: collapse;
+}
 
 .STable {
     width: 100%;
@@ -442,7 +462,7 @@ ul.SPopupMenu a.x:hover{
 }
 
 .STable td.empty  {
-    padding-top: 2px;
+    padding-top: 3px;
     padding-bottom: 3px;
 }
 
@@ -658,10 +678,6 @@ table.SScrollBar table.buttons td:hover {
     float: right;
 }
 
-.SInternalFrame div.WindowBar a.DeiconifyButton {
-    display: inline;
-}
-
 .SInternalFrame div.WindowContent {
     padding: .2em;
 }
@@ -786,6 +802,3 @@ table.DivisionContent {
 	position:relative;
 	top: 30px
 }
-
-
-

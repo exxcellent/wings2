@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,7 +12,6 @@
  */
 package wingset;
 
-import org.wings.SAnchor;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SCheckBox;
@@ -23,17 +21,14 @@ import org.wings.SConstants;
 import org.wings.SDefaultListCellRenderer;
 import org.wings.SDimension;
 import org.wings.SFont;
-import org.wings.SFrame;
 import org.wings.SGridBagLayout;
-import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.STextField;
 import org.wings.SToolBar;
 import org.wings.border.*;
-import org.wings.script.JavaScriptEvent;
-import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
+import org.wings.style.CSSProperty;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -47,17 +42,17 @@ import java.util.Arrays;
  * A visual control used in many WingSet demos.
  *
  * @author hengels
- * @version $Revision$
  */
 public class ComponentControls  extends SPanel {
     protected static final Object[] BORDERS = new Object[] {
+        new Object[] { "default", SDefaultBorder.INSTANCE },
         new Object[] { "none",    null },
         new Object[] { "raised",  new SBevelBorder(SBevelBorder.RAISED) },
         new Object[] { "lowered", new SBevelBorder(SBevelBorder.LOWERED) },
         new Object[] { "line",    new SLineBorder(2) },
         new Object[] { "grooved", new SEtchedBorder(SEtchedBorder.LOWERED) },
         new Object[] { "ridged",  new SEtchedBorder(SEtchedBorder.RAISED) },
-        new Object[] { "titled",  new STitledBorder(new SEtchedBorder(SEtchedBorder.LOWERED), "Border Title") },
+        new Object[] { "titled",  new STitledBorder("Border Title") },
         new Object[] { "empty",   new SEmptyBorder(5,5,5,5)}
     };
 
@@ -70,9 +65,9 @@ public class ComponentControls  extends SPanel {
     };
 
     protected static final Object[] FONTS = new Object[] {
-        new Object[] { "default font",   null },
-        new Object[] { "16pt sans-serif bold & italic", new SFont("Arial,sans-serif",SFont.BOLD+SFont.ITALIC, 16)},
-        new Object[] { "default serif plain",    new SFont("Times, Times New Roman,serif",SFont.DEFAULT_SIZE, SFont.PLAIN) },
+        new Object[] { "default font",           null },
+        new Object[] { "16pt sans bold",         new SFont("Arial,sans-serif",SFont.BOLD, 16)},
+        new Object[] { "default serif plain",    new SFont("Times,Times New Roman,serif",SFont.DEFAULT_SIZE, SFont.PLAIN) },
         new Object[] { "24pt fantasy italic",    new SFont("Comic,Comic Sans MS,fantasy",SFont.ITALIC, 24) }
     };
 
@@ -83,6 +78,8 @@ public class ComponentControls  extends SPanel {
     protected final SToolBar localControls = new SToolBar();
 
     protected final SButton applyButton;
+
+    protected final SCheckBox ajaxCheckBox = new SCheckBox("enable");
 
     protected final STextField widthTextField = new STextField();
     protected final STextField heightTextField = new STextField();
@@ -95,18 +92,13 @@ public class ComponentControls  extends SPanel {
     protected final SComboBox backgroundComboBox = new SComboBox(COLORS);
     protected final SComboBox foregroundComboBox = new SComboBox(COLORS);
     protected final SComboBox fontComboBox = new SComboBox(FONTS);
-    protected final SCheckBox formComponentCheckBox = new SCheckBox("form components");
+    protected final SCheckBox formComponentCheckBox = new SCheckBox("as form");
 
-    protected final SCheckBox ajaxEnabledCheckBox = new SCheckBox("Enable incremental updates");
-    protected final SCheckBox ajaxCursorEnabledCheckBox = new SCheckBox("Enable update cursor");
-    protected final SButton ajaxForceFrameReload = new SButton("Force reload of frame");
-    protected final SAnchor ajaxDebugViewAnchor = new SAnchor();
-
-
-    protected final SFrame frame = SessionManager.getSession().getRootFrame();
+    private SLabel placeHolder = new SLabel("<html>&nbsp;");
 
     public ComponentControls() {
         super(new SGridBagLayout());
+        setBackground(new Color(240,240,240));
         setPreferredSize(SDimension.FULLWIDTH);
         SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.BOTTOM);
@@ -120,24 +112,17 @@ public class ComponentControls  extends SPanel {
 
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
+        border.setThickness(1, SConstants.BOTTOM);
+        border.setStyle("dashed", SConstants.BOTTOM);
         globalControls.setBorder(border);
+        globalControls.setPreferredSize(SDimension.FULLWIDTH);
         globalControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout)globalControls.getLayout()).setHgap(6);
         ((SBoxLayout)globalControls.getLayout()).setVgap(4);
 
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
-        border.setThickness(1, SConstants.TOP);
-        ajaxControls.setBorder(border);
-        ajaxControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        ((SBoxLayout)ajaxControls.getLayout()).setHgap(6);
-        ((SBoxLayout)ajaxControls.getLayout()).setVgap(4);
-
-        border = new SLineBorder(Color.LIGHT_GRAY, 0);
-        border.setThickness(1, SConstants.LEFT);
-        border.setThickness(1, SConstants.TOP);
         localControls.setBorder(border);
-        localControls.setVisible(false);
         localControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout)localControls.getLayout()).setHgap(6);
         ((SBoxLayout)localControls.getLayout()).setVgap(4);
@@ -145,19 +130,26 @@ public class ComponentControls  extends SPanel {
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;
         c.gridheight = 3;
+        c.insets.left = 10;
+        c.insets.right = 10;
+        c.weightx = 0.01;
         add(applyButton, c);
+        c.insets.left = 0;
+        c.insets.right = 0;
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.gridheight = 1;
+        c.weightx = 0.99;
         add(globalControls, c);
         add(ajaxControls, c);
         add(localControls, c);
 
+        ajaxCheckBox.setSelected(SessionManager.getSession().getRootFrame().isUpdateEnabled());
         widthTextField.setColumns(3);
         widthTextField.setToolTipText("length with unit (example: '200px')");
         heightTextField.setColumns(3);
         heightTextField.setToolTipText("length with unit (example: '200px')");
         insetsTextField.setColumns(1);
-        insetsTextField.setToolTipText("length only (example: '8')");
+        insetsTextField.setToolTipText("length only (example: '8')\n(applies to the border!)");
         borderThicknessTextField.setColumns(1);
         borderThicknessTextField.setToolTipText("length only (example: '2')");
         borderStyleComboBox.setRenderer(new ObjectPairCellRenderer());
@@ -165,7 +157,16 @@ public class ComponentControls  extends SPanel {
         backgroundComboBox.setRenderer(new ObjectPairCellRenderer());
         foregroundComboBox.setRenderer(new ObjectPairCellRenderer());
         fontComboBox.setRenderer(new ObjectPairCellRenderer());
+        formComponentCheckBox.setToolTipText("show as form component .. i.e. trigger form submission");
 
+        SLabel titleAjax = new SLabel("Ajax:");
+        titleAjax.setAttribute(CSSProperty.FONT_STYLE, "italic");
+        globalControls.add(titleAjax);
+        globalControls.add(ajaxCheckBox);
+        globalControls.add(new SLabel("  |  "));
+        SLabel titleAppearance = new SLabel("Appearance:");
+        titleAppearance.setAttribute(CSSProperty.FONT_STYLE, "italic");
+        globalControls.add(titleAppearance);
         globalControls.add(new SLabel("width"));
         globalControls.add(widthTextField);
         globalControls.add(new SLabel(" height"));
@@ -174,30 +175,22 @@ public class ComponentControls  extends SPanel {
         globalControls.add(borderThicknessTextField);
         globalControls.add(borderStyleComboBox);
         globalControls.add(borderColorComboBox);
-        globalControls.add(new SLabel(" border insets"));
+        globalControls.add(new SLabel("insets"));
         globalControls.add(insetsTextField);
-        globalControls.add(new SLabel(" foreground"));
+        globalControls.add(new SLabel(" color"));
         globalControls.add(foregroundComboBox);
-        globalControls.add(new SLabel(" background"));
         globalControls.add(backgroundComboBox);
         globalControls.add(new SLabel(" font"));
         globalControls.add(fontComboBox);
         globalControls.add(new SLabel(""));
         globalControls.add(formComponentCheckBox);
 
-        ajaxControls.add(new SLabel("AJAX settings:"));
-        ajaxControls.add(ajaxEnabledCheckBox);
-        ajaxControls.add(new SLabel("  |  "));
-        ajaxControls.add(ajaxCursorEnabledCheckBox);
-        ajaxControls.add(new SLabel("  |  "));
-        ajaxControls.add(ajaxForceFrameReload);
-        ajaxControls.add(new SLabel("  |  "));
-        ajaxControls.add(ajaxDebugViewAnchor);
-        initAjaxSettings();
-
+        localControls.add(placeHolder);
 
         addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent event) {
+                SessionManager.getSession().getRootFrame().setUpdateEnabled(ajaxCheckBox.isSelected());
+
                 SDimension preferredSize = new SDimension();
                 preferredSize.setWidth(widthTextField.getText());
                 preferredSize.setHeight(heightTextField.getText());
@@ -215,7 +208,7 @@ public class ComponentControls  extends SPanel {
                 catch (NumberFormatException e) {}
 
                 SAbstractBorder border = (SAbstractBorder) getSelectedObject(borderStyleComboBox);
-                if (border != null) {
+                if (border != null && border != SDefaultBorder.INSTANCE) {
                     border.setColor((Color)getSelectedObject(borderColorComboBox));
                     border.setInsets(new Insets(insets, insets, insets, insets));
                     border.setThickness(borderThickness);
@@ -236,8 +229,6 @@ public class ComponentControls  extends SPanel {
                     if (fontComboBox.isVisible())
                         component.setFont((SFont) getSelectedObject(fontComboBox));
                 }
-
-                applyAjaxSettings();
             }
         });
     }
@@ -255,8 +246,9 @@ public class ComponentControls  extends SPanel {
     }
 
     public void addControl(SComponent component) {
+        if (localControls.getComponent(0) == placeHolder)
+            localControls.removeAll();
         localControls.add(component);
-        localControls.setVisible(true);
     }
 
     public void addControllable(SComponent component) {
@@ -282,33 +274,4 @@ public class ComponentControls  extends SPanel {
         }
     }
 
-    private void initAjaxSettings() {
-        ajaxEnabledCheckBox.setSelected(frame.isUpdateEnabled());
-        boolean cursorEnabled = ((Boolean) frame.getUpdateCursor()[0]).booleanValue();
-        ajaxCursorEnabledCheckBox.setSelected(cursorEnabled);
-        ajaxDebugViewAnchor.addScriptListener(new JavaScriptListener(
-                JavaScriptEvent.ON_CLICK, "toggleAjaxDebugView()",
-                "toggleAjaxDebugView = function() {\n" +
-                "  if (wingS.ajax.isDebugViewVisible()) wingS.ajax.setDebugViewVisible(false);\n" +
-                "  else wingS.ajax.setDebugViewVisible(true);\n" +
-                "  return false;\n" +
-                "};"
-        ));
-        ajaxForceFrameReload.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.reload();
-            }
-        });
-        ajaxForceFrameReload.setShowAsFormComponent(false);
-        ajaxDebugViewAnchor.add(new SLabel("Toggle AJAX debug view"));
-    }
-
-    private void applyAjaxSettings() {
-        frame.setUpdateEnabled(ajaxEnabledCheckBox.isSelected());
-        boolean cursorEnabled = ajaxCursorEnabledCheckBox.isSelected();
-        SIcon image = (SIcon) frame.getUpdateCursor()[1];
-        int dx = ((Integer) frame.getUpdateCursor()[2]).intValue();
-        int dy = ((Integer) frame.getUpdateCursor()[3]).intValue();
-        frame.setUpdateCursor(cursorEnabled, image, dx, dy);
-    }
 }

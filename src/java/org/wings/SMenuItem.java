@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -21,7 +20,6 @@ import javax.swing.*;
  *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SMenuItem extends SButton {
     protected SComponent menuParent;

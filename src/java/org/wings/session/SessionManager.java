@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -18,7 +17,6 @@ package org.wings.session;
  * A global way to access the current session.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
- * @version $Revision$
  */
 public final class SessionManager {
     private static final ThreadLocal currentSession = new ThreadLocal();

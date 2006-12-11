@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -21,7 +20,6 @@ import org.wings.util.SStringBuilder;
  * Default implementation of a {@link SListCellRenderer}.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public class SDefaultListCellRenderer extends SLabel implements SListCellRenderer {
 

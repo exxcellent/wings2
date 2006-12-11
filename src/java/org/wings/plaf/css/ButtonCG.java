@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -16,6 +15,7 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.plaf.Update;
+import org.wings.plaf.css.PaddingVoodoo;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 
@@ -39,21 +39,25 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
             text = "";
         final String ftext = text;
 
-        if (icon == null && text != null) {
+        if (icon == null) {
             device.print("<table");
             tableAttributes(device, button);
-            device.print("><tr><td>");
+            device.print("><tr><td");
+            PaddingVoodoo.doSimpleTablePaddingWorkaround(device, button);
+            device.print(">");
             writeText(device, text, false);
             device.print("</td></tr></table>");
         }
-        else if (icon != null && text == null) {
+        else if (text == null) {
             device.print("<table");
             tableAttributes(device, button);
-            device.print("><tr><td>");
+            device.print("><tr><td");
+            PaddingVoodoo.doSimpleTablePaddingWorkaround(device, button);
+            device.print(">");
             writeIcon(device, icon, Utils.isMSIE(component));
             device.print("</td></tr></table>");
         }
-        else if (icon != null && text != null) {
+        else {
             new IconTextCompound() {
                 protected void text(Device d) throws IOException {
                     writeText(d, ftext, false);
@@ -113,7 +117,5 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
     public Update updateIcon(SButton button, SIcon icon) {
         return new IconUpdate(button, icon);
     }
-
-
 
 }

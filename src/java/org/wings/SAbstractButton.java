@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -13,8 +12,6 @@
  */
 package org.wings;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.ButtonCG;
 
 import javax.swing.*;
@@ -27,13 +24,10 @@ import java.beans.PropertyChangeListener;
  * Base class for components with button functionality, ie. the need to handle ActionListener notification.
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
- * @version $Revision$
  */
 public abstract class SAbstractButton
         extends SAbstractIconTextCompound
         implements LowLevelEventListener {
-    private final transient static Log log = LogFactory.getLog(SAbstractButton.class);
-
     public static final String SUBMIT_BUTTON = "submit";
     public static final String RESET_BUTTON = "reset";
     public static final String IMAGE_BUTTON = "image";

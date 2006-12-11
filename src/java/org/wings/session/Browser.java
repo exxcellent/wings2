@@ -1,5 +1,4 @@
 /*
- * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -26,7 +25,6 @@ import java.util.regex.Matcher;
  * Detect the browser from the user-agent string passed in the HTTP header.
  *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
- * @version $Revision$
  */
 public class Browser implements Serializable {
     private String agent;
