@@ -13,7 +13,6 @@
 package wingset;
 
 import org.wings.*;
-import org.wings.border.*;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
 import org.wings.event.SMouseEvent;
@@ -66,7 +65,6 @@ public class TableExample
     }
 
     public SComponent createExample() {
-
         table = new STable(new MyTableModel(7, 5));
         table.setName("tableExample");
         table.setShowGrid(true);
@@ -91,7 +89,6 @@ public class TableExample
                 clicks.setText("clicked " + e.getPoint());
             }
         });
-
         table.setVerticalAlignment(SConstants.TOP_ALIGN);
 
         SPanel panel = new SPanel(new SBorderLayout());

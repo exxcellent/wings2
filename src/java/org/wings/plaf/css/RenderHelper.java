@@ -32,7 +32,7 @@ public final class RenderHelper {
 
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
 
-    private boolean allowUsageOfCachedInstances = true;
+    private int allowUsageOfCachedInstances = 0;
 
     public static RenderHelper getInstance(SComponent forComponent) {
         RenderHelper renderHelper =
@@ -48,6 +48,7 @@ public final class RenderHelper {
         scripts.clear();
         menus.clear();
         menueRenderBuffer.reset();
+        allowUsageOfCachedInstances = 0;
     }
 
     public void addScript(String script) {
@@ -104,14 +105,14 @@ public final class RenderHelper {
     }
 
     public void allowCaching() {
-        this.allowUsageOfCachedInstances = true;
+        this.allowUsageOfCachedInstances --;
     }
     public void forbidCaching() {
-        this.allowUsageOfCachedInstances = false;
+        this.allowUsageOfCachedInstances ++;
     }
 
     public boolean isCachingAllowed(final SComponent component) {
-        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances && !(component instanceof SContainer);
+        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances == 0 && !(component instanceof SContainer);
     }
 
 }
