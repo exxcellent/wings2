@@ -18,7 +18,6 @@ import java.util.*;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.EventListenerList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -618,11 +617,16 @@ public class STable extends SComponent
      * @param col Column number to render. Starts with <code>0</code>. May be <code>-1</code> for row selection column.
      * @return The renderer to render the column header
      */
-    public SComponent prepareHeaderRenderer(STableCellRenderer headerRenderer, int col ) {
-        Object headerValue = col >= 0 ? model.getColumnName(col) : null;
-        if ( getColumnModel() != null && getColumnModel().getColumn( col ) != null)
-            headerValue = getColumnModel().getColumn( col ).getHeaderValue();
-        return headerRenderer.getTableCellRendererComponent( this, headerValue, false, -1, col );
+    public SComponent prepareHeaderRenderer(STableCellRenderer headerRenderer, int col) {
+        Object headerValue;
+        if (col < 0) {
+            headerValue = null;
+        } else if (getColumnModel() != null && getColumnModel().getColumn(col) != null) {
+            headerValue = getColumnModel().getColumn(col).getHeaderValue();
+        } else {
+            headerValue = model.getColumnName(col);
+        }
+        return headerRenderer.getTableCellRendererComponent(this, headerValue, false, -1, col);
     }
 
     /**
