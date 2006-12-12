@@ -68,7 +68,7 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         if (oldDocument != null)
             oldDocument.removeDocumentListener(this);
         document.addDocumentListener(this);
-        reloadIfChange(oldDocument, document, ReloadManager.STATE);
+        reloadIfChange(oldDocument, document);
     }
 
     /**
@@ -80,7 +80,7 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         boolean oldEditable = editable;
         editable = ed;
         if (editable != oldEditable)
-            reload(ReloadManager.STATE);
+            reload();
     }
 
 
@@ -187,17 +187,17 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
     //-- implement SDocumentListener to notify TextListeners
     public void insertUpdate(SDocumentEvent e) {
         fireTextValueChanged();
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     public void removeUpdate(SDocumentEvent e) {
         fireTextValueChanged();
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     public void changedUpdate(SDocumentEvent e) {
         fireTextValueChanged();
-        reload(ReloadManager.STATE);
+        reload();
     }
 }
 

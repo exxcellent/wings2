@@ -58,7 +58,7 @@ public class SFrameSet extends SFrame {
             // fireContainerEvent(org.wings.event.SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
-            reload(org.wings.ReloadManager.STATE);
+            reload();
         }
     }
 

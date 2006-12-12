@@ -37,7 +37,7 @@ public final class DefaultReloadManager
     public DefaultReloadManager() {
     }
 
-    public synchronized void reload(SComponent component, int aspect) {
+    public synchronized void reload(SComponent component) {
         if (component != null)
             dirtyComponents.add(component);
     }

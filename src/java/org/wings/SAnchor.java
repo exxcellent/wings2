@@ -100,7 +100,7 @@ public class SAnchor extends SContainer {
         url = r;
         if (url == null && oldURL != null
                 || (url != null && !url.equals(oldURL))) {
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 

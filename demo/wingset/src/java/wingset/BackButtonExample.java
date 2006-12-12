@@ -13,14 +13,12 @@
 
 package wingset;
 
-import org.wings.ReloadManager;
 import org.wings.SButton;
 import org.wings.SButtonGroup;
 import org.wings.SComponent;
 import org.wings.SFlowDownLayout;
 import org.wings.SFlowLayout;
 import org.wings.SFont;
-import org.wings.SForm;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SRadioButton;
@@ -179,7 +177,7 @@ public class BackButtonExample extends WingSetPane {
 
         newEpochButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mainPanel.reload(ReloadManager.STATE); // Force invalidaton of epoch for demonstration purposes
+                mainPanel.reload(); // Force invalidaton of epoch for demonstration purposes
             }
         });
         mainPanel.add(newEpochButton);

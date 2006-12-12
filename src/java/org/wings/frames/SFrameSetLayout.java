@@ -63,7 +63,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     public void setColumns(String columns) {
         this.columns = columns;
         if (getContainer() != null)
-            getContainer().reload(org.wings.ReloadManager.STATE);
+            getContainer().reload();
     }
 
     public String getColumns() {
@@ -82,7 +82,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     public void setRows(String rows) {
         this.rows = rows;
         if (getContainer() != null)
-            getContainer().reload(org.wings.ReloadManager.STATE);
+            getContainer().reload();
     }
 
     public String getRows() {

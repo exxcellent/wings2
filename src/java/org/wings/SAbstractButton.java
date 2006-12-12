@@ -138,7 +138,7 @@ public abstract class SAbstractButton
             if (buttonGroup != null && getSession().getDispatcher() != null) {
                 getSession().getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -211,7 +211,7 @@ public abstract class SAbstractButton
     public void setType(String t) {
         if (isDifferent(type, t)) {
             type = t;
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -346,7 +346,7 @@ public abstract class SAbstractButton
     public void setEventTarget(String target) {
         if (isDifferent(eventTarget, target)) {
             eventTarget = target;
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -399,7 +399,7 @@ public abstract class SAbstractButton
                 actionPropertyChangeListener = createActionPropertyChangeListener(action);
                 action.addPropertyChangeListener(actionPropertyChangeListener);
             }
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -480,7 +480,7 @@ public abstract class SAbstractButton
     }
 
     public void setMnemonic(String mnemonic) {
-        reloadIfChange(this.mnemonic, mnemonic, ReloadManager.STATE);
+        reloadIfChange(this.mnemonic, mnemonic);
         this.mnemonic = mnemonic;
     }
 
@@ -513,7 +513,7 @@ public abstract class SAbstractButton
     public void setWordWrap(boolean wordWrap) {
         if (this.wordWrap != wordWrap) {
             this.wordWrap = wordWrap;
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 }

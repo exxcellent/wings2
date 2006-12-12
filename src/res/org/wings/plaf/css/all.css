@@ -674,22 +674,22 @@ table.SScrollBar table.buttons td:hover {
 }
 
 .SInternalFrame div.WindowBar {
-	padding:.2em;
-	background-color: #aaf;
+    padding:.2em;
+    background-color: #aaf;
     text-align: left;
 }
 
 .SInternalFrame div.WindowBar div.WindowBar_title {
-	padding-right:4em;
-	white-space:pre;
+    padding-right:4em;
+    white-space:pre;
 }
 
 .SInternalFrame div.WindowBar a.WindowButton {
-	float: right;
+    float: right;
 }
 
 .SInternalFrame div.WindowContent {
-	padding: .2em;
+    padding: .2em;
 }
 
 
@@ -715,8 +715,8 @@ form.SDialog {
 
 .SOptionPane div.WindowBar,
 .SDialog div.WindowBar {
-	padding:.2em;
-	background-color: #1f1faa;
+    padding:.2em;
+    background-color: #1f1faa;
     border-bottom: 1px solid #a6a6a6;
 }
 
@@ -728,12 +728,12 @@ form.SDialog {
 
 .SOptionPane div.WindowBar a.WindowButton,
 .SDialog div.WindowBar a.WindowButton {
-	float: right;
+    float: right;
 }
 
 .SOptionPane div.WindowBar a.DeiconifyButton,
 .SDialog div.WindowBar a.DeiconifyButton {
-	display: inline;
+    display: inline;
 }
 
 .SOptionPane div.WindowContent,

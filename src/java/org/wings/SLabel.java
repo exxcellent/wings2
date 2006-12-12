@@ -171,7 +171,7 @@ public class SLabel extends SComponent {
      * @param i
      */
     public void setIcon(SIcon i) {
-        reloadIfChange(icon, i, ReloadManager.STATE);
+        reloadIfChange(icon, i);
         icon = i;
     }
 
@@ -188,7 +188,7 @@ public class SLabel extends SComponent {
      * @param i
      */
     public void setDisabledIcon(SIcon i) {
-        reloadIfChange(disabledIcon, i, ReloadManager.STATE);
+        reloadIfChange(disabledIcon, i);
         disabledIcon = i;
     }
 
@@ -214,7 +214,7 @@ public class SLabel extends SComponent {
      * @param t The new text
      */
     public void setText(String t) {
-        reloadIfChange(text, t, ReloadManager.STATE);
+        reloadIfChange(text, t);
         text = t;
     }
 
@@ -233,7 +233,7 @@ public class SLabel extends SComponent {
     public void setWordWrap(boolean wordWrap) {
         if (this.wordWrap != wordWrap) {
             this.wordWrap = wordWrap;
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 

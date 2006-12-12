@@ -143,7 +143,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
     private final TreeSelectionListener fwdSelectionEvents = new TreeSelectionListener() {
         public void valueChanged(TreeSelectionEvent e) {
             fireTreeSelectionEvent(e);
-            reload(ReloadManager.STATE);
+            reload();
         }
     };
 
@@ -494,7 +494,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 treeState.setExpandedState(new TreePath(model.getRoot()), true);
 
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -895,7 +895,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         }
 
         fireTreeExpanded(p);
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     public void expandRow(int row) {
@@ -906,7 +906,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         treeState.setExpandedState(p, false);
 
         fireTreeCollapsed(p);
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     public void collapseRow(int row) {
@@ -1018,7 +1018,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
             if (e == null)
                 return;
             treeState.treeNodesChanged(e);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void treeNodesInserted(TreeModelEvent e) {
@@ -1026,7 +1026,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 return;
             treeState.treeNodesInserted(e);
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void treeStructureChanged(TreeModelEvent e) {
@@ -1034,7 +1034,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 return;
             treeState.treeStructureChanged(e);
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void treeNodesRemoved(TreeModelEvent e) {
@@ -1042,7 +1042,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 return;
             treeState.treeNodesRemoved(e);
             fireViewportChanged(false);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1104,7 +1104,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                     fireViewportChanged(false);
                 }
             }
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 

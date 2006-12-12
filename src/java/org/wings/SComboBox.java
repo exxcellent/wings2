@@ -127,7 +127,7 @@ public class SComboBox
             // set the current selected item.
             selectedItemReminder = dataModel.getSelectedItem();
 
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -150,7 +150,7 @@ public class SComboBox
         if (maximumRowCount != count) {
             maximumRowCount = count;
 
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -169,7 +169,7 @@ public class SComboBox
     public void setRenderer(SListCellRenderer newRenderer) {
         if (isDifferent(renderer, newRenderer)) {
             renderer = newRenderer;
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -209,7 +209,7 @@ public class SComboBox
             else
                 delayedEvent = true;
 
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -363,7 +363,7 @@ public class SComboBox
      */
     public void addActionListener(ActionListener listener) {
         addEventListener(ActionListener.class, listener);
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     /**
@@ -373,7 +373,7 @@ public class SComboBox
      */
     public void removeActionListener(ActionListener listener) {
         removeEventListener(ActionListener.class, listener);
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     /**
@@ -484,7 +484,7 @@ public class SComboBox
                 delayedEvent = false;
             }
 
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -495,7 +495,7 @@ public class SComboBox
      * @see javax.swing.event.ListDataListener
      */
     public void intervalAdded(ListDataEvent e) {
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     /**
@@ -505,7 +505,7 @@ public class SComboBox
      * @see javax.swing.event.ListDataListener
      */
     public void intervalRemoved(ListDataEvent e) {
-        reload(ReloadManager.STATE);
+        reload();
     }
 
 

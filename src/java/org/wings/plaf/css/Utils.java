@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.border.SAbstractBorder;
+import org.wings.border.SDefaultBorder;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.resource.ResourceManager;
@@ -1191,7 +1192,7 @@ public final class Utils {
                         return 0;
 
                     SAbstractBorder border = (SAbstractBorder) component.getBorder();
-                    if (border != null) {
+                    if (border != SDefaultBorder.INSTANCE) {
                         int oversize = 0;
                         int thickness = border.getThickness(SConstants.LEFT);
                         if (thickness != -1)
@@ -1224,7 +1225,7 @@ public final class Utils {
                         return 0;
 
                     SAbstractBorder border = (SAbstractBorder) component.getBorder();
-                    if (border != null) {
+                    if (border != SDefaultBorder.INSTANCE) {
                         int oversize = 0;
                         int thickness = border.getThickness(SConstants.TOP);
                         if (thickness != -1)

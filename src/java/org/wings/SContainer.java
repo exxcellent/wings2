@@ -264,7 +264,7 @@ public class SContainer extends SComponent {
             fireContainerEvent(SContainerEvent.COMPONENT_REMOVED, c);
 
             c.setParent(null);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -401,7 +401,7 @@ public class SContainer extends SComponent {
             c.addNotify();
             fireContainerEvent(SContainerEvent.COMPONENT_ADDED, c);
 
-            reload(ReloadManager.STATE);
+            reload();
             // STATE is enough. css and script changes are propagated on setParentFrame
             // including them here would'nt help anyway, 'cause the added component might
             // be a container and already contain children

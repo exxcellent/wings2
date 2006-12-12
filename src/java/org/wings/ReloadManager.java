@@ -22,26 +22,11 @@ import java.io.Serializable;
  */
 public interface ReloadManager extends Serializable {
     /**
-     * HTML represenation aspect
-     */
-    public static final int STATE = 1;
-    /**
-     * CSS StyleSheet represenation aspect
-     */
-    public static final int STYLE = 2;
-    /**
-     * Dynamic (Java)Script represenation aspect 
-     */
-    public static final int SCRIPT = 4;
-
-    /**
-     * Mark an aspect of an component as dirty. Valid aspects are {@link #STATE},
-     * {@link #STYLE}, {@link #SCRIPT}
+     * Mark an aspect of an component as dirty.
      *
      * @param component Component whoose representation modified.
-     * @param aspect The respresentation aspect that changed.
      */
-    void reload(SComponent component, int aspect);
+    void reload(SComponent component);
 
     /**
      * Return a set of all components that are marked dirty.

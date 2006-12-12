@@ -12,13 +12,11 @@
  */
 package wingset;
 
-import org.wings.ReloadManager;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
-import org.wings.SForm;
 import org.wings.SGridLayout;
 import org.wings.SLabel;
 import org.wings.SPanel;
@@ -124,7 +122,7 @@ public class JavaScriptListenerExample
         // insert a new JS into the frame's script area without completely reloading the frame.
         // This might be possible as soon as we make the step from componentwise updates to more
         // fine grained updates...
-        SessionManager.getSession().getRootFrame().reload(ReloadManager.STATE);
+        SessionManager.getSession().getRootFrame().reload();
 
         p.add(panel);
         return p;

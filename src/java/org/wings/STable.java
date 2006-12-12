@@ -256,7 +256,7 @@ public class STable extends SComponent
      */
     protected final ListSelectionListener reloadOnSelectionChangeListener = new ListSelectionListener() {
        public void valueChanged(ListSelectionEvent e) {
-           reload(ReloadManager.STATE);
+           reload();
        }
     };
 
@@ -883,7 +883,7 @@ public class STable extends SComponent
         int oldEditingColumn = editingColumn;
         editingColumn = aColumn;
         if (editingColumn != oldEditingColumn)
-            reload(ReloadManager.STATE);
+            reload();
     }
 
     /**
@@ -895,7 +895,7 @@ public class STable extends SComponent
         int oldEditingRow = editingRow;
         editingRow = aRow;
         if (editingRow != oldEditingRow)
-            reload(ReloadManager.STATE);
+            reload();
     }
 
     /**
@@ -995,7 +995,7 @@ public class STable extends SComponent
             Object value = editor.getCellEditorValue();
             setValueAt(value, editingRow, editingColumn);
             removeEditor();
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1007,7 +1007,7 @@ public class STable extends SComponent
      */
     public void editingCanceled(ChangeEvent e) {
         removeEditor();
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     /**
@@ -1099,7 +1099,7 @@ public class STable extends SComponent
     public void clearSelection() {
         if (!getSelectionModel().isSelectionEmpty()) {
             getSelectionModel().clearSelection();
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1337,7 +1337,7 @@ public class STable extends SComponent
             fireViewportChanged(true);
         }
 
-        reload(ReloadManager.STATE);
+        reload();
     }
 
     /**
@@ -1460,7 +1460,7 @@ public class STable extends SComponent
         boolean oldHeaderVisible = headerVisible;
         headerVisible = hv;
         if (oldHeaderVisible != headerVisible) {
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1491,7 +1491,7 @@ public class STable extends SComponent
         boolean oldShowHorizontalLines = showHorizontalLines;
         showHorizontalLines = b;
         if (showHorizontalLines != oldShowHorizontalLines) {
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1515,7 +1515,7 @@ public class STable extends SComponent
         boolean oldShowVerticalLines = showVerticalLines;
         showVerticalLines = b;
         if (showVerticalLines != oldShowVerticalLines) {
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1539,7 +1539,7 @@ public class STable extends SComponent
         intercellSpacing = d;
         if ((intercellSpacing == null && oldIntercellSpacing != null) ||
                 intercellSpacing != null && !intercellSpacing.equals(oldIntercellSpacing))
-            reload(ReloadManager.STATE);
+            reload();
     }
 
     public SDimension getIntercellSpacing() {
@@ -1557,7 +1557,7 @@ public class STable extends SComponent
         intercellPadding = d;
         if ((intercellPadding == null && oldIntercellPadding != null) ||
                 intercellPadding != null && !intercellPadding.equals(oldIntercellPadding))
-            reload(ReloadManager.STATE);
+            reload();
     }
 
     public SDimension getIntercellPadding() {
@@ -1625,7 +1625,7 @@ public class STable extends SComponent
                     fireViewportChanged(false);
                 }
             }
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1733,7 +1733,7 @@ public class STable extends SComponent
             columnModel = newColumnModel;
             columnModel.addColumnModelListener(tableColumnModelListener);
 
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
@@ -1793,30 +1793,30 @@ public class STable extends SComponent
 
         public void columnAdded(STableColumnModelEvent e) {
             fireViewportChanged(true);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void columnHidden(ChangeEvent e) {
             fireViewportChanged(true);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void columnMarginChanged(ChangeEvent e) {
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void columnMoved(STableColumnModelEvent e) {
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void columnRemoved(STableColumnModelEvent e) {
             fireViewportChanged(true);
-            reload(ReloadManager.STATE);
+            reload();
         }
 
         public void columnShown(ChangeEvent e) {
             fireViewportChanged(true);
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 }

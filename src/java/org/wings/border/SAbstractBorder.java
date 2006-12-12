@@ -12,7 +12,6 @@
  */
 package org.wings.border;
 
-import org.wings.ReloadManager;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.style.CSSAttributeSet;
@@ -88,7 +87,7 @@ public abstract class SAbstractBorder
         this.insets = insets;
         attributes = null;
         if (component != null)
-            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
+            component.getSession().getReloadManager().reload(component);
     }
 
     /**
@@ -123,7 +122,7 @@ public abstract class SAbstractBorder
         specs[position].color = color;
         attributes = null;
         if (component != null)
-            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
+            component.getSession().getReloadManager().reload(component);
     }
 
     /**
@@ -141,7 +140,7 @@ public abstract class SAbstractBorder
         specs[position].thickness = thickness;
         attributes = null;
         if (component != null)
-            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
+            component.getSession().getReloadManager().reload(component);
     }
 
     /**
@@ -170,7 +169,7 @@ public abstract class SAbstractBorder
         specs[position].style = style;
         attributes = null;
         if (component != null)
-            component.getSession().getReloadManager().reload(component, ReloadManager.STATE);
+            component.getSession().getReloadManager().reload(component);
     }
 
     /**

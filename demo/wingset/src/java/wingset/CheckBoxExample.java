@@ -12,14 +12,10 @@
  */
 package wingset;
 
-import org.wings.ReloadManager;
-import org.wings.SAbstractButton;
-import org.wings.SBorderLayout;
 import org.wings.SCheckBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
-import org.wings.SForm;
 import org.wings.SGridLayout;
 import org.wings.SIcon;
 import org.wings.SLabel;
@@ -29,7 +25,6 @@ import org.wings.plaf.css.CheckBoxCG;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -120,7 +115,7 @@ public class CheckBoxExample
             useImages.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     cg.setUseIconsInForm(useImages.isSelected());
-                    reload(ReloadManager.STATE);
+                    reload();
                 }
             });
             addControl(useImages);

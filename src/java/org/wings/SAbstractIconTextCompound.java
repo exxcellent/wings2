@@ -115,7 +115,7 @@ public abstract class SAbstractIconTextCompound
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
         this.model = model;
-        reloadIfChange(this.model, model, ReloadManager.STATE);
+        reloadIfChange(this.model, model);
         this.model = model;
     }
 
@@ -242,7 +242,7 @@ public abstract class SAbstractIconTextCompound
      * @param i the icon.
      */
     public void setIcon(SIcon i) {
-        reloadIfChange(icon, i, ReloadManager.STATE);
+        reloadIfChange(icon, i);
         icon = i;
     }
 
@@ -261,7 +261,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown when mouse button is pressed.
      */
     public void setPressedIcon(SIcon icon) {
-        reloadIfChange(pressedIcon, icon, ReloadManager.STATE);
+        reloadIfChange(pressedIcon, icon);
         pressedIcon = icon;
     }
 
@@ -281,7 +281,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon rollOver icon for unselected compound.
      */
     public void setRolloverIcon(SIcon icon) {
-        reloadIfChange(rolloverIcon, icon, ReloadManager.STATE);
+        reloadIfChange(rolloverIcon, icon);
         rolloverIcon = icon;
     }
 
@@ -302,7 +302,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon rollOver icon for selected compound.
      */
     public void setRolloverSelectedIcon(SIcon icon) {
-        reloadIfChange(rolloverSelectedIcon, icon, ReloadManager.STATE);
+        reloadIfChange(rolloverSelectedIcon, icon);
         rolloverSelectedIcon = icon;
     }
 
@@ -321,7 +321,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown for a selected compound.
      */
     public void setSelectedIcon(SIcon icon) {
-        reloadIfChange(selectedIcon, icon, ReloadManager.STATE);
+        reloadIfChange(selectedIcon, icon);
         selectedIcon = icon;
     }
 
@@ -340,7 +340,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown for a selected compound that is disabled.
      */
     public void setDisabledSelectedIcon(SIcon icon) {
-        reloadIfChange(disabledSelectedIcon, icon, ReloadManager.STATE);
+        reloadIfChange(disabledSelectedIcon, icon);
         disabledSelectedIcon = icon;
     }
 
@@ -359,7 +359,7 @@ public abstract class SAbstractIconTextCompound
      * @param icon to be shown for a disabled compound.
      */
     public void setDisabledIcon(SIcon icon) {
-        reloadIfChange(disabledIcon, icon, ReloadManager.STATE);
+        reloadIfChange(disabledIcon, icon);
         disabledIcon = icon;
     }
 
@@ -437,7 +437,7 @@ public abstract class SAbstractIconTextCompound
      * Sets the label of the button.
      */
     public void setText(String t) {
-        reloadIfChange(text, t, ReloadManager.STATE);
+        reloadIfChange(text, t);
         text = t;
     }
 
@@ -472,7 +472,7 @@ public abstract class SAbstractIconTextCompound
             else
                 delayedEvent = true;
 
-            reload(ReloadManager.STATE);
+            reload();
         }
     }
 
