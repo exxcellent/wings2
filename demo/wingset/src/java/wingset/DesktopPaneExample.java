@@ -46,6 +46,7 @@ public class DesktopPaneExample extends WingSetPane {
             }
         }
 
+        desktopPane.setVerticalAlignment(SConstants.TOP_ALIGN);
         return desktopPane;
     }
 
