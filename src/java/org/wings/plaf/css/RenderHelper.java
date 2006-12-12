@@ -8,7 +8,6 @@ import org.wings.SMenuBar;
 import org.wings.SMenuItem;
 import org.wings.SPopupMenu;
 import org.wings.resource.ResourceManager;
-import org.wings.script.ScriptListener;
 import org.wings.io.StringBuilderDevice;
 
 import java.io.IOException;
@@ -25,8 +24,6 @@ public final class RenderHelper {
 
     private static final boolean ALLOW_COMPONENT_CACHING =  // modify in resource.properties
             ((Boolean) ResourceManager.getObject("SComponent.renderCache", Boolean.class)).booleanValue();
-
-    private final List scripts = new ArrayList();
 
     private final List menus = new ArrayList();
 
@@ -45,30 +42,9 @@ public final class RenderHelper {
     }
 
     public void reset() {
-        scripts.clear();
         menus.clear();
         menueRenderBuffer.reset();
         allowUsageOfCachedInstances = 0;
-    }
-
-    public void addScript(String script) {
-        scripts.add(script);
-    }
-
-    public List getCollectedScripts() {
-        return scripts;
-    }
-
-    public void collectScripts(SComponent component) {
-        ScriptListener[] scriptListeners = component.getScriptListeners();
-        String script = null;
-        for (int i = 0; i < scriptListeners.length; ++i) {
-            ScriptListener scriptListener = scriptListeners[i];
-            script = scriptListener.getScript();
-            if (script != null) {
-                addScript(script);
-            }
-        }
     }
 
     private void addMenu(SComponent menuItem) {

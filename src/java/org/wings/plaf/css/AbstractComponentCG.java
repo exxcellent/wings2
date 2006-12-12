@@ -32,6 +32,7 @@ import org.wings.plaf.Update;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
+import org.wings.session.ScriptManager;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
 
@@ -350,7 +351,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         try {
             BorderCG.writeComponentBorderPrefix(device, component);
             writeInternal(device, component);
-            RenderHelper.getInstance(component).collectScripts(component);
+            ScriptManager scriptManager = component.getSession().getScriptManager();
+            scriptManager.addScriptListeners(component.getScriptListeners());
             RenderHelper.getInstance(component).collectMenues(component);
             SToolTipManager.sharedInstance().registerComponent(component);
             BorderCG.writeComponentBorderSufix(device, component);

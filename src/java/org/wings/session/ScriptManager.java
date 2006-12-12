@@ -26,6 +26,12 @@ public class ScriptManager
             scriptListenerList.add(listener);
     }
 
+    public final void addScriptListeners(ScriptListener[] listeners) {
+        for (int i = 0; i < listeners.length; ++i) {
+            addScriptListener(listeners[i]);
+        }
+    }
+
     public final void removeScriptListener(ScriptListener listener) {
         scriptListenerList.remove(listener);
     }

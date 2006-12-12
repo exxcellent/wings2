@@ -14,6 +14,8 @@ import org.wings.plaf.Update;
 import org.wings.io.Device;
 import org.wings.plaf.css.RenderHelper;
 import org.wings.plaf.css.ToolTipCG;
+import org.wings.script.ScriptListener;
+import org.wings.session.ScriptManager;
 import org.wings.session.SessionManager;
 
 /**
@@ -56,7 +58,9 @@ public class UpdateResource extends DynamicResource {
         try {
             final SFrame frame = getFrame();
             final RenderHelper renderHelper = RenderHelper.getInstance(frame);
-            final ReloadManager reloadManager = SessionManager.getSession().getReloadManager();
+            final ReloadManager reloadManager = frame.getSession().getReloadManager();
+            final ScriptManager scriptManager = frame.getSession().getScriptManager();
+            final SToolTipManager tooltipManager = SToolTipManager.sharedInstance();
 
             renderHelper.reset();
 
@@ -72,15 +76,18 @@ public class UpdateResource extends DynamicResource {
 						writeUpdate(out, (Update) i.next());
 					}
 					// update scripts
-					for (Iterator i = renderHelper.getCollectedScripts().iterator(); i.hasNext();) {
-						writeUpdate(out, i.next().toString());
-					}
+                    ScriptListener[] scriptListeners = scriptManager.getScriptListeners();
+                    for (int i = 0; i < scriptListeners.length; ++i) {
+                        if (scriptListeners[i].getScript() != null) {
+                            writeUpdate(out, scriptListeners[i].getScript());
+                        }
+                    }
+                    scriptManager.clearScriptListeners();
                     // update tooltips
-                    SToolTipManager ttManager = SToolTipManager.sharedInstance();
-                    final List ttComponentIds = ttManager.getRegisteredComponents();
+                    final List ttComponentIds = tooltipManager.getRegisteredComponents();
                     if (ttComponentIds.size() != 0) {
                         writeUpdate(out, ToolTipCG.generateTooltipInitScript(ttComponentIds));
-                        ttManager.clearRegisteredComponents();
+                        tooltipManager.clearRegisteredComponents();
                     }
                     // update event epoch
                     writeUpdate(out, "wingS.ajax.updateEpoch(\"" + frame.getEventEpoch() + "\")");

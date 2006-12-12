@@ -16,9 +16,7 @@ import org.wings.SDialog;
 import org.wings.SComponent;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
-import org.wings.plaf.css.RenderHelper;
 import org.wings.plaf.css.Utils;
-import org.wings.util.SStringBuilder;
 
 import java.io.IOException;
 
@@ -28,20 +26,7 @@ public final class DialogCG extends org.wings.plaf.css.DialogCG {
 
     public void writeInternal(final Device device, final SComponent _c) throws IOException {
         super.writeInternal(device, _c);
-
-        final SStringBuilder script = new SStringBuilder();
-        script.append("    function hideSelectBoxes() {\n");
-        script.append("        for (var i = 0; i < document.forms.length; i++) {\n");
-        script.append("            for (var e = 0; e < document.forms[i].length; e++) {\n");
-        script.append("                if (document.forms[i].elements[e].tagName == 'SELECT') {\n");
-        script.append("                    document.forms[i].elements[e].style.visibility = 'hidden';\n");
-        script.append("                }\n");
-        script.append("            }\n");
-        script.append("        }\n");
-        script.append("    }\n");
-        script.append("    hideSelectBoxes();\n");
-
-        RenderHelper.getInstance(_c).addScript(script.toString());
+        _c.getSession().getScriptManager().addScriptListener(new HideSelectBoxesScript());
     }
 
     /* (non-Javadoc)

@@ -475,7 +475,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             }
         }
 
-        writeScriptBlock(device, frame);
+        handleScripts(device, frame);
 
         device.print("</body>\n</html>\n");
 
@@ -483,9 +483,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         RenderHelper.getInstance(frame).reset();
     }
 
-    protected void writeScriptBlock(Device device, SComponent component) throws IOException {
+    protected void handleScripts(Device device, SComponent component) throws IOException {
         final SFrame frame = (SFrame) component;
-        final RenderHelper helper = RenderHelper.getInstance(frame);
+        final ScriptManager scriptManager = frame.getSession().getScriptManager();
+        final SToolTipManager tooltipManager = SToolTipManager.sharedInstance();
 
         device.print("<script type=\"text/javascript\">\n");
 
@@ -504,29 +505,23 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 	"{ 'enabled':" + updateCursor[0] + ", 'image':'" + updateCursor[1] +
                 	"', 'dx':" + updateCursor[2] + ", 'dy':" + updateCursor[3] + " };\n");
 
-        helper.collectScripts(frame);
+        // hand script listeners of frame to script manager
+        scriptManager.addScriptListeners(frame.getScriptListeners());
 
-        device.print("// script code collected during rendering:\n");
-        for (Iterator i = helper.getCollectedScripts().iterator(); i.hasNext();) {
-            device.print(i.next()).print("\n");
-        }
-
-        ScriptManager scriptManager = component.getSession().getScriptManager();
+        // print all scripts
         ScriptListener[] scriptListeners = scriptManager.getScriptListeners();
         for (int i = 0; i < scriptListeners.length; ++i) {
-            ScriptListener scriptListener = scriptListeners[i];
-            String script = scriptListener.getScript();
-            if (script != null) {
-                device.print(script);
+            if (scriptListeners[i].getScript() != null) {
+                device.print(scriptListeners[i].getScript()).print("\n");
             }
         }
         scriptManager.clearScriptListeners();
 
-        List tooltipComponentIds = SToolTipManager.sharedInstance().getRegisteredComponents();
-        if (tooltipComponentIds.size() != 0) {
-            String tooltipsInit = ToolTipCG.generateTooltipInitScript(tooltipComponentIds);
-            device.print(tooltipsInit);
-            SToolTipManager.sharedInstance().clearRegisteredComponents();
+        // print all tooltips
+        final List ttComponentIds = tooltipManager.getRegisteredComponents();
+        if (ttComponentIds.size() != 0) {
+            device.print(ToolTipCG.generateTooltipInitScript(ttComponentIds));
+            tooltipManager.clearRegisteredComponents();
         }
 
         device.print("</script>\n");
