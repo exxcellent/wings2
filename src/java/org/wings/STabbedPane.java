@@ -108,8 +108,8 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @see LowLevelEventListener#isEpochCheckEnabled()
      */
     private boolean epochCheckEnabled = true;
-    
-    
+
+
     /**
 	 * used to forward change events to change listeners of the tabbed pane
 	 */
@@ -521,7 +521,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
         removePageAt(index);
         if (newTabCount > 0 && selected != -1) {
             if (selected >= (newTabCount)) {
-                /* last tab was selected and maybe removed, so try to find a 
+                /* last tab was selected and maybe removed, so try to find a
                  * tab to select before
                  */
                 int decrement = 1;
@@ -537,7 +537,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
                 }
             } else {
                 int newTab = selected;
-                /* some tab was selected and maybe removed, so try to find a 
+                /* some tab was selected and maybe removed, so try to find a
                  * tab to select behind or before the removed one
                  */
                 while ((newTabCount - 1 > newTab) && !isEnabledAt(newTab)) {

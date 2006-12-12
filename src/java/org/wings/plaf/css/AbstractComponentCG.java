@@ -383,6 +383,14 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 			super(component);
 		}
 
+        public int getProperty() {
+            return AFFECTS_COMPLETE_COMPONENT;
+        }
+
+        public int getPriority() {
+            return 5;
+        }
+
 		public Handler getHandler() {
             String htmlCode = "";
             String exception = null;

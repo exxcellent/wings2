@@ -87,7 +87,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
     public static final String YAHOO_CONNECTION = (String) ResourceManager.getObject("JS.yahooConnection", String.class);
     public static final String YAHOO_SLIDER = (String) ResourceManager.getObject("JS.yahooSlider", String.class);
-    public static final String YAHOO_DND = (String) ResourceManager.getObject("JS.yahooDnD", String.class);            
+    public static final String YAHOO_DND = (String) ResourceManager.getObject("JS.yahooDnD", String.class);
 
     /**
      * JavaScript needed for Drag and Drop support
@@ -139,7 +139,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         headerUtil.addHeader(createExternalizedHeader(session, YAHOO_CONTAINER, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, YAHOO_CONNECTION, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, YAHOO_DND, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_SLIDER, "text/javascript"));        
+        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_SLIDER, "text/javascript"));
 
         headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
         headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
@@ -524,11 +524,11 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         List tooltipComponentIds = SToolTipManager.sharedInstance().getRegisteredComponents();
         if (tooltipComponentIds.size() != 0) {
-            String tooltipsInit = ToolTipCG.generateTooltipInitScript(tooltipComponentIds);        
+            String tooltipsInit = ToolTipCG.generateTooltipInitScript(tooltipComponentIds);
             device.print(tooltipsInit);
-            SToolTipManager.sharedInstance().clearRegisteredComponents();    
+            SToolTipManager.sharedInstance().clearRegisteredComponents();
         }
-        
+
         device.print("</script>\n");
     }
 
@@ -573,6 +573,14 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         public ComponentUpdate(SComponent component) {
             super(component);
+        }
+
+        public int getProperty() {
+            return AFFECTS_COMPLETE_COMPONENT;
+        }
+
+        public int getPriority() {
+            return 5;
         }
 
         public Handler getHandler() {

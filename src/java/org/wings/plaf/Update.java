@@ -6,14 +6,15 @@ import org.wings.SComponent;
 
 public interface Update {
 
-    public static final int STANDARD_UPDATE = 0;
-    public static final int MULTIPLE_UPDATE = 1;
+    public static final int DEFAULT_INCREMENTAL_UPDATE = 0;
+    public static final int AFFECTS_COMPLETE_COMPONENT = 1;
+    public static final int ALLOWS_SEVERAL_OF_THE_SAME = 2;
 
     public SComponent getComponent();
 
-    public long getPositioning();
-
     public int getProperty();
+
+    public int getPriority();
 
     public Handler getHandler();
 

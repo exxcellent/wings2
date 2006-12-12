@@ -27,6 +27,8 @@ public class DefaultReloadManager implements ReloadManager {
 
     private final transient static Log log = LogFactory.getLog(DefaultReloadManager.class);
 
+    private int updateCount = 0;
+
     private boolean updateMode = false;
 
     private boolean deliveryPhase = false;
@@ -36,30 +38,40 @@ public class DefaultReloadManager implements ReloadManager {
     protected final Map updatesByComponent = new HashMap();
 
     public void reload(SComponent component) {
-        if (component == null)
-            return;
-
-        if (!deliveryPhase) {
+        if (updateMode)
+            addUpdate(component.getCG().update(component));
+        else
             componentsToReload.add(component);
-        } else if (log.isDebugEnabled()) {
-            log.debug("Component " + component + " requested reload during delivery phase.");
-        }
     }
 
     public void addUpdate(Update update) {
-        if (update == null)
-            return;
+        if (update == null) {
+            String msg = "Update must not be null! \nEvery CG is required to implement the update " +
+                    "methods imposed by the according interface under \"org.wings.plaf\". If a CG " +
+                    "doesn't want to support fine grained updates, it may be sufficient to return " +
+                    "\"null\" here. However, every CGs is expected to implement at least \"update(" +
+                    "SComponent component)\" forced by the \"org.wings.plaf.ComponentCG\" interface.";
+            throw new IllegalArgumentException(msg);
+        } else if (update.getComponent() == null) {
+            String msg = "Component must not be null! Every update belongs to a specific component.";
+            throw new IllegalArgumentException(msg);
+        }
+
         SComponent component = update.getComponent();
-        if (component == null || component.getParentFrame() == null)
-            return;
 
         if (!deliveryPhase) {
+            PotentialUpdate potentialUpdate = new PotentialUpdate(update);
             Set updatesOfComponent = getUpdatesOfComponent(component);
-            updatesOfComponent.remove(update);
-            updatesOfComponent.add(update);
+            updatesOfComponent.remove(potentialUpdate);
+            updatesOfComponent.add(potentialUpdate);
             updatesByComponent.put(component, updatesOfComponent);
+
+            if ((update.getProperty() & Update.AFFECTS_COMPLETE_COMPONENT)
+                    == Update.AFFECTS_COMPLETE_COMPONENT) {
+                componentsToReload.add(component);
+            }
         } else if (log.isDebugEnabled()) {
-            log.debug("Component " + component + " requested update during delivery phase.");
+            log.debug("Component " + component + " changed during delivery phase.");
         }
     }
 
@@ -70,27 +82,22 @@ public class DefaultReloadManager implements ReloadManager {
         for (Iterator i = updatesByComponent.values().iterator(); i.hasNext();) {
             filteredUpdates.addAll((Set) i.next());
         }
-        for (Iterator i = componentsToReload.iterator(); i.hasNext();) {
-            SComponent component = (SComponent) i.next();
-            filteredUpdates.add(component.getCG().update(component));
-        }
-        Collections.sort(filteredUpdates, new PositioningComparator());
+        Collections.sort(filteredUpdates, getOrderOfUpdates());
 
         return filteredUpdates;
     }
 
     public Set getDirtyComponents() {
-        int maxSize = componentsToReload.size() + updatesByComponent.size();
-        Set dirtyComponents = new HashSet(maxSize);
-        dirtyComponents.addAll(componentsToReload);
-        dirtyComponents.addAll(updatesByComponent.keySet());
-        return dirtyComponents;
+        if (updateMode)
+            return updatesByComponent.keySet();
+        else
+            return componentsToReload;
     }
 
     public Set getDirtyFrames() {
         final Set dirtyFrames = new HashSet(5);
-        for (Iterator iterator = getDirtyComponents().iterator(); iterator.hasNext();) {
-            SFrame parentFrame = ((SComponent) iterator.next()).getParentFrame();
+        for (Iterator i = getDirtyComponents().iterator(); i.hasNext();) {
+            SFrame parentFrame = ((SComponent) i.next()).getParentFrame();
             if (parentFrame != null)
                 dirtyFrames.add(parentFrame);
         }
@@ -98,17 +105,17 @@ public class DefaultReloadManager implements ReloadManager {
     }
 
     public void invalidateFrames() {
-        Iterator it = getDirtyFrames().iterator();
-        while (it.hasNext()) {
-            ((SFrame) it.next()).invalidate();
-            it.remove();
+        Iterator i = getDirtyFrames().iterator();
+        while (i.hasNext()) {
+            ((SFrame) i.next()).invalidate();
+            i.remove();
         }
         deliveryPhase = true;
     }
 
     public void notifyCGs() {
-        for (Iterator iterator = getDirtyComponents().iterator(); iterator.hasNext();) {
-            SComponent component = (SComponent) iterator.next();
+        for (Iterator i = getDirtyComponents().iterator(); i.hasNext();) {
+            SComponent component = (SComponent) i.next();
             ComponentCG componentCG = component.getCG();
             if (componentCG != null)
                 componentCG.componentChanged(component);
@@ -116,6 +123,7 @@ public class DefaultReloadManager implements ReloadManager {
     }
 
     public void clear() {
+        updateCount = 0;
         updateMode = false;
         deliveryPhase = false;
         componentsToReload.clear();
@@ -146,52 +154,52 @@ public class DefaultReloadManager implements ReloadManager {
         return updatesOfComponent;
     }
 
-    protected Set getUpdatesOfComponent(SComponent component, int property) {
-        Set updatesOfComponentWithProperty = new HashSet(5);
-        Set updatesOfComponent = getUpdatesOfComponent(component);
-        for (Iterator i = updatesOfComponent.iterator(); i.hasNext();) {
-            Update update = (Update) i.next();
-            if (update.getProperty() == property) {
-                updatesOfComponentWithProperty.add(update);
-            }
-        }
-        return updatesOfComponentWithProperty;
+    protected Comparator getOrderOfUpdates() {
+        return
+            new CombinedComparator(
+                new InverseComparator(new PriorityComparator()),
+                new PositionComparator()
+            );
     }
 
     protected void filterUpdates() {
-        if (log.isDebugEnabled()) {
-            debugReloads("Reloads");
-            debugUpdates("Overall Updates");
+        if (log.isDebugEnabled())
+            printAllUpdates("potential updates");
+
+        for (Iterator i = updatesByComponent.keySet().iterator(); i.hasNext();) {
+            SComponent component = (SComponent) i.next();
+            if (!component.isRecursivelyVisible() || component.getParentFrame() == null) {
+                i.remove();
+                componentsToReload.remove(component);
+            }
         }
 
-        updatesByComponent.keySet().removeAll(componentsToReload);
-
-        SortedMap componentsByPath = new TreeMap(new PathToParentComparator());
+        SortedMap componentsByPath = new TreeMap(new PathComparator());
         for (Iterator i = componentsToReload.iterator(); i.hasNext();) {
             SComponent component = (SComponent) i.next();
-            componentsByPath.put(getPathToParentFrame(component), component);
+            componentsByPath.put(calculatePath(component), component);
         }
         for (Iterator i = componentsByPath.keySet().iterator(); i.hasNext();) {
             String topPath = (String) i.next();
+            retainUpdatesWithProperty(
+                    getUpdatesOfComponent((SComponent) componentsByPath.get(topPath)),
+                    Update.AFFECTS_COMPLETE_COMPONENT);
             while (i.hasNext()) {
                 String subPath = (String) i.next();
                 if (subPath.startsWith(topPath)) {
                     componentsToReload.remove(componentsByPath.get(subPath));
+                    updatesByComponent.keySet().remove(componentsByPath.get(subPath));
                     i.remove();
                 }
             }
             i = componentsByPath.tailMap(topPath + "\0").keySet().iterator();
         }
 
-        if (log.isDebugEnabled()) {
-            debugUpdates("Filtered Updates");
-        }
+        if (log.isDebugEnabled())
+            printAllUpdates("effective updates");
     }
 
-    protected String getPathToParentFrame(SComponent component) {
-        if (component == null)
-            throw new IllegalArgumentException("Component must not be null!");
-
+    private String calculatePath(SComponent component) {
         SStringBuilder path = new SStringBuilder("/").append(component.getName());
         while (component.getParent() != null) {
             path = path.insert(0, "/").insert(1, component.getParent().getName());
@@ -200,43 +208,25 @@ public class DefaultReloadManager implements ReloadManager {
         return path.toString();
     }
 
-    private class PathToParentComparator implements Comparator {
-
-        public int compare(Object object1, Object object2) {
-            String path1 = (String) object1;
-            String path2 = (String) object2;
-            int depthOfPath1 = path1.split("/").length;
-            int depthOfPath2 = path2.split("/").length;
-            if (depthOfPath1 < depthOfPath2) return -1;
-            if (depthOfPath1 > depthOfPath2) return 1;
-            return path1.compareTo(path2);
+    private void removeUpdatesWithProperty(Iterable iterable, int propertyMask) {
+        Iterator i = iterable.iterator();
+        while (i.hasNext()) {
+            Update update = (Update) i.next();
+            if ((update.getProperty() & propertyMask) == propertyMask)
+                i.remove();
         }
-
     }
 
-    private class PositioningComparator implements Comparator {
-
-        public int compare(Object object1, Object object2) {
-            Update update1 = (Update) object1;
-            Update update2 = (Update) object2;
-            if (update1.getPositioning() < update2.getPositioning()) return -1;
-            if (update1.getPositioning() > update2.getPositioning()) return 1;
-            return 0;
+    private void retainUpdatesWithProperty(Iterable iterable, int propertyMask) {
+        Iterator i = iterable.iterator();
+        while (i.hasNext()) {
+            Update update = (Update) i.next();
+            if ((update.getProperty() & propertyMask) != propertyMask)
+                i.remove();
         }
-
     }
 
-    private void debugReloads(String header) {
-        int numberOfReloads = 0;
-        log.debug("--- " + header + " ---");
-        for (Iterator i = componentsToReload.iterator(); i.hasNext();) {
-            log.debug(i.next());
-            ++numberOfReloads;
-        }
-        log.debug("> " + numberOfReloads);
-    }
-
-    private void debugUpdates(String header) {
+    private void printAllUpdates(String header) {
         int numberOfUpdates = 0;
         log.debug("--- " + header + " ---");
         for (Iterator i = updatesByComponent.keySet().iterator(); i.hasNext();) {
@@ -250,6 +240,150 @@ public class DefaultReloadManager implements ReloadManager {
             log.debug(output.toString());
         }
         log.debug("> " + numberOfUpdates);
+    }
+
+    private final class PotentialUpdate implements Update {
+
+        private Update update;
+        private int position;
+
+        public PotentialUpdate(Update update) {
+            this.update = update;
+            this.position = updateCount++;
+        }
+
+        public SComponent getComponent() {
+            return update.getComponent();
+        }
+
+        public Handler getHandler() {
+            return update.getHandler();
+        }
+
+        public int getProperty() {
+            return update.getProperty();
+        }
+
+        public int getPriority() {
+            return update.getPriority();
+        }
+
+        public boolean equals(Object object) {
+            if (object == this)
+                return true;
+            if (object == null || object.getClass() != this.getClass())
+                return false;
+
+            Update update = (Update) object;
+
+            if ((this.getProperty() & ALLOWS_SEVERAL_OF_THE_SAME)
+                    == ALLOWS_SEVERAL_OF_THE_SAME) {
+                return false;
+            } else {
+                if (!this.getComponent().equals(update.getComponent()))
+                    return false;
+                if (this.getProperty() != update.getProperty())
+                    return false;
+                if (this.getPriority() != update.getPriority())
+                    return false;
+
+                return true;
+            }
+        }
+
+        public int hashCode() {
+            int hashCode = 17;
+            int dispersionFactor = 37;
+
+            hashCode = hashCode * dispersionFactor + this.getComponent().hashCode();
+            hashCode = hashCode * dispersionFactor + this.getProperty();
+            hashCode = hashCode * dispersionFactor + this.getPriority();
+
+            return hashCode;
+        }
+
+        public String toString() {
+            String clazz = update.getClass().getName();
+            int index = clazz.lastIndexOf("$");
+            if (index < 0)
+                index = clazz.lastIndexOf(".");
+            return clazz.substring(++index) + "[" + getPriority() + "|" + getPosition() + "]";
+        }
+
+        public int getPosition() {
+            return position;
+        }
+
+    }
+
+    private static class PathComparator implements Comparator {
+
+        public int compare(Object object1, Object object2) {
+            String path1 = (String) object1;
+            String path2 = (String) object2;
+            int depthOfPath1 = path1.split("/").length;
+            int depthOfPath2 = path2.split("/").length;
+            if (depthOfPath1 < depthOfPath2) return -1;
+            if (depthOfPath1 > depthOfPath2) return 1;
+            return path1.compareTo(path2);
+        }
+
+    }
+
+    private static class PositionComparator implements Comparator {
+
+        public int compare(Object object1, Object object2) {
+            PotentialUpdate update1 = (PotentialUpdate) object1;
+            PotentialUpdate update2 = (PotentialUpdate) object2;
+            if (update1.getPosition() < update2.getPosition()) return -1;
+            if (update1.getPosition() > update2.getPosition()) return 1;
+            return 0;
+        }
+
+    }
+
+    private static class PriorityComparator implements Comparator {
+
+        public int compare(Object object1, Object object2) {
+            PotentialUpdate update1 = (PotentialUpdate) object1;
+            PotentialUpdate update2 = (PotentialUpdate) object2;
+            if (update1.getPriority() < update2.getPriority()) return -1;
+            if (update1.getPriority() > update2.getPriority()) return 1;
+            return 0;
+        }
+
+    }
+
+    private static class CombinedComparator implements Comparator {
+
+        private Comparator comparator1;
+        private Comparator comparator2;
+
+        public CombinedComparator(Comparator c1, Comparator c2) {
+            this.comparator1 = c1;
+            this.comparator2 = c2;
+        }
+
+        public int compare(Object object1, Object object2) {
+            int result = comparator1.compare(object1, object2);
+            if (result == 0)
+                return comparator2.compare(object1, object2);
+            else
+                return result;
+        }
+    }
+
+    private static class InverseComparator implements Comparator {
+
+        private Comparator comparator;
+
+        public InverseComparator(Comparator c) {
+            this.comparator = c;
+        }
+
+        public int compare(Object object1, Object object2) {
+            return -comparator.compare(object1, object2);
+        }
     }
 
 }

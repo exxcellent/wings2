@@ -19,7 +19,6 @@ import org.wings.SComboBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
-import org.wings.SForm;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
