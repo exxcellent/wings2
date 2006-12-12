@@ -1190,7 +1190,7 @@ public final class Utils {
                         return 0;
 
                     SAbstractBorder border = (SAbstractBorder) component.getBorder();
-                    if (border != null) {
+                    if (border != SDefaultBorder.INSTANCE) {
                         int oversize = 0;
                         int thickness = border.getThickness(SConstants.TOP);
                         if (thickness != -1)
