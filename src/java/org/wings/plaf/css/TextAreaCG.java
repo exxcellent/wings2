@@ -75,8 +75,10 @@ public final class TextAreaCG extends AbstractComponentCG implements
                 * very time consuming at large texts. But if this way makes to much trouble, the other will be quite equal */
             String text = component.getText();
             if (text != null) {
-                device.print("<nobr>");               /* Should we really ignore everything ? */
-                Utils.writeQuoted(device,text,true);    /* Write new text */
+                device.print("<nobr");                 /* Should we really ignore everything ? */
+                Utils.optAttribute(device, "id", component.getName());
+                device.print(">");
+                Utils.writeQuoted(device,text,true);   /* Write new text */
                 device.print("</nobr>");
             }
 

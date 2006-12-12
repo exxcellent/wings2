@@ -274,7 +274,11 @@ wingS.ajax.updateScriptHeader = function(type, source, add) {
  * @param {String} value - the new value of the component
  */
 wingS.ajax.updateValue = function(componentId, value) {
-    document.getElementById(componentId).value = value;
+    var component = document.getElementById(componentId);
+    if (component.nodeName == "NOBR")
+        component.firstChild.data = value;
+    else
+        component.value = value;
 };
 
 /**
