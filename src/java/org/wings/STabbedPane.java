@@ -267,7 +267,10 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
             throw new IllegalArgumentException("illegal tab placement: must be TOP, BOTTOM, LEFT, or RIGHT");
         }
 
-        this.tabPlacement = tabPlacement;
+        if (this.tabPlacement != tabPlacement) {
+            this.tabPlacement = tabPlacement;
+            reload();
+        }
     }
 
     /**
@@ -291,6 +294,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
         this.model = model;
         if (this.model != null)
             this.model.addChangeListener(fwdChangeEvents);
+        reload();
     }
 
     /**
@@ -590,7 +594,10 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * Sets the maximum tabs per line. tabs >= 0: No maximum.
      */
     public void setMaxTabsPerLine(int tabs) {
-        maxTabsPerLine = tabs;
+        if (tabs != maxTabsPerLine) {
+            maxTabsPerLine = tabs;
+            reload();
+        }
     }
 
     /**
@@ -696,7 +703,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @see #getTitleAt
      */
     public void setTitleAt(int index, String title) {
-        ((Page) pages.get(index)).title = title;
+        Page page = (Page)pages.get(index);
+        if (isDifferent(page.title, title)) {
+            page.title = title;
+            reload();
+        }
     }
 
     /**
@@ -708,7 +719,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @see #getIconAt
      */
     public void setIconAt(int index, SIcon icon) {
-        ((Page) pages.get(index)).icon = icon;
+        Page page = (Page)pages.get(index);
+        if (isDifferent(page.icon, icon)) {
+            page.icon = icon;
+            reload();
+        }
     }
 
     /**
@@ -720,7 +735,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @see #getDisabledIconAt
      */
     public void setDisabledIconAt(int index, SIcon disabledIcon) {
-        ((Page) pages.get(index)).disabledIcon = disabledIcon;
+        Page page = (Page)pages.get(index);
+        if (isDifferent(page.disabledIcon, disabledIcon)) {
+            page.disabledIcon = disabledIcon;
+            reload();
+        }
     }
 
     /**
@@ -734,7 +753,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @see #getBackgroundAt
      */
     public void setBackgroundAt(int index, Color background) {
-        ((Page) pages.get(index)).background = background;
+        Page page = (Page)pages.get(index);
+        if (isDifferent(page.background, background)) {
+            page.background = background;
+            reload();
+        }
     }
 
     /**
@@ -748,7 +771,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @see #getForegroundAt
      */
     public void setForegroundAt(int index, Color foreground) {
-        ((Page) pages.get(index)).foreground = foreground;
+        Page page = (Page)pages.get(index);
+        if (isDifferent(page.foreground, foreground)) {
+            page.foreground = foreground;
+            reload();
+        }
     }
 
     /**
@@ -762,7 +789,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @see #getStyleAt
      */
     public void setStyleAt(int index, String style) {
-        ((Page) pages.get(index)).style = style;
+        Page page = (Page)pages.get(index);
+        if (page.style != style) {
+            page.style = style;
+            reload();
+        }
     }
 
     /**
@@ -774,7 +805,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @see #isEnabledAt
      */
     public void setEnabledAt(int index, boolean enabled) {
-        ((Page) pages.get(index)).enabled = enabled;
+        Page page = (Page)pages.get(index);
+        if (page.enabled != enabled) {
+            page.enabled = enabled;
+            reload();
+        }
     }
 
     /**
@@ -783,7 +818,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      * @param index set the tooltip for this tab
      */
     public void setToolTipTextAt(int index, String toolTip) {
-        ((Page) pages.get(index)).toolTip = toolTip;
+        Page page = (Page)pages.get(index);
+        if (isDifferent(page.toolTip, toolTip)) {
+            page.toolTip = toolTip;
+            reload();
+        }
     }
 
     /**
