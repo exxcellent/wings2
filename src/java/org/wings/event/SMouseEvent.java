@@ -3,6 +3,8 @@ package org.wings.event;
 import org.wings.SPoint;
 import org.wings.SComponent;
 
+import java.util.EventObject;
+
 /**
  * A 'virtual' mouse event. To convert the inner <code>SPoint</code> to a sensefule meaning you should use the
  * according converions methods like {@link org.wings.STree#rowAtPoint(org.wings.SPoint)} or
@@ -12,6 +14,7 @@ import org.wings.SComponent;
  * @author Benjamin Schmid <B.Schmid@exxcellent.de>
  */
 public class SMouseEvent
+    extends EventObject
 {
     protected int id;
     protected boolean consumed;
@@ -25,6 +28,7 @@ public class SMouseEvent
      * @param point An SPoint. Intepretation is component dependent.
      */
     public SMouseEvent(SComponent component, int id, SPoint point) {
+        super(component);
         this.component = component;
         this.id = id;
         this.point = point;
