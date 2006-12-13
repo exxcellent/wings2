@@ -28,11 +28,7 @@ public final class ProgressBarCG extends AbstractComponentCG implements  org.win
         super.installCG(comp);
         final SProgressBar component = (SProgressBar) comp;
         final CGManager manager = component.getSession().getCGManager();
-        Object value = manager.getObject("SProgressBar.borderColor", java.awt.Color.class);
-        if (value != null) {
-            component.setBorderColor((java.awt.Color) value);
-        }
-        value = manager.getObject("SProgressBar.filledColor", java.awt.Color.class);
+        Object value = manager.getObject("SProgressBar.filledColor", java.awt.Color.class);
         if (value != null) {
             component.setFilledColor((java.awt.Color) value);
         }
@@ -53,86 +49,42 @@ public final class ProgressBarCG extends AbstractComponentCG implements  org.win
     public void writeInternal(final Device device, final SComponent pComp) throws IOException {
         final SProgressBar component = (SProgressBar) pComp;
 
-        /* FIXME: The problem here is that the component size is used as the
-         * size for the progressbar. If text is rendered below
-         * (isStringPainted), then that text is out of the component box. So
-         * either create a distinct ProgressBar size or subtract some height.
-         * OL: created distinct height. other solution is removing string
-         * completely.
-         */
         final SDimension size = component.getProgressBarDimension();
-        final int minSize = component.isBorderPainted() ? 3 : 1;
-        int width = (size != null && size.getWidthInt() >= minSize) ? size.getWidthInt() : 200;
-        int height = (size != null && size.getHeightInt() >= minSize) ? size.getHeightInt() : 10;
+        int height = size != null ? size.getHeightInt() : 10;
 
-        writeDivPrefix(device, component);
-
-        if (component.isBorderPainted()) {
-            if (isMSIE(component)) {
-                // compensation for whole component as MSIE uses the correct CSS
-                // border mox model. Hence border is rendered AROUND the content size
-                width -= 2;
-                height -= 2;
-            }
-            device.print("<div style=\"width:").print(width).print("px;height:");
-            device.print(height).print("px;border:1px solid ");
-            Utils.write(device, component.getBorderColor());
-            device.print(";\">");
-            if (isMSIE(component) == false) {
-                // compensation for inner component to border only
-                // for border  box mode used by gecko (and formerly MSIE).
-                width -= 2;
-                height -= 2;
-            }
-        }
-
-        device.print("<table><tr style=\"height:").print(height).print("px\"\">");
-
-        // Part with completed bar
-        final int completedWidth = (int) Math.round(width * component.getPercentComplete());
-        device.print("<td");
-        if (component.getFilledColor() != null) {
-            device.print(" style=\"background-color: ");
-            Utils.write(device, component.getFilledColor());
-            device.print(";\"");
-        }
+        device.print("<table");
+        writeAllAttributes(device, component);
+        device.print("><tr class=\"bar\"");
+        Utils.optAttribute(device, "height", height);
         device.print(">");
-        printSpacerIcon(device, completedWidth, height);
-        device.print("</td>");
 
-        // Part with remaining, incompleted bar
-        final int incompleteWidth = width - completedWidth;
-        device.print("<td");
-        if (component.getUnfilledColor() != null) {
-            device.print(" style=\"background-color: ");
-            Utils.write(device, component.getUnfilledColor());
-           device.print(";\"");
+        final int filledWidth = (int) Math.round(100 * component.getPercentComplete());
+        if (filledWidth > 0) {
+            device.print("<td");
+            Utils.optAttribute(device, "width", filledWidth + "%");
+            Utils.optAttribute(device, "bgcolor", component.getFilledColor());
+            device.print("></td>");
         }
-        device.print(">");
-        printSpacerIcon(device, incompleteWidth, height);
-        device.print("</td></tr></table>");
-        if (component.isBorderPainted()) {
-            device.print("</div>");
+
+        final int unfilledWidth = 100 - filledWidth;
+        if (unfilledWidth > 0) {
+            device.print("<td");
+            Utils.optAttribute(device, "width", unfilledWidth + "%");
+            Utils.optAttribute(device, "bgcolor", component.getUnfilledColor());
+            device.print("></td>");
         }
+
+        device.print("</tr>");
 
         if (component.isStringPainted()) {
-            device.print("<div style=\"width: 100%; text-align: center;\"");
-            Utils.optAttribute(device, "class", Utils.appendSuffixesToWords(component.getStyle(), "_string"));
-            device.print(">");
+            if (filledWidth != 0 && unfilledWidth != 0)
+                device.print("<tr class=\"text\"><td colspan=\"2\">");
+            else
+                device.print("<tr class=\"text\"><td>");
+
             Utils.write(device, component.getString());
-            device.print("</div>");
+            device.print("</td></tr>");
         }
-
-        writeDivSuffix(device, component);
-    }
-
-    private void printSpacerIcon(final Device device, final int width, int height) throws IOException {
-        device.print("<img");
-        Utils.optAttribute(device, "src", getBlindIcon().getURL());
-        Utils.optAttribute(device, "width", width);
-        Utils.optAttribute(device, "height", String.valueOf(height));
-        Utils.optAttribute(device, "class", "spacer");
-        Utils.emptyAttribute(device, "alt");
-        device.print("/>");
+        device.print("</table>");
     }
 }

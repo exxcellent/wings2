@@ -38,14 +38,6 @@ public class SProgressBar extends SComponent {
     protected int orientation;
 
     /**
-     * Whether to display a border around the progress bar.
-     * The default is <code>true</code>.
-     *
-     * @see #setBorderPainted
-     */
-    protected boolean paintBorder;
-
-    /**
      * The object that holds the data for the progress bar.
      *
      * @see #setModel
@@ -120,11 +112,6 @@ public class SProgressBar extends SComponent {
     private boolean indeterminate;
 
     /**
-     * The color in which the border is painted
-     */
-    private Color borderColor;
-
-    /**
      * The color in which the filled region is painted
      */
     private Color filledColor;
@@ -146,7 +133,6 @@ public class SProgressBar extends SComponent {
      * and the maximum is 100.
      *
      * @see #setOrientation
-     * @see #setBorderPainted
      * @see #setStringPainted
      * @see #setString
      * @see #setIndeterminate
@@ -166,7 +152,6 @@ public class SProgressBar extends SComponent {
      *
      * @param orient the desired orientation of the progress bar
      * @see #setOrientation
-     * @see #setBorderPainted
      * @see #setStringPainted
      * @see #setString
      * @see #setIndeterminate
@@ -189,7 +174,6 @@ public class SProgressBar extends SComponent {
      * @param max the maximum value of the progress bar
      * @see BoundedRangeModel
      * @see #setOrientation
-     * @see #setBorderPainted
      * @see #setStringPainted
      * @see #setString
      * @see #setIndeterminate
@@ -213,7 +197,6 @@ public class SProgressBar extends SComponent {
      * @param max    the maximum value of the progress bar
      * @see BoundedRangeModel
      * @see #setOrientation
-     * @see #setBorderPainted
      * @see #setStringPainted
      * @see #setString
      * @see #setIndeterminate
@@ -225,7 +208,6 @@ public class SProgressBar extends SComponent {
         setModel(new DefaultBoundedRangeModel(min, 0, min, max));
 
         setOrientation(orient);      // documented with set/getOrientation()
-        setBorderPainted(true);      // documented with is/setBorderPainted()
         setStringPainted(false);     // see setStringPainted
         setString(null);             // see getString
         setIndeterminate(false);     // see setIndeterminate
@@ -240,7 +222,6 @@ public class SProgressBar extends SComponent {
      *
      * @param newModel the data model for the progress bar
      * @see #setOrientation
-     * @see #setBorderPainted
      * @see #setStringPainted
      * @see #setString
      * @see #setIndeterminate
@@ -249,7 +230,6 @@ public class SProgressBar extends SComponent {
         setModel(newModel);
 
         setOrientation(defaultOrientation);  // see setOrientation()
-        setBorderPainted(true);              // see setBorderPainted()
         setStringPainted(false);             // see setStringPainted
         setString(null);                     // see getString
         setIndeterminate(false);             // see setIndeterminate
@@ -385,54 +365,7 @@ public class SProgressBar extends SComponent {
     public double getPercentComplete() {
         long span = model.getMaximum() - model.getMinimum();
         double currentValue = model.getValue();
-        double pc = (currentValue - model.getMinimum()) / span;
-        return pc;
-    }
-
-    /**
-     * Returns the <code>borderPainted</code> property.
-     *
-     * @return the value of the <code>borderPainted</code> property
-     * @see #setBorderPainted
-     */
-    public boolean isBorderPainted() {
-        return paintBorder;
-    }
-
-    /**
-     * Sets the <code>borderPainted</code> property, which is
-     * <code>true</code> if the progress bar should paint its border.
-     * The default value for this property is <code>true</code>.
-     * Some look and feels might not implement painted borders;
-     * they will ignore this property.
-     *
-     * @param b <code>true</code> if the progress bar
-     *          should paint its border;
-     *          otherwise, <code>false</code>
-     * @see #isBorderPainted
-     */
-    public void setBorderPainted(boolean b) {
-        boolean oldValue = paintBorder;
-        paintBorder = b;
-        reloadIfChange(oldValue, paintBorder);
-    }
-
-    /**
-     * Set the color in which the border is painted, if the border is painted
-     *
-     * @param c a <code>Color</code> value
-     */
-    public void setBorderColor(Color c) {
-        borderColor = c;
-    }
-
-    /**
-     * Returns the color in which the border is painted, if the border is painted
-     *
-     * @return a <code>Color</code> value
-     */
-    public Color getBorderColor() {
-        return borderColor;
+        return (currentValue - model.getMinimum()) / span;
     }
 
     /**
@@ -738,6 +671,4 @@ public class SProgressBar extends SComponent {
     public SDimension getProgressBarDimension() {
         return progressBarDimension;
     }
-
 }
-
