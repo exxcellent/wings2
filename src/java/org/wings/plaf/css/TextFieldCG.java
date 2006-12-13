@@ -143,6 +143,24 @@ public class TextFieldCG extends AbstractComponentCG implements
     	return new ValueUpdate(textfield, text);
     }
 
+    protected class ValueUpdate extends AbstractUpdate {
+
+        private String value;
+
+        public ValueUpdate(SComponent component, String value) {
+            super(component);
+            this.value = value;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("updateValue");
+            handler.addParameter(component.getName());
+            handler.addParameter(value);
+            return handler;
+        }
+
+    }
+
     public static class CallableFormatter {
         Map formatters = new WeakHashMap();
         private final String name = new String("CallableFormatter");

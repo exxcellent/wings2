@@ -417,22 +417,4 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
 	}
 
-    protected class ValueUpdate extends AbstractUpdate {
-
-        private String value;
-
-        public ValueUpdate(SComponent component, String value) {
-            super(component);
-            this.value = value;
-        }
-
-        public Handler getHandler() {
-            UpdateHandler handler = new UpdateHandler("updateValue");
-            handler.addParameter(component.getName());
-            handler.addParameter(value);
-            return handler;
-        }
-
-    }
-
 }

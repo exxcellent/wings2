@@ -16,8 +16,8 @@ import org.wings.*;
 import org.wings.border.SLineBorder;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
-import org.wings.event.SRenderEvent;
-import org.wings.event.SRenderListener;
+import org.wings.event.SRequestEvent;
+import org.wings.event.SRequestListener;
 import org.wings.session.SessionManager;
 import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDateFormatter;
@@ -33,7 +33,7 @@ import java.text.ParseException;
  */
 public class TextComponentExample extends WingSetPane {
     private final SLabel actionEvent = new SLabel("(no form or button event)");
-    private final STextArea eventLog = new STextArea();
+    private final STextArea eventLog = new STextArea("(no document events fired)");
     private ComponentControls controls;
     private SDateFormatter dateFormatter = new SDateFormatter(DateFormat.getDateInstance(DateFormat.SHORT));
 
@@ -140,16 +140,19 @@ public class TextComponentExample extends WingSetPane {
             }
         });
 
-        // Clear event log on rendering page
-        panel.addRenderListener(new SRenderListener() {
-            public void doneRendering(SRenderEvent e) {
-                eventLog.setText("");
-                actionEvent.setText("");
-            }
-
-            public void startRendering(SRenderEvent e) {
-                if (eventLog.getText().length() == 0)
-                    eventLog.setText("(no document events fired)");
+        // Clear event log for every request
+        getSession().addRequestListener(new SRequestListener() {
+            public void processRequest(SRequestEvent e) {
+                if (e.getType() == SRequestEvent.DISPATCH_START) {
+                    if (eventLog.getText().length() == 0)
+                        eventLog.setText("(no document events fired)");
+                    else
+                        eventLog.setText("");
+                    if (actionEvent.getText().length() == 0)
+                        actionEvent.setText("(no form or button event)");
+                    else
+                        actionEvent.setText("");
+                }
             }
         });
 

@@ -13,8 +13,11 @@
 package org.wings.plaf.css;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.Update;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
@@ -23,6 +26,8 @@ import java.io.IOException;
 
 public final class TextAreaCG extends AbstractComponentCG implements
         org.wings.plaf.TextAreaCG {
+
+    private static final Log log = LogFactory.getLog(TextAreaCG.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -70,7 +75,7 @@ public final class TextAreaCG extends AbstractComponentCG implements
         /*
          * a swing like way to write multiline labels
          */
-        if (!component.isEditable() && (component.getLineWrap() == STextArea.NO_WRAP) && (component.getColumns() == 0) && (component.getRows() == 0)) {
+        if (isMultilineLabel(component)) {
                /* A second way could be to calculate rows and columns and generate a textarea, but this will be
                 * very time consuming at large texts. But if this way makes to much trouble, the other will be quite equal */
             String text = component.getText();
@@ -136,8 +141,47 @@ public final class TextAreaCG extends AbstractComponentCG implements
         }
     }
 
+    private boolean isMultilineLabel(STextArea component) {
+        return !component.isEditable() && (component.getLineWrap() == STextArea.NO_WRAP)
+            && (component.getColumns() == 0) && (component.getRows() == 0);
+    }
+
     public Update updateText(STextArea textarea, String text) {
     	return new ValueUpdate(textarea, text);
+    }
+
+    protected class ValueUpdate extends AbstractUpdate {
+
+        private String value;
+
+        public ValueUpdate(SComponent component, String value) {
+            super(component);
+            this.value = value;
+        }
+
+        public Handler getHandler() {
+            String exception = null;
+
+            if (isMultilineLabel((STextArea) component)) {
+                try {
+                    StringBuilderDevice valueDevice = new StringBuilderDevice();
+                    Utils.writeQuoted(valueDevice, value, true);
+                    value = valueDevice.toString();
+                } catch (Throwable t) {
+                    log.fatal("An error occured during rendering", t);
+                    exception = t.getClass().getName();
+                }
+            }
+
+            UpdateHandler handler = new UpdateHandler("updateValue");
+            handler.addParameter(component.getName());
+            handler.addParameter(value);
+            if (exception != null) {
+                handler.addParameter(exception);
+            }
+            return handler;
+        }
+
     }
 
 }

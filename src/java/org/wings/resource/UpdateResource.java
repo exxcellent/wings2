@@ -75,25 +75,25 @@ public class UpdateResource extends DynamicResource {
 					for (Iterator i = updates.iterator(); i.hasNext();) {
 						writeUpdate(out, (Update) i.next());
 					}
-					// update scripts
-                    ScriptListener[] scriptListeners = scriptManager.getScriptListeners();
-                    for (int i = 0; i < scriptListeners.length; ++i) {
-                        if (scriptListeners[i].getScript() != null) {
-                            writeUpdate(out, scriptListeners[i].getScript());
-                        }
-                    }
-                    scriptManager.clearScriptListeners();
-                    // update tooltips
-                    final List ttComponentIds = tooltipManager.getRegisteredComponents();
-                    if (ttComponentIds.size() != 0) {
-                        writeUpdate(out, ToolTipCG.generateTooltipInitScript(ttComponentIds));
-                        tooltipManager.clearRegisteredComponents();
-                    }
                     // update event epoch
                     writeUpdate(out, "wingS.ajax.updateEpoch(\"" + frame.getEventEpoch() + "\")");
 				} else {
 					out.print("\nThere are no components to update!");
 				}
+                // update tooltips
+                final List ttComponentIds = tooltipManager.getRegisteredComponents();
+                if (ttComponentIds.size() != 0) {
+                    writeUpdate(out, ToolTipCG.generateTooltipInitScript(ttComponentIds));
+                    tooltipManager.clearRegisteredComponents();
+                }
+                // update scripts
+                ScriptListener[] scriptListeners = scriptManager.getScriptListeners();
+                for (int i = 0; i < scriptListeners.length; ++i) {
+                    if (scriptListeners[i].getScript() != null) {
+                        writeUpdate(out, scriptListeners[i].getScript());
+                    }
+                }
+                scriptManager.clearScriptListeners();
 			}
             out.print("\n</updates>");
 

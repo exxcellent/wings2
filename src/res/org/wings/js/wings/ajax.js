@@ -247,22 +247,50 @@ wingS.ajax.updateEnabled = function(enabled) {
 /**
  * Adds or removes a script header with the given parameters.
  * @param {String} type - the type of the script header
- * @param {String} source - the source of the script header
+ * @param {String} src - the source of the script header
  * @param {boolean} add - true, if header should be added
  */
-wingS.ajax.updateScriptHeader = function(type, source, add) {
+wingS.ajax.updateScriptHeader = function(type, src, add) {
     var head = document.getElementsByTagName("HEAD")[0];
     if (add) {
-        script = document.createElement("script");
+        var script = document.createElement("script");
         script.type = type;
-        script.src = source;
+        script.src = src;
         head.appendChild(script);
     } else {
         var scripts = head.getElementsByTagName("SCRIPT");
         for (var i = 0; i < scripts.length; i++) {
-            if (scripts[i].getAttribute("src") == source &&
+            if (scripts[i].getAttribute("src") == src &&
                 scripts[i].getAttribute("type") == type) {
                 head.removeChild(scripts[i]);
+            }
+        }
+    }
+};
+
+/**
+ * Adds or removes a link header with the given parameters.
+ * @param {String} rel - the type of the link header
+ * @param {String} type - the type of the link header
+ * @param {String} href - the source of the link header
+ * @param {boolean} add - true, if header should be added
+ */
+wingS.ajax.updateLinkHeader = function(rel, type, href, add) {
+    var head = document.getElementsByTagName("HEAD")[0];
+    if (add) {
+        var link = document.createElement("link");
+        link.rel = rel;
+        link.type = type;
+        link.href = href;
+        head.appendChild(link);
+    } else {
+        alert('X');
+        var links = head.getElementsByTagName("LINK");
+        for (var i = 0; i < links.length; i++) {
+            if (links[i].getAttribute("href") == href &&
+                links[i].getAttribute("type") == type &&
+                links[i].getAttribute("rel") == rel) {
+                head.removeChild(links[i]);
             }
         }
     }
@@ -272,11 +300,19 @@ wingS.ajax.updateScriptHeader = function(type, source, add) {
  * Updates the value of the component with the given ID.
  * @param {String} componentId - the ID of the component
  * @param {String} value - the new value of the component
+ * @param {String} exception - the server exception (optional)
  */
-wingS.ajax.updateValue = function(componentId, value) {
+wingS.ajax.updateValue = function(componentId, value, exception) {
+    // Exception handling
+    if (exception != null) {
+        var update = "ValueUpdate for '" + componentId + "'";
+        wingS.ajax.alertException(exception, update);
+        return;
+    }
+
     var component = document.getElementById(componentId);
     if (component.nodeName == "NOBR")
-        component.firstChild.data = value;
+        component.innerHTML = value;
     else
         component.value = value;
 };
@@ -285,8 +321,16 @@ wingS.ajax.updateValue = function(componentId, value) {
  * Updates the text of the component with the given ID.
  * @param {String} componentId - the ID of the component
  * @param {String} text - the new text of the component
+ * @param {String} exception - the server exception (optional)
  */
-wingS.ajax.updateText = function(componentId, text) {
+wingS.ajax.updateText = function(componentId, text, exception) {
+    // Exception handling
+    if (exception != null) {
+        var update = "TextUpdate for '" + componentId + "'";
+        wingS.ajax.alertException(exception, update);
+        return;
+    }
+
     var component = document.getElementById(componentId);
     var textNode = component.getElementsByTagName("SPAN")[0];
     textNode.innerHTML = text;
