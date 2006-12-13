@@ -88,7 +88,8 @@ public final class RenderHelper {
     }
 
     public boolean isCachingAllowed(final SComponent component) {
-        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances == 0 && !(component instanceof SContainer);
+        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances == 0 &&
+                !(component instanceof SContainer);
     }
 
 }

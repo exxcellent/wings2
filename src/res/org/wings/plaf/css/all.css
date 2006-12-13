@@ -737,6 +737,19 @@ form.SDialog {
 }
 
 
+table.SProgressBar {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+table.SProgressBar tr.bar td {
+    border: 1px solid black;
+    padding: 0px;
+}
+table.SProgressBar tr.text td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 0px;
+}
 
 
 

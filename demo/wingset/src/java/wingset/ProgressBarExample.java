@@ -65,7 +65,6 @@ public class ProgressBarExample extends WingSetPane {
         progressBar.setUnfilledColor(java.awt.Color.lightGray);
         progressBar.setFilledColor(java.awt.Color.orange);
         progressBar.setForeground(java.awt.Color.blue);
-        progressBar.setBorderColor(java.awt.Color.black);
         progressBar.setStringPainted(true);
         progressBar.setPreferredSize(new SDimension(250,SDimension.AUTO_INT));
         progressBar.setProgressBarDimension(new SDimension(250,12));
