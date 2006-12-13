@@ -81,6 +81,10 @@ public class TreeExample
         private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
 
         public TreeControls() {
+            borderColorComboBox.setSelectedItem(COLORS[1]);
+            borderStyleComboBox.setSelectedItem(BORDERS[4]);
+            borderThicknessTextField.setText("1");
+
             final SCheckBox consume = new SCheckBox("Consume events on leaves");
             consume.setToolTipText("<html>A SMouseListener will intercept the mouse clicks.<br>" +
                     "Consumed events will not be processed by the tree anymore");

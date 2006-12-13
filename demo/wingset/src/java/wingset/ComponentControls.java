@@ -56,6 +56,7 @@ public class ComponentControls  extends SPanel {
 
     protected static final Object[] COLORS = new Object[] {
         new Object[] { "none",   null },
+        new Object[] { "gray",   Color.GRAY},
         new Object[] { "yellow", new Color(255, 255, 100) },
         new Object[] { "red",    new Color(255, 100, 100) },
         new Object[] { "green",  new Color(100, 255, 100) },
@@ -65,7 +66,7 @@ public class ComponentControls  extends SPanel {
     protected static final Object[] FONTS = new Object[] {
         new Object[] { "default font",           null },
         new Object[] { "16pt sans bold",         new SFont("Arial,sans-serif",SFont.BOLD, 16)},
-        new Object[] { "default serif plain",    new SFont("Times,Times New Roman,serif",SFont.DEFAULT_SIZE, SFont.PLAIN) },
+        new Object[] { "default serif",          new SFont("Times,Times New Roman,serif",SFont.DEFAULT_SIZE, SFont.PLAIN) },
         new Object[] { "24pt fantasy italic",    new SFont("Comic,Comic Sans MS,fantasy",SFont.ITALIC, 24) }
     };
 
