@@ -22,16 +22,20 @@ import java.util.List;
  * of rendering.
  */
 public final class RenderHelper {
+
     private static final boolean ALLOW_COMPONENT_CACHING =  // modify in resource.properties
             ((Boolean) ResourceManager.getObject("SComponent.renderCache", Boolean.class)).booleanValue();
 
     private final List menus = new ArrayList();
+
     private final StringBuilderDevice menueRenderBuffer = new StringBuilderDevice();
-    private boolean allowUsageOfCachedInstances = true;
+
+    private int allowUsageOfCachedInstances = 0;
 
     public void reset() {
         menus.clear();
         menueRenderBuffer.reset();
+        allowUsageOfCachedInstances = 0;
     }
 
     public List getCollectedMenues() {
@@ -68,14 +72,14 @@ public final class RenderHelper {
     }
 
     public void allowCaching() {
-        this.allowUsageOfCachedInstances = true;
+        this.allowUsageOfCachedInstances --;
     }
     public void forbidCaching() {
-        this.allowUsageOfCachedInstances = false;
+        this.allowUsageOfCachedInstances ++;
     }
 
     public boolean isCachingAllowed(final SComponent component) {
-        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances &&
+        return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances == 0 &&
                 !(component instanceof LowLevelEventListener || component instanceof SContainer);
     }
 
