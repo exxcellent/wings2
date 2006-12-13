@@ -79,6 +79,8 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
                 boolean wordWrap = false;
                 if (component instanceof SLabel)
                     wordWrap = ((SLabel) component).isWordWrap();
+                if (text == null)
+                    text = "";
                 writeText(textDevice, text, wordWrap);
                 textCode = textDevice.toString();
             } catch (Throwable t) {
