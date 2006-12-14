@@ -17,6 +17,6 @@ import org.wings.STextArea;
 
 public interface TextAreaCG extends ComponentCG {
 
-	public Update updateText(STextArea textarea, String text);
+	public Update getTextUpdate(STextArea textArea, String text);
 
 }

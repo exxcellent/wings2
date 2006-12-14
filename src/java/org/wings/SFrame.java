@@ -31,7 +31,6 @@ import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderListener;
 import org.wings.event.SRequestEvent;
 import org.wings.event.SRequestListener;
-import org.wings.header.Script;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
 import org.wings.resource.DynamicResource;
@@ -282,8 +281,8 @@ public class SFrame
     public void addHeader(Object headerElement) {
         if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
-            if (isUpdatePossible() && headerElement instanceof Script)
-                update(((FrameCG) getCG()).updateScriptHeader(this, (Script) headerElement, true));
+            if (isUpdatePossible())
+                update(((FrameCG) getCG()).getAddHeaderUpdate(this, headerElement));
             else
                 reload();
         }
@@ -300,8 +299,8 @@ public class SFrame
     public void addHeader(int index, Object headerElement) {
         if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
-            if (isUpdatePossible() && headerElement instanceof Script)
-                update(((FrameCG) getCG()).updateScriptHeader(this, (Script) headerElement, true));
+            if (isUpdatePossible())
+                update(((FrameCG) getCG()).getAddHeaderUpdate(this, index, headerElement));
             else
                 reload();
         }
@@ -314,7 +313,10 @@ public class SFrame
     public boolean removeHeader(Object headerElement) {
         boolean deleted = headers.remove(headerElement);
         if (deleted) {
-        	reload();
+            if (isUpdatePossible())
+                update(((FrameCG) getCG()).getRemoveHeaderUpdate(this, headerElement));
+            else
+                reload();
         }
         return deleted;
     }
@@ -673,7 +675,7 @@ public class SFrame
 	public void setUpdateEnabled(boolean enabled) {
         if (updateEnabled != enabled) {
             if (isUpdatePossible())
-                update(((FrameCG) getCG()).updateEnabled(this, enabled));
+                update(((FrameCG) getCG()).getUpdateEnabledUpdate(this, enabled));
             else
                 reload();
             updateEnabled = enabled;

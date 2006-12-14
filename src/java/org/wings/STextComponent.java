@@ -184,11 +184,10 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
 
     public void changedUpdate(SDocumentEvent e) {
         if (isUpdatePossible()) {
-            String text = e.getDocument().getText();
             if (getClass() == STextField.class)
-                update(((TextFieldCG) getCG()).updateText((STextField) this, getText()));
+                update(((TextFieldCG) getCG()).getTextUpdate((STextField) this, getText()));
             else if (getClass() == STextArea.class)
-                update(((TextAreaCG) getCG()).updateText((STextArea) this, getText()));
+                update(((TextAreaCG) getCG()).getTextUpdate((STextArea) this, getText()));
             else
                 reload();
         } else {

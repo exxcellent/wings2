@@ -279,23 +279,23 @@ public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.
         this.leafControlIcon = leafControlIcon;
     }
 
-    public Update updateSelection(STree tree, List deselectedRows, List selectedRows) {
-        return new TreeSelectionUpdate(tree, deselectedRows, selectedRows);
+    public Update getSelectionUpdate(STree tree, List deselectedRows, List selectedRows) {
+        return new SelectionUpdate(tree, deselectedRows, selectedRows);
     }
 
-    protected class TreeSelectionUpdate extends AbstractUpdate {
+    protected class SelectionUpdate extends AbstractUpdate {
 
         private List deselectedRows;
         private List selectedRows;
 
-        public TreeSelectionUpdate(SComponent component, List deselectedRows, List selectedRows) {
+        public SelectionUpdate(SComponent component, List deselectedRows, List selectedRows) {
             super(component);
             this.deselectedRows = deselectedRows;
             this.selectedRows = selectedRows;
         }
 
         public Handler getHandler() {
-            UpdateHandler handler = new UpdateHandler("updateTreeSelection");
+            UpdateHandler handler = new UpdateHandler("selectionTree");
             handler.addParameter(component.getName());
             handler.addParameter(handler.listToJsArray(deselectedRows));
             handler.addParameter(handler.listToJsArray(selectedRows));

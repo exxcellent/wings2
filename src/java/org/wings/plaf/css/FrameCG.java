@@ -80,6 +80,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public static final String WINGS_LAYOUT = (String) ResourceManager.getObject("JS.wingsLayout", String.class);
     public static final String WINGS_REQUEST = (String) ResourceManager.getObject("JS.wingsRequest", String.class);
     public static final String WINGS_AJAX = (String) ResourceManager.getObject("JS.wingsAjax", String.class);
+    public static final String WINGS_UPDATE = (String) ResourceManager.getObject("JS.wingsUpdate", String.class);
     public static final String WINGS_COMPONENT = (String) ResourceManager.getObject("JS.wingsComponent", String.class);
     public static final String YAHOO_GLOBAL = (String) ResourceManager.getObject("JS.yahooGlobal", String.class);
     public static final String YAHOO_DOM = (String) ResourceManager.getObject("JS.yahooDom", String.class);
@@ -132,6 +133,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         headerUtil.addHeader(createExternalizedHeader(session, WINGS_LAYOUT, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, WINGS_REQUEST, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, WINGS_AJAX, "text/javascript"));
+        headerUtil.addHeader(createExternalizedHeader(session, WINGS_UPDATE, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, WINGS_COMPONENT, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, YAHOO_GLOBAL, "text/javascript"));
         headerUtil.addHeader(createExternalizedHeader(session, YAHOO_DOM, "text/javascript"));
@@ -552,16 +554,41 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         this.renderXmlDeclaration = renderXmlDeclaration;
     }
 
-	public Update update(SComponent component) {
+	public Update getComponentUpdate(SComponent component) {
 		return new ComponentUpdate(component);
 	}
 
-    public Update updateEnabled(SFrame frame, boolean enabled) {
-        return new EnabledUpdate(frame, enabled);
+    public Update getAddHeaderUpdate(SFrame frame, int index, Object header) {
+        if (header instanceof Script)
+            return new HeaderScriptUpdate(frame, true, (Script) header, index);
+        else if (header instanceof Link)
+            return new HeaderLinkUpdate(frame, true, (Link) header, index);
+        else
+            return null;
     }
 
-    public Update updateScriptHeader(SFrame frame, Script script, boolean add) {
-        return new ScriptHeaderUpdate(frame, script, add);
+    public Update getAddHeaderUpdate(SFrame frame, Object header) {
+        if (header instanceof Script)
+            return new HeaderScriptUpdate(frame, true, (Script) header);
+        else if (header instanceof Link)
+            return new HeaderLinkUpdate(frame, true, (Link) header);
+        else
+            return null;
+    }
+
+    public Update getRemoveHeaderUpdate(SFrame frame, Object header) {
+        if (header instanceof Link)
+            return new HeaderLinkUpdate(frame, false, (Link) header);
+        else
+            // Removing script headers asynchronously would indeed
+            // detach the according header, however, the functions
+            // contained in the according file are not unloaded. So
+            // we force a complete component update in this case.
+            return null;
+    }
+
+    public Update getUpdateEnabledUpdate(SFrame frame, boolean enabled) {
+        return new UpdateEnabledUpdate(frame, enabled);
     }
 
     protected class ComponentUpdate extends AbstractUpdate {
@@ -591,7 +618,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 exception = t.getClass().getName();
             }
 
-            UpdateHandler handler = new UpdateHandler("updateComponent");
+            UpdateHandler handler = new UpdateHandler("component");
             handler.addParameter(component.getName());
             handler.addParameter(htmlCode);
             if (exception != null) {
@@ -602,32 +629,98 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
     }
 
-    protected class ScriptHeaderUpdate extends AbstractUpdate {
+    protected class HeaderScriptUpdate extends AbstractUpdate {
 
-        private Script script;
         private Boolean add;
+        private Script script;
+        private Integer index;
 
-        public ScriptHeaderUpdate(SComponent component, Script script, boolean add) {
+        public HeaderScriptUpdate(SComponent component, boolean add, Script script) {
             super(component);
-            this.script = script;
             this.add = new Boolean(add);
+            this.script = script;
+        }
+
+        public HeaderScriptUpdate(SComponent component, boolean add, Script script, int index) {
+            this(component, add, script);
+            this.index = new Integer(index);
         }
 
         public Handler getHandler() {
-            UpdateHandler handler = new UpdateHandler("updateScriptHeader");
-            handler.addParameter(script.getType());
-            handler.addParameter(script.getURL().toString());
+            UpdateHandler handler = new UpdateHandler("headerScript");
             handler.addParameter(add);
+            handler.addParameter(script.getURL().toString());
+            handler.addParameter(script.getType());
+            if (index != null)
+                handler.addParameter(index);
             return handler;
+        }
+
+        public boolean equals(Object object) {
+            if (this == object)
+                return true;
+            if (!super.equals(object))
+                return false;
+            if (!script.equals(((HeaderScriptUpdate) object).script))
+                return false;
+
+            return true;
         }
 
     }
 
-    protected class EnabledUpdate extends AbstractUpdate {
+    protected class HeaderLinkUpdate extends AbstractUpdate {
+
+        private Boolean add;
+        private Link link;
+        private Integer index;
+
+        public HeaderLinkUpdate(SComponent component, boolean add, Link link) {
+            super(component);
+            this.add = new Boolean(add);
+            this.link = link;
+        }
+
+        public HeaderLinkUpdate(SComponent component, boolean add, Link link, int index) {
+            this(component, add, link);
+            this.index = new Integer(index);
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("headerLink");
+            handler.addParameter(add);
+            handler.addParameter(link.getURL().toString());
+            handler.addParameter(link.getType());
+            if (link.getRel() != null || link.getRev() != null || link.getTarget() != null || index != null)
+                handler.addParameter(link.getRel());
+            if (link.getRev() != null || link.getTarget() != null || index != null)
+                handler.addParameter(link.getRev());
+            if (link.getTarget() != null || index != null)
+                handler.addParameter(link.getTarget());
+            if (index != null)
+                handler.addParameter(index);
+
+            return handler;
+        }
+
+        public boolean equals(Object object) {
+            if (this == object)
+                return true;
+            if (!super.equals(object))
+                return false;
+            if (!link.equals(((HeaderLinkUpdate) object).link))
+                return false;
+
+            return true;
+        }
+
+    }
+
+    protected class UpdateEnabledUpdate extends AbstractUpdate {
 
         private Boolean enabled;
 
-        public EnabledUpdate(SComponent component, boolean enabled) {
+        public UpdateEnabledUpdate(SComponent component, boolean enabled) {
             super(component);
             this.enabled = new Boolean(enabled);
         }

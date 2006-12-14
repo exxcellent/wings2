@@ -79,8 +79,6 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
                 boolean wordWrap = false;
                 if (component instanceof SLabel)
                     wordWrap = ((SLabel) component).isWordWrap();
-                if (text == null)
-                    text = "";
                 writeText(textDevice, text, wordWrap);
                 textCode = textDevice.toString();
             } catch (Throwable t) {
@@ -88,7 +86,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
                 exception = t.getClass().getName();
             }
 
-            UpdateHandler handler = new UpdateHandler("updateText");
+            UpdateHandler handler = new UpdateHandler("text");
             handler.addParameter(component.getName());
             handler.addParameter(textCode);
             if (exception != null) {
@@ -121,7 +119,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
                 exception = t.getClass().getName();
             }
 
-            UpdateHandler handler = new UpdateHandler("updateIcon");
+            UpdateHandler handler = new UpdateHandler("icon");
             handler.addParameter(component.getName());
             handler.addParameter(iconCode);
             if (exception != null) {

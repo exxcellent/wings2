@@ -55,9 +55,9 @@ public interface ComponentCG  extends Serializable {
     public void write(Device device, SComponent component) throws IOException;
 
     /**
-     * Creates an update for the complete component.
+     * Returns an update for the complete component.
      *
      * @param component the component to be updated.
      */
-    public Update update(SComponent component);
+    public Update getComponentUpdate(SComponent component);
 }

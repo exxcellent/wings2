@@ -91,12 +91,12 @@ public final class RadioButtonCG extends CheckBoxCG implements
         device.print("/>");
     }
 
-    public Update updateText(SRadioButton radioButton, String text) {
-        return new TextUpdate(radioButton, text);
+    public Update getTextUpdate(SRadioButton radioButton, String text) {
+        return text == null ? null : new TextUpdate(radioButton, text);
     }
 
-    public Update updateIcon(SRadioButton radioButton, SIcon icon) {
-        return new IconUpdate(radioButton, icon);
+    public Update getIconUpdate(SRadioButton radioButton, SIcon icon) {
+        return icon == null ? null : new IconUpdate(radioButton, icon);
     }
 
 }

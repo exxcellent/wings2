@@ -18,8 +18,8 @@ import org.wings.SIcon;
 
 public interface ButtonCG extends ComponentCG {
 
-    public Update updateText(SButton button, String text);
+    public Update getTextUpdate(SButton button, String text);
 
-    public Update updateIcon(SButton button, SIcon icon);
+    public Update getIconUpdate(SButton button, SIcon icon);
 
 }

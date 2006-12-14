@@ -110,12 +110,12 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
         }
     }
 
-    public Update updateText(SButton button, String text) {
-        return new TextUpdate(button, text);
+    public Update getTextUpdate(SButton button, String text) {
+        return text == null ? null : new TextUpdate(button, text);
     }
 
-    public Update updateIcon(SButton button, SIcon icon) {
-        return new IconUpdate(button, icon);
+    public Update getIconUpdate(SButton button, SIcon icon) {
+        return icon == null ? null : new IconUpdate(button, icon);
     }
 
 }

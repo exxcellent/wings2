@@ -82,11 +82,15 @@ public class Script implements Renderable, Serializable {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != Script.class) {
+        if (obj == this)
+            return true;
+        if (obj == null)
             return false;
-        }
+        if (!(obj instanceof Script))
+            return false;
+
         Script testObj = (Script) obj;
-        
+
         if (testObj.getLanguage() == null) {
             if (getLanguage() != null) {
                 return false;
@@ -96,7 +100,7 @@ public class Script implements Renderable, Serializable {
                 return false;
             }
         }
-        
+
         if (testObj.getType() == null) {
             if (getType() != null) {
                 return false;
@@ -106,7 +110,7 @@ public class Script implements Renderable, Serializable {
                 return false;
             }
         }
-        
+
         if (testObj.getURL() == null) {
             if (getURL() != null) {
                 return false;

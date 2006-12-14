@@ -164,21 +164,21 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         //}
     }
 
-    public Update updateSelection(SComboBox comboBox, int selectedIndex) {
-        return new ComboBoxSelectionUpdate(comboBox, selectedIndex);
+    public Update getSelectionUpdate(SComboBox comboBox, int selectedIndex) {
+        return new SelectionUpdate(comboBox, selectedIndex);
     }
 
-    protected class ComboBoxSelectionUpdate extends AbstractUpdate {
+    protected class SelectionUpdate extends AbstractUpdate {
 
         private Integer selectedIndex;
 
-        public ComboBoxSelectionUpdate(SComponent component, int selectedIndex) {
+        public SelectionUpdate(SComponent component, int selectedIndex) {
             super(component);
             this.selectedIndex = new Integer(selectedIndex);
         }
 
         public Handler getHandler() {
-            UpdateHandler handler = new UpdateHandler("updateComboBoxSelection");
+            UpdateHandler handler = new UpdateHandler("selectionComboBox");
             handler.addParameter(component.getName());
             handler.addParameter(selectedIndex);
             return handler;

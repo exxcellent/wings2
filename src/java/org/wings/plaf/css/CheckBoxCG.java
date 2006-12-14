@@ -184,12 +184,12 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         device.print("/>");
     }
 
-    public Update updateText(SCheckBox checkBox, String text) {
-        return new TextUpdate(checkBox, text);
+    public Update getTextUpdate(SCheckBox checkBox, String text) {
+        return text == null ? null : new TextUpdate(checkBox, text);
     }
 
-    public Update updateIcon(SCheckBox checkBox, SIcon icon) {
-        return new IconUpdate(checkBox, icon);
+    public Update getIconUpdate(SCheckBox checkBox, SIcon icon) {
+        return icon == null ? null : new IconUpdate(checkBox, icon);
     }
 
 }

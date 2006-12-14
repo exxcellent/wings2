@@ -18,8 +18,8 @@ import org.wings.SToggleButton;
 
 public interface ToggleButtonCG extends ComponentCG {
 
-    public Update updateText(SToggleButton toggleButton, String text);
+    public Update getTextUpdate(SToggleButton toggleButton, String text);
 
-    public Update updateIcon(SToggleButton toggleButton, SIcon icon);
+    public Update getIconUpdate(SToggleButton toggleButton, SIcon icon);
 
 }

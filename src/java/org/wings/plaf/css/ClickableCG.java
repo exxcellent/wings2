@@ -85,12 +85,12 @@ public final class ClickableCG extends AbstractLabelCG implements org.wings.plaf
         }
     }
 
-    public Update updateText(SClickable clickable, String text) {
-        return new TextUpdate(clickable, text);
+    public Update getTextUpdate(SClickable clickable, String text) {
+        return text == null ? null : new TextUpdate(clickable, text);
     }
 
-    public Update updateIcon(SClickable clickable, SIcon icon) {
-        return new IconUpdate(clickable, icon);
+    public Update getIconUpdate(SClickable clickable, SIcon icon) {
+        return icon == null ? null : new IconUpdate(clickable, icon);
     }
 
 }

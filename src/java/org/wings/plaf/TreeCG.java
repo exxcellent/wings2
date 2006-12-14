@@ -19,6 +19,6 @@ import org.wings.STree;
 
 public interface TreeCG extends ComponentCG {
 
-    public Update updateSelection(STree tree, List deselectedRows, List selectedRows);
+    public Update getSelectionUpdate(STree tree, List deselectedRows, List selectedRows);
 
 }

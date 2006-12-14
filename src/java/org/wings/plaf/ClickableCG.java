@@ -18,8 +18,8 @@ import org.wings.SIcon;
 
 public interface ClickableCG extends ComponentCG {
 
-    public Update updateText(SClickable clickable, String text);
+    public Update getTextUpdate(SClickable clickable, String text);
 
-    public Update updateIcon(SClickable clickable, SIcon icon);
+    public Update getIconUpdate(SClickable clickable, SIcon icon);
 
 }

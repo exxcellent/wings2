@@ -209,7 +209,7 @@ public class SComboBox
                 delayedEvent = true;
 
             if (isUpdatePossible())
-                update(((ComboBoxCG) getCG()).updateSelection(this, getSelectedIndex()));
+                update(((ComboBoxCG) getCG()).getSelectionUpdate(this, getSelectedIndex()));
             else
                 reload();
         }

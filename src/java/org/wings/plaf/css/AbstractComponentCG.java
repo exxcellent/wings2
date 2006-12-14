@@ -375,7 +375,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
 
-	public Update update(SComponent component) {
+	public Update getComponentUpdate(SComponent component) {
 		return new ComponentUpdate(component);
 	}
 
@@ -406,7 +406,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                 exception = t.getClass().getName();
             }
 
-            UpdateHandler handler = new UpdateHandler("updateComponent");
+            UpdateHandler handler = new UpdateHandler("component");
             handler.addParameter(component.getName());
             handler.addParameter(htmlCode);
             if (exception != null) {

@@ -250,15 +250,15 @@ public abstract class SAbstractIconTextCompound
             // do reload if previous icon was null
             if (isUpdatePossible() && icon != null) {
                 if (getClass() == SButton.class)
-                    update(((ButtonCG) getCG()).updateIcon((SButton) this, i));
+                    update(((ButtonCG) getCG()).getIconUpdate((SButton) this, i));
                 else if (getClass() == SCheckBox.class)
-                    update(((CheckBoxCG) getCG()).updateIcon((SCheckBox) this, i));
+                    update(((CheckBoxCG) getCG()).getIconUpdate((SCheckBox) this, i));
                 else if (getClass() == SRadioButton.class)
-                    update(((RadioButtonCG) getCG()).updateIcon((SRadioButton) this, i));
+                    update(((RadioButtonCG) getCG()).getIconUpdate((SRadioButton) this, i));
                 else if (getClass() == SToggleButton.class)
-                    update(((ToggleButtonCG) getCG()).updateIcon((SToggleButton) this, i));
+                    update(((ToggleButtonCG) getCG()).getIconUpdate((SToggleButton) this, i));
                 else if (getClass() == SClickable.class)
-                    update(((ClickableCG) getCG()).updateIcon((SClickable) this, i));
+                    update(((ClickableCG) getCG()).getIconUpdate((SClickable) this, i));
                 else
                     reload();
             }
@@ -464,15 +464,15 @@ public abstract class SAbstractIconTextCompound
             // do reload if previous text was null
             if (isUpdatePossible() && text != null) {
                 if (getClass() == SButton.class)
-                    update(((ButtonCG) getCG()).updateText((SButton) this, t));
+                    update(((ButtonCG) getCG()).getTextUpdate((SButton) this, t));
                 else if (getClass() == SCheckBox.class)
-                    update(((CheckBoxCG) getCG()).updateText((SCheckBox) this, t));
+                    update(((CheckBoxCG) getCG()).getTextUpdate((SCheckBox) this, t));
                 else if (getClass() == SRadioButton.class)
-                    update(((RadioButtonCG) getCG()).updateText((SRadioButton) this, t));
+                    update(((RadioButtonCG) getCG()).getTextUpdate((SRadioButton) this, t));
                 else if (getClass() == SToggleButton.class)
-                    update(((ToggleButtonCG) getCG()).updateText((SToggleButton) this, t));
+                    update(((ToggleButtonCG) getCG()).getTextUpdate((SToggleButton) this, t));
                 else if (getClass() == SClickable.class)
-                    update(((ClickableCG) getCG()).updateText((SClickable) this, t));
+                    update(((ClickableCG) getCG()).getTextUpdate((SClickable) this, t));
                 else
                     reload();
             }

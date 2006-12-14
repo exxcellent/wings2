@@ -215,23 +215,23 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         RenderHelper.getInstance(_c).allowCaching();
     }
 
-    public Update updateSelection(SList list, List deselectedIndices, List selectedIndices) {
-        return new ListSelectionUpdate(list, deselectedIndices, selectedIndices);
+    public Update getSelectionUpdate(SList list, List deselectedIndices, List selectedIndices) {
+        return new SelectionUpdate(list, deselectedIndices, selectedIndices);
     }
 
-    protected class ListSelectionUpdate extends AbstractUpdate {
+    protected class SelectionUpdate extends AbstractUpdate {
 
         private List deselectedIndices;
         private List selectedIndices;
 
-        public ListSelectionUpdate(SComponent component, List deselectedIndices, List selectedIndices) {
+        public SelectionUpdate(SComponent component, List deselectedIndices, List selectedIndices) {
             super(component);
             this.deselectedIndices = deselectedIndices;
             this.selectedIndices = selectedIndices;
         }
 
         public Handler getHandler() {
-            UpdateHandler handler = new UpdateHandler("updateListSelection");
+            UpdateHandler handler = new UpdateHandler("selectionList");
             handler.addParameter(component.getName());
             handler.addParameter(handler.listToJsArray(deselectedIndices));
             handler.addParameter(handler.listToJsArray(selectedIndices));

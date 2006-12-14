@@ -39,7 +39,7 @@ public class DefaultReloadManager implements ReloadManager {
 
     public void reload(SComponent component) {
         if (updateMode)
-            addUpdate(component.getCG().update(component));
+            addUpdate(component.getCG().getComponentUpdate(component));
         else
             componentsToReload.add(component);
     }
@@ -274,32 +274,13 @@ public class DefaultReloadManager implements ReloadManager {
             if (object == null || object.getClass() != this.getClass())
                 return false;
 
-            Update update = (Update) object;
+            PotentialUpdate other = (PotentialUpdate) object;
 
-            if ((this.getProperty() & ALLOWS_SEVERAL_OF_THE_SAME)
-                    == ALLOWS_SEVERAL_OF_THE_SAME) {
-                return false;
-            } else {
-                if (!this.getComponent().equals(update.getComponent()))
-                    return false;
-                if (this.getProperty() != update.getProperty())
-                    return false;
-                if (this.getPriority() != update.getPriority())
-                    return false;
-
-                return true;
-            }
+            return update.equals(other.update);
         }
 
         public int hashCode() {
-            int hashCode = 17;
-            int dispersionFactor = 37;
-
-            hashCode = hashCode * dispersionFactor + this.getComponent().hashCode();
-            hashCode = hashCode * dispersionFactor + this.getProperty();
-            hashCode = hashCode * dispersionFactor + this.getPriority();
-
-            return hashCode;
+            return update.hashCode();
         }
 
         public String toString() {

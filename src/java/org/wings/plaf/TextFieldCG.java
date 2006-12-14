@@ -17,6 +17,6 @@ import org.wings.STextField;
 
 public interface TextFieldCG extends ComponentCG {
 
-	public Update updateText(STextField textfield, String text);
+	public Update getTextUpdate(STextField textField, String text);
 
 }

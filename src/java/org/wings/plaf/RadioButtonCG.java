@@ -18,8 +18,8 @@ import org.wings.SRadioButton;
 
 public interface RadioButtonCG extends ComponentCG {
 
-    public Update updateText(SRadioButton radioButton, String text);
+    public Update getTextUpdate(SRadioButton radioButton, String text);
 
-    public Update updateIcon(SRadioButton radioButton, SIcon icon);
+    public Update getIconUpdate(SRadioButton radioButton, SIcon icon);
 
 }

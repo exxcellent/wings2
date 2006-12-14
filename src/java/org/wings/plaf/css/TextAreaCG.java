@@ -75,7 +75,7 @@ public final class TextAreaCG extends AbstractComponentCG implements
         /*
          * a swing like way to write multiline labels
          */
-        if (isMultilineLabel(component)) {
+        if (isRenderedAsMultilineLabel(component)) {
                /* A second way could be to calculate rows and columns and generate a textarea, but this will be
                 * very time consuming at large texts. But if this way makes to much trouble, the other will be quite equal */
             String text = component.getText();
@@ -141,41 +141,41 @@ public final class TextAreaCG extends AbstractComponentCG implements
         }
     }
 
-    private boolean isMultilineLabel(STextArea component) {
+    private boolean isRenderedAsMultilineLabel(STextArea component) {
         return !component.isEditable() && (component.getLineWrap() == STextArea.NO_WRAP)
             && (component.getColumns() == 0) && (component.getRows() == 0);
     }
 
-    public Update updateText(STextArea textarea, String text) {
-    	return new ValueUpdate(textarea, text);
+    public Update getTextUpdate(STextArea textArea, String text) {
+    	return new TextUpdate(textArea, text);
     }
 
-    protected class ValueUpdate extends AbstractUpdate {
+    protected class TextUpdate extends AbstractUpdate {
 
-        private String value;
+        private String text;
 
-        public ValueUpdate(SComponent component, String value) {
+        public TextUpdate(SComponent component, String text) {
             super(component);
-            this.value = value;
+            this.text = text;
         }
 
         public Handler getHandler() {
             String exception = null;
 
-            if (isMultilineLabel((STextArea) component)) {
+            if (isRenderedAsMultilineLabel((STextArea) component)) {
                 try {
-                    StringBuilderDevice valueDevice = new StringBuilderDevice();
-                    Utils.writeQuoted(valueDevice, value, true);
-                    value = valueDevice.toString();
+                    StringBuilderDevice textDevice = new StringBuilderDevice();
+                    Utils.writeQuoted(textDevice, text, true);
+                    text = textDevice.toString();
                 } catch (Throwable t) {
                     log.fatal("An error occured during rendering", t);
                     exception = t.getClass().getName();
                 }
             }
 
-            UpdateHandler handler = new UpdateHandler("updateValue");
+            UpdateHandler handler = new UpdateHandler("value");
             handler.addParameter(component.getName());
-            handler.addParameter(value);
+            handler.addParameter(text == null ? "" : text);
             if (exception != null) {
                 handler.addParameter(exception);
             }

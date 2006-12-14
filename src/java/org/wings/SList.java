@@ -202,7 +202,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
                         deselectedIndices.add(new Integer(i - offset));
                     }
                 }
-                update(((ListCG) getCG()).updateSelection(SList.this, deselectedIndices, selectedIndices));
+                update(((ListCG) getCG()).getSelectionUpdate(SList.this, deselectedIndices, selectedIndices));
             } else {
                 reload();
             }

@@ -62,8 +62,11 @@ import org.wings.STree;
 import org.wings.SURLIcon;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
+import org.wings.header.JavaScriptHeader;
 import org.wings.header.Link;
 import org.wings.header.Script;
+import org.wings.header.StyleSheetHeader;
+import org.wings.header.StyleSheetLink;
 import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
@@ -362,8 +365,7 @@ public class LogConfig {
 
         pa_content.add(pa_application, "application");
         pa_content.add(createAjaxDebuggingPanel(), "debugging");
-        fr_frame.addHeader(new Link("stylesheet", null, "text/css", null,
-                new DefaultURLResource("../css/custom.css")));
+        fr_frame.addHeader(new StyleSheetHeader("../css/custom.css"));
         fr_frame.setVisible(true);
     }
 
@@ -766,18 +768,27 @@ public class LogConfig {
         ));
         an_abortCurrentAjaxRequest.add(new SLabel("Abort the current AJAX request!"));
 
-        final Script customJs = new Script("text/javascript", new DefaultURLResource("../js/custom.js"));
-        final SButton bu_addScriptHeader = new SButton("Add a new script header: '../js/custom.js'");
+        final Script includeJs = new JavaScriptHeader("../js/include.js");
+        final Script includeJs2 = new JavaScriptHeader("../js/include2.js");
+        final Link includeCss = new StyleSheetHeader("../css/include.css");
+        final Link includeCss2 = new StyleSheetHeader("../css/include2.css");
+        final SButton bu_addScriptHeader = new SButton("Add a new script header and link header");
         bu_addScriptHeader.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fr_frame.addHeader(customJs);
+                fr_frame.addHeader(includeJs);
+                fr_frame.addHeader(includeCss);
+                fr_frame.addHeader(includeJs2);
+                fr_frame.addHeader(includeCss2);
             }
         });
 
-        final SButton bu_removeScriptHeader = new SButton("Remove a script header: '../js/custom.js'");
+        final SButton bu_removeScriptHeader = new SButton("Remove script header and link header");
         bu_removeScriptHeader.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fr_frame.removeHeader(customJs);
+                fr_frame.removeHeader(includeJs);
+                fr_frame.removeHeader(includeCss);
+                fr_frame.removeHeader(includeJs2);
+                fr_frame.removeHeader(includeCss2);
             }
         });
 
@@ -810,6 +821,7 @@ public class LogConfig {
         final SButton bu_testWhatever = new SButton("TEST WHATEVER!");
         bu_testWhatever.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                tf_editPriorityValue.setText(null);
                 int[] rows = {1,5,2,4,7};
                 tr_domTree.setSelectionRows(rows);
                 la_status.setText("1");

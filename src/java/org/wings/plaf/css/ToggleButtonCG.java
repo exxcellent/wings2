@@ -22,12 +22,12 @@ public final class ToggleButtonCG extends ButtonCG implements
 
     private static final long serialVersionUID = 1L;
 
-    public Update updateText(SToggleButton toggleButton, String text) {
-        return new TextUpdate(toggleButton, text);
+    public Update getTextUpdate(SToggleButton toggleButton, String text) {
+        return text == null ? null : new TextUpdate(toggleButton, text);
     }
 
-    public Update updateIcon(SToggleButton toggleButton, SIcon icon) {
-        return new IconUpdate(toggleButton, icon);
+    public Update getIconUpdate(SToggleButton toggleButton, SIcon icon) {
+        return icon == null ? null : new IconUpdate(toggleButton, icon);
     }
 
 }

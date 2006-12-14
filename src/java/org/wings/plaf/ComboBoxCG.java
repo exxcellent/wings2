@@ -17,6 +17,6 @@ import org.wings.SComboBox;
 
 public interface ComboBoxCG extends ComponentCG {
 
-    public Update updateSelection(SComboBox comboBox, int selectedIndex);
+    public Update getSelectionUpdate(SComboBox comboBox, int selectedIndex);
 
 }

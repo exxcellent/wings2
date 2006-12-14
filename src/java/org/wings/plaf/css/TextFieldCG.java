@@ -139,23 +139,23 @@ public class TextFieldCG extends AbstractComponentCG implements
         }
     }
 
-    public Update updateText(STextField textfield, String text) {
-    	return new ValueUpdate(textfield, text);
+    public Update getTextUpdate(STextField textField, String text) {
+    	return new TextUpdate(textField, text);
     }
 
-    protected class ValueUpdate extends AbstractUpdate {
+    protected class TextUpdate extends AbstractUpdate {
 
-        private String value;
+        private String text;
 
-        public ValueUpdate(SComponent component, String value) {
+        public TextUpdate(SComponent component, String text) {
             super(component);
-            this.value = value;
+            this.text = text;
         }
 
         public Handler getHandler() {
-            UpdateHandler handler = new UpdateHandler("updateValue");
+            UpdateHandler handler = new UpdateHandler("value");
             handler.addParameter(component.getName());
-            handler.addParameter(value);
+            handler.addParameter(text == null ? "" : text);
             return handler;
         }
 

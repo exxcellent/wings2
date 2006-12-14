@@ -159,7 +159,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                         deselectedRows.add(new Integer(row - offset));
                     }
                 }
-                update(((TreeCG) getCG()).updateSelection(STree.this, deselectedRows, selectedRows));
+                update(((TreeCG) getCG()).getSelectionUpdate(STree.this, deselectedRows, selectedRows));
             } else {
                 reload();
             }

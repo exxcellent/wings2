@@ -18,8 +18,8 @@ import org.wings.SIcon;
 
 public interface CheckBoxCG extends ComponentCG {
 
-    public Update updateText(SCheckBox checkBox, String text);
+    public Update getTextUpdate(SCheckBox checkBox, String text);
 
-    public Update updateIcon(SCheckBox checkBox, SIcon icon);
+    public Update getIconUpdate(SCheckBox checkBox, SIcon icon);
 
 }
