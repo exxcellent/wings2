@@ -115,6 +115,9 @@ wingS.update.headerScript = function(add, src, type, index) {
             }
         }
     }
+    if (document.recalc) {
+        document.recalc(true);
+    }
 };
 
 /**
@@ -160,6 +163,9 @@ wingS.update.headerLink = function(add, href, type, rel, rev, target, index) {
                 head.removeChild(links[i]);
             }
         }
+    }
+    if (document.recalc) {
+        document.recalc(true);
     }
 };
 

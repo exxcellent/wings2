@@ -145,7 +145,20 @@ public class WingSet implements Serializable {
         SButton switchDebugViewButton = new SButton("Toggle AJAX debug view");
         switchStyleButton.setShowAsFormComponent(false);
         switchDebugViewButton.addScriptListener(new JavaScriptListener(
-                JavaScriptEvent.ON_CLICK, "wingS.ajax.toggleDebugView(); return false;"
+                JavaScriptEvent.ON_CLICK,
+                "wingS.global.debugMode = !wingS.global.debugMode; " +
+                "wingS.ajax.toggleDebugView(); return false;"
+        ));
+
+        SButton enableConnectionWatcherButton = new SButton("Enable connection watcher");
+        enableConnectionWatcherButton.setShowAsFormComponent(false);
+        enableConnectionWatcherButton.addScriptListener(new JavaScriptListener(
+                JavaScriptEvent.ON_CLICK,
+                "(function(){if(document.getElementById('yui-connection-watcher-bookmark'))" +
+                "{return;};var js = document.createElement('script');js.setAttribute('src'," +
+                "'http://www.hedgerwow.com/360/dhtml/yui-connection-watcher/' + 'watcher-" +
+                "bookmark.js');js.setAttribute('id','yui-connection-watcher-bookmark');" +
+                "document.getElementsByTagName('head')[0].appendChild(js);})(); return false;"
         ));
 
         SPanel south = new SPanel();
@@ -153,6 +166,8 @@ public class WingSet implements Serializable {
         south.add(switchStyleButton);
         south.add(new SLabel("  |  "));
         south.add(switchDebugViewButton);
+        south.add(new SLabel("  |  "));
+        south.add(enableConnectionWatcherButton);
 
         styleWingsetApp();
 

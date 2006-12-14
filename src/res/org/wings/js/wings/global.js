@@ -27,6 +27,8 @@ wingS.global.updateResource;      // Stores the URI of the UpdateResource (witho
 wingS.global.updateEnabled;       // A flag indicating if this frame allows incremental updates
 wingS.global.updateCursor;        // An object holding necessary settings of the update cursor
 
+wingS.global.debugMode = false;   // This flag might be set to control debug outputs accordingly
+
 /**
  * Moves the execution context of the function used upon to the given object. Useful when using
  * setTimeout or event handling, e.g.: setTimeout(func1.bind(someObject), 1); The function func1

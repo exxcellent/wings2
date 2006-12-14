@@ -32,7 +32,8 @@ wingS.ajax.initializeFrame = function() {
     }
     callbackObject = {
         success : function(request) { wingS.ajax.processRequestSuccess(request); },
-        failure : function(request) { wingS.ajax.processRequestFailure(request); }
+        failure : function(request) { wingS.ajax.processRequestFailure(request); },
+        upload  : function(request) { wingS.ajax.processRequestSuccess(request); }
     };
     wingS.ajax.setActivityIndicatorsVisible(false);
 };
@@ -49,7 +50,13 @@ wingS.ajax.requestUpdates = function() {
  * @param {Object} form - the form to be submitted
  */
 wingS.ajax.doSubmit = function(form) {
-    YAHOO.util.Connect.setForm(form);
+    var enc = "multipart/form-data";
+    if (form.enctype == enc || form.encoding == enc) {
+        YAHOO.util.Connect.setForm(form, true);
+    } else {
+        YAHOO.util.Connect.setForm(form);
+    }
+
     wingS.ajax.doRequest(form.method.toUpperCase(), wingS.util.getUpdateResource());
 };
 
@@ -121,7 +128,8 @@ wingS.ajax.processRequestFailure = function(request) {
  * @param {Object} request - the request to process
  */
 wingS.ajax.processRequestSuccess = function(request) {
-    wingS.ajax.updateDebugView(request);
+    if (wingS.global.debugMode)
+        wingS.ajax.updateDebugView(request);
 
     // Get the received XML response
     var xmlDoc = request.responseXML;
@@ -284,9 +292,11 @@ wingS.ajax.updateDebugView = function(request) {
         debugArea.innerHTML = debugHtmlCode;
         document.body.appendChild(debugArea);
     }
-    var txt = request.responseText;
-    debugArea.getElementsByTagName("TEXTAREA")[0].value = txt;
-    debugArea.getElementsByTagName("SPAN")[0].innerHTML = "| " + txt.length + " chars";
+    var output = request.responseText;
+    if (output == null)
+        output = (new XMLSerializer()).serializeToString(request.responseXML);
+    debugArea.getElementsByTagName("TEXTAREA")[0].value = output;
+    debugArea.getElementsByTagName("SPAN")[0].innerHTML = "| " + output.length + " chars";
 };
 
 /**
