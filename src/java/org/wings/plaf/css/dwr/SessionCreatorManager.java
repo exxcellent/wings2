@@ -11,8 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import org.wings.session.SessionManager;
 
-import org.directwebremoting.Creator;
-import org.directwebremoting.CreatorManager;
+import org.directwebremoting.extend.Creator;
+import org.directwebremoting.extend.CreatorManager;
 import org.directwebremoting.WebContextFactory;
 
 /**

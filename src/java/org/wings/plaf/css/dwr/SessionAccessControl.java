@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
-import org.directwebremoting.AccessControl;
-import org.directwebremoting.Creator;
+import org.directwebremoting.extend.AccessControl;
+import org.directwebremoting.extend.Creator;
 import org.directwebremoting.WebContextFactory;
 import javax.servlet.http.HttpSession;
 import org.directwebremoting.util.Messages;
@@ -45,79 +45,7 @@ public class SessionAccessControl implements AccessControl {
      * ban DWR classes from being created or marshalled
      */
     private static final String PACKAGE_DWR_DENY = "org.directwebremoting.";
-    
-    public String getReasonToNotExecute(Creator creator, String className, Method method) {
-        String methodName = method.getName();
         
-        // What if there is some J2EE role based restriction?
-        Set roles = getRoleRestrictions(className, methodName);
-        if (roles != null) {
-            boolean allowed = false;
-            
-            HttpServletRequest req = WebContextFactory.get().getHttpServletRequest();
-            if (req == null) {
-                log.warn("Missing HttpServletRequest roles can not be checked");
-            } else {
-                for (Iterator it = roles.iterator(); it.hasNext() && !allowed;) {
-                    String role = (String) it.next();
-                    if (req.isUserInRole(role)) {
-                        allowed = true;
-                    }
-                }
-            }
-            
-            if (!allowed) {
-                // This just creates a list of allowed roles for better debugging
-                StringBuffer buffer = new StringBuffer();
-                for (Iterator it = roles.iterator(); it.hasNext();) {
-                    String role = (String) it.next();
-                    buffer.append(role);
-                    if (it.hasNext()) {
-                        buffer.append(", ");
-                    }
-                }
-                
-                return Messages.getString("ExecuteQuery.DeniedByJ2EERoles", buffer.toString());
-            }
-        }
-        
-        return null;
-    }
-    
-    public String getReasonToNotDisplay(Creator creator, String className, Method method) {
-        String methodName = method.getName();
-        
-        // Is it public
-        if (!Modifier.isPublic(method.getModifiers())) {
-            return Messages.getString("ExecuteQuery.DeniedNonPublic");
-        }
-        
-        // Do access controls allow it?
-        if (!isExecutable(className, methodName)) {
-            return "Method access is denied by rules";
-        }
-        
-        // We ban some methods from Object too
-        if (method.getDeclaringClass() == Object.class) {
-            return Messages.getString("ExecuteQuery.DeniedObjectMethod");
-        }
-        
-        if (creator.getType().getName().startsWith(PACKAGE_DWR_DENY)) {
-            return Messages.getString("ExecuteQuery.DeniedCoreDWR");
-        }
-        
-        // Check the parameters are not DWR internal either
-        for (int j = 0; j < method.getParameterTypes().length; j++) {
-            Class paramType = method.getParameterTypes()[j];
-            
-            if (paramType.getName().startsWith(PACKAGE_DWR_DENY)) {
-                return Messages.getString("ExecuteQuery.DeniedParamDWR");
-            }
-        }
-        
-        return null;
-    }
-    
     public void addRoleRestriction(String scriptName, String methodName, String role) {
         String key = scriptName + '.' + methodName;
         Set roles = (Set) getRoleRestrictMap().get(key);
@@ -274,6 +202,76 @@ public class SessionAccessControl implements AccessControl {
         
         return map;
     }
+
+    public void assertExecutionIsPossible(Creator creator, String className, Method method) throws SecurityException {
+        String methodName = method.getName();
+        
+        // What if there is some J2EE role based restriction?
+        Set roles = getRoleRestrictions(className, methodName);
+        if (roles != null) {
+            boolean allowed = false;
+            
+            HttpServletRequest req = WebContextFactory.get().getHttpServletRequest();
+            if (req == null) {
+                log.warn("Missing HttpServletRequest roles can not be checked");
+            } else {
+                for (Iterator it = roles.iterator(); it.hasNext() && !allowed;) {
+                    String role = (String) it.next();
+                    if (req.isUserInRole(role)) {
+                        allowed = true;
+                    }
+                }
+            }
+            
+            if (!allowed) {
+                // This just creates a list of allowed roles for better debugging
+                StringBuffer buffer = new StringBuffer();
+                for (Iterator it = roles.iterator(); it.hasNext();) {
+                    String role = (String) it.next();
+                    buffer.append(role);
+                    if (it.hasNext()) {
+                        buffer.append(", ");
+                    }
+                }
+                
+                throw new SecurityException(Messages.getString("ExecuteQuery.DeniedByJ2EERoles", buffer.toString()));                
+            }
+        }
+                
+    }
+
+    public void assertIsDisplayable(Creator creator, String className, Method method) throws SecurityException {
+        String methodName = method.getName();
+        
+        // Is it public
+        if (!Modifier.isPublic(method.getModifiers())) {
+            throw new SecurityException(Messages.getString("ExecuteQuery.DeniedNonPublic"));
+        }
+        
+        // Do access controls allow it?
+        if (!isExecutable(className, methodName)) {
+            throw new SecurityException("Method access is denied by rules");
+        }
+        
+        // We ban some methods from Object too
+        if (method.getDeclaringClass() == Object.class) {
+            throw new SecurityException(Messages.getString("ExecuteQuery.DeniedObjectMethod"));
+        }
+        
+        if (creator.getType().getName().startsWith(PACKAGE_DWR_DENY)) {
+            throw new SecurityException(Messages.getString("ExecuteQuery.DeniedCoreDWR"));
+        }
+        
+        // Check the parameters are not DWR internal either
+        for (int j = 0; j < method.getParameterTypes().length; j++) {
+            Class paramType = method.getParameterTypes()[j];
+            
+            if (paramType.getName().startsWith(PACKAGE_DWR_DENY)) {
+                throw new SecurityException(Messages.getString("ExecuteQuery.DeniedParamDWR"));
+            }
+        }
+                
+    }
     
     /**
      * A struct that contains a method access policy for a Creator
@@ -282,12 +280,5 @@ public class SessionAccessControl implements AccessControl {
         boolean defaultAllow = false;
         List rules = new ArrayList();
     }
+        
 }
-
-
-
-
-
-
-
-

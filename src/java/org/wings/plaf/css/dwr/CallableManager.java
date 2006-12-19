@@ -12,7 +12,7 @@ import org.directwebremoting.impl.DefaultAccessControl;
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
 import org.directwebremoting.WebContextFactory;
-import org.directwebremoting.WebContextBuilder;
+import org.directwebremoting.WebContextFactory.WebContextBuilder;
 import org.directwebremoting.impl.DefaultWebContextBuilder;
 import org.directwebremoting.impl.DefaultContainer;
 

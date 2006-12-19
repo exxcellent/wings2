@@ -68,7 +68,7 @@
         <servlet-name>dwr-invoker</servlet-name>
         <display-name>DWR Servlet</display-name>
         <description>Direct Web Remoter Servlet</description>
-        <servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
+        <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
         <init-param>
             <param-name>debug</param-name>
             <param-value>true</param-value>
@@ -80,12 +80,12 @@
             <description>How verbose do we want logging to be?</description>
         </init-param>
         <init-param>
-            <param-name>org.directwebremoting.CreatorManager</param-name>
+            <param-name>org.directwebremoting.extend.CreatorManager</param-name>
             <param-value>org.wings.plaf.css.dwr.SessionCreatorManager</param-value>
             <description>Install a session local CreatorManager</description>
         </init-param>
         <init-param>
-            <param-name>org.directwebremoting.AccessControl</param-name>
+            <param-name>org.directwebremoting.extend.AccessControl</param-name>
             <param-value>org.wings.plaf.css.dwr.SessionAccessControl</param-value>
             <description>Install a session local AccessControl</description>
         </init-param>
