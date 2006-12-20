@@ -20,6 +20,14 @@ wingS.request.reloadFrame = function() {
 };
 
 /**
+ * Redirect the browser to the specified url.
+ * @param {String} url - the url to redirect to
+ */
+wingS.request.redirectURL = function(url) {
+    window.location.href = url;
+}
+
+/**
  * Each and every form submit that occurs within a wingS application is done through this method.
  * @param {boolean} ajaxEnabled - true if the form should be submitted by an asynchronous request
  * @param {Object} event - the event object

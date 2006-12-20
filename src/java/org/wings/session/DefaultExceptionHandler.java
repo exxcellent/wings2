@@ -49,6 +49,7 @@ public class DefaultExceptionHandler
             errorMessageLabel.setText(thrown.getMessage() !=null ? thrown.getMessage() : "none");
             errorFrame.setVisible(true);
             errorFrame.write(device);
+            errorFrame.setVisible(false);
         }
         catch (IOException e) {
             throw new RuntimeException(e);

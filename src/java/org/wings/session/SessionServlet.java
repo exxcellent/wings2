@@ -20,11 +20,8 @@ import org.wings.event.ExitVetoException;
 import org.wings.event.SRequestEvent;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
-import org.wings.io.Device;
-import org.wings.io.DeviceFactory;
-import org.wings.io.ServletDevice;
-import org.wings.resource.ReloadResource;
-import org.wings.resource.UpdateResource;
+import org.wings.io.*;
+import org.wings.resource.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -297,8 +294,6 @@ final class SessionServlet
 
         ReloadManager reloadManager = session.getReloadManager();
 
-        boolean isErrorHandling = false;
-
         try {
             /*
              * The tomcat 3.x has a bug, in that it does not encode the URL
@@ -374,7 +369,6 @@ final class SessionServlet
             // able to check if the request is valid and processed.
             session.getDispatcher().setEventEpoch(req.getParameter("event_epoch"));
 
-            Map debugParameterMap = req.getParameterMap();
             Enumeration en = req.getParameterNames();
             Cookie[] cookies = req.getCookies();
 
@@ -526,27 +520,11 @@ final class SessionServlet
                 handleUnknownResourceRequested(req, response);
             }
 
-        } catch (Throwable e) {
-            // TODO better error handling, this is pretty flexible, yet dirty
-            /* custom error handling...implement it in SFrame            */
-
-            SFrame defaultFrame = null;
-            if (session.getFrames().size() > 0) {
-                defaultFrame = (SFrame) session.getFrames().iterator().next();
-                while (defaultFrame.getParent() != null)
-                    defaultFrame = (SFrame) defaultFrame.getParent();
-            }
-            if (defaultFrame != null && defaultFrame.handleError(e)) {
-                log.warn("exception, trying to handle it via SFrame.handleError(): ", e);
-                // maybe just call defaultFrame.write(new ServletDevice(out)); instead of doGet()
-                doGet(req, response);
-                isErrorHandling = true;
-            } else {
-                log.fatal("exception handling failed: ", e);
-                handleException(response, e);
-            }
-
-        } finally {
+        }
+        catch (Throwable e) {
+            handleException(response, e);
+        }
+        finally {
             if (session != null) {
                 session.fireRequestEvent(SRequestEvent.REQUEST_END);
             }
@@ -561,7 +539,7 @@ final class SessionServlet
             /*
              * the session might be null due to destroy().
              */
-            if (session != null && !isErrorHandling) {
+            if (session != null) {
                 reloadManager.clear();
                 session.setServletRequest(null);
                 session.setServletResponse(null);
@@ -611,19 +589,11 @@ final class SessionServlet
      * </ol>
      *
      * @see DefaultExceptionHandler
-     * @param res the HTTP Response to use
+     * @param response the HTTP Response to use
      * @param thrown the Exception to report
      */
-    protected void handleException(HttpServletResponse res, Throwable thrown) {
+    protected void handleException(HttpServletResponse response, Throwable thrown) {
         try {
-            // Try to return HTTP status code 500.
-            // In many cases this will be too late (already stream output written)
-            if (session.getUserAgent().getBrowserType() != BrowserType.IE)
-                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-
-            ServletOutputStream out = res.getOutputStream();
-            ServletDevice device = new ServletDevice(out);
-
             String className = (String)session.getProperty("wings.error.handler");
             if (className == null)
                 className = DefaultExceptionHandler.class.getName();
@@ -631,7 +601,45 @@ final class SessionServlet
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             Class clazz = classLoader.loadClass(className);
             ExceptionHandler exceptionHandler = (ExceptionHandler)clazz.newInstance();
+
+            StringBuilderDevice device = new StringBuilderDevice();
             exceptionHandler.handle(device, thrown);
+            Resource resource = new StringResource(device.toString(), "html", "text/html");
+            String url = session.getExternalizeManager().externalize(resource);
+
+            ReloadManager reloadManager = session.getReloadManager();
+            reloadManager.notifyCGs();
+
+            session.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
+            session.fireRequestEvent(SRequestEvent.PROCESS_REQUEST);
+
+            if (reloadManager.isUpdateMode()) {
+                session.fireRequestEvent(SRequestEvent.DELIVER_START);
+
+                String encoding = SessionManager.getSession().getCharacterEncoding();
+                response.setContentType("text/xml; charset=" + encoding);
+                ServletOutputStream out = response.getOutputStream();
+                Device outputDevice = new ServletDevice(out);
+                outputDevice.print("<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"yes\"?>");
+                outputDevice.print("\n<updates>");
+                outputDevice.print("\n  <update><![CDATA[wingS.request.redirectURL(\"");
+                outputDevice.print(url);
+                outputDevice.print("\");]]></update>");
+                outputDevice.print("\n</updates>");
+                out.flush();
+
+                session.fireRequestEvent(SRequestEvent.DELIVER_DONE);
+                session.fireRequestEvent(SRequestEvent.REQUEST_END);
+
+                reloadManager.clear();
+                session.setServletRequest(null);
+                session.setServletResponse(null);
+                SessionManager.removeSession();
+                SForm.clearArmedComponents();
+            }
+            else {
+                response.sendRedirect(url);
+            }
         }
         catch (Exception e) {
             log.warn(e.getMessage(), thrown);
@@ -650,7 +658,7 @@ final class SessionServlet
             throws IOException {
         res.setStatus(HttpServletResponse.SC_NOT_FOUND);
         res.setContentType("text/html");
-        res.getOutputStream().println("<h1>404 Not Found</h1>Unknown Resource Requested");
+        res.getOutputStream().println("<h1>404 Not Found</h1>Unknown Resource Requested: " + req.getPathInfo());
     }
 
     /**
