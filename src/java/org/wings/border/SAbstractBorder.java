@@ -208,7 +208,9 @@ public abstract class SAbstractBorder
             BorderSpec right = specs[SConstants.RIGHT];
             BorderSpec bottom = specs[SConstants.BOTTOM];
 
-            if (top.thickness == left.thickness && left.thickness == right.thickness && right.thickness == bottom.thickness
+            if (this instanceof SEmptyBorder)
+                attributes.put(CSSProperty.BORDER, "none");
+            else if (top.thickness == left.thickness && left.thickness == right.thickness && right.thickness == bottom.thickness
                     && top.style != null && top.style.equals(left.style)
                     && left.style != null && left.style.equals(right.style)
                     && right.style != null && right.style.equals(bottom.style)

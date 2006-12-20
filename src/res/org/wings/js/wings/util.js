@@ -367,8 +367,17 @@ wingS.util.showModalDialog = function(dialogId, modalId) {
     }
     var dialogWidth = dialog.offsetWidth;
     var dialogHeight = dialog.offsetHeight;
-    dialog.style.left = (positionX - (dialogWidth / 2)) + 'px';
-    dialog.style.top = (positionY - (dialogHeight / 2)) + 'px';
+    if (dialogWidth > window.innerWidth) {
+        dialog.style.left = '0px';
+    } else {
+        dialog.style.left = (positionX - (dialogWidth / 2)) + 'px';
+    }
+
+    if(dialogHeight > window.innerHeight) {
+        dialog.style.top = '0px';
+    } else {
+        dialog.style.top = (positionY - (dialogHeight / 2)) + 'px';
+    }
     dialog.style.zIndex = 1000;
 };
 
