@@ -13,64 +13,6 @@ if (!wingS.update) {
 }
 
 /**
- * Replaces the HTML code of the component with the given ID.
- * @param {String} componentId - the ID of the component
- * @param {String} html - the new HTML code of the component
- * @param {String} exception - the server exception (optional)
- */
-wingS.update.component = function(componentId, html, exception) {
-    // Exception handling
-    if (exception != null) {
-        var update = "ComponentUpdate for '" + componentId + "'";
-        wingS.update.alertException(exception, update);
-        return;
-    }
-
-    // Search DOM for according component
-    var component = document.getElementById(componentId);
-    if (component == null) return;
-
-    // Handle layout workaround for IE (if necessary)
-    var wrapping = component.getAttribute("wrapping");
-    if (wrapping != null && !isNaN(wrapping)) {
-        for (var i = 0; i < parseInt(wrapping); i++) {
-            component = component.parentNode;
-        }
-    }
-
-    if (typeof component.outerHTML != "undefined") {
-        // Use outerHTML if available
-        component.outerHTML = html;
-    } else {
-        var parent = component.parentNode;
-        if (parent == null) return;
-
-        var nrOfChildElements = 0;
-        for (var i = 0; i < parent.childNodes.length; i++) {
-            // We have to filter everything except element nodes
-            // since browsers treat whitespace nodes differently
-            if (parent.childNodes[i].nodeType == 1) {
-                nrOfChildElements++;
-            }
-        }
-
-        if (nrOfChildElements == 1) {
-            // If there is only one child it must be our component
-            parent.innerHTML = html;
-        } else {
-            var range;
-            // If there is no other way we have to use proprietary methods
-            if (document.createRange && (range = document.createRange()) &&
-                range.createContextualFragment) {
-                range.selectNode(component);
-                var newComponent = range.createContextualFragment(html);
-                parent.replaceChild(newComponent, component);
-            }
-        }
-    }
-};
-
-/**
  * Updates the current event epoch of this frame.
  * @param {String} epoch - the current event epoch
  */
@@ -115,9 +57,6 @@ wingS.update.headerScript = function(add, src, type, index) {
             }
         }
     }
-    if (document.recalc) {
-        document.recalc(true);
-    }
 };
 
 /**
@@ -153,19 +92,10 @@ wingS.update.headerLink = function(add, href, type, rel, rev, target, index) {
         var links = head.getElementsByTagName("LINK");
         for (var i = 0; i < links.length; i++) {
             if (links[i].getAttribute("href") == href &&
-                links[i].getAttribute("type") == type &&
-                (links[i].getAttribute("rel") == null ||
-                 links[i].getAttribute("rel") == rel) &&
-                (links[i].getAttribute("rev") == null ||
-                 links[i].getAttribute("rev") == rev) &&
-                (links[i].getAttribute("target") == null ||
-                 links[i].getAttribute("target") == target)) {
+                links[i].getAttribute("type") == type) {
                 head.removeChild(links[i]);
             }
         }
-    }
-    if (document.recalc) {
-        document.recalc(true);
     }
 };
 
@@ -194,6 +124,85 @@ wingS.update.headerNext = function(index) {
     // since head.insertBefore(XXX, null)
     // is equal to head.appendChild(XXX).
     return header;
+};
+
+/**
+ * Replaces the HTML code of the component with the given ID.
+ * @param {String} componentId - the ID of the component
+ * @param {String} html - the new HTML code of the component
+ * @param {String} exception - the server exception (optional)
+ */
+wingS.update.component = function(componentId, html, exception) {
+    // Exception handling
+    if (exception != null) {
+        var update = "ComponentUpdate for '" + componentId + "'";
+        wingS.update.alertException(exception, update);
+        return;
+    }
+
+    // Search DOM for according component
+    var component = document.getElementById(componentId);
+
+    // Handle layout workaround for IE (if necessary)
+    var wrapping = component.getAttribute("wrapping");
+    if (wrapping != null && !isNaN(wrapping)) {
+        for (var i = 0; i < parseInt(wrapping); i++) {
+            component = component.parentNode;
+        }
+    }
+
+    if (typeof component.outerHTML != "undefined") {
+        // Use outerHTML if available
+        component.outerHTML = html;
+    } else {
+        var parent = component.parentNode;
+        if (parent == null) return;
+
+        var nrOfChildElements = 0;
+        for (var i = 0; i < parent.childNodes.length; i++) {
+            // We have to filter everything except element nodes
+            // since browsers treat whitespace nodes differently
+            if (parent.childNodes[i].nodeType == 1) {
+                nrOfChildElements++;
+            }
+        }
+
+        if (nrOfChildElements == 1) {
+            // If there is only one child it must be our component
+            parent.innerHTML = html;
+        } else {
+            var range;
+            // If there is no other way we have to use proprietary methods
+            if (document.createRange && (range = document.createRange()) &&
+                range.createContextualFragment) {
+                range.selectNode(component);
+                var newComponent = range.createContextualFragment(html);
+                parent.replaceChild(newComponent, component);
+            }
+        }
+    }
+};
+
+/**
+ * Adds or replaces the HTML code of the menu with the given ID.
+ * @param {String} menuId - the ID of the menu to add or replace
+ * @param {String} html - the new HTML code of the menu
+ * @param {String} exception - the server exception (optional)
+ */
+wingS.update.componentMenu = function(menuId, html, exception) {
+    // Exception handling
+    if (exception != null) {
+        var update = "ComponentUpdate for '" + menuId + "'";
+        wingS.update.alertException(exception, update);
+        return;
+    }
+
+    if (document.getElementById(menuId) == null) {
+        var menues = document.getElementById("wings_menues");
+        wingS.util.appendHTML(menues, html);
+    } else {
+        wingS.update.component(menuId, html);
+    }
 };
 
 /**

@@ -99,8 +99,12 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
         this.wordWrapDefault = wordWrapDefault;
     }
 
-    public Update updateText(SLabel label, String text) {
-        return new TextUpdate(label, text);
+    public Update getTextUpdate(SLabel label, String text) {
+        return text == null ? null : new TextUpdate(label, text);
+    }
+
+    public Update getIconUpdate(SLabel label, SIcon icon) {
+        return icon == null ? null : new IconUpdate(label, icon);
     }
 
 }

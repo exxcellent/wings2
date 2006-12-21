@@ -208,7 +208,7 @@ public class SComboBox
             else
                 delayedEvent = true;
 
-            if (isUpdatePossible())
+            if (isUpdatePossible() && getClass() == SComboBox.class)
                 update(((ComboBoxCG) getCG()).getSelectionUpdate(this, getSelectedIndex()));
             else
                 reload();

@@ -118,6 +118,9 @@ function wpm_isValidEvent(coord) {
 }
 
 function wpm_menu(event, menu) {
+    var target = wingS.events.getTarget(event);
+    var form = wingS.util.getParentByTagName(target, "FORM");
+    document.getElementById(menu).setAttribute("form", form.id);
     event = wpm_getEvent(event);
     menuPos = wpm_getMenuPosition(event);
     eventPos = wpm_getCoordinates(event);

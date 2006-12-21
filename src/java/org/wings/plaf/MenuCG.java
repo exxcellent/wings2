@@ -19,7 +19,7 @@ import org.wings.io.Device;
 
 
 public interface MenuCG extends ComponentCG {
+
     public void writePopup(Device device, SMenu menu) throws IOException;
+
 }
-
-

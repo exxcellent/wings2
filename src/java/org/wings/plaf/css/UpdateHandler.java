@@ -25,12 +25,32 @@ public class UpdateHandler implements Update.Handler {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void addParameter(Object o) {
         parameters.add(encode(o));
     }
 
     public Iterator getParameters() {
         return parameters.iterator();
+    }
+
+    public Object getParameter(int index) {
+        return parameters.get(index);
+    }
+
+    public Object removeParameter(int index) {
+        return parameters.remove(index);
+    }
+
+    public void addParameter(int index, Object o) {
+        parameters.add(index, encode(o));
+    }
+
+    public Object setParameter(int index, Object o) {
+        return parameters.set(index, encode(o));
     }
 
     private String encode(Object o) {

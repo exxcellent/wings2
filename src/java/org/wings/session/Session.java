@@ -95,6 +95,8 @@ public class Session implements PropertyService, Serializable {
 
     private ReloadManager reloadManager = null;
 
+    private MenuManager menuManager = null;
+
     private transient ExternalizeManager externalizeManager;
 
     private LowLevelEventDispatcher dispatcher = new LowLevelEventDispatcher();
@@ -349,6 +351,11 @@ public class Session implements PropertyService, Serializable {
         return reloadManager;
     }
 
+    public MenuManager getMenuManager() {
+        if (menuManager == null)
+            menuManager = new MenuManager();
+        return menuManager;
+    }
 
     /**
      * The Externalize manager is response to provide all {@link org.wings.Resource}

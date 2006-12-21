@@ -31,55 +31,61 @@ public class DefaultReloadManager implements ReloadManager {
 
     private boolean updateMode = false;
 
-    private boolean deliveryPhase = false;
+    private boolean acceptChanges = true;
 
     protected final Set componentsToReload = new HashSet();
 
-    protected final Map updatesByComponent = new HashMap();
+    protected final Map fullReplaceUpdates = new HashMap();
+
+    protected final Map fineGrainedUpdates = new HashMap();
 
     public void reload(SComponent component) {
+        if (component == null)
+            throw new IllegalArgumentException("Component must not be null!");
+
         if (updateMode)
-            addUpdate(component.getCG().getComponentUpdate(component));
+            addUpdate(component, null);
         else
             componentsToReload.add(component);
     }
 
-    public void addUpdate(Update update) {
+    public void addUpdate(SComponent component, Update update) {
+        if (component == null)
+            throw new IllegalArgumentException("Component must not be null!");
+
         if (update == null) {
-            String msg = "Update must not be null! \nEvery CG is required to implement the update " +
-                    "methods imposed by the according interface under \"org.wings.plaf\". If a CG " +
-                    "doesn't want to support fine grained updates, it may be sufficient to return " +
-                    "\"null\" here. However, every CGs is expected to implement at least \"update(" +
-                    "SComponent component)\" forced by the \"org.wings.plaf.ComponentCG\" interface.";
-            throw new IllegalArgumentException(msg);
-        } else if (update.getComponent() == null) {
-            String msg = "Component must not be null! Every update belongs to a specific component.";
-            throw new IllegalArgumentException(msg);
+            update = component.getCG().getComponentUpdate(component);
+            if (update == null) {
+                SFrame frame = component.getParentFrame();
+                if (frame != null)
+                    fullReplaceUpdates.put(frame, null);
+                return;
+            }
         }
 
-        SComponent component = update.getComponent();
+        component = update.getComponent();
 
-        if (!deliveryPhase) {
+        if (acceptChanges) {
             PotentialUpdate potentialUpdate = new PotentialUpdate(update);
-            Set updatesOfComponent = getUpdatesOfComponent(component);
-            updatesOfComponent.remove(potentialUpdate);
-            updatesOfComponent.add(potentialUpdate);
-            updatesByComponent.put(component, updatesOfComponent);
 
-            if ((update.getProperty() & Update.AFFECTS_COMPLETE_COMPONENT)
-                    == Update.AFFECTS_COMPLETE_COMPONENT) {
-                componentsToReload.add(component);
+            if ((update.getProperty() & Update.FULL_REPLACE_UPDATE) == Update.FULL_REPLACE_UPDATE) {
+                fullReplaceUpdates.put(component, potentialUpdate);
+            } else {
+                Set potentialUpdates = getFineGrainedUpdates(component);
+                potentialUpdates.remove(potentialUpdate);
+                potentialUpdates.add(potentialUpdate);
+                fineGrainedUpdates.put(component, potentialUpdates);
             }
         } else if (log.isDebugEnabled()) {
-            log.debug("Component " + component + " changed during delivery phase.");
+            log.debug("Component " + component + " changed after invalidation of frames.");
         }
     }
 
     public List getUpdates() {
         filterUpdates();
 
-        List filteredUpdates = new ArrayList();
-        for (Iterator i = updatesByComponent.values().iterator(); i.hasNext();) {
+        List filteredUpdates = new ArrayList(fullReplaceUpdates.values());
+        for (Iterator i = fineGrainedUpdates.values().iterator(); i.hasNext();) {
             filteredUpdates.addAll((Set) i.next());
         }
         Collections.sort(filteredUpdates, getOrderOfUpdates());
@@ -88,10 +94,16 @@ public class DefaultReloadManager implements ReloadManager {
     }
 
     public Set getDirtyComponents() {
-        if (updateMode)
-            return updatesByComponent.keySet();
-        else
-            return componentsToReload;
+        final Set dirtyComponents = new HashSet();
+
+        if (updateMode) {
+            dirtyComponents.addAll(fullReplaceUpdates.keySet());
+            dirtyComponents.addAll(fineGrainedUpdates.keySet());
+        } else {
+            dirtyComponents.addAll(componentsToReload);
+        }
+
+        return dirtyComponents;
     }
 
     public Set getDirtyFrames() {
@@ -110,7 +122,7 @@ public class DefaultReloadManager implements ReloadManager {
             ((SFrame) i.next()).invalidate();
             i.remove();
         }
-        deliveryPhase = true;
+        acceptChanges = false;
     }
 
     public void notifyCGs() {
@@ -125,17 +137,10 @@ public class DefaultReloadManager implements ReloadManager {
     public void clear() {
         updateCount = 0;
         updateMode = false;
-        deliveryPhase = false;
+        acceptChanges = true;
         componentsToReload.clear();
-        updatesByComponent.clear();
-    }
-
-    public boolean componentRequestedReload(SComponent component) {
-        return componentsToReload.contains(component);
-    }
-
-    public boolean componentRequestedUpdate(SComponent component) {
-        return updatesByComponent.get(component) != null;
+        fullReplaceUpdates.clear();
+        fineGrainedUpdates.clear();
     }
 
     public boolean isUpdateMode() {
@@ -146,12 +151,19 @@ public class DefaultReloadManager implements ReloadManager {
         this.updateMode = updateMode;
     }
 
-    protected Set getUpdatesOfComponent(SComponent component) {
-        Set updatesOfComponent = (Set) updatesByComponent.get(component);
-        if (updatesOfComponent == null) {
-            updatesOfComponent = new HashSet(5);
+    public boolean isReloadRequired(SFrame frame) {
+        if (updateMode)
+            return fullReplaceUpdates.containsKey(frame);
+        else
+            return true;
+    }
+
+    protected Set getFineGrainedUpdates(SComponent component) {
+        Set potentialUpdates = (Set) fineGrainedUpdates.get(component);
+        if (potentialUpdates == null) {
+            potentialUpdates = new HashSet(5);
         }
-        return updatesOfComponent;
+        return potentialUpdates;
     }
 
     protected Comparator getOrderOfUpdates() {
@@ -166,49 +178,63 @@ public class DefaultReloadManager implements ReloadManager {
         if (log.isDebugEnabled())
             printAllUpdates("potential updates");
 
-        for (Iterator i = updatesByComponent.keySet().iterator(); i.hasNext();) {
+        fineGrainedUpdates.keySet().removeAll(fullReplaceUpdates.keySet());
+
+        SortedMap componentHierarchy = new TreeMap(new PathComparator());
+
+        for (Iterator i = getDirtyComponents().iterator(); i.hasNext();) {
             SComponent component = (SComponent) i.next();
-            if (!component.isRecursivelyVisible() || component.getParentFrame() == null) {
-                i.remove();
-                componentsToReload.remove(component);
+            if ((!component.isRecursivelyVisible() && !(component instanceof SMenu)) ||
+                    component.getParentFrame() == null) {
+                fullReplaceUpdates.remove(component);
+                fineGrainedUpdates.remove(component);
+            } else {
+                componentHierarchy.put(getHierarchyPath(component), component);
             }
         }
 
-        SortedMap componentsByPath = new TreeMap(new PathComparator());
-        for (Iterator i = componentsToReload.iterator(); i.hasNext();) {
-            SComponent component = (SComponent) i.next();
-            componentsByPath.put(calculatePath(component), component);
-        }
-        for (Iterator i = componentsByPath.keySet().iterator(); i.hasNext();) {
+        for (Iterator i = componentHierarchy.keySet().iterator(); i.hasNext();) {
             String topPath = (String) i.next();
-            retainUpdatesWithProperty(
-                    getUpdatesOfComponent((SComponent) componentsByPath.get(topPath)),
-                    Update.AFFECTS_COMPLETE_COMPONENT);
-            while (i.hasNext()) {
-                String subPath = (String) i.next();
-                if (subPath.startsWith(topPath)) {
-                    componentsToReload.remove(componentsByPath.get(subPath));
-                    updatesByComponent.keySet().remove(componentsByPath.get(subPath));
-                    i.remove();
+            if (fullReplaceUpdates.containsKey(componentHierarchy.get(topPath))) {
+                while (i.hasNext()) {
+                    String subPath = (String) i.next();
+                    if (subPath.startsWith(topPath)) {
+                        fullReplaceUpdates.remove(componentHierarchy.get(subPath));
+                        fineGrainedUpdates.remove(componentHierarchy.get(subPath));
+                        i.remove();
+                    }
                 }
             }
-            i = componentsByPath.tailMap(topPath + "\0").keySet().iterator();
+            i = componentHierarchy.tailMap(topPath + "\0").keySet().iterator();
         }
 
         if (log.isDebugEnabled())
             printAllUpdates("effective updates");
     }
 
-    private String calculatePath(SComponent component) {
+    private String getHierarchyPath(SComponent component) {
         SStringBuilder path = new SStringBuilder("/").append(component.getName());
-        while (component.getParent() != null) {
-            path = path.insert(0, "/").insert(1, component.getParent().getName());
-            component = component.getParent();
+        if (component instanceof SMenuItem) {
+            SMenuItem menuItem = (SMenuItem) component;
+            while (menuItem.getParentMenu() != null) {
+                SComponent parentMenu = menuItem.getParentMenu();
+                path = path.insert(0, "/").insert(1, parentMenu.getName());
+                if (parentMenu instanceof SMenuItem) {
+                    menuItem = (SMenuItem) parentMenu;
+                } else {
+                    break;
+                }
+            }
+        } else {
+            while (component.getParent() != null) {
+                path = path.insert(0, "/").insert(1, component.getParent().getName());
+                component = component.getParent();
+            }
         }
         return path.toString();
     }
 
-    private void removeUpdatesWithProperty(Iterable iterable, int propertyMask) {
+    private void removeUpdates(Iterable iterable, int propertyMask) {
         Iterator i = iterable.iterator();
         while (i.hasNext()) {
             Update update = (Update) i.next();
@@ -217,7 +243,7 @@ public class DefaultReloadManager implements ReloadManager {
         }
     }
 
-    private void retainUpdatesWithProperty(Iterable iterable, int propertyMask) {
+    private void retainUpdates(Iterable iterable, int propertyMask) {
         Iterator i = iterable.iterator();
         while (i.hasNext()) {
             Update update = (Update) i.next();
@@ -226,20 +252,36 @@ public class DefaultReloadManager implements ReloadManager {
         }
     }
 
+    private boolean containsUpdate(Iterable iterable, int propertyMask) {
+        Iterator i = iterable.iterator();
+        while (i.hasNext()) {
+            Update update = (Update) i.next();
+            if ((update.getProperty() & propertyMask) == propertyMask)
+                return true;
+        }
+        return false;
+    }
+
     private void printAllUpdates(String header) {
         int numberOfUpdates = 0;
         log.debug("--- " + header + " ---");
-        for (Iterator i = updatesByComponent.keySet().iterator(); i.hasNext();) {
+        for (Iterator i = getDirtyComponents().iterator(); i.hasNext();) {
             StringBuilder output = new StringBuilder();
             SComponent component = (SComponent) i.next();
             output.append(component + ":");
-            for (Iterator j = getUpdatesOfComponent(component).iterator(); j.hasNext();) {
+            if (fullReplaceUpdates.containsKey(component)) {
+                output.append(" " + fullReplaceUpdates.get(component));
+                if (fullReplaceUpdates.get(component) == null)
+                    output.append(" [no component update supported --> reload frame!!!]");
+                ++numberOfUpdates;
+            }
+            for (Iterator j = getFineGrainedUpdates(component).iterator(); j.hasNext();) {
                 output.append(" " + j.next());
                 ++numberOfUpdates;
             }
             log.debug(output.toString());
         }
-        log.debug("> " + numberOfUpdates);
+        log.debug("--> " + numberOfUpdates);
     }
 
     private final class PotentialUpdate implements Update {

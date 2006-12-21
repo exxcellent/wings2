@@ -29,8 +29,6 @@ public abstract class IconTextCompound {
 
     public void writeCompound(Device device, SComponent component, int horizontalTextPosition,
                               int verticalTextPosition, boolean writeAllAttributes) throws IOException {
-        RenderHelper.getInstance(component).collectMenues(component);
-
         if (horizontalTextPosition == SConstants.NO_ALIGN)
             horizontalTextPosition = SConstants.RIGHT;
         if (verticalTextPosition == SConstants.NO_ALIGN)

@@ -332,11 +332,15 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     public void setComponentPopupMenu(SPopupMenu popupMenu) {
         reloadIfChange(this.popupMenu, popupMenu);
-        if (this.popupMenu != null)
+        if (this.popupMenu != null) {
+            getSession().getMenuManager().deregisterMenuLink(this.popupMenu, this);
             this.popupMenu.setParentFrame(null);
+        }
         this.popupMenu = popupMenu;
-        if (this.popupMenu != null)
+        if (this.popupMenu != null) {
+            getSession().getMenuManager().registerMenuLink(this.popupMenu, this);
             this.popupMenu.setParentFrame(getParentFrame());
+        }
     }
 
     public SPopupMenu getComponentPopupMenu() {
@@ -1000,6 +1004,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                         ? SComponentEvent.COMPONENT_SHOWN
                         : SComponentEvent.COMPONENT_HIDDEN));
             }
+
             if (parent != null) {
             	parent.reload();
             } else {
@@ -1060,10 +1065,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param update  the update for this component
      */
     public final void update(Update update) {
-        if (update == null)
-            reload();
-        else
-            getSession().getReloadManager().addUpdate(update);
+        getSession().getReloadManager().addUpdate(this, update);
     }
 
     protected boolean isUpdatePossible() {
@@ -1320,7 +1322,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      *
      * @return true, if this component resides in a form, false otherwise
      */
-    public final boolean getResidesInForm() {
+    public boolean getResidesInForm() {
         SComponent parent = getParent();
 
         boolean actuallyDoes = false;

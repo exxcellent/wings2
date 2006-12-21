@@ -19,7 +19,7 @@ abstract class AbstractUpdate implements Update {
 	}
 
     public int getProperty() {
-        return DEFAULT_INCREMENTAL_UPDATE;
+        return FINE_GRAINED_UPDATE;
     }
 
     public int getPriority() {

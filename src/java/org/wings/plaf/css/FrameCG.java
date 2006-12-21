@@ -27,7 +27,6 @@ import org.wings.dnd.DragAndDropManager;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.*;
 import org.wings.io.Device;
-import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.resource.ClassPathResource;
@@ -430,7 +429,15 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             frame.getLayout().write(device);
 
             // Write menus
-            device.print("\n").print(RenderHelper.getInstance(frame).getMenueRenderBuffer().toString());
+            device.print("\n\n<div id=\"wings_menues\">\n");
+            Set menues = frame.getSession().getMenuManager().getMenues(frame);
+            for (Iterator i = menues.iterator(); i.hasNext();) {
+                SComponent menuItem = (SComponent) i.next();
+                menuItem.putClientProperty("popup", Boolean.TRUE);
+                menuItem.write(device);
+                menuItem.putClientProperty("popup", null);
+            }
+            device.print("\n</div>\n\n");
 
             // Write final JS for DnD if neccessary
             if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) {
@@ -555,7 +562,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
 	public Update getComponentUpdate(SComponent component) {
-		return new ComponentUpdate(component);
+        return null;
 	}
 
     public Update getAddHeaderUpdate(SFrame frame, int index, Object header) {
@@ -589,44 +596,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
     public Update getUpdateEnabledUpdate(SFrame frame, boolean enabled) {
         return new UpdateEnabledUpdate(frame, enabled);
-    }
-
-    protected class ComponentUpdate extends AbstractUpdate {
-
-        public ComponentUpdate(SComponent component) {
-            super(component);
-        }
-
-        public int getProperty() {
-            return AFFECTS_COMPLETE_COMPONENT;
-        }
-
-        public int getPriority() {
-            return 5;
-        }
-
-        public Handler getHandler() {
-            String htmlCode = "";
-            String exception = null;
-
-            try {
-                StringBuilderDevice htmlDevice = new StringBuilderDevice();
-                write(htmlDevice, component);
-                htmlCode = htmlDevice.toString();
-            } catch (Throwable t) {
-                log.fatal("An error occured during rendering", t);
-                exception = t.getClass().getName();
-            }
-
-            UpdateHandler handler = new UpdateHandler("component");
-            handler.addParameter(component.getName());
-            handler.addParameter(htmlCode);
-            if (exception != null) {
-                handler.addParameter(exception);
-            }
-            return handler;
-        }
-
     }
 
     protected class HeaderScriptUpdate extends AbstractUpdate {

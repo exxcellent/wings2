@@ -19,6 +19,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -48,6 +49,9 @@ import org.wings.SGridLayout;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SList;
+import org.wings.SMenu;
+import org.wings.SMenuBar;
+import org.wings.SMenuItem;
 import org.wings.SPageScroller;
 import org.wings.SPanel;
 import org.wings.SRadioButton;
@@ -319,7 +323,7 @@ public class LogConfig {
         }
 
         // TESTING ON-CHANGE-SUBMIT-LISTENERS
-        if (true) {
+        if (false) {
             bg_insertOrUpdate.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     log.info("ActionListener of ButtonGroup!!!");
@@ -775,9 +779,9 @@ public class LogConfig {
         final SButton bu_addScriptHeader = new SButton("Add a new script header and link header");
         bu_addScriptHeader.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fr_frame.addHeader(includeJs);
+//                fr_frame.addHeader(includeJs);
                 fr_frame.addHeader(includeCss);
-                fr_frame.addHeader(includeJs2);
+//                fr_frame.addHeader(includeJs2);
                 fr_frame.addHeader(includeCss2);
             }
         });
@@ -785,9 +789,9 @@ public class LogConfig {
         final SButton bu_removeScriptHeader = new SButton("Remove script header and link header");
         bu_removeScriptHeader.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fr_frame.removeHeader(includeJs);
+//                fr_frame.removeHeader(includeJs);
                 fr_frame.removeHeader(includeCss);
-                fr_frame.removeHeader(includeJs2);
+//                fr_frame.removeHeader(includeJs2);
                 fr_frame.removeHeader(includeCss2);
             }
         });
@@ -867,15 +871,18 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, createRandomResultPanel());
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollable);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollPaneMode);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBar);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBar);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBarPolicy);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBarPolicy);
+        addToAjaxDebuggingPanel(pa_debug, createMenuTestPanel());
 
-        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
+//        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollable);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollPaneMode);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBar);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBar);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBarPolicy);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBarPolicy);
+//
+//        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+//        addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, bu_testWhatever);
@@ -972,6 +979,32 @@ public class LogConfig {
         li_testList.setShowAsFormComponent(false);
 
         return li_testList;
+    }
+
+    private SPanel createMenuTestPanel() {
+        SPanel pa_menuTest = new SPanel(new SGridLayout(1));
+
+        SMenuBar menuBar = new SMenuBar();
+
+        // Test right aligned menu
+        SMenu helpMenu = new SMenu("Test");
+        SMenuItem item1 = new SMenuItem("Item 1");
+        SMenuItem item2 = new SMenuItem("Item 1");
+        helpMenu.add(item1);
+        helpMenu.add(item2);
+        menuBar.add(helpMenu);
+
+        pa_menuTest.add(helpMenu);
+//
+//        SMenu aboutMenu = new SMenu("About");
+//        aboutMenu.setHorizontalAlignment(RIGHT_ALIGN);
+//        SMenuItem aboutMenuItem = new SMenuItem("About WingSet");
+//        aboutMenuItem.addActionListener(menuItemListener);
+//        aboutMenu.add(aboutMenuItem);
+//        menuBar.add(aboutMenu);
+//
+//        return li_testList;
+        return pa_menuTest;
     }
 
 }

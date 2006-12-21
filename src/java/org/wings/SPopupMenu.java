@@ -15,7 +15,9 @@ package org.wings;
 import org.wings.plaf.PopupMenuCG;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A popup or context menu that can be attached to abitrary components.
@@ -44,9 +46,14 @@ public class SPopupMenu
     }
 
     public void setParentFrame(SFrame f) {
-        super.setParentFrame(f);
-        for (int i = 0; i < menuItems.size(); i++) {
-            ((SComponent) menuItems.get(i)).setParentFrame(f);
+        if (getParentFrame() == null && f != null) {
+            reload();
+        }
+        if (f != null || (f == null && !getSession().getMenuManager().isMenuLinked(this))) {
+            super.setParentFrame(f);
+            for (int i = 0; i < menuItems.size(); i++) {
+                ((SComponent) menuItems.get(i)).setParentFrame(f);
+            }
         }
     }
 
@@ -97,25 +104,35 @@ public class SPopupMenu
     }
 
     /**
-     * Returns the scale factor for the width of the Menu components. 
+     * Returns the scale factor for the width of the Menu components.
      * The length of the children texts is multiplied by this factor and set as
      * width (in em) for the children.
-     * 
+     *
      * @return Returns the widthScaleFactor.
      */
     public double getWidthScaleFactor() {
         return widthScaleFactor;
     }
     /**
-     * Sets the scale factor for the width of the Menu components. 
+     * Sets the scale factor for the width of the Menu components.
      * The length of the children texts is multiplied by this factor and set as
      * width (in em) for the children.
-     * 
+     *
      * Default value is 0.8.
-     * 
+     *
      * @param widthScaleFactor The widthScaleFactor to set.
      */
     public void setWidthScaleFactor(double widthScaleFactor) {
         this.widthScaleFactor = widthScaleFactor;
+    }
+
+    public void setEnabled(boolean enabled) {
+        if (enabled != isEnabled()) {
+            Set menuLinks = getSession().getMenuManager().getMenueLinks(this);
+            for (Iterator i = menuLinks.iterator(); i.hasNext();) {
+                ((SComponent) i.next()).reload();
+            }
+        }
+        super.setEnabled(enabled);
     }
 }

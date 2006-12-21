@@ -66,7 +66,7 @@ public class UpdateResource extends DynamicResource {
 
             out.print(xmlHeader);
             out.print("\n<updates>");
-            if (reloadManager.componentRequestedReload(frame)) {
+            if (reloadManager.isReloadRequired(frame)) {
                 writeUpdate(out, "wingS.request.reloadFrame()");
             } else {
             	Collection updates = reloadManager.getUpdates();

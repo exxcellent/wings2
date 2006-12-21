@@ -6,8 +6,8 @@ import org.wings.SComponent;
 
 public interface Update {
 
-    public static final int DEFAULT_INCREMENTAL_UPDATE = 0;
-    public static final int AFFECTS_COMPLETE_COMPONENT = 1;
+    public static final int FINE_GRAINED_UPDATE = 0;
+    public static final int FULL_REPLACE_UPDATE = 1;
 
     public SComponent getComponent();
 

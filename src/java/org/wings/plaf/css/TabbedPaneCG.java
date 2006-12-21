@@ -249,7 +249,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("/>");
             }
 
-            Utils.printButtonEnd(device, tabbedPane, eventValue, enabledTab);
+            Utils.printButtonEnd(device, enabledTab);
         }
     }
 }

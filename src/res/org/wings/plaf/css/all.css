@@ -571,7 +571,7 @@ ul.SPopupMenu a.x:hover{
     padding: 1px 2px;
     border: 1px solid #333333;
     font: 100% sans-serif;
-    width: auto;    
+    width: auto;
 }
 
 /* clears the windows */
@@ -789,16 +789,16 @@ table.DivisionContent {
 	background-image: url(../../icons/SliderHoriz.png);
 	background-repeat: no-repeat;
 	height:26px;
-	width:218px;	
+	width:218px;
 }
 
 .SSliderThumb {
 	text-align: left;
         cursor:default;
-        width:18px; 
-        height:18px; 
+        width:18px;
+        height:18px;
         z-index: 9;
-        position:absolute; 
+        position:absolute;
 }
 
 .SSliderBgVert {
@@ -806,7 +806,7 @@ table.DivisionContent {
 	background-image: url(../../icons/SliderVert.png);
 	background-repeat: no-repeat;
 	height:218px;
-	width:26px;	
+	width:26px;
 }
 
 .SSliderValueRight {

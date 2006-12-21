@@ -173,7 +173,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      */
     protected static void writeContextMenu(Device device, SComponent component) throws IOException {
         final SPopupMenu menu = component.getComponentPopupMenu();
-        if (menu != null) {
+        if (menu != null && menu.isEnabled()) {
             final String componentId = menu.getName();
             final String popupId = componentId + "_pop";
             device.print(" onContextMenu=\"return wpm_menuPopup(event, '");
@@ -323,7 +323,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 	public final void write(final Device device, final SComponent component) throws IOException {
 	        // Render component and return if caching for this one is disabled.
 			if (!RenderHelper.getInstance(component).isCachingAllowed(component)) {
-				log.debug("-> writing (not caching) = " + component);
+				// log.debug("-> writing (not caching) = " + component);
 				writeCode(device, component);
 				return;
 			}
@@ -335,10 +335,10 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 				writeCode(cacheDevice, component);
 				cachedCode = cacheDevice.toString();
 				component.putClientProperty("render-cache", cachedCode);
-				log.debug("--> writing (and caching) = " + component);
+				// log.debug("--> writing (and caching) = " + component);
 			} else {
 				// Otherwise we'll reuse the code previously cached.
-				log.debug("---> reusing (from cache) = " + component);
+				// log.debug("---> reusing (from cache) = " + component);
 			}
 			// Reuse the cached code.
 			device.print(cachedCode);
@@ -353,7 +353,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             writeInternal(device, component);
             ScriptManager scriptManager = component.getSession().getScriptManager();
             scriptManager.addScriptListeners(component.getScriptListeners());
-            RenderHelper.getInstance(component).collectMenues(component);
             SToolTipManager.sharedInstance().registerComponent(component);
             BorderCG.writeComponentBorderSufix(device, component);
         } catch (RuntimeException e) {
@@ -386,7 +385,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 		}
 
         public int getProperty() {
-            return AFFECTS_COMPLETE_COMPONENT;
+            return FULL_REPLACE_UPDATE;
         }
 
         public int getPriority() {

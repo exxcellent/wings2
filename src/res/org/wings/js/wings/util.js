@@ -80,7 +80,7 @@ wingS.util.openLink = function(target, url, scriptCodeArray) {
   if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
       // if the target exists => change URL, else => open URL in new window
       if (target == null) {
-          window.location.href = url;
+          wingS.request.redirectURL(url);
       } else {
           if (wingS.util.checkTarget(target)) {
               parent.frames[target].location.href = url;
@@ -128,6 +128,23 @@ wingS.util.preventSubmit = function() {
  */
 wingS.util.insertAfter = function(newChild, refChild) {
     refChild.parentNode.insertBefore(newChild, refChild.nextSibling);
+};
+
+wingS.util.appendHTML = function(element, html) {
+    if (element.insertAdjacentHTML) {
+        element.insertAdjacentHTML("BeforeEnd", html);
+    } else if (document.createRange) {
+        var range = document.createRange();
+        if (!range.selectNodeContents || !range.createContextualFragment) {
+            return false;
+        }
+        range.selectNodeContents(element);
+        var fragment = range.createContextualFragment(html);
+        element.appendChild(fragment);
+    } else {
+        return false;
+    }
+    return true;
 };
 
 /**
@@ -373,7 +390,7 @@ wingS.util.showModalDialog = function(dialogId, modalId) {
         dialog.style.left = (positionX - (dialogWidth / 2)) + 'px';
     }
 
-    if(dialogHeight > window.innerHeight) {
+    if (dialogHeight > window.innerHeight) {
         dialog.style.top = '0px';
     } else {
         dialog.style.top = (positionY - (dialogHeight / 2)) + 'px';

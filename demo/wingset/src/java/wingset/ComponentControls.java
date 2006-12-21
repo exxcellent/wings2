@@ -75,7 +75,6 @@ public class ComponentControls  extends SPanel {
     protected final List components = new LinkedList();
 
     protected final SToolBar globalControls = new SToolBar();
-    protected final SToolBar ajaxControls = new SToolBar();
     protected final SToolBar localControls = new SToolBar();
 
     protected final SButton applyButton;
@@ -113,10 +112,10 @@ public class ComponentControls  extends SPanel {
 
         border = new SLineBorder(Color.LIGHT_GRAY, 0);
         border.setThickness(1, SConstants.LEFT);
-        border.setThickness(1, SConstants.BOTTOM);
-        border.setStyle("dashed", SConstants.BOTTOM);
+        //border.setThickness(1, SConstants.BOTTOM);
+        //border.setStyle("dashed", SConstants.BOTTOM);
         globalControls.setBorder(border);
-        globalControls.setPreferredSize(SDimension.FULLWIDTH);
+        //globalControls.setPreferredSize(SDimension.FULLWIDTH);
         globalControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout)globalControls.getLayout()).setHgap(6);
         ((SBoxLayout)globalControls.getLayout()).setVgap(4);
@@ -130,7 +129,7 @@ public class ComponentControls  extends SPanel {
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;
-        c.gridheight = 3;
+        c.gridheight = 2;
         c.insets.left = 10;
         c.insets.right = 10;
         c.weightx = 0.01;
@@ -141,7 +140,6 @@ public class ComponentControls  extends SPanel {
         c.gridheight = 1;
         c.weightx = 0.99;
         add(globalControls, c);
-        add(ajaxControls, c);
         add(localControls, c);
 
         ajaxCheckBox.setSelected(SessionManager.getSession().getRootFrame().isUpdateEnabled());

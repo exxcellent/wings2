@@ -70,7 +70,7 @@ public class InternalFrameCG extends AbstractComponentCG implements
         Utils.printButtonStart(device, frame, Integer.toString(event), true, frame.getShowAsFormComponent(), cssClass);
         device.print(">");
         writeIcon(device, icon, null);
-        Utils.printButtonEnd(device,frame,Integer.toString(event),true  );
+        Utils.printButtonEnd(device, true);
     }
 
     protected void writeWindowIcon(Device device, SInternalFrame frame,

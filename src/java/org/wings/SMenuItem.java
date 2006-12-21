@@ -16,7 +16,7 @@ import org.wings.plaf.MenuBarCG;
 import javax.swing.*;
 
 /**
- * A chooseable item in a {@link SMenuBar} arranged inside a main {@link SMenu} topic. 
+ * A chooseable item in a {@link SMenuBar} arranged inside a main {@link SMenu} topic.
  *
  * @author <a href="mailto:andre@lison.de">Andre Lison</a>
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
@@ -26,22 +26,27 @@ public class SMenuItem extends SButton {
     private KeyStroke accelerator;
 
     public SMenuItem() {
+        setShowAsFormComponent(false);
     }
 
     public SMenuItem(Action action) {
         super(action);
+        setShowAsFormComponent(false);
     }
 
     public SMenuItem(String text) {
         super(text);
+        setShowAsFormComponent(false);
     }
 
     public SMenuItem(SIcon icon) {
         super(icon);
+        setShowAsFormComponent(false);
     }
 
     public SMenuItem(String text, SIcon icon) {
         super(text, icon);
+        setShowAsFormComponent(false);
     }
 
     final void setParentMenu(SComponent menuParent) {
@@ -56,7 +61,7 @@ public class SMenuItem extends SButton {
     public void setCG(MenuBarCG cg) {
         super.setCG(cg);
     }
-    
+
     public void setAccelerator(KeyStroke keyStroke) {
         accelerator = keyStroke;
         if (accelerator != null) {
@@ -64,7 +69,7 @@ public class SMenuItem extends SButton {
             getActionMap().put("item_accelerator", getAction());
         }
     }
-    
+
     public KeyStroke getAccelerator() {
         return accelerator;
     }
@@ -72,6 +77,11 @@ public class SMenuItem extends SButton {
     public boolean isRecursivelyVisible() {
         return visible && (menuParent != null ? menuParent.isRecursivelyVisible() : super.isRecursivelyVisible());
     }
+
+    public boolean getResidesInForm() {
+        if (getParentMenu() != null)
+            return getParentMenu().getResidesInForm();
+        else
+            return getParent() != null ? getParent().getResidesInForm() : false;
+    }
 }
-
-

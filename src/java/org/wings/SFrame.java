@@ -281,7 +281,7 @@ public class SFrame
     public void addHeader(Object headerElement) {
         if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
-            if (isUpdatePossible())
+            if (isUpdatePossible() && getClass() == SFrame.class)
                 update(((FrameCG) getCG()).getAddHeaderUpdate(this, headerElement));
             else
                 reload();
@@ -299,7 +299,7 @@ public class SFrame
     public void addHeader(int index, Object headerElement) {
         if (!headers().contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
-            if (isUpdatePossible())
+            if (isUpdatePossible() && getClass() == SFrame.class)
                 update(((FrameCG) getCG()).getAddHeaderUpdate(this, index, headerElement));
             else
                 reload();
@@ -313,7 +313,7 @@ public class SFrame
     public boolean removeHeader(Object headerElement) {
         boolean deleted = headers.remove(headerElement);
         if (deleted) {
-            if (isUpdatePossible())
+            if (isUpdatePossible() && getClass() == SFrame.class)
                 update(((FrameCG) getCG()).getRemoveHeaderUpdate(this, headerElement));
             else
                 reload();
@@ -674,7 +674,7 @@ public class SFrame
 
 	public void setUpdateEnabled(boolean enabled) {
         if (updateEnabled != enabled) {
-            if (isUpdatePossible())
+            if (isUpdatePossible() && getClass() == SFrame.class)
                 update(((FrameCG) getCG()).getUpdateEnabledUpdate(this, enabled));
             else
                 reload();

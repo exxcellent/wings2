@@ -205,6 +205,7 @@ public final class LowLevelEventDispatcher
                     		"| expected epoch: " + frame.getEventEpoch());
                 }
                 frame.fireInvalidLowLevelEventListener(gl);
+                frame.reload();
                 return false;
             }
         }

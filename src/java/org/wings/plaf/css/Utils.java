@@ -976,17 +976,17 @@ public final class Utils {
 
     public static void printButtonStart(final Device device, final SComponent component, final String eventValue,
             final boolean enabled, final boolean formComponent, String cssClassName) throws IOException {
-        if (enabled)
+        if (enabled) {
             device.print("<a href=\"#\"");
-        else
+            printClickability(device, component, eventValue, enabled, formComponent);
+        } else {
             device.print("<span");
+        }
 
-        printClickability(device, component, eventValue, enabled, formComponent);
         Utils.optAttribute(device, "class", cssClassName);
     }
 
-    public static void printButtonEnd(final Device device, final SComponent button, final String value,
-            final boolean enabled) throws IOException {
+    public static void printButtonEnd(final Device device, final boolean enabled) throws IOException {
         if (enabled)
             device.print("</a>");
         else

@@ -14,9 +14,13 @@ if (!wingS.request) {
 
 /**
  * Sends a request to the ReloadResource attached to this frame thereby forcing a complete reload.
+ * @param {String} parameters - the parameter string that is encoded into the URL (optional)
  */
-wingS.request.reloadFrame = function() {
-    window.location.href = wingS.util.getReloadResource();
+wingS.request.reloadFrame = function(parameters) {
+    var reloadRequestUrl = wingS.util.getReloadResource();
+    if (parameters != null)
+        reloadRequestUrl += "?" + parameters;
+    window.location.href = reloadRequestUrl;
 };
 
 /**
@@ -25,7 +29,7 @@ wingS.request.reloadFrame = function() {
  */
 wingS.request.redirectURL = function(url) {
     window.location.href = url;
-}
+};
 
 /**
  * Each and every form submit that occurs within a wingS application is done through this method.
@@ -40,17 +44,28 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
     // Enqueue AJAX request and return if there is another one which has not been processed yet
     if (ajaxEnabled && wingS.ajax.enqueueThisRequest(submitForm, submitForm.arguments)) return;
 
-    // Collect all the stuff we need
+    // Setup the target element and form
     event = wingS.events.getEvent(event);
     var target = wingS.events.getTarget(event);
-    var form = wingS.util.getParentByTagName(target, "FORM");
-    if (eventName != null) {
-        var eidProvider = wingS.util.getParentWearingAttribute(target, "eid");
-        if (eidProvider == null) {
-            alert("[DEBUG] submitForm():\ntarget = " + target + "\nform = " + form);
-            return;
+    var form; // The form that we want to submit
+
+    // Try to get the desired form from an according provider (i.e. this is
+    // used by menues which reside out of any forms but want to submit one)
+    var formProvider = wingS.util.getParentWearingAttribute(target, "form");
+
+    if (formProvider != null) { // Use the form suggested by the provider
+        form = document.getElementById(formProvider.getAttribute("form"));
+    } else { // By default we walk up until we find the first form
+        form = wingS.util.getParentByTagName(target, "FORM");
+
+        if (eventName != null) {
+            var eidProvider = wingS.util.getParentWearingAttribute(target, "eid");
+            if (eidProvider == null) {
+                alert("[DEBUG] submitForm():\ntarget = " + target + "\nform = " + form);
+                return;
+            }
+            eventName = eidProvider.getAttribute("eid");
         }
-        eventName = eidProvider.getAttribute("eid");
     }
 
     if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
@@ -61,6 +76,7 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             var epochNodeId = "event_epoch_" + formId;
             var triggerNodeId = "event_trigger_" + formId;
 
+            // Uncomment this to debug the name/value pairs being sent
             // var debug = "Elements before: " + form.elements.length;
 
             // Always encode the current event epoch
@@ -94,6 +110,7 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
                 form.removeChild(triggerNode);
             }
 
+            // Uncomment this to debug the name/value pairs being sent
             // debug += "\nElements after: " + form.elements.length;
             // for (var i = 0; i < form.elements.length; i++) {
             //     debug += "\n - name: " + form.elements[i].name +
@@ -117,7 +134,7 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             // which generated the event we want to process. I.e. this
             // is needed for textfields, textareas or comboboxes with
             // attached listeners (onChange="wingS.request.submitForm(
-            // true, event)") that are then not placed inside a form.
+            // true, event)") which are not placed inside any form.
             if (eventName == null) {
                 eventName = target.getAttribute("id");
                 var eventNode = document.getElementById(eventName);
@@ -129,7 +146,7 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             if (wingS.global.updateEnabled && ajaxEnabled) {
                 wingS.ajax.doRequest("POST", wingS.util.getUpdateResource(), data);
             } else {
-                window.location.href = wingS.util.getReloadResource() + "?" + data;
+                wingS.request.reloadFrame(data);
             }
         }
     }
@@ -154,7 +171,7 @@ wingS.request.followLink = function(ajaxEnabled, eventName, eventValue, scriptCo
         if (wingS.global.updateEnabled && ajaxEnabled) {
             wingS.ajax.doRequest("GET", wingS.util.getUpdateResource() + data);
         } else {
-            window.location.href = wingS.util.getReloadResource() + data;
+            wingS.request.reloadFrame(data);
         }
     }
 };

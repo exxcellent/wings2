@@ -13,10 +13,6 @@
 package org.wings.plaf.css;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wings.RequestURL;
-import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.SMenu;
@@ -27,17 +23,18 @@ import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.Script;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
+import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
 import java.io.IOException;
 
 public final class PopupMenuCG extends AbstractComponentCG implements
-        org.wings.plaf.MenuBarCG, SParentFrameListener {
+        org.wings.plaf.PopupMenuCG, SParentFrameListener {
     private static final long serialVersionUID = 1L;
-    private final transient static Log log = LogFactory.getLog(PopupMenuCG.class);
 
     public void installCG(final SComponent comp) {
         super.installCG(comp);
@@ -53,7 +50,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
 
     private static final String MENU_JS = (String) ResourceManager.getObject("JS.menu", String.class);
     private static final JavaScriptListener BODY_ONCLICK_SCRIPT =
-        new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
+        new JavaScriptListener(JavaScriptEvent.ON_CLICK, "wpm_handleBodyClicks(event)");
 
     protected void writePopup(final Device device, SPopupMenu menu)
             throws IOException {
@@ -70,7 +67,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                 SComponent menuItem = menu.getMenuComponent(i);
 
                 if (menuItem.isVisible()) {
-                    device.print("<li");
+                    device.print("\n <li");
                     if (menuItem instanceof SMenu) {
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenu\"");
@@ -88,20 +85,21 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                     }
                     device.print(">");
                     if (menuItem instanceof SMenuItem) {
-                            device.print("<a");
+                        device.print("<a href=\"#\"");
+                        if (menuItem instanceof SMenu) {
                             if (menuItem.isEnabled()) {
-                                device.print(" href=\"");
-                                writeAnchorAddress(device, (SMenuItem) menuItem);
-                                device.print("\"");
+                                device.print(" class=\"x sub\"");
+                            } else {
+                                device.print(" class=\"y sub\"");
                             }
-                            if (menuItem instanceof SMenu) {
-                                if (menuItem.isEnabled()) {
-                                    device.print(" class=\"x sub\"");
-                                } else {
-                                    device.print(" class=\"y sub\"");
-                                }
-                            }
-                            device.print(">");
+                        }
+                        Utils.printClickability(
+                                device,
+                                menuItem,
+                                ((SMenuItem) menuItem).getToggleSelectionParameter(),
+                                menuItem.isEnabled(),
+                                menuItem.getShowAsFormComponent());
+                        device.print(">");
                     }
                     menuItem.write(device);
                     if (menuItem instanceof SMenuItem) {
@@ -112,7 +110,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                         menuItem.write(device);
                         menuItem.putClientProperty("popup", null);
                     }
-                    device.print("</li>\n");
+                    device.print("</li>");
                 }
             }
             device.print("</ul>");
@@ -151,15 +149,6 @@ public final class PopupMenuCG extends AbstractComponentCG implements
         device.print("_pop');\"");
     }
 
-
-    protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
-            throws IOException {
-        RequestURL addr = abstractButton.getRequestURL();
-        addr.addParameter(abstractButton,
-                abstractButton.getToggleSelectionParameter());
-        addr.write(d);
-    }
-
     public void writeInternal(final Device device, final SComponent _c)
             throws IOException {
         SPopupMenu menu = (SPopupMenu) _c;
@@ -195,6 +184,27 @@ public final class PopupMenuCG extends AbstractComponentCG implements
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
+    }
+
+    public Update getComponentUpdate(SComponent component) {
+        return new ComponentUpdate(component);
+    }
+
+    protected class ComponentUpdate extends AbstractComponentCG.ComponentUpdate {
+
+        public ComponentUpdate(SComponent component) {
+            super(component);
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = (UpdateHandler) super.getHandler();
+
+            handler.setName("componentMenu");
+            handler.setParameter(0, component.getName() + "_pop");
+
+            return handler;
+        }
+
     }
 
 }
