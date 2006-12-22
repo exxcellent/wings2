@@ -93,7 +93,6 @@ public class MemUsageExample extends WingSetPane {
         progressBar.setUnfilledColor(java.awt.Color.lightGray);
         progressBar.setFilledColor(java.awt.Color.red);
         progressBar.setForeground(java.awt.Color.red);
-        progressBar.setBorderColor(java.awt.Color.black);
         progressBar.setStringPainted(true);
         progressBar.setProgressBarDimension(new SDimension(200, 5));
 
