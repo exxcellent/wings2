@@ -106,5 +106,4 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
     public Update getIconUpdate(SLabel label, SIcon icon) {
         return icon == null ? null : new IconUpdate(label, icon);
     }
-
 }

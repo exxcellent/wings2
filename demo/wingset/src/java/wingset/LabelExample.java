@@ -51,9 +51,10 @@ public class LabelExample extends WingSetPane {
         }
     }
 
-
     protected SComponent createControls() {
         controls = new ComponentControls();
+        controls.fontComboBox.setSelectedIndex(1);
+        controls.foregroundComboBox.setSelectedIndex(3);
         return controls;
     }
 

@@ -29,7 +29,8 @@ import java.awt.*;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  */
 public class TreeExample
-        extends WingSetPane {
+        extends WingSetPane
+{
     private STree tree;
     private static SIcon ARROW_DOWN = new SResourceIcon("org/wings/icons/ArrowDown.gif");
     private static SIcon ARROW_RIGHT = new SResourceIcon("org/wings/icons/ArrowRight.gif");
@@ -51,7 +52,6 @@ public class TreeExample
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
         tree.setName("tree");
         tree.setShowAsFormComponent(false);
-        tree.setBorder(new SLineBorder(Color.GRAY, 1));
 
         tree.addMouseListener(new SMouseListener() {
             public void mouseClicked(SMouseEvent e) {
@@ -63,15 +63,21 @@ public class TreeExample
             }
         });
         tree.getSelectionModel().setSelectionMode(STree.SINGLE_TREE_SELECTION);
-        tree.setNodeIndentDepth(12);
+        tree.setNodeIndentDepth(24);
         tree.setHorizontalAlignment(SConstants.CENTER_ALIGN);
 
         clicks.setHorizontalAlignment(SConstants.CENTER_ALIGN);
 
-        controls.addControllable(tree);
+        SScrollPane scrollPane = new SScrollPane(tree);
+        scrollPane.setMode(SScrollPane.MODE_COMPLETE);
+        scrollPane.setBorder(new SLineBorder(Color.GRAY, 1));
+        scrollPane.setPreferredSize(new SDimension("400px", null));
+        scrollPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+
+        controls.addControllable(scrollPane);
 
         SPanel panel = new SPanel(new SBorderLayout());
-        panel.add(tree, SBorderLayout.CENTER);
+        panel.add(scrollPane, SBorderLayout.CENTER);
         panel.add(clicks, SBorderLayout.SOUTH);
         return panel;
     }
@@ -81,6 +87,7 @@ public class TreeExample
         private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
 
         public TreeControls() {
+            widthTextField.setText("400px");
             borderColorComboBox.setSelectedItem(COLORS[1]);
             borderStyleComboBox.setSelectedItem(BORDERS[4]);
             borderThicknessTextField.setText("1");

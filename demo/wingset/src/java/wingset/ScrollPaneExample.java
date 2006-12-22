@@ -65,6 +65,10 @@ public class ScrollPaneExample extends WingSetPane
 
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
+            borderColorComboBox.setSelectedIndex(1);
+            borderStyleComboBox.setSelectedIndex(4);
+            borderThicknessTextField.setText("1");
+
             String[] scrollables = {"table", "tree", "list"};
             final SComboBox scrollable = new SComboBox(scrollables);
             scrollable.addActionListener(new ActionListener() {

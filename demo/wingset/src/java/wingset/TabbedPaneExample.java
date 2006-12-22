@@ -102,6 +102,7 @@ public class TabbedPaneExample extends WingSetPane {
         private int tabCount = INITIAL_TAB_COUNT;
 
         public TabbedPaneControls() {
+            widthTextField.setText("700px");
             final SComboBox placement = new SComboBox(TAB_PLACEMENTS);
             placement.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {

@@ -522,6 +522,7 @@ final class SessionServlet
 
         }
         catch (Throwable e) {
+            log.error("Uncaught Exception", e);
             handleException(response, e);
         }
         finally {
