@@ -10,139 +10,83 @@
  *
  * Please see COPYING for the complete licence.
  */
+
 package wingset;
 
-import org.wings.SBoxLayout;
-import org.wings.SButton;
+import java.awt.Color;
+import org.wings.SBorderLayout;
 import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SFont;
-import org.wings.SLabel;
-import org.wings.SMenu;
-import org.wings.SMenuItem;
+import org.wings.SContainer;
+import org.wings.SDimension;
+import org.wings.SGridLayout;
+import org.wings.SIcon;
 import org.wings.SPanel;
-import org.wings.SPopupMenu;
-import org.wings.SSpacer;
-import org.wings.STextField;
+import org.wings.SPopup;
+import org.wings.SLabel;
 import org.wings.SURLIcon;
-import org.wings.border.SEmptyBorder;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import org.wings.border.SLineBorder;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.PopupListener;
 
 /**
- * @author Holger Engels
+ *
+ * @author Christian Schyma
  */
-public class PopupExample extends WingSetPane {
+public class PopupExample
+        extends WingSetPane {
 
-    private SLabel selection;
+    private static final SIcon WINGS_IMAGE = new SURLIcon("../icons/wings-logo.png");
+    private static final String SOME_TEXT =
+            "What is wingS? In a nutshell, wingS is a web application\n" +
+            "framework based on Java Servlets, resembling the Swing API with\n" +
+            "its MVC paradigm and event oriented design principles. It utilizes\n" +
+            "the models, events, and event listeners of Swing. Like in Swing,\n" +
+            "components are arranged in a hierarchy of containers, whose root\n" +
+            "container is hooked to a frame.";
 
-    private final ActionListener menuItemListener = new java.awt.event.ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            selection.setText(((SMenuItem) e.getSource()).getText());
-        }
-    };
+    public SContainer createContent() {
+        SContainer content = new SContainer(new SBorderLayout());
+        content.setBorder(new SLineBorder(1));
+        content.setBackground(Color.WHITE);
+        content.setPreferredSize(new SDimension(200, 200));
+        content.add(new SLabel(WINGS_IMAGE), SBorderLayout.NORTH);
+        SLabel label = new SLabel(SOME_TEXT);
+        content.add(new SLabel(SOME_TEXT), SBorderLayout.SOUTH);
 
+        return content;
+    }
+
+    public SComponent createExample() {
+        SPanel panel = new SPanel(new SGridLayout(2, 1, 50, 50));
+
+        SLabel mouseSensitiveLabel = new SLabel("mouse sensitive label");
+        SPopup popup = new SPopup(null, createContent(), 100, 100);
+
+        mouseSensitiveLabel.addScriptListener(
+                new PopupListener(JavaScriptEvent.ON_MOUSE_OVER, popup, PopupListener.SHOW, mouseSensitiveLabel));
+        mouseSensitiveLabel.addScriptListener(
+                new PopupListener(JavaScriptEvent.ON_MOUSE_OUT, popup, PopupListener.HIDE, mouseSensitiveLabel));
+
+        panel.add(mouseSensitiveLabel);
+
+
+        SLabel mouseSensitiveLabel2 = new SLabel("mouse sensitive label, popup gets aligned");
+        SPopup popup2 = new SPopup(null, createContent(), 0, 0);
+        popup2.setContext(mouseSensitiveLabel2, SPopup.TOP_LEFT, SPopup.BOTTOM_LEFT);
+
+        mouseSensitiveLabel2.addScriptListener(
+                new PopupListener(JavaScriptEvent.ON_MOUSE_OVER, popup2, PopupListener.SHOW, mouseSensitiveLabel2));
+        mouseSensitiveLabel2.addScriptListener(
+                new PopupListener(JavaScriptEvent.ON_MOUSE_OUT, popup2, PopupListener.HIDE, mouseSensitiveLabel2));
+
+        panel.add(mouseSensitiveLabel2);
+
+
+        return panel;
+    }
 
     protected SComponent createControls() {
         return null;
     }
 
-    public SComponent createExample() {
-
-        final SPopupMenu menu = new SPopupMenu();
-        final SMenuItem cutMenuItem = createMenuItem("Cut");
-        cutMenuItem.setShowAsFormComponent(true);
-        menu.add(cutMenuItem);
-        menu.add(createMenuItem("Copy"));
-        menu.add(createMenuItem("Paste"));
-
-        SMenu subMenu = new SMenu("Help");
-        subMenu.add(createMenuItem("About"));
-        subMenu.add(createMenuItem("Topics"));
-        menu.add(subMenu);
-
-        final SPopupMenu menu2 = new SPopupMenu();
-        menu2.add(createMenuItem("Open"));
-        menu2.add(createMenuItem("Save"));
-        menu2.add(createMenuItem("Close"));
-
-        final SLabel testLabel = new SLabel("This label has a context menu.");
-        testLabel.setComponentPopupMenu(menu);
-        final STextField testLabel2 = new STextField("This textfield has the same context menu.");
-        testLabel2.setColumns(testLabel2.getText().length());
-        testLabel2.setComponentPopupMenu(menu);
-        SLabel testLabel3 = new SLabel(" This label has another context menu.", new SURLIcon("../icons/cowSmall.gif"));
-        testLabel3.setComponentPopupMenu(menu2);
-        SLabel selectionLabel = new SLabel("Selected Menu: ");
-        selectionLabel.setBorder(new SEmptyBorder(20,0,0,0));
-        selection = new SLabel("none");
-        selection.setFont(new SFont(SFont.BOLD));
-
-        SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.VERTICAL);
-        boxLayout.setVgap(10);
-
-        final SPanel all = new SPanel(boxLayout);
-
-        final String titleMenueEnabled = " first context menu";
-        final SButton toggleMenuEnabled = new SButton("Disable" +  titleMenueEnabled);
-        toggleMenuEnabled.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        toggleMenuEnabled.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (menu.isEnabled()) {
-                    menu.setEnabled(false);
-                    toggleMenuEnabled.setText("Enable" + titleMenueEnabled);
-                } else {
-                    menu.setEnabled(true);
-                    toggleMenuEnabled.setText("Disable" + titleMenueEnabled);
-                }
-            }
-        });
-        final String titleContextMenu = " context menu from first label";
-        final SButton toggleContextMenu = new SButton("Remove" + titleContextMenu);
-        toggleContextMenu.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        toggleContextMenu.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (testLabel.getComponentPopupMenu() != null) {
-                    testLabel.setComponentPopupMenu(null);
-                    toggleContextMenu.setText("Add" + titleContextMenu);
-                } else {
-                    testLabel.setComponentPopupMenu(menu);
-                    toggleContextMenu.setText("Remove" + titleContextMenu);
-                }
-            }
-        });
-        final String titleContextMenu2 = " context menu from textfield";
-        final SButton toggleContextMenu2 = new SButton("Remove" +  titleContextMenu2);
-        toggleContextMenu2.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        toggleContextMenu2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (testLabel2.getComponentPopupMenu() != null) {
-                    testLabel2.setComponentPopupMenu(null);
-                    toggleContextMenu2.setText("Add" + titleContextMenu2);
-                } else {
-                    testLabel2.setComponentPopupMenu(menu);
-                    toggleContextMenu2.setText("Remove" + titleContextMenu2);
-                }
-            }
-        });
-
-        all.add(testLabel);
-        all.add(testLabel2);
-        all.add(testLabel3);
-        all.add(new SSpacer(1, 10));
-        all.add(toggleMenuEnabled);
-        all.add(toggleContextMenu);
-        all.add(toggleContextMenu2);
-        all.add(selectionLabel);
-        all.add(selection);
-
-        return all;
-    }
-
-    private SMenuItem createMenuItem(String string) {
-        SMenuItem result = new SMenuItem(string);
-        result.addActionListener(menuItemListener);
-        return result;
-    }
 }
