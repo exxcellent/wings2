@@ -22,7 +22,7 @@ public class UpdateHandler implements Update.Handler {
     }
 
     public String getName() {
-        return name;
+        return "wingS.update." + name;
     }
 
     public void setName(String name) {

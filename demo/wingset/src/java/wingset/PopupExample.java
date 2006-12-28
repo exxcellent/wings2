@@ -51,7 +51,9 @@ public class PopupExample extends WingSetPane {
     public SComponent createExample() {
 
         final SPopupMenu menu = new SPopupMenu();
-        menu.add(createMenuItem("Cut"));
+        final SMenuItem cutMenuItem = createMenuItem("Cut");
+        cutMenuItem.setShowAsFormComponent(true);
+        menu.add(cutMenuItem);
         menu.add(createMenuItem("Copy"));
         menu.add(createMenuItem("Paste"));
 

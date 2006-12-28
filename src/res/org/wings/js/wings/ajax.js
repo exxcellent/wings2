@@ -42,14 +42,14 @@ wingS.ajax.initializeFrame = function() {
  * Requests any available component updates from the server.
  */
 wingS.ajax.requestUpdates = function() {
-    wingS.ajax.doRequest("GET", wingS.util.getUpdateResource());
+    wingS.ajax.sendRequest("GET", wingS.util.getUpdateResource());
 };
 
 /**
  * Submits the given form by means of an asynchronous request.
  * @param {Object} form - the form to be submitted
  */
-wingS.ajax.doSubmit = function(form) {
+wingS.ajax.submitForm = function(form) {
     var enc = "multipart/form-data";
     if (form.enctype == enc || form.encoding == enc) {
         YAHOO.util.Connect.setForm(form, true);
@@ -57,7 +57,7 @@ wingS.ajax.doSubmit = function(form) {
         YAHOO.util.Connect.setForm(form);
     }
 
-    wingS.ajax.doRequest(form.method.toUpperCase(), wingS.util.getUpdateResource());
+    wingS.ajax.sendRequest(form.method.toUpperCase(), wingS.util.getUpdateResource());
 };
 
 /**
@@ -66,7 +66,7 @@ wingS.ajax.doSubmit = function(form) {
  * @param {String} uri - the fully qualified path of resource
  * @param {String} postData - the POST body (in case of "POST")
  */
-wingS.ajax.doRequest = function(method, uri, postData) {
+wingS.ajax.sendRequest = function(method, uri, postData) {
     requestIsActive = true;
     wingS.ajax.setActivityIndicatorsVisible(true);
 
@@ -274,7 +274,7 @@ wingS.ajax.ActivityCursor.prototype.setVisible = function(visible) {
 
 /**
  * Prints some debug information about the given AJAX request.
- * @param {Object} request - the request to debug
+ * @param {Object} request - the request object to debug
  */
 wingS.ajax.updateDebugView = function(request) {
     var debugArea = document.getElementById("ajaxDebugView");
@@ -285,18 +285,25 @@ wingS.ajax.updateDebugView = function(request) {
             '  &nbsp;<span style="font:11px monospace"></span></div>\n' +
             '<textarea readonly="readonly" style="width:100%; height:200px;\n' +
             '  border-top:1px dashed #000000; border-bottom:1px dashed #000000;\n' +
-            '  font:11px monospace;"></textarea>\n';
+            '  font:11px monospace; padding:10px;"></textarea>\n';
         debugArea = document.createElement("div");
         debugArea.id = "ajaxDebugView";
         debugArea.style.display = "none";
         debugArea.innerHTML = debugHtmlCode;
         document.body.appendChild(debugArea);
     }
-    var output = request.responseText;
-    if (output == null)
-        output = (new XMLSerializer()).serializeToString(request.responseXML);
+
+    var output;
+    if (request != null) {
+        output = request.responseText;
+        if (output == null)
+            output = (new XMLSerializer()).serializeToString(request.responseXML);
+        debugArea.getElementsByTagName("SPAN")[0].innerHTML = "| " + output.length + " chars";
+    } else {
+        output = "Currently there is no XML response available..." +
+                 "\nProbably no asynchronous request has been sent.";
+    }
     debugArea.getElementsByTagName("TEXTAREA")[0].value = output;
-    debugArea.getElementsByTagName("SPAN")[0].innerHTML = "| " + output.length + " chars";
 };
 
 /**
@@ -321,7 +328,8 @@ wingS.ajax.setDebugViewVisible = function(visible) {
         if (visible) debugArea.style.display = "block";
         else debugArea.style.display = "none";
     } else {
-        alert("The AJAX debug view has not been enabled yet!");
+        wingS.ajax.updateDebugView();
+        wingS.ajax.setDebugViewVisible(true);
     }
 };
 

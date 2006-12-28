@@ -68,7 +68,7 @@ public class TextFieldCG extends AbstractComponentCG implements
         	// itself as a listener of its document as well.
             if (clientProperty == null) {
             	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.submitForm(" + !textField.isReloadForced() + ",event);";
+            	String code = "wingS.request.sendEvent(event, true, " + !textField.isReloadForced() + ");";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 textField.addScriptListener(javaScriptListener);
                 textField.putClientProperty("onChangeSubmitListener", javaScriptListener);

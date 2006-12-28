@@ -594,6 +594,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             return null;
     }
 
+    public Update getEpochUpdate(SFrame frame, String epoch) {
+        return new EpochUpdate(frame, epoch);
+    }
+
     public Update getUpdateEnabledUpdate(SFrame frame, boolean enabled) {
         return new UpdateEnabledUpdate(frame, enabled);
     }
@@ -681,6 +685,23 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 return false;
 
             return true;
+        }
+
+    }
+
+    protected class EpochUpdate extends AbstractUpdate {
+
+        private String epoch;
+
+        public EpochUpdate(SComponent component, String epoch) {
+            super(component);
+            this.epoch = epoch;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("epoch");
+            handler.addParameter(epoch);
+            return handler;
         }
 
     }

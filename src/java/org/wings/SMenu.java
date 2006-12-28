@@ -18,7 +18,9 @@ import org.wings.plaf.MenuCG;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Aggregates various {@link SMenuItem}s under a main header entry.
@@ -193,16 +195,12 @@ public class SMenu extends SMenuItem {
         throw new UnsupportedOperationException("Only invoke this on SMenuItem.");
     }
 
-    public boolean getResidesInForm() {
-        if (getParentMenu() != null)
-            return getParentMenu().getResidesInForm();
-        else
-            return getParent() != null ? getParent().getResidesInForm() : false;
-    }
-
     public void setEnabled(boolean enabled) {
-        if (enabled != isEnabled() && getParent() != null && getParent() instanceof SMenuBar) {
-            getParent().reload();
+        if (enabled != isEnabled()) {
+            Set menuLinks = getSession().getMenuManager().getMenueLinks(this);
+            for (Iterator i = menuLinks.iterator(); i.hasNext();) {
+                ((SComponent) i.next()).reload();
+            }
         }
         super.setEnabled(enabled);
     }

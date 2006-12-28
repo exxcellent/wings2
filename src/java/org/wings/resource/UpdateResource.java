@@ -75,8 +75,6 @@ public class UpdateResource extends DynamicResource {
 					for (Iterator i = updates.iterator(); i.hasNext();) {
 						writeUpdate(out, (Update) i.next());
 					}
-                    // update event epoch
-                    writeUpdate(out, "wingS.update.epoch(\"" + frame.getEventEpoch() + "\")");
 				} else {
 					out.print("\nThere are no components to update!");
 				}
@@ -111,7 +109,7 @@ public class UpdateResource extends DynamicResource {
         Update.Handler handler = update.getHandler();
 
         writePrefix(out);
-    	out.print("wingS.update.").print(handler.getName()).print("(");
+    	out.print(handler.getName()).print("(");
         Iterator parameters = handler.getParameters();
         if (parameters.hasNext())
             out.print(parameters.next());

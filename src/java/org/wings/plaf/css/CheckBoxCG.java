@@ -146,7 +146,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
                 (button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
             if (clientProperty == null) {
                 String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.submitForm(" + !button.isReloadForced() + ",event);";
+            	String code = "wingS.request.sendEvent(event, true, " + !button.isReloadForced() + ");";
                 if (Utils.isMSIE(button)) {
                     // In IE the "onchange"-event gets fired when a control loses the
                     // input focus and its value has been modified since gaining focus.

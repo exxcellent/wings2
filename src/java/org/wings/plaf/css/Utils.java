@@ -97,13 +97,6 @@ public final class Utils {
     public final static String[] EXCLUDE_ON_CLICK = new String[]{JavaScriptEvent.ON_CLICK};
 
     /**
-     * Default list of javascript events to exlcude in form case of
-     * {@link #printButtonStart(org.wings.io.Device, org.wings.SComponent, String, boolean, boolean)}
-     */
-    private final static String[] EXCLUDE_ON_CLICK_MOUSEUP_MOUSEDOWN_MOUSEOUT = new String[]
-            {JavaScriptEvent.ON_CLICK};
-
-    /**
      * Renders a container using its Layout manager or fallback just one after another.
      */
     public static void renderContainer(Device d, SContainer c) throws IOException {
@@ -996,17 +989,11 @@ public final class Utils {
     public static void printClickability(final Device device, final SComponent component, final String eventValue,
             final boolean enabled, final boolean formComponent) throws IOException {
         if (enabled) {
-            boolean ajaxEnabled = !component.isReloadForced();
-
             // Render onclick JS listeners
-            if (formComponent) {
-                device.print(" onclick=\"wingS.request.submitForm(" + ajaxEnabled);
-                device.print(",event,'");
-            } else {
-                device.print(" onclick=\"wingS.request.followLink(" + ajaxEnabled);
-                device.print(",'");
-            }
-
+            device.print(" onclick=\"wingS.request.sendEvent(");
+            device.print("event,");
+            device.print(formComponent + ",");
+            device.print(!component.isReloadForced() + ",'");
             device.print(Utils.event(component));
             device.print("','");
             device.print(eventValue == null ? "" : eventValue);
@@ -1023,8 +1010,7 @@ public final class Utils {
      * Renders inline the javascript code attached to the passed javascipt event type
      * on the component. Used to allow usage of javascript events by the framework
      * as well as by the application itself.
-     * <p> For an example: See the <code>wingS.request.submitForm</code> and <code>wingS.request.followLink</code>
-     * method declared in <code>wings.js</code>.
+     * <p> For an example: See the <code>wingS.request.sendEvent()</code>.
      *
      * @param component           The component wearing the event handler
      * @param javascriptEventType the event type declared in {@link JavaScriptEvent}

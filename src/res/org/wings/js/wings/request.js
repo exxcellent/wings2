@@ -13,6 +13,14 @@ if (!wingS.request) {
 }
 
 /**
+ * Redirect the browser to the specified url.
+ * @param {String} url - the url to redirect to
+ */
+wingS.request.redirectURL = function(url) {
+    window.location.href = url;
+};
+
+/**
  * Sends a request to the ReloadResource attached to this frame thereby forcing a complete reload.
  * @param {String} parameters - the parameter string that is encoded into the URL (optional)
  */
@@ -24,29 +32,49 @@ wingS.request.reloadFrame = function(parameters) {
 };
 
 /**
- * Redirect the browser to the specified url.
- * @param {String} url - the url to redirect to
+ * This method prepares any requests and dispatches them to the appropriate send method.
+ * @param {Object} event - an object that provides information about the occured event
+ * @param {boolean} submit - true, if this request entails a form submit
+ * @param {boolean} async - true, if this request is sent asynchronously
+ * @param {String} eventName - the name of the event or component respectively
+ * @param {String} eventValue - the value of the event or component respectively
+ * @param {Array} scriptCodeArray - the scripts to invoke before sending the request
  */
-wingS.request.redirectURL = function(url) {
-    window.location.href = url;
+wingS.request.sendEvent = function(event, submit, async, eventName, eventValue, scriptCodeArray) {
+    // Detect the according event target
+    event = wingS.events.getEvent(event);
+    var target = wingS.events.getTarget(event);
+
+    // Disable text selection
+    wingS.util.preventTextSelection(target, true);
+
+    // Prepare the appropriate method call
+    var sendMethod;
+    if (submit) {
+        sendMethod = wingS.request.submitForm;
+    } else {
+        sendMethod = wingS.request.followLink;
+    }
+    var sendMethodArgs = new Array(target, async, eventName, eventValue, scriptCodeArray);
+
+    // Enqueue asynchronous requests in case another one hasn't been processed yet
+    if (async && wingS.ajax.enqueueThisRequest(sendMethod, sendMethodArgs)) return;
+    // Otherwise instantly send the request by calling the appropriate send method
+    sendMethod(target, async, eventName, eventValue, scriptCodeArray);
+
+    // Reenable text selection
+    wingS.util.preventTextSelection(target, false);
 };
 
 /**
- * Each and every form submit that occurs within a wingS application is done through this method.
- * @param {boolean} ajaxEnabled - true if the form should be submitted by an asynchronous request
- * @param {Object} event - the event object
+ * Each and every form submit within a wingS application is done through this method.
+ * @param {Object} target - the element in the DOM which initiated the form submit
+ * @param {boolean} async - true, if the form should be submitted asynchronously
  * @param {String} eventName - the name of the event or component respectively
  * @param {String} eventValue - the value of the event or component respectively
  * @param {Array} scriptCodeArray - the scripts to invoke before submitting the form
  */
-wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, scriptCodeArray) {
-    var submitForm = wingS.request.submitForm;
-    // Enqueue AJAX request and return if there is another one which has not been processed yet
-    if (ajaxEnabled && wingS.ajax.enqueueThisRequest(submitForm, submitForm.arguments)) return;
-
-    // Setup the target element and form
-    event = wingS.events.getEvent(event);
-    var target = wingS.events.getTarget(event);
+wingS.request.submitForm = function(target, async, eventName, eventValue, scriptCodeArray) {
     var form; // The form that we want to submit
 
     // Try to get the desired form from an according provider (i.e. this is
@@ -58,13 +86,22 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
     } else { // By default we walk up until we find the first form
         form = wingS.util.getParentByTagName(target, "FORM");
 
-        if (eventName != null) {
-            var eidProvider = wingS.util.getParentWearingAttribute(target, "eid");
-            if (eidProvider == null) {
-                alert("[DEBUG] submitForm():\ntarget = " + target + "\nform = " + form);
-                return;
+        if (true) {
+            // START  D E B U G
+            var tmpEventName = eventName;
+            if (eventName != null) {
+                var eidProvider = wingS.util.getParentWearingAttribute(target, "eid");
+                if (eidProvider == null) {
+                    alert("[DEBUG] wingS.request.submitForm():\n" +
+                          "target = " + target + "\nform = " + form);
+                    return;
+                }
+                eventName = eidProvider.getAttribute("eid");
             }
-            eventName = eidProvider.getAttribute("eid");
+            if (eventName != tmpEventName) {
+                alert("[DEBUG] eventName changed:\nfrom = " + tmpEventName + "\nto = " + eventName);
+            }
+            // END  D E B U G
         }
     }
 
@@ -118,10 +155,12 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             // }
             // alert(debug);
 
-            // Submit the from, either via AJAX or the traditional way
-            if (wingS.global.updateEnabled && ajaxEnabled) {
-                wingS.ajax.doSubmit(form);
+            // Submit the from...
+            if (wingS.global.updateEnabled && async) {
+                // asynchronously
+                wingS.ajax.submitForm(form);
             } else {
+                // traditionally
                 form.submit();
             }
         } else {
@@ -133,8 +172,8 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             // we need to send the name and the value of the component
             // which generated the event we want to process. I.e. this
             // is needed for textfields, textareas or comboboxes with
-            // attached listeners (onChange="wingS.request.submitForm(
-            // true, event)") which are not placed inside any form.
+            // attached listeners (onChange="wingS.request.sendEvent(
+            // event, true, true)") which are not placed inside a form.
             if (eventName == null) {
                 eventName = target.getAttribute("id");
                 var eventNode = document.getElementById(eventName);
@@ -142,10 +181,12 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
             }
             var data = wingS.request.encodeEvent(eventName, eventValue);
 
-            // Send the event, either via AJAX or the traditional way
-            if (wingS.global.updateEnabled && ajaxEnabled) {
-                wingS.ajax.doRequest("POST", wingS.util.getUpdateResource(), data);
+            // Send the event...
+            if (wingS.global.updateEnabled && async) {
+                // asynchronously
+                wingS.ajax.sendRequest("POST", wingS.util.getUpdateResource(), data);
             } else {
+                // traditionally
                 wingS.request.reloadFrame(data);
             }
         }
@@ -153,24 +194,23 @@ wingS.request.submitForm = function(ajaxEnabled, event, eventName, eventValue, s
 };
 
 /**
- * All normal requests (except form submits) in a wingS application are done through this method.
- * @param {boolean} ajaxEnabled - true if the request should be invoked asynchronously
+ * Apart from form submits any request in a wingS application is handled by this method.
+ * @param {Object} target - the element in the DOM which initiated the request
+ * @param {boolean} async - true, if the request should be invoked asynchronously
  * @param {String} eventName - the name of the event or component respectively
  * @param {String} eventValue - the value of the event or component respectively
  * @param {Array} scriptCodeArray - the scripts to invoke before sending the request
  */
-wingS.request.followLink = function(ajaxEnabled, eventName, eventValue, scriptCodeArray) {
-    var followLink = wingS.request.followLink;
-    // Enqueue AJAX request and return if there is another one which has not been processed yet
-    if (ajaxEnabled && wingS.ajax.enqueueThisRequest(followLink, followLink.arguments)) return;
-
+wingS.request.followLink = function(target, async, eventName, eventValue, scriptCodeArray) {
     if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
         var data = wingS.request.encodeEvent(eventName, eventValue, "?");
 
-        // Send the event, either via AJAX or the traditional way
-        if (wingS.global.updateEnabled && ajaxEnabled) {
-            wingS.ajax.doRequest("GET", wingS.util.getUpdateResource() + data);
+        // Send the event...
+        if (wingS.global.updateEnabled && async) {
+            // asynchronously
+            wingS.ajax.sendRequest("GET", wingS.util.getUpdateResource() + data);
         } else {
+            // traditionally
             wingS.request.reloadFrame(data);
         }
     }

@@ -1,5 +1,5 @@
 /***************************************************************************************************
- * WINGS.GLOBAL  --  contains: global variables, function shortcuts and extensions, etc.
+ * WINGS.GLOBAL  --  contains: global variables, function extensions, etc.
  **************************************************************************************************/
 
 
@@ -27,7 +27,7 @@ wingS.global.updateResource;      // Stores the URI of the UpdateResource (witho
 wingS.global.updateEnabled;       // A flag indicating if this frame allows incremental updates
 wingS.global.updateCursor;        // An object holding necessary settings of the update cursor
 
-wingS.global.debugMode = false;   // This flag might be set to control debug outputs accordingly
+wingS.global.debugMode = true;    // This flag might be set to control debug outputs accordingly
 
 /**
  * Moves the execution context of the function used upon to the given object. Useful when using

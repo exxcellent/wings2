@@ -121,6 +121,16 @@ wingS.util.preventSubmit = function() {
 };
 
 /**
+ * All normal requests (except form submits) in a wingS application are done through this method.
+ * @param {Object} element - the element on which text selection should be enabled or disabled
+ * @param {boolean} prevent - true, if text selection should be prevented - false otherwise
+ */
+wingS.util.preventTextSelection = function(element, prevent) {
+    element.onmousedown = function () { return prevent; }   // Mozilla
+    element.onselectstart = function () { return prevent; } // IE
+};
+
+/**
  * Inserts a node into the childNodes array after the specified child node refChild. Note:
  * Because there is no function insertAfter, it is done by raping insertBefore.
  * @param {Object} newChild node to insert

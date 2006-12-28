@@ -202,7 +202,7 @@ public final class LowLevelEventDispatcher
                 if (log.isDebugEnabled()) {
                     log.debug("### got outdated event '" + gl.getName() + "' from frame '" +
                     		frame.getName() + "' --> received epoch: " + eventEpoch +
-                    		"| expected epoch: " + frame.getEventEpoch());
+                    		" | expected epoch: " + frame.getEventEpoch());
                 }
                 frame.fireInvalidLowLevelEventListener(gl);
                 frame.reload();

@@ -52,7 +52,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         if (list.getListSelectionListeners().length > 0) {
             if (clientProperty == null) {
                 String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.submitForm(" + !list.isReloadForced() + ",event);";
+            	String code = "wingS.request.sendEvent(event, true, " + !list.isReloadForced() + ");";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 list.addScriptListener(javaScriptListener);
                 list.putClientProperty("onChangeSubmitListener", javaScriptListener);

@@ -217,7 +217,10 @@ public class SFrame
      * is attached to this frame has to be externalized with a new "version-number".
      */
     public final void invalidate() {
-        epochCache = "W" + StringUtil.toShortestAlphaNumericString(++eventEpoch);
+        epochCache = "W" + (++eventEpoch);
+        if (isUpdatePossible() && getClass() == SFrame.class)
+            update(((FrameCG) getCG()).getEpochUpdate(this, epochCache));
+
         if (log.isDebugEnabled()) {
             log.debug("Event epoch of " + this + " has been invalidated: " + epochCache);
         }

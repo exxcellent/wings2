@@ -79,9 +79,6 @@ public class SMenuItem extends SButton {
     }
 
     public boolean getResidesInForm() {
-        if (getParentMenu() != null)
-            return getParentMenu().getResidesInForm();
-        else
-            return getParent() != null ? getParent().getResidesInForm() : false;
+        return true;
     }
 }

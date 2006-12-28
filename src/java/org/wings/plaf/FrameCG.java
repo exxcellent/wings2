@@ -23,6 +23,8 @@ public interface FrameCG extends ComponentCG {
 
     public Update getRemoveHeaderUpdate(SFrame frame, Object header);
 
+    public Update getEpochUpdate(SFrame frame, String epoch);
+
     public Update getUpdateEnabledUpdate(SFrame frame, boolean enabled);
 
 }
