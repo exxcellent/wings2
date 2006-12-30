@@ -15,7 +15,6 @@ package org.wings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.DialogCG;
-import org.wings.session.SessionManager;
 
 /**
  * Top-level window with a title and a border that is typically

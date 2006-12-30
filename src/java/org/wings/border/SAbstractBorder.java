@@ -12,7 +12,6 @@
  */
 package org.wings.border;
 
-import org.wings.ReloadManager;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.style.CSSAttributeSet;
@@ -210,7 +209,7 @@ public abstract class SAbstractBorder
 
             if (this instanceof SEmptyBorder)
                 attributes.put(CSSProperty.BORDER, "none");
-            else if (top.thickness == left.thickness && left.thickness == right.thickness && right.thickness == bottom.thickness
+            if (top.thickness == left.thickness && left.thickness == right.thickness && right.thickness == bottom.thickness
                     && top.style != null && top.style.equals(left.style)
                     && left.style != null && left.style.equals(right.style)
                     && right.style != null && right.style.equals(bottom.style)

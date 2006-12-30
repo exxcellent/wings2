@@ -13,14 +13,12 @@
 
 package wingset;
 
-import org.wings.ReloadManager;
 import org.wings.SButton;
 import org.wings.SButtonGroup;
 import org.wings.SComponent;
 import org.wings.SFlowDownLayout;
 import org.wings.SFlowLayout;
 import org.wings.SFont;
-import org.wings.SForm;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SRadioButton;

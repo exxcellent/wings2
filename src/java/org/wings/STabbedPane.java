@@ -295,6 +295,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
         if (this.model != null)
             this.model.addChangeListener(fwdChangeEvents);
         reload();
+        reload();
     }
 
     /**

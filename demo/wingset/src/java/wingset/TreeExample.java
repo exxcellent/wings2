@@ -29,8 +29,7 @@ import java.awt.*;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  */
 public class TreeExample
-        extends WingSetPane
-{
+        extends WingSetPane {
     private STree tree;
     private static SIcon ARROW_DOWN = new SResourceIcon("org/wings/icons/ArrowDown.gif");
     private static SIcon ARROW_RIGHT = new SResourceIcon("org/wings/icons/ArrowRight.gif");

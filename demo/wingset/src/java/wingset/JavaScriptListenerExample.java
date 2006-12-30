@@ -12,13 +12,11 @@
  */
 package wingset;
 
-import org.wings.ReloadManager;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
-import org.wings.SForm;
 import org.wings.SGridLayout;
 import org.wings.SLabel;
 import org.wings.SPanel;
