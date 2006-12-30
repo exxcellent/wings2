@@ -72,7 +72,7 @@ public class PopupMenuExample extends WingSetPane {
         final STextField testLabel2 = new STextField("This textfield has the same context menu.");
         testLabel2.setColumns(testLabel2.getText().length());
         testLabel2.setComponentPopupMenu(menu);
-        SLabel testLabel3 = new SLabel(" This label has another context menu.", new SURLIcon("../icons/cowSmall.gif"));
+        final SLabel testLabel3 = new SLabel(" This label has another context menu.", new SURLIcon("../icons/cowSmall.gif"));
         testLabel3.setComponentPopupMenu(menu2);
         SLabel selectionLabel = new SLabel("Selected Menu: ");
         selectionLabel.setBorder(new SEmptyBorder(20,0,0,0));
@@ -126,6 +126,20 @@ public class PopupMenuExample extends WingSetPane {
                 }
             }
         });
+        final String titleContextMenu3 = " context menu second label";
+        final SButton toggleContextMenu3 = new SButton("Remove" +  titleContextMenu2);
+        toggleContextMenu3.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        toggleContextMenu3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (testLabel3.getComponentPopupMenu() != null) {
+                    testLabel3.setComponentPopupMenu(null);
+                    toggleContextMenu3.setText("Add" + titleContextMenu3);
+                } else {
+                    testLabel3.setComponentPopupMenu(menu2);
+                    toggleContextMenu3.setText("Remove" + titleContextMenu3);
+                }
+            }
+        });
 
         all.add(testLabel);
         all.add(testLabel2);
@@ -134,6 +148,7 @@ public class PopupMenuExample extends WingSetPane {
         all.add(toggleMenuEnabled);
         all.add(toggleContextMenu);
         all.add(toggleContextMenu2);
+        all.add(toggleContextMenu3);
         all.add(selectionLabel);
         all.add(selection);
 

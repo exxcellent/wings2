@@ -18,12 +18,13 @@ import org.wings.*;
 import org.wings.border.SAbstractBorder;
 import org.wings.border.SDefaultBorder;
 import org.wings.externalizer.ExternalizeManager;
+import org.wings.header.JavaScriptHeader;
 import org.wings.header.Link;
 import org.wings.header.Script;
+import org.wings.header.StyleSheetHeader;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
 import org.wings.resource.ClassPathResource;
-import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
@@ -1199,15 +1200,17 @@ public final class Utils {
         return 0;
     }
 
-    public static Script createExternalizedJavaScriptHeader(Session session, String classPath) {
-        ClassPathResource res = new ClassPathResource(classPath, "text/javascript");
-        String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        return new Script("text/javascript", new DefaultURLResource(jScriptUrl));
+    public static Script createExternalizedJavaScriptHeader(String jsClassPath) {
+        ClassPathResource res = new ClassPathResource(jsClassPath, "text/javascript");
+        ExternalizeManager extMgr = SessionManager.getSession().getExternalizeManager();
+        String jsUrl = extMgr.externalize(res, ExternalizeManager.GLOBAL);
+        return new JavaScriptHeader(jsUrl);
     }
 
-    public static Link createExternalizedCSSHeader(Session session, String classPath) {
-        ClassPathResource res = new ClassPathResource(classPath, "text/css");
-        String cssUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        return new Link("stylesheet", null, "text/css", null, new DefaultURLResource(cssUrl));
+    public static Link createExternalizedSytleSheetHeader(String cssClassPath) {
+        ClassPathResource res = new ClassPathResource(cssClassPath, "text/css");
+        ExternalizeManager extMgr = SessionManager.getSession().getExternalizeManager();
+        String cssUrl = extMgr.externalize(res, ExternalizeManager.GLOBAL);
+        return new StyleSheetHeader(cssUrl);
     }
 }

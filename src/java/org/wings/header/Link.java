@@ -161,6 +161,19 @@ public class Link implements Renderable, Serializable {
         }
         return true;
     }
+
+    public int hashCode() {
+        int hashCode = 17;
+        int dispersionFactor = 37;
+
+        hashCode = hashCode * dispersionFactor + ((getRel() == null) ? 0 : getRel().hashCode());
+        hashCode = hashCode * dispersionFactor + ((getRev() == null) ? 0 : getRev().hashCode());
+        hashCode = hashCode * dispersionFactor + ((getType() == null) ? 0 : getType().hashCode());
+        hashCode = hashCode * dispersionFactor + ((getTarget() == null) ? 0 : getTarget().hashCode());
+        hashCode = hashCode * dispersionFactor + ((getURL() == null) ? 0 : getURL().hashCode());
+
+        return hashCode;
+    }
 }
 
 

@@ -3,21 +3,13 @@
  */
 package dwr;
 
-import org.wings.session.Session;
 import org.wings.session.SessionManager;
-import org.wings.externalizer.ExternalizedResource;
-import org.wings.event.SRequestEvent;
-import org.wings.event.SRequestListener;
 import org.wings.*;
 import org.wings.plaf.css.DWRScriptListener;
-import org.wings.resource.DefaultURLResource;
-import org.wings.header.Script;
-import org.wings.script.JavaScriptListener;
+import org.wings.header.JavaScriptHeader;
 import org.wings.script.JavaScriptEvent;
 import org.wings.text.SAbstractFormatter;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -75,8 +67,8 @@ public class DWRExample
         frame = new SFrame("DWRExample example");
         frame.getContentPane().add(form);
         frame.show();
-        frame.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
-        frame.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
+        frame.addHeader(new JavaScriptHeader("../dwr/engine.js"));
+        frame.addHeader(new JavaScriptHeader("../dwr/util.js"));
     }
 
     public static class DateFormatter extends SAbstractFormatter {

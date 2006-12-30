@@ -12,20 +12,19 @@
  */
 package org.wings.plaf.css;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+
 import org.wings.SComponent;
 import org.wings.SPopup;
 import org.wings.header.Headers;
-import org.wings.header.Link;
-import org.wings.header.Script;
 import org.wings.io.Device;
 import java.io.IOException;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
 import org.wings.util.SStringBuilder;
 
 /**
@@ -34,75 +33,71 @@ import org.wings.util.SStringBuilder;
  * @author Christian Schyma
  */
 public final class PopupCG extends AbstractComponentCG implements org.wings.plaf.PopupCG {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
+    protected final List headers = new ArrayList();
+
     private SPopup popup;
-    
+
     private String popupJSObject;
     private String dwrJsObject;
-    private String contentName;
-    private Script popupJS;
-    private Link containerCSS;
-    
+
     private String showFunction;
     private String hideFunction;
-    
+
     private JavaScriptDOMListener listener;
-    
+
     private final String DWR_GETTER = "getRenderedContent";
-    
+
     public PopupCG(SPopup popup) {
         this.popup = popup;
-        
-        Session session = SessionManager.getSession();
-        popupJS = Utils.createExternalizedJavaScriptHeader(session, "org/wings/js/etc/popup.js");
-        containerCSS = Utils.createExternalizedCSSHeader(session, "org/wings/js/yui/container/assets/container.css");
-        Headers.INSTANCE.add(popupJS);
-        Headers.INSTANCE.add(containerCSS);
-        
+
+        headers.add(Utils.createExternalizedJavaScriptHeader("org/wings/js/etc/popup.js"));
+        headers.add(Utils.createExternalizedSytleSheetHeader("org/wings/js/yui/container/assets/container.css"));
+        Headers.getInstance().registerHeaderLinks(headers, popup);
+
         String name        = this.popup.getComponent().getName();
         this.popupJSObject = name + "_popup";
         this.dwrJsObject   = name + "_popup_dwr";
         this.showFunction  = "function() {"+ popupJSObject + ".show()}";
         this.hideFunction  = "function() {"+ popupJSObject + ".hide()}";
-        
+
         // expose data source to java script by using DWR
         HashSet methodsToExpose = new HashSet();
         methodsToExpose.add(DWR_GETTER);
         CallableManager.getInstance().registerCallable(this.dwrJsObject, this, methodsToExpose);
-        
+
         attachJavaScript();
     }
- 
-    public void attachJavaScript() {        
+
+    public void attachJavaScript() {
         if (listener != null) {
             popup.getOwner().removeScriptListener(listener);
         }
         listener = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD, generateInitScript(), this.popup.getComponent());
-        popup.getOwner().addScriptListener(listener);                        
+        popup.getOwner().addScriptListener(listener);
     }
-    
+
     public void tidyUp() {
         CallableManager.getInstance().unregisterCallable(dwrJsObject);
-        Headers.INSTANCE.remove(popupJS);
-        Headers.INSTANCE.remove(containerCSS);
+        Headers.getInstance().deregisterHeaderLinks(headers, popup);
     }
-    
+
     private String generateInitScript() {
         SStringBuilder code = new SStringBuilder();
-        
+
         if (this.popup.isAnchored()) {
             code
                     .append(popupJSObject)
-                    .append(" = new wingS.Popup(")                    
+                    .append(" = new wingS.Popup(")
                     .append("'").append(popupJSObject).append("', ")
                     .append(this.dwrJsObject).append(".").append(DWR_GETTER).append(", ")
                     .append("0, ")
                     .append("0, ")
                     .append(this.popup.getWidth()).append(", ")
-                    .append(this.popup.getHeight()).append(", ")                    
+                    .append(this.popup.getHeight()).append(", ")
                     .append("'").append(this.popup.getContext().getName()).append("', ")
                     .append("'").append(this.popup.getContentsCorner()).append("', ")
                     .append("'").append(this.popup.getContextCorner()).append("'")
@@ -110,7 +105,7 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
         } else {
             code
                     .append(this.popupJSObject)
-                    .append(" = new wingS.Popup(")                    
+                    .append(" = new wingS.Popup(")
                     .append("'").append(popupJSObject).append("', ")
                     .append(this.dwrJsObject).append(".").append(DWR_GETTER).append(", ")
                     .append(this.popup.getX()).append(", ")
@@ -119,30 +114,30 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
                     .append(this.popup.getHeight())
                     .append(")");
         }
-        
+
         return code.toString();
     }
-    
+
     /**
      * @return JavaScript function to use a the client side to show the popup
      */
     public String getJsShowFunction() {
         return this.showFunction;
     }
-    
+
     /**
      * @return JavaScript function to use a the client side to hide the popup
      */
     public String getJsHideFunction() {
         return this.hideFunction;
     }
-    
+
     /**
      * Returns the rendered HTML code of the contents component.
      */
     public String getRenderedContent() {
         StringBuilderDevice device = new StringBuilderDevice();
-        
+
         if (this.popup.getComponent() != null) {
             try {
                 this.popup.getComponent().write(device);
@@ -150,11 +145,11 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
                 ex.printStackTrace();
             }
         }
-        
+
         return device.toString();
-    }    
+    }
 
     public void writeInternal(Device device, SComponent component) throws IOException {
     }
-    
+
 }

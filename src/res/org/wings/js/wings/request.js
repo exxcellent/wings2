@@ -46,7 +46,7 @@ wingS.request.sendEvent = function(event, submit, async, eventName, eventValue, 
     var target = wingS.events.getTarget(event);
 
     // Disable text selection
-    wingS.util.preventTextSelection(target, true);
+    // wingS.util.preventTextSelection(target, true);
 
     // Prepare the appropriate method call
     var sendMethod;
@@ -63,7 +63,7 @@ wingS.request.sendEvent = function(event, submit, async, eventName, eventValue, 
     sendMethod(target, async, eventName, eventValue, scriptCodeArray);
 
     // Reenable text selection
-    wingS.util.preventTextSelection(target, false);
+    // wingS.util.preventTextSelection(target, false);
 };
 
 /**

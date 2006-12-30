@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 0.12.1
+version: 0.12.0
 */ 
 
 /**
@@ -15,11 +15,7 @@ version: 0.12.1
  *                  refer to this object in the callback.  Default value: 
  *                  the window object.  The listener can override this.
  * @param {boolean} silent pass true to prevent the event from writing to
- *                  the debugsystem
- * @param {int}     signature the signature that the custom event subscriber
- *                  will receive. YAHOO.util.CustomEvent.LIST or 
- *                  YAHOO.util.CustomEvent.FLAT.  The default is
- *                  YAHOO.util.CustomEvent.LIST.
+ *                  the log system
  * @namespace YAHOO.util
  * @class CustomEvent
  * @constructor
@@ -43,7 +39,7 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
 
     /**
      * By default all custom events are logged in the debug build, set silent
-     * to true to disable debug outpu for this event.
+     * to true to disable logging for this event.
      * @property silent
      * @type boolean
      */
@@ -185,8 +181,6 @@ YAHOO.util.CustomEvent.prototype = {
      * @method fire 
      * @param {Object*} arguments an arbitrary set of parameters to pass to 
      *                            the handler.
-     * @return {boolean} false if one of the subscribers returned false, 
-     *                   true otherwise
      */
     fire: function() {
         var len=this.subscribers.length;
@@ -653,8 +647,7 @@ if (!YAHOO.util.Event) {
              *                             the execution scope of the listener
              * @return {boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
-             *                        could not have the listener attached,
-             *                        or if the operation throws an exception.
+             *                        could not have the event bound to it.
              * @static
              */
             addListener: function(el, sType, fn, obj, override) {
@@ -712,7 +705,6 @@ if (!YAHOO.util.Event) {
                     return true;
                 }
 
-
                 // if the user chooses to override the scope, we use the custom
                 // object passed in, otherwise the executing scope will be the
                 // HTML element that the event is registered on
@@ -767,14 +759,7 @@ if (!YAHOO.util.Event) {
                     legacyHandlers[legacyIndex].push(li);
 
                 } else {
-                    try {
-                        this._simpleAdd(el, sType, wrappedFn, false);
-                    } catch(e) {
-                        // handle an error trying to attach an event.  If it fails
-                        // we need to clean up the cache
-                        this.removeListener(el, sType, fn);
-                        return false;
-                    }
+                    this._simpleAdd(el, sType, wrappedFn, false);
                 }
 
                 return true;
@@ -908,7 +893,6 @@ if (!YAHOO.util.Event) {
                     return false;
                 }
 
-
                 if (this.useLegacyEvent(el, sType)) {
                     var legacyIndex = this.getLegacyIndex(el, sType);
                     var llist = legacyHandlers[legacyIndex];
@@ -926,11 +910,7 @@ if (!YAHOO.util.Event) {
                     }
 
                 } else {
-                    try {
-                        this._simpleRemove(el, sType, cacheItem[this.WFN], false);
-                    } catch(e) {
-                        return false;
-                    }
+                    this._simpleRemove(el, sType, cacheItem[this.WFN], false);
                 }
 
                 // removed the wrapped handler
@@ -1272,7 +1252,6 @@ if (!YAHOO.util.Event) {
 
                 this.locked = true;
 
-
                 // keep trying until after the page is loaded.  We need to 
                 // check the page load state prior to trying to bind the 
                 // elements so that we can be certain all elements have been 
@@ -1291,9 +1270,7 @@ if (!YAHOO.util.Event) {
 
                         if (el) {
                             // The element is available, but not necessarily ready
-                            // @todo verify IE7 compatibility
-                            // @todo should we test parentNode.nextSibling?
-                            // @todo re-evaluate global content ready
+
                             if ( !item.checkReady || 
                                     loadComplete || 
                                     el.nextSibling ||
@@ -1308,9 +1285,7 @@ if (!YAHOO.util.Event) {
                                     }
                                 }
                                 item.fn.call(scope, item.obj);
-                                //delete onAvailStack[i];
-                                // null out instead of delete for Opera
-                                onAvailStack[i] = null;
+                                delete onAvailStack[i];
                             }
                         } else {
                             notAvail.push(item);
@@ -1321,7 +1296,6 @@ if (!YAHOO.util.Event) {
                 retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
 
                 if (tryAgain) {
-                    onAvailStack = notAvail; // cleanse the array
                     this.startInterval();
                 } else {
                     clearInterval(this._interval);
@@ -1423,13 +1397,11 @@ if (!YAHOO.util.Event) {
                             }
                         }
                         l[EU.FN].call(scope, EU.getEvent(e), l[EU.OBJ] );
-                        unloadListeners[i] = null;
+                        delete unloadListeners[i];
                         l=null;
                         scope=null;
                     }
                 }
-
-                unloadListeners = null;
 
                 if (listeners && listeners.length > 0) {
                     j = listeners.length;
@@ -1449,15 +1421,10 @@ if (!YAHOO.util.Event) {
 
                 for (i=0,len=legacyEvents.length; i<len; ++i) {
                     // dereference the element
-                    //delete legacyEvents[i][0];
-                    legacyEvents[i][0] = null;
-
+                    delete legacyEvents[i][0];
                     // delete the array item
-                    //delete legacyEvents[i];
-                    legacyEvents[i] = null;
+                    delete legacyEvents[i];
                 }
-
-                legacyEvents = null;
 
                 EU._simpleRemove(window, "unload", EU._unload);
 

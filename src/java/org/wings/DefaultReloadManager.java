@@ -88,7 +88,7 @@ public class DefaultReloadManager implements ReloadManager {
         for (Iterator i = fineGrainedUpdates.values().iterator(); i.hasNext();) {
             filteredUpdates.addAll((Set) i.next());
         }
-        Collections.sort(filteredUpdates, getOrderOfUpdates());
+        Collections.sort(filteredUpdates, getUpdateComparator());
 
         return filteredUpdates;
     }
@@ -164,14 +164,6 @@ public class DefaultReloadManager implements ReloadManager {
             potentialUpdates = new HashSet(5);
         }
         return potentialUpdates;
-    }
-
-    protected Comparator getOrderOfUpdates() {
-        return
-            new CombinedComparator(
-                new InverseComparator(new PriorityComparator()),
-                new PositionComparator()
-            );
     }
 
     protected void filterUpdates() {
@@ -310,6 +302,10 @@ public class DefaultReloadManager implements ReloadManager {
             return update.getPriority();
         }
 
+        public int getPosition() {
+            return position;
+        }
+
         public boolean equals(Object object) {
             if (object == this)
                 return true;
@@ -333,10 +329,14 @@ public class DefaultReloadManager implements ReloadManager {
             return clazz.substring(++index) + "[" + getPriority() + "|" + getPosition() + "]";
         }
 
-        public int getPosition() {
-            return position;
-        }
+    }
 
+    private Comparator getUpdateComparator() {
+        return
+            new CombinedComparator(
+                new InverseComparator(new PriorityComparator()),
+                new PositionComparator()
+            );
     }
 
     private static class PathComparator implements Comparator {

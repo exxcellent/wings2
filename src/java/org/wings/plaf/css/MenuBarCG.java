@@ -15,21 +15,19 @@ package org.wings.plaf.css;
 
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.SFrame;
 import org.wings.SMenu;
 import org.wings.SMenuBar;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
-import org.wings.externalizer.ExternalizeManager;
-import org.wings.header.Script;
+import org.wings.header.Headers;
 import org.wings.io.Device;
-import org.wings.resource.ClassPathResource;
-import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ResourceManager;
+import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
-import org.wings.session.SessionManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the Default XHTML CSS plaf for the SMenuBar Component.
@@ -38,43 +36,30 @@ import java.io.IOException;
 public class MenuBarCG extends AbstractComponentCG implements
         org.wings.plaf.MenuBarCG, SParentFrameListener {
 
-    private static final long serialVersionUID = 1L;
+    protected final List headers = new ArrayList();
 
-    /**
-     * javascript with the menu magic
-     */
-    private static final String MENU_JS = (String) ResourceManager.getObject("JS.menu", String.class);
-    /**
-     * handler for clicks outside of menu. these clicks possibly close the menu.
-     */
-    public static final JavaScriptListener BODY_ONCLICK_SCRIPT = new JavaScriptListener("onclick", "wpm_handleBodyClicks(event)");
+    private static final String ETC_MENU = (String) ResourceManager.getObject("JS.etcMenu", String.class);
 
-    private HeaderUtil headerUtil = new HeaderUtil();
+    public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
+        new JavaScriptListener(JavaScriptEvent.ON_CLICK, "wpm_handleBodyClicks(event)");
 
     public MenuBarCG() {
-        ClassPathResource resource = new ClassPathResource(MENU_JS, "text/javascript");
-        String url = SessionManager.getSession().getExternalizeManager().externalize(resource, ExternalizeManager.GLOBAL);
-        headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource(url)));
+        headers.add(Utils.createExternalizedJavaScriptHeader(ETC_MENU));
     }
 
-    /* (non-Javadoc)
-    * @see org.wings.plaf.ComponentCG#installCG(org.wings.SComponent)
-    */
     public void installCG(final SComponent comp) {
         super.installCG(comp);
-        SFrame parentFrame = comp.getParentFrame();
-        if (parentFrame != null) {
-            addListenersToParentFrame(parentFrame);
-        }
         comp.addParentFrameListener(this);
-
-        headerUtil.installHeaders();
     }
 
-    /* (non-Javadoc)
-     * @see org.wings.plaf.ComponentCG#uninstallCG(org.wings.SComponent)
-     */
-    public void uninstallCG(final SComponent comp) {
+    public void parentFrameAdded(SParentFrameEvent e) {
+        Headers.getInstance().registerHeaderLinks(headers, e.getComponent());
+        e.getParentFrame().addScriptListener(BODY_ONCLICK_SCRIPT);
+    }
+
+    public void parentFrameRemoved(SParentFrameEvent e) {
+        Headers.getInstance().deregisterHeaderLinks(headers, e.getComponent());
+        //e.getParentFrame().removeScriptListener(BODY_ONCLICK_SCRIPT);
     }
 
     /* (non-Javadoc)
@@ -137,27 +122,4 @@ public class MenuBarCG extends AbstractComponentCG implements
         device.print("<div class=\"spacer\"></div>");
     }
 
-    /* (non-Javadoc)
-     * @see org.wings.event.SParentFrameListener#parentFrameAdded(org.wings.event.SParentFrameEvent)
-     */
-    public void parentFrameAdded(SParentFrameEvent e) {
-        SFrame parentFrame = e.getParentFrame();
-        addListenersToParentFrame(parentFrame);
-    }
-
-    /**
-     * adds the necessary listeners to the parent frame. is called by
-     * parent frame listener or from install.
-     * @param parentFrame
-     */
-    private void addListenersToParentFrame(SFrame parentFrame) {
-        parentFrame.addScriptListener(BODY_ONCLICK_SCRIPT);
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.event.SParentFrameListener#parentFrameRemoved(org.wings.event.SParentFrameEvent)
-     */
-    public void parentFrameRemoved(SParentFrameEvent e) {
-        //e.getParentFrame().removeScriptListener(BODY_ONCLICK_SCRIPT);
-    }
 }

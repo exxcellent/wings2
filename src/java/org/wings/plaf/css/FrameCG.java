@@ -30,7 +30,6 @@ import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.resource.ClassPathResource;
-import org.wings.resource.DefaultURLResource;
 import org.wings.resource.ReloadResource;
 import org.wings.resource.UpdateResource;
 import org.wings.resource.ResourceManager;
@@ -73,40 +72,35 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private static final String PROPERTY_STYLESHEET = "Stylesheet.";
     private static final String BROWSER_DEFAULT = "default";
 
-    public static final String WINGS_GLOBALS = (String) ResourceManager.getObject("JS.wingsGlobal", String.class);
-    public static final String WINGS_EVENT = (String) ResourceManager.getObject("JS.wingsEvent", String.class);
-    public static final String WINGS_UTIL = (String) ResourceManager.getObject("JS.wingsUtil", String.class);
-    public static final String WINGS_LAYOUT = (String) ResourceManager.getObject("JS.wingsLayout", String.class);
-    public static final String WINGS_REQUEST = (String) ResourceManager.getObject("JS.wingsRequest", String.class);
-    public static final String WINGS_AJAX = (String) ResourceManager.getObject("JS.wingsAjax", String.class);
-    public static final String WINGS_UPDATE = (String) ResourceManager.getObject("JS.wingsUpdate", String.class);
-    public static final String WINGS_COMPONENT = (String) ResourceManager.getObject("JS.wingsComponent", String.class);
-    public static final String YAHOO_GLOBAL = (String) ResourceManager.getObject("JS.yahooGlobal", String.class);
-    public static final String YAHOO_DOM = (String) ResourceManager.getObject("JS.yahooDom", String.class);
-    public static final String YAHOO_EVENT = (String) ResourceManager.getObject("JS.yahooEvent", String.class);
-    public static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
-    public static final String YAHOO_CONNECTION = (String) ResourceManager.getObject("JS.yahooConnection", String.class);
-    public static final String YAHOO_SLIDER = (String) ResourceManager.getObject("JS.yahooSlider", String.class);
-    public static final String YAHOO_DND = (String) ResourceManager.getObject("JS.yahooDnD", String.class);
-
-    /**
-     * JavaScript needed for Drag and Drop support
-     */
-    private final String DND_JS = (String) ResourceManager.getObject("JS.dnd", String.class);
-
-    private final String WZ_DND_JS = (String) ResourceManager.getObject("JS.wzdragdrop", String.class);
+    private static final String WINGS_GLOBALS = (String) ResourceManager.getObject("JS.wingsGlobal", String.class);
+    private static final String WINGS_EVENT = (String) ResourceManager.getObject("JS.wingsEvent", String.class);
+    private static final String WINGS_UTIL = (String) ResourceManager.getObject("JS.wingsUtil", String.class);
+    private static final String WINGS_LAYOUT = (String) ResourceManager.getObject("JS.wingsLayout", String.class);
+    private static final String WINGS_REQUEST = (String) ResourceManager.getObject("JS.wingsRequest", String.class);
+    private static final String WINGS_AJAX = (String) ResourceManager.getObject("JS.wingsAjax", String.class);
+    private static final String WINGS_UPDATE = (String) ResourceManager.getObject("JS.wingsUpdate", String.class);
+    private static final String WINGS_COMPONENT = (String) ResourceManager.getObject("JS.wingsComponent", String.class);
+    private static final String YAHOO_GLOBAL = (String) ResourceManager.getObject("JS.yahooGlobal", String.class);
+    private static final String YAHOO_DOM = (String) ResourceManager.getObject("JS.yahooDom", String.class);
+    private static final String YAHOO_EVENT = (String) ResourceManager.getObject("JS.yahooEvent", String.class);
+    private static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
+    private static final String YAHOO_CONNECTION = (String) ResourceManager.getObject("JS.yahooConnection", String.class);
+    private static final String YAHOO_SLIDER = (String) ResourceManager.getObject("JS.yahooSlider", String.class);
+    private static final String YAHOO_DND = (String) ResourceManager.getObject("JS.yahooDnD", String.class);
+    private static final String ETC_DND = (String) ResourceManager.getObject("JS.etcDnD", String.class);
+    private static final String ETC_WZDND = (String) ResourceManager.getObject("JS.etcWzDnD", String.class);
 
     private ClassPathResource formbutton;
 
     private String documentType = STRICT_DOCTYPE;
+
+    protected final List headers = new ArrayList();
 
     /**
      * Should the returned HTML page start with the &lt;?xml version="1.0" encoding="..."&gt;.
      * This has effects which rendering mode the browsers will choose (quirks/strict)
      */
     private Boolean renderXmlDeclaration = Boolean.FALSE;
-
-    private HeaderUtil headerUtil = new HeaderUtil();
 
     /**
      * Initialize properties from config
@@ -125,39 +119,27 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // Externalize JavaScript headers
-        Session session = SessionManager.getSession();
-        headerUtil.addHeader(createExternalizedHeader(session, WINGS_GLOBALS, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, WINGS_EVENT, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, WINGS_UTIL, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, WINGS_LAYOUT, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, WINGS_REQUEST, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, WINGS_AJAX, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, WINGS_UPDATE, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, WINGS_COMPONENT, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_GLOBAL, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_DOM, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_EVENT, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_CONTAINER, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_CONNECTION, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_DND, "text/javascript"));
-        headerUtil.addHeader(createExternalizedHeader(session, YAHOO_SLIDER, "text/javascript"));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_GLOBALS));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_EVENT));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_UTIL));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_LAYOUT));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_REQUEST));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_AJAX));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_UPDATE));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_COMPONENT));
+        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_GLOBAL));
+        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_DOM));
+        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_EVENT));
+        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_CONTAINER));
+        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_CONNECTION));
+        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_DND));
+        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_SLIDER));
 
-        headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/engine.js")));
-        headerUtil.addHeader(new Script("text/javascript", new DefaultURLResource("../dwr/util.js")));
+        headers.add(new JavaScriptHeader("../dwr/engine.js"));
+        headers.add(new JavaScriptHeader("../dwr/util.js"));
 
         formbutton = new ClassPathResource("org/wings/plaf/css/formbutton.htc", "text/x-component");
         formbutton.getId(); // externalize
-    }
-
-    /**
-     * Adds the file found at the classPath to the parentFrame header with the specified mimeType
-     * @param classPath the classPath to look in for the file
-     * @param mimeType the mimetype of the file
-     */
-    private Script createExternalizedHeader(Session session, String classPath, String mimeType) {
-        ClassPathResource res = new ClassPathResource(classPath, mimeType);
-        String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-        return new Script(mimeType, new DefaultURLResource(jScriptUrl));
     }
 
     public void installCG(final SComponent comp) {
@@ -196,50 +178,33 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         CaptureDefaultBindingsScriptListener.install(component);
 
-        headerUtil.installHeaders();
-
-        // Retrieve list of static CSS files to be attached to this frame for this browser.
-        final List externalizedBrowserCssUrls = externalizeBrowserStylesheets(component.getSession());
-        for (int i = 0; i < externalizedBrowserCssUrls.size(); i++) {
-            component.addHeader(new Link("stylesheet", null, "text/css", null,
-                    new DefaultURLResource((String) externalizedBrowserCssUrls.get(i))));
-        }
+        Headers.getInstance().registerHeaderLinks(headers, component);
+        Headers.getInstance().registerHeaderLinks(getBrowserStylesheets(component.getSession()), component);
     }
 
     /**
      * Externalizes the style sheet(s) for this session. Look up according style sheet file name in
      * org.wings.plaf.css.properties file under Stylesheet.BROWSERNAME. The style sheet is loaded from
      * the class path.
-     * @return the URLs under which the css file(s) was externalized
+     *
+     * @return a list of externalized browser specific stylesheet headers
      */
-    private List externalizeBrowserStylesheets(Session session) {
-        final ExternalizeManager extManager = session.getExternalizeManager();
-        final CGManager manager = session.getCGManager();
+    private List getBrowserStylesheets(Session session) {
+        final CGManager cgManager = session.getCGManager();
         final String browserName = session.getUserAgent().getBrowserType().getShortName();
-        final String cssResource = PROPERTY_STYLESHEET + browserName;
-        String cssClassPaths = (String)manager.getObject(cssResource, String.class);
-        // Catch missing browser entry in properties file
+
+        String cssClassPaths = (String) cgManager.getObject(PROPERTY_STYLESHEET + browserName, String.class);
         if (cssClassPaths == null) {
-            cssClassPaths = (String)manager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
+            cssClassPaths = (String) cgManager.getObject(PROPERTY_STYLESHEET + BROWSER_DEFAULT, String.class);
         }
 
-        StringTokenizer tokenizer = new StringTokenizer(cssClassPaths,",");
-        ArrayList cssUrls = new ArrayList();
+        ArrayList browserStylesheets = new ArrayList();
+        StringTokenizer tokenizer = new StringTokenizer(cssClassPaths, ",");
         while (tokenizer.hasMoreTokens()) {
-            String cssClassPath = tokenizer.nextToken();
-            ClassPathResource res = new ClassPathResource(cssClassPath, "text/css");
-            String cssUrl = extManager.externalize(res, ExternalizeManager.GLOBAL);
-            if (cssUrl != null) {
-                log.info("Attaching CSS Stylesheet " + cssClassPath + " found for browser " + browserName +
-                        " to frame. (See Stylesheet.xxx entries in default.properties)");
-                cssUrls.add(cssUrl);
-            } else {
-                log.warn("Did not attach CSS Stylesheet " + cssClassPath + " for browser " + browserName +
-                        " to frame. (See Stylesheet.xxx entries in default.properties)");
-            }
+            browserStylesheets.add(Utils.createExternalizedSytleSheetHeader(tokenizer.nextToken()));
         }
 
-        return cssUrls;
+        return browserStylesheets;
     }
 
     /**
@@ -250,7 +215,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         component.removeDynamicResource(ReloadResource.class);
         component.removeDynamicResource(UpdateResource.class);
-        component.clearHeaders();
+
+        Headers.getInstance().deregisterHeaderLinks(headers, component);
     }
 
     public void componentChanged(SComponent c) {
@@ -357,13 +323,11 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         // Register and render DWR callables
         Collection callableNames = CallableManager.getInstance().callableNames();
 
-        Collection allHeaders = new ArrayList(headers.size() + callableNames.size() + Headers.INSTANCE.size());
-        allHeaders.addAll(Headers.INSTANCE);
+        Collection allHeaders = new ArrayList();
+        allHeaders.addAll(Headers.getInstance().getHeaders(frame));
         allHeaders.addAll(headers);
         for (Iterator iterator = callableNames.iterator(); iterator.hasNext();) {
-            String name = (String) iterator.next();
-            Script header = new Script("text/javascript", new DefaultURLResource("../dwr/interface/" + name + ".js"));
-            allHeaders.add(header);
+            allHeaders.add(new JavaScriptHeader("../dwr/interface/" + iterator.next() + ".js"));
         }
 
         for (Iterator iterator = allHeaders.iterator(); iterator.hasNext();) {
@@ -417,7 +381,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 if (dragIter.hasNext()) {
                     // this needs to be added to the body, so use device.print()
                     // TODO: is caching by the VM enough or make this only initialize once?
-                    ClassPathResource res = new ClassPathResource(WZ_DND_JS, "text/javascript");
+                    ClassPathResource res = new ClassPathResource(ETC_WZDND, "text/javascript");
                     String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
                     device.print("<script type=\"text/javascript\" src=\"");
                     device.print(jScriptUrl);
@@ -476,7 +440,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 device.print("';\n");
                 device.print("//-->\n</script>");
                 // TODO: is caching by the VM enough or make this only initialize once?
-                ClassPathResource res = new ClassPathResource(DND_JS, "text/javascript");
+                ClassPathResource res = new ClassPathResource(ETC_DND, "text/javascript");
                 String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
                 device.print("<script type=\"text/javascript\" src=\"");
                 device.print(jScriptUrl);

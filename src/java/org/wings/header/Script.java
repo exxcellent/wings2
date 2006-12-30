@@ -124,7 +124,14 @@ public class Script implements Renderable, Serializable {
     }
 
     public int hashCode() {
-        return language != null ? language.hashCode() : 0;
+        int hashCode = 17;
+        int dispersionFactor = 37;
+
+        hashCode = hashCode * dispersionFactor + ((getLanguage() == null) ? 0 : getLanguage().hashCode());
+        hashCode = hashCode * dispersionFactor + ((getType() == null) ? 0 : getType().hashCode());
+        hashCode = hashCode * dispersionFactor + ((getURL() == null) ? 0 : getURL().hashCode());
+
+        return hashCode;
     }
 
 }

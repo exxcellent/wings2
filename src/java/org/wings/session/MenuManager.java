@@ -13,7 +13,7 @@ import org.wings.SPopupMenu;
 
 public class MenuManager {
 
-    private Map menuLinks = new HashMap();
+    private Map menuLinkMap = new HashMap();
 
     public void registerMenuLink(SMenu menu, SComponent component) {
         register(menu, component);
@@ -29,7 +29,7 @@ public class MenuManager {
 
         Set components = getComponents(menu);
         components.add(component);
-        menuLinks.put(menu, components);
+        menuLinkMap.put(menu, components);
     }
 
     public void deregisterMenuLink(SMenu menu, SComponent component) {
@@ -48,9 +48,9 @@ public class MenuManager {
         components.remove(component);
 
         if (components.isEmpty()) {
-            menuLinks.remove(menu);
+            menuLinkMap.remove(menu);
         } else {
-            menuLinks.put(menu, components);
+            menuLinkMap.put(menu, components);
         }
     }
 
@@ -62,20 +62,6 @@ public class MenuManager {
         return !getComponents(menu).isEmpty();
     }
 
-    public Set getMenues() {
-        return menuLinks.keySet();
-    }
-
-    public Set getMenues(SFrame frame) {
-        Set menuesUsedInFrame = new HashSet(menuLinks.keySet());
-        for (Iterator i = menuesUsedInFrame.iterator(); i.hasNext();) {
-            if (((SComponent) i.next()).getParentFrame() != frame) {
-                i.remove();
-            }
-        }
-        return menuesUsedInFrame;
-    }
-
     public Set getMenueLinks(SMenu menu) {
         return getComponents(menu);
     }
@@ -84,8 +70,22 @@ public class MenuManager {
         return getComponents(menu);
     }
 
+    public Set getMenues() {
+        return menuLinkMap.keySet();
+    }
+
+    public Set getMenues(SFrame frame) {
+        Set menuesUsedInFrame = new HashSet(menuLinkMap.keySet());
+        for (Iterator i = menuesUsedInFrame.iterator(); i.hasNext();) {
+            if (((SComponent) i.next()).getParentFrame() != frame) {
+                i.remove();
+            }
+        }
+        return menuesUsedInFrame;
+    }
+
     private Set getComponents(SComponent menu) {
-        Set links = (Set) menuLinks.get(menu);
+        Set links = (Set) menuLinkMap.get(menu);
         if (links == null) {
             links = new HashSet(2);
         }
