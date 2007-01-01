@@ -3,6 +3,6 @@
 <tr bgcolor="#5555ff">
 </tr>
 <tr>
-    <td><a href="<object name="linkText"></object>">a link with a RawTextComponent as link</a></td>
+    <td><object name="linkText"></object></td>
 </tr>
 </table>

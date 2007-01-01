@@ -23,7 +23,6 @@ import org.wings.SPanel;
 import org.wings.STextField;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
-import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 
 import java.awt.*;
@@ -114,15 +113,6 @@ public class JavaScriptListenerExample
 
         // any change to the sum field: no way, recalculate from source fields
         sumField.addScriptListener(jsListener);
-
-        // THIS HAS TO BE FIXED!!!
-        // Because when first loading the JavaScriptListenerExample only this new WingSetPane
-        // is loaded (and not the complete Frame) the FrameCG will not render the attached
-        // scripts. What we have to do is implement a mechanism that allows us to dynamically
-        // insert a new JS into the frame's script area without completely reloading the frame.
-        // This might be possible as soon as we make the step from componentwise updates to more
-        // fine grained updates...
-        // SessionManager.getSession().getRootFrame().reload();
 
         p.add(panel);
         return p;

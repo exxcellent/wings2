@@ -33,20 +33,23 @@ public class DefaultReloadManager implements ReloadManager {
 
     private boolean acceptChanges = true;
 
-    protected final Set componentsToReload = new HashSet();
-
     protected final Map fullReplaceUpdates = new HashMap();
 
     protected final Map fineGrainedUpdates = new HashMap();
+
+    protected final List componentsToReload = new ArrayList();
 
     public void reload(SComponent component) {
         if (component == null)
             throw new IllegalArgumentException("Component must not be null!");
 
-        if (updateMode)
+        if (updateMode) {
             addUpdate(component, null);
-        else
-            componentsToReload.add(component);
+        } else {
+            if (!componentsToReload.contains(component)) {
+                componentsToReload.add(component);
+            }
+        }
     }
 
     public void addUpdate(SComponent component, Update update) {
@@ -77,11 +80,20 @@ public class DefaultReloadManager implements ReloadManager {
                 fineGrainedUpdates.put(component, potentialUpdates);
             }
         } else if (log.isDebugEnabled()) {
-            log.debug("Component " + component + " changed after invalidation of frames.");
+            //log.debug("Component " + component + " changed after invalidation of frames.");
         }
     }
 
     public List getUpdates() {
+        if (!componentsToReload.isEmpty()) {
+            for (Iterator i = componentsToReload.iterator(); i.hasNext();) {
+                boolean tmp = acceptChanges;
+                acceptChanges = true;
+                addUpdate((SComponent) i.next(), null);
+                acceptChanges = tmp;
+            }
+        }
+
         filterUpdates();
 
         List filteredUpdates = new ArrayList(fullReplaceUpdates.values());
@@ -95,14 +107,9 @@ public class DefaultReloadManager implements ReloadManager {
 
     public Set getDirtyComponents() {
         final Set dirtyComponents = new HashSet();
-
-        if (updateMode) {
-            dirtyComponents.addAll(fullReplaceUpdates.keySet());
-            dirtyComponents.addAll(fineGrainedUpdates.keySet());
-        } else {
-            dirtyComponents.addAll(componentsToReload);
-        }
-
+        dirtyComponents.addAll(fullReplaceUpdates.keySet());
+        dirtyComponents.addAll(fineGrainedUpdates.keySet());
+        dirtyComponents.addAll(componentsToReload);
         return dirtyComponents;
     }
 
@@ -138,9 +145,9 @@ public class DefaultReloadManager implements ReloadManager {
         updateCount = 0;
         updateMode = false;
         acceptChanges = true;
-        componentsToReload.clear();
         fullReplaceUpdates.clear();
         fineGrainedUpdates.clear();
+        componentsToReload.clear();
     }
 
     public boolean isUpdateMode() {
@@ -181,7 +188,7 @@ public class DefaultReloadManager implements ReloadManager {
                 fullReplaceUpdates.remove(component);
                 fineGrainedUpdates.remove(component);
             } else {
-                componentHierarchy.put(getHierarchyPath(component), component);
+                componentHierarchy.put(getPath(component).toString(), component);
             }
         }
 
@@ -204,26 +211,20 @@ public class DefaultReloadManager implements ReloadManager {
             printAllUpdates("effective updates");
     }
 
-    private String getHierarchyPath(SComponent component) {
-        SStringBuilder path = new SStringBuilder("/").append(component.getName());
-        if (component instanceof SMenuItem) {
-            SMenuItem menuItem = (SMenuItem) component;
-            while (menuItem.getParentMenu() != null) {
-                SComponent parentMenu = menuItem.getParentMenu();
-                path = path.insert(0, "/").insert(1, parentMenu.getName());
-                if (parentMenu instanceof SMenuItem) {
-                    menuItem = (SMenuItem) parentMenu;
-                } else {
-                    break;
-                }
-            }
+    private SStringBuilder getPath(SComponent component) {
+        if (component == null) {
+            return new SStringBuilder();
         } else {
-            while (component.getParent() != null) {
-                path = path.insert(0, "/").insert(1, component.getParent().getName());
-                component = component.getParent();
+            if (component instanceof SMenuItem) {
+                SMenuItem menuItem = (SMenuItem) component;
+                return getPath(menuItem.getParentMenu()).append("/").append(component.getName());
+            } else if (component instanceof SSpinner.DefaultEditor) {
+                SSpinner.DefaultEditor defaultEditor = (SSpinner.DefaultEditor) component;
+                return getPath(defaultEditor.getSpinner()).append("/").append(component.getName());
+            } else {
+                return getPath(component.getParent()).append("/").append(component.getName());
             }
         }
-        return path.toString();
     }
 
     private void removeUpdates(Iterable iterable, int propertyMask) {

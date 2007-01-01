@@ -20,23 +20,7 @@ public class Headers extends SessionLocal {
     }
 
     protected Object initialValue() {
-        return new TreeMap(new Comparator() {
-            public int compare(Object object1, Object object2) {
-                HeaderObject headerObject1 = (HeaderObject) object1;
-                HeaderObject headerObject2 = (HeaderObject) object2;
-
-                if (headerObject1.equals(headerObject2)) return 0;
-                else {
-                    if (headerObject1.header instanceof Script &&
-                        headerObject2.header instanceof Link) return -1;
-                    if (headerObject1.header instanceof Link &&
-                        headerObject2.header instanceof Script) return 1;
-                    if (headerObject1.position < headerObject2.position) return -1;
-                    if (headerObject1.position > headerObject2.position) return 1;
-                    return 0;
-                }
-            }
-        });
+        return new HashMap();
     }
 
     protected Map getHeaderLinkMap() {
@@ -56,13 +40,9 @@ public class Headers extends SessionLocal {
         HeaderObject headerObject = new HeaderObject(header);
         Set components = getComponents(headerObject);
 
-        SFrame frame = component.getParentFrame();
-        if (!containsLinkToFrame(components, frame)) {
-            if (frame == null) reloadAllFrames();
-            else frame.reload();
-        }
-
+        handleFrameReload(component, components);
         components.add(component);
+
         getHeaderLinkMap().put(headerObject, components);
     }
 
@@ -78,13 +58,9 @@ public class Headers extends SessionLocal {
 
         HeaderObject headerObject = new HeaderObject(header);
         Set components = getComponents(headerObject);
-        components.remove(component);
 
-        SFrame frame = component.getParentFrame();
-        if (!containsLinkToFrame(components, frame)) {
-            if (frame == null) reloadAllFrames();
-            else frame.reload();
-        }
+        components.remove(component);
+        handleFrameReload(component, components);
 
         if (components.isEmpty())
             getHeaderLinkMap().remove(headerObject);
@@ -102,7 +78,7 @@ public class Headers extends SessionLocal {
 
     public List getHeaders() {
         List headers = new ArrayList(getHeaderLinkMap().keySet().size());
-        for (Iterator i = getHeaderLinkMap().keySet().iterator(); i.hasNext();) {
+        for (Iterator i = getSortedHeaderObjects().iterator(); i.hasNext();) {
             headers.add(((HeaderObject) i.next()).header);
         }
         return headers;
@@ -110,7 +86,7 @@ public class Headers extends SessionLocal {
 
     public List getHeaders(SFrame frame) {
         List headers = new ArrayList(getHeaderLinkMap().keySet().size());
-        for (Iterator i = getHeaderLinkMap().keySet().iterator(); i.hasNext();) {
+        for (Iterator i = getSortedHeaderObjects().iterator(); i.hasNext();) {
             HeaderObject headerObject = (HeaderObject) i.next();
             if (containsLinkToFrame(getComponents(headerObject), frame) ||
                 containsLinkToFrame(getComponents(headerObject), null))
@@ -135,11 +111,40 @@ public class Headers extends SessionLocal {
         return false;
     }
 
-    private void reloadAllFrames() {
-        Set frames = SessionManager.getSession().getFrames();
-        for (Iterator i = frames.iterator(); i.hasNext();) {
-            ((SFrame) i.next()).reload();
+    private void handleFrameReload(SComponent component, Set components) {
+        SFrame frame = component.getParentFrame();
+        if (!containsLinkToFrame(components, frame)) {
+            if (frame == null) {
+                Set frames = SessionManager.getSession().getFrames();
+                for (Iterator i = frames.iterator(); i.hasNext();) {
+                    ((SFrame) i.next()).reload();
+                }
+            } else {
+                frame.reload();
+            }
         }
+    }
+
+    private List getSortedHeaderObjects() {
+        List headerObjects = new ArrayList(getHeaderLinkMap().keySet());
+        Collections.sort(headerObjects, new Comparator() {
+            public int compare(Object object1, Object object2) {
+                HeaderObject headerObject1 = (HeaderObject) object1;
+                HeaderObject headerObject2 = (HeaderObject) object2;
+
+                if (headerObject1.equals(headerObject2)) return 0;
+                else {
+                    if (headerObject1.header instanceof Script &&
+                        headerObject2.header instanceof Link) return -1;
+                    if (headerObject1.header instanceof Link &&
+                        headerObject2.header instanceof Script) return 1;
+                    if (headerObject1.position < headerObject2.position) return -1;
+                    if (headerObject1.position > headerObject2.position) return 1;
+                    return 0;
+                }
+            }
+        });
+        return headerObjects;
     }
 
     private final class HeaderObject {

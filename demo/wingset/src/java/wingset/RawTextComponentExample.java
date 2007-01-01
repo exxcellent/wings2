@@ -32,7 +32,8 @@ public class RawTextComponentExample extends WingSetPane {
         }
 
         examplePanel.add(new SRawTextComponent("This is a Raw Text. It does not break and has no div's wrapping it."), "contentText");
-        examplePanel.add(new SRawTextComponent("javascript:alert('This is a text put inside the href of the link');"), "linkText");
+        examplePanel.add(new SRawTextComponent("<a href=\"javascript:alert('Simple but useful...');\">" +
+                "This link was made with a RawTextComponent.</a>"), "linkText");
 
         return examplePanel;
 
