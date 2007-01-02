@@ -296,44 +296,6 @@ wingS.util.setCookie = function(name, value, days, path) {
             + (path ? 'path=' + path : '');
 };
 
-wingS.util.storeScrollPosition = function(event) {
-    var target = wingS.events.getTarget(event);
-    var scrollableElement = wingS.util.getScrollableElement(target);
-    if (scrollableElement && target) {
-        var pos = target.scrollTop;
-        if (scrollableElement.nodeName == 'DIV' ||
-            scrollableElement.nodeName == 'TBODY') {
-            var targetId = scrollableElement.getAttribute("id");
-            wingS.util.getCookie("scroll_pos", "" + pos, 1);
-            wingS.util.getCookie("scroll_target", "" + targetId, 1);
-        }
-    }
-};
-
-wingS.util.restoreScrollPosition = function() {
-    var pos = wingS.util.getCookie("scroll_pos");
-    var target = wingS.util.getCookie("scroll_target");
-    var el = document.getElementById(target);
-    if (el) {
-        el.scrollTop = pos;
-    }
-};
-
-wingS.util.getScrollableElement = function(el) {
-    if (!el) return;
-    if (el.scrollTop > 0)
-        return el;
-
-    var parent = el.parentNode;
-    if (null == parent) return null;
-    if (parent.scrollTop != 0) {
-        return parent;
-    }
-    else {
-        return arguments.callee(parent);
-    }
-};
-
 wingS.util.checkUserAgent = function(string) {
     return navigator.userAgent.toLowerCase().indexOf(string) + 1;
 };

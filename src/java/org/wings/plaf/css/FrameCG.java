@@ -146,20 +146,12 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         final JavaScriptDOMListener storeFocusIE = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_ACTIVATE,
                 "wingS.util.storeFocus", comp);
-        final JavaScriptDOMListener storeScrollPosition = new JavaScriptDOMListener(
-                JavaScriptEvent.ON_SCROLL,
-                "wingS.util.storeScrollPosition", comp);
-        final JavaScriptDOMListener restoreScrollPosition = new JavaScriptDOMListener(
-                JavaScriptEvent.ON_LOAD,
-                "wingS.util.restoreScrollPosition", comp);
         final JavaScriptDOMListener initializeAjaxFrame = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_LOAD,
                 "wingS.ajax.initializeFrame", comp);
 
         // Add script listeners to the frame
         component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
-        component.addScriptListener(storeScrollPosition);
-        component.addScriptListener(restoreScrollPosition);
         component.addScriptListener(initializeAjaxFrame);
 
         CaptureDefaultBindingsScriptListener.install(component);
