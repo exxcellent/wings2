@@ -2,7 +2,6 @@
  * WINGS.LAYOUT  --  contains: functions used to layout components
  **************************************************************************************************/
 
-
 /**
  * Create according namespace
  */
@@ -69,3 +68,4 @@ wingS.layout.scrollPane = function(tableId) {
         //div.style.overflow = "auto";
     }
 };
+

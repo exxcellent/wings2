@@ -51,6 +51,18 @@
     </target>
 
     <target name="build" depends="compile" description="build">
+        <concat destfile="src/res/org/wings/js/wings/all.js">
+            <filelist dir="src/res/org/wings/js/wings">
+                <file name="global.js"/>
+                <file name="event.js"/>
+                <file name="util.js"/>
+                <file name="request.js"/>
+                <file name="ajax.js"/>
+                <file name="update.js"/>
+                <file name="layout.js"/>
+                <file name="component.js"/>
+            </filelist>
+        </concat>
         <mkdir dir="build/web/WEB-INF/lib"/>
         <jar jarfile="build/web/WEB-INF/lib/wings.jar">
             <fileset dir="build/class">
@@ -68,18 +80,16 @@
             <fileset dir="build/class">
                 <include name="org/wings/plaf/xhtml/**"/>
                 <include name="org/wings/plaf/css/**"/>
-                <include name="org/wingx/plaf/**"/>
-            </fileset>
-            <fileset dir="src/java">
-                <include name="org/wings/plaf/css/*.js"/>
-                <include name="org/wingx/calendar/**"/>
-                <include name="org/wingx/plaf/**/*.js"/>
             </fileset>
             <fileset dir="src/res">
                 <include name="**/*.js"/>
                 <include name="**/*.css"/>
                 <include name="**/*.htc"/>
                 <include name="**/*.properties"/>
+                <exclude name="**/js/wings/*.js"/>
+            </fileset>
+            <fileset dir="src/res">
+               <include name="**/js/wings/all.js"/>
             </fileset>
         </jar>
         <copy todir="build/web/WEB-INF/lib">

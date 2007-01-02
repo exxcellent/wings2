@@ -2,7 +2,6 @@
  * WINGS.AJAX  --  contains: functions used to process ajax requests
  **************************************************************************************************/
 
-
 /**
  * Create according namespace
  */
@@ -341,3 +340,4 @@ wingS.ajax.toggleDebugView = function() {
         wingS.ajax.setDebugViewVisible(false);
     else wingS.ajax.setDebugViewVisible(true);
 };
+

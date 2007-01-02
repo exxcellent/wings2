@@ -72,14 +72,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private static final String PROPERTY_STYLESHEET = "Stylesheet.";
     private static final String BROWSER_DEFAULT = "default";
 
-    private static final String WINGS_GLOBALS = (String) ResourceManager.getObject("JS.wingsGlobal", String.class);
-    private static final String WINGS_EVENT = (String) ResourceManager.getObject("JS.wingsEvent", String.class);
-    private static final String WINGS_UTIL = (String) ResourceManager.getObject("JS.wingsUtil", String.class);
-    private static final String WINGS_LAYOUT = (String) ResourceManager.getObject("JS.wingsLayout", String.class);
-    private static final String WINGS_REQUEST = (String) ResourceManager.getObject("JS.wingsRequest", String.class);
-    private static final String WINGS_AJAX = (String) ResourceManager.getObject("JS.wingsAjax", String.class);
-    private static final String WINGS_UPDATE = (String) ResourceManager.getObject("JS.wingsUpdate", String.class);
-    private static final String WINGS_COMPONENT = (String) ResourceManager.getObject("JS.wingsComponent", String.class);
+    private static final String WINGS_ALL = (String) ResourceManager.getObject("JS.wingsAll", String.class);
     private static final String YAHOO_GLOBAL = (String) ResourceManager.getObject("JS.yahooGlobal", String.class);
     private static final String YAHOO_DOM = (String) ResourceManager.getObject("JS.yahooDom", String.class);
     private static final String YAHOO_EVENT = (String) ResourceManager.getObject("JS.yahooEvent", String.class);
@@ -119,14 +112,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // Externalize JavaScript headers
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_GLOBALS));
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_EVENT));
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_UTIL));
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_LAYOUT));
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_REQUEST));
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_AJAX));
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_UPDATE));
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_COMPONENT));
+        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_ALL));
         headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_GLOBAL));
         headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_DOM));
         headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_EVENT));

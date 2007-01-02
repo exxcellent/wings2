@@ -2,7 +2,6 @@
  * WINGS.UTIL  --  contains: functions used to do common tasks
  **************************************************************************************************/
 
-
 /**
  * Create according namespace
  */
@@ -432,3 +431,4 @@ wingS.util.printAllFields = function(obj) {
         logDebug(obj[i], obj);
     }
 };
+

@@ -2,7 +2,6 @@
  * WINGS.EVENT  --  contains: functions used to do event handling
  **************************************************************************************************/
 
-
 /**
  * Create according namespace
  */
@@ -51,3 +50,4 @@ wingS.events.registerEvent = function(obj, eventType, func, useCaption) {
         return false;
     }
 };
+

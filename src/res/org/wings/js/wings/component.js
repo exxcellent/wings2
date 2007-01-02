@@ -2,7 +2,6 @@
  * WINGS.COMPONENT  --  contains: functions used for special components
  **************************************************************************************************/
 
-
 /**
  * Create according namespace
  */
@@ -37,3 +36,4 @@ wingS.component.spinnerCallback = function(result) {
         elem.setAttribute("lastValid", data);
     }
 };
+

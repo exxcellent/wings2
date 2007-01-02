@@ -2,7 +2,6 @@
  * WINGS.UPDATE  --  contains: functions to process incremental updates
  **************************************************************************************************/
 
-
 /**
  * Create according namespace
  */
@@ -332,3 +331,4 @@ wingS.update.alertException = function(exception, details) {
                    "Please examine your server's log file for further details...";
     alert(errorMsg);
 };
+

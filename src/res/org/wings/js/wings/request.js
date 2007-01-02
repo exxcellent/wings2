@@ -2,7 +2,6 @@
  * WINGS.REQUEST  --  contains: functions used to send new request
  **************************************************************************************************/
 
-
 /**
  * Create according namespace
  */
@@ -231,3 +230,4 @@ wingS.request.encodeEvent = function(eventName, eventValue, prefix) {
     }
     return data;
 };
+

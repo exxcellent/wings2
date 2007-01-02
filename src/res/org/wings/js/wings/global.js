@@ -2,7 +2,6 @@
  * WINGS.GLOBAL  --  contains: global variables, function extensions, etc.
  **************************************************************************************************/
 
-
 /**
  * Create according namespace
  */
@@ -44,3 +43,4 @@ Function.prototype.bind = function(obj) {
 
     return temp;
 };
+
