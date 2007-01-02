@@ -43,11 +43,13 @@ public class TextFieldCG extends AbstractComponentCG implements
     public void installCG( SComponent comp ) {
         super.installCG( comp );
         if ( comp instanceof SFormattedTextField ) {
-            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
-                CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter);
+            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {                
+                HashSet methodsToExpose = new HashSet();        
+                methodsToExpose.add("validate");
+                CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter, methodsToExpose);
             }
             comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';" +
-                    "CallableFormatter.validate(wingS.component.ftextFieldCallback, this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'))"));
+                    "CallableFormatter.validate(this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'), wingS.component.ftextFieldCallback)"));
         }
         if (isMSIE(comp))
             comp.putClientProperty("horizontalOversize", new Integer(horizontalOversize));

@@ -12,6 +12,7 @@
  */
 package org.wings.plaf.css;
 
+import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -49,7 +50,9 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         super.installCG(component);
 
         if (!CallableManager.getInstance().containsCallable("CallableSpinner")) {
-            CallableManager.getInstance().registerCallable("CallableSpinner", getCallableSpinner());
+            HashSet methodsToExpose = new HashSet();        
+            methodsToExpose.add("getValue");
+            CallableManager.getInstance().registerCallable("CallableSpinner", getCallableSpinner(), methodsToExpose);
         }
     }
 
@@ -65,8 +68,8 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         device.print( "><tr><td>\n" );
         spinner.getEditor().write( device );
         device.print( "\n</td><td style=\"width:0px;\">\n" );
-        device.print( "<img onclick=\"CallableSpinner.getValue(wingS.component.spinnerCallback,'"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'0')\" src=\"" + iconNext.getURL() + "\" style=\"display:block;vertical-align:bottom;\">\n");
-        device.print( "<img onclick=\"CallableSpinner.getValue(wingS.component.spinnerCallback,'"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'1')\" src=\"" + iconPrev.getURL() + "\" style=\"display:block;vertical-align:top\">\n");
+        device.print( "<img onclick=\"CallableSpinner.getValue('"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'0',wingS.component.spinnerCallback)\" src=\"" + iconNext.getURL() + "\" style=\"display:block;vertical-align:bottom;\">\n");
+        device.print( "<img onclick=\"CallableSpinner.getValue('"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'1',wingS.component.spinnerCallback)\" src=\"" + iconPrev.getURL() + "\" style=\"display:block;vertical-align:top\">\n");
         device.print( "</td></tr></table>\n" );
     }
 
