@@ -21,7 +21,6 @@ import org.wings.SResourceIcon;
 import org.wings.SSlider;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
-import org.wings.header.Headers;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
@@ -29,6 +28,7 @@ import org.wings.SComponent;
 import org.wings.io.Device;
 import java.io.IOException;
 import org.wings.util.SStringBuilder;
+import org.wings.header.SessionHeaders;
 
 /**
  * CG for SSlider instances.
@@ -170,12 +170,12 @@ public class SliderCG extends AbstractComponentCG implements org.wings.plaf.Slid
         this.verticalThumb = icon;
     }
     
-    public void parentFrameAdded(SParentFrameEvent e) {
-        Headers.getInstance().registerHeaderLinks(headers, e.getComponent());        
+    public void parentFrameAdded(SParentFrameEvent e) {                
+        SessionHeaders.getInstance().registerHeaders(headers);        
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {        
-        Headers.getInstance().deregisterHeaderLinks(headers, e.getComponent());
+        SessionHeaders.getInstance().deregisterHeaders(headers);        
     }
     
 }
