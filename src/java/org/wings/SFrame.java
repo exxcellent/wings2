@@ -31,6 +31,7 @@ import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderListener;
 import org.wings.event.SRequestEvent;
 import org.wings.event.SRequestListener;
+import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
 import org.wings.resource.DynamicResource;
@@ -138,6 +139,8 @@ public class SFrame
         getSession().addPropertyChangeListener("lookAndFeel", this);
         getSession().addPropertyChangeListener("request.url", this);
         this.visible = false; // Frames are invisible originally.
+
+        headers = SessionHeaders.getInstance().getHeaders();
 
         setUpdateEnabled(true);
         setUpdateCursor(true, new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif"), 15, 0);
@@ -282,7 +285,7 @@ public class SFrame
      * @see org.wings.header.Link
      */
     public void addHeader(Object headerElement) {
-        if (!headers().contains(headerElement) && headerElement != null) {
+        if (!getHeaders().contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
             if (isUpdatePossible() && getClass() == SFrame.class)
                 update(((FrameCG) getCG()).getAddHeaderUpdate(this, headerElement));
@@ -297,10 +300,10 @@ public class SFrame
      * @param headerElement is typically a {@link org.wings.header.Link} or {@link DynamicResource}.
      * @param index index in header list to add this item
      * @see org.wings.header.Link
-     * @see #headers()
+     * @see #getHeaders()
      */
     public void addHeader(int index, Object headerElement) {
-        if (!headers().contains(headerElement) && headerElement != null) {
+        if (!getHeaders().contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
             if (isUpdatePossible() && getClass() == SFrame.class)
                 update(((FrameCG) getCG()).getAddHeaderUpdate(this, index, headerElement));
@@ -338,10 +341,18 @@ public class SFrame
 
     /**
      * @see #addHeader(Object)
+     * @deprecated Use {@link #getHeaders()} instead
      */
     public List headers() {
+        return getHeaders();
+    }
+
+    /**
+     * @see #addHeader(Object)
+     */
+    public List getHeaders() {
         if (headers == null) {
-            headers = new ArrayList(2);
+            headers = new ArrayList();
         }
         return Collections.unmodifiableList(headers);
     }

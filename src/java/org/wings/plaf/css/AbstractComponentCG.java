@@ -389,7 +389,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
 
         public int getPriority() {
-            return 5;
+            return 4;
         }
 
 		public Handler getHandler() {

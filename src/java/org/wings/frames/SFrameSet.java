@@ -180,7 +180,7 @@ public class SFrameSet extends SFrame {
         // it could be come a non-static method again
 
         // There can only be one such header so if existing overwrite
-        List headers = frame.headers();
+        List headers = frame.getHeaders();
         boolean found = false;
         Iterator it = headers.iterator();
         while (it.hasNext()) {
@@ -216,7 +216,7 @@ public class SFrameSet extends SFrame {
      * @return The found base target header element or <code>null</code>
      */
     public static BaseTarget retrieveBaseTarget(SFrame frame) {
-        List headers = frame.headers();
+        List headers = frame.getHeaders();
         Iterator it = headers.iterator();
         while (it.hasNext()) {
             Object next = it.next();

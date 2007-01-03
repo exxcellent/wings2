@@ -28,7 +28,6 @@ import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
-import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.ReloadResource;
 import org.wings.resource.UpdateResource;
@@ -156,8 +155,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         CaptureDefaultBindingsScriptListener.install(component);
 
-        Headers.getInstance().registerHeaderLinks(headers, component);
-        Headers.getInstance().registerHeaderLinks(getBrowserStylesheets(component.getSession()), component);
+        SessionHeaders.getInstance().registerHeaders(headers);
+        SessionHeaders.getInstance().registerHeaders(getBrowserStylesheets());
     }
 
     /**
@@ -167,7 +166,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
      *
      * @return a list of externalized browser specific stylesheet headers
      */
-    private List getBrowserStylesheets(Session session) {
+    private List getBrowserStylesheets() {
+        Session session = SessionManager.getSession();
         final CGManager cgManager = session.getCGManager();
         final String browserName = session.getUserAgent().getBrowserType().getShortName();
 
@@ -194,7 +194,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         component.removeDynamicResource(ReloadResource.class);
         component.removeDynamicResource(UpdateResource.class);
 
-        Headers.getInstance().deregisterHeaderLinks(headers, component);
+        SessionHeaders.getInstance().deregisterHeaders(headers);
     }
 
     public void componentChanged(SComponent c) {
@@ -255,7 +255,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         Session session = SessionManager.getSession();
         final String language = session.getLocale().getLanguage();
         final String title = frame.getTitle();
-        final List headers = frame.headers();
         final String encoding = session.getCharacterEncoding();
 
         // <?xml version="1.0" encoding="...">
@@ -298,16 +297,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         device.print(Version.getCompileTime());
         device.print("\" />\n");
 
-        // Register and render DWR callables
-        Collection callableNames = CallableManager.getInstance().callableNames();
-
+        // Render headers of session and frame
         Collection allHeaders = new ArrayList();
-        allHeaders.addAll(Headers.getInstance().getHeaders(frame));
-        allHeaders.addAll(headers);
-        for (Iterator iterator = callableNames.iterator(); iterator.hasNext();) {
-            allHeaders.add(new JavaScriptHeader("../dwr/interface/" + iterator.next() + ".js"));
-        }
-
+        allHeaders.addAll(SessionHeaders.getInstance().getHeaders());
+        allHeaders.addAll(frame.getHeaders());
         for (Iterator iterator = allHeaders.iterator(); iterator.hasNext();) {
             Object next = iterator.next();
             if (next instanceof Renderable) {
@@ -561,6 +554,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             this.index = new Integer(index);
         }
 
+        public int getPriority() {
+            return 5;
+        }
+
         public Handler getHandler() {
             UpdateHandler handler = new UpdateHandler("headerScript");
             handler.addParameter(add);
@@ -599,6 +596,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         public HeaderLinkUpdate(SComponent component, boolean add, Link link, int index) {
             this(component, add, link);
             this.index = new Integer(index);
+        }
+
+        public int getPriority() {
+            return 5;
         }
 
         public Handler getHandler() {

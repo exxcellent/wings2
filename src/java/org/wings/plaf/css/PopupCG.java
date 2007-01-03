@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.wings.SComponent;
 import org.wings.SPopup;
-import org.wings.header.Headers;
+import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
 import java.io.IOException;
 import org.wings.io.StringBuilderDevice;
@@ -55,7 +55,7 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
 
         headers.add(Utils.createExternalizedJavaScriptHeader("org/wings/js/etc/popup.js"));
         headers.add(Utils.createExternalizedSytleSheetHeader("org/wings/js/yui/container/assets/container.css"));
-        Headers.getInstance().registerHeaderLinks(headers, popup);
+        SessionHeaders.getInstance().registerHeaders(headers);
 
         String name        = this.popup.getComponent().getName();
         this.popupJSObject = name + "_popup";
@@ -81,8 +81,8 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
     }
 
     public void tidyUp() {
+        SessionHeaders.getInstance().deregisterHeaders(headers);
         CallableManager.getInstance().unregisterCallable(dwrJsObject);
-        Headers.getInstance().deregisterHeaderLinks(headers, popup);
     }
 
     private String generateInitScript() {

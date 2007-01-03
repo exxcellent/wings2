@@ -30,6 +30,7 @@ import org.wings.SComponent;
 import org.wings.SFormattedTextField;
 import org.wings.SResourceIcon;
 
+import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.text.SAbstractFormatter;
@@ -50,10 +51,14 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         super.installCG(component);
 
         if (!CallableManager.getInstance().containsCallable("CallableSpinner")) {
-            HashSet methodsToExpose = new HashSet();        
+            HashSet methodsToExpose = new HashSet();
             methodsToExpose.add("getValue");
             CallableManager.getInstance().registerCallable("CallableSpinner", getCallableSpinner(), methodsToExpose);
         }
+    }
+
+    public void uninstallCG(SComponent component) {
+        CallableManager.getInstance().unregisterCallable("CallableSpinner");
     }
 
     public void writeInternal(final Device device, final SComponent component)

@@ -43,8 +43,8 @@ public class TextFieldCG extends AbstractComponentCG implements
     public void installCG( SComponent comp ) {
         super.installCG( comp );
         if ( comp instanceof SFormattedTextField ) {
-            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {                
-                HashSet methodsToExpose = new HashSet();        
+            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
+                HashSet methodsToExpose = new HashSet();
                 methodsToExpose.add("validate");
                 CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter, methodsToExpose);
             }
@@ -53,6 +53,10 @@ public class TextFieldCG extends AbstractComponentCG implements
         }
         if (isMSIE(comp))
             comp.putClientProperty("horizontalOversize", new Integer(horizontalOversize));
+    }
+
+    public void uninstallCG(SComponent component) {
+        CallableManager.getInstance().unregisterCallable(callableFormatter.getName());
     }
 
     public void writeInternal(final Device device,

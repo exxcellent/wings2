@@ -3,12 +3,10 @@
  */
 package org.wings.plaf.css.dwr;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import java.util.Set;
-import org.directwebremoting.impl.DefaultAccessControl;
+import org.wings.header.SessionHeaders;
+import org.wings.header.JavaScriptHeader;
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
 import org.directwebremoting.WebContextFactory;
@@ -23,12 +21,12 @@ import java.io.Serializable;
  * @author hengels
  */
 public class CallableManager implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private SessionCreatorManager creatorManager = new SessionCreatorManager();
     private SessionAccessControl accessControl = new SessionAccessControl();
-    
+
     public static CallableManager getInstance() {
         Session session = SessionManager.getSession();
         CallableManager callableManager = (CallableManager) session.getProperty("CallableManager");
@@ -38,25 +36,27 @@ public class CallableManager implements Serializable {
         }
         return callableManager;
     }
-    
+
     /**
      * Register callable and expose all public methods.
      * @param scriptName
      * @param callable
-     * @deprecated security issue, use registerCallable(String scriptName, Object callable, Set methodsToExpose) instead
      */
     public void registerCallable(String scriptName, Object callable) {
         Session session = SessionManager.getSession();
-        
+
         WebContextBuilder builder = new DefaultWebContextBuilder();
         builder.set(session.getServletRequest(), session.getServletResponse(), null, session.getServletContext(), new DefaultContainer());
-        
-        WebContextFactory.setWebContextBuilder(builder);                
-        
+
+        WebContextFactory.setWebContextBuilder(builder);
+
         creatorManager.addCreator(scriptName, new SessionCreator(callable));
         builder.unset();
+
+        JavaScriptHeader header = new JavaScriptHeader("../dwr/interface/" + scriptName + ".js");
+        SessionHeaders.getInstance().registerHeader(header);
     }
-    
+
     /**
      * Register callable and only expose a limited number of methods.
      * @param scriptName
@@ -65,20 +65,23 @@ public class CallableManager implements Serializable {
      */
     public void registerCallable(String scriptName, Object callable, Set methodsToExpose) {
         Session session = SessionManager.getSession();
-        
+
         WebContextBuilder builder = new DefaultWebContextBuilder();
         builder.set(session.getServletRequest(), session.getServletResponse(), null, session.getServletContext(), new DefaultContainer());
-        
+
         WebContextFactory.setWebContextBuilder(builder);
-        
+
         for (Iterator it = methodsToExpose.iterator(); it.hasNext();) {
-            accessControl.addIncludeRule(scriptName, (String)it.next());            
+            accessControl.addIncludeRule(scriptName, (String)it.next());
         }
-        
+
         creatorManager.addCreator(scriptName, new SessionCreator(callable));
-        builder.unset();  
+        builder.unset();
+
+        JavaScriptHeader header = new JavaScriptHeader("../dwr/interface/" + scriptName + ".js");
+        SessionHeaders.getInstance().registerHeader(header);
     }
-    
+
     public void unregisterCallable(String scriptName) {
         Session session = SessionManager.getSession();
 
@@ -88,6 +91,9 @@ public class CallableManager implements Serializable {
         WebContextFactory.setWebContextBuilder(builder);
         creatorManager.removeCreator(scriptName);
         builder.unset();
+
+        JavaScriptHeader header = new JavaScriptHeader("../dwr/interface/" + scriptName + ".js");
+        SessionHeaders.getInstance().deregisterHeader(header);
     }
 
     public boolean containsCallable(String scriptName) {

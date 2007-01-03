@@ -106,7 +106,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     public void write(Device d)
             throws IOException {
         SFrameSet frameSet = (SFrameSet) getContainer();
-        List headers = frameSet.headers();
+        List headers = frameSet.getHeaders();
 
         if (frameSet.getParent() == null) {
             Session session = SessionManager.getSession();

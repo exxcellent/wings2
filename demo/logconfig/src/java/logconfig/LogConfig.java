@@ -779,9 +779,9 @@ public class LogConfig {
         final SButton bu_addScriptHeader = new SButton("Add a new script header and link header");
         bu_addScriptHeader.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-//                fr_frame.addHeader(includeJs);
+                fr_frame.addHeader(includeJs);
                 fr_frame.addHeader(includeCss);
-//                fr_frame.addHeader(includeJs2);
+                fr_frame.addHeader(includeJs2);
                 fr_frame.addHeader(includeCss2);
             }
         });
@@ -789,9 +789,9 @@ public class LogConfig {
         final SButton bu_removeScriptHeader = new SButton("Remove script header and link header");
         bu_removeScriptHeader.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-//                fr_frame.removeHeader(includeJs);
+                fr_frame.removeHeader(includeJs);
                 fr_frame.removeHeader(includeCss);
-//                fr_frame.removeHeader(includeJs2);
+                fr_frame.removeHeader(includeJs2);
                 fr_frame.removeHeader(includeCss2);
             }
         });

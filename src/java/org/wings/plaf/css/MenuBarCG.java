@@ -19,7 +19,7 @@ import org.wings.SMenu;
 import org.wings.SMenuBar;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
-import org.wings.header.Headers;
+import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptEvent;
@@ -53,12 +53,12 @@ public class MenuBarCG extends AbstractComponentCG implements
     }
 
     public void parentFrameAdded(SParentFrameEvent e) {
-        Headers.getInstance().registerHeaderLinks(headers, e.getComponent());
+        SessionHeaders.getInstance().registerHeaders(headers);
         e.getParentFrame().addScriptListener(BODY_ONCLICK_SCRIPT);
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
-        Headers.getInstance().deregisterHeaderLinks(headers, e.getComponent());
+        SessionHeaders.getInstance().deregisterHeaders(headers);
         //e.getParentFrame().removeScriptListener(BODY_ONCLICK_SCRIPT);
     }
 
