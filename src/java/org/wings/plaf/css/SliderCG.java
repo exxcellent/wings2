@@ -14,9 +14,14 @@
 
 package org.wings.plaf.css;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.wings.SIcon;
 import org.wings.SResourceIcon;
 import org.wings.SSlider;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
+import org.wings.header.Headers;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
@@ -29,8 +34,11 @@ import org.wings.util.SStringBuilder;
  * CG for SSlider instances.
  * @author Christian Schyma
  */
-public class SliderCG extends AbstractComponentCG implements org.wings.plaf.SliderCG {
+public class SliderCG extends AbstractComponentCG implements org.wings.plaf.SliderCG, 
+        SParentFrameListener {
      
+    protected final List headers = new ArrayList();
+    
     private SIcon horizontalThumb;
     private SIcon verticalThumb;
     
@@ -55,6 +63,9 @@ public class SliderCG extends AbstractComponentCG implements org.wings.plaf.Slid
     public SliderCG() {
         setHorizontalThumbIcon((SIcon) ResourceManager.getObject("SliderCG.horizontalThumbIcon", SIcon.class));
         setVerticalThumbIcon((SIcon) ResourceManager.getObject("SliderCG.verticalThumbIcon", SIcon.class));
+        
+        headers.add(Utils.createExternalizedJavaScriptHeader((String) ResourceManager.getObject("JS.yahooDnD", String.class))); 
+        headers.add(Utils.createExternalizedJavaScriptHeader((String) ResourceManager.getObject("JS.yahooSlider", String.class)));        
     }
     
     public void writeInternal(final Device device, final SComponent component) throws IOException {
@@ -146,12 +157,25 @@ public class SliderCG extends AbstractComponentCG implements org.wings.plaf.Slid
         component.putClientProperty("initScript", listener);
     }
       
+    public void installCG(final SComponent comp) {
+        super.installCG(comp);
+        comp.addParentFrameListener(this);
+    }
+    
     public void setHorizontalThumbIcon(SIcon icon) {
         this.horizontalThumb = icon;
     }
     
     public void setVerticalThumbIcon(SIcon icon) {
         this.verticalThumb = icon;
+    }
+    
+    public void parentFrameAdded(SParentFrameEvent e) {
+        Headers.getInstance().registerHeaderLinks(headers, e.getComponent());        
+    }
+
+    public void parentFrameRemoved(SParentFrameEvent e) {        
+        Headers.getInstance().deregisterHeaderLinks(headers, e.getComponent());
     }
     
 }

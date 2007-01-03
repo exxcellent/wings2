@@ -77,8 +77,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private static final String YAHOO_EVENT = (String) ResourceManager.getObject("JS.yahooEvent", String.class);
     private static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
     private static final String YAHOO_CONNECTION = (String) ResourceManager.getObject("JS.yahooConnection", String.class);
-    private static final String YAHOO_SLIDER = (String) ResourceManager.getObject("JS.yahooSlider", String.class);
-    private static final String YAHOO_DND = (String) ResourceManager.getObject("JS.yahooDnD", String.class);
     private static final String ETC_DND = (String) ResourceManager.getObject("JS.etcDnD", String.class);
     private static final String ETC_WZDND = (String) ResourceManager.getObject("JS.etcWzDnD", String.class);
 
@@ -117,8 +115,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_EVENT));
         headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_CONTAINER));
         headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_CONNECTION));
-        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_DND));
-        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_SLIDER));
 
         headers.add(new JavaScriptHeader("../dwr/engine.js"));
         headers.add(new JavaScriptHeader("../dwr/util.js"));
