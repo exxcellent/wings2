@@ -297,11 +297,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         device.print(Version.getCompileTime());
         device.print("\" />\n");
 
-        // Render headers of session and frame
-        Collection allHeaders = new ArrayList();
-        allHeaders.addAll(SessionHeaders.getInstance().getHeaders());
-        allHeaders.addAll(frame.getHeaders());
-        for (Iterator iterator = allHeaders.iterator(); iterator.hasNext();) {
+        // Render all headers
+        for (Iterator iterator = frame.getHeaders().iterator(); iterator.hasNext();) {
             Object next = iterator.next();
             if (next instanceof Renderable) {
                 ((Renderable) next).write(device);
