@@ -62,6 +62,11 @@
             <param-value>TRUE</param-value>
     	    <description>Include tests in WingSet</description>
         </init-param>
+        <init-param>
+            <param-name>wingset.include.experiments</param-name>
+            <param-value>TRUE</param-value>
+    	    <description>Include experiments in WingSet</description>
+        </init-param>
     </servlet>
 
     <servlet>

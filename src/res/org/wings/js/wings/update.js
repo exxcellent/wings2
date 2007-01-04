@@ -293,10 +293,10 @@ wingS.update.selectionList = function(listId, deselectedIndices, selectedIndices
     } else {
         var listItems = list.getElementsByTagName("LI");
         for (var i = 0; i < deselectedIndices.length; i++) {
-            listItems[deselectedIndices[i]].setAttribute("class", "clickable");
+            listItems[deselectedIndices[i]].className = "clickable";
         }
         for (var i = 0; i < selectedIndices.length; i++) {
-            listItems[selectedIndices[i]].setAttribute("class", "selected clickable");
+            listItems[selectedIndices[i]].className = "selected clickable";
         }
     }
 };
@@ -312,10 +312,10 @@ wingS.update.selectionTree = function(treeId, deselectedRows, selectedRows) {
     var rows = wingS.util.getElementsByAttribute(tree, 'td', 'row');
 
     for (var i = 0; i < deselectedRows.length; i++) {
-        rows[deselectedRows[i]].setAttribute('class', 'norm');
+        rows[deselectedRows[i]].className = 'norm';
     }
     for (var i = 0; i < selectedRows.length; i++) {
-        rows[selectedRows[i]].setAttribute('class', 'selected');
+        rows[selectedRows[i]].className = 'selected';
     }
 };
 

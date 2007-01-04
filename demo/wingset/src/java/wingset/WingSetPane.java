@@ -101,6 +101,8 @@ abstract public class WingSetPane
             name = name.substring(0, name.length() - "Example".length());
         else if (name.endsWith("Test"))
             name = name.substring(0, name.length() - "Test".length());
+        else if (name.endsWith("Experiment"))
+            name = name.substring(0, name.length() - "Experiment".length());
         return name;
     }
 }

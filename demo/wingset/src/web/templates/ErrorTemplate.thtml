@@ -1,7 +1,7 @@
 <body>
 <h2>WingS caught an Exception</h2>
 <p>
-    Please click <a href="javascript:window.history.back()">here</a> or use the <strong>BackButton</strong> to return to the application!
+    Please click <a href="javascript:window.history.back()" style="font-weight: bold">here</a> or use the <strong>BackButton</strong> to return to the application!
 </p>
 
 <h2>Developer information</h2>

@@ -28,7 +28,9 @@ import java.io.*;
 import java.net.URL;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * The root of the WingSet demo application.
@@ -114,6 +116,16 @@ public class WingSet implements Serializable {
             classFileNames.addAll(Arrays.asList(testClassFileNames));
         }
 
+        if ("TRUE".equals(SessionManager.getSession().getProperty("wingset.include.experiments"))) {
+            String[] experimentClassFileNames = dir.list(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.endsWith("Experiment.class");
+                }
+            });
+            Arrays.sort(experimentClassFileNames);
+            classFileNames.addAll(Arrays.asList(experimentClassFileNames));
+        }
+
         for (Iterator iterator = classFileNames.iterator(); iterator.hasNext();) {
             String classFileName = (String)iterator.next();
             String className = "wingset." + classFileName.substring(0, classFileName.length() - ".class".length());
@@ -121,6 +133,8 @@ public class WingSet implements Serializable {
                 Class clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
                 WingSetPane example = (WingSetPane)clazz.newInstance();
                 tab.add(example, example.getExampleName());
+                if (example.getClass().getName().endsWith("Experiment"))
+                    tab.setForegroundAt(tab.getTabCount() - 1, Color.GRAY);
             }
             catch (Throwable e) {
                 System.err.println("Could not load plugin: " + className);
