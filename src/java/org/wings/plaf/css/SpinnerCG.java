@@ -72,7 +72,7 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         writeAllAttributes(device, component);
         device.print( "><tr><td>\n" );
         spinner.getEditor().write( device );
-        device.print( "\n</td><td style=\"width:0px;\">\n" );
+        device.print( "\n</td><td style=\"width:0px; font-size: 0px; line-height: 0\">\n" );
         device.print( "<img onclick=\"CallableSpinner.getValue('"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'0',wingS.component.spinnerCallback)\" src=\"" + iconNext.getURL() + "\" style=\"display:block;vertical-align:bottom;\">\n");
         device.print( "<img onclick=\"CallableSpinner.getValue('"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'1',wingS.component.spinnerCallback)\" src=\"" + iconPrev.getURL() + "\" style=\"display:block;vertical-align:top\">\n");
         device.print( "</td></tr></table>\n" );
