@@ -83,7 +83,7 @@ public class TreeExample
 
     class TreeControls extends ComponentControls {
         private final String[] SELECTION_MODES = new String[]{"single", "contiguous", "discontiguous"};
-        private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
+        private final Integer[] WIDTHS = new Integer[]{ new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
 
         public TreeControls() {
             widthTextField.setText("400px");
@@ -118,7 +118,7 @@ public class TreeExample
 
             final SComboBox indentationWidth = new SComboBox(WIDTHS);
             // sync indentation width of tree with controller
-            indentationWidth.setSelectedIndex(3); // set to 24px indent
+            indentationWidth.setSelectedIndex(1); // set to 24px indent
             // now add the listener
             indentationWidth.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
