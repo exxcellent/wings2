@@ -69,6 +69,8 @@ public final class Utils {
     public final static boolean PRINT_DEBUG;
     public final static boolean PRINT_PRETTY;
 
+    public final static String HEADER_LOADED_CALLBACK = "wingS.global.finishedLoadingHeader();";
+
     static {
         Session session = SessionManager.getSession();
         // Respect settings from resource.properties
@@ -1207,8 +1209,7 @@ public final class Utils {
     }
 
     public static Script createExternalizedJSHeader(String jsClassPath) {
-        String callbackCode = "wingS.global.decrementHeaderLoadCount();";
-        ClassPathResource res = new ClassPathJavascriptResource(jsClassPath, callbackCode);
+        ClassPathResource res = new ClassPathJavascriptResource(jsClassPath, HEADER_LOADED_CALLBACK);
         ExternalizeManager extMgr = SessionManager.getSession().getExternalizeManager();
         String jsUrl = extMgr.externalize(res, ExternalizeManager.GLOBAL);
         return new JavaScriptHeader(jsUrl);

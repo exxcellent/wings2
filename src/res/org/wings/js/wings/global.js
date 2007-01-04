@@ -54,25 +54,25 @@ wingS.global.init =  function(eventEpoch, reloadResource, updateResource, update
 };
 
 /**
- * Adds a callback function that is invoked when all asynchronously downloaded headers are available
+ * Adds a callback function which is invoked when all (asynchronously loaded) headers are available.
  * @param {Function} callback - the callback function to invoke
  */
-wingS.global.addHeaderCallback = function(callback) {
+wingS.global.onHeadersAvailable = function(callback) {
     if (wingS.global.headerLoadCount == 0) callback();
     else wingS.global.headerCallbacks.push(callback);
 };
 
 /**
- * Increases a counter which indicates the number of headers asynchronously downloaded at the moment
+ * Increases a counter which indicates the number of headers (asynchronously) loaded at the moment.
  */
-wingS.global.incrementHeaderLoadCount = function() {
+wingS.global.startLoadingHeader = function() {
     wingS.global.headerLoadCount++;
 };
 
 /**
- * Decreases a counter which indicates the number of headers asynchronously downloaded at the moment
+ * Decreases a counter which indicates the number of headers (asynchronously) loaded at the moment.
  */
-wingS.global.decrementHeaderLoadCount = function() {
+wingS.global.finishedLoadingHeader = function() {
     if (wingS.global.headerLoadCount > 0) {
         wingS.global.headerLoadCount--;
         if (wingS.global.headerLoadCount == 0) {

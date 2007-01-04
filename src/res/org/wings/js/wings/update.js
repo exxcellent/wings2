@@ -23,9 +23,7 @@ wingS.update.headerScript = function(add, src, type, index) {
     var head = document.getElementsByTagName("HEAD")[0];
 
     if (add) {
-        if (src.charAt(0) == "-") {
-            wingS.global.incrementHeaderLoadCount();
-        }
+        wingS.global.startLoadingHeader();
         var script = document.createElement("script");
         script.src = src;
         script.type = type;
