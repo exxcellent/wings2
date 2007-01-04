@@ -38,7 +38,7 @@ public class SessionCreator implements Creator
     }
 
     public boolean isCacheable() {
-        return false;
+        return true;
     }
 
     public String getJavascript() {

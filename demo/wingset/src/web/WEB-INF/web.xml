@@ -89,6 +89,11 @@
             <param-value>org.wings.plaf.css.dwr.SessionAccessControl</param-value>
             <description>Install a session local AccessControl</description>
         </init-param>
+        <init-param>
+            <param-name>org.directwebremoting.extend.Remoter</param-name>
+            <param-value>org.wings.plaf.css.dwr.SessionRemoter</param-value>
+            <description>Install a session local AccessControl</description>
+        </init-param>
         <load-on-startup>-1</load-on-startup>
     </servlet>
 
