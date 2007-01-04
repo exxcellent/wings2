@@ -13,8 +13,6 @@
 package org.wings.resource;
 
 import org.wings.StaticResource;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
 import org.wings.externalizer.ExternalizeManager;
 import java.io.InputStream;
 

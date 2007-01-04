@@ -24,14 +24,12 @@ import org.wings.Version;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
 import org.wings.dnd.DragAndDropManager;
-import org.wings.externalizer.ExternalizeManager;
 import org.wings.header.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.ReloadResource;
 import org.wings.resource.UpdateResource;
-import org.wings.resource.ResourceManager;
 import org.wings.script.ScriptListener;
 import org.wings.session.*;
 
@@ -71,15 +69,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private static final String PROPERTY_STYLESHEET = "Stylesheet.";
     private static final String BROWSER_DEFAULT = "default";
 
-    private static final String WINGS_ALL = (String) ResourceManager.getObject("JS.wingsAll", String.class);
-    private static final String YAHOO_GLOBAL = (String) ResourceManager.getObject("JS.yahooGlobal", String.class);
-    private static final String YAHOO_DOM = (String) ResourceManager.getObject("JS.yahooDom", String.class);
-    private static final String YAHOO_EVENT = (String) ResourceManager.getObject("JS.yahooEvent", String.class);
-    private static final String YAHOO_CONTAINER = (String) ResourceManager.getObject("JS.yahooContainer", String.class);
-    private static final String YAHOO_CONNECTION = (String) ResourceManager.getObject("JS.yahooConnection", String.class);
-    private static final String ETC_DND = (String) ResourceManager.getObject("JS.etcDnD", String.class);
-    private static final String ETC_WZDND = (String) ResourceManager.getObject("JS.etcWzDnD", String.class);
-
     private ClassPathResource formbutton;
 
     private String documentType = STRICT_DOCTYPE;
@@ -109,12 +98,12 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // Externalize JavaScript headers
-        headers.add(Utils.createExternalizedJavaScriptHeader(WINGS_ALL));
-        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_GLOBAL));
-        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_DOM));
-        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_EVENT));
-        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_CONTAINER));
-        headers.add(Utils.createExternalizedJavaScriptHeader(YAHOO_CONNECTION));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.wingsAll"));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooGlobal"));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooDom"));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooEvent"));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooContainer"));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooConnection"));
 
         headers.add(new JavaScriptHeader("../dwr/engine.js"));
         headers.add(new JavaScriptHeader("../dwr/util.js"));
@@ -141,13 +130,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         final JavaScriptDOMListener storeFocusIE = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_ACTIVATE,
                 "wingS.util.storeFocus", comp);
-        final JavaScriptDOMListener initializeAjaxFrame = new JavaScriptDOMListener(
-                JavaScriptEvent.ON_LOAD,
-                "wingS.ajax.initializeFrame", comp);
 
         // Add script listeners to the frame
         component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
-        component.addScriptListener(initializeAjaxFrame);
 
         CaptureDefaultBindingsScriptListener.install(component);
 
@@ -175,7 +160,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         ArrayList browserStylesheets = new ArrayList();
         StringTokenizer tokenizer = new StringTokenizer(cssClassPaths, ",");
         while (tokenizer.hasMoreTokens()) {
-            browserStylesheets.add(Utils.createExternalizedSytleSheetHeader(tokenizer.nextToken()));
+            browserStylesheets.add(Utils.createExternalizedCSSHeader(tokenizer.nextToken()));
         }
 
         return browserStylesheets;
@@ -345,11 +330,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 if (dragIter.hasNext()) {
                     // this needs to be added to the body, so use device.print()
                     // TODO: is caching by the VM enough or make this only initialize once?
-                    ClassPathResource res = new ClassPathResource(ETC_WZDND, "text/javascript");
-                    String jScriptUrl = frame.getSession().getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-                    device.print("<script type=\"text/javascript\" src=\"");
-                    device.print(jScriptUrl);
-                    device.print("\"></script>\n");
+                    Utils.createExternalizedJSHeaderFromProperty("JS.etcWzDnD").write(device);
+                    device.print("\n");
                 }
             }
 
@@ -404,11 +386,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 device.print("';\n");
                 device.print("//-->\n</script>");
                 // TODO: is caching by the VM enough or make this only initialize once?
-                ClassPathResource res = new ClassPathResource(ETC_DND, "text/javascript");
-                String jScriptUrl = session.getExternalizeManager().externalize(res, ExternalizeManager.GLOBAL);
-                device.print("<script type=\"text/javascript\" src=\"");
-                device.print(jScriptUrl);
-                device.print("\"></script>\n");
+                Utils.createExternalizedJSHeaderFromProperty("JS.etcDnD").write(device);
+                device.print("\n");
             }
         }
 
@@ -425,25 +404,13 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         final ScriptManager scriptManager = frame.getSession().getScriptManager();
         final SToolTipManager tooltipManager = SToolTipManager.sharedInstance();
 
-        device.print("<script type=\"text/javascript\">\n");
-
-        final String eventEpoch = frame.getEventEpoch();
-        final String reloadResource = frame.getDynamicResource(ReloadResource.class).getId();
-        final String updateResource = frame.getDynamicResource(UpdateResource.class).getId();
-        final boolean updateEnabled = frame.isUpdateEnabled();
-        final Object[] updateCursor = frame.getUpdateCursor();
-
-        device.print("// globally accessible script variables:\n" +
-                "wingS.global.eventEpoch = '" + eventEpoch + "';\n" +
-                "wingS.global.reloadResource = '" + reloadResource + "';\n" +
-                "wingS.global.updateResource = '" + updateResource + "';\n" +
-                "wingS.global.updateEnabled = " + updateEnabled + ";\n" +
-                "wingS.global.updateCursor = " +
-                	"{ 'enabled':" + updateCursor[0] + ", 'image':'" + updateCursor[1] +
-                	"', 'dx':" + updateCursor[2] + ", 'dy':" + updateCursor[3] + " };\n");
-
         // hand script listeners of frame to script manager
         scriptManager.addScriptListeners(frame.getScriptListeners());
+
+        device.print("<script type=\"text/javascript\">\n");
+
+        // print all scripts
+        device.print(getInitScript(frame)).print("\n");
 
         // print all scripts
         ScriptListener[] scriptListeners = scriptManager.getScriptListeners();
@@ -462,6 +429,20 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         device.print("</script>\n");
+    }
+
+    private String getInitScript(SFrame frame) throws IOException {
+        StringBuilder script = new StringBuilder();
+        script.append("wingS.global.init('");
+        script.append(frame.getEventEpoch()).append("','");
+        script.append(frame.getDynamicResource(ReloadResource.class).getId()).append("','");
+        script.append(frame.getDynamicResource(UpdateResource.class).getId()).append("',");
+        script.append(frame.isUpdateEnabled()).append(",{");
+        script.append("'enabled':").append(frame.getUpdateCursor()[0]).append(",");
+        script.append("'image':'").append(frame.getUpdateCursor()[1]).append("',");
+        script.append("'dx':").append(frame.getUpdateCursor()[2]).append(",");
+        script.append("'dy':").append(frame.getUpdateCursor()[3]).append("});");
+        return script.toString();
     }
 
     public String getDocumentType() {

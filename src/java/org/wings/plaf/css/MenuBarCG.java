@@ -21,7 +21,6 @@ import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
 import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
-import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
@@ -38,13 +37,11 @@ public class MenuBarCG extends AbstractComponentCG implements
 
     protected final List headers = new ArrayList();
 
-    private static final String ETC_MENU = (String) ResourceManager.getObject("JS.etcMenu", String.class);
-
     public static final JavaScriptListener BODY_ONCLICK_SCRIPT =
         new JavaScriptListener(JavaScriptEvent.ON_CLICK, "wpm_handleBodyClicks(event)");
 
     public MenuBarCG() {
-        headers.add(Utils.createExternalizedJavaScriptHeader(ETC_MENU));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.etcMenu"));
     }
 
     public void installCG(final SComponent comp) {

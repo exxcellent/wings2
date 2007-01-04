@@ -24,6 +24,7 @@ import org.wings.header.Script;
 import org.wings.header.StyleSheetHeader;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
+import org.wings.resource.ClassPathJavascriptResource;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptDOMListener;
@@ -1200,17 +1201,29 @@ public final class Utils {
         return 0;
     }
 
-    public static Script createExternalizedJavaScriptHeader(String jsClassPath) {
-        ClassPathResource res = new ClassPathResource(jsClassPath, "text/javascript");
+    public static Script createExternalizedJSHeaderFromProperty(String jsResourceProperty) {
+        String jsClassPath = (String) ResourceManager.getObject(jsResourceProperty, String.class);
+        return createExternalizedJSHeader(jsClassPath);
+    }
+
+    public static Script createExternalizedJSHeader(String jsClassPath) {
+        String callbackCode = "wingS.global.decrementHeaderLoadCount();";
+        ClassPathResource res = new ClassPathJavascriptResource(jsClassPath, callbackCode);
         ExternalizeManager extMgr = SessionManager.getSession().getExternalizeManager();
         String jsUrl = extMgr.externalize(res, ExternalizeManager.GLOBAL);
         return new JavaScriptHeader(jsUrl);
     }
 
-    public static Link createExternalizedSytleSheetHeader(String cssClassPath) {
+    public static Script createExternalizedCSSHeaderFromProperty(String cssResourceProperty) {
+        String cssClassPath = (String) ResourceManager.getObject(cssResourceProperty, String.class);
+        return createExternalizedJSHeader(cssClassPath);
+    }
+
+    public static Link createExternalizedCSSHeader(String cssClassPath) {
         ClassPathResource res = new ClassPathResource(cssClassPath, "text/css");
         ExternalizeManager extMgr = SessionManager.getSession().getExternalizeManager();
         String cssUrl = extMgr.externalize(res, ExternalizeManager.GLOBAL);
         return new StyleSheetHeader(cssUrl);
     }
+
 }

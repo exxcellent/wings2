@@ -12,22 +12,6 @@ if (!wingS.update) {
 }
 
 /**
- * Updates the current event epoch of this frame.
- * @param {String} epoch - the current event epoch
- */
-wingS.update.epoch = function(epoch) {
-    wingS.global.eventEpoch = epoch;
-};
-
-/**
- * Enables or disabled incremental updates for this frame.
- * @param {boolean} enabled - true, if updates are allowed
- */
-wingS.update.updateEnabled = function(enabled) {
-    wingS.global.updateEnabled = enabled;
-};
-
-/**
  * Adds or removes a script header with the given parameters.
  * @param {Boolean} add - true, if the header should be added
  * @param {String} src - the source of the script header
@@ -39,6 +23,9 @@ wingS.update.headerScript = function(add, src, type, index) {
     var head = document.getElementsByTagName("HEAD")[0];
 
     if (add) {
+        if (src.charAt(0) == "-") {
+            wingS.global.incrementHeaderLoadCount();
+        }
         var script = document.createElement("script");
         script.src = src;
         script.type = type;
@@ -123,6 +110,22 @@ wingS.update.headerNext = function(index) {
     // since head.insertBefore(XXX, null)
     // is equal to head.appendChild(XXX).
     return header;
+};
+
+/**
+ * Updates the current event epoch of this frame.
+ * @param {String} epoch - the current event epoch
+ */
+wingS.update.epoch = function(epoch) {
+    wingS.global.eventEpoch = epoch;
+};
+
+/**
+ * Enables or disabled incremental updates for this frame.
+ * @param {boolean} enabled - true, if updates are allowed
+ */
+wingS.update.updateEnabled = function(enabled) {
+    wingS.global.updateEnabled = enabled;
 };
 
 /**

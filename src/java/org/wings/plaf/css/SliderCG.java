@@ -64,8 +64,8 @@ public class SliderCG extends AbstractComponentCG implements org.wings.plaf.Slid
         setHorizontalThumbIcon((SIcon) ResourceManager.getObject("SliderCG.horizontalThumbIcon", SIcon.class));
         setVerticalThumbIcon((SIcon) ResourceManager.getObject("SliderCG.verticalThumbIcon", SIcon.class));
         
-        headers.add(Utils.createExternalizedJavaScriptHeader((String) ResourceManager.getObject("JS.yahooDnD", String.class))); 
-        headers.add(Utils.createExternalizedJavaScriptHeader((String) ResourceManager.getObject("JS.yahooSlider", String.class)));        
+        headers.add(Utils.createExternalizedJSHeader((String) ResourceManager.getObject("JS.yahooDnD", String.class))); 
+        headers.add(Utils.createExternalizedJSHeader((String) ResourceManager.getObject("JS.yahooSlider", String.class)));        
     }
     
     public void writeInternal(final Device device, final SComponent component) throws IOException {

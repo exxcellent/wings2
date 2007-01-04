@@ -26,7 +26,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.Resource;
 import org.wings.SFrame;
 import org.wings.io.Device;
-import org.wings.plaf.css.RenderHelper;
 
 /**
  * Traverses the component hierarchy of a frame and lets the CGs compose

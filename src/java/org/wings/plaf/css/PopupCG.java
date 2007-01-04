@@ -53,8 +53,8 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
     public PopupCG(SPopup popup) {
         this.popup = popup;
 
-        headers.add(Utils.createExternalizedJavaScriptHeader("org/wings/js/etc/popup.js"));
-        headers.add(Utils.createExternalizedSytleSheetHeader("org/wings/js/yui/container/assets/container.css"));
+        headers.add(Utils.createExternalizedJSHeader("org/wings/js/etc/popup.js"));
+        headers.add(Utils.createExternalizedCSSHeader("org/wings/js/yui/container/assets/container.css"));
         SessionHeaders.getInstance().registerHeaders(headers);
 
         String name        = this.popup.getComponent().getName();

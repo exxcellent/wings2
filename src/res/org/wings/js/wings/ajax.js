@@ -12,32 +12,6 @@ if (!wingS.ajax) {
 }
 
 /**
- * AJAX related global variables according namespace
- */
-var requestIsActive;    // Indicates if a request is active
-var requestQueue;       // A queue of requests to be invoked
-var activityCursor;     // The activity cursor (animated GIF)
-var callbackObject;     // Object defining callback functions
-var connectionObject;   // Holds the active connection object
-
-/**
- * Callback method that is called when the frame is loaded.
- */
-wingS.ajax.initializeFrame = function() {
-    requestIsActive = false;
-    requestQueue = new Array();
-    if (wingS.global.updateCursor.enabled) {
-        activityCursor = new wingS.ajax.ActivityCursor();
-    }
-    callbackObject = {
-        success : function(request) { wingS.ajax.processRequestSuccess(request); },
-        failure : function(request) { wingS.ajax.processRequestFailure(request); },
-        upload  : function(request) { wingS.ajax.processRequestSuccess(request); }
-    };
-    wingS.ajax.setActivityIndicatorsVisible(false);
-};
-
-/**
  * Requests any available component updates from the server.
  */
 wingS.ajax.requestUpdates = function() {
@@ -66,7 +40,7 @@ wingS.ajax.submitForm = function(form) {
  * @param {String} postData - the POST body (in case of "POST")
  */
 wingS.ajax.sendRequest = function(method, uri, postData) {
-    requestIsActive = true;
+    wingS.ajax.requestIsActive = true;
     wingS.ajax.setActivityIndicatorsVisible(true);
 
     // Since some browsers cache GET requests via the XMLHttpRequest
@@ -77,7 +51,8 @@ wingS.ajax.sendRequest = function(method, uri, postData) {
         uri += "_xhrID=" + new Date().getTime();
     }
 
-    connectionObject = YAHOO.util.Connect.asyncRequest(method, uri, callbackObject, postData);
+    wingS.ajax.connectionObject =
+        YAHOO.util.Connect.asyncRequest(method, uri, wingS.ajax.callbackObject, postData);
 };
 
 /**
@@ -85,8 +60,8 @@ wingS.ajax.sendRequest = function(method, uri, postData) {
  * @return {boolean} true if successfully aborted, false otherwise
  */
 wingS.ajax.abortRequest = function() {
-    if (connectionObject != null) {
-        return YAHOO.util.Connect.abort(connectionObject, callbackObject);
+    if (wingS.ajax.connectionObject != null) {
+        return YAHOO.util.Connect.abort(wingS.ajax.connectionObject, wingS.ajax.callbackObject);
     }
     return false;
 };
@@ -98,10 +73,10 @@ wingS.ajax.abortRequest = function() {
 wingS.ajax.processRequestFailure = function(request) {
     // Reset activity indicators and active flag
     wingS.ajax.setActivityIndicatorsVisible(false);
-    requestIsActive = false;
+    wingS.ajax.requestIsActive = false;
 
     // Clear enqueued request
-    requestQueue = new Array();
+    wingS.ajax.requestQueue = new Array();
 
     if (request.status == -1) {
         alert("Transaction has been aborted!");
@@ -171,7 +146,7 @@ wingS.ajax.processRequestSuccess = function(request) {
 
     // Reset activity indicators and active flag
     wingS.ajax.setActivityIndicatorsVisible(false);
-    requestIsActive = false;
+    wingS.ajax.requestIsActive = false;
 
     // Send the next enqueued request
     wingS.ajax.dequeueNextRequest();
@@ -184,8 +159,8 @@ wingS.ajax.processRequestSuccess = function(request) {
  * @return {boolean} true if request was enqueued, false otherwise
  */
 wingS.ajax.enqueueThisRequest = function(send, args) {
-    if (requestIsActive) {
-        requestQueue.push( {"send" : send, "args" : args} );
+    if (wingS.ajax.requestIsActive) {
+        wingS.ajax.requestQueue.push( {"send" : send, "args" : args} );
         return true;
     }
     return false;
@@ -195,8 +170,8 @@ wingS.ajax.enqueueThisRequest = function(send, args) {
  * Grabs the next available request from the queue and invokes it.
  */
 wingS.ajax.dequeueNextRequest = function() {
-    if (requestQueue.length > 0) {
-        var request = requestQueue.shift();
+    if (wingS.ajax.requestQueue.length > 0) {
+        var request = wingS.ajax.requestQueue.shift();
         var args = request.args;
         // Fifth argument might be "undefined", but that's ok
         request.send(args[0], args[1], args[2], args[3], args[4]);
@@ -209,7 +184,7 @@ wingS.ajax.dequeueNextRequest = function() {
  */
 wingS.ajax.setActivityIndicatorsVisible = function(visible) {
     if (wingS.global.updateCursor.enabled) {
-        activityCursor.setVisible(visible);
+        wingS.ajax.activityCursor.setVisible(visible);
         // An alternative to the cursor might be something like
         // if (visible) document.body.style.cursor = "progress";
         // else document.body.style.cursor = "default";
