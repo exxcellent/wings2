@@ -29,7 +29,7 @@ public class SessionHeaders {
     }
 
     public List getHeaders() {
-        return new ArrayList(getHeaderList());
+        return Collections.unmodifiableList(getHeaderList());
     }
 
     public void registerHeaders(List headers) {

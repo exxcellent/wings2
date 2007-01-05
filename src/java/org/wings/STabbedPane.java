@@ -408,6 +408,8 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
         } else if (index <= getSelectedIndex()) {
             setSelectedIndex(getSelectedIndex() + 1);
         }
+
+        reload();
     }
 
     /**
@@ -693,6 +695,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
         contents.remove(index);
         ((Page) pages.get(index)).component = component;
         contents.add(component, component.getName(), index);
+        reload();
     }
 
     /**
@@ -853,6 +856,8 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
             contents.addComponent(page.component, page.component.getName());
             if (getSelectedIndex() == index)
                 card.show(component);
+
+            reload();
         }
     }
 
@@ -889,6 +894,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
     private void removePageAt(int i) {
         contents.remove(((Page) pages.get(i)).component);
         pages.remove(i);
+        reload();
     }
 
     /**

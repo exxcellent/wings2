@@ -78,7 +78,7 @@ wingS.request.submitForm = function(target, async, eventName, eventValue, script
 
     // Try to get the desired form from an according provider (i.e. this is
     // used by menues which reside out of any forms but want to submit one)
-    var formProvider = wingS.util.getParentWearingAttribute(target, "form");
+    var formProvider = wingS.util.getParentByAttribute(target, "form");
 
     if (formProvider != null) { // Use the form suggested by the provider
         form = document.getElementById(formProvider.getAttribute("form"));
@@ -89,7 +89,7 @@ wingS.request.submitForm = function(target, async, eventName, eventValue, script
             // START  D E B U G
             var tmpEventName = eventName;
             if (eventName != null) {
-                var eidProvider = wingS.util.getParentWearingAttribute(target, "eid");
+                var eidProvider = wingS.util.getParentByAttribute(target, "eid");
                 if (eidProvider == null) {
                     alert("[DEBUG] wingS.request.submitForm():\n" +
                           "target = " + target + "\nform = " + form);
@@ -108,7 +108,7 @@ wingS.request.submitForm = function(target, async, eventName, eventValue, script
         if (form != null) {
             // Generate unique IDs for the nodes we have to insert
             // dynamically into the form (workaround because of IE)
-            var formId = form.getAttribute("id");
+            var formId = form.id;
             var epochNodeId = "event_epoch_" + formId;
             var triggerNodeId = "event_trigger_" + formId;
 
@@ -174,7 +174,7 @@ wingS.request.submitForm = function(target, async, eventName, eventValue, script
             // attached listeners (onChange="wingS.request.sendEvent(
             // event, true, true)") which are not placed inside a form.
             if (eventName == null) {
-                eventName = target.getAttribute("id");
+                eventName = target.id;
                 var eventNode = document.getElementById(eventName);
                 if (eventNode.value) eventValue = eventNode.value;
             }

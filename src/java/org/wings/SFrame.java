@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.InputMap;
@@ -63,9 +64,9 @@ public class SFrame
     protected String title;
 
     /**
-     * A Set containing additional tags for the html header.
+     * A list of all header used by this frame.
      */
-    protected List headers;
+    protected List headers = new ArrayList();
 
     /**
      * the style sheet used in certain look and feels.
@@ -139,8 +140,6 @@ public class SFrame
         getSession().addPropertyChangeListener("lookAndFeel", this);
         getSession().addPropertyChangeListener("request.url", this);
         this.visible = false; // Frames are invisible originally.
-
-        headers = SessionHeaders.getInstance().getHeaders();
 
         setUpdateEnabled(true);
         setUpdateCursor(true, new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif"), 15, 0);
@@ -285,7 +284,7 @@ public class SFrame
      * @see org.wings.header.Link
      */
     public void addHeader(Object headerElement) {
-        if (!getHeaders().contains(headerElement) && headerElement != null) {
+        if (!headers.contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
             if (isUpdatePossible() && getClass() == SFrame.class)
                 update(((FrameCG) getCG()).getAddHeaderUpdate(this, headerElement));
@@ -303,7 +302,7 @@ public class SFrame
      * @see #getHeaders()
      */
     public void addHeader(int index, Object headerElement) {
-        if (!getHeaders().contains(headerElement) && headerElement != null) {
+        if (!headers.contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
             if (isUpdatePossible() && getClass() == SFrame.class)
                 update(((FrameCG) getCG()).getAddHeaderUpdate(this, index, headerElement));
@@ -333,10 +332,8 @@ public class SFrame
      * @see #addHeader(Object)
      */
     public void clearHeaders() {
-        if (headers != null) {
-        	headers.clear();
-        	reload();
-        }
+        headers.clear();
+        reload();
     }
 
     /**
@@ -351,9 +348,6 @@ public class SFrame
      * @see #addHeader(Object)
      */
     public List getHeaders() {
-        if (headers == null) {
-            headers = new ArrayList();
-        }
         return Collections.unmodifiableList(headers);
     }
 
@@ -440,6 +434,14 @@ public class SFrame
     public void setVisible(boolean visible) {
         if (visible != isVisible()) {
             if (visible) {
+                List newHeaders = new ArrayList(SessionHeaders.getInstance().getHeaders());
+                for (Iterator i = headers.iterator(); i.hasNext();) {
+                    Object oldHeaders = i.next();
+                    if (!newHeaders.contains(oldHeaders)) {
+                        newHeaders.add(oldHeaders);
+                    }
+                }
+                headers = newHeaders;
                 getSession().addFrame(this);
                 register();
             } else {

@@ -32,50 +32,50 @@ import org.wings.session.SessionManager;
  * @author Christian Schyma
  */
 public class SPopup extends SComponent {
-    
+
     /**
      * The SComponent representing the Popup.
      */
     private SComponent contents;
-    
+
     /**
      * Owner Frame.
      */
     private SComponent owner;
-    
+
     /**
      * popup x position, origin is the top left of the browser viewport
      */
     private int x;
-    
+
     /**
      * popup y position, origin is the top left of the browser viewport
      */
     private int y;
-    
+
     /**
      * width of the popup which will be retrieved by using
      * contents.getPreferredSize()
      */
     private int width;
-    
+
     /**
      * height of the popup which will be retrieved by using
      * contents.getPreferredSize()
      */
     private int height;
-                
+
     // TODO: use constants from Swing
     public static final String TOP_RIGHT    = "tr";
     public static final String TOP_LEFT     = "tl";
     public static final String BOTTOM_RIGHT = "br";
     public static final String BOTTOM_LEFT  = "bl";
-    
+
     private boolean anchored = false;
     private SComponent context;
     private String contentsCorner;
     private String contextCorner;
-    
+
     /**
      * Creates a <code>SPopup</code>.
      * <code>x</code> and <code>y</code> specify the preferred initial location
@@ -97,40 +97,40 @@ public class SPopup extends SComponent {
         if (contents == null) {
             throw new IllegalArgumentException("Contents must be non-null");
         }
-        
+
         if (owner == null) {
             this.owner = SessionManager.getSession().getRootFrame();;
         } else {
-            this.owner = owner;    
+            this.owner = owner;
         }
-                
-        this.contents = contents;        
+
+        this.contents = contents;
         this.x        = x;
         this.y        = y;
         this.width    = contents.getPreferredSize().getWidthInt();
         this.height   = contents.getPreferredSize().getHeightInt();
-        
+
         setCG(new PopupCG(this));
     }
-    
+
     /**
      * Anchors the popup to the the given component <code>context</code>.
      * @param context        component to be anchored to
      * @param contentsCorner anchor point: e.g. SAnchoredPopup.TOP_LEFT
      * @param contextCorner  anchor point: e.g. SAnchoredPopup.BOTTOM_LEFT
      */
-    public void setContext(SComponent context, String contentsCorner, String contextCorner) {                
+    public void setContext(SComponent context, String contentsCorner, String contextCorner) {
         this.anchored     = true;
         this.context        = context;
         this.contentsCorner = contentsCorner;
         this.contextCorner  = contextCorner;
         ((PopupCG)getCG()).attachJavaScript();
-    }    
-    
-    protected void finalize() throws Throwable {        
+    }
+
+    protected void finalize() throws Throwable {
         ((PopupCG)getCG()).tidyUp();
     }
-    
+
     /**
      * Returns the <code>Component</code> returned from
      * <code>createComponent</code> that will hold the <code>Popup</code>.
@@ -162,7 +162,7 @@ public class SPopup extends SComponent {
     public int getY() {
         return y;
     }
-  
+
     public SComponent getOwner() {
         return owner;
     }
@@ -174,5 +174,5 @@ public class SPopup extends SComponent {
     public SComponent getContext() {
         return context;
     }
-    
+
 }

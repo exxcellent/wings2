@@ -126,3 +126,8 @@ TABLE.formbutton_hover {
 {
   -moz-user-select: none;
 }
+
+.STree td.slash, .STree td.plus, .STree td.minus {
+    padding-right: 2px;
+    padding-bottom: 0px;
+}

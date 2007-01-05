@@ -56,20 +56,22 @@ wingS.util.getElementsByAttribute = function(parent, tagName, attributeName, att
     return result;
 };
 
-wingS.util.getParentByTagName = function(element, tag) {
+wingS.util.getParentByAttribute = function(element, attributeName) {
+    var attribute;
     while (element != null) {
-        if (tag == element.tagName)
+        attribute = element.getAttribute && element.getAttribute(attributeName);
+        if (typeof attribute == "string" && attribute.length > 0) {
             return element;
+        }
         element = element.parentNode;
     }
     return null;
 };
 
-wingS.util.getParentWearingAttribute = function(element, attribute) {
+wingS.util.getParentByTagName = function(element, tag) {
     while (element != null) {
-        if (element.getAttribute && element.getAttribute(attribute)) {
+        if (tag == element.tagName)
             return element;
-        }
         element = element.parentNode;
     }
     return null;
@@ -258,12 +260,12 @@ wingS.util.requestFocus = function(id) {
 
 wingS.util.storeFocus = function(event) {
     var target = wingS.events.getTarget(event);
-    var div = wingS.util.getParentWearingAttribute(target, "eid");
+    var div = wingS.util.getParentByAttribute(target, "eid");
     var body = wingS.util.getParentByTagName(target, "BODY");
     // Avoid rembering FORM as focus component as this automatically
     // gains focus on pressing Enter in MSIE.
     if (div && body && div.tagName != "FORM") {
-        wingS.util.getCookie(body.getAttribute("id") + "_focus", div.getAttribute("id"), 1);
+        wingS.util.getCookie(body.id + "_focus", div.id, 1);
     }
 };
 
@@ -298,6 +300,12 @@ wingS.util.setCookie = function(name, value, days, path) {
 
 wingS.util.checkUserAgent = function(string) {
     return navigator.userAgent.toLowerCase().indexOf(string) + 1;
+};
+
+wingS.util.handleBodyClicks = function(event) {
+    if (window.wpm_handleBodyClicks != undefined) {
+        wpm_handleBodyClicks(event);
+    }
 };
 
 /**

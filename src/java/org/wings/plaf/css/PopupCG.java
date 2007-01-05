@@ -23,8 +23,6 @@ import org.wings.io.Device;
 import java.io.IOException;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.css.dwr.CallableManager;
-import org.wings.script.JavaScriptDOMListener;
-import org.wings.script.JavaScriptEvent;
 import org.wings.util.SStringBuilder;
 
 /**
@@ -45,8 +43,6 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
 
     private String showFunction;
     private String hideFunction;
-
-    private JavaScriptDOMListener listener;
 
     private final String DWR_GETTER = "getRenderedContent";
 
@@ -72,12 +68,7 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
     }
 
     public void attachJavaScript() {
-        if (listener != null) {
-            popup.getOwner().removeScriptListener(listener);
-        }
-        listener = new JavaScriptDOMListener(
-                JavaScriptEvent.ON_LOAD, generateInitScript(), this.popup.getComponent());
-        popup.getOwner().addScriptListener(listener);
+        popup.getSession().getScriptManager().addScriptListener(new OnHeadersAvailableScript(generateInitScript()));
     }
 
     public void tidyUp() {

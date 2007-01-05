@@ -248,6 +248,11 @@ A.STabbedPane_Tab_top IMG {
 .STree td {
    text-align: center !important;
 }
+
+.STree td.slash, .STree td.plus, .STree td.minus {
+    padding-bottom: 2px;
+}
+
 .STree td.slash {
     background: url('../../icons/lineslash.gif') no-repeat center center;
 }
@@ -258,7 +263,7 @@ A.STabbedPane_Tab_top IMG {
     background: url('../../icons/lineminus.gif') no-repeat center center;
 }
 .STree td.selected {
-    background-color: #ffbbbb;
+    background-color: #D8E1F1;
     cursor: pointer;
     text-align: left !important;
 }

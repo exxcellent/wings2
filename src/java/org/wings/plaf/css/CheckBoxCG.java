@@ -136,32 +136,34 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {
-        Object clientProperty = button.getClientProperty("onChangeSubmitListener");
-        // If the application developer attached any ActionListeners, ItemListeners or
-        // ChangeListeners to this SCheckBox or its ButtonGroup, the surrounding form
-        // gets submitted as soon as the state of this SCheckBox changed.
-        if (button.getActionListeners().length > 0 ||
-                button.getItemListeners().length > 0 ||
-                button.getChangeListeners().length > 0 ||
-                (button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
-            if (clientProperty == null) {
-                String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.sendEvent(event, true, " + !button.isReloadForced() + ");";
-                if (Utils.isMSIE(button)) {
-                    // In IE the "onchange"-event gets fired when a control loses the
-                    // input focus and its value has been modified since gaining focus.
-                    // Even though this is actually the correct behavior, we want the
-                    // event to get fired immediately - thats why we use IE's proprietary
-                    // "onpropertychange"-event.
-                    event = "onpropertychange";
+        if (button.getShowAsFormComponent() && !useIconsInForms) {
+            Object clientProperty = button.getClientProperty("onChangeSubmitListener");
+            // If the application developer attached any ActionListeners, ItemListeners or
+            // ChangeListeners to this SCheckBox or its ButtonGroup, the surrounding form
+            // gets submitted as soon as the state of this SCheckBox changed.
+            if (button.getActionListeners().length > 0 ||
+                    button.getItemListeners().length > 0 ||
+                    button.getChangeListeners().length > 0 ||
+                    (button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
+                if (clientProperty == null) {
+                    String event = JavaScriptEvent.ON_CHANGE;
+                	String code = "wingS.request.sendEvent(event, true, " + !button.isReloadForced() + ");";
+                    if (Utils.isMSIE(button)) {
+                        // In IE the "onchange"-event gets fired when a control loses the
+                        // input focus and its value has been modified since gaining focus.
+                        // Even though this is actually the correct behavior, we want the
+                        // event to get fired immediately - thats why we use IE's proprietary
+                        // "onpropertychange"-event.
+                        event = "onpropertychange";
+                    }
+                    JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
+                    button.addScriptListener(javaScriptListener);
+                    button.putClientProperty("onChangeSubmitListener", javaScriptListener);
                 }
-                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
-                button.addScriptListener(javaScriptListener);
-                button.putClientProperty("onChangeSubmitListener", javaScriptListener);
+            } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+                button.removeScriptListener((JavaScriptListener) clientProperty);
+                button.putClientProperty("onChangeSubmitListener", null);
             }
-        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
-            button.removeScriptListener((JavaScriptListener) clientProperty);
-            button.putClientProperty("onChangeSubmitListener", null);
         }
 
         device.print("<input type=\"hidden\" name=\"");

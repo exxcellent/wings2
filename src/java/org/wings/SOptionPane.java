@@ -18,6 +18,8 @@ import org.wings.border.SBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.plaf.OptionPaneCG;
 import org.wings.resource.ResourceManager;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 
 
 import javax.swing.*;
@@ -369,6 +371,16 @@ public class SOptionPane extends SDialog implements ActionListener {
         setMessageType(messageType);
         // value = UNINITIALIZED_VALUE;
         // inputValue = UNINITIALIZED_VALUE;
+
+        // Actually we should not delete all resize listeners, but only the desired one --> TODO!
+        // Also to do --> move JS to CG, somehow!?!
+        String code = "YAHOO.util.Event.removeListener(window, 'resize');";
+        JavaScriptListener listener = new JavaScriptListener(JavaScriptEvent.ON_CLICK, code);
+
+        optionOK.addScriptListener(listener);
+        optionCancel.addScriptListener(listener);
+        optionYes.addScriptListener(listener);
+        optionNo.addScriptListener(listener);
     }
 
     public void setCG(OptionPaneCG cg) {
@@ -390,7 +402,7 @@ public class SOptionPane extends SDialog implements ActionListener {
         return inputValue;
     }
 
-    private void initPanel() {        
+    private void initPanel() {
         //setHorizontalAlignment(SConstants.LEFT);
         ((SFlowLayout) optionButtons.getLayout()).setHgap(8);
         optionButtons.add(optionOK, "OK");

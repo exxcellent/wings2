@@ -23,6 +23,7 @@ import org.wings.SToolTipManager;
 import org.wings.Version;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.header.*;
 import org.wings.io.Device;
@@ -124,6 +125,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         // Externalize update resource
         component.getDynamicResource(UpdateResource.class).getId();
 
+        final JavaScriptListener handleClicks = new JavaScriptListener(
+                JavaScriptEvent.ON_CLICK,
+                "wingS.util.handleBodyClicks(event)");
         final JavaScriptDOMListener storeFocusFF = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_FOCUS,
                 "wingS.util.storeFocus", comp);
@@ -132,6 +136,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 "wingS.util.storeFocus", comp);
 
         // Add script listeners to the frame
+        component.addScriptListener(handleClicks);
         component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
 
         CaptureDefaultBindingsScriptListener.install(component);

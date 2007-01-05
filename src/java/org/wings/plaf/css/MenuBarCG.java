@@ -51,7 +51,7 @@ public class MenuBarCG extends AbstractComponentCG implements
 
     public void parentFrameAdded(SParentFrameEvent e) {
         SessionHeaders.getInstance().registerHeaders(headers);
-        e.getParentFrame().addScriptListener(BODY_ONCLICK_SCRIPT);
+        //e.getParentFrame().addScriptListener(BODY_ONCLICK_SCRIPT);
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
