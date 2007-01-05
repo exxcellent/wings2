@@ -13,7 +13,8 @@
 package wingset;
 
 import org.wings.*;
-import org.wings.border.SEmptyBorder;
+import org.wings.plaf.css.Utils;
+import org.wings.border.*;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
@@ -191,6 +192,12 @@ public class MenuExample extends WingSetPane {
 
     SMenuBar createMenuBar(TreeNode root) {
         SMenuBar menuBar = new SMenuBar();
+        SBorder border = new SLineBorder(Color.WHITE, 0);
+        border.setThickness(1, SConstants.TOP);
+        if (!Utils.isMSIE(this))
+            border.setThickness(1, SConstants.LEFT);
+
+        menuBar.setBorder(border);
 
         for (int i = 0; i < root.getChildCount(); i++) {
             TreeNode node = root.getChildAt(i);
