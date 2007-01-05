@@ -131,3 +131,11 @@ TABLE.formbutton_hover {
     padding-right: 2px;
     padding-bottom: 0px;
 }
+
+.DivisionControl {
+    width: 0%;
+}
+
+.DivisionTitle {
+    width: 100%;
+}

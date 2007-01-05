@@ -978,6 +978,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             style.remove(CSSProperty.FONT_STYLE);
             style.remove(CSSProperty.FONT_WEIGHT);
             style.putAll(attributes);
+            reload();
         }
     }
 

@@ -78,9 +78,7 @@ public class ComponentControls  extends SPanel {
     protected final SToolBar globalControls = new SToolBar();
     protected final SToolBar localControls = new SToolBar();
 
-    protected final SButton applyButton;
-
-    protected final SCheckBox ajaxCheckBox = new SCheckBox("enable");
+    protected final SCheckBox ajaxCheckBox = new SCheckBox("<html>AJAX&nbsp;");
 
     protected final STextField widthTextField = new STextField();
     protected final STextField heightTextField = new STextField();
@@ -101,27 +99,22 @@ public class ComponentControls  extends SPanel {
         super(new SGridBagLayout());
         setBackground(new Color(240,240,240));
         setPreferredSize(SDimension.FULLWIDTH);
-        SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
-        border.setThickness(1, SConstants.BOTTOM);
-        setBorder(border);
 
-        applyButton = new SButton("Apply");
-        applyButton.setActionCommand("apply");
-        applyButton.setHorizontalAlignment(SConstants.CENTER_ALIGN);
-        applyButton.setVerticalAlignment(SConstants.CENTER_ALIGN);
-
-        border = new SLineBorder(Color.LIGHT_GRAY, 0);
-        border.setThickness(1, SConstants.LEFT);
-        //border.setThickness(1, SConstants.BOTTOM);
-        //border.setStyle("dashed", SConstants.BOTTOM);
+        SBorder border = new SLineBorder(1, new Insets(0, 3, 0, 6));
+        border.setColor(new Color(255, 255, 255), SConstants.TOP);
+        border.setColor(new Color(255, 255, 255), SConstants.LEFT);
+        border.setColor(new Color(190, 190, 190), SConstants.RIGHT);
+        border.setColor(new Color(190, 190, 190), SConstants.BOTTOM);
         globalControls.setBorder(border);
-        //globalControls.setPreferredSize(SDimension.FULLWIDTH);
         globalControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout)globalControls.getLayout()).setHgap(6);
         ((SBoxLayout)globalControls.getLayout()).setVgap(4);
 
-        border = new SLineBorder(Color.LIGHT_GRAY, 0);
-        border.setThickness(1, SConstants.LEFT);
+        border = new SLineBorder(1, new Insets(0, 3, 0, 6));
+        border.setColor(new Color(255, 255, 255), SConstants.TOP);
+        border.setColor(new Color(255, 255, 255), SConstants.LEFT);
+        border.setColor(new Color(190, 190, 190), SConstants.RIGHT);
+        border.setColor(new Color(190, 190, 190), SConstants.BOTTOM);
         localControls.setBorder(border);
         localControls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         ((SBoxLayout)localControls.getLayout()).setHgap(6);
@@ -129,16 +122,8 @@ public class ComponentControls  extends SPanel {
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.RELATIVE;
-        c.gridheight = 2;
-        c.insets.left = 10;
-        c.insets.right = 10;
-        c.weightx = 0.01;
-        add(applyButton, c);
-        c.insets.left = 0;
-        c.insets.right = 0;
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.gridheight = 1;
-        c.weightx = 0.99;
         add(globalControls, c);
         add(localControls, c);
 
@@ -158,14 +143,7 @@ public class ComponentControls  extends SPanel {
         fontComboBox.setRenderer(new ObjectPairCellRenderer());
         formComponentCheckBox.setToolTipText("show as form component .. i.e. trigger form submission");
 
-        SLabel titleAjax = new SLabel("Ajax:");
-        titleAjax.setAttribute(CSSProperty.FONT_STYLE, "italic");
-        globalControls.add(titleAjax);
         globalControls.add(ajaxCheckBox);
-        globalControls.add(new SLabel("  |  "));
-        SLabel titleAppearance = new SLabel("Appearance:");
-        titleAppearance.setAttribute(CSSProperty.FONT_STYLE, "italic");
-        globalControls.add(titleAppearance);
         globalControls.add(new SLabel("width"));
         globalControls.add(widthTextField);
         globalControls.add(new SLabel(" height"));
@@ -186,50 +164,128 @@ public class ComponentControls  extends SPanel {
 
         localControls.add(placeHolder);
 
-        addActionListener(new java.awt.event.ActionListener() {
+        ActionListener ajaxListener = new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                SessionManager.getSession().getRootFrame().setUpdateEnabled(ajaxCheckBox.isSelected());
-
-                SDimension preferredSize = new SDimension();
-                preferredSize.setWidth(widthTextField.getText());
-                preferredSize.setHeight(heightTextField.getText());
-
-                int insets = 0;
-                try {
-                    insets = Integer.parseInt(insetsTextField.getText());
-                }
-                catch (NumberFormatException e) {}
-
-                int borderThickness = 1;
-                try {
-                    borderThickness = Integer.parseInt(borderThicknessTextField.getText());
-                }
-                catch (NumberFormatException e) {}
-
-                SAbstractBorder border = (SAbstractBorder) getSelectedObject(borderStyleComboBox);
-                if (border != null && border != SDefaultBorder.INSTANCE) {
-                    border.setColor((Color)getSelectedObject(borderColorComboBox));
-                    border.setInsets(new Insets(insets, insets, insets, insets));
-                    border.setThickness(borderThickness);
-                }
-
-                for (Iterator iterator = components.iterator(); iterator.hasNext();) {
-                    SComponent component = (SComponent) iterator.next();
-                    if (widthTextField.isVisible())
-                        component.setPreferredSize(preferredSize);
-                    if (borderThicknessTextField.isVisible())
-                        component.setBorder(border != null ? (SBorder)border.clone() : null);
-                    if (backgroundComboBox.isVisible())
-                        component.setBackground((Color)getSelectedObject(backgroundComboBox));
-                    if (foregroundComboBox.isVisible())
-                        component.setForeground((Color)getSelectedObject(foregroundComboBox));
-                    if (formComponentCheckBox.isVisible())
-                        component.setShowAsFormComponent(formComponentCheckBox.isSelected());
-                    if (fontComboBox.isVisible())
-                        component.setFont((SFont) getSelectedObject(fontComboBox));
-                }
+                ajax();
             }
-        });
+        };
+        ajaxCheckBox.addActionListener(ajaxListener);
+
+        ActionListener preferredSizeListener = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                preferredSize();
+            }
+        };
+        widthTextField.addActionListener(preferredSizeListener);
+        heightTextField.addActionListener(preferredSizeListener);
+
+        ActionListener borderListener = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                border();
+            }
+        };
+        borderThicknessTextField.addActionListener(borderListener);
+        borderStyleComboBox.addActionListener(borderListener);
+        borderColorComboBox.addActionListener(borderListener);
+        insetsTextField.addActionListener(borderListener);
+
+        ActionListener foregroundListener = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                foreground();
+            }
+        };
+        foregroundComboBox.addActionListener(foregroundListener);
+
+        ActionListener backgroundListener = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                background();
+            }
+        };
+        backgroundComboBox.addActionListener(backgroundListener);
+
+        ActionListener fontListener = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                font();
+            }
+        };
+        fontComboBox.addActionListener(fontListener);
+
+        ActionListener showAsFormComponentListener = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                showAsFormComponent();
+            }
+        };
+        formComponentCheckBox.addActionListener(showAsFormComponentListener);
+    }
+
+    void ajax() {
+        SessionManager.getSession().getRootFrame().setUpdateEnabled(ajaxCheckBox.isSelected());
+    }
+
+    void preferredSize() {
+        for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+            SComponent component = (SComponent) iterator.next();
+
+            SDimension preferredSize = new SDimension();
+            preferredSize.setWidth(widthTextField.getText());
+            preferredSize.setHeight(heightTextField.getText());
+
+            component.setPreferredSize(preferredSize);
+        }
+    }
+
+    void border() {
+        int insets = 0;
+        try {
+            insets = Integer.parseInt(insetsTextField.getText());
+        }
+        catch (NumberFormatException e) {}
+
+        int borderThickness = 1;
+        try {
+            borderThickness = Integer.parseInt(borderThicknessTextField.getText());
+        }
+        catch (NumberFormatException e) {}
+
+        SAbstractBorder border = (SAbstractBorder) getSelectedObject(borderStyleComboBox);
+        if (border != null && border != SDefaultBorder.INSTANCE) {
+            border.setColor((Color)getSelectedObject(borderColorComboBox));
+            border.setInsets(new Insets(insets, insets, insets, insets));
+            border.setThickness(borderThickness);
+        }
+
+        for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+            SComponent component = (SComponent) iterator.next();
+            component.setBorder(border != null ? (SBorder)border.clone() : null);
+        }
+    }
+
+    void background() {
+        for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+            SComponent component = (SComponent) iterator.next();
+            component.setBackground((Color)getSelectedObject(backgroundComboBox));
+        }
+    }
+
+    void foreground() {
+        for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+            SComponent component = (SComponent) iterator.next();
+            component.setForeground((Color)getSelectedObject(foregroundComboBox));
+        }
+    }
+
+    void font() {
+        for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+            SComponent component = (SComponent) iterator.next();
+            component.setFont((SFont) getSelectedObject(fontComboBox));
+        }
+    }
+
+    void showAsFormComponent() {
+        for (Iterator iterator = components.iterator(); iterator.hasNext();) {
+            SComponent component = (SComponent) iterator.next();
+            component.setShowAsFormComponent(formComponentCheckBox.isSelected());
+        }
     }
 
     protected Object getSelectedObject(SComboBox combo) {
@@ -256,10 +312,6 @@ public class ComponentControls  extends SPanel {
 
     public List getControllables() {
         return components;
-    }
-
-    protected void addActionListener(ActionListener actionListener) {
-        applyButton.addActionListener(actionListener);
     }
 
     /**

@@ -12,15 +12,7 @@
  */
 package wingset;
 
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SGridLayout;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SURLIcon;
+import org.wings.*;
 import org.wings.plaf.css.CheckBoxCG;
 
 import java.awt.event.ActionEvent;
@@ -35,12 +27,12 @@ public class CheckBoxExample
     final static int[] textHPos = new int[] {SConstants.LEFT, SConstants.CENTER, SConstants.RIGHT};
     final static int[] textVPos = new int[] {SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
 
-    static final SIcon sel = new SURLIcon("../icons/ComboBoxSelectedIcon.gif");
-    static final SIcon nsel = new SURLIcon("../icons/ComboBoxIcon.gif");
-    static final SIcon dissel = new SURLIcon("../icons/ComboBoxDisabledSelectedIcon.gif");
-    static final SIcon disnsel = new SURLIcon("../icons/ComboBoxDisabledIcon.gif");
-    static final SIcon rollsel = new SURLIcon("../icons/ComboBoxRolloverSelectedIcon.gif");
-    static final SIcon rollnsel = new SURLIcon("../icons/ComboBoxRolloverIcon.gif");
+    static final SIcon sel = new SResourceIcon("org/wings/icons/green_light_on.png");
+    static final SIcon nsel = new SResourceIcon("org/wings/icons/green_light_off.png");
+    static final SIcon dissel = new SResourceIcon("org/wings/icons/green_light_on_disabled.png");
+    static final SIcon disnsel = new SResourceIcon("org/wings/icons/green_light_off_disabled.png");
+    static final SIcon rollsel = new SResourceIcon("org/wings/icons/green_light_on.png");
+    static final SIcon rollnsel = new SResourceIcon("org/wings/icons/green_light_on.png");
     private ButtonControls controls;
 
     private final SLabel reportLabel = new SLabel("No button pressed");

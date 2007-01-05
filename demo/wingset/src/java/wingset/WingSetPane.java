@@ -16,7 +16,8 @@ package wingset;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
-import org.wings.border.SLineBorder;
+import org.wings.plaf.css.Utils;
+import org.wings.border.*;
 import org.wings.event.SComponentAdapter;
 import org.wings.event.SComponentEvent;
 
@@ -38,6 +39,8 @@ abstract public class WingSetPane
     public WingSetPane() {
         setLayout(new SBorderLayout());
         setPreferredSize(SDimension.FULLAREA);
+        if (!Utils.isMSIE(this))
+            setBorder(new SEmptyBorder(0, 1, 0, 1));
 
         SAnchor anchor = new SAnchor("../" + getClass().getName().substring(getClass().getName().indexOf('.') + 1) + ".java");
         anchor.setTarget("sourceWindow");
@@ -47,8 +50,12 @@ abstract public class WingSetPane
         SPanel south = new SPanel();
         south.setPreferredSize(SDimension.FULLWIDTH);
         south.add(anchor);
-        SLineBorder border = new SLineBorder(Color.LIGHT_GRAY, 0);
-        border.setThickness(1, SConstants.TOP);
+
+        SBorder border = new SLineBorder(1, new Insets(0, 3, 0, 6));
+        border.setColor(new Color(255, 255, 255), SConstants.TOP);
+        border.setColor(new Color(255, 255, 255), SConstants.LEFT);
+        border.setColor(new Color(190, 190, 190), SConstants.RIGHT);
+        border.setColor(new Color(190, 190, 190), SConstants.BOTTOM);
         south.setBorder(border);
         south.setBackground(new Color(240,240,240));
 
