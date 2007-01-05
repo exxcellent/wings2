@@ -191,52 +191,51 @@ th.STabbedPane_bottom {
     padding-bottom:.1em;
 }
 
-.STabbedPane_Tab_top,
-.STabbedPane_Tab_bottom,
-.STabbedPane_Tab_left,
-.STabbedPane_Tab_right {
-    border: 1px solid #333333;
-    white-space: nowrap;
-    line-height: 1.6em;
+.STabbedPane_Tab_disabled,
+.STabbedPane_Tab_selected,
+.STabbedPane_Tab_unselected {
+    border-left: 1px solid #ffffff;
+    border-top: 1px solid #ffffff;
+    border-right: 1px solid #bbbbbb;
+    border-bottom: 1px solid #bbbbbb;
+    -moz-border-radius: 0;
+    font-size: 12px;
+    padding: 3px;
+    line-height: 20px;
+    background-color: #dddddd;
 }
 
-td.STabbedPane_pane {
-    border: 2px ridge #333333;
-    width: 100%;
-}
-
-.STabbedPane_Tab_top {
-    border-bottom: none !important;
-}
-
-.STabbedPane_Tab_bottom {
-    border-top: none !important;
-}
-
-.STabbedPane_Tab_left {
-    border-right: none !important;
-    display: block;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    width: 100%;
-}
-
-.STabbedPane_Tab_right {
-    border-left: none !important;
-    display: block;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    width: 100%;
-}
-
-/* Background color of selected STabbedPane tabs */
 .STabbedPane_Tab_selected {
-    background-color: #ffbbbb;
+    background-color: #eeeeee;
 }
 
 .STabbedPane_Tab_disabled {
     color : #808080;
 }
+
+.STabbedPane_top,
+.STabbedPane_bottom,
+.STabbedPane_left,
+.STabbedPane_right {
+   font-size: 0px;
+   line-height: 0;
+}
+.STabbedPane_left {
+   padding-right: 6px;
+}
+
+.STabbedPane_pane {
+    border: 1px solid #bbbbbb !important;
+    width: 100%;
+}
+
+.STabbedPane_Tab_left,
+.STabbedPane_Tab_right {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+}
+
 
 A.STabbedPane_Tab_top IMG {
    /* keeps images inside tabs */

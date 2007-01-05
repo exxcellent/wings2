@@ -44,8 +44,6 @@ import java.awt.event.ActionEvent;
  */
 public class TabbedPaneExample extends WingSetPane {
     private final static int INITIAL_TAB_COUNT = 10;
-    private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
-    private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
     private final static Object[] TAB_PLACEMENTS = new Object[]{
             new Object[]{"Top", new Integer(SConstants.TOP)},
             new Object[]{"Left", new Integer(SConstants.LEFT)},
@@ -71,8 +69,6 @@ public class TabbedPaneExample extends WingSetPane {
             addTab();
         }
         tabbedPane.setShowAsFormComponent(false);
-        tabbedPane.setIconAt(3, JAVA_CUP_ICON);      // decorate with icons
-        tabbedPane.setIconAt(8, SMALL_COW_ICON);
         tabbedPane.setEnabledAt(1, false);          // disable a tab
         tabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {

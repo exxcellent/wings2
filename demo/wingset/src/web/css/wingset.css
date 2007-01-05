@@ -24,7 +24,43 @@ select.SList {
     background-color: #f6decc !important;
 }
 
-/* ----- Background color of selected STabbedPane tabs */
+.STabbedPane_Tab_disabled,
+.STabbedPane_Tab_unselected {
+    border-left: 1px solid #ffffff;
+    border-top: 1px solid #ffffff;
+    border-right: 1px solid #bbbbbb;
+    border-bottom: 1px solid #bbbbbb;
+    -moz-border-radius: 0;
+    font-size: 12px;
+    padding: 3px;
+    line-height: 20px;
+    background-color: #dddddd;
+}
+
 .STabbedPane_Tab_selected {
-    background-color: #f6decc;
+    border-left: 1px solid #ffffff;
+    border-top: 1px solid #ffffff;
+    border-right: 1px solid #bbbbbb;
+    border-bottom: 1px solid #bbbbbb;
+    -moz-border-radius: 0;
+    font-size: 12px;
+    padding: 3px;
+    margin: 0px;
+    line-height: 20px;
+    background-color: #eeeeee;
+}
+
+.STabbedPane_top,
+.STabbedPane_bottom,
+.STabbedPane_left,
+.STabbedPane_right {
+   font-size: 0px;
+   line-height: 0;
+}
+.STabbedPane_left {
+   padding-right: 6px;
+}
+
+.STabbedPane_pane {
+   border: 1px solid #bbbbbb !important;
 }

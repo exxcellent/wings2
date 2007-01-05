@@ -19,25 +19,6 @@ tr {
     vertical-align: inherit;
 }
 
-/* rounded corners for gecko */
-.STabbedPane_Tab_top {
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-topleft: 4px;
-}
-.STabbedPane_Tab_left {
-    -moz-border-radius-topleft: 4px;
-    -moz-border-radius-bottomleft: 4px;
-}
-.STabbedPane_Tab_right {
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-bottomright: 4px;
-}
-
-.STabbedPane_Tab_bottom {
-    -moz-border-radius-bottomright: 4px;
-    -moz-border-radius-bottomleft: 4px;
-}
-
 td.STabbedPane_pane {
     height: 100%;
 }
