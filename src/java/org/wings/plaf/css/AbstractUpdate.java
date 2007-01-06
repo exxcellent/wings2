@@ -23,7 +23,7 @@ abstract class AbstractUpdate implements Update {
     }
 
     public int getPriority() {
-        return 0;
+        return 1;
     }
 
 	public abstract Handler getHandler();

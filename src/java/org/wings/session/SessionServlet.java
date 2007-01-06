@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Arrays;
-import java.util.Map;
 
 /**
  * The servlet engine creates for each user a new HttpSession. This
@@ -622,7 +621,7 @@ final class SessionServlet
                 ServletOutputStream out = response.getOutputStream();
                 Device outputDevice = new ServletDevice(out);
                 UpdateResource.writeHeader(outputDevice);
-                UpdateResource.writeUpdate(outputDevice, "wingS.request.redirectURL(\"" + url + "\");");
+                UpdateResource.writeUpdate(outputDevice, "wingS.request.sendRedirect(\"" + url + "\");");
                 UpdateResource.writeFooter(outputDevice);
                 out.flush();
 

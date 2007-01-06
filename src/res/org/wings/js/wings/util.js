@@ -81,26 +81,17 @@ wingS.util.openLink = function(target, url, scriptCodeArray) {
   if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
       // if the target exists => change URL, else => open URL in new window
       if (target == null) {
-          wingS.request.redirectURL(url);
+          wingS.request.sendRedirect(url);
       } else {
-          if (wingS.util.checkTarget(target)) {
-              parent.frames[target].location.href = url;
-          } else {
-              window.open(url, target);
+          for (var i = 0; i < parent.frames.length; i++) {
+              if (parent.frames[i].name == target) {
+                  parent.frames[target].location.href = url;
+                  return;
+              }
           }
+          window.open(url, target);
       }
   }
-};
-
-/**
- * The following two functions are a workaround for IE to open a link in the right target/new window
- * used in AnchorCG.
- */
-wingS.util.checkTarget = function(target) {
-    for (var i = 0; i < parent.frames.length; i++) {
-        if (parent.frames[i].name == target) return true;
-    }
-    return false;
 };
 
 // TODO document + event.stopPropagation()
@@ -190,15 +181,8 @@ wingS.util.highlightElement = function(id, color, duration) {
 /**
  * Remove focus from a component and respect additonal custom script listeners attached by user.
  */
-wingS.util.blurComponent = function(component, clientHandlers) {
-    var success = true;
-    if (clientHandlers) {
-        for (var i = 0; i < clientHandlers.length; i++) {
-            success = clientHandlers[i]();
-            if (success == false) break;
-        }
-    }
-    if (success == undefined || success && component.blur()) {
+wingS.util.blurComponent = function(component, scriptCodeArray) {
+    if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
         component.blur();
     }
     return true;
@@ -207,15 +191,8 @@ wingS.util.blurComponent = function(component, clientHandlers) {
 /**
  * Set focus to a component and respect additonal custom script listeners attached by user.
  */
-wingS.util.focusComponent = function(component, clientHandlers) {
-    var success = true;
-    if (clientHandlers) {
-        for (var i = 0; i < clientHandlers.length; i++) {
-            success = clientHandlers[i]();
-            if (success == false) break;
-        }
-    }
-    if (success == undefined || success && component.focus()) {
+wingS.util.focusComponent = function(component, scriptCodeArray) {
+    if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
         component.focus();
     }
     return true;
@@ -255,12 +232,12 @@ wingS.util.requestFocus = function(id) {
 
 wingS.util.storeFocus = function(event) {
     var target = wingS.events.getTarget(event);
-    var div = wingS.util.getParentByAttribute(target, "eid");
+    var eidProvider = wingS.util.getParentByAttribute(target, "eid");
     var body = wingS.util.getParentByTagName(target, "BODY");
     // Avoid rembering FORM as focus component as this automatically
     // gains focus on pressing Enter in MSIE.
-    if (div && body && div.tagName != "FORM") {
-        wingS.util.getCookie(body.id + "_focus", div.id, 1);
+    if (eidProvider && body && eidProvider.tagName != "FORM") {
+        wingS.util.setCookie(body.id + "_focus", eidProvider.id, 1);
     }
 };
 
@@ -301,25 +278,6 @@ wingS.util.handleBodyClick = function(event) {
     if (window.wpm_handleBodyClicks != undefined) {
         wpm_handleBodyClicks(event);
     }
-};
-
-/**
- * Utility method to determine available inner space of the show window on all browsers. Returns a
- * numeric value of available pixel width.
- *
- */
-wingS.util.framewidth = function() {
-    if (self.innerHeight) {
-        // all except Explorer
-        return self.innerWidth;
-    } else if (document.documentElement && document.documentElement.clientHeight) {
-        // Explorer 6 Strict Mode
-        return document.documentElement.clientWidth;
-    } else if (document.body) {
-        // other Explorers
-        return document.body.clientWidth;
-    } else
-        return -1;
 };
 
 /**

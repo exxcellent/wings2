@@ -85,12 +85,26 @@ function wpm_findPosX(obj)
 
     /* Workaround for right aligned menues:
        Return the RIGHT X of the Menu as a negative number, not the left X
-    if (wingS.util.framewidth() < curleft + 200) {
+    if (wpm_getFrameWidth() < curleft + 200) {
         curleft = - (curleft + origobj.offsetWidth);
     }
     */
 
     return curleft;
+}
+
+function wpm_getFrameWidth() {
+    if (self.innerHeight) {
+        // all except Explorer
+        return self.innerWidth;
+    } else if (document.documentElement && document.documentElement.clientHeight) {
+        // Explorer 6 Strict Mode
+        return document.documentElement.clientWidth;
+    } else if (document.body) {
+        // other Explorers
+        return document.body.clientWidth;
+    } else
+        return -1;
 }
 
 function wpm_findPosY(obj)

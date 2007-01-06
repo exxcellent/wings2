@@ -9,7 +9,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.ReloadManager;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
-import org.wings.plaf.FrameCG;
 import org.wings.plaf.Update;
 import org.wings.io.Device;
 import org.wings.plaf.css.RenderHelper;
@@ -68,12 +67,6 @@ public class UpdateResource extends DynamicResource {
                 // update components
                 for (Iterator i = reloadManager.getUpdates().iterator(); i.hasNext();) {
                     writeUpdate(out, (Update) i.next());
-                }
-
-                // update focus
-                if (frame.getFocus() != null) {
-                    FrameCG cg = (FrameCG) frame.getCG();
-                    writeUpdate(out, cg.getFocusUpdate(frame, frame.getFocus()));
                 }
 
                 // update scripts

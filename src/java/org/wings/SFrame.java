@@ -489,6 +489,8 @@ public class SFrame
      */
     public void setFocus(SComponent focusOnComponent) {
         focusComponent = focusOnComponent;
+        if (isUpdatePossible() && getClass() == SFrame.class)
+            update(((FrameCG) getCG()).getFocusUpdate(this, focusComponent));
     }
 
     /**
@@ -506,7 +508,7 @@ public class SFrame
             for (int i = 0; i < listeners.size() && focusComponent == null; i++) {
                 Object listener = listeners.get(i);
                 if (listener instanceof SComponent) {
-                    focusComponent = (SComponent) listener;
+                    setFocus((SComponent) listener);
                 }
             }
         }

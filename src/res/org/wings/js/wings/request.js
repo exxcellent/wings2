@@ -12,10 +12,10 @@ if (!wingS.request) {
 }
 
 /**
- * Redirect the browser to the specified url.
+ * Redirects the browser to the specified url.
  * @param {String} url - the url to redirect to
  */
-wingS.request.redirectURL = function(url) {
+wingS.request.sendRedirect = function(url) {
     window.location.href = url;
 };
 

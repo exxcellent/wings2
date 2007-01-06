@@ -613,6 +613,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             this.epoch = epoch;
         }
 
+        public int getPriority() {
+            return 0;
+        }
+
         public Handler getHandler() {
             UpdateHandler handler = new UpdateHandler("epoch");
             handler.addParameter(epoch);
@@ -628,6 +632,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         public FocusUpdate(SComponent component, SComponent focus) {
             super(component);
             this.focus = focus;
+        }
+
+        public int getPriority() {
+            return 0;
         }
 
         public Handler getHandler() {
