@@ -119,6 +119,14 @@ wingS.update.epoch = function(epoch) {
 };
 
 /**
+ * Gives the focus to the component with the given ID.
+ * @param {String} id - the ID of the component to focus
+ */
+wingS.update.focus = function(id) {
+    wingS.util.requestFocus(id);
+};
+
+/**
  * Enables or disabled incremental updates for this frame.
  * @param {boolean} enabled - true, if updates are allowed
  */

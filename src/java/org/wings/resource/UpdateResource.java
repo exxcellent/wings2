@@ -1,7 +1,6 @@
 package org.wings.resource;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.ReloadManager;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
+import org.wings.plaf.FrameCG;
 import org.wings.plaf.Update;
 import org.wings.io.Device;
 import org.wings.plaf.css.RenderHelper;
@@ -45,13 +45,10 @@ public class UpdateResource extends DynamicResource {
 
     private static final transient Log log = LogFactory.getLog(UpdateResource.class);
 
-    private String encoding = SessionManager.getSession().getCharacterEncoding();
-    private String xmlHeader = "<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"yes\"?>";
-
     public UpdateResource(final SFrame f) {
         super(f);
         this.extension = "xml";
-        this.mimeType = "text/xml; charset=" + encoding;
+        this.mimeType = "text/xml; charset=" + SessionManager.getSession().getCharacterEncoding();
     }
 
     public void write(Device out) throws IOException {
@@ -64,26 +61,21 @@ public class UpdateResource extends DynamicResource {
 
             renderHelper.reset();
 
-            out.print(xmlHeader);
-            out.print("\n<updates>");
+            writeHeader(out);
             if (reloadManager.isReloadRequired(frame)) {
                 writeUpdate(out, "wingS.request.reloadFrame()");
             } else {
-            	Collection updates = reloadManager.getUpdates();
-				if (updates.size() > 0) {
-					// update components
-					for (Iterator i = updates.iterator(); i.hasNext();) {
-						writeUpdate(out, (Update) i.next());
-					}
-				} else {
-					out.print("\nThere are no components to update!");
-				}
-                // update tooltips
-                final List ttComponentIds = tooltipManager.getRegisteredComponents();
-                if (ttComponentIds.size() != 0) {
-                    writeUpdate(out, ToolTipCG.generateTooltipInitScript(ttComponentIds));
-                    tooltipManager.clearRegisteredComponents();
+                // update components
+                for (Iterator i = reloadManager.getUpdates().iterator(); i.hasNext();) {
+                    writeUpdate(out, (Update) i.next());
                 }
+
+                // update focus
+                if (frame.getFocus() != null) {
+                    FrameCG cg = (FrameCG) frame.getCG();
+                    writeUpdate(out, cg.getFocusUpdate(frame, frame.getFocus()));
+                }
+
                 // update scripts
                 ScriptListener[] scriptListeners = scriptManager.getScriptListeners();
                 for (int i = 0; i < scriptListeners.length; ++i) {
@@ -92,8 +84,15 @@ public class UpdateResource extends DynamicResource {
                     }
                 }
                 scriptManager.clearScriptListeners();
+
+                // update tooltips
+                final List ttComponentIds = tooltipManager.getRegisteredComponents();
+                if (ttComponentIds.size() != 0) {
+                    writeUpdate(out, ToolTipCG.generateTooltipInitScript(ttComponentIds));
+                    tooltipManager.clearRegisteredComponents();
+                }
 			}
-            out.print("\n</updates>");
+            writeFooter(out);
 
             renderHelper.reset();
 
@@ -105,7 +104,17 @@ public class UpdateResource extends DynamicResource {
         }
     }
 
-    private void writeUpdate(Device out, Update update) throws IOException {
+    public static void writeHeader(Device out) throws IOException {
+        String encoding = SessionManager.getSession().getCharacterEncoding();
+        out.print("<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"yes\"?>");
+        out.print("\n<updates>");
+    }
+
+    public static void writeFooter(Device out) throws IOException {
+        out.print("\n</updates>");
+    }
+
+    public static void writeUpdate(Device out, Update update) throws IOException {
         Update.Handler handler = update.getHandler();
 
         writePrefix(out);
@@ -119,17 +128,17 @@ public class UpdateResource extends DynamicResource {
         writePostfix(out);
     }
 
-    private void writeUpdate(Device out, String update) throws IOException {
+    public static void writeUpdate(Device out, String update) throws IOException {
         writePrefix(out);
         out.print(update);
         writePostfix(out);
     }
 
-    private void writePrefix(Device out) throws IOException {
+    private static void writePrefix(Device out) throws IOException {
         out.print("\n  <update><![CDATA[");
     }
 
-    private void writePostfix(Device out) throws IOException {
+    private static void writePostfix(Device out) throws IOException {
         out.print("]]></update>");
     }
 

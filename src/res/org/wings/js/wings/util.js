@@ -227,32 +227,27 @@ wingS.util.focusComponent = function(component, clientHandlers) {
  * the focus to be the input element and not the table element.
  */
 wingS.util.requestFocus = function(id) {
-    var div = document.getElementById(id);
-    window.focus = id;
-    if (div) {
-        if (div.getAttribute("foc") == id) {
-            if (!div.disabled && !div.style.display == "none") div.focus();
+    window.focus();
+    var parent = document.getElementById(id);
+    if (parent != null) {
+        if (parent.getAttribute("foc") == id) {
+            if (parent.style.display != "none" && !parent.disabled) {
+                parent.focus();
+            }
             return;
         }
 
-        var elements = div.getElementsByTagName("INPUT");
-        for (var i = 0; i < elements.length; i++) {
-            var element = elements[i];
-            if (element.getAttribute("foc") == id &&
-                !element.disabled &&
-                !element.style.display == "none") {
-                element.focus();
-                return;
-            }
-        }
-        elements = div.getElementsByTagName("A");
-        for (var i = 0; i < elements.length; i++) {
-            var element = elements[i];
-            if (element.getAttribute("foc") == id &&
-                !element.disabled &&
-                !element.style.display == "none") {
-                element.focus();
-                return;
+        var tags = new Array("INPUT", "A");
+        for (var i = 0; i < tags.length; i++) {
+            var elements = parent.getElementsByTagName(tags[i]);
+            for (var j = 0; j < elements.length; j++) {
+                var element = elements[j];
+                if (element.getAttribute("foc") == id &&
+                    element.style.display != "none" &&
+                    !element.disabled) {
+                    element.focus();
+                    return;
+                }
             }
         }
     }
@@ -302,7 +297,7 @@ wingS.util.checkUserAgent = function(string) {
     return navigator.userAgent.toLowerCase().indexOf(string) + 1;
 };
 
-wingS.util.handleBodyClicks = function(event) {
+wingS.util.handleBodyClick = function(event) {
     if (window.wpm_handleBodyClicks != undefined) {
         wpm_handleBodyClicks(event);
     }

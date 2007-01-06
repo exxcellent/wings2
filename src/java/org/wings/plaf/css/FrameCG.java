@@ -23,7 +23,6 @@ import org.wings.SToolTipManager;
 import org.wings.Version;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
-import org.wings.script.JavaScriptListener;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.header.*;
 import org.wings.io.Device;
@@ -125,9 +124,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         // Externalize update resource
         component.getDynamicResource(UpdateResource.class).getId();
 
-        final JavaScriptListener handleClicks = new JavaScriptListener(
+        final JavaScriptDOMListener handleClicks = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_CLICK,
-                "wingS.util.handleBodyClicks(event)");
+                "wingS.util.handleBodyClick", comp);
         final JavaScriptDOMListener storeFocusFF = new JavaScriptDOMListener(
                 JavaScriptEvent.ON_FOCUS,
                 "wingS.util.storeFocus", comp);
@@ -295,20 +294,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // Focus management. Put focus in selected object.
-        final SComponent focus = frame.getFocus();
-        FocusScriptListener gainFocusScript = (FocusScriptListener) frame.getClientProperty("gain-focus-script");
-        if (gainFocusScript == null || gainFocusScript.getFocusComponent() != focus) {
-            if (gainFocusScript != null) {
-                // Drop old focus gain script
-                frame.removeScriptListener(gainFocusScript);
-                frame.putClientProperty("gain-focus-script", null);
-            }
-            if (focus != null) {
-                // Add new focus gain script
-                gainFocusScript = new FocusScriptListener(focus);
-                frame.addScriptListener(gainFocusScript);
-                frame.putClientProperty("gain-focus-script", gainFocusScript);
-            }
+        // OnHeadersAvailableScript is totally misused here - just until i'll write a script manager.
+        if (frame.getFocus() != null) {
+            String script = "wingS.util.requestFocus('" + frame.getFocus().getName() + "');";
+            component.getSession().getScriptManager().addScriptListener(new OnHeadersAvailableScript(script));
         }
 
         device.print("</head>\n");
@@ -512,6 +501,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         return new EpochUpdate(frame, epoch);
     }
 
+    public Update getFocusUpdate(SFrame frame, SComponent focus) {
+        return new FocusUpdate(frame, focus);
+    }
+
     public Update getUpdateEnabledUpdate(SFrame frame, boolean enabled) {
         return new UpdateEnabledUpdate(frame, enabled);
     }
@@ -623,6 +616,23 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         public Handler getHandler() {
             UpdateHandler handler = new UpdateHandler("epoch");
             handler.addParameter(epoch);
+            return handler;
+        }
+
+    }
+
+    protected class FocusUpdate extends AbstractUpdate {
+
+        private SComponent focus;
+
+        public FocusUpdate(SComponent component, SComponent focus) {
+            super(component);
+            this.focus = focus;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("focus");
+            handler.addParameter(focus.getName());
             return handler;
         }
 

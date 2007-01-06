@@ -12,6 +12,7 @@
  */
 package org.wings.plaf;
 
+import org.wings.SComponent;
 import org.wings.SFrame;
 
 
@@ -24,6 +25,8 @@ public interface FrameCG extends ComponentCG {
     public Update getRemoveHeaderUpdate(SFrame frame, Object header);
 
     public Update getEpochUpdate(SFrame frame, String epoch);
+
+    public Update getFocusUpdate(SFrame frame, SComponent focus);
 
     public Update getUpdateEnabledUpdate(SFrame frame, boolean enabled);
 

@@ -621,12 +621,9 @@ final class SessionServlet
                 response.setContentType("text/xml; charset=" + encoding);
                 ServletOutputStream out = response.getOutputStream();
                 Device outputDevice = new ServletDevice(out);
-                outputDevice.print("<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"yes\"?>");
-                outputDevice.print("\n<updates>");
-                outputDevice.print("\n  <update><![CDATA[wingS.request.redirectURL(\"");
-                outputDevice.print(url);
-                outputDevice.print("\");]]></update>");
-                outputDevice.print("\n</updates>");
+                UpdateResource.writeHeader(outputDevice);
+                UpdateResource.writeUpdate(outputDevice, "wingS.request.redirectURL(\"" + url + "\");");
+                UpdateResource.writeFooter(outputDevice);
                 out.flush();
 
                 session.fireRequestEvent(SRequestEvent.DELIVER_DONE);
