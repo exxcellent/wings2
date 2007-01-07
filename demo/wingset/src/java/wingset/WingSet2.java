@@ -42,6 +42,7 @@ public class WingSet2
     private final SPanel content;
     private final STree tree;
     private WingsImage wingsImage;
+    SCardLayout cards = new SCardLayout();
 
     /**
      * Constructor of the wingS application.
@@ -82,7 +83,7 @@ public class WingSet2
         border.setThickness(1, SConstants.RIGHT);
         scrollPane.setBorder(border);
 
-        content = new SPanel(new SBorderLayout());
+        content = new SPanel(cards);
         content.setPreferredSize(SDimension.FULLAREA);
         content.add(wingsImage);
 
@@ -105,8 +106,10 @@ public class WingSet2
     }
 
     private void show(SComponent component) {
-        content.remove(0);
-        content.add(component, SBorderLayout.CENTER);
+        if (component.getParent() != content) {
+            content.add(component);
+        }
+        cards.show(component);
     }
 
     static class PanesTreeModel

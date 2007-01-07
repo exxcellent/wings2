@@ -239,7 +239,7 @@ public class FileChooserExample
 
             Object[] values = {new Integer(1), new Integer(2), new Integer(4),
                                new Integer(8), new Integer(16), new Integer(32),
-                               new Integer(64)};
+                               new Integer(64), new Integer(128), new Integer(256)};
 
             final SComboBox comboBox = new SComboBox(values);
             comboBox.addItemListener(new ItemListener() {

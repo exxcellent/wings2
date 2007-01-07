@@ -81,14 +81,14 @@ public final class RadioButtonCG extends CheckBoxCG implements
         Utils.write(device, button.getToggleSelectionParameter());
         device.print("\"");
         Utils.writeEvents( device, button, null );
+        Utils.optAttribute(device, "tabindex", button.getFocusTraversalIndex());
 
         if (!button.isEnabled())
             device.print(" disabled=\"true\"");
-        if (button.isFocusOwner())
-            Utils.optAttribute(device, "foc", button.getName());
-
         if (button.isSelected())
             device.print(" checked=\"true\"");
+        if (button.isFocusOwner())
+            Utils.optAttribute(device, "foc", button.getName());
 
         device.print("/>");
     }

@@ -153,22 +153,14 @@ input.SFormattedTextField,
 input.SPasswordField,
 .SFileChooser input,
 textarea.STextArea,
-select.SComboBox {
+select.SComboBox,
+select.SList {
     font-family: sans-serif;
     font-weight: normal;
     font-style: normal;
+    font-size: 12px;
     color: #000;
-}
-
-input.STextField,
-input.XSuggest,
-input.SFormattedTextField,
-input.SPasswordField,
-.SFileChooser input,
-textarea.STextArea,
-select.SComboBox,
-select.SList {
-    border: 1px solid #333333;
+    border: 1px solid #bbbbbb;
 }
 
 
@@ -404,8 +396,7 @@ ul.SPopupMenu a.x:hover{
 
 /* SList */
 .SList li.selected {
-    background-color: #f6decc !important;
-    border: 1px dotted black;
+    background-color: #D8E1F1 !important;
 }
 
 .SList li.clickable {

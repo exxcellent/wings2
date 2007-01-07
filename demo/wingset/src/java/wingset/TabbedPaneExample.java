@@ -85,7 +85,7 @@ public class TabbedPaneExample extends WingSetPane {
 
     protected void addTab() {
         int i = tabbedPane.getTabCount();
-        SPanel panel = new SPanel(new SBorderLayout());
+        SPanel panel = new SPanel(new SBorderLayout(10, 10));
         STextArea textArea = new STextArea(logText, null, 6, 60);
         textArea.setPreferredSize(SDimension.FULLWIDTH);
         panel.add(new SLabel("Tab # " + i), SBorderLayout.NORTH);

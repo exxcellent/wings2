@@ -36,6 +36,11 @@ public class TextComponentExample extends WingSetPane {
     private final STextArea eventLog = new STextArea("(no document events fired)");
     private ComponentControls controls;
     private SDateFormatter dateFormatter = new SDateFormatter(DateFormat.getDateInstance(DateFormat.SHORT));
+    private STextField textField;
+    private SFormattedTextField numberTextField;
+    private SFormattedTextField dateTextField;
+    private SPasswordField passwordField;
+    private STextArea textArea;
 
 
     protected SComponent createControls() {
@@ -50,7 +55,7 @@ public class TextComponentExample extends WingSetPane {
         SPanel panel = new SPanel(gridLayout);
 
         panel.add(new SLabel("STextField: "));
-        STextField textField = new STextField();
+        textField = new STextField();
         textField.setName("textfield");
         textField.setToolTipText("Here you can enter any abritriary text.");
         textField.addDocumentListener(new MyDocumentListener(textField));
@@ -59,7 +64,8 @@ public class TextComponentExample extends WingSetPane {
 
         panel.add(new SLabel("SFormattedTextField (NumberFormat): "));
         SFormattedTextField numberTextField = new SFormattedTextField(new NumberFormatter());
-        numberTextField.setName("numberfield");
+        this.numberTextField = numberTextField;
+        this.numberTextField.setName("numberfield");
         numberTextField.setToolTipText("Text entered here will be formatted as number when you leave focus.<br>" +
                 "If you entered an invalid number the text should become red.<br>" +
                 "This uses code executed on server side in Java!");
@@ -69,7 +75,8 @@ public class TextComponentExample extends WingSetPane {
 
         panel.add(new SLabel("SFormattedTextField (DateFormat): "));
         SFormattedTextField dateTextField = new SFormattedTextField(dateFormatter);
-        dateTextField.setName("datefield");
+        this.dateTextField = dateTextField;
+        this.dateTextField.setName("datefield");
         dateTextField.setToolTipText("Enter a valid/invalid date here.<br>" +
                 "Dates will be parsed on server side and reformatted accordingly.");
         dateTextField.addDocumentListener(new MyDocumentListener(dateTextField));
@@ -78,7 +85,8 @@ public class TextComponentExample extends WingSetPane {
 
         panel.add(new SLabel("SPasswordField: "));
         SPasswordField passwordField = new SPasswordField();
-        passwordField.setName("passwordfield");
+        this.passwordField = passwordField;
+        this.passwordField.setName("passwordfield");
         passwordField.setToolTipText("Just a regular passsword input.");
         passwordField.addDocumentListener(new MyDocumentListener(passwordField));
         passwordField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
@@ -86,7 +94,8 @@ public class TextComponentExample extends WingSetPane {
 
         panel.add(new SLabel("STextArea: "));
         STextArea textArea = new STextArea("");
-        textArea.setName("textarea");
+        this.textArea = textArea;
+        this.textArea.setName("textarea");
         textArea.setPreferredSize(new SDimension(250, 50));
         textArea.setToolTipText("Okay - but don't start writing books now ;-)");
         textArea.addDocumentListener(new MyDocumentListener(textArea));
@@ -120,11 +129,11 @@ public class TextComponentExample extends WingSetPane {
 
         eventLog.setEditable(false); // for multiline label
         eventLog.setBorder(new SLineBorder(1));
-        eventLog.setBackground(Color.LIGHT_GRAY);
+        eventLog.setBackground(new Color(240, 240, 240));
         eventLog.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
         actionEvent.setBorder(new SLineBorder(1));
-        actionEvent.setBackground(Color.LIGHT_GRAY);
+        actionEvent.setBackground(new Color(240, 240, 240));
         actionEvent.setHorizontalAlignment(SConstants.LEFT_ALIGN);
 
         controls.addControllable(textField);
@@ -203,12 +212,25 @@ public class TextComponentExample extends WingSetPane {
         }
     }
 
-    static class TextComponentControls
+    class TextComponentControls
         extends ComponentControls
     {
         public TextComponentControls() {
             widthTextField.setText("100%");
             formComponentCheckBox.setVisible(false);
+
+            final SCheckBox editable = new SCheckBox("editable");
+            editable.setSelected(true);
+            editable.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    textField.setEditable(editable.isSelected());
+                    numberTextField.setEditable(editable.isSelected());
+                    dateTextField.setEditable(editable.isSelected());
+                    passwordField.setEditable(editable.isSelected());
+                    textArea.setEditable(editable.isSelected());
+                }
+            });
+            addControl(editable);
         }
     }
 }

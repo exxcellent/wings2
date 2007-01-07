@@ -43,7 +43,7 @@ public final class ToolTipCG {
         }
         ids.append("]");        
                         
-        final SStringBuilder tooltipsInitScript = new SStringBuilder("new YAHOO.widget.Tooltip('tt',");
+        final SStringBuilder tooltipsInitScript = new SStringBuilder("new YAHOO.widget.Tooltip('_tt_',");
         tooltipsInitScript
                 .append("{context:").append(ids).append(", ")
                 .append("showdelay: ").append(ttManager.getInitialDelay()).append(", ")
@@ -52,5 +52,4 @@ public final class ToolTipCG {
         
         return tooltipsInitScript.toString();                
     }
-    
 }

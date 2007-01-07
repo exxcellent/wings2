@@ -296,7 +296,8 @@ public class ComponentControls  extends SPanel {
         int index = Arrays.asList(globalControls.getComponents()).indexOf(control);
         if (index >= 0) {
             globalControls.remove(index);    // comp
-            globalControls.remove(index-1);  // label
+            if (globalControls.getComponent(index - 1) instanceof SLabel)
+                globalControls.remove(index-1);  // label
         }
     }
 

@@ -12,21 +12,12 @@
  */
 package wingset;
 
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SFlowDownLayout;
-import org.wings.SGridLayout;
-import org.wings.SLabel;
-import org.wings.SList;
-import org.wings.SPanel;
-import org.wings.SResourceIcon;
-import org.wings.SSpacer;
+import org.wings.*;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -39,6 +30,10 @@ public class ListExample
     private final static SResourceIcon javaCup = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final ListModel listModel = createListModel();
     private ComponentControls controls;
+    private SList singleSelectionList;
+    private SList multiSelectionList;
+    private SComboBox comboBox;
+    private SList anchorList;
 
 
     protected SComponent createControls() {
@@ -60,7 +55,7 @@ public class ListExample
         SContainer cont = new SPanel(new SFlowDownLayout());
         cont.add(new SLabel("List with single selection"));
         cont.add(new SSpacer(1, 5));
-        SList singleSelectionList = new SList();
+        singleSelectionList = new SList();
         singleSelectionList.setName("single");
         singleSelectionList.setSelectionMode(SList.SINGLE_SELECTION);
         addListElements(singleSelectionList);
@@ -75,7 +70,8 @@ public class ListExample
         cont.add(new SLabel("List with multiple selection"));
         cont.add(new SSpacer(1, 5));
         SList multiSelectionList = new SList();
-        multiSelectionList.setName("multiple");
+        this.multiSelectionList = multiSelectionList;
+        this.multiSelectionList.setName("multiple");
         multiSelectionList.setSelectionMode(SList.MULTIPLE_SELECTION);
         addListElements(multiSelectionList);
         cont.add(multiSelectionList);
@@ -89,7 +85,7 @@ public class ListExample
         cont.setVerticalAlignment(SConstants.TOP_ALIGN);
         cont.add(new SLabel("ComboBox"));
         cont.add(new SSpacer(1, 5));
-        SComboBox comboBox = new SComboBox();
+        comboBox = new SComboBox();
         comboBox.setName("combo");
         addComboBoxElements(comboBox);
         cont.add(comboBox);
@@ -103,7 +99,8 @@ public class ListExample
         cont.add(new SLabel("AnchorList"));
         cont.add(new SSpacer(1, 5));
         SList anchorList = new SList();
-        anchorList.setName("noform");
+        this.anchorList = anchorList;
+        this.anchorList.setName("noform");
         anchorList.setShowAsFormComponent(false);
         anchorList.setSelectionMode(SList.SINGLE_SELECTION);
         addAnchorElements(anchorList);
@@ -182,11 +179,23 @@ public class ListExample
         }
     }
 
-    static class ListControls
+    class ListControls
         extends ComponentControls
     {
         public ListControls() {
             formComponentCheckBox.setVisible(false);
+
+            final SCheckBox enabled = new SCheckBox("enabled");
+            enabled.setSelected(true);
+            enabled.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    singleSelectionList.setEnabled(enabled.isSelected());
+                    multiSelectionList.setEnabled(enabled.isSelected());
+                    comboBox.setEnabled(enabled.isSelected());
+                    anchorList.setEnabled(enabled.isSelected());
+                }
+            });
+            addControl(enabled);
         }
     }
 }

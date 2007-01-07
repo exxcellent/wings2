@@ -72,7 +72,7 @@ public class ProgressBarExample extends WingSetPane {
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         c1.gridwidth = GridBagConstraints.REMAINDER;
-        panel.add(new SLabel("<html>&nbsp;"));
+        panel.add(new SLabel("<html>&nbsp;"), c1);
         panel.add(progressBar, c1);
         panel.add(backward10Percent, c0);
         backward10Percent.setHorizontalAlignment(LEFT_ALIGN);

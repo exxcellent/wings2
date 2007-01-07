@@ -33,6 +33,14 @@ public class CheckBoxExample
     static final SIcon disnsel = new SResourceIcon("org/wings/icons/green_light_off_disabled.png");
     static final SIcon rollsel = new SResourceIcon("org/wings/icons/green_light_on.png");
     static final SIcon rollnsel = new SResourceIcon("org/wings/icons/green_light_on.png");
+
+    static SIcon backup_sel;
+    static SIcon backup_nsel;
+    static SIcon backup_dissel;
+    static SIcon backup_disnsel;
+    static SIcon backup_rollsel;
+    static SIcon backup_rollnsel;
+
     private ButtonControls controls;
 
     private final SLabel reportLabel = new SLabel("No button pressed");
@@ -60,7 +68,7 @@ public class CheckBoxExample
             button.setShowAsFormComponent(true);
             button.setActionCommand(button.getText());
             button.setToolTipText("CheckBox " + (i+1));
-            button.setName("cb" + (i+1));
+            button.setName("check" + (i+1));
             button.setVerticalTextPosition(textVPos[(i / 3)% 3]);
             button.setHorizontalTextPosition(textHPos[i % 3]);
             controls.addControllable(button);
@@ -93,6 +101,12 @@ public class CheckBoxExample
                     for (int i = 0; i < buttons.length; i++) {
                         SCheckBox button = buttons[i];
                         if (i != 4 && customIcons.isSelected()) {
+                            backup_nsel = button.getIcon();
+                            backup_sel = button.getSelectedIcon();
+                            backup_disnsel = button.getDisabledIcon();
+                            backup_dissel = button.getDisabledSelectedIcon();
+                            backup_rollnsel = button.getRolloverIcon();
+                            backup_rollsel = button.getRolloverSelectedIcon();
                             button.setIcon(nsel);
                             button.setSelectedIcon(sel);
                             button.setDisabledIcon(disnsel);
@@ -101,12 +115,12 @@ public class CheckBoxExample
                             button.setRolloverSelectedIcon(rollsel);
                         }
                         else {
-                            button.setIcon(null);
-                            button.setSelectedIcon(null);
-                            button.setDisabledIcon(null);
-                            button.setDisabledSelectedIcon(null);
-                            button.setRolloverIcon(null);
-                            button.setRolloverSelectedIcon(null);
+                            button.setIcon(backup_nsel);
+                            button.setSelectedIcon(backup_sel);
+                            button.setDisabledIcon(backup_disnsel);
+                            button.setDisabledSelectedIcon(backup_dissel);
+                            button.setRolloverIcon(backup_rollnsel);
+                            button.setRolloverSelectedIcon(backup_rollsel);
                         }
                     }
                 }
