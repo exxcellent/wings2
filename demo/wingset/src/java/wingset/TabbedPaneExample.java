@@ -77,7 +77,9 @@ public class TabbedPaneExample extends WingSetPane {
         });
         controls.addControllable(tabbedPane);
 
-        return tabbedPane;
+        SPanel panel = new SPanel(new SBorderLayout(10, 10));
+        panel.add(tabbedPane);
+        return panel;
     }
 
 

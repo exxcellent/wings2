@@ -66,11 +66,11 @@ public class ComponentControls  extends SPanel {
     };
 
     protected static final Object[] FONTS = new Object[] {
-        new Object[] { "default font",           null },
-        new Object[] { "serif italic bold",      new SFont("Times,Times New Roman,serif", SFont.ITALIC | SFont.BOLD, 10)},
-        new Object[] { "serif",                  new SFont("Times,Times New Roman,serif", SFont.PLAIN, SFont.DEFAULT_SIZE) },
-        new Object[] { "16pt sans bold",         new SFont("Arial,sans-serif", SFont.BOLD, 16)},
-        new Object[] { "24pt fantasy italic",    new SFont("Comic,Comic Sans MS,fantasy", SFont.ITALIC, 24) }
+        new Object[] { "default font",         null },
+        new Object[] { "serif italic bold",    new SFont("Times,Times New Roman,serif", SFont.ITALIC | SFont.BOLD, 10)},
+        new Object[] { "serif",                new SFont("Times,Times New Roman,serif", SFont.PLAIN, SFont.DEFAULT_SIZE) },
+        new Object[] { "16 sans bold",         new SFont("Arial,sans-serif", SFont.BOLD, 16)},
+        new Object[] { "24 fantasy italic",    new SFont("Comic,Comic Sans MS,fantasy", SFont.ITALIC, 24) }
     };
 
     protected final List components = new LinkedList();
@@ -325,3 +325,12 @@ public class ComponentControls  extends SPanel {
         }
     }
 }
+
+/*
+        SButton switchDebugViewButton = new SButton("Toggle AJAX debug view");
+        switchStyleButton.setShowAsFormComponent(false);
+        switchDebugViewButton.addScriptListener(new JavaScriptListener(
+                JavaScriptEvent.ON_CLICK,
+                "wingS.ajax.toggleDebugView(); return false;"
+        ));
+*/

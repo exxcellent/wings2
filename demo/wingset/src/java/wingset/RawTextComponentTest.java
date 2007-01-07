@@ -7,9 +7,9 @@ import org.wings.SPanel;
 import org.wings.SRawTextComponent;
 import org.wings.STemplateLayout;
 
-public class RawTextComponentExample extends WingSetPane {
-
-
+public class RawTextComponentTest
+    extends WingSetPane
+{
     protected SComponent createControls() {
         return null;
     }
@@ -31,7 +31,7 @@ public class RawTextComponentExample extends WingSetPane {
             except.printStackTrace();
         }
 
-        examplePanel.add(new SRawTextComponent("This is a Raw Text. It does not break and has no div's wrapping it."), "contentText");
+        examplePanel.add(new SRawTextComponent("This is a raw text. It does not break and has no div's wrapping it."), "contentText");
         examplePanel.add(new SRawTextComponent("<a href=\"javascript:alert('Simple but useful...');\">" +
                 "This link was made with a RawTextComponent.</a>"), "linkText");
 

@@ -99,7 +99,7 @@ public class TableExample
     }
 
     static class MyCellRenderer extends SDefaultTableCellRenderer {
-        private static final SFont MONOSPACE = new SFont("monospace", SFont.BOLD, 10);
+        private static final SFont MONOSPACE = new SFont("monospace", SFont.BOLD, SFont.DEFAULT_SIZE);
 
         public MyCellRenderer() {
             setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));

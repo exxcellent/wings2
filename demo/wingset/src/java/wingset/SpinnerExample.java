@@ -35,13 +35,13 @@ public class SpinnerExample
 
     public SComponent createExample() {
 
-        SGridLayout layout = new SGridLayout( 2 );
-        SPanel form = new SPanel( layout );
+        SGridLayout layout = new SGridLayout(4, 2, 10, 10);
+        SPanel panel = new SPanel( layout );
 
-        form.add( new SLabel( "Fruits : ",     SConstants.RIGHT_ALIGN ) ); form.add( getListSpinner() );
-        form.add( new SLabel( "Month : ",      SConstants.RIGHT_ALIGN ) ); form.add( getDateSpinner() );
-        form.add( new SLabel( "Percent : ",    SConstants.RIGHT_ALIGN ) ); form.add( getNumberSpinner() );
-        form.add( new SLabel( "Calendar : ",   SConstants.RIGHT_ALIGN ) );
+        panel.add( new SLabel( "Fruits : ",     SConstants.RIGHT_ALIGN ) ); panel.add( getListSpinner() );
+        panel.add( new SLabel( "Month : ",      SConstants.RIGHT_ALIGN ) ); panel.add( getDateSpinner() );
+        panel.add( new SLabel( "Percent : ",    SConstants.RIGHT_ALIGN ) ); panel.add( getNumberSpinner() );
+        panel.add( new SLabel( "Calendar : ",   SConstants.RIGHT_ALIGN ) );
 
         Calendar calendar = new GregorianCalendar();
         Date initDate = calendar.getTime();
@@ -53,9 +53,9 @@ public class SpinnerExample
         Date latestDate = calendar.getTime();
 
         SSpinner spinner = new SSpinner( new SpinnerDateModel( initDate, earliestDate, latestDate, Calendar.MONTH) );
-        form.add( spinner );
+        panel.add( spinner );
 
-        return form;
+        return panel;
 
     }
 

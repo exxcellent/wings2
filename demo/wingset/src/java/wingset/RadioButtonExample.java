@@ -111,7 +111,7 @@ public class RadioButtonExample
             buttonGrid.add(buttons[i]);
         }
 
-        SPanel panel = new SPanel(new SGridLayout(1));
+        final SPanel panel = new SPanel(new SGridLayout(2, 1, 0, 20));
         panel.add(buttonGrid);
         panel.add(reportLabel);
 

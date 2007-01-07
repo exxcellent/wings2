@@ -62,11 +62,6 @@ public class JavaScriptListenerExample
     }
 
     public SComponent createExample() {
-        SPanel p = new SPanel(new SBoxLayout(SConstants.VERTICAL));
-        p.setPreferredSize(SDimension.FULLWIDTH);
-        p.add(new SLabel("The client side can handle simple events by JavaScript listeners.\n" +
-                "In this example, numbers are added locally inside the browser.\n", SConstants.CENTER_ALIGN));
-
         final STextField firstField = createNumberField();
         final STextField secondField = createNumberField();
         final STextField sumField = createNumberField();
@@ -114,6 +109,10 @@ public class JavaScriptListenerExample
         // any change to the sum field: no way, recalculate from source fields
         sumField.addScriptListener(jsListener);
 
+        SPanel p = new SPanel(new SGridLayout(2, 1, 10, 10));
+        p.setPreferredSize(SDimension.FULLWIDTH);
+        p.add(new SLabel("The client side can handle simple events by JavaScript listeners.\n" +
+                "In this example, numbers are added locally inside the browser.\n", SConstants.CENTER_ALIGN));
         p.add(panel);
         return p;
     }

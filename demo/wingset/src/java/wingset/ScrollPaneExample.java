@@ -51,7 +51,6 @@ public class ScrollPaneExample extends WingSetPane
         scrollPane.setVerticalExtent(20);
         scrollPane.getHorizontalScrollBar().setBlockIncrement(3);
         scrollPane.getVerticalScrollBar().setBlockIncrement(3);
-        scrollPane.setBorder(new SLineBorder(Color.GRAY, 1));
         scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
         scrollPane.setPreferredSize(SDimension.FULLAREA);
 
@@ -65,10 +64,6 @@ public class ScrollPaneExample extends WingSetPane
 
     class ScrollPaneControls extends ComponentControls {
         public ScrollPaneControls () {
-            borderColorComboBox.setSelectedIndex(1);
-            borderStyleComboBox.setSelectedIndex(4);
-            borderThicknessTextField.setText("1");
-
             String[] scrollables = {"table", "tree", "list"};
             final SComboBox scrollable = new SComboBox(scrollables);
             scrollable.addActionListener(new ActionListener() {
@@ -209,17 +204,17 @@ public class ScrollPaneExample extends WingSetPane
                 }
             });
 
-            addControl(new SLabel("Scrollable:"));
+            addControl(new SLabel("Scrollable"));
             addControl(scrollable);
-            addControl(new SLabel(" Mode:"));
+            addControl(new SLabel(" Mode"));
             addControl(mode);
-            addControl(new SLabel(" Extent (H/V):"));
+            addControl(new SLabel(" Extent (H/V)"));
             addControl(hScrollpaneExtent);
             addControl(vScrollpaneExtent);
-            addControl(new SLabel(" Scrollbar (H/V):"));
+            addControl(new SLabel(" Scrollbar (H/V)"));
             addControl(hScrollBar);
             addControl(vScrollBar);
-            addControl(new SLabel(" Scrollbar policy (H/V):"));
+            addControl(new SLabel(" Policy (H/V)"));
             addControl(hScrollBarPolicy);
             addControl(vScrollBarPolicy);
         }

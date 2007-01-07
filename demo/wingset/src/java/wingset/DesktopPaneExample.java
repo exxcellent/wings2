@@ -24,7 +24,8 @@ public class DesktopPaneExample extends WingSetPane {
     }
 
     protected SComponent createExample() {
-        windowIcon = (SIcon)getSession().getCGManager().getObject("TableCG.editIcon", SIcon.class);
+        windowIcon = new SResourceIcon("org/wings/icons/window.png");
+
         for (int i = 0; i < FRAME_COUNT; i++) {
             SInternalFrame iFrame = new SInternalFrame();
             iFrame.getContentPane().setLayout(new SBoxLayout(SConstants.VERTICAL));

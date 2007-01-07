@@ -41,9 +41,19 @@
 
     <target name="build" depends="compile, includelog4j">
         <copy todir="build/web">
-            <fileset dir="src/web"/>
+            <fileset dir="src/web">
+                <exclude name="WEB-INF/web.xml"/>
+            </fileset>
             <fileset dir="../../build/web"/>
-            <fileset dir="src/java/wingset" includes="*Example.java">
+            <fileset dir="src/java/wingset" includes="*Example.java,*Test.java,*Experiment.java"/>
+        </copy>
+        <copy todir="build/web">
+            <filterset>
+                <filter token="wingset.include.tests" value="${wingset.include.tests}"/>
+                <filter token="wingset.include.experiments" value="${wingset.include.experiments}"/>
+            </filterset>
+            <fileset dir="src/web">
+                <include name="WEB-INF/web.xml"/>
             </fileset>
         </copy>
         <copy todir="build/web/WEB-INF/classes">

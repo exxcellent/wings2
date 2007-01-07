@@ -44,7 +44,6 @@ public class TextComponentExample extends WingSetPane {
     }
 
     public SComponent createExample() {
-
         SGridLayout gridLayout = new SGridLayout(2);
         gridLayout.setHgap(10);
         gridLayout.setVgap(4);

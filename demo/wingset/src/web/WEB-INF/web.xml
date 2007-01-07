@@ -10,7 +10,7 @@
         <servlet-class>org.wings.session.WingServlet</servlet-class>
         <init-param>
             <param-name>wings.mainclass</param-name>
-            <param-value>wingset.WingSet</param-value>
+            <param-value>wingset.WingSet2</param-value>
         </init-param>
 
         <!-- NOTE: The entries below are optionally. We included them mainly for documentation purpose -->
@@ -59,12 +59,12 @@
         </init-param>
         <init-param>
             <param-name>wingset.include.tests</param-name>
-            <param-value>TRUE</param-value>
+            <param-value>@wingset.include.tests@</param-value>
     	    <description>Include tests in WingSet</description>
         </init-param>
         <init-param>
             <param-name>wingset.include.experiments</param-name>
-            <param-value>TRUE</param-value>
+            <param-value>@wingset.include.experiments@</param-value>
     	    <description>Include experiments in WingSet</description>
         </init-param>
     </servlet>

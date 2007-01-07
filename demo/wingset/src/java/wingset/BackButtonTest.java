@@ -24,10 +24,7 @@ import org.wings.SPanel;
 import org.wings.SRadioButton;
 import org.wings.SDimension;
 import org.wings.border.SEmptyBorder;
-import org.wings.event.InvalidLowLevelEvent;
-import org.wings.event.SInvalidLowLevelEventListener;
-import org.wings.event.SRenderEvent;
-import org.wings.event.SRenderListener;
+import org.wings.event.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -41,7 +38,9 @@ import java.awt.event.ActionEvent;
  *
  * @author bschmid
  */
-public class BackButtonExample extends WingSetPane {
+public class BackButtonTest
+    extends WingSetPane
+{
     private final SPanel mainPanel = new SPanel();
     private final SLabel epochLabel = new SLabel();
     private final SButton newEpochButton = new SButton("After changing mode, click here SEVERAL times generate browser history entries");
@@ -197,18 +196,22 @@ public class BackButtonExample extends WingSetPane {
         });
         mainPanel.add(nonEpochedButton);
 
-        return mainPanel;
-    }
+        mainPanel.addParentFrameListener(new SParentFrameListener()
+        {
+            public void parentFrameAdded(SParentFrameEvent e) {
+                mainPanel.getParentFrame().setBackButton(virtualBackButton);
 
-    protected void initializePanel() {
-        super.initializePanel(); // first add this panel to the frame.
-        mainPanel.getParentFrame().setBackButton(virtualBackButton);
+                mainPanel.getParentFrame().addInvalidLowLevelEventListener(new SInvalidLowLevelEventListener() {
+                    public void invalidLowLevelEvent(InvalidLowLevelEvent e) {
+                        log.info("Invalid Low-Level event detected on "+e.getSource());
+                    }
+                });
+                mainPanel.removeParentFrameListener(this);
+            }
 
-        mainPanel.getParentFrame().addInvalidLowLevelEventListener(new SInvalidLowLevelEventListener() {
-            public void invalidLowLevelEvent(InvalidLowLevelEvent e) {
-                log.info("Invalid Low-Level event detected on "+e.getSource());
+            public void parentFrameRemoved(SParentFrameEvent e) {
             }
         });
+        return mainPanel;
     }
-
 }

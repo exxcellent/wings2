@@ -73,7 +73,7 @@ public class LabelExample extends WingSetPane {
         SLabel titleResult = new SLabel("Result");
         titleResult.setHorizontalAlignment(SConstants.CENTER_ALIGN);
 
-        SGridLayout layout = new SGridLayout(3);
+        SGridLayout layout = new SGridLayout(3, 3, 10, 10);
         layout.setRenderFirstLineAsHeader(true);
         SPanel panel = new SPanel(layout);
         panel.add(new SLabel("Control the label's text position"));

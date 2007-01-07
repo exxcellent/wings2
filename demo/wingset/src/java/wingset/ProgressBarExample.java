@@ -12,13 +12,7 @@
  */
 package wingset;
 
-import org.wings.SButton;
-import org.wings.SComponent;
-import org.wings.SContainer;
-import org.wings.SDimension;
-import org.wings.SGridBagLayout;
-import org.wings.SPanel;
-import org.wings.SProgressBar;
+import org.wings.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -78,6 +72,7 @@ public class ProgressBarExample extends WingSetPane {
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         c1.gridwidth = GridBagConstraints.REMAINDER;
+        panel.add(new SLabel("<html>&nbsp;"));
         panel.add(progressBar, c1);
         panel.add(backward10Percent, c0);
         backward10Percent.setHorizontalAlignment(LEFT_ALIGN);
@@ -90,8 +85,6 @@ public class ProgressBarExample extends WingSetPane {
 
         return panel;
     }
-
-
 }
 
 

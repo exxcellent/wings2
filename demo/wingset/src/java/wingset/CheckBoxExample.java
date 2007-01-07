@@ -41,6 +41,7 @@ public class CheckBoxExample
             reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
         }
     };
+    private SCheckBox[] buttons;
 
     protected SComponent createControls() {
         controls = new ButtonControls();
@@ -52,33 +53,17 @@ public class CheckBoxExample
     }
 
     SContainer createCheckBoxExample() {
-        SCheckBox[] buttons = new SCheckBox[9];
+        buttons = new SCheckBox[9];
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new SCheckBox("Text " + (i + 1));
-            buttons[i].setActionCommand(buttons[i].getText());
-            if (i != 4) {
-                buttons[i].setIcon(nsel);
-                buttons[i].setSelectedIcon(sel);
-                buttons[i].setDisabledIcon(disnsel);
-                buttons[i].setDisabledSelectedIcon(dissel);
-                buttons[i].setRolloverIcon(rollnsel);
-                buttons[i].setRolloverSelectedIcon(rollsel);
-            }
-            else {
-                buttons[i].setIcon(null);
-                buttons[i].setSelectedIcon(null);
-                buttons[i].setDisabledIcon(null);
-                buttons[i].setDisabledSelectedIcon(null);
-                buttons[i].setRolloverIcon(null);
-                buttons[i].setRolloverSelectedIcon(null);
-            }
-            buttons[i].setToolTipText("CheckBox " + (i+1));
-            buttons[i].setName("cb" + (i+1));
-            buttons[i].setShowAsFormComponent(false);
-            buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
-            buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
-            controls.addControllable(buttons[i]);
+            SCheckBox button = buttons[i] = new SCheckBox("Text " + (i + 1));
+            button.setShowAsFormComponent(true);
+            button.setActionCommand(button.getText());
+            button.setToolTipText("CheckBox " + (i+1));
+            button.setName("cb" + (i+1));
+            button.setVerticalTextPosition(textVPos[(i / 3)% 3]);
+            button.setHorizontalTextPosition(textHPos[i % 3]);
+            controls.addControllable(button);
         }
 
         final SGridLayout grid = new SGridLayout(3);
@@ -92,7 +77,7 @@ public class CheckBoxExample
             buttonGrid.add(buttons[i]);
         }
 
-        SPanel panel = new SPanel(new SGridLayout(1));
+        final SPanel panel = new SPanel(new SGridLayout(2, 1, 0, 20));
         panel.add(buttonGrid);
         panel.add(reportLabel);
 
@@ -101,13 +86,41 @@ public class CheckBoxExample
 
     class ButtonControls extends ComponentControls {
         public ButtonControls() {
-            final SCheckBox useImages = new SCheckBox("Show icons in form");
+            formComponentCheckBox.setSelected(true);
+            final SCheckBox customIcons = new SCheckBox("custom icons");
+            customIcons.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    for (int i = 0; i < buttons.length; i++) {
+                        SCheckBox button = buttons[i];
+                        if (i != 4 && customIcons.isSelected()) {
+                            button.setIcon(nsel);
+                            button.setSelectedIcon(sel);
+                            button.setDisabledIcon(disnsel);
+                            button.setDisabledSelectedIcon(dissel);
+                            button.setRolloverIcon(rollnsel);
+                            button.setRolloverSelectedIcon(rollsel);
+                        }
+                        else {
+                            button.setIcon(null);
+                            button.setSelectedIcon(null);
+                            button.setDisabledIcon(null);
+                            button.setDisabledSelectedIcon(null);
+                            button.setRolloverIcon(null);
+                            button.setRolloverSelectedIcon(null);
+                        }
+                    }
+                }
+            });
+            addControl(customIcons);
+
+            final SCheckBox useImages = new SCheckBox("icons in form");
             final CheckBoxCG cg = (CheckBoxCG) getSession().getCGManager().getCG(SCheckBox.class);
-            useImages.setSelected(cg.isUseIconsInForm());
+            useImages.setSelected(true);
+            cg.setUseIconsInForm(true);
             useImages.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     cg.setUseIconsInForm(useImages.isSelected());
-                    reload();
+                    CheckBoxExample.this.reload();
                 }
             });
             addControl(useImages);

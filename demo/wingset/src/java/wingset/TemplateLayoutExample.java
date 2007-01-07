@@ -15,8 +15,10 @@ package wingset;
 import org.wings.*;
 import org.wings.border.SLineBorder;
 import org.wings.template.StringTemplateSource;
+import org.wings.template.propertymanagers.DefaultPropertyManager;
 import org.wings.util.SStringBuilder;
 
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
@@ -25,21 +27,20 @@ import java.io.InputStreamReader;
 /**
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  */
-public class InteractiveTemplateExample
-        extends WingSetPane
+public class TemplateLayoutExample
+    extends WingSetPane
         implements SConstants {
 
-    final static String TEMPLATE = "/templates/FallbackInteractiveTemplateExample.thtml";
+    final static String TEMPLATE = "/templates/TemplateExample.thtml";
 
     private String templateString;
     protected StringTemplateSource templateSource;
     protected STextArea templateInput;
-    protected Controls controls;
 
+    private ComponentControls controls;
 
     protected SComponent createControls() {
         controls = new Controls();
-        controls.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         return controls;
     }
 
@@ -67,6 +68,7 @@ public class InteractiveTemplateExample
 
         templateSource = new StringTemplateSource(templateString);
         templateInput = new STextArea(templateString);
+        templateInput.setAttribute("font", "12px monospace");
 
         SButton applyButton = new SButton("Apply");
         applyButton.addActionListener(new java.awt.event.ActionListener() {
@@ -79,6 +81,18 @@ public class InteractiveTemplateExample
         SLabel label = new SLabel("Simple Label");
 
         SPanel panel = new SPanel();
+        panel.add(new SLabel("BeanScript support not enabled. Define value 'true' for " +
+                "property "+ DefaultPropertyManager.BEANSCRIPT_ENABLE+" in web.xml " +
+                "to enable BeanScript support!"), "theLabel");
+        panel.add(new STextField(), "NAME");
+        panel.add(new STextField(), "FIRSTNAME");
+
+        STree tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
+        SScrollPane scrollPane = new SScrollPane(tree);
+        scrollPane.setMode(SScrollPane.MODE_COMPLETE);
+        scrollPane.setPreferredSize(new SDimension("320px", "180px"));
+        panel.add(scrollPane, "TREE");
+        panel.setVerticalAlignment(SConstants.TOP_ALIGN);
         panel.setLayout(new STemplateLayout(templateSource));
         panel.add(templateInput, "TemplateInput");
         panel.add(applyButton, "Apply");
@@ -88,8 +102,10 @@ public class InteractiveTemplateExample
         return panel;
     }
 
-    class Controls extends SToolBar {
+    class Controls extends ComponentControls {
         public Controls() {
+            globalControls.setVisible(false);
+            
             SLineBorder border = new SLineBorder(new Color(0xCC, 0xCC, 0xCC), 0);
             border.setThickness(1, SConstants.TOP);
             setBorder(border);
@@ -98,11 +114,11 @@ public class InteractiveTemplateExample
                 public void actionPerformed(ActionEvent e) {
                     templateSource.setTemplate(templateString);
                     templateInput.setText(templateString);
-                    InteractiveTemplateExample.this.reload();
+                    TemplateLayoutExample.this.reload();
                 }
             });
 
-            add(resetButton, SBorderLayout.NORTH);
+            addControl(resetButton);
         }
     }
 }

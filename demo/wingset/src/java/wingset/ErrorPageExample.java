@@ -14,14 +14,12 @@ public class ErrorPageExample extends WingSetPane {
     }
 
     protected SComponent createExample() {
-        SPanel panel = new SPanel();
         SButton incremental = new SButton("Error during incremental request");
         incremental.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 throw new RuntimeException("Show error page!");
             }
         });
-        panel.addComponent(incremental);
         SButton complete = new SButton("Error during complete request");
         complete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -43,7 +41,11 @@ public class ErrorPageExample extends WingSetPane {
                 });
             }
         });
+
+        SPanel panel = new SPanel(new SGridLayout(1, 2, 10, 10));
+        panel.addComponent(incremental);
         panel.addComponent(complete);
+
         return panel;
     }
 }

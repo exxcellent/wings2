@@ -75,7 +75,7 @@ public class TreeExample
 
         controls.addControllable(scrollPane);
 
-        SPanel panel = new SPanel(new SBorderLayout());
+        SPanel panel = new SPanel(new SBorderLayout(10, 10));
         panel.add(scrollPane, SBorderLayout.CENTER);
         panel.add(clicks, SBorderLayout.SOUTH);
         return panel;
@@ -148,6 +148,7 @@ public class TreeExample
                         PropertyAccessor.setProperty(tree.getCG(), "expandControlIcon", ARROW_RIGHT);
                         PropertyAccessor.setProperty(tree.getCG(), "leafControlIcon", null);
                     }
+                    tree.reload();
                 }
             });
 

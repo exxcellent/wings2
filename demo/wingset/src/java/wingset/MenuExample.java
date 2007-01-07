@@ -73,10 +73,6 @@ public class MenuExample extends WingSetPane {
         formPanel.add(new STextField("wingS is great"));
         formPanel.add(new STextArea("wingS is a great framework for implementing complex web applications"));
 
-        SList list2 = new SList(ListExample.createListModel());
-        list2.setVisibleRowCount(3);
-        formPanel.add(list2, "List2");
-
         SPanel messagePanel = new SPanel(new SGridLayout(1));
         messagePanel.add(new SLabel("Form components are overlayed or hidden (IE bug).\n\nSelected Menu: "));
         selectionLabel = new SLabel("<No menue selected yet>");
@@ -194,9 +190,6 @@ public class MenuExample extends WingSetPane {
         SMenuBar menuBar = new SMenuBar();
         SBorder border = new SLineBorder(Color.WHITE, 0);
         border.setThickness(1, SConstants.TOP);
-        if (!Utils.isMSIE(this))
-            border.setThickness(1, SConstants.LEFT);
-
         menuBar.setBorder(border);
 
         for (int i = 0; i < root.getChildCount(); i++) {

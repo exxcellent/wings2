@@ -1005,7 +1005,10 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         if (depth < 0) {
             depth = 0;
         }
-        nodeIndentDepth = depth;
+        if (nodeIndentDepth != depth) {
+            nodeIndentDepth = depth;
+            reload();
+        }
     }
 
     public int getNodeIndentDepth() {
