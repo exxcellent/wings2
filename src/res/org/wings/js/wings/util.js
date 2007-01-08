@@ -231,7 +231,7 @@ wingS.util.requestFocus = function(id) {
 };
 
 wingS.util.storeFocus = function(event) {
-    var target = wingS.events.getTarget(event);
+    var target = wingS.event.getTarget(event);
     var eidProvider = wingS.util.getParentByAttribute(target, "eid");
     var body = wingS.util.getParentByTagName(target, "BODY");
     // Avoid rembering FORM as focus component as this automatically

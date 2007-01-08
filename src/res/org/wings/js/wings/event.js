@@ -5,20 +5,20 @@
 /**
  * Create according namespace
  */
-if (!wingS.events) {
-    wingS.events = new Object();
-} else if (typeof wingS.events != "object") {
-    throw new Error("wingS.events already exists and is not an object");
+if (!wingS.event) {
+    wingS.event = new Object();
+} else if (typeof wingS.event != "object") {
+    throw new Error("wingS.event already exists and is not an object");
 }
 
-wingS.events.getEvent = function(event) {
+wingS.event.getEvent = function(event) {
     if (window.event)
         return window.event;
     else
         return event;
 };
 
-wingS.events.getTarget = function(event) {
+wingS.event.getTarget = function(event) {
     var target;
     if (event.srcElement)
         // according to IE
@@ -35,11 +35,11 @@ wingS.events.getTarget = function(event) {
 /**
  * Cross-browser method to register an event listener on the passed object. Only Mozilla will
  * support captive mode of event handling. The 'eventType' is without the 'on'-prefix.
- * Example: wingS.events.registerEvent(document,'focus',storeFocus,false);
+ * Example: wingS.event.registerEvent(document,'focus',storeFocus,false);
  *
  * Deprecated! Use YAHOO.util.Event.addListener() instead of this function.
  */
-wingS.events.registerEvent = function(obj, eventType, func, useCaption) {
+wingS.event.registerEvent = function(obj, eventType, func, useCaption) {
     if (obj.addEventListener) {
         obj.addEventListener(eventType, func, useCaption);
         return true;

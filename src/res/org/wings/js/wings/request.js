@@ -43,8 +43,8 @@ wingS.request.sendEvent = function(event, submit, async, eventName, eventValue, 
     var target = null;
     if (event != null) {
         // Detect the according event target
-        event = wingS.events.getEvent(event);
-        target = wingS.events.getTarget(event);
+        event = wingS.event.getEvent(event);
+        target = wingS.event.getTarget(event);
     }
 
     // Prepare the appropriate method call

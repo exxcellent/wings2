@@ -132,7 +132,7 @@ function wpm_isValidEvent(coord) {
 }
 
 function wpm_menu(event, menu) {
-    var target = wingS.events.getTarget(event);
+    var target = wingS.event.getTarget(event);
     var form = wingS.util.getParentByTagName(target, "FORM");
     if (form != null)
         document.getElementById(menu).setAttribute("form", form.id);
@@ -160,7 +160,7 @@ function wpm_changeMenu(event, menu) {
 }
 
 function wpm_menuPopup(event, menu) {
-    var target = wingS.events.getTarget(event);
+    var target = wingS.event.getTarget(event);
     var form = wingS.util.getParentByTagName(target, "FORM");
     if (form != null)
         document.getElementById(menu).setAttribute("form", form.id);
@@ -251,7 +251,7 @@ function wpm_setVisible(element, visible) {
 
 
 function wpm_openMenu(event, id, parentId) {
-    var event = wingS.events.getEvent(event);
+    var event = wingS.event.getEvent(event);
 
     if (parentULId(event) != parentId) {
         // don't bubble
@@ -293,7 +293,7 @@ function wpm_openMenu(event, id, parentId) {
 }
 
 function parentULId(event) {
-    var node = wingS.events.getTarget(event);
+    var node = wingS.event.getTarget(event);
     while (node) {
         if (node.tagName == "UL") {
             return node.id;

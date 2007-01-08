@@ -174,6 +174,11 @@ public class Link implements Renderable, Serializable {
 
         return hashCode;
     }
+
+    public String toString() {
+        return urlSource.getURL().toString();
+    }
+
 }
 
 

@@ -134,6 +134,10 @@ public class Script implements Renderable, Serializable {
         return hashCode;
     }
 
+    public String toString() {
+        return urlSource.getURL().toString();
+    }
+
 }
 
 

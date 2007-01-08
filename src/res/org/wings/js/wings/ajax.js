@@ -223,8 +223,8 @@ wingS.ajax.ActivityCursor = function() {
  * @param {Object} event - the event object
  */
 wingS.ajax.ActivityCursor.prototype.followMouse = function(event) {
-    event = wingS.events.getEvent(event);
-    var target = wingS.events.getTarget(event);
+    event = wingS.event.getEvent(event);
+    var target = wingS.event.getTarget(event);
 
     var posX = 0;
     var posY = 0;
