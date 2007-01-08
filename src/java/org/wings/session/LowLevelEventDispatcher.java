@@ -101,35 +101,20 @@ public final class LowLevelEventDispatcher
      */
     public void register(LowLevelEventListener gl) {
         if (gl != null) {
-            final String key = gl.getLowLevelEventId();
-            final String name = gl.getName();
+            final String id = gl.getLowLevelEventId();
 
-            log.debug("dispatcher: register id    '" + key + "' type: " + gl.getClass());
-            addLowLevelEventListener(gl, key);
-
-            if (namedEvents && (name != null) && !name.equals(key) && (name.length() > 0) ) {
-                log.debug("dispatcher: register named '" + name + "'");
-                addLowLevelEventListener(gl, name);
-            }
+            log.debug("register id '" + id + "' (type: " + gl.getClass() + ")");
+            addLowLevelEventListener(gl, id);
         }
     }
 
     public void unregister(LowLevelEventListener gl) {
-        if (gl == null) {
-            return;
+        if (gl != null) {
+            final String id = gl.getLowLevelEventId();
+
+            log.debug("unregister id '" + id + "' (type: " + gl.getClass() + ")");
+            removeLowLevelEventListener(gl, id);
         }
-
-        String key = gl.getLowLevelEventId();
-
-        log.debug("unregister '" + key + "'");
-        removeLowLevelEventListener(gl, key);
-
-        key = gl.getName();
-        if (key != null && key.trim().length() > 0) {
-            log.debug("unregister named '" + key + "'");
-            removeLowLevelEventListener(gl, key);
-        }
-
     }
 
     /**

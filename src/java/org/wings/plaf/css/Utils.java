@@ -181,16 +181,13 @@ public final class Utils {
     }
 
     /**
-     * Encodes a low level event id for using it in a request parameter. Every
-     * {@link LowLevelEventListener} should encode its LowLevelEventId before
-     * using it in a request parameter. This encoding adds consistency checking
-     * for outtimed requests ("Back Button")
+     * Returns the according event ID for the given component.
      */
     public static String event(SComponent component) {
         if (component instanceof SClickable)
-            return ((SClickable)component).getEventTarget().getEncodedLowLevelEventId();
+            return ((SClickable)component).getEventTarget().getLowLevelEventId();
         else
-            return component.getEncodedLowLevelEventId();
+            return component.getLowLevelEventId();
     }
 
     /**

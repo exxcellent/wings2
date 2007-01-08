@@ -177,8 +177,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     private EventListenerList listeners;
 
-    private Boolean useNamedEvents;
-
     private boolean showAsFormComponent = true;
 
     private boolean reloadForced = false;
@@ -1257,44 +1255,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
         buffer.append("]");
         return buffer.toString();
-    }
-
-    /**
-     * Encodes a low level event id for using it in a request parameter. Every
-     * {@link LowLevelEventListener} should encode its LowLevelEventId before
-     * using it in a request parameter. This encoding adds consistency checking
-     * for outtimed requests ("Back Button")
-     */
-    private String encodeLowLevelEventId(String lowLevelEventId) {
-//        if (getParentFrame() != null)
-//            if (!(this instanceof LowLevelEventListener) ||
-//                    ((LowLevelEventListener) this).isEpochCheckEnabled()) {
-//                return (getParentFrame().getEventEpoch()
-//                        + SConstants.UID_DIVIDER
-//                        + lowLevelEventId);
-//            }
-        return lowLevelEventId;
-    }
-
-    /**
-     * Encodes a low level event id for using it in a request parameter. Every
-     * {@link LowLevelEventListener} should encode its LowLevelEventId before
-     * using it in a request parameter. This encoding adds consistency checking
-     * for outtimed requests ("Back Button")
-     */
-    public final String getEncodedLowLevelEventId() {
-        if (getUseNamedEvents() && getName() != null)
-            return name;
-        else
-            return encodeLowLevelEventId(getLowLevelEventId());
-    }
-
-    private boolean getUseNamedEvents() {
-        if (useNamedEvents == null) {
-            useNamedEvents = ("true".equalsIgnoreCase((String) getSession().getProperty("wings.event.usenames")))
-                    ? Boolean.TRUE : Boolean.FALSE;
-        }
-        return useNamedEvents.booleanValue();
     }
 
     /**

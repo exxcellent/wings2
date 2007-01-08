@@ -141,14 +141,13 @@ public class RequestURL extends SimpleURL {
 
     /**
      * Add an additional name/value pair to be included in the GET paramter
-     * list. The added name will be the encoded LowLevelEventId of the
-     * LowLevelEventListener.
+     * list. The added name will be the LowLevelEventId of the LowLevelEventListener.
      *
      * @param value the value of the parameter
      * @return a reference to <code>this</code> to simplify 'call chaining'
      */
     public RequestURL addParameter(LowLevelEventListener comp, String value) {
-        addParameter(comp.getEncodedLowLevelEventId(), value);
+        addParameter(comp.getLowLevelEventId(), value);
         return this;
     }
 

@@ -21,12 +21,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SForm;
 import org.wings.event.SComponentDropListener;
-import org.wings.session.LowLevelEventDispatcher;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
 
 /**
  * The Drag and Drop Manager. It receives DnD events and dispatches them to the
@@ -152,13 +148,6 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         log.debug("sourcename: " + sourceName);
         log.debug("targetname: " + targetName);
         SForm.addArmedComponent(this);
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.SComponent#getLowLevelEventId()
-     */
-    public String getLowLevelEventId() {
-        return getName();
     }
 
     /* (non-Javadoc)

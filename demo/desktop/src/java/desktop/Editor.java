@@ -75,7 +75,7 @@ public class Editor
         textArea.setColumns(80);
         textArea.setRows(12);
         textArea.setPreferredSize(SDimension.FULLWIDTH);
-        
+
         SForm form = new SForm(new SFlowDownLayout());
         form.add(toolBar);
         form.add(textArea);
@@ -252,12 +252,11 @@ public class Editor
                         //logger.info("remove java script");
                         getParentFrame().removeScriptListener(script);
                     }
-                    
+
                     public String getName() { return "clear"; }
 
                     public String getLowLevelEventId() { return ""; }
-                    public String getEncodedLowLevelEventId() { return ""; }
-                    
+
                     public void fireIntermediateEvents() {}
                     public void fireFinalEvents() {}
   		            public boolean isEnabled() { return true; }

@@ -134,7 +134,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         Utils.optAttribute(device, "style", getInlineStyles(component));
 
         if (component instanceof LowLevelEventListener) {
-            Utils.optAttribute(device, "eid", component.getEncodedLowLevelEventId());
+            Utils.optAttribute(device, "eid", component.getLowLevelEventId());
         }
 
         // Tooltip handling

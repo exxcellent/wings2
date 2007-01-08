@@ -376,7 +376,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                     }
                 }
                 device.print("var wdnd_managerId = '");
-                device.print(dndManager.getEncodedLowLevelEventId());
+                device.print(dndManager.getLowLevelEventId());
                 device.print("';\n");
                 device.print("//-->\n</script>");
                 // TODO: is caching by the VM enough or make this only initialize once?
