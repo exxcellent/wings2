@@ -81,24 +81,6 @@ wingS.request.submitForm = function(target, async, eventName, eventValue, script
         form = document.getElementById(formProvider.getAttribute("form"));
     } else { // By default we walk up until we find the first form
         form = wingS.util.getParentByTagName(target, "FORM");
-
-        if (true) {
-            // START  D E B U G
-            var tmpEventName = eventName;
-            if (eventName != null) {
-                var eidProvider = wingS.util.getParentByAttribute(target, "eid");
-                if (eidProvider == null) {
-                    alert("[DEBUG] wingS.request.submitForm():\n" +
-                          "target = " + target + "\nform = " + form);
-                    return;
-                }
-                eventName = eidProvider.getAttribute("eid");
-            }
-            if (eventName != tmpEventName) {
-                alert("[DEBUG] eventName changed:\nfrom = " + tmpEventName + "\nto = " + eventName);
-            }
-            // END  D E B U G
-        }
     }
 
     if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
