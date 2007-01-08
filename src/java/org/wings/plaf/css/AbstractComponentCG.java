@@ -351,8 +351,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         try {
             BorderCG.writeComponentBorderPrefix(device, component);
             writeInternal(device, component);
-            ScriptManager scriptManager = component.getSession().getScriptManager();
-            scriptManager.addScriptListeners(component.getScriptListeners());
+            ScriptManager.getInstance().addScriptListeners(component.getScriptListeners());
             SToolTipManager.sharedInstance().registerComponent(component);
             BorderCG.writeComponentBorderSufix(device, component);
         } catch (RuntimeException e) {

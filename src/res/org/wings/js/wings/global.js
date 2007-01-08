@@ -59,7 +59,7 @@ wingS.global.init =  function(eventEpoch, reloadResource, updateResource, update
  * Adds a callback function which is invoked when all (asynchronously loaded) headers are available.
  * @param {Function} callback - the callback function to invoke
  */
-wingS.global.onHeadersAvailable = function(callback) {
+wingS.global.onHeadersLoaded = function(callback) {
     if (wingS.global.asyncHeaderCount == 0 &&
         wingS.global.asyncHeaderQueue.length == 0) {
         // If there is no header download going on we

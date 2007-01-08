@@ -27,6 +27,7 @@ import org.wings.dnd.DragAndDropManager;
 import org.wings.header.*;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+import org.wings.plaf.css.script.OnPageRenderedScript;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.ReloadResource;
 import org.wings.resource.UpdateResource;
@@ -294,10 +295,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // Focus management. Put focus in selected object.
-        // OnHeadersAvailableScript is totally misused here - just until i'll write a script manager.
         if (frame.getFocus() != null) {
             String script = "wingS.util.requestFocus('" + frame.getFocus().getName() + "');";
-            component.getSession().getScriptManager().addScriptListener(new OnHeadersAvailableScript(script));
+            ScriptManager.getInstance().addScriptListener(new OnPageRenderedScript(script));
         }
 
         device.print("</head>\n");

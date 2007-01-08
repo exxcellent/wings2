@@ -17,6 +17,7 @@ import org.wings.SComponent;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
+import org.wings.plaf.css.script.HideSelectBoxesScript;
 
 import java.io.IOException;
 

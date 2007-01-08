@@ -18,6 +18,8 @@ import org.wings.SDialog;
 import org.wings.SIcon;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
+import org.wings.plaf.css.script.OnHeadersLoadedScript;
+import org.wings.plaf.css.script.OnPageRenderedScript;
 import org.wings.resource.ResourceManager;
 
 import java.io.IOException;
@@ -84,11 +86,9 @@ public class DialogCG extends FormCG implements org.wings.plaf.DialogCG {
 
         device.print("</div>");
 
-        // Add the function for window.onresize and window.onload.
-        String function = "function() {wingS.util.showModalDialog(\"" + dialogId + "\", \"" + modalId + "\")}";
-        _c.addScriptListener(new JavaScriptDOMListener(JavaScriptEvent.ON_RESIZE, function, _c));
-        // OnHeadersAvailableScript is totally misused here - just until i'll write a script manager.
-        _c.getSession().getScriptManager().addScriptListener(new OnHeadersAvailableScript(function, false));
+        String function = "wingS.util.showModalDialog(\"" + dialogId + "\", \"" + modalId + "\");";
+        _c.getSession().getScriptManager().addScriptListener(new OnPageRenderedScript(function));
+        _c.addScriptListener(new JavaScriptDOMListener(JavaScriptEvent.ON_RESIZE, "function() { " + function + "}", _c));
     }
 
 

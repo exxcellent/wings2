@@ -16,6 +16,10 @@ import java.io.IOException;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.plaf.css.script.LayoutFillScript;
+import org.wings.plaf.css.script.LayoutFixScript;
+import org.wings.plaf.css.script.LayoutScrollPaneScript;
+import org.wings.session.ScriptManager;
 
 public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG implements org.wings.plaf.ScrollPaneCG {
 
@@ -34,7 +38,7 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
             }
 
             writeContent(device, component);
-            component.getSession().getScriptManager().addScriptListener(new LayoutScrollPaneScript(component.getName()));
+            ScriptManager.getInstance().addScriptListener(new LayoutScrollPaneScript(component.getName()));
         } else {
             writeContent(device, component);
         }

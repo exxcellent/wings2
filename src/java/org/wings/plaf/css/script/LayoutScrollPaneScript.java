@@ -1,4 +1,4 @@
-package org.wings.plaf.css;
+package org.wings.plaf.css.script;
 
 import org.wings.script.ScriptListener;
 
@@ -24,6 +24,6 @@ public class LayoutScrollPaneScript
     }
 
     public int getPriority() {
-        return 0;
+        return DEFAULT_PRIORITY;
     }
 }

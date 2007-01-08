@@ -9,6 +9,10 @@ public class ScriptManager
 {
     private final List scriptListenerList = new LinkedList();
 
+    public static ScriptManager getInstance() {
+        return SessionManager.getSession().getScriptManager();
+    }
+
     public final void addScriptListener(ScriptListener listener) {
         if (scriptListenerList.contains(listener))
             return;

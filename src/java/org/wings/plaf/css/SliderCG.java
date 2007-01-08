@@ -21,7 +21,9 @@ import org.wings.SResourceIcon;
 import org.wings.SSlider;
 import org.wings.event.SParentFrameEvent;
 import org.wings.event.SParentFrameListener;
+import org.wings.plaf.css.script.OnHeadersLoadedScript;
 import org.wings.resource.ResourceManager;
+import org.wings.session.ScriptManager;
 import org.wings.SComponent;
 import org.wings.io.Device;
 import java.io.IOException;
@@ -145,16 +147,7 @@ public class SliderCG extends AbstractComponentCG implements org.wings.plaf.Slid
         .append(slider).append(".onChange = function(offset) {document.getElementById('").append(valId).append("').value = offset * ").append(factor).append("+ ").append(c.getMinimum()).append("};")
         .append("}");
 
-        // remove old and attach new script
-//        JavaScriptDOMListener listener;
-//        if ((listener = (JavaScriptDOMListener)component.getClientProperty("initScript")) != null) {
-//            component.removeScriptListener(listener);
-//        }
-//        listener = new JavaScriptDOMListener(JavaScriptEvent.ON_AVAILABLE, code.toString(), component);
-//        component.addScriptListener(listener);
-//        component.putClientProperty("initScript", listener);
-
-        component.getSession().getScriptManager().addScriptListener(new OnHeadersAvailableScript(code.toString(), false));
+        ScriptManager.getInstance().addScriptListener(new OnHeadersLoadedScript(code.toString(), false));
     }
 
     public void installCG(final SComponent comp) {

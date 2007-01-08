@@ -1,4 +1,4 @@
-package org.wings.plaf.css.msie;
+package org.wings.plaf.css.script;
 
 import org.wings.script.ScriptListener;
 import org.wings.util.SStringBuilder;

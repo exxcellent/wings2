@@ -1,14 +1,14 @@
-package org.wings.plaf.css;
+package org.wings.plaf.css.script;
 
 import org.wings.script.ScriptListener;
 
-public class LayoutFixScript
+public class OnPageRenderedScript
     implements ScriptListener
 {
-    String name;
+    String script;
 
-    public LayoutFixScript(String name) {
-        this.name = name;
+    public OnPageRenderedScript(String script) {
+        this.script = script;
     }
 
     public String getEvent() {
@@ -20,10 +20,10 @@ public class LayoutFixScript
     }
 
     public String getScript() {
-        return "wingS.layout.fix('" + name + "');";
+        return script;
     }
 
     public int getPriority() {
-        return 0;
+        return DEFAULT_PRIORITY;
     }
 }

@@ -1,18 +1,19 @@
-package org.wings.plaf.css;
+package org.wings.plaf.css.script;
 
-import org.wings.script.ScriptListener;
 import org.wings.util.SStringBuilder;
+import org.wings.script.ScriptListener;
 
-public class OnHeadersAvailableScript implements ScriptListener
+public class OnHeadersLoadedScript
+    implements ScriptListener
 {
     String script;
     boolean wrapAsFunction;
 
-    public OnHeadersAvailableScript(String script) {
+    public OnHeadersLoadedScript(String script) {
         this(script, true);
     }
 
-    public OnHeadersAvailableScript(String script, boolean wrapAsFunction) {
+    public OnHeadersLoadedScript(String script, boolean wrapAsFunction) {
         this.script = script;
         this.wrapAsFunction = wrapAsFunction;
     }
@@ -28,7 +29,7 @@ public class OnHeadersAvailableScript implements ScriptListener
     public String getScript() {
         final SStringBuilder output = new SStringBuilder();
 
-        output.append("wingS.global.onHeadersAvailable(");
+        output.append("wingS.global.onHeadersLoaded(");
         if (wrapAsFunction) output.append("function() {");
         output.append(script);
         if (wrapAsFunction) output.append("}");
@@ -38,6 +39,6 @@ public class OnHeadersAvailableScript implements ScriptListener
     }
 
     public int getPriority() {
-        return 0;
+        return DEFAULT_PRIORITY;
     }
 }

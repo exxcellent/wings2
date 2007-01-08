@@ -23,6 +23,7 @@ import org.wings.io.Device;
 import java.io.IOException;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.css.dwr.CallableManager;
+import org.wings.plaf.css.script.OnHeadersLoadedScript;
 import org.wings.util.SStringBuilder;
 
 /**
@@ -68,7 +69,7 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
     }
 
     public void attachJavaScript() {
-        popup.getSession().getScriptManager().addScriptListener(new OnHeadersAvailableScript(generateInitScript()));
+        popup.getSession().getScriptManager().addScriptListener(new OnHeadersLoadedScript(generateInitScript()));
     }
 
     public void tidyUp() {
