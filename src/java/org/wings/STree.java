@@ -152,11 +152,18 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
                 List selectedRows = new ArrayList();
                 for (int i = 0; i < affectedPaths.length; ++i) {
                     int row = treeState.getRowForPath(affectedPaths[i]);
-                    int offset = getViewportSize() == null ? 0 : getViewportSize().y;
+                    if (row == -1)
+                        continue;
+                    int visibleRow = row;
+                    if (getViewportSize() != null) {
+                        visibleRow = row - getViewportSize().y;
+                        if (visibleRow < 0 || visibleRow >= getViewportSize().height)
+                            continue;
+                    }
                     if (e.isAddedPath(affectedPaths[i])) {
-                        selectedRows.add(new Integer(row - offset));
+                        selectedRows.add(new Integer(visibleRow));
                     } else {
-                        deselectedRows.add(new Integer(row - offset));
+                        deselectedRows.add(new Integer(visibleRow));
                     }
                 }
                 update(((TreeCG) getCG()).getSelectionUpdate(STree.this, deselectedRows, selectedRows));

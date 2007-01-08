@@ -322,13 +322,13 @@ wingS.update.selectionList = function(listId, deselectedIndices, selectedIndices
  */
 wingS.update.selectionTree = function(treeId, deselectedRows, selectedRows) {
     var tree = document.getElementById(treeId);
-    var rows = wingS.util.getElementsByAttribute(tree, 'td', 'row');
+    var rows = wingS.util.getElementsByAttribute(tree, "td", "row");
 
     for (var i = 0; i < deselectedRows.length; i++) {
-        rows[deselectedRows[i]].className = 'norm';
+        rows[deselectedRows[i]].className = "norm";
     }
     for (var i = 0; i < selectedRows.length; i++) {
-        rows[selectedRows[i]].className = 'selected';
+        rows[selectedRows[i]].className = "selected";
     }
 };
 
