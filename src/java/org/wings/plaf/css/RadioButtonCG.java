@@ -37,6 +37,12 @@ public final class RadioButtonCG extends CheckBoxCG implements
         button.setDisabledSelectedIcon((SIcon) ResourceManager.getObject("SRadioButton.disabledSelectedIcon", SIcon.class));
     }
 
+    protected void tableClickability(Device device, SAbstractButton button) throws IOException {
+        if (!button.isSelected()) {
+            super.tableClickability(device, button);
+        }
+    }
+
     protected void writeInput(Device device, SAbstractButton button) throws IOException {
         if (button.getShowAsFormComponent() && !useIconsInForms) {
             Object clientProperty = button.getClientProperty("onChangeSubmitListener");

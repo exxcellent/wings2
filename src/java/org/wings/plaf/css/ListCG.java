@@ -149,6 +149,14 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
     }
 
     public void writeAnchorList(Device device, SList list) throws IOException {
+        // Remove superfluous 'onChangeSubmitListener' (in case there is any).
+        // This is because we don't want to render 'onclick' AND 'onchange'.
+        Object clientProperty = list.getClientProperty("onChangeSubmitListener");
+        if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+            list.removeScriptListener((JavaScriptListener) clientProperty);
+            list.putClientProperty("onChangeSubmitListener", null);
+        }
+
         boolean renderSelection = list.getSelectionMode() != SList.NO_SELECTION;
 
         device.print("<");

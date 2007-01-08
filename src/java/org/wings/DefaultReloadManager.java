@@ -175,7 +175,7 @@ public class DefaultReloadManager implements ReloadManager {
 
     protected void filterUpdates() {
         if (log.isDebugEnabled())
-            printAllUpdates("potential updates");
+            printAllUpdates("Potential updates:");
 
         fineGrainedUpdates.keySet().removeAll(fullReplaceUpdates.keySet());
 
@@ -208,7 +208,7 @@ public class DefaultReloadManager implements ReloadManager {
         }
 
         if (log.isDebugEnabled())
-            printAllUpdates("effective updates");
+            printAllUpdates("Effective updates:");
     }
 
     private SStringBuilder getPath(SComponent component) {
@@ -256,12 +256,12 @@ public class DefaultReloadManager implements ReloadManager {
     }
 
     private void printAllUpdates(String header) {
+        log.debug(header);
         int numberOfUpdates = 0;
-        log.debug("--- " + header + " ---");
         for (Iterator i = getDirtyComponents().iterator(); i.hasNext();) {
             StringBuilder output = new StringBuilder();
             SComponent component = (SComponent) i.next();
-            output.append(component + ":");
+            output.append("    ").append(component + ":");
             if (fullReplaceUpdates.containsKey(component)) {
                 output.append(" " + fullReplaceUpdates.get(component));
                 if (fullReplaceUpdates.get(component) == null)
@@ -274,7 +274,7 @@ public class DefaultReloadManager implements ReloadManager {
             }
             log.debug(output.toString());
         }
-        log.debug("--> " + numberOfUpdates);
+        log.debug("    --> " + numberOfUpdates + " updates");
     }
 
     private final class PotentialUpdate implements Update {

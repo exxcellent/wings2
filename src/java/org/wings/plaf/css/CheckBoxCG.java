@@ -109,7 +109,15 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         final boolean showAsFormComponent = button.getShowAsFormComponent();
         // table is clickable
         if (!showAsFormComponent || useIconsInForms) {
-            Utils.printClickability(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent());
+            // Remove superfluous 'onChangeSubmitListener' (in case there is any).
+            // This is because we don't want to render 'onclick' AND 'onchange'.
+            Object clientProperty = button.getClientProperty("onChangeSubmitListener");
+            if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+                button.removeScriptListener((JavaScriptListener) clientProperty);
+                button.putClientProperty("onChangeSubmitListener", null);
+            }
+
+            tableClickability(device, button);
 
             if (button.isFocusOwner())
                 Utils.optAttribute(device, "foc", button.getName());
@@ -133,6 +141,10 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         button.setStyle(className.toString());
         writeAllAttributes(device, button);
         button.setStyle(style);
+    }
+
+    protected void tableClickability(Device device, SAbstractButton button) throws IOException {
+        Utils.printClickability(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent());
     }
 
     protected void writeInput(Device device, SAbstractButton button) throws IOException {

@@ -487,13 +487,18 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     public Update getRemoveHeaderUpdate(SFrame frame, Object header) {
-        if (header instanceof Link)
-            return new HeaderLinkUpdate(frame, false, (Link) header);
-        else
+        if (header instanceof Script)
             // Removing script headers asynchronously would indeed
             // detach the according header, however, the functions
-            // contained in the according file are not unloaded. So
-            // we force a complete component update in this case.
+            // contained in the according files are not unloaded.
+            // If unloading functions is desired, it might be a good
+            // idea to RETURN 'NULL' here. This would create a
+            // component update of the frame which in turn would
+            // force a complete page reload and function unloading.
+            return new HeaderScriptUpdate(frame, false, (Script) header);
+        else if (header instanceof Link)
+            return new HeaderLinkUpdate(frame, false, (Link) header);
+        else
             return null;
     }
 

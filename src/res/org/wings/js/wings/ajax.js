@@ -15,7 +15,7 @@ if (!wingS.ajax) {
  * Requests any available component updates from the server.
  */
 wingS.ajax.requestUpdates = function() {
-    wingS.ajax.sendRequest("GET", wingS.util.getUpdateResource());
+    wingS.request.sendEvent(null, false, true);
 };
 
 /**
@@ -144,19 +144,27 @@ wingS.ajax.processRequestSuccess = function(request) {
         }
     }
 
-    // Reset activity indicators and active flag
-    wingS.ajax.setActivityIndicatorsVisible(false);
-    wingS.ajax.requestIsActive = false;
+    // So far we applied all updates. If there are
+    // no headers downloaded asynchronously at this
+    // stage, we are finished with this request and
+    // ready to process the next one from the queue.
+    // Otherwise there will be a callback when all
+    // header downloads and header callbacks ended.
+    if (wingS.global.asyncHeaderQueue.length == 0) {
+        // Reset activity indicators and active flag
+        wingS.ajax.setActivityIndicatorsVisible(false);
+        wingS.ajax.requestIsActive = false;
 
-    // Send the next enqueued request
-    wingS.ajax.dequeueNextRequest();
+        // Send the next enqueued request
+        wingS.ajax.dequeueNextRequest();
+    }
 };
 
 /**
  * Enqueues the given request if another one is still in action.
  * @param {Function} send - the function to send the request with
  * @param {Array} args - the arguments needed by the send function
- * @return {boolean} true if request was enqueued, false otherwise
+ * @return {boolean} true, if request was enqueued, false otherwise
  */
 wingS.ajax.enqueueThisRequest = function(send, args) {
     if (wingS.ajax.requestIsActive) {
@@ -173,7 +181,6 @@ wingS.ajax.dequeueNextRequest = function() {
     if (wingS.ajax.requestQueue.length > 0) {
         var request = wingS.ajax.requestQueue.shift();
         var args = request.args;
-        // Fifth argument might be "undefined", but that's ok
         request.send(args[0], args[1], args[2], args[3], args[4]);
     }
 };

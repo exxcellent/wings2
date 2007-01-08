@@ -40,16 +40,16 @@ wingS.request.reloadFrame = function(parameters) {
  * @param {Array} scriptCodeArray - the scripts to invoke before sending the request
  */
 wingS.request.sendEvent = function(event, submit, async, eventName, eventValue, scriptCodeArray) {
-    // Detect the according event target
-    event = wingS.events.getEvent(event);
-    var target = wingS.events.getTarget(event);
-
-    // Disable text selection
-    // wingS.util.preventTextSelection(target, true);
+    var target = null;
+    if (event != null) {
+        // Detect the according event target
+        event = wingS.events.getEvent(event);
+        target = wingS.events.getTarget(event);
+    }
 
     // Prepare the appropriate method call
     var sendMethod;
-    if (submit) {
+    if (submit && target != null) {
         sendMethod = wingS.request.submitForm;
     } else {
         sendMethod = wingS.request.followLink;
@@ -60,9 +60,6 @@ wingS.request.sendEvent = function(event, submit, async, eventName, eventValue, 
     if (async && wingS.ajax.enqueueThisRequest(sendMethod, sendMethodArgs)) return;
     // Otherwise instantly send the request by calling the appropriate send method
     sendMethod(target, async, eventName, eventValue, scriptCodeArray);
-
-    // Reenable text selection
-    // wingS.util.preventTextSelection(target, false);
 };
 
 /**
@@ -223,10 +220,14 @@ wingS.request.followLink = function(target, async, eventName, eventValue, script
  */
 wingS.request.encodeEvent = function(eventName, eventValue, prefix) {
     var data = "";
+    if (prefix != null) data += prefix;
+    // In order to be consistent we do always encode
+    // the epoch - even without any name/value pair.
+    data += "event_epoch=" + wingS.global.eventEpoch
+
     if (eventName != null && eventValue != null) {
-        if (prefix != null) data += prefix;
-        // We don't need to encode the stuff we send since this is already done on server side
-        data += "event_epoch=" + wingS.global.eventEpoch + "&" + eventName + "=" + eventValue;
+        // Encoding is already done on server side
+        data += "&" + eventName + "=" + eventValue;
     }
     return data;
 };

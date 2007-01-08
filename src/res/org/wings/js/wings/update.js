@@ -19,6 +19,11 @@ if (!wingS.update) {
  * @param {int} index - the desired position of the header
  */
 wingS.update.headerScript = function(add, src, type, index) {
+    var loadMethod = wingS.update.headerScript;
+    var loadMethodArgs = new Array(add, src, type, index);
+    // Enqueue header download in case another one isn't finished yet.
+    if (wingS.global.enqueueThisHeader(loadMethod, loadMethodArgs)) return;
+
     if (src == null || type == null) return;
     var head = document.getElementsByTagName("HEAD")[0];
 

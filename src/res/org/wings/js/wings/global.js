@@ -20,9 +20,10 @@ if (!wingS.global) {
 /**
  * Global variables
  */
-wingS.global.debugMode = true;      // This flag might be set to control debug outputs accordingly
-wingS.global.headerLoadCount = 0;   // Count of headers which are currently loaded asynchronously
-wingS.global.headerCallbacks = [];  // Callbacks which are invoked when all headers are available
+wingS.global.debugMode = true;       // This flag might be set in order to control debug outputs
+wingS.global.asyncHeaderCount = 0;   // Count of headers which are currently loaded asynchronously
+wingS.global.asyncHeaderQueue = [];  // Queue of functions each of which downloads an async header
+wingS.global.asyncHeaderCalls = [];  // Callbacks which are invoked when all headers are available
 
 /**
  * Callback method which initializes the current frame. This method is called upon each reload.
@@ -33,13 +34,14 @@ wingS.global.headerCallbacks = [];  // Callbacks which are invoked when all head
  * @param {Object} updateCursor - an object holding necessary settings of the update cursor
  */
 wingS.global.init =  function(eventEpoch, reloadResource, updateResource, updateEnabled, updateCursor) {
-
+    // Initialize -wingS.global-
     wingS.global.eventEpoch = eventEpoch;
     wingS.global.reloadResource = reloadResource;
     wingS.global.updateResource = updateResource;
     wingS.global.updateEnabled = updateEnabled;
     wingS.global.updateCursor = updateCursor;
 
+    // Initialize -wingS.ajax-
     wingS.ajax.requestIsActive = false;
     wingS.ajax.requestQueue = new Array();
     if (wingS.global.updateCursor.enabled) {
@@ -58,29 +60,73 @@ wingS.global.init =  function(eventEpoch, reloadResource, updateResource, update
  * @param {Function} callback - the callback function to invoke
  */
 wingS.global.onHeadersAvailable = function(callback) {
-    if (wingS.global.headerLoadCount == 0) callback();
-    else wingS.global.headerCallbacks.push(callback);
+    if (wingS.global.asyncHeaderCount == 0 &&
+        wingS.global.asyncHeaderQueue.length == 0) {
+        // If there is no header download going on we
+        // are free to invoke this callback directly.
+        callback();
+    } else {
+        // Otherwise we have to enqueue this callback
+        wingS.global.asyncHeaderCalls.push(callback);
+    }
 };
 
 /**
  * Increases a counter which indicates the number of headers (asynchronously) loaded at the moment.
  */
 wingS.global.startLoadingHeader = function() {
-    wingS.global.headerLoadCount++;
+    wingS.global.asyncHeaderCount++;
 };
 
 /**
  * Decreases a counter which indicates the number of headers (asynchronously) loaded at the moment.
  */
 wingS.global.finishedLoadingHeader = function() {
-    if (wingS.global.headerLoadCount > 0) {
-        wingS.global.headerLoadCount--;
-        if (wingS.global.headerLoadCount == 0) {
-            for (var i = 0; i < wingS.global.headerCallbacks.length; i++) {
-                wingS.global.headerCallbacks[i]();
-            }
-            wingS.global.headerCallbacks = new Array();
+    if (wingS.global.asyncHeaderCount > 0) {
+        // Only if something is going on
+        wingS.global.asyncHeaderCount--;
+        wingS.global.dequeueNextHeader();
+    }
+};
+
+/**
+ * Enqueues the given header download if another one is still in action.
+ * @param {Function} load - the function to load the header with
+ * @param {Array} args - the arguments needed by the load function
+ * @return {boolean} true, if header was enqueued, false otherwise
+ */
+wingS.global.enqueueThisHeader = function(load, args) {
+    if (wingS.global.asyncHeaderCount > 0) { // Load one header after another
+        // This is because header 2 might require header 1 to be fully loaded
+        wingS.global.asyncHeaderQueue.push( {"load" : load, "args" : args} );
+        return true;
+    }
+    return false;
+};
+
+/**
+ * Grabs the next available header download from the queue and starts it.
+ */
+wingS.global.dequeueNextHeader = function() {
+    if (wingS.global.asyncHeaderQueue.length > 0) {
+        // Remove and start first enqueued header download
+        var header = wingS.global.asyncHeaderQueue.shift();
+        var args = header.args;
+        header.load(args[0], args[1], args[2], args[3]);
+    } else {
+        // Invoke all callback methods which have registered interest
+        for (var i = 0; i < wingS.global.asyncHeaderCalls.length; i++) {
+            wingS.global.asyncHeaderCalls[i]();
         }
+        // Clear all callbacks upon each new request
+        wingS.global.asyncHeaderCalls = new Array();
+
+        // Reset activity indicators and active flag
+        wingS.ajax.setActivityIndicatorsVisible(false);
+        wingS.ajax.requestIsActive = false;
+
+        // Send the next enqueued request
+        wingS.ajax.dequeueNextRequest();
     }
 };
 

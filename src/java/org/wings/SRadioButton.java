@@ -17,7 +17,7 @@ import org.wings.plaf.RadioButtonCG;
 
 /**
  * Can be selected or deselected, and displays that state to the user.
- * 
+ *
  * <p/>
  * Example:
  * <form>
@@ -31,18 +31,18 @@ import org.wings.plaf.RadioButtonCG;
  */
 public class SRadioButton
         extends SAbstractButton {
-	
+
 	/**
      * Creates an unselected radio button.
-     * 
+     *
      */
     public SRadioButton() {
-        setType(RADIOBUTTON);        
+        setType(RADIOBUTTON);
     }
 
     /**
      * Creates a unselected radio button with an initial text.
-     * 
+     *
      * @param label Text to display
      */
     public SRadioButton(String label) {
@@ -51,7 +51,7 @@ public class SRadioButton
 
     /**
      * Creates a radio button with a certain state.
-     * 
+     *
      * @param selected Whether the radio button is initially selected or not.
      */
     public SRadioButton(boolean selected) {
@@ -61,7 +61,7 @@ public class SRadioButton
 
     /**
      * Creates a radio button with a text-label and a state.
-     * 
+     *
      * @param label Text to display
      * @param selected Whether the radio button is initially selected or not.
      */
@@ -70,7 +70,7 @@ public class SRadioButton
         setText(label);
     }
 
-    
+
     public String getLowLevelEventId() {
         if (getGroup() != null && getShowAsFormComponent()) {
             return getGroup().getComponentId();
@@ -96,13 +96,19 @@ public class SRadioButton
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
-        
+
         delayEvents(true);
 
         boolean origSelected = isSelected();
 
         if (getShowAsFormComponent()) {
-            if (getGroup() == null) {
+            if (values.length == 1) {
+                // this happens if we've got a form component but
+                // the CG uses icons since useIconsInForm is true
+                if (getName().equals(values[0]) && !isSelected()) {
+                    setSelected(true);
+                }
+            } else if (getGroup() == null) {
                 // one hidden and one checked event from the form says select
                 // it, else deselect it (typically only the hidden event)
                 setSelected(values.length == 2);
@@ -111,7 +117,7 @@ public class SRadioButton
                 for (int i = 0; i < values.length; i++) {
                     // check the count of events, which are for me - with a
                     // button group, the value is my component id, if a event is
-                    // for me   
+                    // for me
                     if (getName().equals(values[i])) {
                         eventCount++;
                     } // end of if ()
@@ -134,29 +140,15 @@ public class SRadioButton
             // got an event, that is a select...
             SForm.addArmedComponent(this);
         } // end of if ()
-        
+
         delayEvents(false);
     }
 
-    /**
-     * in form components the parameter value of an button is the button
-     * text. So just toggle selection, in process request, if it is a request
-     * for me.
-     */
     protected boolean parseSelectionToggle(String toggleParameter) {
-        // a button/image in a form has no value, so just toggle selection...
-        if (getShowAsFormComponent()) {
-            return !isSelected();
-        } // end of if ()
-
-        if ("1".equals(toggleParameter))
+        if ("1".equals(toggleParameter) && !isSelected())
             return true;
-        else if ("0".equals(toggleParameter))
-            return false;
-
-
-        // don't change...
-        return isSelected();
+        else
+            return isSelected();
     }
 
     public String getSelectionParameter() {
