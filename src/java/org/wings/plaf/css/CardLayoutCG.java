@@ -12,9 +12,8 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SCardLayout;
-import org.wings.SComponent;
-import org.wings.SLayoutManager;
+import org.wings.*;
+import org.wings.session.BrowserType;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 
@@ -29,13 +28,54 @@ public class CardLayoutCG implements LayoutCG {
      * @throws IOException
      */
     public void write(Device d, SLayoutManager l)
-            throws IOException {
+            throws IOException
+    {
         SCardLayout cardLayout = (SCardLayout) l;
+        SContainer container = l.getContainer();
         SComponent c = cardLayout.getVisibleComponent();
+
+        SDimension preferredSize = container.getPreferredSize();
+        String height = preferredSize != null ? preferredSize.getHeight() : null;
+        boolean clientLayout = isMSIE(container) && height != null && !"auto".equals(height);
+
+        if (clientLayout)
+            d.print("<tr yweight=\"100\">");
+        else
+            openLayouterRow(d, "100%");
+
+        openLayouterCell(d);
         // Just present visible component
         if (c != null) {
             c.write(d);
         }
+
+        closeLayouterCell(d);
+        closeLayouterRow(d);
+    }
+
+    public static void openLayouterRow(final Device d, String height) throws IOException {
+        d.print("<tr");
+        Utils.optAttribute(d, "height", height);
+        d.print(">");
+    }
+
+    public static void openLayouterCell(final Device d) throws IOException {
+        d.print("<td>");
+    }
+
+    public static void closeLayouterCell(final Device d) throws IOException {
+        d.print("</td>");
+    }
+
+    public static void closeLayouterRow(final Device d) throws IOException {
+        d.print("</tr>");
+    }
+
+    /**
+     * @return true if current browser is microsoft exploder
+     */
+    protected final boolean isMSIE(final SComponent component) {
+        return component.getSession().getUserAgent().getBrowserType() == BrowserType.IE;
     }
 }
 

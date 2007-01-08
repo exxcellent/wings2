@@ -3,6 +3,7 @@ package wingset;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.plaf.css.Utils;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.SLineBorder;
 import org.wings.session.SessionManager;
@@ -95,9 +96,11 @@ public class WingSet2
         frame = new SFrame("WingSet Demo");
         frame.getContentPane().add(panel, SBorderLayout.CENTER);
         frame.getContentPane().setPreferredSize(SDimension.FULLAREA);
-        frame.getContentPane().setAttribute("position", "absolute");
-        frame.getContentPane().setAttribute("height", "100%");
-        frame.getContentPane().setAttribute("width", "100%");
+        if (!Utils.isMSIE(frame)) {
+            frame.getContentPane().setAttribute("position", "absolute");
+            frame.getContentPane().setAttribute("height", "100%");
+            frame.getContentPane().setAttribute("width", "100%");
+        }
         frame.setAttribute("position", "absolute");
         frame.setAttribute("height", "100%");
         frame.setAttribute("width", "100%");
