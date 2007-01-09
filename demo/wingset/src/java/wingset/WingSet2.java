@@ -126,7 +126,7 @@ public class WingSet2
     private SPanel createHeader() {
         SPanel header = new SPanel();
         header.setPreferredSize(SDimension.FULLWIDTH);
-        header.setStyle("header");
+        header.setStyle("wingset_header");
 
         try {
             header.setLayout(new STemplateLayout(SessionManager.getSession().

@@ -1,8 +1,8 @@
 <table>
   <tr>
   	<td width="100%">
-  	  <span class="title">WingSet Demo</span>
-  	  <span class="subtitle">
+  	  <span class="wingset_title">WingSet Demo</span>
+  	  <span class="wingset_subtitle">
   	    Similar to the Java SwingSet example, WingSet
   	    demonstrates some properties of wingS and wingX.
   	  </span>
