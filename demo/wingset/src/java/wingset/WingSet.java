@@ -94,15 +94,7 @@ public class WingSet implements Serializable {
 
         String[] exampleClassFileNames = dir.list(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                //return name.endsWith("Example.class");
-                return name.equals("XColorPickerExample.class") ||
-                    name.equals("XCalendarExample.class") ||
-                    name.equals("XSuggestExample.class") ||
-                    name.equals("XInplaceEditorExample.class") ||
-                    name.equals("PopupExample.class") ||
-                    name.equals("SpinnerExample.class") ||
-                    name.equals("ButtonExample.class") ||
-                    name.equals("XTableExample.class");
+                return name.endsWith("Example.class");
             }
         });
         Arrays.sort(exampleClassFileNames);
