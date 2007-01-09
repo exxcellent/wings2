@@ -19,7 +19,6 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -70,8 +69,6 @@ import org.wings.header.JavaScriptHeader;
 import org.wings.header.Link;
 import org.wings.header.Script;
 import org.wings.header.StyleSheetHeader;
-import org.wings.header.StyleSheetLink;
-import org.wings.resource.DefaultURLResource;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
@@ -158,12 +155,12 @@ public class LogConfig {
         sp_tree.setPreferredSize(new SDimension(477, SDimension.AUTO_INT));
         sp_tree.setVerticalAlignment(SConstants.TOP_ALIGN);
         sp_tree.getVerticalScrollBar().setBlockIncrement(3);
-        sp_tree.setVerticalExtent(30);
-        sp_tree.setHorizontalExtent(5);
+        sp_tree.setVerticalExtent(25);
 
         SButtonGroup bg_insertOrUpdate = new SButtonGroup();
         rb_insertNode = new SRadioButton("Insert node");
         rb_insertNode.setSelected(true);
+        rb_insertNode.setShowAsFormComponent(false);
         rb_insertNode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (rb_insertNode.isSelected()) {
@@ -173,6 +170,7 @@ public class LogConfig {
         });
         rb_updateNode = new SRadioButton("Update node");
         rb_updateNode.setEnabled(false);
+        rb_updateNode.setShowAsFormComponent(false);
         rb_updateNode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (rb_updateNode.isSelected()) {
@@ -215,7 +213,7 @@ public class LogConfig {
         });
 
         bu_deleteNode = new SButton("Delete", new SURLIcon("../images/delete.gif"));
-        bu_deleteNode.setDisabledIcon(new SURLIcon("../images/deleteDisabled.gif"));
+        bu_deleteNode.setDisabledIcon(new SURLIcon("../images/delete_disabled.gif"));
         bu_deleteNode.setPreferredSize(BU_DIM);
         bu_deleteNode.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         bu_deleteNode.addActionListener(new ActionListener() {
@@ -293,7 +291,7 @@ public class LogConfig {
         pa_controls.add(pa_delete);
         pa_controls.add(verticalSpace(10));
         pa_controls.add(pa_commit);
-        pa_controls.add(verticalSpace(31));
+        pa_controls.add(verticalSpace(10));
         pa_controls.add(la_activityIndicator);
 
         fo_form = new SForm(new SGridLayout(1, 2, 10, 10));
@@ -310,6 +308,7 @@ public class LogConfig {
         resetStatusLabel();
 
         SPanel pa_application = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        pa_application.setHorizontalAlignment(SConstants.CENTER_ALIGN);
         pa_application.setStyle(pa_application.getStyle() + " pa_application");
         pa_application.add(la_header);
         pa_application.add(fo_form);
@@ -368,7 +367,7 @@ public class LogConfig {
         }
 
         pa_content.add(pa_application, "application");
-        pa_content.add(createAjaxDebuggingPanel(), "debugging");
+        //pa_content.add(createAjaxDebuggingPanel(), "debugging");
         fr_frame.addHeader(new StyleSheetHeader("../css/custom.css"));
         fr_frame.setVisible(true);
     }
@@ -873,13 +872,13 @@ public class LogConfig {
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, createMenuTestPanel());
 
-//        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-//        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollable);
-//        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollPaneMode);
-//        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBar);
-//        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBar);
-//        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBarPolicy);
-//        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBarPolicy);
+        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollable);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollPaneMode);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBar);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBar);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBarPolicy);
+        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBarPolicy);
 //
 //        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
 //        addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
@@ -977,6 +976,7 @@ public class LogConfig {
 
         SList li_testList = new SList(new SDefaultListModel(modelData));
         li_testList.setShowAsFormComponent(false);
+        li_testList.setSelectionMode(SList.SINGLE_SELECTION);
 
         return li_testList;
     }

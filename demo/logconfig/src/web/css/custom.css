@@ -1,11 +1,12 @@
 body {
-	padding: 20px 20px 0px 20px;
+	margin: 50px;
 	background-image: url(../images/page_bg.jpg);
 	background-repeat: repeat-x;
 }
 
 .pa_content {
 	width: 100%;
+    align: center;
 }
 
 .pa_application {
@@ -33,7 +34,7 @@ body {
 }
 
 .pa_mode {
-	padding-bottom: 3px;
+	padding-bottom: 5px;
 	border-bottom: 1px dashed #000000;
 }
 
@@ -71,6 +72,11 @@ body {
 
 .STree td.selected {
     background-color: #F7F7F7;
+}
+
+.STree td.empty  {
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
 
 .STextArea {
