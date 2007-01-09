@@ -4,8 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
 import org.wings.plaf.css.Utils;
-import org.wings.border.SEmptyBorder;
 import org.wings.border.SLineBorder;
+import org.wings.header.StyleSheetHeader;
 import org.wings.session.SessionManager;
 
 import javax.swing.tree.*;
@@ -28,6 +28,8 @@ public class WingSet2
      */
     private static final boolean LOG_STATISTICS_TO_FILE = true;
 
+    private final static Log log = LogFactory.getLog(WingSet2.class);
+
     static {
         if (LOG_STATISTICS_TO_FILE) {
             StatisticsTimerTask.startStatisticsLogging(60);
@@ -40,8 +42,9 @@ public class WingSet2
     private final SFrame frame;
 
     private final SPanel panel;
-    private final SPanel content;
     private final STree tree;
+    private final SPanel header;
+    private final SPanel content;
     private WingsImage wingsImage;
     SCardLayout cards = new SCardLayout();
 
@@ -84,12 +87,15 @@ public class WingSet2
         border.setThickness(1, SConstants.RIGHT);
         scrollPane.setBorder(border);
 
+        header = createHeader();
+
         content = new SPanel(cards);
         content.setPreferredSize(SDimension.FULLAREA);
         content.add(wingsImage);
 
         panel = new SPanel(new SBorderLayout());
         panel.setPreferredSize(SDimension.FULLAREA);
+        panel.add(header, SBorderLayout.NORTH);
         panel.add(scrollPane, SBorderLayout.WEST);
         panel.add(content, SBorderLayout.CENTER);
 
@@ -105,6 +111,8 @@ public class WingSet2
         frame.setAttribute("height", "100%");
         frame.setAttribute("width", "100%");
 
+        frame.addHeader(new StyleSheetHeader("../css/wingset2.css"));
+
         frame.show();
     }
 
@@ -115,6 +123,21 @@ public class WingSet2
         cards.show(component);
     }
 
+    private SPanel createHeader() {
+        SPanel header = new SPanel();
+        header.setPreferredSize(SDimension.FULLWIDTH);
+        header.setStyle("header");
+
+        try {
+            header.setLayout(new STemplateLayout(SessionManager.getSession().
+                    getServletContext().getRealPath("/templates/WingSetHeader.thtml")));
+        } catch (java.io.IOException ex) {
+            log.error("Could not find template file!", ex);
+        }
+
+        return header;
+    }
+
     static class PanesTreeModel
         extends DefaultTreeModel
     {
@@ -123,15 +146,11 @@ public class WingSet2
         }
 
         private static TreeNode buildNodes() {
-            DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
+            DefaultMutableTreeNode root = new DefaultMutableTreeNode("Demo");
             DefaultMutableTreeNode wings = new DefaultMutableTreeNode("wingS");
             root.add(wings);
             DefaultMutableTreeNode wingx = new DefaultMutableTreeNode("wingX");
             root.add(wingx);
-            DefaultMutableTreeNode tests = new DefaultMutableTreeNode("Tests");
-            root.add(tests);
-            DefaultMutableTreeNode experiments = new DefaultMutableTreeNode("Experiments");
-            root.add(experiments);
 
             String dirName = SessionManager.getSession().getServletContext().getRealPath("/WEB-INF/classes/wingset");
             String includeTests = (String)SessionManager.getSession().getProperty("wingset.include.tests");
@@ -156,6 +175,9 @@ public class WingSet2
             buildNodes(wingx, wingxClassFileNames);
 
             if ("TRUE".equalsIgnoreCase(includeTests)) {
+                DefaultMutableTreeNode tests = new DefaultMutableTreeNode("Tests");
+                root.add(tests);
+
                 String[] testClassFileNames = dir.list(new FilenameFilter() {
                     public boolean accept(File dir, String name) {
                         return name.endsWith("Test.class");
@@ -166,6 +188,9 @@ public class WingSet2
             }
 
             if ("TRUE".equalsIgnoreCase(includeExperiments)) {
+                DefaultMutableTreeNode experiments = new DefaultMutableTreeNode("Experiments");
+                root.add(experiments);
+
                 String[] experimentClassFileNames = dir.list(new FilenameFilter() {
                     public boolean accept(File dir, String name) {
                         return name.endsWith("Experiment.class");

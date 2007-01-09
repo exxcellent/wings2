@@ -21,7 +21,7 @@ import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
-import org.wings.resource.DefaultURLResource;
+import org.wings.header.StyleSheetHeader;
 import org.wings.style.CSSProperty;
 
 import java.io.*;
@@ -187,7 +187,7 @@ public class WingSet implements Serializable {
         }
 
         // 2) Include an application specific CSS stylesheet to extend/overwrite the default wingS style set.
-        customStyleSheetLink = new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset.css"));
+        customStyleSheetLink = new StyleSheetHeader("../css/wingset.css");
         frame.addHeader(customStyleSheetLink);
 
         customStyleApplied = true;
