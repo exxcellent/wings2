@@ -227,39 +227,11 @@ public class DefaultReloadManager implements ReloadManager {
         }
     }
 
-    private void removeUpdates(Iterable iterable, int propertyMask) {
-        Iterator i = iterable.iterator();
-        while (i.hasNext()) {
-            Update update = (Update) i.next();
-            if ((update.getProperty() & propertyMask) == propertyMask)
-                i.remove();
-        }
-    }
-
-    private void retainUpdates(Iterable iterable, int propertyMask) {
-        Iterator i = iterable.iterator();
-        while (i.hasNext()) {
-            Update update = (Update) i.next();
-            if ((update.getProperty() & propertyMask) != propertyMask)
-                i.remove();
-        }
-    }
-
-    private boolean containsUpdate(Iterable iterable, int propertyMask) {
-        Iterator i = iterable.iterator();
-        while (i.hasNext()) {
-            Update update = (Update) i.next();
-            if ((update.getProperty() & propertyMask) == propertyMask)
-                return true;
-        }
-        return false;
-    }
-
     private void printAllUpdates(String header) {
         log.debug(header);
         int numberOfUpdates = 0;
         for (Iterator i = getDirtyComponents().iterator(); i.hasNext();) {
-            StringBuilder output = new StringBuilder();
+            SStringBuilder output = new SStringBuilder();
             SComponent component = (SComponent) i.next();
             output.append("    ").append(component + ":");
             if (fullReplaceUpdates.containsKey(component)) {

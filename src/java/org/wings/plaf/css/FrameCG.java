@@ -21,6 +21,7 @@ import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
 import org.wings.Version;
+import org.wings.util.SStringBuilder;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
 import org.wings.dnd.DragAndDropManager;
@@ -426,7 +427,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     private String getInitScript(SFrame frame) throws IOException {
-        StringBuilder script = new StringBuilder();
+        SStringBuilder script = new SStringBuilder();
         script.append("wingS.global.init('");
         script.append(frame.getEventEpoch()).append("','");
         script.append(frame.getDynamicResource(ReloadResource.class).getId()).append("','");

@@ -398,7 +398,8 @@ final class SessionServlet
                         String paramName = (String) e.nextElement();
                         SStringBuilder param = new SStringBuilder();
                         param.append("    ").append(paramName).append(": ");
-                        param.append(Arrays.toString(req.getParameterValues(paramName)));
+                        final String[] values = req.getParameterValues(paramName);
+                        param.append(values != null ? values.toString() : "null");
                         log.debug(param);
                     }
                 }
