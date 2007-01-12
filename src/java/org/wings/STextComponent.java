@@ -184,7 +184,7 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
 
     public void changedUpdate(SDocumentEvent e) {
         if (isUpdatePossible()) {
-            if (STextField.class.isAssignableFrom(getClass()))
+            if (STextField.class.isAssignableFrom(getClass()) && ! SPasswordField.class.isAssignableFrom(getClass()))
                 update(((TextFieldCG) getCG()).getTextUpdate((STextField) this, getText()));
             else if (STextArea.class.isAssignableFrom(getClass()))
                 update(((TextAreaCG) getCG()).getTextUpdate((STextArea) this, getText()));
