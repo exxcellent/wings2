@@ -191,7 +191,7 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
         public void valueChanged(ListSelectionEvent e) {
             fireSelectionValueChanged(e.getFirstIndex(), e.getLastIndex(), e.getValueIsAdjusting());
 
-            if (isUpdatePossible() && SList.this.getClass() == SList.class) {
+            if (isUpdatePossible() && SList.class.isAssignableFrom(SList.this.getClass())) {
                 List deselectedIndices = new ArrayList();
                 List selectedIndices = new ArrayList();
                 for (int index = e.getFirstIndex(); index <= e.getLastIndex(); ++index) {

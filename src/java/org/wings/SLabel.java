@@ -173,7 +173,7 @@ public class SLabel extends SComponent {
     public void setIcon(SIcon i) {
         if (isDifferent(icon, i)) {
             // do reload if previous text was null
-            if (isUpdatePossible() && icon != null && getClass() == SLabel.class)
+            if (isUpdatePossible() && icon != null && SLabel.class.isAssignableFrom(getClass()))
                 update(((LabelCG) getCG()).getIconUpdate(this, i));
             else
                 reload();
@@ -222,7 +222,7 @@ public class SLabel extends SComponent {
     public void setText(String t) {
         if (isDifferent(text, t)) {
             // do reload if previous text was null
-            if (isUpdatePossible() && text != null && getClass() == SLabel.class)
+            if (isUpdatePossible() && text != null && SLabel.class.isAssignableFrom(getClass()))
                 update(((LabelCG) getCG()).getTextUpdate(this, t));
             else
                 reload();

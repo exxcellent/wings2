@@ -220,7 +220,7 @@ public class SFrame
      */
     public final void invalidate() {
         epochCache = "W" + (++eventEpoch);
-        if (isUpdatePossible() && getClass() == SFrame.class)
+        if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
             update(((FrameCG) getCG()).getEpochUpdate(this, epochCache));
 
         if (log.isDebugEnabled()) {
@@ -286,7 +286,7 @@ public class SFrame
     public void addHeader(Object headerElement) {
         if (!headers.contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
-            if (isUpdatePossible() && getClass() == SFrame.class)
+            if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
                 update(((FrameCG) getCG()).getAddHeaderUpdate(this, headerElement));
             else
                 reload();
@@ -304,7 +304,7 @@ public class SFrame
     public void addHeader(int index, Object headerElement) {
         if (!headers.contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
-            if (isUpdatePossible() && getClass() == SFrame.class)
+            if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
                 update(((FrameCG) getCG()).getAddHeaderUpdate(this, index, headerElement));
             else
                 reload();
@@ -318,7 +318,7 @@ public class SFrame
     public boolean removeHeader(Object headerElement) {
         boolean deleted = headers.remove(headerElement);
         if (deleted) {
-            if (isUpdatePossible() && getClass() == SFrame.class)
+            if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
                 update(((FrameCG) getCG()).getRemoveHeaderUpdate(this, headerElement));
             else
                 reload();
@@ -489,7 +489,7 @@ public class SFrame
      */
     public void setFocus(SComponent focusOnComponent) {
         focusComponent = focusOnComponent;
-        if (isUpdatePossible() && getClass() == SFrame.class)
+        if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
             update(((FrameCG) getCG()).getFocusUpdate(this, focusComponent));
     }
 
@@ -692,7 +692,7 @@ public class SFrame
 
 	public void setUpdateEnabled(boolean enabled) {
         if (updateEnabled != enabled) {
-            if (isUpdatePossible() && getClass() == SFrame.class)
+            if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
                 update(((FrameCG) getCG()).getUpdateEnabledUpdate(this, enabled));
             else
                 reload();

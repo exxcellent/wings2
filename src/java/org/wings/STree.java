@@ -146,7 +146,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         public void valueChanged(TreeSelectionEvent e) {
             fireTreeSelectionEvent(e);
 
-            if (isUpdatePossible() && STree.this.getClass() == STree.class) {
+            if (isUpdatePossible() && STree.class.isAssignableFrom(STree.this.getClass())) {
                 TreePath[] affectedPaths = e.getPaths();
                 List deselectedRows = new ArrayList();
                 List selectedRows = new ArrayList();
