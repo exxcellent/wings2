@@ -489,7 +489,7 @@ public class SFrame
      */
     public void setFocus(SComponent focusOnComponent) {
         focusComponent = focusOnComponent;
-        if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
+        if (focusComponent != null && isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
             update(((FrameCG) getCG()).getFocusUpdate(this, focusComponent));
     }
 
