@@ -13,6 +13,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.plaf.css.TreeCG;
 import org.wings.border.SLineBorder;
 import org.wings.event.SMouseEvent;
 import org.wings.event.SMouseListener;
@@ -51,6 +52,8 @@ public class TreeExample
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
         tree.setName("tree");
         tree.setShowAsFormComponent(false);
+        TreeCG treeCG = new TreeCG();
+        tree.setCG(treeCG);
 
         tree.addMouseListener(new SMouseListener() {
             public void mouseClicked(SMouseEvent e) {
