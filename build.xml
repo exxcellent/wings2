@@ -35,22 +35,15 @@
         </tstamp>
     </target>
 
-    <target depends="prepare"  name="version.java">
+    <target depends="prepare"  name="generate">
+        <!-- Generate wingS version information class -->
         <filter token="WINGS_VERSION" value="${wings.version}"/>
         <filter token="COMPILE_TIME" value="${wings.buildtime}"/>
         <copy file="src/res/org/wings/Version.java.in"
             tofile="src/java/org/wings/Version.java"
             filtering="yes"/>
-    </target>
 
-    <target name="compile" depends="prepare, version.java">
-        <javac debug="${build.debug}" deprecation="${build.deprecation}"
-            destdir="build/class" srcdir="src/java" source="1.3" target="1.3">
-            <classpath refid="build.classpath"/>
-        </javac>
-    </target>
-
-    <target name="build" depends="compile" description="build">
+        <!-- generate concatenated JS-file -->
         <concat destfile="src/res/org/wings/js/wings/all.js">
             <filelist dir="src/res/org/wings/js/wings">
                 <file name="global.js"/>
@@ -63,6 +56,16 @@
                 <file name="component.js"/>
             </filelist>
         </concat>
+    </target>
+
+    <target name="compile" depends="prepare, generate">
+        <javac debug="${build.debug}" deprecation="${build.deprecation}"
+            destdir="build/class" srcdir="src/java" source="1.3" target="1.3">
+            <classpath refid="build.classpath"/>
+        </javac>
+    </target>
+
+    <target name="build" depends="compile" description="build">
         <mkdir dir="build/web/WEB-INF/lib"/>
         <jar jarfile="build/web/WEB-INF/lib/wings.jar">
             <fileset dir="build/class">
