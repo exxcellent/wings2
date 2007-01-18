@@ -416,38 +416,44 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
 
             SPoint point = new SPoint(value.substring(1));
             int row = getRowForLocation(point);
-
-            SMouseEvent event = new SMouseEvent(this, 0, point);
-            fireMouseClickedEvent(event);
-            if (event.isConsumed())
-                continue;
-
             if (row < 0) continue; // row not found...
 
-            if (value.charAt(0) == 'b') {
-                TreePath path = getPathForRow(row);
-                //selection
-                if (path != null) {
-                    togglePathSelection(path);
-                }
-            } else if (value.charAt(0) == 'h') {
-                TreePath path = getPathForRow(row);
-                //selection
-                if (path != null) {
-                    requestedExpansionPaths.add(path);
-                }
-            } else if (value.charAt(0) == 'a') {
-                TreePath path = getPathForAbsoluteRow(row);
-                //selection
-                if (path != null) {
-                    togglePathSelection(path);
-                }
-            } else if (value.charAt(0) == 'j') {
-                TreePath path = getPathForAbsoluteRow(row);
-                //selection
-                if (path != null) {
-                    requestedExpansionPaths.add(path);
-                }
+            switch (value.charAt(0)) {
+                case 'b':
+                    SMouseEvent event = new SMouseEvent(this, 0, point);
+                    fireMouseClickedEvent(event);
+                    if (event.isConsumed())
+                        continue;
+
+                    TreePath path = getPathForRow(row);
+                    if (path != null) {
+                        togglePathSelection(path);
+                    }
+                    break;
+                case 'a':
+                    event = new SMouseEvent(this, 0, point);
+                    fireMouseClickedEvent(event);
+                    if (event.isConsumed())
+                        continue;
+
+                    path = getPathForAbsoluteRow(row);
+                    if (path != null) {
+                        togglePathSelection(path);
+                    }
+                    break;
+                case 'h':
+                    path = getPathForRow(row);
+                    if (path != null) {
+                        requestedExpansionPaths.add(path);
+                    }
+                    break;
+                case 'j':
+                    path = getPathForAbsoluteRow(row);
+                    //selection
+                    if (path != null) {
+                        requestedExpansionPaths.add(path);
+                    }
+                    break;
             }
         }
         getSelectionModel().setDelayEvents(false);
