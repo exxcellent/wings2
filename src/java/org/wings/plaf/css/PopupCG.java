@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.wings.SComponent;
 import org.wings.SPopup;
+import org.wings.SPopupInterface;
 import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
 import java.io.IOException;
@@ -31,7 +32,7 @@ import org.wings.util.SStringBuilder;
  *
  * @author Christian Schyma
  */
-public final class PopupCG extends AbstractComponentCG implements org.wings.plaf.PopupCG {
+public final class PopupCG extends AbstractComponentCG implements org.wings.plaf.PopupCG, SPopupInterface {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,9 +45,7 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
 
     private String showFunction;
     private String hideFunction;
-
-    private final String DWR_GETTER = "getRenderedContent";
-
+    
     public PopupCG(SPopup popup) {
         this.popup = popup;
 
@@ -60,10 +59,8 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
         this.showFunction  = "function() {"+ popupJSObject + ".show()}";
         this.hideFunction  = "function() {"+ popupJSObject + ".hide()}";
 
-        // expose data source to java script by using DWR
-        HashSet methodsToExpose = new HashSet();
-        methodsToExpose.add(DWR_GETTER);
-        CallableManager.getInstance().registerCallable(this.dwrJsObject, this, methodsToExpose);
+        // expose data source to java script by using DWR        
+        CallableManager.getInstance().registerCallable(this.dwrJsObject, this, SPopupInterface.class);
 
         attachJavaScript();
     }
@@ -85,7 +82,7 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
                     .append(popupJSObject)
                     .append(" = new wingS.Popup(")
                     .append("'").append(popupJSObject).append("', ")
-                    .append(this.dwrJsObject).append(".").append(DWR_GETTER).append(", ")
+                    .append(this.dwrJsObject).append(", ")
                     .append("0, ")
                     .append("0, ")
                     .append(this.popup.getWidth()).append(", ")
@@ -99,7 +96,7 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
                     .append(this.popupJSObject)
                     .append(" = new wingS.Popup(")
                     .append("'").append(popupJSObject).append("', ")
-                    .append(this.dwrJsObject).append(".").append(DWR_GETTER).append(", ")
+                    .append(this.dwrJsObject).append(", ")
                     .append(this.popup.getX()).append(", ")
                     .append(this.popup.getY()).append(", ")
                     .append(this.popup.getWidth()).append(", ")
@@ -123,10 +120,7 @@ public final class PopupCG extends AbstractComponentCG implements org.wings.plaf
     public String getJsHideFunction() {
         return this.hideFunction;
     }
-
-    /**
-     * Returns the rendered HTML code of the contents component.
-     */
+    
     public String getRenderedContent() {
         StringBuilderDevice device = new StringBuilderDevice();
 

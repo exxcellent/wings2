@@ -43,10 +43,8 @@ public class TextFieldCG extends AbstractComponentCG implements
     public void installCG( SComponent comp ) {
         super.installCG( comp );
         if ( comp instanceof SFormattedTextField ) {
-            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
-                HashSet methodsToExpose = new HashSet();
-                methodsToExpose.add("validate");
-                CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter, methodsToExpose);
+            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {                
+                CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter, CallableFormatter.class);
             }
             comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';" +
                     "CallableFormatter.validate(this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'), wingS.component.ftextFieldCallback)"));
@@ -207,4 +205,5 @@ public class TextFieldCG extends AbstractComponentCG implements
             return name;
         }
     }
+            
 }

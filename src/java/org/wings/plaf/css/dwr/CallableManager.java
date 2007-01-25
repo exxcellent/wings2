@@ -3,6 +3,7 @@
  */
 package org.wings.plaf.css.dwr;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Set;
 import org.wings.header.SessionHeaders;
@@ -56,14 +57,15 @@ public class CallableManager implements Serializable {
         JavaScriptHeader header = new JavaScriptHeader("../dwr/interface/" + scriptName + ".js");
         SessionHeaders.getInstance().registerHeader(header);
     }
-
+    
     /**
      * Register callable and only expose a limited number of methods.
      * @param scriptName
      * @param callable
-     * @param methodsToExpose method names as Strings without brackets, e.g. "setData"
+     * @param exportInterface interface that defines the methods to be exposed 
+     * to the client by DWR
      */
-    public void registerCallable(String scriptName, Object callable, Set methodsToExpose) {
+    public void registerCallable(String scriptName, Object callable, Class exportInterface) {
         Session session = SessionManager.getSession();
 
         WebContextBuilder builder = new DefaultWebContextBuilder();
@@ -71,17 +73,19 @@ public class CallableManager implements Serializable {
 
         WebContextFactory.setWebContextBuilder(builder);
 
-        for (Iterator it = methodsToExpose.iterator(); it.hasNext();) {
-            accessControl.addIncludeRule(scriptName, (String)it.next());
+        Method[] methods = exportInterface.getMethods();
+        
+        for (int i = 0; i < methods.length; i++) {
+            accessControl.addIncludeRule(scriptName, methods[i].getName());            
         }
-
+                
         creatorManager.addCreator(scriptName, new SessionCreator(callable));
         builder.unset();
 
         JavaScriptHeader header = new JavaScriptHeader("../dwr/interface/" + scriptName + ".js");
         SessionHeaders.getInstance().registerHeader(header);
     }
-
+    
     public void unregisterCallable(String scriptName) {
         Session session = SessionManager.getSession();
 

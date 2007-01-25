@@ -50,10 +50,8 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
     public void installCG(SComponent component) {
         super.installCG(component);
 
-        if (!CallableManager.getInstance().containsCallable("CallableSpinner")) {
-            HashSet methodsToExpose = new HashSet();
-            methodsToExpose.add("getValue");
-            CallableManager.getInstance().registerCallable("CallableSpinner", getCallableSpinner(), methodsToExpose);
+        if (!CallableManager.getInstance().containsCallable("CallableSpinner")) {            
+            CallableManager.getInstance().registerCallable("CallableSpinner", getCallableSpinner(), CallableSpinner.class);
         }
     }
 

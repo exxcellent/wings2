@@ -10,7 +10,7 @@ else if (typeof wingS != "object") {
  * Creates an ajaxified popup.
  *
  * @param {String} id element id of the popup to be created
- * @param {Function} dwrGetter function that returns the contents
+ * @param {String} dwrObject DWR interface object to communicate with the server
  * @param {int} x position (origin top left)
  * @param {int} y position (origin top left)
  * @param {int} width
@@ -24,10 +24,9 @@ else if (typeof wingS != "object") {
  *
  * @author Christian Schyma
  */
-wingS.Popup = function(id, dwrGetter, x, y, width, height, context,
+wingS.Popup = function(id, dwrObject, x, y, width, height, context,
 			contentsCorner, contextCorner) {    
-    this.id             = id;
-    this.dwrGetter      = dwrGetter;
+    this.id             = id;    
     this.x              = x;
     this.y              = y;
     this.width          = width;
@@ -36,6 +35,9 @@ wingS.Popup = function(id, dwrGetter, x, y, width, height, context,
     this.contentsCorner = contentsCorner;
     this.contextCorner  = contextCorner;    
     this.timeout        = 5000;    
+    
+    // method has to be exposed by DWR   
+    this.dwrGetter      = dwrObject["getRenderedContent"];
     
     this.hideRequest       = false;
     this.requestingContent = false;
