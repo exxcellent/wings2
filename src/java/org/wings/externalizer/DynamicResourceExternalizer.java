@@ -12,7 +12,6 @@
  */
 package org.wings.externalizer;
 
-import org.wings.Renderable;
 import org.wings.io.Device;
 import org.wings.resource.DynamicResource;
 
@@ -28,7 +27,7 @@ public class DynamicResourceExternalizer implements Externalizer<DynamicResource
 
     public static final DynamicResourceExternalizer SHARED_INSTANCE = new DynamicResourceExternalizer();
 
-    public String getId(Object obj) {
+    public String getId(DynamicResource obj) {
         return null;
     }
 
@@ -41,7 +40,7 @@ public class DynamicResourceExternalizer implements Externalizer<DynamicResource
 
     public String getMimeType(DynamicResource obj) {
         if (obj != null) {
-            return ((DynamicResource) obj).getMimeType();
+            return obj.getMimeType();
         } else
             return "unknown";
     }
@@ -58,9 +57,9 @@ public class DynamicResourceExternalizer implements Externalizer<DynamicResource
         return obj.getFrame().getEventEpoch();
     }
 
-    public void write(DynamicResource obj, Device out)
+    public void write(Object obj, Device out)
             throws IOException {
-        obj.write(out);
+        ((DynamicResource)obj).write(out);
     }
 
     public Class[] getSupportedClasses() {
