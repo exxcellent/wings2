@@ -26,7 +26,6 @@ import org.directwebremoting.extend.AccessControl;
 import org.directwebremoting.extend.Creator;
 import org.directwebremoting.WebContextFactory;
 import javax.servlet.http.HttpSession;
-import org.directwebremoting.util.Messages;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -64,7 +63,7 @@ public class SessionAccessControl implements AccessControl {
         // to default disallow mode, and check that the are not rules applied
         if (policy.defaultAllow) {
             if (policy.rules.size() > 0) {
-                throw new IllegalArgumentException(Messages.getString("DefaultAccessControl.MixedIncludesAndExcludes", scriptName));
+                throw new IllegalArgumentException("ACL rules mixed includes/exluded for script: " + scriptName);
             }
             
             policy.defaultAllow = false;
@@ -81,7 +80,7 @@ public class SessionAccessControl implements AccessControl {
         // to default disallow mode, and check that the are not rules applied
         if (!policy.defaultAllow) {
             if (policy.rules.size() > 0) {
-                throw new IllegalArgumentException(Messages.getString("DefaultAccessControl.MixedIncludesAndExcludes", scriptName));
+                throw new IllegalArgumentException("ACL rules mixed includes/exluded for script: " + scriptName);
             }
             
             policy.defaultAllow = true;
@@ -234,7 +233,7 @@ public class SessionAccessControl implements AccessControl {
                     }
                 }
                 
-                throw new SecurityException(Messages.getString("ExecuteQuery.DeniedByJ2EERoles", buffer.toString()));                
+                throw new SecurityException("DWR method invocation denied by J2EE role definition: "  + buffer.toString());
             }
         }
                 
@@ -245,7 +244,7 @@ public class SessionAccessControl implements AccessControl {
         
         // Is it public
         if (!Modifier.isPublic(method.getModifiers())) {
-            throw new SecurityException(Messages.getString("ExecuteQuery.DeniedNonPublic"));
+            throw new SecurityException("Denied DWR invocation of non-public method.");
         }
         
         // Do access controls allow it?
@@ -255,11 +254,11 @@ public class SessionAccessControl implements AccessControl {
         
         // We ban some methods from Object too
         if (method.getDeclaringClass() == Object.class) {
-            throw new SecurityException(Messages.getString("ExecuteQuery.DeniedObjectMethod"));
+            throw new SecurityException("Security denied a DWR call to an Method declared in class Object");
         }
         
         if (creator.getType().getName().startsWith(PACKAGE_DWR_DENY)) {
-            throw new SecurityException(Messages.getString("ExecuteQuery.DeniedCoreDWR"));
+            throw new SecurityException("Security denied a DWR call to an Method declared in the DWR framework");
         }
         
         // Check the parameters are not DWR internal either
@@ -267,7 +266,7 @@ public class SessionAccessControl implements AccessControl {
             Class paramType = method.getParameterTypes()[j];
             
             if (paramType.getName().startsWith(PACKAGE_DWR_DENY)) {
-                throw new SecurityException(Messages.getString("ExecuteQuery.DeniedParamDWR"));
+                throw new SecurityException("Denied remote DWR invocation of a DWR framework method.");
             }
         }
                 
