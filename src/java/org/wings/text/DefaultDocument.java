@@ -77,7 +77,7 @@ public class DefaultDocument implements SDocument {
     }
 
     public String getText() {
-        return buffer.toString();
+        return buffer.length() == 0 ? null : buffer.toString();
     }
 
     public String getText(int offset, int length) throws BadLocationException {

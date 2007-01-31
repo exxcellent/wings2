@@ -152,14 +152,14 @@ public class TextComponentExample extends WingSetPane {
         getSession().addRequestListener(new SRequestListener() {
             public void processRequest(SRequestEvent e) {
                 if (e.getType() == SRequestEvent.DISPATCH_START) {
-                    if (eventLog.getText().length() == 0)
+                    if (eventLog.getText() == null || eventLog.getText().length() == 0)
                         eventLog.setText("(no document events fired)");
                     else
-                        eventLog.setText("");
-                    if (actionEvent.getText().length() == 0)
+                        eventLog.setText(null);
+                    if (actionEvent.getText() == null || actionEvent.getText().length() == 0)
                         actionEvent.setText("(no form or button event)");
                     else
-                        actionEvent.setText("");
+                        actionEvent.setText(null);
                 }
             }
         });
