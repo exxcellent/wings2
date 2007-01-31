@@ -55,21 +55,15 @@ public class DynamicLayoutExample extends WingSetPane {
                                                       "SBoxLayout"};
     private final SComboBox selectLayoutManager = new SComboBox(demoManagerNames);
     protected SPanel panel;
-
+    private ComponentControls controls;
 
     protected SComponent createControls() {
-        selectLayoutManager.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                panel.remove(0);
-                panel.add(demoPanels[selectLayoutManager.getSelectedIndex()]);
-            }
-        });
-        selectLayoutManager.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        return selectLayoutManager;
+        controls = new LayoutControls();
+        return controls;
     }
 
     protected SComponent createExample() {
-        panel = new SPanel(new SBorderLayout());
+        panel = new SPanel(new SBorderLayout(10, 10));
         panel.setPreferredSize(SDimension.FULLWIDTH);
         panel.add(demoPanels[0], SBorderLayout.CENTER);
         return panel;
@@ -77,6 +71,14 @@ public class DynamicLayoutExample extends WingSetPane {
 
     private static class BorderLayoutDemoPanel extends SPanel {
         private int i = 0;
+        private static final Color[] COLORS = new Color[] {
+            Color.GRAY,
+            new Color(255, 150, 150),
+            new Color(255, 255, 150),
+            new Color(150, 255, 150),
+            new Color(150, 255, 255),
+            new Color(150, 150, 255),
+        };
 
         public BorderLayoutDemoPanel() {
             super(new SFlowDownLayout());
@@ -99,13 +101,12 @@ public class DynamicLayoutExample extends WingSetPane {
         }
 
         private SComponent wrapIntoColouredPane(SComponent c) {
-            final Color[] colors = {Color.red, Color.green, Color.pink, Color.magenta, Color.gray, Color.cyan};
             SPanel colouredPanel = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
             colouredPanel.add(c);
             colouredPanel.setPreferredSize(SDimension.FULLAREA);
             colouredPanel.setVerticalAlignment(c.getVerticalAlignment());
             colouredPanel.setHorizontalAlignment(c.getHorizontalAlignment());
-            colouredPanel.setBackground(colors[i++ % colors.length]);
+            colouredPanel.setBackground(COLORS[i++ % COLORS.length]);
             return colouredPanel;
         }
     }
@@ -123,11 +124,11 @@ public class DynamicLayoutExample extends WingSetPane {
             horizontalLayout.setHgap(10);
             horizontalLayout.setVgap(10);
             horizontalLayout.setBorder(1);
-            add(createPanel(horizontalLayout, 5));
+            add(createPanel(horizontalLayout, 4));
 
             add(new SLabel("\nVertical vanilla box layout"));
             SBoxLayout verticalLayout = new SBoxLayout(SBoxLayout.VERTICAL);
-            add(createPanel(verticalLayout, 5));
+            add(createPanel(verticalLayout, 4));
         }
     }
 
@@ -547,7 +548,7 @@ public class DynamicLayoutExample extends WingSetPane {
         multiLineLabel.setPreferredSize(SDimension.FULLWIDTH);
         multiLineLabel.setText(description);
         multiLineLabel.setBorder(new SLineBorder(Color.gray, 1));
-        multiLineLabel.setBackground(Color.orange);
+        multiLineLabel.setBackground(new Color(255, 255, 150));
         return multiLineLabel;
     }
 
@@ -565,9 +566,9 @@ public class DynamicLayoutExample extends WingSetPane {
 
     /* Create a dummy label with a specific label, color, border and alignment depending on index. */
     private static SLabel createDummyLabel(int i) {
-        final String[] texts = {"[%] A very short component (Top/Left)",
-                                "[%] A much longer, unbreakable label for wrapping demo (Default)",
-                                "[%] And again a short one (Right/Bottom)",
+        final String[] texts = {"[%] A short component (Top/Left)",
+                                "[%] A longer, unbreakable label for wrapping demo (Default)",
+                                "[%] Another short one (Right/Bottom)",
                                 "[%] A 2-line\nlabel (Center/Center)"};
         final SBorder greenLineBorder = new SLineBorder(2);
         greenLineBorder.setColor(Color.red);
@@ -592,4 +593,21 @@ public class DynamicLayoutExample extends WingSetPane {
         return label;
     }
 
+    class LayoutControls
+        extends ComponentControls {
+        public LayoutControls() {
+            globalControls.setVisible(false);
+
+            selectLayoutManager.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    panel.remove(0);
+                    panel.add(demoPanels[selectLayoutManager.getSelectedIndex()]);
+                }
+            });
+            selectLayoutManager.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+
+            addControl(new SLabel(" choose layout manager"));
+            addControl(selectLayoutManager);
+        }
+    }
 }

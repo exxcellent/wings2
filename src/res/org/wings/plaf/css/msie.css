@@ -47,7 +47,7 @@ ul.SMenu li a
 }
 
 /* tooltips opacity */
-div.domTT {
+.tt {
     filter:alpha(opacity=80);
 }
 
@@ -92,4 +92,50 @@ TABLE.formbutton_hover {
 .STitledBorder {
     margin-top: 1em;
     padding-top: 1em;
+}
+
+.SButton,
+.SButton_disabled,
+.SButton_form,
+.SButton_form_disabled,
+.SToggleButton,
+.SToggleButton_selected,
+.SToggleButton_disabled,
+.SToggleButton_form,
+.SToggleButton_form_selected,
+.SToggleButton_form_disabled,
+.SCheckBox,
+.SCheckBox_selected,
+.SCheckBox_disabled,
+.SCheckBox_form,
+.SCheckBox_form_selected,
+.SCheckBox_form_disabled,
+.SRadioBox,
+.SRadioBox_selected,
+.SRadioBox_selected,
+.SRadioBox_disabled,
+.SRadioBox_form,
+.SRadioBox_form_selected,
+.SRadioBox_form_disabled,
+.STree td.slash,
+.STree td.plus,
+.STree td.minus,
+.STree td.selected,
+.STree td.norm,
+.clickable
+{
+  -moz-user-select: none;
+}
+
+.STree td.slash, .STree td.plus, .STree td.minus {
+    padding-right: 2px;
+    padding-bottom: 0px;
+}
+
+.DivisionControl {
+    width: 0%;
+}
+
+.DivisionTitle {
+    width: 100%;
 }

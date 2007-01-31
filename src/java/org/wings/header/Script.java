@@ -82,11 +82,15 @@ public class Script implements Renderable, Serializable {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != Script.class) {
+        if (obj == this)
+            return true;
+        if (obj == null)
             return false;
-        }
+        if (!(obj instanceof Script))
+            return false;
+
         Script testObj = (Script) obj;
-        
+
         if (testObj.getLanguage() == null) {
             if (getLanguage() != null) {
                 return false;
@@ -96,7 +100,7 @@ public class Script implements Renderable, Serializable {
                 return false;
             }
         }
-        
+
         if (testObj.getType() == null) {
             if (getType() != null) {
                 return false;
@@ -106,7 +110,7 @@ public class Script implements Renderable, Serializable {
                 return false;
             }
         }
-        
+
         if (testObj.getURL() == null) {
             if (getURL() != null) {
                 return false;
@@ -120,7 +124,18 @@ public class Script implements Renderable, Serializable {
     }
 
     public int hashCode() {
-        return language != null ? language.hashCode() : 0;
+        int hashCode = 17;
+        int dispersionFactor = 37;
+
+        hashCode = hashCode * dispersionFactor + ((getLanguage() == null) ? 0 : getLanguage().hashCode());
+        hashCode = hashCode * dispersionFactor + ((getType() == null) ? 0 : getType().hashCode());
+        hashCode = hashCode * dispersionFactor + ((getURL() == null) ? 0 : getURL().hashCode());
+
+        return hashCode;
+    }
+
+    public String toString() {
+        return urlSource.getURL().toString();
     }
 
 }

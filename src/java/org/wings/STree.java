@@ -14,6 +14,7 @@ package org.wings;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeExpansionEvent;
@@ -141,9 +142,34 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
      * used to forward selection events to selection listeners of the tree
      */
     private final TreeSelectionListener fwdSelectionEvents = new TreeSelectionListener() {
+
         public void valueChanged(TreeSelectionEvent e) {
             fireTreeSelectionEvent(e);
-            reload();
+
+            if (isUpdatePossible() && STree.class.isAssignableFrom(STree.this.getClass())) {
+                TreePath[] affectedPaths = e.getPaths();
+                List deselectedRows = new ArrayList();
+                List selectedRows = new ArrayList();
+                for (int i = 0; i < affectedPaths.length; ++i) {
+                    int row = treeState.getRowForPath(affectedPaths[i]);
+                    if (row == -1)
+                        continue;
+                    int visibleRow = row;
+                    if (getViewportSize() != null) {
+                        visibleRow = row - getViewportSize().y;
+                        if (visibleRow < 0 || visibleRow >= getViewportSize().height)
+                            continue;
+                    }
+                    if (e.isAddedPath(affectedPaths[i])) {
+                        selectedRows.add(new Integer(visibleRow));
+                    } else {
+                        deselectedRows.add(new Integer(visibleRow));
+                    }
+                }
+                update(((TreeCG) getCG()).getSelectionUpdate(STree.this, deselectedRows, selectedRows));
+            } else {
+                reload();
+            }
         }
     };
 
@@ -390,38 +416,44 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
 
             SPoint point = new SPoint(value.substring(1));
             int row = getRowForLocation(point);
-
-            SMouseEvent event = new SMouseEvent(this, 0, point);
-            fireMouseClickedEvent(event);
-            if (event.isConsumed())
-                continue;
-
             if (row < 0) continue; // row not found...
 
-            if (value.charAt(0) == 'b') {
-                TreePath path = getPathForRow(row);
-                //selection
-                if (path != null) {
-                    togglePathSelection(path);
-                }
-            } else if (value.charAt(0) == 'h') {
-                TreePath path = getPathForRow(row);
-                //selection
-                if (path != null) {
-                    requestedExpansionPaths.add(path);
-                }
-            } else if (value.charAt(0) == 'a') {
-                TreePath path = getPathForAbsoluteRow(row);
-                //selection
-                if (path != null) {
-                    togglePathSelection(path);
-                }
-            } else if (value.charAt(0) == 'j') {
-                TreePath path = getPathForAbsoluteRow(row);
-                //selection
-                if (path != null) {
-                    requestedExpansionPaths.add(path);
-                }
+            switch (value.charAt(0)) {
+                case 'b':
+                    SMouseEvent event = new SMouseEvent(this, 0, point);
+                    fireMouseClickedEvent(event);
+                    if (event.isConsumed())
+                        continue;
+
+                    TreePath path = getPathForRow(row);
+                    if (path != null) {
+                        togglePathSelection(path);
+                    }
+                    break;
+                case 'a':
+                    event = new SMouseEvent(this, 0, point);
+                    fireMouseClickedEvent(event);
+                    if (event.isConsumed())
+                        continue;
+
+                    path = getPathForAbsoluteRow(row);
+                    if (path != null) {
+                        togglePathSelection(path);
+                    }
+                    break;
+                case 'h':
+                    path = getPathForRow(row);
+                    if (path != null) {
+                        requestedExpansionPaths.add(path);
+                    }
+                    break;
+                case 'j':
+                    path = getPathForAbsoluteRow(row);
+                    //selection
+                    if (path != null) {
+                        requestedExpansionPaths.add(path);
+                    }
+                    break;
             }
         }
         getSelectionModel().setDelayEvents(false);
@@ -644,7 +676,7 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
 
         TreePath paths[] = new TreePath[rows.length];
         for (int i = 0; i < rows.length; i++) {
-            paths[i] = getPathForRow(i);
+            paths[i] = getPathForRow(rows[i]);
         }
 
         setSelectionPaths(paths);
@@ -986,7 +1018,10 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
         if (depth < 0) {
             depth = 0;
         }
-        nodeIndentDepth = depth;
+        if (nodeIndentDepth != depth) {
+            nodeIndentDepth = depth;
+            reload();
+        }
     }
 
     public int getNodeIndentDepth() {

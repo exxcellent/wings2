@@ -130,10 +130,6 @@ public class FileChooserExample
         SPanel p = new SPanel(new SFlowDownLayout());
         p.setVerticalAlignment(TOP);
 
-        SLabel previewLabel = new SLabel("Preview");
-        previewLabel.setBorder(new SEmptyBorder(0, 20, 0, 0));
-        p.add(previewLabel);
-
         contentSwitcher = new SCardLayout();
 
         SPanel contentPane = new SPanel(contentSwitcher);
@@ -159,44 +155,47 @@ public class FileChooserExample
 
         contentSwitcher.show(unknownLabel);
 
-        contentPane.setBorder(new SEmptyBorder(10, 20, 0, 0));
+        p.setBorder(new SEmptyBorder(20, 80, 0, 0));
         p.add(contentPane);
+
         return p;
     }
 
     protected SComponent createUpload() {
         SPanel form = new SPanel(new SFlowDownLayout());
-        form.setBorder(new SEmptyBorder(10, 5, 0, 0));
+        form.setBorder(new SEmptyBorder(20, 20, 0, 0));
 
         chooser = new SFileChooser();
+        chooser.setColumns(25);
         form.add(chooser);
 
-        SButton submit = new SButton("upload");
-        submit.setVerticalAlignment(RIGHT);
+        SButton submit = new SButton("Upload");
+        submit.setVerticalAlignment(SConstants.RIGHT_ALIGN);
+        form.add(new SSpacer(0, 10));
         form.add(submit);
 
-        SPanel p = new SPanel(new SGridLayout(2));
-        p.setBorder(new SEmptyBorder(10, 5, 0, 0));
-        p.add(new SLabel("message:"));
+        SPanel p = new SPanel(new SGridLayout(0, 2, 10, 5));
+        p.add(new SLabel("Message:"));
         final SLabel message = new SLabel("");
         p.add(message);
 
-        p.add(new SLabel("filename:"));
+        p.add(new SLabel("Filename:"));
         final SLabel filename = new SLabel("");
         p.add(filename);
 
-        p.add(new SLabel("fileid:"));
+        p.add(new SLabel("Fileid:"));
         final SLabel fileid = new SLabel("");
         p.add(fileid);
 
-        p.add(new SLabel("filetype:"));
+        p.add(new SLabel("Filetype:"));
         final SLabel filetype = new SLabel("");
         p.add(filetype);
 
-        p.add(new SLabel("size:"));
+        p.add(new SLabel("Size:"));
         final SLabel size = new SLabel("");
         p.add(size);
 
+        form.add(new SSpacer(0, 30));
         form.add(p);
 
 
@@ -237,10 +236,10 @@ public class FileChooserExample
         public FileChooserControls() {
             //showAsFormComponentCheckBox.setVisible(false);
             globalControls.setVisible(false);
-            
+
             Object[] values = {new Integer(1), new Integer(2), new Integer(4),
                                new Integer(8), new Integer(16), new Integer(32),
-                               new Integer(64)};
+                               new Integer(64), new Integer(128), new Integer(256)};
 
             final SComboBox comboBox = new SComboBox(values);
             comboBox.addItemListener(new ItemListener() {

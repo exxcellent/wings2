@@ -14,16 +14,25 @@ package org.wings;
 
 
 import org.wings.plaf.DesktopPaneCG;
+import org.wings.event.*;
 
 /**
  * Container that holds SInternalFrames.
  *
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  */
-public class SDesktopPane extends SContainer {
-    public SDesktopPane() {
-        super();
-    }
+public class SDesktopPane
+    extends SContainer
+{
+    SInternalFrameListener listener = new SInternalFrameAdapter() {
+        public void internalFrameMaximized(SInternalFrameEvent e) {
+            reload();
+        }
+
+        public void internalFrameUnmaximized(SInternalFrameEvent e) {
+            reload();
+        }
+    };
 
     public void setLayout(SLayoutManager l) {}
 
@@ -34,8 +43,18 @@ public class SDesktopPane extends SContainer {
     public SComponent addComponent(SComponent component,
                                    Object constraints, int index) {
         if (constraints == null)
-            constraints = component.getLowLevelEventId();
+            constraints = component.getName();
+
+        ((SInternalFrame)component).addInternalFrameListener(listener);
+
         return super.addComponent(component, constraints, index);
+    }
+
+
+    public void remove(SComponent c) {
+        super.remove(c);
+
+        ((SInternalFrame)c).removeInternalFrameListener(listener);
     }
 
     /**
@@ -47,8 +66,11 @@ public class SDesktopPane extends SContainer {
      *                 -1 is the bottommost position
      */
     public void setPosition(SComponent c, int position) {
-        getComponentList().remove(c);
-        getComponentList().add(position, c);
+        if (position != getComponentList().indexOf(c)) {
+            getComponentList().remove(c);
+            getComponentList().add(position, c);
+            reload();
+        }
     }
 
     /**

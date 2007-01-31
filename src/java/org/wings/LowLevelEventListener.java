@@ -67,16 +67,6 @@ public interface LowLevelEventListener {
     String getLowLevelEventId();
 
     /**
-     * Get the encoded low level event id. This is a convenience method for
-     * SComponent.encodeLowLevelEventId(getLowLevelEventId());
-     * Encodes a low level event id for using it in a request parameter. Every
-     * {@link LowLevelEventListener} should encode its LowLevelEventId before
-     * using it in a request parameter. This encoding adds consistency checking
-     * for outtimed requests ("Back Button"). Mainly used in CG's
-     */
-    String getEncodedLowLevelEventId();
-
-    /**
      * If the dispatcher is configured to use named event, the return value of
      * this method is used to identiy a LowLevelEventListener by name. E.g. in a
      * http request you might give an action a special name, like

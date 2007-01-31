@@ -14,6 +14,7 @@ package org.wings.plaf;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wings.session.Browser;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
 
@@ -78,10 +79,13 @@ public abstract class LookAndFeelFactory {
         public LookAndFeel create()
                 throws IOException {
             Session session = SessionManager.getSession();
-            LookAndFeel laf = (LookAndFeel)lafs.get(session.getUserAgent().getBrowserType());
+            Browser userAgent = session.getUserAgent();
+            final String lookupKey = userAgent.getBrowserType().getShortName() + Integer.toString(userAgent.getMajorVersion());
+            
+            LookAndFeel laf = (LookAndFeel)lafs.get(lookupKey );            
             if (laf == null) {
                 synchronized (Default.class) {
-                    laf = (LookAndFeel)lafs.get(session.getUserAgent().getBrowserType());
+                    laf = (LookAndFeel)lafs.get(lookupKey);
                     if (laf == null) {
                         String lafName = (String) session.getProperty("wings.lookandfeel.default");
                         if (lafName == null)
@@ -93,7 +97,7 @@ public abstract class LookAndFeelFactory {
                             log.fatal("create", e);
                             throw new IOException(e.getMessage());
                         }
-                        lafs.put(session.getUserAgent().getBrowserType(), laf);
+                        lafs.put(lookupKey, laf);
                     }
                 }
             }

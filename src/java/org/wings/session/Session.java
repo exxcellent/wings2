@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.DefaultReloadManager;
 import org.wings.ReloadManager;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
@@ -78,7 +77,7 @@ public class Session implements PropertyService, Serializable {
      * The property name of the sessions character encoding
      */
     public final static String CHARACTER_ENCODING_PROPERTY = "characterEncoding";
-    
+
     /**
      * The property name of the look&feel
      */
@@ -95,6 +94,8 @@ public class Session implements PropertyService, Serializable {
     private SToolTipManager toolTipManager = new SToolTipManager();
 
     private ReloadManager reloadManager = null;
+
+    private MenuManager menuManager = null;
 
     private transient ExternalizeManager externalizeManager;
 
@@ -127,7 +128,7 @@ public class Session implements PropertyService, Serializable {
     private Locale locale = Locale.getDefault();
 
     private boolean localeFromHeader = true;
-    
+
     private DragAndDropManager dndManager;
 
     private ScriptManager scriptManager;
@@ -273,7 +274,7 @@ public class Session implements PropertyService, Serializable {
      * Copy the init parameters.
      */
     protected void initProps(ServletConfig servletConfig) {
-        Enumeration params = servletConfig.getInitParameterNames(); 
+        Enumeration params = servletConfig.getInitParameterNames();
         while (params.hasMoreElements()) {
             String name = (String) params.nextElement();
             props.put(name, servletConfig.getInitParameter(name));
@@ -350,6 +351,11 @@ public class Session implements PropertyService, Serializable {
         return reloadManager;
     }
 
+    public MenuManager getMenuManager() {
+        if (menuManager == null)
+            menuManager = new MenuManager();
+        return menuManager;
+    }
 
     /**
      * The Externalize manager is response to provide all {@link org.wings.Resource}
@@ -365,7 +371,7 @@ public class Session implements PropertyService, Serializable {
     }
 
     /**
-     * The Script manager collects scripts 
+     * The Script manager collects scripts
      *
      * @return The script manager responsible to script all sort
      * of resources contained in this session.
@@ -429,6 +435,8 @@ public class Session implements PropertyService, Serializable {
             final String userAgentString = request.getHeader("User-Agent");
             browser = new Browser(userAgentString);
             log.debug("Browser is detected as " + browser+". User-Agent was: "+userAgentString);
+            log.debug("major version = "+browser.getMajorVersion()+", id = "+browser.getBrowserType().getId());
+            log.debug("short name = "+browser.getBrowserType().getShortName());
         } catch (Exception ex) {
             log.warn("Cannot get User-Agent from request", ex);
         }
@@ -487,12 +495,12 @@ public class Session implements PropertyService, Serializable {
 
         return rootFrame;
     }
-    
-    
+
+
     public SComponent getComponentByName( String name ) {
         return getComponentByName( this.getRootFrame(), name );
     }
-    
+
     /**
      * Search in the given SContainer for the SComponent with the given name.
      * @param container The SContainer where you want to search for the SComponent with the given name.
@@ -500,7 +508,7 @@ public class Session implements PropertyService, Serializable {
      * @return the SComponent with the given name
      */
     public SComponent getComponentByName( SContainer container, String name ) {
-       SComponent component = null; 
+       SComponent component = null;
        SComponent[] components = container.getComponents();
        for ( int x = 0, y = components.length ; x < y ; x++ ) {
            SComponent component_x = components[x];
@@ -514,9 +522,9 @@ public class Session implements PropertyService, Serializable {
                }
            }
        }
-       return component;   
-    }   
-    
+       return component;
+    }
+
     /**
      * Describe <code>getProperties</code> method here.
      *
@@ -932,7 +940,7 @@ public class Session implements PropertyService, Serializable {
     public boolean hasDragAndDropManager() {
         return dndManager != null;
     }
-    
+
     public DragAndDropManager getDragAndDropManager() {
         if (dndManager == null) {
             dndManager = new DragAndDropManager();

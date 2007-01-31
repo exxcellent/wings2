@@ -1,0 +1,12 @@
+<table>
+  <tr>
+  	<td width="100%">
+  	  <span class="wingset_title">WingSet Demo</span>
+  	  <span class="wingset_subtitle">
+  	    Similar to the Java SwingSet example, WingSet
+  	    demonstrates some properties of wingS and wingX.
+  	  </span>
+  	</td>
+    <td><img src="../icons/wings_logo_small.gif" /></td>
+  </tr>
+</table>

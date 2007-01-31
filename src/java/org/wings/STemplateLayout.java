@@ -221,7 +221,7 @@ public class STemplateLayout extends SAbstractLayoutManager {
 
     /**
      * Deregisters a property manager for a given component class to be able to replace it.
-     * @param supportedComponentClass Target class as in {@link org.wings.template.PropertyManager#getSupportedClasses()} 
+     * @param supportedComponentClass Target class as in {@link org.wings.template.PropertyManager#getSupportedClasses()}
      */
     public static final PropertyManager removePropertyManager(Class supportedComponentClass) {
         if (supportedComponentClass == null)

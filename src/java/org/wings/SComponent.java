@@ -13,32 +13,8 @@
 package org.wings;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wings.border.SBorder;
-import org.wings.event.SComponentEvent;
-import org.wings.event.SComponentListener;
-import org.wings.event.SParentFrameEvent;
-import org.wings.event.SParentFrameListener;
-import org.wings.event.SRenderEvent;
-import org.wings.event.SRenderListener;
-import org.wings.io.Device;
-import org.wings.plaf.ComponentCG;
-import org.wings.script.ScriptListener;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
-import org.wings.style.CSSAttributeSet;
-import org.wings.style.CSSProperty;
-import org.wings.style.CSSStyle;
-import org.wings.style.CSSStyleSheet;
-import org.wings.style.Selector;
-import org.wings.style.Style;
-import org.wings.util.ComponentVisitor;
-import org.wings.util.SStringBuilder;
-
-import javax.swing.*;
-import javax.swing.event.EventListenerList;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -58,6 +34,37 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.event.EventListenerList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.border.SBorder;
+import org.wings.event.SComponentEvent;
+import org.wings.event.SComponentListener;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
+import org.wings.event.SRenderEvent;
+import org.wings.event.SRenderListener;
+import org.wings.io.Device;
+import org.wings.plaf.ComponentCG;
+import org.wings.plaf.Update;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
+import org.wings.session.Session;
+import org.wings.session.SessionManager;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyle;
+import org.wings.style.CSSStyleSheet;
+import org.wings.style.Selector;
+import org.wings.style.Style;
+import org.wings.util.ComponentVisitor;
+import org.wings.util.SStringBuilder;
 
 /**
  * Object having a graphical representation that can be displayed on the
@@ -170,9 +177,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     private EventListenerList listeners;
 
-    private Boolean useNamedEvents;
-
     private boolean showAsFormComponent = true;
+
+    private boolean reloadForced = false;
 
     private SPopupMenu popupMenu;
 
@@ -305,7 +312,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             popupMenu.setParentFrame(parentFrame);
         }
 
-        //reload(ReloadManager.STATE);
+        //reload();
         if (getScriptListeners().length > 0)
             reload();
         if (dynamicStyles != null && dynamicStyles.size() > 0)
@@ -323,11 +330,15 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
     public void setComponentPopupMenu(SPopupMenu popupMenu) {
         reloadIfChange(this.popupMenu, popupMenu);
-        if (this.popupMenu != null)
+        if (this.popupMenu != null) {
+            getSession().getMenuManager().deregisterMenuLink(this.popupMenu, this);
             this.popupMenu.setParentFrame(null);
+        }
         this.popupMenu = popupMenu;
-        if (this.popupMenu != null)
+        if (this.popupMenu != null) {
+            getSession().getMenuManager().registerMenuLink(this.popupMenu, this);
             this.popupMenu.setParentFrame(getParentFrame());
+        }
     }
 
     public SPopupMenu getComponentPopupMenu() {
@@ -361,7 +372,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * The URL under which this component is accessible for the browser.
      * This is equivalent to the URL of the component's root frame, as this is the
-     * node externalized to the browser via the {@link org.wings.resource.DynamicCodeResource}
+     * node externalized to the browser via the {@link org.wings.resource.ReloadResource}
      * externalizer.
      *
      * @return The HTTP URL where this component can be accessed.
@@ -965,6 +976,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             style.remove(CSSProperty.FONT_STYLE);
             style.remove(CSSProperty.FONT_WEIGHT);
             style.putAll(attributes);
+            reload();
         }
     }
 
@@ -991,7 +1003,12 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                         ? SComponentEvent.COMPONENT_SHOWN
                         : SComponentEvent.COMPONENT_HIDDEN));
             }
-            reload();
+
+            if (parent != null) {
+            	parent.reload();
+            } else {
+            	reload();
+            }
         }
     }
 
@@ -1035,147 +1052,146 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Mark the component as subject to reload.
+     * Marks this component as subject to reload.
      * The component will be registered with the ReloadManager.
-     *
      */
     public final void reload() {
         getSession().getReloadManager().reload(this);
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Hands the given update to the Reload Manager.
+     * @param update  the update for this component
+     */
+    public final void update(Update update) {
+        getSession().getReloadManager().addUpdate(this, update);
+    }
+
+    protected boolean isUpdatePossible() {
+        return getSession().getReloadManager().isUpdateMode();
+    }
+
+    public boolean isReloadForced() {
+        return reloadForced;
+    }
+
+    public void setReloadForced(boolean forced) {
+        if (reloadForced != forced) {
+            Object clientProperty = getClientProperty("onChangeSubmitListener");
+            if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+                removeScriptListener((JavaScriptListener) clientProperty);
+                putClientProperty("onChangeSubmitListener", null);
+            }
+            reloadForced = forced;
+            reload();
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(Object oldVal, Object newVal) {
-        if (!((oldVal == newVal) || (oldVal != null && oldVal.equals(newVal)))) {
-            reload();
-        }
+        if (isDifferent(oldVal, newVal)) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(int oldVal, int newVal) {
-        if (oldVal != newVal) {
-            reload();
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(boolean oldVal, boolean newVal) {
-        if (oldVal != newVal) {
-            reload();
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(byte oldVal, byte newVal) {
-        if (oldVal != newVal) {
-            reload();
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(short oldVal, short newVal) {
-        if (oldVal != newVal) {
-            reload();
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(long oldVal, long newVal) {
-        if (oldVal != newVal) {
-            reload();
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(float oldVal, float newVal) {
-        if (oldVal != newVal) {
-            reload();
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(double oldVal, double newVal) {
-        if (oldVal != newVal) {
-            reload();
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Mark this component as subject to reload for the given
-     * aspect if the property, that is given in its old and new
-     * fashion, changed. Convenience method for {@link #reload()}
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
      * @param oldVal the old value of some property
      * @param newVal the new value of some property
      */
     protected final void reloadIfChange(char oldVal, char newVal) {
-        if (oldVal != newVal) {
-            reload();
-        }
+        if (oldVal != newVal) reload();
     }
 
     /**
-     * Let the code generator delegate write the component's code
-     * to the device. The code generator is the actual 'plaf'.
+     * Mark this component as subject to reload if the property,
+     * that is given in its old and new fashion, changed.
      *
-     * @param s the Device to write into
-     * @throws IOException Thrown if the connection to the client gets broken,
-     *                     for example when the user stops loading
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
      */
     public void write(Device s) throws IOException {
         try {
@@ -1242,44 +1258,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Encodes a low level event id for using it in a request parameter. Every
-     * {@link LowLevelEventListener} should encode its LowLevelEventId before
-     * using it in a request parameter. This encoding adds consistency checking
-     * for outtimed requests ("Back Button")
-     */
-    private String encodeLowLevelEventId(String lowLevelEventId) {
-        if (getParentFrame() != null)
-            if (!(this instanceof LowLevelEventListener) ||
-                    ((LowLevelEventListener) this).isEpochCheckEnabled()) {
-                return (getParentFrame().getEventEpoch()
-                        + SConstants.UID_DIVIDER
-                        + lowLevelEventId);
-            }
-        return lowLevelEventId;
-    }
-
-    /**
-     * Encodes a low level event id for using it in a request parameter. Every
-     * {@link LowLevelEventListener} should encode its LowLevelEventId before
-     * using it in a request parameter. This encoding adds consistency checking
-     * for outtimed requests ("Back Button")
-     */
-    public final String getEncodedLowLevelEventId() {
-        if (getUseNamedEvents() && getName() != null)
-            return name;
-        else
-            return encodeLowLevelEventId(getLowLevelEventId());
-    }
-
-    private boolean getUseNamedEvents() {
-        if (useNamedEvents == null) {
-            useNamedEvents = ("true".equalsIgnoreCase((String) getSession().getProperty("wings.event.usenames")))
-                    ? Boolean.TRUE : Boolean.FALSE;
-        }
-        return useNamedEvents.booleanValue();
-    }
-
-    /**
      * Default implementation of the method in
      * {@link LowLevelEventListener}.
      */
@@ -1305,7 +1283,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      *
      * @return true, if this component resides in a form, false otherwise
      */
-    public final boolean getResidesInForm() {
+    public boolean getResidesInForm() {
         SComponent parent = getParent();
 
         boolean actuallyDoes = false;
@@ -1317,13 +1295,13 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Set the tooltip text.
+     * Set the tooltip text. To style use HTML tags.
      *
      * @param t the new tooltip text
      */
     public void setToolTipText(String t) {
         reloadIfChange(this.tooltip, t);
-        tooltip = t;
+        this.tooltip = t;
     }
 
     /**
@@ -1966,4 +1944,5 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                 e.getParentFrame().deregisterGlobalInputMapComponent(me);
         }
     }
+
 }

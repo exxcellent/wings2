@@ -12,15 +12,7 @@
  */
 package wingset;
 
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SGridLayout;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SURLIcon;
+import org.wings.*;
 import org.wings.plaf.css.CheckBoxCG;
 
 import java.awt.event.ActionEvent;
@@ -35,12 +27,20 @@ public class CheckBoxExample
     final static int[] textHPos = new int[] {SConstants.LEFT, SConstants.CENTER, SConstants.RIGHT};
     final static int[] textVPos = new int[] {SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
 
-    static final SIcon sel = new SURLIcon("../icons/ComboBoxSelectedIcon.gif");
-    static final SIcon nsel = new SURLIcon("../icons/ComboBoxIcon.gif");
-    static final SIcon dissel = new SURLIcon("../icons/ComboBoxDisabledSelectedIcon.gif");
-    static final SIcon disnsel = new SURLIcon("../icons/ComboBoxDisabledIcon.gif");
-    static final SIcon rollsel = new SURLIcon("../icons/ComboBoxRolloverSelectedIcon.gif");
-    static final SIcon rollnsel = new SURLIcon("../icons/ComboBoxRolloverIcon.gif");
+    static final SIcon sel = new SResourceIcon("org/wings/icons/green_light_on.png");
+    static final SIcon nsel = new SResourceIcon("org/wings/icons/green_light_off.png");
+    static final SIcon dissel = new SResourceIcon("org/wings/icons/green_light_on_disabled.png");
+    static final SIcon disnsel = new SResourceIcon("org/wings/icons/green_light_off_disabled.png");
+    static final SIcon rollsel = new SResourceIcon("org/wings/icons/green_light_on.png");
+    static final SIcon rollnsel = new SResourceIcon("org/wings/icons/green_light_on.png");
+
+    static SIcon backup_sel;
+    static SIcon backup_nsel;
+    static SIcon backup_dissel;
+    static SIcon backup_disnsel;
+    static SIcon backup_rollsel;
+    static SIcon backup_rollnsel;
+
     private ButtonControls controls;
 
     private final SLabel reportLabel = new SLabel("No button pressed");
@@ -49,6 +49,7 @@ public class CheckBoxExample
             reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
         }
     };
+    private SCheckBox[] buttons;
 
     protected SComponent createControls() {
         controls = new ButtonControls();
@@ -60,33 +61,17 @@ public class CheckBoxExample
     }
 
     SContainer createCheckBoxExample() {
-        SCheckBox[] buttons = new SCheckBox[9];
+        buttons = new SCheckBox[9];
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new SCheckBox("Text " + (i + 1));
-            buttons[i].setActionCommand(buttons[i].getText());
-            if (i != 4) {
-                buttons[i].setIcon(nsel);
-                buttons[i].setSelectedIcon(sel);
-                buttons[i].setDisabledIcon(disnsel);
-                buttons[i].setDisabledSelectedIcon(dissel);
-                buttons[i].setRolloverIcon(rollnsel);
-                buttons[i].setRolloverSelectedIcon(rollsel);
-            }
-            else {
-                buttons[i].setIcon(null);
-                buttons[i].setSelectedIcon(null);
-                buttons[i].setDisabledIcon(null);
-                buttons[i].setDisabledSelectedIcon(null);
-                buttons[i].setRolloverIcon(null);
-                buttons[i].setRolloverSelectedIcon(null);
-            }
-            buttons[i].setToolTipText("CheckBox " + (i+1));
-            buttons[i].setName("button" + (i+1));
-            buttons[i].setShowAsFormComponent(false);
-            buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
-            buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
-            controls.addControllable(buttons[i]);
+            SCheckBox button = buttons[i] = new SCheckBox("Text " + (i + 1));
+            button.setShowAsFormComponent(true);
+            button.setActionCommand(button.getText());
+            button.setToolTipText("CheckBox " + (i+1));
+            button.setName("check" + (i+1));
+            button.setVerticalTextPosition(textVPos[(i / 3)% 3]);
+            button.setHorizontalTextPosition(textHPos[i % 3]);
+            controls.addControllable(button);
         }
 
         final SGridLayout grid = new SGridLayout(3);
@@ -100,7 +85,7 @@ public class CheckBoxExample
             buttonGrid.add(buttons[i]);
         }
 
-        SPanel panel = new SPanel(new SGridLayout(1));
+        final SPanel panel = new SPanel(new SGridLayout(2, 1, 0, 20));
         panel.add(buttonGrid);
         panel.add(reportLabel);
 
@@ -109,13 +94,47 @@ public class CheckBoxExample
 
     class ButtonControls extends ComponentControls {
         public ButtonControls() {
-            final SCheckBox useImages = new SCheckBox("Show icons in form");
+            formComponentCheckBox.setSelected(true);
+            final SCheckBox customIcons = new SCheckBox("custom icons");
+            customIcons.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    for (int i = 0; i < buttons.length; i++) {
+                        SCheckBox button = buttons[i];
+                        if (i != 4 && customIcons.isSelected()) {
+                            backup_nsel = button.getIcon();
+                            backup_sel = button.getSelectedIcon();
+                            backup_disnsel = button.getDisabledIcon();
+                            backup_dissel = button.getDisabledSelectedIcon();
+                            backup_rollnsel = button.getRolloverIcon();
+                            backup_rollsel = button.getRolloverSelectedIcon();
+                            button.setIcon(nsel);
+                            button.setSelectedIcon(sel);
+                            button.setDisabledIcon(disnsel);
+                            button.setDisabledSelectedIcon(dissel);
+                            button.setRolloverIcon(rollnsel);
+                            button.setRolloverSelectedIcon(rollsel);
+                        }
+                        else {
+                            button.setIcon(backup_nsel);
+                            button.setSelectedIcon(backup_sel);
+                            button.setDisabledIcon(backup_disnsel);
+                            button.setDisabledSelectedIcon(backup_dissel);
+                            button.setRolloverIcon(backup_rollnsel);
+                            button.setRolloverSelectedIcon(backup_rollsel);
+                        }
+                    }
+                }
+            });
+            addControl(customIcons);
+
+            final SCheckBox useImages = new SCheckBox("icons in form");
             final CheckBoxCG cg = (CheckBoxCG) getSession().getCGManager().getCG(SCheckBox.class);
-            useImages.setSelected(cg.isUseIconsInForm());
+            useImages.setSelected(true);
+            cg.setUseIconsInForm(true);
             useImages.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     cg.setUseIconsInForm(useImages.isSelected());
-                    reload();
+                    CheckBoxExample.this.reload();
                 }
             });
             addControl(useImages);

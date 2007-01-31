@@ -28,10 +28,10 @@ public class ButtonExample extends WingSetPane {
     final static int[] textVPos = new int[]{SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
 
     // icons
-    private static final SIcon icon = new SURLIcon("../icons/ButtonIcon.gif");
-    private static final SIcon disabledIcon = new SURLIcon("../icons/ButtonDisabledIcon.gif");
-    private static final SIcon pressedIcon = new SURLIcon("../icons/ButtonPressedIcon.gif");
-    private static final SIcon rolloverIcon = new SURLIcon("../icons/ButtonRolloverIcon.gif");
+    private static final SIcon icon = new SResourceIcon("org/wings/icons/star.png");
+    private static final SIcon disabledIcon = new SResourceIcon("org/wings/icons/star_disabled.png");
+    private static final SIcon pressedIcon = new SResourceIcon("org/wings/icons/star.png");
+    private static final SIcon rolloverIcon = new SResourceIcon("org/wings/icons/star.png");
 
     // pressed label & handler
     private final SLabel reportLabel = new SLabel("No button pressed");
@@ -44,10 +44,11 @@ public class ButtonExample extends WingSetPane {
     // button control itself
     private ButtonControls controls;
     private SButton[] buttons;
+    private SGridLayout grid;
+    private SPanel gridPanel;
 
     protected SComponent createControls() {
         controls = new ButtonControls();
-        controls.addActionListener(action);
         return controls;
     }
 
@@ -65,33 +66,32 @@ public class ButtonExample extends WingSetPane {
 
         for (int i = 0; i < buttons.length; i++) {
             final String buttonName = "Text " + (i + 1);
-            buttons[i] = new SButton(buttonName);
-            buttons[i].setActionCommand(buttons[i].getText());
+            SButton button = buttons[i] = new SButton(buttonName);
+            button.setShowAsFormComponent(true);
+            button.setActionCommand(button.getText());
 
-            buttons[i].setToolTipText("Button " + (i + 1));
-            buttons[i].setName("button" + (i + 1));
-            buttons[i].setShowAsFormComponent(false);
-            buttons[i].setVerticalTextPosition(textVPos[(i / 3) % 3]);
-            buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
-            buttons[i].setActionCommand(buttonName);
-            controls.addControllable(buttons[i]);
+            button.setToolTipText("Button " + (i + 1));
+            button.setName("bu" + (i + 1));
+            button.setVerticalTextPosition(textVPos[(i / 3) % 3]);
+            button.setHorizontalTextPosition(textHPos[i % 3]);
+            button.setActionCommand(buttonName);
+            controls.addControllable(button);
         }
 
         updateIconUsage(true);
 
-        final SGridLayout grid = new SGridLayout(3);
-        final SPanel buttonGrid = new SPanel(grid);
-        grid.setBorder(1);
+        grid = new SGridLayout(3);
+        gridPanel = new SPanel(grid);
         grid.setHgap(10);
         grid.setVgap(10);
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].addActionListener(action);
-            buttonGrid.add(buttons[i]);
+            gridPanel.add(buttons[i]);
         }
 
-        final SPanel panel = new SPanel(new SGridLayout(1));
-        panel.add(buttonGrid);
+        final SPanel panel = new SPanel(new SGridLayout(2, 1, 0, 20));
+        panel.add(gridPanel);
         panel.add(reportLabel);
 
         addSomeConfirmDialogues();
@@ -101,7 +101,7 @@ public class ButtonExample extends WingSetPane {
 
     /**
      * Register and use some <code>JavaScriptEvent.ON_CLICK</code> listeners to react on button click.
-     * This tests the feature that return false aborts the button submit. 
+     * This tests the feature that return false aborts the button submit.
       */
     private void addSomeConfirmDialogues() {
         for (int i = 0; i < 3; i++) {
@@ -137,11 +137,19 @@ public class ButtonExample extends WingSetPane {
     /**
      * The additional control toolbar for the button example
      */
-    private class ButtonControls extends ComponentControls implements ActionListener
+    private class ButtonControls extends ComponentControls
     {
         private STextField iconTextGap = new STextField("4");
 
         public ButtonControls() {
+            formComponentCheckBox.setSelected(true);
+            formComponentCheckBox.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    grid.setBorder(formComponentCheckBox.isSelected() ? 0 : 1);
+                    gridPanel.reload();
+                }
+            });
+
             final SCheckBox useImages = new SCheckBox("Use Icons");
             useImages.setSelected(true);
             useImages.addActionListener(new java.awt.event.ActionListener() {
@@ -157,23 +165,23 @@ public class ButtonExample extends WingSetPane {
                     updateEnabled(!disableSomeButtons.isSelected());
                 }
             });
+
+            iconTextGap.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    for (Iterator iterator = getControllables().iterator(); iterator.hasNext();) {
+                        SAbstractIconTextCompound component = (SAbstractIconTextCompound)iterator.next();
+                        try {
+                            component.setIconTextGap(Integer.parseInt(iconTextGap.getText()));
+                        } catch (NumberFormatException invalidNumber) {
+                            component.setIconTextGap(0);
+                        }
+                    }
+                }
+            });
             addControl(new SLabel(""));
             addControl(disableSomeButtons);
             addControl(new SLabel("iconTextGap"));
             addControl(iconTextGap);
-
-            addActionListener(this);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            for (Iterator iterator = getControllables().iterator(); iterator.hasNext();) {
-                SAbstractIconTextCompound component = (SAbstractIconTextCompound)iterator.next();
-                try {
-                    component.setIconTextGap(Integer.parseInt(iconTextGap.getText()));
-                } catch (NumberFormatException invalidNumber) {
-                    component.setIconTextGap(0);
-                }
-            }
         }
     }
 }

@@ -23,7 +23,6 @@ import org.wings.SPanel;
 import org.wings.STextField;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
-import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 
 import java.awt.*;
@@ -48,7 +47,7 @@ public class JavaScriptListenerExample
      * SComponent argument.
      */
     private final static String JS_ADD_SCRIPT =
-            "function add() { " +
+            "self.add = function() { " +
             "  document.getElementById('{2}').value" +
             "  = ((1.0 * document.getElementById('{0}').value)" +
             "  + (1.0 * document.getElementById('{1}').value));" +
@@ -63,11 +62,6 @@ public class JavaScriptListenerExample
     }
 
     public SComponent createExample() {
-        SPanel p = new SPanel(new SBoxLayout(SConstants.VERTICAL));
-        p.setPreferredSize(SDimension.FULLWIDTH);
-        p.add(new SLabel("The client side can handle simple events by JavaScript listeners.\n" +
-                "In this example, numbers are added locally inside the browser.\n", SConstants.CENTER_ALIGN));
-
         final STextField firstField = createNumberField();
         final STextField secondField = createNumberField();
         final STextField sumField = createNumberField();
@@ -115,15 +109,10 @@ public class JavaScriptListenerExample
         // any change to the sum field: no way, recalculate from source fields
         sumField.addScriptListener(jsListener);
 
-        // THIS HAS TO BE FIXED!!!
-        // Because when first loading the JavaScriptListenerExample only this new WingSetPane
-        // is loaded (and not the complete Frame) the FrameCG will not render the attached
-        // scripts. What we have to do is implement a mechanism that allows us to dynamically
-        // insert a new JS into the frame's script area without completely reloading the frame.
-        // This might be possible as soon as we make the step from componentwise updates to more
-        // fine grained updates...
-        SessionManager.getSession().getRootFrame().reload();
-
+        SPanel p = new SPanel(new SGridLayout(2, 1, 10, 10));
+        p.setPreferredSize(SDimension.FULLWIDTH);
+        p.add(new SLabel("The client side can handle simple events by JavaScript listeners.\n" +
+                "In this example, numbers are added locally inside the browser.\n", SConstants.CENTER_ALIGN));
         p.add(panel);
         return p;
     }

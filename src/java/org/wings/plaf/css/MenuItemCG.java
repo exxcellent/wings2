@@ -17,6 +17,7 @@ import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.SMenuItem;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 import org.wings.util.KeystrokeUtil;
 
 import javax.swing.*;
@@ -55,4 +56,13 @@ public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
         final SMenuItem menuItem = (SMenuItem) component;
         writeItemContent(device, menuItem);
     }
+
+    public Update getComponentUpdate(SComponent component) {
+        SComponent parentMenu = ((SMenuItem) component).getParentMenu();
+        if (parentMenu != null)
+            return parentMenu.getCG().getComponentUpdate(parentMenu);
+        else
+            return super.getComponentUpdate(component);
+    }
+
 }

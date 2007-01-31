@@ -15,14 +15,13 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
+
 import java.io.IOException;
 
 public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         org.wings.plaf.MenuCG {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private SResourceIcon arrowIcon = new SResourceIcon("org/wings/icons/MenuArrowRight.gif");
     {
@@ -44,9 +43,9 @@ public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
             device.print(" class=\"SMenu\">");
             for (int i = 0; i < menu.getMenuComponentCount(); i++) {
                 SComponent menuItem = menu.getMenuComponent(i);
-    
+
                 if (menuItem.isVisible()) {
-                    device.print("<li");
+                    device.print("\n <li");
                     if (menuItem instanceof SMenu) {
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenu\"");
@@ -63,20 +62,21 @@ public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
                     printScriptHandlers(device, menuItem);
                     device.print(">");
                     if (menuItem instanceof SMenuItem) {
-                            device.print("<a");
+                        device.print("<a href=\"#\"");
+                        if (menuItem instanceof SMenu) {
                             if (menuItem.isEnabled()) {
-                                device.print(" href=\"");
-                                writeAnchorAddress(device, (SMenuItem) menuItem);
-                                device.print("\"");
+                                device.print(" class=\"x sub\"");
+                            } else {
+                                device.print(" class=\"y sub\"");
                             }
-                            if (menuItem instanceof SMenu) {
-                                if (menuItem.isEnabled()) {
-                                    device.print(" class=\"x sub\"");
-                                } else {
-                                    device.print(" class=\"y sub\"");
-                                }
-                            }
-                            device.print(">");
+                        }
+                        Utils.printClickability(
+                                device,
+                                menuItem,
+                                ((SMenuItem) menuItem).getToggleSelectionParameter(),
+                                menuItem.isEnabled(),
+                                menuItem.getShowAsFormComponent());
+                        device.print(">");
                     }
                     menuItem.write(device);
                     if (menuItem instanceof SMenuItem) {
@@ -87,7 +87,7 @@ public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
                         menuItem.write(device);
                         menuItem.putClientProperty("popup", null);
                     }
-                    device.print("</li>\n");
+                    device.print("</li>");
                 }
             }
             device.print("</ul>");
@@ -157,14 +157,6 @@ public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         device.print("_pop\"");
     }
 
-    protected void writeAnchorAddress(Device d, SAbstractButton abstractButton)
-            throws IOException {
-        RequestURL addr = abstractButton.getRequestURL();
-        addr.addParameter(abstractButton,
-                abstractButton.getToggleSelectionParameter());
-        addr.write(d);
-    }
-
     public void writeInternal(final Device device, final SComponent _c)
         throws IOException {
         SMenu menu = (SMenu) _c;
@@ -173,4 +165,32 @@ public final class MenuCG extends org.wings.plaf.css.MenuItemCG implements
         else
             writePopup(device, menu);
     }
+
+    public Update getComponentUpdate(SComponent component) {
+        SComponent parentMenu = ((SMenu) component).getParentMenu();
+        if (parentMenu != null)
+            return parentMenu.getCG().getComponentUpdate(parentMenu);
+        else
+            return new ComponentUpdate(component);
+    }
+
+    protected class ComponentUpdate extends AbstractComponentCG.ComponentUpdate {
+
+        public ComponentUpdate(SComponent component) {
+            super(component);
+        }
+
+        public Handler getHandler() {
+            component.putClientProperty("popup", Boolean.TRUE);
+            UpdateHandler handler = (UpdateHandler) super.getHandler();
+            component.putClientProperty("popup", null);
+
+            handler.setName("componentMenu");
+            handler.setParameter(0, component.getName() + "_pop");
+
+            return handler;
+        }
+
+    }
+
 }

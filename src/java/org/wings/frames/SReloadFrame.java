@@ -20,7 +20,7 @@ import org.wings.SContainer;
 import org.wings.SFrame;
 import org.wings.SLayoutManager;
 import org.wings.io.Device;
-import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.ReloadResource;
 import org.wings.resource.DynamicResource;
 import java.io.IOException;
 import java.util.Iterator;
@@ -35,7 +35,7 @@ import java.util.Set;
  */
 public class SReloadFrame extends SFrame {
     private final static Log logger = LogFactory.getLog("org.wings");
-    private Set dirtyResources;
+    private Set dirtyFrames;
 
     public SReloadFrame() {
     }
@@ -91,8 +91,8 @@ public class SReloadFrame extends SFrame {
     public void setLayout(SLayoutManager l) {
     }
 
-    public void setDirtyResources(Set dirtyResources) {
-        this.dirtyResources = dirtyResources;
+    public void setDirtyFrames(Set dirtyFrames) {
+        this.dirtyFrames = dirtyFrames;
     }
 
     /**
@@ -106,16 +106,16 @@ public class SReloadFrame extends SFrame {
         d.print("<script language=\"javascript\">\n");
         d.print("function reload() {\n");
 
-        if (dirtyResources != null) {
+        if (dirtyFrames != null) {
             boolean all = false;
-            DynamicResource toplevel = null;
+            SFrame toplevel = null;
             {
-                Iterator it = dirtyResources.iterator();
+                Iterator it = dirtyFrames.iterator();
                 while (it.hasNext()) {
-                    DynamicResource resource = (DynamicResource) it.next();
-                    if (!(resource.getFrame() instanceof SReloadFrame) &&
-                            resource.getFrame().getParent() == null) {
-                        toplevel = resource;
+                    SFrame frame = (SFrame) it.next();
+                    if (!(frame instanceof SReloadFrame) &&
+                            frame.getParent() == null) {
+                        toplevel = frame;
                         all = true;
                     }
                 }
@@ -124,38 +124,36 @@ public class SReloadFrame extends SFrame {
             if (all) {
                 // reload the _whole_ document
                 d.print("parent.location.href='");
-                d.print(toplevel.getURL());
+                d.print(toplevel.getRequestURL());
                 d.print("';\n");
 
                 if (logger.isTraceEnabled())
-                    logger.debug("parent.location.href='" + toplevel.getURL() + "';\n");
+                    logger.debug("parent.location.href='" + toplevel.getRequestURL() + "';\n");
 
-                // invalidate resources
-                Iterator it = dirtyResources.iterator();
+                // invalidate frames
+                Iterator it = dirtyFrames.iterator();
                 while (it.hasNext()) {
-                    DynamicResource resource = (DynamicResource) it.next();
-                    resource.invalidate();
+                    SFrame frame = (SFrame) it.next();
+                    frame.invalidate();
 
                 }
             } else {
-                Iterator it = dirtyResources.iterator();
+                Iterator it = dirtyFrames.iterator();
                 while (it.hasNext()) {
-                    DynamicResource resource = (DynamicResource) it.next();
-                    resource.invalidate();
-                    if (!(resource instanceof DynamicCodeResource))
-                        continue;
+                	SFrame frame = (SFrame) it.next();
+                	frame.invalidate();
 
                     d.print("parent.frame");
-                    d.print(resource.getFrame().getName());
+                    d.print(frame.getName());
                     d.print(".location.href='");
-                    d.print(resource.getURL());
+                    d.print(frame.getRequestURL());
                     d.print("';\n");
 
                     if (logger.isTraceEnabled())
                         logger.debug("parent.frame" +
-                                resource.getFrame().getName() +
+                                frame.getName() +
                                 ".location.href='" +
-                                resource.getURL() +
+                                frame.getRequestURL() +
                                 "';\n");
                 }
             }

@@ -21,7 +21,7 @@ import org.wings.text.SDocument;
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
  */
-public class STextArea        extends STextComponent {
+public class STextArea extends STextComponent {
 
     /**
      * Text wrapping behaviour for {@link STextArea#setLineWrap(int)}: Don't wrap.

@@ -18,11 +18,12 @@ import org.wings.resource.DefaultURLResource;
 /**
  * Use this to add style sheets to a frame.
  * <code>
- *  frame.addHeader(new StyleSheetLink("../myStyleSheet.css"));
+ *   frame.addHeader(new StyleSheetLink("../myStyleSheet.css"));
  * </code>
  *
  * @author armin
  *         created at 15.01.2004 17:55:28
+ * @deprecated use StyleSheetHeader instead
  */
 public class StyleSheetLink extends Link {
 

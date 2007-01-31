@@ -12,23 +12,14 @@
  */
 package wingset;
 
-import org.wings.SBorderLayout;
-import org.wings.SButton;
-import org.wings.SComboBox;
-import org.wings.SComponent;
-import org.wings.SContainer;
-import org.wings.SFlowDownLayout;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SLabel;
-import org.wings.SList;
-import org.wings.SPanel;
-import org.wings.SResourceIcon;
+import org.wings.*;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
@@ -39,6 +30,10 @@ public class ListExample
     private final static SResourceIcon javaCup = new SResourceIcon("org/wings/icons/JavaCup.gif");
     private final ListModel listModel = createListModel();
     private ComponentControls controls;
+    private SList singleSelectionList;
+    private SList multiSelectionList;
+    private SComboBox comboBox;
+    private SList anchorList;
 
 
     protected SComponent createControls() {
@@ -47,7 +42,7 @@ public class ListExample
     }
 
     public SComponent createExample() {
-        SPanel panel = new SPanel(new SGridLayout(2, 2));
+        SPanel panel = new SPanel(new SGridLayout(2, 2, 40, 40));
         panel.add(createListSingleSelExample());
         panel.add(createListMultSelExample());
         panel.add(createComboBoxExample());
@@ -59,7 +54,8 @@ public class ListExample
     public SContainer createListSingleSelExample() {
         SContainer cont = new SPanel(new SFlowDownLayout());
         cont.add(new SLabel("List with single selection"));
-        SList singleSelectionList = new SList();
+        cont.add(new SSpacer(1, 5));
+        singleSelectionList = new SList();
         singleSelectionList.setName("single");
         singleSelectionList.setSelectionMode(SList.SINGLE_SELECTION);
         addListElements(singleSelectionList);
@@ -72,8 +68,10 @@ public class ListExample
     public SContainer createListMultSelExample() {
         SContainer cont = new SPanel(new SFlowDownLayout());
         cont.add(new SLabel("List with multiple selection"));
+        cont.add(new SSpacer(1, 5));
         SList multiSelectionList = new SList();
-        multiSelectionList.setName("multiple");
+        this.multiSelectionList = multiSelectionList;
+        this.multiSelectionList.setName("multiple");
         multiSelectionList.setSelectionMode(SList.MULTIPLE_SELECTION);
         addListElements(multiSelectionList);
         cont.add(multiSelectionList);
@@ -84,8 +82,10 @@ public class ListExample
 
     public SContainer createComboBoxExample() {
         SContainer cont = new SPanel(new SFlowDownLayout());
+        cont.setVerticalAlignment(SConstants.TOP_ALIGN);
         cont.add(new SLabel("ComboBox"));
-        SComboBox comboBox = new SComboBox();
+        cont.add(new SSpacer(1, 5));
+        comboBox = new SComboBox();
         comboBox.setName("combo");
         addComboBoxElements(comboBox);
         cont.add(comboBox);
@@ -96,9 +96,11 @@ public class ListExample
 
     public SContainer createAnchorListExample() {
         SContainer cont = new SPanel(new SFlowDownLayout());
-        cont.add(new SLabel("List with showAsFormComponent = false"));
+        cont.add(new SLabel("AnchorList"));
+        cont.add(new SSpacer(1, 5));
         SList anchorList = new SList();
-        anchorList.setName("noform");
+        this.anchorList = anchorList;
+        this.anchorList.setName("noform");
         anchorList.setShowAsFormComponent(false);
         anchorList.setSelectionMode(SList.SINGLE_SELECTION);
         addAnchorElements(anchorList);
@@ -121,20 +123,18 @@ public class ListExample
         color.setForeground(Color.green);
         color.setText(Color.green.toString());
         Object[] values = {
-            "element1",
+            "Element 1",
             color,
-            "element3",
-            "element4",
-            "element5",
-            "element6"
+            "Element 3",
+            new Date(),
+            "Element 5"
         };
 
         return values;
     }
 
     public static ListModel createListModel() {
-        final SLabel img =
-                new SLabel(javaCup);
+        final SLabel img = new SLabel("This element has an icon", javaCup);
 
         final SLabel color = new SLabel("");
         color.setForeground(Color.green);
@@ -154,13 +154,13 @@ public class ListExample
         private final Object[] values;
 
         public MyListModel(SLabel color, SLabel img) {
-            values = new Object[]{
-                "element1",
+            values = new Object[] {
+                "Element 1",
                 color,
-                img,
-                "element4",
-                "element5",
-                "element6"
+                "Element 3",
+                new Date(),
+                "Element 5",
+                img
             };
         }
 
@@ -179,11 +179,23 @@ public class ListExample
         }
     }
 
-    static class ListControls
+    class ListControls
         extends ComponentControls
     {
         public ListControls() {
             formComponentCheckBox.setVisible(false);
+
+            final SCheckBox enabled = new SCheckBox("enabled");
+            enabled.setSelected(true);
+            enabled.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    singleSelectionList.setEnabled(enabled.isSelected());
+                    multiSelectionList.setEnabled(enabled.isSelected());
+                    comboBox.setEnabled(enabled.isSelected());
+                    anchorList.setEnabled(enabled.isSelected());
+                }
+            });
+            addControl(enabled);
         }
     }
 }

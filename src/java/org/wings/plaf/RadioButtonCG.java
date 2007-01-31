@@ -12,9 +12,14 @@
  */
 package org.wings.plaf;
 
+import org.wings.SIcon;
+import org.wings.SRadioButton;
 
 
 public interface RadioButtonCG extends ComponentCG {
+
+    public Update getTextUpdate(SRadioButton radioButton, String text);
+
+    public Update getIconUpdate(SRadioButton radioButton, SIcon icon);
+
 }
-
-

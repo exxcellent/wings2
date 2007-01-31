@@ -26,6 +26,7 @@ import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SURLIcon;
 import org.wings.border.SEmptyBorder;
+import org.wings.border.SLineBorder;
 import org.wings.dnd.DragSource;
 import org.wings.dnd.DropTarget;
 import org.wings.event.SComponentDropListener;
@@ -33,6 +34,7 @@ import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 
 import java.awt.event.ActionEvent;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -85,16 +87,11 @@ public class DragAndDropExample extends WingSetPane {
     private int piecesRight;
     private final SLabel statusLabel = new SLabel();
 
+    private ComponentControls controls;
 
     protected SComponent createControls() {
-        final SButton resetButton = new SButton("Reset");
-        resetButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                resetPuzzle();
-            }
-        });
-        resetButton.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        return resetButton;
+        controls = new Controls();
+        return controls;
     }
 
     protected SComponent createExample() {
@@ -251,5 +248,21 @@ public class DragAndDropExample extends WingSetPane {
         public List getComponentDropListeners() {
             return componentDropListeners;
         }        
+    }
+
+    class Controls extends ComponentControls {
+        public Controls() {
+            globalControls.setVisible(false);
+
+            final SButton resetButton = new SButton("Reset");
+            resetButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    resetPuzzle();
+                }
+            });
+            resetButton.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+
+            addControl(resetButton);
+        }
     }
 }

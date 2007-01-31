@@ -145,7 +145,7 @@ public class SDefaultTreeCellRenderer
         if (value == null || value.toString() == null ||
                 value.toString().length() == 0) {
 
-            setText("&nbsp;");
+            setText(null);
         } else {
             setText(value.toString());
             setToolTipText(value.toString());

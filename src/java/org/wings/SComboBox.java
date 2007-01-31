@@ -123,7 +123,7 @@ public class SComboBox
             dataModel = model;
 
             dataModel.addListDataListener(this);
-        
+
             // set the current selected item.
             selectedItemReminder = dataModel.getSelectedItem();
 
@@ -187,7 +187,6 @@ public class SComboBox
      */
     public void setSelectedItem(Object object) {
         if (isDifferent(object, dataModel.getSelectedItem())) {
-
             // Must toggle the state of this flag since this method
             // call may result in ListDataEvents being fired.
 
@@ -209,7 +208,10 @@ public class SComboBox
             else
                 delayedEvent = true;
 
-            reload();
+            if (isUpdatePossible() && SComboBox.class.isAssignableFrom(getClass()))
+                update(((ComboBoxCG) getCG()).getSelectionUpdate(this, getSelectedIndex()));
+            else
+                reload();
         }
     }
 
@@ -484,7 +486,8 @@ public class SComboBox
                 delayedEvent = false;
             }
 
-            reload();
+            if (e.getIndex0() != -1 && e.getIndex1() != -1)
+                reload();
         }
     }
 

@@ -1,4 +1,5 @@
 /*
+ * $Id$
  * Copyright 2000,2005 wingS development team.
  *
  * This file is part of wingS (http://www.j-wings.org).
@@ -14,18 +15,19 @@ package org.wings;
 
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
+import org.wings.plaf.TextAreaCG;
+import org.wings.plaf.TextFieldCG;
 import org.wings.text.DefaultDocument;
 import org.wings.text.SDocument;
 
 import javax.swing.text.BadLocationException;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
 
 /**
  * Abstract base class of input text components like {@link STextArea} and {@link STextField}.
  * Requires a surrounding {@link SForm} element!
  *
  * @author <a href="mailto:armin.haaf@mercatis.de">Armin Haaf</a>
+ * @version $Revision$
  */
 public abstract class STextComponent extends SComponent implements LowLevelEventListener, SDocumentListener {
 
@@ -127,9 +129,11 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
             if (text != null && text.length() == 0) {
                 text = null;
             }
-            
+
             if (isDifferent(newValue, text)) {
+                getDocument().setDelayEvents(true);
                 setText(newValue);
+                getDocument().setDelayEvents(false);
                 SForm.addArmedComponent(this);
             }
         }
@@ -147,27 +151,13 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         getDocument().removeDocumentListener(listener);
     }
 
-    /**
-     * Fire a TextEvent at each registered listener.
-     */
-    protected void fireTextValueChanged() {
-        TextEvent event = null;
-        // Guaranteed to return a non-null array
-        Object[] listeners = getListenerList();
-        // Process the listeners last to first, notifying
-        // those that are interested in this event
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == TextListener.class) {
-                if (event == null) {
-                    event = new TextEvent(this, TextEvent.TEXT_VALUE_CHANGED);
-                } // end of if ()
-                ((TextListener) listeners[i + 1]).textValueChanged(event);
-            }
-        }
+    public void fireIntermediateEvents() {
+    	getDocument().fireDelayedIntermediateEvents();
     }
 
-    public void fireIntermediateEvents() {
-        fireTextValueChanged();
+    public void fireFinalEvents() {
+        super.fireFinalEvents();
+        getDocument().fireDelayedFinalEvents();
     }
 
     /**
@@ -184,20 +174,25 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
         this.epochCheckEnabled = epochCheckEnabled;
     }
 
-    //-- implement SDocumentListener to notify TextListeners
     public void insertUpdate(SDocumentEvent e) {
-        fireTextValueChanged();
-        reload();
+        //reload();
     }
 
     public void removeUpdate(SDocumentEvent e) {
-        fireTextValueChanged();
-        reload();
+        //reload();
     }
 
     public void changedUpdate(SDocumentEvent e) {
-        fireTextValueChanged();
-        reload();
+        if (isUpdatePossible()) {
+            if (STextField.class.isAssignableFrom(getClass()) && ! SPasswordField.class.isAssignableFrom(getClass()))
+                update(((TextFieldCG) getCG()).getTextUpdate((STextField) this, getText()));
+            else if (STextArea.class.isAssignableFrom(getClass()))
+                update(((TextAreaCG) getCG()).getTextUpdate((STextArea) this, getText()));
+            else
+                reload();
+        } else {
+            reload();
+        }
     }
 }
 

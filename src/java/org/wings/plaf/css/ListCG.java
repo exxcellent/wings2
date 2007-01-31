@@ -21,11 +21,13 @@ import org.wings.SListCellRenderer;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
+import org.wings.plaf.Update;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
 import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.List;
 
 public final class ListCG extends AbstractComponentCG implements  org.wings.plaf.ListCG {
 
@@ -50,7 +52,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         if (list.getListSelectionListeners().length > 0) {
             if (clientProperty == null) {
                 String event = JavaScriptEvent.ON_CHANGE;
-                String code = "this.form.submit();";
+            	String code = "wingS.request.sendEvent(event, true, " + !list.isReloadForced() + ");";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 list.addScriptListener(javaScriptListener);
                 list.putClientProperty("onChangeSubmitListener", javaScriptListener);
@@ -60,7 +62,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             list.putClientProperty("onChangeSubmitListener", null);
         }
 
-        device.print("<select");
+        device.print("<span><select wrapping=\"1\"");
         writeAllAttributes(device, list);
 
         Utils.optAttribute(device, "name", Utils.event(list));
@@ -95,7 +97,6 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             }
 
             if (renderer != null) {
-                writeTooltipMouseOver( device, renderer );
                 Utils.optAttribute(device, "style", Utils.generateCSSComponentInlineStyle(renderer));
             }
             device.print(">");
@@ -134,7 +135,7 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         device.print("<input type=\"hidden\"");
         Utils.optAttribute(device, "name", Utils.event(list));
         Utils.optAttribute(device, "value", -1);
-        device.print("/>");
+        device.print("/></span>");
     }
 
     private StringBuilderDevice stringBufferDevice = null;
@@ -148,6 +149,14 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
     }
 
     public void writeAnchorList(Device device, SList list) throws IOException {
+        // Remove superfluous 'onChangeSubmitListener' (in case there is any).
+        // This is because we don't want to render 'onclick' AND 'onchange'.
+        Object clientProperty = list.getClientProperty("onChangeSubmitListener");
+        if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+            list.removeScriptListener((JavaScriptListener) clientProperty);
+            list.putClientProperty("onChangeSubmitListener", null);
+        }
+
         boolean renderSelection = list.getSelectionMode() != SList.NO_SELECTION;
 
         device.print("<");
@@ -212,5 +221,30 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         }
 
         RenderHelper.getInstance(_c).allowCaching();
+    }
+
+    public Update getSelectionUpdate(SList list, List deselectedIndices, List selectedIndices) {
+        return new SelectionUpdate(list, deselectedIndices, selectedIndices);
+    }
+
+    protected class SelectionUpdate extends AbstractUpdate {
+
+        private List deselectedIndices;
+        private List selectedIndices;
+
+        public SelectionUpdate(SComponent component, List deselectedIndices, List selectedIndices) {
+            super(component);
+            this.deselectedIndices = deselectedIndices;
+            this.selectedIndices = selectedIndices;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("selectionList");
+            handler.addParameter(component.getName());
+            handler.addParameter(handler.listToJsArray(deselectedIndices));
+            handler.addParameter(handler.listToJsArray(selectedIndices));
+            return handler;
+        }
+
     }
 }

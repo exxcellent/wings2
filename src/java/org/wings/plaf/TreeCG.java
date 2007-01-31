@@ -12,9 +12,13 @@
  */
 package org.wings.plaf;
 
+import java.util.List;
+
+import org.wings.STree;
 
 
 public interface TreeCG extends ComponentCG {
+
+    public Update getSelectionUpdate(STree tree, List deselectedRows, List selectedRows);
+
 }
-
-

@@ -24,7 +24,7 @@ import org.wings.plaf.LabelCG;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  */
 public class SLabel extends SComponent {
-    
+
     protected String text;
     protected SIcon icon = null;
     protected SIcon disabledIcon = null;
@@ -171,8 +171,14 @@ public class SLabel extends SComponent {
      * @param i
      */
     public void setIcon(SIcon i) {
-        reloadIfChange(icon, i);
-        icon = i;
+        if (isDifferent(icon, i)) {
+            // do reload if previous text was null
+            if (isUpdatePossible() && icon != null && SLabel.class.isAssignableFrom(getClass()))
+                update(((LabelCG) getCG()).getIconUpdate(this, i));
+            else
+                reload();
+            icon = i;
+        }
     }
 
     /**
@@ -214,8 +220,14 @@ public class SLabel extends SComponent {
      * @param t The new text
      */
     public void setText(String t) {
-        reloadIfChange(text, t);
-        text = t;
+        if (isDifferent(text, t)) {
+            // do reload if previous text was null
+            if (isUpdatePossible() && text != null && SLabel.class.isAssignableFrom(getClass()))
+                update(((LabelCG) getCG()).getTextUpdate(this, t));
+            else
+                reload();
+            text = t;
+        }
     }
 
     /**

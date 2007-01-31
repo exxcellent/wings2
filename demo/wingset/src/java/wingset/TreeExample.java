@@ -13,6 +13,7 @@
 package wingset;
 
 import org.wings.*;
+import org.wings.plaf.css.TreeCG;
 import org.wings.border.SLineBorder;
 import org.wings.event.SMouseEvent;
 import org.wings.event.SMouseListener;
@@ -51,7 +52,8 @@ public class TreeExample
         tree = new STree(new DefaultTreeModel(HugeTreeModel.ROOT_NODE));
         tree.setName("tree");
         tree.setShowAsFormComponent(false);
-        tree.setBorder(new SLineBorder(Color.GRAY, 1));
+        TreeCG treeCG = new TreeCG();
+        tree.setCG(treeCG);
 
         tree.addMouseListener(new SMouseListener() {
             public void mouseClicked(SMouseEvent e) {
@@ -63,24 +65,31 @@ public class TreeExample
             }
         });
         tree.getSelectionModel().setSelectionMode(STree.SINGLE_TREE_SELECTION);
-        tree.setNodeIndentDepth(12);
+        tree.setNodeIndentDepth(20);
         tree.setHorizontalAlignment(SConstants.CENTER_ALIGN);
 
         clicks.setHorizontalAlignment(SConstants.CENTER_ALIGN);
 
-        controls.addControllable(tree);
+        SScrollPane scrollPane = new SScrollPane(tree);
+        scrollPane.setMode(SScrollPane.MODE_COMPLETE);
+        scrollPane.setBorder(new SLineBorder(Color.GRAY, 1));
+        scrollPane.setPreferredSize(new SDimension("400px", null));
+        scrollPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
 
-        SPanel panel = new SPanel(new SBorderLayout());
-        panel.add(tree, SBorderLayout.CENTER);
+        controls.addControllable(scrollPane);
+
+        SPanel panel = new SPanel(new SBorderLayout(10, 10));
+        panel.add(scrollPane, SBorderLayout.CENTER);
         panel.add(clicks, SBorderLayout.SOUTH);
         return panel;
     }
 
     class TreeControls extends ComponentControls {
         private final String[] SELECTION_MODES = new String[]{"single", "contiguous", "discontiguous"};
-        private final Integer[] WIDTHS = new Integer[]{new Integer(-12), new Integer(0), new Integer(12), new Integer(24), new Integer(36), new Integer(48)};
+        private final Integer[] WIDTHS = new Integer[]{ new Integer(15), new Integer(20), new Integer(25), new Integer(30)};
 
         public TreeControls() {
+            widthTextField.setText("400px");
             borderColorComboBox.setSelectedItem(COLORS[1]);
             borderStyleComboBox.setSelectedItem(BORDERS[4]);
             borderThicknessTextField.setText("1");
@@ -112,7 +121,7 @@ public class TreeExample
 
             final SComboBox indentationWidth = new SComboBox(WIDTHS);
             // sync indentation width of tree with controller
-            indentationWidth.setSelectedIndex(3); // set to 24px indent
+            indentationWidth.setSelectedIndex(1); // set to 20px indent
             // now add the listener
             indentationWidth.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
@@ -142,6 +151,7 @@ public class TreeExample
                         PropertyAccessor.setProperty(tree.getCG(), "expandControlIcon", ARROW_RIGHT);
                         PropertyAccessor.setProperty(tree.getCG(), "leafControlIcon", null);
                     }
+                    tree.reload();
                 }
             });
 

@@ -14,6 +14,7 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
+import org.wings.plaf.Update;
 import org.wings.plaf.css.PaddingVoodoo;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
@@ -108,4 +109,13 @@ public class ButtonCG extends AbstractLabelCG implements org.wings.plaf.ButtonCG
                     : abstractButton.getDisabledIcon();
         }
     }
+
+    public Update getTextUpdate(SButton button, String text) {
+        return text == null ? null : new TextUpdate(button, text);
+    }
+
+    public Update getIconUpdate(SButton button, SIcon icon) {
+        return icon == null ? null : new IconUpdate(button, icon);
+    }
+
 }

@@ -60,7 +60,7 @@ class CaptureDefaultBindingsScriptListener extends JavaScriptListener
         if (typed.length() > 0)
             component.addScriptListener(new CaptureDefaultBindingsScriptListener("onkeydown", "return keydown_" + component.getName() + "(event)",
                     "function keydown_" + component.getName() + "(event) {\n  " +
-                    "event = getEvent(event);\n  " +
+                    "event = wingS.event.getEvent(event);\n  " +
                     typed.toString() + "  return true;\n}\n"));
     }
 
@@ -83,6 +83,6 @@ class CaptureDefaultBindingsScriptListener extends JavaScriptListener
     }
 
     private static void writeCapture(SStringBuilder buffer) {
-        buffer.append(" { preventDefault(event); return false; }\n");
+        buffer.append(" { wingS.util.preventDefault(event); return false; }\n");
     }
 }

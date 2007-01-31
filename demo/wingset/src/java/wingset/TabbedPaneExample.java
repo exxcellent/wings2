@@ -19,7 +19,6 @@ import org.wings.SComboBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
-import org.wings.SForm;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
@@ -45,8 +44,6 @@ import java.awt.event.ActionEvent;
  */
 public class TabbedPaneExample extends WingSetPane {
     private final static int INITIAL_TAB_COUNT = 10;
-    private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
-    private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
     private final static Object[] TAB_PLACEMENTS = new Object[]{
             new Object[]{"Top", new Integer(SConstants.TOP)},
             new Object[]{"Left", new Integer(SConstants.LEFT)},
@@ -72,8 +69,6 @@ public class TabbedPaneExample extends WingSetPane {
             addTab();
         }
         tabbedPane.setShowAsFormComponent(false);
-        tabbedPane.setIconAt(3, JAVA_CUP_ICON);      // decorate with icons
-        tabbedPane.setIconAt(8, SMALL_COW_ICON);
         tabbedPane.setEnabledAt(1, false);          // disable a tab
         tabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
@@ -82,13 +77,15 @@ public class TabbedPaneExample extends WingSetPane {
         });
         controls.addControllable(tabbedPane);
 
-        return tabbedPane;
+        SPanel panel = new SPanel(new SBorderLayout(10, 10));
+        panel.add(tabbedPane);
+        return panel;
     }
 
 
     protected void addTab() {
         int i = tabbedPane.getTabCount();
-        SPanel panel = new SPanel(new SBorderLayout());
+        SPanel panel = new SPanel(new SBorderLayout(10, 10));
         STextArea textArea = new STextArea(logText, null, 6, 60);
         textArea.setPreferredSize(SDimension.FULLWIDTH);
         panel.add(new SLabel("Tab # " + i), SBorderLayout.NORTH);
@@ -103,6 +100,7 @@ public class TabbedPaneExample extends WingSetPane {
         private int tabCount = INITIAL_TAB_COUNT;
 
         public TabbedPaneControls() {
+            widthTextField.setText("700px");
             final SComboBox placement = new SComboBox(TAB_PLACEMENTS);
             placement.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {

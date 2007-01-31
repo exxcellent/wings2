@@ -12,9 +12,11 @@
  */
 package org.wings.plaf;
 
+import org.wings.STextField;
 
 
 public interface TextFieldCG extends ComponentCG {
+
+	public Update getTextUpdate(STextField textField, String text);
+
 }
-
-

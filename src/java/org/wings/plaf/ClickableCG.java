@@ -12,7 +12,14 @@
  */
 package org.wings.plaf;
 
+import org.wings.SClickable;
+import org.wings.SIcon;
+
+
 public interface ClickableCG extends ComponentCG {
+
+    public Update getTextUpdate(SClickable clickable, String text);
+
+    public Update getIconUpdate(SClickable clickable, SIcon icon);
+
 }
-
-

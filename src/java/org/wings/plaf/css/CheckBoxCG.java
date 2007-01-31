@@ -14,9 +14,11 @@ package org.wings.plaf.css;
 
 
 import org.wings.SAbstractButton;
+import org.wings.SCheckBox;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 import org.wings.resource.ResourceManager;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
@@ -107,7 +109,15 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         final boolean showAsFormComponent = button.getShowAsFormComponent();
         // table is clickable
         if (!showAsFormComponent || useIconsInForms) {
-            Utils.printClickability(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent());
+            // Remove superfluous 'onChangeSubmitListener' (in case there is any).
+            // This is because we don't want to render 'onclick' AND 'onchange'.
+            Object clientProperty = button.getClientProperty("onChangeSubmitListener");
+            if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+                button.removeScriptListener((JavaScriptListener) clientProperty);
+                button.putClientProperty("onChangeSubmitListener", null);
+            }
+
+            tableClickability(device, button);
 
             if (button.isFocusOwner())
                 Utils.optAttribute(device, "foc", button.getName());
@@ -133,31 +143,39 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         button.setStyle(style);
     }
 
+    protected void tableClickability(Device device, SAbstractButton button) throws IOException {
+        Utils.printClickability(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent());
+    }
+
     protected void writeInput(Device device, SAbstractButton button) throws IOException {
-    	Object clientProperty = button.getClientProperty("onChangeSubmitListener");
-    	// If the application developer attached any ActionListeners or ItemListeners to
-        // this SCheckBox or its ButtonGroup, the surrounding form gets submitted as soon
-        // as the state of this SCheckBox changed.
-    	if (button.getActionListeners().length > 0 || button.getItemListeners().length > 0 ||
-        		(button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
-            if (clientProperty == null) {
-            	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "this.form.submit();";
-            	if (Utils.isMSIE(button)) {
-            		// In IE the "onchange"-event gets fired when a control loses the
-            		// input focus and its value has been modified since gaining focus.
-            		// Even though this is actually the correct behavior, we want the
-            		// event to get fired immediately - thats why we use IE's proprietary
-            		// "onpropertychange"-event.
-            		event = "onpropertychange";
-            	}
-                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
-                button.addScriptListener(javaScriptListener);
-                button.putClientProperty("onChangeSubmitListener", javaScriptListener);
+        if (button.getShowAsFormComponent() && !useIconsInForms) {
+            Object clientProperty = button.getClientProperty("onChangeSubmitListener");
+            // If the application developer attached any ActionListeners, ItemListeners or
+            // ChangeListeners to this SCheckBox or its ButtonGroup, the surrounding form
+            // gets submitted as soon as the state of this SCheckBox changed.
+            if (button.getActionListeners().length > 0 ||
+                    button.getItemListeners().length > 0 ||
+                    button.getChangeListeners().length > 0 ||
+                    (button.getGroup() != null && button.getGroup().getActionListeners().length > 0)) {
+                if (clientProperty == null) {
+                    String event = JavaScriptEvent.ON_CHANGE;
+                	String code = "wingS.request.sendEvent(event, true, " + !button.isReloadForced() + ");";
+                    if (Utils.isMSIE(button)) {
+                        // In IE the "onchange"-event gets fired when a control loses the
+                        // input focus and its value has been modified since gaining focus.
+                        // Even though this is actually the correct behavior, we want the
+                        // event to get fired immediately - thats why we use IE's proprietary
+                        // "onpropertychange"-event.
+                        event = "onpropertychange";
+                    }
+                    JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
+                    button.addScriptListener(javaScriptListener);
+                    button.putClientProperty("onChangeSubmitListener", javaScriptListener);
+                }
+            } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+                button.removeScriptListener((JavaScriptListener) clientProperty);
+                button.putClientProperty("onChangeSubmitListener", null);
             }
-        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
-            button.removeScriptListener((JavaScriptListener) clientProperty);
-            button.putClientProperty("onChangeSubmitListener", null);
         }
 
         device.print("<input type=\"hidden\" name=\"");
@@ -178,6 +196,14 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
             Utils.optAttribute(device, "foc", button.getName());
 
         device.print("/>");
+    }
+
+    public Update getTextUpdate(SCheckBox checkBox, String text) {
+        return text == null ? null : new TextUpdate(checkBox, text);
+    }
+
+    public Update getIconUpdate(SCheckBox checkBox, SIcon icon) {
+        return icon == null ? null : new IconUpdate(checkBox, icon);
     }
 
 }

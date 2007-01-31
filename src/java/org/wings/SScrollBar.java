@@ -19,6 +19,7 @@ import org.wings.plaf.ScrollBarCG;
  * In contrast to {@link SPageScroller} this class is a graphical scroller component.
  *
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
+ * @version $Revision$
  * @see SScrollPane
  */
 public class SScrollBar extends SAbstractAdjustable {

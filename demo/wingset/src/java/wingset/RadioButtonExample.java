@@ -12,20 +12,8 @@
  */
 package wingset;
 
-import org.wings.SAbstractButton;
-import org.wings.SBorderLayout;
-import org.wings.SButtonGroup;
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SConstants;
-import org.wings.SContainer;
-import org.wings.SForm;
-import org.wings.SGridLayout;
-import org.wings.SIcon;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SRadioButton;
-import org.wings.SURLIcon;
+import org.wings.*;
+import org.wings.plaf.css.RadioButtonCG;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,13 +28,20 @@ public class RadioButtonExample
     final static int[] textHPos = new int[] {SConstants.LEFT, SConstants.CENTER, SConstants.RIGHT};
     final static int[] textVPos = new int[] {SConstants.TOP, SConstants.CENTER, SConstants.BOTTOM};
 
-    static final SIcon sel = new SURLIcon("../icons/RadioButtonSelectedIcon.gif");
-    static final SIcon nsel = new SURLIcon("../icons/RadioButtonIcon.gif");
-    static final SIcon pressed = new SURLIcon("../icons/RadioButtonPressedIcon.gif");
-    static final SIcon dissel = new SURLIcon("../icons/RadioButtonDisabledSelectedIcon.gif");
-    static final SIcon disnsel = new SURLIcon("../icons/RadioButtonDisabledIcon.gif");
-    static final SIcon rollsel = new SURLIcon("../icons/RadioButtonRolloverSelectedIcon.gif");
-    static final SIcon rollnsel = new SURLIcon("../icons/RadioButtonRolloverIcon.gif");
+    static final SIcon sel = new SResourceIcon("org/wings/icons/green_light_on.png");
+    static final SIcon nsel = new SResourceIcon("org/wings/icons/green_light_off.png");
+    static final SIcon dissel = new SResourceIcon("org/wings/icons/green_light_on_disabled.png");
+    static final SIcon disnsel = new SResourceIcon("org/wings/icons/green_light_off_disabled.png");
+    static final SIcon rollsel = new SResourceIcon("org/wings/icons/green_light_on.png");
+    static final SIcon rollnsel = new SResourceIcon("org/wings/icons/green_light_on.png");
+
+    static SIcon backup_sel;
+    static SIcon backup_nsel;
+    static SIcon backup_dissel;
+    static SIcon backup_disnsel;
+    static SIcon backup_rollsel;
+    static SIcon backup_rollnsel;
+
     private ButtonControls controls;
 
     private final SLabel reportLabel = new SLabel("No button pressed");
@@ -55,7 +50,7 @@ public class RadioButtonExample
             reportLabel.setText("<html>Button <b>'" + e.getActionCommand() + "'</b> pressed");
         }
     };
-
+    private SRadioButton[] buttons;
 
     protected SComponent createControls() {
         controls = new ButtonControls();
@@ -68,36 +63,18 @@ public class RadioButtonExample
 
     SContainer createRadioButtonExample() {
         SButtonGroup group = new SButtonGroup();
-        SRadioButton[] buttons = new SRadioButton[9];
+        buttons = new SRadioButton[9];
 
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new SRadioButton("Text " + (i + 1));
-            buttons[i].setActionCommand(buttons[i].getText());
-            if (i != 4) {
-                buttons[i].setIcon(nsel);
-                buttons[i].setSelectedIcon(sel);
-                buttons[i].setDisabledIcon(disnsel);
-                buttons[i].setDisabledSelectedIcon(dissel);
-                buttons[i].setRolloverIcon(rollnsel);
-                buttons[i].setRolloverSelectedIcon(rollsel);
-                buttons[i].setPressedIcon(pressed);
-            }
-            else {
-                buttons[i].setIcon(null);
-                buttons[i].setSelectedIcon(null);
-                buttons[i].setDisabledIcon(null);
-                buttons[i].setDisabledSelectedIcon(null);
-                buttons[i].setRolloverIcon(null);
-                buttons[i].setRolloverSelectedIcon(null);
-                buttons[i].setPressedIcon(null);
-            }
-            buttons[i].setToolTipText("RadioButton " + (i+1));
-            buttons[i].setName("button" + (i+1));
-            buttons[i].setShowAsFormComponent(false);
-            buttons[i].setVerticalTextPosition(textVPos[(i / 3)% 3]);
-            buttons[i].setHorizontalTextPosition(textHPos[i % 3]);
-            group.add(buttons[i]);
-            controls.addControllable(buttons[i]);
+            SRadioButton button = buttons[i] = new SRadioButton("Text " + (i + 1));
+            button.setShowAsFormComponent(true);
+            button.setActionCommand(button.getText());
+            button.setToolTipText("RadioButton " + (i+1));
+            button.setName("radio" + (i+1));
+            button.setVerticalTextPosition(textVPos[(i / 3)% 3]);
+            button.setHorizontalTextPosition(textHPos[i % 3]);
+            group.add(button);
+            controls.addControllable(button);
         }
 
         final SGridLayout grid = new SGridLayout(3);
@@ -111,7 +88,7 @@ public class RadioButtonExample
             buttonGrid.add(buttons[i]);
         }
 
-        SPanel panel = new SPanel(new SGridLayout(1));
+        final SPanel panel = new SPanel(new SGridLayout(2, 1, 0, 20));
         panel.add(buttonGrid);
         panel.add(reportLabel);
 
@@ -120,24 +97,47 @@ public class RadioButtonExample
 
     class ButtonControls extends ComponentControls {
         public ButtonControls() {
-            final SCheckBox useImages = new SCheckBox("Use Icons");
-            useImages.setSelected(true);
-            useImages.addActionListener(new java.awt.event.ActionListener() {
+            formComponentCheckBox.setSelected(true);
+            final SCheckBox customIcons = new SCheckBox("custom icons");
+            customIcons.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    boolean use = useImages.isSelected();
-
-                    for (Iterator iterator = components.iterator(); iterator.hasNext();) {
-                        SAbstractButton component = (SAbstractButton) iterator.next();
-                        if (!"button5".equals(component.getName())) {
-                            component.setIcon(use ? nsel : null);
-                            component.setSelectedIcon(use ? sel : null);
-                            component.setDisabledIcon(use ? disnsel : null);
-                            component.setDisabledSelectedIcon(use ? dissel : null);
-                            component.setRolloverIcon(use ? rollnsel : null);
-                            component.setRolloverSelectedIcon(use ? rollsel : null);
-                            component.setPressedIcon(use ? pressed : null);
+                    for (int i = 0; i < buttons.length; i++) {
+                        SRadioButton button = buttons[i];
+                        if (i != 4 && customIcons.isSelected()) {
+                            backup_nsel = button.getIcon();
+                            backup_sel = button.getSelectedIcon();
+                            backup_disnsel = button.getDisabledIcon();
+                            backup_dissel = button.getDisabledSelectedIcon();
+                            backup_rollnsel = button.getRolloverIcon();
+                            backup_rollsel = button.getRolloverSelectedIcon();
+                            button.setIcon(nsel);
+                            button.setSelectedIcon(sel);
+                            button.setDisabledIcon(disnsel);
+                            button.setDisabledSelectedIcon(dissel);
+                            button.setRolloverIcon(rollnsel);
+                            button.setRolloverSelectedIcon(rollsel);
+                        }
+                        else {
+                            button.setIcon(backup_nsel);
+                            button.setSelectedIcon(backup_sel);
+                            button.setDisabledIcon(backup_disnsel);
+                            button.setDisabledSelectedIcon(backup_dissel);
+                            button.setRolloverIcon(backup_rollnsel);
+                            button.setRolloverSelectedIcon(backup_rollsel);
                         }
                     }
+                }
+            });
+            addControl(customIcons);
+
+            final SCheckBox useImages = new SCheckBox("icons in form");
+            final RadioButtonCG cg = (RadioButtonCG) getSession().getCGManager().getCG(SRadioButton.class);
+            useImages.setSelected(true);
+            cg.setUseIconsInForm(true);
+            useImages.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cg.setUseIconsInForm(useImages.isSelected());
+                    RadioButtonExample.this.reload();
                 }
             });
             addControl(useImages);

@@ -3,7 +3,7 @@
  */
 package org.wings.plaf.css.dwr;
 
-import org.directwebremoting.Creator;
+import org.directwebremoting.extend.Creator;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
 
@@ -38,7 +38,7 @@ public class SessionCreator implements Creator
     }
 
     public boolean isCacheable() {
-        return false;
+        return true;
     }
 
     public String getJavascript() {

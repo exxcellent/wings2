@@ -65,7 +65,6 @@ public class TableExample
     }
 
     public SComponent createExample() {
-
         table = new STable(new MyTableModel(7, 5));
         table.setName("tableExample");
         table.setShowGrid(true);
@@ -90,7 +89,6 @@ public class TableExample
                 clicks.setText("clicked " + e.getPoint());
             }
         });
-
         table.setVerticalAlignment(SConstants.TOP_ALIGN);
 
         SPanel panel = new SPanel(new SBorderLayout());
@@ -101,7 +99,7 @@ public class TableExample
     }
 
     static class MyCellRenderer extends SDefaultTableCellRenderer {
-        private static final SFont MONOSPACE = new SFont("monospace", SFont.BOLD, 10);
+        private static final SFont MONOSPACE = new SFont("monospace", SFont.BOLD, SFont.DEFAULT_SIZE);
 
         public MyCellRenderer() {
             setEditIcon(getSession().getCGManager().getIcon("TableCG.editIcon"));

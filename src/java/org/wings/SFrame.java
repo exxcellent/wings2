@@ -12,25 +12,34 @@
  */
 package org.wings;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.InputMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.event.InvalidLowLevelEvent;
 import org.wings.event.SInvalidLowLevelEventListener;
 import org.wings.event.SRenderListener;
-import org.wings.event.SRequestListener;
 import org.wings.event.SRequestEvent;
+import org.wings.event.SRequestListener;
+import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
-import org.wings.resource.DynamicCodeResource;
 import org.wings.resource.DynamicResource;
+import org.wings.resource.ReloadResource;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
-
-import javax.swing.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.util.*;
+import org.wings.util.StringUtil;
 
 /**
  * The root component of every component hierarchy.
@@ -47,8 +56,7 @@ import java.util.*;
 public class SFrame
         extends SRootContainer
         implements PropertyChangeListener, LowLevelEventListener {
-
-    private final transient static Log log = LogFactory.getLog(SFrame.class);
+	private final transient static Log log = LogFactory.getLog(SFrame.class);
 
     /**
      * The Title of the Frame.
@@ -56,9 +64,9 @@ public class SFrame
     protected String title;
 
     /**
-     * A Set containing additional tags for the html header.
+     * A list of all header used by this frame.
      */
-    protected List headers;
+    protected List headers = new ArrayList();
 
     /**
      * the style sheet used in certain look and feels.
@@ -71,12 +79,27 @@ public class SFrame
 
     protected String statusLine;
 
+    /**
+     * The event epoch of this frame which is incremented with each invalidation.
+     */
+    private int eventEpoch = 0;
+
+    /**
+     * The event epoch of this frame represented as a (preferably short) string.
+     */
+    private String epochCache = "W" + StringUtil.toShortestAlphaNumericString(eventEpoch);
+
     private RequestURL requestURL = null;
+
     private String targetResource;
 
     private HashMap dynamicResources;
 
-    private SComponent focusComponent = null;                //Component which requests the focus
+    private boolean updateEnabled;
+
+    private Object[] updateCursor;
+
+    private SComponent focusComponent = null; // Component which requests the focus
 
     /**
      * @see #setBackButton(SButton)
@@ -117,6 +140,9 @@ public class SFrame
         getSession().addPropertyChangeListener("lookAndFeel", this);
         getSession().addPropertyChangeListener("request.url", this);
         this.visible = false; // Frames are invisible originally.
+
+        setUpdateEnabled(true);
+        setUpdateCursor(true, new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif"), 15, 0);
     }
 
     /**
@@ -157,7 +183,7 @@ public class SFrame
      * Severeral Dynamic code Ressources are attached to a <code>SFrame</code>.
      * <br>See <code>Frame.plaf</code> for details, but in general you wil find attached
      * to every <code>SFrame</code> a
-     * <ul><li>A {@link DynamicCodeResource} rendering the HTML-Code of all SComponents inside this frame.
+     * <ul><li>A {@link ReloadResource} rendering the HTML-Code of all SComponents inside this frame.
      * </ul>
      */
     public DynamicResource getDynamicResource(Class c) {
@@ -187,13 +213,23 @@ public class SFrame
     }
 
     /**
-     * A String with the current epoch of this SFrame. Provided by the
-     * {@link DynamicCodeResource} rendering this frame.
-     *
-     * @return A String with current epoch. Increased on every invalidation.
+     * Invalidate this frame by incrementing its event epoch. This method is called
+     * whenever a change took place inside this frame - that is whenever one of its
+     * child components has become dirty. In consequence each dynamic resource which
+     * is attached to this frame has to be externalized with a new "version-number".
      */
-    public String getEventEpoch() {
-        return getDynamicResource(DynamicCodeResource.class).getEpoch();
+    public final void invalidate() {
+        epochCache = "W" + (++eventEpoch);
+        if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
+            update(((FrameCG) getCG()).getEpochUpdate(this, epochCache));
+
+        if (log.isDebugEnabled()) {
+            log.debug("Event epoch of " + this + " has been invalidated: " + epochCache);
+        }
+    }
+
+    public final String getEventEpoch() {
+        return epochCache;
     }
 
     /**
@@ -216,6 +252,7 @@ public class SFrame
         }
         if (requestURL != null) {
             result = (RequestURL) requestURL.clone();
+            result.setEventEpoch(getEventEpoch());
             result.setResource(getTargetResource());
         }
         return result;
@@ -229,13 +266,13 @@ public class SFrame
     }
 
     /**
-     * Every externalized ressource has an id. A frame is a <code>DynamicCodeResource</code>.
+     * Every externalized ressource has an id. A frame is a <code>ReloadResource</code>.
      *
-     * @return The id of this <code>DynamicCodeResource</code>
+     * @return The id of this <code>ReloadResource</code>
      */
     public String getTargetResource() {
         if (targetResource == null) {
-            targetResource = getDynamicResource(DynamicCodeResource.class).getId();
+            targetResource = getDynamicResource(ReloadResource.class).getId();
         }
         return targetResource;
     }
@@ -247,8 +284,12 @@ public class SFrame
      * @see org.wings.header.Link
      */
     public void addHeader(Object headerElement) {
-        if (!headers().contains(headerElement) && headerElement != null) {
+        if (!headers.contains(headerElement) && headerElement != null) {
             headers.add(headerElement);
+            if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
+                update(((FrameCG) getCG()).getAddHeaderUpdate(this, headerElement));
+            else
+                reload();
         }
     }
 
@@ -258,11 +299,15 @@ public class SFrame
      * @param headerElement is typically a {@link org.wings.header.Link} or {@link DynamicResource}.
      * @param index index in header list to add this item
      * @see org.wings.header.Link
-     * @see #headers()
+     * @see #getHeaders()
      */
     public void addHeader(int index, Object headerElement) {
-        if (!headers().contains(headerElement) && headerElement != null) {
+        if (!headers.contains(headerElement) && headerElement != null) {
             headers.add(index, headerElement);
+            if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
+                update(((FrameCG) getCG()).getAddHeaderUpdate(this, index, headerElement));
+            else
+                reload();
         }
     }
 
@@ -270,8 +315,15 @@ public class SFrame
      * @see #addHeader(Object)
      * @return <tt>true</tt> if this frame contained the specified header element.
      */
-    public boolean removeHeader(Object m) {
-        return headers.remove(m);
+    public boolean removeHeader(Object headerElement) {
+        boolean deleted = headers.remove(headerElement);
+        if (deleted) {
+            if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
+                update(((FrameCG) getCG()).getRemoveHeaderUpdate(this, headerElement));
+            else
+                reload();
+        }
+        return deleted;
     }
 
     /**
@@ -280,17 +332,22 @@ public class SFrame
      * @see #addHeader(Object)
      */
     public void clearHeaders() {
-        if (headers != null)
-            headers.clear();
+        headers.clear();
+        reload();
+    }
+
+    /**
+     * @see #addHeader(Object)
+     * @deprecated Use {@link #getHeaders()} instead
+     */
+    public List headers() {
+        return getHeaders();
     }
 
     /**
      * @see #addHeader(Object)
      */
-    public List headers() {
-        if (headers == null) {
-            headers = new ArrayList(2);
-        }
+    public List getHeaders() {
         return Collections.unmodifiableList(headers);
     }
 
@@ -336,7 +393,7 @@ public class SFrame
     /**
      * Typically you don't want any wings application to operate on old 'views' meaning
      * old pages. Hence all generated HTML pages (<code>SFrame</code> objects
-     * rendered through {@link DynamicCodeResource} are marked as <b>do not cache</b>
+     * rendered through {@link ReloadResource} are marked as <b>do not cache</b>
      * inside the HTTP response header and the generated HTML frame code.
      * <p>If for any purpose (i.e. you a writing a read only application) you want
      * th user to be able to work on old views then set this to <code>false</code>
@@ -377,6 +434,14 @@ public class SFrame
     public void setVisible(boolean visible) {
         if (visible != isVisible()) {
             if (visible) {
+                List newHeaders = new ArrayList(SessionHeaders.getInstance().getHeaders());
+                for (Iterator i = headers.iterator(); i.hasNext();) {
+                    Object oldHeaders = i.next();
+                    if (!newHeaders.contains(oldHeaders)) {
+                        newHeaders.add(oldHeaders);
+                    }
+                }
+                headers = newHeaders;
                 getSession().addFrame(this);
                 register();
             } else {
@@ -424,6 +489,8 @@ public class SFrame
      */
     public void setFocus(SComponent focusOnComponent) {
         focusComponent = focusOnComponent;
+        if (focusComponent != null && isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
+            update(((FrameCG) getCG()).getFocusUpdate(this, focusComponent));
     }
 
     /**
@@ -441,7 +508,7 @@ public class SFrame
             for (int i = 0; i < listeners.size() && focusComponent == null; i++) {
                 Object listener = listeners.get(i);
                 if (listener instanceof SComponent) {
-                    focusComponent = (SComponent) listener;
+                    setFocus((SComponent) listener);
                 }
             }
         }
@@ -565,7 +632,7 @@ public class SFrame
 
     /**
      * custom error handling. If you want to catch application errors,
-     * return true here. 
+     * return true here.
      * @param e The throwable causing this.
      * @return does this frame handle errors...
      */
@@ -618,4 +685,31 @@ public class SFrame
                 lastDispatchingFinished = System.currentTimeMillis();
         }
     }
+
+	public boolean isUpdateEnabled() {
+		return updateEnabled;
+	}
+
+	public void setUpdateEnabled(boolean enabled) {
+        if (updateEnabled != enabled) {
+            if (isUpdatePossible() && SFrame.class.isAssignableFrom(getClass()))
+                update(((FrameCG) getCG()).getUpdateEnabledUpdate(this, enabled));
+            else
+                reload();
+            updateEnabled = enabled;
+        }
+	}
+
+	public Object[] getUpdateCursor() {
+		return updateCursor;
+	}
+
+	public void setUpdateCursor(boolean enabled, SIcon image, int dx, int dy) {
+		Object[] cursor = { new Boolean(enabled), image, new Integer(dx), new Integer(dy) };
+		if (!Arrays.equals(updateCursor, cursor)) {
+			updateCursor = cursor;
+			reload();
+		}
+	}
+
 }

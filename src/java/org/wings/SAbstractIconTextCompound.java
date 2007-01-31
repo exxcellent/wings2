@@ -13,6 +13,11 @@
 package org.wings;
 
 
+import org.wings.plaf.ButtonCG;
+import org.wings.plaf.CheckBoxCG;
+import org.wings.plaf.ClickableCG;
+import org.wings.plaf.RadioButtonCG;
+import org.wings.plaf.ToggleButtonCG;
 import org.wings.style.Selector;
 import org.wings.style.CSSStyleSheet;
 import org.wings.style.CSSAttributeSet;
@@ -114,7 +119,6 @@ public abstract class SAbstractIconTextCompound
     public void setModel(SButtonModel model) {
         if (model == null)
             throw new IllegalArgumentException("null not allowed");
-        this.model = model;
         reloadIfChange(this.model, model);
         this.model = model;
     }
@@ -242,8 +246,27 @@ public abstract class SAbstractIconTextCompound
      * @param i the icon.
      */
     public void setIcon(SIcon i) {
-        reloadIfChange(icon, i);
-        icon = i;
+        if (isDifferent(icon, i)) {
+            // do reload if previous icon was null
+            if (isUpdatePossible() && icon != null) {
+                if (SButton.class.isAssignableFrom(getClass()))
+                    update(((ButtonCG) getCG()).getIconUpdate((SButton) this, i));
+                else if (SCheckBox.class.isAssignableFrom(getClass()))
+                    update(((CheckBoxCG) getCG()).getIconUpdate((SCheckBox) this, i));
+                else if (SRadioButton.class.isAssignableFrom(getClass()))
+                    update(((RadioButtonCG) getCG()).getIconUpdate((SRadioButton) this, i));
+                else if (SToggleButton.class.isAssignableFrom(getClass()))
+                    update(((ToggleButtonCG) getCG()).getIconUpdate((SToggleButton) this, i));
+                else if (SClickable.class.isAssignableFrom(getClass()))
+                    update(((ClickableCG) getCG()).getIconUpdate((SClickable) this, i));
+                else
+                    reload();
+            }
+            else {
+                reload();
+            }
+            icon = i;
+        }
     }
 
     /**
@@ -437,8 +460,27 @@ public abstract class SAbstractIconTextCompound
      * Sets the label of the button.
      */
     public void setText(String t) {
-        reloadIfChange(text, t);
-        text = t;
+        if (isDifferent(text, t)) {
+            // do reload if previous text was null
+            if (isUpdatePossible() && text != null) {
+                if (SButton.class.isAssignableFrom(getClass()))
+                    update(((ButtonCG) getCG()).getTextUpdate((SButton) this, t));
+                else if (SCheckBox.class.isAssignableFrom(getClass()))
+                    update(((CheckBoxCG) getCG()).getTextUpdate((SCheckBox) this, t));
+                else if (SRadioButton.class.isAssignableFrom(getClass()))
+                    update(((RadioButtonCG) getCG()).getTextUpdate((SRadioButton) this, t));
+                else if (SToggleButton.class.isAssignableFrom(getClass()))
+                    update(((ToggleButtonCG) getCG()).getTextUpdate((SToggleButton) this, t));
+                else if (SClickable.class.isAssignableFrom(getClass()))
+                    update(((ClickableCG) getCG()).getTextUpdate((SClickable) this, t));
+                else
+                    reload();
+            }
+            else {
+                reload();
+            }
+            text = t;
+        }
     }
 
     /**

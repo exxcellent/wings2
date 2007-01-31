@@ -12,9 +12,14 @@
  */
 package org.wings.plaf;
 
+import org.wings.SIcon;
+import org.wings.SLabel;
 
 
 public interface LabelCG extends ComponentCG {
+
+    public Update getTextUpdate(SLabel label, String text);
+
+    public Update getIconUpdate(SLabel label, SIcon icon);
+
 }
-
-

@@ -1,57 +1,82 @@
-/*
- * Copyright 2000,2005 wingS development team.
- *
- * This file is part of wingS (http://www.j-wings.org).
- *
- * wingS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- *
- * Please see COPYING for the complete licence.
- */
 package org.wings;
 
+import java.util.List;
 import java.util.Set;
 import java.io.Serializable;
 
+import org.wings.plaf.Update;
+
 /**
- * Responsible for registering and invalidating modified components.
+ * A reload manger is responsible for managing reloads and updates of components as
+ * well as for invalidating the epoch of frames whose contained components changed.
  *
- * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
+ * @author Stephan Schuster
+ * @version $Revision$
  */
 public interface ReloadManager extends Serializable {
-    /**
-     * Mark an aspect of an component as dirty.
-     *
-     * @param component Component whoose representation modified.
-     */
-    void reload(SComponent component);
 
     /**
-     * Return a set of all components that are marked dirty.
-     * @return a set of all components that have been marked dirty.
+     * Marks an entire component change.
+     * @param component  the component that changed
      */
-    Set getDirtyComponents();
+    public void reload(SComponent component);
 
     /**
-     * Return a set of all dynamic resources that are marked dirty.
-     * @return a set of all dynamic resource that have been marked dirty.
+     * Inserts an update for a component.
+     * @param component  the component that changed
+     * @param update  the update for this component
      */
-    Set getDirtyResources();
+    public void addUpdate(SComponent component, Update update);
 
     /**
-     * Clear dirty components collection.
+     * Returns a (filtered) list of all updates.
+     * @return a list of all needed updates
      */
-    void clear();
+    public List getUpdates();
 
     /**
-     * Invalidates the resources containining / depending on dirty components.
+     * Returns a set of all components marked dirty.
+     * @return a set of all dirty components
      */
-    void invalidateResources();
+    public Set getDirtyComponents();
 
     /**
-     * Notify the CG's of the dirty components that those components were updated.
+     * Return a set of all frames marked dirty.
+     * @return a set of all dirty frames
      */
-    void notifyCGs();
+    public Set getDirtyFrames();
+
+    /**
+     * Invalidates all frames containing dirty components.
+     */
+    public void invalidateFrames();
+
+    /**
+     * Notifies the CG's of dirty components about changes.
+     */
+    public void notifyCGs();
+
+    /**
+     * Clears all requested reloads and updates.
+     */
+    public void clear();
+
+    /**
+     * Returns the current operation mode.
+     * @return true if in update mode
+     */
+    public boolean isUpdateMode();
+
+    /**
+     * Sets the current operation mode.
+     * @param enabled  true to enable update mode
+     */
+    public void setUpdateMode(boolean enabled);
+
+    /**
+     * Returns a reload suggestion.
+     * @return true if a reload is required
+     */
+    public boolean isReloadRequired(SFrame frame);
+
 }

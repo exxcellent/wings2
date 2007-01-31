@@ -12,9 +12,14 @@
  */
 package org.wings.plaf;
 
+import org.wings.SIcon;
+import org.wings.SToggleButton;
 
 
 public interface ToggleButtonCG extends ComponentCG {
+
+    public Update getTextUpdate(SToggleButton toggleButton, String text);
+
+    public Update getIconUpdate(SToggleButton toggleButton, SIcon icon);
+
 }
-
-

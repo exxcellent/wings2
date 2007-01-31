@@ -12,7 +12,14 @@
  */
 package org.wings.plaf;
 
+import org.wings.SCheckBox;
+import org.wings.SIcon;
+
+
 public interface CheckBoxCG extends ComponentCG {
+
+    public Update getTextUpdate(SCheckBox checkBox, String text);
+
+    public Update getIconUpdate(SCheckBox checkBox, SIcon icon);
+
 }
-
-

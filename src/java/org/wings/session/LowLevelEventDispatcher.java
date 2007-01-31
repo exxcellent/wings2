@@ -16,7 +16,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SFrame;
 
 import java.util.*;
@@ -39,6 +38,8 @@ public final class LowLevelEventDispatcher
      * HashMap as key. The value is a Set (ArrayList) of {@link LowLevelEventListener}s
      */
     private final HashMap listeners = new HashMap();
+
+    private String eventEpoch;
 
     protected boolean namedEvents = true;
 
@@ -100,35 +101,20 @@ public final class LowLevelEventDispatcher
      */
     public void register(LowLevelEventListener gl) {
         if (gl != null) {
-            final String key = gl.getLowLevelEventId();
-            final String name = gl.getName();
+            final String id = gl.getLowLevelEventId();
 
-            log.debug("dispatcher: register id    '" + key + "' type: " + gl.getClass());
-            addLowLevelEventListener(gl, key);
-
-            if (namedEvents && (name != null) && !name.equals(key) && (name.length() > 0) ) {
-                log.debug("dispatcher: register named '" + name + "'");
-                addLowLevelEventListener(gl, name);
-            }
+            log.debug("register id '" + id + "' (type: " + gl.getClass() + ")");
+            addLowLevelEventListener(gl, id);
         }
     }
 
     public void unregister(LowLevelEventListener gl) {
-        if (gl == null) {
-            return;
+        if (gl != null) {
+            final String id = gl.getLowLevelEventId();
+
+            log.debug("unregister id '" + id + "' (type: " + gl.getClass() + ")");
+            removeLowLevelEventListener(gl, id);
         }
-
-        String key = gl.getLowLevelEventId();
-
-        log.debug("unregister '" + key + "'");
-        removeLowLevelEventListener(gl, key);
-
-        key = gl.getName();
-        if (key != null && key.trim().length() > 0) {
-            log.debug("unregister named '" + key + "'");
-            removeLowLevelEventListener(gl, key);
-        }
-
     }
 
     /**
@@ -143,16 +129,8 @@ public final class LowLevelEventDispatcher
      */
     public boolean dispatch(String name, String[] values) {
         boolean result = false;
-        int dividerIndex = name.indexOf(SConstants.UID_DIVIDER);
-        String epoch = null;
 
-        // no Alias
-        if (dividerIndex > 0) {
-            epoch = name.substring(0, dividerIndex);
-            name = name.substring(dividerIndex + 1);
-        }
-
-        // make ImageButtons work in Forms .. browsers return
+        // make ImageButtons work in Forms - browsers return
         // the click position as .x and .y suffix of the name
         if (name.endsWith(".x") || name.endsWith(".X")) {
             name = name.substring(0, name.length() - 2);
@@ -162,11 +140,11 @@ public final class LowLevelEventDispatcher
             return false;
         }
 
-        // does name contain underscores? Then use the part before the underscore for
-        // identification of the low level event listener
+        // does name contain underscores? Then use the part before the
+        // underscore for identification of the low level event listener
         String id;
         String suffix = null;
-        dividerIndex = name.indexOf('_');
+        int dividerIndex = name.indexOf('_');
         if (dividerIndex > -1) {
             id = name.substring(0, dividerIndex);
             suffix = name.substring(dividerIndex + 1);
@@ -174,22 +152,20 @@ public final class LowLevelEventDispatcher
             id = name;
         }
 
-
         final List l = (List) listeners.get(id);
         if (l != null && l.size() > 0) {
-            if (log.isDebugEnabled()) {
-                log.debug("process event '" + epoch + SConstants.UID_DIVIDER + name + "'");
-            }
             for (int i = 0; i < l.size(); ++i) {
                 LowLevelEventListener gl = (LowLevelEventListener) l.get(i);
                 if (gl.isEnabled()) {
-                    if (checkEpoch(epoch, name, gl)) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("process event '" + name + "' by " + gl.getClass() + "(" + gl.getLowLevelEventId() + ")");
+                    if (!gl.isEpochCheckEnabled() || isEventEpochValid(gl)) {
+                        if (!"focus".equals(suffix) || gl instanceof SFrame) {
+                        	if (log.isDebugEnabled()) {
+                                log.debug("processing event '" + name + "' by " +
+                                		gl.getClass() + "(" + gl.getLowLevelEventId() + ")");
+                            }
+                        	gl.processLowLevelEvent(name, values);
+                            result = true;
                         }
-                        if (!"focus".equals(suffix) || gl instanceof SFrame)
-                            gl.processLowLevelEvent(name, values);
-                        result = true;
                     }
                 }
             }
@@ -197,23 +173,24 @@ public final class LowLevelEventDispatcher
         return result;
     }
 
-    protected boolean checkEpoch(String epoch, String name,
-                                 LowLevelEventListener gl) {
-        if (epoch != null) {
+    protected boolean isEventEpochValid(LowLevelEventListener gl) {
+        if (eventEpoch != null) {
             SFrame frame = ((SComponent) gl).getParentFrame();
             if (frame == null) {
                 if (log.isDebugEnabled()) {
-                    log.debug("request for dangling component '" + epoch + SConstants.UID_DIVIDER + name);
+                    log.debug("request for dangling component '" + gl.getName() + "'");
                 }
                 unregister(gl);
                 return false;
             }
-            if (!epoch.equals(frame.getEventEpoch())) {
+            if (!eventEpoch.equals(frame.getEventEpoch())) {
                 if (log.isDebugEnabled()) {
-                    log.debug("### got outdated event '" + epoch + SConstants.UID_DIVIDER + name
-                            + "' from frame '" + frame.getName() + "'; expected epoch: " + frame.getEventEpoch());
+                    log.debug("### got outdated event '" + gl.getName() + "' from frame '" +
+                    		frame.getName() + "' --> received epoch: " + eventEpoch +
+                    		" | expected epoch: " + frame.getEventEpoch());
                 }
                 frame.fireInvalidLowLevelEventListener(gl);
+                frame.reload();
                 return false;
             }
         }
@@ -246,6 +223,8 @@ public final class LowLevelEventDispatcher
             }
         }
     }
+
+	protected void setEventEpoch(String epoch) {
+		this.eventEpoch = epoch;
+	}
 }
-
-

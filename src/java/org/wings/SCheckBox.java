@@ -104,6 +104,8 @@ public class SCheckBox extends SAbstractButton {
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        
+        delayEvents(true);
 
         boolean requestSelection;
         if (Arrays.asList(values).contains("hidden_reset")) {
@@ -115,11 +117,12 @@ public class SCheckBox extends SAbstractButton {
         }
 
         if (requestSelection != isSelected()) {
-            delayEvents(true);
             setSelected(requestSelection);
             // got an event, that is a select...
             SForm.addArmedComponent(this);
         } // end of if ()
+        
+        delayEvents(false);
     }
 
     /**

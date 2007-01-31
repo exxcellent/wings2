@@ -21,6 +21,7 @@ import org.wings.style.CSSStyleSheet;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>,
  *         <a href="mailto:andre.lison@general-bytes.com">Andre Lison</a>
  */
-public class STabbedPane extends SContainer implements LowLevelEventListener, ChangeListener {
+public class STabbedPane extends SContainer implements LowLevelEventListener {
     /**
      * A Pseudo selector addressing the container area of this container.
      * Refer to {@link SComponent#setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}
@@ -108,6 +109,20 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
      */
     private boolean epochCheckEnabled = true;
 
+
+    /**
+	 * used to forward change events to change listeners of the tabbed pane
+	 */
+	private final ChangeListener fwdChangeEvents = new ChangeListener() {
+	    public void stateChanged(ChangeEvent ce) {
+	        final int index = model.getSelectedIndex();
+	        if (index >= pages.size() || index == -1) return;
+	        card.show(((Page) pages.get(index)).component);
+
+	        fireStateChanged();
+	        reload();
+	    }
+	};
 
     /**
      * Creates a new empty Tabbed Pane with the tabs at the top.
@@ -275,10 +290,11 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
      */
     public void setModel(SingleSelectionModel model) {
         if (this.model != null)
-            this.model.removeChangeListener(this);
+            this.model.removeChangeListener(fwdChangeEvents);
         this.model = model;
         if (this.model != null)
-            this.model.addChangeListener(this);
+            this.model.addChangeListener(fwdChangeEvents);
+        reload();
         reload();
     }
 
@@ -392,6 +408,8 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
         } else if (index <= getSelectedIndex()) {
             setSelectedIndex(getSelectedIndex() + 1);
         }
+
+        reload();
     }
 
     /**
@@ -510,7 +528,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
         removePageAt(index);
         if (newTabCount > 0 && selected != -1) {
             if (selected >= (newTabCount)) {
-                /* last tab was selected and maybe removed, so try to find a 
+                /* last tab was selected and maybe removed, so try to find a
                  * tab to select before
                  */
                 int decrement = 1;
@@ -526,7 +544,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
                 }
             } else {
                 int newTab = selected;
-                /* some tab was selected and maybe removed, so try to find a 
+                /* some tab was selected and maybe removed, so try to find a
                  * tab to select behind or before the removed one
                  */
                 while ((newTabCount - 1 > newTab) && !isEnabledAt(newTab)) {
@@ -677,6 +695,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
         contents.remove(index);
         ((Page) pages.get(index)).component = component;
         contents.add(component, component.getName(), index);
+        reload();
     }
 
     /**
@@ -837,6 +856,8 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
             contents.addComponent(page.component, page.component.getName());
             if (getSelectedIndex() == index)
                 card.show(component);
+
+            reload();
         }
     }
 
@@ -873,6 +894,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
     private void removePageAt(int i) {
         contents.remove(((Page) pages.get(i)).component);
         pages.remove(i);
+        reload();
     }
 
     /**
@@ -971,20 +993,6 @@ public class STabbedPane extends SContainer implements LowLevelEventListener, Ch
      */
     public void setEpochCheckEnabled(boolean epochCheckEnabled) {
         this.epochCheckEnabled = epochCheckEnabled;
-    }
-
-    /**
-     * When tab selection changed.
-     *
-     * @see ChangeListener#stateChanged(ChangeEvent)
-     */
-    public void stateChanged(ChangeEvent ce) {
-        final int index = model.getSelectedIndex();
-        if (index >= pages.size() || index == -1) return;
-        card.show(((Page) pages.get(index)).component);
-
-        reload();
-        fireStateChanged();
     }
 
     public void removeAllTabs() {

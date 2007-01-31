@@ -17,7 +17,7 @@ import org.wings.SAbstractLayoutManager;
 import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.io.Device;
-import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.ReloadResource;
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
 import org.wings.util.SStringBuilder;
@@ -106,7 +106,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     public void write(Device d)
             throws IOException {
         SFrameSet frameSet = (SFrameSet) getContainer();
-        List headers = frameSet.headers();
+        List headers = frameSet.getHeaders();
 
         if (frameSet.getParent() == null) {
             Session session = SessionManager.getSession();
@@ -182,7 +182,7 @@ public class SFrameSetLayout extends SAbstractLayoutManager {
     protected void writeFrame(Device device, SFrame frame, Properties properties)
             throws IOException {
         device.print("<frame src=\"");
-        device.print(frame.getDynamicResource(DynamicCodeResource.class).getURL());
+        device.print(frame.getDynamicResource(ReloadResource.class).getURL());
         device.print("\"");
         device.print(" name=\"");
         device.print(SFrameSet.createBaseTargetName(frame));

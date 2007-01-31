@@ -17,6 +17,7 @@ import org.wings.SComponent;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.io.Device;
 import org.wings.plaf.css.Utils;
+import org.wings.plaf.css.script.HideSelectBoxesScript;
 
 import java.io.IOException;
 
@@ -26,19 +27,7 @@ public final class DialogCG extends org.wings.plaf.css.DialogCG {
 
     public void writeInternal(final Device device, final SComponent _c) throws IOException {
         super.writeInternal(device, _c);
-
-        device.print("<script type=\"text/javascript\">");
-        device.print("    function hideSelectBoxes() {\n");
-        device.print("        for (var i = 0; i < document.forms.length; i++) {\n");
-        device.print("            for (var e = 0; e < document.forms[i].length; e++) {\n");
-        device.print("                if (document.forms[i].elements[e].tagName == 'SELECT') {\n");
-        device.print("                    document.forms[i].elements[e].style.visibility = 'hidden';\n");
-        device.print("                }\n");
-        device.print("            }\n");
-        device.print("        }\n");
-        device.print("    }\n");
-        device.print("    hideSelectBoxes();\n");
-        device.print("</script>");
+        _c.getSession().getScriptManager().addScriptListener(new HideSelectBoxesScript());
     }
 
     /* (non-Javadoc)

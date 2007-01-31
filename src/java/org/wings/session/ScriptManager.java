@@ -9,6 +9,10 @@ public class ScriptManager
 {
     private final List scriptListenerList = new LinkedList();
 
+    public static ScriptManager getInstance() {
+        return SessionManager.getSession().getScriptManager();
+    }
+
     public final void addScriptListener(ScriptListener listener) {
         if (scriptListenerList.contains(listener))
             return;
@@ -24,6 +28,12 @@ public class ScriptManager
             scriptListenerList.add(placingPosition, listener);
         else
             scriptListenerList.add(listener);
+    }
+
+    public final void addScriptListeners(ScriptListener[] listeners) {
+        for (int i = 0; i < listeners.length; ++i) {
+            addScriptListener(listeners[i]);
+        }
     }
 
     public final void removeScriptListener(ScriptListener listener) {

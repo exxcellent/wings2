@@ -19,6 +19,8 @@ import org.wings.script.JavaScriptListener;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
+import org.wings.plaf.Update;
+
 import java.io.IOException;
 
 public final class ComboBoxCG extends AbstractComponentCG implements org.wings.plaf.ComboBoxCG {
@@ -44,7 +46,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         if (component.getActionListeners().length > 0 || component.getItemListeners().length > 0) {
             if (clientProperty == null) {
             	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "this.form.submit();";
+            	String code = "wingS.request.sendEvent(event, true, " + !component.isReloadForced() + ");";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 component.addScriptListener(javaScriptListener);
                 component.putClientProperty("onChangeSubmitListener", javaScriptListener);
@@ -54,7 +56,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         	component.putClientProperty("onChangeSubmitListener", null);
         }
 
-        device.print("<select size=\"1\"");
+        device.print("<span><select size=\"1\" wrapping=\"1\"");
 
         writeAllAttributes(device, component);
 
@@ -129,7 +131,7 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         device.print("<input type=\"hidden\"");
         Utils.optAttribute(device, "name", Utils.event(component));
         Utils.optAttribute(device, "value", -1);
-        device.print("/>");
+        device.print("/></span>");
     }
 
     private org.wings.io.StringBuilderDevice
@@ -160,5 +162,27 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
         //finally {
         RenderHelper.getInstance(_c).allowCaching();
         //}
+    }
+
+    public Update getSelectionUpdate(SComboBox comboBox, int selectedIndex) {
+        return new SelectionUpdate(comboBox, selectedIndex);
+    }
+
+    protected class SelectionUpdate extends AbstractUpdate {
+
+        private Integer selectedIndex;
+
+        public SelectionUpdate(SComponent component, int selectedIndex) {
+            super(component);
+            this.selectedIndex = new Integer(selectedIndex);
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("selectionComboBox");
+            handler.addParameter(component.getName());
+            handler.addParameter(selectedIndex);
+            return handler;
+        }
+
     }
 }

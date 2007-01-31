@@ -20,10 +20,9 @@ import org.wings.event.ExitVetoException;
 import org.wings.event.SRequestEvent;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.externalizer.ExternalizedResource;
-import org.wings.io.Device;
-import org.wings.io.DeviceFactory;
-import org.wings.io.ServletDevice;
-import org.wings.resource.DynamicCodeResource;
+import org.wings.io.*;
+import org.wings.resource.*;
+import org.wings.util.SStringBuilder;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -221,7 +220,7 @@ final class SessionServlet
                     // context class loader.
                     mainClass = Class.forName(mainClassName);
                 }
-                Object main = mainClass.newInstance();
+                mainClass.newInstance();
             } catch (Exception ex) {
                 log.fatal("could not load wings.mainclass: " +
                         config.getInitParameter("wings.mainclass"), ex);
@@ -294,15 +293,13 @@ final class SessionServlet
         Device outputDevice = null;
 
         ReloadManager reloadManager = session.getReloadManager();
-        
-        boolean isErrorHandling = false;
-        
+
         try {
             /*
              * The tomcat 3.x has a bug, in that it does not encode the URL
              * sometimes. It does so, when there is a cookie, containing some
              * tomcat sessionid but that is invalid (because, for instance,
-             * we restarted the tomcat in-between). 
+             * we restarted the tomcat in-between).
              * [I can't think of this being the correct behaviour, so I assume
              *  it is a bug. ]
              *
@@ -310,7 +307,7 @@ final class SessionServlet
              * session id from a cookie, but it is not valid, we don't do
              * the encodeURL() here: we just leave the requestURL as it is
              * in the properties .. and this is url-encoded, since
-             * we had set it up in the very beginning of this session 
+             * we had set it up in the very beginning of this session
              * with URL-encoding on  (see WingServlet::newSession()).
              *
              * Vice versa: if the requestedSessionId is valid, then we can
@@ -322,19 +319,56 @@ final class SessionServlet
             if (req.isRequestedSessionIdValid()) {
                 requestURL = new RequestURL("", getSessionEncoding(response));
                 // this will fire an event, if the encoding has changed ..
-                ((PropertyService) session).setProperty("request.url",
-                        requestURL);
+                ((PropertyService) session).setProperty("request.url", requestURL);
             }
 
             if (log.isDebugEnabled()) {
-                log.debug("request URL: " + requestURL);
+                log.debug("Request URL: " + requestURL);
                 log.debug("HTTP header:");
                 for (Enumeration en = req.getHeaderNames(); en.hasMoreElements();) {
                     String header = (String) en.nextElement();
-                    log.debug("   " + header + ": " + req.getHeader(header));
+                    log.debug("    " + header + ": " + req.getHeader(header));
                 }
             }
             handleLocale(req);
+
+            // The externalizer is able to handle static and dynamic resources
+            ExternalizeManager extManager = getSession().getExternalizeManager();
+            String pathInfo = req.getPathInfo().substring(1);
+            log.debug("PathInfo: " + pathInfo);
+
+            // If we have no path info, or the special '_' path info (that should be explained
+            // somewhere, Holger), then we deliver the top-level frame of this application.
+            String externalizeIdentifier = null;
+            if (pathInfo == null || pathInfo.length() == 0 || "_".equals(pathInfo) || firstRequest) {
+                externalizeIdentifier = retrieveCurrentRootFrameResource().getId();
+                firstRequest = false;
+            } else {
+                externalizeIdentifier = pathInfo;
+            }
+
+            // Retrieve externalized resource
+            ExternalizedResource extInfo = extManager.getExternalizedResource(externalizeIdentifier);
+
+            // Special case handling: We request a .html resource of a session which is not accessible.
+            // This happens some times and leads to a 404, though it should not be possible.
+            if (extInfo == null && pathInfo != null && pathInfo.length() > 0 && pathInfo.endsWith(".html")) {
+                log.info("Found a request to an invalid .html during a valid session. Redirecting to root frame.");
+                response.sendRedirect(retrieveCurrentRootFrameResource().getURL().toString());
+                return;
+            }
+
+            if (extInfo != null && extInfo.getObject() instanceof UpdateResource) {
+                reloadManager.setUpdateMode(true);
+            } else {
+                reloadManager.setUpdateMode(false);
+            }
+
+            // Prior to dispatching the actual events we have to detect
+            // their epoch and inform the dispatcher which will then be
+            // able to check if the request is valid and processed. If
+            // this is not the case, we force a complete page reload.
+            session.getDispatcher().setEventEpoch(req.getParameter("event_epoch"));
 
             Enumeration en = req.getParameterNames();
             Cookie[] cookies = req.getCookies();
@@ -350,38 +384,63 @@ final class SessionServlet
                         Cookie cookie = cookies[i];
                         String paramName = cookie.getName();
                         String value = cookie.getValue();
-    
+
                         if (log.isDebugEnabled())
                             log.debug("dispatching cookie " + paramName + " = " + value);
-    
+
                         session.getDispatcher().dispatch(paramName, new String[] { value });
                     }
                 }
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Parameters:");
+                    for (Enumeration e = req.getParameterNames(); e.hasMoreElements();) {
+                        String paramName = (String) e.nextElement();
+                        SStringBuilder param = new SStringBuilder();
+                        param.append("    ").append(paramName).append(": ");
+                        final String[] values = req.getParameterValues(paramName);
+                        param.append(values != null ? values.toString() : "null");
+                        log.debug(param);
+                    }
+                }
+
                 while (en.hasMoreElements()) {
                     String paramName = (String) en.nextElement();
-                    String[] value = req.getParameterValues(paramName);
+                    String[] values = req.getParameterValues(paramName);
+
+                    // We do not need to dispatch the event epoch and the XHR request ID
+                    if (paramName.equals("event_epoch") || paramName.equals("_xhrID")) {
+                        continue;
+                    }
+
+                    // Split the values of the event trigger
+                    if (paramName.equals("event_trigger")) {
+                        String[] splittedValues = values[0].split("\\|");
+                        paramName = splittedValues[0];
+                        values = new String[] { splittedValues[1] };
+                    }
 
                     if (log.isDebugEnabled())
-                        log.debug("dispatching " + paramName + " = " + Arrays.asList(value));
+                        log.debug("dispatching " + paramName + " = " + Arrays.asList(values));
 
-                    session.getDispatcher().dispatch(paramName, value);
+                    session.getDispatcher().dispatch(paramName, values);
                 }
 
                 SForm.fireEvents();
-            
+
                 // only fire DISPATCH DONE if we have parameters to dispatch
                 session.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
             }
 
             session.fireRequestEvent(SRequestEvent.PROCESS_REQUEST);
             session.getDispatcher().invokeRunnables();
-            
+
             // if the user chose to exit the session as a reaction on an
             // event, we got an URL to redirect after the session.
             /*
              * where is the right place?
-             * The right place is 
-             *    - _after_ we processed the events 
+             * The right place is
+             *    - _after_ we processed the events
              *        (e.g. the 'Pressed Exit-Button'-event or gave
              *         the user the chance to exit this session in the custom
              *         processRequest())
@@ -418,73 +477,31 @@ final class SessionServlet
                 session.setRedirectAddress(null);
                 return;
             }
-            
-            // invalidate frames and resources
+
             reloadManager.notifyCGs();
-            reloadManager.invalidateResources();
-
-            // deliver resource. The
-            // externalizer is able to handle static and dynamic resources
-            ExternalizeManager extManager = getSession().getExternalizeManager();
-            String pathInfo = req.getPathInfo().substring(1);
-            log.debug("pathInfo: " + pathInfo);
-
-            /*
-             * if we have no path info, or the special '_' path info
-             * (that should be explained somewhere, Holger), then we
-             * deliver the toplevel Frame of this application.
-             */
-            String externalizeIdentifier = null;
-            if (pathInfo == null || pathInfo.length() == 0 || "_".equals(pathInfo) || firstRequest) {
-                externalizeIdentifier = retrieveCurrentRootFrameResource().getId();
-                firstRequest = false;
-            } else {
-                externalizeIdentifier = pathInfo;
-            }
-            
-            // Retrieve externalized resource.
-            ExternalizedResource extInfo = extManager.getExternalizedResource(externalizeIdentifier);
-
-            // Special case handling: We request a .html resource of a session which is not accessible.
-            // This happens some times and leads to a 404, though it should not be possible.
-            if (extInfo == null && pathInfo != null && pathInfo.length() > 0 && pathInfo.endsWith(".html")) {
-                log.info("Found a request to an invalid .html during a valid session. Redirecting to root frame.");
-                response.sendRedirect(retrieveCurrentRootFrameResource().getURL().toString());
-                return;
-            }
+            reloadManager.invalidateFrames();
 
             if (extInfo != null) {
                 outputDevice = DeviceFactory.createDevice(extInfo);
-
                 session.fireRequestEvent(SRequestEvent.DELIVER_START, extInfo);
-                extManager.deliver(extInfo, response, outputDevice);
-                session.fireRequestEvent(SRequestEvent.DELIVER_DONE, extInfo);
 
+                long startTime = System.currentTimeMillis();
+                extManager.deliver(extInfo, response, outputDevice);
+                long endTime = System.currentTimeMillis();
+                log.debug("------------------------- Time needed for rendering: " +
+                        (endTime - startTime) + " ms -------------------------\n");
+
+                session.fireRequestEvent(SRequestEvent.DELIVER_DONE, extInfo);
             } else {
                 handleUnknownResourceRequested(req, response);
             }
 
-        } catch (Throwable e) {
-            // TODO better error handling, this is pretty flexible, yet dirty
-            /* custom error handling...implement it in SFrame            */
-
-            SFrame defaultFrame = null;
-            if (session.getFrames().size() > 0) {
-                defaultFrame = (SFrame) session.getFrames().iterator().next();
-                while (defaultFrame.getParent() != null)
-                    defaultFrame = (SFrame) defaultFrame.getParent();
-            }
-            if (defaultFrame != null && defaultFrame.handleError(e)) {
-                log.warn("exception, trying to handle it via SFrame.handleError(): ", e);
-                // maybe just call defaultFrame.write(new ServletDevice(out)); instead of doGet()
-                doGet(req, response);
-                isErrorHandling = true;
-            } else {
-                log.fatal("exception handling failed: ", e);
-                handleException(response, e);
-            }
-
-        } finally {
+        }
+        catch (Throwable e) {
+            log.error("Uncaught Exception", e);
+            handleException(response, e);
+        }
+        finally {
             if (session != null) {
                 session.fireRequestEvent(SRequestEvent.REQUEST_END);
             }
@@ -499,12 +516,11 @@ final class SessionServlet
             /*
              * the session might be null due to destroy().
              */
-            if (session != null && !isErrorHandling) {
+            if (session != null) {
                 reloadManager.clear();
                 session.setServletRequest(null);
                 session.setServletResponse(null);
             }
-
 
             // make sure that the session association to the thread is removed
             // from the SessionManager
@@ -533,7 +549,7 @@ final class SessionServlet
         while (defaultFrame.getParent() != null)
             defaultFrame = (SFrame) defaultFrame.getParent();
 
-        return defaultFrame.getDynamicResource(DynamicCodeResource.class);
+        return defaultFrame.getDynamicResource(ReloadResource.class);
     }
 
     /**
@@ -550,19 +566,11 @@ final class SessionServlet
      * </ol>
      *
      * @see DefaultExceptionHandler
-     * @param res the HTTP Response to use
+     * @param response the HTTP Response to use
      * @param thrown the Exception to report
      */
-    protected void handleException(HttpServletResponse res, Throwable thrown) {
+    protected void handleException(HttpServletResponse response, Throwable thrown) {
         try {
-            // Try to return HTTP status code 500.
-            // In many cases this will be too late (already stream output written)
-            if (session.getUserAgent().getBrowserType() != BrowserType.IE)
-                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-
-            ServletOutputStream out = res.getOutputStream();
-            ServletDevice device = new ServletDevice(out);
-
             String className = (String)session.getProperty("wings.error.handler");
             if (className == null)
                 className = DefaultExceptionHandler.class.getName();
@@ -570,7 +578,42 @@ final class SessionServlet
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             Class clazz = classLoader.loadClass(className);
             ExceptionHandler exceptionHandler = (ExceptionHandler)clazz.newInstance();
+
+            StringBuilderDevice device = new StringBuilderDevice();
             exceptionHandler.handle(device, thrown);
+            Resource resource = new StringResource(device.toString(), "html", "text/html");
+            String url = session.getExternalizeManager().externalize(resource);
+
+            ReloadManager reloadManager = session.getReloadManager();
+            reloadManager.notifyCGs();
+
+            session.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
+            session.fireRequestEvent(SRequestEvent.PROCESS_REQUEST);
+
+            if (reloadManager.isUpdateMode()) {
+                session.fireRequestEvent(SRequestEvent.DELIVER_START);
+
+                String encoding = SessionManager.getSession().getCharacterEncoding();
+                response.setContentType("text/xml; charset=" + encoding);
+                ServletOutputStream out = response.getOutputStream();
+                Device outputDevice = new ServletDevice(out);
+                UpdateResource.writeHeader(outputDevice);
+                UpdateResource.writeUpdate(outputDevice, "wingS.request.sendRedirect(\"" + url + "\");");
+                UpdateResource.writeFooter(outputDevice);
+                out.flush();
+
+                session.fireRequestEvent(SRequestEvent.DELIVER_DONE);
+                session.fireRequestEvent(SRequestEvent.REQUEST_END);
+
+                reloadManager.clear();
+                session.setServletRequest(null);
+                session.setServletResponse(null);
+                SessionManager.removeSession();
+                SForm.clearArmedComponents();
+            }
+            else {
+                response.sendRedirect(url);
+            }
         }
         catch (Exception e) {
             log.warn(e.getMessage(), thrown);
@@ -589,7 +632,7 @@ final class SessionServlet
             throws IOException {
         res.setStatus(HttpServletResponse.SC_NOT_FOUND);
         res.setContentType("text/html");
-        res.getOutputStream().println("<h1>404 Not Found</h1>Unknown Resource Requested");
+        res.getOutputStream().println("<h1>404 Not Found</h1>Unknown Resource Requested: " + req.getPathInfo());
     }
 
     /**

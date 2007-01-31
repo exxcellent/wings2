@@ -105,7 +105,7 @@ public class WingsSession
                     wingsSession.fireRequestEvent(SRequestEvent.DISPATCH_DONE);
                 }
 
-                wingsSession.getReloadManager().invalidateResources();
+                wingsSession.getReloadManager().invalidateFrames();
                 wingsSession.getReloadManager().notifyCGs();
             }
             finally {
@@ -139,7 +139,7 @@ public class WingsSession
             SFrame frame = getFrame(wingsSession);
 
             StringBuilderDevice headerdev = new StringBuilderDevice();
-            for (Iterator iterator = frame.headers().iterator(); iterator.hasNext();) {
+            for (Iterator iterator = frame.getHeaders().iterator(); iterator.hasNext();) {
                 Object next = iterator.next();
                 if (next instanceof Renderable) {
                     ((Renderable) next).write(headerdev);

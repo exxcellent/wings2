@@ -13,6 +13,7 @@
 package org.wings.plaf.css;
 
 import org.wings.plaf.CGManager;
+import org.wings.plaf.Update;
 import org.wings.session.SessionManager;
 import org.wings.SComponent;
 import org.wings.SLabel;
@@ -98,4 +99,11 @@ public class LabelCG extends AbstractLabelCG implements org.wings.plaf.LabelCG {
         this.wordWrapDefault = wordWrapDefault;
     }
 
+    public Update getTextUpdate(SLabel label, String text) {
+        return text == null ? null : new TextUpdate(label, text);
+    }
+
+    public Update getIconUpdate(SLabel label, SIcon icon) {
+        return icon == null ? null : new IconUpdate(label, icon);
+    }
 }

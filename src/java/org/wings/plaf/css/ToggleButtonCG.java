@@ -12,8 +12,22 @@
  */
 package org.wings.plaf.css;
 
+import org.wings.SIcon;
+import org.wings.SToggleButton;
+import org.wings.plaf.Update;
+
+
 public final class ToggleButtonCG extends ButtonCG implements
         org.wings.plaf.ToggleButtonCG {
 
     private static final long serialVersionUID = 1L;
+
+    public Update getTextUpdate(SToggleButton toggleButton, String text) {
+        return text == null ? null : new TextUpdate(toggleButton, text);
+    }
+
+    public Update getIconUpdate(SToggleButton toggleButton, SIcon icon) {
+        return icon == null ? null : new IconUpdate(toggleButton, icon);
+    }
+
 }

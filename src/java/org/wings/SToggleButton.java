@@ -65,6 +65,8 @@ public class SToggleButton extends SAbstractButton {
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        
+        delayEvents(true);
 
         boolean origSelected = isSelected();
 
@@ -81,6 +83,8 @@ public class SToggleButton extends SAbstractButton {
             // got an event, that is a select...
             SForm.addArmedComponent(this);
         } // end of if ()
+        
+        delayEvents(false);
     }
 
     /**

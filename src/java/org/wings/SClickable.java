@@ -174,7 +174,7 @@ public class SClickable
         if (getEvent() != null && getEventTarget() != null) {
             RequestURL u = getRequestURL();
             if (!isEpochCheckEnabled()) {
-                u.setEpoch(null);
+                u.setEventEpoch(null);
                 u.setResource(null);
             }
 

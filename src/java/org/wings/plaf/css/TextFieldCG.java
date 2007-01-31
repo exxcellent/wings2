@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.text.SAbstractFormatter;
 import org.wings.io.Device;
+import org.wings.plaf.Update;
 import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.*;
 
@@ -23,7 +24,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
-public final class TextFieldCG extends AbstractComponentCG implements
+public class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
 
     private static final long serialVersionUID = 1L;
@@ -42,13 +43,18 @@ public final class TextFieldCG extends AbstractComponentCG implements
     public void installCG( SComponent comp ) {
         super.installCG( comp );
         if ( comp instanceof SFormattedTextField ) {
-            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {
-                CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter);
+            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {                
+                CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter, CallableFormatter.class);
             }
-            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';CallableFormatter.validate(ftextFieldCallback, this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'))"));
+            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';" +
+                    "CallableFormatter.validate(this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'), wingS.component.ftextFieldCallback)"));
         }
         if (isMSIE(comp))
             comp.putClientProperty("horizontalOversize", new Integer(horizontalOversize));
+    }
+
+    public void uninstallCG(SComponent component) {
+        CallableManager.getInstance().unregisterCallable(callableFormatter.getName());
     }
 
     public void writeInternal(final Device device,
@@ -66,7 +72,7 @@ public final class TextFieldCG extends AbstractComponentCG implements
         	// itself as a listener of its document as well.
             if (clientProperty == null) {
             	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "this.form.submit();";
+            	String code = "wingS.request.sendEvent(event, true, " + !textField.isReloadForced() + ");";
                 JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
                 textField.addScriptListener(javaScriptListener);
                 textField.putClientProperty("onChangeSubmitListener", javaScriptListener);
@@ -137,6 +143,27 @@ public final class TextFieldCG extends AbstractComponentCG implements
         }
     }
 
+    public Update getTextUpdate(STextField textField, String text) {
+    	return new TextUpdate(textField, text);
+    }
+
+    protected class TextUpdate extends AbstractUpdate {
+
+        private String text;
+
+        public TextUpdate(SComponent component, String text) {
+            super(component);
+            this.text = text;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("value");
+            handler.addParameter(component.getName());
+            handler.addParameter(text == null ? "" : text);
+            return handler;
+        }
+
+    }
 
     public static class CallableFormatter {
         Map formatters = new WeakHashMap();
@@ -178,4 +205,5 @@ public final class TextFieldCG extends AbstractComponentCG implements
             return name;
         }
     }
+            
 }

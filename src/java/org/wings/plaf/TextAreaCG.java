@@ -12,9 +12,11 @@
  */
 package org.wings.plaf;
 
+import org.wings.STextArea;
 
 
 public interface TextAreaCG extends ComponentCG {
+
+	public Update getTextUpdate(STextArea textArea, String text);
+
 }
-
-

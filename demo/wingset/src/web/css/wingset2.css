@@ -1,0 +1,18 @@
+.wingset_header {
+	width: 100%;
+    padding: 5px 8px 2px 0px;
+	border-bottom: 1px solid #BEBEBE;
+    background-image: url(../icons/header_bg.gif);
+	background-repeat: repeat-x;
+}
+
+.wingset_title {
+    font-size: 22px;
+    margin-left: 15px;
+}
+
+.wingset_subtitle {
+    font-size: 12px;
+	font-weight: lighter;
+    margin-left: 10px;
+}

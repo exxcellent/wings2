@@ -55,17 +55,17 @@ public class InputMapScriptListener
         if (pressed.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeydown", "return pressed_" + component.getName() + "(event)",
                     "function pressed_" + component.getName() + "(event) {\n  " +
-                            "event = getEvent(event);\n  " +
+                            "event = wingS.event.getEvent(event);\n  " +
                             pressed.toString() + "  return true;\n}\n"));
         if (typed.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeypress", "return typed_" + component.getName() + "(event)",
                     "function typed_" + component.getName() + "(event) {\n  " +
-                            "event = getEvent(event);\n  " +
+                            "event = wingS.event.getEvent(event);\n  " +
                             typed.toString() + "  return true;\n}\n"));
         if (released.length() > 0)
             component.addScriptListener(new InputMapScriptListener("onkeyup", "return released_" + component.getName() + "(event)",
                     "function released_" + component.getName() + "(event) {\n" +
-                            "event = getEvent(event);\n  " +
+                            "event = wingS.event.getEvent(event);\n  " +
                             released.toString() + "  return true;\n}\n"));
     }
 
@@ -81,17 +81,17 @@ public class InputMapScriptListener
         if (pressed.length() > 0)
             frame.addScriptListener(new InputMapScriptListener("onkeydown", "pressed_frame_" + component.getName() + "(event)",
                     "function pressed_frame_" + component.getName() + "(event) {\n  " +
-                    "event = getEvent(event);\n  " +
+                    "event = wingS.event.getEvent(event);\n  " +
                     pressed.toString() + "  return true;\n}\n"));
         if (typed.length() > 0)
             frame.addScriptListener(new InputMapScriptListener("onkeypress", "typed_frame_" + component.getName() + "(event)",
                     "function typed_frame_" + component.getName() + "(event) {\n  " +
-                    "event = getEvent(event);\n  " +
+                    "event = wingS.event.getEvent(event);\n  " +
                     typed.toString() + "  return true;\n}\n"));
         if (released.length() > 0)
             frame.addScriptListener(new InputMapScriptListener("onkeyup", "released_frame_" + component.getName() + "(event)",
                     "function released_frame_" + component.getName() + "(event) {\n" +
-                    "event = getEvent(event);\n  " +
+                    "event = wingS.event.getEvent(event);\n  " +
                     released.toString() + "  return true;\n}\n"));
     }
 
@@ -120,7 +120,7 @@ public class InputMapScriptListener
             }
         }
     }
-    
+
     private static void appendMatchCode(SStringBuilder buffer, KeyStroke keyStroke) {
         buffer.append("if (event.keyCode == " + keyStroke.getKeyCode());
         if ((keyStroke.getModifiers() & InputEvent.SHIFT_DOWN_MASK) != 0)
@@ -139,9 +139,10 @@ public class InputMapScriptListener
     }
 
     private static void appendSendRequestCode(SStringBuilder buffer, Object binding, SComponent targetComponent) {
-        buffer.append(" { sendEvent(event, \"").append(binding).append("\"");
-        if (targetComponent != null)
-            buffer.append(", \"").append(targetComponent.getName());
+        buffer.append(" { wingS.request.sendEvent(event, true, " + !targetComponent.isReloadForced());
+        buffer.append(",\"");
+        buffer.append(targetComponent == null ? "" : targetComponent.getName());
+        buffer.append("\",\"").append(binding);
         buffer.append("\"); return false; }\n");
     }
 }

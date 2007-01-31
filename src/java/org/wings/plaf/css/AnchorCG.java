@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 import org.wings.SAnchor;
 import org.wings.SComponent;
 import org.wings.io.Device;
+import org.wings.script.JavaScriptEvent;
 
 import java.io.IOException;
 
@@ -44,7 +45,8 @@ public final class AnchorCG extends AbstractComponentCG implements org.wings.pla
         */
 
         final String target = component.getTarget() != null ? "'" + component.getTarget() + "'" : "null";
-        device.print("<table onclick=\"wu_openlink(" + target + ",'"+component.getURL()+"');return false;\"");
+        device.print("<table onclick=\"wingS.util.openLink(" + target + ",'" + component.getURL() + "'" +
+                Utils.collectJavaScriptListenerCode(component, JavaScriptEvent.ON_CLICK) + "); return false;\"");
         writeAllAttributes(device, component);
         if (component.isFocusOwner())
             Utils.optAttribute(device, "foc", component.getName());

@@ -211,7 +211,8 @@ public final class TableCG
             Utils.printClickability(device, table, parameter, true, table.getShowAsFormComponent());
             device.print(" class=\"cell clickable\"");
         }
-        device.print(" class=\"cell\"");
+        else
+            device.print(" class=\"cell\"");
         device.print(">");
 
         rendererPane.writeComponent(device, component, table);
@@ -233,70 +234,54 @@ public final class TableCG
 
         Utils.printTableCellAlignment(device, comp, SConstants.CENTER, SConstants.CENTER);
         device.print(">");
+
         rendererPane.writeComponent(device, comp, table);
+
         device.print("</th>");
         Utils.printNewline(device, comp);
     }
 
-    public final void writeInternal(final Device _device, final SComponent _c) throws IOException {
+    public final void writeInternal(final Device device, final SComponent _c) throws IOException {
         RenderHelper.getInstance(_c).forbidCaching();
 
         final STable table = (STable)_c;
 
-        /*
-         * Description: This is a FIREFOX bug workaround. Currently we render all components surrounded by a DIV/TABLE.
-         * During heavy load and incremental delivery of a page this leads to disorted tables as the firefox seems
-         * to have an bug.
-         * Refer to http://jira.j-wings.org/browse/WGS-139 for screenshots
-         *
-         * This workaround tries to deliver the HTML code of a table at once.
-         * This seems to resolve this issue to 99%.
-         */
-        final CachingDevice device = new CachingDevice(_device);
+        device.print("<table");
+        writeAllAttributes(device, table);
+        writeTableAttributes(device, table);
+        device.print("><thead>");
+        Utils.printNewline(device, table);
 
-        try {
-            device.print("<table");
-            writeAllAttributes(device, table);
-            writeTableAttributes(device, table);
-            device.print("><thead>");
-            Utils.printNewline(device, table);
+        Rectangle currentViewport = table.getViewportSize();
+        Rectangle maximalViewport = table.getScrollableViewportSize();
+        int startX = 0;
+        int endX = table.getVisibleColumnCount();
+        int startY = 0;
+        int endY = table.getRowCount();
+        int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
 
-            Rectangle currentViewport = table.getViewportSize();
-            Rectangle maximalViewport = table.getScrollableViewportSize();
-            int startX = 0;
-            int endX = table.getVisibleColumnCount();
-            int startY = 0;
-            int endY = table.getRowCount();
-            int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
-
-            if (currentViewport != null) {
-                startX = currentViewport.x;
-                endX = startX + currentViewport.width;
-                startY = currentViewport.y;
-                endY = startY + currentViewport.height;
-            }
-
-            writeColumnWidths(device, table, startX, endX);
-
-            writeHeader(device, table, startX, endX);
-
-            device.print("</thead>");
-            Utils.printNewline(device, table);
-            device.print("<tbody>");
-
-            writeBody(device, table, startX, endX, startY, endY, emptyIndex);
-
-            device.print("</tbody></table>");
+        if (currentViewport != null) {
+            startX = currentViewport.x;
+            endX = startX + currentViewport.width;
+            startY = currentViewport.y;
+            endY = startY + currentViewport.height;
         }
-        finally {
-            /* Refer to description above. */
-            device.close();
-            //device = null;
-            RenderHelper.getInstance(_c).allowCaching();
-        }
+
+        writeColumnWidths(device, table, startX, endX);
+
+        writeHeader(device, table, startX, endX);
+
+        device.print("</thead>");
+        Utils.printNewline(device, table);
+        device.print("<tbody>");
+
+        writeBody(device, table, startX, endX, startY, endY, emptyIndex);
+
+        device.print("</tbody></table>");
+        RenderHelper.getInstance(_c).allowCaching();
     }
 
-    private void writeTableAttributes(CachingDevice device, STable table) throws IOException {
+    private void writeTableAttributes(Device device, STable table) throws IOException {
         final SDimension intercellPadding = table.getIntercellPadding();
         final SDimension intercellSpacing = table.getIntercellSpacing();
         Utils.writeEvents(device, table, null);
@@ -309,7 +294,7 @@ public final class TableCG
         Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? "" + intercellPadding.getHeightInt() : null));
     }
 
-    private void writeColumnWidths(CachingDevice device, STable table, int startX, int endX) throws IOException {
+    private void writeColumnWidths(Device device, STable table, int startX, int endX) throws IOException {
         STableColumnModel columnModel = table.getColumnModel();
         if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
             device.print("<colgroup>");
@@ -328,7 +313,7 @@ public final class TableCG
         }
     }
 
-    private void writeHeader(CachingDevice device, STable table, int startX, int endX) throws IOException {
+    private void writeHeader(Device device, STable table, int startX, int endX) throws IOException {
         if (!table.isHeaderVisible())
             return;
 
@@ -354,7 +339,7 @@ public final class TableCG
         Utils.printNewline(device, table);
     }
 
-    private void writeBody(CachingDevice device, STable table,
+    private void writeBody(Device device, STable table,
             int startX, int endX, int startY, int endY, int emptyIndex) throws IOException {
         final SListSelectionModel selectionModel = table.getSelectionModel();
 

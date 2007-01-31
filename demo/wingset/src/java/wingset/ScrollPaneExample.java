@@ -14,8 +14,6 @@ package wingset;
 
 import org.wings.*;
 import org.wings.border.SLineBorder;
-import org.wings.table.SDefaultTableColumnModel;
-import org.wings.table.STableColumn;
 
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
@@ -50,10 +48,9 @@ public class ScrollPaneExample extends WingSetPane
 
         scrollPane = new SScrollPane(table);
         scrollPane.setHorizontalExtent(10);
-        scrollPane.setVerticalExtent(16);
+        scrollPane.setVerticalExtent(20);
         scrollPane.getHorizontalScrollBar().setBlockIncrement(3);
         scrollPane.getVerticalScrollBar().setBlockIncrement(3);
-        scrollPane.setBorder(new SLineBorder(Color.GRAY, 1));
         scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
         scrollPane.setPreferredSize(SDimension.FULLAREA);
 
@@ -97,11 +94,31 @@ public class ScrollPaneExample extends WingSetPane
                 }
             });
 
+            Integer[] horizontalExtents = {new Integer(5), new Integer(10), new Integer(15)};
+            final SComboBox hScrollpaneExtent = new SComboBox(horizontalExtents);
+            hScrollpaneExtent.setSelectedIndex(1);
+            hScrollpaneExtent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int extent = ((Integer) hScrollpaneExtent.getSelectedItem()).intValue();
+                    scrollPane.setHorizontalExtent(extent);
+                }
+            });
+
+            Integer[] verticalExtents = {new Integer(10), new Integer(15), new Integer(20)};
+            final SComboBox vScrollpaneExtent = new SComboBox(verticalExtents);
+            vScrollpaneExtent.setSelectedIndex(2);
+            vScrollpaneExtent.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int extent = ((Integer) vScrollpaneExtent.getSelectedItem()).intValue();
+                    scrollPane.setVerticalExtent(extent);
+                }
+            });
+
             final SPageScroller horizontalPageScrollerH = new SPageScroller(SPageScroller.HORIZONTAL);
             horizontalPageScrollerH.setLayoutMode(SPageScroller.HORIZONTAL);
             final SPageScroller horizontalPageScrollerV = new SPageScroller(SPageScroller.VERTICAL);
             horizontalPageScrollerV.setLayoutMode(SPageScroller.HORIZONTAL);
-            String[] horizontalScrollBars = {"scrollbar", "pagescroller (H)", "pagescroller (V)", "null"};
+            String[] horizontalScrollBars = {"normal", "page (H)", "page (V)", "null"};
             final SComboBox hScrollBar = new SComboBox(horizontalScrollBars);
             hScrollBar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -127,7 +144,7 @@ public class ScrollPaneExample extends WingSetPane
             verticalPageScrollerH.setLayoutMode(SPageScroller.VERTICAL);
             final SPageScroller verticalPageScrollerV = new SPageScroller(SPageScroller.VERTICAL);
             verticalPageScrollerV.setLayoutMode(SPageScroller.VERTICAL);
-            String[] verticalScrollBars = {"scrollbar", "pagescroller (H)", "pagescroller (V)", "null"};
+            String[] verticalScrollBars = {"normal", "page (H)", "page (V)", "null"};
             final SComboBox vScrollBar = new SComboBox(verticalScrollBars);
             vScrollBar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -187,30 +204,19 @@ public class ScrollPaneExample extends WingSetPane
                 }
             });
 
-            final SCheckBox hideSomeColumns = new SCheckBox("Hide some columns");
-            hideSomeColumns.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    SDefaultTableColumnModel columnModel = (SDefaultTableColumnModel) table.getColumnModel();
-                    for (int i = 0; i < columnModel.getColumnCount(); ++i) {
-                        if (i % 3 == 0) {
-                            STableColumn column = columnModel.getColumn(i);
-                            columnModel.setColumnHidden(column, hideSomeColumns.isSelected());
-                        }
-                    }
-                }
-            });
-
-            addControl(new SLabel("Scrollable:"));
+            addControl(new SLabel("scrollable"));
             addControl(scrollable);
-            addControl(new SLabel(" Mode:"));
+            addControl(new SLabel(" mode"));
             addControl(mode);
-            addControl(new SLabel(" Scrollbar (H/V):"));
+            addControl(new SLabel(" extent (H/V)"));
+            addControl(hScrollpaneExtent);
+            addControl(vScrollpaneExtent);
+            addControl(new SLabel(" scrollbar (H/V)"));
             addControl(hScrollBar);
             addControl(vScrollBar);
-            addControl(new SLabel(" Scrollbar policy (H/V):"));
+            addControl(new SLabel(" policy (H/V)"));
             addControl(hScrollBarPolicy);
             addControl(vScrollBarPolicy);
-            addControl(hideSomeColumns);
         }
     }
 

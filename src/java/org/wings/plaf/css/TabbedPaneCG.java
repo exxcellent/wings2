@@ -16,8 +16,10 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
+import org.wings.plaf.css.script.LayoutFillScript;
 import org.wings.session.Browser;
 import org.wings.session.BrowserType;
+import org.wings.session.ScriptManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -90,7 +92,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
 
             if (clientLayout) {
                 preferredSize.setHeight(height);
-                component.getSession().getScriptManager().addScriptListener(new LayoutFillScript(component.getName()));
+                ScriptManager.getInstance().addScriptListener(new LayoutFillScript(component.getName()));
             }
 
             device.print(">");
@@ -249,7 +251,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 device.print("/>");
             }
 
-            Utils.printButtonEnd(device, tabbedPane, eventValue, enabledTab);
+            Utils.printButtonEnd(device, enabledTab);
         }
     }
 }

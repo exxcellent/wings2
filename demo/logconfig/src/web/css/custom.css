@@ -1,0 +1,84 @@
+body {
+	margin: 50px;
+	background-image: url(../images/page_bg.jpg);
+	background-repeat: repeat-x;
+}
+
+.pa_content {
+	width: 100%;
+    align: center;
+}
+
+.pa_application {
+	border: 1px solid #000000;
+}
+
+.fo_form {
+	padding: 5px;
+	background-color: #FFFFFF;
+	border-bottom: 1px solid #000000;
+}
+
+.sp_tree {
+	padding-left: 4px;
+	border: 1px dashed #000000;
+}
+
+.pa_control {
+	width: 222px;
+	padding-bottom: 5px;
+	border: 1px solid #000000;
+    background-color: #F7F7F7;
+	background-image: url(../images/panels_bg.jpg);
+	background-repeat: repeat-x;
+}
+
+.pa_mode {
+	padding-bottom: 5px;
+	border-bottom: 1px dashed #000000;
+}
+
+.pa_debug {
+	width: 100%;
+	padding-bottom: 5px;
+	border: 1px solid #000000;
+    background-color: #F7F7F7;
+	background-image: url(../images/panels_bg.jpg);
+	background-repeat: repeat-x;
+}
+
+.la_header {
+	width: 100%;
+	height: 45px;
+	font-size: 16px;
+	color: #FFFFFF;
+	font-weight: lighter;
+	font-variant: small-caps;
+	background-image: url(../images/header_bg.jpg);
+	background-repeat: repeat-x;
+	border-bottom: 1px solid #000000;
+}
+
+.la_title {
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+.la_status {
+	color: #555555;
+	line-height: 20px;
+	background-color: #F7F7F7;
+}
+
+.STree td.selected {
+    background-color: #F7F7F7;
+}
+
+.STree td.empty  {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.STextArea {
+    font-size: 10pt;
+}

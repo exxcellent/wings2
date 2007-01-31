@@ -12,9 +12,13 @@
  */
 package org.wings.plaf;
 
+import java.util.List;
+
+import org.wings.SList;
 
 
 public interface ListCG extends ComponentCG {
+
+    public Update getSelectionUpdate(SList list, List deselectedIndices, List selectedIndices);
+
 }
-
-

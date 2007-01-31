@@ -12,6 +12,8 @@
  */
 package org.wings;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.wings.session.SessionManager;
 import java.io.Serializable;
 
@@ -23,8 +25,8 @@ import java.io.Serializable;
 public class SToolTipManager implements Serializable {
     private int initialDelay = 1000;
     private int dismissDelay = 3000;
-    private boolean followMouse = true;
-
+    private final List componentIds = new ArrayList();
+    
     /**
      * @return The initial delay in ms the mouse pointer has to rest over a component
      * before it's tooltip is shown
@@ -32,7 +34,7 @@ public class SToolTipManager implements Serializable {
     public int getInitialDelay() {
         return initialDelay;
     }
-
+    
     /**
      * @param initialDelay The initial delay in ms the mouse pointer has to rest over a component
      * before it's tooltip is shown
@@ -40,36 +42,49 @@ public class SToolTipManager implements Serializable {
     public void setInitialDelay(int initialDelay) {
         this.initialDelay = initialDelay;
     }
-
+    
     /**
      * @return The delay in ms before a tooltip is hidden automatically
      */
     public int getDismissDelay() {
         return dismissDelay;
     }
-
+    
     /**
      * @param dismissDelay The delay in ms before a tooltip is hidden automatically
      */
     public void setDismissDelay(int dismissDelay) {
         this.dismissDelay = dismissDelay;
     }
-
-    /**
-     * @return <code>true</code> if the tooltip popup should follow the mouse movements.
-     */
-    public boolean isFollowMouse() {
-        return followMouse;
-    }
-
-    /**
-     * @param followMouse <code>true</code> if the tooltip popup should follow the mouse movements.
-     */
-    public void setFollowMouse(boolean followMouse) {
-        this.followMouse = followMouse;
-    }
     
     public static SToolTipManager sharedInstance() {
         return SessionManager.getSession().getToolTipManager();
+    }
+    
+    /**
+     * If a component has a tooltip, it will be stored in a list which is used
+     * by ToolTipCG.generateTooltipInitScript() to initialize the tooltips.
+     * @param component component to register if there is a tooltip
+     */
+    public void registerComponent(SComponent component) {
+        String tooltip = component.getToolTipText();               
+        if ((tooltip != null) && (tooltip.length() > 0)) {        
+            componentIds.add(component.getName());            
+        }        
+    }
+    
+    /**
+     * @see org.wings.SToolTipManager#registerComponent
+     */
+    public List getRegisteredComponents() {
+        return componentIds;
+    }
+    
+    /**
+     * Clear list of registered components.
+     * @see org.wings.SToolTipManager#registerComponent
+     */
+    public void clearRegisteredComponents() {
+        componentIds.clear();
     }
 }

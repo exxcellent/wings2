@@ -13,13 +13,15 @@
 package wingset;
 
 import org.wings.*;
-import org.wings.border.SEmptyBorder;
+import org.wings.plaf.css.Utils;
+import org.wings.border.*;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 
 /**
@@ -50,15 +52,16 @@ public class MenuExample extends WingSetPane {
 
         controls.addControllable(menuBar);
 
+        SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.HORIZONTAL);
+        boxLayout.setVgap(20);
+        boxLayout.setHgap(20);
+
         SPanel formPanel = new SPanel();
-        formPanel.setLayout(new SBoxLayout(SBoxLayout.VERTICAL));
+        formPanel.setLayout(boxLayout);
         formPanel.setPreferredSize(SDimension.FULLWIDTH);
-        formPanel.add(new SLabel("Combobox:"));
         formPanel.add(new SComboBox(new DefaultComboBoxModel(ListExample.createElements())));
 
-        formPanel.add(new SLabel(" \nList:"));
-
-        int tColCount = 2;
+        int tColCount = 1;
         SPanel tListsPanel = new SPanel(new SGridLayout(tColCount));
         for (int i = 0; i < tColCount; i++) {
             SList list = new SList(ListExample.createListModel());
@@ -67,14 +70,8 @@ public class MenuExample extends WingSetPane {
         }
 
         formPanel.add(tListsPanel, "List");
-        formPanel.add(new SLabel(" \ntextfield(stay visible):"));
         formPanel.add(new STextField("wingS is great"));
-        formPanel.add(new SLabel(" \ntextarea(stay visible):"));
         formPanel.add(new STextArea("wingS is a great framework for implementing complex web applications"));
-
-        SList list2 = new SList(ListExample.createListModel());
-        list2.setVisibleRowCount(7);
-        formPanel.add(list2, "List2");
 
         SPanel messagePanel = new SPanel(new SGridLayout(1));
         messagePanel.add(new SLabel("Form components are overlayed or hidden (IE bug).\n\nSelected Menu: "));
@@ -84,11 +81,41 @@ public class MenuExample extends WingSetPane {
         messagePanel.add(selectionLabel, "SelectionLabel");
         messagePanel.add(new SLabel("\nTry the menu accelerator keys." +
                 "\nCtrl-A to Ctrl-Z call menuitem actions (doesn't work on Konqueror)"));
-        messagePanel.setBorder(new SEmptyBorder(0,20,0,0));
+        messagePanel.setBorder(new SEmptyBorder(50,0,0,0));
 
-        SPanel mainPanel = new SPanel(new SBoxLayout(SBoxLayout.HORIZONTAL));
+        SButton addMenu = new SButton("Add new random menu");
+        addMenu.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        addMenu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int nr = new Random().nextInt(100);
+                SMenu menu = new SMenu("Menu " + nr);
+                for (int i = 0; i < 3; ++i) {
+                    SMenuItem item = new SMenuItem("Item " + nr + "-" + (i + 1));
+                    item.addActionListener(menuItemListener);
+                    menu.add(item);
+                }
+                menuBar.add(menu);
+            }
+        });
+        SButton removeMenu = new SButton("Remove last added menu");
+        removeMenu.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        removeMenu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int count = menuBar.getMenuCount();
+                if (count > 0) {
+                    menuBar.remove(menuBar.getMenu(count - 1));
+                }
+            }
+        });
+        messagePanel.add(new SSpacer(1, 50));
+        messagePanel.add(addMenu);
+        messagePanel.add(new SSpacer(1, 10));
+        messagePanel.add(removeMenu);
+
+        SPanel mainPanel = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
         mainPanel.add(formPanel);
         mainPanel.add(messagePanel);
+        mainPanel.setPreferredSize(SDimension.FULLWIDTH);
 
         SPanel panel = new SPanel(new SBorderLayout());
         panel.add(menuBar, SBorderLayout.NORTH);
@@ -124,8 +151,12 @@ public class MenuExample extends WingSetPane {
 
     SMenuItem createMenuItem(TreeNode node) {
         SMenuItem item = new SMenuItem(node.toString());
-        item.setToolTipText(node.toString());
+        /* setToolTipText() cannot be used due to JavaScript performance problems,
+         * only occurs when using incremental updates and menu
+         */
+        //item.setToolTipText(node.toString());
         item.addActionListener(menuItemListener);
+        item.setShowAsFormComponent(true);
         if (shortcutKey != 0) {
             item.setAccelerator(KeyStroke.getKeyStroke(shortcutKey,
                     java.awt.Event.ALT_MASK));
@@ -140,6 +171,7 @@ public class MenuExample extends WingSetPane {
 
     SMenu createMenu(TreeNode root) {
         SMenu menu = new SMenu(root.toString());
+        menu.setShowAsFormComponent(false);
         menu.addActionListener(menuItemListener);
 
         for (int i = 0; i < root.getChildCount(); i++) {
@@ -156,6 +188,9 @@ public class MenuExample extends WingSetPane {
 
     SMenuBar createMenuBar(TreeNode root) {
         SMenuBar menuBar = new SMenuBar();
+        SBorder border = new SLineBorder(Color.WHITE, 0);
+        border.setThickness(1, SConstants.TOP);
+        menuBar.setBorder(border);
 
         for (int i = 0; i < root.getChildCount(); i++) {
             TreeNode node = root.getChildAt(i);

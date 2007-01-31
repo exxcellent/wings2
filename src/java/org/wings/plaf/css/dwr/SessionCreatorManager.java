@@ -11,8 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import org.wings.session.SessionManager;
 
-import org.directwebremoting.Creator;
-import org.directwebremoting.CreatorManager;
+import org.directwebremoting.extend.Creator;
+import org.directwebremoting.extend.CreatorManager;
 import org.directwebremoting.WebContextFactory;
 
 /**
@@ -28,9 +28,13 @@ public class SessionCreatorManager implements CreatorManager {
         // empty
     }
 
-    public boolean isDebug() {
+    /* (non-Javadoc)
+     * @see org.directwebremoting.CreatorManager#isDebug()
+     */
+    public boolean isDebug()
+    {
         return false;
-    }
+    }        
 
     public void addCreatorType(String typename, String clazz) {
     }

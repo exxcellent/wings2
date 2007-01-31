@@ -19,25 +19,6 @@ tr {
     vertical-align: inherit;
 }
 
-/* rounded corners for gecko */
-.STabbedPane_Tab_top {
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-topleft: 4px;
-}
-.STabbedPane_Tab_left {
-    -moz-border-radius-topleft: 4px;
-    -moz-border-radius-bottomleft: 4px;
-}
-.STabbedPane_Tab_right {
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-bottomright: 4px;
-}
-
-.STabbedPane_Tab_bottom {
-    -moz-border-radius-bottomright: 4px;
-    -moz-border-radius-bottomleft: 4px;
-}
-
 td.STabbedPane_pane {
     height: 100%;
 }
@@ -57,7 +38,7 @@ div, input, select, textarea, table {
 }
 
 /* tooltips opacity */
-div.domTT {
+.tt {
     -moz-opacity: 0.8;
 }
 
@@ -69,4 +50,37 @@ div.domTT {
 
 .STree img {
     margin-left: 0px;
+}
+
+.SButton,
+.SButton_disabled,
+.SButton_form,
+.SButton_form_disabled,
+.SToggleButton,
+.SToggleButton_selected,
+.SToggleButton_disabled,
+.SToggleButton_form,
+.SToggleButton_form_selected,
+.SToggleButton_form_disabled,
+.SCheckBox,
+.SCheckBox_selected,
+.SCheckBox_disabled,
+.SCheckBox_form,
+.SCheckBox_form_selected,
+.SCheckBox_form_disabled,
+.SRadioBox,
+.SRadioBox_selected,
+.SRadioBox_selected,
+.SRadioBox_disabled,
+.SRadioBox_form,
+.SRadioBox_form_selected,
+.SRadioBox_form_disabled,
+.STree td.slash,
+.STree td.plus,
+.STree td.minus,
+.STree td.selected,
+.STree td.norm,
+.clickable
+{
+  -moz-user-select: none;
 }

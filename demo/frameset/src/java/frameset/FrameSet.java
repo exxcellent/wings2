@@ -23,7 +23,7 @@ import org.wings.event.SRequestListener;
 import org.wings.frames.SFrameSet;
 import org.wings.frames.SFrameSetLayout;
 import org.wings.frames.SReloadFrame;
-import org.wings.resource.DynamicCodeResource;
+import org.wings.resource.ReloadResource;
 import org.wings.resource.DynamicResource;
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
@@ -83,8 +83,8 @@ public class FrameSet {
         session.addRequestListener(new SRequestListener() {
             public void processRequest(SRequestEvent e) {
                 if (SRequestEvent.DISPATCH_DONE == e.getType() && reloadFrame != null) {
-                    Set dirtyResources = new HashSet(session.getReloadManager().getDirtyResources());
-                    reloadFrame.setDirtyResources(dirtyResources);
+                    Set dirtyFrames = new HashSet(session.getReloadManager().getDirtyFrames());
+                    reloadFrame.setDirtyFrames(dirtyFrames);
                     session.getReloadManager().clear();
                 }
             }
@@ -204,7 +204,7 @@ public class FrameSet {
         SFrameSet.assignBaseTarget(leftFrame, SFrameSet.createBaseTargetName(reloadFrame));
         SFrameSet.assignBaseTarget(rightFrame, SFrameSet.createBaseTargetName(reloadFrame));
 
-        DynamicResource targetResource = reloadFrame.getDynamicResource(DynamicCodeResource.class);
+        DynamicResource targetResource = reloadFrame.getDynamicResource(ReloadResource.class);
         // set target resource
         toolbarFrame.setTargetResource(targetResource.getId());
         leftFrame.setTargetResource(targetResource.getId());
@@ -213,9 +213,9 @@ public class FrameSet {
 
     void uninstallReloadManagerFrame() {
         if (reloadFrame != null) {
-            Set dirtyResources = new HashSet();
-            dirtyResources.add(vertical.getDynamicResource(DynamicCodeResource.class));
-            reloadFrame.setDirtyResources(dirtyResources);
+            Set dirtyFrames = new HashSet();
+            dirtyFrames.add(vertical.getDynamicResource(ReloadResource.class));
+            reloadFrame.setDirtyFrames(dirtyFrames);
 
             vertical.remove(reloadFrame);
             vertical.setLayout(new SFrameSetLayout(null, VERTICAL_LAYOUT));
@@ -227,7 +227,7 @@ public class FrameSet {
         SFrameSet.assignBaseTarget(leftFrame, "_top");
         SFrameSet.assignBaseTarget(rightFrame, "_top");
 
-        DynamicResource targetResource = vertical.getDynamicResource(DynamicCodeResource.class);
+        DynamicResource targetResource = vertical.getDynamicResource(ReloadResource.class);
         toolbarFrame.setTargetResource(targetResource.getId());
         leftFrame.setTargetResource(targetResource.getId());
         rightFrame.setTargetResource(targetResource.getId());

@@ -72,15 +72,25 @@ public class SMenuBar extends SContainer {
         this.selectionModel = model;
     }
 
-
     /**
      * Appends the specified menu to the end of the menu bar.
      *
-     * @param c the SMenu component to add
+     * @param menu the SMenu component to add
      */
-    public SMenuItem add(SMenu c) {
-        super.add(c);
-        return c;
+    public SMenuItem add(SMenu menu) {
+        getSession().getMenuManager().registerMenuLink(menu, this);
+        super.add(menu);
+        return menu;
+    }
+
+    /**
+     * Removes the specified menu from the menu bar.
+     *
+     * @param menu the SMenu component to remove
+     */
+    public void remove(SMenu menu) {
+        getSession().getMenuManager().deregisterMenuLink(menu, this);
+        super.remove(menu);
     }
 
     /**

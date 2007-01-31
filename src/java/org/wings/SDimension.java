@@ -257,6 +257,8 @@ public class SDimension implements Serializable {
     protected int extractNumericValue(String value) {
         if (value == null || value.equalsIgnoreCase(AUTO)) {
             return AUTO_INT;
+        } else if (value.equalsIgnoreCase(INHERIT)) {
+            return INHERIT_INT;
         } else {
             try {
                 return new DecimalFormat().parse(value, new ParsePosition(0)).intValue();

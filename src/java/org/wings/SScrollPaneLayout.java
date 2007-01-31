@@ -11,9 +11,9 @@ import java.util.Map;
  * Internal layout manager used by {@link SScrollPane}
  *
  * @author hengels
+ * @version $Revision$
  */
-public class SScrollPaneLayout
-        extends SAbstractLayoutManager {
+public class SScrollPaneLayout extends SAbstractLayoutManager {
     public static final String VIEWPORT = "Viewport";
     public static final String NORTH = SBorderLayout.NORTH;
     public static final String WEST = SBorderLayout.WEST;
@@ -32,14 +32,14 @@ public class SScrollPaneLayout
     }
 
     /**
-     * @deprecated Use {@link org.wings.SScrollPane#getMode()}
+     * @deprecated Use {@link org.wings.SScrollPane#isPaging()}
      */
     public boolean isPaging() {
     	return ((SScrollPane) container).getMode() == SScrollPane.MODE_SCROLLING;
     }
 
     /**
-     * @deprecated Use {@link org.wings.SScrollPane#setMode(int)}
+     * @deprecated Use {@link org.wings.SScrollPane#setPaging(boolean)}
      */
     public void setPaging(boolean paging) {
     	if (paging) {

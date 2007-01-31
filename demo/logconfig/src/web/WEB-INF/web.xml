@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+  <servlet>
+    <servlet-name>LogConfig</servlet-name>
+    <servlet-class>org.wings.session.WingServlet</servlet-class>
+    <init-param>
+      <param-name>wings.mainclass</param-name>
+      <param-value>logconfig.LogConfig</param-value>
+    </init-param>
+    <init-param>
+       <param-name>wings.error.template</param-name>
+       <param-value>templates/error.thtml</param-value>
+    </init-param>
+    <init-param>
+       <param-name>log4j.xml.path</param-name>
+       <param-value>C:/Development/JBoss/wings/server/default/conf/log4j.xml</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LogConfig</servlet-name>
+    <url-pattern>/LogConfig/*</url-pattern>
+  </servlet-mapping>
+
+  <session-config>
+     <session-timeout>300</session-timeout>
+  </session-config>
+
+</web-app>

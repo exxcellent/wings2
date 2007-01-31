@@ -21,16 +21,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.LowLevelEventListener;
 import org.wings.SComponent;
-import org.wings.SConstants;
 import org.wings.SForm;
 import org.wings.event.SComponentDropListener;
-import org.wings.session.LowLevelEventDispatcher;
-import org.wings.session.Session;
-import org.wings.session.SessionManager;
 
 /**
  * The Drag and Drop Manager. It receives DnD events and dispatches them to the
- * registered components. You must register your component with this class, 
+ * registered components. You must register your component with this class,
  * which is accessible via the wings session. you should do this in the
  * @link org.wings.dnd.DragSource#setDragEnabled or
  * @link org.wings.dnd.DropTarget#addComponentDropListener methods.
@@ -44,7 +40,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
     private HashMap namesToComponentsMap;
     private Object sourceName;
     private Object targetName;
-    
+
     /**
      * The constructor. It initializes all fields
      */
@@ -56,10 +52,10 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         setParentFrame(getSession().getRootFrame());
         getSession().getDispatcher().register(this);
     }
-    
+
     /**
-     * register a dragSource with the Manager. After registering it will be 
-     * receivable by dropTargets. 
+     * register a dragSource with the Manager. After registering it will be
+     * receivable by dropTargets.
      * @param dragSource the SComponent which is the DragSource
      */
     public void registerDragSource(DragSource dragSource) {
@@ -67,9 +63,10 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         if (!dragSources.contains(dragSource)) {
             dragSources.add(dragSource);
             namesToComponentsMap.put(((SComponent)dragSource).getName(), dragSource);
+            getParentFrame().reload();
         }
     }
-    
+
     /**
      * deregister a dragSource.
      * @param dragSource the SComponent which is the DragSource to deregister
@@ -77,8 +74,9 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
     public void deregisterDragSource(DragSource dragSource) {
         dragSources.remove(dragSource);
         namesToComponentsMap.remove(((SComponent)dragSource).getName());
+        getParentFrame().reload();
     }
-    
+
     /**
      * register a dropTarget with the Manager. After registering it can receive
      * drop events.
@@ -89,6 +87,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         if (!dropTargets.contains(dropTarget)) {
             dropTargets.add(dropTarget);
             namesToComponentsMap.put(((SComponent)dropTarget).getName(), dropTarget);
+            getParentFrame().reload();
         }
     }
 
@@ -99,6 +98,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
     public void deregisterDropTarget(DropTarget dropTarget) {
         dropTargets.remove(dropTarget);
         namesToComponentsMap.remove(((SComponent)dropTarget).getName());
+        getParentFrame().reload();
     }
 
     public SComponent getComponentByName(String name) {
@@ -107,16 +107,16 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
 
     /**
      * getter for the list of drag sources. Used for initializing them in the
-     * client code. 
+     * client code.
      * @return a List of all drag sources
      */
     public List getDragSources() {
         return dragSources;
     }
-    
+
     /**
      * getter for the list of drop targets. Used for initializing them in the
-     * client code. 
+     * client code.
      * @return a List of all drop targets
      */
     public List getDropTargets() {
@@ -148,13 +148,6 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         log.debug("sourcename: " + sourceName);
         log.debug("targetname: " + targetName);
         SForm.addArmedComponent(this);
-    }
-
-    /* (non-Javadoc)
-     * @see org.wings.SComponent#getLowLevelEventId()
-     */
-    public String getLowLevelEventId() {
-        return getName();
     }
 
     /* (non-Javadoc)

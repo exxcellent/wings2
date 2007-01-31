@@ -16,17 +16,21 @@ package wingset;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.script.JavaScriptEvent;
+import org.wings.script.JavaScriptListener;
 import org.wings.session.SessionManager;
 import org.wings.border.SEmptyBorder;
 import org.wings.header.Link;
-import org.wings.resource.DefaultURLResource;
+import org.wings.header.StyleSheetHeader;
 import org.wings.style.CSSProperty;
 
 import java.io.*;
 import java.net.URL;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * The root of the WingSet demo application.
@@ -39,12 +43,6 @@ public class WingSet implements Serializable {
      * Jakarta commons logger.
      */
     private final static Log log = LogFactory.getLog(WingSet.class);
-
-    // Some different icons used inside the demo applciation
-    private final static SIcon JAVA_CUP_ICON = new SResourceIcon("org/wings/icons/JavaCup.gif");
-    private final static SIcon SMALL_COW_ICON = new SURLIcon("../icons/cowSmall.gif");
-    private final static SURLIcon STANDARD_TAB_BACKGROUND = new SURLIcon("../icons/ButtonsBackground.gif");
-    private final static SURLIcon SELECTED_TAB_BACKGROUND = new SURLIcon("../icons/ButtonsBackgroundHighlighted.gif");
 
     /**
      * If true then use {@link StatisticsTimerTask} to log statistics on a regular basis to a logging file.
@@ -102,7 +100,7 @@ public class WingSet implements Serializable {
         Arrays.sort(exampleClassFileNames);
         classFileNames.addAll(Arrays.asList(exampleClassFileNames));
 
-        if ("TRUE".equals(SessionManager.getSession().getProperty("wingset.include.tests"))) {
+        if ("TRUE".equalsIgnoreCase((String)SessionManager.getSession().getProperty("wingset.include.tests"))) {
             String[] testClassFileNames = dir.list(new FilenameFilter() {
                 public boolean accept(File dir, String name) {
                     return name.endsWith("Test.class");
@@ -112,6 +110,16 @@ public class WingSet implements Serializable {
             classFileNames.addAll(Arrays.asList(testClassFileNames));
         }
 
+        if ("TRUE".equalsIgnoreCase((String)SessionManager.getSession().getProperty("wingset.include.experiments"))) {
+            String[] experimentClassFileNames = dir.list(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.endsWith("Experiment.class");
+                }
+            });
+            Arrays.sort(experimentClassFileNames);
+            classFileNames.addAll(Arrays.asList(experimentClassFileNames));
+        }
+
         for (Iterator iterator = classFileNames.iterator(); iterator.hasNext();) {
             String classFileName = (String)iterator.next();
             String className = "wingset." + classFileName.substring(0, classFileName.length() - ".class".length());
@@ -119,6 +127,8 @@ public class WingSet implements Serializable {
                 Class clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
                 WingSetPane example = (WingSetPane)clazz.newInstance();
                 tab.add(example, example.getExampleName());
+                if (example.getClass().getName().endsWith("Experiment"))
+                    tab.setForegroundAt(tab.getTabCount() - 1, Color.GRAY);
             }
             catch (Throwable e) {
                 System.err.println("Could not load plugin: " + className);
@@ -139,11 +149,23 @@ public class WingSet implements Serializable {
                     styleWingsetApp();
             }
         });
-        switchStyleButton.setBorder(new SEmptyBorder(5, 0, 5, 0));
+
+        SButton switchDebugViewButton = new SButton("Toggle AJAX debug view");
+        switchStyleButton.setShowAsFormComponent(false);
+        switchDebugViewButton.addScriptListener(new JavaScriptListener(
+                JavaScriptEvent.ON_CLICK,
+                "wingS.ajax.toggleDebugView(); return false;"
+        ));
+
+        SPanel south = new SPanel();
+        south.setBorder(new SEmptyBorder(5, 0, 5, 0));
+        south.add(switchStyleButton);
+        south.add(new SLabel("  |  "));
+        south.add(switchDebugViewButton);
 
         styleWingsetApp();
 
-        frame.getContentPane().add(switchStyleButton, SBorderLayout.SOUTH);
+        frame.getContentPane().add(south, SBorderLayout.SOUTH);
         frame.getContentPane().setPreferredSize(SDimension.FULLAREA);
 
         frame.show();
@@ -165,20 +187,8 @@ public class WingSet implements Serializable {
         }
 
         // 2) Include an application specific CSS stylesheet to extend/overwrite the default wingS style set.
-        customStyleSheetLink = new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../css/wingset.css"));
+        customStyleSheetLink = new StyleSheetHeader("../css/wingset.css");
         frame.addHeader(customStyleSheetLink);
-
-        // 3) More advanced version of 3)
-        //    Here we demonstrate how you can style single component by applying a CSS properties on a
-        //    part of a component using component specific "css selectors" or "pseudo css selectors".
-        //
-        //    As we want to set styles on specific areas of the componentn and not the component itself, we use
-        //    "CSS selectors" provided by the componentn to address these areas. They are dynamically resolved
-        //     to the according CSS statements during the rednering process.
-        //
-        //  Set a background image on selected and unselected tabs (gradient grey image or orange image):
-        tab.setAttribute(STabbedPane.SELECTOR_UNSELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, STANDARD_TAB_BACKGROUND);
-        tab.setAttribute(STabbedPane.SELECTOR_SELECTED_TAB, CSSProperty.BACKGROUND_IMAGE, SELECTED_TAB_BACKGROUND);
 
         customStyleApplied = true;
     }
