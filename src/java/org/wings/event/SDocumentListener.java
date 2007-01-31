@@ -26,7 +26,7 @@ public interface SDocumentListener extends EventListener {
      *
      * @param e the document event
      */
-    public void insertUpdate(SDocumentEvent e);
+    void insertUpdate(SDocumentEvent e);
 
     /**
      * Gives notification that a portion of the document has been
@@ -35,7 +35,7 @@ public interface SDocumentListener extends EventListener {
      *
      * @param e the document event
      */
-    public void removeUpdate(SDocumentEvent e);
+    void removeUpdate(SDocumentEvent e);
 
     /**
      * Gives notification that an attribute or set of attributes changed for styled
@@ -45,5 +45,5 @@ public interface SDocumentListener extends EventListener {
      *
      * @param e the document event
      */
-    public void changedUpdate(SDocumentEvent e);
+    void changedUpdate(SDocumentEvent e);
 }

@@ -22,29 +22,29 @@ import java.util.Collection;
  * @author armin
  *         created at 24.02.2004 10:49:32
  */
-public class ResourceExternalizer implements Externalizer {
+public class ResourceExternalizer implements Externalizer<Resource> {
 
     private static final Class[] SUPPORTED_CLASSES = {Resource.class};
 
     public static final ResourceExternalizer SHARED_INSTANCE = new ResourceExternalizer();
 
-    public String getId(Object obj) {
+    public String getId(Resource obj) {
         return null;
     }
 
-    public String getExtension(Object obj) {
+    public String getExtension(Resource obj) {
         return ((Resource) obj).getExtension();
     }
 
-    public String getMimeType(Object obj) {
+    public String getMimeType(Resource obj) {
         return ((Resource) obj).getMimeType();
     }
 
-    public int getLength(Object obj) {
+    public int getLength(Resource obj) {
         return ((Resource) obj).getLength();
     }
 
-    public boolean isFinal(Object obj) {
+    public boolean isFinal(Resource obj) {
         return false;
     }
 
@@ -61,7 +61,7 @@ public class ResourceExternalizer implements Externalizer {
         return null;
     }
 
-    public Collection getHeaders(Object obj) {
+    public Collection getHeaders(Resource obj) {
         return ((Resource) obj).getHeaders();
     }
 

@@ -12,6 +12,8 @@
  */
 package org.wings.externalizer;
 
+import java.awt.*;
+
 import org.wings.io.Device;
 
 import javax.swing.*;
@@ -40,6 +42,7 @@ public class ImageIconExternalizer extends ImageExternalizer {
         return SUPPORTED_CLASSES;
     }
 
+    @Override
     public void write(Object obj, Device out)
             throws java.io.IOException {
         super.write(((ImageIcon) obj).getImage(), out);

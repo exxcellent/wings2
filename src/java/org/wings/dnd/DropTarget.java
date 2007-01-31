@@ -19,7 +19,6 @@ import java.util.List;
  * The Interface for the taget of drag and drop events. A component must implement this interface to able to drop components on it..
  *
  * @author ole
- *
  */
 public interface DropTarget {
     /** 
@@ -27,10 +26,10 @@ public interface DropTarget {
      * Don't forget to register the component with the @link{DragAndDropManager}
      * @param listener the listener to add
      */
-    public void addComponentDropListener(SComponentDropListener listener);
+    void addComponentDropListener(SComponentDropListener listener);
     /**
      * get the List of DropListeners
      * @return the list of listeners
      */
-    public List getComponentDropListeners();
+    List<SComponentDropListener> getComponentDropListeners();
 }

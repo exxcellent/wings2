@@ -30,7 +30,7 @@ public interface SRequestListener extends EventListener {
      *
      * @param e The current request event type.
      */
-    public void processRequest(SRequestEvent e);
+    void processRequest(SRequestEvent e);
 
 }
 

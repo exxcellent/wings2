@@ -31,15 +31,15 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
     /**
      * singleton implementation
      */
-    private static final SystemExternalizeManager sharedInstance = new SystemExternalizeManager();
+    private static final SystemExternalizeManager SHARED_INSTANCE = new SystemExternalizeManager();
 
     private final String MY_PREFIX_TIMESLICE_STRING = "-" + PREFIX_TIMESLICE_STRING;
 
-    protected final Map/*<String, ExternalizedResource>*/ externalized;
+    protected final Map<String, ExternalizedResource> externalized;
 
 
     private SystemExternalizeManager() {
-        externalized = Collections.synchronizedMap(new HashMap());
+        externalized = Collections.synchronizedMap(new HashMap<String, ExternalizedResource>());
     }
 
     /**
@@ -48,7 +48,7 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
      * @return the SystemExternalizeManager instance.
      */
     public static SystemExternalizeManager getSharedInstance() {
-        return sharedInstance;
+        return SHARED_INSTANCE;
     }
 
 
@@ -71,7 +71,7 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
             return null;
 
         log.debug("system externalizer: " + identifier);
-        return (ExternalizedResource) externalized.get(identifier);
+        return externalized.get(identifier);
     }
 
     public final void removeExternalizedResource(String identifier) {

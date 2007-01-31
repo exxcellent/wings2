@@ -30,13 +30,13 @@ public interface SRenderListener extends EventListener {
      * The rendering of the listened component is abut to start.
      * @param renderEvent The render event information.
      */
-    public void startRendering(SRenderEvent renderEvent);
+    void startRendering(SRenderEvent renderEvent);
 
     /**
      * The rendering of the listened component finished.
      * @param renderEvent The render event information.
      */
-    public void doneRendering(SRenderEvent renderEvent);
+    void doneRendering(SRenderEvent renderEvent);
 
 }
 

@@ -27,42 +27,42 @@ public interface SInternalFrameListener extends EventListener {
      *
      * @see org.wings.SInternalFrame#show
      */
-    public void internalFrameOpened(SInternalFrameEvent e);
+    void internalFrameOpened(SInternalFrameEvent e);
 
     /**
      * Invoked when an internal frame has been closed.
      *
      * @see org.wings.SInternalFrame#setClosed
      */
-    public void internalFrameClosed(SInternalFrameEvent e);
+    void internalFrameClosed(SInternalFrameEvent e);
 
     /**
      * Invoked when an internal frame is iconified.
      *
      * @see org.wings.SInternalFrame#setIcon
      */
-    public void internalFrameIconified(SInternalFrameEvent e);
+    void internalFrameIconified(SInternalFrameEvent e);
 
     /**
      * Invoked when an internal frame is de-iconified.
      *
      * @see org.wings.SInternalFrame#setIcon
      */
-    public void internalFrameDeiconified(SInternalFrameEvent e);
+    void internalFrameDeiconified(SInternalFrameEvent e);
 
     /**
      * Invoked when an internal frame is maximized.
      *
      * @see org.wings.SInternalFrame#setMaximized
      */
-    public void internalFrameMaximized(SInternalFrameEvent e);
+    void internalFrameMaximized(SInternalFrameEvent e);
 
     /**
      * Invoked when an internal frame is un-maximized.
      *
      * @see org.wings.SInternalFrame#setMaximized
      */
-    public void internalFrameUnmaximized(SInternalFrameEvent e);
+    void internalFrameUnmaximized(SInternalFrameEvent e);
 }
 
 

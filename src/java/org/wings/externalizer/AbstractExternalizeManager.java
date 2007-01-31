@@ -25,7 +25,7 @@ import java.util.*;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  */
 public abstract class AbstractExternalizeManager {
-    protected final transient static Log log = LogFactory.getLog(AbstractExternalizeManager.class);
+    protected final static Log log = LogFactory.getLog(AbstractExternalizeManager.class);
 
     /**
      * The identifier generated, if the {@link ExternalizeManager} did not find
@@ -115,7 +115,7 @@ public abstract class AbstractExternalizeManager {
      * than search in the value set of the
      * identifier-{@link ExternalizedResource} map.
      */
-    protected final Map/*<ExternalizedResource,String>*/ reverseExternalized;
+    protected final Map<ExternalizedResource,String> reverseExternalized;
 
     /**
      * To support Session local externalizing, the {@link ExternalizeManager}
@@ -130,7 +130,7 @@ public abstract class AbstractExternalizeManager {
         log.info("Externalizer: Final scope expires in " + FINAL_EXPIRES + " seconds."+
                 "Using prefix: " + PREFIX_TIMESLICE_STRING);
 
-        reverseExternalized = Collections.synchronizedMap(new HashMap());
+        reverseExternalized = Collections.synchronizedMap(new HashMap<ExternalizedResource, String>());
     }
 
     public void setResponse(HttpServletResponse response) {
@@ -398,8 +398,8 @@ public abstract class AbstractExternalizeManager {
 
         Collection headers = extInfo.getHeaders();
         if (headers != null) {
-            for (Iterator it = headers.iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Object header : headers) {
+                Map.Entry entry = (Map.Entry) header;
                 if (entry.getValue() instanceof String) {
                     response.addHeader((String) entry.getKey(),
                             (String) entry.getValue());

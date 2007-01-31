@@ -35,20 +35,20 @@ import org.wings.event.SComponentDropListener;
  */
 public class DragAndDropManager extends SComponent implements LowLevelEventListener {
     private final static Log log = LogFactory.getLog(DragAndDropManager.class);
-    private ArrayList dragSources;
-    private ArrayList dropTargets;
-    private HashMap namesToComponentsMap;
-    private Object sourceName;
-    private Object targetName;
+    private ArrayList<DragSource> dragSources;
+    private ArrayList<DropTarget> dropTargets;
+    private HashMap<String, SComponent> namesToComponentsMap;
+    private String sourceName;
+    private String targetName;
 
     /**
      * The constructor. It initializes all fields
      */
     public DragAndDropManager() {
         super();
-        dragSources = new ArrayList();
-        dropTargets = new ArrayList();
-        namesToComponentsMap = new HashMap();
+        dragSources = new ArrayList<DragSource>();
+        dropTargets = new ArrayList<DropTarget>();
+        namesToComponentsMap = new HashMap<String, SComponent>();
         setParentFrame(getSession().getRootFrame());
         getSession().getDispatcher().register(this);
     }
@@ -62,7 +62,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         // don't add a component more than once
         if (!dragSources.contains(dragSource)) {
             dragSources.add(dragSource);
-            namesToComponentsMap.put(((SComponent)dragSource).getName(), dragSource);
+            namesToComponentsMap.put(((SComponent)dragSource).getName(), (SComponent) dragSource);
             getParentFrame().reload();
         }
     }
@@ -86,7 +86,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         // don't add a component more than once
         if (!dropTargets.contains(dropTarget)) {
             dropTargets.add(dropTarget);
-            namesToComponentsMap.put(((SComponent)dropTarget).getName(), dropTarget);
+            namesToComponentsMap.put(((SComponent)dropTarget).getName(), (SComponent) dropTarget);
             getParentFrame().reload();
         }
     }
@@ -102,7 +102,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
     }
 
     public SComponent getComponentByName(String name) {
-        return (SComponent)namesToComponentsMap.get(name);
+        return namesToComponentsMap.get(name);
     }
 
     /**
@@ -110,7 +110,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
      * client code.
      * @return a List of all drag sources
      */
-    public List getDragSources() {
+    public List<DragSource> getDragSources() {
         return dragSources;
     }
 
@@ -119,7 +119,7 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
      * client code.
      * @return a List of all drop targets
      */
-    public List getDropTargets() {
+    public List<DropTarget> getDropTargets() {
         return dropTargets;
     }
 
@@ -131,18 +131,18 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         // handle the somehow coded drag to drop connection, look for the components and dispatch
         sourceName = null;
         targetName = null;
-        for (int i = 0; i < values.length; i++) {
-            int sourceIndex = values[i].indexOf("dragSource");
+        for (String value : values) {
+            int sourceIndex = value.indexOf("dragSource");
             if (sourceIndex != -1) {
                 /* extract name from request value. remove string "dragSource"
                  * from the beginning.
                  */
-                sourceName = values[i].substring(sourceIndex + 10,values[i].length());
+                sourceName = value.substring(sourceIndex + 10, value.length());
             }
-            int targetIndex = values[i].indexOf("dropTarget");
+            int targetIndex = value.indexOf("dropTarget");
             if (targetIndex != -1) {
                 // see above
-                targetName = values[i].substring(targetIndex + 10,values[i].length());
+                targetName = value.substring(targetIndex + 10, value.length());
             }
         }
         log.debug("sourcename: " + sourceName);
@@ -166,11 +166,11 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
             DropTarget target = (DropTarget)namesToComponentsMap.get(targetName);
             DragSource source = (DragSource)namesToComponentsMap.get(sourceName);
             if (target != null && source != null) {
-                Iterator listIter = target.getComponentDropListeners().iterator();
+                Iterator<SComponentDropListener> listIter = target.getComponentDropListeners().iterator();
                 SComponentDropListener listener;
                 while (listIter.hasNext()) {
                     log.debug("fireFinalEvents listener");
-                    listener = (SComponentDropListener)listIter.next();
+                    listener = listIter.next();
                     // TODO: evaluate return value of handleDrop and visualize it in the client
                     listener.handleDrop((SComponent)source);
                 }

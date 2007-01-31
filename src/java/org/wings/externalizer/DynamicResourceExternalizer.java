@@ -22,7 +22,7 @@ import java.util.Collection;
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  */
-public class DynamicResourceExternalizer implements Externalizer {
+public class DynamicResourceExternalizer implements Externalizer<DynamicResource> {
 
     private static final Class[] SUPPORTED_CLASSES = {DynamicResource.class};
 
@@ -32,35 +32,35 @@ public class DynamicResourceExternalizer implements Externalizer {
         return null;
     }
 
-    public String getExtension(Object obj) {
+    public String getExtension(DynamicResource obj) {
         if (obj != null)
-            return ((DynamicResource) obj).getExtension();
+            return obj.getExtension();
         else
             return "";
     }
 
-    public String getMimeType(Object obj) {
-        if (obj != null)
+    public String getMimeType(DynamicResource obj) {
+        if (obj != null) {
             return ((DynamicResource) obj).getMimeType();
-        else
+        } else
             return "unknown";
     }
 
-    public int getLength(Object obj) {
+    public int getLength(DynamicResource obj) {
         return -1;
     }
 
-    public boolean isFinal(Object obj) {
+    public boolean isFinal(DynamicResource obj) {
         return false;
     }
 
-    public String getEventEpoch(Object obj) {
-        return ((DynamicResource) obj).getFrame().getEventEpoch();
+    public String getEventEpoch(DynamicResource obj) {
+        return obj.getFrame().getEventEpoch();
     }
 
-    public void write(Object obj, Device out)
+    public void write(DynamicResource obj, Device out)
             throws IOException {
-        ((Renderable) obj).write(out);
+        obj.write(out);
     }
 
     public Class[] getSupportedClasses() {
@@ -71,9 +71,9 @@ public class DynamicResourceExternalizer implements Externalizer {
         return null;
     }
 
-    public Collection getHeaders(Object obj) {
+    public Collection getHeaders(DynamicResource obj) {
         if (obj != null)
-            return ((DynamicResource) obj).getHeaders();
+            return obj.getHeaders();
         else
             return null;
     }

@@ -35,11 +35,11 @@ public class ExternalizeManager extends AbstractExternalizeManager {
         ResourceExternalizer.SHARED_INSTANCE,
     };
 
-    protected final HashMap externalizerByClass = new HashMap();
+    protected final HashMap<Class, Externalizer> externalizerByClass = new HashMap<Class, Externalizer>();
 
-    protected final HashMap externalizerByMimeType = new HashMap();
+    protected final HashMap<String, Externalizer> externalizerByMimeType = new HashMap<String, Externalizer>();
 
-    protected final Map externalized = Collections.synchronizedMap(new HashMap());
+    protected final Map<String, ExternalizedResource> externalized = Collections.synchronizedMap(new HashMap<String, ExternalizedResource>());
 
 
     public ExternalizeManager() {
@@ -54,8 +54,8 @@ public class ExternalizeManager extends AbstractExternalizeManager {
 
 
     public final void addDefaultExternalizers() {
-        for (int i = 0; i < DEFAULT_EXTERNALIZERS.length; i++) {
-            addExternalizer(DEFAULT_EXTERNALIZERS[i]);
+        for (Externalizer aDEFAULT_EXTERNALIZERS : DEFAULT_EXTERNALIZERS) {
+            addExternalizer(aDEFAULT_EXTERNALIZERS);
         }
     }
 
@@ -104,7 +104,7 @@ public class ExternalizeManager extends AbstractExternalizeManager {
                     getExternalizedResource(identifier);
         }
 
-        return (ExternalizedResource) externalized.get(identifier);
+        return externalized.get(identifier);
     }
 
     public final void removeExternalizedResource(String identifier) {
@@ -181,17 +181,22 @@ public class ExternalizeManager extends AbstractExternalizeManager {
         if (externalizer != null) {
             Class c[] = externalizer.getSupportedClasses();
             if (c != null)
-                for (int i = 0; i < c.length; i++)
-                    if (c[i] != null)
-                        externalizerByClass.put(c[i], externalizer);
+                for (Class aC : c) {
+                    if (aC != null) {
+                        externalizerByClass.put(aC, externalizer);
+                    }
+                }
 
             String mimeTypes[] = externalizer.getSupportedMimeTypes();
-            if (mimeTypes != null)
-                for (int i = 0; i < mimeTypes.length; i++)
+            if (mimeTypes != null) {
+                for (int i = 0; i < mimeTypes.length; i++) {
                     if (mimeTypes[i] != null &&
-                            mimeTypes[i].trim().length() > 0)
+                            mimeTypes[i].trim().length() > 0) {
                         externalizerByMimeType.put(mimeTypes[i].trim().toLowerCase(),
                                 externalizer);
+                    }
+                }
+            }
         }
     }
 
@@ -225,7 +230,7 @@ public class ExternalizeManager extends AbstractExternalizeManager {
     private Externalizer getSuperclassExternalizer(Class c) {
         Externalizer externalizer = null;
         if (c != null) {
-            externalizer = (Externalizer) externalizerByClass.get(c);
+            externalizer = externalizerByClass.get(c);
             if (externalizer == null)
                 externalizer = getExternalizer(c.getSuperclass());
         }
@@ -236,10 +241,11 @@ public class ExternalizeManager extends AbstractExternalizeManager {
     private Externalizer getInterfaceExternalizer(Class c) {
         Externalizer externalizer = null;
         Class[] ifList = c.getInterfaces();
-        for (int i = 0; i < ifList.length; i++) {
-            externalizer = (Externalizer) externalizerByClass.get(ifList[i]);
-            if (externalizer != null)
+        for (Class anIfList : ifList) {
+            externalizer = externalizerByClass.get(anIfList);
+            if (externalizer != null) {
                 break;
+            }
         }
         return externalizer;
     }
@@ -250,7 +256,7 @@ public class ExternalizeManager extends AbstractExternalizeManager {
     public Externalizer getExternalizer(String mimeType) {
         Externalizer externalizer = null;
         if (mimeType != null && mimeType.length() > 0) {
-            externalizer = (Externalizer) externalizerByMimeType.get(mimeType);
+            externalizer = externalizerByMimeType.get(mimeType);
             if (externalizer == null) {
                 if (mimeType.indexOf('/') >= 0)
                     externalizer =

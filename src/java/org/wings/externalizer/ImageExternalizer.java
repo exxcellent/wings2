@@ -28,9 +28,9 @@ import java.util.Collection;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  */
-public class ImageExternalizer implements Externalizer {
+public class ImageExternalizer implements Externalizer<Image> {
 
-    private final transient static Log log = LogFactory.getLog(ImageExternalizer.class);
+    private final static Log log = LogFactory.getLog(ImageExternalizer.class);
 
     public static final String FORMAT_PNG = "png";
     public static final String FORMAT_GIF = "gif";
@@ -59,30 +59,31 @@ public class ImageExternalizer implements Externalizer {
     }
 
     protected void checkFormat() {
-        for (int i = 0; i < SUPPORTED_FORMATS.length; i++) {
-            if (SUPPORTED_FORMATS[i].equals(format))
+        for (String aSUPPORTED_FORMATS : SUPPORTED_FORMATS) {
+            if (aSUPPORTED_FORMATS.equals(format)) {
                 return;
+            }
         }
         throw new IllegalArgumentException("Unsupported Format " + format);
     }
 
-    public String getId(Object obj) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public String getId(Image obj) {
+        return null;
     }
 
-    public String getExtension(Object obj) {
+    public String getExtension(Image obj) {
         return format;
     }
 
-    public String getMimeType(Object obj) {
+    public String getMimeType(Image obj) {
         return "image/" + format;
     }
 
-    public int getLength(Object obj) {
+    public int getLength(Image obj) {
         return -1;
     }
 
-    public boolean isFinal(Object obj) {
+    public boolean isFinal(Image obj) {
         return false; // images may dynamically change (i.e. status charts)
                       // I guess the static case should cache the encoding results rather
                       // then rerunning it
@@ -98,13 +99,12 @@ public class ImageExternalizer implements Externalizer {
 
     public void write(Object obj, Device out)
             throws java.io.IOException {
-        Image img = (Image) obj;
         if (FORMAT_PNG.equals(format))
-            writePNG(img, out);
+            writePNG((Image) obj, out);
         else if (FORMAT_JPG.equals(format))
-            writeJPG(img, out);
+            writeJPG((Image) obj, out);
         else
-            writeGIF(img, out);
+            writeGIF((Image) obj, out);
     }
 
     /**
@@ -142,7 +142,7 @@ public class ImageExternalizer implements Externalizer {
         out.flush();
     }
 
-    public Collection getHeaders(Object obj) {
+    public Collection getHeaders(Image obj) {
         return null;
     }
 }

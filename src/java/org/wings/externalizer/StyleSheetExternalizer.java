@@ -21,30 +21,30 @@ import java.util.Collection;
 /**
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  */
-public class StyleSheetExternalizer implements Externalizer {
+public class StyleSheetExternalizer implements Externalizer<StyleSheet> {
 
     public static final StyleSheetExternalizer SHARED_INSTANCE = new StyleSheetExternalizer();
 
     private static final Class[] SUPPORTED_CLASSES = {StyleSheet.class};
     private static final String[] SUPPORTED_MIME_TYPES = {"text/css"};
 
-    public String getId(Object obj) {
+    public String getId(StyleSheet obj) {
         return null;
     }
 
-    public String getExtension(Object obj) {
+    public String getExtension(StyleSheet obj) {
         return "css";
     }
 
-    public String getMimeType(Object obj) {
+    public String getMimeType(StyleSheet obj) {
         return "text/css";
     }
 
-    public boolean isFinal(Object obj) {
+    public boolean isFinal(StyleSheet obj) {
         return ((StyleSheet) obj).isFinal();
     }
 
-    public int getLength(Object obj) {
+    public int getLength(StyleSheet obj) {
         return -1;
     }
 
@@ -61,7 +61,7 @@ public class StyleSheetExternalizer implements Externalizer {
         return SUPPORTED_MIME_TYPES;
     }
 
-    public Collection getHeaders(Object obj) {
+    public Collection getHeaders(StyleSheet obj) {
         return null;
     }
 }

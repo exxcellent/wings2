@@ -19,64 +19,64 @@ public interface ReloadManager extends Serializable {
      * Marks an entire component change.
      * @param component  the component that changed
      */
-    public void reload(SComponent component);
+    void reload(SComponent component);
 
     /**
      * Inserts an update for a component.
      * @param component  the component that changed
      * @param update  the update for this component
      */
-    public void addUpdate(SComponent component, Update update);
+    void addUpdate(SComponent component, Update update);
 
     /**
      * Returns a (filtered) list of all updates.
      * @return a list of all needed updates
      */
-    public List getUpdates();
+    List getUpdates();
 
     /**
      * Returns a set of all components marked dirty.
      * @return a set of all dirty components
      */
-    public Set getDirtyComponents();
+    Set getDirtyComponents();
 
     /**
      * Return a set of all frames marked dirty.
      * @return a set of all dirty frames
      */
-    public Set getDirtyFrames();
+    Set getDirtyFrames();
 
     /**
      * Invalidates all frames containing dirty components.
      */
-    public void invalidateFrames();
+    void invalidateFrames();
 
     /**
      * Notifies the CG's of dirty components about changes.
      */
-    public void notifyCGs();
+    void notifyCGs();
 
     /**
      * Clears all requested reloads and updates.
      */
-    public void clear();
+    void clear();
 
     /**
      * Returns the current operation mode.
      * @return true if in update mode
      */
-    public boolean isUpdateMode();
+    boolean isUpdateMode();
 
     /**
      * Sets the current operation mode.
      * @param enabled  true to enable update mode
      */
-    public void setUpdateMode(boolean enabled);
+    void setUpdateMode(boolean enabled);
 
     /**
      * Returns a reload suggestion.
      * @return true if a reload is required
      */
-    public boolean isReloadRequired(SFrame frame);
+    boolean isReloadRequired(SFrame frame);
 
 }

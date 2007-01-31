@@ -25,40 +25,40 @@ import java.util.Collection;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  */
-public class StaticResourceExternalizer implements Externalizer {
+public class StaticResourceExternalizer implements Externalizer<StaticResource> {
 
     private static final Class[] SUPPORTED_CLASSES = {StaticResource.class};
 
     public static final StaticResourceExternalizer SHARED_INSTANCE = new StaticResourceExternalizer();
 
-    public String getId(Object obj) {
+    public String getId(StaticResource obj) {
         if (obj instanceof NamedResource)
             return ((NamedResource)obj).getResourceName();
         else
             return null;
     }
 
-    public String getExtension(Object obj) {
+    public String getExtension(StaticResource obj) {
         if (obj instanceof NamedResource)
             return null;
         else
-            return ((StaticResource)obj).getExtension();
+            return obj.getExtension();
     }
 
-    public String getMimeType(Object obj) {
+    public String getMimeType(StaticResource obj) {
         if (obj != null)
-            return ((StaticResource) obj).getMimeType();
+            return obj.getMimeType();
         else
             return "unknown";
     }
 
-    public int getLength(Object obj) {
+    public int getLength(StaticResource obj) {
         if (obj != null)
-            return ((StaticResource) obj).getLength();
+            return obj.getLength();
         return -1;
     }
 
-    public boolean isFinal(Object obj) {
+    public boolean isFinal(StaticResource obj) {
         return true;
     }
 
@@ -75,9 +75,9 @@ public class StaticResourceExternalizer implements Externalizer {
         return null;
     }
 
-    public Collection getHeaders(Object obj) {
+    public Collection getHeaders(StaticResource obj) {
         if (obj != null)
-            return ((StaticResource) obj).getHeaders();
+            return obj.getHeaders();
         else
             return null;
     }

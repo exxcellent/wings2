@@ -60,14 +60,14 @@ public interface SBorder extends Serializable, Cloneable {
      * @return thickness
      * @see #setThickness(int)
      */
-    public int getThickness();
+    int getThickness();
 
     /**
      * Set the thickness in pixel for this border.
      *
      * @see #getThickness()
      */
-    public void setThickness(int thickness);
+    void setThickness(int thickness);
 
     /**
      * @return The CSS Attributes which need to be applied to the component to build up the border.

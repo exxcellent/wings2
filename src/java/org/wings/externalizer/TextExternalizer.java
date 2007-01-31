@@ -21,7 +21,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Collection;
 
-public class TextExternalizer implements Externalizer {
+public class TextExternalizer implements Externalizer<String> {
 
     private static final Class[] SUPPORTED_CLASSES = {String.class};
 
@@ -49,11 +49,11 @@ public class TextExternalizer implements Externalizer {
         this.extension = extension;
     }
 
-    public String getId(Object obj) {
+    public String getId(String obj) {
         return null;
     }
 
-    public String getExtension(Object obj) {
+    public String getExtension(String obj) {
         return extension;
     }
 
@@ -61,15 +61,15 @@ public class TextExternalizer implements Externalizer {
         this.mimeType = mimeType;
     }
 
-    public String getMimeType(Object obj) {
+    public String getMimeType(String obj) {
         return mimeType;
     }
 
-    public boolean isFinal(Object obj) {
+    public boolean isFinal(String obj) {
         return true;
     }
 
-    public int getLength(Object obj) {
+    public int getLength(String obj) {
         return -1;
     }
 
@@ -92,7 +92,7 @@ public class TextExternalizer implements Externalizer {
         return supportedMimeTypes;
     }
 
-    public Collection getHeaders(Object obj) {
+    public Collection getHeaders(String obj) {
         return null;
     }
 }

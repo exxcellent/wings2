@@ -34,43 +34,42 @@ import java.util.Collection;
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  */
-public interface Externalizer {
+public interface Externalizer<SUPPORTED_TYPE> {
     /**
      * Suggest an id.
      * If a resource has a reasonable unique id, then it will be used as the externalized id.
      */
-    String getId(Object obj);
+    String getId(SUPPORTED_TYPE obj);
 
     /**
      * Returns the file extension of the given object. Some (old) browsers use
      * this information instead of the mime type. This is especially necessary
      * if delivering anything different than HTML.
      */
-    String getExtension(Object obj);
+    String getExtension(SUPPORTED_TYPE obj);
 
     /**
      * returns the mime type of the given object.
      */
-    String getMimeType(Object obj);
+    String getMimeType(SUPPORTED_TYPE obj);
 
     /**
      * Returns the externalized length of this Object. This value is set as
      * content length in the HttpServletResponse. If it return -1 no content
      * length is set.
      */
-    int getLength(Object obj);
+    int getLength(SUPPORTED_TYPE obj);
 
     /**
      * Returns true if the object is final, false if transient. It is used to
      * control the caching in the browser.
      */
-    boolean isFinal(Object obj);
+    boolean isFinal(SUPPORTED_TYPE obj);
 
     /**
      * Writes the given object into the given Device.
      */
-    void write(Object obj, Device out)
-            throws IOException;
+    void write(Object obj, Device out) throws IOException;
 
     /**
      * Returns the supported classes. The {@link ExternalizeManager}
@@ -92,7 +91,7 @@ public interface Externalizer {
      * @param obj get headers for this object
      * @return Set of {@link java.util.Map.Entry} (key-value pairs)
      */
-    Collection getHeaders(Object obj);
+    Collection getHeaders(SUPPORTED_TYPE obj);
 }
 
 

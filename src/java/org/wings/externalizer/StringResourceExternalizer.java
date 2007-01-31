@@ -23,37 +23,37 @@ import java.util.Collection;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  */
-public class StringResourceExternalizer implements Externalizer {
+public class StringResourceExternalizer implements Externalizer<StringResource> {
 
     private static final Class[] SUPPORTED_CLASSES = {StringResource.class};
 
     public static final StringResourceExternalizer SHARED_INSTANCE = new StringResourceExternalizer();
 
-    public String getId(Object obj) {
+    public String getId(StringResource obj) {
         return null;
     }
 
-    public String getExtension(Object obj) {
+    public String getExtension(StringResource obj) {
         if (obj != null)
-            return ((StringResource) obj).getExtension();
+            return obj.getExtension();
         else
             return "";
     }
 
-    public String getMimeType(Object obj) {
+    public String getMimeType(StringResource obj) {
         if (obj != null)
-            return ((StringResource) obj).getMimeType();
+            return obj.getMimeType();
         else
             return "unknown";
     }
 
-    public int getLength(Object obj) {
+    public int getLength(StringResource obj) {
         if (obj != null)
-            return ((StringResource) obj).getLength();
+            return obj.getLength();
         return -1;
     }
 
-    public boolean isFinal(Object obj) {
+    public boolean isFinal(StringResource obj) {
         return true;
     }
 
@@ -70,9 +70,9 @@ public class StringResourceExternalizer implements Externalizer {
         return null;
     }
 
-    public Collection getHeaders(Object obj) {
+    public Collection getHeaders(StringResource obj) {
         if (obj != null)
-            return ((StringResource) obj).getHeaders();
+            return obj.getHeaders();
         else
             return null;
     }

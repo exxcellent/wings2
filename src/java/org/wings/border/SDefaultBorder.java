@@ -24,14 +24,12 @@ public class SDefaultBorder
 
     /**
      * The default border is not modifyable, thus no component needs to be informed.
-     * @param newComponent
      */
     public void setComponent(SComponent newComponent) {
     }
 
     /**
      * Return no attributes.
-     * @return
      */
     public CSSAttributeSet getAttributes() {
         return null;
