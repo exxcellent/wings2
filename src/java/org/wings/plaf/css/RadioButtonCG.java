@@ -12,9 +12,7 @@
  */
 package org.wings.plaf.css;
 
-import org.wings.SAbstractButton;
-import org.wings.SIcon;
-import org.wings.SRadioButton;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.Update;
 import org.wings.resource.ResourceManager;
@@ -43,7 +41,7 @@ public final class RadioButtonCG extends CheckBoxCG implements
         }
     }
 
-    protected void writeInput(Device device, SAbstractButton button) throws IOException {
+    protected void writeInput(Device device, SAbstractButton button, boolean writeAllAttributes) throws IOException {
         if (button.getShowAsFormComponent() && !useIconsInForms) {
             Object clientProperty = button.getClientProperty("onChangeSubmitListener");
             // If the application developer attached any ActionListeners, ItemListeners or
@@ -82,6 +80,15 @@ public final class RadioButtonCG extends CheckBoxCG implements
         device.print("\"/>");
 
         device.print("<input type=\"radio\" name=\"");
+        if (writeAllAttributes) {
+            SDimension backup = button.getPreferredSize();
+            if (backup != null)
+                button.setPreferredSize(null);
+            writeAllAttributes(device, button);
+            if (backup != null)
+                button.setPreferredSize(backup);
+        }
+
         Utils.write(device, Utils.event(button));
         device.print("\" value=\"");
         Utils.write(device, button.getToggleSelectionParameter());

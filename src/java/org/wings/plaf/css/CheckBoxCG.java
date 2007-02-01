@@ -13,10 +13,7 @@
 package org.wings.plaf.css;
 
 
-import org.wings.SAbstractButton;
-import org.wings.SCheckBox;
-import org.wings.SComponent;
-import org.wings.SIcon;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.Update;
 import org.wings.resource.ResourceManager;
@@ -76,7 +73,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         // icon or input only
         if (text == null) {
             if ((showAsFormComponent && !useIconsInForms) || icon == null)
-                writeInput(device, button);
+                writeInput(device, button, true);
             else {
                 device.print("<table");
                 tableAttributes(device, button);
@@ -93,7 +90,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
 
                 protected void icon(Device device) throws IOException {
                     if ((showAsFormComponent && !useIconsInForms) || icon == null)
-                        writeInput(device, button);
+                        writeInput(device, button, false);
                     else
                         writeIcon(device, icon, Utils.isMSIE(component));
                 }
@@ -147,7 +144,7 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         Utils.printClickability(device, button, button.getToggleSelectionParameter(), button.isEnabled(), button.getShowAsFormComponent());
     }
 
-    protected void writeInput(Device device, SAbstractButton button) throws IOException {
+    protected void writeInput(Device device, SAbstractButton button, boolean writeAllAttributes) throws IOException {
         if (button.getShowAsFormComponent() && !useIconsInForms) {
             Object clientProperty = button.getClientProperty("onChangeSubmitListener");
             // If the application developer attached any ActionListeners, ItemListeners or
@@ -183,6 +180,15 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
         device.print("\" value=\"hidden_reset\"/>");
 
         device.print("<input type=\"checkbox\" name=\"");
+        if (writeAllAttributes) {
+            SDimension backup = button.getPreferredSize();
+            if (backup != null)
+                button.setPreferredSize(null);
+            writeAllAttributes(device, button);
+            if (backup != null)
+                button.setPreferredSize(backup);
+        }
+
         Utils.write(device, Utils.event(button));
         device.print("\"");
         Utils.writeEvents(device, button, null);
@@ -205,5 +211,4 @@ public class CheckBoxCG extends ButtonCG implements org.wings.plaf.CheckBoxCG {
     public Update getIconUpdate(SCheckBox checkBox, SIcon icon) {
         return icon == null ? null : new IconUpdate(checkBox, icon);
     }
-
 }
