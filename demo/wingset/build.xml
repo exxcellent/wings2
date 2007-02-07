@@ -87,6 +87,7 @@
         <copy todir="${deploy.wingset}">
             <fileset dir="build/web"/>
         </copy>
+        <touch file="${deploy.wingset}/WEB-INF/web.xml"/>
     </target>
 
 

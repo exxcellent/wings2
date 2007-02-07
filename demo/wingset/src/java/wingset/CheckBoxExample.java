@@ -65,8 +65,10 @@ public class CheckBoxExample
 
         for (int i = 0; i < buttons.length; i++) {
             SCheckBox button = buttons[i] = new SCheckBox("Text " + (i + 1));
+            if (i == 4)
+                button.setText(null);
             button.setShowAsFormComponent(true);
-            button.setActionCommand(button.getText());
+            button.setActionCommand("check" + (i+1));
             button.setToolTipText("CheckBox " + (i+1));
             button.setName("check" + (i+1));
             button.setVerticalTextPosition(textVPos[(i / 3)% 3]);

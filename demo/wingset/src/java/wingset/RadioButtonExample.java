@@ -68,7 +68,7 @@ public class RadioButtonExample
         for (int i = 0; i < buttons.length; i++) {
             SRadioButton button = buttons[i] = new SRadioButton("Text " + (i + 1));
             button.setShowAsFormComponent(true);
-            button.setActionCommand(button.getText());
+            button.setActionCommand("radio" + (i+1));
             button.setToolTipText("RadioButton " + (i+1));
             button.setName("radio" + (i+1));
             button.setVerticalTextPosition(textVPos[(i / 3)% 3]);
