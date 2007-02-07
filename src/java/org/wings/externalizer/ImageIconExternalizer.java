@@ -13,6 +13,7 @@
 package org.wings.externalizer;
 
 import java.awt.*;
+import java.util.Collection;
 
 import org.wings.io.Device;
 
@@ -22,30 +23,59 @@ import javax.swing.*;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  * @author <a href="mailto:mreinsch@to.com">Michael Reinsch</a>
  */
-public class ImageIconExternalizer extends ImageExternalizer {
-    private static final Class[] SUPPORTED_CLASSES = {ImageIcon.class};
+public class ImageIconExternalizer implements Externalizer<ImageIcon> {
+    ImageExternalizer delegate;
 
-    public static final ImageIconExternalizer SHARED_GIF_INSTANCE = new ImageIconExternalizer(FORMAT_GIF);
-    public static final ImageIconExternalizer SHARED_PNG_INSTANCE = new ImageIconExternalizer(FORMAT_PNG);
-    public static final ImageIconExternalizer SHARED_JPG_INSTANCE = new ImageIconExternalizer(FORMAT_JPG);
+    private static final Class[] SUPPORTED_CLASSES = { ImageIcon.class };
+
+    public static final ImageIconExternalizer SHARED_GIF_INSTANCE = new ImageIconExternalizer(ImageExternalizer.FORMAT_GIF);
+    public static final ImageIconExternalizer SHARED_PNG_INSTANCE = new ImageIconExternalizer(ImageExternalizer.FORMAT_PNG);
+    public static final ImageIconExternalizer SHARED_JPG_INSTANCE = new ImageIconExternalizer(ImageExternalizer.FORMAT_JPG);
 
 
     public ImageIconExternalizer() {
-        super();
+        delegate = new ImageExternalizer();
     }
 
     public ImageIconExternalizer(String format) {
-        super(format);
+        delegate = new ImageExternalizer(format);
     }
 
     public Class[] getSupportedClasses() {
         return SUPPORTED_CLASSES;
     }
 
-    @Override
+    public String[] getSupportedMimeTypes() {
+        return delegate.getSupportedMimeTypes();
+    }
+
+    public Collection getHeaders(ImageIcon obj) {
+        return delegate.getHeaders(obj.getImage());
+    }
+
+    public String getId(ImageIcon obj) {
+        return delegate.getId(obj.getImage());
+    }
+
+    public String getExtension(ImageIcon obj) {
+        return delegate.getExtension(obj.getImage());
+    }
+
+    public String getMimeType(ImageIcon obj) {
+        return delegate.getMimeType(obj.getImage());
+    }
+
+    public int getLength(ImageIcon obj) {
+        return delegate.getLength(obj.getImage());
+    }
+
+    public boolean isFinal(ImageIcon obj) {
+        return false;
+    }
+
     public void write(Object obj, Device out)
             throws java.io.IOException {
-        super.write(((ImageIcon) obj).getImage(), out);
+        delegate.write(((ImageIcon) obj).getImage(), out);
     }
 }
 
