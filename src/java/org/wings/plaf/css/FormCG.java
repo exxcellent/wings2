@@ -49,6 +49,14 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
             writeCapture(device, form);
         }
 
+        // Default button handling
+        device.print("<input type=\"hidden\" name=\"");
+        Utils.write(device, Utils.event(form));
+        device.print("\" value=\"");
+        Utils.write(device, form.getName());
+        device.print(SConstants.UID_DIVIDER);
+        device.print("\" />");
+
         SDimension preferredSize = form.getPreferredSize();
         String height = preferredSize != null ? preferredSize.getHeight() : null;
         boolean clientLayout = isMSIE(form) && height != null && !"auto".equals(height)
