@@ -399,7 +399,7 @@ final class SessionServlet
                         SStringBuilder param = new SStringBuilder();
                         param.append("    ").append(paramName).append(": ");
                         final String[] values = req.getParameterValues(paramName);
-                        param.append(values != null ? values.toString() : "null");
+                        param.append(values != null ? Arrays.toString(values) : "null");
                         log.debug(param);
                     }
                 }
@@ -418,6 +418,16 @@ final class SessionServlet
                         String[] splittedValues = values[0].split("\\|");
                         paramName = splittedValues[0];
                         values = new String[] { splittedValues[1] };
+                    }
+
+                    // Handle form submit via default button
+                    if (paramName.equals("default_button")) {
+                        if (values[0].equals("undefined")) {
+                            continue;
+                        } else {
+                            paramName = values[0];
+                            values = new String[] { "1" };
+                        }
                     }
 
                     if (log.isDebugEnabled())

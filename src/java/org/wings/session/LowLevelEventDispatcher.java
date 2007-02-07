@@ -130,16 +130,6 @@ public final class LowLevelEventDispatcher
     public boolean dispatch(String name, String[] values) {
         boolean result = false;
 
-        // make ImageButtons work in Forms - browsers return
-        // the click position as .x and .y suffix of the name
-        if (name.endsWith(".x") || name.endsWith(".X")) {
-            name = name.substring(0, name.length() - 2);
-        } else if (name.endsWith(".y") || name.endsWith(".Y")) {
-            // .. but don't process the same event twice.
-            log.debug("discard '.y' part of image event");
-            return false;
-        }
-
         // does name contain underscores? Then use the part before the
         // underscore for identification of the low level event listener
         String id;
