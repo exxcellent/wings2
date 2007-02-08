@@ -12,7 +12,6 @@
  */
 package org.wings.header;
 
-import org.wings.Renderable;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -23,7 +22,7 @@ import java.io.Serializable;
  *
  * @author Holger Engels
  */
-public class Meta implements Renderable, Serializable {
+public class Meta implements Header, Serializable {
     protected String httpEquiv;
     protected String name;
     protected String lang;

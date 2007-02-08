@@ -35,8 +35,8 @@ import java.util.Properties;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  */
 public class SFrameSetLayout extends SAbstractLayoutManager {
-    private List components = new LinkedList();
-    private List constraints = new LinkedList();
+    private final List<SComponent> components = new LinkedList<SComponent>();
+    private final List<Object> constraints = new LinkedList<Object>();
 
     private String columns;
     private String rows;

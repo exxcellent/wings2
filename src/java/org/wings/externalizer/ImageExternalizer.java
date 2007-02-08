@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.io.Device;
 import org.wings.io.DeviceOutputStream;
+import org.wings.resource.HttpHeader;
 
 import java.awt.*;
 import java.util.Collection;
@@ -142,7 +143,7 @@ public class ImageExternalizer implements Externalizer<Image> {
         out.flush();
     }
 
-    public Collection getHeaders(Image obj) {
+    public Collection<HttpHeader> getHeaders(Image obj) {
         return null;
     }
 }

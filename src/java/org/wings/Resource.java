@@ -14,6 +14,7 @@ package org.wings;
 
 import org.wings.session.Session;
 import org.wings.session.SessionManager;
+import org.wings.resource.HttpHeader;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -39,7 +40,7 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
     /**
      * a serializable class is supposed to have this ID.
      */
-    private static final long serialVersionUID = 001000L;
+    private static final long serialVersionUID = 0x200L;
 
     protected String id;
 
@@ -47,7 +48,7 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
 
     protected String mimeType;
 
-    protected Collection headers;
+    protected Collection<HttpHeader> headers;
 
     protected Resource(String extension, String mimeType) {
         this.extension = extension;
@@ -74,11 +75,12 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
         return mimeType;
     }
 
-    public void setHeaders(Collection/*<Map.Entry>*/ headers) {
+
+    public void setHeaders(Collection<HttpHeader> headers) {
         this.headers = headers;
     }
 
-    public Collection getHeaders() {
+    public Collection<HttpHeader> getHeaders() {
         return headers;
     }
 
@@ -101,24 +103,24 @@ public abstract class Resource implements Serializable, URLResource, Renderable 
     /**
      * Internal structure to manage HTTP headers which should be delivered with a resource to the client.
      */
-    public static final class HeaderEntry implements Map.Entry, Serializable {
+    public static final class HeaderEntry implements HttpHeader, Serializable {
         /**
          * a serializable class is supposed to have this ID.
          */
-        private static final long serialVersionUID = 001000L;
+        private static final long serialVersionUID = 0x200L;
 
-        private final Serializable key;
-        Serializable value;
+        private final String key;
+        private Serializable value;
 
         /**
          * Create new entry.
          */
-        public HeaderEntry(Serializable k, Serializable v) {
+        public HeaderEntry(String k, Serializable v) {
             key = k;
             value = v;
         }
 
-        public Object getKey() {
+        public String getKey() {
             return key;
         }
 

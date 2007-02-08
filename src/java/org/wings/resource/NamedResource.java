@@ -12,6 +12,13 @@
  */
  package org.wings.resource;
 
-public interface NamedResource {	
+/**
+ * If a {@link org.wings.Resource} implements this interface, then the resource name will be used
+ * as file name by the externalizer.
+ */
+public interface NamedResource {
+    /**
+     * @return A valid name for this externalized HTTP resource.
+     */
     String getResourceName();
 }

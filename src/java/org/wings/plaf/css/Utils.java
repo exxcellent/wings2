@@ -1097,7 +1097,7 @@ public final class Utils {
                 style.append("height:100%;");
             }
             if (style.length() > 0)
-                Utils.optAttribute(device, "style", style.toString());
+                Utils.optAttribute(device, "style", style);
         }
     }
 

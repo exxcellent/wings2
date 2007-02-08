@@ -101,9 +101,9 @@ public class Session implements PropertyService, Serializable {
 
     private LowLevelEventDispatcher dispatcher = new LowLevelEventDispatcher();
 
-    private final HashMap props = new HashMap();
+    private final HashMap<String, Object> props = new HashMap<String, Object>();
 
-    private final HashSet frames = new HashSet();
+    private final HashSet<SFrame> frames = new HashSet<SFrame>();
 
     private long uniqueIdCounter = 1;
 
@@ -476,7 +476,7 @@ public class Session implements PropertyService, Serializable {
      *
      * @return a <code>Set</code> value
      */
-    public Set getFrames() {
+    public Set<SFrame> getFrames() {
         return Collections.unmodifiableSet(frames);
     }
 
@@ -486,10 +486,10 @@ public class Session implements PropertyService, Serializable {
      * @return a <code>SFrame</code> value
      */
     public SFrame getRootFrame() {
-        if (frames.size() == 0)
+        if (frames.isEmpty())
             return null;
 
-        SFrame rootFrame = (SFrame) frames.iterator().next();
+        SFrame rootFrame = frames.iterator().next();
         while (rootFrame.getParent() != null)
             rootFrame = (SFrame) rootFrame.getParent();
 

@@ -23,7 +23,7 @@ import org.wings.resource.DefaultURLResource;
  *
  * @author armin
  *         created at 15.01.2004 17:55:28
- * @deprecated use StyleSheetHeader instead
+ * [bsc] why?: deprecated use StyleSheetHeader instead
  */
 public class StyleSheetLink extends Link {
 

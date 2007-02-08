@@ -16,6 +16,7 @@ import java.awt.*;
 import java.util.Collection;
 
 import org.wings.io.Device;
+import org.wings.resource.HttpHeader;
 
 import javax.swing.*;
 
@@ -49,7 +50,7 @@ public class ImageIconExternalizer implements Externalizer<ImageIcon> {
         return delegate.getSupportedMimeTypes();
     }
 
-    public Collection getHeaders(ImageIcon obj) {
+    public Collection<HttpHeader> getHeaders(ImageIcon obj) {
         return delegate.getHeaders(obj.getImage());
     }
 

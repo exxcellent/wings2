@@ -100,17 +100,7 @@ public abstract class DynamicResource
      *
      * @return Set of {@link java.util.Map.Entry} (key-value pairs)
      */
-    public Collection getHeaders() {
-        return null;
-    }
-
-    /**
-     * Get additional http-headers.
-     * Returns <tt>null</tt>, if there are no additional headers to be set.
-     *
-     * @return Set of {@link java.util.Map.Entry} (key-value pairs)
-     */
-    public Set getCookies() {
+    public Collection<HttpHeader> getHeaders() {
         return null;
     }
 }

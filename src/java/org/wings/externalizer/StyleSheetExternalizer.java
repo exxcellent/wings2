@@ -13,6 +13,7 @@
 package org.wings.externalizer;
 
 import org.wings.Renderable;
+import org.wings.resource.HttpHeader;
 import org.wings.io.Device;
 import org.wings.style.StyleSheet;
 
@@ -61,7 +62,7 @@ public class StyleSheetExternalizer implements Externalizer<StyleSheet> {
         return SUPPORTED_MIME_TYPES;
     }
 
-    public Collection getHeaders(StyleSheet obj) {
+    public Collection<HttpHeader> getHeaders(StyleSheet obj) {
         return null;
     }
 }

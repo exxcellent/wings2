@@ -2,7 +2,10 @@ package org.wings.util;
 
 import org.wings.session.SessionManager;
 
-public class SessionLocal {
+/**
+ * A helper class for storing session local variables similar to {@link ThreadLocal} for thread local variables.
+ */
+public class SessionLocal<T> {
 
     private final String propertyName;
 
@@ -16,23 +19,23 @@ public class SessionLocal {
      * whether the property has been initialized
      * for the current session
      */
-    private class ValueWrapper {
-        Object value;
+    private static class ValueWrapper<T> {
+        T value;
     }
 
     /**
      * return the current value of this variable from the session
      *
-     * @return
+     * @return The current value or the result of {@link #initialValue()} if called for the first time.
      */
-    public Object get() {
-        ValueWrapper valueWrapper = (ValueWrapper) SessionManager.getSession().getProperty(this.propertyName);
+    public T get() {
+        ValueWrapper<T> valueWrapper = (ValueWrapper<T>) SessionManager.getSession().getProperty(this.propertyName);
         /*
          * null means that the property is being used for the first time this session,
          * initialize the value, which may be null.
          */
         if (valueWrapper == null) {
-            Object value = initialValue();
+            T value = initialValue();
             set(value);
             return value;
         }
@@ -44,20 +47,20 @@ public class SessionLocal {
     /**
      * override this method to get the initial value for a new session
      *
-     * @return
+     * @return The stored value
      */
-    protected Object initialValue() {
+    protected T initialValue() {
         return null;
     }
 
     /**
-     * set the value.  the value which is set may be null,
+     * Set the value.  the value which is set may be null,
      * but the object set is never null because it is wrapped.
      *
-     * @param value
+     * @param value Value. <code>null</code> is also a valid value.
      */
-    public void set(Object value) {
-        ValueWrapper valueWrapper = new ValueWrapper();
+    public void set(T value) {
+        ValueWrapper<T> valueWrapper = new ValueWrapper<T>();
         valueWrapper.value = value;
         SessionManager.getSession().setProperty(this.propertyName, valueWrapper);
     }

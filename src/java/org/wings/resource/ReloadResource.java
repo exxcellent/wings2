@@ -35,9 +35,9 @@ import org.wings.io.Device;
  * @version $Revision$
  */
 public class ReloadResource extends DynamicResource {
-    private final transient static Log log = LogFactory.getLog(ReloadResource.class);
+    private final static Log log = LogFactory.getLog(ReloadResource.class);
 
-    private static final ArrayList DEFAULT_CODE_HEADER = new ArrayList();
+    private static final ArrayList<HttpHeader> DEFAULT_CODE_HEADER = new ArrayList<HttpHeader>();
     private final PropertyChangeListener changeListener;
 
     static {
@@ -92,7 +92,7 @@ public class ReloadResource extends DynamicResource {
      *
      * @return A <code>Collection</code> of {@link org.wings.Resource.HeaderEntry} objects.
      */
-    public Collection getHeaders() {
+    public Collection<HttpHeader> getHeaders() {
         if (getFrame().isNoCaching())
             return DEFAULT_CODE_HEADER;
         else

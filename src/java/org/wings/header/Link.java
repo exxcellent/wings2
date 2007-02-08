@@ -12,7 +12,6 @@
  */
 package org.wings.header;
 
-import org.wings.Renderable;
 import org.wings.SimpleURL;
 import org.wings.URLResource;
 import org.wings.io.Device;
@@ -28,7 +27,7 @@ import java.io.Serializable;
  *
  * @author Holger Engels
  */
-public class Link implements Renderable, Serializable {
+public class Link implements Header, Serializable {
     protected String rel = null;
     protected String rev = null;
     protected String type = null;

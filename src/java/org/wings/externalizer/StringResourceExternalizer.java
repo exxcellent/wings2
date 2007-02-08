@@ -15,6 +15,7 @@ package org.wings.externalizer;
 import org.wings.Renderable;
 import org.wings.io.Device;
 import org.wings.resource.StringResource;
+import org.wings.resource.HttpHeader;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -70,7 +71,7 @@ public class StringResourceExternalizer implements Externalizer<StringResource> 
         return null;
     }
 
-    public Collection getHeaders(StringResource obj) {
+    public Collection<HttpHeader> getHeaders(StringResource obj) {
         if (obj != null)
             return obj.getHeaders();
         else

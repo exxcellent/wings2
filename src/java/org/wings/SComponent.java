@@ -1241,7 +1241,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
                     if (getter == null || getter.getName().startsWith("getParent"))
                         continue;
                     // System.out.println("invoking " + this.getClass().getDescription()+"."+getter.getDescription());
-                    Object value = getter.invoke(this, null);
+                    Object value = getter.invoke(this);
                     if (first)
                         first = false;
                     else

@@ -16,6 +16,7 @@ import org.wings.Renderable;
 import org.wings.StaticResource;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.NamedResource;
+import org.wings.resource.HttpHeader;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -75,7 +76,7 @@ public class StaticResourceExternalizer implements Externalizer<StaticResource> 
         return null;
     }
 
-    public Collection getHeaders(StaticResource obj) {
+    public Collection<HttpHeader> getHeaders(StaticResource obj) {
         if (obj != null)
             return obj.getHeaders();
         else

@@ -13,6 +13,7 @@
 package org.wings.externalizer;
 
 import org.wings.Resource;
+import org.wings.resource.HttpHeader;
 import org.wings.io.Device;
 
 import java.io.IOException;
@@ -33,15 +34,15 @@ public class ResourceExternalizer implements Externalizer<Resource> {
     }
 
     public String getExtension(Resource obj) {
-        return ((Resource) obj).getExtension();
+        return obj.getExtension();
     }
 
     public String getMimeType(Resource obj) {
-        return ((Resource) obj).getMimeType();
+        return obj.getMimeType();
     }
 
     public int getLength(Resource obj) {
-        return ((Resource) obj).getLength();
+        return obj.getLength();
     }
 
     public boolean isFinal(Resource obj) {
@@ -61,8 +62,8 @@ public class ResourceExternalizer implements Externalizer<Resource> {
         return null;
     }
 
-    public Collection getHeaders(Resource obj) {
-        return ((Resource) obj).getHeaders();
+    public Collection<HttpHeader> getHeaders(Resource obj) {
+        return obj.getHeaders();
     }
 
 }

@@ -32,7 +32,7 @@ import org.wings.SFrame;
  * @author <a href="mailto:engels@mercatis.de">Holger Engels</a>
  */
 public class ReloadManager {
-    private final Set dirtyFrames = new HashSet();
+    private final Set<SFrame> dirtyFrames = new HashSet<SFrame>();
     private SReloadFrame reloadFrame = null;
 
     /**
@@ -50,7 +50,7 @@ public class ReloadManager {
     }
 
     public SComponent[] getDirtyComponents(int aspect) {
-        return (SComponent[]) dirtyFrames.toArray(new SFrame[dirtyFrames.size()]);
+        return dirtyFrames.toArray(new SFrame[dirtyFrames.size()]);
     }
 
     public void clearDirtyComponents(int aspect) {

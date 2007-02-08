@@ -13,6 +13,7 @@
 package org.wings.externalizer;
 
 import org.wings.io.Device;
+import org.wings.resource.HttpHeader;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -89,9 +90,9 @@ public interface Externalizer<SUPPORTED_TYPE> {
      * Returns <tt>null</tt>, if there are no additional headers to be set.
      *
      * @param obj get headers for this object
-     * @return Set of {@link java.util.Map.Entry} (key-value pairs)
+     * @return Set of {@link java.util.Map.Entry} (key-value pairs) or <code>null</code> if none should be added.
      */
-    Collection getHeaders(SUPPORTED_TYPE obj);
+    Collection<HttpHeader> getHeaders(SUPPORTED_TYPE obj);
 }
 
 

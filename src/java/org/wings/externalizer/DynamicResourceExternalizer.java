@@ -14,6 +14,7 @@ package org.wings.externalizer;
 
 import org.wings.io.Device;
 import org.wings.resource.DynamicResource;
+import org.wings.resource.HttpHeader;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -70,7 +71,7 @@ public class DynamicResourceExternalizer implements Externalizer<DynamicResource
         return null;
     }
 
-    public Collection getHeaders(DynamicResource obj) {
+    public Collection<HttpHeader> getHeaders(DynamicResource obj) {
         if (obj != null)
             return obj.getHeaders();
         else

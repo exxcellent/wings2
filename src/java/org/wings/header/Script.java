@@ -12,7 +12,6 @@
  */
 package org.wings.header;
 
-import org.wings.Renderable;
 import org.wings.SimpleURL;
 import org.wings.URLResource;
 import org.wings.io.Device;
@@ -24,7 +23,7 @@ import java.io.Serializable;
  *
  * @author Holger Engels
  */
-public class Script implements Renderable, Serializable {
+public class Script implements Header, Serializable {
     protected String language = null;
     protected String type = null;
     protected URLResource urlSource = null;

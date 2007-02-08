@@ -16,6 +16,7 @@
 package org.wings.externalizer;
 
 import org.wings.io.Device;
+import org.wings.resource.HttpHeader;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -92,7 +93,7 @@ public class TextExternalizer implements Externalizer<String> {
         return supportedMimeTypes;
     }
 
-    public Collection getHeaders(String obj) {
+    public Collection<HttpHeader> getHeaders(String obj) {
         return null;
     }
 }
