@@ -695,6 +695,7 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
         contents.remove(index);
         ((Page) pages.get(index)).component = component;
         contents.add(component, component.getName(), index);
+        component.setVisible(getSelectedIndex() == index);        
         reload();
     }
 
