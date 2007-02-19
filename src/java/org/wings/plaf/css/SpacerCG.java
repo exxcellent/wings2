@@ -31,7 +31,7 @@ public final class SpacerCG extends AbstractComponentCG implements org.wings.pla
         Utils.optAttribute(device, "width", width);
         Utils.optAttribute(device, "height", height);
         Utils.optAttribute(device, "class", "spacer");
-        Utils.emptyAttribute(device, "alt");
+        Utils.attribute(device, "alt", null);
         device.print("/>");
     }
 }

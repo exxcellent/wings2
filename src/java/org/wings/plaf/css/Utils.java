@@ -709,16 +709,6 @@ public final class Utils {
     }
 
     /**
-     * Prints an empty attribute. I.e. alt=""
-     */
-    public static void emptyAttribute(Device d, String attr)
-            throws IOException {
-        if (attr != null) {
-            d.print(" ").print(attr).print("=\"\"");
-        }
-    }
-
-    /**
      * writes the given java.awt.Color to the device. Speed optimized;
      * character conversion avoided.
      */

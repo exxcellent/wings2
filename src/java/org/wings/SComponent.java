@@ -727,12 +727,11 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Set an CSS class name provided by the laf-provided Cascading Style Sheet (CSS), which should
      * be applied to this component.
-     * <p/>
+     * <p>
+     * <b>Note:</b> Probably the {@link #addStyle(String)} method is more what you want.
      * <p>By <b>default</b> this is set to the wingS component class name (i.e. "SLabel").
-     * <p/>
      * <p>The PLAFs render the value of this String to an <code>class="<i>cssClassName</i>"</code> attribute
      * inside the generated HTML code of this component.
-     * <p/>
      * <p>The default wingS plaf initializes this by default to the wingS component class name
      * (i.e. <code>SButton</code> for button instances). <br/>Please be aware if you <b>replace</b> this
      * default value, the default wingS style will no longer take effect, as they operate on these
@@ -740,11 +739,43 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * <code>c.setStyle(c.getStyle + "myStyle");</code>
      *
      * @param cssClassName The new CSS name value for this component
+     * @see #addStyle(String)
+     * @see #removeStyle(String)
      */
     // <p>Please consider using {@link #addStyle(String)} to avoid disabling of default wingS stylesheet set.
     public void setStyle(String cssClassName) {
         reloadIfChange(style, cssClassName);
         this.style = cssClassName;
+    }
+
+    /**
+     * Append a style class name to the style string. Use this method if you want to append a specific CSS
+     * class to a componentn without loosing the other CSS styles assigned to the component (i.e. the wingS
+     * default styles.)
+     * @param additionalCssClassName The style class to remove (if existing).
+     * @see #removeStyle(String)
+     */
+    public void addStyle(String additionalCssClassName) {
+        if (this.style == null || this.style.length() == 0) {
+            setStyle(additionalCssClassName);  // trivial case
+        } else {
+            if (this.style.indexOf(additionalCssClassName) < 0) {
+                setStyle(this.style+" "+additionalCssClassName);
+            }
+        }
+    }
+
+    /**
+     * Remove a style class definiton from this component.
+     * @param cssStyleClassName The style class to remove (if existing).
+     */
+    public void removeStyle(String cssStyleClassName) {
+        if (this.style != null && cssStyleClassName != null && this.style.indexOf(cssStyleClassName) >= 0) {
+            if (this.style.length() == cssStyleClassName.length())
+                setStyle(null); // trivial case
+            else
+                setStyle(this.style.replaceAll("\\b"+cssStyleClassName+"\\b","").replaceAll("  "," ").trim());
+        }
     }
 
     /**
@@ -1727,7 +1758,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return true, if displayed as link, false when displayed as html form component.
      * @see #setShowAsFormComponent(boolean)
      */
-    // TODO bsc:  rename to isShowas...
     public boolean getShowAsFormComponent() {
         return showAsFormComponent && getResidesInForm();
     }

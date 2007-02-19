@@ -272,8 +272,7 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.print(" alt=\"");
-        device.print(icon.getIconTitle());
-        device.print("\"/>");
+        Utils.attribute(device, "alt", icon.getIconTitle());
+        device.print("/>");
     }
 }

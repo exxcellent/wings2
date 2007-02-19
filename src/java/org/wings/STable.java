@@ -454,8 +454,17 @@ public class STable extends SComponent
         if (isEditing() && action.indexOf("_e_") != -1 && cellEditorComponent != null) {
             cellEditorComponent.processLowLevelEvent(action, values);
         }
-        else
-            this.lastReceivedLowLevelEvents = values;
+        else {
+            if (this.lastReceivedLowLevelEvents == null) {
+                this.lastReceivedLowLevelEvents = values;
+            } else if (values != null && values.length > 0) {
+                // more than one parameter targets the table. collecting parameter values
+                String[] joinedParameters = new String[this.lastReceivedLowLevelEvents.length + values.length];
+                System.arraycopy(this.lastReceivedLowLevelEvents, 0, joinedParameters, 0, this.lastReceivedLowLevelEvents.length);
+                System.arraycopy(values, 0, joinedParameters, this.lastReceivedLowLevelEvents.length, values.length);
+                this.lastReceivedLowLevelEvents = joinedParameters;
+            }
+        }
 
         SForm.addArmedComponent(this);
     }

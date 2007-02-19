@@ -232,7 +232,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 Utils.optAttribute(device, "src", icon.getURL());
                 Utils.optAttribute(device, "width", icon.getIconWidth());
                 Utils.optAttribute(device, "height", icon.getIconHeight());
-                Utils.optAttribute(device, "alt", icon.getIconTitle());
+                Utils.attribute(device, "alt", icon.getIconTitle());
                 device.print("/>");
             }
 
@@ -247,7 +247,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
                 Utils.optAttribute(device, "src", icon.getURL());
                 Utils.optAttribute(device, "width", icon.getIconWidth());
                 Utils.optAttribute(device, "height", icon.getIconHeight());
-                Utils.optAttribute(device, "alt", icon.getIconTitle());
+                Utils.attribute(device, "alt", icon.getIconTitle());
                 device.print("/>");
             }
 

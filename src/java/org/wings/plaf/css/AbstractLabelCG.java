@@ -56,9 +56,8 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
 
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-        device.print(" alt=\"");
-        device.print(icon.getIconTitle());
-        device.print("\"/>");
+        Utils.attribute(device, "alt", icon.getIconTitle());
+        device.print("/>");
     }
 
     protected class TextUpdate extends AbstractUpdate {

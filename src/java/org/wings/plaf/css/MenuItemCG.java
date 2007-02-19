@@ -35,9 +35,8 @@ public class MenuItemCG extends ButtonCG implements org.wings.plaf.MenuItemCG {
             Utils.optAttribute(device, "src", icon.getURL());
             Utils.optAttribute(device, "width", icon.getIconWidth());
             Utils.optAttribute(device, "height", icon.getIconHeight());
-            device.print(" alt=\"");
-            device.print(icon.getIconTitle());
-            device.print("\"/>");
+            Utils.attribute(device, "alt", icon.getIconTitle());
+            device.print("/>");
         }
         String text = menuItem.getText();
         if (text != null) {
