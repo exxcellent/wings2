@@ -138,6 +138,7 @@ public class SForm  extends SContainer implements LowLevelEventListener {
      * If <code>null</code> enter key pressed will be catched by the wings framework.
      */
     public void setDefaultButton(SButton defaultButton) {
+        reloadIfChange(this.defaultButton, defaultButton);
         this.defaultButton = defaultButton;
     }
 
@@ -208,7 +209,7 @@ public class SForm  extends SContainer implements LowLevelEventListener {
      * the request. The calls on the components will be ordered dependend on their type.
      *
      * @param component The component to callback for event firing in a later phase of the request
-     * @see #fireEvents() 
+     * @see #fireEvents()
      */
     public static void addArmedComponent(LowLevelEventListener component) {
         Set armedComponents = (Set) threadArmedComponents.get();
@@ -386,12 +387,12 @@ public class SForm  extends SContainer implements LowLevelEventListener {
      * Get the current encoding type, as set with
      * {@link #setEncodingType(String)}. If no encoding type was set, this
      * method detects the best encoding type. This can be expensive, so if
-     * you can, set the encoding type. 
+     * you can, set the encoding type.
      *
      * @return string containing the encoding type. This is something like
      *         <code>multipart/form-data</code>,
      *         <code>application/x-www-form-urlencoded</code> .. or 'null'
-     *         by default. 
+     *         by default.
      */
     public String getEncodingType() {
         if (encType == null) {
@@ -403,7 +404,7 @@ public class SForm  extends SContainer implements LowLevelEventListener {
 
     /**
      * Detects if the Container contains a component that needs a certain encoding type
-     * @return <code>null</code> or {@link #ENC_TYPE_MULTIPART_FORM}   
+     * @return <code>null</code> or {@link #ENC_TYPE_MULTIPART_FORM}
      */
     protected String detectEncodingType(SContainer pContainer) {
         for (int i = 0; i < pContainer.getComponentCount(); i++) {

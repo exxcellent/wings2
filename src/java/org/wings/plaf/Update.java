@@ -21,8 +21,6 @@ public interface Update {
 
         public String getName();
 
-        public void addParameter(Object param);
-
         public Iterator getParameters();
 
     }

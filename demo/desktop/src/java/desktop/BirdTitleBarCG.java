@@ -56,7 +56,7 @@ public class BirdTitleBarCG
         Utils.optAttribute(device, "src", icon.getURL());
         Utils.optAttribute(device, "width", icon.getIconWidth());
         Utils.optAttribute(device, "height", icon.getIconHeight());
-        Utils.atribute(device, "alt", icon.getIconTitle());
+        Utils.optAttribute(device, "alt", icon.getIconTitle());
         device.print("/>");
     }
 
