@@ -197,7 +197,7 @@ public class DefaultReloadManager implements ReloadManager {
             if (fullReplaceUpdates.containsKey(componentHierarchy.get(topPath))) {
                 while (i.hasNext()) {
                     String subPath = (String) i.next();
-                    if (subPath.startsWith(topPath)) {
+                    if (subPath.startsWith(topPath + "/")) {
                         fullReplaceUpdates.remove(componentHierarchy.get(subPath));
                         fineGrainedUpdates.remove(componentHierarchy.get(subPath));
                         i.remove();
