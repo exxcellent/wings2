@@ -58,20 +58,20 @@ public class DefaultDocument implements SDocument {
         buffer.setLength(0);
         if (text != null){
             buffer.append(text);
-            if((listeners == null) || (listeners.getListenerCount() > 0)){
-                // If there are any document listeners: Generate document change events!
-            	List actions = EditTranscriptGenerator.generateEvents(origText, text);
+        }
+        if((listeners == null) || (listeners.getListenerCount() > 0)){
+            // If there are any document listeners: Generate document change events!
+            List actions = EditTranscriptGenerator.generateEvents(origText, text);
 
-                // and fire them!
-                fireChangeUpdate(0, buffer.length());
-            	for(int i = 0; i < actions.size(); i++){
-            		DocumentEvent de = (DocumentEvent) actions.get(i);
-            		if(de.getType().equals(DocumentEvent.EventType.INSERT)){
-            			fireInsertUpdate(de.getOffset(), de.getLength());
-            		} else if(de.getType().equals(DocumentEvent.EventType.REMOVE)){
-            			fireRemoveUpdate(de.getOffset(), de.getLength());
-            		}
-            	}
+            // and fire them!
+            fireChangeUpdate(0, buffer.length());
+            for(int i = 0; i < actions.size(); i++){
+                DocumentEvent de = (DocumentEvent) actions.get(i);
+                if(de.getType().equals(DocumentEvent.EventType.INSERT)){
+                    fireInsertUpdate(de.getOffset(), de.getLength());
+                } else if(de.getType().equals(DocumentEvent.EventType.REMOVE)){
+                    fireRemoveUpdate(de.getOffset(), de.getLength());
+                }
             }
         }
     }
