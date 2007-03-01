@@ -118,9 +118,6 @@ public class TextFieldCG extends AbstractComponentCG implements
 
         if (textField instanceof SFormattedTextField) {
             SFormattedTextField formattedTextField = (SFormattedTextField)textField;
-            String text = textField.getText();
-            if (text == null)
-                text = "";
             if ( !formattedTextField.isEditValid() ) {
                 textField.setForeground( java.awt.Color.RED );
             }
@@ -147,7 +144,7 @@ public class TextFieldCG extends AbstractComponentCG implements
     	return new TextUpdate(textField, text);
     }
 
-    protected class TextUpdate extends AbstractUpdate {
+    protected static class TextUpdate extends AbstractUpdate {
 
         private String text;
 
@@ -166,12 +163,12 @@ public class TextFieldCG extends AbstractComponentCG implements
     }
 
     public static class CallableFormatter {
-        Map formatters = new WeakHashMap();
-        private final String name = new String("CallableFormatter");
+        Map<SAbstractFormatter, Boolean> formatters = new WeakHashMap<SAbstractFormatter, Boolean>();
+        private final String name = "CallableFormatter";
 
         public List validate(String key, String name, String text, String lastValid) {
             String value = "";
-            List list = new LinkedList();
+            List<String> list = new LinkedList<String>();
             SAbstractFormatter formatter = formatterByKey(key);
             if ( formatter != null ) {
                 list.add( name );
@@ -188,16 +185,17 @@ public class TextFieldCG extends AbstractComponentCG implements
         }
 
         protected SAbstractFormatter formatterByKey(String key) {
-            for (Iterator iterator = formatters.keySet().iterator(); iterator.hasNext();) {
-                SAbstractFormatter formatter = (SAbstractFormatter)iterator.next();
-                if (key.equals("" + System.identityHashCode(formatter)))
+            for (SAbstractFormatter sAbstractFormatter : formatters.keySet()) {
+                SAbstractFormatter formatter = (SAbstractFormatter) sAbstractFormatter;
+                if (key.equals("" + System.identityHashCode(formatter))) {
                     return formatter;
+                }
             }
             return null;
         }
 
         private String registerFormatter(SAbstractFormatter formatter) {
-            formatters.put(formatter, formatter);
+            formatters.put(formatter, Boolean.TRUE);
             return "" + System.identityHashCode(formatter);
         }
 

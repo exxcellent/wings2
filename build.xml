@@ -35,16 +35,21 @@
         </tstamp>
     </target>
 
-    <target depends="prepare"  name="generate">
+    <target name="generate" depends="generate-wings.js, generate-version.java"
+            description="Generates all artefacts (joined JS and Version.java)"/>
+
+    <target name="generate-version.java" depends="prepare">
         <!-- Generate wingS version information class -->
         <filter token="WINGS_VERSION" value="${wings.version}"/>
         <filter token="COMPILE_TIME" value="${wings.buildtime}"/>
         <copy file="src/res/org/wings/Version.java.in"
             tofile="src/java/org/wings/Version.java"
             filtering="yes"/>
+    </target>
 
+    <target name="generate-wings.js" depends="prepare">
         <!-- generate concatenated JS-file -->
-        <concat destfile="src/res/org/wings/js/wings/all.js">
+        <concat destfile="src/res/org/wings/js/wings/wings.js">
             <filelist dir="src/res/org/wings/js/wings">
                 <file name="global.js"/>
                 <file name="event.js"/>
@@ -56,6 +61,17 @@
                 <file name="component.js"/>
             </filelist>
         </concat>
+
+       <java jar="tools/javascript-compressor/custom_rhino.jar" fork="true" failonerror="true" maxmemory="128m">
+         <arg value="${basedir}/tools/javascript-compressor/packer.js"/>
+         <arg value="${basedir}/src/res/org/wings/js/wings/wings.js"/>
+         <arg value="${basedir}/src/res/org/wings/js/wings/wings-min.js"/>
+         <classpath>
+           <pathelement location="tools/javascript-compressor/custom_rhino.jar"/>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+       </java>
+        
     </target>
 
     <target name="compile" depends="prepare, generate">
