@@ -164,7 +164,9 @@ public class TextFieldCG extends AbstractComponentCG implements
 
     public static class CallableFormatter {
         Map<SAbstractFormatter, Boolean> formatters = new WeakHashMap<SAbstractFormatter, Boolean>();
-        private final String name = "CallableFormatter";
+
+        /* ATTENTION: This String-copy is used as UNIQUE object reference with common equals(). */
+        private final String name = new String("CallableFormatter");
 
         public List validate(String key, String name, String text, String lastValid) {
             String value = "";
