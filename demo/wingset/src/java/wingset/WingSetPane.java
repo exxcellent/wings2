@@ -32,9 +32,11 @@ abstract public class WingSetPane
         extends SForm
         implements SConstants
 {
-    protected final static transient Log log = LogFactory.getLog(WingSetPane.class);
+    protected final static Log log = LogFactory.getLog(WingSetPane.class);
     private static final SResourceIcon SOURCE_LABEL_ICON = new SResourceIcon("org/wings/icons/source_java.png");
     private boolean initialized = false;
+    private SComponent controlsComponent;
+    private SComponent exampleComponent;
 
     public WingSetPane() {
         setLayout(new SBorderLayout());
@@ -67,18 +69,18 @@ abstract public class WingSetPane
                 initializePanel();
             }
 
-            /* Debug method to test memory leak with invisible low level event listerner (i.e. back button example)
-             public void componentHidden(SComponentEvent e) {
-                initialized = false;
-                if (getComponentCount() > 1)
-                    remove(0);
-            }*/
+            public void componentHidden(SComponentEvent e) {
+                // TODO FIXME : Uncommenting the following line MUST work but doesnt:
+                // I leads to the correct unregistering of headers.
+                // Switch between XCalendar and XColorpicker i.e. --> Application hangs.
+                // passivatePanel();
+            }
         });
     }
 
-    protected void initializePanel() {
+    protected final void initializePanel() {
         if (!initialized) {
-            SComponent controlsComponent = createControls();
+            controlsComponent = createControls();
             if (controlsComponent != null) {
                 if (!Utils.isMSIE(this) && controlsComponent instanceof SContainer)
                     controlsComponent.setBorder(new SEmptyBorder(0, 1, 0, 1));
@@ -88,7 +90,7 @@ abstract public class WingSetPane
                 add(controlsComponent, SBorderLayout.NORTH);
             }
 
-            SComponent exampleComponent = createExample();
+            exampleComponent = createExample();
             if (exampleComponent != null) {
                 if (!Utils.isMSIE(this))
                     exampleComponent.setBorder(new SEmptyBorder(0, 1, 1, 1));
@@ -100,6 +102,14 @@ abstract public class WingSetPane
             }
             initialized = true;
         }
+    }
+
+    protected final void passivatePanel() {
+        // Dumb: Always dropp all components to test header deregistration etc.
+        // Maybe make this configurable per example
+        remove(controlsComponent);
+        remove(exampleComponent);
+        initialized = false;
     }
 
     protected abstract SComponent createControls();

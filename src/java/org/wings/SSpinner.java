@@ -27,7 +27,7 @@ import org.wings.text.SDateFormatter;
 import org.wings.text.SDefaultFormatterFactory;
 
 /**
- *
+ * A single line input field that lets the user select a number or an object value from an ordered sequence.
  * @author erik
  */
 public class SSpinner extends SComponent {

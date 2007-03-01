@@ -29,7 +29,7 @@ import java.net.URL;
  * border, a title or a footer line by defining your own template with a STemplateLayout.
  */
 public class SRootLayout extends STemplateLayout {
-    private final static transient Log log = LogFactory.getLog(SRootLayout.class);
+    private final static Log log = LogFactory.getLog(SRootLayout.class);
 
     /**
      * Use the default template.

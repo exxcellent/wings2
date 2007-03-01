@@ -45,8 +45,8 @@ public class WingSet2
     private final STree tree;
     private final SPanel header;
     private final SPanel content;
-    private WingsImage wingsImage;
-    SCardLayout cards = new SCardLayout();
+    private final WingsImage wingsImage;
+    public final SCardLayout cards = new SCardLayout();
 
     /**
      * Constructor of the wingS application.

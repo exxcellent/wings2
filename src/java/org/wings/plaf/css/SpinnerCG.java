@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.LinkedList;
 
 import org.wings.SSpinner;
-import org.wings.SSpinner.DefaultEditor;
 import org.wings.SComponent;
 import org.wings.SFormattedTextField;
 import org.wings.SResourceIcon;
+import org.wings.SIcon;
 
 import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
@@ -40,17 +40,20 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
 
     private static final Log log = LogFactory.getLog( SpinnerCG.class );
 
-    private static final SResourceIcon iconNext = new SResourceIcon("org/wings/icons/SpinnerNext.gif");
-    private static final SResourceIcon iconPrev = new SResourceIcon("org/wings/icons/SpinnerPrev.gif");
+    private static final SResourceIcon DEFAULT_ICON_NEXT = new SResourceIcon("org/wings/icons/SpinnerNext.gif");
+    private static final SResourceIcon DEFAULT_ICON_PREV = new SResourceIcon("org/wings/icons/SpinnerPrev.gif");
 
     private static final long serialVersionUID = 1L;
 
-    private SessionLocal sessionLocal = new SessionLocal();
+    private SessionLocal<CallableSpinner> sessionLocal = new SessionLocal<CallableSpinner>();
+
+    private SIcon nextIcon = DEFAULT_ICON_NEXT;
+    private SIcon prevIcon = DEFAULT_ICON_PREV;
 
     public void installCG(SComponent component) {
         super.installCG(component);
 
-        if (!CallableManager.getInstance().containsCallable("CallableSpinner")) {            
+        if (!CallableManager.getInstance().containsCallable("CallableSpinner")) {
             CallableManager.getInstance().registerCallable("CallableSpinner", getCallableSpinner(), CallableSpinner.class);
         }
     }
@@ -64,20 +67,20 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         final SSpinner spinner = (SSpinner) component;
 
         String key = getCallableSpinner().register(spinner);
-        SFormattedTextField ftf = ((DefaultEditor)spinner.getEditor()).getTextField();
+        SFormattedTextField ftf = spinner.getEditor().getTextField();
 
         device.print( "\n<table" );
         writeAllAttributes(device, component);
         device.print( "><tr><td>\n" );
         spinner.getEditor().write( device );
         device.print( "\n</td><td style=\"width:0px; font-size: 0px; line-height: 0\">\n" );
-        device.print( "<img onclick=\"CallableSpinner.getValue('"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'0',wingS.component.spinnerCallback)\" src=\"" + iconNext.getURL() + "\" style=\"display:block;vertical-align:bottom;\">\n");
-        device.print( "<img onclick=\"CallableSpinner.getValue('"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'1',wingS.component.spinnerCallback)\" src=\"" + iconPrev.getURL() + "\" style=\"display:block;vertical-align:top\">\n");
+        device.print( "<img onclick=\"CallableSpinner.getValue('"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'0',wingS.component.spinnerCallback)\" src=\"" + nextIcon.getURL() + "\" style=\"display:block;vertical-align:bottom;\">\n");
+        device.print( "<img onclick=\"CallableSpinner.getValue('"+key+"','"+ftf.getName()+"',document.getElementById('"+ftf.getName()+"').value,'1',wingS.component.spinnerCallback)\" src=\"" + prevIcon.getURL() + "\" style=\"display:block;vertical-align:top\">\n");
         device.print( "</td></tr></table>\n" );
     }
 
     protected CallableSpinner getCallableSpinner() {
-        CallableSpinner callableSpinner = (CallableSpinner)this.sessionLocal.get();
+        CallableSpinner callableSpinner = this.sessionLocal.get();
         if (callableSpinner == null) {
             callableSpinner = new CallableSpinner();
             this.sessionLocal.set(callableSpinner);
@@ -86,7 +89,7 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
     }
 
     public final static class CallableSpinner {
-        Map weakHashMap = new WeakHashMap();
+        Map<SSpinner, Boolean> weakHashMap = new WeakHashMap<SSpinner, Boolean>();
 
         public static final int PREV = 1;
         public static final int NEXT = 0;
@@ -94,14 +97,14 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         public List getValue( String key, String name, String value, int type ) {
             log.debug( "getValue( " + key + ", " + name + ", " + value + ", " + type + " )" );
 
-            List list = new LinkedList();
+            List<String> list = new LinkedList<String>();
 
             SSpinner spinner = spinnerByKey(key);
             if ( spinner != null ) {
                 list.add( name );
                 try {
 
-                    SAbstractFormatter formatter = ((DefaultEditor)spinner.getEditor()).getTextField().getFormatter();
+                    SAbstractFormatter formatter = spinner.getEditor().getTextField().getFormatter();
 
                     Object newValue = formatter.stringToValue( value );
 
@@ -131,9 +134,9 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
                     }
 
                 } catch ( java.text.ParseException pe ) {
-                    pe.printStackTrace();
+                    log.debug("ParseException in Spinner", pe);
                 } catch ( java.lang.IllegalArgumentException iae ) {
-                    iae.printStackTrace();
+                    log.debug("IllegalArgumentException in Spinner", iae);
                 }
             }
 
@@ -141,22 +144,34 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         }
 
         protected SSpinner spinnerByKey(String key) {
-            for (Iterator iterator = weakHashMap.keySet().iterator(); iterator.hasNext();) {
-                SSpinner spinner = (SSpinner)iterator.next();
-                if (key.equals("" + System.identityHashCode(spinner)))
+            for (Object o : weakHashMap.keySet()) {
+                SSpinner spinner = (SSpinner) o;
+                if (key.equals(Integer.toString(System.identityHashCode(spinner)))) {
                     return spinner;
+                }
             }
             return null;
         }
 
         public String register(SSpinner model) {
-            weakHashMap.put(model, model);
-            return "" + System.identityHashCode(model);
+            weakHashMap.put(model, Boolean.TRUE);
+            return Integer.toString(System.identityHashCode(model));
         }
     }
 
-    public long getSerialVersionUID() {
-        return serialVersionUID;
+    public SIcon getNextIcon() {
+        return nextIcon;
     }
 
+    public void setNextIcon(SIcon nextIcon) {
+        this.nextIcon = nextIcon;
+    }
+
+    public SIcon getPrevIcon() {
+        return prevIcon;
+    }
+
+    public void setPrevIcon(SIcon prevIcon) {
+        this.prevIcon = prevIcon;
+    }
 }

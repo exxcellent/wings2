@@ -9,7 +9,13 @@
 
 package org.wings.text;
 
+import java.text.Format;
+import java.text.ParseException;
+
 /**
+ * <code>SInternationalFormatter</code> extends <code>SDefaultFormatter</code>,
+ * using an instance of <code>java.text.Format</code> to handle the
+ * conversion to a String, and the conversion from a String.
  *
  * @author erik
  */
@@ -18,23 +24,32 @@ public class SInternationalFormatter extends SDefaultFormatter {
     java.text.Format format = null;
     
     /** Creates a new instance of SInternationalFormatter */
-    public SInternationalFormatter( java.text.Format format ) {
+    public SInternationalFormatter( Format format ) {
         setFormat( format );
     }
-    
-    public void setFormat( java.text.Format format ) {
+
+    /**
+     * Sets the format that dictates the legal values that can be edited and displayed.
+     * @param format The format that dictates the legal values that can be edited and displayed.
+     */
+    public void setFormat( Format format ) {
         this.format = format;
     }
-    
-    public java.text.Format getFormat() {
+
+    /**
+     *  Returns the format that dictates the legal values that can be edited and displayed.
+     * @return The format that dictates the legal values that can be edited and displayed.
+     */
+    public Format getFormat() {
         return this.format;
     }
     
     /**
+     * Object representation of text.
      * @param text String to convert
      * @return Object representation of text
      */
-    public Object stringToValue(String text) throws java.text.ParseException {
+    public Object stringToValue(String text) throws ParseException {
         Object value;
         if ( format == null ) {
             value = text;
@@ -46,10 +61,11 @@ public class SInternationalFormatter extends SDefaultFormatter {
     }
 
     /**
+     * String representation of value.
      * @param value Value to convert
      * @return String representation of value
      */
-    public String valueToString(Object value) throws java.text.ParseException {
+    public String valueToString(Object value) throws ParseException {
         if (value == null) {
             return "";
         }
@@ -59,11 +75,19 @@ public class SInternationalFormatter extends SDefaultFormatter {
         }
         return string;
     }
-    
+
+    /**
+     * Not implemented yet.
+     * @deprecated
+     */
     public void setMinimum( Comparable min ) {
     }
-    
+
+    /**
+     * Not implemented yet.
+     * @deprecated
+     */
     public void setMaximum( Comparable max ) {
     }
-    
+
 }

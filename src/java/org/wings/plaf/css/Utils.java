@@ -1190,6 +1190,19 @@ public final class Utils {
         return 0;
     }
 
+    public static final String JS_ALL_WINGSSCRIPTS= "JS.wingsAll";
+
+    public static final String JS_YUI_GLOBAL = "JS.yahooGlobal";
+    public static final String JS_YUI_DOM = "JS.yahooDom";
+    public static final String JS_YUI_EVENT = "JS.yahooEvent";
+    public static final String JS_YUI_CONTAINER= "JS.yahooContainer";
+    public static final String JS_YUI_CONNECTION = "JS.yahooConnection";
+    public static final String JS_YUI_SLIDER = "JS.yahooSlider";
+    public static final String JS_YUI_DND = "JS.yahooDnD";
+    public static final String JS_YUI_MENU = "JS.etcMenu";
+    public static final String JS_YUI_DND_ETC= "JS.etcDnD";
+    public static final String JS_YUI_DND_ETC_WZ= "JS.etcWzDnD";
+
     public static Script createExternalizedJSHeaderFromProperty(String jsResourceProperty) {
         String jsClassPath = (String) ResourceManager.getObject(jsResourceProperty, String.class);
         return createExternalizedJSHeader(jsClassPath);

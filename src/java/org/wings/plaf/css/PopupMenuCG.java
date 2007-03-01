@@ -34,14 +34,19 @@ public final class PopupMenuCG extends AbstractComponentCG implements
         comp.addParentFrameListener(this);
     }
 
+    public void uninstallCG(SComponent component) {
+        super.uninstallCG(component);
+        component.removeParentFrameListener(this);
+        if (component.getParentFrame() != null)
+            SessionHeaders.getInstance().deregisterHeaders(headers);
+    }
+
     public void parentFrameAdded(SParentFrameEvent e) {
         SessionHeaders.getInstance().registerHeaders(headers);
-        //e.getParentFrame().addScriptListener(BODY_ONCLICK_SCRIPT);
     }
 
     public void parentFrameRemoved(SParentFrameEvent e) {
         SessionHeaders.getInstance().deregisterHeaders(headers);
-        //e.getParentFrame().removeScriptListener(BODY_ONCLICK_SCRIPT);
     }
 
     protected void writePopup(final Device device, SPopupMenu menu)

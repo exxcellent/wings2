@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class InternalFrameCG extends AbstractComponentCG implements
         org.wings.plaf.InternalFrameCG {
     private static final long serialVersionUID = 1L;
-    private final static transient Log log = LogFactory.getLog(InternalFrameCG.class);
+    private final static Log log = LogFactory.getLog(InternalFrameCG.class);
     protected static final String WINDOWICON_CLASSNAME = "WindowIcon";
     protected static final String BUTTONICON_CLASSNAME = "WindowButton";
     private SIcon closeIcon;

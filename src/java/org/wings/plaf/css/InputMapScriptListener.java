@@ -29,7 +29,7 @@ import java.awt.event.KeyEvent;
  */
 public class InputMapScriptListener
         extends JavaScriptListener {
-    private final static transient Log log = LogFactory.getLog(InputMapScriptListener.class);
+    private final static Log log = LogFactory.getLog(InputMapScriptListener.class);
 
     public InputMapScriptListener(String event, String code, String script) {
         super(event, code, script);

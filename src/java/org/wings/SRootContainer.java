@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:Haaf@mercatis.de">Armin Haaf</a>
  */
 public abstract class SRootContainer extends SContainer {
-    private final static transient Log log = LogFactory.getLog(SRootContainer.class);
+    private final static Log log = LogFactory.getLog(SRootContainer.class);
 
     /**
      * The container for the contentPane.

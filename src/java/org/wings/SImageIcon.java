@@ -26,7 +26,7 @@ import java.awt.image.PixelGrabber;
  * SIcon implementation that is based on {@link ImageIcon}.
  */
 public class SImageIcon extends SAbstractIcon {
-    private final static transient Log log = LogFactory.getLog(SImageIcon.class);
+    private final static Log log = LogFactory.getLog(SImageIcon.class);
 
     private final ImageIcon img;
     private final SimpleURL url;
