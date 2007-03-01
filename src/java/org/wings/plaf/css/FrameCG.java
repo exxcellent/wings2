@@ -100,12 +100,12 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // Externalize JavaScript headers
-        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.wingsAll"));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooGlobal"));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooDom"));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooEvent"));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooContainer"));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.yahooConnection"));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ALL_WINGSSCRIPTS));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_GLOBAL));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_DOM));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_EVENT));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_CONTAINER));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_CONNECTION));
 
         headers.add(new JavaScriptHeader("../dwr/engine.js"));
         headers.add(new JavaScriptHeader("../dwr/util.js"));
@@ -325,7 +325,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 if (dragIter.hasNext()) {
                     // this needs to be added to the body, so use device.print()
                     // TODO: is caching by the VM enough or make this only initialize once?
-                    Utils.createExternalizedJSHeaderFromProperty("JS.etcWzDnD").write(device);
+                    Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_WZDND).write(device);
                     device.print("\n");
                 }
             }
@@ -381,7 +381,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 device.print("';\n");
                 device.print("//-->\n</script>");
                 // TODO: is caching by the VM enough or make this only initialize once?
-                Utils.createExternalizedJSHeaderFromProperty("JS.etcDnD").write(device);
+                Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_DND).write(device);
                 device.print("\n");
             }
         }

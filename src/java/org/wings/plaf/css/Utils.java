@@ -1192,22 +1192,97 @@ public final class Utils {
 
     public static final String JS_ALL_WINGSSCRIPTS= "JS.wingsAll";
 
-    public static final String JS_YUI_GLOBAL = "JS.yahooGlobal";
-    public static final String JS_YUI_DOM = "JS.yahooDom";
-    public static final String JS_YUI_EVENT = "JS.yahooEvent";
+    //
+    // Yahoo UI Library --- Lookup keys for createExternalJSHeader
+    //
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_GLOBAL_PLUS_DOM_PLUS_EVENT = "JS.yahooAllInOne1";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_GLOBAL = JS_YUI_GLOBAL_PLUS_DOM_PLUS_EVENT; // prefere joined lib = "JS.yahooGlobal";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_DOM = JS_YUI_GLOBAL_PLUS_DOM_PLUS_EVENT; // prefere joined lib = "JS.yahooDom";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_EVENT = JS_YUI_GLOBAL_PLUS_DOM_PLUS_EVENT; // prefere joined lib = "JS.yahooEvent";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
     public static final String JS_YUI_CONTAINER= "JS.yahooContainer";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
     public static final String JS_YUI_CONNECTION = "JS.yahooConnection";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
     public static final String JS_YUI_SLIDER = "JS.yahooSlider";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
     public static final String JS_YUI_DND = "JS.yahooDnD";
-    public static final String JS_YUI_MENU = "JS.etcMenu";
-    public static final String JS_YUI_DND_ETC= "JS.etcDnD";
-    public static final String JS_YUI_DND_ETC_WZ= "JS.etcWzDnD";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_ANIMATION = "JS.yahooAnimation";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_AUTOCOMPLETE = "JS.yahooAutocomplete";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_LOGGER = "JS.yahooLogger";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_MENU = "JS.yahooMenu";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_TABVIEW = "JS.yahooTabview";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for Yahoo UI Library
+     */
+    public static final String JS_YUI_TREEVIEW = "JS.yahooTreeview";
 
+    //
+    // Arbtritrary scrips
+    //
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for a JSLibrary
+     */
+    public static final String JS_ETC_MENU = "JS.etcMenu";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for a JSLibrary
+     */
+    public static final String JS_ETC_DND = "JS.etcDnD";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for a JSLibrary
+     */
+    public static final String JS_ETC_WZDND = "JS.etcWzDnD";
+
+    /**
+     * Load a Javascript library that comes with wingS by a property. Check <code>JS_XXXX_XXX</code> constants.
+     * @param jsResourceProperty A poroperty lookup key, preferably by a constant in this utility class
+     * @return A script reference to the desired script addable as header
+     */
     public static Script createExternalizedJSHeaderFromProperty(String jsResourceProperty) {
         String jsClassPath = (String) ResourceManager.getObject(jsResourceProperty, String.class);
         return createExternalizedJSHeader(jsClassPath);
     }
 
+    /**
+     * Load a Javascript library from classpath.
+     * @param jsClassPath A classpath to the .JS file
+     * @return A script reference to the desired script addable as header
+     */
     public static Script createExternalizedJSHeader(String jsClassPath) {
         ClassPathResource res = new ClassPathJavascriptResource(jsClassPath, HEADER_LOADED_CALLBACK);
         ExternalizeManager extMgr = SessionManager.getSession().getExternalizeManager();

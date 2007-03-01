@@ -1,10 +1,9 @@
 /*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Copyright (c) 2007, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version 0.12.1
+version: 2.2.0
 */
-
 /**
 * Config is a utility used within an Object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
 * @namespace YAHOO.util
@@ -15,13 +14,12 @@ version 0.12.1
 YAHOO.util.Config = function(owner) {
 	if (owner) {
 		this.init(owner);
-	} else {
-		YAHOO.log("No owner specified for Config object", "error");
 	}
+	if (!owner) { YAHOO.log("No owner specified for Config object", "error"); }
 };
 
 YAHOO.util.Config.prototype = {
-
+	
 	/**
 	* Object reference to the owner of this Config Object
 	* @property owner
@@ -42,7 +40,7 @@ YAHOO.util.Config.prototype = {
 	* @method checkBoolean
 	* @param	{Object}	val	The value to validate
 	* @return	{Boolean}	true, if the value is valid
-	*/
+	*/	
 	checkBoolean: function(val) {
 		if (typeof val == 'boolean') {
 			return true;
@@ -90,7 +88,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @property config
 	* @private
 	* @type Object
-	*/
+	*/ 
 	var config = {};
 
 	/**
@@ -99,7 +97,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @property initialConfig
 	* @private
 	* @type Object
-	*/
+	*/ 
 	var initialConfig = {};
 
 	/**
@@ -107,26 +105,25 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @property eventQueue
 	* @private
 	* @type Object
-	*/
+	*/ 
 	var eventQueue = [];
 
 	/**
-	* Fires a configuration property event using the specified value.
+	* Fires a configuration property event using the specified value. 
 	* @method fireEvent
 	* @private
 	* @param {String}	key			The configuration property's name
 	* @param {value}	Object		The value of the correct type for the property
-	*/
+	*/ 
 	var fireEvent = function( key, value ) {
 		YAHOO.log("Firing Config event: " + key + "=" + value, "info");
-
 		key = key.toLowerCase();
 
 		var property = config[key];
 
 		if (typeof property != 'undefined' && property.event) {
 			property.event.fire(value);
-		}
+		}	
 	};
 	/* End Private Members */
 
@@ -138,7 +135,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	*/
 	this.addProperty = function( key, propertyObject ) {
 		key = key.toLowerCase();
-
 		YAHOO.log("Added property: " + key, "info");
 
 		config[key] = propertyObject;
@@ -151,7 +147,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 
 		this.setProperty(key, propertyObject.value, true);
-
+		
 		if (! propertyObject.suppressEvent) {
 			this.queueProperty(key, propertyObject.value);
 		}
@@ -164,14 +160,14 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	*/
 	this.getConfig = function() {
 		var cfg = {};
-
+			
 		for (var prop in config) {
 			var property = config[prop];
 			if (typeof property != 'undefined' && property.event) {
 				cfg[prop] = property.value;
 			}
 		}
-
+		
 		return cfg;
 	};
 
@@ -222,11 +218,10 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	*/
 	this.setProperty = function(key, value, silent) {
 		key = key.toLowerCase();
-
 		YAHOO.log("setProperty: " + key + "=" + value, "info");
 
 		if (this.queueInProgress && ! silent) {
-			this.queueProperty(key,value); // Currently running through a queue...
+			this.queueProperty(key,value); // Currently running through a queue... 
 			return true;
 		} else {
 			var property = config[key];
@@ -254,14 +249,13 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {String} key	The name of the property
 	* @param {String} value	The value to set the property to
 	* @return {Boolean}		true, if the set was successful, false if it failed.
-	*/
+	*/	
 	this.queueProperty = function(key, value) {
 		key = key.toLowerCase();
-
 		YAHOO.log("queueProperty: " + key + "=" + value, "info");
 
 		var property = config[key];
-
+							
 		if (typeof property != 'undefined' && property.event) {
 			if (typeof value != 'undefined' && property.validator && ! property.validator(value)) { // validator
 				return false;
@@ -281,7 +275,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 					if (queueItem) {
 						var queueItemKey = queueItem[0];
 						var queueItemValue = queueItem[1];
-
+						
 						if (queueItemKey.toLowerCase() == key) {
 							// found a dupe... push to end of queue, null current item, and break
 							eventQueue[i] = null;
@@ -291,7 +285,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 						}
 					}
 				}
-
+				
 				if (! foundDuplicate && typeof value != 'undefined') { // this is a refire, or a new property in the queue
 					eventQueue.push([key, value]);
 				}
@@ -307,7 +301,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 						if (queueItemCheck) {
 							var queueItemCheckKey = queueItemCheck[0];
 							var queueItemCheckValue = queueItemCheck[1];
-
+							
 							if ( queueItemCheckKey.toLowerCase() == supercedesCheck.toLowerCase() ) {
 								eventQueue.push([queueItemCheckKey, queueItemCheckValue]);
 								eventQueue[q] = null;
@@ -317,7 +311,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 					}
 				}
 			}
-
 			YAHOO.log("Config event queue: " + this.outputEventQueue(), "info");
 
 			return true;
@@ -381,27 +374,27 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			if (queueItem) {
 				var key = queueItem[0];
 				var value = queueItem[1];
-
+				
 				var property = config[key];
 				property.value = value;
 
 				fireEvent(key,value);
 			}
 		}
-
+		
 		this.queueInProgress = false;
 		eventQueue = [];
 	};
 
 	/**
-	* Subscribes an external handler to the change event for any given property.
+	* Subscribes an external handler to the change event for any given property. 
 	* @method subscribeToConfigEvent
 	* @param {String}	key			The property name
 	* @param {Function}	handler		The handler function to use subscribe to the property's event
 	* @param {Object}	obj			The Object to use for scoping the event handler (see CustomEvent documentation)
 	* @param {Boolean}	override	Optional. If true, will override "this" within the handler to map to the scope Object passed into the method.
 	* @return {Boolean}				True, if the subscription was successful, otherwise false.
-	*/
+	*/	
 	this.subscribeToConfigEvent = function(key, handler, obj, override) {
 		key = key.toLowerCase();
 
@@ -417,7 +410,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	};
 
 	/**
-	* Unsubscribes an external handler from the change event for any given property.
+	* Unsubscribes an external handler from the change event for any given property. 
 	* @method unsubscribeFromConfigEvent
 	* @param {String}	key			The property name
 	* @param {Function}	handler		The handler function to use subscribe to the property's event
@@ -515,7 +508,7 @@ YAHOO.widget.Module = function(el, userConfig) {
 * @final
 * @type String
 */
-YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
+YAHOO.widget.Module.IMG_ROOT = null;
 
 /**
 * Constant representing the prefix path to use for securely served images
@@ -524,7 +517,7 @@ YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
 * @final
 * @type String
 */
-YAHOO.widget.Module.IMG_ROOT_SSL = "https://a248.e.akamai.net/sec.yimg.com/i/";
+YAHOO.widget.Module.IMG_ROOT_SSL = null;
 
 /**
 * Constant for the default CSS class name that represents a Module
@@ -835,7 +828,7 @@ YAHOO.widget.Module.prototype = {
 
 			el = document.getElementById(el);
 			if (! el) {
-				el = document.createElement("DIV");
+				el = document.createElement("div");
 				el.id = elId;
 			}
 		}
@@ -898,13 +891,8 @@ YAHOO.widget.Module.prototype = {
 
                 var bIE = (this.browser.indexOf("ie") === 0);
 
-                if(this.isSecure &&
-                   YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL &&
-                   bIE) {
-
-                  resizeMonitor.src =
-                       YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL;
-
+                if(this.isSecure && YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL && bIE) {
+                   resizeMonitor.src = YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL;
                 }
 
                 resizeMonitor.id = "_yuiResizeMonitor";
@@ -916,11 +904,11 @@ YAHOO.widget.Module.prototype = {
                 resizeMonitor.style.height = "10em";
                 resizeMonitor.style.position = "absolute";
 
-                var nLeft = -1 * resizeMonitor.offsetWidth,
-                    nTop = -1 * resizeMonitor.offsetHeight;
+                var nLeft = -1 * resizeMonitor.offsetWidth;
+                var nTop = -1 * resizeMonitor.offsetHeight;
 
                 resizeMonitor.style.top = nTop + "px";
-                resizeMonitor.style.left =  nLeft + "px";
+                resizeMonitor.style.left = nLeft + "px";
                 resizeMonitor.style.borderStyle = "none";
                 resizeMonitor.style.borderWidth = "0";
                 YAHOO.util.Dom.setStyle(resizeMonitor, "opacity", "0");
@@ -984,7 +972,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	setHeader : function(headerContent) {
 		if (! this.header) {
-			this.header = document.createElement("DIV");
+			this.header = document.createElement("div");
 			this.header.className = YAHOO.widget.Module.CSS_HEADER;
 		}
 
@@ -1006,7 +994,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	appendToHeader : function(element) {
 		if (! this.header) {
-			this.header = document.createElement("DIV");
+			this.header = document.createElement("div");
 			this.header.className = YAHOO.widget.Module.CSS_HEADER;
 		}
 
@@ -1023,7 +1011,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	setBody : function(bodyContent) {
 		if (! this.body) {
-			this.body = document.createElement("DIV");
+			this.body = document.createElement("div");
 			this.body.className = YAHOO.widget.Module.CSS_BODY;
 		}
 
@@ -1046,7 +1034,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	appendToBody : function(element) {
 		if (! this.body) {
-			this.body = document.createElement("DIV");
+			this.body = document.createElement("div");
 			this.body.className = YAHOO.widget.Module.CSS_BODY;
 		}
 
@@ -1063,7 +1051,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	setFooter : function(footerContent) {
 		if (! this.footer) {
-			this.footer = document.createElement("DIV");
+			this.footer = document.createElement("div");
 			this.footer.className = YAHOO.widget.Module.CSS_FOOTER;
 		}
 
@@ -1085,7 +1073,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	appendToFooter : function(element) {
 		if (! this.footer) {
-			this.footer = document.createElement("DIV");
+			this.footer = document.createElement("div");
 			this.footer.className = YAHOO.widget.Module.CSS_FOOTER;
 		}
 
@@ -1242,7 +1230,7 @@ YAHOO.widget.Module.prototype = {
 		if (monitor) {
 			this.initResizeMonitor();
 		} else {
-			YAHOO.util.Event.removeListener(this.resizeMonitor, "resize", this.onDomResize);
+			YAHOO.widget.Module.textResizeEvent.unsubscribe(this.onDomResize, this, true);
 			this.resizeMonitor = null;
 		}
 	}
@@ -1325,7 +1313,7 @@ YAHOO.widget.Overlay.BOTTOM_RIGHT = "br";
 * @final
 * @type String
 */
-YAHOO.widget.Overlay.CSS_OVERLAY = "overlay";
+YAHOO.widget.Overlay.CSS_OVERLAY = "yui-overlay";
 
 /**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
@@ -1953,7 +1941,6 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 		}
 
 		if (element && context) {
-			var elementRegion = YAHOO.util.Dom.getRegion(element);
 			var contextRegion = YAHOO.util.Dom.getRegion(context);
 
 			var doAlign = function(v,h) {
@@ -2941,3 +2928,5 @@ YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
 	slide.init();
 	return slide;
 };
+
+YAHOO.register("container_core", YAHOO.widget.Module, {version: "2.2.0", build: "127"});

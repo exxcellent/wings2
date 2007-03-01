@@ -38,7 +38,7 @@ div, input, select, textarea, table {
 }
 
 /* tooltips opacity */
-.tt {
+.yui-tt {
     -moz-opacity: 0.8;
 }
 

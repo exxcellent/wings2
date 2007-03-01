@@ -41,7 +41,7 @@ public class MenuBarCG extends AbstractComponentCG implements
         new JavaScriptListener(JavaScriptEvent.ON_CLICK, "wpm_handleBodyClicks(event)");
 
     public MenuBarCG() {
-        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.etcMenu"));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_MENU));
     }
 
     public void installCG(final SComponent comp) {

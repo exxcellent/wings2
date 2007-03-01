@@ -26,7 +26,7 @@ public final class PopupMenuCG extends AbstractComponentCG implements
         new JavaScriptListener(JavaScriptEvent.ON_CLICK, "wpm_handleBodyClicks(event)");
 
     public PopupMenuCG() {
-        headers.add(Utils.createExternalizedJSHeaderFromProperty("JS.etcMenu"));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_MENU));
     }
 
     public void installCG(final SComponent comp) {

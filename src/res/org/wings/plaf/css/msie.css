@@ -41,13 +41,22 @@ ul.SPopupMenu li a,
 ul.SMenu li a
 {height:1%;}
 
+/** Quickfix workaround for MSIE7: Revert upper declarations by using child selectors. */
+ul.SPopupMenu > li,
+ul.SMenu > li
+{float:none;height:auto;}
+ul.SPopupMenu > li a,
+ul.SMenu > li a
+{height:auto;}
+
+
 /* IE renders the bullet on a separate line with this missing */
 .SList li table {
     display: inline;
 }
 
 /* tooltips opacity */
-.tt {
+.yui-tt {
     filter:alpha(opacity=80);
 }
 
