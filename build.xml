@@ -112,10 +112,6 @@
                 <include name="**/*.css"/>
                 <include name="**/*.htc"/>
                 <include name="**/*.properties"/>
-                <exclude name="**/js/wings/*.js"/>
-            </fileset>
-            <fileset dir="src/res">
-               <include name="**/js/wings/all.js"/>
             </fileset>
         </jar>
         <copy todir="build/web/WEB-INF/lib">
