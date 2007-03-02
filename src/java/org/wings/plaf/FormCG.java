@@ -12,9 +12,15 @@
  */
 package org.wings.plaf;
 
+import org.wings.SForm;
 
 
-public interface FormCG extends ComponentCG {
+public interface FormCG
+    extends ComponentCG
+{
+    Update getEncodingUpdate(SForm form, String encoding);
+
+    Update getMethodUpdate(SForm form, String postMethod);
 }
 
 

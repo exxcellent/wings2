@@ -349,6 +349,9 @@ public class SForm  extends SContainer implements LowLevelEventListener {
      * usually want, is <code>POST</code>.
      */
     public void setPostMethod(boolean postMethod) {
+        if (isDifferent(this.postMethod, postMethod))
+            update(getCG().getMethodUpdate(this, postMethod ? "post" : "get"));
+
         this.postMethod = postMethod;
     }
 
@@ -380,6 +383,9 @@ public class SForm  extends SContainer implements LowLevelEventListener {
      *             <code>application/x-www-form-urlencoded</code> or null to detect encoding.
      */
     public void setEncodingType(String type) {
+        if (isDifferent(encType, type))
+            update(getCG().getEncodingUpdate(this, type));
+
         encType = type;
     }
 
@@ -395,32 +401,22 @@ public class SForm  extends SContainer implements LowLevelEventListener {
      *         by default.
      */
     public String getEncodingType() {
-        if (encType == null) {
-            return detectEncodingType(this);
-        } else {
-            return encType;
-        }
+        return encType;
     }
 
-    /**
-     * Detects if the Container contains a component that needs a certain encoding type
-     * @return <code>null</code> or {@link #ENC_TYPE_MULTIPART_FORM}
-     */
-    protected String detectEncodingType(SContainer pContainer) {
-        for (int i = 0; i < pContainer.getComponentCount(); i++) {
-            SComponent tComponent = pContainer.getComponent(i);
-            if (tComponent instanceof SFileChooser && tComponent.isVisible()) {
-                return ENC_TYPE_MULTIPART_FORM;
-            } else if ((tComponent instanceof SContainer) && tComponent.isVisible()) {
-                String tContainerEncoding = detectEncodingType((SContainer) tComponent);
-                if (tContainerEncoding != null) {
-                    return tContainerEncoding;
-                }
-            }
-        }
-        return null;
+    int fileChooserCount;
+
+    public void registerFileChooser(SFileChooser fileChooser) {
+        fileChooserCount++;
+        if (!ENC_TYPE_MULTIPART_FORM.equals(encType))
+            setEncodingType(ENC_TYPE_MULTIPART_FORM);
     }
 
+    public void unregisterFileChooser(SFileChooser fileChooser) {
+        fileChooserCount--;
+        if (fileChooserCount == 0 && ENC_TYPE_MULTIPART_FORM.equals(encType))
+            setEncodingType(ENC_TYPE_TEXT_PLAIN);
+    }
 
     public void setAction(URL action) {
         this.action = action;
@@ -477,5 +473,9 @@ public class SForm  extends SContainer implements LowLevelEventListener {
 
     public void setCG(FormCG cg) {
         super.setCG(cg);
+    }
+
+    public FormCG getCG() {
+        return (FormCG)super.getCG();
     }
 }

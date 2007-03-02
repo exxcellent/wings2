@@ -16,6 +16,7 @@ package org.wings.plaf.css;
 import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.css.script.LayoutFillScript;
+import org.wings.plaf.Update;
 
 import java.io.IOException;
 
@@ -142,5 +143,48 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         Utils.optAttribute(device, "src", getBlindIcon().getURL());
         device.print(" width=\"0\" height=\"0\" tabindex=\"\"" +
                 " style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
+    }
+
+    public Update getEncodingUpdate(SForm form, String encoding) {
+        return new EncodingUpdate(form, encoding != null ? encoding : "");
+    }
+
+    public Update getMethodUpdate(SForm form, String method) {
+        return new MethodUpdate(form, method != null ? method : "");
+    }
+
+    protected class EncodingUpdate extends AbstractUpdate {
+
+        private String encoding;
+
+        public EncodingUpdate(SComponent component, String encoding) {
+            super(component);
+            this.encoding = encoding;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("encoding");
+            handler.addParameter(component.getName());
+            handler.addParameter(encoding);
+            return handler;
+        }
+    }
+
+    protected class MethodUpdate
+        extends AbstractUpdate {
+
+        private String method;
+
+        public MethodUpdate(SComponent component, String method) {
+            super(component);
+            this.method = method;
+        }
+
+        public Handler getHandler() {
+            UpdateHandler handler = new UpdateHandler("method");
+            handler.addParameter(component.getName());
+            handler.addParameter(method);
+            return handler;
+        }
     }
 }

@@ -346,3 +346,22 @@ wingS.update.alertException = function(exception, details) {
     alert(errorMsg);
 };
 
+/**
+ * Updates the encoding of the form with the given ID.
+ * @param {String} formId - the ID of the form to update
+ * @param {int} encoding - the encoding to be set
+ */
+wingS.update.encoding = function(formId, encoding) {
+    var form = document.getElementById(formId);
+    form.enctype = encoding;
+};
+
+/**
+ * Updates the method of the form with the given ID.
+ * @param {String} formId - the ID of the form to update
+ * @param {int} method - the method to be set
+ */
+wingS.update.method = function(formId, method) {
+    var form = document.getElementById(formId);
+    form.method = method;
+};

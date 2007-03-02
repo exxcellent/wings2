@@ -15,6 +15,8 @@ package org.wings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.FileChooserCG;
+import org.wings.event.SParentFrameListener;
+import org.wings.event.SParentFrameEvent;
 
 import javax.servlet.http.HttpUtils;
 import java.io.File;
@@ -82,7 +84,8 @@ import java.util.Hashtable;
  */
 public class SFileChooser
         extends SComponent
-        implements LowLevelEventListener {
+        implements LowLevelEventListener, SParentFrameListener
+{
     private final transient static Log log = LogFactory.getLog(SFileChooser.class);
 
     /**
@@ -109,11 +112,13 @@ public class SFileChooser
      * removed if and when it is not accessible anymore.
      */
     protected IOException exception = null;
+    private SForm parentForm;
 
     /**
      * Creates a new FileChooser.
      */
     public SFileChooser() {
+        addParentFrameListener(this);
     }
 
     /**
@@ -140,6 +145,22 @@ public class SFileChooser
         if (form != null) {
             SForm.addArmedComponent(form);
         }
+    }
+
+    public void parentFrameAdded(SParentFrameEvent e) {
+        parentForm = getParentForm();
+        if (parentForm != null)
+            parentForm.registerFileChooser(this);
+        else
+            log.warn("file chooser not in a form");
+    }
+
+    public void parentFrameRemoved(SParentFrameEvent e) {
+        if (parentForm != null)
+            parentForm.unregisterFileChooser(this);
+        else
+            log.warn("file chooser not in a form");
+        parentForm = null;
     }
 
     /**
@@ -414,6 +435,9 @@ public class SFileChooser
                 log.fatal(null, e);
             }
         }
+
+        // clear the input field
+        reload();
     }
 
     public void fireIntermediateEvents() {
