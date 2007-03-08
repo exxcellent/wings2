@@ -25,7 +25,7 @@ var wpm_lastCoord = new wpm_point(0, 0);
    This circumvents mutiple events and thus enables the use of
    cascaded menus.
 */
-var wpm_timeOut = 200;
+var wpm_timeOut = 600;
 /* ClickDelta in px. When a click is recieved, the coordinates of the click
    are compared with the coordinates of the event that was recieved last. If
    the clicks are not farther apart than the ClickDelta in x and y, the event
