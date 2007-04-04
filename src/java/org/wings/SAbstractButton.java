@@ -113,13 +113,16 @@ public abstract class SAbstractButton
     }
 
     protected void setParentFrame(SFrame f) {
+        if (f == getParentFrame())
+            return;
+
         if (buttonGroup != null && getSession().getDispatcher() != null) {
             getSession().getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
         } // end of if ()
 
         super.setParentFrame(f);
 
-        if (buttonGroup != null && getSession().getDispatcher() != null) {
+        if (buttonGroup != null && f != null && getSession().getDispatcher() != null) {
             getSession().getDispatcher().addLowLevelEventListener(this, buttonGroup.getComponentId());
         } // end of if ()
     }
@@ -131,12 +134,14 @@ public abstract class SAbstractButton
      */
     protected void setGroup(SButtonGroup g) {
         if (isDifferent(buttonGroup, g)) {
+            // Do no longer react on  events from old button group
             if (buttonGroup != null && getSession().getDispatcher() != null) {
                 getSession().getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
             buttonGroup = g;
-            if (buttonGroup != null && getSession().getDispatcher() != null) {
-                getSession().getDispatcher().removeLowLevelEventListener(this, buttonGroup.getComponentId());
+            // Button Group changed but button already registered via parent frame?
+            if (buttonGroup != null && getParentFrame() != null && getSession().getDispatcher() != null) {
+                getSession().getDispatcher().addLowLevelEventListener(this, buttonGroup.getComponentId());
             } // end of if ()
             reload();
         }
