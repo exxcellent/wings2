@@ -404,7 +404,8 @@ public class STable extends SComponent
             return modelColumnIndex;
         }
         STableColumnModel cm = getColumnModel();
-        for (int column = 0; column < getColumnCount(); column++) {
+        int count = cm.getColumnCount();
+        for (int column = 0; column < count; column++) {
             if (cm.getColumn(column).getModelIndex() == modelColumnIndex) {
                 return column;
             }

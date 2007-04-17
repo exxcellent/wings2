@@ -30,7 +30,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
 
     public static SIcon TRANSPARENT_ICON = new SResourceIcon("org/wings/icons/transdot.gif");
 
-    public final void writeText(Device device, String text, boolean wordWrap) throws IOException {
+    public void writeText(Device device, String text, boolean wordWrap) throws IOException {
         // white-space:nowrap seems to work in all major browser.
         // Except leading and trailing spaces!
         device.print("<span").print(wordWrap ? ">" : " style=\"white-space:nowrap\">");
@@ -45,7 +45,7 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
         device.print("</span>");
     }
 
-    public final void writeIcon(Device device, SIcon icon, boolean isMSIE) throws IOException {
+    public void writeIcon(Device device, SIcon icon, boolean isMSIE) throws IOException {
         device.print("<img class=\"nopad\"");
         if (isMSIE && icon.getURL().toString().endsWith(".png") && icon.getIconWidth() > 0 && icon.getIconHeight() > 0) {
             Utils.optAttribute(device, "style", "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + icon.getURL() + "', sizingMethod='scale')");

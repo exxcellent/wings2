@@ -18,7 +18,6 @@ public class NestingTest
     private Color[] colors = new Color[] { Color.red, Color.green, Color.yellow};
 
     protected SComponent createControls() {
-        selectComboBox.addScriptListener(JavaScriptListener.JS_ON_CHANGE_SUBMIT_FORM);
         for(int i = 5; i< 30; i++) {
             selectComboBox.addItem(new Integer(i));
         }

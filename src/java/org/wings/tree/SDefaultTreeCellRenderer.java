@@ -141,14 +141,13 @@ public class SDefaultTreeCellRenderer
                                                    int row,
                                                    boolean hasFocus) {
         setNameRaw(name(tree, row));
+        String string = value != null ? value.toString() : null;
 
-        if (value == null || value.toString() == null ||
-                value.toString().length() == 0) {
-
+        if (value == null || string == null || string.length() == 0) {
             setText(null);
         } else {
-            setText(value.toString());
-            setToolTipText(value.toString());
+            setText(string);
+            setToolTipText(string);
         }
 
         if (!tree.isEnabled()) {
