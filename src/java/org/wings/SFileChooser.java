@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wings.plaf.FileChooserCG;
 import org.wings.event.SParentFrameListener;
 import org.wings.event.SParentFrameEvent;
+import org.wings.util.LocaleCharSet;
 
 import javax.servlet.http.HttpUtils;
 import java.io.File;
@@ -395,20 +396,13 @@ public class SFileChooser
 
         exception = null;
 
+        /* Analogous to the other end in UploadedFile.java ! */
+        final String encoding = getSession().getCharacterEncoding() != null ? getSession().getCharacterEncoding() : LocaleCharSet.DEFAULT_ENCODING;
         String value;
-
         try {
-            value = URLDecoder.decode(values[0], "UTF-8");
-            /*
-             * FIXME: shouldn't this use the session encoding like below?
-             */
-            //value = URLDecoder.decode(values[0], SessionManager.getSession().getCharacterEncoding());
-
-        } catch (final UnsupportedEncodingException e) {
-            if (log.isWarnEnabled()) {
-                log.warn("Failed to url-decode '" + values[0] + "'.");
-            }
-            
+            value = URLDecoder.decode(values[0], encoding);
+        } catch (UnsupportedEncodingException e) {
+            log.warn("Failed to url-decode '" + values[0] + "'.");
             value = values[0];
         }
 
