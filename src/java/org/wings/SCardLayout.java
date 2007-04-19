@@ -42,7 +42,7 @@ public class SCardLayout
             if (tab.get(key) == c) {
                 // if removing the current visible element fall back to previous one
                 if (c.isVisible() && (c.getParent() != null)) {
-                    previous(c.getParent());
+                    next(c.getParent());
                 }                
                 tab.remove(key);
                 return;
