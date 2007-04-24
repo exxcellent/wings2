@@ -3,7 +3,7 @@ package org.wings.plaf.css;
 import org.wings.SComponent;
 import org.wings.plaf.Update;
 
-abstract class AbstractUpdate implements Update {
+public abstract class AbstractUpdate implements Update {
 
 	protected SComponent component;
 
