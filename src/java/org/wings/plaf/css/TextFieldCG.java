@@ -14,22 +14,17 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
-import org.wings.text.SAbstractFormatter;
 import org.wings.io.Device;
 import org.wings.plaf.Update;
-import org.wings.plaf.css.dwr.CallableManager;
 import org.wings.script.*;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.*;
 
 public class TextFieldCG extends AbstractComponentCG implements
         org.wings.plaf.TextFieldCG {
 
     private static final long serialVersionUID = 1L;
 
-    private CallableFormatter callableFormatter = new CallableFormatter();
     int horizontalOversize = 4;
 
     public int getHorizontalOversize() {
@@ -42,19 +37,8 @@ public class TextFieldCG extends AbstractComponentCG implements
 
     public void installCG( SComponent comp ) {
         super.installCG( comp );
-        if ( comp instanceof SFormattedTextField ) {
-            if (!CallableManager.getInstance().containsCallable(callableFormatter.getName())) {                
-                CallableManager.getInstance().registerCallable(callableFormatter.getName(), callableFormatter, CallableFormatter.class);
-            }
-            comp.addScriptListener(new JavaScriptListener(JavaScriptEvent.ON_BLUR, "this.style.color = '';" +
-                    "CallableFormatter.validate(this.getAttribute('formatter'), this.id, this.value, this.getAttribute('lastValue'), wingS.component.ftextFieldCallback)"));
-        }
         if (isMSIE(comp))
             comp.putClientProperty("horizontalOversize", new Integer(horizontalOversize));
-    }
-
-    public void uninstallCG(SComponent component) {
-        CallableManager.getInstance().unregisterCallable(callableFormatter.getName());
     }
 
     public void writeInternal(final Device device,
@@ -66,7 +50,7 @@ public class TextFieldCG extends AbstractComponentCG implements
         // If the application developer attached any SDocumentListeners to this
     	// STextField, the surrounding form gets submitted as soon as the content
         // of this STextField changed.
-        if (textField.getDocumentListeners().length > 1) {
+        if (textField.getDocumentListeners().length > 1 || textField instanceof SFormattedTextField ) {
         	// We need to test if there are at least 2 document
         	// listeners because each text component registers
         	// itself as a listener of its document as well.
@@ -114,22 +98,7 @@ public class TextFieldCG extends AbstractComponentCG implements
             device.print(" disabled=\"true\"");
         }
 
-        java.awt.Color orgColor = textField.getForeground();
-
-        if (textField instanceof SFormattedTextField) {
-            SFormattedTextField formattedTextField = (SFormattedTextField)textField;
-            if ( !formattedTextField.isEditValid() ) {
-                textField.setForeground( java.awt.Color.RED );
-            }
-
-            SAbstractFormatter formatter = formattedTextField.getFormatter();
-            String key = callableFormatter.registerFormatter(formatter);
-            Utils.optAttribute(device, "formatter", key);
-        }
-
         writeAllAttributes(device, component);
-
-        textField.setForeground( orgColor );
 
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
@@ -162,48 +131,4 @@ public class TextFieldCG extends AbstractComponentCG implements
 
     }
 
-    public static class CallableFormatter {
-        Map<SAbstractFormatter, Boolean> formatters = new WeakHashMap<SAbstractFormatter, Boolean>();
-
-        /* ATTENTION: This String-copy is used as UNIQUE object reference with common equals(). */
-        private final String name = new String("CallableFormatter");
-
-        public List validate(String key, String name, String text, String lastValid) {
-            String value = "";
-            List<String> list = new LinkedList<String>();
-            SAbstractFormatter formatter = formatterByKey(key);
-            if ( formatter != null ) {
-                list.add( name );
-                try {
-                    value = formatter.valueToString( formatter.stringToValue(text) );
-                }
-                catch (ParseException e) {
-                    if (lastValid != null)
-                        value = lastValid;
-                }
-            }
-            list.add( value );
-            return list;
-        }
-
-        protected SAbstractFormatter formatterByKey(String key) {
-            for (SAbstractFormatter sAbstractFormatter : formatters.keySet()) {
-                SAbstractFormatter formatter = (SAbstractFormatter) sAbstractFormatter;
-                if (key.equals("" + System.identityHashCode(formatter))) {
-                    return formatter;
-                }
-            }
-            return null;
-        }
-
-        private String registerFormatter(SAbstractFormatter formatter) {
-            formatters.put(formatter, Boolean.TRUE);
-            return "" + System.identityHashCode(formatter);
-        }
-
-        private String getName() {
-            return name;
-        }
-    }
-            
 }

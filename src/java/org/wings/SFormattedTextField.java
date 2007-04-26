@@ -18,7 +18,6 @@
  */
 package org.wings;
 
-import org.wings.text.SAbstractFormatter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import java.text.ParseException;
@@ -28,6 +27,7 @@ import org.wings.text.SDateFormatter;
 import org.wings.text.SInternationalFormatter;
 import org.wings.text.SNumberFormatter;
 import java.util.Date;
+import org.wings.plaf.TextFieldCG;
 import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDefaultFormatter;
 
@@ -122,21 +122,39 @@ public class SFormattedTextField extends STextField {
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
-
+        
+        String orgText = getText() == null ? "" : getText();
+        String newText = "";
         if (isEditable() && isEnabled()) {
-            if (getText() == null || !getText().equals(values[0])) {
+            if ( !orgText.equals(values[0]) ) {
+                System.out.println("value has changed" );
                 try {
                     SAbstractFormatter formatter = getFormatter();
-                    setText(formatter.valueToString(formatter.stringToValue(values[0])));
+                    newText = formatter.valueToString(formatter.stringToValue(values[0]));
+                } catch (ParseException e) {
+                    System.out.println( "ParseException");
+                    switch( getFocusLostBehavior() ) {
+                        case COMMIT_OR_REVERT :
+                            newText = orgText;
+                            break;
+                        case COMMIT :
+                            newText = values[0];
+                            break;
+                    }
                 }
-                catch (ParseException e) {
-                    setText(values[0]);
+                
+                System.out.println( "orgText : " + orgText + " ; newText : " + newText );
+
+                setText(newText);
+                if ( !newText.equals(values[0]) && orgText.equals( newText ) ) {
+                    update( ((TextFieldCG)getCG()).getTextUpdate( this, getText() ) );
                 }
                 SForm.addArmedComponent(this);
+                
             }
         }
     }
-    
+
     public boolean isEditValid() {
         boolean isEditValid = true;
         try {

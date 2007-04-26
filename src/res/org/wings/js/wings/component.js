@@ -11,22 +11,6 @@ if (!wingS.component) {
     throw new Error("wingS.component already exists and is not an object");
 }
 
-/**
- * SFormattedTextField JavaScript Code
- */
-wingS.component.ftextFieldCallback = function(result) {
-    var elem = document.getElementById(result[0]);
-    var data = result[1];
-    var invalid = result[2];
-    if (!elem) return; // dwr bug
-    if (invalid) {
-        elem.style.color = '#ff0000';
-    } else {
-        elem.style.color = '';
-    }
-    elem.value = data;
-};
-
 wingS.component.spinnerCallback = function(result) {
     var elem = document.getElementById(result[0]);
     if (!elem) return; // dwr bug

@@ -37,8 +37,10 @@ public class TextComponentExample extends WingSetPane {
     private ComponentControls controls;
     private SDateFormatter dateFormatter = new SDateFormatter(DateFormat.getDateInstance(DateFormat.SHORT));
     private STextField textField;
-    private SFormattedTextField numberTextField;
-    private SFormattedTextField dateTextField;
+    private SFormattedTextField numberTextFieldCoR;
+    private SFormattedTextField dateTextFieldCoR;
+    private SFormattedTextField numberTextFieldC;
+    private SFormattedTextField dateTextFieldC;
     private SPasswordField passwordField;
     private STextArea textArea;
 
@@ -62,26 +64,49 @@ public class TextComponentExample extends WingSetPane {
         textField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
         panel.add(textField);
 
-        panel.add(new SLabel("SFormattedTextField (NumberFormat): "));
-        SFormattedTextField numberTextField = new SFormattedTextField(new NumberFormatter());
-        this.numberTextField = numberTextField;
-        this.numberTextField.setName("numberfield");
-        numberTextField.setToolTipText("Text entered here will be formatted as number when you leave focus.<br>" +
+        panel.add(new SLabel("SFormattedTextField (NumberFormat) :\n[COMMIT_OR_REVERT]"));
+        SFormattedTextField numberTextFieldCoR = new SFormattedTextField(new NumberFormatter());
+        this.numberTextFieldCoR = numberTextFieldCoR;
+        this.numberTextFieldCoR.setName("numberfieldCoR");
+        numberTextFieldCoR.setToolTipText("Text entered here will be formatted as number when you leave focus.<br>" +
                 "If you entered an invalid number the text should become red.<br>" +
                 "This uses code executed on server side in Java!");
-        numberTextField.addDocumentListener(new MyDocumentListener(numberTextField));
-        numberTextField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        panel.add(numberTextField);
+        numberTextFieldCoR.addDocumentListener(new MyDocumentListener(numberTextFieldCoR));
+        numberTextFieldCoR.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(numberTextFieldCoR);
 
-        panel.add(new SLabel("SFormattedTextField (DateFormat): "));
-        SFormattedTextField dateTextField = new SFormattedTextField(dateFormatter);
-        this.dateTextField = dateTextField;
-        this.dateTextField.setName("datefield");
-        dateTextField.setToolTipText("Enter a valid/invalid date here.<br>" +
+        panel.add(new SLabel("SFormattedTextField (DateFormat) :\n[COMMIT_OR_REVERT]"));
+        SFormattedTextField dateTextFieldCoR = new SFormattedTextField(dateFormatter);
+        this.dateTextFieldCoR = dateTextFieldCoR;
+        this.dateTextFieldCoR.setName("datefieldCoR");
+        dateTextFieldCoR.setToolTipText("Enter a valid/invalid date here.<br>" +
                 "Dates will be parsed on server side and reformatted accordingly.");
-        dateTextField.addDocumentListener(new MyDocumentListener(dateTextField));
-        dateTextField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        panel.add(dateTextField);
+        dateTextFieldCoR.addDocumentListener(new MyDocumentListener(dateTextFieldCoR));
+        dateTextFieldCoR.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(dateTextFieldCoR);
+        
+        panel.add(new SLabel("SFormattedTextField (NumberFormat) :\n[COMMIT]"));
+        SFormattedTextField numberTextFieldC = new SFormattedTextField(new NumberFormatter());
+        this.numberTextFieldC = numberTextFieldC;
+        this.numberTextFieldC.setName("numberfieldC");
+        this.numberTextFieldC.setFocusLostBehavior( SFormattedTextField.COMMIT );
+        numberTextFieldC.setToolTipText("Text entered here will be formatted as number when you leave focus.<br>" +
+                "If you entered an invalid number the text should become red.<br>" +
+                "This uses code executed on server side in Java!");
+        numberTextFieldC.addDocumentListener(new MyDocumentListener(numberTextFieldC));
+        numberTextFieldC.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(numberTextFieldC);
+
+        panel.add(new SLabel("SFormattedTextField (DateFormat) :\n[COMMIT]: "));
+        SFormattedTextField dateTextFieldC = new SFormattedTextField(dateFormatter);
+        this.dateTextFieldC = dateTextFieldC;
+        this.dateTextFieldC.setName("datefieldC");
+        this.dateTextFieldC.setFocusLostBehavior( SFormattedTextField.COMMIT );
+        dateTextFieldC.setToolTipText("Enter a valid/invalid date here.<br>" +
+                "Dates will be parsed on server side and reformatted accordingly.");
+        dateTextFieldC.addDocumentListener(new MyDocumentListener(dateTextFieldC));
+        dateTextFieldC.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        panel.add(dateTextFieldC);        
 
         panel.add(new SLabel("SPasswordField: "));
         SPasswordField passwordField = new SPasswordField();
@@ -139,8 +164,10 @@ public class TextComponentExample extends WingSetPane {
         controls.addControllable(textField);
         controls.addControllable(textArea);
         controls.addControllable(passwordField);
-        controls.addControllable(numberTextField);
-        controls.addControllable(dateTextField);
+        controls.addControllable(numberTextFieldCoR);
+        controls.addControllable(dateTextFieldCoR);
+        controls.addControllable(numberTextFieldC);
+        controls.addControllable(dateTextFieldC);
 
         addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -224,8 +251,8 @@ public class TextComponentExample extends WingSetPane {
             editable.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     textField.setEditable(editable.isSelected());
-                    numberTextField.setEditable(editable.isSelected());
-                    dateTextField.setEditable(editable.isSelected());
+                    numberTextFieldCoR.setEditable(editable.isSelected());
+                    dateTextFieldCoR.setEditable(editable.isSelected());
                     passwordField.setEditable(editable.isSelected());
                     textArea.setEditable(editable.isSelected());
                 }
