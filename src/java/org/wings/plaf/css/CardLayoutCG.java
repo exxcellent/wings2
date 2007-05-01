@@ -43,7 +43,7 @@ public class CardLayoutCG implements LayoutCG {
         else
             openLayouterRow(d, "100%");
 
-        openLayouterCell(d);
+        openLayouterCell(d, c);
         // Just present visible component
         if (c != null) {
             c.write(d);
@@ -59,8 +59,10 @@ public class CardLayoutCG implements LayoutCG {
         d.print(">");
     }
 
-    public static void openLayouterCell(final Device d) throws IOException {
-        d.print("<td>");
+    public static void openLayouterCell(final Device d, SComponent component) throws IOException {
+        d.print("<td");
+        Utils.printTableCellAlignment(d, component, SConstants.CENTER_ALIGN, SConstants.CENTER_ALIGN);
+        d.print(">");
     }
 
     public static void closeLayouterCell(final Device d) throws IOException {
