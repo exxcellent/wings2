@@ -298,7 +298,7 @@ public class MultipartRequest
                     break;
 
                 headers = parseHeader(headerByteArray.toString(req.getCharacterEncoding()));
-
+                headerByteArray.reset();
                 currentParam = (String) headers.get("name");
 
                 if (headers.size() == 1) {                // .. it's not a file
