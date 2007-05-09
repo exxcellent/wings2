@@ -1242,7 +1242,7 @@ public class STable extends SComponent
                         case 'e':
                             editCellAt(row, col, null);
                             break;
-                        case 't'
+                        case 't':
                             boolean shiftKey    = Boolean.parseBoolean( values[1].split("=")[1] );
                             boolean ctrlKey     = Boolean.parseBoolean( values[2].split("=")[1] );
                             if ( ctrlKey == true && shiftKey == false && getSelectionModel().isSelectedIndex(row))
