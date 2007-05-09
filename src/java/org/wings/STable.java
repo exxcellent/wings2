@@ -1218,10 +1218,14 @@ public class STable extends SComponent
         for (int i = 0; i < lastReceivedLowLevelEvents.length; i++) {
             String value = lastReceivedLowLevelEvents[i];
             if (value.length() > 1) {
+                
                 char modus = value.charAt(0);
                 value = value.substring(1);
                 if (value.indexOf(':') == -1)
                     continue;
+
+                String[] values = value.split(";");
+                value = values[0];
 
                 try {
                     SPoint point = new SPoint(value);
@@ -1238,11 +1242,20 @@ public class STable extends SComponent
                         case 'e':
                             editCellAt(row, col, null);
                             break;
-                        case 't':
-                            if (getSelectionModel().isSelectedIndex(row))
+                        case 't'
+                            boolean shiftKey    = Boolean.parseBoolean( values[1].split("=")[1] );
+                            boolean ctrlKey     = Boolean.parseBoolean( values[2].split("=")[1] );
+                            if ( ctrlKey == true && shiftKey == false && getSelectionModel().isSelectedIndex(row))
                                 getSelectionModel().removeSelectionInterval(row, row);
-                            else
-                                getSelectionModel().addSelectionInterval(row, row);
+                            else {
+                                if ( shiftKey == true ) {
+                                    getSelectionModel().setSelectionInterval( getSelectionModel().getLeadSelectionIndex(), row );
+                                } else if ( ctrlKey == true ) {
+                                    getSelectionModel().addSelectionInterval( row, row );
+                                } else {
+                                    getSelectionModel().setSelectionInterval(row, row);
+                                }
+                            }
                             break;
                         case 's':
                             getSelectionModel().addSelectionInterval(row, row);
@@ -1589,7 +1602,7 @@ public class STable extends SComponent
      * wingS internal method used to create specific HTTP request parameter names.
      */
     public String getToggleSelectionParameter(int row, int col) {
-        return "t" + row + ":" + col;
+        return "t" + row + ":" + col + ";shiftKey='+event.shiftKey+';ctrlKey='+event.ctrlKey+'";
     }
 
     /**
