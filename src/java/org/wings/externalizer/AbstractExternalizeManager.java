@@ -67,12 +67,6 @@ public abstract class AbstractExternalizeManager {
     protected final long PREFIX_TIMESLICE =
             ((System.currentTimeMillis() / 1000) % FINAL_EXPIRES) / UNIQUE_TIMESLICE;
 
-    /**
-     * String prefix for externalized ID as String. Computed, do not change.
-     */
-    protected final String PREFIX_TIMESLICE_STRING =
-            StringUtil.toShortestAlphaNumericString(PREFIX_TIMESLICE, 2);
-
     // Flags
 
     /**
@@ -125,12 +119,19 @@ public abstract class AbstractExternalizeManager {
      */
     protected String sessionEncoding = "";
 
+    /**
+     * String prefixed to every created externlizer identifier via {@link #createIdentifier()}
+     */
+    private String prefix;
+
 
     public AbstractExternalizeManager() {
-        log.info("Externalizer: Final scope expires in " + FINAL_EXPIRES + " seconds."+
-                "Using prefix: " + PREFIX_TIMESLICE_STRING);
+        if (log.isInfoEnabled()) {
+            log.info("Externalizer scope using prefix" + prefix + "expires in " + FINAL_EXPIRES + " seconds ");
+        }
 
         reverseExternalized = Collections.synchronizedMap(new HashMap<ExternalizedResource, String>());
+        setPrefix(StringUtil.toShortestAlphaNumericString(PREFIX_TIMESLICE, 2));
     }
 
     public void setResponse(HttpServletResponse response) {
@@ -144,9 +145,20 @@ public abstract class AbstractExternalizeManager {
         return ++counter;
     }
 
+    /**
+     * String prefixed to every created externlizer identifier via {@link #createIdentifier()}
+     */
+    public String getPrefix() {
+        return prefix;
+    }
 
-    protected String getPrefix() {
-        return PREFIX_TIMESLICE_STRING;
+    /**
+     * String prefixed to every created externlizer identifier via {@link #createIdentifier()}
+     */
+    public void setPrefix(final String prefix) {
+        if (log.isDebugEnabled())
+            log.debug("Externalizer prefix changed from "+this.prefix + " to "+prefix);
+        this.prefix = prefix;
     }
 
 

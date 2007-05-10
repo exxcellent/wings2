@@ -33,8 +33,6 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
      */
     private static final SystemExternalizeManager SHARED_INSTANCE = new SystemExternalizeManager();
 
-    private final String MY_PREFIX_TIMESLICE_STRING = "-" + PREFIX_TIMESLICE_STRING;
-
     protected final Map<String, ExternalizedResource> externalized;
 
 
@@ -51,9 +49,11 @@ public class SystemExternalizeManager extends AbstractExternalizeManager {
         return SHARED_INSTANCE;
     }
 
-
-    protected String getPrefix() {
-        return MY_PREFIX_TIMESLICE_STRING;
+    public void setPrefix(final String prefix) {
+        if (prefix.startsWith("-"))
+            super.setPrefix(prefix);
+        else  // The prefix MUST start with a - as this is the identifiert for global resources.
+            super.setPrefix("-" + prefix);
     }
 
     protected void storeExternalizedResource(String identifier,

@@ -622,6 +622,10 @@ final class SessionServlet
                 SForm.clearArmedComponents();
             }
             else {
+                // TODO FIXME: This redirect is in most times too late. Redirect works only if no byte
+                // has yet been sent to the client (dispatch phase)
+                // Won't work if exception occurred during rendering phase
+                // Solution: Provide / send javascript code to redirect.
                 response.sendRedirect(url);
             }
         }
