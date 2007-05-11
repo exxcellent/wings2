@@ -16,6 +16,8 @@ package org.wings.text;
  */
 public class SDefaultFormatter extends SAbstractFormatter {
     
+    private Class valueClass = null;
+    
     /** Creates a new instance of SDefaultFormatter */
     public SDefaultFormatter() {
     }
@@ -38,5 +40,23 @@ public class SDefaultFormatter extends SAbstractFormatter {
             string = value.toString();
         return string;
     }
+    
+    /**
+     * Sets the valueClass
+     * @param valueClass the valueClass
+     */
+    public void setValueClass( Class<?> valueClass ) {
+        this.valueClass = valueClass;
+    }
+    
+    /**
+     * Returns the valueClass
+     * @return Class the valueClass
+     */
+    public Class<?> getValueClass() {
+        return valueClass;
+    }
+    
+    
     
 }
