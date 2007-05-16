@@ -119,7 +119,6 @@ public class SFormattedTextField extends STextField {
 
         return returnValue;
     }
-
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
         
@@ -127,12 +126,10 @@ public class SFormattedTextField extends STextField {
         String newText = "";
         if (isEditable() && isEnabled()) {
             if ( !orgText.equals(values[0]) ) {
-                System.out.println("value has changed" );
                 try {
                     SAbstractFormatter formatter = getFormatter();
                     newText = formatter.valueToString(formatter.stringToValue(values[0]));
                 } catch (ParseException e) {
-                    System.out.println( "ParseException");
                     switch( getFocusLostBehavior() ) {
                         case COMMIT_OR_REVERT :
                             newText = orgText;
@@ -142,11 +139,8 @@ public class SFormattedTextField extends STextField {
                             break;
                     }
                 }
-                
-                System.out.println( "orgText : " + orgText + " ; newText : " + newText );
-
                 setText(newText);
-                if ( !newText.equals(values[0]) && orgText.equals( newText ) ) {
+                if ( !getText().equals(values[0]) && orgText.equals( getText() ) ) {
                     update( ((TextFieldCG)getCG()).getTextUpdate( this, getText() ) );
                 }
                 SForm.addArmedComponent(this);
