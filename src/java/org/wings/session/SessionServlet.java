@@ -413,19 +413,21 @@ final class SessionServlet
                         continue;
                     }
 
+                    String value = values[0];
+
                     // Split the values of the event trigger
                     if (paramName.equals("event_trigger")) {
-                        String[] splittedValues = values[0].split("\\|");
-                        paramName = splittedValues[0];
-                        values = new String[] { splittedValues[1] };
+                        int pos = value.indexOf('|');
+                        paramName = value.substring(0, pos);
+                        values = new String[] { value.substring(pos +1) };
                     }
 
                     // Handle form submit via default button
                     if (paramName.equals("default_button")) {
-                        if (values[0].equals("undefined")) {
+                        if (value.equals("undefined")) {
                             continue;
                         } else {
-                            paramName = values[0];
+                            paramName = value;
                             values = new String[] { "1" };
                         }
                     }

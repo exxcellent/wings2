@@ -404,8 +404,6 @@ public class SDefaultCellEditor
         }
 
         public void processLowLevelEvent(String name, String[] values) {
-            System.out.println(name + " = " + Arrays.asList(values));
-
             if (name.endsWith("_panel")) {
                 if ("ok".equals(values[0]))
                     okFinalEvents = true;
@@ -413,7 +411,6 @@ public class SDefaultCellEditor
                     cancelFinalEvents = true;
             }
             else if (name.endsWith("_ed") && editorComponent instanceof LowLevelEventListener) {
-                System.out.println("editorValues = " + Arrays.asList(values));
                 LowLevelEventListener lowLevelEventListener = (LowLevelEventListener) editorComponent;
                 lowLevelEventListener.processLowLevelEvent(name, values);
             }
