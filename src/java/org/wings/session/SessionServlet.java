@@ -427,7 +427,7 @@ final class SessionServlet
                         if (value.equals("undefined")) {
                             continue;
                         } else {
-                            paramName = value;
+                            paramName = values[0];
                             values = new String[] { "1" };
                         }
                     }
