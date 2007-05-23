@@ -70,6 +70,15 @@
     </servlet>
 
     <servlet>
+        <servlet-name>HelloWingS</servlet-name>
+        <servlet-class>org.wings.session.WingServlet</servlet-class>
+        <init-param>
+            <param-name>wings.mainclass</param-name>
+            <param-value>wingset.HelloWingS</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
         <servlet-name>dwr-invoker</servlet-name>
         <display-name>DWR Servlet</display-name>
         <description>Direct Web Remoter Servlet</description>
@@ -105,6 +114,11 @@
     <servlet-mapping>
         <servlet-name>WingSet</servlet-name>
         <url-pattern>/WingSet/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>HelloWingS</servlet-name>
+        <url-pattern>/HelloWingS/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

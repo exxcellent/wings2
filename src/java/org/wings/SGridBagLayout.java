@@ -473,15 +473,16 @@ public class SGridBagLayout
                     row = rows - 1;
                     maxrow = rows;
                 }
-                colweight[row] += c.weightx;
-                rowweight[col] += c.weighty;
 
                 for (; col < maxcol; col++) {
+                    rowweight[col] += c.weighty;
                     for (int r = row; r < maxrow; r++) {
                         grid[col][r] = comp;
+                        colweight[r] += c.weightx;
                     }
                 }
             }
+            /*
             for (firstRow = 0; firstRow < rows; firstRow++) {
                 int col;
                 for (col = 0; col < cols; col++) {
@@ -504,6 +505,7 @@ public class SGridBagLayout
                     break;
                 }
             }
+            */
         }
     }
 

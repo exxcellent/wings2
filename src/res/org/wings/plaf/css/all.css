@@ -154,7 +154,7 @@ input.SPasswordField,
 .SFileChooser input,
 textarea.STextArea,
 select.SComboBox,
-select.SList {
+.SList {
     font-family: sans-serif;
     font-weight: normal;
     font-style: normal;

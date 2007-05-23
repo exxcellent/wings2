@@ -114,7 +114,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
 
                         cellStyle.width = null;
                         if (c.weightx > 0 && grid.colweight[row] > 0) {
-                            cellStyle.width = (int) (100 * c.weightx / grid.colweight[row]) + "%";
+                            cellStyle.width = (int)(100 * c.weightx / grid.colweight[row]) + "%";
                         }
 
                         if (useCellInsets) {

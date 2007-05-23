@@ -18,6 +18,7 @@ import org.wings.SComponent;
 import org.wings.SDefaultListCellRenderer;
 import org.wings.SList;
 import org.wings.SListCellRenderer;
+import org.wings.util.SStringBuilder;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
@@ -62,7 +63,15 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
             list.putClientProperty("onChangeSubmitListener", null);
         }
 
-        device.print("<span><select wrapping=\"1\"");
+        device.print("<span");
+        SStringBuilder builder = new SStringBuilder();
+        Utils.appendCSSInlineSize(builder, list);
+        if (builder.length() != 0) {
+            device.print(" style=\"");
+            device.print(builder.toString());
+            device.print("\"");
+        }
+        device.print("><select wrapping=\"1\"");
         writeAllAttributes(device, list);
 
         Utils.optAttribute(device, "name", Utils.event(list));
