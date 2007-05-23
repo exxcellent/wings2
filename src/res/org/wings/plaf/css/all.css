@@ -85,8 +85,18 @@ TABLE.SToggleButton_selected {
     color: #000066;
 }
 
+TABLE.SButton_form_disabled {
+    border: 2px outset #ddd;
+    background-color: #ddd;
+    color: #9c9a9c !important;
+    cursor: default;
+    text-align: center;
+    white-space: normal;
+    text-indent: 0px;
+    border-collapse: collapse;
+}
+
 TABLE.SButton_form,
-TABLE.SButton_form_disabled,
 TABLE.SToggleButton_form,
 TABLE.SToggleButton_form_selected {
     border: 2px outset #ddd;
