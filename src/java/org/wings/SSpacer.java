@@ -30,4 +30,8 @@ public class SSpacer extends SComponent {
         setPreferredSize(new SDimension(width, height));
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
 }

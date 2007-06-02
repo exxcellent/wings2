@@ -122,7 +122,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Enabled / disabled.
      */
-    private boolean enabled = true;
+    protected boolean enabled = true;
 
     /**
      * The container, this component resides in.
