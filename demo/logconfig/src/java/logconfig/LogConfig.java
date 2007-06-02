@@ -367,7 +367,7 @@ public class LogConfig {
         }
 
         pa_content.add(pa_application, "application");
-        //pa_content.add(createAjaxDebuggingPanel(), "debugging");
+        pa_content.add(createAjaxDebuggingPanel(), "debugging");
         fr_frame.addHeader(new StyleSheetHeader("../css/custom.css"));
         fr_frame.setVisible(true);
     }
@@ -540,7 +540,7 @@ public class LogConfig {
         pa_debug.setStyle(pa_debug.getStyle() + " pa_debug");
         pa_debug.setVerticalAlignment(SConstants.TOP_ALIGN);
 
-        SLabel la_title = new SLabel("Playground for debugging some AJAX stuff:");
+        SLabel la_title = new SLabel("Playground for debugging AJAX:");
         la_title.setStyle(la_title.getStyle() + " la_title");
         pa_debug.add(la_title);
 
@@ -848,43 +848,43 @@ public class LogConfig {
                 "  return false;\n" +
                 "}"
         ));
-        an_toggleAjaxDebugView.add(new SLabel("Show/hide the AJAX debugging view (if enabled)"));
+        an_toggleAjaxDebugView.add(new SLabel("Show / hide AJAX debugging view"));
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(0));
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameUpdateEnabled);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleFrameUpdateCursor);
-        addToAjaxDebuggingPanel(pa_debug, cb_toggleFormReloadForced);
+//        addToAjaxDebuggingPanel(pa_debug, cb_toggleFormReloadForced);
         addToAjaxDebuggingPanel(pa_debug, cb_toggleTreeReloadForced);
-        addToAjaxDebuggingPanel(pa_debug, cb_toggleCheckboxTest);
+//        addToAjaxDebuggingPanel(pa_debug, cb_toggleCheckboxTest);
 
-        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, bu_markFrameDirty);
-        addToAjaxDebuggingPanel(pa_debug, bu_doSomethingSpecial);
-        addToAjaxDebuggingPanel(pa_debug, bu_forceServerError);
-        addToAjaxDebuggingPanel(pa_debug, an_abortCurrentAjaxRequest);
-        addToAjaxDebuggingPanel(pa_debug, bu_addScriptHeader);
-        addToAjaxDebuggingPanel(pa_debug, bu_removeScriptHeader);
-        addToAjaxDebuggingPanel(pa_debug, an_alertHello);
+//        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+//        addToAjaxDebuggingPanel(pa_debug, bu_markFrameDirty);
+//        addToAjaxDebuggingPanel(pa_debug, bu_doSomethingSpecial);
+//        addToAjaxDebuggingPanel(pa_debug, bu_forceServerError);
+//        addToAjaxDebuggingPanel(pa_debug, an_abortCurrentAjaxRequest);
+//        addToAjaxDebuggingPanel(pa_debug, bu_addScriptHeader);
+//        addToAjaxDebuggingPanel(pa_debug, bu_removeScriptHeader);
+//        addToAjaxDebuggingPanel(pa_debug, an_alertHello);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, createRandomResultPanel());
 
-        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, createMenuTestPanel());
+//        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+//        addToAjaxDebuggingPanel(pa_debug, createMenuTestPanel());
 
-        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollable);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollPaneMode);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBar);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBar);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBarPolicy);
-        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBarPolicy);
+//        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollable);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeScrollPaneMode);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBar);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBar);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeHScrollBarPolicy);
+//        addToAjaxDebuggingPanel(pa_debug, cb_changeVScrollBarPolicy);
 //
 //        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
 //        addToAjaxDebuggingPanel(pa_debug, ta_testTextArea);
 
-        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
-        addToAjaxDebuggingPanel(pa_debug, bu_testWhatever);
+//        addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
+//        addToAjaxDebuggingPanel(pa_debug, bu_testWhatever);
 
         addToAjaxDebuggingPanel(pa_debug, verticalSpace(5));
         addToAjaxDebuggingPanel(pa_debug, an_toggleAjaxDebugView);
@@ -916,10 +916,10 @@ public class LogConfig {
                     try {
                         Thread.sleep(ms);
                     } catch (InterruptedException e1) {}
-                    label.setText("Woke up after " + ms + " ms.");
+                    label.setText(ms + " ms");
                 } else {
                     int nr = new Random().nextInt(9000) + 1000;
-                    label.setText("Ok, my number is " + nr + ".");
+                    label.setText(nr + "");
                 }
             }
         }

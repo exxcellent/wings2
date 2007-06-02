@@ -1,7 +1,7 @@
 <table>
   <tr>
-  	<td width="50%"><object name="debugging"></object></td>
+  	<td width="50%">&nbsp;</object></td>
     <td align="center"><object name="application"></object></td>
-    <td width="50%"><object name="debugging"></object></td>
+    <td width="50%" style="padding-left:50px"><object name="debugging"></object></td>
   </tr>
 </table>
