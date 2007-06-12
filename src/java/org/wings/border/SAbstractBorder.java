@@ -41,7 +41,7 @@ public abstract class SAbstractBorder
     protected Insets insets;
 
     private CSSAttributeSet attributes = new CSSAttributeSet();
-    private SComponent component;
+    protected SComponent component;
 
     public SAbstractBorder() {
         this(null, -1, null);
