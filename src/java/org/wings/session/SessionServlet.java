@@ -334,8 +334,13 @@ final class SessionServlet
 
             // The externalizer is able to handle static and dynamic resources
             ExternalizeManager extManager = getSession().getExternalizeManager();
-            String pathInfo = req.getPathInfo().substring(1);
-            log.debug("PathInfo: " + pathInfo);
+            String pathInfo = req.getPathInfo();                    // Note: Websphere returns <code>null</code> here!
+            if (pathInfo != null && pathInfo.length() > 0) {
+                // strip of leading /
+                pathInfo = pathInfo.substring(1);
+            }
+            if (log.isDebugEnabled())
+                log.debug("pathInfo: " + pathInfo);
 
             // If we have no path info, or the special '_' path info (that should be explained
             // somewhere, Holger), then we deliver the top-level frame of this application.
@@ -352,7 +357,7 @@ final class SessionServlet
 
             // Special case handling: We request a .html resource of a session which is not accessible.
             // This happens some times and leads to a 404, though it should not be possible.
-            if (extInfo == null && pathInfo != null && pathInfo.length() > 0 && pathInfo.endsWith(".html")) {
+            if (extInfo == null && pathInfo != null && pathInfo.endsWith(".html")) {
                 log.info("Found a request to an invalid .html during a valid session. Redirecting to root frame.");
                 response.sendRedirect(retrieveCurrentRootFrameResource().getURL().toString());
                 return;
@@ -651,15 +656,13 @@ final class SessionServlet
         res.getOutputStream().println("<h1>404 Not Found</h1>Unknown Resource Requested: " + req.getPathInfo());
     }
 
-    /**
-     * --- HttpSessionBindingListener --- *
-     */
 
-
+    /* HttpSessionBindingListener */
     public void valueBound(HttpSessionBindingEvent event) {
     }
 
 
+    /* HttpSessionBindingListener */
     public void valueUnbound(HttpSessionBindingEvent event) {
         destroy();
     }

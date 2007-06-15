@@ -20,8 +20,8 @@ public class SBorderFactory
     private SBorderFactory() {
     }
 
+    //// LineBorder ///////////////////////////////////////////////////////////////
 
-//// LineBorder ///////////////////////////////////////////////////////////////
     /**
      * Creates a line SBorder withe the specified color.
      *
@@ -37,7 +37,7 @@ public class SBorderFactory
      * and width. The width applies to all four sides of the
      * SBorder. To specify widths individually for the top,
      * bottom, left, and right, use 
-     * {@link #createMatteBorder(int,int,int,int,Color)}.
+     * {@link #createSEmptyBorder(int, int, int, int)}. 
      *
      * @param color  a <code>Color</code> to use for the line
      * @param thickness  an integer specifying the width in pixels
@@ -48,8 +48,7 @@ public class SBorderFactory
     }
     
 
-//// BevelBorder /////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+    //// BevelBorder /////////////////////////////////////////////////////////////
 
     /**
      * Creates a SBorder with a raised beveled edge, using
@@ -139,7 +138,8 @@ public class SBorderFactory
 					shadowOuter, shadowInner);
     }
 */
-//// EtchedBorder ///////////////////////////////////////////////////////////
+
+    //// EtchedBorder ///////////////////////////////////////////////////////////
 
     /**
      * Creates a SBorder with an "etched" look using
@@ -180,7 +180,8 @@ public class SBorderFactory
         return new SEtchedBorder(type, highlight, shadow);
     }
 */
-//// STitledBorder ////////////////////////////////////////////////////////////
+    //// STitledBorder ////////////////////////////////////////////////////////////
+
     /**
      * Creates a new STitled SBorder with the specified title,
      * the default SBorder type (determined by the current look and feel),
@@ -269,7 +270,7 @@ public class SBorderFactory
      * positioning and font, and using the default text color
      * (determined by the current look and feel).
      *
-     * @param SBorder      the <code>SBorder</code> object to add the title to
+     * @param border      the <code>SBorder</code> object to add the title to
      * @param title       a <code>String</code> containing the text of the title
      * @param titleJustification  an integer specifying the justification
      *        of the title -- one of the following:
@@ -308,7 +309,7 @@ public class SBorderFactory
      * Adds a title to an existing SBorder, with the specified
      * positioning, font and color.
      *
-     * @param SBorder      the <code>SBorder</code> object to add the title to
+     * @param border      the <code>SBorder</code> object to add the title to
      * @param title       a <code>String</code> containing the text of the title
      * @param titleJustification  an integer specifying the justification
      *        of the title -- one of the following:
