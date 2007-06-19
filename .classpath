@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="src" path="demo/dwr/src/java"/>
-	<classpathentry kind="src" path="demo/wingset/src/java"/>
-	<classpathentry kind="src" path="demo/jsp/src/java"/>
 	<classpathentry kind="src" path="demo/desktop/src/java"/>
+	<classpathentry kind="src" path="demo/dwr/src/java"/>
+	<classpathentry kind="src" path="demo/jsp/src/java"/>
 	<classpathentry kind="src" path="demo/logconfig/src/java"/>
 	<classpathentry kind="src" path="demo/frameset/src/java"/>
-	<classpathentry kind="src" path="lib"/>
+	<classpathentry kind="src" path="demo/wingset/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/bsh-core.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-2.0-beta1.jar"/>
