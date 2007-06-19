@@ -209,12 +209,15 @@ wingS.util.requestFocus = function(id) {
     if (parent != null) {
         if (parent.getAttribute("foc") == id) {
             if (parent.style.display != "none" && !parent.disabled) {
-                parent.focus();
+                // Workaround for IE6! Without timeout IE6 hangs the complete
+                // GUI in case 'parent' is a combobox and the newly selected
+                // index is smaller than before. Unbelieveable, but true!!!
+                window.setTimeout(function() { parent.focus() }, 100);
             }
             return;
         }
 
-        var tags = new Array("INPUT", "A");
+        var tags = new Array("INPUT", "A", "SELECT", "TEXTAREA");
         for (var i = 0; i < tags.length; i++) {
             var elements = parent.getElementsByTagName(tags[i]);
             for (var j = 0; j < elements.length; j++) {
@@ -222,7 +225,7 @@ wingS.util.requestFocus = function(id) {
                 if (element.getAttribute("foc") == id &&
                     element.style.display != "none" &&
                     !element.disabled) {
-                    element.focus();
+                    window.setTimeout(function() { element.focus() }, 100);
                     return;
                 }
             }
