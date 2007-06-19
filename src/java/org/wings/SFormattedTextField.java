@@ -140,7 +140,9 @@ public class SFormattedTextField extends STextField {
                     }
                 }
                 setText(newText);
-                if ( !getText().equals(values[0]) && orgText.equals( getText() ) ) {
+                if (newText == null)
+                    newText = "";
+                if ( !newText.equals(values[0]) && orgText.equals( newText ) ) {
                     update( ((TextFieldCG)getCG()).getTextUpdate( this, getText() ) );
                 }
                 SForm.addArmedComponent(this);
