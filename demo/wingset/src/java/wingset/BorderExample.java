@@ -53,8 +53,7 @@ public class BorderExample extends WingSetPane {
         //First pane: simple borders
         SPanel simpleBorders = new SPanel();
         simpleBorders.setBorder(paneEdge);
-        simpleBorders.setLayout(new SBoxLayout(simpleBorders,
-                                              SBoxLayout.Y_AXIS));
+        simpleBorders.setLayout(new SBoxLayout(SBoxLayout.Y_AXIS));
 
         addCompForBorder(blackline, "line border",
                          simpleBorders);
@@ -72,16 +71,14 @@ public class BorderExample extends WingSetPane {
         //Second pane: matte borders
         SPanel matteBorders = new SPanel();
         matteBorders.setBorder(paneEdge);
-        matteBorders.setLayout(new SBoxLayout(matteBorders,
-                                              SBoxLayout.Y_AXIS));
+        matteBorders.setLayout(new SBoxLayout(SBoxLayout.Y_AXIS));
 
         ImageIcon icon = createImageIcon("images/wavy.gif",
                                          "wavy-line border icon"); //20x22
         //Third pane: titled borders
         SPanel titledBorders = new SPanel();
         titledBorders.setBorder(paneEdge);
-        titledBorders.setLayout(new SBoxLayout(titledBorders,
-                                              SBoxLayout.Y_AXIS));
+        titledBorders.setLayout(new SBoxLayout(SBoxLayout.Y_AXIS));
         STitledBorder titled;
 
         titled = SBorderFactory.createSTitledBorder("title");
@@ -147,8 +144,7 @@ public class BorderExample extends WingSetPane {
         //Fourth pane: compound borders
         SPanel compoundBorders = new SPanel();
         compoundBorders.setBorder(paneEdge);
-        compoundBorders.setLayout(new SBoxLayout(compoundBorders,
-                                              SBoxLayout.Y_AXIS));
+        compoundBorders.setLayout(new SBoxLayout(SBoxLayout.Y_AXIS));
         SBorder redline = SBorderFactory.createSLineBorder(Color.red);
 
 
