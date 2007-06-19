@@ -14,7 +14,6 @@ package org.wings.plaf.css;
 
 
 import org.wings.*;
-import org.wings.io.CachingDevice;
 import org.wings.io.Device;
 import org.wings.plaf.CGManager;
 import org.wings.session.SessionManager;
@@ -298,7 +297,7 @@ public final class TableCG
         STableColumnModel columnModel = table.getColumnModel();
         if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
             device.print("<colgroup>");
-            if (table.getRowSelectionRenderer() != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION)
+            if (isSelectionColumnVisible(table))
                 writeCol(device, selectionColumnWidth);
 
             for (int i = startX; i < endX; ++i) {
@@ -355,7 +354,9 @@ public final class TableCG
             if (r >= emptyIndex) {
                 int colspan = endX - startX;
                 device.print("<tr>\n");
-                device.print("  <td class=\"empty\"></td>\n");
+                if (isSelectionColumnVisible(table)) {
+                    device.print("  <td class=\"empty\"></td>\n");
+                }
                 device.print("  <td class=\"empty\" colspan=\"" + colspan + "\">&nbsp;</td>\n");
                 device.print("</tr>\n");
                 continue;
@@ -394,7 +395,7 @@ public final class TableCG
     }
 
     protected void writeSelectionHeader(Device device, STable table) throws IOException {
-        if (table.getRowSelectionRenderer() != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION) {
+        if (isSelectionColumnVisible(table)) {
             device.print("<th valign=\"middle\" class=\"num\"");
             Utils.optAttribute(device, "width", selectionColumnWidth);
             device.print("></th>");
@@ -423,8 +424,8 @@ public final class TableCG
         throws IOException
     {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
-        if (rowSelectionRenderer != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION) {
-            final String columnStyle = Utils.joinStyles((SComponent)rowSelectionRenderer, "num");
+        if (isSelectionColumnVisible(table)) {
+            final String columnStyle = Utils.joinStyles((SComponent) rowSelectionRenderer, "num");
 
             device.print("<td valign=\"top\" align=\"right\"");
             Utils.optAttribute(device, "width", selectionColumnWidth);
@@ -456,17 +457,17 @@ public final class TableCG
         throws IOException
     {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
-        if (rowSelectionRenderer == null) {
-            // simple case: just row number
-            device.print(row);
-        }
-        else {
-            // default case: use row selection renderer component
-            final SComponent comp = rowSelectionRenderer.getTableCellRendererComponent(table,
-                                                                                       table.getToggleSelectionParameter(row, -1),
-                                                                                       table.isRowSelected(row),
-                                                                                       row, -1);
-            rendererPane.writeComponent(device, comp, table);
-        }
+        // use row selection renderer component
+        final SComponent comp = rowSelectionRenderer.getTableCellRendererComponent(table,
+                                                                                   table.getToggleSelectionParameter(row, -1),
+                                                                                   table.isRowSelected(row),
+                                                                                   row, -1);
+        rendererPane.writeComponent(device, comp, table);
+    }
+    
+    private boolean isSelectionColumnVisible(STable table) {
+        if (table.getRowSelectionRenderer() != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION)
+            return true;
+        return false;
     }
 }
