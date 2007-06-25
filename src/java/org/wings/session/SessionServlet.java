@@ -100,7 +100,8 @@ final class SessionServlet
         for (int i = 0; i < args.length; i++) {
             try {
                 getSession().setLocaleFromHeader(Boolean.valueOf(args[i]).booleanValue());
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 log.error("setLocaleFromHeader", e);
             }
         }
@@ -117,17 +118,8 @@ final class SessionServlet
     protected final void handleLocale(HttpServletRequest req) {
         setLocaleFromHeader(req.getParameterValues("LocaleFromHeader"));
 
-        if (getSession().getLocaleFromHeader()) {
-            for (Enumeration en = req.getLocales(); en.hasMoreElements();) {
-                Locale locale = (Locale) en.nextElement();
-                try {
-                    getSession().setLocale(locale);
-                    return;
-                } catch (Exception ex) {
-                    log.warn("locale not supported " + locale);
-                } // end of try-catch
-            } // end of for ()
-        }
+        if (getSession().getLocaleFromHeader())
+            getSession().determineLocale();
     }
 
     // jetzt kommen alle Servlet Methoden, die an den parent deligiert

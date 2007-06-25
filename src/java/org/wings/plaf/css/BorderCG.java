@@ -38,7 +38,7 @@ public class BorderCG {
                     break;
             }
                         
-            Utils.optAttribute( device, "style", getLegendAttributes(titledBorder) ); /* Write Legend Specifiec styöes */
+            Utils.optAttribute( device, "style", getLegendAttributes(titledBorder) ); /* Write Legend Specifiec styles */
             device.print(">").print(((STitledBorder)component.getBorder()).getTitle()).print("</legend>");
         }
     }

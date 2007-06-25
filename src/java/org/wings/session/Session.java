@@ -623,26 +623,17 @@ public class Session implements PropertyService, Serializable {
 
 
     /**
-     * sets a new locale for this session. The locale is <em>only</em> set,
-     * if it is one of the supported locales {@link #setSupportedLocales},
-     * otherwise an IllegalArgumentException is thrown.
+     * Sets the locale for this session. A property change event is fired, if the locale has actually changed.
      *
-     * @param l the locale to be associated with this session.
-     * @throws IllegalArgumentException if this locale is not supported, as
-     *                                  predefined with {@link #setSupportedLocales}.
+     * @param locale the locale to be associated with this session.
      */
-    public void setLocale(Locale l) throws IllegalArgumentException {
-        if (l == null || locale.equals(l))
+    public void setLocale(Locale locale) throws IllegalArgumentException {
+        Locale old = this.locale;
+        if (locale == null || this.locale.equals(locale))
             return;
-        if (supportedLocales == null ||
-                supportedLocales.length == 0 ||
-                Arrays.asList(supportedLocales).contains(l)) {
-            final Locale oldLocale = locale;
-            locale = l;
-            propertyChangeSupport.firePropertyChange(LOCALE_PROPERTY, oldLocale, locale);
-            log.info("Setting session locale to: " + l);
-        } else
-            throw new IllegalArgumentException("Locale " + l + " not supported!");
+
+        this.locale = locale;
+        propertyChangeSupport.firePropertyChange(LOCALE_PROPERTY, old, locale);
     }
 
     /**
@@ -662,6 +653,8 @@ public class Session implements PropertyService, Serializable {
      */
     public final void setLocaleFromHeader(boolean adoptLocale) {
         localeFromHeader = adoptLocale;
+        if (localeFromHeader)
+            determineLocale();
     }
 
     /**
@@ -672,12 +665,32 @@ public class Session implements PropertyService, Serializable {
         return localeFromHeader;
     }
 
-
     /**
      * sets the locales, supported by this application. If empty or <em>null</em>, all locales are supported.
      */
     public final void setSupportedLocales(Locale[] locales) {
         supportedLocales = locales;
+        localeFromHeader = true;
+        determineLocale();
+    }
+
+    void determineLocale() {
+        if (supportedLocales == null)
+            setLocale(servletRequest.getLocale());
+
+        Enumeration<Locale> requestedLocales = servletRequest.getLocales();
+        while (requestedLocales.hasMoreElements()) {
+            Locale locale = requestedLocales.nextElement();
+            for (int i = 0; i < supportedLocales.length; i++) {
+                Locale supportedLocale = supportedLocales[i];
+                if (locale.equals(supportedLocale)) {
+                    setLocale(supportedLocale);
+                    return;
+                }
+            }
+        }
+        log.warn("locale not supported " + locale);
+        setLocale(supportedLocales[0]);
     }
 
     /**

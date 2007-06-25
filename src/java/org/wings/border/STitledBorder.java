@@ -154,7 +154,7 @@ public class STitledBorder extends SAbstractBorder {
 
     /**
      * Constructor for STitledBorder
-     * Creates a TitledBorder instance with the specified border, title, title-justification, title-position, title-font, and title-color.
+     * Creates a TitledBorder instance with the specified border, title, title-justification, title-position, title-font, and title-color.
      *
      * @param border the border to use
      * @param title  the title to display

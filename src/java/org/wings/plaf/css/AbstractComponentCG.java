@@ -355,7 +355,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             SToolTipManager.sharedInstance().registerComponent(component);
             BorderCG.writeComponentBorderSufix(device, component);
         } catch (RuntimeException e) {
-            log.fatal("Runtime exception during rendering", e);
+            log.fatal("Runtime exception during rendering of " + component.getName(), e);
             device.print("<blink>" + e.getClass().getName() + " during code generation of "
                     + component.getName() + "(" + component.getClass().getName() + ")</blink>\n");
         }
