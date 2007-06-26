@@ -309,6 +309,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         // Write contents of the frame
         if (frame.isVisible()) {
+            Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_TOOLTIP).write(device);
+            device.print("\n");
 
             // Setup DnD
             DragAndDropManager dndManager = frame.getSession().getDragAndDropManager();
@@ -384,9 +386,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_DND).write(device);
                 device.print("\n");
             }
+            handleScripts(device, frame);
         }
-
-        handleScripts(device, frame);
 
         device.print("</body>\n</html>\n");
 
@@ -405,9 +406,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         device.print("<script type=\"text/javascript\">\n");
 
         // print all scripts
-        device.print(getInitScript(frame)).print("\n");
+        device.print(getGlobalInitScript(frame)).print("\n");
+        device.print(getTooltipInitScript(tooltipManager)).print("\n");
 
-        // print all scripts
         ScriptListener[] scriptListeners = scriptManager.getScriptListeners();
         for (int i = 0; i < scriptListeners.length; ++i) {
             if (scriptListeners[i].getScript() != null) {
@@ -416,17 +417,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
         scriptManager.clearScriptListeners();
 
-        // print all tooltips
-        final List ttComponentIds = tooltipManager.getRegisteredComponents();
-        if (ttComponentIds.size() != 0) {
-            device.print(ToolTipCG.generateTooltipInitScript(ttComponentIds));
-            tooltipManager.clearRegisteredComponents();
-        }
-
         device.print("</script>\n");
     }
 
-    private String getInitScript(SFrame frame) throws IOException {
+    private String getGlobalInitScript(SFrame frame) throws IOException {
         SStringBuilder script = new SStringBuilder();
         script.append("wingS.global.init('");
         script.append(frame.getEventEpoch()).append("','");
@@ -437,6 +431,15 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         script.append("'image':'").append(frame.getUpdateCursor()[1]).append("',");
         script.append("'dx':").append(frame.getUpdateCursor()[2]).append(",");
         script.append("'dy':").append(frame.getUpdateCursor()[3]).append("});");
+        return script.toString();
+    }
+    
+    private String getTooltipInitScript(SToolTipManager tooltipManager) throws IOException {
+        SStringBuilder script = new SStringBuilder();
+        script.append("wingS.component.initTooltips(");
+        script.append(tooltipManager.getInitialDelay()).append(",");
+        script.append(tooltipManager.getDismissDelay()).append(",");
+        script.append(tooltipManager.isFollowMouse()).append(");");
         return script.toString();
     }
 

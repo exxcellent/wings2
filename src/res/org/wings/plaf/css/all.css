@@ -566,19 +566,6 @@ ul.SPopupMenu a.x:hover{
     color: #004;
 }
 
-/* tooltips */
-.yui-tt {
-    visibility: hidden;
-    position: absolute;
-    color: #000000;
-    background-color: #F1F1FF;
-    font-family: arial,helvetica,verdana,sans-serif;
-    padding: 1px 2px;
-    border: 1px solid #333333;
-    font-size: 100% ;
-    width: auto;
-}
-
 /* clears the windows */
 .SDesktopPane div.spacer, .SFlowLayout div.spacer {
     height:0px;

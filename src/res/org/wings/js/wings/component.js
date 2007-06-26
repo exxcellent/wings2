@@ -21,3 +21,10 @@ wingS.component.spinnerCallback = function(result) {
     }
 };
 
+wingS.component.initTooltips = function(delay, duration, followMouse) {
+    if (config && config.Delay && config.Duration && config.FollowMouse) {
+    	config.Delay = delay;
+		config.Duration = duration;
+		config.FollowMouse = followMouse;
+    }
+};

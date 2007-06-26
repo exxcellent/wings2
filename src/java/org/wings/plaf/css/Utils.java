@@ -1267,6 +1267,10 @@ public final class Utils {
      * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for a JSLibrary
      */
     public static final String JS_ETC_WZDND = "JS.etcWzDnD";
+    /**
+     * Lookup key for {@link #createExternalizedJSHeaderFromProperty(String)} for a JSLibrary
+     */
+    public static final String JS_ETC_TOOLTIP = "JS.etcWzTooltip";
 
     /**
      * Load a Javascript library that comes with wingS by a property. Check <code>JS_XXXX_XXX</code> constants.

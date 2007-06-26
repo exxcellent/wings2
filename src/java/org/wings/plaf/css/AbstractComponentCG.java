@@ -21,7 +21,6 @@ import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SPopupMenu;
 import org.wings.SResourceIcon;
-import org.wings.SToolTipManager;
 import org.wings.border.*;
 import org.wings.dnd.DragSource;
 import org.wings.io.Device;
@@ -190,7 +189,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     protected static void writeTooltipMouseOver(Device device, SComponent component) throws IOException {
         final String toolTipText = component != null ? component.getToolTipText() : null;
         if (toolTipText != null && toolTipText.length() > 0) {
-            Utils.optAttribute(device, "title", toolTipText);
+            device.print(" onmouseover=\"Tip('");
+            Utils.quote(device, toolTipText, true, false, true);
+            device.print("')\"");
         }
     }
 
@@ -352,7 +353,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             BorderCG.writeComponentBorderPrefix(device, component);
             writeInternal(device, component);
             ScriptManager.getInstance().addScriptListeners(component.getScriptListeners());
-            SToolTipManager.sharedInstance().registerComponent(component);
             BorderCG.writeComponentBorderSufix(device, component);
         } catch (RuntimeException e) {
             log.fatal("Runtime exception during rendering of " + component.getName(), e);

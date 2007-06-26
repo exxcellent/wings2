@@ -37,11 +37,6 @@ div, input, select, textarea, table {
     -moz-box-sizing: border-box;
 }
 
-/* tooltips opacity */
-.yui-tt {
-    -moz-opacity: 0.8;
-}
-
 /*pre.label {
     font-family: inherit;
     margin: 0px;

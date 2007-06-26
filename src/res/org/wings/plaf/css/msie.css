@@ -55,11 +55,6 @@ ul.SMenu > li a
     display: inline;
 }
 
-/* tooltips opacity */
-.yui-tt {
-    filter:alpha(opacity=80);
-}
-
 TABLE {
     border-collapse: collapse;
 }

@@ -12,7 +12,6 @@ import org.wings.SToolTipManager;
 import org.wings.plaf.Update;
 import org.wings.io.Device;
 import org.wings.plaf.css.RenderHelper;
-import org.wings.plaf.css.ToolTipCG;
 import org.wings.script.ScriptListener;
 import org.wings.session.ScriptManager;
 import org.wings.session.SessionManager;
@@ -77,13 +76,6 @@ public class UpdateResource extends DynamicResource {
                     }
                 }
                 scriptManager.clearScriptListeners();
-
-                // update tooltips
-                final List ttComponentIds = tooltipManager.getRegisteredComponents();
-                if (ttComponentIds.size() != 0) {
-                    writeUpdate(out, ToolTipCG.generateTooltipInitScript(ttComponentIds));
-                    tooltipManager.clearRegisteredComponents();
-                }
 			}
             writeFooter(out);
 
