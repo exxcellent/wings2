@@ -37,8 +37,8 @@ public class ScrollPaneCG extends org.wings.plaf.css.AbstractComponentCG impleme
                 if (preferredSize.getHeightInt() < 0) preferredSize.setHeight(400);
             }
 
-            writeContent(device, component);
             ScriptManager.getInstance().addScriptListener(new LayoutScrollPaneScript(component.getName()));
+            writeContent(device, component);
         } else {
             writeContent(device, component);
         }
