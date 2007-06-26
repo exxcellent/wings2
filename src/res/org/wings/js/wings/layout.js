@@ -31,7 +31,8 @@ wingS.layout.fill = function(tableId) {
       var yweight = row.getAttribute("yweight");
       if (yweight) {
           var oversize = row.getAttribute("oversize");
-          row.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
+          if (oversize == null) oversize = 0;
+          row.style.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
       }
     }
 };
