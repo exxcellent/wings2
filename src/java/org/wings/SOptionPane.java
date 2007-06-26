@@ -27,6 +27,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.StringTokenizer;
+import org.wings.session.SessionManager;
 
 /**
  * An immodal dialog component offering several options for selection (like Yes/No, etc.)
@@ -167,22 +168,22 @@ public class SOptionPane extends SDialog implements ActionListener {
     /**
      * OK Button
      */
-    protected final SButton optionOK = createButton("OK");
+    protected final SButton optionOK = createButton(UIManager.getString("OptionPane.okButtonText", SessionManager.getSession().getLocale()));
 
     /**
      * Cancel Button
      */
-    protected final SButton optionCancel = createButton("Cancel");
+    protected final SButton optionCancel = createButton(UIManager.getString("OptionPane.cancelButtonText", SessionManager.getSession().getLocale()));
 
     /**
      * Yes Button
      */
-    protected final SButton optionYes = createButton("Yes");
+    protected final SButton optionYes = createButton(UIManager.getString("OptionPane.yesButtonText", SessionManager.getSession().getLocale()));
 
     /**
      * No Button
      */
-    protected final SButton optionNo = createButton("No");
+    protected final SButton optionNo = createButton(UIManager.getString("OptionPane.noButtonText", SessionManager.getSession().getLocale()));
 
     final SBorder empty = new SEmptyBorder(new Insets(6, 24, 6, 24));
 
