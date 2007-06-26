@@ -679,18 +679,22 @@ public class Session implements PropertyService, Serializable {
             setLocale(servletRequest.getLocale());
 
         Enumeration<Locale> requestedLocales = servletRequest.getLocales();
-        while (requestedLocales.hasMoreElements()) {
-            Locale locale = requestedLocales.nextElement();
-            for (int i = 0; i < supportedLocales.length; i++) {
-                Locale supportedLocale = supportedLocales[i];
-                if (locale.equals(supportedLocale)) {
-                    setLocale(supportedLocale);
-                    return;
+        if (supportedLocales != null) {
+            while (requestedLocales.hasMoreElements()) {
+                Locale locale = requestedLocales.nextElement();
+                for (int i = 0; i < supportedLocales.length; i++) {
+                    Locale supportedLocale = supportedLocales[i];
+                    if (locale.equals(supportedLocale)) {
+                        setLocale(supportedLocale);
+                        return;
+                    }
                 }
             }
+            log.warn("locale not supported " + locale);
+            setLocale(supportedLocales[0]);
         }
-        log.warn("locale not supported " + locale);
-        setLocale(supportedLocales[0]);
+        else
+            setLocale(requestedLocales.nextElement());
     }
 
     /**
