@@ -69,8 +69,15 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                 Utils.optAttribute(d, "oversize", vertivalOversize);
                 d.print(">");
             }
-            else
-                openLayouterRow(d, determineRowHeight(layout, row) + "%");
+            else {
+                if (clientLayout) {
+                    d.print("<tr");
+                    Utils.optAttribute(d, "yweight", determineRowHeight(layout, row));
+                    d.print(">");
+                }
+                else
+                    openLayouterRow(d, determineRowHeight(layout, row) + "%");
+            }
             for (int col = grid.firstCol; col < grid.cols; col++) {
                 final SComponent comp = grid.grid[col][row];
                 Utils.printNewline(d, container);

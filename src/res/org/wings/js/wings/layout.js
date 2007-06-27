@@ -26,14 +26,16 @@ wingS.layout.fill = function(tableId) {
     table.style.height = table.getAttribute("layoutHeight");
     var diff = table.clientHeight - consumedHeight;
 
-    for (var i = 0; i < rows.length; i++) {
-      var row = rows[i];
-      var yweight = row.getAttribute("yweight");
-      if (yweight) {
-          var oversize = row.getAttribute("oversize");
-          if (oversize == null) oversize = 0;
-          row.style.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
-      }
+    if (diff > 0) {
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var yweight = row.getAttribute("yweight");
+            if (yweight) {
+                var oversize = row.getAttribute("oversize");
+                if (oversize == null) oversize = 0;
+                row.height = Math.max(Math.floor((diff * yweight) / 100) - oversize, oversize);
+            }
+        }
     }
 };
 
