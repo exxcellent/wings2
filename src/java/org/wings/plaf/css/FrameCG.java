@@ -181,7 +181,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                         }
                         if (changeDetected) {
                             String script = strokes(components);
-                            System.out.println("strokes = " + script);
                             InputMapRequestListener.this.frame.getSession().getScriptManager().addScriptListener(new JavaScriptListener(null, null, script));
                         }
                     }
@@ -202,7 +201,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                 final Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion" + condition);
                 if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion) {
                     component.putClientProperty("inputMapVersion" + condition, versionedInputMap.getVersion());
-                    System.out.println("change " + component.getClass().getSimpleName() + " "  + component.getName());
                     return true;
                 }
             }
@@ -317,7 +315,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         final String encoding = session.getCharacterEncoding();
 
         // <?xml version="1.0" encoding="...">
-        if (renderXmlDeclaration == null || renderXmlDeclaration.booleanValue()) {
+        if (renderXmlDeclaration == null || renderXmlDeclaration) {
             device.print("<?xml version=\"1.0\" encoding=\"");
             Utils.write(device, encoding);
             device.print("\"?>\n");
@@ -598,13 +596,13 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         public HeaderScriptUpdate(SComponent component, boolean add, Script script) {
             super(component);
-            this.add = new Boolean(add);
+            this.add = add;
             this.script = script;
         }
 
         public HeaderScriptUpdate(SComponent component, boolean add, Script script, int index) {
             this(component, add, script);
-            this.index = new Integer(index);
+            this.index = index;
         }
 
         public int getPriority() {
@@ -642,13 +640,13 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         public HeaderLinkUpdate(SComponent component, boolean add, Link link) {
             super(component);
-            this.add = new Boolean(add);
+            this.add = add;
             this.link = link;
         }
 
         public HeaderLinkUpdate(SComponent component, boolean add, Link link, int index) {
             this(component, add, link);
-            this.index = new Integer(index);
+            this.index = index;
         }
 
         public int getPriority() {
@@ -733,7 +731,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         public UpdateEnabledUpdate(SComponent component, boolean enabled) {
             super(component);
-            this.enabled = new Boolean(enabled);
+            this.enabled = Boolean.valueOf(enabled);
         }
 
         public Handler getHandler() {
