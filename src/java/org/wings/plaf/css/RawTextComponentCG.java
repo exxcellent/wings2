@@ -12,6 +12,10 @@ public final class RawTextComponentCG extends AbstractComponentCG implements org
 
 	public void writeInternal(Device device, SComponent component) throws IOException {
 		SRawTextComponent _c = (SRawTextComponent) component;
+        device.print("<span");
+        Utils.optAttribute(device, "id", _c.getName());
+        device.print(">");
         device.print(_c.getText());
+        device.print("</span>");
 	}
 }
