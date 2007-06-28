@@ -37,9 +37,24 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
         if ((text.length() > 5) && (text.startsWith("<html>"))) {
             Utils.writeRaw(device, text.substring(6));
         } else {
-            // NOTE: Quoting of spaces would be only necessary for trailing and leading spaces !!!
-            // TODO: Quote only trailing/leading spaces
-            Utils.quote(device, text, true, !wordWrap, false);
+            // Only quote leading/trailing whitespace
+            int len = text.length();
+            int off = 0;
+            
+            while ( off < len && text.charAt(off) <= ' ' ) {
+                off++;
+                device.print("&nbsp;");
+            }
+            while ( off < len && text.charAt(len - 1) <= ' ' ) {
+                len--;
+            }
+            
+            Utils.quote(device, text.substring(off,len), true, false, false);
+            
+            for ( int x = len; x < text.length() ; x++ ) {
+                device.print("&nbsp;");
+            }
+            
         }
 
         device.print("</span>");
