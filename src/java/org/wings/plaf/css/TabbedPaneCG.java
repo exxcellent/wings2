@@ -30,13 +30,13 @@ import java.util.Map;
 
 public class TabbedPaneCG extends AbstractComponentCG {
     private static final long serialVersionUID = 1L;
-    private static final Map placements = new HashMap();
+    private static final Map<Integer, String> placements = new HashMap<Integer, String>();
 
     static {
-        placements.put(new Integer(SConstants.TOP), "top");
-        placements.put(new Integer(SConstants.BOTTOM), "bottom");
-        placements.put(new Integer(SConstants.LEFT), "left");
-        placements.put(new Integer(SConstants.RIGHT), "right");
+        placements.put(SConstants.TOP, "top");
+        placements.put(SConstants.BOTTOM, "bottom");
+        placements.put(SConstants.LEFT, "left");
+        placements.put(SConstants.RIGHT, "right");
     }
 
     public void installCG(SComponent component) {
@@ -46,15 +46,19 @@ public class TabbedPaneCG extends AbstractComponentCG {
         InputMap inputMap = new InputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK, false), "previous");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK, false), "next");
-        tab.setInputMap(SComponent.WHEN_IN_FOCUSED_FRAME, inputMap);
+        tab.setInputMap(SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap);
 
 
         Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 if (tab.getSelectedIndex() > 0 && "previous".equals(e.getActionCommand())) {
-                    tab.setSelectedIndex(tab.getSelectedIndex() - 1);
+                    int index = tab.getSelectedIndex() - 1;
+                    if (tab.isEnabledAt(index))
+                        tab.setSelectedIndex(index);
                 } else if (tab.getSelectedIndex() < tab.getTabCount() - 1 && "next".equals(e.getActionCommand())) {
-                    tab.setSelectedIndex(tab.getSelectedIndex() + 1);
+                    int index = tab.getSelectedIndex() + 1;
+                    if (tab.isEnabledAt(index))
+                        tab.setSelectedIndex(index);
                 }
                 tab.requestFocus();
             }
@@ -208,7 +212,7 @@ public class TabbedPaneCG extends AbstractComponentCG {
             }
 
             final SStringBuilder cssClassName = new SStringBuilder("STabbedPane_Tab_");
-            cssClassName.append(placements.get(new Integer(tabbedPane.getTabPlacement())));
+            cssClassName.append(placements.get(tabbedPane.getTabPlacement()));
             if (i == tabbedPane.getSelectedIndex()) {
                 cssClassName.append(" STabbedPane_Tab_selected");
             } else if (!enabledTab) {

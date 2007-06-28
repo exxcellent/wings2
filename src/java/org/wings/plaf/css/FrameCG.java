@@ -168,21 +168,19 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
                             boolean visible = component.isRecursivelyVisible();
                             if (!Boolean.valueOf(visible).equals(component.getClientProperty("visible"))) {
                                 component.putClientProperty("visible", visible);
-                                changeDetected = true;
-                                break;
-                            }
-                            if (checkForChange(component, SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)) {
-                                changeDetected = true;
-                                break;
-                            }
-                            if (checkForChange(component, SComponent.WHEN_IN_FOCUSED_FRAME)) {
-                                changeDetected = true;
-                                break;
+                                changeDetected |= true;
                             }
                         }
-
+                        for (SComponent component : components) {
+                            if (checkForChange(component, SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)) {
+                                changeDetected |= true;
+                            }
+                            if (checkForChange(component, SComponent.WHEN_IN_FOCUSED_FRAME)) {
+                                changeDetected |= true;
+                            }
+                        }
                         if (changeDetected) {
-                        String script = strokes(components);
+                            String script = strokes(components);
                             System.out.println("strokes = " + script);
                             InputMapRequestListener.this.frame.getSession().getScriptManager().addScriptListener(new JavaScriptListener(null, null, script));
                         }
