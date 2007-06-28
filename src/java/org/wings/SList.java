@@ -983,6 +983,8 @@ public class SList extends SComponent implements Scrollable, LowLevelEventListen
      */
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         // delay events...
         getSelectionModel().setDelayEvents(true);

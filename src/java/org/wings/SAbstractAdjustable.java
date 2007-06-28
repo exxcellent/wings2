@@ -408,6 +408,8 @@ public abstract class SAbstractAdjustable extends SComponent implements Adjustab
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         getModel().setDelayEvents(true);
         for (int i = 0; i < values.length; i++) {

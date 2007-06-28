@@ -320,6 +320,8 @@ public class SSlider extends SComponent implements SConstants, LowLevelEventList
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         if (action.compareTo(getName()+"_val") == 0) {
             setValue(Integer.parseInt(values[0]));

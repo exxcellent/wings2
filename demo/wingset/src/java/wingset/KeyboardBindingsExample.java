@@ -25,7 +25,7 @@ import java.awt.*;
 public class KeyboardBindingsExample extends WingSetPane {
     private final SLabel actionEventLabel = new SLabel();
     private final STextField textField = new STextField();
-    private final SPanel panel = new SPanel(new SFlowDownLayout());
+    private final SPanel panel = new KeyboardPanel(new SFlowDownLayout());
 
     public KeyboardBindingsExample() {
 
@@ -162,5 +162,25 @@ public class KeyboardBindingsExample extends WingSetPane {
 
     public SComponent createExample() {
         return panel;
+    }
+
+    private static class KeyboardPanel
+        extends SPanel
+        implements LowLevelEventListener
+    {
+        public KeyboardPanel(SLayoutManager l) {
+            super(l);
+        }
+
+        public void processLowLevelEvent(String name, String[] values) {
+            processKeyEvents(values);
+        }
+
+        public void fireIntermediateEvents() {
+        }
+
+        public boolean isEpochCheckEnabled() {
+            return true;
+        }
     }
 }

@@ -95,6 +95,8 @@ public class SButton extends SAbstractButton {
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         // got an event, that is a select...
         SForm.addArmedComponent(this);

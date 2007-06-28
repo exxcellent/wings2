@@ -1017,6 +1017,9 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
+
         this.lowLevelEvents = values;
         SForm.addArmedComponent(this);
     }

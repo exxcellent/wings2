@@ -172,6 +172,8 @@ public class SInternalFrame
     // LowLevelEventListener interface. Handle own events.
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         switch (new Integer(values[0]).intValue()) {
             case SInternalFrameEvent.INTERNAL_FRAME_CLOSED:

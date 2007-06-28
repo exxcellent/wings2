@@ -254,6 +254,8 @@ public abstract class SAbstractButton
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         delayEvents(true);
 

@@ -121,7 +121,9 @@ public class SFormattedTextField extends STextField {
     }
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
-        
+        if (action.endsWith("_keystroke"))
+            return;
+
         String orgText = getText() == null ? "" : getText();
         String newText = "";
         if (isEditable() && isEnabled()) {

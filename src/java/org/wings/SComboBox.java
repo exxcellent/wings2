@@ -555,6 +555,8 @@ public class SComboBox
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         delayEvent = true;
 

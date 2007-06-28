@@ -438,6 +438,8 @@ public class SForm  extends SContainer implements LowLevelEventListener {
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         // we have to wait, until all changed states of our form have
         // changed, before we anything can happen.

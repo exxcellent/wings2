@@ -214,6 +214,8 @@ public class SDialog extends SForm {
     // LowLevelEventListener interface. Handle own events.
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         // is this a window event?
         try {

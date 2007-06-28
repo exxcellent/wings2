@@ -943,6 +943,8 @@ public class STabbedPane extends SContainer implements LowLevelEventListener {
      */
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         for (int i = 0; i < values.length; ++i) {
             try {

@@ -119,6 +119,8 @@ public abstract class STextComponent extends SComponent implements LowLevelEvent
 
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
 
         if (isEditable() && isEnabled()) {
             String newValue = values[0];

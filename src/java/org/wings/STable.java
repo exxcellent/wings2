@@ -452,6 +452,9 @@ public class STable extends SComponent
     // check fireIntermediateEvents !
     public void processLowLevelEvent(String action, String[] values) {
         processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
+
         if (isEditing() && action.indexOf("_e_") != -1 && cellEditorComponent != null) {
             cellEditorComponent.processLowLevelEvent(action, values);
         }
