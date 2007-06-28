@@ -33,11 +33,6 @@ public class MenuExample extends WingSetPane {
     private SMenuBar menuBar;
     private int shortcutKey = java.awt.event.KeyEvent.VK_A;
 
-    private final ActionListener menuItemListener = new java.awt.event.ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            selectionLabel.setText(((SMenuItem) e.getSource()).getText());
-        }
-    };
     private ComponentControls controls;
 
 
@@ -90,8 +85,7 @@ public class MenuExample extends WingSetPane {
                 int nr = new Random().nextInt(100);
                 SMenu menu = new SMenu("Menu " + nr);
                 for (int i = 0; i < 3; ++i) {
-                    SMenuItem item = new SMenuItem("Item " + nr + "-" + (i + 1));
-                    item.addActionListener(menuItemListener);
+                    SMenuItem item = new SMenuItem(new MenuItemAction("Item " + nr + "-" + (i + 1)));
                     menu.add(item);
                 }
                 menuBar.add(menu);
@@ -150,12 +144,11 @@ public class MenuExample extends WingSetPane {
     }
 
     SMenuItem createMenuItem(TreeNode node) {
-        SMenuItem item = new SMenuItem(node.toString());
+        SMenuItem item = new SMenuItem(new MenuItemAction(node.toString()));
         /* setToolTipText() cannot be used due to JavaScript performance problems,
          * only occurs when using incremental updates and menu
          */
         //item.setToolTipText(node.toString());
-        item.addActionListener(menuItemListener);
         item.setShowAsFormComponent(true);
         if (shortcutKey != 0) {
             item.setAccelerator(KeyStroke.getKeyStroke(shortcutKey,
@@ -172,7 +165,7 @@ public class MenuExample extends WingSetPane {
     SMenu createMenu(TreeNode root) {
         SMenu menu = new SMenu(root.toString());
         menu.setShowAsFormComponent(false);
-        menu.addActionListener(menuItemListener);
+        menu.addActionListener(new MenuItemAction(null));
 
         for (int i = 0; i < root.getChildCount(); i++) {
             TreeNode node = root.getChildAt(i);
@@ -205,14 +198,14 @@ public class MenuExample extends WingSetPane {
         SMenu helpMenu = new SMenu("Help");
         helpMenu.setHorizontalAlignment(RIGHT_ALIGN);
         SMenuItem helpMenuItem = new SMenuItem("Help on using WingSet");
-        helpMenuItem.addActionListener(menuItemListener);
+        helpMenuItem.addActionListener(new MenuItemAction("Help on using WingSet"));
         helpMenu.add(helpMenuItem);
         menuBar.add(helpMenu);
 
         SMenu aboutMenu = new SMenu("About");
         aboutMenu.setHorizontalAlignment(RIGHT_ALIGN);
         SMenuItem aboutMenuItem = new SMenuItem("About WingSet");
-        aboutMenuItem.addActionListener(menuItemListener);
+        aboutMenuItem.addActionListener(new MenuItemAction("About WingSet"));
         aboutMenu.add(aboutMenuItem);
         menuBar.add(aboutMenu);
 
@@ -234,6 +227,18 @@ public class MenuExample extends WingSetPane {
                 }
             });
             addControl(disableSomeMenus);
+        }
+    }
+
+    private class MenuItemAction
+        extends AbstractAction
+    {
+        public MenuItemAction(String name) {
+            super(name);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            selectionLabel.setText(((SMenuItem) e.getSource()).getText());
         }
     }
 }

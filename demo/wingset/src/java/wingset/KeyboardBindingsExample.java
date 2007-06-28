@@ -129,7 +129,7 @@ public class KeyboardBindingsExample extends WingSetPane {
         panel.add(titleLabel);
 
         final SLabel instructions = new SLabel(
-                "This page demonstrates the feature of attaching key binbding to specific component. " +
+                "This page demonstrates the feature of attaching key binding to specific components. " +
                         "Some components provide already default bindings like STabbedPane (try [Alt]-[LEFT] " +
                         "or [Alt]-[RIGHT].\n" +
                         "\n" +
