@@ -20,7 +20,7 @@ if (!wingS.global) {
 /**
  * Global variables
  */
-wingS.global.debugMode = true;       // This flag might be set in order to control debug outputs
+wingS.global.debugMode = false;      // This flag might be set in order to control debug outputs
 wingS.global.asyncHeaderCount = 0;   // Count of headers which are currently loaded asynchronously
 wingS.global.asyncHeaderQueue = [];  // Queue of functions each of which downloads an async header
 wingS.global.asyncHeaderCalls = [];  // Callbacks which are invoked when all headers are available
