@@ -22,8 +22,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 
-import javax.swing.InputMap;
+import javax.swing.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,11 +37,13 @@ import org.wings.event.SRequestListener;
 import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
+import org.wings.plaf.css.VersionedInputMap;
 import org.wings.resource.DynamicResource;
 import org.wings.resource.ReloadResource;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
 import org.wings.util.StringUtil;
+import org.wings.script.JavaScriptListener;
 
 /**
  * The root component of every component hierarchy.
@@ -131,7 +135,7 @@ public class SFrame
     /**
      * Global input maps
      */
-    private ArrayList globalInputMapComponents;
+    private ArrayList<SComponent> globalInputMapComponents;
 
     /**
      * Creates a new SFrame
@@ -654,7 +658,7 @@ public class SFrame
 
     public void registerGlobalInputMapComponent(SComponent comp) {
         if (globalInputMapComponents == null) {
-            globalInputMapComponents = new ArrayList();
+            globalInputMapComponents = new ArrayList<SComponent>();
         }
         if (!globalInputMapComponents.contains(comp)) {
             // not yet registered
@@ -669,7 +673,7 @@ public class SFrame
     }
 
 
-    public List getGlobalInputMapComponents() {
+    public List<SComponent> getGlobalInputMapComponents() {
         return globalInputMapComponents;
     }
 

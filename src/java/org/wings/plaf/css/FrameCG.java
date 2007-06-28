@@ -21,9 +21,9 @@ import org.wings.SComponent;
 import org.wings.SFrame;
 import org.wings.SToolTipManager;
 import org.wings.Version;
+import org.wings.event.SRequestListener;
+import org.wings.event.SRequestEvent;
 import org.wings.util.SStringBuilder;
-import org.wings.script.JavaScriptDOMListener;
-import org.wings.script.JavaScriptEvent;
 import org.wings.dnd.DragAndDropManager;
 import org.wings.header.*;
 import org.wings.io.Device;
@@ -32,13 +32,15 @@ import org.wings.plaf.css.script.OnPageRenderedScript;
 import org.wings.resource.ClassPathResource;
 import org.wings.resource.ReloadResource;
 import org.wings.resource.UpdateResource;
-import org.wings.script.ScriptListener;
+import org.wings.script.*;
 import org.wings.session.*;
 
 import javax.swing.*;
 
 import java.io.IOException;
 import java.util.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 
 /**
  * PLAF renderer for SFrames.
@@ -140,10 +142,120 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         component.addScriptListener(handleClicks);
         component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
 
-        CaptureDefaultBindingsScriptListener.install(component);
+        //CaptureDefaultBindingsScriptListener.install(component);
 
         SessionHeaders.getInstance().registerHeaders(headers);
         SessionHeaders.getInstance().registerHeaders(getBrowserStylesheets());
+
+        new InputMapRequestListener(component);
+    }
+
+    class InputMapRequestListener {
+        SFrame frame;
+
+        public InputMapRequestListener(SFrame frame) {
+            this.frame = frame;
+            frame.putClientProperty("InputMapRequestListener", this);
+
+            frame.getSession().addRequestListener(new SRequestListener() {
+                public void processRequest(SRequestEvent e) {
+                    if (e.getType() == SRequestEvent.DELIVER_START && InputMapRequestListener.this.frame.getDynamicResources().contains(e.getRequestedResource().getObject())) {
+                        boolean changeDetected = false;
+
+                        List<SComponent> components = InputMapRequestListener.this.frame.getGlobalInputMapComponents();
+
+                        for (SComponent component : components) {
+                            boolean visible = component.isRecursivelyVisible();
+                            if (!Boolean.valueOf(visible).equals(component.getClientProperty("visible"))) {
+                                component.putClientProperty("visible", visible);
+                                changeDetected = true;
+                                break;
+                            }
+                            if (checkForChange(component, SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)) {
+                                changeDetected = true;
+                                break;
+                            }
+                            if (checkForChange(component, SComponent.WHEN_IN_FOCUSED_FRAME)) {
+                                changeDetected = true;
+                                break;
+                            }
+                        }
+
+                        if (changeDetected) {
+                        String script = strokes(components);
+                            System.out.println("strokes = " + script);
+                            InputMapRequestListener.this.frame.getSession().getScriptManager().addScriptListener(new JavaScriptListener(null, null, script));
+                        }
+                    }
+                }
+            });
+        }
+
+        private boolean checkForChange(SComponent component, int condition) {
+            InputMap inputMap = component.getInputMap(condition);
+            if (inputMap != null && inputMap.size() > 0) {
+                if (!(inputMap instanceof VersionedInputMap)) {
+                    inputMap = new VersionedInputMap(inputMap);
+                    component.setInputMap(condition, inputMap);
+                    component.putClientProperty("inputMapVersion" + condition, -1);
+                }
+
+                final VersionedInputMap versionedInputMap = (VersionedInputMap)inputMap;
+                final Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion" + condition);
+                if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion) {
+                    component.putClientProperty("inputMapVersion" + condition, versionedInputMap.getVersion());
+                    System.out.println("change " + component.getClass().getSimpleName() + " "  + component.getName());
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    private String strokes(List<SComponent> components) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("wingS.keyboard.keyStrokes = new Array();\n");
+        for (SComponent component : components) {
+            if (component.isRecursivelyVisible()) {
+                appendStrokes(builder, component, SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT, component.getInputMap(SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT));
+                appendStrokes(builder, component, SComponent.WHEN_IN_FOCUSED_FRAME, component.getInputMap(SComponent.WHEN_IN_FOCUSED_FRAME));
+            }
+        }
+        return builder.toString();
+    }
+
+    private void appendStrokes(StringBuilder builder, SComponent component, int condition, InputMap inputMap) {
+        KeyStroke[] keyStrokes = inputMap.keys();
+        if (keyStrokes != null) {
+            for (int i = 0; i < keyStrokes.length; i++) {
+                KeyStroke keyStroke = keyStrokes[i];
+                Object binding = inputMap.get(keyStroke);
+
+                switch (keyStroke.getKeyEventType()) {
+                    case KeyEvent.KEY_PRESSED:
+                        builder.append("wingS.keyboard.keyStrokes.push(new wingS.keyboard.KeyStroke('");
+                        builder.append(component.getName());
+                        builder.append("',");
+                        builder.append(condition == SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT ? "true" : "false");
+                        builder.append(",'");
+                        builder.append(binding);
+                        builder.append("',");
+                        builder.append(keyStroke.getKeyCode());
+                        builder.append(',');
+                        builder.append((keyStroke.getModifiers() & InputEvent.SHIFT_DOWN_MASK) != 0);
+                        builder.append(',');
+                        builder.append((keyStroke.getModifiers() & InputEvent.CTRL_DOWN_MASK) != 0);
+                        builder.append(',');
+                        builder.append((keyStroke.getModifiers() & InputEvent.ALT_DOWN_MASK) != 0);
+                        builder.append("));\n");
+                        break;
+                    case KeyEvent.KEY_TYPED:
+                        break;
+                    case KeyEvent.KEY_RELEASED:
+                        break;
+                }
+            }
+        }
     }
 
     /**
@@ -185,52 +297,14 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     public void componentChanged(SComponent c) {
-        // The update of the input maps happens on every write, so here it's unnecessary.
-        // updateGlobalInputMaps(frame);
-    }
-
-    private void updateGlobalInputMaps(SFrame frame) {
-        // Here it goes, global input maps
-        ScriptListener[] scriptListeners = frame.getScriptListeners();
-        // First, delete all of them, they are from the last request...
-        for (int i = 0; i < scriptListeners.length; i++) {
-            ScriptListener scriptListener = scriptListeners[i];
-            if (scriptListener instanceof InputMapScriptListener) {
-                /*
-                 * One could collect this as a list and only add/remove
-                 * the changes. But the listeners are added as anonymous
-                 * classes, which makes identifying them expensive. That
-                 * would have to be changed.
-                 */
-                frame.removeScriptListener(scriptListener);
-            }
-        }
-        // Then install the ones we need for the request going on...
-        List inputMapComponents = frame.getGlobalInputMapComponents();
-        if (inputMapComponents != null) {
-            Iterator iter = inputMapComponents.iterator();
-            while (iter.hasNext()) {
-                SComponent comp = (SComponent)iter.next();
-                if (comp.isRecursivelyVisible()) {
-                    InputMap inputMap = comp.getInputMap(SComponent.WHEN_IN_FOCUSED_FRAME);
-                    if (inputMap != null) {
-                        InputMapScriptListener.installToFrame(frame, comp);
-                    }
-                }
-            }
-        }
     }
 
     public void write(final Device device, final SComponent component) throws IOException {
         final SFrame frame = (SFrame) component;
 
-        /*
-         * The input maps must be updated on every rendering of the SFrame, since
-         * some components could be invisible in this request that registered an
-         * input map before. To avoid too much code sent to the client, this update
-         * is calles.
-         */
-        updateGlobalInputMaps(frame);
+        List<SComponent> components = frame.getGlobalInputMapComponents();
+        String strokes = strokes(components);
+        component.getSession().getScriptManager().addScriptListener(new JavaScriptListener(null, null, strokes));
 
         RenderHelper.getInstance(frame).reset();
 

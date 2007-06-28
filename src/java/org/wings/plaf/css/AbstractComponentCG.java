@@ -254,7 +254,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             final VersionedInputMap versionedInputMap = (VersionedInputMap) inputMap;
             final Integer inputMapVersion = (Integer) component.getClientProperty("inputMapVersion");
             if (inputMapVersion == null || versionedInputMap.getVersion() != inputMapVersion.intValue()) {
-                InputMapScriptListener.install(component);
+                //InputMapScriptListener.install(component);
                 component.putClientProperty("inputMapVersion", new Integer(versionedInputMap.getVersion()));
             }
         }

@@ -80,7 +80,7 @@ public class MenuExample extends WingSetPane {
         selectionLabel.setForeground(Color.RED);
         messagePanel.add(selectionLabel, "SelectionLabel");
         messagePanel.add(new SLabel("\nTry the menu accelerator keys." +
-                "\nCtrl-A to Ctrl-Z call menuitem actions (doesn't work on Konqueror)"));
+                "\nAlt-A to Alt-Z call menuitem actions (doesn't work on Konqueror)"));
         messagePanel.setBorder(new SEmptyBorder(50,0,0,0));
 
         SButton addMenu = new SButton("Add new random menu");

@@ -17,15 +17,8 @@ import javax.swing.KeyStroke;
 
 /**
  * @author hengels
- *
- * @deprecated Hohoho....better try sth. like ComponentCG.componentChanged(ASPECT.InputMap) and use this wrapping INTERNALLY!.
- * What about MyClientInputMap ????
- * Better use reflection proxies!
  */
-class VersionedInputMap extends InputMap {
-    /**
-     * 
-     */
+public class VersionedInputMap extends InputMap {
     private static final long serialVersionUID = 1L;
     InputMap inputMap;
     int version = 0;

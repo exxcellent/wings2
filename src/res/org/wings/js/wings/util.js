@@ -68,6 +68,19 @@ wingS.util.getParentByAttribute = function(element, attributeName) {
     return null;
 };
 
+wingS.util.getParentByAttributeAndValue = function(element, attributeName, attributeValue) {
+    var attribute;
+    while (element != null) {
+        attribute = element.getAttribute && element.getAttribute(attributeName);
+        if (attribute == attributeValue) {
+            return element;
+        }
+        element = element.parentNode;
+    }
+    return null;
+};
+
+
 wingS.util.getParentByTagName = function(element, tag) {
     while (element != null) {
         if (tag == element.tagName)

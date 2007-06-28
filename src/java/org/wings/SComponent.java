@@ -1220,9 +1220,6 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Mark this component as subject to reload if the property,
      * that is given in its old and new fashion, changed.
-     *
-     * @param oldVal the old value of some property
-     * @param newVal the new value of some property
      */
     public void write(Device s) throws IOException {
         try {
@@ -1810,9 +1807,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     public void setInputMap(int condition, InputMap inputMap) {
         initInputMaps();
         this.inputMaps[condition] = inputMap;
-        if (condition == WHEN_IN_FOCUSED_FRAME && inputMap != null) {
-            registerGlobalInputMapWithFrame();
-        }
+        registerGlobalInputMapWithFrame();
     }
 
     /**
@@ -1835,23 +1830,19 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             inputMaps[condition] = new InputMap();
             result = inputMaps[condition];
         }
-        if (condition == WHEN_IN_FOCUSED_FRAME) {
-            // map could be filled
-            registerGlobalInputMapWithFrame();
-        }
+        registerGlobalInputMapWithFrame();
         return result;
     }
 
 
     private void registerGlobalInputMapWithFrame() {
         final SFrame parentFrame = getParentFrame();
-        if (parentFrame != null) {
+        if (parentFrame != null)
             parentFrame.registerGlobalInputMapComponent(this);
-        } else {
-            if (globalInputMapListener == null) {
-                globalInputMapListener = new GlobalInputMapParentFrameListener(this);
-                addParentFrameListener(globalInputMapListener);
-            }
+
+        if (globalInputMapListener == null) {
+            globalInputMapListener = new GlobalInputMapParentFrameListener(this);
+            addParentFrameListener(globalInputMapListener);
         }
     }
 
