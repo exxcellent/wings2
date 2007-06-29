@@ -8,7 +8,8 @@ import org.wings.SComponent;
 import org.wings.style.CSSAttributeSet;
 
 /**
- * If a default border is set, CGs will omit inline borders and paddings.
+ * If a default border is set, CGs will not write any inline borders and paddings. Thus the styles as defined in the
+ * stylesheet take effect.
  * @author Benjamin Schmid <B.Schmid@exxcellent.de>
  */
 public class SDefaultBorder

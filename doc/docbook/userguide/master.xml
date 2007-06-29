@@ -5,7 +5,7 @@
   <title>wingS User Guide</title>
 
   <bookinfo>
-    <date>December 5, 2005</date>
+    <date>June 29, 2007</date>
 
     <author>
       <surname>wingS Project Team</surname>
@@ -14,18 +14,10 @@
     <subtitle>Writing and understanding wingS applications</subtitle>
 
     <copyright>
-      <year>2005 - 2006</year>
+      <year>2005 - 2007</year>
 
       <holder>wingS Project Team</holder>
     </copyright>
-
-    <revhistory>
-      <revision>
-        <revnumber>$Revision$</revnumber>
-
-        <date>$Date$</date>
-      </revision>
-    </revhistory>
 
     <legalnotice>
       <para>Permission is granted to copy, distribute and/or modify this
@@ -37,9 +29,6 @@
       license is included in the section entitled "<link linkend="gfdl">GNU
       Free Documentation License</link>" .</para>
     </legalnotice>
-
-    <releaseinfo>1.0RC1 $Date: 2006-10-23 14:41:01 +0200 (må, 23 okt 2006)
-    $</releaseinfo>
   </bookinfo>
 
   <preface>
@@ -66,7 +55,7 @@
       <para>For management-oriented information please refer to the wingS
       whitepaper<footnote>
           <para><ulink
-          url="http://www.j-wings.org/tiki-index.php?page=Documentation">wingS
+          url="http://wingsframework.org">wingS
           project website</ulink></para>
         </footnote>.</para>
     </section>
@@ -85,8 +74,8 @@
     <section>
       <title>Credits</title>
 
-      <para>Contributions to this documentation were provided by Ian Gardner,
-      Benjamin Schmid, Volker Fritzsch, and Oliver Scheck.</para>
+      <para>Contributions to this documentation were provided by Holger Engels,
+      Volker Fritzsch, Ian Gardner, Oliver Scheck and Benjamin Schmid.</para>
     </section>
   </preface>
 
@@ -114,7 +103,7 @@
         it! Apart from this prefix character of widget names the code is
         identical.</para>
 
-        <para>For nearly every <code>J&lt;xxx&gt;</code> component of Swing
+        <para>For almost every <code>J&lt;xxx&gt;</code> component of Swing
         you find a <code>S&lt;xxx&gt;</code> counterpart in wingS with similar
         or identical behavior.</para>
       </section>
@@ -275,7 +264,7 @@
     application.</para>
 
     <para>The following sections will demonstrate all the tasks needed to set
-    up a simple "Hello Word" example from scratch using the wingS framework.
+    up a simple "Hello World" example from scratch using the wingS framework.
     <note>
         <para>Please refer to the <filename>
         doc/tutorial/hellowings</filename> folder in the wingS distribution
@@ -288,9 +277,9 @@
       <para>First we need to set up your development environment. Just create
       a new directory <filename>helloworld</filename> and
       <filename>helloword/src</filename> and copy the contents of the two
-      directories <filename>web</filename> and <filename> lib</filename> of
+      directories <filename>web</filename> and <filename>lib</filename> of
       the wingS distribution. Start your preferred IDE and create a new
-      project using the directory you just generated . Include all the
+      project using the directory you just generated. Include all the
       <filename>*.jar</filename>files in the copied <filename>lib</filename>
       and <filename> web/WEB-INF/lib</filename>directories in the classpath of
       your newly created project.</para>
@@ -312,10 +301,10 @@
       </tip>
 
       <para>We don't have any special layout desires, so we won't use a
-      template layout file. For simplicity we'll just use one of the very
-      powerful dynamic layout managers to arrange our components. So let's
-      create a <filename> HelloWingS.java class in the
-      <filename>src</filename> directory</filename>:</para>
+      template layout file. For simplicity we'll just use one of the dynamic
+      layout managers to arrange our components. So let's create a
+      <filename>HelloWingS.java</filename> class in the
+      <filename>src</filename> directory:</para>
 
       <programlisting>import org.wings.*;
 import java.util.*;
@@ -340,15 +329,15 @@ public class HelloWingS {
                 if (Integer.toString(randomNr).equals(textField.getText()))
                     message.setText("Congratulations! You guessed my number!");
                 else
-                    message.setText("No - '"+textField.getText()+
-                            "' is not the right number. Try again!");
+                    message.setText("No - '" + textField.getText()+
+                                    "' is not the right number. Try again!");
             }
         });
 
         // arrange components using a grid layout
         panel.add(titel);
         panel.add(new SLabel("We want fun, so let's play a game!\n" +
-                "Try to guess a number between 1 and 10."));
+                             "Try to guess a number between 1 and 10."));
         panel.add(textField);
         panel.add(okButton);
         panel.add(message);
@@ -363,12 +352,12 @@ public class HelloWingS {
     <section>
       <title id="web_xml_file">Set - Preparing the web.xml File</title>
 
-      <para>In the next step we need to set up a <filename> web.xml</filename>
+      <para>In the next step we need to set up a <filename>web.xml</filename>
       file in the web/WEB-INF directory. This step is only needed once per
       application and it's only intention is to register the wingS servlet
       inside the servlet container and point wingS to our newly created
       application root class <code>HelloWingS</code>. A very minimalist
-      <filename> web.xml</filename> file would look like this:</para>
+      <filename>web.xml</filename> file would look like this:</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;!DOCTYPE web-app
@@ -396,13 +385,13 @@ public class HelloWingS {
       <title>Go! - Deployment in Servlet Container</title>
 
       <para>In the last step we only need to compile and package all our
-      application files into an Servlet compatible Web Archive
+      application files into a Servlet compatible Web Archive
       <abbrev>(WAR)</abbrev> file. You could do this either by manually
       compiling and zipping your application sources, but as this is a
       reccurring task it's better to let a tool do this task. Apache
       Ant<footnote>
           <para>You can download the latest version of Apache Ant at <ulink
-          url="http://ant.apache.org/"> http://ant.apache.org/</ulink></para>
+          url="http://ant.apache.org/">http://ant.apache.org/</ulink></para>
         </footnote> is a very popular Java based build tool. We'll create a
       very simple Ant build file which will instruct Apache Ant to package our
       files as needed into our application <filename>WAR</filename> file. So
@@ -541,7 +530,7 @@ public class HelloWingS {
                 <entry>yes</entry>
 
                 <entry>Apache Commons Logging API. Will delegate logging to
-                Log4J or JDK 1.4 logging facility</entry>
+                Log4J or the standard java logging facility</entry>
               </row>
 
               <row>
@@ -576,9 +565,7 @@ public class HelloWingS {
 
                 <entry>optional</entry>
 
-                <entry>Deploy and configure Log4J with you application if
-                you're using JDK 1.3 or you prefer Log4J in advance to the JDK
-                logging facility</entry>
+                <entry>Deploy and configure Log4J with your application</entry>
               </row>
 
               <row>
@@ -686,6 +673,17 @@ public class HelloWingS {
               these plugins can help you.</para>
             </listitem>
           </varlistentry>
+
+          <varlistentry>
+            <term>Firebug Extension plugin for Firefox</term>
+
+            <listitem>
+              <para>This is a great javascript debugger, html- and css- editor,
+              dom- inspector, ... available at:
+              <ulink url="http://www.getfirebug.com/">
+              http://www.getfirebug.com/</ulink>.</para>
+            </listitem>
+          </varlistentry>
         </variablelist>
       </sect2>
     </sect1>
@@ -702,15 +700,16 @@ public class HelloWingS {
           <para>First of all try to determine the basic layout and the logical
           groups in your web application. <xref linkend="container-nesting" />
           shows an example of an application screen split into various logical
-          areas. For the root panel a <code>STemplateLayout</code> based
-          layout template file might be a good choice.</para>
+          areas. For floating layouts the <code>STemplateLayout</code> might be
+          a good choice for the root panel (<code>contentPane</code>).</para>
         </listitem>
 
         <listitem>
           <para>Introduce your own new components for reccurring composite
-          visual blocks in your application. Examples might be specially
-          styled components or repeating groups of component. You will save
-          time, and your look and feel will be consistent.</para>
+          visual blocks in your application by derivating from the standard
+          components. Examples might be specially styled components or
+          repeating groups of component. You will save time, and your look
+          and feel will be consistent.</para>
         </listitem>
 
         <listitem>
@@ -719,7 +718,7 @@ public class HelloWingS {
           layout, and creating custom components, its also a good idea to
           avoid spreading styling instructions all over your code. Instead of
           manually setting the foreground color to red for error notification
-          labels try either to introduce a new, global CSS style inside you
+          labels try either to introduce a new, global CSS style inside your
           custom CSS file and apply this to the according <code>SLabel,</code>
           or to create a special derived <code>ErrorLabel</code> subclass
           which gathers the styling specific code instructions.</para>
@@ -731,7 +730,7 @@ public class HelloWingS {
           modify or extend the default behaviour of specific UI components
           easily in one place during later phases of the project runtime. E.g.
           think of enhancing text based <code>SButton</code> with dynamical
-          rendered graphical buttons.</para>
+          rendered icons.</para>
         </listitem>
 
         <listitem>
@@ -796,8 +795,7 @@ public class HelloWingS {
           widgets currently visible and can be retrieved at any time via the
           session manager:</para>
 
-          <programlisting>SFrame rootFrame =
-          SessionManager.getSession().getRootFrame();</programlisting>
+          <programlisting>SFrame rootFrame = SessionManager.getSession().getRootFrame();</programlisting>
 
           <para>Though in most cases every session has only exactly one
           instance of <code>SFrame</code>, there are situations where multiple
@@ -2052,6 +2050,7 @@ public Class getColumnClass(int column) {
           <para>And below you see the final outcome of our efforts</para>
 
           <screenshot>
+          <screenshot>
             <screeninfo>Editable table</screeninfo>
 
             <mediaobject>
@@ -3267,7 +3266,8 @@ cardLayout.last(stackedPanel);
       <para>The web offers many valuable resources on this topics so it should
       be easy to learn the required knowledge or better ask a web developer
       you trust for support on creating the required CSS definitions to style
-      your application.</para>
+      your application. Beware that the interpretation of CSS, especially the
+      support for CSS selectors is very different among browsers!</para>
 
       <sect2>
         <title>CSS selector scheme inside wingS</title>
@@ -3323,49 +3323,33 @@ cardLayout.last(stackedPanel);
           </listitem>
 
           <listitem>
-            <para>The code of a single wingS component is always embraced by a
-            common prefix and suffix</para>
-
-            <para>In the case of the regular browsers these are two nested
-            <code>DIV</code> elements, the outer having the components name as
-            <code>ID</code>, the inner one having the components name suffixed
-            with "<code>_i</code>" as ID.</para>
-
-            <para>In the case of Internet Explorer the two <code>DIV</code>
-            elements are replaced by a single <code>TABLE</code> element with
-            the component's name as ID.</para>
-          </listitem>
-
-          <listitem>
-            <para>Additionally this <code>DIV</code>/<code>TABLE</code>
-            element has specific CSS classes assigned. By default every wingS
-            SComponent becomes initialized with the unqualified class name of
-            the wingS base component as CSS class name. So by default every
-            <code>SButton</code> instance has the CSS class
-            <code>SButton</code>.</para>
-
-            <para>You can overwrite this CSS class name using the
-            <code>setStyle()</code> method of <code>SComponent</code>. Please
-            be aware that most of the wingS default styles operate on these
-            CSS class names, so this will probably have the effect that this
-            component loses most of its wingS default styling. If you want to
-            keep the default style and just assign additional CSS class, the
-            just append your CSS class name to the existing ones separated by
-            a space character.</para>
+            <para>Thus every component has its root element. Typically this
+            element wears the <code>id</code> attribute with the component's
+            name and a <code>class</code> attribute with the component's
+            style. The style defaults to the component's simple class name.</para>
           </listitem>
         </itemizedlist>
+
+        <para>The id and the style class make the component addressable by
+        means of CSS rules. You can alter the style property using the
+        <code>setStyle()</code> method of <code>SComponent</code>. Please
+        be aware that most of the wingS default styles operate on the
+        default CSS class, so this will probably have the effect that this
+        component loses most of its wingS default styling. If you want to
+        keep the default style and just assign additional CSS class, the
+        just append your CSS class name to the existing ones separated by
+        a space character.</para>
 
         <para>So below you'll just find a short example HTML fragment of the
         WingSet demo illustrating the described patterns</para>
 
-        <programlisting>&lt;!-- Regular browsers --&gt;
-&lt;!-- l1 --&gt;&lt;div class="SLabel_Box" id="l1"&gt;&lt;div id="l1_i" class="SLabel"&gt;
-Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
-
-&lt;!-- Internet explorer --&gt;
-&lt;!-- l1 --&gt;&lt;table id="l1" class="SLabel SContainer" style="width:100%;"&gt;
-&lt;tr&gt;&lt;td class="SLayout" align="center"&gt;Welcome&amp;nbsp;to&lt;/td&gt;
-&lt;/tr&gt;&lt;/table&gt;&lt;!-- /l1 --&gt;</programlisting>
+        <programlisting>
+            &lt;table class="SLabel" id="o2"&gt;
+                &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
+                    &lt;span style="white-space: nowrap;"&gt;Hello wingS&lt;/span&gt;
+                &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+            &lt;/table&gt;
+        </programlisting>
 
         <bridgehead>The CSS cascade in wingS</bridgehead>
 
@@ -3391,11 +3375,9 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
         <title>Default style sheets</title>
 
         <para>The default wingS distribution contains different style sheets
-        mainly for two browsers: One for the Microsoft Internet explorer and
-        one specially optimized for the Gecko-based browsers (FireFox,
-        Mozilla, Konqueror). Actually the last style sheet is the default
-        browser and most standards conforming browsers will work well with
-        this default style. The special style sheet for the Microsoft stuff is
+        mainly for two browsers: One specialized for the Microsoft Internet
+        explorer and one for all standard conform browsers (FireFox,
+        Mozilla, Konqueror). The special style sheet for the Microsoft stuff is
         only necessary as IE 6 still lacks on standard functionalities like
         CSS child selectors but on the other side requires really a quite huge
         workaround for all the curious effects it 'features'.</para>
@@ -3408,8 +3390,20 @@ Welcome to&lt;/div&gt;&lt;/div&gt;&lt;!-- /l1 --&gt;
         style.</para>
 
         <para>During session initialization the <code>FrameCG</code>
-        determines the browser of the client and attaches the right style
+        determines the browser of the client and attaches the respective style
         sheets.</para>
+      </sect2>
+
+      <sect2>
+        <title>Borders and the Default Border</title>
+
+        <para>By default, a <code>border.DefaultBorder</code> is applied to
+        all components. This special border renders no inline attributes. Thus
+        the styles as defined in the stylesheet(s) take effect. If another
+        border is set, that border's style attributes are rendered as an inline
+        style attribute and override the stylesheet definition. If the border is
+        set to <code>null</code>, an inline style with no border and no padding
+        is written.</para>
       </sect2>
 
       <sect2>
@@ -3526,37 +3520,26 @@ Session sameSession = aComponent.getSession();</programlisting>
         i.e. that your application might want to now the current logged in
         user at various time during application runtime. So you would use the
         session to store the user after successful login and use getters to
-        retrieve it from the session again. A wrapper class might implement do
-        the object casting and provide typesafe method calls vs. errourness
-        property retrievals using string keys and class casts</para>
+        retrieve it from the session again. There is a utility class
+        <code>SessionLocal</code> for typesafe access to session properties.
+        </para>
 
-        <programlisting>public class MyAppSession {
-    public static User getLoggedInUser() {
-        return (User) SessionManager.getSession().getProperty("currentuser");
-    }
+        <programlisting>static final SessionLocal&lt;String&gt; userid = new SessionLocal&lt;String&gt;();
 
-    public static void setLoggedInUser(User user) {
-        SessionManager.getSession().setProperty("currentuser",user);
-    }
-}
+    // ...
+    user.set(SessionManager.getSession().getServletRequest().getUserPrincipal().getName());
+    // ...
+    String userid = user.get();
+    // ...
+</programlisting>
 
-// After successfull login
-MyAppSession.setLoggedInUser(user);
-
-// ....
-
-// ... later on somewhere in you application logic
-if (MyAppSession.getLoggedInUser().getName().equals("admin")) {
-   // ...
-}</programlisting>
-
-        <bridgehead>Further features of the session</bridgehead>
+        <bridgehead>Further features of the Session</bridgehead>
 
         <para>The session objects also holds various informations like the
         current used <emphasis role="bold">character encoding</emphasis> for
         the communication with the browser (Default: UTF-8), the current
-        session <emphasis role="bold"> Locale</emphasis>, informations about
-        the <emphasis role="bold"> client browser</emphasis>, an object
+        session <emphasis role="bold">Locale</emphasis>, informations about
+        the <emphasis role="bold">browser</emphasis>, an object
         describing some <emphasis role="bold">session statistics</emphasis>
         like request count and average response time and the current <emphasis
         role="bold">servlet context, HTTP request</emphasis> and <emphasis
@@ -4786,9 +4769,9 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       </copyright>
 
       <legalnotice id="gfdl-legalnotice">
-        <para><address>Free Software Foundation, Inc., <street>51 Franklin 
-          St, Fifth Floor</street><city>Boston</city>, 
-          <state>MA</state>, 
+        <para><address>Free Software Foundation, Inc., <street>51 Franklin
+          St, Fifth Floor</street><city>Boston</city>,
+          <state>MA</state>,
           <postcode>02110-1301,</postcode><country>USA</country></address>
         Everyone is permitted to copy and distribute verbatim copies of this
         license document, but changing it is not allowed.</para>

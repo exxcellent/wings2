@@ -106,8 +106,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             if (component.getBorder() != null) {
                 Utils.createInlineStylesForInsets(styleString, component.getBorder().getInsets());
             }
-            // This is used for 100% height of inner components - works in FF, not in IE
-            //styleString.append("width:100%;height:100%;vertical-align:top");
             Utils.optAttribute(device, "style", styleString);
 
             device.print(">"); // table
@@ -207,7 +205,7 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         String style = clazz.getName();
         style = style.substring(style.lastIndexOf('.') + 1);
         component.setStyle(style); // set default style name to component class (ie. SLabel).
-        component.setBorder(SDefaultBorder.INSTANCE);
+        component.setBorder(SDefaultBorder.INSTANCE); // the default style writes _no_ attributes, thus the stylesheet is in effect
 
         if (Utils.isMSIE(component)) {
             final CGManager manager = component.getSession().getCGManager();

@@ -8,7 +8,7 @@
     <title>Introduction</title>
 
     <para>wingS is a Java servlet based toolkit which presents a high level
-    windowing API to the user. Applications created with wingS can then be
+    windowing API to the user. Applications created with wingS can be
     deployed in a standard java servlet container to present a web based
     interface. Where possible interfaces and concepts are reused from the Java
     Swing API to minimise the learning curve. A programmer with basic Java
@@ -33,8 +33,17 @@
     and an easy learning curve, so is suitable for any type of web
     application. However the ability to correctly structure and layer your
     code will be most beneficial in large applications, where more typical
-    scripting approaches collapse due to the poor structure dictated by the
-    scripting technology.</para>
+    stateless approaches collapse due to the poor structure dictated by the
+    request-/ reqponse- scheme.</para>
+
+    <para>As of wingS 3.0, AJAX is used in the background in order to update
+    the page incrementally. This enriches the user experience dramatically
+    while it is totally transparent to the application developer. In fact, an
+    application written with wingS 2.0 will leverage the AJAX capabilities
+    immediately, if only the old JARs are replaced with the new ones. Even
+    custom components will take part in the process of incremental updates
+    without any special treatment.
+    </para>
 
     <para>Apart from requiring a Java servlet container to execute, wingS is
     non-invasive and imposes no particular technical constraints. The display
@@ -60,10 +69,9 @@
     <para>The server-side of a wingS application is inherently cross-platform
     being pure Java. On the web browser side wingS tries to be as inclusive as
     possible by adhering to W3C standards, and not requiring any special
-    client-side plug-in. Reliance on JavaScript, the main source of browser
-    incompatibility, is minimised. More adventurous users can customise the
-    display rendering if required, using internal APIs, and work is on-going
-    to better modularise these aspects of the toolkit.</para>
+    client-side plug-in. More adventurous users can customise the display
+    rendering if required, using internal APIs, and work is on-going to better
+    modularise these aspects of the toolkit.</para>
 
     <para>wingS applications have been deployed for several years in a variety
     of industries. The code is stable and mature.</para>
@@ -81,8 +89,8 @@
     interface using familiar concepts such as windows, widgets, and events.
     Thus you can structure your code in the way you want, rather than the way
     the technology forces you to. A portion of the toolkit uses cascading
-    style sheets and a small amount of JavaScript. You are unlikely to be
-    interested in this unless you intend customising the look and feel.</para>
+    style sheets and JavaScript. You are unlikely to be interested in this
+    unless you intend customising the look and feel.</para>
 
     <para><emphasis role="bold">Open Architecture</emphasis></para>
 
@@ -128,8 +136,10 @@
 
     <para>Nothing in the wingS toolkit prevents you from writing applications
     that can "scale out" to many concurrent users. The scalability limits are
-    likely to depend on the other technologies you use in your
-    application.</para>
+    likely to depend on the other technologies you use in your application. The
+    stateful architecture by its very nature preserves as much context
+    information as possible between requests, thereby taking load from the
+    business logic and persistence store.</para>
 
     <para><emphasis role="bold">Easily Integrated</emphasis></para>
 
@@ -208,11 +218,19 @@
             <entry><ulink url="http://www.scinapps.com">Scinapps
             Ltd</ulink></entry>
           </row>
+
+          <row>
+            <entry>E-Procurement Suite</entry>
+
+            <entry><ulink url="http://www.wilken.de">Wilken
+            GmbH</ulink></entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
 
-    <para>Please contact the project, if you want to be added.</para>
+    <para>Please contact the project team, if you want a reference
+    to be added.</para>
   </section>
 
   <section>
@@ -372,9 +390,9 @@
   <section>
     <title>Standard Compliance</title>
 
-    <para>wingS is based on and compiled with Sun's Servlet API version 2.2.
-    It uses Jakarta Commons Logging and Regexp. Optional features require
-    Direct Web Remoting (DWR), HTTPClient for session recording and playback
+    <para>wingS is based on Sun's Servlet API version 2.2 or later.
+    It uses Jakarta Commons Logging. Optional features require Direct Web
+    Remoting (DWR), HTTPClient for session recording and playback
     and bsh-core for scripting support inside template files. There are no
     other dependencies.</para>
 
@@ -397,11 +415,6 @@
 
       <listitem>
         <para>W3C standards</para>
-      </listitem>
-
-      <listitem>
-        <para>Support old JRE versions (currently JDK1.3), do not make latest
-        JRE a requirement</para>
       </listitem>
 
       <listitem>
