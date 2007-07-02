@@ -416,46 +416,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             }
             device.print("\n</div>\n\n");
 
-            // Write final JS for DnD if neccessary
-            if (dndManager.isVisible() && dragIter != null && dragIter.hasNext()) {
-                // initialize only if dragSources are present
-                device.print("<script type=\"text/javascript\">\n<!--\n");
-                device.print("SET_DHTML();\n");
-                while (dragIter.hasNext()) {
-                    SComponent dragComp = (SComponent)dragIter.next();
-                    if (dragComp.isVisible()) {
-                        device.print("ADD_DHTML('");
-                        device.print(dragComp.getName());
-                        device.print("'+CLONE+TRANSPARENT);\n");
-                        device.print("dd.elements['");
-                        device.print(dragComp.getName());
-                        device.print("'].dragsource=1;\n");
-                    }
-                }
-                while (dropIter.hasNext()) {
-                    SComponent dropComp = (SComponent)dropIter.next();
-                    if (dropComp.isVisible()) {
-                        if (dragComponents.contains(dropComp)) {
-                            // This is a draggable and a dropTarget, it's already
-                            // added.
-                        } else {
-                            device.print("ADD_DHTML('");
-                            device.print(dropComp.getName());
-                            device.print("'+NO_DRAG);\n");
-                        }
-                        device.print("dd.elements['");
-                        device.print(dropComp.getName());
-                        device.print("'].droptarget=1;\n");
-                    }
-                }
-                device.print("var wdnd_managerId = '");
-                device.print(dndManager.getLowLevelEventId());
-                device.print("';\n");
-                device.print("//-->\n</script>");
-                // TODO: is caching by the VM enough or make this only initialize once?
-                Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_DND).write(device);
-                device.print("\n");
-            }
+            dndManager.getCG().write(device, dndManager);
+
             handleScripts(device, frame);
         }
 

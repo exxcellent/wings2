@@ -1191,6 +1191,7 @@ public final class Utils {
     }
 
     public static final String JS_ALL_WINGSSCRIPTS= "JS.wingsAll";
+    public static final String JS_DRAG_AND_DROP = "JS.wingsDnD";
 
     //
     // Yahoo UI Library --- Lookup keys for createExternalJSHeader

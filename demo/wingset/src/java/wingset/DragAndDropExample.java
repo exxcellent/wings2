@@ -170,7 +170,8 @@ public class DragAndDropExample extends WingSetPane {
 
         puzzleContainer.add(puzzle);
         puzzleContainer.add(pieces);
-        
+
+        statusLabel.setPreferredSize(new SDimension("400px", null));
         controlContainer.add(statusLabel);
         
         container.add(puzzleContainer);

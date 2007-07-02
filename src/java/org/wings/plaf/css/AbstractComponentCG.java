@@ -22,7 +22,7 @@ import org.wings.SIcon;
 import org.wings.SPopupMenu;
 import org.wings.SResourceIcon;
 import org.wings.border.*;
-import org.wings.dnd.DragSource;
+import org.wings.dnd.*;
 import org.wings.io.Device;
 import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
@@ -34,6 +34,7 @@ import org.wings.session.BrowserType;
 import org.wings.session.ScriptManager;
 import org.wings.style.Style;
 import org.wings.util.SStringBuilder;
+import org.wings.util.SessionLocal;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -54,6 +55,16 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      * An invisible icon / graphic (spacer graphic)
      */
     private static SIcon BLIND_ICON;
+
+    /**
+     * Be careful with this shared StringBuilder. Don't use it in situations where unknown code is called, that might
+     * use the StringBuilder, too.
+     */
+    public static SessionLocal<StringBuilder> STRING_BUILDER = new SessionLocal<StringBuilder>() {
+        protected StringBuilder initialValue() {
+            return new StringBuilder();
+        }
+    };
 
     protected AbstractComponentCG() {
     }
@@ -320,28 +331,91 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
      * the settings for server side caching the rendered code is newly generated or taken from the cache.
      */
 	public final void write(final Device device, final SComponent component) throws IOException {
-	        // Render component and return if caching for this one is disabled.
-			if (!RenderHelper.getInstance(component).isCachingAllowed(component)) {
-				// log.debug("-> writing (not caching) = " + component);
-				writeCode(device, component);
-				return;
-			}
-			// Look if there is already some code in the cache for this component.
-			String cachedCode = (String) component.getClientProperty("render-cache");
-			if (cachedCode == null) {
-				// If not, we render the complete component to the cache.
-				StringBuilderDevice cacheDevice = new StringBuilderDevice();
-				writeCode(cacheDevice, component);
-				cachedCode = cacheDevice.toString();
-				component.putClientProperty("render-cache", cachedCode);
-				// log.debug("--> writing (and caching) = " + component);
-			} else {
-				// Otherwise we'll reuse the code previously cached.
-				// log.debug("---> reusing (from cache) = " + component);
-			}
-			// Reuse the cached code.
-			device.print(cachedCode);
-	}
+        // Render component and return if caching for this one is disabled.
+        if (!RenderHelper.getInstance(component).isCachingAllowed(component)) {
+            // log.debug("-> writing (not caching) = " + component);
+            writeCode(device, component);
+            return;
+        }
+        // Look if there is already some code in the cache for this component.
+        String cachedCode = (String) component.getClientProperty("render-cache");
+        if (cachedCode == null) {
+            // If not, we render the complete component to the cache.
+            StringBuilderDevice cacheDevice = new StringBuilderDevice();
+            writeCode(cacheDevice, component);
+            cachedCode = cacheDevice.toString();
+            component.putClientProperty("render-cache", cachedCode);
+            // log.debug("--> writing (and caching) = " + component);
+        } else {
+            // Otherwise we'll reuse the code previously cached.
+            // log.debug("---> reusing (from cache) = " + component);
+        }
+        // Reuse the cached code.
+        device.print(cachedCode);
+
+        updateDragAndDrop(component);
+    }
+
+    private void updateDragAndDrop(final SComponent component) {
+        if (component instanceof DragSource) {
+            ScriptManager.getInstance().addScriptListener(new ScriptListener() {
+                public String getScript() {
+                    StringBuilder builder = STRING_BUILDER.get();
+                    builder.setLength(0);
+
+                    String name = component.getName();
+                    builder.append("var ds_");
+                    builder.append(name);
+                    builder.append(" = new wingS.dnd.DD(\"");
+                    builder.append(name);
+                    builder.append("\");\n");
+
+                    return builder.toString();
+                }
+
+                public String getEvent() {
+                    return null;
+                }
+
+                public String getCode() {
+                    return null;
+                }
+
+                public int getPriority() {
+                    return DEFAULT_PRIORITY;
+                }
+            });
+        }
+        if (component instanceof DropTarget) {
+            ScriptManager.getInstance().addScriptListener(new ScriptListener() {
+                public String getScript() {
+                    StringBuilder builder = STRING_BUILDER.get();
+                    builder.setLength(0);
+
+                    String name = component.getName();
+                    builder.append("var dt_");
+                    builder.append(name);
+                    builder.append(" = new YAHOO.util.DDTarget(\"");
+                    builder.append(name);
+                    builder.append("\");\n");
+
+                    return builder.toString();
+                }
+
+                public String getEvent() {
+                    return null;
+                }
+
+                public String getCode() {
+                    return null;
+                }
+
+                public int getPriority() {
+                    return DEFAULT_PRIORITY;
+                }
+            });
+        }
+    }
 
     private void writeCode(Device device, SComponent component) throws IOException {
         Utils.printDebug(device, "<!-- ").print(component.getName()).print(" -->");
@@ -372,7 +446,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
 	public Update getComponentUpdate(SComponent component) {
-		return new ComponentUpdate(component);
+        updateDragAndDrop(component);
+        return new ComponentUpdate(component);
 	}
 
 	protected class ComponentUpdate extends AbstractUpdate {
@@ -410,7 +485,5 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             }
 			return handler;
 		}
-
 	}
-
 }

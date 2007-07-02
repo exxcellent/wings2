@@ -19,9 +19,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wings.LowLevelEventListener;
-import org.wings.SComponent;
-import org.wings.SForm;
+import org.wings.*;
 import org.wings.event.SComponentDropListener;
 
 /**
@@ -63,7 +61,6 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         if (!dragSources.contains(dragSource)) {
             dragSources.add(dragSource);
             namesToComponentsMap.put(((SComponent)dragSource).getName(), (SComponent) dragSource);
-            getParentFrame().reload();
         }
     }
 
@@ -74,7 +71,6 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
     public void deregisterDragSource(DragSource dragSource) {
         dragSources.remove(dragSource);
         namesToComponentsMap.remove(((SComponent)dragSource).getName());
-        getParentFrame().reload();
     }
 
     /**
@@ -87,7 +83,6 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         if (!dropTargets.contains(dropTarget)) {
             dropTargets.add(dropTarget);
             namesToComponentsMap.put(((SComponent)dropTarget).getName(), (SComponent) dropTarget);
-            getParentFrame().reload();
         }
     }
 
@@ -98,7 +93,6 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
     public void deregisterDropTarget(DropTarget dropTarget) {
         dropTargets.remove(dropTarget);
         namesToComponentsMap.remove(((SComponent)dropTarget).getName());
-        getParentFrame().reload();
     }
 
     public SComponent getComponentByName(String name) {
@@ -131,22 +125,12 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
         // handle the somehow coded drag to drop connection, look for the components and dispatch
         sourceName = null;
         targetName = null;
-        for (String value : values) {
-            int sourceIndex = value.indexOf("dragSource");
-            if (sourceIndex != -1) {
-                /* extract name from request value. remove string "dragSource"
-                 * from the beginning.
-                 */
-                sourceName = value.substring(sourceIndex + 10, value.length());
-            }
-            int targetIndex = value.indexOf("dropTarget");
-            if (targetIndex != -1) {
-                // see above
-                targetName = value.substring(targetIndex + 10, value.length());
-            }
-        }
-        log.debug("sourcename: " + sourceName);
-        log.debug("targetname: " + targetName);
+        String value = values[0];
+        int index = value.indexOf(':');
+        sourceName = value.substring(0, index);
+        targetName= value.substring(index + 1);
+        log.info("sourcename: " + sourceName);
+        log.info("targetname: " + targetName);
         SForm.addArmedComponent(this);
     }
 
@@ -174,6 +158,8 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
                     // TODO: evaluate return value of handleDrop and visualize it in the client
                     listener.handleDrop((SComponent)source);
                 }
+                ((SComponent)source).reload();
+                ((SComponent)target).reload();
             }
         }
     }
@@ -190,25 +176,5 @@ public class DragAndDropManager extends SComponent implements LowLevelEventListe
      */
     public boolean isEpochCheckEnabled() {
         return true;
-    }
-
-    public boolean isVisible() {
-        final Iterator dragIter = dragSources.iterator();
-        final Iterator dropIter = dropTargets.iterator();
-        boolean result = false;
-        while (dragIter.hasNext()) {
-            if (((SComponent)dragIter.next()).isRecursivelyVisible()) {
-                result = true;
-                break;
-            }
-        }
-        if (result) return true;
-        while (dropIter.hasNext()) {
-            if (((SComponent)dropIter.next()).isRecursivelyVisible()) {
-                result = true;
-                break;
-            }
-        }
-        return result;
     }
 }
