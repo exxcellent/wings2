@@ -102,7 +102,7 @@ public class DragAndDropExample extends WingSetPane {
 
     protected SComponent createExample() {
         final SPanel container = new SPanel(new SBoxLayout(SBoxLayout.HORIZONTAL));
-        final SPanel puzzleContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
+        final SPanel puzzleContainer = new SPanel(new SGridLayout(2, 1, 0, 20));
 
         // initialize the drag components
         for (int i = 0; i < dragIcons.length; i++) {

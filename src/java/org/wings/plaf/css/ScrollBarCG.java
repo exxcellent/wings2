@@ -121,8 +121,8 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
         }
 
         device.print("><tbody>")
-                .print("<tr").print(rowHeightFlattened).print(">")
-                .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
+            .print("<tr").print(rowHeightFlattened).print(">")
+            .print("<td><table class=\"buttons\"><tbody>");
 
         device.print("<tr><td");
         Utils.printClickability(device, sb, "" + minimum, true, sb.getShowAsFormComponent());
@@ -157,7 +157,7 @@ public final class ScrollBarCG extends org.wings.plaf.css.AbstractComponentCG im
                 .print("</tr>");
         Utils.printNewline(device, sb);
         device.print("<tr").print(rowHeightFlattened).print(">")
-                .print("<td height=\"1%\"><table class=\"buttons\"><tbody>");
+            .print("<td><table class=\"buttons\"><tbody>");
 
         device.print("<tr><td");
         Utils.printClickability(device, sb, "" + (value + 1), true, sb.getShowAsFormComponent());

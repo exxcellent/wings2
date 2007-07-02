@@ -30,7 +30,7 @@ public final class TableCG
     private static final long serialVersionUID = 1L;
     protected String fixedTableBorderWidth;
     protected SIcon editIcon;
-    protected String selectionColumnWidth = "22";
+    protected String selectionColumnWidth = "60";
 
     int horizontalOversize = 4;
 
