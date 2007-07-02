@@ -24,6 +24,7 @@ wingS.dnd.DD.prototype.wingSInit = function(id, sGroup, config) {
 
     this.init(id, sGroup, config);
     this.initFrame();
+    this.setInitPosition();
 };
 
 wingS.dnd.DD.TYPE = "wingS.DD";
@@ -47,9 +48,6 @@ wingS.dnd.DD.prototype.onDragDrop = function(event, id) {
     wingS.request.sendEvent(event, true, true, dragAndDropManager, this.id + ':' + id);
 };
 
-wingS.dnd.DD.prototype.onInvalidDrop = function(event) {
-    this.resetConstraints();
-
-    var el = this.getEl();
-    YAHOO.util.Dom.setXY(el, [this.initPageX, this.initPageY]);
+wingS.dnd.DD.prototype.endDrag = function(e) {
+    this.resetStyles();
 };
