@@ -13,8 +13,6 @@
 package org.wings.plaf;
 
 import org.wings.SComponent;
-import org.wings.dnd.DragAndDropManager;
-import org.wings.dnd.DragSource;
 import org.wings.io.Device;
 
 import java.io.IOException;

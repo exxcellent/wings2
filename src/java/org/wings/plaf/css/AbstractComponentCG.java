@@ -156,8 +156,10 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         // write inline styles
         final SStringBuilder builder = new SStringBuilder();
 
+        /*
         if (component instanceof DragSource)
             builder.append("position:relative;");
+        */
 
         Utils.appendCSSInlineSize(builder, component);
 
@@ -352,8 +354,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         }
         // Reuse the cached code.
         device.print(cachedCode);
-
-        updateDragAndDrop(component);
     }
 
     private void updateDragAndDrop(final SComponent component) {
@@ -434,6 +434,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         component.fireRenderEvent(SComponent.DONE_RENDERING);
         Utils.printDebug(device, "<!-- /").print(component.getName()).print(" -->");
+
+        updateDragAndDrop(component);
     }
 
     public abstract void writeInternal(Device device, SComponent component) throws IOException;

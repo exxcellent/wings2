@@ -19,8 +19,6 @@ public class DragAndDropManagerCG
     protected final List headers = new ArrayList();
 
     public DragAndDropManagerCG() {
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_DND));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_DRAG_AND_DROP));
     }
 
     public void write(Device device, final SComponent component) throws IOException {

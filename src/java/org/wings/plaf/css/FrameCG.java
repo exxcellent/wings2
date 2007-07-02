@@ -108,6 +108,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_EVENT));
         headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_CONTAINER));
         headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_CONNECTION));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_DND));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_DRAG_AND_DROP));
 
         headers.add(new JavaScriptHeader("../dwr/engine.js"));
         headers.add(new JavaScriptHeader("../dwr/util.js"));
@@ -382,26 +384,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_TOOLTIP).write(device);
             device.print("\n");
 
-            // Setup DnD
-            DragAndDropManager dndManager = frame.getSession().getDragAndDropManager();
-            List dragComponents = null;
-            List dropComponents = null;
-            Iterator dragIter = null;
-            Iterator dropIter = null;
-            // Add initial JS for DnD if neccessary
-            if (dndManager.isVisible()) {
-                dragComponents = dndManager.getDragSources();
-                dropComponents = dndManager.getDropTargets();
-                dragIter = dragComponents.iterator();
-                dropIter = dropComponents.iterator();
-                if (dragIter.hasNext()) {
-                    // this needs to be added to the body, so use device.print()
-                    // TODO: is caching by the VM enough or make this only initialize once?
-                    Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_WZDND).write(device);
-                    device.print("\n");
-                }
-            }
-
             // Write components
             frame.getLayout().write(device);
 
@@ -416,6 +398,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
             }
             device.print("\n</div>\n\n");
 
+            DragAndDropManager dndManager = frame.getSession().getDragAndDropManager();
             dndManager.getCG().write(device, dndManager);
 
             handleScripts(device, frame);

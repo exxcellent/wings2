@@ -19,22 +19,17 @@ import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SDimension;
-import org.wings.SForm;
 import org.wings.SGridLayout;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SURLIcon;
-import org.wings.border.SEmptyBorder;
-import org.wings.border.SLineBorder;
 import org.wings.dnd.DragSource;
 import org.wings.dnd.DropTarget;
 import org.wings.event.SComponentDropListener;
-import org.wings.session.SessionManager;
 import org.wings.style.CSSProperty;
 
 import java.awt.event.ActionEvent;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -48,15 +43,25 @@ import java.util.Random;
 public class DragAndDropExample extends WingSetPane {
     private final static Log log = LogFactory.getLog(DragAndDropExample.class);
 
-    private static final SURLIcon ICON_BEE1 = new SURLIcon("../icons/bee_1.jpg");
-    private static final SURLIcon ICON_BEE2 = new SURLIcon("../icons/bee_2.jpg");
-    private static final SURLIcon ICON_BEE3 = new SURLIcon("../icons/bee_3.jpg");
-    private static final SURLIcon ICON_BEE4 = new SURLIcon("../icons/bee_4.jpg");
-    private static final SURLIcon ICON_BEE5 = new SURLIcon("../icons/bee_5.jpg");
-    private static final SURLIcon ICON_BEE6 = new SURLIcon("../icons/bee_6.jpg");
-    private static final SURLIcon ICON_BEE7 = new SURLIcon("../icons/bee_7.jpg");
-    private static final SURLIcon ICON_BEE8 = new SURLIcon("../icons/bee_8.jpg");
-    private static final SURLIcon ICON_BEE9 = new SURLIcon("../icons/bee_9.jpg");
+    private static final SURLIcon ICON_BEE1 = new SURLIcon("../icons/bee_1.jpg", 100, 100);
+    private static final SURLIcon ICON_BEE2 = new SURLIcon("../icons/bee_2.jpg", 100, 100);
+    private static final SURLIcon ICON_BEE3 = new SURLIcon("../icons/bee_3.jpg", 100, 100);
+    private static final SURLIcon ICON_BEE4 = new SURLIcon("../icons/bee_4.jpg", 100, 100);
+    private static final SURLIcon ICON_BEE5 = new SURLIcon("../icons/bee_5.jpg", 100, 100);
+    private static final SURLIcon ICON_BEE6 = new SURLIcon("../icons/bee_6.jpg", 100, 100);
+    private static final SURLIcon ICON_BEE7 = new SURLIcon("../icons/bee_7.jpg", 100, 100);
+    private static final SURLIcon ICON_BEE8 = new SURLIcon("../icons/bee_8.jpg", 100, 100);
+    private static final SURLIcon ICON_BEE9 = new SURLIcon("../icons/bee_9.jpg", 100, 100);
+
+    private static final SURLIcon ICON_BEE1_SMALL = new SURLIcon("../icons/bee_1.jpg", 30, 30);
+    private static final SURLIcon ICON_BEE2_SMALL = new SURLIcon("../icons/bee_2.jpg", 30, 30);
+    private static final SURLIcon ICON_BEE3_SMALL = new SURLIcon("../icons/bee_3.jpg", 30, 30);
+    private static final SURLIcon ICON_BEE4_SMALL = new SURLIcon("../icons/bee_4.jpg", 30, 30);
+    private static final SURLIcon ICON_BEE5_SMALL = new SURLIcon("../icons/bee_5.jpg", 30, 30);
+    private static final SURLIcon ICON_BEE6_SMALL = new SURLIcon("../icons/bee_6.jpg", 30, 30);
+    private static final SURLIcon ICON_BEE7_SMALL = new SURLIcon("../icons/bee_7.jpg", 30, 30);
+    private static final SURLIcon ICON_BEE8_SMALL = new SURLIcon("../icons/bee_8.jpg", 30, 30);
+    private static final SURLIcon ICON_BEE9_SMALL = new SURLIcon("../icons/bee_9.jpg", 30, 30);
 
     private final SDragLabel dragIconOne = new SDragLabel();
     private final SDragLabel dragIconTwo = new SDragLabel();
@@ -79,6 +84,7 @@ public class DragAndDropExample extends WingSetPane {
     private final SDropLabel dropIconNine = new SDropLabel();
 
     private final SIcon[] beeIcons = new SIcon[] {ICON_BEE1, ICON_BEE2, ICON_BEE3, ICON_BEE4, ICON_BEE5, ICON_BEE6, ICON_BEE7, ICON_BEE8, ICON_BEE9};
+    private final SIcon[] beeIconsSmall = new SIcon[] {ICON_BEE1_SMALL, ICON_BEE2_SMALL, ICON_BEE3_SMALL, ICON_BEE4_SMALL, ICON_BEE5_SMALL, ICON_BEE6_SMALL, ICON_BEE7_SMALL, ICON_BEE8_SMALL, ICON_BEE9_SMALL};
     private final SDragLabel[] dragIcons = new SDragLabel[] {dragIconOne, dragIconTwo, dragIconThree, dragIconFour, dragIconFive, dragIconSix, dragIconSeven, dragIconEight, dragIconNine};
     private final SDropLabel[] dropIcons = new SDropLabel[] {dropIconOne, dropIconTwo, dropIconThree, dropIconFour, dropIconFive, dropIconSix, dropIconSeven, dropIconEight, dropIconNine};
 
@@ -95,13 +101,8 @@ public class DragAndDropExample extends WingSetPane {
     }
 
     protected SComponent createExample() {
-        final SPanel container = new SPanel();
+        final SPanel container = new SPanel(new SBoxLayout(SBoxLayout.HORIZONTAL));
         final SPanel puzzleContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        final SPanel controlContainer = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
-        container.setLayout(new SBoxLayout(SBoxLayout.HORIZONTAL));
-        controlContainer.setPreferredSize(new SDimension(150, SDimension.AUTO_INT));
-        controlContainer.setBorder(new SEmptyBorder(0, 20,0,0));
-        controlContainer.setVerticalAlignment(SConstants.CENTER);
 
         // initialize the drag components
         for (int i = 0; i < dragIcons.length; i++) {
@@ -129,8 +130,6 @@ public class DragAndDropExample extends WingSetPane {
                 public boolean handleDrop(SComponent dragSource) {
                     if (dragIcons[shuffleTable[position]].equals(dragSource)) {
                         dragIcons[shuffleTable[position]].setIcon(null);
-                        beeIcons[position].setIconHeight(100);
-                        beeIcons[position].setIconWidth(100);
                         dropIcon.setIcon(beeIcons[position]);
                         piecesRight++;
                         if (piecesRight == 9) {
@@ -151,19 +150,17 @@ public class DragAndDropExample extends WingSetPane {
         resetPuzzle();
         
         // build the puzzle
-        final SPanel puzzle = new SPanel();
-        final SGridLayout gridLayout = new SGridLayout(3,3);
+        SGridLayout gridLayout = new SGridLayout(3,3);
         gridLayout.setBorder(1);
-        puzzle.setLayout(gridLayout);
+        final SPanel puzzle = new SPanel(gridLayout);
         for (int i = 0; i < dropIcons.length; i++) {
             puzzle.add(dropIcons[i]);
         }
         
         // build the pieces area
-        final SPanel pieces = new SPanel();
-        final SBoxLayout boxLayout = new SBoxLayout(SBoxLayout.HORIZONTAL);
-        boxLayout.setBorder(1);
-        pieces.setLayout(boxLayout);
+        gridLayout = new SGridLayout(9);
+        gridLayout.setBorder(1);
+        final SPanel pieces = new SPanel(gridLayout);
         for (int i = 0; i < dragIcons.length; i++) {
             pieces.add(dragIcons[i]);
         }
@@ -172,10 +169,9 @@ public class DragAndDropExample extends WingSetPane {
         puzzleContainer.add(pieces);
 
         statusLabel.setPreferredSize(new SDimension("400px", null));
-        controlContainer.add(statusLabel);
         
         container.add(puzzleContainer);
-        container.add(controlContainer);
+        container.add(statusLabel);
         
         return container;
     }
@@ -186,15 +182,10 @@ public class DragAndDropExample extends WingSetPane {
         statusLabel.setAttribute(CSSProperty.FONT_WEIGHT, "normal");
         statusLabel.setAttribute(CSSProperty.COLOR, "black");
 
-        // init the icons
-        for (int i = 0; i < beeIcons.length; i++) {
-            beeIcons[i].setIconHeight(30);
-            beeIcons[i].setIconWidth(30);
-        }
         // initialize the drag components
         for (int i = 0; i < dragIcons.length; i++) {
             SDragLabel dragIcon = dragIcons[shuffleTable[i]];
-            dragIcon.setIcon(beeIcons[i]);
+            dragIcon.setIcon(beeIconsSmall[i]);
         }
         // initialize the drop components
         for (int i = 0; i < dropIcons.length; i++) {
