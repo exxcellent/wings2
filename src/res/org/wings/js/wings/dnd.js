@@ -49,5 +49,4 @@ wingS.dnd.DD.prototype.onDragDrop = function(event, id) {
 };
 
 wingS.dnd.DD.prototype.endDrag = function(e) {
-    this.resetStyles();
 };
