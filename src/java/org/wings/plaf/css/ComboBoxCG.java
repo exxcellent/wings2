@@ -106,16 +106,27 @@ public final class ComboBoxCG extends AbstractComponentCG implements org.wings.p
                 cellRenderer.write(string);
                 char[] chars = string.toString().replace('\n',' ').trim().toCharArray();
                 int pos = 0;
+                boolean optionIsEmpty = true;
                 for (int c = 0; c < chars.length; c++) {
                     switch (chars[c]) {
                         case '<':
-                            device.print(chars, pos, c - pos);
+                            int len = c - pos;
+                            device.print(chars, pos, len);
+                            if (len > 0) optionIsEmpty = false;
                             break;
                         case '>':
                             pos = c + 1;
                     }
                 }
-                device.print(chars, pos, chars.length - pos);
+                int len = chars.length - pos;
+                device.print(chars, pos, len);
+                if (len > 0) optionIsEmpty = false;
+                
+                if (optionIsEmpty) {
+                    // If the option is empty ("") Firefox
+                    // renders somehow smaller comboboxes!
+                    device.print("&nbsp;");
+                }
             } else {
                 device.print("<!--cellrenderer==null, use toString-->");
                 device.print(model.getElementAt(i).toString());
