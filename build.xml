@@ -59,6 +59,7 @@
                 <file name="update.js"/>
                 <file name="layout.js"/>
                 <file name="keyboard.js"/>
+            	<file name="dnd.js"/>
                 <file name="component.js"/>
             </filelist>
         </concat>

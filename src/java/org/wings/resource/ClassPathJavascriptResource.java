@@ -31,7 +31,7 @@ public class ClassPathJavascriptResource extends ClassPathResource {
         if (callbackCode == null) {
             return super.getResourceStream();
         }
-        return new SequenceInputStream(super.getResourceStream(), new ByteArrayInputStream(("\n" + callbackCode).getBytes()));
+        return new SequenceInputStream(super.getResourceStream(), new ByteArrayInputStream(("\n\n" + callbackCode).getBytes()));
     }
 
 }

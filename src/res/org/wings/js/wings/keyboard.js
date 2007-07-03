@@ -1,5 +1,5 @@
 /***************************************************************************************************
- * WINGS.KEYBOARD --  contains: Keyboard handling functionality
+ * WINGS.KEYBOARD  --  contains: keyboard handling functionality
  **************************************************************************************************/
 
 /**
@@ -74,3 +74,4 @@ wingS.keyboard.KeyStroke = function(component, focussed, command, keyCode, shift
 }
 
 document.onkeydown = wingS.keyboard.handler;
+

@@ -102,14 +102,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         }
 
         // Externalize JavaScript headers
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ALL_WINGSSCRIPTS));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_GLOBAL));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_DOM));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_EVENT));
+        // JS_YUI_UTILITIES = aggregate: yahoo, dom, event, connection, animation, dragdrop
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_UTILITIES));
         headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_CONTAINER));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_CONNECTION));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_YUI_DND));
-        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_DRAG_AND_DROP));
+        headers.add(Utils.createExternalizedJSHeaderFromProperty(Utils.JS_WINGS_ALL));
 
         headers.add(new JavaScriptHeader("../dwr/engine.js"));
         headers.add(new JavaScriptHeader("../dwr/util.js"));
@@ -381,7 +377,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
         // Write contents of the frame
         if (frame.isVisible()) {
-            Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_TOOLTIP).write(device);
+            Utils.createExternalizedJSHeaderFromProperty(Utils.JS_ETC_WZ_TOOLTIP).write(device);
             device.print("\n");
 
             // Write components

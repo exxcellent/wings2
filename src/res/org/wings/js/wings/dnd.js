@@ -1,3 +1,10 @@
+/***************************************************************************************************
+ * WINGS.DND  --  contains: drag 'n' drop functionality
+ **************************************************************************************************/
+
+/**
+ * Create according namespace
+ */
 if (!wingS.dnd) {
     wingS.dnd = new Object();
 } else if (typeof wingS.dnd != "object") {
@@ -50,3 +57,4 @@ wingS.dnd.DD.prototype.onDragDrop = function(event, id) {
 
 wingS.dnd.DD.prototype.endDrag = function(e) {
 };
+
