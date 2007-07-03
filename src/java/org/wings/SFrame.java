@@ -709,7 +709,12 @@ public class SFrame
 	}
 
 	public void setUpdateCursor(boolean enabled, SIcon image, int dx, int dy) {
-		Object[] cursor = { new Boolean(enabled), image, new Integer(dx), new Integer(dy) };
+		Object[] cursor = { new Boolean(enabled),
+                            image,
+                            new Integer(image.getIconWidth()),
+                            new Integer(image.getIconHeight()),
+                            new Integer(dx),
+                            new Integer(dy) };
 		if (!Arrays.equals(updateCursor, cursor)) {
 			updateCursor = cursor;
 			reload();

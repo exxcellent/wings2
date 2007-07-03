@@ -211,7 +211,7 @@ wingS.ajax.ActivityCursor = function() {
     this.dy = wingS.global.updateCursor.dy;
     this.div = document.createElement("div");
     this.div.style.position = "absolute";
-    this.div.style.zIndex = "1000";
+    this.div.style.zIndex = "9999";
     this.div.style.display = "none";
     this.div.innerHTML = "<img src=\"" + wingS.global.updateCursor.image + "\"/>";
     document.body.insertBefore(this.div, document.body.firstChild);
@@ -239,9 +239,15 @@ wingS.ajax.ActivityCursor.prototype.followMouse = function(event) {
         posX += wingS.util.absLeft(target);
         posY += wingS.util.absTop(target.parentNode) + 18;
     }
-
-    this.div.style.left = posX + this.dx + "px";
-    this.div.style.top = posY + this.dy + "px";
+    
+    var newX = posX + this.dx;
+    if (newX > 0 && newX < (YAHOO.util.Dom.getDocumentWidth() - wingS.global.updateCursor.width - 2)) {
+        this.div.style.left = newX + "px";
+    }
+    var newY = posY + this.dy;
+    if (newY > 0 && newY < (YAHOO.util.Dom.getDocumentHeight() - wingS.global.updateCursor.height - 2)) {
+	    this.div.style.top = newY + "px";
+    }
 };
 
 /**

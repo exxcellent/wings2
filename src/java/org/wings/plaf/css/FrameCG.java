@@ -440,8 +440,10 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         script.append(frame.isUpdateEnabled()).append(",{");
         script.append("'enabled':").append(frame.getUpdateCursor()[0]).append(",");
         script.append("'image':'").append(frame.getUpdateCursor()[1]).append("',");
-        script.append("'dx':").append(frame.getUpdateCursor()[2]).append(",");
-        script.append("'dy':").append(frame.getUpdateCursor()[3]).append("});");
+        script.append("'width':'").append(frame.getUpdateCursor()[2]).append("',");
+        script.append("'height':'").append(frame.getUpdateCursor()[3]).append("',");
+        script.append("'dx':").append(frame.getUpdateCursor()[4]).append(",");
+        script.append("'dy':").append(frame.getUpdateCursor()[5]).append("});");
         return script.toString();
     }
     
