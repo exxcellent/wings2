@@ -22,6 +22,7 @@ import org.wings.util.PropertyAccessor;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.*;
@@ -140,7 +141,7 @@ public class TreeExample
             group.add(arrowButton);
             plusButton.setSelected(true);
 
-            group.addActionListener(new java.awt.event.ActionListener() {
+            group.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (plusButton.isSelected()) {
                         PropertyAccessor.setProperty(tree.getCG(), "collapseControlIcon", MINUS);
@@ -154,6 +155,13 @@ public class TreeExample
                     tree.reload();
                 }
             });
+            
+            final SCheckBox rootVisible = new SCheckBox("show root", true);
+            rootVisible.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    tree.setRootVisible(rootVisible.isSelected());
+                }
+            });
 
             addControl(consume);
             addControl(new SLabel(" selection mode"));
@@ -163,6 +171,8 @@ public class TreeExample
             addControl(new SLabel(" folding icons"));
             addControl(plusButton);
             addControl(arrowButton);
+            addControl(new SLabel(" "));
+            addControl(rootVisible);
         }
     }
 }

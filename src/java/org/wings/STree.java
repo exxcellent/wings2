@@ -499,7 +499,11 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
     }
 
     public void setRootVisible(boolean rootVisible) {
-        treeState.setRootVisible(rootVisible);
+        if (isRootVisible() != rootVisible) {
+            treeState.setRootVisible(rootVisible);
+            fireViewportChanged(false);
+            reload();
+        }
     }
 
 

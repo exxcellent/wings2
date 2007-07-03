@@ -124,8 +124,8 @@ public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.
         };
 
         Object[] pathElements = path.getPath();
-        Object parentElement = null;
-        for (int i = 0; i < pathElements.length; i++) {
+        Object parentElement = component.isRootVisible() ? null : model.getRoot();
+        for (int i = component.isRootVisible() ? 0 : 1; i < pathElements.length; i++) {
             Object element = pathElements[i];
             boolean lastElement = i == pathElements.length - 1;
             boolean lastChild = lastChild(model, parentElement, element);
