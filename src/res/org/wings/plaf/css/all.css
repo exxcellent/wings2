@@ -816,3 +816,13 @@ table.DivisionContent {
 	position:relative;
 	top: 30px
 }
+
+.XCalendarButton {
+    margin-left: 2px;
+    cursor: pointer;
+}
+
+.XCalendarClearButton {
+    margin-left: 2px;
+    cursor: pointer;
+}
