@@ -620,7 +620,7 @@ public class HelloWingS {
             <listitem>
               <para>The latest version of the wingS framework can be always
               obtained from its website at <ulink
-              url="http://www.j-wings.org/"> http://www.j-wings.org/</ulink>.
+              url="http://wingsframework.org/"> http://wingsframework.org/</ulink>.
               If you want to be in touch with the latest development you can
               also retrieve a development snapshot by anonymous CVS
               access.</para>
@@ -2049,7 +2049,6 @@ public Class getColumnClass(int column) {
 
           <para>And below you see the final outcome of our efforts</para>
 
-          <screenshot>
           <screenshot>
             <screeninfo>Editable table</screeninfo>
 
@@ -4501,13 +4500,13 @@ public MyFoo getSessionHelper(HttpServletRequest request)
       </itemizedlist>
 
       <para>URLs can be entirely arbitrary, in which case use a <ulink
-      url="http://www.j-wings.org/javadoc/org/wings/SimpleURL.html">
+      url="http://wingsframework.org/javadoc/org/wings/SimpleURL.html">
       <code>SimpleURL</code></ulink> (e.g. to refer to another web
       application), or they can be relative to your web application context in
       which case use a <code>RequestURL</code> (e.g. for a resource deployed
       under your web application deployment directory). For further options
       see <ulink
-      url="http://www.j-wings.org/javadoc/org/wings/externalizer/AbstractExternalizeManager.html">
+      url="http://wingsframework.org/javadoc/org/wings/externalizer/AbstractExternalizeManager.html">
       <code>AbstractExternalizeManager</code></ulink> flags. Resources will
       choose the type which is most suitable for themselves.</para>
 
@@ -4518,7 +4517,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
         <itemizedlist>
             <listitem>
               <para><ulink
-              url="http://www.j-wings.org/javadoc/org/wings/StaticResource.html"><code>StaticResource</code></ulink>
+              url="http://wingsframework.org/javadoc/org/wings/StaticResource.html"><code>StaticResource</code></ulink>
               - base class for components whose representation does not
               change, e.g. images. Much of the implementation can be put into
               this base class so it has methods to write the raw data and
@@ -4527,7 +4526,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
               <para><itemizedlist>
                   <listitem>
                     <para><ulink
-                    url="http://www.j-wings.org/javadoc/org/wings/ClasspathResource.html"><code>ClasspathResource</code></ulink>
+                    url="http://wingsframework.org/javadoc/org/wings/ClasspathResource.html"><code>ClasspathResource</code></ulink>
                     - a static resource that is loaded by a class loader. This
                     is useful when you want to jar up a bunch of resources
                     (e.g. images) along with your java classes for deployment
@@ -4542,7 +4541,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
 
                   <listitem>
                     <para><ulink
-                    url="http://www.j-wings.org/javadoc/org/wings/FileResource.html"><code>FileResource</code></ulink>
+                    url="http://wingsframework.org/javadoc/org/wings/FileResource.html"><code>FileResource</code></ulink>
                     - a static resource wrapped around a file stream. If the
                     resource is an image then use the derived FileImageIcon,
                     which will try and deduce dimensions.</para>
@@ -4552,14 +4551,14 @@ public MyFoo getSessionHelper(HttpServletRequest request)
 
             <listitem>
               <para><ulink
-              url="http://www.j-wings.org/javadoc/org/wings/StringResource.html"><code>StringResource</code></ulink>
+              url="http://wingsframework.org/javadoc/org/wings/StringResource.html"><code>StringResource</code></ulink>
               - use this if you already have the raw representation data of
               some static resource as a string.</para>
             </listitem>
 
             <listitem>
               <para><ulink
-              url="http://www.j-wings.org/javadoc/org/wings/DynamicResource.html">
+              url="http://wingsframework.org/javadoc/org/wings/DynamicResource.html">
               <code>DynamicResource</code></ulink> - base class for components
               whose representation changes, i.e. most user interface widgets.
               Because of the dynamic nature the URL of these resources is not
@@ -4569,7 +4568,7 @@ public MyFoo getSessionHelper(HttpServletRequest request)
               which is also an important security feature. <itemizedlist>
                   <listitem>
                     <para><ulink
-                    url="http://www.j-wings.org/javadoc/org/wings/DynamicCodeResource.html"><code>DynamicCodeResource</code></ulink>
+                    url="http://wingsframework.org/javadoc/org/wings/DynamicCodeResource.html"><code>DynamicCodeResource</code></ulink>
                     - actually only used for SFrame components. Delegates
                     externalisation to the frame.</para>
                   </listitem>
