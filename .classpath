@@ -17,5 +17,5 @@
 	<classpathentry kind="lib" path="lib/servlet.jar"/>
 	<classpathentry kind="lib" path="demo/logconfig/src/web/WEB-INF/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="demo/logconfig/src/web/WEB-INF/lib/jaxen-1.1-beta-6.jar"/>
-	<classpathentry kind="output" path="build/class"/>
+	<classpathentry kind="output" path="build_eclipse/class"/>
 </classpath>
