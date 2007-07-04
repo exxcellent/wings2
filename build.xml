@@ -27,6 +27,20 @@
         </fileset>
     </path>
 
+    <filelist dir="src/res/org/wings/js/wings/modules"
+        id="wings.js.modules">
+        <file name="global.js"/>
+        <file name="event.js"/>
+        <file name="util.js"/>
+        <file name="request.js"/>
+        <file name="ajax.js"/>
+        <file name="update.js"/>
+        <file name="layout.js"/>
+        <file name="keyboard.js"/>
+        <file name="dnd.js"/>
+        <file name="component.js"/>
+    </filelist>
+
     <target name="prepare" depends="splash">
         <mkdir dir="build/class"/>
         <mkdir dir="build/doc"/>
@@ -34,9 +48,6 @@
             <format property="wings.buildtime" pattern="yyyy-MM-dd HH:mm"/>
         </tstamp>
     </target>
-
-    <target name="generate" depends="generate-wings.js, generate-version.java"
-            description="Generates all artefacts (joined JS and Version.java)"/>
 
     <target name="generate-version.java" depends="prepare">
         <!-- Generate wingS version information class -->
@@ -48,42 +59,36 @@
     </target>
 
     <target name="generate-wings.js" depends="prepare">
-        <!-- generate concatenated JS-file -->
-        <concat destfile="src/res/org/wings/js/wings/wings.js">
-            <filelist dir="src/res/org/wings/js/wings">
-                <file name="global.js"/>
-                <file name="event.js"/>
-                <file name="util.js"/>
-                <file name="request.js"/>
-                <file name="ajax.js"/>
-                <file name="update.js"/>
-                <file name="layout.js"/>
-                <file name="keyboard.js"/>
-            	<file name="dnd.js"/>
-                <file name="component.js"/>
-            </filelist>
+        <!-- Generate concatenated JS-file -->
+        <concat destfile="src/res/org/wings/js/wings/wings.js" force="no">
+            <filelist refid="wings.js.modules" />
         </concat>
 
-       <java jar="tools/javascript-compressor/custom_rhino.jar" failonerror="true" fork="true" maxmemory="128m"
-             output="${basedir}/src/res/org/wings/js/wings/wings-min.js">
-         <!--
-            Use  this instead "-c" to achieve a greater compression an replace the
-            output file with the 3rd argument to use alternative compression
-            approach (55kb vs. 24kb. vs 16kb).
-            <arg value="${basedir}/tools/javascript-compressor/packer.js"/>
-         -->
-         <arg value="-c"/>
-         <arg value="${basedir}/src/res/org/wings/js/wings/wings.js"/>
-         <!-- <arg value="${basedir}/src/res/org/wings/js/wings/wings-min.js"/> -->
-         <classpath>
-           <pathelement location="tools/javascript-compressor/custom_rhino.jar"/>
-           <pathelement path="${java.class.path}"/>
-         </classpath>
-       </java>
-        
+        <uptodate property="nominimize"
+            targetfile="${basedir}/src/res/org/wings/js/wings/wings-min.js"
+            srcfile="${basedir}/src/res/org/wings/js/wings/wings.js" />
     </target>
 
-    <target name="compile" depends="prepare, generate">
+    <target name="minimize-wings.js" depends="generate-wings.js" unless="nominimize">
+        <!-- Minimize concatenated JS-file -->
+        <java jar="tools/javascript-compressor/custom_rhino.jar" failonerror="true"
+            fork="true" maxmemory="128m" output="${basedir}/src/res/org/wings/js/wings/wings-min.js">
+            <!--
+                Use this instead "-c" to achieve a greater compression an replace the
+                output file with the 3rd argument to use alternative compression
+                approach (55kb vs. 24kb. vs 16kb).
+                <arg value="${basedir}/tools/javascript-compressor/packer.js"/>
+            -->
+            <arg value="-c"/>
+            <arg value="${basedir}/src/res/org/wings/js/wings/wings.js"/>
+            <classpath>
+                <pathelement location="tools/javascript-compressor/custom_rhino.jar"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="compile" depends="prepare, generate-version.java, minimize-wings.js">
         <javac debug="${build.debug}" deprecation="${build.deprecation}"
             destdir="build/class" srcdir="src/java" source="1.5" target="1.5">
             <classpath refid="build.classpath"/>
