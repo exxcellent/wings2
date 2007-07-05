@@ -25,8 +25,12 @@ wingS.request.sendRedirect = function(url) {
  */
 wingS.request.reloadFrame = function(parameters) {
     var reloadRequestUrl = wingS.util.getReloadResource();
-    if (parameters != null)
-        reloadRequestUrl += "?" + parameters;
+    if (parameters != null) {
+    	if (parameters.charAt(0) != "?") {
+    		reloadRequestUrl += "?";
+    	}
+        reloadRequestUrl += parameters;
+    }
     window.location.href = reloadRequestUrl;
 };
 
@@ -181,12 +185,12 @@ wingS.request.submitForm = function(target, async, eventName, eventValue, script
  */
 wingS.request.followLink = function(target, async, eventName, eventValue, scriptCodeArray) {
     if (wingS.util.invokeScriptCodeArray(scriptCodeArray)) {
-        var data = wingS.request.encodeEvent(eventName, eventValue, "?");
+        var data = wingS.request.encodeEvent(eventName, eventValue);
 
         // Send the event...
         if (wingS.global.updateEnabled && async) {
             // asynchronously
-            wingS.ajax.sendRequest("GET", wingS.util.getUpdateResource() + data);
+            wingS.ajax.sendRequest("GET", wingS.util.getUpdateResource() + "?" + data);
         } else {
             // traditionally
             wingS.request.reloadFrame(data);
@@ -198,11 +202,9 @@ wingS.request.followLink = function(target, async, eventName, eventValue, script
  * Encodes the given event with the frame's current event epoch and returns the generated string.
  * @param {String} eventName - the name of the event or component respectively
  * @param {String} eventValue - the value of the event or component respectively
- * @param {String} prefix - an optional string which is prepended to the result
  */
-wingS.request.encodeEvent = function(eventName, eventValue, prefix) {
+wingS.request.encodeEvent = function(eventName, eventValue) {
     var data = "";
-    if (prefix != null) data += prefix;
     // In order to be consistent we do always encode
     // the epoch - even without any name/value pair.
     data += "event_epoch=" + wingS.global.eventEpoch
