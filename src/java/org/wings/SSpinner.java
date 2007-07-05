@@ -30,12 +30,17 @@ import org.wings.text.SDefaultFormatterFactory;
  * A single line input field that lets the user select a number or an object value from an ordered sequence.
  * @author erik
  */
-public class SSpinner extends SComponent {
+public class SSpinner extends SComponent implements LowLevelEventListener {
     
     private SpinnerModel    model;
     private DefaultEditor   editor;
 
     private ChangeListener  modelChangeListener = null;
+    
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
+    protected boolean epochCheckEnabled = true;
     
     /** Creates a new instance of SSpinner */
     public SSpinner() {
@@ -186,9 +191,20 @@ public class SSpinner extends SComponent {
                     SSpinner spinner = getSpinner();
                     if (isEditable() && isEnabled() && spinner != null ) {
                         if ( text == null || !text.equals( values[0] ) ) {
-                            spinner.setValue( getValue() );
+                            
+                            Object lastValue = spinner.getValue();
+                            try {
+                                spinner.setValue( getTextField().getValue() );
+                            } catch (IllegalArgumentException iae) {
+                                try {
+                                    getTextField().setValue(lastValue);
+                                } catch (IllegalArgumentException iae2) {
+                                }
+                            }
+                            
                         }
                     }
+                    
                 }
             };
             ftf.setStyle( "SFormattedTextField" );
@@ -231,7 +247,7 @@ public class SSpinner extends SComponent {
             if ( source instanceof SSpinner ) {
                 getTextField().setValue( ((SSpinner)source).getValue() );
             }
-        }
+        }    
         
     }
       
@@ -340,4 +356,47 @@ public class SSpinner extends SComponent {
         getEditor().setParentFrame(f);
     }
    
+    /**
+     * @see LowLevelEventListener#isEpochCheckEnabled()
+     */
+    public boolean isEpochCheckEnabled() {
+        return epochCheckEnabled;
+    }
+
+    /**
+     * @see LowLevelEventListener#setEpochCheckEnabled()
+     */
+    public void setEpochCheckEnabled(boolean epochCheckEnabled) {
+        this.epochCheckEnabled = epochCheckEnabled;
+    }
+    
+    /**
+     * @see LowLevelEventListener#fireIntermediateEvents()
+     */    
+    public void fireIntermediateEvents() {     
+    }
+    
+    /**
+     * @see LowLevelEventListener#processLowLevelEvent(String action, String[] values)
+     */        
+    public void processLowLevelEvent(String action, String[] values) {    
+        processKeyEvents(values);
+        if (action.endsWith("_keystroke"))
+            return;
+        
+        int type = Integer.parseInt(values[0]);
+        
+        Object value = null;
+        if ( type == 0 ) {
+            value = getModel().getNextValue();
+        } else {
+            value = getModel().getPreviousValue();
+        }
+        try {
+            getModel().setValue( value );
+        } catch( IllegalArgumentException iae) {
+        }
+        
+    }
+    
 }
