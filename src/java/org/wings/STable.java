@@ -1,7 +1,7 @@
  /*
  * Copyright 2000,2005 wingS development team.
  *
- * This file is part of wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://wingsframework.org).
  *
  * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License

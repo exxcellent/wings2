@@ -1,7 +1,7 @@
 /*
  * Copyright 2000,2005 wingS development team.
  *
- * This file is part of wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://wingsframework.org).
  *
  * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
@@ -346,7 +346,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         /* Insert version and compile time. Since the Version Class is generated on compile time,
          * build errors in SDK's are quite normal. Just run the Version.java ant task.
          */
-        device.print("<meta http-equiv=\"Generator\" content=\"wingS (http://www.j-wings.org) v");
+        device.print("<meta http-equiv=\"Generator\" content=\"wingS (http://wingsframework.org) v");
         device.print(Version.getVersion());
         device.print(" built on: ");
         device.print(Version.getCompileTime());

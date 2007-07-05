@@ -1,7 +1,7 @@
 /*
  * Copyright 2000,2005 wingS development team.
  *
- * This file is part of wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://wingsframework.org).
  *
  * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
@@ -44,7 +44,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.swing.event.EventListenerList;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.EventListener;
@@ -154,6 +153,7 @@ public class Session implements PropertyService, Serializable {
     protected final EventListenerList listenerList = new EventListenerList();
 
     private final WeakPropertyChangeSupport propertyChangeSupport = new WeakPropertyChangeSupport(this);
+    private ResourceMapper resourceMapper;
 
 
     public final SessionStatistics getStatistics() {
@@ -967,5 +967,13 @@ public class Session implements PropertyService, Serializable {
 
     public void setDndManager(DragAndDropManager dndManager) {
         this.dndManager = dndManager;
+    }
+
+    public ResourceMapper getResourceMapper() {
+        return resourceMapper;
+    }
+
+    public void setResourceMapper(ResourceMapper resourceMapper) {
+        this.resourceMapper = resourceMapper;
     }
 }

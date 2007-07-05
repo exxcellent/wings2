@@ -28,21 +28,6 @@
     	    <description>The template for the default error catcher</description>
         </init-param>
         <init-param>
-            <param-name>wings.prevent.default.keybindings</param-name>
-            <param-value>alt pressed LEFT, alt pressed RIGHT, pressed F1, shift pressed F1</param-value>
-    	    <description>
-                If you want to attach key listeners to generic keys, you must prevent
-                the browser  to execute the default action bound to the key (i.e. you do not
-                want to present the browser help on F1, but your own action).
-
-                This is a comma-separated list of all keys for which wings should generate
-                a script that prevents the default key binding.
-
-                For notation see
-                See KeyStroke.getKeyStroke(String s).
-            </description>
-        </init-param>
-        <init-param>
             <param-name>wings.template.beanscript</param-name>
             <param-value>TRUE</param-value>
     	    <description>Allows bean scripting in STemplate layout templates.</description>

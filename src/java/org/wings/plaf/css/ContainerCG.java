@@ -1,7 +1,7 @@
 /*
  * Copyright 2000,2005 wingS development team.
  *
- * This file is part of wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://wingsframework.org).
  *
  * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
@@ -47,10 +47,12 @@ public class ContainerCG extends AbstractComponentCG implements org.wings.plaf.P
 
         device.print(">");
 
-        // special case templateLayout and card layout. We open TABLE cell for them.
+        // special case templateLayout and card layout. We open a TABLE cell for them.
         final boolean writeTableData = layout instanceof STemplateLayout || layout instanceof SCardLayout;
         if (writeTableData) {
-            device.print("<tr><td>");
+            device.print("<tr><td");
+            Utils.printTableCellAlignment(device, component, SConstants.LEFT_ALIGN, SConstants.TOP_ALIGN);
+            device.print(">");
         }
 
         Utils.renderContainer(device, container);

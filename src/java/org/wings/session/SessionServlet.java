@@ -1,7 +1,7 @@
 /*
  * Copyright 2000,2005 wingS development team.
  *
- * This file is part of wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://wingsframework.org).
  *
  * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
@@ -489,6 +489,15 @@ final class SessionServlet
 
             reloadManager.notifyCGs();
             reloadManager.invalidateFrames();
+
+            // TODO ResourceMapper
+            ResourceMapper mapper = session.getResourceMapper();
+            if (extInfo == null && mapper != null) {
+                Resource res = mapper.mapResource(req.getPathInfo());
+                if (res != null) {
+                    extInfo = extManager.getExternalizedResource(res.getId());
+                }
+            }
 
             if (extInfo != null) {
                 outputDevice = DeviceFactory.createDevice(extInfo);

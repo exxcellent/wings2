@@ -2,7 +2,7 @@
  * $Id: SProgressBar.java 2419 2006-01-23 10:20:41Z hengels $
  * Copyright 2000,2006 wingS development team.
  *
- * This file is part of wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://wingsframework.org).
  *
  * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License

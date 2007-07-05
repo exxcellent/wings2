@@ -20,15 +20,6 @@
             <param-name>wings.lookandfeel.default</param-name>
             <param-value>org.wings.plaf.css.CSSLookAndFeel</param-value>
         </init-param>
-        <init-param>
-            <param-name>wings.prevent.default.keybindings</param-name>
-            <param-value>alt F4, alt UP, alt DOWN, F1</param-value>
-	    <description>See KeyStroke.getKeyStroke(String s).</description>
-        </init-param>
-        <!--init-param>
-            <param-name>wings.servlet.lookupname</param-name>
-            <param-value>Recording</param-value>
-        </init-param-->
     </servlet>
 
     <servlet-mapping>

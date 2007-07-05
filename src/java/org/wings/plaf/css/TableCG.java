@@ -1,7 +1,7 @@
 /*
  * Copyright 2000,2005 wingS development team.
  *
- * This file is part of wingS (http://www.j-wings.org).
+ * This file is part of wingS (http://wingsframework.org).
  *
  * wingS is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
@@ -30,7 +30,7 @@ public final class TableCG
     private static final long serialVersionUID = 1L;
     protected String fixedTableBorderWidth;
     protected SIcon editIcon;
-    protected String selectionColumnWidth = "60";
+    protected String selectionColumnWidth = "30";
 
     int horizontalOversize = 4;
 

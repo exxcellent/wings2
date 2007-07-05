@@ -306,7 +306,7 @@
   Full CVS sources required!
   This task requires that you have the complete wingS sources which
   are available via CVS from the wingS website.
-  Please consult http://www.j-wings.org/ how to access the wingS CVS.
+  Please consult http://wingsframework.org/ how to access the wingS CVS.
         </fail>
     </target>
 
