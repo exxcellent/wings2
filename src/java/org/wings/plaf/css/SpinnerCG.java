@@ -49,11 +49,11 @@ public class SpinnerCG extends AbstractComponentCG implements org.wings.plaf.Spi
         device.print( "\n</td><td style=\"width:0px; font-size: 0px; line-height: 0\">\n" );
         
         device.print( "<img src=\"" + getNextIcon().getURL() + "\" style=\"display:block;vertical-align:bottom;\"");
-        Utils.printClickability( device, spinner, "0", true, spinner.getShowAsFormComponent() );
+        Utils.printClickability( device, spinner, "0", true, false );
         device.print( ">\n" );
         
         device.print( "<img src=\"" + getPrevIcon().getURL() + "\" style=\"display:block;vertical-align:bottom;\"");
-        Utils.printClickability( device, spinner, "1", true, spinner.getShowAsFormComponent() );
+        Utils.printClickability( device, spinner, "1", true, false);
         device.print( ">\n" );
         
         device.print( "</td></tr></table>\n" );
