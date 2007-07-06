@@ -570,9 +570,8 @@ public class SComboBox
             }
         }
 
-        if (selectedIndex >= 0) {
+        if (selectedIndex >= 0 && getSelectedIndex() != selectedIndex) {
             setSelectedIndex(selectedIndex);
-
             SForm.addArmedComponent(this);
         }
 
