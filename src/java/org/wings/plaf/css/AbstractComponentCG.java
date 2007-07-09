@@ -21,6 +21,7 @@ import org.wings.SDimension;
 import org.wings.SIcon;
 import org.wings.SPopupMenu;
 import org.wings.SResourceIcon;
+import org.wings.SAbstractIconTextCompound;
 import org.wings.border.*;
 import org.wings.dnd.*;
 import org.wings.io.Device;
@@ -33,6 +34,8 @@ import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
 import org.wings.session.ScriptManager;
 import org.wings.style.Style;
+import org.wings.style.CSSStyle;
+import org.wings.style.CSSAttributeSet;
 import org.wings.util.SStringBuilder;
 import org.wings.util.SessionLocal;
 
@@ -163,7 +166,20 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
         Utils.appendCSSInlineSize(builder, component);
 
-        final Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
+        // Determine Style String
+        Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
+        if (component instanceof SAbstractIconTextCompound && ((SAbstractIconTextCompound)component).isSelected()) {
+            // present, SComponent.getDynamicStyle() always is instance of CSSStyle
+            CSSStyle selectedStyle = (CSSStyle)component.getDynamicStyle(SAbstractIconTextCompound.SELECTOR_SELECTED);
+            if (allStyle != null) {
+                // make a copy to modify
+                allStyle = new CSSStyle(SComponent.SELECTOR_ALL, (CSSAttributeSet) allStyle);
+                allStyle.putAll(selectedStyle);
+            } else {
+                allStyle = selectedStyle;
+            }
+        }
+        // Render Style string
         if (allStyle != null)
             builder.append(allStyle.toString());
 
