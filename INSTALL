@@ -12,5 +12,5 @@ In short words:
 - web/ contains files you need to deploy during runtime
   with your wings application
 - src/ The sources needed to build the core wingS libraries
-  wings.jar and css1.jar which are only distributed in binary
-  form under the web/WEB-INF/lib directory.
+  wings.jar and css.jar which are only contained in the binary
+  distribution under the web/WEB-INF/lib directory.

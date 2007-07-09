@@ -1,7 +1,7 @@
-                              _           ____    ________
-                      _    __(_)__  ___ _/ __/   /  _/  _/
-                     | |/|/ / / _ \/ _ `/\ \    _/ /_/ /
-                     |__,__/_/_//_/\_, /___/   /___/___/
+                              _           ____    ____________
+                      _    __(_)__  ___ _/ __/   /  _/  _/  _/
+                     | |/|/ / / _ \/ _ `/\ \    _/ /_/ / / /
+                     |__,__/_/_//_/\_, /___/   /___/___/___/
                                   /___/
 
   What is wingS?
@@ -46,16 +46,17 @@
   efficient and pure Java-based web application design with wingS!
 
   Beneath the very powerful approach of a pure Java API for web applications,
-  wingS 2 also has some additional, outstanding features to offer, like:
+  wingS 3 also has some additional, outstanding features to offer, like:
+    o Transparent AJAX
     o Powerful set of widgets including Trees, Tables, Menus, etc.
     o Highly flexible dynamic layout managers
     o Drag & Drop support (see WingSet)
-    o Server-side code execution (AJAX / DWR)
+    o Server-side code execution (DWR)
     o Component context menus
     o Handling of browser back navigation
     o and more
 
-  For a quick overview of these feature you may want totake a look at the
+  For a quick overview of these feature you may want to take a look at the
   WingSet demo which is contained in this distribution or can be accessed
   online at the wingS website.
 
