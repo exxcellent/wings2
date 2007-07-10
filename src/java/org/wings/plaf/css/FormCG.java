@@ -141,7 +141,7 @@ public class FormCG extends AbstractComponentCG implements org.wings.plaf.FormCG
         // don't even name it - would be useless anyway...
         device.print("<input type=\"image\" border=\"0\" ");
         Utils.optAttribute(device, "src", getBlindIcon().getURL());
-        device.print(" width=\"0\" height=\"0\" tabindex=\"\"" +
+        device.print(" width=\"0\" height=\"0\" tabindex=\"-1\"" +
                 " style=\"border:none;padding:0px;margin:0px;position:absolute\"/>");
     }
 
