@@ -220,6 +220,9 @@ wingS.util.requestFocus = function(id) {
     window.focus();
     var parent = document.getElementById(id);
     if (parent != null) {
+    	if (!parent.getAttribute("foc")) {
+    		parent.setAttribute("foc", id);
+    	}
         if (parent.getAttribute("foc") == id) {
             if (parent.style.display != "none" && !parent.disabled) {
                 // Workaround for IE6! Without timeout IE6 hangs the complete
