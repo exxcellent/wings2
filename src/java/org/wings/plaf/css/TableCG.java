@@ -15,7 +15,9 @@ package org.wings.plaf.css;
 
 import org.wings.*;
 import org.wings.io.Device;
+import org.wings.io.StringBuilderDevice;
 import org.wings.plaf.CGManager;
+import org.wings.plaf.Update;
 import org.wings.session.SessionManager;
 import org.wings.table.*;
 import org.wings.util.SStringBuilder;
@@ -469,5 +471,69 @@ public final class TableCG
         if (table.getRowSelectionRenderer() != null && table.getSelectionModel().getSelectionMode() != SListSelectionModel.NO_SELECTION)
             return true;
         return false;
+    }
+    
+    public Update getTableCellUpdate(STable table, int row, int col) {
+        return new TableCellUpdate(table, row, col);
+    }
+    
+    protected class TableCellUpdate extends AbstractUpdate {
+
+        private int row, col;
+        
+        public TableCellUpdate(SComponent component, int row, int col) {
+            super(component);
+            this.row = row;
+            this.col = col;
+        }
+
+        public Handler getHandler() {
+            STable table = (STable) component;
+            SComponent cellComponent = table.prepareRenderer(table.getCellRenderer(row, col), row, col);
+            
+            String htmlCode = "";
+            String exception = null;
+
+            try {
+                StringBuilderDevice htmlDevice = new StringBuilderDevice();
+                table.getCellRendererPane().writeComponent(htmlDevice, cellComponent, table);
+                htmlCode = htmlDevice.toString();
+            } catch (Throwable t) {
+                exception = t.getClass().getName();
+            }
+
+            UpdateHandler handler = new UpdateHandler("component");
+            handler.addParameter(cellComponent.getName());
+            handler.addParameter(htmlCode);
+            if (exception != null) {
+                handler.addParameter(exception);
+            }
+            return handler;
+        }
+        
+        public boolean equals(Object object) {
+            if (!super.equals(object))
+                return false;
+            
+            TableCellUpdate other = (TableCellUpdate) object;
+
+            if (this.row != other.row)
+                return false;
+            if (this.col != other.col)
+                return false;
+
+            return true;
+        }
+
+        public int hashCode() {
+            int hashCode = super.hashCode();
+            int dispersionFactor = 37;
+
+            hashCode = hashCode * dispersionFactor + row;
+            hashCode = hashCode * dispersionFactor + col;
+
+            return hashCode;
+        }
+
     }
 }

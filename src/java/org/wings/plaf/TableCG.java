@@ -12,9 +12,11 @@
  */
 package org.wings.plaf;
 
+import org.wings.STable;
 
 
 public interface TableCG extends ComponentCG {
+    
+    Update getTableCellUpdate(STable table, int row, int col);
+
 }
-
-

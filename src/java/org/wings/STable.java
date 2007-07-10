@@ -33,6 +33,7 @@ import org.wings.event.STableColumnModelEvent;
 import org.wings.event.STableColumnModelListener;
 import org.wings.event.SViewportChangeEvent;
 import org.wings.event.SViewportChangeListener;
+import org.wings.plaf.TableCG;
 import org.wings.style.CSSAttributeSet;
 import org.wings.style.CSSProperty;
 import org.wings.style.CSSStyleSheet;
@@ -1012,7 +1013,6 @@ public class STable extends SComponent
             Object value = editor.getCellEditorValue();
             setValueAt(value, editingRow, editingColumn);
             removeEditor();
-            reload();
         }
     }
 
@@ -1024,7 +1024,6 @@ public class STable extends SComponent
      */
     public void editingCanceled(ChangeEvent e) {
         removeEditor();
-        reload();
     }
 
     /**
@@ -1330,7 +1329,7 @@ public class STable extends SComponent
         this.epochCheckEnabled = epochCheckEnabled;
     }
 
-    public void tableChanged(TableModelEvent e) {
+    public void tableChanged(TableModelEvent e) {        
         // kill active editors
         editingCanceled(null);
 
@@ -1367,7 +1366,18 @@ public class STable extends SComponent
             fireViewportChanged(true);
         }
 
-        reload();
+        if (e != null &&
+            e.getFirstRow() == e.getLastRow() &&
+            e.getFirstRow() != TableModelEvent.HEADER_ROW &&
+            e.getColumn() != TableModelEvent.ALL_COLUMNS &&
+            e.getType() == TableModelEvent.UPDATE) {
+            if (isUpdatePossible() && STable.class.isAssignableFrom(getClass()))
+                update(((TableCG) getCG()).getTableCellUpdate(this, e.getFirstRow(), e.getColumn()));
+            else
+                reload();
+        } else {
+            reload();
+        }
     }
 
     /**
