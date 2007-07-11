@@ -2,14 +2,9 @@
  * WINGS.EVENT  --  contains: functions used to do event handling
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS.event) {
-    wingS.event = new Object();
-} else if (typeof wingS.event != "object") {
-    throw new Error("wingS.event already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("event");
+
 
 wingS.event.getEvent = function(event) {
     if (window.event)

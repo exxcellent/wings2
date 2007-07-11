@@ -2,14 +2,9 @@
  * WINGS.AJAX  --  contains: functions used to process ajax requests
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS.ajax) {
-    wingS.ajax = new Object();
-} else if (typeof wingS.ajax != "object") {
-    throw new Error("wingS.ajax already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("ajax");
+
 
 /**
  * Requests any available component updates from the server.

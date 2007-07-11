@@ -2,20 +2,9 @@
  * WINGS.GLOBAL  --  contains: global variables and functions, function extensions, etc.
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS) {
-    var wingS = new Object();
-} else if (typeof wingS != "object") {
-    throw new Error("wingS already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("global");
 
-if (!wingS.global) {
-    wingS.global = new Object();
-} else if (typeof wingS.global != "object") {
-    throw new Error("wingS.global already exists and is not an object");
-}
 
 /**
  * Global variables

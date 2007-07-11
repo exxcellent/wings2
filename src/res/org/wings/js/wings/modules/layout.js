@@ -2,14 +2,9 @@
  * WINGS.LAYOUT  --  contains: functions used to layout components
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS.layout) {
-    wingS.layout = new Object();
-} else if (typeof wingS.layout != "object") {
-    throw new Error("wingS.layout already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("layout");
+
 
 wingS.layout.fill = function(tableId) {
     var table = document.getElementById(tableId);

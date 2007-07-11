@@ -2,14 +2,9 @@
  * WINGS.KEYBOARD  --  contains: keyboard handling functionality
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS.keyboard) {
-    wingS.keyboard = new Object();
-} else if (typeof wingS.keyboard != "object") {
-    throw new Error("wingS.keyboard already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("keyboard");
+
 
 wingS.keyboard.keyStrokes = null;
 

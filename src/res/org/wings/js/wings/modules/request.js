@@ -2,14 +2,9 @@
  * WINGS.REQUEST  --  contains: functions used to send new request
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS.request) {
-    wingS.request = new Object();
-} else if (typeof wingS.request != "object") {
-    throw new Error("wingS.request already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("request");
+
 
 /**
  * Redirects the browser to the specified url.

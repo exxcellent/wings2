@@ -29,6 +29,7 @@
 
     <filelist dir="src/res/org/wings/js/wings/modules"
         id="wings.js.modules">
+    	<file name="namespace.js"/>
         <file name="global.js"/>
         <file name="event.js"/>
         <file name="util.js"/>

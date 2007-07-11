@@ -2,14 +2,9 @@
  * WINGS.UPDATE  --  contains: functions to process incremental updates
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS.update) {
-    wingS.update = new Object();
-} else if (typeof wingS.update != "object") {
-    throw new Error("wingS.update already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("update");
+
 
 /**
  * Adds or removes a script header with the given parameters.
@@ -365,3 +360,4 @@ wingS.update.method = function(formId, method) {
     var form = document.getElementById(formId);
     form.method = method;
 };
+

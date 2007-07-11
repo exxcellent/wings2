@@ -2,14 +2,9 @@
  * WINGS.DND  --  contains: drag 'n' drop functionality
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS.dnd) {
-    wingS.dnd = new Object();
-} else if (typeof wingS.dnd != "object") {
-    throw new Error("wingS.dnd already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("dnd");
+
 
 /**
  * @class a YAHOO.util.DDFramed implementation. During the drag over event, the

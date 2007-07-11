@@ -2,14 +2,9 @@
  * WINGS.UTIL  --  contains: functions used to do common tasks
  **************************************************************************************************/
 
-/**
- * Create according namespace
- */
-if (!wingS.util) {
-    wingS.util = new Object();
-} else if (typeof wingS.util != "object") {
-    throw new Error("wingS.util already exists and is not an object");
-}
+// Create module namespace
+wingS.namespace("util");
+
 
 wingS.util.getReloadResource = function() {
     return wingS.global.eventEpoch + "-" + wingS.global.reloadResource;
