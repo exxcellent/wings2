@@ -52,7 +52,7 @@ wingS.dnd.DD.prototype.onDragDrop = function(event, id) {
     this.resetConstraints();
     target.resetConstraints();
 
-    wingS.request.sendEvent(event, true, true, dragAndDropManager, this.id + ':' + id);
+    wingS.request.sendEvent(event, true, true, wingS.dnd.manager, this.id + ':' + id);
 };
 
 wingS.dnd.DD.prototype.endDrag = function(e) {

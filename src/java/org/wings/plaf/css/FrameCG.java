@@ -204,7 +204,7 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
 
     private String strokes(List<SComponent> components) {
         StringBuilder builder = new StringBuilder();
-        builder.append("wingS.keyboard.keyStrokes = new Array();\n");
+        builder.append("wingS.keyboard.keyStrokes = new Array();");
         for (SComponent component : components) {
             if (component.isRecursivelyVisible()) {
                 appendStrokes(builder, component, SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT, component.getInputMap(SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT));
@@ -428,18 +428,16 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     private String getGlobalInitScript(SFrame frame) throws IOException {
+        Map<String, Object> initConfig = new HashMap<String, Object>();
+        initConfig.put("eventEpoch", frame.getEventEpoch());
+        initConfig.put("reloadResource", frame.getDynamicResource(ReloadResource.class).getId());
+        initConfig.put("updateResource", frame.getDynamicResource(UpdateResource.class).getId());
+        initConfig.put("updateEnabled", frame.isUpdateEnabled());
+        initConfig.put("updateCursor", Utils.mapToJsObject(frame.getUpdateCursor()));
+        initConfig.put("autoAdjustLayout", Utils.mapToJsObject(frame.getAutoAdjustLayout()));
+        
         SStringBuilder script = new SStringBuilder();
-        script.append("wingS.global.init('");
-        script.append(frame.getEventEpoch()).append("','");
-        script.append(frame.getDynamicResource(ReloadResource.class).getURL()).append("','");
-        script.append(frame.getDynamicResource(UpdateResource.class).getURL()).append("',");
-        script.append(frame.isUpdateEnabled()).append(",{");
-        script.append("'enabled':").append(frame.getUpdateCursor()[0]).append(",");
-        script.append("'image':'").append(frame.getUpdateCursor()[1]).append("',");
-        script.append("'width':'").append(frame.getUpdateCursor()[2]).append("',");
-        script.append("'height':'").append(frame.getUpdateCursor()[3]).append("',");
-        script.append("'dx':").append(frame.getUpdateCursor()[4]).append(",");
-        script.append("'dy':").append(frame.getUpdateCursor()[5]).append("});");
+        script.append("wingS.global.init(").append(Utils.mapToJsObject(initConfig)).append(");");
         return script.toString();
     }
     

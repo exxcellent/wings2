@@ -250,8 +250,8 @@ public final class ListCG extends AbstractComponentCG implements  org.wings.plaf
         public Handler getHandler() {
             UpdateHandler handler = new UpdateHandler("selectionList");
             handler.addParameter(component.getName());
-            handler.addParameter(handler.listToJsArray(deselectedIndices));
-            handler.addParameter(handler.listToJsArray(selectedIndices));
+            handler.addParameter(Utils.listToJsArray(deselectedIndices));
+            handler.addParameter(Utils.listToJsArray(selectedIndices));
             return handler;
         }
 

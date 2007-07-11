@@ -27,19 +27,22 @@ wingS.global.asyncHeaderCalls = [];  // Callbacks which are invoked when all hea
 
 /**
  * Callback method which initializes the current frame. This method is called upon each reload.
- * @param {String} eventEpoch - keeps the event epoch of this frame (needed for all events)
- * @param {String} reloadResource - stores the URI of the ReloadResource (without the event epoch)
- * @param {String} updateResource - stores the URI of the UpdateResource (without the event epoch)
- * @param {boolean} updateEnabled - a flag indicating if this frame allows incremental updates
- * @param {Object} updateCursor - an object holding necessary settings of the update cursor
+ * @param {Object} configObject - an object representing the desired initial configuration, i.e:
+ *  - {String} eventEpoch - keeps the event epoch of this frame (needed for all events)
+ *  - {String} reloadResource - stores the URI of the ReloadResource (without the event epoch)
+ *  - {String} updateResource - stores the URI of the UpdateResource (without the event epoch)
+ *  - {boolean} updateEnabled - a flag indicating if this frame allows incremental updates
+ *  - {Object} updateCursor - update cursor configuration (enabled, image, width, height, dx, dy)
+ *  - {Object} autoAdjustLayout - configuration for automatic layout adjustments (enabled, delay)
  */
-wingS.global.init =  function(eventEpoch, reloadResource, updateResource, updateEnabled, updateCursor) {
+wingS.global.init =  function(configObject) {
     // Initialize -wingS.global-
-    wingS.global.eventEpoch = eventEpoch;
-    wingS.global.reloadResource = reloadResource;
-    wingS.global.updateResource = updateResource;
-    wingS.global.updateEnabled = updateEnabled;
-    wingS.global.updateCursor = updateCursor;
+    wingS.global.eventEpoch = configObject.eventEpoch;
+    wingS.global.reloadResource = configObject.reloadResource;
+    wingS.global.updateResource = configObject.updateResource;
+    wingS.global.updateEnabled = configObject.updateEnabled;
+    wingS.global.updateCursor = configObject.updateCursor;
+    wingS.global.autoAdjustLayout = configObject.autoAdjustLayout;
 
     // Initialize -wingS.ajax-
     wingS.ajax.requestIsActive = false;
@@ -53,6 +56,25 @@ wingS.global.init =  function(eventEpoch, reloadResource, updateResource, update
         upload  : function(request) { wingS.ajax.processRequestSuccess(request); }
     };
     wingS.ajax.setActivityIndicatorsVisible(false);
+    
+    // Initialize -wingS.layout-
+    if (wingS.global.autoAdjustLayout.enabled) {
+	    wingS.layout.callbackObject = {
+	    	_tOutId : 0,
+	    	_adjust : function () {
+	    		wingS.request.reloadFrame();
+	    	},
+	    	adjust : function () {
+		        clearTimeout(this._tOutId);
+		        var layout = this;
+		        this._tOutId = setTimeout(
+		        	function() { layout._adjust(); },
+		        	wingS.global.autoAdjustLayout.delay);
+		    }
+		};
+		var layout = wingS.layout.callbackObject;
+	    YAHOO.util.Event.addListener(window, 'resize', layout.adjust, layout, true);
+	}
 };
 
 /**

@@ -16,14 +16,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -37,13 +35,11 @@ import org.wings.event.SRequestListener;
 import org.wings.header.SessionHeaders;
 import org.wings.io.Device;
 import org.wings.plaf.FrameCG;
-import org.wings.plaf.css.VersionedInputMap;
 import org.wings.resource.DynamicResource;
 import org.wings.resource.ReloadResource;
 import org.wings.style.StyleSheet;
 import org.wings.util.ComponentVisitor;
 import org.wings.util.StringUtil;
-import org.wings.script.JavaScriptListener;
 
 /**
  * The root component of every component hierarchy.
@@ -101,7 +97,9 @@ public class SFrame
 
     private boolean updateEnabled;
 
-    private Object[] updateCursor;
+    private Map<String, Object> updateCursor;
+    
+    private Map<String, Object> autoAdjustLayout;
 
     private SComponent focusComponent = null; // Component which requests the focus
 
@@ -146,7 +144,21 @@ public class SFrame
         this.visible = false; // Frames are invisible originally.
 
         setUpdateEnabled(true);
-        setUpdateCursor(true, new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif"), 15, 0);
+        
+        Map<String, Object> updateCursor = new HashMap<String, Object>();
+        SIcon cursorImage = new SResourceIcon("org/wings/icons/AjaxActivityCursor.gif");
+        updateCursor.put("enabled", true);
+        updateCursor.put("image", cursorImage.getURL().toString());
+        updateCursor.put("width", cursorImage.getIconWidth());
+        updateCursor.put("height", cursorImage.getIconHeight());
+        updateCursor.put("dx", 15);
+        updateCursor.put("dy", 0);
+        setUpdateCursor(updateCursor);
+        
+        Map<String, Object> autoAdjustLayout = new HashMap<String, Object>();
+        autoAdjustLayout.put("enabled", true);
+        autoAdjustLayout.put("delay", 250);
+        setAutoAdjustLayout(autoAdjustLayout);
     }
 
     /**
@@ -704,21 +716,26 @@ public class SFrame
         }
 	}
 
-	public Object[] getUpdateCursor() {
+	public Map<String, Object> getUpdateCursor() {
 		return updateCursor;
 	}
 
-	public void setUpdateCursor(boolean enabled, SIcon image, int dx, int dy) {
-		Object[] cursor = { new Boolean(enabled),
-                            image,
-                            new Integer(image.getIconWidth()),
-                            new Integer(image.getIconHeight()),
-                            new Integer(dx),
-                            new Integer(dy) };
-		if (!Arrays.equals(updateCursor, cursor)) {
-			updateCursor = cursor;
+	public void setUpdateCursor(Map<String, Object> updateCursor) {        
+		if (isDifferent(this.updateCursor, updateCursor)) {
+			this.updateCursor = updateCursor;
 			reload();
 		}
 	}
+    
+    public Map<String, Object> getAutoAdjustLayout() {
+        return autoAdjustLayout;
+    }
+
+    public void setAutoAdjustLayout(Map<String, Object> autoAdjustLayout) {        
+        if (isDifferent(this.autoAdjustLayout, autoAdjustLayout)) {
+            this.autoAdjustLayout = autoAdjustLayout;
+            reload();
+        }
+    }
 
 }

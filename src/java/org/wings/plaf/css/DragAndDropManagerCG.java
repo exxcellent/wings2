@@ -30,7 +30,7 @@ public class DragAndDropManagerCG
                 StringBuilder builder = AbstractComponentCG.STRING_BUILDER.get();
                 builder.setLength(0);
 
-                builder.append("var dragAndDropManager = '");
+                builder.append("wingS.dnd.manager = '");
                 builder.append(dragAndDropManager.getName());
                 builder.append("';");
 

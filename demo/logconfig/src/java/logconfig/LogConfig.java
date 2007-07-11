@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
@@ -45,7 +46,6 @@ import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SFrame;
 import org.wings.SGridLayout;
-import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SList;
 import org.wings.SMenu;
@@ -564,16 +564,16 @@ public class LogConfig {
             }
         });
 
-        selected = ((Boolean) fr_frame.getUpdateCursor()[0]).booleanValue();
+        Map<String, Object> updateCursor = fr_frame.getUpdateCursor();
+        selected = ((Boolean) updateCursor.get("enabled")).booleanValue();
         final SCheckBox cb_toggleFrameUpdateCursor =
             new SCheckBox(cb_texts[1] + selected, selected);
         cb_toggleFrameUpdateCursor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean state = ((Boolean) fr_frame.getUpdateCursor()[0]).booleanValue();
-                SIcon image = (SIcon) fr_frame.getUpdateCursor()[1];
-                int dx = ((Integer) fr_frame.getUpdateCursor()[2]).intValue();
-                int dy = ((Integer) fr_frame.getUpdateCursor()[3]).intValue();
-                fr_frame.setUpdateCursor(!state, image, dx, dy);
+                Map<String, Object> updateCursor = fr_frame.getUpdateCursor();
+                boolean state = ((Boolean) updateCursor.get("enabled")).booleanValue();
+                updateCursor.put("enabled", !state);
+                fr_frame.setUpdateCursor(updateCursor);
                 cb_toggleFrameUpdateCursor.setText(cb_texts[1] + !state);
             }
         });

@@ -296,8 +296,8 @@ public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.
         public Handler getHandler() {
             UpdateHandler handler = new UpdateHandler("selectionTree");
             handler.addParameter(component.getName());
-            handler.addParameter(handler.listToJsArray(deselectedRows));
-            handler.addParameter(handler.listToJsArray(selectedRows));
+            handler.addParameter(Utils.listToJsArray(deselectedRows));
+            handler.addParameter(Utils.listToJsArray(selectedRows));
             return handler;
         }
 
