@@ -9,9 +9,9 @@ import org.wings.resource.DefaultURLResource;
  *   frame.addHeader(new JavaScriptHeader("../myJavaScript.js"));
  * </code>
  */
-public class JavaScriptHeader extends Script {
-
-
+public class JavaScriptHeader
+    extends Script
+{
     public JavaScriptHeader(String url) {
         this(new DefaultURLResource(url));
     }
@@ -19,5 +19,4 @@ public class JavaScriptHeader extends Script {
     public JavaScriptHeader(URLResource resource) {
         super("text/javascript", resource);
     }
-
 }

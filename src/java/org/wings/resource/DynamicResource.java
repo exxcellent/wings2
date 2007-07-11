@@ -75,19 +75,12 @@ public abstract class DynamicResource
     }
 
     public SimpleURL getURL() {
-        RequestURL requestURL = (RequestURL) getPropertyService().getProperty("request.url");
+        RequestURL requestURL = (RequestURL)SessionManager.getSession().getProperty("request.url");
         if (requestURL != null) {
             requestURL = (RequestURL) requestURL.clone();
-            requestURL.setEventEpoch(getFrame().getEventEpoch());
             requestURL.setResource(getId());
         }
         return requestURL;
-    }
-
-    protected PropertyService getPropertyService() {
-        if (propertyService == null)
-            propertyService = SessionManager.getSession();
-        return propertyService;
     }
 
     public String toString() {

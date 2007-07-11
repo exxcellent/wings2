@@ -78,7 +78,14 @@ public class SImageIcon extends SAbstractIcon {
      * be relative, usually if generated from the externalizer.
      */
     public SimpleURL getURL() {
-        return url;
+        RequestURL requestURL = (RequestURL)SessionManager.getSession().getProperty("request.url");
+        if (requestURL != null) {
+            requestURL = (RequestURL)requestURL.clone();
+            requestURL.setResource(url.toString());
+            return requestURL;
+        }
+        else
+            return url;
     }
 
     // get the image e.g. if you want to grey it out

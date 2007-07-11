@@ -55,7 +55,6 @@ public class UpdateResource extends DynamicResource {
             final RenderHelper renderHelper = RenderHelper.getInstance(frame);
             final ReloadManager reloadManager = frame.getSession().getReloadManager();
             final ScriptManager scriptManager = frame.getSession().getScriptManager();
-            final SToolTipManager tooltipManager = SToolTipManager.sharedInstance();
 
             renderHelper.reset();
 

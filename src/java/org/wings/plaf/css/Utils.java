@@ -24,9 +24,7 @@ import org.wings.header.Script;
 import org.wings.header.StyleSheetHeader;
 import org.wings.io.Device;
 import org.wings.io.NullDevice;
-import org.wings.resource.ClassPathJavascriptResource;
-import org.wings.resource.ClassPathResource;
-import org.wings.resource.ResourceManager;
+import org.wings.resource.*;
 import org.wings.script.JavaScriptDOMListener;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
@@ -1253,7 +1251,7 @@ public final class Utils {
         ClassPathResource res = new ClassPathJavascriptResource(jsClassPath, HEADER_LOADED_CALLBACK);
         ExternalizeManager extMgr = SessionManager.getSession().getExternalizeManager();
         String jsUrl = extMgr.externalize(res, ExternalizeManager.GLOBAL);
-        return new JavaScriptHeader(jsUrl);
+        return new JavaScriptHeader(new SessionResource(jsUrl));
     }
 
     /**
@@ -1275,7 +1273,6 @@ public final class Utils {
         ClassPathResource res = new ClassPathResource(cssClassPath, "text/css");
         ExternalizeManager extMgr = SessionManager.getSession().getExternalizeManager();
         String cssUrl = extMgr.externalize(res, ExternalizeManager.GLOBAL);
-        return new StyleSheetHeader(cssUrl);
+        return new StyleSheetHeader(new SessionResource(cssUrl));
     }
-
 }

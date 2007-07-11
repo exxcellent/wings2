@@ -29,7 +29,6 @@ import java.io.IOException;
  */
 public class StringResource extends Resource {
     private final String string;
-    private PropertyService propertyService;
     private String id;
 
     /**
@@ -83,7 +82,7 @@ public class StringResource extends Resource {
         if ((externalizerFlags & ExternalizeManager.GLOBAL) > 0) {
             return new SimpleURL(name);
         } else {
-            RequestURL requestURL = (RequestURL) getPropertyService().getProperty("request.url");
+            RequestURL requestURL = (RequestURL)SessionManager.getSession().getProperty("request.url");
             requestURL = (RequestURL) requestURL.clone();
             requestURL.setResource(name);
             return requestURL;
@@ -97,13 +96,6 @@ public class StringResource extends Resource {
     public int getExternalizerFlags() {
         return externalizerFlags;
     }
-
-    protected PropertyService getPropertyService() {
-        if (propertyService == null)
-            propertyService = SessionManager.getSession();
-        return propertyService;
-    }
-
 }
 
 

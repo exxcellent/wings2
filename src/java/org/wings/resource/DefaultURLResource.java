@@ -17,6 +17,8 @@ import org.wings.URLResource;
 
 /**
  * Default implementation of an Resource accessible via an HTTP URL.
+ * Beware that this kind of resource cannot address urls below the servlet path, if the servlet is authorized and the
+ * browser has cookies switched off!
  *
  * @author armin
  *         created at 15.01.2004 17:58:29

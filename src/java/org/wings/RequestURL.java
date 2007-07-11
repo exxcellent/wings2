@@ -305,7 +305,4 @@ public class RequestURL extends SimpleURL {
             return parameter;
         }
     }
-
 }
-
-

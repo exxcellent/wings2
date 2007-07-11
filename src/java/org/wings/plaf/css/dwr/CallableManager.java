@@ -10,6 +10,7 @@ import org.wings.header.SessionHeaders;
 import org.wings.header.JavaScriptHeader;
 import org.wings.session.SessionManager;
 import org.wings.session.Session;
+import org.wings.resource.SessionResource;
 import org.directwebremoting.WebContextFactory;
 import org.directwebremoting.WebContextFactory.WebContextBuilder;
 import org.directwebremoting.impl.DefaultWebContextBuilder;
@@ -54,7 +55,7 @@ public class CallableManager implements Serializable {
         creatorManager.addCreator(scriptName, new SessionCreator(callable));
         builder.unset();
 
-        JavaScriptHeader header = new JavaScriptHeader("../dwr/interface/" + scriptName + ".js");
+        JavaScriptHeader header = new JavaScriptHeader(new SessionResource("../dwr/interface/" + scriptName + ".js"));
         SessionHeaders.getInstance().registerHeader(header);
     }
     
@@ -82,7 +83,7 @@ public class CallableManager implements Serializable {
         creatorManager.addCreator(scriptName, new SessionCreator(callable));
         builder.unset();
 
-        JavaScriptHeader header = new JavaScriptHeader("../dwr/interface/" + scriptName + ".js");
+        JavaScriptHeader header = new JavaScriptHeader(new SessionResource("../dwr/interface/" + scriptName + ".js"));
         SessionHeaders.getInstance().registerHeader(header);
     }
     
@@ -96,7 +97,7 @@ public class CallableManager implements Serializable {
         creatorManager.removeCreator(scriptName);
         builder.unset();
 
-        JavaScriptHeader header = new JavaScriptHeader("../dwr/interface/" + scriptName + ".js");
+        JavaScriptHeader header = new JavaScriptHeader(new SessionResource("../dwr/interface/" + scriptName + ".js"));
         SessionHeaders.getInstance().deregisterHeader(header);
     }
 

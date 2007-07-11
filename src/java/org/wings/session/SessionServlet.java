@@ -193,8 +193,7 @@ final class SessionServlet
             // set request.url in session, if used in constructor of wings main classs
             if (request.isRequestedSessionIdValid()) {
                 // this will fire an event, if the encoding has changed ..
-                ((PropertyService) session).setProperty("request.url",
-                        new RequestURL("", getSessionEncoding(response)));
+                session.setProperty("request.url", new RequestURL("", getSessionEncoding(response)));
             }
 
             session.init(config, request, response);
@@ -311,7 +310,7 @@ final class SessionServlet
             if (req.isRequestedSessionIdValid()) {
                 requestURL = new RequestURL("", getSessionEncoding(response));
                 // this will fire an event, if the encoding has changed ..
-                ((PropertyService) session).setProperty("request.url", requestURL);
+                session.setProperty("request.url", requestURL);
             }
 
             if (log.isDebugEnabled()) {
@@ -676,8 +675,7 @@ final class SessionServlet
     public static String getSessionEncoding(HttpServletResponse response) {
         if (response == null) return "";
         // encode dummy non-empty URL.
-        String enc = response.encodeURL("foo").substring(3);
-        return enc;
+        return response.encodeURL("foo").substring(3);
     }
 
     /**

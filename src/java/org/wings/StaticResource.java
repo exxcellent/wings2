@@ -261,26 +261,11 @@ public abstract class StaticResource extends Resource {
 
     public SimpleURL getURL() {
         String name = getId();
-
-        // append the sessionid, if not global
-        if ((externalizerFlags & ExternalizeManager.GLOBAL) > 0) {
-            return new SimpleURL(name);
-        } else {
-            RequestURL requestURL = (RequestURL) getPropertyService().getProperty("request.url");
-            requestURL = (RequestURL) requestURL.clone();
-            requestURL.setResource(name);
-            return requestURL;
-        }
+        RequestURL requestURL = (RequestURL)SessionManager.getSession().getProperty("request.url");
+        requestURL = (RequestURL) requestURL.clone();
+        requestURL.setResource(name);
+        return requestURL;
     }
-
-    private PropertyService propertyService;
-
-    protected PropertyService getPropertyService() {
-        if (propertyService == null)
-            propertyService = SessionManager.getSession();
-        return propertyService;
-    }
-
 
     public String toString() {
         return getId();
