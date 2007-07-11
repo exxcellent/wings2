@@ -191,10 +191,10 @@ final class SessionServlet
             SessionManager.setSession(session);
 
             // set request.url in session, if used in constructor of wings main classs
-            if (request.isRequestedSessionIdValid()) {
+            //if (request.isRequestedSessionIdValid()) {
                 // this will fire an event, if the encoding has changed ..
                 session.setProperty("request.url", new RequestURL("", getSessionEncoding(response)));
-            }
+            //}
 
             session.init(config, request, response);
 
