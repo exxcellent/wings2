@@ -136,8 +136,6 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
         component.addScriptListener(handleClicks);
         component.addScriptListener(Utils.isMSIE(component) ? storeFocusIE : storeFocusFF);
 
-        //CaptureDefaultBindingsScriptListener.install(component);
-
         SessionHeaders.getInstance().registerHeaders(headers);
         SessionHeaders.getInstance().registerHeaders(getBrowserStylesheets());
 
@@ -430,8 +428,8 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     private String getGlobalInitScript(SFrame frame) throws IOException {
         Map<String, Object> initConfig = new HashMap<String, Object>();
         initConfig.put("eventEpoch", frame.getEventEpoch());
-        initConfig.put("reloadResource", frame.getDynamicResource(ReloadResource.class).getId());
-        initConfig.put("updateResource", frame.getDynamicResource(UpdateResource.class).getId());
+        initConfig.put("reloadResource", frame.getDynamicResource(ReloadResource.class).getURL());
+        initConfig.put("updateResource", frame.getDynamicResource(UpdateResource.class).getURL());
         initConfig.put("updateEnabled", frame.isUpdateEnabled());
         initConfig.put("updateCursor", Utils.mapToJsObject(frame.getUpdateCursor()));
         initConfig.put("autoAdjustLayout", Utils.mapToJsObject(frame.getAutoAdjustLayout()));
