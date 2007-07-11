@@ -77,16 +77,10 @@ public class StringResource extends Resource {
 
     public SimpleURL getURL() {
         String name = getId();
-
-        // append the sessionid, if not global
-        if ((externalizerFlags & ExternalizeManager.GLOBAL) > 0) {
-            return new SimpleURL(name);
-        } else {
-            RequestURL requestURL = (RequestURL)SessionManager.getSession().getProperty("request.url");
-            requestURL = (RequestURL) requestURL.clone();
-            requestURL.setResource(name);
-            return requestURL;
-        }
+        RequestURL requestURL = (RequestURL)SessionManager.getSession().getProperty("request.url");
+        requestURL = (RequestURL) requestURL.clone();
+        requestURL.setResource(name);
+        return requestURL;
     }
 
     public final void write(Device out) throws IOException {
