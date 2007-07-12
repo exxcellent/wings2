@@ -13,6 +13,7 @@ import org.wings.plaf.Update;
 import org.wings.script.JavaScriptEvent;
 import org.wings.script.JavaScriptListener;
 
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,6 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                     if (menuItem instanceof SMenu) {
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenu\"");
-                            printScriptHandlers(device, menuItem);
                         } else {
                             device.print(" class=\"SMenu_Disabled\"");
                         }
@@ -76,10 +76,10 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                         if (menuItem.isEnabled()) {
                             device.print(" class=\"SMenuItem\"");
                         } else {
-
                             device.print(" class=\"SMenuItem_Disabled\"");
                         }
                     }
+                    printScriptHandlers(device, menuItem, "onmouseover");
                     device.print(">");
                     if (menuItem instanceof SMenuItem) {
                         device.print("<a href=\"#\"");
@@ -90,12 +90,25 @@ public final class PopupMenuCG extends AbstractComponentCG implements
                                 device.print(" class=\"y sub\"");
                             }
                         }
-                        Utils.printClickability(
-                                device,
-                                menuItem,
-                                ((SMenuItem) menuItem).getToggleSelectionParameter(),
-                                menuItem.isEnabled(),
-                                menuItem.getShowAsFormComponent());
+                        if (menuItem.getListeners(ActionListener.class).length == 0) {
+                            // Prevent an unnecessary server roundtrip in case we've
+                            // got a menu or menu item with no actions attached to it.
+                            if (menuItem instanceof SMenu) {
+                                // In case we've got a (sub-) menu we render the same
+                                // 'ScriptHandler' as we've already done on 'mouseover'.
+                                // Actually this is not mandatory but it makes menues
+                                // usable on devices where 'mouseover' isn't working,
+                                // e.g. on this fancy e-board in our presentation room.
+                                printScriptHandlers(device, menuItem, "onclick");
+                            }
+                        } else {
+                            Utils.printClickability(
+                                    device,
+                                    menuItem,
+                                    ((SMenuItem) menuItem).getToggleSelectionParameter(),
+                                    menuItem.isEnabled(),
+                                    menuItem.getShowAsFormComponent());
+                        }
                         device.print(">");
                     }
                     menuItem.write(device);
@@ -138,11 +151,35 @@ public final class PopupMenuCG extends AbstractComponentCG implements
         device.print("em;\"");
     }
 
-    protected void printScriptHandlers(Device device, SComponent menuItem) throws IOException {
-        device.print(" onmouseover=\"wpm_openMenu(event, '");
-        device.print(((SMenu)menuItem).getName());
+    protected void printScriptHandlers(Device device, SComponent menuItem, String handler) throws IOException {
+        // Print the script handlers if this is a SMenu OR if the parent has both, items and menus as childs.
+        // In the latter case a menu item might need to close an open submenu from a menu on the same level.
+        SMenuItem tMenuItem = (SMenuItem) menuItem;
+        if (!(tMenuItem instanceof SMenu)) {
+            if (tMenuItem.getParentMenu() != null && tMenuItem.getParentMenu() instanceof SMenu) {
+                SMenu tParentMenu = (SMenu) tMenuItem.getParentMenu();
+                boolean tHasMenuChild = false;
+                boolean tHasMenuItemChild = false;
+                for (int tChildIndex = 0; tChildIndex < tParentMenu.getMenuComponentCount(); tChildIndex++) {
+                    SComponent tChild = tParentMenu.getChild(tChildIndex);
+                    if (tChild instanceof SMenu) {
+                        tHasMenuChild = true;
+                    } else {
+                        tHasMenuItemChild = true;
+                    }
+                }
+
+                // No handler if not both types are present
+                if (!(tHasMenuChild && tHasMenuItemChild)) {
+                    return;
+                }
+            }
+        }
+
+        device.print(" ").print(handler).print("=\"wpm_openMenu(event, '");
+        device.print(tMenuItem.getName());
         device.print("_pop','");
-        device.print(((SMenu)menuItem).getParentMenu().getName());
+        device.print(tMenuItem.getParentMenu().getName());
         device.print("_pop');\"");
     }
 
