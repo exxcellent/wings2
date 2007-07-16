@@ -31,7 +31,9 @@ public final class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
         if (text == null)
             text = "wingS";
 
-        device.print("<div class=\"WindowBar\">");
+        device.print("<div class=\"WindowBar\" id=\"");
+        device.print(frame.getName());
+        device.print("_titlebar\">");
         device.print("<table width=\"100%\"><tr><td width=\"100%\"><div class=\"WindowBar_title\">");
         if (frame.getIcon() != null) {
             writeIcon(device, frame.getIcon(), WINDOWICON_CLASSNAME);
@@ -71,5 +73,4 @@ public final class InternalFrameCG extends org.wings.plaf.css.InternalFrameCG {
         device.print("<td>&nbsp;&nbsp;</td></tr></table>");
         device.print("</div>");
     }
-
 }

@@ -2,7 +2,7 @@
 <!-- ant build file for wingS Demos-->
 <!-- $Id$ -->
 
-<project name="desktop" default="build" basedir=".">
+<project name="desktop" default="deploy" basedir=".">
     <property environment="env"/>
     <!-- read custom properties from file -->
     <property file="../../etc/custom-build.properties"/>
@@ -32,7 +32,9 @@
         <javac srcdir="src/java"
             destdir="build/class"
             debug="${build.debug}"
-            deprecation="${build.deprecation}">
+            deprecation="${build.deprecation}"
+            source="1.5"
+            target="1.5">
             <classpath refid="build.classpath"/>
         </javac>
     </target>
@@ -61,6 +63,7 @@
         <copy todir="${deploy.desktop}">
             <fileset dir="build/web"/>
         </copy>
+        <touch file="${deploy.desktop}/WEB-INF/web.xml"/>
     </target>
 
     <!-- ==================== Admin ==================== -->

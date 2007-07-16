@@ -663,6 +663,7 @@ table.SScrollBar table.buttons td:hover {
     padding: .1em;
     background-color: #aaf;
     text-align: left;
+    cursor: pointer;
 }
 
 .SInternalFrame div.WindowBar div.WindowBar_title {

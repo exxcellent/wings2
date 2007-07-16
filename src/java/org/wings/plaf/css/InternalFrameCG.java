@@ -115,7 +115,10 @@ public class InternalFrameCG extends AbstractComponentCG implements
         if (text == null)
             text = "wingS";
 
-        device.print("<div class=\"WindowBar\"");
+        device.print("<div class=\"WindowBar\" id=\"");
+        device.print(frame.getName());
+        device.print("_titlebar\"");
+
         SStringBuilder titleArea = Utils.inlineStyles(frame.getDynamicStyle(SInternalFrame.SELECTOR_TITLE));
         Utils.optAttribute(device, "style", titleArea);
         device.print(">");
@@ -150,6 +153,15 @@ public class InternalFrameCG extends AbstractComponentCG implements
         device.print("</div>");
 
         device.print("</div>");
+    }
+
+    protected void writeRegisterDragHandle(StringBuilder builder, SComponent component) {
+        String name = component.getName();
+        builder.append("ds_");
+        builder.append(name);
+        builder.append(".setHandleElId(\"");
+        builder.append(name);
+        builder.append("_titlebar\");");
     }
 
     public SIcon getCloseIcon() {

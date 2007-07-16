@@ -17,12 +17,8 @@ import org.wings.*;
 import org.wings.dnd.DragSource;
 import org.wings.dnd.DropTarget;
 import org.wings.event.SComponentDropListener;
-import org.wings.event.SDocumentEvent;
-import org.wings.event.SDocumentListener;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.event.SInternalFrameListener;
-import org.wings.event.SParentFrameEvent;
-import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.AbstractExternalizeManager;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.io.Device;
@@ -31,7 +27,6 @@ import org.wings.resource.FileResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
-import org.wings.style.CSSProperty;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,7 +61,7 @@ public class Editor
     extends SInternalFrame
     implements SInternalFrameListener, DragSource, DropTarget
 {
-	private ArrayList componentDropListeners = new ArrayList();
+	private ArrayList<SComponentDropListener> componentDropListeners = new ArrayList<SComponentDropListener>();
 	private boolean dragEnabled = false;
 	private DynamicResource saveResource;
     private SMenuBar menuBar;
@@ -146,46 +141,39 @@ public class Editor
                 		pane.remove(sindex);
                 		pane.add(Editor.this, sindex);
                 		pane.add(dragSource, tindex);
-                		
                 	}
                 	else{
                 		pane.remove(sindex);
                 		pane.remove(tindex);
                 		pane.add(dragSource, tindex);
                 		pane.add(Editor.this, sindex);
-                		
                 	}
                 	return true;
             	}
             	return false;
             }
-            });
+        });
     }
     
-    @Override
 	public void addComponentDropListener(SComponentDropListener listener) {
     	componentDropListeners.add(listener);
         SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
 	}
 
-	@Override
 	public List<SComponentDropListener> getComponentDropListeners() {
 		return this.componentDropListeners;
 	}
 
-	
-	@Override
 	public boolean isDragEnabled() {
 		return this.dragEnabled;
 	}
 
-	@Override
 	public void setDragEnabled(boolean dragEnabled) {
 		this.dragEnabled = dragEnabled;
         if (dragEnabled) {
-            SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+            SessionManager.getSession().getDragAndDropManager().registerDragSource(this);
         } else {
-            SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+            SessionManager.getSession().getDragAndDropManager().deregisterDragSource(this);
         }
 	}
  	
@@ -397,7 +385,7 @@ public void save() {
         public String getId() {
             if (id == null) {
                 ExternalizeManager ext = SessionManager.getSession().getExternalizeManager();
-                Map headers = new HashMap();
+                Map<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Disposition", "attachment; filename=blub");
                 id = ext.getId(ext.externalize(this, headers.entrySet(), AbstractExternalizeManager.REQUEST));
                 //logger.debug("new " + this.getClass().getName() + " with id " + id);

@@ -43,8 +43,6 @@ import java.io.PrintStream;
 public class RSSPortlet
         extends SInternalFrame implements SInternalFrameListener, DragSource, DropTarget
 {
-    
-
 	private List<SComponentDropListener> componentDropListeners;
 	private boolean dragEnabled;
 	private String feed;
@@ -130,24 +128,20 @@ public class RSSPortlet
             
     }
     
-    @Override
 	public void addComponentDropListener(SComponentDropListener listener) {
     	componentDropListeners.add(listener);
         SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
         
 	}
 
-	@Override
 	public List<SComponentDropListener> getComponentDropListeners() {
 		return this.componentDropListeners;
 	}
 
-	@Override
 	public boolean isDragEnabled() {
 		return this.dragEnabled;
 	}
 
-	@Override
 	public void setDragEnabled(boolean dragEnabled) {
 		this.dragEnabled = dragEnabled;
         if (dragEnabled) {
@@ -166,17 +160,11 @@ public class RSSPortlet
 		super.dispose();
 	}
 	
-	@Override
 	public void internalFrameClosed(SInternalFrameEvent e) {close();}
-	@Override
 	public void internalFrameDeiconified(SInternalFrameEvent e) {}
-	@Override
 	public void internalFrameIconified(SInternalFrameEvent e) {}
-	@Override
 	public void internalFrameMaximized(SInternalFrameEvent e) {}
-	@Override
 	public void internalFrameOpened(SInternalFrameEvent e) {}
-	@Override
 	public void internalFrameUnmaximized(SInternalFrameEvent e) {}
 
     String getNews() {

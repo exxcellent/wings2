@@ -372,8 +372,8 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
         device.print(cachedCode);
     }
 
-    private void updateDragAndDrop(final SComponent component) {
-        if (component instanceof DragSource) {
+    protected void updateDragAndDrop(final SComponent component) {
+        if (component instanceof DragSource && ((DragSource)component).isDragEnabled()) {
             ScriptManager.getInstance().addScriptListener(new ScriptListener() {
                 public String getScript() {
                     StringBuilder builder = STRING_BUILDER.get();
@@ -384,7 +384,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                     builder.append(name);
                     builder.append(" = new wingS.dnd.DD(\"");
                     builder.append(name);
-                    builder.append("\");\n");
+                    builder.append("\");");
+                    writeRegisterDragHandle(builder, component);
+                    builder.append("\n");
 
                     return builder.toString();
                 }
@@ -431,6 +433,9 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
                 }
             });
         }
+    }
+
+    protected void writeRegisterDragHandle(StringBuilder builder, SComponent component) {
     }
 
     private void writeCode(Device device, SComponent component) throws IOException {
