@@ -100,11 +100,9 @@ public class Editor
         
         addComponentDropListener(new SComponentDropListener() {
             public boolean handleDrop(SComponent dragSource) {
-            	if(!((DragSource)dragSource).isDragEnabled())
-            		return false;
-            	
-            	SContainer cont = dragSource.getParent();
             	            	
+            	SContainer cont = dragSource.getParent();
+            	
             	if(Editor.this.getParent() != cont){
             		if(cont instanceof SDesktopPane){
             			
@@ -114,12 +112,8 @@ public class Editor
             			
             			SDesktopPane targetPane = (SDesktopPane)Editor.this.getParent();
             			SDesktopPane sourcePane = (SDesktopPane)cont;
-            			int sindex = sourcePane.getIndexOf(dragSource);
-            			int tindex = targetPane.getIndexOf(Editor.this);
-            			sourcePane.remove(sindex);
-            			targetPane.remove(tindex);
-            			sourcePane.add(Editor.this, sindex);
-            			targetPane.add(dragSource, tindex);
+            			sourcePane.remove(sourcePane.getIndexOf(dragSource));
+            			targetPane.add(dragSource, targetPane.getIndexOf(Editor.this));
             			return true;
             		}
             	}
@@ -129,6 +123,7 @@ public class Editor
             		int tindex = pane.getIndexOf(Editor.this);
             		int sindex = pane.getIndexOf(dragSource);
             		
+            		//do nothing if drag on itself..
             		if(sindex == tindex)
             			return false;
             		
@@ -136,18 +131,13 @@ public class Editor
             		if(dragSource instanceof SInternalFrame)
                 		((SInternalFrame)dragSource).setMaximized(false);
             		
-            		if(tindex > sindex){
-                		pane.remove(tindex);
-                		pane.remove(sindex);
-                		pane.add(Editor.this, sindex);
+            		pane.remove(sindex);
+            		
+            		if(tindex > sindex)
+                		pane.add(dragSource, tindex -1);
+                	else               		
                 		pane.add(dragSource, tindex);
-                	}
-                	else{
-                		pane.remove(sindex);
-                		pane.remove(tindex);
-                		pane.add(dragSource, tindex);
-                		pane.add(Editor.this, sindex);
-                	}
+
                 	return true;
             	}
             	return false;

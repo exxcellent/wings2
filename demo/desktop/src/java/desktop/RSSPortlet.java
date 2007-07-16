@@ -43,6 +43,8 @@ import java.io.PrintStream;
 public class RSSPortlet
         extends SInternalFrame implements SInternalFrameListener, DragSource, DropTarget
 {
+    
+
 	private List<SComponentDropListener> componentDropListeners;
 	private boolean dragEnabled;
 	private String feed;
@@ -70,8 +72,6 @@ public class RSSPortlet
         
         addComponentDropListener(new SComponentDropListener() {
             public boolean handleDrop(SComponent dragSource) {
-            	if(!((DragSource)dragSource).isDragEnabled())
-            		return false;
             	
             	SContainer cont = dragSource.getParent();
             	
@@ -83,12 +83,8 @@ public class RSSPortlet
             			
             			SDesktopPane targetPane = (SDesktopPane)RSSPortlet.this.getParent();
             			SDesktopPane sourcePane = (SDesktopPane)cont;
-            			int sindex = sourcePane.getIndexOf(dragSource);
-            			int tindex = targetPane.getIndexOf(RSSPortlet.this);
-            			sourcePane.remove(sindex);
-            			targetPane.remove(tindex);
-            			sourcePane.add(RSSPortlet.this, sindex);
-            			targetPane.add(dragSource, tindex);
+            			sourcePane.remove(sourcePane.getIndexOf(dragSource));
+            			targetPane.add(dragSource, targetPane.getIndexOf(RSSPortlet.this));
             			return true;
             		}
             		
@@ -106,20 +102,13 @@ public class RSSPortlet
             		if(dragSource instanceof SInternalFrame)
                 		((SInternalFrame)dragSource).setMaximized(false);
             		
-            		if(tindex > sindex){
-                		pane.remove(tindex);
-                		pane.remove(sindex);
-                		pane.add(RSSPortlet.this, sindex);
+            		pane.remove(sindex);
+            		
+            		if(tindex > sindex)
+                		pane.add(dragSource, tindex -1);
+                	else
                 		pane.add(dragSource, tindex);
-                		
-                	}
-                	else{
-                		pane.remove(sindex);
-                		pane.remove(tindex);
-                		pane.add(dragSource, tindex);
-                		pane.add(RSSPortlet.this, sindex);
-                		
-                	}
+                	
             		return true;
             	}
             	return false;
@@ -128,20 +117,24 @@ public class RSSPortlet
             
     }
     
+    @Override
 	public void addComponentDropListener(SComponentDropListener listener) {
     	componentDropListeners.add(listener);
         SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
         
 	}
 
+	@Override
 	public List<SComponentDropListener> getComponentDropListeners() {
 		return this.componentDropListeners;
 	}
 
+	@Override
 	public boolean isDragEnabled() {
 		return this.dragEnabled;
 	}
 
+	@Override
 	public void setDragEnabled(boolean dragEnabled) {
 		this.dragEnabled = dragEnabled;
         if (dragEnabled) {
@@ -160,11 +153,17 @@ public class RSSPortlet
 		super.dispose();
 	}
 	
+	@Override
 	public void internalFrameClosed(SInternalFrameEvent e) {close();}
+	@Override
 	public void internalFrameDeiconified(SInternalFrameEvent e) {}
+	@Override
 	public void internalFrameIconified(SInternalFrameEvent e) {}
+	@Override
 	public void internalFrameMaximized(SInternalFrameEvent e) {}
+	@Override
 	public void internalFrameOpened(SInternalFrameEvent e) {}
+	@Override
 	public void internalFrameUnmaximized(SInternalFrameEvent e) {}
 
     String getNews() {
