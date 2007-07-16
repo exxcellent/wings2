@@ -3,7 +3,23 @@
  */
 package desktop;
 
+import org.wings.SBorderLayout;
+import org.wings.SComponent;
+import org.wings.SDimension;
+import org.wings.SFlowDownLayout;
+import org.wings.SForm;
 import org.wings.SLabel;
+import org.wings.SContainer;
+import org.wings.SGridLayout;
+import org.wings.SDesktopPane;
+import org.wings.SInternalFrame;
+import org.wings.dnd.DragSource;
+import org.wings.dnd.DropTarget;
+import org.wings.event.SComponentDropListener;
+import org.wings.event.SInternalFrameEvent;
+import org.wings.event.SInternalFrameListener;
+import org.wings.session.SessionManager;
+import org.wings.style.CSSProperty;
 
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Source;
@@ -14,6 +30,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -23,9 +41,13 @@ import java.io.PrintStream;
  * @author hengels
  */
 public class RSSPortlet
-        extends Bird
+        extends SInternalFrame implements SInternalFrameListener, DragSource, DropTarget
 {
-    private String feed;
+    
+
+	private List<SComponentDropListener> componentDropListeners;
+	private boolean dragEnabled;
+	private String feed;
     private String user;
     private String password;
 
@@ -38,8 +60,124 @@ public class RSSPortlet
         this.feed = feed;
         this.user = user;
         this.password = password;
-        getContentPane().add(new SLabel("<html>" + getNews()));
+                
+        SLabel label = new SLabel("<html>" + getNews());
+                
+        contentPane.add(label);
+                                       
+        setDragEnabled(true);
+        componentDropListeners = new ArrayList<SComponentDropListener>();
+        
+        addInternalFrameListener(this);
+        
+        addComponentDropListener(new SComponentDropListener() {
+            public boolean handleDrop(SComponent dragSource) {
+            	if(!((DragSource)dragSource).isDragEnabled())
+            		return false;
+            	
+            	SContainer cont = dragSource.getParent();
+            	
+            	if(RSSPortlet.this.getParent() != cont){
+            		if(cont instanceof SDesktopPane){
+            			RSSPortlet.this.setMaximized(false);
+            			if(dragSource instanceof SInternalFrame)
+                    		((SInternalFrame)dragSource).setMaximized(false);
+            			
+            			SDesktopPane targetPane = (SDesktopPane)RSSPortlet.this.getParent();
+            			SDesktopPane sourcePane = (SDesktopPane)cont;
+            			int sindex = sourcePane.getIndexOf(dragSource);
+            			int tindex = targetPane.getIndexOf(RSSPortlet.this);
+            			sourcePane.remove(sindex);
+            			targetPane.remove(tindex);
+            			sourcePane.add(RSSPortlet.this, sindex);
+            			targetPane.add(dragSource, tindex);
+            			return true;
+            		}
+            		
+            	}
+            	else if(cont instanceof SDesktopPane)
+            	{
+            		SDesktopPane pane = (SDesktopPane)cont;
+            		int tindex = pane.getIndexOf(RSSPortlet.this);
+            		int sindex = pane.getIndexOf(dragSource);
+            		
+            		if(sindex == tindex)
+            			return false;
+            		
+            		RSSPortlet.this.setMaximized(false);
+            		if(dragSource instanceof SInternalFrame)
+                		((SInternalFrame)dragSource).setMaximized(false);
+            		
+            		if(tindex > sindex){
+                		pane.remove(tindex);
+                		pane.remove(sindex);
+                		pane.add(RSSPortlet.this, sindex);
+                		pane.add(dragSource, tindex);
+                		
+                	}
+                	else{
+                		pane.remove(sindex);
+                		pane.remove(tindex);
+                		pane.add(dragSource, tindex);
+                		pane.add(RSSPortlet.this, sindex);
+                		
+                	}
+            		return true;
+            	}
+            	return false;
+            }
+            });
+            
     }
+    
+    @Override
+	public void addComponentDropListener(SComponentDropListener listener) {
+    	componentDropListeners.add(listener);
+        SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
+        
+	}
+
+	@Override
+	public List<SComponentDropListener> getComponentDropListeners() {
+		return this.componentDropListeners;
+	}
+
+	@Override
+	public boolean isDragEnabled() {
+		return this.dragEnabled;
+	}
+
+	@Override
+	public void setDragEnabled(boolean dragEnabled) {
+		this.dragEnabled = dragEnabled;
+        if (dragEnabled) {
+            SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+        } else {
+            SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+        }
+		
+	}
+	
+	public void addInternalFrameListener(SInternalFrameListener listener) {
+        addEventListener(SInternalFrameListener.class, listener);
+    }
+	
+	public void close(){
+		super.dispose();
+	}
+	
+	@Override
+	public void internalFrameClosed(SInternalFrameEvent e) {close();}
+	@Override
+	public void internalFrameDeiconified(SInternalFrameEvent e) {}
+	@Override
+	public void internalFrameIconified(SInternalFrameEvent e) {}
+	@Override
+	public void internalFrameMaximized(SInternalFrameEvent e) {}
+	@Override
+	public void internalFrameOpened(SInternalFrameEvent e) {}
+	@Override
+	public void internalFrameUnmaximized(SInternalFrameEvent e) {}
 
     String getNews() {
         try {

@@ -21,6 +21,7 @@ import java.io.IOException;
 public class BirdTitleBarCG
         extends AbstractComponentCG
 {
+	
     protected static final String WINDOWICON_CLASSNAME = "WindowIcon";
     protected static final String BUTTONICON_CLASSNAME = "WindowButton";
     private SIcon closeIcon;
@@ -32,6 +33,7 @@ public class BirdTitleBarCG
     /**
      * Initialize properties from config
      */
+    
     public BirdTitleBarCG() {
         final CGManager manager = SessionManager.getSession().getCGManager();
 

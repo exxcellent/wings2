@@ -22,6 +22,7 @@ import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.style.CSSProperty;
 import org.wings.util.ComponentVisitor;
+import org.wings.event.SComponentDropListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,34 +38,60 @@ public class Desktop
     implements SConstants
 {
     SFrame frame;
-    BirdsNest desktop;
-    BirdsNest feeds;
+    SDesktopPane desktop;
+    SDesktopPane feeds;
     SMenu windowMenu;
+    SMenuBar menuBar;
     int editorNumber = 0;
 
     public Desktop() {
         frame = new SFrame("Desktop");
         frame.setAttribute(CSSProperty.MARGIN, "4px");
 
-        SMenuBar menuBar = createMenu();
+        menuBar = createMenu();
 
-        desktop = new BirdsNest();
+        
+        desktop = new SDesktopPane();
+        
         // add the frames to the window-menu ..
         desktop.addContainerListener(new SContainerListener() {
                 public void componentAdded(SContainerEvent e) {
                     SInternalFrame frame = (SInternalFrame) e.getChild();
                     SMenuItem windowItem = new WindowMenuItem(desktop, frame);
+                    menuBar.remove(windowMenu);
                     windowMenu.add(windowItem);
+                    menuBar.add(windowMenu);
                 }
                 public void componentRemoved(SContainerEvent e) {
                     SInternalFrame frame = (SInternalFrame) e.getChild();
                     SMenuItem windowItem = new WindowMenuItem(frame);
+                    menuBar.remove(windowMenu);
                     windowMenu.remove(windowItem);
+                    menuBar.add(windowMenu);
                 }
             });
+        
         desktop.setVerticalAlignment(SConstants.TOP_ALIGN);
-
-        feeds = new BirdsNest();
+		
+        feeds = new SDesktopPane();
+        
+        feeds.addContainerListener(new SContainerListener() {
+            public void componentAdded(SContainerEvent e) {
+                SInternalFrame frame = (SInternalFrame) e.getChild();
+                SMenuItem windowItem = new WindowMenuItem(feeds, frame);
+                menuBar.remove(windowMenu);
+                windowMenu.add(windowItem);
+                menuBar.add(windowMenu);
+            }
+            public void componentRemoved(SContainerEvent e) {
+                SInternalFrame frame = (SInternalFrame) e.getChild();
+                SMenuItem windowItem = new WindowMenuItem(frame);
+                menuBar.remove(windowMenu);
+                windowMenu.remove(windowItem);
+                menuBar.add(windowMenu);
+            }
+        });
+        
         feeds.setVerticalAlignment(SConstants.TOP_ALIGN);
 
         SContainer contentPane = frame.getContentPane();
@@ -81,6 +108,7 @@ public class Desktop
         c.weightx = 0.3;
         contentPane.add(feeds, c);
 
+        frame.setVisible(true);
         newEditor().setText(getStory());
         feeds.add(new RSSPortlet("heise news ticker", "http://www.heise.de/english/newsticker/news.rdf"));
         feeds.add(new RSSPortlet("the server side", "http://www.theserverside.com/rss/theserverside-rss2.xml"));
@@ -171,7 +199,6 @@ public class Desktop
             System.err.println(e);
         }
     }
-
     public Editor newEditor() {
         Editor editor = new Editor();
         editor.setTitle("Editor [" + (++editorNumber) + "]");
@@ -290,31 +317,6 @@ public class Desktop
                 return (frame != null && wme.frame == frame);
             }
             return false;
-        }
-    }
-
-    public static class Blub
-        extends SLabel
-        implements DragSource
-    {
-        private boolean dragEnabled;
-
-        public Blub(String text) {
-            super(text);
-            setDragEnabled(true);
-        }
-
-        public boolean isDragEnabled() {
-            return dragEnabled;
-        }
-
-        public void setDragEnabled(boolean dragEnabled) {
-            this.dragEnabled = dragEnabled;
-            if (dragEnabled) {
-                SessionManager.getSession().getDragAndDropManager().registerDragSource(this);
-            } else {
-                SessionManager.getSession().getDragAndDropManager().deregisterDragSource(this);
-            }
         }
     }
 }

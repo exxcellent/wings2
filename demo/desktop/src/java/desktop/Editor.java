@@ -14,8 +14,15 @@
 package desktop;
 
 import org.wings.*;
+import org.wings.dnd.DragSource;
+import org.wings.dnd.DropTarget;
+import org.wings.event.SComponentDropListener;
+import org.wings.event.SDocumentEvent;
+import org.wings.event.SDocumentListener;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.event.SInternalFrameListener;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
 import org.wings.externalizer.AbstractExternalizeManager;
 import org.wings.externalizer.ExternalizeManager;
 import org.wings.io.Device;
@@ -24,6 +31,7 @@ import org.wings.resource.FileResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
+import org.wings.style.CSSProperty;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +39,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,10 +63,12 @@ import java.util.Map;
  * @author Holger Engels
  */
 public class Editor
-    extends Bird
-    implements SInternalFrameListener
+    extends SInternalFrame
+    implements SInternalFrameListener, DragSource, DropTarget
 {
-    private DynamicResource saveResource;
+	private ArrayList componentDropListeners = new ArrayList();
+	private boolean dragEnabled = false;
+	private DynamicResource saveResource;
     private SMenuBar menuBar;
     private SToolBar toolBar;
     private STextArea textArea;
@@ -65,6 +77,9 @@ public class Editor
     private String clip;
 
     public Editor() {
+    	this.setDragEnabled(true);
+        componentDropListeners = new ArrayList<SComponentDropListener>();
+         
         menuBar = createMenu();
         SContainer contentPane = getContentPane();
         contentPane.setLayout(new SBorderLayout());
@@ -72,22 +87,109 @@ public class Editor
         toolBar = createToolBar();
 
         textArea = new STextArea();
-        textArea.setColumns(80);
+        textArea.setColumns(500);
         textArea.setRows(12);
         textArea.setPreferredSize(SDimension.FULLWIDTH);
-
+        textArea.setEditable(true);
+        
         SForm form = new SForm(new SFlowDownLayout());
         form.add(toolBar);
         form.add(textArea);
         contentPane.add(form, SBorderLayout.CENTER);
-
         saveResource = new EditorDynamicResource();
 
         SIcon icon = new SURLIcon("../icons/penguin.png");
         setIcon(icon);
         addInternalFrameListener(this);
+        
+        
+        addComponentDropListener(new SComponentDropListener() {
+            public boolean handleDrop(SComponent dragSource) {
+            	if(!((DragSource)dragSource).isDragEnabled())
+            		return false;
+            	
+            	SContainer cont = dragSource.getParent();
+            	            	
+            	if(Editor.this.getParent() != cont){
+            		if(cont instanceof SDesktopPane){
+            			
+            			Editor.this.setMaximized(false);
+            			if(dragSource instanceof SInternalFrame)
+                    		((SInternalFrame)dragSource).setMaximized(false);
+            			
+            			SDesktopPane targetPane = (SDesktopPane)Editor.this.getParent();
+            			SDesktopPane sourcePane = (SDesktopPane)cont;
+            			int sindex = sourcePane.getIndexOf(dragSource);
+            			int tindex = targetPane.getIndexOf(Editor.this);
+            			sourcePane.remove(sindex);
+            			targetPane.remove(tindex);
+            			sourcePane.add(Editor.this, sindex);
+            			targetPane.add(dragSource, tindex);
+            			return true;
+            		}
+            	}
+            	else if(cont instanceof SDesktopPane)
+            	{
+            		SDesktopPane pane = (SDesktopPane)cont;
+            		int tindex = pane.getIndexOf(Editor.this);
+            		int sindex = pane.getIndexOf(dragSource);
+            		
+            		if(sindex == tindex)
+            			return false;
+            		
+            		Editor.this.setMaximized(false);
+            		if(dragSource instanceof SInternalFrame)
+                		((SInternalFrame)dragSource).setMaximized(false);
+            		
+            		if(tindex > sindex){
+                		pane.remove(tindex);
+                		pane.remove(sindex);
+                		pane.add(Editor.this, sindex);
+                		pane.add(dragSource, tindex);
+                		
+                	}
+                	else{
+                		pane.remove(sindex);
+                		pane.remove(tindex);
+                		pane.add(dragSource, tindex);
+                		pane.add(Editor.this, sindex);
+                		
+                	}
+                	return true;
+            	}
+            	return false;
+            }
+            });
     }
+    
+    @Override
+	public void addComponentDropListener(SComponentDropListener listener) {
+    	componentDropListeners.add(listener);
+        SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
+	}
 
+	@Override
+	public List<SComponentDropListener> getComponentDropListeners() {
+		return this.componentDropListeners;
+	}
+
+	
+	@Override
+	public boolean isDragEnabled() {
+		return this.dragEnabled;
+	}
+
+	@Override
+	public void setDragEnabled(boolean dragEnabled) {
+		this.dragEnabled = dragEnabled;
+        if (dragEnabled) {
+            SessionManager.getSession().getDragAndDropManager().registerDragSource((DragSource)this);
+        } else {
+            SessionManager.getSession().getDragAndDropManager().deregisterDragSource((DragSource)this);
+        }
+	}
+ 	
+ 
     protected SMenuBar createMenu() {
         SMenuItem saveItem = new SMenuItem("Save");
         saveItem.addActionListener(new ActionListener() {
@@ -219,60 +321,26 @@ public class Editor
     }
     public String getBackup() { return backup; }
 
-    public void save() {
-        try {
-            //logger.info("save");
-            // write editor content to a temporary file
-            File file = File.createTempFile("wings", "txt");
-            PrintWriter out = new PrintWriter(new FileOutputStream(file));
+public void save() {
+    	try {
+			File file = File.createTempFile("wings", "txt");
+			PrintWriter out = new PrintWriter(new FileOutputStream(file));
             out.print(textArea.getText());
             out.close();
+			
+			FileResource resource = new FileResource(file);
+	    	resource.setExternalizerFlags(resource.getExternalizerFlags() | ExternalizeManager.REQUEST);
+	    	 
+	    	Map headers = new HashMap();
+	    	headers.put("Content-Disposition", "attachment; filename=" + file.getName());
+	    	resource.setHeaders(headers.entrySet());
+	    	 
+	    	final ScriptListener listener = new JavaScriptListener(null, null, "location.href='" + resource.getURL() + "'");SessionManager.getSession().getScriptManager().addScriptListener(listener);
 
-            // create a file resource
-            FileResource resource = new FileResource(file);
-            // we only request this once, thats it.
-            resource.setExternalizerFlags(resource.getExternalizerFlags()
-                                          | ExternalizeManager.REQUEST);
-            // advice the browser to pop the save dialog
-            Map headers = new HashMap();
-            headers.put("Content-Disposition", "attachment; filename=blub");
-            resource.setHeaders(headers.entrySet());
-
-            // java script, that is executed "onload"; loads the file resource and triggers
-            // the named event "clear=X"
-            RequestURL url = (RequestURL) resource.getURL();
-            url.addParameter("clear=X");
-
-            final ScriptListener script = new JavaScriptListener("onload", "parent.location='" + url + "'");
-            getParentFrame().addScriptListener(script);
-
-            // register a request listener, that handles the named event "clear"
-            getSession().getDispatcher().register(new LowLevelEventListener() {
-                    public void processLowLevelEvent(String name, String[] values) {
-                        //logger.info("remove java script");
-                        getParentFrame().removeScriptListener(script);
-                    }
-
-                    public String getName() { return "clear"; }
-
-                    public String getLowLevelEventId() { return ""; }
-
-                    public void fireIntermediateEvents() {}
-                    public void fireFinalEvents() {}
-  		            public boolean isEnabled() { return true; }
-
-                public boolean checkEpoch() {
-                    return true;
-                }
-
-                public boolean isEpochCheckEnabled() { return true; }
-                });
-
-        }
-        catch (IOException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace(System.err);
-        }
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace(System.err);
+		}
     }
 
     public void revert() {
