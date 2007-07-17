@@ -39,14 +39,12 @@ public class DropLabel extends SLabel implements DropTarget {
 		
 	}
 
-	@Override
 	public void addComponentDropListener(SComponentDropListener listener) {
 		componentDropListeners.add(listener);
         SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
 		
 	}
 
-	@Override
 	public List<SComponentDropListener> getComponentDropListeners() {
 		return componentDropListeners;
 	}

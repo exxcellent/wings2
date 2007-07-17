@@ -16,6 +16,7 @@ package org.wings.session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.script.JavaScriptListener;
 import org.wings.event.ExitVetoException;
 import org.wings.event.SRequestEvent;
 import org.wings.externalizer.ExternalizeManager;
@@ -480,9 +481,7 @@ final class SessionServlet
             }
 
             if (session.getRedirectAddress() != null) {
-                // redirect to user requested URL.
-                response.sendRedirect(session.getRedirectAddress());
-                session.setRedirectAddress(null);
+                handleRedirect(response);
                 return;
             }
 
@@ -569,6 +568,48 @@ final class SessionServlet
         return defaultFrame.getDynamicResource(ReloadResource.class);
     }
 
+    private void handleRedirect(HttpServletResponse response) throws IOException {
+        try {
+            ReloadManager reloadManager = session.getReloadManager();
+            if (reloadManager.isUpdateMode()) {
+                String script = "wingS.request.sendRedirect(\"" + session.getRedirectAddress() + "\");";
+                session.getScriptManager().addScriptListener(new JavaScriptListener(null, null, script));
+                /*
+                Resource root = retrieveCurrentRootFrameResource();
+                ExternalizedResource externalizedResource = session.getExternalizeManager().getExternalizedResource(root.getId());
+                session.fireRequestEvent(SRequestEvent.DELIVER_START, externalizedResource);
+
+                String encoding = session.getCharacterEncoding();
+                response.setContentType("text/xml; charset=" + encoding);
+                ServletOutputStream out = response.getOutputStream();
+                Device outputDevice = new ServletDevice(out);
+                UpdateResource.writeHeader(outputDevice);
+                UpdateResource.writeUpdate(outputDevice, "wingS.request.sendRedirect(\"" + session.getRedirectAddress() + "\");");
+                UpdateResource.writeFooter(outputDevice);
+                out.flush();
+
+                session.fireRequestEvent(SRequestEvent.DELIVER_DONE, externalizedResource);
+                session.fireRequestEvent(SRequestEvent.REQUEST_END);
+
+                reloadManager.clear();
+                session.setServletRequest(null);
+                session.setServletResponse(null);
+                SessionManager.removeSession();
+                SForm.clearArmedComponents();
+                */
+            }
+            else {
+                response.sendRedirect(session.getRedirectAddress());
+            }
+        }
+        catch (Exception e) {
+            log.warn(e.getMessage(), e);
+        }
+        finally {
+            session.setRedirectAddress(null);
+        }
+    }
+
     /**
      * In case of an error, display an error page to the user. This is only
      * done if there is a properties <code>wings.error.handler</code> defined
@@ -600,7 +641,6 @@ final class SessionServlet
             exceptionHandler.handle(device, thrown);
             Resource resource = new StringResource(device.toString(), "html", "text/html");
             String url = session.getExternalizeManager().externalize(resource);
-            ExternalizedResource externalizedResource = session.getExternalizeManager().getExternalizedResource(resource.getId());
 
             ReloadManager reloadManager = session.getReloadManager();
             reloadManager.notifyCGs();
@@ -609,6 +649,8 @@ final class SessionServlet
             session.fireRequestEvent(SRequestEvent.PROCESS_REQUEST);
 
             if (reloadManager.isUpdateMode()) {
+                Resource root = retrieveCurrentRootFrameResource();
+                ExternalizedResource externalizedResource = session.getExternalizeManager().getExternalizedResource(root.getId());
                 session.fireRequestEvent(SRequestEvent.DELIVER_START, externalizedResource);
 
                 String encoding = session.getCharacterEncoding();

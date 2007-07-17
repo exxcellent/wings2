@@ -72,24 +72,22 @@ public class RSSPortlet
         entries = getNews();
         DefaultListModel model = new DefaultListModel();
         
-        
         for(Object obj: entries){
         	model.addElement(((NewsFeedEntry)obj).getText());
         }
         
-        SList list = new SList(model);
+        final SList list = new SList(model);
         list.setShowAsFormComponent(false);
         list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         list.setOrderType("none");
         
-      
-        list.addListSelectionListener(new ListSelectionListener(){
-        	public void valueChanged(ListSelectionEvent e){
-        		
-				NewsFeedEntry entry = (NewsFeedEntry)entries.get(e.getFirstIndex());
+        list.addListSelectionListener(new ListSelectionListener() {
+        	public void valueChanged(ListSelectionEvent e) {
+				NewsFeedEntry entry = (NewsFeedEntry)entries.get(list.getSelectedIndex());
 				System.out.println(entry.getUrl());
 				SessionManager.getSession().setRedirectAddress(entry.getUrl());
-        	}
+                list.clearSelection();
+            }
         });
 
         contentPane.add(list);
@@ -116,7 +114,6 @@ public class RSSPortlet
             			targetPane.add(dragSource, targetPane.getIndexOf(RSSPortlet.this));
             			return true;
             		}
-            		
             	}
             	else if(cont instanceof SDesktopPane)
             	{
@@ -146,24 +143,20 @@ public class RSSPortlet
             
     }
     
-    @Override
 	public void addComponentDropListener(SComponentDropListener listener) {
     	componentDropListeners.add(listener);
         SessionManager.getSession().getDragAndDropManager().registerDropTarget(this);
         
 	}
 
-	@Override
 	public List<SComponentDropListener> getComponentDropListeners() {
 		return this.componentDropListeners;
 	}
 
-	@Override
 	public boolean isDragEnabled() {
 		return this.dragEnabled;
 	}
 
-	@Override
 	public void setDragEnabled(boolean dragEnabled) {
 		this.dragEnabled = dragEnabled;
         if (dragEnabled) {
@@ -182,17 +175,11 @@ public class RSSPortlet
 		super.dispose();
 	}
 	
-	@Override
 	public void internalFrameClosed(SInternalFrameEvent e) {close();}
-	@Override
 	public void internalFrameDeiconified(SInternalFrameEvent e) {}
-	@Override
 	public void internalFrameIconified(SInternalFrameEvent e) {}
-	@Override
 	public void internalFrameMaximized(SInternalFrameEvent e) {}
-	@Override
 	public void internalFrameOpened(SInternalFrameEvent e) {}
-	@Override
 	public void internalFrameUnmaximized(SInternalFrameEvent e) {}
 
     List getNews() {
