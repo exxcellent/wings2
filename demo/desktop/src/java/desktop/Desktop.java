@@ -165,7 +165,7 @@ public class Desktop
         final STextField inputElement = new STextField("file:///home/hengels/IssueNavigator.jspa.xml");
         SOptionPane.showInputDialog(desktop, "URL of the News-Feed", "News-Feed", inputElement, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                feeds.add(new RSSPortlet("custom", inputElement.getText()));
+                feeds.add(new RSSPortlet("custom", inputElement.getText()), 0);
             }
         });
     }
