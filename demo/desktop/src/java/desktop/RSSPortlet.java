@@ -16,20 +16,10 @@ import org.wings.event.SInternalFrameEvent;
 import org.wings.event.SInternalFrameListener;
 import org.wings.session.SessionManager;
 
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 import java.util.List;
 import java.util.ArrayList;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -57,7 +47,7 @@ public class RSSPortlet
 	private String feed;
     private String user;
     private String password;
-    private List entries;
+        
 
     public RSSPortlet(String name, String feed) {
         this(name, feed, null, null);
@@ -68,28 +58,23 @@ public class RSSPortlet
         this.feed = feed;
         this.user = user;
         this.password = password;
-        
-        entries = getNews();
-        DefaultListModel model = new DefaultListModel();
-        
-        for(Object obj: entries){
-        	model.addElement(((NewsFeedEntry)obj).getText());
-        }
-        
-        final SList list = new SList(model);
+                
+        final SList list = new SList(getNews());
         list.setShowAsFormComponent(false);
         list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         list.setOrderType("none");
         
         list.addListSelectionListener(new ListSelectionListener() {
         	public void valueChanged(ListSelectionEvent e) {
-                if (list.getSelectedIndex() == -1)
-                    return;
 
-                NewsFeedEntry entry = (NewsFeedEntry)entries.get(list.getSelectedIndex());
-				System.out.println(entry.getUrl());
-				SessionManager.getSession().setRedirectAddress(entry.getUrl());
-                list.clearSelection();
+        		if(list.getSelectedIndex() == -1)
+        			return;
+        		
+        		NewsFeedEntry entry = (NewsFeedEntry)list.getSelectedValue();
+        		SessionManager.getSession().setRedirectAddress(entry.getUrl());
+        		        		
+        		list.clearSelection();
+
             }
         });
 
@@ -185,48 +170,29 @@ public class RSSPortlet
 	public void internalFrameOpened(SInternalFrameEvent e) {}
 	public void internalFrameUnmaximized(SInternalFrameEvent e) {}
 
-    List getNews() {
+    DefaultListModel getNews() {
     	try{
     		URL feedUrl = new URL(this.feed); 
     		SyndFeedInput input = new SyndFeedInput();
     		SyndFeed feed = input.build(new XmlReader(feedUrl));
     		
-    		ArrayList list = new ArrayList();
     		
+    		DefaultListModel model = new DefaultListModel();
     		
     		for (Object obj: feed.getEntries()){
     			SyndEntryImpl entry = (SyndEntryImpl)obj;
-    			list.add(new NewsFeedEntry(entry.getTitle(), entry.getLink()));
+    			model.addElement(new NewsFeedEntry(entry.getTitle(), entry.getLink()));
     		}
     		
-    		return list;
+    		return model;
     	}
     	catch(Exception e){
     		System.err.println(e);
     	}
     	
-    	return new ArrayList();
+    	return new DefaultListModel();
     }
 
-    private void copy(InputStream in, PrintStream out) throws IOException {
-        byte[] buffer = new byte[256];
-        int len;
-        while ((len = in.read(buffer)) > -1)
-            out.write(buffer, 0, len);
-    }
-
-    private InputStream openFeed() throws IOException {
-        URL url = new URL(feed);
-        URLConnection connection = url.openConnection();
-        connection.setDoInput(true);
-        if (user != null) {
-            String userPassword = user + ":" + password;
-            String encoding = new sun.misc.BASE64Encoder().encode(userPassword.getBytes());
-            connection.setRequestProperty("Authorization", "Basic " + encoding);
-        }
-        return connection.getInputStream();
-    }
-    
     private class NewsFeedEntry{
     	private String text;
     	private String url;
@@ -246,6 +212,10 @@ public class RSSPortlet
 		}
 		public void setUrl(String url) {
 			this.url = url;
+		}
+		
+		public String toString(){
+			return getText();
 		}
 		
     	
