@@ -3,29 +3,26 @@
  */
 package desktop;
 
-import org.wings.SBorderLayout;
 import org.wings.SComponent;
-import org.wings.SDimension;
-import org.wings.SFlowDownLayout;
-import org.wings.SForm;
 import org.wings.SLabel;
 import org.wings.SContainer;
-import org.wings.SGridLayout;
 import org.wings.SDesktopPane;
 import org.wings.SInternalFrame;
+import org.wings.SList;
 import org.wings.dnd.DragSource;
 import org.wings.dnd.DropTarget;
 import org.wings.event.SComponentDropListener;
 import org.wings.event.SInternalFrameEvent;
 import org.wings.event.SInternalFrameListener;
 import org.wings.session.SessionManager;
-import org.wings.style.CSSProperty;
 
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
+
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.Authenticator;
@@ -36,6 +33,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+
+import javax.swing.DefaultListModel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
+
+
+import com.sun.syndication.io.SyndFeedInput;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.XmlReader;
+import com.sun.syndication.feed.synd.SyndEntryImpl;
 
 /**
  * @author hengels
@@ -50,6 +57,7 @@ public class RSSPortlet
 	private String feed;
     private String user;
     private String password;
+    private List entries;
 
     public RSSPortlet(String name, String feed) {
         this(name, feed, null, null);
@@ -60,10 +68,31 @@ public class RSSPortlet
         this.feed = feed;
         this.user = user;
         this.password = password;
-                
-        SLabel label = new SLabel("<html>" + getNews());
-                
-        contentPane.add(label);
+        
+        entries = getNews();
+        DefaultListModel model = new DefaultListModel();
+        
+        
+        for(Object obj: entries){
+        	model.addElement(((NewsFeedEntry)obj).getText());
+        }
+        
+        SList list = new SList(model);
+        list.setShowAsFormComponent(false);
+        list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        list.setOrderType("none");
+        
+      
+        list.addListSelectionListener(new ListSelectionListener(){
+        	public void valueChanged(ListSelectionEvent e){
+        		
+				NewsFeedEntry entry = (NewsFeedEntry)entries.get(e.getFirstIndex());
+				System.out.println(entry.getUrl());
+				SessionManager.getSession().setRedirectAddress(entry.getUrl());
+        	}
+        });
+
+        contentPane.add(list);
                                        
         setDragEnabled(true);
         componentDropListeners = new ArrayList<SComponentDropListener>();
@@ -166,23 +195,27 @@ public class RSSPortlet
 	@Override
 	public void internalFrameUnmaximized(SInternalFrameEvent e) {}
 
-    String getNews() {
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            TransformerFactory tFactory = TransformerFactory.newInstance();
-            String ctx = getSession().getServletContext().getRealPath("") + System.getProperty("file.separator");
-            Source xslSource = new StreamSource(new URL("file", "", ctx + "rss.xsl").openStream());
-            Transformer transformer = tFactory.newTransformer(xslSource);
-
-            copy(openFeed(), System.out);
-            Source xmlSource = new StreamSource(openFeed());
-            transformer.transform(xmlSource, new StreamResult(out));
-            return out.toString();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
+    List getNews() {
+    	try{
+    		URL feedUrl = new URL(this.feed); 
+    		SyndFeedInput input = new SyndFeedInput();
+    		SyndFeed feed = input.build(new XmlReader(feedUrl));
+    		
+    		ArrayList list = new ArrayList();
+    		
+    		
+    		for (Object obj: feed.getEntries()){
+    			SyndEntryImpl entry = (SyndEntryImpl)obj;
+    			list.add(new NewsFeedEntry(entry.getTitle(), entry.getLink()));
+    		}
+    		
+    		return list;
+    	}
+    	catch(Exception e){
+    		System.err.println(e);
+    	}
+    	
+    	return new ArrayList();
     }
 
     private void copy(InputStream in, PrintStream out) throws IOException {
@@ -203,4 +236,29 @@ public class RSSPortlet
         }
         return connection.getInputStream();
     }
+    
+    private class NewsFeedEntry{
+    	private String text;
+    	private String url;
+		public NewsFeedEntry(String text, String url) {
+			this.text = text;
+			this.url = url;
+		}
+		
+		public String getText() {
+			return text;
+		}
+		public void setText(String text) {
+			this.text = text;
+		}
+		public String getUrl() {
+			return url;
+		}
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		
+    	
+    }
+    
 }

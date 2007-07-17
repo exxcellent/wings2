@@ -38,8 +38,8 @@ public class Desktop
     implements SConstants
 {
     SFrame frame;
-    SDesktopPane desktop;
-    SDesktopPane feeds;
+    DesktopPane desktop;
+    DesktopPane feeds;
     SMenu windowMenu;
     SMenuBar menuBar;
     int editorNumber = 0;
@@ -51,7 +51,7 @@ public class Desktop
         menuBar = createMenu();
 
         
-        desktop = new SDesktopPane();
+        desktop = new DesktopPane();
         
         // add the frames to the window-menu ..
         desktop.addContainerListener(new SContainerListener() {
@@ -73,7 +73,7 @@ public class Desktop
         
         desktop.setVerticalAlignment(SConstants.TOP_ALIGN);
 		
-        feeds = new SDesktopPane();
+        feeds = new DesktopPane();
         
         feeds.addContainerListener(new SContainerListener() {
             public void componentAdded(SContainerEvent e) {
@@ -110,9 +110,12 @@ public class Desktop
 
         frame.setVisible(true);
         newEditor().setText(getStory());
+        desktop.addNonFrameComponent(new DropLabel());
         feeds.add(new RSSPortlet("heise news ticker", "http://www.heise.de/english/newsticker/news.rdf"));
         feeds.add(new RSSPortlet("the server side", "http://www.theserverside.com/rss/theserverside-rss2.xml"));
-
+        feeds.addNonFrameComponent(new DropLabel());
+        
+        
         frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../desktop.css")));
         frame.show();
     }
