@@ -83,7 +83,10 @@ public class RSSPortlet
         
         list.addListSelectionListener(new ListSelectionListener() {
         	public void valueChanged(ListSelectionEvent e) {
-				NewsFeedEntry entry = (NewsFeedEntry)entries.get(list.getSelectedIndex());
+                if (list.getSelectedIndex() == -1)
+                    return;
+
+                NewsFeedEntry entry = (NewsFeedEntry)entries.get(list.getSelectedIndex());
 				System.out.println(entry.getUrl());
 				SessionManager.getSession().setRedirectAddress(entry.getUrl());
                 list.clearSelection();
