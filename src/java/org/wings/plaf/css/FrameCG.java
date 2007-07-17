@@ -201,6 +201,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     }
 
     private String strokes(List<SComponent> components) {
+        if (components == null)
+            return null;
+
         StringBuilder builder = new StringBuilder();
         builder.append("wingS.keyboard.keyStrokes = new Array();");
         for (SComponent component : components) {
@@ -290,9 +293,9 @@ public final class FrameCG implements org.wings.plaf.FrameCG {
     public void write(final Device device, final SComponent component) throws IOException {
         final SFrame frame = (SFrame) component;
 
-        List<SComponent> components = frame.getGlobalInputMapComponents();
-        String strokes = strokes(components);
-        component.getSession().getScriptManager().addScriptListener(new JavaScriptListener(null, null, strokes));
+        String strokes = strokes(frame.getGlobalInputMapComponents());
+        if (strokes != null)
+            component.getSession().getScriptManager().addScriptListener(new JavaScriptListener(null, null, strokes));
 
         RenderHelper.getInstance(frame).reset();
 

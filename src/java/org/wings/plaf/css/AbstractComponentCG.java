@@ -436,6 +436,19 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     }
 
     protected void writeRegisterDragHandle(StringBuilder builder, SComponent component) {
+        String dragHandle = getDragHandle(component);
+        if (dragHandle != null) {
+            String name = component.getName();
+            builder.append("ds_");
+            builder.append(name);
+            builder.append(".setHandleElId(\"");
+            builder.append(dragHandle);
+            builder.append("\");");
+        }
+    }
+
+    protected String getDragHandle(SComponent component) {
+        return null;
     }
 
     private void writeCode(Device device, SComponent component) throws IOException {

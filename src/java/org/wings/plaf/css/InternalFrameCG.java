@@ -155,15 +155,10 @@ public class InternalFrameCG extends AbstractComponentCG implements
         device.print("</div>");
     }
 
-    protected void writeRegisterDragHandle(StringBuilder builder, SComponent component) {
-        String name = component.getName();
-        builder.append("ds_");
-        builder.append(name);
-        builder.append(".setHandleElId(\"");
-        builder.append(name);
-        builder.append("_titlebar\");");
+    protected String getDragHandle(SComponent component) {
+        return component.getName() + "_titlebar";
     }
-
+    
     public SIcon getCloseIcon() {
         return closeIcon;
     }
@@ -203,5 +198,4 @@ public class InternalFrameCG extends AbstractComponentCG implements
     public void setUnmaximizeIcon(SIcon unmaximizeIcon) {
         this.unmaximizeIcon = unmaximizeIcon;
     }
-
 }

@@ -600,6 +600,7 @@ final class SessionServlet
             exceptionHandler.handle(device, thrown);
             Resource resource = new StringResource(device.toString(), "html", "text/html");
             String url = session.getExternalizeManager().externalize(resource);
+            ExternalizedResource externalizedResource = session.getExternalizeManager().getExternalizedResource(resource.getId());
 
             ReloadManager reloadManager = session.getReloadManager();
             reloadManager.notifyCGs();
@@ -608,9 +609,9 @@ final class SessionServlet
             session.fireRequestEvent(SRequestEvent.PROCESS_REQUEST);
 
             if (reloadManager.isUpdateMode()) {
-                session.fireRequestEvent(SRequestEvent.DELIVER_START);
+                session.fireRequestEvent(SRequestEvent.DELIVER_START, externalizedResource);
 
-                String encoding = SessionManager.getSession().getCharacterEncoding();
+                String encoding = session.getCharacterEncoding();
                 response.setContentType("text/xml; charset=" + encoding);
                 ServletOutputStream out = response.getOutputStream();
                 Device outputDevice = new ServletDevice(out);
@@ -619,7 +620,7 @@ final class SessionServlet
                 UpdateResource.writeFooter(outputDevice);
                 out.flush();
 
-                session.fireRequestEvent(SRequestEvent.DELIVER_DONE);
+                session.fireRequestEvent(SRequestEvent.DELIVER_DONE, externalizedResource);
                 session.fireRequestEvent(SRequestEvent.REQUEST_END);
 
                 reloadManager.clear();
