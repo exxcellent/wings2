@@ -67,7 +67,7 @@ public class SCellRendererPane
         if (getParentFrame() == null)
             log.warn("SCellRendererPane: parentFrame == null!");
 
-        if (c == null) {
+        if (c == null || !c.isVisible()) {
             return;
         }
 

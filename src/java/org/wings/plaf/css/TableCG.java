@@ -427,7 +427,11 @@ public final class TableCG
     {
         final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
         if (isSelectionColumnVisible(table)) {
-            final String columnStyle = Utils.joinStyles((SComponent) rowSelectionRenderer, "num");
+            final SComponent comp = rowSelectionRenderer.getTableCellRendererComponent(table,
+                                                                                       table.getToggleSelectionParameter(row, -1),
+                                                                                       table.isRowSelected(row),
+                                                                                       row, -1);
+            final String columnStyle = Utils.joinStyles(comp, "num");
 
             device.print("<td valign=\"top\" align=\"right\"");
             Utils.optAttribute(device, "width", selectionColumnWidth);
@@ -445,26 +449,12 @@ public final class TableCG
                 device.print("\"");
             }
             device.print(">");
-
-            renderSelectionColumnContent(device, row, table, rendererPane);
+            
+            // Renders the content of the row selection row
+            rendererPane.writeComponent(device, comp, table);
 
             device.print("</td>");
         }
-    }
-
-    /**
-     * Renders the <b>content</b> of the row selection row.
-     */
-    private void renderSelectionColumnContent(final Device device, int row, final STable table, final SCellRendererPane rendererPane)
-        throws IOException
-    {
-        final STableCellRenderer rowSelectionRenderer = table.getRowSelectionRenderer();
-        // use row selection renderer component
-        final SComponent comp = rowSelectionRenderer.getTableCellRendererComponent(table,
-                                                                                   table.getToggleSelectionParameter(row, -1),
-                                                                                   table.isRowSelected(row),
-                                                                                   row, -1);
-        rendererPane.writeComponent(device, comp, table);
     }
     
     private boolean isSelectionColumnVisible(STable table) {
