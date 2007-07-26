@@ -225,7 +225,7 @@ public final class TreeCG extends AbstractComponentCG implements org.wings.plaf.
 
         for (int i = start; i < end; ++i) {
             if (i >= empty) {
-                device.print("<tr><td class=\"empty\">&nbsp;</td></tr>");
+                device.print("<tr class=\"empty\"><td>&nbsp;</td></tr>");
                 continue;
             }
             writeTreeNode(tree, device, i, depth);

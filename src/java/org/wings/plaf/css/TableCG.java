@@ -355,11 +355,11 @@ public final class TableCG
         for (int r = startY; r < endY; ++r) {
             if (r >= emptyIndex) {
                 int colspan = endX - startX;
-                device.print("<tr>\n");
+                device.print("<tr class=\"empty\">\n");
                 if (isSelectionColumnVisible(table)) {
-                    device.print("  <td class=\"empty\"></td>\n");
+                    device.print("  <td></td>\n");
                 }
-                device.print("  <td class=\"empty\" colspan=\"" + colspan + "\">&nbsp;</td>\n");
+                device.print("  <td colspan=\"" + colspan + "\">&nbsp;</td>\n");
                 device.print("</tr>\n");
                 continue;
             }

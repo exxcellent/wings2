@@ -469,7 +469,7 @@ ul.SPopupMenu a.x:hover{
     background-color: #ffbbbb !important;
 }
 
-.STable td.empty  {
+.STable tr.empty td {
     padding-top: 3px;
     padding-bottom: 3px;
 }
@@ -516,7 +516,7 @@ ul.SPopupMenu a.x:hover{
     background-color: #ffbbbb !important;
 }
 
-.XTable td.empty  {
+.XTable tr.empty td {
     padding-top: 2px;
     padding-bottom: 2px;
 }
