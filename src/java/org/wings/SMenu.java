@@ -55,6 +55,7 @@ public class SMenu extends SMenuItem {
     public void add(SMenuItem menuItem) {
         menuItems.add(menuItem);
         menuItem.setParentMenu(this);
+        reload();
     }
 
     /**
@@ -63,6 +64,7 @@ public class SMenu extends SMenuItem {
     public void add(SComponent menuItem) {
         menuItems.add(menuItem);
         menuItem.setParentFrame(getParentFrame());
+        reload();
     }
 
     public void setParentFrame(SFrame f) {
@@ -115,7 +117,9 @@ public class SMenu extends SMenuItem {
      * removes a specific menu item component.
      */
     public void remove(SComponent comp) {
-        menuItems.remove(comp);
+        if (menuItems.remove(comp)) {
+            reload();
+        }
         comp.setParentFrame(null);
     }
 

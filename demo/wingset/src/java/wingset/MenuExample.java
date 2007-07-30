@@ -101,10 +101,36 @@ public class MenuExample extends WingSetPane {
                 }
             }
         });
+        SButton addMenuItem = new SButton("Add new random menu item");
+        addMenuItem.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        addMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int nr = new Random().nextInt(100);
+                SMenuItem menuItem = new SMenuItem(new MenuItemAction("Item " + nr));
+                SMenu firstMenu = menuBar.getMenu(0);
+                if (firstMenu != null) {
+                    firstMenu.add(menuItem);
+                }
+            }
+        });
+        SButton removeMenuItem = new SButton("Remove last added menu item");
+        removeMenuItem.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        removeMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SMenu firstMenu = menuBar.getMenu(0);
+                if (firstMenu != null && firstMenu.getChildrenCount() > 0) {
+                    firstMenu.remove(firstMenu.getChildrenCount() - 1);
+                }
+            }
+        });
         messagePanel.add(new SSpacer(1, 50));
         messagePanel.add(addMenu);
         messagePanel.add(new SSpacer(1, 10));
         messagePanel.add(removeMenu);
+        messagePanel.add(new SSpacer(1, 20));
+        messagePanel.add(addMenuItem);
+        messagePanel.add(new SSpacer(1, 10));
+        messagePanel.add(removeMenuItem);
 
         SPanel mainPanel = new SPanel(new SBoxLayout(SBoxLayout.VERTICAL));
         mainPanel.add(formPanel);
