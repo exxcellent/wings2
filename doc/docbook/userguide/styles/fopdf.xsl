@@ -51,7 +51,7 @@
                                 <xsl:value-of select="bookinfo/subtitle"/>
                             </fo:block>
                             <fo:block font-family="Helvetica" font-size="12pt" padding="10mm">
-                                Version:
+                                <xsl:text>Version: </xsl:text>
                                 <xsl:value-of select="bookinfo/releaseinfo"/>
                             </fo:block>
                         </fo:table-cell>
@@ -95,9 +95,9 @@
 
         <xsl:variable name="Version">
             <xsl:choose>
-                <xsl:when test="//releaseinfo">
-                    <xsl:text>wingS </xsl:text>
-                    <xsl:value-of select="//releaseinfo"/>
+                <xsl:when test="//bookinfo/releaseinfo">
+                    <xsl:text>Version: </xsl:text>
+                    <xsl:value-of select="//bookinfo/releaseinfo"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <!-- nop -->
