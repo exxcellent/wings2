@@ -56,9 +56,8 @@
 
       <para>For management-oriented information please refer to the wingS
       whitepaper<footnote>
-          <para><ulink
-          url="http://wingsframework.org">wingS
-          project website</ulink></para>
+          <para><ulink url="http://wingsframework.org">wingS project
+          website</ulink></para>
         </footnote>.</para>
     </section>
 
@@ -76,8 +75,9 @@
     <section>
       <title>Credits</title>
 
-      <para>Contributions to this documentation were provided by Holger Engels,
-      Volker Fritzsch, Ian Gardner, Oliver Scheck and Benjamin Schmid.</para>
+      <para>Contributions to this documentation were provided by Holger
+      Engels, Volker Fritzsch, Ian Gardner, Oliver Scheck and Benjamin
+      Schmid.</para>
     </section>
   </preface>
 
@@ -279,9 +279,9 @@
       <para>First we need to set up your development environment. Just create
       a new directory <filename>helloworld</filename> and
       <filename>helloword/src</filename> and copy the contents of the two
-      directories <filename>web</filename> and <filename>lib</filename> of
-      the wingS distribution. Start your preferred IDE and create a new
-      project using the directory you just generated. Include all the
+      directories <filename>web</filename> and <filename>lib</filename> of the
+      wingS distribution. Start your preferred IDE and create a new project
+      using the directory you just generated. Include all the
       <filename>*.jar</filename>files in the copied <filename>lib</filename>
       and <filename> web/WEB-INF/lib</filename>directories in the classpath of
       your newly created project.</para>
@@ -381,6 +381,12 @@ public class HelloWingS {
         &lt;url-pattern&gt;/HelloWingS/*&lt;/url-pattern&gt;
     &lt;/servlet-mapping&gt;
 &lt;/web-app&gt;</programlisting>
+
+      <highlights>
+        <para>Please note that if you want to use some advanced, Ajax-based
+        components you have to add a few further declarations in this web.xml
+        file as described in <xref linkend="ajax-components" /> </para>
+      </highlights>
     </section>
 
     <section id="hellowings-deployment">
@@ -567,7 +573,8 @@ public class HelloWingS {
 
                 <entry>optional</entry>
 
-                <entry>Deploy and configure Log4J with your application</entry>
+                <entry>Deploy and configure Log4J with your
+                application</entry>
               </row>
 
               <row>
@@ -622,10 +629,10 @@ public class HelloWingS {
             <listitem>
               <para>The latest version of the wingS framework can be always
               obtained from its website at <ulink
-              url="http://wingsframework.org/"> http://wingsframework.org/</ulink>.
-              If you want to be in touch with the latest development you can
-              also retrieve a development snapshot by anonymous CVS
-              access.</para>
+              url="http://wingsframework.org/">
+              http://wingsframework.org/</ulink>. If you want to be in touch
+              with the latest development you can also retrieve a development
+              snapshot by anonymous CVS access.</para>
             </listitem>
           </varlistentry>
 
@@ -680,9 +687,9 @@ public class HelloWingS {
             <term>Firebug Extension plugin for Firefox</term>
 
             <listitem>
-              <para>This is a great javascript debugger, html- and css- editor,
-              dom- inspector, ... available at:
-              <ulink url="http://www.getfirebug.com/">
+              <para>This is a great javascript debugger, html- and css-
+              editor, dom- inspector, ... available at: <ulink
+              url="http://www.getfirebug.com/">
               http://www.getfirebug.com/</ulink>.</para>
             </listitem>
           </varlistentry>
@@ -702,16 +709,17 @@ public class HelloWingS {
           <para>First of all try to determine the basic layout and the logical
           groups in your web application. <xref linkend="container-nesting" />
           shows an example of an application screen split into various logical
-          areas. For floating layouts the <code>STemplateLayout</code> might be
-          a good choice for the root panel (<code>contentPane</code>).</para>
+          areas. For floating layouts the <code>STemplateLayout</code> might
+          be a good choice for the root panel
+          (<code>contentPane</code>).</para>
         </listitem>
 
         <listitem>
           <para>Introduce your own new components for reccurring composite
           visual blocks in your application by derivating from the standard
           components. Examples might be specially styled components or
-          repeating groups of component. You will save time, and your look
-          and feel will be consistent.</para>
+          repeating groups of component. You will save time, and your look and
+          feel will be consistent.</para>
         </listitem>
 
         <listitem>
@@ -942,8 +950,9 @@ frameset.setVisible(true);</programlisting>
                 of this component. It is initially set on demand but can be
                 overwritten with custom values. This name will also appear
                 inside the generated HTML code, hence it must contain only a
-                restricted set of characters. The name must be unique throughout
-                the session! Otherwise event dispatching won't work consistently.</entry>
+                restricted set of characters. The name must be unique
+                throughout the session! Otherwise event dispatching won't work
+                consistently.</entry>
               </row>
 
               <row>
@@ -983,13 +992,14 @@ frameset.setVisible(true);</programlisting>
               <row>
                 <entry><code>get/setBorder()</code></entry>
 
-                <entry>Apply a border. Gives components a border and/ or applies
-                insets. Besides the well known types <code>SLineBorder</code>,
-                <code>SEtchedBorder</code>, etc. there is the <code>SDefaultBorder</code>,
-                that components have attached by default. It makes the component appear,
-                as defined in the stylesheet (see <xref linkend="css-styles" />). If the
-                border property is set to null, there will be no border and no insets and
-                the rules in the stylesheet have no affect.</entry>
+                <entry>Apply a border. Gives components a border and/ or
+                applies insets. Besides the well known types
+                <code>SLineBorder</code>, <code>SEtchedBorder</code>, etc.
+                there is the <code>SDefaultBorder</code>, that components have
+                attached by default. It makes the component appear, as defined
+                in the stylesheet (see <xref linkend="css-styles" />). If the
+                border property is set to null, there will be no border and no
+                insets and the rules in the stylesheet have no affect.</entry>
               </row>
 
               <row>
@@ -1023,8 +1033,9 @@ frameset.setVisible(true);</programlisting>
                 panel or similar component: This achieves that the component
                 is stretched by the browser as far as possible to take up the
                 full available width. Please be aware that the rendering
-                result may vary depending on the browser. This is especially the
-                case for relative vertical dimensions (FULLHEIGHT).</entry>
+                result may vary depending on the browser. This is especially
+                the case for relative vertical dimensions
+                (FULLHEIGHT).</entry>
               </row>
 
               <row>
@@ -1057,19 +1068,21 @@ frameset.setVisible(true);</programlisting>
                 <entry><code>get/setShowAsFormComponent()</code></entry>
 
                 <entry>The value of this property influences the <emphasis
-                role="bold">technical representation of some components</emphasis>
-                and the <emphasis role="bold">submit behaviour of most
-                components</emphasis>. For example, an SList is either rendered
-                as a select tag or as an unordered list (ul) of links. For most
-                components, this decides only, if the whole form will be sumbitted
-                on click or if the form content gets lost and a GET request will be
-                sent. HTML Check boxes are only rendered in browsers if you nest
-                them inside a HTML <code>&lt;FORM&gt;</code> element. Therefore
-                wingS will render them as clickable images if it is not contained
-                in an <code>SForm</code>. You can achieve the same behaviour inside
-                forms on setting this value to <code>false</code>. A very common usage
-                of this property is to force <code>SButton</code> to appear as
-                text links and not browser submit buttons inside forms.</entry>
+                role="bold">technical representation of some
+                components</emphasis> and the <emphasis role="bold">submit
+                behaviour of most components</emphasis>. For example, an SList
+                is either rendered as a select tag or as an unordered list
+                (ul) of links. For most components, this decides only, if the
+                whole form will be sumbitted on click or if the form content
+                gets lost and a GET request will be sent. HTML Check boxes are
+                only rendered in browsers if you nest them inside a HTML
+                <code>&lt;FORM&gt;</code> element. Therefore wingS will render
+                them as clickable images if it is not contained in an
+                <code>SForm</code>. You can achieve the same behaviour inside
+                forms on setting this value to <code>false</code>. A very
+                common usage of this property is to force <code>SButton</code>
+                to appear as text links and not browser submit buttons inside
+                forms.</entry>
               </row>
 
               <row>
@@ -2121,10 +2134,10 @@ public Class getColumnClass(int column) {
               </mediaobject>
             </screenshot>
 
-              <para>Beware that the checkbox is readonly. Clicking it will not update
-              the table model. Making cells editable is the job of a cell editor.
-              Look at the wingSet Table example and XTable example to learn more
-              about editable tables.</para>
+            <para>Beware that the checkbox is readonly. Clicking it will not
+            update the table model. Making cells editable is the job of a cell
+            editor. Look at the wingSet Table example and XTable example to
+            learn more about editable tables.</para>
           </sect4>
 
           <sect4>
@@ -2444,11 +2457,12 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
                 never.</entry>
               </row>
 
-                <row>
-                  <entry><code>mode</code></entry>
+              <row>
+                <entry><code>mode</code></entry>
 
-                  <entry>Sets the scroll mode. See below for supported options.</entry>
-                </row>
+                <entry>Sets the scroll mode. See below for supported
+                options.</entry>
+              </row>
 
               <row>
                 <entry nameend="col2" namest="col1"><code>SAdjustable</code>
@@ -2485,52 +2499,56 @@ form.add(new SScrollPane(table)); // wrap in a scrollpane</programlisting>
           </tgroup>
         </table>
 
-          <para>The scrollpane distinguishes three different scroll modes:</para>
+        <para>The scrollpane distinguishes three different scroll
+        modes:</para>
 
-            <table frame="topbot" pgwide="0">
-              <title>Scroll modes</title>
+        <table frame="topbot" pgwide="0">
+          <title>Scroll modes</title>
 
-              <tgroup cols="3">
-                <colspec colwidth="1*" />
+          <tgroup cols="2">
+            <colspec colwidth="1*" />
 
-                <colspec colwidth="2*" />
+            <colspec colwidth="2*" />
 
-                <thead>
-                  <row>
-                    <entry>Mode</entry>
+            <thead>
+              <row>
+                <entry>Mode</entry>
 
-                    <entry>Behaviour</entry>
-                  </row>
-                </thead>
+                <entry>Behaviour</entry>
+              </row>
+            </thead>
 
-                <tbody>
-                  <row>
-                    <entry>COMPLETE</entry>
+            <tbody>
+              <row>
+                <entry>COMPLETE</entry>
 
-                    <entry>The whole scrollable viewport of the scrollable is rendered.
-                    Give it a preferred size! It will be rendered as a scrollable div
-                    (overflow: auto), that requires a defined size.</entry>
-                  </row>
+                <entry>The whole scrollable viewport of the scrollable is
+                rendered. Give it a preferred size! It will be rendered as a
+                scrollable div (overflow: auto), that requires a defined
+                size.</entry>
+              </row>
 
-                  <row>
-                    <entry>SCROLLING</entry>
+              <row>
+                <entry>SCROLLING</entry>
 
-                    <entry>Only the portion defined by the extents will be rendered. The
-                    scrollbar's extent spans exactly the scrollable's scrollable viewport.
-                    Use it in combination with the standard <code>SScrollBar</code>.</entry>
-                  </row>
-                    <row>
-                      <entry>PAGING</entry>
+                <entry>Only the portion defined by the extents will be
+                rendered. The scrollbar's extent spans exactly the
+                scrollable's scrollable viewport. Use it in combination with
+                the standard <code>SScrollBar</code>.</entry>
+              </row>
 
-                      <entry>Only the portion defined by the extents will be rendered. The
-                      scrollbar's extent is the first multiple of the respective scrollpane extent,
-                      that covers the scrollable viewport. Use it in combination with the
-                      <code>SPageScroller</code>.</entry>
-                    </row>
-                </tbody>
+              <row>
+                <entry>PAGING</entry>
 
-            </tgroup>
-          </table>
+                <entry>Only the portion defined by the extents will be
+                rendered. The scrollbar's extent is the first multiple of the
+                respective scrollpane extent, that covers the scrollable
+                viewport. Use it in combination with the
+                <code>SPageScroller</code>.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
 
         <para>Using these properties we know how to modify our scroller in the
         previous example to achieve a paged view as i.e. known from popular
@@ -2613,6 +2631,89 @@ form.add(testLabel);</programlisting>
             </imageobject>
           </mediaobject>
         </screenshot>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title id="ajax-components">AJAX-based componets</title>
+
+      <sect2>
+        <title>Prerequisites</title>
+
+        <para>Besides the AJAX based incremental update feature contained in
+        wingS, some components use also AJAX mechanism to provide a better and
+        smoother user expierience. Those components use the DWR library as
+        communication mechanism. Currently these are namely:</para>
+
+        <para><itemizedlist>
+            <listitem>
+              <para>SFormattedTextField</para>
+            </listitem>
+
+            <listitem>
+              <para>XCalendar </para>
+            </listitem>
+
+            <listitem>
+              <para>XColorPicker </para>
+            </listitem>
+
+            <listitem>
+              <para>XInplaceEditor </para>
+            </listitem>
+
+            <listitem>
+              <para>XSuggest </para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para>Please ensure that your web.xml contain the following
+        declaration of the DWR servlet, so that they work properly:</para>
+
+        <programlisting>&lt;servlet&gt;
+   &lt;servlet-name&gt;dwr-invoker&lt;/servlet-name&gt;
+   &lt;display-name&gt;DWR Servlet&lt;/display-name&gt;
+   &lt;description&gt;Direct Web Remoter Servlet&lt;/description&gt;
+   &lt;servlet-class&gt;org.directwebremoting.servlet.DwrServlet&lt;/servlet-class&gt;
+   &lt;init-param&gt;
+     &lt;param-name&gt;debug&lt;/param-name&gt;
+     &lt;param-value&gt;true&lt;/param-value&gt;
+     &lt;description&gt;Do we startup in debug/test mode?&lt;/description&gt;
+   &lt;/init-param&gt;
+   &lt;init-param&gt;
+     &lt;param-name&gt;logLevel&lt;/param-name&gt;
+     &lt;param-value&gt;DEBUG&lt;/param-value&gt;
+     &lt;description&gt;How verbose do we want logging to be?&lt;/description&gt;
+   &lt;/init-param&gt;
+   &lt;init-param&gt;
+     &lt;param-name&gt;org.directwebremoting.extend.CreatorManager&lt;/param-name&gt;
+     &lt;param-value&gt;org.wings.plaf.css.dwr.SessionCreatorManager&lt;/param-value&gt;
+     &lt;description&gt;Install a session local CreatorManager&lt;/description&gt;
+   &lt;/init-param&gt;
+   &lt;init-param&gt;
+     &lt;param-name&gt;org.directwebremoting.extend.AccessControl&lt;/param-name&gt;
+     &lt;param-value&gt;org.wings.plaf.css.dwr.SessionAccessControl&lt;/param-value&gt;
+     &lt;description&gt;Install a session local AccessControl&lt;/description&gt;
+   &lt;/init-param&gt;
+   &lt;init-param&gt;
+     &lt;param-name&gt;org.directwebremoting.extend.Remoter&lt;/param-name&gt;
+     &lt;param-value&gt;org.wings.plaf.css.dwr.SessionRemoter&lt;/param-value&gt;
+     &lt;description&gt;Install a session local Remoter&lt;/description&gt;
+   &lt;/init-param&gt;
+   &lt;load-on-startup&gt;-1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+   &lt;servlet-name&gt;dwr-invoker&lt;/servlet-name&gt;
+   &lt;url-pattern&gt;/dwr/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</programlisting>
+
+        <para>this is because DWR calls are handled by a separate servlet, the
+        <code>DwrServlet</code>, which needs to be configured accordingly
+        (with another <code>&lt;servlet&gt;</code> and
+        <code>&lt;servlet-mapping&gt;</code> section). You can integrate and
+        write your own components if required and use the DWR communcation
+        mechanism.</para>
       </sect2>
     </sect1>
 
@@ -2781,12 +2882,11 @@ form.add(testLabel);</programlisting>
       time.</para>
 
       <para>If using relative preferred sizes, please understand, how layout
-      calculations are performed in the browser. If you give an element 100% width
-      or height, this is 100% of the <emphasis>available</emphasis> space. A
-      typical desktop layout, that spans the whole browser window requires, that
-      all containers, starting from the frame's content pane, have a preferred size
-      of <code>SDimension.FULLAREA</code>.
-      </para>
+      calculations are performed in the browser. If you give an element 100%
+      width or height, this is 100% of the <emphasis>available</emphasis>
+      space. A typical desktop layout, that spans the whole browser window
+      requires, that all containers, starting from the frame's content pane,
+      have a preferred size of <code>SDimension.FULLAREA</code>.</para>
 
       <sect2 id="SwingLayoutManager">
         <title>Swing-like Layout Managers</title>
@@ -2958,10 +3058,10 @@ flowPanel.add(new SLabel("Component 3"));
           inside a flow layout you'll notice that your components won't flow
           anymore. This is just because in this case the sized component will
           adapt the available width rather than the flow layout being able to
-          know that it should use the available space. A similar effect can happen on put a flow layout managed
-          container together with other components inside a parent container.
-          Some components will take up a minimum width though it may
-          visibility not be apparent.</para>
+          know that it should use the available space. A similar effect can
+          happen on put a flow layout managed container together with other
+          components inside a parent container. Some components will take up a
+          minimum width though it may visibility not be apparent.</para>
 
           <para>So just in case you encounter problems with non-flowing flow
           layouts try to play with the preferred sizes of the surrounding or
@@ -3327,19 +3427,19 @@ cardLayout.last(stackedPanel);
             <para>Thus every component has its root element. Typically this
             element wears the <code>id</code> attribute with the component's
             name and a <code>class</code> attribute with the component's
-            style. The style defaults to the component's simple class name.</para>
+            style. The style defaults to the component's simple class
+            name.</para>
           </listitem>
         </itemizedlist>
 
         <para>The id and the style class make the component addressable by
         means of CSS rules. You can alter the style property using the
-        <code>setStyle()</code> method of <code>SComponent</code>. Please
-        be aware that most of the wingS default styles operate on the
-        default CSS class, so this will probably have the effect that this
-        component loses most of its wingS default styling. If you want to
-        keep the default style and just assign additional CSS class, the
-        just append your CSS class name to the existing ones separated by
-        a space character.</para>
+        <code>setStyle()</code> method of <code>SComponent</code>. Please be
+        aware that most of the wingS default styles operate on the default CSS
+        class, so this will probably have the effect that this component loses
+        most of its wingS default styling. If you want to keep the default
+        style and just assign additional CSS class, the just append your CSS
+        class name to the existing ones separated by a space character.</para>
 
         <para>So below you'll just find a short example HTML fragment of the
         WingSet demo illustrating the described patterns</para>
@@ -3361,15 +3461,16 @@ cardLayout.last(stackedPanel);
         on generic HTML attributes (i.e. <code>IMG</code>) as well as on the
         default CSS class names (i.e. <code>SButton).</code></para>
 
-        <para>As next the static style sheets you optionally attached to
-        the root frame are declared. As this CSS file is declared as last one,
+        <para>As next the static style sheets you optionally attached to the
+        root frame are declared. As this CSS file is declared as last one,
         your customized value will win by default against equal-prioritized
         declarations from the default style sheet.</para>
 
-        <para>Last, the dynamic styles of the components (<code>setAttribute()</code>
-        but also <code>setForground()</code>, <code>setBorder()</code>, etc.) are
-        rendered as inline styles in the page. They will override the definitions of
-        all attached stylesheets.</para>
+        <para>Last, the dynamic styles of the components
+        (<code>setAttribute()</code> but also <code>setForground()</code>,
+        <code>setBorder()</code>, etc.) are rendered as inline styles in the
+        page. They will override the definitions of all attached
+        stylesheets.</para>
       </sect2>
 
       <sect2>
@@ -3377,10 +3478,10 @@ cardLayout.last(stackedPanel);
 
         <para>The default wingS distribution contains different style sheets
         mainly for two browsers: One specialized for the Microsoft Internet
-        explorer and one for all standard conform browsers (FireFox,
-        Mozilla, Konqueror). The special style sheet for the Microsoft stuff is
-        only necessary as IE 6 still lacks on standard functionalities like
-        CSS child selectors but on the other side requires really a quite huge
+        explorer and one for all standard conform browsers (FireFox, Mozilla,
+        Konqueror). The special style sheet for the Microsoft stuff is only
+        necessary as IE 6 still lacks on standard functionalities like CSS
+        child selectors but on the other side requires really a quite huge
         workaround for all the curious effects it 'features'.</para>
 
         <para>You can find those default CSS style sheets in the wingS
@@ -3401,10 +3502,10 @@ cardLayout.last(stackedPanel);
         <para>By default, a <code>border.DefaultBorder</code> is applied to
         all components. This special border renders no inline attributes. Thus
         the styles as defined in the stylesheet(s) take effect. If another
-        border is set, that border's style attributes are rendered as an inline
-        style attribute and override the stylesheet definition. If the border is
-        set to <code>null</code>, an inline style with no border and no padding
-        is written.</para>
+        border is set, that border's style attributes are rendered as an
+        inline style attribute and override the stylesheet definition. If the
+        border is set to <code>null</code>, an inline style with no border and
+        no padding is written.</para>
       </sect2>
 
       <sect2>
@@ -3522,8 +3623,8 @@ Session sameSession = aComponent.getSession();</programlisting>
         user at various time during application runtime. So you would use the
         session to store the user after successful login and use getters to
         retrieve it from the session again. There is a utility class
-        <code>SessionLocal</code> for typesafe access to session properties.
-        </para>
+        <code>SessionLocal</code> for typesafe access to session
+        properties.</para>
 
         <programlisting>static final SessionLocal&lt;String&gt; userid = new SessionLocal&lt;String&gt;();
 
@@ -3540,9 +3641,9 @@ Session sameSession = aComponent.getSession();</programlisting>
         current used <emphasis role="bold">character encoding</emphasis> for
         the communication with the browser (Default: UTF-8), the current
         session <emphasis role="bold">Locale</emphasis>, informations about
-        the <emphasis role="bold">browser</emphasis>, an object
-        describing some <emphasis role="bold">session statistics</emphasis>
-        like request count and average response time and the current <emphasis
+        the <emphasis role="bold">browser</emphasis>, an object describing
+        some <emphasis role="bold">session statistics</emphasis> like request
+        count and average response time and the current <emphasis
         role="bold">servlet context, HTTP request</emphasis> and <emphasis
         role="bold">HTTP response</emphasis> objects.</para>
 
