@@ -3,7 +3,6 @@ package desktop;
 import java.io.IOException;
 
 import org.wings.SComponent;
-import org.wings.SDesktopPane;
 import org.wings.SDimension;
 import org.wings.SInternalFrame;
 import org.wings.io.Device;
@@ -11,6 +10,8 @@ import org.wings.plaf.css.AbstractComponentCG;
 
 public class DpCG extends AbstractComponentCG implements org.wings.plaf.DesktopPaneCG  {
 
+	private static final long serialVersionUID = 1L;
+	
 	 public void installCG(SComponent component) {
 	        super.installCG(component);
 	        component.setPreferredSize(SDimension.FULLWIDTH);
@@ -37,7 +38,7 @@ public class DpCG extends AbstractComponentCG implements org.wings.plaf.DesktopP
         		}
         	}
         }
-
+        
         if (!maximized) {
             for (int i = 0; i < componentCount; i++) {
             	if(desktop.getComponent(i) instanceof SInternalFrame){
@@ -46,12 +47,16 @@ public class DpCG extends AbstractComponentCG implements org.wings.plaf.DesktopP
             			frame.write(device);
             		}
             	}
-            	else if(desktop.getComponent(i) instanceof DropLabel){
-            		DropLabel label = (DropLabel)desktop.getComponent(i);
-            		label.write(device);
-            	}
             }
         }
+        
+        for (int i = 0; i < componentCount; i++){
+        	if(desktop.getComponent(i) instanceof DropLabel){
+        		DropLabel label = (DropLabel)desktop.getComponent(i);
+        		label.write(device);
+        	}
+        }
+        
         device.print("<div class=\"spacer\"></div>");
 
         writeDivSuffix(device, desktop);
