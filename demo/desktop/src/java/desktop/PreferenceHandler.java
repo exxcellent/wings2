@@ -20,6 +20,7 @@ import javax.servlet.http.Cookie;
 public class PreferenceHandler {
 	
 	private static PreferenceHandler handler;
+	private static String COOKIE_NAME = "PreferencesCookie";
 	private Preferences pref;
 	private static String PANE_SUFFIX ="desktoppanes";
 	private static String ITEM_SUFFIX = "desktopitems";
@@ -31,53 +32,80 @@ public class PreferenceHandler {
 	private PreferenceHandler(){
 		//rootPref = new DesktopPreferences(null, "");
 		rootPref = Preferences.userNodeForPackage(this.getClass());
-		try{
-			InputStream is = new BufferedInputStream(new FileInputStream("desktop.xml"));
-			rootPref.importPreferences(is);
-			userID = rootPref.getInt(NEXT_FREE_USER_ID, 0);
-		}catch(Exception ex){ex.printStackTrace();}
+		
+		File configFile = new File("desktop.xml");
+		if(configFile.exists()){
+			try{
+				rootPref.importPreferences(new FileInputStream(configFile));
+				userID = rootPref.getInt(NEXT_FREE_USER_ID, 0);
+			}catch(Exception ex){ex.printStackTrace();}
+		}
 				
 		pref = rootPref.node("temp");
 	}
 	
-	public boolean cookieExists(){
-		Cookie[] cookies = org.wings.session.SessionManager.getSession().getServletRequest().getCookies();
-		boolean cookieExists = false;
+	public boolean returningUser(){
+		HttpServletRequest request = org.wings.session.SessionManager.getSession().getServletRequest();
+		boolean isReturning = false;
 		
-		for(int i=0; i< cookies.length; i++){
-			if(cookies[i].getName().equals("DesktopDemoCookie")){
-				pref = rootPref.node(cookies[i].getValue());
+		if(request.getUserPrincipal()!= null && request.getUserPrincipal().getName()!= null){
+			String userName = request.getUserPrincipal().getName();
+			pref = rootPref.node(userName);
+			File file = new File(userName + ".xml");
+			if(file.exists()){
+				isReturning = true;
 				try{
-					InputStream is = new BufferedInputStream(new FileInputStream(pref.name() + ".xml"));
-					pref.importPreferences(is);
+					pref.importPreferences(new FileInputStream(file));
 				}catch(Exception ex){ex.printStackTrace();}
+			}
+			else
+				pref = rootPref.node(userName);
+		}
+		else{
+			Cookie[] cookies = request.getCookies();
+			for(int i=0; i< cookies.length; i++){
+				if(cookies[i].getName().equals(COOKIE_NAME)){
+					pref = rootPref.node(cookies[i].getValue());
+					File file = new File(pref.name() + ".xml");
+					if(file.exists()){
+						try{
+							InputStream is = new BufferedInputStream(new FileInputStream(file));
+							pref.importPreferences(is);
+						}catch(Exception ex){ex.printStackTrace();}
+					}
+					else{
+						isReturning = false;
+						break;
+					}
+					
+					isReturning = true;
+					break;
+				}
+			}
+			
+			if(!isReturning){
+				pref = rootPref.node(userID.toString());
+				Cookie cookie= new Cookie(COOKIE_NAME, ((Integer)rootPref.getInt(NEXT_FREE_USER_ID, 0)).toString());
 				
-				cookieExists = true;
-				break;
+				
+				cookie.setMaxAge(1000000000);
+				org.wings.session.SessionManager.getSession().getServletResponse().addCookie(cookie);
+				userID++;
+				rootPref.putInt(NEXT_FREE_USER_ID, userID);
+				
+				try{
+					OutputStream os = new BufferedOutputStream(new FileOutputStream("desktop.xml"));
+					rootPref.exportNode(os);
+				}catch(Exception ex){ex.printStackTrace();}
 			}
 		}
-		
-		if(!cookieExists){
-			pref = rootPref.node(userID.toString());
-			Cookie cookie= new Cookie("DesktopDemoCookie", ((Integer)rootPref.getInt(NEXT_FREE_USER_ID, 0)).toString());
-			
-			
-			cookie.setMaxAge(1000000000);
-			org.wings.session.SessionManager.getSession().getServletResponse().addCookie(cookie);
-			userID++;
-			rootPref.putInt(NEXT_FREE_USER_ID, userID);
-			
-			try{
-				OutputStream os = new BufferedOutputStream(new FileOutputStream("desktop.xml"));
-				rootPref.exportNode(os);
-			}catch(Exception ex){ex.printStackTrace();}
-		}
+				
 		
 		pref.addNodeChangeListener(new DesktopNodeChangeListener());
 		
 		pref.addPreferenceChangeListener(new DesktopPreferenceChangeListener());
 		
-		return cookieExists;
+		return isReturning;
 	}
 	
 	public static PreferenceHandler getPreferenceHandler(){

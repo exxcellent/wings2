@@ -56,7 +56,7 @@ public class Desktop
         frame.setVisible(true);
         SContainer contentPane = frame.getContentPane();
         
-        if(prefHandler.cookieExists()){
+        if(prefHandler.returningUser()){
     	   SOptionPane.showYesNoDialog(frame,"Do you want to reload your old state?", "Reload old state?", new ActionListener(){
     		   public void actionPerformed(ActionEvent evt) {
     			   if(evt.getActionCommand() == SOptionPane.YES_ACTION)
