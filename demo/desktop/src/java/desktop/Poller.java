@@ -43,7 +43,7 @@ public class Poller extends Timer{
 			this.scheduleAtFixedRate(pt, 0, pollingInterval);
 		}
 		//run the poller immediately to have the feeds filled at startup
-		pt.run();
+		//pt.run();
 	}
 	
 	public synchronized void unregisterFeedUpdatedListener(String url, FeedUpdatedListener listener){
@@ -116,6 +116,7 @@ public class Poller extends Timer{
 							listener.getSession().getDispatcher().invokeLater(new FeedUpdatedEvent(feed, listener));
 					}
 				}
+			System.out.println("Finished polling");	
 			}catch(java.net.MalformedURLException e1){
 				System.out.println("MalformedURLException");
 				e1.printStackTrace();

@@ -100,6 +100,7 @@ public class DesktopPane extends SDesktopPane {
 		Preferences p = PreferenceHandler.getPreferenceHandler().getItemPreferences();
 		p.node((String)contentItem.getValue(DesktopItem.KEY)).put(DesktopItem.DESKTOPPANE, this.getName());
 		p.node((String)contentItem.getValue(DesktopItem.KEY)).putInt(DesktopItem.POSITION_ON_PANE, getComponentList().size() -1);
+		
 		this.add(newFrame, getComponentList().size() -1);
 		
 		try {
@@ -116,10 +117,13 @@ public class DesktopPane extends SDesktopPane {
                         }
                     }
                 });
+        	
+        	pref.flush();
         }
         catch (Exception e) {
             System.err.println(e);
         }
+        
 	}
 	
 	public void addExistingDesktopItem(DesktopItem contentItem){
@@ -141,6 +145,8 @@ public class DesktopPane extends SDesktopPane {
                         }
                     }
                 });
+        	
+        	pref.flush();
         }
         catch (Exception e) {
             System.err.println(e);

@@ -53,8 +53,8 @@ public abstract class AbstractDesktopItem implements DesktopItem {
 	protected AbstractDesktopItem(String name){
 		
 		prefHandler = PreferenceHandler.getPreferenceHandler();
-		pref = prefHandler.getItemPreferences().node("desktopitem" + itemNo.get().toString());
-		putValue(KEY, name);
+		pref = prefHandler.getItemPreferences().node(name);
+		this.putValue(KEY, name);
 		addPropertyChangeListener(new PropertyChangeListener(){
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName() == NAME){
@@ -88,6 +88,13 @@ public abstract class AbstractDesktopItem implements DesktopItem {
 			pref.putLong(key, (Long)value);
 		else if(value instanceof Float)
 			pref.putFloat(key, (Float)value);
+		
+		try{
+			pref.flush();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -125,6 +132,7 @@ public abstract class AbstractDesktopItem implements DesktopItem {
 	public void destroyed(){
 		try{
 			pref.removeNode();
+			//pref.flush();
 		}catch(BackingStoreException ex){
 			ex.printStackTrace();
 		}

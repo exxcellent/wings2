@@ -56,7 +56,8 @@ public class Desktop
         frame.setVisible(true);
         SContainer contentPane = frame.getContentPane();
         
-        if(prefHandler.returningUser()){
+       if(prefHandler.returningUser()){
+    	   
     	   SOptionPane.showYesNoDialog(frame,"Do you want to reload your old state?", "Reload old state?", new ActionListener(){
     		   public void actionPerformed(ActionEvent evt) {
     			   if(evt.getActionCommand() == SOptionPane.YES_ACTION)
@@ -70,12 +71,12 @@ public class Desktop
         	createNew(contentPane);
         
         frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../desktop.css")));
-        
+        flushPreferences();
         frame.show();
     }
     
     private void createNew(SContainer contentPane){
-    	    	
+    	  	
     	try{
     		for(String name: prefHandler.getUserRootPreference().childrenNames()){
     			prefHandler.getUserRootPreference().node(name).removeNode();
@@ -340,6 +341,7 @@ public class Desktop
         		panes.put(newPane.getName(), newPane);
                 contentPane.add(newPane, c);
                 prefHandler.getPanePreferences().node(newPane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
+                flushPreferences();
                 
         	}});
         
@@ -515,6 +517,7 @@ public class Desktop
         		});
         		        		
         		optionPane.showInput(frame, "Resize Desktop Panes", inputPanel, "Resize Desktop Panes");
+        		flushPreferences();
         	}
         });
         
@@ -537,6 +540,14 @@ public class Desktop
      */
     public String getServletInfo() {
         return "Desktop ($Revision$)";
+    }
+    
+    private void flushPreferences(){
+    	try{
+    		prefHandler.getUserRootPreference().flush();
+    	}catch(Exception ex){
+    		ex.printStackTrace();
+    	}
     }
     
    

@@ -121,6 +121,7 @@ implements SInternalFrameListener, DragSource, DropTarget, ItemContainer{
 	public void destroy() {
 		item.destroyed();
 		dispose();
+		
 	}
 
 	
