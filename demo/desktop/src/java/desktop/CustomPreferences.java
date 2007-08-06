@@ -6,17 +6,9 @@
  */
 
 package desktop;
-import java.util.*;
-import java.io.*;
-import java.util.logging.Logger;
-import java.util.prefs.Preferences;
-import java.util.prefs.AbstractPreferences;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.InvalidPreferencesFormatException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedExceptionAction;
-import java.security.PrivilegedActionException;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,10 +16,10 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.prefs.*;
 
 
 /**
@@ -40,12 +32,14 @@ import org.w3c.dom.NodeList;
  * reasonable behavior when multiple VMs are running at the same time.
  * (The file lock is obtained only for sync(), flush() and removeNode().)
  *
- * @author  Josh Bloch
+ * @author Josh Bloch
  * @version 1.21, 11/17/05
- * @see     Preferences
- * @since   1.4
+ * @see Preferences
+ * @since 1.4
  */
-public class CustomPreferences extends java.util.prefs.AbstractPreferences {
+public class CustomPreferences
+    extends java.util.prefs.AbstractPreferences
+{
 
     /**
      * Returns logger for error messages. Backing store exceptions are logged at
@@ -70,9 +64,8 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      */
     private static File userRootDir;
 
-    
 
-   /**
+    /**
      * The user root.
      */
     static Preferences userRoot = null;
@@ -89,43 +82,33 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
         userRootDir = new File("./Prefs/user/");
 //                      new File(System.getProperty("java.util.prefs.userRoot",
 //                      System.getProperty("user.home")), ".java/.userPrefs");
-                // Attempt to create root dir if it does not yet exist.
+        // Attempt to create root dir if it does not yet exist.
         if (!userRootDir.exists()) {
-        	if (userRootDir.mkdirs()) {
-                    	
-        		userRootDir.setReadable(true);
-                userRootDir.setWritable(true);
-                userRootDir.setExecutable(true);
-                        
-                    	
+            if (userRootDir.mkdirs()) {
+
                 getLogger().info("Created user preferences directory.");
             }
             else
-            	getLogger().warning("Couldn't create user preferences" +
-                        " directory. User preferences are unusable.");
-        }else{
-        	userRootDir.setReadable(true);
-            userRootDir.setWritable(true);
-            userRootDir.setExecutable(true);
+                getLogger().warning("Couldn't create user preferences" +
+                    " directory. User preferences are unusable.");
         }
-                
-               
-                String USER_NAME = System.getProperty("user.name");
-                userLockFile = new File (userRootDir,".user.lock." + USER_NAME);
-                userRootModFile = new File (userRootDir,
-                                               ".userRootModFile." + USER_NAME);
-                if (!userRootModFile.exists())
-                try {
-                    // create if does not exist.
-                    userRootModFile.createNewFile();
-                    
-                } catch (IOException e) {
-                    getLogger().warning(e.toString());
-                }
-                userRootModTime = userRootModFile.lastModified();
-               
-            
-        
+
+        String USER_NAME = System.getProperty("user.name");
+        userLockFile = new File(userRootDir, ".user.lock." + USER_NAME);
+        userRootModFile = new File(userRootDir,
+                                   ".userRootModFile." + USER_NAME);
+        if (!userRootModFile.exists())
+            try {
+                // create if does not exist.
+                userRootModFile.createNewFile();
+
+            }
+            catch (IOException e) {
+                getLogger().warning(e.toString());
+            }
+        userRootModTime = userRootModFile.lastModified();
+
+
     }
 
 
@@ -144,52 +127,52 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
 
     private static void setupSystemRoot() {
         String systemPrefsDirName = "./Prefs/system/";
-        	
-        	//(String)System.getProperty("java.util.prefs.systemRoot","/etc/.java");
-        
+
+        //(String)System.getProperty("java.util.prefs.systemRoot","/etc/.java");
+
         systemRootDir = new File(systemPrefsDirName);//, ".systemPrefs");
         // Attempt to create root dir if it does not yet exist.
         //if (!systemRootDir.exists()) {
-        	// system root does not exist in /etc/.java
-            // Switching  to java.home
-            //systemRootDir = new File(System.getProperty("java.home"),".systemPrefs");
-            if (!systemRootDir.exists()) {
-            	if (systemRootDir.mkdirs()) {
-            		getLogger().info(
-            				"Created system preferences directory "
-                            + "in " + systemPrefsDirName);
-                           
-                        } else {
-                            getLogger().warning("Could not create "
-                                + "system preferences directory. System "
-                                + "preferences are unusable.");
-                        }
-                    
-                }
-                isSystemRootWritable = systemRootDir.canWrite();
-                systemLockFile = new File(systemRootDir, ".system.lock");
-                systemRootModFile =
-                               new File (systemRootDir,".systemRootModFile");
-                if (!systemRootModFile.exists() && isSystemRootWritable)
-                try {
-                    // create if does not exist.
-                    systemRootModFile.createNewFile();
-                    
-                } catch (IOException e) { getLogger().warning(e.toString());
-                }
-                systemRootModTime = systemRootModFile.lastModified();
-                
-           
-        
+        // system root does not exist in /etc/.java
+        // Switching  to java.home
+        //systemRootDir = new File(System.getProperty("java.home"),".systemPrefs");
+        if (!systemRootDir.exists()) {
+            if (systemRootDir.mkdirs()) {
+                getLogger().info(
+                    "Created system preferences directory "
+                        + "in " + systemPrefsDirName);
+
+            }
+            else {
+                getLogger().warning("Could not create "
+                    + "system preferences directory. System "
+                    + "preferences are unusable.");
+            }
+
+        }
+        isSystemRootWritable = systemRootDir.canWrite();
+        systemLockFile = new File(systemRootDir, ".system.lock");
+        systemRootModFile =
+            new File(systemRootDir, ".systemRootModFile");
+        if (!systemRootModFile.exists() && isSystemRootWritable)
+            try {
+                // create if does not exist.
+                systemRootModFile.createNewFile();
+
+            }
+            catch (IOException e) {
+                getLogger().warning(e.toString());
+            }
+        systemRootModTime = systemRootModFile.lastModified();
+
+
     }
 
 
-   
     /**
      * The lock file for the user tree.
      */
     static File userLockFile;
-
 
 
     /**
@@ -197,7 +180,7 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      */
     static File systemLockFile;
 
-    
+
     /**
      * The directory representing this preference node.  There is no guarantee
      * that this directory exits, as another VM can delete it at any time
@@ -227,7 +210,7 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
     /**
      * File, which keeps track of global modifications of userRoot.
      */
-    private static  File userRootModFile;
+    private static File userRootModFile;
 
     /**
      * Flag, which indicated whether userRoot was modified by another VM
@@ -265,7 +248,7 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      * corresponding disk file (prefsFile) by the sync operation.  The initial
      * value is read *without* acquiring the file-lock.
      */
-    private Map<String,String> prefsCache = null;
+    private Map<String, String> prefsCache = null;
 
     /**
      * The last modification time of the file backing this node at the time
@@ -278,7 +261,7 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      */
     private long lastSyncTime = 0;
 
-   
+
     /**
      * A list of all uncommitted preference changes.  The elements in this
      * list are of type PrefChange.  If this node is concurrently modified on
@@ -293,17 +276,22 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
     /**
      * Represents a change to a preference.
      */
-    private abstract class Change {
+    private abstract class Change
+    {
         /**
          * Reapplies the change to prefsCache.
          */
         abstract void replay();
-    };
+    }
+
+    ;
 
     /**
      * Represents a preference put.
      */
-    private class Put extends Change {
+    private class Put
+        extends Change
+    {
         String key, value;
 
         Put(String key, String value) {
@@ -319,7 +307,9 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
     /**
      * Represents a preference remove.
      */
-    private class Remove extends Change {
+    private class Remove
+        extends Change
+    {
         String key;
 
         Remove(String key) {
@@ -334,7 +324,9 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
     /**
      * Represents the creation of this node.
      */
-    private class NodeCreate extends Change {
+    private class NodeCreate
+        extends Change
+    {
         /**
          * Performs no action, but the presence of this object in changeLog
          * will force the node and its ancestors to be made permanent at the
@@ -353,7 +345,7 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      * Replay changeLog against prefsCache.
      */
     private void replayChanges() {
-        for (int i = 0, n = changeLog.size(); i<n; i++)
+        for (int i = 0, n = changeLog.size(); i < n; i++)
             ((Change)changeLog.get(i)).replay();
     }
 
@@ -392,21 +384,21 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      * will only be called twice, by the static initializer.
      */
     private CustomPreferences(boolean user) {
-    	super(null, "");
+        super(null, "");
         isUserNode = user;
-        dir = (user ? userRootDir: systemRootDir);
-        
+        dir = (user ? userRootDir : systemRootDir);
+
         prefsFile = new File(dir, "prefs.xml");
-        
-        tmpFile   = new File(dir, "prefs.tmp");
-        
+
+        tmpFile = new File(dir, "prefs.tmp");
+
         if (newNode) {
             // These 2 things guarantee node will get wrtten at next flush/sync
             prefsCache = new TreeMap();
             nodeCreate = new NodeCreate();
             changeLog.add(nodeCreate);
         }
-   }
+    }
 
     /**
      * Construct a new FileSystemPreferences instance with the specified
@@ -416,20 +408,20 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
     private CustomPreferences(CustomPreferences parent, String name) {
         super(parent, name);
         isUserNode = parent.isUserNode;
-        dir  = new File(parent.dir, name);
+        dir = new File(parent.dir, name);
         prefsFile = new File(dir, "prefs.xml");
-        tmpFile  = new File(dir, "prefs.tmp");
+        tmpFile = new File(dir, "prefs.tmp");
         newNode = !dir.exists();
         //this.initCacheIfNecessary();
-        
-        
+
+
         if (newNode) {
             // These 2 things guarantee node will get wrtten at next flush/sync
             prefsCache = new TreeMap();
             nodeCreate = new NodeCreate();
             changeLog.add(nodeCreate);
         }
-        
+
     }
 
     public boolean isUserNode() {
@@ -444,7 +436,7 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
 
     protected String getSpi(String key) {
         initCacheIfNecessary();
-        return (String) prefsCache.get(key);
+        return (String)prefsCache.get(key);
     }
 
     protected void removeSpi(String key) {
@@ -465,10 +457,11 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
         if (prefsCache != null)
             return;
 
-        prefsCache = new HashMap<String,String>();
+        prefsCache = new HashMap<String, String>();
         try {
             loadCache();
-        } catch(Exception e) {
+        }
+        catch (Exception e) {
             // assert lastSyncTime == 0;
             prefsCache = new TreeMap<String, String>();
         }
@@ -483,54 +476,57 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      * lastSyncTime are unaffected by the call.
      */
     private void loadCache() throws BackingStoreException {
-                    
-                    long newLastSyncTime = 0;
-                    
-                    try {
-                    	
-                        newLastSyncTime = prefsFile.lastModified();
-                        
-                        DocumentBuilder docBuilder =  javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                        System.out.println("Parse file " + prefsFile.getAbsolutePath());
-                        org.w3c.dom.Document doc = null;
-                        
-                        doc= docBuilder.parse(prefsFile);
-                        
-                        NodeList entries = doc.getElementsByTagName("entry");
-                        
-                        for(int i=0; i< entries.getLength(); i++){
-                        	Element entry = (Element)entries.item(i);
-                        	
-                        	
-                        	String key = entry.getAttribute("key");
-                        	
-                        	
-                        	String value =entry.getAttribute("value");
-                        	
-                        	prefsCache.put(key, value);
-                       }
-                       
-                      
-                    } catch(Exception e) {
-                        if (e instanceof InvalidPreferencesFormatException) {
-                            getLogger().warning("Invalid preferences format in "
-                                                        +  prefsFile.getPath());
-                            prefsFile.renameTo( new File(
-                                                    prefsFile.getParentFile(),
-                                                  "IncorrectFormatPrefs.xml"));
-                            
-                        } else if (e instanceof FileNotFoundException) {
-                        getLogger().warning("Prefs file removed in background "
-                                           + prefsFile.getPath());
-                        } else {
-                            throw new BackingStoreException(e);
-                        }
-                    }
-                    // Attempt succeeded; update state
-                    
-                    lastSyncTime = newLastSyncTime;
-                   
-        
+
+        long newLastSyncTime = 0;
+
+        try {
+
+            newLastSyncTime = prefsFile.lastModified();
+
+            DocumentBuilder docBuilder = javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            System.out.println("Parse file " + prefsFile.getAbsolutePath());
+            org.w3c.dom.Document doc = null;
+
+            doc = docBuilder.parse(prefsFile);
+
+            NodeList entries = doc.getElementsByTagName("entry");
+
+            for (int i = 0; i < entries.getLength(); i++) {
+                Element entry = (Element)entries.item(i);
+
+
+                String key = entry.getAttribute("key");
+
+
+                String value = entry.getAttribute("value");
+
+                prefsCache.put(key, value);
+            }
+
+
+        }
+        catch (Exception e) {
+            if (e instanceof InvalidPreferencesFormatException) {
+                getLogger().warning("Invalid preferences format in "
+                    + prefsFile.getPath());
+                prefsFile.renameTo(new File(
+                    prefsFile.getParentFile(),
+                    "IncorrectFormatPrefs.xml"));
+
+            }
+            else if (e instanceof FileNotFoundException) {
+                getLogger().warning("Prefs file removed in background "
+                    + prefsFile.getPath());
+            }
+            else {
+                throw new BackingStoreException(e);
+            }
+        }
+        // Attempt succeeded; update state
+
+        lastSyncTime = newLastSyncTime;
+
+
     }
 
     /**
@@ -543,51 +539,51 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      * NEVER leave prefsFile in a corrupt state.
      */
     private void writeBackCache() throws BackingStoreException {
-        			OutputStream os;
-        			FileOutputStream fos;
-            
-                    try {
-                        if (!dir.exists() && !dir.mkdirs())
-                            throw new BackingStoreException(dir +
-                                                             " create failed.");
-                        fos = new FileOutputStream(prefsFile);
-                        os = new BufferedOutputStream(fos);
-            			//exportSubtree(os);
-                        
-                        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-                        DocumentBuilder build = f.newDocumentBuilder();
-                        
-                        
-                        org.w3c.dom.Document doc =build.newDocument();
-                        Element root = doc.createElement("PREFS");
-                        doc.appendChild(root);
-                        
-                       for(String key: prefsCache.keySet()){
-                    	   Element e= doc.createElement("entry");
-                    	   e.setAttribute("key", key);
-                    	   e.setAttribute("value", prefsCache.get(key));
-                    	   root.appendChild(e);
-                    	   
-                        	
-                        }
-                        
-                        
-                        Transformer trans = TransformerFactory.newInstance().newTransformer();
-                        DOMSource source = new DOMSource(doc);
-                        StreamResult result= new StreamResult(os);
-                        trans.transform(source, result);
-                        
-                       os.close();
-                       fos.close();
-                        
-                    } catch(Exception e) {
-                        if (e instanceof BackingStoreException)
-                            throw (BackingStoreException)e;
-                        throw new BackingStoreException(e);
-                    }
-                    
-       
-        
+        OutputStream os;
+        FileOutputStream fos;
+
+        try {
+            if (!dir.exists() && !dir.mkdirs())
+                throw new BackingStoreException(dir +
+                    " create failed.");
+            fos = new FileOutputStream(prefsFile);
+            os = new BufferedOutputStream(fos);
+            //exportSubtree(os);
+
+            DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+            DocumentBuilder build = f.newDocumentBuilder();
+
+
+            org.w3c.dom.Document doc = build.newDocument();
+            Element root = doc.createElement("PREFS");
+            doc.appendChild(root);
+
+            for (String key : prefsCache.keySet()) {
+                Element e = doc.createElement("entry");
+                e.setAttribute("key", key);
+                e.setAttribute("value", prefsCache.get(key));
+                root.appendChild(e);
+
+
+            }
+
+
+            Transformer trans = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(os);
+            trans.transform(source, result);
+
+            os.close();
+            fos.close();
+
+        }
+        catch (Exception e) {
+            if (e instanceof BackingStoreException)
+                throw (BackingStoreException)e;
+            throw new BackingStoreException(e);
+        }
+
+
     }
 
     protected String[] keysSpi() {
@@ -597,17 +593,17 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
     }
 
     protected String[] childrenNamesSpi() {
-       
-            
-                    List<String> result = new ArrayList<String>();
-                    File[] dirContents = dir.listFiles();
-                    if (dirContents != null) {
-                        for (int i = 0; i < dirContents.length; i++)
-                            if (dirContents[i].isDirectory())
-                                result.add(dirContents[i].getName());
-                    }
-                    return result.toArray(EMPTY_STRING_ARRAY);
-              
+
+
+        List<String> result = new ArrayList<String>();
+        File[] dirContents = dir.listFiles();
+        if (dirContents != null) {
+            for (int i = 0; i < dirContents.length; i++)
+                if (dirContents[i].isDirectory())
+                    result.add(dirContents[i].getName());
+        }
+        return result.toArray(EMPTY_STRING_ARRAY);
+
     }
 
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
@@ -617,15 +613,16 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
     }
 
     public void removeNode() throws BackingStoreException {
-        synchronized (isUserNode()? userLockFile: systemLockFile) {
+        synchronized (isUserNode() ? userLockFile : systemLockFile) {
             // to remove a node we need an exclusive lock
-        	try{
-        		super.removeNode();
-        	}catch(Exception ex){
-        		ex.printStackTrace();
-        	}
-            
-        	
+            try {
+                super.removeNode();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+
         }
     }
 
@@ -633,99 +630,97 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
      * Called with file lock held (in addition to node locks).
      */
     protected void removeNodeSpi() throws BackingStoreException {
-    
-                    
-    			dir.setWritable(true);
-    			dir.setExecutable(true);
-    			
-    			
-    			if (changeLog.contains(nodeCreate)) {
-                        changeLog.remove(nodeCreate);
-                        nodeCreate = null;
-                        return;// null;
-                    }
-                    if (!dir.exists())
-                    	return;
-                    	//                        return null;
-                    prefsFile.delete();
-                    tmpFile.delete();
-                    // dir should be empty now.  If it's not, empty it
-                    File[] junk = dir.listFiles();
-                    if (junk.length != 0) {
-                        getLogger().warning(
-                           "Found extraneous files when removing node: "
-                            + Arrays.asList(junk));
-                        for (int i=0; i<junk.length; i++){
-                        	junk[i].setWritable(true);
-                        	junk[i].delete();
-                        }
-                            
-                    }
-                    if (!dir.delete())
-                        throw new BackingStoreException("Couldn't delete dir: "
-                                                                         + dir);
-         
+
+
+        if (changeLog.contains(nodeCreate)) {
+            changeLog.remove(nodeCreate);
+            nodeCreate = null;
+            return;// null;
         }
-    
+        if (!dir.exists())
+            return;
+        //                        return null;
+        prefsFile.delete();
+        tmpFile.delete();
+        // dir should be empty now.  If it's not, empty it
+        File[] junk = dir.listFiles();
+        if (junk.length != 0) {
+            getLogger().warning(
+                "Found extraneous files when removing node: "
+                    + Arrays.asList(junk));
+            for (int i = 0; i < junk.length; i++) {
+                junk[i].delete();
+            }
+
+        }
+        if (!dir.delete())
+            throw new BackingStoreException("Couldn't delete dir: "
+                + dir);
+
+    }
+
 
     public synchronized void sync() throws BackingStoreException {
-              
-        synchronized (isUserNode()? userLockFile:systemLockFile) {
-               final Long newModTime;
-                
-                   
-                   if (isUserNode()) {
-                       newModTime = userRootModFile.lastModified();
-                       isUserRootModified = userRootModTime == newModTime;
-                   } else {
-                       newModTime = systemRootModFile.lastModified();
-                       isSystemRootModified = systemRootModTime == newModTime;
-                   }
-                  
-               
-           
-               super.sync();
-               
-                   if (isUserNode()) {
-                       userRootModTime = newModTime.longValue() + 1000;
-                       userRootModFile.setLastModified(userRootModTime);
-                   } else {
-                       systemRootModTime = newModTime.longValue() + 1000;
-                       systemRootModFile.setLastModified(systemRootModTime);
-                   }
-                   
+
+        synchronized (isUserNode() ? userLockFile : systemLockFile) {
+            final Long newModTime;
+
+
+            if (isUserNode()) {
+                newModTime = userRootModFile.lastModified();
+                isUserRootModified = userRootModTime == newModTime;
+            }
+            else {
+                newModTime = systemRootModFile.lastModified();
+                isSystemRootModified = systemRootModTime == newModTime;
+            }
+
+
+            super.sync();
+
+            if (isUserNode()) {
+                userRootModTime = newModTime.longValue() + 1000;
+                userRootModFile.setLastModified(userRootModTime);
+            }
+            else {
+                systemRootModTime = newModTime.longValue() + 1000;
+                systemRootModFile.setLastModified(systemRootModTime);
+            }
+
         }
     }
 
     protected void syncSpi() throws BackingStoreException {
-        
-       syncSpiPrivileged();
-                   
+
+        syncSpiPrivileged();
+
     }
+
     private void syncSpiPrivileged() throws BackingStoreException {
-	if (isRemoved())
-	    throw new IllegalStateException("Node has been removed");
-	if (prefsCache == null)
+        if (isRemoved())
+            throw new IllegalStateException("Node has been removed");
+        if (prefsCache == null)
             return;  // We've never been used, don't bother syncing
         long lastModifiedTime;
         if ((isUserNode() ? isUserRootModified : isSystemRootModified)) {
             lastModifiedTime = prefsFile.lastModified();
-            if (lastModifiedTime  != lastSyncTime) {
+            if (lastModifiedTime != lastSyncTime) {
                 // Prefs at this node were externally modified; read in node and
                 // playback any local mods since last sync
                 loadCache();
                 replayChanges();
                 lastSyncTime = lastModifiedTime;
             }
-        } else if (lastSyncTime != 0 && !dir.exists()) {
+        }
+        else if (lastSyncTime != 0 && !dir.exists()) {
             // This node was removed in the background.  Playback any changes
             // against a virgin (empty) Map.
-            prefsCache = new TreeMap<String,String>();
+            prefsCache = new TreeMap<String, String>();
             replayChanges();
         }
         if (!changeLog.isEmpty()) {
             writeBackCache();  // Creates directory & file if necessary
-           /*
+            /*
             * Attempt succeeded; it's barely possible that the call to
             * lastModified might fail (i.e., return 0), but this would not
             * be a disaster, as lastSyncTime is allowed to lag.
@@ -745,8 +740,8 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
     }
 
     public void flush() throws BackingStoreException {
-	if (isRemoved())
-	    return;
+        if (isRemoved())
+            return;
         sync();
     }
 
@@ -754,8 +749,5 @@ public class CustomPreferences extends java.util.prefs.AbstractPreferences {
         // assert false;
     }
 
-    
-   
-   
-  
+
 }
