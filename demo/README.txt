@@ -5,6 +5,9 @@ This directory contains several simple demos on how to use wingS:
  - desktop:  Another eye-candy demo which simulates a desktop
              with inner windows that can be opened/closed/minimized
              maximized.
+
+At the moment, the following demos are unmaintained and non functional
+
  - jsp:      Conceptual demo to demonstrate integration of wingS
              into JSP technology.
  - dwr:      Conceptual demo to show the frame of DWR integration.
@@ -35,7 +38,7 @@ directly deploy the according demo to the servlet container
 without the need to create and copy a WAR file manually.
 
 NOTE:
-Some Demos are also available online via http://wingsframework.org,
+Some Demos are also available online via http://wingsframework.org
 although these demos may not be always up-to-date.
 
 Have phun!

@@ -224,6 +224,7 @@
                 <include name="**/src/**"/>
                 <include name="**/build.xml"/>
                 <include name="**/*.txt"/>
+                <include name="**/lib/*.jar"/>
             </fileset>
         </copy>
 
@@ -304,9 +305,9 @@
     <target name="check-full-dist">
         <available file="doc/docbook/build.xml" property="full-distribution"/>
         <fail unless="full-distribution">
-  Full CVS sources required!
+  Full source checkout required!
   This task requires that you have the complete wingS sources which
-  are available via CVS from the wingS website.
+  are available via svn checkout from the wingS website.
   Please consult http://wingsframework.org/ how to access the wingS CVS.
         </fail>
     </target>

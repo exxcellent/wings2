@@ -125,7 +125,7 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
                         cellStyle.rowspan = gridheight;
 
                         if (PaddingVoodoo.hasPaddingInsets(container)) {
-                            final Insets patchedInsets = (Insets) origCellStyle.getInsets().clone();
+                            final Insets patchedInsets = (Insets) cellStyle.getInsets().clone();
                             final boolean isFirstRow = row == grid.firstRow;
                             final boolean isLastRow = row == grid.rows - 1;
                             final boolean isFirstCol = col == grid.firstCol;
