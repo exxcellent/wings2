@@ -164,19 +164,21 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
             builder.append("position:relative;");
         */
 
-        Utils.appendCSSInlineSize(builder, component);
+        Utils.appendCSSInlineSize(builder, component);  
 
         // Determine Style String
         Style allStyle = component.getDynamicStyle(SComponent.SELECTOR_ALL);
         if (component instanceof SAbstractIconTextCompound && ((SAbstractIconTextCompound)component).isSelected()) {
             // present, SComponent.getDynamicStyle() always is instance of CSSStyle
             CSSStyle selectedStyle = (CSSStyle)component.getDynamicStyle(SAbstractIconTextCompound.SELECTOR_SELECTED);
-            if (allStyle != null) {
-                // make a copy to modify
-                allStyle = new CSSStyle(SComponent.SELECTOR_ALL, (CSSAttributeSet) allStyle);
-                allStyle.putAll(selectedStyle);
-            } else {
-                allStyle = selectedStyle;
+            if (selectedStyle != null) {
+              if (allStyle != null) {
+                  // make a copy to modify
+                  allStyle = new CSSStyle(SComponent.SELECTOR_ALL, (CSSAttributeSet) allStyle);
+                  allStyle.putAll(selectedStyle);
+              } else {
+                  allStyle = selectedStyle;
+              }
             }
         }
         // Render Style string
