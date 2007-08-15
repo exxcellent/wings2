@@ -92,6 +92,11 @@ public class UpdateResource extends DynamicResource {
         String encoding = SessionManager.getSession().getCharacterEncoding();
         out.print("<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"yes\"?>");
         out.print("\n<updates>");
+
+        if (log.isDebugEnabled()) {
+            SFrame frame = SessionManager.getSession().getRootFrame();
+            log.debug("Request: " + (frame != null ? frame.getEventEpoch() : "x"));
+        }
     }
 
     public static void writeFooter(Device out) throws IOException {
@@ -110,6 +115,19 @@ public class UpdateResource extends DynamicResource {
             out.print(",").print(parameters.next());
 		out.print(")");
         writePostfix(out);
+
+        if (log.isDebugEnabled()) {
+            log.debug(update.getClass().getName() + ":");
+            StringBuilder builder = new StringBuilder();
+            builder.append(handler.getName()).append("(");
+            parameters = handler.getParameters();
+            if (parameters.hasNext())
+                builder.append(parameters.next());
+            while (parameters.hasNext())
+                builder.append(",").append(parameters.next());
+            builder.append(")");
+            log.debug(builder.toString());
+        }
     }
 
     public static void writeUpdate(Device out, String update) throws IOException {

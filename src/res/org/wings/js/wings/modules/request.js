@@ -39,12 +39,13 @@ wingS.request.reloadFrame = function(parameters) {
  * @param {Array} scriptCodeArray - the scripts to invoke before sending the request
  */
 wingS.request.sendEvent = function(event, submit, async, eventName, eventValue, scriptCodeArray) {
-    var target = null;
-    if (event != null) {
-        // Detect the according event target
-        event = wingS.event.getEvent(event);
+    event = wingS.event.getEvent(event);
+
+    var target;
+    if (event != null)
         target = wingS.event.getTarget(event);
-    }
+    else
+        target = document.forms[0];
 
     // Prepare the appropriate method call
     var sendMethod;

@@ -159,6 +159,10 @@ public class SInternalFrame
         super.setVisible(false);
     }
 
+    public boolean isShowingChildren() {
+        return !iconified;
+    }
+
     public void addInternalFrameListener(SInternalFrameListener listener) {
         addEventListener(SInternalFrameListener.class, listener);
     }
@@ -251,5 +255,3 @@ public class SInternalFrame
         super.setCG(cg);
     }
 }
-
-

@@ -36,7 +36,6 @@ public class GridBagLayoutCG extends AbstractLayoutCG {
         final boolean useCellInsets = layout.getVgap() == -1 && layout.getHgap() == -1;
         final SGridBagLayout.Grid grid = layout.getGrid();
         final TableCellStyle cellStyle = cellLayoutStyle(layout);
-        final TableCellStyle origCellStyle = cellStyle.makeACopy();
 
         SDimension preferredSize = container.getPreferredSize();
         String height = preferredSize != null ? preferredSize.getHeight() : null;

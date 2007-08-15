@@ -46,25 +46,7 @@ public class TextFieldCG extends AbstractComponentCG implements
             throws IOException {
         final STextField textField = (STextField) component;
 
-        Object clientProperty = textField.getClientProperty("onChangeSubmitListener");
-        // If the application developer attached any SDocumentListeners to this
-    	// STextField, the surrounding form gets submitted as soon as the content
-        // of this STextField changed.
-        if (textField.getDocumentListeners().length > 1 || textField instanceof SFormattedTextField ) {
-        	// We need to test if there are at least 2 document
-        	// listeners because each text component registers
-        	// itself as a listener of its document as well.
-            if (clientProperty == null) {
-            	String event = JavaScriptEvent.ON_CHANGE;
-            	String code = "wingS.request.sendEvent(event, true, " + !textField.isReloadForced() + ");";
-                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
-                textField.addScriptListener(javaScriptListener);
-                textField.putClientProperty("onChangeSubmitListener", javaScriptListener);
-            }
-        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
-        	textField.removeScriptListener((JavaScriptListener) clientProperty);
-        	textField.putClientProperty("onChangeSubmitListener", null);
-        }
+        onChangeSubmitListener(textField);
 
         SDimension preferredSize = component.getPreferredSize();
         boolean tableWrapping = Utils.isMSIE(component) && preferredSize != null && "%".equals(preferredSize.getWidthUnit());
@@ -103,10 +85,37 @@ public class TextFieldCG extends AbstractComponentCG implements
         Utils.optAttribute(device, "value", textField.getText());
         device.print("/>");
 
+        printPostInput(device, textField);
+
         if (tableWrapping) {
             preferredSize.setWidth(actualWidth);
             device.print("</td></tr></table>");
         }
+    }
+
+    protected void onChangeSubmitListener(STextField textField) {
+        Object clientProperty = textField.getClientProperty("onChangeSubmitListener");
+        // If the application developer attached any SDocumentListeners to this
+        // STextField, the surrounding form gets submitted as soon as the content
+        // of this STextField changed.
+        if (textField.getDocumentListeners().length > 1 || textField instanceof SFormattedTextField) {
+        	// We need to test if there are at least 2 document
+        	// listeners because each text component registers
+        	// itself as a listener of its document as well.
+            if (clientProperty == null) {
+            	String event = JavaScriptEvent.ON_CHANGE;
+            	String code = "wingS.request.sendEvent(event, true, " + !textField.isReloadForced() + ");";
+                JavaScriptListener javaScriptListener = new JavaScriptListener(event, code);
+                textField.addScriptListener(javaScriptListener);
+                textField.putClientProperty("onChangeSubmitListener", javaScriptListener);
+            }
+        } else if (clientProperty != null && clientProperty instanceof JavaScriptListener) {
+        	textField.removeScriptListener((JavaScriptListener) clientProperty);
+        	textField.putClientProperty("onChangeSubmitListener", null);
+        }
+    }
+
+    protected void printPostInput(Device device, STextField textField) throws IOException {
     }
 
     public Update getTextUpdate(STextField textField, String text) {

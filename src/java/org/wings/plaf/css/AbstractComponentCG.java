@@ -30,6 +30,7 @@ import org.wings.plaf.CGManager;
 import org.wings.plaf.ComponentCG;
 import org.wings.plaf.Update;
 import org.wings.plaf.css.dwr.CallableManager;
+import org.wings.plaf.css.script.OnPageRenderedScript;
 import org.wings.script.ScriptListener;
 import org.wings.session.BrowserType;
 import org.wings.session.ScriptManager;
@@ -158,11 +159,6 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
     private static String getInlineStyles(SComponent component) {
         // write inline styles
         final SStringBuilder builder = new SStringBuilder();
-
-        /*
-        if (component instanceof DragSource)
-            builder.append("position:relative;");
-        */
 
         Utils.appendCSSInlineSize(builder, component);  
 
@@ -376,64 +372,31 @@ public abstract class AbstractComponentCG implements ComponentCG, SConstants, Se
 
     protected void updateDragAndDrop(final SComponent component) {
         if (component instanceof DragSource && ((DragSource)component).isDragEnabled()) {
-            ScriptManager.getInstance().addScriptListener(new ScriptListener() {
-                public String getScript() {
-                    StringBuilder builder = STRING_BUILDER.get();
-                    builder.setLength(0);
+            StringBuilder builder = STRING_BUILDER.get();
+            builder.setLength(0);
 
-                    String name = component.getName();
-                    builder.append("var ds_");
-                    builder.append(name);
-                    builder.append(" = new wingS.dnd.DD(\"");
-                    builder.append(name);
-                    builder.append("\");");
-                    writeRegisterDragHandle(builder, component);
-                    builder.append("\n");
+            String name = component.getName();
+            builder.append("var ds_");
+            builder.append(name);
+            builder.append(" = new wingS.dnd.DD(\"");
+            builder.append(name);
+            builder.append("\");");
+            writeRegisterDragHandle(builder, component);
+            builder.append("\n");
 
-                    return builder.toString();
-                }
-
-                public String getEvent() {
-                    return null;
-                }
-
-                public String getCode() {
-                    return null;
-                }
-
-                public int getPriority() {
-                    return DEFAULT_PRIORITY;
-                }
-            });
+            ScriptManager.getInstance().addScriptListener(new OnPageRenderedScript(builder.toString()));
         }
         if (component instanceof DropTarget) {
-            ScriptManager.getInstance().addScriptListener(new ScriptListener() {
-                public String getScript() {
-                    StringBuilder builder = STRING_BUILDER.get();
-                    builder.setLength(0);
+            StringBuilder builder = STRING_BUILDER.get();
+            builder.setLength(0);
 
-                    String name = component.getName();
-                    builder.append("var dt_");
-                    builder.append(name);
-                    builder.append(" = new YAHOO.util.DDTarget(\"");
-                    builder.append(name);
-                    builder.append("\");\n");
-
-                    return builder.toString();
-                }
-
-                public String getEvent() {
-                    return null;
-                }
-
-                public String getCode() {
-                    return null;
-                }
-
-                public int getPriority() {
-                    return DEFAULT_PRIORITY;
-                }
-            });
+            String name = component.getName();
+            builder.append("var dt_");
+            builder.append(name);
+            builder.append(" = new YAHOO.util.DDTarget(\"");
+            builder.append(name);
+            builder.append("\");\n");
+            ScriptManager.getInstance().addScriptListener(new OnPageRenderedScript(builder.toString()));
         }
     }
 

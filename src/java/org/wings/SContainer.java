@@ -525,4 +525,8 @@ public class SContainer extends SComponent {
         }
         return menus;
     }*/
+
+    public boolean isShowingChildren() {
+        return true;
+    }
 }

@@ -27,7 +27,7 @@ public class ContainerCG extends AbstractComponentCG implements org.wings.plaf.P
 
         SDimension preferredSize = container.getPreferredSize();
         String height = preferredSize != null ? preferredSize.getHeight() : null;
-        boolean clientLayout = isMSIE(container) && height != null && !"auto".equals(height)
+        boolean clientLayout = height != null && isMSIE(container) && !"auto".equals(height)
             && (layout instanceof SBorderLayout || layout instanceof SGridBagLayout || layout instanceof SCardLayout);
 
         device.print("<table");

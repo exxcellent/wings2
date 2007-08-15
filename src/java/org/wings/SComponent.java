@@ -1060,7 +1060,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return wether the component will show
      */
     public boolean isRecursivelyVisible() {
-        return visible && (parent == null || parent.isRecursivelyVisible());
+        return visible && (parent == null || (parent.isShowingChildren() && parent.isRecursivelyVisible()));
     }
 
     /**
