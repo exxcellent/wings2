@@ -6,8 +6,6 @@ import="org.wings.*,
         org.wings.jsp.WingsSession,
         javax.swing.tree.DefaultTreeModel,
         org.wings.tree.STreeSelectionModel,
-        org.wings.tree.SDefaultTreeSelectionModel,
-        javax.swing.table.DefaultTableModel,
         org.wings.plaf.css.TreeCG,
         javax.swing.event.TreeSelectionListener,
         javax.swing.event.TreeSelectionEvent,
@@ -21,8 +19,8 @@ import="org.wings.*,
     WingsSession.dispatchEvents(request, response);
 
     STree tree = null;
-    STable tasks = null;
-    STable subjects = null;
+    STable tasks;
+    STable subjects;
     SPanel panel = null;
     SLabel tableLabel = null;
     DocumentTools documentTools = null;
@@ -108,7 +106,6 @@ import="org.wings.*,
 %>
 
 <title>Test wingS JSP integration</title>
-</head>
 <body bgcolor="#f0f0f0">
 
 <table>
@@ -124,7 +121,7 @@ import="org.wings.*,
 <tr><th>Bedarf</th><td align="right"><%WingsSession.writeComponent(request, response, out, documentTools);%></td></tr>
 </table></th>
 </tr><tr>
-<td valign="top" align="left"><button style="border: 1px solid grey">stornieren</button>
+<td valign="top" align="left"><button style="border: 1px solid gray">stornieren</button>
 <br>
 <br>
 Here goes the document ..

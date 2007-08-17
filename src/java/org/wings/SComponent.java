@@ -1044,20 +1044,21 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     }
 
     /**
-     * Return the visibility. If the Component has a parent which is invisible,
-     * this method returns an invisible status.
+     * Return the <b>local</b> visibility. If set to <code>true</code> this ccmponent
+     * should be visible if all parent components are visible, too.
      *
-     * @return wether the component will show
+     * @return <code>true</code> If the component and it's children should show, <code>false</code> otherwise
+     * @see #isRecursivelyVisible()
      */
     public boolean isVisible() {
         return visible;
     }
 
     /**
-     * Return the visibility. If the Component has a parent which is invisible,
-     * this method returns an invisible status.
+     * Return the visibility. If the Component itself or any of it's parent is invisible,
+     * this method will return <code>false</code>.
      *
-     * @return wether the component will show
+     * @return <code>true</code> if this component and all it's ancestors are visible, <code>false</code> otherwise.
      */
     public boolean isRecursivelyVisible() {
         return visible && (parent == null || (parent.isShowingChildren() && parent.isRecursivelyVisible()));

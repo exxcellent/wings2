@@ -526,7 +526,13 @@ public class SContainer extends SComponent {
         return menus;
     }*/
 
-    public boolean isShowingChildren() {
+    /**
+     * Indicates if this container is actually showing it's children. Default is <code>true</code>
+     * @return <code>true</code> if {@link #getComponents()} are rendered, <code>false</code> if i.e the container
+     * hides them (i.e minimized MDI window).
+     */
+// holger! Kannst du dein Zeugs nicht mal selber kommentieren! Alles public in org.wing.* ist API!
+    boolean isShowingChildren() {
         return true;
     }
 }
