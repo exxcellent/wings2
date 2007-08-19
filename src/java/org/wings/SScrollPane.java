@@ -158,7 +158,7 @@ public class SScrollPane
             super.addComponent(c, SScrollPaneLayout.VIEWPORT, index);
             setScrollable(c);
         } else {
-            super.addComponent(c, SScrollPaneLayout.VIEWPORT, index);
+            super.addComponent(c, constraint, index);
         }
         return c;
     }
