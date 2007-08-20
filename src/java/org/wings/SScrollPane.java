@@ -154,7 +154,7 @@ public class SScrollPane
      * Only {@link Scrollable scrollables} are allowed here!
      */
     public SComponent addComponent(SComponent c, Object constraint, int index) {
-        if (c instanceof Scrollable) {
+        if (c instanceof Scrollable || constraint == SScrollPaneLayout.VIEWPORT) {
             super.addComponent(c, SScrollPaneLayout.VIEWPORT, index);
             setScrollable(c);
         } else {
