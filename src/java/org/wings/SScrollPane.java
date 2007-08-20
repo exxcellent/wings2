@@ -147,7 +147,7 @@ public class SScrollPane
      * @param view the component to add to the viewport
      */
     public void setViewportView(SComponent view) {
-        add(view);
+        add(view, SScrollPaneLayout.VIEWPORT);
     }
 
     /**
