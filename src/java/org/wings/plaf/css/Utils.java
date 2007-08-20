@@ -1225,7 +1225,18 @@ public final class Utils {
     public static final String JS_YUI_UTILITIES = "JS.yuiUtilities";
     public static final String JS_YUI_YAHOO = "JS.yuiYahoo";
     public static final String JS_YUI_YAHOO_DOM_EVENT = "JS.yuiYahooDomEvent";
-    
+
+    public static final String CSS_EXT_CORE         = "CSS.extCoreCSS";
+    public static final String JS_EXT_EXT           = "JS.extExt";
+    public static final String JS_EXT_YUI_BRIDGE    = "JS.extYuiBridge";
+    public static final String JS_EXT_DOM_QUERY     = "JS.extDomQuery";
+    public static final String JS_EXT_OBSERVABLE    = "JS.extObservable";
+    public static final String JS_EXT_EVENT_MANAGER = "JS.extEventManager";
+    public static final String JS_EXT_DOM_HELPER    = "JS.extDomHelper";
+    public static final String JS_EXT_ELEMENT       = "JS.extElement";
+    public static final String JS_EXT_DD_CORE       = "JS.extDDCore";
+    public static final String JS_EXT_SPLITBAR      = "JS.extSplitBar";
+
     /**
      * Lookup keys for other resources
      */

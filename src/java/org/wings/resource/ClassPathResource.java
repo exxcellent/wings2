@@ -79,7 +79,10 @@ public class ClassPathResource
     }
 
     protected InputStream getResourceStream() {
-        return getClassLoader().getResourceAsStream(resourceFileName);
+        InputStream stream = getClassLoader().getResourceAsStream(resourceFileName);
+        if (stream == null)
+            throw new IllegalArgumentException("Resource not found: " + resourceFileName);
+        return stream;
     }
 
     /*

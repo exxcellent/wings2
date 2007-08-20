@@ -391,6 +391,9 @@ public class SContainer extends SComponent {
                     c.getParent().remove(c);
                 }
             }
+            if (index == -1)
+                index = getComponentList().size();
+
             getComponentList().add(index, c);
             getConstraintList().add(index, constraint);
             c.setParent(this);

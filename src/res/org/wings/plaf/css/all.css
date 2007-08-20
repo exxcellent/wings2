@@ -827,3 +827,7 @@ table.DivisionContent {
     margin-left: 2px;
     cursor: pointer;
 }
+
+.splitter {
+    background-color: gray;
+}
