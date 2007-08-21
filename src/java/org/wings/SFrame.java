@@ -743,10 +743,18 @@ public class SFrame
         setContentPane(new SForm(new SBorderLayout()));
     }
 
+    /**
+     * Tell wether the contentPane is an SForm.
+     * @return <code>true</code> if the contentPane is an SForm, <code>false</code> otherwise
+     */
     public boolean isFormContentPane() {
         return contentPane instanceof SForm;
     }
 
+    /**
+     * Determine wether the contentPane shall be an SForm. The property is true by default.
+     * @param contentPaneForm <code>true</code> if the contentPane shall be an SForm, <code>false</code> otherwise
+     */
     public void setFormContentPane(boolean contentPaneForm) {
         if (contentPane instanceof SForm && !contentPaneForm) {
             SPanel newPanel = new SPanel();
