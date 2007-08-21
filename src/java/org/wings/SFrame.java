@@ -135,6 +135,7 @@ public class SFrame
      */
     private ArrayList<SComponent> globalInputMapComponents;
 
+
     /**
      * Creates a new SFrame
      */
@@ -738,4 +739,40 @@ public class SFrame
         }
     }
 
+    protected void initializeContentPane() {
+        setContentPane(new SForm(new SBorderLayout()));
+    }
+
+    public boolean isFormContentPane() {
+        return contentPane instanceof SForm;
+    }
+
+    public void setFormContentPane(boolean contentPaneForm) {
+        if (contentPane instanceof SForm && !contentPaneForm) {
+            SPanel newPanel = new SPanel();
+            rebuildPanel(contentPane, newPanel);
+            setContentPane(newPanel);
+        }
+        else if (!(contentPane instanceof SForm) && contentPaneForm) {
+            SForm newPanel = new SForm();
+            rebuildPanel(contentPane, newPanel);
+            setContentPane(newPanel);
+        }
+    }
+
+    private void rebuildPanel(SContainer oldPanel, SContainer newPanel) {
+        SLayoutManager layoutManager = oldPanel.getLayout();
+        SComponent[] components = oldPanel.getComponents();
+        ArrayList constraints = oldPanel.getConstraintList();
+
+        oldPanel.removeAll();
+        oldPanel.setLayout(null);
+
+        newPanel.setLayout(layoutManager);
+        for (int i = 0; i < components.length; i++) {
+            SComponent component = components[i];
+            Object constraint = constraints.get(i);
+            newPanel.add(component, constraint);
+        }
+    }
 }

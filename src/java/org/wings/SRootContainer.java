@@ -46,6 +46,10 @@ public abstract class SRootContainer extends SContainer {
      */
     public SRootContainer() {
         super(new SRootLayout());
+        initializeContentPane();
+    }
+
+    protected void initializeContentPane() {
         setContentPane(new SPanel(new SBorderLayout()));
     }
 

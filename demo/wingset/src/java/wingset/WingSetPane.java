@@ -29,7 +29,7 @@ import java.awt.*;
  * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
  */
 abstract public class WingSetPane
-        extends SForm
+        extends SPanel
         implements SConstants
 {
     protected final static Log log = LogFactory.getLog(WingSetPane.class);

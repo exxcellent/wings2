@@ -153,5 +153,3 @@ public abstract class SAbstractLayoutManager
         return border;
     }
 }
-
-
