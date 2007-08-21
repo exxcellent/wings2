@@ -143,5 +143,4 @@ public class UpdateResource extends DynamicResource {
     private static void writePostfix(Device out) throws IOException {
         out.print("]]></update>");
     }
-
 }

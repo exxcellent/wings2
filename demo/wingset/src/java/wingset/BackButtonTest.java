@@ -13,16 +13,7 @@
 
 package wingset;
 
-import org.wings.SButton;
-import org.wings.SButtonGroup;
-import org.wings.SComponent;
-import org.wings.SFlowDownLayout;
-import org.wings.SFlowLayout;
-import org.wings.SFont;
-import org.wings.SLabel;
-import org.wings.SPanel;
-import org.wings.SRadioButton;
-import org.wings.SDimension;
+import org.wings.*;
 import org.wings.border.SEmptyBorder;
 import org.wings.event.*;
 
@@ -150,13 +141,13 @@ public class BackButtonTest
                 nonEpochedButton.setVisible(false);
 
                 if (buttonGroup.getSelection() == postMode) {
-                    setPostMethod(true);
+                    getForm().setPostMethod(true);
                     mainPanel.getParentFrame().setNoCaching(true);
                 } else if (buttonGroup.getSelection() == getMode) {
-                    setPostMethod(false);
+                    getForm().setPostMethod(false);
                     mainPanel.getParentFrame().setNoCaching(true);
                 } else if (buttonGroup.getSelection() == getMode2) {
-                    setPostMethod(false);
+                    getForm().setPostMethod(false);
                     mainPanel.getParentFrame().setNoCaching(false);
                     // Allow events on this button from old views
                     nonEpochedButton.setEpochCheckEnabled(false);
@@ -165,10 +156,14 @@ public class BackButtonTest
                     postMode.setEpochCheckEnabled(false);
                     getMode.setEpochCheckEnabled(false);
                     getMode2.setEpochCheckEnabled(false);
-                    setEpochCheckEnabled(false);
+                    getForm().setEpochCheckEnabled(false);
                     regularButton.setVisible(true);
                     nonEpochedButton.setVisible(true);
                 }
+            }
+
+            private SForm getForm() {
+                return (SForm)getParentFrame().getContentPane();
             }
         });
 

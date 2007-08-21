@@ -14,10 +14,7 @@ package wingset;
 
 import org.wings.*;
 import org.wings.border.SLineBorder;
-import org.wings.event.SDocumentEvent;
-import org.wings.event.SDocumentListener;
-import org.wings.event.SRequestEvent;
-import org.wings.event.SRequestListener;
+import org.wings.event.*;
 import org.wings.session.SessionManager;
 import org.wings.text.SAbstractFormatter;
 import org.wings.text.SDateFormatter;
@@ -169,12 +166,6 @@ public class TextComponentExample extends WingSetPane {
         controls.addControllable(numberTextFieldC);
         controls.addControllable(dateTextFieldC);
 
-        addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                actionEvent.setText(actionEvent.getText() + " Form event");
-            }
-        });
-
         // Clear event log for every request
         getSession().addRequestListener(new SRequestListener() {
             public void processRequest(SRequestEvent e) {
@@ -191,6 +182,17 @@ public class TextComponentExample extends WingSetPane {
             }
         });
 
+        panel.addParentFrameListener(new SParentFrameListener() {
+            public void parentFrameAdded(SParentFrameEvent e) {
+                ((SForm)e.getParentFrame().getContentPane()).addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        actionEvent.setText(actionEvent.getText() + " Form event");
+                    }
+                });
+            }
+            public void parentFrameRemoved(SParentFrameEvent e) {
+            }
+        });
         return panel;
     }
 
