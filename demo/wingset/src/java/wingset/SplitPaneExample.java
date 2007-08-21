@@ -29,7 +29,12 @@ public class SplitPaneExample
         SLabel right = new SLabel("right");
         right.setPreferredSize(SDimension.FULLAREA);
         right.setBorder(new SLineBorder(1));
-        splitPane = new SSplitPane(SSplitPane.HORIZONTAL_SPLIT, left, right);
+        splitPane = new SSplitPane(SSplitPane.HORIZONTAL_SPLIT, left, right) {
+            public void fireIntermediateEvents() {
+                super.fireIntermediateEvents();
+                controls.dividerLocationTextField.setText("" + getDividerLocation());
+            }
+        };
         splitPane.setPreferredSize(SDimension.FULLAREA);
 
         controls.addControllable(splitPane);
@@ -39,6 +44,7 @@ public class SplitPaneExample
     class SplitPaneControls
         extends ComponentControls {
         private final String[] ORIENTATIONS = new String[] { "horizontal", "vertical" };
+        public STextField dividerLocationTextField;
 
         public SplitPaneControls() {
             widthTextField.setText("100%");
@@ -57,6 +63,7 @@ public class SplitPaneExample
             });
 
             final STextField dividerSizeTextField = new STextField();
+            dividerSizeTextField.setText("4");
             dividerSizeTextField.setColumns(1);
             dividerSizeTextField.setToolTipText("length only (example: '4')");
             dividerSizeTextField.addActionListener(new ActionListener() {
@@ -68,10 +75,27 @@ public class SplitPaneExample
                     catch (NumberFormatException e) {}
                 }
             });
+
+            dividerLocationTextField = new STextField();
+            dividerLocationTextField.setText("-1");
+            dividerLocationTextField.setColumns(3);
+            dividerLocationTextField.setToolTipText("length only (example: '4')");
+            dividerLocationTextField.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    try {
+                        int dividerSize = Integer.parseInt(dividerLocationTextField.getText());
+                        splitPane.setDividerLocation(dividerSize);
+                    }
+                    catch (NumberFormatException e) {}
+                }
+            });
+
             addControl(new SLabel(" orientation"));
             addControl(orientationCombo);
             addControl(new SLabel(" divider size"));
             addControl(dividerSizeTextField);
+            addControl(new SLabel(" divider location"));
+            addControl(dividerLocationTextField);
         }
     }
 }
