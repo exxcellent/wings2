@@ -534,8 +534,6 @@ public class SContainer extends SComponent {
      * @return <code>true</code> if {@link #getComponents()} are rendered, <code>false</code> if i.e the container
      * hides them (i.e minimized MDI window).
      */
-    // benjamin! Kannst du bitte aufpassen, wenn du die modifier einer methode änderst! XDivision ueberschreibt
-    // das hier nicht mehr, wenn es package local ist!
     protected boolean isShowingChildren() {
         return true;
     }

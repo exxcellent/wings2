@@ -159,6 +159,7 @@ public class SInternalFrame
         super.setVisible(false);
     }
 
+    @Override
     public boolean isShowingChildren() {
         return !iconified;
     }
