@@ -112,7 +112,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Map of {@link Selector} to CSS {@link Style}s currently assigned to this component.
      */
-    protected Map dynamicStyles;
+    protected Map<Selector, Style> dynamicStyles;
 
     /**
      * Visibility of the component.
@@ -190,16 +190,17 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     /**
      * Contains all script listeners of the component.
      */
-    private final List scriptListenerList = new LinkedList();
+    private final List<ScriptListener> scriptListenerList = new LinkedList<ScriptListener>();
 
     private ActionMap actionMap;
 
-    private final Map actionEvents = new HashMap();
+    private final Map<Action, ActionEvent> actionEvents = new HashMap<Action, ActionEvent>();
 
     private transient SRenderEvent renderEvent;
 
     private SParentFrameListener globalInputMapListener;
 
+    private Map<Object, Object> clientProperties;
 
     /**
      * Internal constants for {@link #fireRenderEvent(int)}
@@ -592,7 +593,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
 
         int placingPosition = -1;
         for (int i = 0; i < scriptListenerList.size() && placingPosition < 0; i++) {
-            ScriptListener existingListener = (ScriptListener) scriptListenerList.get(i);
+            ScriptListener existingListener = scriptListenerList.get(i);
             if (existingListener.getPriority() < listener.getPriority())
                 placingPosition = i;
         }
@@ -627,7 +628,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return the ScriptListener Array.
      */
     public ScriptListener[] getScriptListeners() {
-        return (ScriptListener[]) scriptListenerList.toArray(new ScriptListener[scriptListenerList.size()]);
+        return scriptListenerList.toArray(new ScriptListener[scriptListenerList.size()]);
     }
 
     /**
@@ -796,7 +797,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      */
     public void addDynamicStyle(Style style) {
         if (dynamicStyles == null)
-            dynamicStyles = new HashMap(4);
+            dynamicStyles = new HashMap<Selector, Style>(4);
         dynamicStyles.put(style.getSelector(), style);
         reload();
     }
@@ -823,7 +824,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     public Style getDynamicStyle(Selector selector) {
         if (dynamicStyles == null)
             return null;
-        return (Style) dynamicStyles.get(selector);
+        return dynamicStyles.get(selector);
     }
 
     /**
@@ -836,9 +837,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         if (dynamicStyles == null)
             return;
         if (this.dynamicStyles == null)
-            this.dynamicStyles = new HashMap(4);
-        for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
-            Style style = (Style) iterator.next();
+            this.dynamicStyles = new HashMap<Selector, Style>(4);
+        for (Object dynamicStyle : dynamicStyles) {
+            Style style = (Style) dynamicStyle;
             this.dynamicStyles.put(style.getSelector(), style);
         }
         reload();
@@ -1230,6 +1231,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         } catch (IOException se) {
             // Typical double-clicks. Not severe
             log.debug("Not Severe: Socket exception during code generation for " + getClass().getName() + se);
+// FIXME Error should no tbe catched!
         } catch (NoClassDefFoundError e) {
             // Mostly happens when DWR jar is not in classpath
             log.fatal("Error during code generation for " + getClass().getName(), e);
@@ -1264,22 +1266,26 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             PropertyDescriptor[] descriptors = info.getPropertyDescriptors();
 
             boolean first = true;
-            for (int i = 0; i < descriptors.length; i++) {
+            for (PropertyDescriptor descriptor : descriptors) {
                 try {
-                    Method getter = descriptors[i].getReadMethod();
-                    if (getter == null || getter.getName().startsWith("getParent"))
+                    Method getter = descriptor.getReadMethod();
+                    if (getter == null || getter.getName().startsWith("getParent")) {
                         continue;
+                    }
                     // System.out.println("invoking " + this.getClass().getDescription()+"."+getter.getDescription());
                     Object value = getter.invoke(this);
-                    if (first)
+                    if (first) {
                         first = false;
-                    else
+                    } else {
                         buffer.append(",");
-                    buffer.append(descriptors[i].getName() + "=" + value);
+                    }
+                    buffer.append(descriptor.getName() + "=" + value);
                 } catch (Exception e) {
+                    log.debug("Exception during paramString()" +e );
                 }
             }
         } catch (Exception e) {
+            log.debug("Exception during paramString()" +e );
         }
 
         buffer.append("]");
@@ -1315,9 +1321,10 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
     public boolean getResidesInForm() {
         SComponent parent = getParent();
 
-        boolean actuallyDoes = false;
-        while (parent != null && !(actuallyDoes = (parent instanceof SForm))) {
+        boolean actuallyDoes = parent instanceof SForm;
+        while (parent != null && !actuallyDoes) {
             parent = parent.getParent();
+            actuallyDoes = parent instanceof SForm;
         }
 
         return actuallyDoes;
@@ -1374,6 +1381,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      *
      * @return a clone of this component
      */
+    @Override
     public Object clone() {
         try {
             return super.clone();
@@ -1425,16 +1433,15 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
         return verticalAlignment;
     }
 
-    private Map clientProperties;
 
     /**
      * @return a small HashMap
      * @see #putClientProperty
      * @see #getClientProperty
      */
-    private Map getClientProperties() {
+    private Map<Object, Object> getClientProperties() {
         if (clientProperties == null) {
-            clientProperties = new HashMap(2);
+            clientProperties = new HashMap<Object, Object>(2);
         }
         return clientProperties;
     }
@@ -1574,7 +1581,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param type     The class/type of events to listen to.
      * @param listener The listener itself.
      */
-    protected final void addEventListener(Class type, EventListener listener) {
+    protected final <T extends EventListener> void addEventListener(Class<T> type, T listener) {
         if (listeners == null) {
             listeners = new EventListenerList();
         }
@@ -1587,7 +1594,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @param type     The class/type of events to listen to.
      * @param listener The listener itself.
      */
-    protected final void removeEventListener(Class type, EventListener listener) {
+    protected final <T extends EventListener> void removeEventListener(Class<T> type, T listener) {
         if (listeners != null) {
             listeners.remove(type, listener);
         }
@@ -1632,7 +1639,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * @return an array of the specified type with all listeners of the specified type
      * @see EventListenerList
      */
-    public final EventListener[] getListeners(Class type) {
+    public final EventListener[] getListeners(Class<? extends EventListener> type) {
         if (listeners != null) {
             return listeners.getListeners(type);
         } else {
@@ -1864,8 +1871,7 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
             log.debug("processKeyEvents " + Arrays.asList(values));
 
         boolean arm = false;
-        for (int i = 0; i < values.length; i++) {
-            String value = values[i];
+        for (String value : values) {
             Action action = actionMap.get(value);
             if (action != null) {
                 actionEvents.put(action, new ActionEvent(this, 0, value));
@@ -1890,10 +1896,9 @@ public abstract class SComponent implements Cloneable, Serializable, Renderable 
      * Internal method to trigger firing of key events.
      */
     protected void fireKeyEvents() {
-        for (Iterator iterator = actionEvents.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            Action action = (Action) entry.getKey();
-            ActionEvent event = (ActionEvent) entry.getValue();
+        for (Map.Entry<Action, ActionEvent> entry : actionEvents.entrySet()) {
+            Action action = entry.getKey();
+            ActionEvent event = entry.getValue();
             action.actionPerformed(event);
         }
         actionEvents.clear();

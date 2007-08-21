@@ -550,7 +550,7 @@ public class SFrame
      */
 
     public final void removeDispatchListener(SInvalidLowLevelEventListener l) {
-        removeEventListener(SRenderListener.class, l);
+        removeEventListener(SInvalidLowLevelEventListener.class, l);
     }
 
     /**
