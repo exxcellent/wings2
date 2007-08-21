@@ -74,20 +74,7 @@ public class SSplitPane
     /**
      * Size of the divider.
      */
-    protected int dividerSize;
-    private boolean dividerSizeSet = false;
-
-    /**
-     * Is a little widget provided to quickly expand/collapse the
-     * split pane?
-     */
-    protected boolean oneTouchExpandable;
-    private boolean oneTouchExpandableSet;
-
-    /**
-     * Previous location of the split pane.
-     */
-    protected int lastDividerLocation;
+    protected int dividerSize = 4;
 
     /**
      * How to distribute extra space.
@@ -99,7 +86,7 @@ public class SSplitPane
      * have a different value.
      */
     private int dividerLocation;
-    private Integer newLocation = -1;
+    private int newLocation = -1;
 
 
     /**
@@ -217,7 +204,6 @@ public class SSplitPane
     public void setDividerSize(int newSize) {
         int oldSize = dividerSize;
 
-        dividerSizeSet = true;
         if (oldSize != newSize) {
             dividerSize = newSize;
             reloadIfChange(oldSize, newSize);
@@ -327,71 +313,6 @@ public class SSplitPane
      */
     public SComponent getBottomComponent() {
         return rightComponent;
-    }
-
-    /**
-     * Sets the value of the <code>oneTouchExpandable</code> property,
-     * which must be <code>true</code> for the
-     * <code>JSplitPane</code> to provide a UI widget
-     * on the divider to quickly expand/collapse the divider.
-     * The default value of this property is <code>false</code>.
-     * Some look and feels might not support one-touch expanding;
-     * they will ignore this property.
-     *
-     * @param newValue <code>true</code> to specify that the split pane should provide a
-     *        collapse/expand widget
-     * @beaninfo
-     *        bound: true
-     *  description: UI widget on the divider to quickly
-     *               expand/collapse the divider.
-     *
-     * @see #isOneTouchExpandable
-     */
-    public void setOneTouchExpandable(boolean newValue) {
-        boolean           oldValue = oneTouchExpandable;
-
-        oneTouchExpandable = newValue;
-        oneTouchExpandableSet = true;
-        reloadIfChange(oldValue, newValue);
-    }
-
-    /**
-     * Gets the <code>oneTouchExpandable</code> property.
-     *
-     * @return the value of the <code>oneTouchExpandable</code> property
-     * @see #setOneTouchExpandable
-     */
-    public boolean isOneTouchExpandable() {
-        return oneTouchExpandable;
-    }
-
-    /**
-     * Sets the last location the divider was at to
-     * <code>newLastLocation</code>.
-     *
-     * @param newLastLocation an integer specifying the last divider location
-     *        in pixels, from the left (or upper) edge of the pane to the
-     *        left (or upper) edge of the divider
-     * @beaninfo
-     *        bound: true
-     *  description: The last location the divider was at.
-     */
-    public void setLastDividerLocation(int newLastLocation) {
-        int               oldLocation = lastDividerLocation;
-
-        lastDividerLocation = newLastLocation;
-        reloadIfChange(oldLocation, newLastLocation);
-    }
-
-    /**
-     * Returns the last location the divider was at.
-     *
-     * @return an integer specifying the last divider location as a count
-     *       of pixels from the left (or upper) edge of the pane to the
-     *       left (or upper) edge of the divider
-     */
-    public int getLastDividerLocation() {
-        return lastDividerLocation;
     }
 
     /**
@@ -691,14 +612,10 @@ public class SSplitPane
                                     "HORIZONTAL_SPLIT" : "VERTICAL_SPLIT");
         String continuousLayoutString = (continuousLayout ?
                                          "true" : "false");
-        String oneTouchExpandableString = (oneTouchExpandable ?
-                                           "true" : "false");
 
         return super.paramString() +
         ",continuousLayout=" + continuousLayoutString +
         ",dividerSize=" + dividerSize +
-        ",lastDividerLocation=" + lastDividerLocation +
-        ",oneTouchExpandable=" + oneTouchExpandableString +
         ",orientation=" + orientationString;
     }
 

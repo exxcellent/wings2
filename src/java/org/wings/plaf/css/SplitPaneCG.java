@@ -50,7 +50,7 @@ public class SplitPaneCG
             String splitBarName = name + "_tb";
 
             writeVertical(device, topPaneName, splitPane.getTopComponent());
-            writeVerticalSplitter(device, splitBarName);
+            writeVerticalSplitter(device, splitBarName, splitPane.getDividerSize());
             writeVertical(device, bottomPaneName, splitPane.getBottomComponent());
             writeSplitterScript(scriptBuilder, splitBarName, topPaneName, splitPane.getDividerLocation(), "Ext.SplitBar.VERTICAL", "Ext.SplitBar.TOP");
         }
@@ -61,7 +61,7 @@ public class SplitPaneCG
 
             device.print("<tr>");
             writeHorizontal(device, leftPaneName, splitPane.getLeftComponent());
-            writeHorizontalSplitter(device, splitBarName);
+            writeHorizontalSplitter(device, splitBarName, splitPane.getDividerSize());
             writeHorizontal(device, rightPaneName, splitPane.getRightComponent());
             device.print("</tr>");
             writeSplitterScript(scriptBuilder, splitBarName, leftPaneName, splitPane.getDividerLocation(), "Ext.SplitBar.HORIZONTAL", "Ext.SplitBar.LEFT");
@@ -102,8 +102,10 @@ public class SplitPaneCG
         device.print("</td></tr>");
     }
 
-    protected void writeVerticalSplitter(Device device, String name) throws IOException {
-        device.print("<tr><td style=\"height: 4px\" class=\"splitter\"");
+    protected void writeVerticalSplitter(Device device, String name, int dividerSize) throws IOException {
+        device.print("<tr><td style=\"height: ");
+        device.print(dividerSize);
+        device.print("px\" class=\"splitter\" id=\"");
         device.print(name);
         device.print("\"></td></tr>");
     }
@@ -116,8 +118,10 @@ public class SplitPaneCG
         device.print("</td>");
     }
 
-    protected void writeHorizontalSplitter(Device device, String name) throws IOException {
-        device.print("<td style=\"width: 4px\" class=\"splitter\" id=\"");
+    protected void writeHorizontalSplitter(Device device, String name, int dividerSize) throws IOException {
+        device.print("<td style=\"width: ");
+        device.print(dividerSize);
+        device.print("px\" class=\"splitter\" id=\"");
         device.print(name);
         device.print("\"></td>");
     }
