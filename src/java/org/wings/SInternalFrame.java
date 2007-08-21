@@ -160,7 +160,7 @@ public class SInternalFrame
     }
 
     @Override
-    public boolean isShowingChildren() {
+    protected boolean isShowingChildren() {
         return !iconified;
     }
 
