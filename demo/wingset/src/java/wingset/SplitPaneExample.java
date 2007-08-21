@@ -60,7 +60,7 @@ public class SplitPaneExample
             dividerSizeTextField.setColumns(1);
             dividerSizeTextField.setToolTipText("length only (example: '4')");
             dividerSizeTextField.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(ActionEvent event) {
                     try {
                         int dividerSize = Integer.parseInt(dividerSizeTextField.getText());
                         splitPane.setDividerSize(dividerSize);
