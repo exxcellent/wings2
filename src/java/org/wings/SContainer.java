@@ -534,8 +534,9 @@ public class SContainer extends SComponent {
      * @return <code>true</code> if {@link #getComponents()} are rendered, <code>false</code> if i.e the container
      * hides them (i.e minimized MDI window).
      */
-// holger! Kannst du dein Zeugs nicht mal selber kommentieren! Alles public in org.wing.* ist API!
-    boolean isShowingChildren() {
+    // benjamin! Kannst du bitte aufpassen, wenn du die modifier einer methode änderst! XDivision ueberschreibt
+    // das hier nicht mehr, wenn es package local ist!
+    protected boolean isShowingChildren() {
         return true;
     }
 }
